@@ -33,10 +33,10 @@ buildPythonPackage rec {
   # test data not included
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Delorean: Time Travel Made Easy";
     homepage = "https://github.com/myusuf3/delorean";
-    license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

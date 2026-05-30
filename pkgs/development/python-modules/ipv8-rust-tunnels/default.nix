@@ -21,15 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-axWG5cJtNaoZl7cG+Zyo1k+eA8pXHDWFgHqpTmQNHlo=";
   };
 
+  # pyo3 0.23 has no python 3.14 support yet.
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
     homepage = "https://github.com/Tribler/ipv8-rust-tunnels";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mlaradji ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ mlaradji ];
   };
 }

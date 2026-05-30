@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   libsForQt5,
 
@@ -11,8 +10,8 @@
   botan3,
   curl,
   darwinMinVersionHook,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libargon2,
   libusb1,
   minizip,
@@ -31,40 +30,46 @@
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
+  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.10";
+  version = "2.7.12";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
+    hash = "sha256-eg8jRaSJdRBpEOHQ8E3jXcdwRzsnyq6r4RLyltdpIB8=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-  ]);
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-old-style-cast"
+        "-Wno-error"
+        "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+      ];
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = toString [
+        "-rpath"
+        "${libargon2}/lib"
+      ];
+    };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
+  patches = [ ./darwin-remove-macdeployqt.patch ];
 
-  patches = [
-    ./darwin.patch
-    # Fixes a static_cast related compilation issue by converting to dynamic cast.
-    # Will be included in next release > 2.7.10 and can be dropped on bump.
-    (fetchpatch2 {
-      name = "fix-botan-3.10.patch";
-      url = "https://github.com/keepassxreboot/keepassxc/commit/fedcbf60c5c0dc7c3602c49a984d53a45c154c73.patch";
-      hash = "sha256-UntT7/LDjslyqHqt5gJjzC/vMw/RVZLNj2ZxzBPL9xI=";
-    })
-  ];
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -148,8 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     botan3
     curl
-    libXi
-    libXtst
+    libxi
+    libxtst
     libargon2
     libsForQt5.qtbase
     libsForQt5.qtsvg
@@ -196,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
       sigmasquadron
+      ryand56
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

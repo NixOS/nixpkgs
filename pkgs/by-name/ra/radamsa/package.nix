@@ -20,14 +20,14 @@ let
     hash = "sha256-OT04EGun8nKR6D55bMx8xj20dSFwxI7zP/8sdeFZAHQ=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radamsa";
   version = "0.7";
 
   src = fetchFromGitLab {
     owner = "akihe";
     repo = "radamsa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cwTE+8mZujuVbm8vOpqGWCAYMwrWUXzLP7k3y7UoKtU=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -27,13 +27,13 @@ stdenv.mkDerivation {
     cp ${./root.ds} $out/root.ds
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.iana.org/domains/root/files";
     description = "DNS root data including root hints and DNSSEC root trust anchor + key";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
       vcunat
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

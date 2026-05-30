@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  jdk21,
+  jdk25,
   writeScript,
   nixosTests,
   jq,
@@ -18,11 +18,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.528.1";
+  version = "2.555.2";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-1jDcomX3Wo1YHxJ6kjTxZ51LCACo83DQOtShVM63KVs=";
+    hash = "sha256-39oJV4xcGxjyjVDsNihoMF9XLDt674uQ0A96lDamKGc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,10 +33,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+    ${jdk25}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
       && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${jdk25}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 
@@ -74,17 +74,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extendable open source continuous integration server";
     homepage = "https://jenkins.io/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       earldouglas
-      nequissimus
+      felixsinger
     ];
     changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -5,7 +5,7 @@
   buildPythonPackage,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # nativeBuildInputs
   beets-minimal,
@@ -22,29 +22,26 @@
 
 buildPythonPackage rec {
   pname = "beets-alternatives";
-  version = "0.13.4";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-jGHRoBBXqJq0r/Gbp7gkuaEFPVMGE6cqQRi84AHTXxQ=";
+    hash = "sha256-C4EVJwzLhwQJz/iUKrIKUjhYHIpPrETqyQi0DByZM3Y=";
   };
 
   patches = [
-    # Fixes build failure by ignoring DeprecationWarning during tests.
+    # Fixes failing tests; see https://github.com/geigerzaehler/beets-alternatives/pull/221
     (fetchpatch {
-      url = "https://github.com/geigerzaehler/beets-alternatives/commit/3c15515edfe62d5d6c8f3fb729bf3dcef41c1ffa.patch";
-      hash = "sha256-gZXftDI5PXJ0c65Z1HLABJ2SlDnXU78xxIEt7IGp8RQ=";
-      excludes = [
-        "poetry.lock"
-      ];
+      url = "https://github.com/geigerzaehler/beets-alternatives/commit/84fdb0fa15225cce1e881b07bddcb52715677915.patch";
+      hash = "sha256-rURvP7aNJ+I9bPjk43t8rYujOK1iUS1J4RFMAHfa5AU=";
     })
   ];
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   nativeBuildInputs = [

@@ -6,14 +6,14 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qhull";
   version = "2020.2";
 
   src = fetchFromGitHub {
     owner = "qhull";
     repo = "qhull";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-djUO3qzY8ch29AuhY3Bn1ajxWZ4/W70icWVrxWRAxRc=";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 3.5...4.0)'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qhull.org/";
     description = "Compute the convex hull, Delaunay triangulation, Voronoi diagram and more";
-    license = licenses.qhull;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.qhull;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

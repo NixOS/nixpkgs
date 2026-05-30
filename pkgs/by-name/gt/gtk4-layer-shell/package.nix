@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
-  version = "1.2.0";
+  version = "1.3.0";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wmww";
     repo = "gtk4-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1FRP75KDr0wvlByKwEK7d2wbEH52wnC0e7LIZ/GHsdQ=";
+    hash = "sha256-2OZsLUUsWVk5oh5Y/UFjTqzcM+u2NSPG/YS7uT3iRfc=";
   };
 
   strictDeps = true;
@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to create panels and other desktop components for Wayland using the Layer Shell protocol and GTK4";
     mainProgram = "gtk4-layer-demo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ donovanglover ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ donovanglover ];
+    platforms = lib.platforms.linux;
   };
 })

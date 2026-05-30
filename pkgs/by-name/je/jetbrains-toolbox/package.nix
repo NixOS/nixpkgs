@@ -10,7 +10,7 @@
 
 let
   pname = "jetbrains-toolbox";
-  version = "3.0.1.59888";
+  version = "3.4.3.81140";
 
   updateScript = ./update.sh;
 
@@ -19,7 +19,10 @@ let
     homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ners ];
+    maintainers = with lib.maintainers; [
+      ners
+      fabiob
+    ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
@@ -55,10 +58,10 @@ let
         aarch64 = "-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-+rSjKr/MF6WbRkXeCvxzepThiDleYdtqQmX8rfJinNs=";
-        aarch64-linux = "sha256-Zt3OqnQhiK8nWrKYWFuQ10oc5SZJbhrLpGY5P0QcbBw=";
-        x86_64-darwin = "sha256-Lbq+buoulHmLBNOm23yDBoodPPOOOfF/FfkdGEOh/N4=";
-        aarch64-darwin = "sha256-jaLddShsw/lDIICAa8RZFhOoWJ7hx9gfRFwxy1t6sVc=";
+        x86_64-linux = "sha256-cDquMMb2gcRv6juEo2Ty4KgoKG5zBYtq+0mppnq4vyU=";
+        aarch64-linux = "sha256-jF9Evg6IZVEz6Nsl8XYb0nIyaO/yqdEEYOs+k2vZ8jo=";
+        x86_64-darwin = "sha256-AiaER3tqV1GXL3E1ImWdIjWt/iElt+kxNTHz7bpgeQw=";
+        aarch64-darwin = "sha256-UIh7HRx+ofdnxA8Bv6kI2L0pFmWW0UMApexffe+9bY0=";
       };
     in
     selectKernel {

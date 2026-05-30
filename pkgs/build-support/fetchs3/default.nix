@@ -1,7 +1,7 @@
 {
   lib,
   runCommand,
-  awscli,
+  awscli2,
 }:
 lib.fetchers.withNormalizedHash { } (
   {
@@ -33,7 +33,7 @@ lib.fetchers.withNormalizedHash { } (
   runCommand name
     (
       {
-        nativeBuildInputs = [ awscli ];
+        nativeBuildInputs = [ awscli2 ];
 
         inherit outputHash outputHashAlgo;
         outputHashMode = if recursiveHash then "recursive" else "flat";

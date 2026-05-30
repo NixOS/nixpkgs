@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "1.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/network-manager-applet/${lib.versions.majorMinor version}/network-manager-applet-${version}.tar.xz";
     sha256 = "sha256-qEcESH6jr+FIXEf7KrWYuPd59UCuDcvwocX4XmSn4lM=";
   };
 
@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/network-manager-applet/";
     description = "NetworkManager control applet for GNOME";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "nm-applet";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

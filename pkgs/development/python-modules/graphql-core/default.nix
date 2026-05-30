@@ -3,26 +3,30 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pytest-benchmark,
+  pytest-describe,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.6";
+  version = "3.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-core";
     tag = "v${version}";
-    hash = "sha256-RkVyoTSVmtKhs42IK+oOrOL4uBs3As3N5KY0Sz1VaDQ=";
+    hash = "sha256-ag8yFf6254dX2xNZMKtVBW5QtI5JOZjzgcZveuoeAss=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools>=59,<76"' ""
+      --replace-fail ', "setuptools>=59,<81"' ""
+
+    # avoid big pytest-benchmark dependency
+    substituteInPlace setup.cfg \
+      --replace-fail "addopts = --benchmark-disable" ""
   '';
 
   build-system = [
@@ -31,19 +35,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-benchmark
+    pytest-describe
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  disabledTestPaths = [
+    "tests/benchmarks"
+  ];
 
   pythonImportsCheck = [ "graphql" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${src.tag}";
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

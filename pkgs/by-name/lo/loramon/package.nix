@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "loramon";
   version = "0.9.7";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "LoRaMon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-94tXhuAoaS1y/zGz63PPqOayRylGK0Ei2a6H4/BCB30";
   };
 
@@ -28,8 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "LoRa packet sniffer for RNode hardware";
     mainProgram = "loramon";
     homepage = "https://github.com/markqvist/LoRaMon";
-    changelog = "https://github.com/markqvist/LoRaMon/releases/tag/${version}";
+    changelog = "https://github.com/markqvist/LoRaMon/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erethon ];
   };
-}
+})

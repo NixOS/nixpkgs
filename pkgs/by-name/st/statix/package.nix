@@ -3,37 +3,37 @@
   rustPlatform,
   fetchFromGitHub,
   withJson ? true,
-  stdenv,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "statix";
-  # also update version of the vim plugin in
-  # pkgs/applications/editors/vim/plugins/overrides.nix
-  # the version can be found in flake.nix of the source code
-  version = "0.5.8";
+  version = "0-unstable-2026-05-14";
 
   src = fetchFromGitHub {
-    owner = "oppiliappan";
+    owner = "molybdenumsoftware";
     repo = "statix";
-    rev = "v${version}";
-    sha256 = "sha256-bMs3XMiGP6sXCqdjna4xoV6CANOIWuISSzCaL5LYY4c=";
+    rev = "f0d256d60d9b9736b274a0edc0492be472318166";
+    hash = "sha256-dylteN19qQ/MclInQ+x4vf+rBGNIsaKWJ+WgiS0ZBjI=";
   };
 
-  cargoHash = "sha256-Pi1q2qNLjQYr3Wla7rqrktNm0StszB2klcfzwAnF3tE=";
+  cargoHash = "sha256-lODAnIGw8MncMT5xicWORSbCChn2HQXENsOStJYHepQ=";
 
   buildFeatures = lib.optional withJson "json";
 
-  # tests are failing on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Lints and suggestions for the nix programming language";
-    homepage = "https://github.com/oppiliappan/statix";
-    license = licenses.mit;
+    homepage = "https://github.com/molybdenumsoftware/statix";
+    license = lib.licenses.mit;
     mainProgram = "statix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      mightyiam
       nerdypepper
+      progrm_jarvis
     ];
   };
-}
+})

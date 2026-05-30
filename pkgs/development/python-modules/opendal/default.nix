@@ -9,7 +9,7 @@
   pytestCheckHook,
   python-dotenv,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opendal";
   version = "0.46.0";
   pyproject = true;
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "opendal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OQGpz6o4R0Yp+1vAgFtik/l7wvHwJNcB1BhZLk+BFPg=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -58,12 +58,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Write-only command-line Discord webhook integration written in 100% Bash script";
     mainProgram = "discord.sh";
     homepage = "https://github.com/ChaoticWeg/discord.sh";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

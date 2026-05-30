@@ -34,11 +34,12 @@
   nixosTests,
   blackbox-terminal,
   darwinMinVersionHook,
+  withApp ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.82.1";
+  version = "0.84.0";
 
   outputs = [
     "out"
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eTdtcEAtJx4tOEJEGOGupyNXk00nLjIeOQa3Fwanjjo=";
+    hash = "sha256-BBTjFYODaut4eNol9nxRX36IeZF+zDfJLia4Po2Pw+M=";
   };
 
   patches = [
@@ -107,11 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "app" withApp)
     (lib.mesonBool "gtk3" (gtkVersion == "3"))
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
-  ]
-  ++ lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
+    (lib.mesonBool "_systemd" systemdSupport)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
@@ -125,11 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    patchShebangs perf/*
-    patchShebangs src/app/meson_desktopfile.py
-    patchShebangs src/parser-seq.py
-    patchShebangs src/minifont-coverage.py
-    patchShebangs src/modes.py
+    patchShebangs perf/* \
+      src/app/meson_desktopfile.py \
+      src/parser-seq.py \
+      src/minifont-coverage.py \
+      src/modes.py
   '';
 
   postFixup = ''
@@ -151,14 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
         sakura
         stupidterm
         terminator
-        termite
         xfce4-terminal
         ;
-      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
+      inherit blackbox-terminal;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnome.org/";
     description = "Library implementing a terminal emulator widget for GTK";
     longDescription = ''
@@ -169,11 +168,11 @@ stdenv.mkDerivation (finalAttrs: {
       character set conversion, as well as emulating any terminal known to
       the system's terminfo database.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       antono
     ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

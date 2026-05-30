@@ -4,20 +4,19 @@
   aiohttp,
   aioresponses,
   aiosqlite,
-  async-timeout,
   attrs,
   buildPythonPackage,
   crccheck,
   cryptography,
   fetchFromGitHub,
+  filelock,
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio-fast,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  serialx,
   setuptools,
   typing-extensions,
   voluptuous,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.86.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-PROJKC8ZxAZ8zZR4if33553qtp7i9y58LPr1d1gCXVQ=";
+    hash = "sha256-9e+n4C2ViCAHFw2Ed+NxPSAbcVX5KJl7biIIsYr8E4c=";
   };
 
   postPatch = ''
@@ -51,16 +50,16 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio-fast
+    serialx
     typing-extensions
     voluptuous
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aioresponses
+    filelock
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
@@ -68,13 +67,11 @@ buildPythonPackage rec {
   disabledTests = [
     # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
     "test_quirks_v2"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    "test_periodic_scan_priority"
   ];
 
   disabledTestPaths = [
     # Tests require network access
+    "tests/ota/test_ota_image.py"
     "tests/ota/test_ota_providers.py"
     # All tests fail to shutdown thread during teardown
     "tests/ota/test_ota_matching.py"
@@ -88,12 +85,12 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
 }

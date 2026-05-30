@@ -7,6 +7,7 @@
   texinfo,
   which,
   gettext,
+  autoconf269,
   gnused,
   patchelf,
   gmp,
@@ -26,11 +27,13 @@
   cargo,
   withoutTargetLibc ? null,
   threadsCross ? null,
+  buildIsHost,
+  hostIsTarget,
 }:
 
 let
   inherit (lib) optionals;
-  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+  inherit (stdenv) buildPlatform targetPlatform;
 in
 
 {
@@ -41,6 +44,7 @@ in
     texinfo
     which
     gettext
+    autoconf269
   ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]
@@ -54,12 +58,12 @@ in
   # same for all gcc's
   depsBuildTarget =
     (
-      if lib.systems.equals hostPlatform buildPlatform then
+      if buildIsHost then
         [
           targetPackages.stdenv.cc.bintools # newly-built gcc will be used
         ]
       else
-        assert lib.systems.equals targetPlatform hostPlatform;
+        assert hostIsTarget;
         [
           # build != host == target
           stdenv.cc

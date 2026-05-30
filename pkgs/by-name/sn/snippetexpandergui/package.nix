@@ -5,7 +5,7 @@
   wails,
   scdoc,
   installShellFiles,
-  xorg,
+  libx11,
   gtk3,
   # webkitgtk_4_0,
   snippetexpanderd,
@@ -31,7 +31,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     gtk3
     # webkitgtk_4_0
     snippetexpanderd

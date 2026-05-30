@@ -9,21 +9,21 @@
   linphonePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosmoabis";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-abis";
-    rev = version;
-    hash = "sha256-OdmegQXdbpwNBepY+7MeUjaEguVo2q9b8lSkRmlXHEc=";
+    rev = finalAttrs.version;
+    hash = "sha256-jJD7XvwOBisN6womVSrY+V78KpFZ7WBvvh757dAS8y0=";
   };
 
   configureFlags = [ "enable_dahdi=false" ];
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Osmocom Abis interface library";
     homepage = "https://github.com/osmocom/libosmo-abis";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       markuskowa
     ];
   };
-}
+})

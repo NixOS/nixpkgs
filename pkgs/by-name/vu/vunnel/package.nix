@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
-  version = "0.43.0";
+  version = "0.58.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    tag = "v${version}";
-    hash = "sha256-DHuNhizYDY/z3DPAPPOgGWn1m86yGHamiVCHGxlaC1w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9rxQ96PVbU5GCSpp3BDW1p/1jBnZzkmPkwblERv9CCc=";
     leaveDotGit = true;
   };
 
@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
       sqlalchemy
       xsdata
       xxhash
+      yardstick
       zstandard
     ]
     ++ xsdata.optional-dependencies.cli
@@ -85,9 +86,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
-    changelog = "https://github.com/anchore/vunnel/releases/tag/${src.tag}";
+    changelog = "https://github.com/anchore/vunnel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
-}
+})

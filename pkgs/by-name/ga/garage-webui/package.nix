@@ -5,11 +5,10 @@
   buildGoModule,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-let
-  pnpm = pnpm_9;
-in
 buildGoModule (finalAttrs: {
   pname = "garage-webui";
   version = "1.1.0";
@@ -27,13 +26,15 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-8eQhR/fuDFNL8W529Ev7piCaseVaFahgZJQk3AJA3ng=";
+      pnpm = pnpm_9;
+      fetcherVersion = 3;
+      hash = "sha256-z/Y9q/SE2c/KYzIOAfATlprjr6NjmmUHQB+ZbO39OK4=";
     };
 
     buildPhase = ''

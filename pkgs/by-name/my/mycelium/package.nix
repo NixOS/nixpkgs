@@ -8,20 +8,20 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mycelium";
-  version = "0.6.1";
+  version = "0.7.9";
 
-  sourceRoot = "${src.name}/myceliumd";
+  sourceRoot = "${finalAttrs.src.name}/myceliumd";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
-    rev = "v${version}";
-    hash = "sha256-DP6gCTuWraCwprY5C0JlTR1VrOwrOnUMSVxuPSVMjo0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YQq8lW+F/c92884XqUOw1XeNK6bL1EEkSyNJzj0OKLo=";
   };
 
-  cargoHash = "sha256-5TyJNYBTULSu886D+vy8YRh50oFBubNZ9KkMu1/PvgU=";
+  cargoHash = "sha256-Ctg5c88i/fn5AJNoAaEJ90HaKooAAQgflrA0mbHAaDU=";
 
   nativeBuildInputs = [ versionCheckHook ];
 
@@ -40,16 +40,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
-    changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/threefoldtech/mycelium/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       flokli
       matthewcroughan
       rvdp
     ];
     mainProgram = "mycelium";
   };
-}
+})

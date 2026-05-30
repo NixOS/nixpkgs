@@ -13,12 +13,12 @@ buildPythonPackage {
 
   preConfigure = "cd py-smbus";
 
-  meta = with lib; {
+  meta = {
     inherit (i2c-tools.meta) homepage platforms;
 
     description = "Wrapper for i2c-tools' smbus stuff";
     # from py-smbus/smbusmodule.c
-    license = [ licenses.gpl2Only ];
+    license = [ lib.licenses.gpl2Only ];
     maintainers = [ ];
   };
 }

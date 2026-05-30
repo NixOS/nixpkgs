@@ -76,12 +76,12 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CUPS drivers for Lexmark B2200 and MB2200 Series printers";
     homepage = "https://support.lexmark.com/en_xm/drivers-downloads.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.tobim ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.tobim ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

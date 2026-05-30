@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jcli";
   version = "0.0.47";
 
   src = fetchFromGitHub {
     owner = "jenkins-zh";
     repo = "jenkins-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HsuYTgGe0cDRAG5FP77CGJG+xCDSWjBthPeAclmqd44=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/linuxsuren/cobra-extension/version.version=${version}"
+    "-X github.com/linuxsuren/cobra-extension/version.version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -51,8 +51,8 @@ buildGoModule rec {
     description = "Jenkins CLI allows you to manage your Jenkins in an easy way";
     mainProgram = "jcli";
     homepage = "https://github.com/jenkins-zh/jenkins-cli";
-    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/v${version}";
+    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

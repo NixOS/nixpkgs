@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -23,10 +24,12 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "prepare";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Git integration of coc.nvim";
     homepage = "https://github.com/neoclide/coc-git";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

@@ -229,6 +229,7 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
+          "mincore"
         ];
       };
 

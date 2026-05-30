@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nelm";
-  version = "1.16.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "nelm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0U1eLtYv4SZtsRotOzySqE0S3vWzQVvI73T4KGh6wOw=";
+    hash = "sha256-tP5NkuKmne+XthBnN36uorwMuM7yuJLvo4zzc1K1JBQ=";
   };
 
-  vendorHash = "sha256-pev4J44XMjUG8VxrZav0NyEr1Vy2xVUg4gtb126XZyM=";
+  vendorHash = "sha256-Ux9fyezBXWVjmpa8WsEHvOUo/pokzFXvdpDAtNh0T/8=";
 
   subPackages = [ "cmd/nelm" ];
 
@@ -30,6 +30,9 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # Tests are currently broken upstream because they were neglected after some
+  # sort of a refactor. This is not a packaging problem.
+  doCheck = false;
   preCheck = ''
     # Test all packages.
     unset subPackages

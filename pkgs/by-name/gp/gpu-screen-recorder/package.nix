@@ -7,33 +7,34 @@
   ninja,
   addDriverRunpath,
   pkg-config,
-  libXcomposite,
+  libxcomposite,
   libpulseaudio,
   dbus,
   ffmpeg,
   wayland,
   wayland-scanner,
   vulkan-headers,
+  vulkan-loader,
   pipewire,
   libdrm,
   libva,
   libglvnd,
-  libXdamage,
-  libXi,
-  libXrandr,
-  libXfixes,
+  libxdamage,
+  libxi,
+  libxrandr,
+  libxfixes,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "5.8.1";
+  version = "5.13.8";
 
   src = fetchgit {
-    url = "https://repo.dec05eba.com/${pname}";
-    tag = version;
-    hash = "sha256-VAb7YAPZVe23qqoGgY8wPR+PwPHuWUmlcixoLOW/H5A=";
+    url = "https://repo.dec05eba.com/gpu-screen-recorder";
+    tag = finalAttrs.version;
+    hash = "sha256-0uYj9NA6KqORr7ag8OOMphWWyHU27ptuOs5q0lGLGLc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXcomposite
+    libxcomposite
     libpulseaudio
     dbus
     ffmpeg
@@ -52,12 +53,13 @@ stdenv.mkDerivation rec {
     wayland
     wayland-scanner
     vulkan-headers
+    vulkan-loader
     libdrm
     libva
-    libXdamage
-    libXi
-    libXrandr
-    libXfixes
+    libxdamage
+    libxi
+    libxrandr
+    libxfixes
   ];
 
   mesonFlags = [
@@ -95,6 +97,6 @@ stdenv.mkDerivation rec {
       babbaj
       js6pak
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
-}
+})

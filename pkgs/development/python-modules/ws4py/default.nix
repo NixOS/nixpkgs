@@ -7,7 +7,6 @@
   git,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tornado,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ws4py";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ws4py" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket package for Python";
     homepage = "https://ws4py.readthedocs.org";
     changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -1,89 +1,105 @@
 {
+  stdenvNoCC,
   lib,
-  buildNpmPackage,
-  fetchzip,
-  ripgrep,
+  fetchurl,
+  autoPatchelfHook,
+  gzip,
   makeWrapper,
-  testers,
+  ripgrep,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  cctools,
+  darwin,
+  rcodesign,
 }:
 
-buildNpmPackage (finalAttrs: {
-  pname = "amp-cli";
-  version = "0.0.1763236881-g2ce1ea";
-
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
-    hash = "sha256-2pkn3Anp5MB8D+leDU1GCsyd70N3b0S4FjhQYlyc7bs=";
+let
+  platforms = {
+    # Upstream also publishes linux-x64, which is optimized for AVX2. Use the
+    # baseline build for nixpkgs so the x86_64-linux package works on all
+    # supported x86_64 CPUs instead of depending on the build user's CPU flags.
+    x86_64-linux = "linux-x64-baseline";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "darwin-x64";
+    aarch64-darwin = "darwin-arm64";
   };
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "amp-cli";
+  version = "0.0.1779772576-g751b94";
 
-    # Create a minimal package.json with just the dependency we need (without devDependencies)
-    cat > package.json <<EOF
-    {
-      "name": "amp-cli",
-      "version": "0.0.0",
-      "license": "UNLICENSED",
-      "dependencies": {
-        "@sourcegraph/amp": "${finalAttrs.version}"
-      },
-      "bin": {
-        "amp": "./bin/amp-wrapper.js"
-      }
-    }
-    EOF
-
-    # Create wrapper bin directory
-    mkdir -p bin
-
-    # Create a wrapper script that will be installed by npm
-    cat > bin/amp-wrapper.js << EOF
-    #!/usr/bin/env node
-    import('@sourcegraph/amp/dist/main.js')
-    EOF
-    chmod +x bin/amp-wrapper.js
-  '';
-
-  npmDepsHash = "sha256-ACMguY9qWJ+3YNYFfwLpv5jZt+kVRabms+YZjMzRhzE=";
-
-  propagatedBuildInputs = [
-    ripgrep
-  ];
+  src = finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system};
 
   nativeBuildInputs = [
+    gzip
     makeWrapper
-  ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  strictDeps = true;
 
-  npmFlags = [
-    "--no-audit"
-    "--no-fund"
-    "--ignore-scripts"
-  ];
+  dontUnpack = true;
+  dontStrip = true;
+  dontFixup = !stdenvNoCC.hostPlatform.isLinux;
 
-  # Disable build and prune steps
-  dontNpmBuild = true;
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
-    wrapProgram $out/bin/amp \
+    mkdir -p $out/bin $out/libexec/amp-cli
+    gunzip -c $src > $out/libexec/amp-cli/amp
+    chmod +x $out/libexec/amp-cli/amp
+
+    makeWrapper $out/libexec/amp-cli/amp $out/bin/amp \
+      --set AMP_SKIP_UPDATE_CHECK 1 \
       --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
+
+    runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "HOME=$(mktemp -d) amp --version";
+  postInstall = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/libexec/amp-cli/amp \
+      -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
+    '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/libexec/amp-cli/amp
+  '';
+
+  doInstallCheck = stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/amp";
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru = {
+    sources = lib.mapAttrs (
+      system': platform:
+      fetchurl {
+        url = "https://static.ampcode.com/cli/${finalAttrs.version}/amp-${platform}.gz";
+        hash =
+          {
+            x86_64-linux = "sha256-y3o+GOeyH8daz+CdPNs6nWYJ3Ss+x/KtQ6FaIvBviCc=";
+            aarch64-linux = "sha256-FviFU+T1pTmQLFliV/xl/ihdoSx8EnxM7QW8l7igVYI=";
+            x86_64-darwin = "sha256-9fJ/p6v/TLxIs2TIwwT+c3yio16tpoEYWR+B60sKFcU=";
+            aarch64-darwin = "sha256-EDksMRB1odiv6+t7ZH+76dnjq7t+5i0UQ6m2h8qt0y4=";
+          }
+          .${system'};
+      }
+    ) platforms;
+    updateScript = ./update.sh;
   };
 
   meta = {
     description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
     homepage = "https://ampcode.com/";
-    downloadPage = "https://www.npmjs.com/package/@sourcegraph/amp";
+    downloadPage = "https://ampcode.com/install";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       keegancsmith
       burmudar
     ];
     mainProgram = "amp";
+    platforms = builtins.attrNames platforms;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

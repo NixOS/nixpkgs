@@ -7,11 +7,11 @@
   fontconfig,
   freetype,
   glib,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
-  libXrender,
+  libice,
+  libsm,
+  libx11,
+  libxext,
+  libxrender,
   zlib,
 }:
 
@@ -22,11 +22,11 @@ let
     fontconfig
     freetype
     glib
-    libICE
-    libSM
-    libX11
-    libXext
-    libXrender
+    libice
+    libsm
+    libx11
+    libxext
+    libxrender
     zlib
   ];
 

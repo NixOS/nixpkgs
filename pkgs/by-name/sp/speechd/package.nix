@@ -4,6 +4,7 @@
   replaceVars,
   pkg-config,
   fetchurl,
+  fetchpatch,
   python3Packages,
   gettext,
   itstool,
@@ -30,7 +31,7 @@
   pcaudiolib,
   mbrola,
   withPico ? true,
-  svox,
+  picotts,
   libsOnly ? false,
 }:
 
@@ -51,6 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       utillinux = util-linux;
       # patch context
       bindir = null;
+    })
+    (fetchpatch {
+      name = "use-binsh.patch";
+      url = "https://github.com/brailcom/speechd/commit/66d5fe65cffd4c0ce9cfb4c6d292866ed8726999.diff?full_index=1";
+      hash = "sha256-7R5BH6QmxovvtXoH/T76qu6YMfm1HE+CA0eB0mzwmfY=";
     })
   ]
   ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
@@ -93,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     flite
   ]
   ++ lib.optionals withPico [
-    svox
+    picotts
   ];
 
   pythonPath = [
@@ -101,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -126,8 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${picotts}/share/pico/lang"
   '';
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   postInstall =
     if libsOnly then
@@ -141,17 +152,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description =
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       berce
       jtojnar
     ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
-    platforms = if withAlsa || withPico then platforms.linux else platforms.unix;
+    platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";
   };
 })

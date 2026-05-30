@@ -1,7 +1,7 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
   description = "TypeScript/JavaScript code formatter";
-  hash = "sha256-gBYx23MC6Biz8FIIZLBW3d7SOxtpmCml4N6554Wh0Pc=";
+  hash = "sha256-01MkexYMHoHrBDkw3m+UCtzT1xNlEiHToChNTDDqQ8Q=";
   initConfig = {
     configExcludes = [ "**/node_modules" ];
     configKey = "typescript";
@@ -16,6 +16,6 @@ mkDprintPlugin {
   };
   pname = "dprint-plugin-typescript";
   updateUrl = "https://plugins.dprint.dev/dprint/typescript/latest.json";
-  url = "https://plugins.dprint.dev/typescript-0.95.12.wasm";
-  version = "0.95.12";
+  url = "https://plugins.dprint.dev/typescript-0.95.13.wasm";
+  version = "0.95.13";
 }

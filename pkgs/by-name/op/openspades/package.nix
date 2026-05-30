@@ -19,7 +19,7 @@
   openal,
   opusfile,
   libogg,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     opusfile
     openal
     libogg
-    libXext
+    libxext
   ];
 
   patches = [
@@ -93,15 +93,15 @@ stdenv.mkDerivation rec {
     cp $notoFont $out/share/games/openspades/Resources/
   '';
 
-  NIX_CFLAGS_LINK = "-lopenal";
+  env.NIX_CFLAGS_LINK = "-lopenal";
 
-  meta = with lib; {
+  meta = {
     description = "Compatible client of Ace of Spades 0.75";
     mainProgram = "openspades";
     homepage = "https://github.com/yvt/openspades/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       azahi
     ];
     # never built on aarch64-linux since first introduction in nixpkgs

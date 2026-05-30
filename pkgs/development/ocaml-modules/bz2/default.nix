@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR/stublibs";
 
-  meta = with lib; {
+  meta = {
     description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
     downloadPage = "https://gitlab.com/irill/camlbz2";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";
     maintainers = [ ];
   };

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
 
   # extras: babel
@@ -52,16 +51,14 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.7.0";
+  version = "5.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
     tag = version;
-    hash = "sha256-y8qj9Ahb0J//15yWQ9iXkwTiuCTQlLFKriw9DUmEv/M=";
+    hash = "sha256-xNWgLIk/AB5beZQX7jzh8uQ9o0Gq+W5rgowBS215pk4=";
   };
 
   build-system = [ flit-core ];

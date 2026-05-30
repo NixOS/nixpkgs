@@ -61,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "htmldate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
     changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jokatzke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "htmldate";
   };
 }

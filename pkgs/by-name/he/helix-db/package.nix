@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "helix-db";
-  version = "2.1.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     repo = "helix-db";
     owner = "HelixDB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/7BS+7ZryWOmmSx1M/8PmQGHkj5M0/UmJHrLhYf7y3o=";
+    hash = "sha256-2dhCTMCgB7vbGa3URbPGJTPJQXcAUQjlTshemZqWH8E=";
   };
 
-  cargoHash = "sha256-JpKsAd1SG7ZI+DrCivZBNVkWITr0juu2osDRkL94FBk=";
+  cargoHash = "sha256-Nx30s7530W7JDizLKAHxf1aoe78QApNBJL97vO0FDZA=";
 
   patches = [
     #There are no feature yet
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

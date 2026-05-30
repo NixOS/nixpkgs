@@ -5,16 +5,17 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nvitop";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = "nvitop";
-    tag = "v${version}";
-    hash = "sha256-Ce92O0GfOIIwHHFLBYQdvYlQmAeeJ6xBfMVXps6+B5E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-If32hdXWABv8UgSrUlarelQxZEe1h0B3poAAxuN/tN0=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -26,20 +27,18 @@ python3Packages.buildPythonApplication rec {
     nvidia-ml-py
   ];
 
-  doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "nvitop" ];
 
   meta = {
     description = "Interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management";
     homepage = "https://github.com/XuehaiPan/nvitop";
-    changelog = "https://github.com/XuehaiPan/nvitop/releases/tag/v${version}";
+    changelog = "https://github.com/XuehaiPan/nvitop/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = with lib.platforms; linux;
   };
-}
+})

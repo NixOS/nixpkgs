@@ -2,30 +2,30 @@
   lib,
   stdenv,
   buildNpmPackage,
-  electron_39,
+  electron_42,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
 }:
 
 let
-  electron = electron_39;
+  electron = electron_42;
   description = "Visualizer for neural network, deep learning and machine learning models";
   icon = "netron";
 
 in
 buildNpmPackage (finalAttrs: {
   pname = "netron";
-  version = "8.7.3";
+  version = "9.0.9";
 
   src = fetchFromGitHub {
     owner = "lutzroeder";
     repo = "netron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4ATVEPOOju2nz7vsl+qCwG4A6F1HRx3/1MkFSUKPD2Q=";
+    hash = "sha256-SNBNjMmOVkOpLGnzrXotUecQuEKii8bg22GPA1wiF3s=";
   };
 
-  npmDepsHash = "sha256-TTAemrFZoXKlkPSHjQWZh0zree+s5ZWYXT0cy8xUBA0=";
+  npmDepsHash = "sha256-KgMf4qWM8HeaZ6UQNVqLjbFZvlFZ/Y2YydI/dtGaeEw=";
 
   nativeBuildInputs = [ jq ];
 
@@ -97,9 +97,5 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ flokli ];
     mainProgram = "netron";
     platforms = electron.meta.platforms;
-    badPlatforms = [
-      # Fails on darwin
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 })

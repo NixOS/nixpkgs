@@ -1,9 +1,10 @@
 {
+  lib,
   fetchFromGitHub,
 }:
 
 let
-  version = "1.2.2";
+  version = "2.1.1";
 in
 {
   inherit version;
@@ -12,8 +13,18 @@ in
     owner = "lima-vm";
     repo = "lima";
     tag = "v${version}";
-    hash = "sha256-bIYF/bsOMuWTkjD6fe6by220/WQGL+VWEBXmUzyXU98=";
+    hash = "sha256-U054xA3utBcSfpyvsZi4MvgJGNa7QyAYJf9usNXpgXg=";
   };
 
-  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+  vendorHash = "sha256-C4YCuFVXkL5vS6lWZCGkEeZQgAkP55buPDGZ/wvMnAA=";
+
+  meta = {
+    homepage = "https://github.com/lima-vm/lima";
+    changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "2") "Lima version ${version} is EOL. See https://lima-vm.io/docs/releases/.";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      anhduy
+    ];
+  };
 }

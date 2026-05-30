@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     # This is necessary because the real xtf-runner should
     # be in the same directory as the tests/ directory.
     + ''
-      wrapPythonProgramsIn "''${!outputBin}/share/xtf" "''${!outputBin} $pythonPath"
+      wrapPythonProgramsIn "''${!outputBin}/share/xtf" "''${!outputBin} ''${pythonPath[*]}"
       mkdir -p ''${!outputBin}/bin
       ln -s ''${!outputBin}/share/xtf/xtf-runner ''${!outputBin}/bin/xtf-runner
     '';

@@ -21,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/develop/SuperBuild/patches/SHARK?ref_type=heads
   # patch of hdf5 seems to be not needed based on latest master branch of shark as HDF5 has been removed
   # c.f https://github.com/Shark-ML/Shark/commit/221c1f2e8abfffadbf3c5ef7cf324bc6dc9b4315
-  patches = [ ./shark-2-ext-num-literals-all.diff ];
+  patches = [
+    ./shark-2-ext-num-literals-all.diff
+    ./boost-1.89.patch
+  ];
 
   # Remove explicitly setting C++11, because boost::math headers need C++14 since Boost187.
   postPatch = ''

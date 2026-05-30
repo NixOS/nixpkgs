@@ -8,16 +8,16 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-crispy-forms";
-  version = "2.5";
-  format = "pyproject";
+  version = "2.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "django-crispy-forms";
-    tag = version;
-    hash = "sha256-UZw860dOmQOAHcOPn5JO5OPe0kei4Mivy5FTh25Zo1s=";
+    tag = finalAttrs.version;
+    hash = "sha256-yU5xNlV3OFZUdO6zK1sG7mHGkNXLwZocEH8JhvAwyAc=";
   };
 
   propagatedBuildInputs = [
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crispy_forms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Best way to have DRY Django forms";
     homepage = "https://django-crispy-forms.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

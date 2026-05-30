@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  isPy310,
   isPyPy,
   pythonOlder,
 
@@ -51,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.13.2";
+  version = "3.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-LqYGrrWgSZazk0hjQvTFwqtU/PtMEaPi+m1Ya8Ds+pU=";
+    hash = "sha256-bAP1/a2COHbe+39KY3GHXSo1Iq9x9xX8O2mLhmFlMlE=";
   };
 
   postPatch = ''
@@ -96,15 +95,14 @@ buildPythonPackage rec {
     propcache
     yarl
   ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ]
   ++ optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
-    backports-zstd
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [
@@ -134,15 +132,15 @@ buildPythonPackage rec {
     "test_invalid_idna"
     # don't run benchmarks
     "test_import_time"
+    "test_cookie_pattern_performance"
+    "test_forwarded_re_performance"
+    "test_regex_performance"
     # racy
     "test_uvloop_secure_https_proxy"
     # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
     "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
-  ]
-  # these tests fail with python310 but succeeds with 11+
-  ++ lib.optionals isPy310 [
-    "test_https_proxy_unsupported_tls_in_tls"
-    "test_tcp_connector_raise_connector_ssl_error"
+    # Fails with http.cookies.CookieError: Control characters are not allowed in cookies
+    "test_parse_set_cookie_headers_uses_unquote_with_octal"
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -164,11 +162,11 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

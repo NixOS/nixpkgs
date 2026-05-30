@@ -17,13 +17,13 @@ in
 buildKodiAddon rec {
   pname = "jellycon";
   namespace = "plugin.video.jellycon";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellycon";
     rev = "v${version}";
-    sha256 = "sha256-dCPbPuUtiMhcECd3Aebs3ZGIM6jn6mmCd0rXS+1TQLs=";
+    sha256 = "sha256-bSAzd0nKD0S3hNEM0azmCNPw9wHQK5XH6lbfcz3sW9o=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ buildKodiAddon rec {
     websocket
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/jellycon";
     description = "Lightweight Kodi add-on for Jellyfin";
     longDescription = ''
@@ -61,7 +61,7 @@ buildKodiAddon rec {
       files directly from your Jellyfin server within the Kodi interface. It can
       easily switch between multiple user accounts at will.
     '';
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

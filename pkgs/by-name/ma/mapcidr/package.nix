@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mapcidr";
   version = "1.1.97";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "mapcidr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a+yVSh+Cgq73mQHaumVgNqEg/gXa2r2qld4bTi3Du/Y=";
   };
 
@@ -29,9 +29,9 @@ buildGoModule rec {
       operations, it can be used both as a library and as independent CLI tool.
     '';
     homepage = "https://github.com/projectdiscovery/mapcidr";
-    changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hanemile ];
     mainProgram = "mapcidr";
   };
-}
+})

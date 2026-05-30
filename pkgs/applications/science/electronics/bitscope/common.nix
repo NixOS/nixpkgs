@@ -10,7 +10,7 @@
   pango,
   lib,
   stdenv,
-  xorg,
+  libx11,
 }:
 
 {
@@ -30,15 +30,12 @@ let
     name = "${toolName}-${version}";
 
     meta =
-      with lib;
+
       {
         homepage = "http://bitscope.com/software/";
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        license = licenses.unfree;
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        license = lib.licenses.unfree;
         platforms = [ "x86_64-linux" ];
-        maintainers = with maintainers; [
-          vidbina
-        ];
       }
       // (attrs.meta or { });
 
@@ -55,7 +52,7 @@ let
         glib
         gtk2-x11
         pango
-        xorg.libX11
+        libx11
       ];
 
     dontBuild = true;

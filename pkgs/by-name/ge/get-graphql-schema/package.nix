@@ -7,6 +7,7 @@
   yarnConfigHook,
   yarnBuildHook,
   npmHooks,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "get-graphql-schema";
@@ -31,11 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint";
     homepage = "https://github.com/prisma-labs/get-graphql-schema";
     license = lib.licenses.mit;
     mainProgram = "get-graphql-schema";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

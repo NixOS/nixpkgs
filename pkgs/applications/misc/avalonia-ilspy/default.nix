@@ -4,13 +4,13 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
+  libx11,
+  libice,
+  libsm,
+  libxi,
+  libxcursor,
+  libxext,
+  libxrandr,
   fontconfig,
   glew,
   makeDesktopItem,
@@ -59,13 +59,13 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     # Avalonia UI
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
+    libx11
+    libice
+    libsm
+    libxi
+    libxcursor
+    libxext
+    libxrandr
     fontconfig
     glew
   ];
@@ -108,21 +108,21 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = ".NET assembly browser and decompiler";
     homepage = "https://github.com/icsharpcode/AvaloniaILSpy";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # third party dependencies
       lgpl21Only
       mspl
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       AngryAnt
       emilytrau
     ];

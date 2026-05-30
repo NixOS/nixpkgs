@@ -9,13 +9,6 @@ let
   sandbox = pkgs.chromium.sandbox;
 in
 {
-  imports = [
-    (lib.mkRenamedOptionModule
-      [ "programs" "unity3d" "enable" ]
-      [ "security" "chromiumSuidSandbox" "enable" ]
-    )
-  ];
-
   options.security.chromiumSuidSandbox.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;

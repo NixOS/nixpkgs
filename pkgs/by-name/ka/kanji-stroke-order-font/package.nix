@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -17,10 +18,11 @@ stdenv.mkDerivation {
     hash = "sha256-6mw72eoRIGzG2IoVnPo1G0i2Z2Ot8Q/WjaJ8tNDQbMk=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/${font}
     install -Dm644 *.txt -t $out/share/doc/${font}
     install -Dm644 *.pdf -t $out/share/doc/${font}
 

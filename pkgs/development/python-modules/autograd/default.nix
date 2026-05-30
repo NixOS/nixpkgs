@@ -10,7 +10,7 @@
   numpy,
 
   # tests
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
 }:
@@ -27,12 +27,17 @@ buildPythonPackage rec {
     hash = "sha256-k4rcalwznKS2QvmyTLra+ciWFifnILW/DDdB8D+clxQ=";
   };
 
+  postPatch = ''
+    # don't require pytest-cov
+    sed -i "/required_plugins/d" pyproject.toml
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [ numpy ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
   ];

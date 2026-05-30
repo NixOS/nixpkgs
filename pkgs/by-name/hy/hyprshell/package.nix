@@ -4,25 +4,25 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
-  gtk4,
   gtk4-layer-shell,
   hyprland,
   gcc,
   pixman,
+  libadwaita,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprshell";
-  version = "4.7.2";
+  version = "4.10.4";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6WC7vcPdtKR4iw5VHF88i/NQ+EBfvGxex8AvJONnG5w=";
+    hash = "sha256-33qau/UP4CHBwL/6damFBTjsy/6gX8Nuh87uuhmqVfA=";
   };
 
-  cargoHash = "sha256-g23W5cgGxWNyJ4uew2x12vgF5Bvaid1+phV2fxyHbas=";
+  cargoHash = "sha256-6m0ZvZBO30DbhcBJQWBx3PoHeZuS2FKiGJhcJx1eEfo=";
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk4
+    libadwaita
     gtk4-layer-shell
   ];
 

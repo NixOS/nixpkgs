@@ -2,10 +2,16 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation {
   pname = "besley";
   version = "4.0-unstable-2023-01-09";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "indestructible-type";
@@ -14,14 +20,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-N6QU3Pd6EnIrdbRtDT3mW5ny683DBWo0odADJBSdA2E=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp fonts/*/*.otf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://indestructibletype.com/Besley.html";

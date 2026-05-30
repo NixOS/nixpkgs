@@ -52,13 +52,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
+
+    # Fix build with newer C standards
+    substituteInPlace include/platform.h \
+      --replace-fail "typedef int bool;" ""
+
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for communicating with WebOS devices";
     mainProgram = "novacomd";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

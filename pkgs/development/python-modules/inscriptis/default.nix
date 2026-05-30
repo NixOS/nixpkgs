@@ -2,30 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   lxml,
   fastapi,
   httpx,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.6.0";
+  version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
     tag = version;
-    hash = "sha256-+qLHdQ4i/PYSUCZLYV3BguXjacjs7aB3MP0rJegv+dI=";
+    hash = "sha256-hNNPY2/SroVQnf04SJ/2yYorBgQJk6d0X616+w41Y1c=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     lxml
@@ -36,16 +34,19 @@ buildPythonPackage rec {
     fastapi
     httpx
     pytestCheckHook
+    pytest-cov-stub
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   pythonImportsCheck = [ "inscriptis" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML to text converter";
     mainProgram = "inscript.py";
     homepage = "https://github.com/weblyzard/inscriptis";
     changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

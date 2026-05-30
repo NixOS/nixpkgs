@@ -113,9 +113,13 @@
             (
               self.legacyPackages.${system}.stdenv.hostPlatform.isLinux
               # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
-              && !self.legacyPackages.${system}.targetPlatform.isPower64
+              && !self.legacyPackages.${system}.stdenv.targetPlatform.isPower64
               # Exclude armv6l-linux because "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
               && system != "armv6l-linux"
+              # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+              && system != "armv7l-linux"
+              # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+              && system != "powerpc64le-linux"
               # Exclude riscv64-linux because "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
               && system != "riscv64-linux"
             )
@@ -140,6 +144,7 @@
                         nixpkgs.hostPlatform = "x86_64-linux";
                         boot.loader.grub.enable = false;
                         fileSystems."/".device = "nodev";
+                        fileSystems."/".fsType = "none";
                         # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
                         system.stateVersion = lib.trivial.release; # DON'T do this in real configs!
                       }
@@ -165,6 +170,10 @@
             (
               # Exclude armv6l-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
               system != "armv6l-linux"
+              # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+              && system != "armv7l-linux"
+              # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+              && system != "powerpc64le-linux"
               # Exclude riscv64-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
               && system != "riscv64-linux"
               # Exclude x86_64-freebsd because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
@@ -182,6 +191,10 @@
         system: _:
         # Exclude armv6l-linux because "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
         system != "armv6l-linux"
+        # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+        && system != "armv7l-linux"
+        # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+        && system != "powerpc64le-linux"
         # Exclude riscv64-linux because "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
         && system != "riscv64-linux"
         # Exclude x86_64-freebsd because "Package ‘go-1.22.12-freebsd-amd64-bootstrap’ in /nix/store/0yw40qnrar3lvc5hax5n49abl57apjbn-source/pkgs/development/compilers/go/binary.nix:50 is not available on the requested hostPlatform"

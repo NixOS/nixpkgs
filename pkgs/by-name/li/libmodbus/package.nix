@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodbus";
-  version = "3.1.11";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "stephane";
     repo = "libmodbus";
-    rev = "v${version}";
-    hash = "sha256-d/diR9yeV0WY0C6wqxYZfOjEKFeWTvN73MxcWtXPOJc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DqR0E8ODZFGDx3r92XS+rLRqPD55yOi+NhU0gMRK7KY=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to send/receive data according to the Modbus protocol";
     homepage = "https://libmodbus.org/";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix ++ windows;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

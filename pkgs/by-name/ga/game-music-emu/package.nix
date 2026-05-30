@@ -7,14 +7,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.6.4";
   pname = "game-music-emu";
 
   src = fetchFromGitHub {
     owner = "libgme";
     repo = "game-music-emu";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qGNWFFUUjv2R5e/nQrriAyDJCARISqNB8e5/1zEJ3fk=";
   };
   nativeBuildInputs = [
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

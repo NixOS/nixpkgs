@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  preCheck = ''export LD_LIBRARY_PATH=$PWD'';
+  preCheck = "export LD_LIBRARY_PATH=$PWD";
 
   passthru.updateScript = nix-update-script { };
 

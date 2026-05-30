@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   cython,
   zlib,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "indexed_gzip";
   version = "1.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_gzip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to seek within compressed gzip files";
     homepage = "https://github.com/pauldmccarthy/indexed_gzip";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

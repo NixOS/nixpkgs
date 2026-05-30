@@ -2,17 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   cmake,
   pkg-config,
   fmt,
   liblo,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
   withJack ? false,
@@ -36,7 +37,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "${lib.strings.toLower type}plug";
-  version = "unstable-2021-12-17";
+  version = "1.0.2-unstable-2021-12-17";
 
   src = fetchFromGitHub {
     owner = "jpcima";
@@ -65,7 +66,7 @@ stdenv.mkDerivation {
     ./cmake-v4.patch
   ];
 
-  NIX_LDFLAGS = toString (
+  env.NIX_LDFLAGS = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
       # Framework that JUCE needs which don't get linked properly
       "-framework CoreAudioKit"
@@ -94,11 +95,11 @@ stdenv.mkDerivation {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ]
   ++ lib.optionals withJack [ libjack2 ];
 
@@ -111,6 +112,11 @@ stdenv.mkDerivation {
     mv vst2/${mainProgram}.vst $out/Library/Audio/Plug-Ins/VST/
     mv au/${mainProgram}.component $out/Library/Audio/Plug-Ins/Components/
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    tagFormat = "v*";
+  };
 
   meta = {
     inherit mainProgram;

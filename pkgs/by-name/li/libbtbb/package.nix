@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbtbb";
   version = "2020-12-R1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libbtbb";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1byv8174xam7siakr1p0523x97wkh0fmwmq341sd3g70qr2g767d";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth baseband decoding library";
     homepage = "https://github.com/greatscottgadgets/libbtbb";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
   };
-}
+})

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "7.0.1";
+  version = "7.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PsvLEdK4VRWI7IFrN1ax60OUGGw7aJsX4EhQ38IPflc=";
+    hash = "sha256-tGAE7DClMkZyaD7ISK7Z6PxQCw0mHUCjIpwtK7/O3Ck=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pbr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Build Reasonableness";
     mainProgram = "pbr";
     homepage = "https://github.com/openstack/pbr";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

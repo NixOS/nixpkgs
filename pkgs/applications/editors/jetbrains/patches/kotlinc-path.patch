@@ -1,7 +1,7 @@
 --- a/src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt
 +++ b/src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt
-@@ -14,19 +14,7 @@
-     "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies"
+@@ -30,25 +30,7 @@
+ 
  
    fun downloadAndExtractKotlinCompiler(communityRoot: BuildDependenciesCommunityRoot): Path {
 -    // We already have kotlin JPS in the classpath, fetch version from it
@@ -10,12 +10,18 @@
 -    info("Kotlin compiler version is $kotlincVersion")
 -
 -    val kotlincUrl = getUriForMavenArtifact(
--      KOTLIN_IDE_MAVEN_REPOSITORY_URL,
+-      getMavenRepositoryUrl(),
 -      "org.jetbrains.kotlin",
 -      "kotlin-dist-for-ide",
 -      kotlincVersion,
 -      "jar")
--    val kotlincDist = downloadFileToCacheLocation(communityRoot, kotlincUrl)
+-    val kotlincDist = if (shouldUseMavenLocal()) {
+-      val path = kotlincUrl.toPath()
+-      check(path.exists()) { "kotlin-dist-for-ide was not found in the local Maven repository" }
+-      path
+-    } else {
+-      downloadFileToCacheLocation(communityRoot, kotlincUrl)
+-    }
 -    val kotlinc = extractFileToCacheLocation(communityRoot, kotlincDist)
 +    val kotlinc = Path.of("KOTLIN_PATH_HERE")
      verbose("Kotlin compiler is at $kotlinc")

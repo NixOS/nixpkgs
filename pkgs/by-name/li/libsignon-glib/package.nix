@@ -17,7 +17,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsignon-glib";
   version = "2.1";
 
@@ -29,11 +29,16 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchgit {
-    url = "https://gitlab.com/accounts-sso/${pname}";
-    tag = version;
+    url = "https://gitlab.com/accounts-sso/libsignon-glib";
+    tag = finalAttrs.version;
     sha256 = "0gnx9gqsh0hcfm1lk7w60g64mkn1iicga5f5xcy1j9a9byacsfd0";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Remove when https://gitlab.com/accounts-sso/libsignon-glib/-/merge_requests/23 merged & in release
+    ./1001-Clean-up-declarations-definitions-usage-of-0-argument-functions.patch
+  ];
 
   nativeBuildInputs = [
     check
@@ -68,11 +73,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing single signon credentials which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

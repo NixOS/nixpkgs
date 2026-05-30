@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "osc";
   version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "theimpostor";
     repo = "osc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XVFNcQH4MFZKmuOD9b3t320/hE+s+3igjlyHBWGKr0Q=";
   };
 
@@ -24,9 +24,9 @@ buildGoModule rec {
       System clipboard access includes writing (i.e. copy) and reading (i.e. paste), even while logged into a remote machine via ssh.
     '';
     homepage = "https://github.com/theimpostor/osc";
-    changelog = "https://github.com/theimpostor/osc/releases/tag/v${version}";
+    changelog = "https://github.com/theimpostor/osc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ harryposner ];
     mainProgram = "osc";
   };
-}
+})

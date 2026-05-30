@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-workspace";
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "git-workspace";
-    tag = "v${version}";
-    hash = "sha256-SeE8O48lzqJSg8rfmIgsUcGPbquo2OvK3OUUBG21ksc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Twm/z627vXUVqJgAQ4pWjVGTgaSDhncHZVsImilWg4Q=";
   };
 
-  cargoHash = "sha256-CaHZivayZNuCi8vID8Qr5j/Ed+GGdNu+7NznvsCb3j0=";
+  cargoHash = "sha256-ws+dqXGS0lsf+5dvUj/N16eEIH1FhgMhsnvYheYGm7s=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "git-workspace";
   };
-}
+})

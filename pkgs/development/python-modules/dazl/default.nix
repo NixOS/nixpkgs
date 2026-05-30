@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  attrs,
+  httpx,
+  python-dateutil,
   googleapis-common-protos,
   grpcio,
   protobuf,
@@ -16,23 +19,27 @@
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "8.5.0";
+  version = "8.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digital-asset";
     repo = "dazl-client";
     tag = "v${version}";
-    hash = "sha256-GcZVyUx/aYSw7sy1JGeWRKBXifQaG/ygK9jJdG13cO8=";
+    hash = "sha256-ZJBaamazyNAYU5xbUvNGLUV5OsyymCdJCoUvoUlIkm4=";
   };
 
   pythonRelaxDeps = [
     "grpcio"
+    "httpx"
   ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    attrs
+    httpx
+    python-dateutil
     googleapis-common-protos
     grpcio
     protobuf

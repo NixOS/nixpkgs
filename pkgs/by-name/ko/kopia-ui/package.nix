@@ -10,12 +10,12 @@
   kopia,
 }:
 let
-  version = "0.21.1";
+  version = "0.23.0";
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-0i8bKah3a7MrgzATysgFCsmDZxK9qH+4hmBMW+GR9/4=";
+    hash = "sha256-9xvgm+A8h2pAX3oHtiFSa2xNab5BDkEBEtXQZz3Fd5A=";
   };
 in
 buildNpmPackage {
@@ -24,7 +24,7 @@ buildNpmPackage {
 
   sourceRoot = "${src.name}/app";
 
-  npmDepsHash = "sha256-IoPR3es5rHVOxITYCG5I3ETB/KKh5Ku8ftyR9uQH//8=";
+  npmDepsHash = "sha256-Ctp41vNZPVbycwIzWiTh+1ej3NpCf1WJCqnJsyoyxlc=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ buildNpmPackage {
     downloadPage = "https://github.com/kopia/kopia";
     changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = lib.platforms.linux;
   };
 }

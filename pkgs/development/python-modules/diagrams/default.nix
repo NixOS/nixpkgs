@@ -2,38 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   graphviz,
   imagemagick,
   inkscape,
   jinja2,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
-  pythonOlder,
   round,
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.24.4";
+  version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "diagrams";
     tag = "v${version}";
-    hash = "sha256-N4JGrtgLgGUayFR6/xTf3GZEZjtxC/4De3ZCfRZbi6M=";
+    hash = "sha256-uDBmQSEn9LMT2CbR3VDhxW1ec4udXN5wZ1H1+RX/K0U=";
   };
 
   patches = [
-    # Add build-system, https://github.com/mingrammer/diagrams/pull/1089
-    (fetchpatch {
-      name = "add-build-system.patch";
-      url = "https://github.com/mingrammer/diagrams/commit/59b84698b142f5a0998ee9e395df717a1b77e9b2.patch";
-      hash = "sha256-/zV5X4qgHJs+KO9gHyu6LqQ3hB8Zx+BzOFo7K1vQK78=";
-    })
     ./remove-black-requirement.patch
   ];
 
@@ -46,7 +36,7 @@ buildPythonPackage rec {
     ./autogen.sh
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
@@ -63,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diagrams" ];
 
-  meta = with lib; {
+  meta = {
     description = "Diagram as Code";
     homepage = "https://diagrams.mingrammer.com/";
     changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ addict3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ addict3d ];
   };
 }

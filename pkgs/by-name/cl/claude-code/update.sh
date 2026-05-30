@@ -1,10 +1,12 @@
-#!/usr/bin/env nix-shell
-#!nix-shell --pure --keep NIX_PATH -i bash --packages nodejs nix-update git cacert
+#!/usr/bin/env nix
+#!nix shell --ignore-environment .#cacert .#coreutils .#curl .#bash --command bash
 
 set -euo pipefail
 
-version=$(npm view @anthropic-ai/claude-code version)
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
-# Update version and hashes
-AUTHORIZED=1 NIXPKGS_ALLOW_UNFREE=1 nix-update claude-code --version="$version" --generate-lockfile
-nix-update vscode-extensions.anthropic.claude-code --use-update-script --version "$version"
+BASE_URL="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
+
+VERSION="${1:-$(curl -fsSL "$BASE_URL/latest")}"
+
+curl -fsSL "$BASE_URL/$VERSION/manifest.json" --output manifest.json

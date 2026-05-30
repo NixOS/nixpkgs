@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "mkdocs-plugins";
     tag = "v${version}";
-    hash = "sha256-4Rd4VhgaMzoSZ87FMQsUxadGG1ucQgGY0Y4uZoZl380=";
+    hash = "sha256-l5jJCmsBns1bGv+yBA0R6TDlfQuweFr92kNnQalWB7k=";
   };
 
   buildInputs = [ hatchling ];
@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "tests/test_http.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Neoteroi/mkdocs-plugins";
     description = "Plugins for MkDocs";
     changelog = "https://github.com/Neoteroi/mkdocs-plugins/releases/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];

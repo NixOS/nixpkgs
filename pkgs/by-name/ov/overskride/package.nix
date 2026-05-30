@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "overskride";
-  version = "0.6.3";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "kaii-lb";
     repo = "overskride";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-snyVSQG4eXAW8gIw9ryowTlLbrGo+2y+b4mEQ9ZEBzE=";
+    hash = "sha256-JKYf0172sK/+IqtQqmeHOwC/P563ww+stEc3gxNwe/I=";
   };
 
-  cargoHash = "sha256-AVdo6HPdCvitynqtWZEJMHF5UZpy9ZX6z4SqoqgyOTA=";
+  cargoHash = "sha256-q1g+6JFW+euYCq2uMYQn4R0AP4yt5/cJoP88AXg9NLw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -72,7 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/kaii-lb/overskride/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "overskride";
-    maintainers = with lib.maintainers; [ mrcjkb ];
+    maintainers = with lib.maintainers; [
+      mrcjkb
+      ilkecan
+    ];
     platforms = lib.platforms.linux;
   };
 })

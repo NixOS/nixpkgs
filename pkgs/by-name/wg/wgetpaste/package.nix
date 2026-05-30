@@ -6,12 +6,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wgetpaste";
   version = "2.34";
 
   src = fetchurl {
-    url = "https://github.com/zlin/wgetpaste/releases/download/${version}/wgetpaste-${version}.tar.xz";
+    url = "https://github.com/zlin/wgetpaste/releases/download/${finalAttrs.version}/wgetpaste-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-vW0G7ZAaPWPJyMVxJghP8JlPCZAb+xY4uHlT6sHpQz8=";
   };
   # currently zsh-autocompletion support is not installed
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

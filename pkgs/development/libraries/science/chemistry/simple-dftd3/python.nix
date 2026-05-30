@@ -9,10 +9,13 @@
   pyscf,
   ase,
   pytestCheckHook,
+  meson-python,
+  meson,
+  setuptools,
+  pkg-config,
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   inherit (simple-dftd3)
     pname
     version
@@ -20,12 +23,21 @@ buildPythonPackage {
     meta
     ;
 
-  # pytest is also required for installation, not only testing
-  nativeBuildInputs = [ pytestCheckHook ];
+  pyproject = true;
+
+  build-system = [
+    meson-python
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+  ];
 
   buildInputs = [ simple-dftd3 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     numpy
     toml
@@ -35,6 +47,7 @@ buildPythonPackage {
     ase
     qcengine
     pyscf
+    pytestCheckHook
   ];
 
   preConfigure = ''

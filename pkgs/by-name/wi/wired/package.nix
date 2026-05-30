@@ -6,17 +6,21 @@
   dbus,
   pango,
   cairo,
-  xorg,
+  libxscrnsaver,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wired";
   version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "Toqozz";
     repo = "wired-notify";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AWIV/+vVwDZECZ4lFMSFyuyUKJc/gb72PiBJv6lbhnc=";
   };
 
@@ -29,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     dbus
     pango
     cairo
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libXi
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libx11
+    libxi
   ];
 
   postInstall = ''
@@ -50,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "wired";
   };
-}
+})

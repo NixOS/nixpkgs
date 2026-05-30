@@ -5,7 +5,7 @@
   libspelling,
   fetchFromGitHub,
   python312Packages,
-  nodePackages,
+  mathjax,
   meson,
   ninja,
   pkg-config,
@@ -26,7 +26,7 @@ let
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
 
@@ -36,7 +36,7 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    rev = "refs/tags/5.1.0";
+    tag = "5.1.0";
     hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in
@@ -57,7 +57,7 @@ python312Packages.buildPythonApplication {
   # Use mathjax from nixpkgs to avoid loading from CDN
   + ''
     substituteInPlace apostrophe/preview_converter.py \
-      --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
+      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
   '';
 
   # Should be done in postInstall, but meson checks this eagerly before build

@@ -11,10 +11,10 @@
   flex,
   perl,
   nixosTests,
-  ...
-}@args:
+  enabledPlugins ? null,
+}:
 let
-  plugins = callPackage ./plugins.nix args;
+  plugins = callPackage ./plugins.nix { inherit enabledPlugins; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "collectd";

@@ -2,32 +2,27 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  rename,
+  installFonts,
   unstableGitUpdater,
 }:
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";
-  version = "4.0.0-unstable-2025-04-11";
+  version = "4.0.0-unstable-2026-05-08";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = "941fa95d7f6084a599a54ca71bc565f48e7c6d9e";
-    hash = "sha256-5bcEh7Oetd2JmFEPCcoweDrLGQTpcuaCU8hCjz8ls3M=";
+    rev = "5a4e1b7fd26f11ce3d2abf7d7fcd13274f874e6c";
+    hash = "sha256-XVza/duC2hsBrT6Ty1XxJy0m/lpuBt2rVoUo5B1JmUc=";
     sparseCheckout = [ "variablefont" ];
   };
 
-  nativeBuildInputs = [ rename ];
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    rename 's/\[FILL,GRAD,opsz,wght\]//g' variablefont/*
-    install -Dm755 variablefont/*.ttf -t $out/share/fonts/TTF
-    install -Dm755 variablefont/*.woff2 -t $out/share/fonts/woff2
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = unstableGitUpdater { };
 
@@ -39,6 +34,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       fufexan
       luftmensch-luftmensch
+      alexphanna
     ];
     platforms = lib.platforms.all;
   };

@@ -13,7 +13,10 @@
   gst_all_1,
   libnotify,
   pcre,
-  xorg,
+  libxtst,
+  libxi,
+  libxext,
+  libx11,
   xosd,
 }:
 
@@ -42,10 +45,10 @@ stdenv.mkDerivation {
     gst_all_1.gstreamer
     libnotify
     pcre
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libxext
+    libxi
+    libxtst
     xosd
   ];
 
@@ -66,12 +69,12 @@ stdenv.mkDerivation {
     sed -e 's@for xosd_dir in@for xosd_dir in ${xosd} @' -i configure.ac
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for switching between keyboard layouts";
     mainProgram = "xneur";
     homepage = "https://xneur.ru";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

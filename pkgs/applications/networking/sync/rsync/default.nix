@@ -15,7 +15,7 @@
   enableOpenSSL ? true,
   openssl,
   enableXXHash ? true,
-  xxHash,
+  xxhash,
   enableZstd ? true,
   zstd,
   nixosTests,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableZstd zstd
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
-  ++ lib.optional enableXXHash xxHash;
+  ++ lib.optional enableXXHash xxhash;
 
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")
@@ -84,15 +84,15 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "rsync";
-    maintainers = with lib.maintainers; [
-      ivan
+    maintainers = [
     ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.unix;
     identifiers.cpeParts = {
       vendor = "samba";
       inherit version;

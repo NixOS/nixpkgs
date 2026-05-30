@@ -1,8 +1,43 @@
-diff --git a/src/items/paletteitembase.cpp b/src/items/paletteitembase.cpp
-index 49db343e..8760ba55 100644
---- a/src/items/paletteitembase.cpp
-+++ b/src/items/paletteitembase.cpp
-@@ -626,7 +626,7 @@ QString PaletteItemBase::retrieveSvg(ViewLayer::ViewLayerID viewLayerID, QHash<Q
+diff --git i/src/commands.cpp w/src/commands.cpp
+index fb808bff..5ffd6265 100644
+--- i/src/commands.cpp
++++ w/src/commands.cpp
+@@ -509,7 +509,7 @@ QString FlipItemCommand::getParamString() const {
+ 	       + BaseCommand::getParamString() +
+ 	       QString(" id:%1 by:%2")
+ 	       .arg(m_itemID)
+-	       .arg(m_orientation);
++	       .arg(static_cast<int>(m_orientation));
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@@ -1830,7 +1830,7 @@ QString RotateFlipLabelCommand::getParamString() const {
+ 	}
+ 	
+ 	result += QString(" id:%1 degrees:%2 orientation:%3")
+-	          .arg(m_itemID).arg(m_degrees).arg(m_orientation);
++	          .arg(static_cast<int>(m_itemID)).arg(m_degrees).arg(static_cast<int>(m_orientation));
+ 	
+ 	return result;
+ }
+diff --git i/src/items/itembase.cpp w/src/items/itembase.cpp
+index 431bab55..80b37cb1 100644
+--- i/src/items/itembase.cpp
++++ w/src/items/itembase.cpp
+@@ -2006,7 +2006,7 @@ void ItemBase::debugInfo2(const QString & msg) const
+ 	                   .arg(this->instanceTitle())
+ 	                   .arg(this->viewLayerID())
+ 	                   .arg(this->viewLayerPlacement())
+-	                   .arg(this->wireFlags())
++	                   .arg(static_cast<int>(this->wireFlags()))
+ 			   .arg((long) dynamic_cast<const QGraphicsItem *>(this), 0, 16)
+ 	                   .arg(m_viewID)
+ 	                   .arg(this->zValue())
+diff --git i/src/items/paletteitembase.cpp w/src/items/paletteitembase.cpp
+index 98676ccd..95e4bb2d 100644
+--- i/src/items/paletteitembase.cpp
++++ w/src/items/paletteitembase.cpp
+@@ -653,7 +653,7 @@ QString PaletteItemBase::retrieveSvg(ViewLayer::ViewLayerID viewLayerID, QHash<Q
  
  	//DebugDialog::debug(QString("path: %1").arg(path));
  
@@ -11,7 +46,7 @@ index 49db343e..8760ba55 100644
  	if (!svg.isEmpty()) return svg;
  
  	SvgFileSplitter splitter;
-@@ -657,7 +657,7 @@ QString PaletteItemBase::retrieveSvg(ViewLayer::ViewLayerID viewLayerID, QHash<Q
+@@ -684,7 +684,7 @@ QString PaletteItemBase::retrieveSvg(ViewLayer::ViewLayerID viewLayerID, QHash<Q
  		return "";
  	}
  	svg = splitter.elementString(xmlName);
@@ -20,10 +55,10 @@ index 49db343e..8760ba55 100644
  	return svg;
  }
  
-diff --git a/src/items/resistor.cpp b/src/items/resistor.cpp
+diff --git i/src/items/resistor.cpp w/src/items/resistor.cpp
 index e2a23fd8..3fb4c669 100644
---- a/src/items/resistor.cpp
-+++ b/src/items/resistor.cpp
+--- i/src/items/resistor.cpp
++++ w/src/items/resistor.cpp
 @@ -260,7 +260,7 @@ bool Resistor::collectExtraInfo(QWidget * parent, const QString & family, const
  		validator->setSymbol(OhmSymbol);
  		validator->setConverter(TextUtils::convertFromPowerPrefix);
@@ -33,11 +68,24 @@ index e2a23fd8..3fb4c669 100644
  		focusOutComboBox->setValidator(validator);
  		connect(focusOutComboBox->validator(), SIGNAL(sendState(QValidator::State)), this, SLOT(textModified(QValidator::State)));
  		connect(focusOutComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(resistanceEntry(int)));
-diff --git a/src/utils/textutils.cpp b/src/utils/textutils.cpp
-index a1a28d51..3d3aa8e0 100644
---- a/src/utils/textutils.cpp
-+++ b/src/utils/textutils.cpp
-@@ -79,7 +79,7 @@ const QString TextUtils::AdobeIllustratorIdentifier = "Generator: Adobe Illustra
+diff --git i/src/sketch/sketchwidget.cpp w/src/sketch/sketchwidget.cpp
+index f10e56b6..e2c0bd10 100644
+--- i/src/sketch/sketchwidget.cpp
++++ w/src/sketch/sketchwidget.cpp
+@@ -1384,7 +1384,7 @@ long SketchWidget::createWire(ConnectorItem * from, ConnectorItem * to,
+ 	                   .arg(newID)
+ 	                   .arg(fromPos.x()).arg(fromPos.y())
+ 	                   .arg(toPos.x()).arg(toPos.y())
+-	                   .arg(wireFlags)
++	                   .arg(static_cast<int>(wireFlags))
+ 	                   .arg(from->attachedToTitle()).arg(from->connectorSharedID())
+ 	                   .arg(to->attachedToTitle()).arg(to->connectorSharedID())
+ 	                   .arg(m_viewID)
+diff --git i/src/utils/textutils.cpp w/src/utils/textutils.cpp
+index 9c6b3dee..5e89eb5b 100644
+--- i/src/utils/textutils.cpp
++++ w/src/utils/textutils.cpp
+@@ -80,7 +80,7 @@ const QString TextUtils::AdobeIllustratorIdentifier = "Generator: Adobe Illustra
  
  QList<QString> PowerPrefixes;
  QList<double> PowerPrefixValues;

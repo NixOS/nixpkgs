@@ -4,30 +4,37 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.26.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-NsnJa5+P0xm12o7HAmfD8+w3H46f5WR2GO78My+YAi0=";
+    hash = "sha256-PHdHhhVy0RWMFzR4ZEyWLOiRYHROadLiPIdqkUZMTow=";
   };
 
   # Delete vendor directory to regenerate it consistently across platforms
   postPatch = ''
     rm -rf vendor
   '';
-  vendorHash = "sha256-Mx6dCC8xRTfE/7j4chLtdKzQLHQE9y+xtEasWPtn94k=";
+  vendorHash = "sha256-3M3fXwCkljfY8wjXf+PdcbqnkyPKaDCJWt9/nRA/+Dc=";
+  proxyVendor = true;
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-En3y1fQRtwJm8fwxZ/VWuRfm1zPcnlDBuMNcY5WtxqM=";
-    fetcherVersion = 2;
+    hash = "sha256-8iKug4zsX3u0vS68osKRW6iOP+A3OdjI3yxNPIJaQqM=";
+    fetcherVersion = 3;
   };
 
   # Frontend is in a subdirectory
@@ -35,13 +42,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   # Generate templ templates during vendor hash calculation
-  # Don't run pnpm in this phase - filter out pnpm.configHook
+  # Don't run pnpm in this phase - filter out pnpmConfigHook
   overrideModAttrs = oldAttrs: {
-    nativeBuildInputs = builtins.filter (drv: drv != pnpm_9.configHook) (
+    nativeBuildInputs = builtins.filter (drv: drv != pnpmConfigHook) (
       oldAttrs.nativeBuildInputs or [ ]
     );
     preBuild = ''

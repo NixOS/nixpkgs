@@ -9,7 +9,6 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   regex,
   setuptools,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "3.2.0";
+  version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
     tag = version;
-    hash = "sha256-60VxMUUCIP+Mp+OsgdyRTPZVLGC/3iaMxxhw02ABB9k=";
+    hash = "sha256-py6sspmhQ2vjXEEn+X6kx1+fTiS1M0P8z+kbgVItW/k=";
   };
 
   build-system = [ setuptools ];
@@ -57,12 +54,13 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
+  disabledTests = [ "test_no_silence_site_packages" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
     changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

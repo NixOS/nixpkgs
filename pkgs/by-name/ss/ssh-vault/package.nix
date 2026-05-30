@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-vault";
-  version = "1.1.4";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "ssh-vault";
     repo = "ssh-vault";
     tag = finalAttrs.version;
-    hash = "sha256-qAALDpspHR2pHo8T1QgHrazO128u9CqoibwIzmgAj1s=";
+    hash = "sha256-2EriGn507ojvZVQrwza/hkad4YgxuB5HcmskS0cCnv4=";
   };
 
-  cargoHash = "sha256-uEucFplvFZNTJU/PmyLsehYmlxTvBW4lUNG6pKu6EhM=";
+  cargoHash = "sha256-n37iK0ZftL1KBYnHzrM7LU3ApYw672vs6MZjKI0J1lg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

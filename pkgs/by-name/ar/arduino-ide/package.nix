@@ -6,11 +6,11 @@
 
 let
   pname = "arduino-ide";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-3Zx6XRhkvAt1Erv13wF3p3lm3guRDYreh+ATBzoO6pk=";
+    hash = "sha256-m4RYtjJMZ01M1qwKc70Gkey9QLQ4Gk59rwpunm4TY2g=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -19,9 +19,9 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-    install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
-    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
+    install -Dm444 ${appimageContents}/arduino-ide.desktop -t $out/share/applications/
+    install -Dm444 ${appimageContents}/arduino-ide.png -t $out/share/icons/hicolor/512x512/apps
+    substituteInPlace $out/share/applications/arduino-ide.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=arduino-ide %U'
   '';
 
   extraPkgs = pkgs: [ pkgs.libsecret ];

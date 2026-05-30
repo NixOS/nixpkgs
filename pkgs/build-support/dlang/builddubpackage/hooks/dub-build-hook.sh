@@ -2,7 +2,14 @@ dubBuildHook() {
     runHook preBuild
     echo "Executing dubBuildHook"
 
-    dub build --skip-registry=all --build="${dubBuildType-"release"}" "${dubBuildFlags[@]}" "${dubFlags[@]}"
+    local flagsArray=(
+        --skip-registry=all
+        "--build=${dubBuildType-release}"
+    )
+    concatTo flagsArray dubBuildFlags dubFlags
+
+    echoCmd 'dubBuildHook flags' "${flagsArray[@]}"
+    dub build "${flagsArray[@]}"
 
     echo "Finished dubBuildHook"
     runHook postBuild

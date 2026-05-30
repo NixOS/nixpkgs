@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlemaps/google-maps-services-python";
     changelog = "https://github.com/googlemaps/google-maps-services-python/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 }

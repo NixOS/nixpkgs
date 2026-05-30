@@ -7,8 +7,8 @@ let
 in
 {
   imports = [
-    ../../modules/virtualisation/qemu-vm.nix
     ../../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+    ../../modules/virtualisation/guest-networking-options.nix
     {
       key = "no-manual";
       documentation.nixos.enable = false;
@@ -32,7 +32,9 @@ in
         # This is mostly a Hydra optimization, so we don't rebuild all the tests every time switch-to-configuration-ng changes.
         key = "no-switch-to-configuration";
         system.switch.enable = mkDefault (
-          config.isSpecialisation || config.specialisation != { } || config.virtualisation.installBootLoader
+          config.isSpecialisation
+          || config.specialisation != { }
+          || (!config.boot.isContainer && config.virtualisation.installBootLoader)
         );
       }
     )

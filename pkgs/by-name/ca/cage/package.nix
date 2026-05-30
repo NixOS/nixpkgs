@@ -8,27 +8,27 @@
   wayland-scanner,
   scdoc,
   makeWrapper,
-  wlroots_0_19,
+  wlroots_0_20,
   wayland,
   wayland-protocols,
   pixman,
   libxkbcommon,
-  xcbutilwm,
+  libxcb-wm,
   libGL,
-  libX11,
+  libx11,
   xwayland ? null,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cage";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "cage-kiosk";
     repo = "cage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P9MhIl2YIE2hwT5Yr0Cpes5S12evb0aj9oOPLeehkw0=";
+    hash = "sha256-NLoz11bfeZwesmwLmyytuB6/vSwIsnDWKzyAXFe+YZ0=";
   };
 
   depsBuildBuild = [
@@ -45,17 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wlroots_0_19
+    wlroots_0_20
     wayland
     wayland-protocols
     pixman
     libxkbcommon
-    xcbutilwm
+    libxcb-wm
     libGL
-    libX11
+    libx11
   ];
 
-  postFixup = lib.optionalString wlroots_0_19.enableXWayland ''
+  postFixup = lib.optionalString wlroots_0_20.enableXWayland ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 

@@ -5,15 +5,15 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alacritty-theme";
-  version = "0-unstable-2025-08-18";
+  version = "0-unstable-2026-05-01";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "40e0c6c8690d1c62f58718fcef8a48eb6077740b";
-    hash = "sha256-guNbnnSyENom6SkwN2Zjn3I1KnV5F3hbvYS1ns4q4uE=";
+    rev = "2749b407b597790e6f08b218c2bc2acdf66210a0";
+    hash = "sha256-vcacyCQ8XqnDUQ/rx+FBdcKHDfvkxUszIJRZZsvauag=";
     sparseCheckout = [ "themes" ];
   };
 
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (self: {
   dontBuild = true;
   preferLocalBuild = true;
 
-  sourceRoot = "${self.src.name}/themes";
+  sourceRoot = "${finalAttrs.src.name}/themes";
   installPhase = ''
     runHook preInstall
     install -Dt $out/share/alacritty-theme *.toml
@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation (self: {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Alacritty color schemes";
     homepage = "https://alacritty.org/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.nicoo ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nicoo ];
+    platforms = lib.platforms.all;
   };
 })

@@ -24,7 +24,7 @@ in
   testScript = ''
     machine.wait_for_unit("onlyoffice-docservice.service")
     machine.wait_for_unit("onlyoffice-converter.service")
-    machine.wait_for_open_port(${builtins.toString port})
+    machine.wait_for_open_port(${toString port})
     machine.succeed("curl --fail http://office.example.com/healthcheck")
   '';
 }

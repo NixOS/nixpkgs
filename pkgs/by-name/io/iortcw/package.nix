@@ -11,7 +11,8 @@ let
   });
 in
 buildEnv {
-  name = "iortcw";
+  inherit (sp) version;
+  pname = "iortcw";
 
   paths = [
     sp

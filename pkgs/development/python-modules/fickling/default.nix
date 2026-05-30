@@ -1,40 +1,38 @@
 {
   lib,
-  astunparse,
   buildPythonPackage,
-  distutils,
   fetchFromGitHub,
-  flit-core,
+  pythonOlder,
+  hatchling,
   numpy,
+  py7zr,
   pytestCheckHook,
+  stdlib-list,
   torch,
   torchvision,
-  stdlib-list,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fickling";
-  version = "0.1.4";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
-    tag = "v${version}";
-    hash = "sha256-EgVtMYPwSVBlw1bmX3qEeUKvEY7Awv6DOB5tgSLG+xQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0tY7zmMW5zt1Cl+Id5BejcLCQmjeqwCJS/CbKijqXNQ=";
   };
 
   build-system = [
-    distutils
-    flit-core
+    hatchling
   ];
 
   dependencies = [
-    astunparse
     stdlib-list
   ];
 
-  pythonRelaxDeps = [ "stdlib_list" ];
+  pythonRelaxDeps = [ "stdlib-list" ];
 
   optional-dependencies = {
     torch = [
@@ -44,21 +42,22 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    py7zr
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTestPaths = [
-    # https://github.com/trailofbits/fickling/issues/162
-    # AttributeError: module 'numpy.lib.format' has no attribute...
-    "test/test_polyglot.py"
-  ];
+  # Tests fail upstream in pytorch under python 3.14
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "fickling" ];
 
   meta = {
     description = "Python pickling decompiler and static analyzer";
     homepage = "https://github.com/trailofbits/fickling";
-    changelog = "https://github.com/trailofbits/fickling/releases/tag/${src.tag}";
+    changelog = "https://github.com/trailofbits/fickling/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

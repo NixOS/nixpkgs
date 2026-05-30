@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CobbCoding1";
     repo = "Cano";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OaWj0AKw3+sEhcAbIjgOLfxwCKRG6O1k+zSp0GnnFn8=";
   };
 

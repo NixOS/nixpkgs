@@ -29,7 +29,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Give Node-RED access to NPM and GCC at runtime, so 'Nodes' can be
+        Give Node-RED access to npm and GCC at runtime, so 'Nodes' can be
         downloaded and managed imperatively via the 'Palette Manager'.
       '';
     };
@@ -119,7 +119,7 @@ in
     systemd.services.node-red = {
       description = "Node-RED Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [ "network.target" ];
       environment = {
         HOME = cfg.userDir;
       };

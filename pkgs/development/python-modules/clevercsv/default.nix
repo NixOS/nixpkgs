@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     tag = "v${version}";
-    hash = "sha256-yp102f0WHu9wdVpXBIXn4lP7fi1UOQdA7M11hyVyRyM=";
+    hash = "sha256-XbRydL/4EzsKKlxtMnuv5HLB0VAThRAjH0IDCfRFFTc=";
   };
 
   build-system = [ setuptools ];
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     "tests/test_unit/test_console.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for handling messy CSV files";
     mainProgram = "clevercsv";
     longDescription = ''
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
     changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

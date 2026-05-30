@@ -5,19 +5,16 @@
   csrmesh,
   fetchPypi,
   pycryptodome,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "avion";
   version = "0.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-v/0NwFmxDZ9kEOx5qs5L9sKzOg/kto79syctg0Ah+30=";
   };
 
@@ -40,10 +37,10 @@ buildPythonPackage rec {
   # bluepy/uuids.json is not found
   # pythonImportsCheck = [ "avion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for controlling Avi-on Bluetooth dimmers";
     homepage = "https://github.com/mjg59/python-avion";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

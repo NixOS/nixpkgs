@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiousbwatcher";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "aiousbwatcher";
     tag = "v${version}";
-    hash = "sha256-M9MUaB3oHELHdtgaWri9nILnVQpF2FJvHrL68jXeOqg=";
+    hash = "sha256-kCuY4+pdfnO8BuYSQjZEyGxSaCwVYXRHWYhnbzxlDzM=";
   };
 
   build-system = [ setuptools ];

@@ -3,6 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # frontend
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+
   # build-system
   setuptools,
 
@@ -12,13 +17,13 @@
   django,
   django-filter,
   django-modelcluster,
-  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
   djangorestframework,
   draftjs-exporter,
   laces,
+  modelsearch,
   openpyxl,
   permissionedforms,
   pillow,
@@ -30,23 +35,42 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.2";
+  version = "7.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "wagtail";
-    tag = "v${version}";
-    hash = "sha256-o/4jn32ffR3BPVNwtFKJ6PowXYi7SpjBqghdeZIl5tM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Ar8lg340rafaRNgcohEBuloU/dJC+ODTzAMmrPS/PU=";
   };
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
+  ];
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-Z2VOMqsNIBybJpfYxAq2dkmS2vwd8Yuhu7MCFyqNxdI=";
+  };
+
+  preBuild = ''
+    # upstream only provides a hook for sdists, not wheels
+    # https://github.com/wagtail/wagtail/blob/v7.3/setup.py#L22
+    npm run build
+  '';
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [ "django-tasks" ];
+  pythonRelaxDeps = [
+    "django-tasks"
+    "modelsearch"
+  ];
 
   dependencies = [
     anyascii
@@ -54,13 +78,13 @@ buildPythonPackage rec {
     django
     django-filter
     django-modelcluster
-    django-modelsearch
     django-taggit
     django-tasks
     django-treebeard
     djangorestframework
     draftjs-exporter
     laces
+    modelsearch
     openpyxl
     permissionedforms
     pillow
@@ -82,8 +106,8 @@ buildPythonPackage rec {
     description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
-    changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wagtail/wagtail/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

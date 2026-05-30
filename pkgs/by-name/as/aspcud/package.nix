@@ -10,14 +10,14 @@
   re2c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.9.6";
   pname = "aspcud";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "aspcud";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PdRfpmH7zF5dn+feoijtzdSUjaYhjHwyAUfuYoWCL9E=";
   };
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Solver for package problems in CUDF format using ASP";
     homepage = "https://potassco.org/aspcud/";
-    platforms = platforms.all;
-    maintainers = [ maintainers.hakuch ];
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.hakuch ];
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

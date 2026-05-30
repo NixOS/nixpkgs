@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   valkey,
   redis,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -56,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

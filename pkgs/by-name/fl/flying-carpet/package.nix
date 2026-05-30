@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flying-carpet";
-  version = "9.0.6";
+  version = "9.0.10";
 
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "FlyingCarpet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yqY1D7SwTtARqsK/opC0SieCtwosr8zDFlEgmoaTiME=";
+    hash = "sha256-7yGU4HCuP8/6UC1J6fNA5CpppJGGhS/ywThXRToDTqo=";
   };
 
-  cargoHash = "sha256-zoZS7rV5Pou9OmodLF8CqcEsAWFjSdtk/S5OXsnKKyg=";
+  cargoHash = "sha256-/Z+0hdQ1H9R7FMLunGT5WgQKFY0b0b6gzrR2CNMe2II=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -63,11 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 "Flying Carpet/src-tauri/icons/32x32.png" "$out/share/icons/hicolor/32x32/apps/FlyingCarpet.png"
     install -Dm644 "Flying Carpet/src-tauri/icons/128x128.png" "$out/share/icons/hicolor/128x128/apps/FlyingCarpet.png"
     install -Dm644 "Flying Carpet/src-tauri/icons/128x128@2x.png" "$out/share/icons/hicolor/256x256@2/apps/FlyingCarpet.png"
-  '';
-
-  preFixup = ''
-    # https://github.com/tauri-apps/tauri/issues/9304
-    gappsWrapperArgs+=(--set WEBKIT_DISABLE_DMABUF_RENDERER 1)
   '';
 
   passthru.updateScript = nix-update-script { };

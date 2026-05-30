@@ -6,7 +6,7 @@
   freetype,
   wafHook,
   python3,
-  libXmu,
+  libxmu,
   glew,
   ucs-fonts,
   nixosTests,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     freetype
-    libXmu
+    libxmu
     glew
   ];
 

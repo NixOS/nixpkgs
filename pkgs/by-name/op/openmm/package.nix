@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmm";
-  version = "8.4.0";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "openmm";
     rev = finalAttrs.version;
-    hash = "sha256-vD0daqhEwiM+OMqW//mpc3p6ho/TI2muA6VopXyLYVE=";
+    hash = "sha256-YGoQGOP6Use4ivhxlWfKMpEjpm5ovFH1Qf0yVK5jr48=";
   };
 
   # "This test is stochastic and may occasionally fail". It does.
@@ -115,16 +115,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Couldn't get CUDA to run properly in the sandbox
   doCheck = !enableCuda && !enableOpencl;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for molecular simulation using high performance GPU code";
     mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 })

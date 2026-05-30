@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code-minimap";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "code-minimap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-unf7gFc/tQiUw3VqQ0KC96Srxn1E27WsmJviSggaCF4=";
   };
 
@@ -21,14 +21,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  meta = with lib; {
+  meta = {
     description = "High performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ bsima ];
+    maintainers = with lib.maintainers; [ bsima ];
     mainProgram = "code-minimap";
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     tag = "v${version}";
-    hash = "sha256-PEkxEKet0nrowWJ4J3AqqqdecO4zSbTampz/Dx0QD2s=";
+    hash = "sha256-n5AvHE9oe7+vqxUsqqGeVcENU8+I0y0jikbulAHAR3Q=";
   };
 
   build-system = [ hatchling ];
@@ -36,11 +36,11 @@ buildPythonPackage rec {
     "test_connection_auth_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
     changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

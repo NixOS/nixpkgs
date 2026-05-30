@@ -24,15 +24,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapcast";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
-    rev = "v${version}";
-    hash = "sha256-BPsAGFLWUfONuyQ1pzsJzGV/Jlxv+4TkVT1KG7j8H0s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kUw4yQpCxgjP4hH2Lpxc7l+ufhYSKs7xL80aJuPrqOo=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional pipewireSupport pipewire
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    TARGET = "MACOS";
+  };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport)
@@ -75,11 +77,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.snapcast = nixosTests.snapcast;
 
-  meta = with lib; {
+  meta = {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

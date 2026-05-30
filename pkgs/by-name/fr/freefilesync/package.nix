@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   replaceVars,
+  fetchFromGitHub,
   fetchDebianPatch,
   copyDesktopItems,
   pkg-config,
@@ -19,8 +20,16 @@
 }:
 
 let
-  wxwidgets_3_3' = wxwidgets_3_3.overrideAttrs (
+  wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
+      version = "3.3.2";
+      src = fetchFromGitHub {
+        owner = "wxWidgets";
+        repo = "wxWidgets";
+        tag = "v${finalAttrs.version}";
+        fetchSubmodules = true;
+        hash = "sha256-UL1NuByKFGMQ/dhjuWRdnWTgdy4+1cD9pSls3e1mur8=";
+      };
       patches = [
         ./wxcolorhook.patch
       ];
@@ -29,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.5";
+  version = "14.9";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -38,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-+qfj1zf3V5xxtvXgCa0QDDRhEPQ3Qzii5eKiMySuUUY=";
+    hash = "sha256-TY41DJIvp7CNR8U12q2YUhiyHZuL9FcfLTVDQWTIfQA=";
   };
 
   sourceRoot = ".";
@@ -60,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    touch zen/warn_static.h
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
@@ -74,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3'
+    wxwidgets_3_3_1
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -106,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R FreeFileSync/Build/* $out
     mv $out/{Bin,bin}
 
-    mkdir -p $out/share/pixmaps
-    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';
@@ -137,16 +150,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
     license = [
-      licenses.gpl3Only
-      licenses.openssl
-      licenses.curl
-      licenses.bsd3
+      lib.licenses.gpl3Only
+      lib.licenses.openssl
+      lib.licenses.curl
+      lib.licenses.bsd3
     ];
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.linux;
   };
 })

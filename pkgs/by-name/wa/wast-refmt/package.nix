@@ -8,6 +8,7 @@
   nodejs,
   makeBinaryWrapper,
   gcc,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wast-refmt";
@@ -59,11 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "WAST Reformatter";
     homepage = "https://webassembly.js.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "wast-refmt";
   };
 })

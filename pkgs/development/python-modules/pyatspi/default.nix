@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.58.0";
+  version = "2.58.1";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor version}/pyatspi-${version}.tar.xz";
-    sha256 = "6dKQ1TzH4wZtly/RilDuiF77i+CqJSYvGe9/iE/qDv8=";
+    sha256 = "Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = "https://gitlab.gnome.org/GNOME/pyatspi2";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = with lib.platforms; unix;
   };
 }

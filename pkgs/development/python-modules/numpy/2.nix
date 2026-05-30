@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python,
-  numpy_2,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -15,7 +13,6 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
@@ -35,42 +32,17 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-let
-  cfg = writeTextFile {
-    name = "site.cfg";
-    text = lib.generators.toINI { } {
-      ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
-        library_dirs = "${blas}/lib:${lapack}/lib";
-        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
-        libraries = "lapack,lapacke,blas,cblas";
-      };
-      lapack = {
-        include_dirs = "${lib.getDev lapack}/include";
-        library_dirs = "${lapack}/lib";
-        runtime_library_dirs = "${lapack}/lib";
-      };
-      blas = {
-        include_dirs = "${lib.getDev blas}/include";
-        library_dirs = "${blas}/lib";
-        runtime_library_dirs = "${blas}/lib";
-      };
-    };
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.3.4";
+  version = "2.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "numpy";
     repo = "numpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MfL7UQeSuxJIEQzY/0LIuScyBCilINt8e+zAeUNPmH0=";
+    hash = "sha256-LAGXw4vFpjZjZ2s/dXdzXHDm6Ah3pronjScqK02wivY=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -90,13 +62,28 @@ buildPythonPackage rec {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
+    # This is required to support CPUs with feature-sets earlier than x86-64-v2
+    # (before 2009). This will still build optimizations for newer features, but
+    # allow for importing with older machines. See:
+    #
+    #  - https://github.com/NixOS/nixpkgs/issues/496822
+    #  - https://numpy.org/devdocs/reference/simd/build-options.html
+    #  - https://github.com/numpy/numpy/issues/31073
+    #
+    # NOTE: It is possible to enable CPU features based upon attributes defined
+    # in `lib/systems/architectures.nix`, but that might trigger tons of
+    # rebuilds on old x86_64 CPU machines, and it will be too complex for
+    # maintenance.
+    (lib.mesonOption "cpu-baseline" "none")
+  ];
+
   build-system = [
     cython
     gfortran
     meson-python
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
@@ -113,7 +100,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ln -s ${cfg} site.cfg
+    ln -s ${finalAttrs.finalPackage.passthru.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -162,6 +149,10 @@ buildPythonPackage rec {
     "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_floor_division_errors" # FloatingPointError: invalid value encountered in floor_divide
+    "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage ...>]
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
     "test_loss_of_precision"
@@ -179,18 +170,39 @@ buildPythonPackage rec {
     # just for backwards compatibility
     blas = blas.provider;
     blasImplementation = blas.implementation;
-    inherit cfg;
-    coreIncludeDir = "${numpy_2}/${python.sitePackages}/numpy/_core/include";
+    buildConfig = {
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+        runtime_library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+        runtime_library_dirs = "${blas}/lib";
+      };
+    };
+    cfg = writeTextFile {
+      name = "site.cfg";
+      text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
+    };
+    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
     tests = {
       inherit sage;
     };
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${finalAttrs.src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

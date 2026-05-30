@@ -49,6 +49,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def drawterm_running():
               machine.succeed("pgrep drawterm")

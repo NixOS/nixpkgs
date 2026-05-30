@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "subprober";
   version = "1.0.9";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RevoltSecurities";
     repo = "SubProber";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CxmePd1dw9H/XLQZ16JMF1pdFFOI59Qa2knTnKKzFvM=";
   };
 
@@ -45,9 +45,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Subdomain scanning tool";
     homepage = "https://github.com/RevoltSecurities/SubProber";
-    changelog = "https://github.com/RevoltSecurities/SubProber/releases/tag/v${version}";
+    changelog = "https://github.com/RevoltSecurities/SubProber/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "subprober";
   };
-}
+})

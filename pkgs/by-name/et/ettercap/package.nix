@@ -22,7 +22,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ettercap";
   version = "0.8.4-unstable-2025-07-16";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   # TODO: Remove after the next release (0.8.4 should work without this):
   env.NIX_CFLAGS_COMPILE = toString [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive suite for man in the middle attacks";
     longDescription = ''
       Ettercap is a comprehensive suite for man in the middle attacks. It
@@ -83,9 +83,9 @@ stdenv.mkDerivation rec {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
-    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

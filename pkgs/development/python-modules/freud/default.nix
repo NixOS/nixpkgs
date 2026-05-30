@@ -4,33 +4,31 @@
   fetchFromGitHub,
 
   # build-system
-  scikit-build-core,
   cython,
-  oldest-supported-numpy,
+  numpy,
+  scikit-build-core,
 
   # nativeBuildInputs
   cmake,
   ninja,
 
   # buildInputs
-  onetbb,
   nanobind,
+  onetbb,
 
   # dependencies
-  numpy,
+  parsnip,
   rowan,
   scipy,
-  parsnip,
 
   # tests
-  pytestCheckHook,
-  python,
   gsd,
   matplotlib,
+  pytestCheckHook,
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "freud";
   version = "3.5.0";
   pyproject = true;
@@ -38,9 +36,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
-    tag = "v${version}";
-    hash = "sha256-NRI3cv3yQxAwkGxh0CFYEERNkjP51Z58vtCV9GlIESY=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-NRI3cv3yQxAwkGxh0CFYEERNkjP51Z58vtCV9GlIESY=";
   };
 
   # Because we prefer to not `leaveDotGit`, we need to fool upstream into
@@ -54,9 +52,9 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    scikit-build-core
     cython
-    oldest-supported-numpy
+    numpy
+    scikit-build-core
   ];
 
   nativeBuildInputs = [
@@ -65,37 +63,47 @@ buildPythonPackage rec {
   ];
   dontUseCmakeConfigure = true;
   buildInputs = [
-    onetbb
     nanobind
+    onetbb
   ];
 
   dependencies = [
     numpy
+    parsnip
     rowan
     scipy
-    parsnip
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     gsd
     matplotlib
+    pytestCheckHook
     sympy
   ];
-  # On top of cd $out due to https://github.com/NixOS/nixpkgs/issues/255262 ,
-  # we need to also copy the tests because otherwise pytest won't find them.
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
-    cp -R tests $out/${python.sitePackages}/freud/tests
-    cd $out
+    rm -rf freud
   '';
+
+  disabledTests = [
+    # 4 tests fail with:
+    #
+    # AttributeError: module 'scipy.special' has no attribute 'sph_harm'
+    #
+    # See: https://github.com/glotzerlab/freud/issues/1408
+    "test_ld"
+    "test_multiple_l"
+    "test_qlmi"
+    "test_query_point_ne_points"
+  ];
 
   pythonImportsCheck = [ "freud" ];
 
   meta = {
     description = "Powerful, efficient particle trajectory analysis in scientific Python";
     homepage = "https://github.com/glotzerlab/freud";
-    changelog = "https://github.com/glotzerlab/freud/blob/${src.tag}/ChangeLog.md";
+    changelog = "https://github.com/glotzerlab/freud/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

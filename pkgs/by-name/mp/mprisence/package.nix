@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprisence";
-  version = "1.2.13";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "lazykern";
     repo = "mprisence";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZOkgBwph0BQVbDhKCTMd0/On2Hti2FleRVhDx1HlwVk=";
+    hash = "sha256-8w4k+l0uqIFgIVBuK0H/Mhvwp2HHEzvKmExkTiRUmEM=";
   };
 
-  cargoHash = "sha256-SocWijJA2Io7AzOyM2miUCFG5rD2zCfYJrON/Q7yTaw=";
+  cargoHash = "sha256-PcQc7LpQqnTiAfTL+E67Ibbsw5UI7j0YICiHpxWrrj8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable Discord Rich Presence for MPRIS media players on Linux";
     homepage = "https://github.com/lazykern/mprisence";
-    license = licenses.mit;
-    maintainers = with maintainers; [ toasteruwu ];
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ toasteruwu ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "mprisence";
   };
 })

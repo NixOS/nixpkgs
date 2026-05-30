@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Receive and store audio & video over IEEE1394";
 
     longDescription = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation {
 
     homepage = "https://github.com/ddennedy/dvgrab"; # Formerly http://www.kinodv.org/
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.gnu ++ platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "dvgrab";
   };
 }

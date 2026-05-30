@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "greaseweazle";
-  version = "1.22";
+  version = "1.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keirf";
     repo = "greaseweazle";
-    rev = "v${version}";
-    hash = "sha256-Ki4OvtcFn5DH87OCWY7xN9fRhGxlzS9QIuQCJxPWJco=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ey9srzGnyaZ5TmeSXo7AQwh93Iufim41mgJnJXHSIyc=";
   };
 
   build-system = with python3.pkgs; [
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "greaseweazle";
   };
-}
+})

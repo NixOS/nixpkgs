@@ -24,10 +24,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "deep_chainmap" ];
 
   # See the guide for more information: https://nixos.org/nixpkgs/manual/#chap-meta
-  meta = with lib; {
+  meta = {
     description = "Recursive subclass of ChainMap";
     homepage = "https://github.com/neutrinoceros/deep_chainmap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rehno-lindeque ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rehno-lindeque ];
   };
 }

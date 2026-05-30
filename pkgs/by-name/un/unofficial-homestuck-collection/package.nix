@@ -3,7 +3,6 @@
   stdenv,
   electron,
   fetchFromGitHub,
-  fetchurl,
   fetchYarnDeps,
   fixup-yarn-lock,
   replaceVars,
@@ -15,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unofficial-homestuck-collection";
-  version = "2.7.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "GiovanH";
     repo = "unofficial-homestuck-collection";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-0RPZfXdcdBo1OxJU3eSRF7fEO5EYMyJCcAZLEqzDMRk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xG7pFJnQLsJDsC8e7PJ2lDWsN4p1NtqIgfwnpHBA0Yk=";
   };
 
   patches = [

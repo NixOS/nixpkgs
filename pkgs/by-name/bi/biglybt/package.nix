@@ -8,12 +8,12 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "biglybt";
   version = "3.9.0.0";
 
   src = fetchurl {
-    url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${version}/GitHub_BiglyBT_unix.tar.gz";
+    url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${finalAttrs.version}/GitHub_BiglyBT_unix.tar.gz";
     hash = "sha256-NBXEY5f2kVPoZit7Gy4rM61bwQSdXovg0gURukhxJJ4=";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${version}";
+    changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${finalAttrs.version}";
     description = "BitTorrent client based on the Azureus that supports I2P darknet for privacy";
     downloadPage = "https://github.com/BiglySoftware/BiglyBT";
     homepage = "https://www.biglybt.com/";
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "biglybt";
     maintainers = with lib.maintainers; [ raspher ];
   };
-}
+})

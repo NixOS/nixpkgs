@@ -18,12 +18,12 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libdrm,
   libxcb,
   libxkbcommon,
@@ -82,12 +82,12 @@ stdenv.mkDerivation {
           gdk-pixbuf
           glib
           gtk3
-          libX11
-          libXcomposite
-          libXdamage
-          libXext
-          libXfixes
-          libXrandr
+          libx11
+          libxcomposite
+          libxdamage
+          libxext
+          libxfixes
+          libxrandr
           libdrm
           libxcb
           libxkbcommon

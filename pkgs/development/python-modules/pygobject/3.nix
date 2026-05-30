@@ -11,27 +11,24 @@
   ncurses,
   meson,
   ninja,
-  pythonOlder,
   gnome,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.54.3";
+  version = "3.56.2";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  disabled = pythonOlder "3.9";
-
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-qNoJE0oPfVZJHPJBIUXjWqdOkddg6PM3CWoc2guSuuc=";
+    url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
+    hash = "sha256-uBYJiWlUQIHenuztuUrWrFnHfk1XH+cFHxi+vOwHQxM=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -54,6 +51,12 @@ buildPythonPackage rec {
     gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
+  # Fixes https://github.com/NixOS/nixpkgs/issues/378447
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    export PKG_CONFIG_PATH=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH
+    export PKG_CONFIG_PATH_FOR_BUILD=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH_FOR_BUILD
+  '';
+
   mesonFlags = [
     # This is only used for figuring out what version of Python is in
     # use, and related stuff like figuring out what the install prefix
@@ -63,17 +66,17 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "python3.pkgs.${pname}3";
+      packageName = "pygobject";
+      attrPath = "python3.pkgs.pygobject3";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

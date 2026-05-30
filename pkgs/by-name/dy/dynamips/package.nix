@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dynamips";
   version = "0.2.23";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "dynamips";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+h+WsZ/QrDd+dNrR6CJb2uMG+vbUvK8GTxFJZOxknL0=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       routers.
     '';
     homepage = "https://github.com/GNS3/dynamips";
-    changelog = "https://github.com/GNS3/dynamips/releases/tag/v${version}";
+    changelog = "https://github.com/GNS3/dynamips/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "dynamips";
     maintainers = with lib.maintainers; [
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

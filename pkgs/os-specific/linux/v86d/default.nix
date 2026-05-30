@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     mainProgram = "v86d";
     homepage = "https://github.com/mjanusz/v86d";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

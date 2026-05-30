@@ -7,19 +7,19 @@
   libosmocore,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-ggsn";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-ggsn";
-    rev = version;
-    hash = "sha256-qsBjoLyMlRgUjhX1tyI/MoHGmww1XUT3OMH4dVZzLU4=";
+    rev = finalAttrs.version;
+    hash = "sha256-/t5BqZYbeQb2Aea7fSJSJ4ZY2kG/6BtqHeCfFdfo4VA=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "osmo-ggsn";
   };
-}
+})

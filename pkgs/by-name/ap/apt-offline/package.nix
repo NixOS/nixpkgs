@@ -18,7 +18,7 @@ let
   };
 in
 python3Packages.buildPythonApplication {
-  format = "pyproject";
+  pyproject = true;
   inherit pname version src;
 
   nativeBuildInputs = [ installShellFiles ];

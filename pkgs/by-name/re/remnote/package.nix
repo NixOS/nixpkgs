@@ -6,10 +6,10 @@
 }:
 let
   pname = "remnote";
-  version = "1.22.7";
+  version = "1.26.11";
   src = fetchurl {
     url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
-    hash = "sha256-iC0ycw+mx4K0IK4u9PmgRFXAP5chHdAPHSpbWpBE0Ko=";
+    hash = "sha256-3F1lC/3ek6k3x6qZ4WswJRe/QYEy3iTNMhMmLtR6i0U=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -20,7 +20,7 @@ appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/remnote.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
-    install -Dm444 ${appimageContents}/remnote.png -t $out/share/pixmaps
+    install -Dm444 ${appimageContents}/remnote.png -t $out/share/icons/hicolor/512x512/apps
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
@@ -36,11 +36,11 @@ appimageTools.wrapType2 {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ chewblacka ];
-    license = licenses.unfree;
+    maintainers = [ ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
   };

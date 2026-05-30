@@ -10,14 +10,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fomp";
   version = "1.2.4";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "fomp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8rkAV+RJS9vQV+9+swclAP0QBjBDT2tKeLWHxwpUrlk=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://drobilla.net/software/fomp.html";
     description = "LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
-}
+})

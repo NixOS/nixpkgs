@@ -19,7 +19,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
     homepage = "https://github.com/xocolatl/periods";
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };

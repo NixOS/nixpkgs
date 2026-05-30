@@ -4,7 +4,6 @@
   blueprint-compiler,
   desktop-file-utils,
   fetchurl,
-  fetchpatch,
   glib,
   gnome,
   gobject-introspection,
@@ -18,24 +17,15 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "showtime";
-  version = "49.0";
+  version = "50.0";
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/showtime/${lib.versions.major version}/showtime-${version}.tar.xz";
-    hash = "sha256-Wryvl6telTADgoKEhYjozmwmFztzA+9nVr69sLIO05g=";
+    url = "mirror://gnome/sources/showtime/${lib.versions.major finalAttrs.version}/showtime-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Q5nJ+n9h5ZhCQuJ5rNFRm+7CRrmKZ21EpLKrlOnuywE=";
   };
-
-  patches = [
-    # Fix startup crash when missing state directory.
-    # https://gitlab.gnome.org/GNOME/showtime/-/merge_requests/80
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/showtime/-/commit/a5d57a6b023664c9dc5aeb55a3467a8b56e1b7bc.patch";
-      hash = "sha256-IUkopJ3J381+9MnvaItx7dn9NAVrqO9y4LjgPh8MU/M=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -79,6 +69,13 @@ python3Packages.buildPythonApplication rec {
     export HOME="$TEMPDIR"
   '';
 
+  # HACK: To get rid of unreproducible __pycache__ created by pythonImportsCheck.
+  # See https://github.com/NixOS/nixpkgs/issues/469081
+  deletePycachePhase = ''
+    find $out/lib -type d -name __pycache__ -prune -exec rm -vr {} \;
+  '';
+  postPhases = [ "deletePycachePhase" ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "showtime";
@@ -93,4 +90,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome ];
     mainProgram = "showtime";
   };
-}
+})

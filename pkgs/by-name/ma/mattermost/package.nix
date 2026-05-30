@@ -5,28 +5,34 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
   jq,
   nixosTests,
 
+  latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
-    # ESR releases only.
-    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # ESR releases only. Note: if NixOS would release with an ESR that goes out
+    # of support during the lifetime of the NixOS release, it is acceptable
+    # to put the latest non-ESR release here if we change it to an ESR shortly after
+    # the NixOS release.
+    #
+    # See <https://docs.mattermost.com/upgrade/extended-support-release.html>.
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.6";
-    srcHash = "sha256-JBZAFyjZOteDaCVktxXtdbimNrvCpUpgK45OuFCI5xQ=";
-    vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
-    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
-    lockfileOverlay = ''
-      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
-    '';
+    regex = "^v(11\\.7\\.[0-9]+)$";
+    version = "11.7.1";
+    srcHash = "sha256-9eI9tX6qHEEzm7aro7ky2JORfAmqbjmrmxABFVTZzW8=";
+    vendorHash = "sha256-xu399pAtIJUIns+GhKFlDR0crWV+8HiN9Wf38EMu5q8=";
+    npmDepsHash = "sha256-M+yoCLR4yT30n3rhqZu1z8zeWas+5VniP4aaIJPz6VU=";
   },
+  ...
 }:
 
 let
@@ -84,16 +90,27 @@ let
         };
     in
     finalPassthru.withoutTests;
+
+  versionInfo' =
+    if
+      latestVersionInfo != null && lib.versionAtLeast latestVersionInfo.version versionInfo.version
+    then
+      # Prefer the latest if we're building mattermostLatest
+      latestVersionInfo
+    else
+      # Prefer the one we have
+      assert versionInfo != null;
+      versionInfo;
 in
 buildMattermost rec {
   pname = "mattermost";
-  inherit (versionInfo) version;
+  inherit (versionInfo') version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     tag = "v${version}";
-    hash = versionInfo.srcHash;
+    hash = versionInfo'.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -104,13 +121,13 @@ buildMattermost rec {
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
-      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+      ${lib.optionalString (versionInfo'.lockfileOverlay or null != null) ''
         ${lib.getExe jq} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
                  | .packages[path].version = root.packages.channels.dependencies[dependency];
-          ${versionInfo.lockfileOverlay}
+          ${versionInfo'.lockfileOverlay}
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
@@ -121,26 +138,38 @@ buildMattermost rec {
     '';
   };
 
+  patches =
+    lib.optionals removeFreeBadge [
+      ./mattermost-remove-free-banner.patch
+    ]
+    ++ lib.optionals removeUserLimit [
+      ./mattermost-remove-user-limit.patch
+    ];
+
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
   overrideModAttrs = _: {
     buildPhase = ''
+      runHook preBuild
+
       make setup-go-work
       go work vendor -e -v
+
+      runHook postBuild
     '';
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = versionInfo.npmDepsHash;
+    hash = versionInfo'.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
 
-  inherit (versionInfo) vendorHash;
+  inherit (versionInfo') vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -185,20 +214,26 @@ buildMattermost rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     for subPackage in $subPackages; do
+      echo "Checking version for: $subPackage" >&2
       "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
     done
+
+    runHook postInstallCheck
   '';
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
-        versionInfo.regex
+        versionInfo'.regex
       ]
-      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+      ++ lib.optionals (versionInfo'.autoUpdate or null != null) [
         "--override-filename"
-        versionInfo.autoUpdate
+        versionInfo'.autoUpdate
       ];
     };
     tests.mattermost = nixosTests.mattermost;
@@ -220,6 +255,7 @@ buildMattermost rec {
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
 
+      inherit nodejs;
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;
@@ -229,10 +265,11 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        npm run build --workspace=platform/types
-        npm run build --workspace=platform/client
-        npm run build --workspace=platform/components
-        npm run build --workspace=channels
+        for ws in platform/{types,client,components,shared} channels; do
+          if [ -d "$ws" ]; then
+            npm run build --workspace="$ws"
+          fi
+        done
 
         runHook postBuild
       '';
@@ -258,7 +295,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;

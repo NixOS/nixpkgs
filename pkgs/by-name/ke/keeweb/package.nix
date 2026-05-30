@@ -19,12 +19,12 @@
   libsecret,
   libappindicator,
   xdotool,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXrandr,
-  libXScrnSaver,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxext,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
   libxshmfence,
 }:
 let
@@ -55,12 +55,12 @@ let
     libGL
     nss
     udev
-    libX11
-    libXcomposite
-    libXext
-    libXrandr
-    libXScrnSaver
-    libXtst
+    libx11
+    libxcomposite
+    libxext
+    libxrandr
+    libxscrnsaver
+    libxtst
     libxshmfence
     gnome-keyring
     libgbm

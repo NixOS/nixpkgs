@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "simple64-netplay-server";
   version = "2025.03.1";
 
   src = fetchFromGitHub {
     owner = "simple64";
     repo = "simple64-netplay-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n+au4x6d50rZI5sH7B5jdlD6vXK65UM4TRAtzpPW6ws=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     mainProgram = "simple64-netplay-server";
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

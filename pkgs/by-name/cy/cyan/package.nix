@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyan";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "rodlie";
     repo = "cyan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-R5sj8AN7UT9OIeUPNrdTIUQvtEitXp1A32l/Z2qRS94=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Image viewer and converter, designed for prepress (print) work";
     homepage = "https://github.com/rodlie/cyan";
     mainProgram = "Cyan";
-    license = licenses.cecill21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.cecill21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

@@ -60,6 +60,9 @@ $a}
       s/ ([^ ]+)/ "\1"/g
       # adjust naming as in nixpkgs, the full texts of the licenses are available at https://www.ctan.org/license/${licenseName}
       s/"(cc-by(-sa)?-[1-4])"/"\10"/g
+      s/"0bsd"/"bsd0"/g
+      s/"agpl3"/"agpl3Only"/g
+      s/"agpl3\+"/"agpl3Plus"/g
       s/"apache2"/"asl20"/g
       s/"artistic"/"artistic1-cl8"/g
       s/"bsd"/"bsd3"/g          # license text does not match exactly, but is pretty close
@@ -164,18 +167,22 @@ $a}
       # flag existence of tlpkg files in hold space
       x ; s/$/\n  hasTlpkg = true;/ ; x
     }
+    / [^ ]*\.jar /{
+      # flag existence of java bytecode in hold space
+      x ; s/$/\n  hasJar = true;/ ; x
+    }
 
     # extract script extensions
-    / texmf-dist\/scripts\/.*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
+    / texmf-dist\/scripts\/[^ ]*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
       i\  scriptExts = [
-        / texmf-dist\/scripts\/.*\.jar /i\    "jar"
-        / texmf-dist\/scripts\/.*\.lua /i\    "lua"
-        / texmf-dist\/scripts\/.*\.py /i\    "py"
-        / texmf-dist\/scripts\/.*\.rb /i\    "rb"
-        / texmf-dist\/scripts\/.*\.sno /i\    "sno"
-        / texmf-dist\/scripts\/.*\.tcl /i\    "tcl"
-        / texmf-dist\/scripts\/.*\.texlua /i\    "texlua"
-        / texmf-dist\/scripts\/.*\.tlu /i\    "tlu"
+        / texmf-dist\/scripts\/[^ ]*\.jar /i\    "jar"
+        / texmf-dist\/scripts\/[^ ]*\.lua /i\    "lua"
+        / texmf-dist\/scripts\/[^ ]*\.py /i\    "py"
+        / texmf-dist\/scripts\/[^ ]*\.rb /i\    "rb"
+        / texmf-dist\/scripts\/[^ ]*\.sno /i\    "sno"
+        / texmf-dist\/scripts\/[^ ]*\.tcl /i\    "tcl"
+        / texmf-dist\/scripts\/[^ ]*\.texlua /i\    "texlua"
+        / texmf-dist\/scripts\/[^ ]*\.tlu /i\    "tlu"
       i\  ];
     }
 

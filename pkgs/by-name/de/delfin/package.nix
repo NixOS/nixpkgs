@@ -4,7 +4,7 @@
   appstream,
   cargo,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gitUpdater,
   gtk4,
   libadwaita,
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   pname = "delfin";
   version = "0.4.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
@@ -75,15 +74,15 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       colinsane
       avery
     ];
     mainProgram = "delfin";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

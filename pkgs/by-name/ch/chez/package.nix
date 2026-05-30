@@ -10,7 +10,7 @@
   darwin,
   ncurses,
   libiconv,
-  libX11,
+  libx11,
   testers,
   writableTmpDirAsHomeHook,
   buildPackages,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "10.3.0";
+  version = "10.4.1";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "ChezScheme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5h9W4Tdn8EKEhdecKttLOn8J2OfNp5iaIg017UIk3CI=";
+    hash = "sha256-7b7I+g4h05BRI2lLAlwlIBw5KxKAai1lU8TESACaSYg=";
     # Vendored nanopass and stex
     fetchSubmodules = true;
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
   ]
   ++ lib.optionals stdenv.hostPlatform.isUnix [
-    libX11
+    libx11
   ];
 
   /*

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "nameparser";
   version = "1.1.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nameparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for parsing human names into their individual components";
     homepage = "https://github.com/derek73/python-nameparser";
     changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

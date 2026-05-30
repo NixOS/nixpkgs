@@ -10,25 +10,24 @@
   brush,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brush";
-  version = "0.2.23";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "reubeno";
     repo = "brush";
-    tag = "brush-shell-v${version}";
-    hash = "sha256-b3foza29ty4P09PaBFh1nmGyn1YsxNPiVQHUcwWo6Lg=";
+    tag = "brush-shell-v${finalAttrs.version}";
+    hash = "sha256-zG6ho/QECzLC/evOUdo9mYXoh4xA2PF+BQvnCsLZiNg=";
   };
 
-  cargoHash = "sha256-+HUZNOPPyRn2tQel/8fIiRQo761G3ygfRPuvjHkRAV8=";
+  cargoHash = "sha256-NSvlLiLp0kdnWNUSIateGkscL5as+b00d54CP3sEakI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
@@ -61,9 +60,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Bash/POSIX-compatible shell implemented in Rust";
     homepage = "https://github.com/reubeno/brush";
-    changelog = "https://github.com/reubeno/brush/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/reubeno/brush/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kachick ];
     mainProgram = "brush";
   };
-}
+})

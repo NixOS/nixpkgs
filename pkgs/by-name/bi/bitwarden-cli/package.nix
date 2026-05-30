@@ -14,27 +14,31 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.11.0";
+  version = "2026.4.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-wG0JKQKjNAEoQt/8BFIzISNNUrBqKQHPZ8DRJ69eA5s=";
+    hash = "sha256-8UDzW93O+AvMGXcVHe1PTvYvmXewl/bXsxIdjoGRtcQ=";
   };
-
-  patches = [
-    ./fix-lockfile.patch
-  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
+
+    # Upstream cli-v2026.4.1 bumps @napi-rs/cli to 3.5.1 in the desktop workspace,
+    # but the root lockfile still points that entry at 3.2.0.
+    substituteInPlace package-lock.json \
+      --replace-fail \
+      $'    "apps/desktop/node_modules/@napi-rs/cli": {\n      "version": "3.2.0",\n      "resolved": "https://registry.npmjs.org/@napi-rs/cli/-/cli-3.2.0.tgz",\n      "integrity": "sha512-heyXt/9OBPv/WrTFW2+PxIMzH6MCeqP9ZsvOg0LN6pLngBnszcxFsdhCAh5I6sddzQsvru53zj59GUzvmpWk8Q==",' \
+      $'    "apps/desktop/node_modules/@napi-rs/cli": {\n      "version": "3.5.1",\n      "resolved": "https://registry.npmjs.org/@napi-rs/cli/-/cli-3.5.1.tgz",\n      "integrity": "sha512-XBfLQRDcB3qhu6bazdMJsecWW55kR85l5/k0af9BIBELXQSsCFU0fzug7PX8eQp6vVdm7W/U3z6uP5WmITB2Gw==",'
   '';
 
   nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-/57+ch1d1VMGIMO0Kzu6o3tUX/3adgLkONNRgtyARtQ=";
+  npmDepsHash = "sha256-3RQ0HRsLQlXMeJIHAPKbZsGi6I/70pSIg8NM/3uJvUo=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -91,9 +95,9 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
+    inherit (finalAttrs) npmDeps;
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
@@ -114,6 +118,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       dotlambda
+      caverav
     ];
   };
 })

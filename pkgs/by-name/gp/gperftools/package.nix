@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/gperftools/raw/88ce8ee43a12b1a8146781a1b4d9abbd8df8af0e/f/gperftools-2.17-disable-generic-dynamic-tls.patch";
       hash = "sha256-IOLUf9mCEA+fVSJKU94akcnXTIm7+t+S9cjBHsEDwFA=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-disable-benchmarks.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

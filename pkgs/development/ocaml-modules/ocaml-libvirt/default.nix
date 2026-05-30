@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OCaml bindings for libvirt";
     homepage = "https://libvirt.org/ocaml/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
     inherit (ocaml.meta) platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.02");

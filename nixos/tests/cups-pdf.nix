@@ -36,7 +36,7 @@
         # wait until the pdf files are completely produced and readable by alice
         machine.wait_until_succeeds(f"su - alice -c 'pdfinfo /var/spool/cups-pdf-{name}/users/alice/*.pdf'")
         machine.succeed(f"cp /var/spool/cups-pdf-{name}/users/alice/*.pdf /tmp/{name}.pdf")
-        machine.copy_from_vm(f"/tmp/{name}.pdf", "")
+        machine.copy_from_machine(f"/tmp/{name}.pdf", "")
         run(f"${lib.getExe hostPkgs.imagemagickBig} -density 300 $out/{name}.pdf $out/{name}.jpeg", shell=True, check=True)
         assert text.encode() in run(f"${lib.getExe hostPkgs.tesseract} $out/{name}.jpeg stdout", shell=True, check=True, capture_output=True).stdout
   '';

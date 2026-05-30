@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
+  pythonAtLeast,
   scipy,
   numpy,
   pytestCheckHook,
@@ -45,18 +46,24 @@ buildPythonPackage rec {
     "test_ellipse_axes"
     "test_normalize"
     "test_haralick3d"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # sys.getrefcount semantics changed in 3.14
+    "test_close_holes_simple"
+    "test_watershed"
   ];
 
   pythonImportsCheck = [ "mahotas" ];
 
-  disabled = stdenv.hostPlatform.isi686; # Failing tests
-
-  meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  meta = {
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      # Failing tests
+      || stdenv.hostPlatform.isi686;
     description = "Computer vision package based on numpy";
     homepage = "https://mahotas.readthedocs.io/";
-    maintainers = with maintainers; [ luispedro ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ luispedro ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

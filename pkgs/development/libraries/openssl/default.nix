@@ -39,6 +39,8 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
+  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+
   common =
     {
       version,
@@ -90,6 +92,24 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
+      ''
+      # This test will fail if the error strings between the build libc and host
+      # libc mismatch, e.g. when cross-compiling from glibc to musl
+      +
+        lib.optionalString
+          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
+          ''
+            rm test/recipes/02-test_errstr.t
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
+      ''
+      # this test has inconsistent behavior in the freebsd sandbox
+      # (binds to only ipv6 and connects on only ipv4)
+      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+        substituteInPlace test/recipes/82-test_ocsp_cert_chain.t \
+          --replace-fail '"-accept",' '"-4", "-accept",' \
+          --replace-fail '"-connect",' '"-4", "-connect",'
       '';
 
       outputs = [
@@ -113,7 +133,7 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -167,6 +187,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -186,11 +208,6 @@ let
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
-      # Tell build system it's cross environment. This allows to skip tests
-      # that would fail when libc is different. Otherwise, run the tests.
-      ++ lib.optional (
-        !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
-      ) "--cross-compile-prefix=${lib.getBin stdenv.cc}/bin/"
       ++ lib.optionals withCryptodev [
         "-DHAVE_CRYPTODEV"
         "-DUSE_CRYPTODEV_DIGESTS"
@@ -287,7 +304,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -368,20 +385,25 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+      strictDeps = lib.versionAtLeast version "4.0";
+      __structuredAttrs = lib.versionAtLeast version "4.0";
+
       meta = {
         homepage = "https://www.openssl.org/";
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
+        donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
-        teams = [ lib.teams.stridtech ];
+        teams = [ lib.teams.security-review ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"
           "openssl"
         ];
         platforms = lib.platforms.all;
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openssl" finalAttrs.version;
       }
       // extraMeta;
     });
@@ -408,7 +430,10 @@ in
       ./1.1/nix-ssl-cert-file.patch
 
       (
-        if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
+        if stdenv.hostPlatform.isDarwin then
+          ./1.1/use-etc-ssl-certs-darwin.patch
+        else
+          ./1.1/use-etc-ssl-certs.patch
       )
     ];
     withDocs = true;
@@ -420,8 +445,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.18";
-    hash = "sha256-2Aw09c+QLczx8bXfXruG0DkuNwSeXXPfGzq65y5P/os=";
+    version = "3.0.20";
+    hash = "sha256-yAoB38cOzk3CEWiTLDdzkELUBNRszIGlmG3XUxTs2m8=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -436,7 +461,11 @@ in
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 
@@ -445,9 +474,9 @@ in
     };
   };
 
-  openssl_3_6 = common {
-    version = "3.6.0";
-    hash = "sha256-tqX0S362nj+jXb8VUkQFtEg3pIHUPYHa3d4/8h/LuOk=";
+  openssl_3_5 = common {
+    version = "3.5.6";
+    hash = "sha256-3q58gMupnEtPlA7K2zwzOLE8t3QYQJI45X1/MfKjtzY=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -468,6 +497,64 @@ in
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
+    ];
+
+    withDocs = true;
+
+    extraMeta = {
+      license = lib.licenses.asl20;
+    };
+  };
+
+  openssl_3_6 = common {
+    version = "3.6.2";
+    hash = "sha256-qvUaH+BkOE+BHa6utOxNznNA7IvYkwJ+7mdq8x6DoE8=";
+
+    patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      # Look up SSL certificates in /etc rather than the immutable installation directory
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
+    ];
+
+    withDocs = true;
+
+    extraMeta = {
+      license = lib.licenses.asl20;
+    };
+  };
+
+  openssl_4_0 = common {
+    version = "4.0.0";
+    hash = "sha256-wyz0mpWcTzRflgaYLdNufSj3xYsZwuJddWJNKz0veaw=";
+
+    patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      # Look up SSL certificates in /etc rather than the immutable installation directory
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
     ];
 
     withDocs = true;

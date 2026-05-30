@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,25 +20,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp font/*.ttf $out/share/fonts/truetype
-
-    mkdir -p $out/share/fonts/opentype
-    cp font/*.otf $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "System status icons by Google, featuring material design";
     homepage = "https://material.io/icons";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mpcsh ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mpcsh ];
   };
 })

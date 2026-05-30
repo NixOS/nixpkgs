@@ -17,7 +17,6 @@ let
     cleanSourceFilter
     concatMapStringsSep
     evalModules
-    filter
     functionArgs
     hasSuffix
     isAttrs
@@ -116,7 +115,10 @@ let
           && (t == "directory" -> baseNameOf n != "tests")
           && (t == "file" -> hasSuffix ".nix" n)
         );
-        prefixRegex = "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos)($|/.*))";
+        prefixRegex =
+          "^"
+          + lib.strings.escapeRegex (toString pkgs.path)
+          + "($|/(modules|nixos|lib/services)($|/.*)|/lib)";
         filteredModules = builtins.path {
           name = "source";
           inherit (pkgs) path;
@@ -133,19 +135,21 @@ let
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filteredModules + "/nixos";
-          NIX_ABORT_ON_WARN = warningsAreErrors;
+          env.NIX_ABORT_ON_WARN = warningsAreErrors;
           modules =
             "[ "
             + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
             + " ]";
-          passAsFile = [ "modules" ];
           disallowedReferences = [
             filteredModules
             libPath
             pkgsLibPath
           ];
+          __structuredAttrs = true;
         }
         ''
+          modulesPath="$TMPDIR/modules"
+          printf "%s" "$modules" > "$modulesPath"
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
           ${pkgs.buildPackages.nix}/bin/nix-instantiate \
@@ -228,6 +232,10 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRenamedOptionModule
+      [ "documentation" "man" "generateCaches" ]
+      [ "documentation" "man" "cache" "enable" ]
+    )
     (mkRemovedOptionModule [
       "documentation"
       "nixos"
@@ -261,7 +269,7 @@ in
         '';
       };
 
-      man.generateCaches = mkOption {
+      man.cache.enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -270,6 +278,19 @@ in
           keyword using utilities like {manpage}`apropos(1)`
           and the `-k` option of
           {manpage}`man(1)`.
+        '';
+      };
+
+      man.cache.generateAtRuntime = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches at runtime using
+          a systemd service.
+
+          ::: {.note}
+          This is currently only supported by the man-db module.
+          :::
         '';
       };
 

@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kafkactl";
-  version = "5.15.0";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = "kafkactl";
-    tag = "v${version}";
-    hash = "sha256-4Kj5RqnTVfMsjEutxJ+21kT7s4UAd8JSKTuPXQtAnxo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M2G01xCrOOCpcCpZ7TxoVfYLouNtOC8/xQPZADi8GRg=";
   };
 
-  vendorHash = "sha256-sVvEHMXpjas+l93IZfAChDX5eDm0lkUNCr5r1JaVQ9I=";
+  vendorHash = "sha256-oiN1nMln8oXy/e7gt0JtynCQxcxi0rwcdVthaWhjBWQ=";
 
   doCheck = false;
 
   meta = {
     homepage = "https://github.com/deviceinsight/kafkactl";
-    changelog = "https://github.com/deviceinsight/kafkactl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/deviceinsight/kafkactl/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command Line Tool for managing Apache Kafka";
     mainProgram = "kafkactl";
     longDescription = ''
@@ -33,6 +33,6 @@ buildGoModule rec {
       - directly access kafka clusters inside your kubernetes cluster
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
   };
-}
+})

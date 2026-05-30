@@ -5,14 +5,14 @@
   slurm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm-spank-stunnel";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "stanford-rc";
     repo = "slurm-spank-stunnel";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "15cpd49ccvzsmmr3gk8svm2nz461rvs4ybczckyf4yla0xzp06gj";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     install -m 644 plugstack.conf $out/etc/slurm/plugstack.conf.d/stunnel.conf.example
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stanford-rc/slurm-spank-stunnel";
     description = "Plugin for SLURM for SSH tunneling and port forwarding support";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

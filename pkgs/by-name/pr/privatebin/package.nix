@@ -3,18 +3,17 @@
   stdenvNoCC,
   fetchFromGitHub,
   nixosTests,
-  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "privatebin";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "PrivateBin";
     repo = "PrivateBin";
     tag = finalAttrs.version;
-    hash = "sha256-23NzowQCuvJHenWmFGgIXFMP6oZoTLf0AZA7+uDQs5E=";
+    hash = "sha256-OyTEi1D+B33e0Dqr/l/uTBcPTlC7AAqc2atnClYhyGo=";
   };
 
   installPhase = ''
@@ -26,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = nixosTests.privatebin;
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {

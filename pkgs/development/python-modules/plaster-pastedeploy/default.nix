@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "PasteDeploy binding to the plaster configuration loader";
     homepage = "https://github.com/Pylons/plaster_pastedeploy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

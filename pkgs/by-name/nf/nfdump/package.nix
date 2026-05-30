@@ -12,15 +12,15 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfdump";
-  version = "1.7.6";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
-    tag = "v${version}";
-    hash = "sha256-4iyoQAjOQW4KNJbRmdisdecuOz+DFvQGEKgq8cq7GDI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2CQ57OEKCOaRvuBX4GN2Gz/S7B6CUTpvArD84QqLZEw=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
       nfdump is a set of tools for working with netflow data.
     '';
     homepage = "https://github.com/phaag/nfdump";
-    changelog = "https://github.com/phaag/nfdump/releases/tag/v${version}";
+    changelog = "https://github.com/phaag/nfdump/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ takikawa ];
     platforms = lib.platforms.unix;
   };
-}
+})

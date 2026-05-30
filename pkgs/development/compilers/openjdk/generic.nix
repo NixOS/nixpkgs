@@ -29,16 +29,16 @@
   giflib,
   libpng,
   lcms2,
-  libX11,
-  libICE,
-  libXext,
-  libXrender,
-  libXtst,
-  libXt,
-  libXi,
-  libXinerama,
-  libXcursor,
-  libXrandr,
+  libx11,
+  libice,
+  libxext,
+  libxrender,
+  libxtst,
+  libxt,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libxrandr,
   fontconfig,
 
   setJavaClassPath,
@@ -276,16 +276,16 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjpeg
     giflib
-    libX11
-    libICE
-    libXext
-    libXrender
-    libXtst
-    libXt
-    libXi
-    libXinerama
-    libXcursor
-    libXrandr
+    libx11
+    libice
+    libxext
+    libxrender
+    libxtst
+    libxt
+    libxi
+    libxinerama
+    libxcursor
+    libxrandr
     fontconfig
   ]
   ++ lib.optionals (atLeast11 && !atLeast21) [
@@ -353,17 +353,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21) (
-    if atLeast11 then
-      [
-        "--with-freetype=system"
-        "--with-harfbuzz=system"
-      ]
-    else
-      [
-        "--disable-freetype-bundling"
-      ]
-  )
+  ++ lib.optionals (!atLeast21 && atLeast11) [
+    "--with-freetype=system"
+    "--with-harfbuzz=system"
+  ]
   ++ lib.optionals atLeast11 [
     "--with-libjpeg=system"
     "--with-libpng=system"
@@ -412,10 +405,16 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
-        # Workaround for
-        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
-        # when building jtreg
-        "-Wformat"
+        lib.concatStringsSep " " (
+          # Workaround for
+          # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+          # when building jtreg
+          [ "-Wformat" ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+            # Fix build with gcc15
+            "-std=gnu17"
+          ]
+        )
       else
         lib.concatStringsSep " " (
           [
@@ -435,6 +434,10 @@ stdenv.mkDerivation (finalAttrs: {
             # error by default in GCC 14
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
+          ]
+          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+            # Fix build with gcc15
+            "-std=gnu17"
           ]
         );
 
@@ -606,7 +609,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      edwtjo
       infinidoge
     ];
     teams = [ lib.teams.java ];

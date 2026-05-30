@@ -6,16 +6,16 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diffstat";
-  version = "1.68";
+  version = "1.69";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/diffstat/diffstat-${version}.tgz"
-      "https://invisible-mirror.net/archives/diffstat/diffstat-${version}.tgz"
+      "https://invisible-island.net/archives/diffstat/diffstat-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/diffstat/diffstat-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-ifkpSorHT8728bmsQI9D6+340gjj7+C5m0rMFtxlgsc=";
+    hash = "sha256-uwJGQHL3ad2YMv2ZlSZzTJDrTWb7VtU1FUCnUMiKd/Y=";
   };
 
   buildInputs = [ zstd ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     url = "https://invisible-island.net/archives/diffstat/";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Read output of diff and display a histogram of the changes";
     mainProgram = "diffstat";
     longDescription = ''
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
       reviewing large, complex patch files.
     '';
     homepage = "https://invisible-island.net/diffstat/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

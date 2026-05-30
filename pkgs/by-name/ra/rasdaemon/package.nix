@@ -1,11 +1,11 @@
 {
   autoreconfHook,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   libtraceevent,
   nix-update-script,
   nixosTests,
+  pciutils,
   perl,
   pkg-config,
   sqlite,
@@ -17,22 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SpMNkeJkjaWteWsIScRnzNILf+PtVu1sX9e6ctwm3G0=";
+    hash = "sha256-rk4CZrWQRe2wsx8/eXP0BIeaU/Gxmcb+Kry5F8t4YKQ=";
   };
 
   patches = [
-    # https://github.com/mchehab/rasdaemon/pull/212
-    (fetchpatch {
-      name = "fix_buffer_overflow_in_add_event_handler_read.patch";
-      url = "https://github.com/mchehab/rasdaemon/commit/46bed1b6845bcb560d760b4cacea7df67cd6d1fd.patch";
-      hash = "sha256-5T5U2i0i/7MpHzqpPq6mn2ghSUj9O6BzY11VcySgCMo=";
-    })
+    # https://github.com/mchehab/rasdaemon/pull/246
+    ./ras-mc-ctl_fix_invalid_column_in_signal_events_query.patch
   ];
 
   strictDeps = true;
@@ -51,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
         DBDSQLite
       ]
     ))
+    pciutils
     sqlite
   ]
   ++ lib.optionals enableDmidecode [
@@ -130,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.zowoq ];
   };
 })

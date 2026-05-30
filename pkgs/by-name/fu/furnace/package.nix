@@ -11,7 +11,7 @@
   fmt,
   freetype,
   libsndfile,
-  libX11,
+  libx11,
   libGL,
   rtmidi,
   SDL2,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
     # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
     substituteInPlace src/gui/scaling.cpp \
-      --replace-fail 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+      --replace-fail 'libX11.so' '${lib.getLib libx11}/lib/libX11.so'
   '';
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
     alsa-lib
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

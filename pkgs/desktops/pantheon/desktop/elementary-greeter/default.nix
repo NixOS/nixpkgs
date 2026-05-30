@@ -27,20 +27,21 @@
   lightdm,
   gdk-pixbuf,
   dbus,
-  accountsservice,
   wayland-scanner,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-greeter";
-  version = "8.1.0";
+  version = "8.1.2-unstable-2025-01-12";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    tag = version;
-    hash = "sha256-lOk5H1uuaf2Q+z+hRLyhtKAHq+3ibtBzWI7r87KpKgQ=";
+    # Contains crash fixes for mutter 48.
+    # nixpkgs-update: no auto update
+    rev = "5510466126f7aa3412a21c055d59f8eb5fcc8d29";
+    hash = "sha256-30XvdeibAptwH4L5MDPPrqQJF0GuPCwwvRc51DgxZp0=";
   };
 
   patches = [
@@ -64,7 +65,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    accountsservice
     elementary-icon-theme
     elementary-settings-daemon
     gala # for io.elementary.desktop.background
@@ -107,13 +107,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    # Use NixOS default wallpaper
-    substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
-      --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
-      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
-
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
-      --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
+      --replace-fail "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
   passthru = {
@@ -127,12 +122,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.greeter";
   };
 }

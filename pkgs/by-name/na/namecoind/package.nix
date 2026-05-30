@@ -18,14 +18,14 @@
   withWallet ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "namecoind";
   version = "28.0";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
-    tag = "nc${version}";
+    tag = "nc${finalAttrs.version}";
     hash = "sha256-r6rVgPrKz7nZ07oXw7KmVhGF4jVn6L+R9YHded+3E9k=";
   };
 
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
 
   checkFlags = [ "LC_ALL=en_US.UTF-8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "https://namecoin.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

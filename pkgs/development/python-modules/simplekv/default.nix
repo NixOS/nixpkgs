@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 
   # optional dependencies
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "simplekv";
   version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mbr";
@@ -63,12 +60,12 @@ buildPythonPackage rec {
     */
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple key-value store for binary data";
     homepage = "https://github.com/mbr/simplekv";
     changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       bbenne10
     ];

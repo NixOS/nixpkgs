@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "y-cruncher";
-  version = "0.8.6.9545";
+  version = "0.8.7.9547";
 
   src = fetchurl {
     url = "https://github.com/Mysticial/y-cruncher/releases/download/v${finalAttrs.version}/y-cruncher.v${finalAttrs.version}-static.tar.xz";
-    hash = "sha256-R57uTP45CXGi3+dcH0eyxR2ewjZKNxIyGHyh6mh7FUk=";
+    hash = "sha256-4i/zRPQnY1INIzHxntYXfzp8eKxb1GLpwGDDgmcYFJA=";
   };
 
   nativeBuildInputs = [
@@ -66,8 +66,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bsd3 # Intel Cilk Run-Time Library
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     mainProgram = "y-cruncher";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

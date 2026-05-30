@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.20.3";
+  version = "2.34.4";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-OCou4yhx9rY1JznrzGMLhsjj/3CvqQXfXWFAPDxA8Ds=";
+      hash = "sha256-w20nrn3wo9Dvv3BILYBzuJTTLXqcWaRAF7SiPtryhwk=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -42,22 +42,22 @@ stdenv.mkDerivation rec {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.23.4";
-      hash = "sha256-zorhOhBTcymnAlShJxJecXD+HIfScGouhSea/A3tBXE=";
+      tag = "v0.25.0";
+      hash = "sha256-ozc1w3V5RqWHwqNHuefZJMN8RAYxrJxH9bd1BEqxfiQ=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.5";
-      hash = "sha256-JfynEsCXltVdVY/LqWvZwzWfzEFUz6nI9Zub+bze1zE=";
+      tag = "v16.0.11";
+      hash = "sha256-ema1jTNMHs3pUituVb1NPllc6cA8eYJHtDOjuEzIDWM=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.17";
-      hash = "sha256-ta5QbVady9/cwBbAwF1r4ft/ESMnLgcmGMrFhv1PCH0=";
+      tag = "v16.0.24";
+      hash = "sha256-aTcwfQt2WdOA44jfHdD7x7oxt8emSDexgZnI7MPVqvU=";
     })
   ];
 
@@ -66,6 +66,16 @@ stdenv.mkDerivation rec {
     # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
     # https://github.com/intel/intel-graphics-compiler/pull/364
     ./bump-cmake.patch
+
+    # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
+    # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
+    # on https://github.com/intel/intel-graphics-compiler/pull/383.
+    ./gcc15-llvm-header-fixes.patch
+
+    # Fix for GCC 15 by disabling `-Werror` for `-Wfree-nonheap-object`
+    # warnings within LLVM. This is in accordance with IGC disabling warnings
+    # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
+    ./gcc15-allow-llvm-free-nonheap-object-warning.patch
   ];
 
   sourceRoot = ".";
@@ -90,12 +100,12 @@ stdenv.mkDerivation rec {
     git -C llvm-project init
     git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
-      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
                      'COMMAND patch -p1 --ignore-whitespace -i '
 
     # match default LLVM version with our provided version to apply correct patches
     substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "15.0.7" "${llvmVersion}"
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [
@@ -135,12 +145,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

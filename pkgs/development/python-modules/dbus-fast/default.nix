@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   cython,
   dbus,
@@ -16,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.46.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${version}";
-    hash = "sha256-Z/TuYRpmMTU86pJAFDY2J9RG4YfsDcOJsl+71yEVgSI=";
+    hash = "sha256-lfAG17R33YsU8HYbnM9te0H7YoVUUpB6TtqQrWbhR6Q=";
   };
 
   postPatch = ''
@@ -40,8 +39,6 @@ buildPythonPackage rec {
     poetry-core
     setuptools
   ];
-
-  dependencies = [ async-timeout ];
 
   nativeCheckInputs = [
     dbus
@@ -69,11 +66,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

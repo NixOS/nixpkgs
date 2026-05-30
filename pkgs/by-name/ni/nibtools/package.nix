@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     hash = "sha256-0skAavJe01b+4Z7LEfS2qIhqkwj8XhOwmflhYPEynw4=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   nativeBuildInputs = [
     cc65

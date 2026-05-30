@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -11,15 +11,15 @@
   withVtGen ? false,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "VictoriaTraces";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaTraces";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jmcwn2/UB87wOBCHvquHIgc+a/sCXnxC63nddlZuSL0=";
+    hash = "sha256-IbiQ83iWGIGVZsb3Qszjnr89/LGh7tU6jKyDMTeOZEQ=";
   };
 
   vendorHash = null;
@@ -40,9 +40,7 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) victoriatraces;
-    };
+    tests = lib.recurseIntoAttrs nixosTests.victoriatraces;
     updateScript = nix-update-script { };
   };
 

@@ -3,6 +3,7 @@
   stdenv,
   a2wsgi,
   aiohttp,
+  aiohttp-asgi-connector,
   aiosqlite,
   attrs,
   buildPythonPackage,
@@ -53,7 +54,6 @@
   python-dateutil,
   python-json-logger,
   python-multipart,
-  pythonOlder,
   pyyaml,
   questionary,
   rich,
@@ -62,9 +62,7 @@
   simple-di,
   starlette,
   tomli-w,
-  tomli,
   tritonclient,
-  uv,
   uvicorn,
   watchfiles,
   # native check inputs
@@ -80,7 +78,7 @@
 }:
 
 let
-  version = "1.4.28";
+  version = "1.4.33";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -130,7 +128,7 @@ let
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-9hxAsTy3e9BDWhJCB5N2RaEFIO0Lc6FK2XKgJC78VUg=";
+    hash = "sha256-SR84EeZ9WNoaRDG4uklYhlFSDigZv81XX3VlKCn/7Zw=";
   };
 in
 buildPythonPackage {
@@ -160,6 +158,7 @@ buildPythonPackage {
   dependencies = [
     a2wsgi
     aiohttp
+    aiohttp-asgi-connector
     aiosqlite
     attrs
     cattrs
@@ -202,11 +201,9 @@ buildPythonPackage {
     simple-di
     starlette
     tomli-w
-    uv
     uvicorn
     watchfiles
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   inherit optional-dependencies;
 
@@ -247,12 +244,12 @@ buildPythonPackage {
   ]
   ++ optional-dependencies.grpc;
 
-  meta = with lib; {
+  meta = {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       happysalada
       natsukium
     ];

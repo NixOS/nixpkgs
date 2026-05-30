@@ -25,6 +25,9 @@ in
   nixpkgsArgs ? {
     config = {
       allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
+      # [CVE-2026-24188](https://github.com/NixOS/nixpkgs/issues/522570):
+      # OOB write
+      allowInsecurePredicate = p: lib.getName p == "tensorrt";
       "${variant}Support" = true;
       inHydra = true;
 
@@ -91,7 +94,6 @@ let
       firefox-devedition-unwrapped = linux;
       freecad = linux;
       gimp = linux;
-      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;

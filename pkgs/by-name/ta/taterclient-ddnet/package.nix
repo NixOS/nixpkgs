@@ -13,7 +13,7 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
   pcre,
   python3,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.6.0";
+  version = "10.8.7";
 
   src = fetchFromGitHub {
-    owner = "sjrc6";
-    repo = "taterclient-ddnet";
+    owner = "TaterClient";
+    repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-Z5W+IBiNhEXyBVk6w2YzotBlHam1fELmr3ojJ0q4Ge8=";
+    hash = "sha256-jGi0eRKeYVGWes4AAzasKjdSqoYrEalxVHR/dYEzSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-tools
     glew
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.6.0/CMakeLists.txt#L3179
+  # See https://github.com/TaterClient/TClient/blob/V10.8.6/CMakeLists.txt#L3260
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

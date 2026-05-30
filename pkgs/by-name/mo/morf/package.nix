@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "morf";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "amrudesh1";
     repo = "morf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3PJ+YtKSH6HHAXBSHO8iMP2HFiuW1RQ0N8iUjQD7NBw=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Offensive mobile security tool designed to identify and address sensitive information";
     homepage = "https://github.com/amrudesh1/morf";
-    changelog = "https://github.com/amrudesh1/morf/releases/tag/v${version}";
+    changelog = "https://github.com/amrudesh1/morf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "morf";
   };
-}
+})

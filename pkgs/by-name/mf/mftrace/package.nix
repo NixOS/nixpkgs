@@ -7,7 +7,7 @@
   python3,
   fontforge,
   potrace,
-  texlive,
+  fetchpatch2,
 }:
 
 /*
@@ -34,6 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "02ik25aczkbi10jrjlnxby3fmixxrwm2k5r4fkfif3bjfym7nqbc";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "gcc-15.patch";
+      url = "https://salsa.debian.org/debian/mftrace/-/raw/628987e5ce8bdab737f9fbc730a75fdd29ce81d2/debian/patches/gcc-15.patch";
+      hash = "sha256-eTDohSGzy2hxZmpAXiYaAk3DBnrXduNum0fO6bHGUQw=";
+    })
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     autoreconfHook
@@ -50,15 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
-  # experimental texlive.combine support
-  # (note that only the bin/ folder will be combined into texlive)
-  passthru.tlDeps = with texlive; [
-    kpathsea
-    t1utils
-    metafont
+  # for use with texlive.withPackages
+  passthru.tlDeps = ps: [
+    ps.kpathsea
+    ps.t1utils
+    ps.metafont
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scalable PostScript Fonts for MetaFont";
     longDescription = ''
       mftrace is a small Python program that lets you trace a TeX bitmap
@@ -66,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
       TTF (TrueType) font.
     '';
     homepage = "https://lilypond.org/mftrace/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       mit
     ];
-    maintainers = with maintainers; [ xworld21 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ xworld21 ];
+    platforms = lib.platforms.all;
   };
 })

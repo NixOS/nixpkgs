@@ -13,6 +13,9 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withRaster ? false,
+  withCairo ? false,
+  cairo,
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
@@ -34,12 +37,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "12.1.0";
+  version = "13.2.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5cgbf24LEC37AAz6QkU4uOiWq3ii9Lil7IyuYqtDNp4=";
+    hash = "sha256-ZpXaPrfhvgqjCS/k2BQzoztH9FGSWcdZ1ynjqaVcFCk=";
   };
+
+  # This test fails reliably when executed through mesonCheckPhase but passes with
+  # a direct 'meson test' checkPhase, the validated symbols are fine but msan is not happy
+  # skipping this for now as it is not relevant for the packaging
+  patches = [ ./disable-check-symbols-test.patch ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -59,10 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # upstream recommends cairo, but it is only used for development purposes
-    # and is not part of the library.
+    # and hb-raster and is not part of the main library.
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
-    (lib.mesonEnable "cairo" false)
+    (lib.mesonEnable "cairo" withCairo)
+    (lib.mesonEnable "raster" withRaster)
     # chafa is only used in a development utility, not in the library
     (lib.mesonEnable "chafa" false)
     (lib.mesonEnable "coretext" withCoreText)
@@ -87,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection;
+  ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional withCairo cairo;
 
   buildInputs = [
     glib
@@ -102,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doCheck = true;
+
+  # test_native_coretext_variations depends on the system fonts.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts"
+  ];
 
   # Slightly hacky; some pkgs expect them in a single directory.
   postFixup = lib.optionalString withIcu ''
@@ -126,17 +141,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
     changelog = "https://github.com/harfbuzz/harfbuzz/raw/${finalAttrs.version}/NEWS";
-    maintainers = [ maintainers.cobalt ];
-    license = licenses.mit;
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = [ lib.maintainers.cobalt ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [
       "harfbuzz"
       "harfbuzz-gobject"
       "harfbuzz-subset"
-    ];
+      "harfbuzz-vector"
+    ]
+    ++ (lib.optional withIcu "harfbuzz-icu")
+    ++ (lib.optional withRaster "harfbuzz-raster")
+    ++ (lib.optional withCairo "harfbuzz-cairo");
   };
 })

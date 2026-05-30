@@ -6,14 +6,14 @@
   dash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "owl-lisp";
   version = "0.2.2";
 
   src = fetchFromGitLab {
     owner = "owl-lisp";
     repo = "owl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   # tests are run as part of the compilation process
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Functional Scheme for world domination";
     homepage = "https://gitlab.com/owl-lisp/owl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})

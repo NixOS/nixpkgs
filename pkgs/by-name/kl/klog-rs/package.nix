@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "klog-rs";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "tobifroe";
     repo = "klog";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VyUUzhVwJ1tNLICXwy7f85queH+pn4vL5HTL8IHcQ7w=";
   };
 
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tool to tail logs of multiple Kubernetes pods simultaneously";
     homepage = "https://github.com/tobifroe/klog";
-    changelog = "https://github.com/tobifroe/klog/releases/tag/${version}";
+    changelog = "https://github.com/tobifroe/klog/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "klog";
     maintainers = with lib.maintainers; [ tobifroe ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

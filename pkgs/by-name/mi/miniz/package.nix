@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniz";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "richgel999";
     repo = "miniz";
     rev = finalAttrs.version;
-    hash = "sha256-DQbXz1ehBNGFhuaW5Nz509njpPe73QpMHyKDbpqX0aI=";
+    hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
   };
   passthru.updateScript = nix-update-script { };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Single C source file zlib-replacement library";
     homepage = "https://github.com/richgel999/miniz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "miniz" ];
   };
 })

@@ -1,13 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   winboat,
 }:
-buildGoModule {
+
+buildGo125Module {
   inherit (winboat) version src;
   modRoot = "guest_server";
   pname = "winboat-guest-server";
-  vendorHash = "sha256-JglpTv1hkqxmcbD8xmG80Sukul5hzGyyANfe+GeKzQ4=";
+  vendorHash = "sha256-vpBvSaqbbJ8sHNMm299z/3Qb7FKMWbr62amtKT3acYk=";
 
   env = {
     GOOS = "windows";

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
-  version = "1.0.0";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
-    hash = "sha256-khpZY6kttbgacnY1EKCyIPBR2ZiZHC3OA+0NpIBXg9s=";
+    hash = "sha256-52qgkr9oem4jFGNWvoC3wb0WR2z9yhglqA8sJHIhtbs=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";
@@ -46,12 +46,6 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
-
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
@@ -59,6 +53,16 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Comparison error due to message formatting differences
+    "test__convert_dict_to_message_tool_call"
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    # RuntimeError: Cannot send a request, as the client has been closed.
+    # Tries to download from huggingface hub
+    "test_mistral_init"
+  ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
@@ -71,7 +75,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;

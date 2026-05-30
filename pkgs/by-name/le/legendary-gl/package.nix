@@ -26,8 +26,6 @@ python3Packages.buildPythonApplication {
     filelock
   ];
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   # no tests
   doCheck = false;
 

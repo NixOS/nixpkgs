@@ -223,18 +223,19 @@ lib.extendMkDerivation {
         GOTOOLCHAIN = "local";
 
         CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
-      };
 
-      GOFLAGS =
-        GOFLAGS
-        ++
-          lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
-            "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-            (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
-        ++
-          lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
-            "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!finalAttrs.allowGoReference) "-trimpath");
+        GOFLAGS = toString (
+          GOFLAGS
+          ++
+            lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
+              "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+              (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+          ++
+            lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
+              "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+              (lib.optional (!finalAttrs.allowGoReference) "-trimpath")
+        );
+      };
 
       inherit enableParallelBuilding;
 
@@ -282,7 +283,7 @@ lib.extendMkDerivation {
 
               exclude='\(/_\|examples\|Godeps\|testdata'
               if [[ -n "$excludedPackages" ]]; then
-                IFS=' ' read -r -a excludedArr <<<$excludedPackages
+                IFS=' ' read -r -a excludedArr <<<"''${excludedPackages[@]}"
                 printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
                 excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
                 exclude+='\|'"$excludedAlternates"

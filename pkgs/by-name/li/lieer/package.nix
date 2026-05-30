@@ -5,17 +5,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lieer";
   version = "1.6";
-  format = "pyproject";
+  pyproject = true;
 
   passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     "lieer"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
     longDescription = ''
       This program can pull email and labels (and changes to labels)
@@ -47,11 +47,11 @@ python3Packages.buildPythonApplication rec {
       GMail account.
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       archer-65
       flokli
     ];
     mainProgram = "gmi";
   };
-}
+})

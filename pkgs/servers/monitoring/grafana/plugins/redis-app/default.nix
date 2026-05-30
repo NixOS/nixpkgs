@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "redis-app";
-  version = "2.2.1";
-  zipHash = "sha256-1ZzJaGhlM6CaTecj69aqJ9fqN7wYSsiDCMTRVkZJUb0=";
-  meta = with lib; {
+  version = "2.3.2";
+  zipHash = "sha256-HncZBj0FCku7DRTCDigY2aH2oBScDg7d9XL7ixm7DOM=";
+  meta = {
     description = "Redis Application plugin for Grafana";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
   };
 }

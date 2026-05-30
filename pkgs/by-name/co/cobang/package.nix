@@ -16,16 +16,16 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cobang";
-  version = "1.9.1";
+  version = "2.5.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
-    tag = "v${version}";
-    hash = "sha256-jF6hWpOPbJKRyUWRyZdp4OziCdJupyFpNdrsiOdjByA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q28pSvEqWy56qNh7aE05PB6l3Hpu7eazz52REmQDYhY=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,8 @@ python3Packages.buildPythonApplication rec {
     pillow
     pygobject3
     python-zbar
+    qrcode
+    typing-extensions
   ];
 
   # Wrapping this manually for SVG recognition
@@ -78,4 +80,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "cobang";
     platforms = lib.platforms.linux;
   };
-}
+})

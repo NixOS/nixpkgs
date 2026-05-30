@@ -4,23 +4,23 @@
   fetchFromGitHub,
   ruby,
   makeWrapper,
-  replace,
+  sd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "discourse-mail-receiver";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "mail-receiver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 
   nativeBuildInputs = [
-    replace
     makeWrapper
+    sd
   ];
   buildInputs = [ ruby ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
 
-    replace-literal -f -r -e /etc/postfix /run/discourse-mail-receiver .
+    find . -type f -exec sd '/etc/postfix' '/run/discourse-mail-receiver' {} +
 
     cp -r receive-mail discourse-smtp-fast-rejection $out/bin/
     cp -r lib $out/
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/discourse-smtp-fast-rejection --set RUBYLIB $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.discourse.org/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ talyz ];
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ talyz ];
+    license = lib.licenses.mit;
     description = "Helper program which receives incoming mail for Discourse";
   };
 
-}
+})

@@ -12,12 +12,7 @@
   gettext,
 }:
 let
-  python = python3Packages.python.override {
-    packageOverrides = self: super: {
-      django_5 = super.django_5.override { withGdal = true; };
-      django = super.django_5;
-    };
-  };
+  inherit (froide) python;
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide-govplan";

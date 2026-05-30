@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config, # needed to find minizip
   SDL2,
   SDL2_image,
@@ -22,20 +23,20 @@
   zlib,
   minizip,
   asio,
-  libSM,
-  libICE,
-  libXext,
+  libsm,
+  libice,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "widelands";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "widelands";
     repo = "widelands";
     rev = "v${version}";
-    sha256 = "sha256-/MEeb0KnefK812w5y238Icd4gW85d/pvZ08xnlVXDdk=";
+    sha256 = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
   };
 
   postPatch = ''
@@ -76,10 +77,10 @@ stdenv.mkDerivation rec {
     zlib
     minizip
     asio
-    libSM # XXX: these should be propagated by SDL2?
-    libICE
+    libsm # XXX: these should be propagated by SDL2?
+    libice
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libXext;
+  ++ lib.optional stdenv.hostPlatform.isLinux libxext;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''

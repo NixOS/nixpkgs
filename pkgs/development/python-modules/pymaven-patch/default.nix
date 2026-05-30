@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymaven" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python access to maven";
     homepage = "https://github.com/nexB/pymaven";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

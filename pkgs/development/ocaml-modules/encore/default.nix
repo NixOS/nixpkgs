@@ -8,14 +8,14 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "encore";
   version = "0.8.1";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/encore/releases/download/v${version}/encore-${version}.tbz";
+    url = "https://github.com/mirage/encore/releases/download/v${finalAttrs.version}/encore-${finalAttrs.version}.tbz";
     hash = "sha256-qg6heSBc6OSfb7vZxEi4rrKh+nx+ffnsCfVvhVR3yY0=";
   };
 
@@ -35,8 +35,8 @@ buildDunePackage rec {
       an internal encoder from a shared description. The goal is to ensure a dual isomorphism
       between them.
     '';
-    changelog = "https://raw.githubusercontent.com/mirage/encore/refs/tags/v${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/mirage/encore/refs/tags/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

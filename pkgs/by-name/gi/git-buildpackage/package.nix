@@ -15,7 +15,7 @@
   man,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-buildpackage";
   version = "0.9.39";
   pyproject = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "agx";
     repo = "git-buildpackage";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     hash = "sha256-glj0WtlZb42wetD5sKHbWvgPOZ/lQofPYtChuk3rie0=";
     fetchSubmodules = true;
   };
@@ -48,6 +48,9 @@ python3Packages.buildPythonApplication rec {
     "gbp"
   ];
 
+  # don't add pytest and pytest-cov to setup_requires
+  env.WITHOUT_PYTESTS = true;
+
   nativeCheckInputs = [
     debian-devscripts
     dpkg
@@ -56,8 +59,7 @@ python3Packages.buildPythonApplication rec {
     man
   ]
   ++ (with python3Packages; [
-    coverage
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ]);
 
@@ -92,4 +94,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ nim65s ];
     mainProgram = "git-buildpackage";
   };
-}
+})

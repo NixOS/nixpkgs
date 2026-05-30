@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gti";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DUDCFcaB38Xkp3lLfEhjGC0j430dphXFBVhGzm7/Bp0=";
   };
 
@@ -32,12 +32,11 @@ stdenv.mkDerivation rec {
       --zsh completions/gti.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://r-wos.org/hacks/gti";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Humorous typo-based git runner; drives a car over the terminal";
-    maintainers = with maintainers; [ fadenb ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gti";
   };
-}
+})

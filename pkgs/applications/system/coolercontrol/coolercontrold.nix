@@ -1,12 +1,15 @@
 {
   rustPlatform,
   testers,
+  hwdata,
+  pkg-config,
   libdrm,
   coolercontrol,
   runtimeShell,
   addDriverRunpath,
   python3Packages,
   liquidctl,
+  protobuf,
 }:
 
 {
@@ -20,11 +23,16 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-teKMz6ruTSwQ76dMXoupS3D7n1ashfHPpxMGo3Qm6FI=";
+  cargoHash = "sha256-f0SsTwriUo2rD97L+Z/bq7UahOSLjYjH8bbXg/Hx5qE=";
 
-  buildInputs = [ libdrm ];
+  buildInputs = [
+    hwdata
+    libdrm
+  ];
 
   nativeBuildInputs = [
+    pkg-config
+    protobuf
     addDriverRunpath
     python3Packages.wrapPython
   ];
@@ -37,7 +45,7 @@ rustPlatform.buildRustPackage {
     cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
-    substituteInPlace src/repositories/utils.rs \
+    substituteInPlace daemon/src/repositories/utils.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
   '';
 
@@ -50,7 +58,7 @@ rustPlatform.buildRustPackage {
   postFixup = ''
     addDriverRunpath "$out/bin/coolercontrold"
 
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     wrapProgram "$out/bin/coolercontrold" \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : $program_PYTHONPATH

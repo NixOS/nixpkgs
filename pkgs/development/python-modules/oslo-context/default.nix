@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-context";
-  version = "6.1.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "oslo_context";
-    hash = "sha256-wajRfHn1DHECTVTMF8wLAeidv/JYMV3BHX4E5rGgLOM=";
+    hash = "sha256-5QT43wLFzOf8mE+Gf736qh1NS5uIl44pH25cuJ31o+A=";
   };
 
   postPatch = ''
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_context" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Context library";
     homepage = "https://github.com/openstack/oslo.context";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -8,11 +8,11 @@
 
 let
   pname = "nrfconnect";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/desktop-software/nrf-connect-for-desktop/${lib.versions.major version}-${lib.versions.minor version}-${lib.versions.patch version}/nrfconnect-${version}-x86_64.appimage";
-    hash = "sha256-QEoKIdi8tlZ86langbCYJXSO+dGONBEQPdwmREIhZBA=";
+    url = "https://eu.files.nordicsemi.com/ui/api/v1/download?repoKey=web-assets-com_nordicsemi&path=external%2fswtools%2fncd%2flauncher%2fv${version}%2fnrfconnect-${version}-x86_64.AppImage";
+    hash = "sha256-3YPH/HmeAHm1Cf4/tCUIRTdT3JX0tOLVS/b6lk27Wn4=";
     name = "${pname}-${version}.AppImage";
   };
 

@@ -11,7 +11,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   titlecase,
   types-pytz,
@@ -20,9 +19,7 @@
 buildPythonPackage rec {
   pname = "aioridwell";
   version = "2025.09.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -64,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioridwell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with Ridwell waste recycling";
     homepage = "https://github.com/bachya/aioridwell";
     changelog = "https://github.com/bachya/aioridwell/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,7 +13,7 @@
   luarocks,
 
   # buildInputs
-  lua,
+  luajit,
   harfbuzz,
   icu,
   fontconfig,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     # build time we would fail to build since we only provide it at test time.
     "PDFINFO=false"
   ]
-  ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+  ++ lib.optionals (!luajit.pkgs.isLuaJIT) [
     "--without-luajit"
   ];
 
@@ -97,13 +97,16 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0644 documentation/sile.pdf $out/share/doc/sile/manual.pdf
   '';
 
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [
-      gentium-plus
-    ];
+  env = {
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [
+        gentium-plus
+      ];
+    };
+    LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
   };
+
   strictDeps = true;
-  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 
@@ -111,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Use this passthru variable to add packages to your lua environment. Use
     # something like this in your development environment:
     #
-    # myLuaEnv = lua.withPackages (
+    # myLuaEnv = luajit.withPackages (
     #  ps: lib.attrVals (sile.passthru.luaPackages ++ [
     #    "lua-cjson"
     #    "lua-resty-http"
@@ -142,13 +145,13 @@ stdenv.mkDerivation (finalAttrs: {
       "ldoc"
       # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
     ]
-    ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+    ++ lib.optionals (lib.versionOlder luajit.luaversion "5.2") [
       "bit32"
     ]
-    ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+    ++ lib.optionals (lib.versionOlder luajit.luaversion "5.3") [
       "compat53"
     ];
-    luaEnv = lua.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
+    luaEnv = luajit.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
 
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
@@ -158,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
             poppler-utils
             finalAttrs.finalPackage
           ];
-          inherit (finalAttrs) FONTCONFIG_FILE;
+          env.FONTCONFIG_FILE = finalAttrs.env.FONTCONFIG_FILE;
         }
         ''
           output=$(mktemp -t selfcheck-XXXXXX.pdf)

@@ -3,7 +3,6 @@
   pkgs,
   src,
   officialRelease,
-  maintainers,
   teams,
   version,
 }:
@@ -123,7 +122,7 @@ let
       +
         lib.optionalString
           (
-            !stdenv.hostPlatform.isWindows
+            !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
             # LTO breaks exception handling on x86-64-darwin.
@@ -200,7 +199,6 @@ let
           environments.
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
-      maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
       teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
@@ -224,7 +222,6 @@ in
 # This becomes the pkgs.nixComponents attribute set
 {
   inherit version;
-  inherit maintainers;
   inherit teams;
 
   inherit filesetToSource;
@@ -371,8 +368,11 @@ in
   nix-main-c = callPackage ../src/libmain-c/package.nix { };
 
   nix-cmd = callPackage ../src/libcmd/package.nix { };
+  # TODO: upstream nix-cmd-c to Nix from devenv
+  nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
+  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
@@ -380,7 +380,8 @@ in
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
   nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
-  nix-perl-bindings = callPackage ../src/perl/package.nix { };
+  nix-perl-bindings =
+    if (lib.versionAtLeast version "2.35pre") then null else callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
     # Note: no `passthru.overrideAllMesonComponents` etc

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcredis";
   version = "0.2.3";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-${version}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-${finalAttrs.version}.tar.gz";
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     cp -v *.h "$out/include/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C client library for Redis (key-value database)";
     mainProgram = "credis-test";
     homepage = "https://code.google.com/archive/p/credis/";
-    license = licenses.bsd3; # from homepage
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.bsd3; # from homepage
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

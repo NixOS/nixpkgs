@@ -32,7 +32,6 @@ buildGoModule {
     mainProgram = "govers";
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
-      urandom
     ];
   };
 }

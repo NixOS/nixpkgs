@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bypass-url-parser";
   version = "0.4.4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "laluka";
     repo = "bypass-url-parser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h9+kM2LmfPaaM7MK6lK/ARrArwvRn6d+3BW+rNTkqzA=";
   };
 
@@ -41,9 +41,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool that tests URL bypasses to reach a 40X protected page";
     homepage = "https://github.com/laluka/bypass-url-parser";
-    changelog = "https://github.com/laluka/bypass-url-parser/releases/tag/${src.tag}";
+    changelog = "https://github.com/laluka/bypass-url-parser/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "bypass-url-parser";
   };
-}
+})

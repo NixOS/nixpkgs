@@ -16,21 +16,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spdlog";
-  version = "1.15.3";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0rOR9G2Y4Z4OBZtUHxID0s1aXN9ejodHrurlVCA0pIo=";
+    hash = "sha256-bL3hQmERXNwGmDoi7+wLv/TkppGhG6cO47k1iZvJGzY=";
   };
 
   patches = [
-    # https://github.com/gabime/spdlog/pull/3451
     (fetchpatch {
-      name = "catch2-3.9.0-compat.patch";
-      url = "https://github.com/gabime/spdlog/commit/3edc8036dbf3c7cdf0e460a913ae294c87ae90dc.patch";
-      hash = "sha256-0XtNaAvDGpSTtQZjxmLbHOoY4OMZDJfLDzBh7gNQh2c=";
+      # Remove when updating past 1.17.0. Fixes `pkgsMusl.spdlog` build.
+      url = "https://github.com/gabime/spdlog/commit/0f7562a0f9273cfc71fddc6ae52ebff7a490fa04.patch";
+      name = "tests-timezone-Provide-DST-rules-when-setting-TZ-on-POSIX-systems";
+      hash = "sha256-jsw3AgTXeRdU2ncuzAkYp6SPrBKntz2I3NLOjAPkW78=";
     })
   ];
 

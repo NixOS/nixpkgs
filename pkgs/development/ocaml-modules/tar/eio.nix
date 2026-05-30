@@ -2,7 +2,8 @@
   buildDunePackage,
   tar,
   eio,
-  git,
+  alcotest,
+  eio_main,
 }:
 
 buildDunePackage {
@@ -16,8 +17,9 @@ buildDunePackage {
     eio
   ];
 
-  nativeCheckInputs = [
-    git
+  checkInputs = [
+    alcotest
+    eio_main
   ];
 
   meta = tar.meta // {

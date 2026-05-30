@@ -3,6 +3,7 @@
   buildDunePackage,
   dune_3,
   dune-private-libs,
+  re,
 }:
 
 buildDunePackage {
@@ -13,16 +14,15 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ dune-private-libs ];
+  propagatedBuildInputs = [
+    dune-private-libs
+    re
+  ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
-  meta = with lib; {
+  meta = {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

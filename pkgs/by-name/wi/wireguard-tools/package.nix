@@ -12,13 +12,13 @@
   wireguard-go,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wireguard-tools";
-  version = "1.0.20250521";
+  version = "1.0.20260223";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "sha256-V9yKf4ZvxpOoVCFkFk18+130YBMhyeMt0641tn0O0e0=";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-jOFEE9CcCjU52nPO/+ib72rqki7H1qkIinv7Z8yWQBA=";
   };
 
   outputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     tests = nixosTests.wireguard;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for the WireGuard secure network tunnel";
     longDescription = ''
       Supplies the main userspace tooling for using and configuring WireGuard tunnels, including the wg(8) and wg-quick(8) utilities.
@@ -86,13 +86,12 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       zx2c4
-      globin
       ma27
     ];
     mainProgram = "wg";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

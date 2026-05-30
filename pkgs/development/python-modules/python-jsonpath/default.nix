@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-jsonpath";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,14 +17,7 @@ buildPythonPackage rec {
     repo = "python-jsonpath";
     tag = "v${version}";
     fetchSubmodules = true;
-    preFetch = ''
-      # can't clone using ssh
-      # https://github.com/jg-rp/python-jsonpath/pull/122
-      export GIT_CONFIG_COUNT=1
-      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
-      export GIT_CONFIG_VALUE_0=git@github.com:
-    '';
-    hash = "sha256-DiXBIo/I36rrn+RCQda+khfViCnzHwiGzK2X9ACF3io=";
+    hash = "sha256-eVypnFeqFW2WJfCinWXJulVtxaFpNomK2tZNbmxsxrY=";
   };
 
   build-system = [ hatchling ];

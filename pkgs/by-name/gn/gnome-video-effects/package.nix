@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.6.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-video-effects/${lib.versions.majorMinor version}/gnome-video-effects-${version}.tar.xz";
     sha256 = "166utGs/WoMvsuDZC0K/jGFgICylKsmt0Xr84ZLjyKg=";
   };
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of GStreamer effects to be used in different GNOME Modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-video-effects";
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
-    license = licenses.gpl2;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
   };
 }

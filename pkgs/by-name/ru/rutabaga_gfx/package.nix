@@ -58,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gfxstream" withGfxstream)
   ];
 
-  CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  };
 
   preConfigure = ''
     cd rutabaga_gfx/ffi
@@ -69,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"$BUILDTYPE"/"$SHARED_LIB"' '${stdenv.hostPlatform.rust.cargoShortTarget}/"$BUILDTYPE"/"$SHARED_LIB"'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crosvm.dev/book/appendix/rutabaga_gfx.html";
     description = "Cross-platform abstraction for GPU and display virtualization";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ qyliss ];
     platforms = [
       # src/generated/virgl_debug_callback_bindings.rs
       "aarch64-darwin"

@@ -8,14 +8,14 @@
   xclip,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gtt";
   version = "10";
 
   src = fetchFromGitHub {
     owner = "eeeXun";
     repo = "gtt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ghdf8UQA+SfsBiD5bPrNZM8sPE+Xhbhn18iNl3xLh8c=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "gtt";
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -10,7 +9,7 @@
   qt6,
   wrapGAppsHook3,
   # darwin-only
-  xcbuild,
+  re-plistbuddy,
 
   # buildInputs
   bzip2,
@@ -19,29 +18,30 @@
   enet,
   ffmpeg,
   fmt,
+  glslang,
   gtest,
   hidapi,
-  libXdmcp,
+  libxdmcp,
   libpulseaudio,
   libspng,
   libusb1,
   lz4,
   lzo,
-  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
   pugixml,
   sdl3,
   sfml,
-  xxHash,
+  xxhash,
   xz,
+  zlib-ng,
   # linux-only
   alsa-lib,
   bluez,
   libGL,
-  libXext,
-  libXrandr,
+  libxext,
+  libxrandr,
   libevdev,
   udev,
   vulkan-loader,
@@ -55,13 +55,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2509";
+  version = "2603a";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
+    hash = "sha256-+3/JtjKFsTEkKQa0LjycqNmDz0M8o2FndWQtw5R5/jQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -72,12 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
-      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
-    })
-  ];
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace CMake/DolphinInjectVersionInfo.cmake \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
+  '';
 
   strictDeps = true;
 
@@ -88,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild # for plutil
+    re-plistbuddy # for plutil as well
   ];
 
   buildInputs = [
@@ -98,15 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
     enet
     ffmpeg
     fmt
+    glslang
     gtest
     hidapi
-    libXdmcp
+    libxdmcp
     libpulseaudio
     libspng
     libusb1
     lz4
     lzo
-    mbedtls
+    #mbedtls_2 # Use vendored, as using nixpkgs' would mark the package unsafe
     miniupnpc
     minizip-ng
     openal
@@ -115,17 +114,16 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     sdl3
     sfml
-    xxHash
+    xxhash
     xz
-    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-    #zlib-ng
+    zlib-ng
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     bluez
     libGL
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     libevdev
     # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin
@@ -205,10 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
     branch = "master";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    badPlatforms = [
-      # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
-      lib.systems.inspect.patterns.isDarwin
-    ];
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })

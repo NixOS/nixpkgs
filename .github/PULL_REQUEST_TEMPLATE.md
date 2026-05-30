@@ -27,21 +27,16 @@ For new packages please briefly describe the package or provide a link to its ho
   - [ ] Module addition: when adding a new NixOS module.
   - [ ] Module update: when the change is significant.
 - [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other READMEs.
+- [ ] Follows the [automation/AI policy].
 
 [NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
 [Package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
 [nixpkgs-review usage]: https://github.com/Mic92/nixpkgs-review#usage
 
 [CONTRIBUTING.md]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md
+[automation/AI policy]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy
 [lib/tests]: https://github.com/NixOS/nixpkgs/blob/master/lib/tests
 [maintainers/README.md]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md
 [nixos/tests]: https://github.com/NixOS/nixpkgs/blob/master/nixos/tests
 [pkgs/README.md]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md
 [pkgs/test]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/test
-
----
-
-Add a :+1: [reaction] to [pull requests you find important].
-
-[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
-[pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc

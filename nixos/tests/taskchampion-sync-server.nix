@@ -18,7 +18,7 @@
     { nodes, ... }:
     let
       cfg = nodes.server.services.taskchampion-sync-server;
-      port = builtins.toString cfg.port;
+      port = toString cfg.port;
       # Generated with uuidgen
       uuid = "bf01376e-04a4-435a-9263-608567531af3";
       password = "nixos-test";
@@ -41,7 +41,7 @@
       client.succeed("task sync")
 
       # Useful for debugging
-      client.copy_from_vm("/root/.task", "client")
-      server.copy_from_vm("${cfg.dataDir}", "server")
+      client.copy_from_machine("/root/.task", "client")
+      server.copy_from_machine("${cfg.dataDir}", "server")
     '';
 }

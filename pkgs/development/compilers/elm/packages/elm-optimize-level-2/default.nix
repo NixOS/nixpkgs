@@ -7,7 +7,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "elm-optimize-level-2";
-  version = "0.3.5-unstable-2022-04-05";
+  version = "0.3.4-unstable-2022-04-05";
 
   src = fetchFromGitHub {
     owner = "mdgriffith";
@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     description = "A second level of optimization for the Javascript that the Elm Compiler produces.";
     homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-optimize-level-2";
   };
 })

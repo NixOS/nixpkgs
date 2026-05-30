@@ -31,7 +31,7 @@ let
   );
 
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax-cuda12-pjrt";
   inherit version;
   pyproject = false;
@@ -50,8 +50,8 @@ buildPythonPackage rec {
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-npnD5Ub2vgD/xqTt0s9bdtTFmqNKjYOW2COauP2Ov9M=";
-        aarch64-linux = "sha256-UAu8W9mrvcyyOP4TgbkAzVdyZFANFHA1H2jl29tSNcI=";
+        x86_64-linux = "sha256-MJUVRT9Zyq2Vv3bIvGScJLwOPRLQe68895K+CCq97js=";
+        aarch64-linux = "sha256-NqwxbFiKDgjrZPhoJwUmrco4VtS3CxN2C36bc76F0s8=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -102,4 +102,4 @@ buildPythonPackage rec {
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
-}
+})

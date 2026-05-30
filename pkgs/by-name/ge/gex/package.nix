@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   libgit2,
   nix-update-script,
@@ -9,15 +9,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gex";
   version = "0.6.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Piturnah";
     repo = "gex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xer7a3UtFIv3idchI7DfZ5u6qgDW/XFWi5ihtcREXqo=";
   };
 
@@ -40,15 +39,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
-  meta = with lib; {
+  meta = {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
     homepage = "https://codeberg.org/Piturnah/gex";
-    changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${src.tag}";
-    license = with licenses; [
+    changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azd325
       bot-wxt1221
       evanrichter
@@ -56,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gex";
   };
-}
+})

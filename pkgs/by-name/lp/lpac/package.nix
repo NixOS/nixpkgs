@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   cmake,
   pkg-config,
@@ -10,8 +11,8 @@
   libqmi,
   withDrivers ? true,
   withLibeuicc ? true,
-  withMbim ? true,
-  withQmi ? true,
+  withMbim ? stdenv.hostPlatform.isLinux,
+  withQmi ? stdenv.hostPlatform.isLinux,
   nix-update-script,
 }:
 
@@ -32,13 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.LPAC_VERSION = finalAttrs.version;
 
-  patches = [ ./lpac-version.patch ];
+  patches = [
+    ./lpac-version.patch
+
+    # CMAKE_OSX_ARCHITECTURES is set to "arm64;x86_64", and not overridable without this fix.
+    # https://github.com/estkme-group/lpac/pull/346
+    (fetchpatch {
+      url = "https://github.com/estkme-group/lpac/commit/be86645e596ee34f6d85cd0f3e039d5b31f35856.patch";
+      hash = "sha256-Y3tL9A1uKjX0x1O2WrQQ9k88Zu+Lpc+MNV9DRYePwgs=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "LPAC_DYNAMIC_DRIVERS" withDrivers)
     (lib.cmakeBool "LPAC_DYNAMIC_LIBEUICC" withLibeuicc)
     (lib.cmakeBool "LPAC_WITH_APDU_MBIM" withMbim)
     (lib.cmakeBool "LPAC_WITH_APDU_QMI" withQmi)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
   ];
 
   nativeBuildInputs = [
@@ -48,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pcsclite
   ]
   ++ optional withMbim libmbim

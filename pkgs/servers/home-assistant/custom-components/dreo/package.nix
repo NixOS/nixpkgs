@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "JeffSteinbok";
   domain = "dreo";
-  version = "1.4.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-dreo";
     tag = "v${version}";
-    hash = "sha256-j5dsT+1/qd+z9TBHXui3kx2kBQBnJ8VaSxdFt6R8sFQ=";
+    hash = "sha256-JF1n6a33qA6HN0JQ5ULT87Pnj3tp7ZrIwLfhLrWx+6I=";
   };
 
   dependencies = [ websockets ];
@@ -26,6 +26,10 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     pytest-homeassistant-custom-component
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   passthru.updateScript = nix-update-script { };

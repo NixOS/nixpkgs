@@ -2,21 +2,21 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xgalaga++";
   version = "0.9";
   src = fetchurl {
-    url = "https://marc.mongenet.ch/OSS/XGalaga/xgalaga++_${version}.tar.gz";
+    url = "https://marc.mongenet.ch/OSS/XGalaga/xgalaga++_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-yNtLuYCMHLvQAVM7CDGPardrh3q27TE9l31qhUbMf8k=";
   };
 
   buildInputs = [
-    libX11
-    libXpm
+    libx11
+    libxpm
   ];
 
   buildFlags = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://marc.mongenet.ch/OSS/XGalaga/";
     description = "XGalaga++ is a classic single screen vertical shoot ’em up. It is inspired by XGalaga and reuses most of its sprites";
     mainProgram = "xgalaga++";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

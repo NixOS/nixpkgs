@@ -5,12 +5,12 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dum";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://github.com/mjambon/dum/releases/download/${version}/dum-${version}.tbz";
+    url = "https://github.com/mjambon/dum/releases/download/${finalAttrs.version}/dum-${finalAttrs.version}.tbz";
     hash = "sha256-ZFojUD/IoxVTDfGyh2wveFsSz4D19pKkHrNuU+LFJlE=";
   };
 
@@ -33,6 +33,6 @@ buildDunePackage rec {
       objects or exceptions in depth and without risk.
     '';
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ alexfmpe ];
+    maintainers = [ ];
   };
-}
+})

@@ -2,10 +2,12 @@
   blueprint-compiler,
   desktop-file-utils,
   fetchFromGitHub,
+  glib-networking,
   gobject-introspection,
   lib,
   libadwaita,
   libsecret,
+  libsoup_3,
   meson,
   ninja,
   nix-update-script,
@@ -14,16 +16,16 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lenspect";
-  version = "1.0.2";
+  version = "1.0.5";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "vmkspv";
     repo = "lenspect";
-    tag = "v${version}";
-    hash = "sha256-R3Y1t4qEXY7zuYZENzwiAoW1fDEN/YiatnFLPUOeRUE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aGL6o9gv+z7Ey2XR8IZ/4gBXdDqGlaWaQXf0eVDEHlI=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +39,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    glib-networking
     libadwaita
     libsecret
+    libsoup_3
   ];
 
   dependencies = with python3Packages; [
@@ -56,10 +60,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Lightweight security threat scanner intended to make malware detection more accessible and efficient";
     homepage = "https://github.com/vmkspv/lenspect";
-    changelog = "https://github.com/vmkspv/lenspect/releases/tag/v${version}";
+    changelog = "https://github.com/vmkspv/lenspect/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ RoGreat ];
     mainProgram = "lenspect";
     platforms = lib.platforms.linux;
   };
-}
+})

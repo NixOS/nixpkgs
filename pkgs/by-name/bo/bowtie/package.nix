@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bowtie";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mWItmrTMPst/NnzSpxxTHcBztDqHPCza9yOsZPwp7G4=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ultrafast memory-efficient short read aligner";
-    license = licenses.artistic2;
+    license = lib.licenses.artistic2;
     homepage = "https://bowtie-bio.sourceforge.net";
-    maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ prusnak ];
+    platforms = lib.platforms.all;
   };
-}
+})

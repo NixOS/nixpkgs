@@ -1,7 +1,7 @@
 {
   boost,
   faust,
-  ladspaH,
+  ladspa-header,
 }:
 
 faust.wrapWithBuildEnv {
@@ -10,7 +10,7 @@ faust.wrapWithBuildEnv {
 
   propagatedBuildInputs = [
     boost
-    ladspaH
+    ladspa-header
   ];
 
 }

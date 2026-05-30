@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -29,9 +30,6 @@
   sqlalchemy,
   tornado,
   traitlets,
-  pythonOlder,
-  async-generator,
-  importlib-metadata,
 
   # tests
   addBinToPathHook,
@@ -47,23 +45,26 @@
   requests-mock,
   versionCheckHook,
   virtualenv,
+  # darwin-only
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.4.2";
+  version = "5.4.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    tag = version;
-    hash = "sha256-eSYoLoPWHQ/HHAFW6X262hrIrmUxDxrYEzVFiwGVqCs=";
+    tag = finalAttrs.version;
+    hash = "sha256-ndL5pE332VDlCk16XYUDaXhsg/J8ndGtgDhKct+y26c=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-IlY0dRHXsrEWNfBqUSk7hwU+CmlUfGPtXTPNcOBT8Bw=";
+    inherit (finalAttrs) src;
+    hash = "sha256-64FRdLHBpnywpCLjsMoXmWp/tK00+QwNIR9yAoQFIbg=";
   };
 
   postPatch = ''
@@ -104,10 +105,6 @@ buildPythonPackage rec {
     sqlalchemy
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    async-generator
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "jupyterhub" ];
@@ -121,24 +118,17 @@ buildPythonPackage rec {
     mock
     nbclassic
     playwright
-    # require pytest-asyncio<0.23
-    # https://github.com/jupyterhub/jupyterhub/pull/4663
-    (pytest-asyncio.overrideAttrs (
-      final: prev: {
-        version = "0.21.2";
-        src = fetchFromGitHub {
-          inherit (prev.src) owner repo;
-          rev = "refs/tags/v${final.version}";
-          hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
-        };
-      }
-    ))
+    pytest-asyncio
     pytestCheckHook
     requests-mock
     versionCheckHook
     virtualenv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied:
+    # '/private/tmp/temp_user_1/Library/Jupyter/runtime/jpserver-45402-open.html'
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tries to install older versions through pip
@@ -151,6 +141,11 @@ buildPythonPackage rec {
     "test_valid_events"
     "test_invalid_events"
     "test_user_group_roles"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Server connection times out under load on Darwin
+    "test_server_token_role"
+    "test_share_flow_full"
   ];
 
   disabledTestPaths = [
@@ -173,15 +168,17 @@ buildPythonPackage rec {
     "jupyterhub/tests/test_user.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://github.com/jupyterhub/jupyterhub";
-    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${finalAttrs.src.tag}/docs/source/reference/changelog.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
     badPlatforms = [
       # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-      lib.systems.inspect.patterns.isDarwin
+      # lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

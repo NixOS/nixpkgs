@@ -21,19 +21,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-perplexity";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-perplexity==${version}";
-    hash = "sha256-RUvzV1DQqg0nK/SABBekXlhuKmMT7vHTlyxb7RVpoiI=";
+    tag = "langchain-perplexity==${finalAttrs.version}";
+    hash = "sha256-bm7sIa62CIvsYNDdaN+XZKpRnCv5bg9kPZ1Ym8utFcM=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/perplexity";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/perplexity";
 
   build-system = [ hatchling ];
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;
@@ -77,4 +77,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

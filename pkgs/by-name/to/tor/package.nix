@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.20";
+  version = "0.4.9.8";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-G7IjKM3R7pSGR7/O1XHvp4wS/FBkGHtB1SVAhbUoL6c=";
+    hash = "sha256-rB85Ti3Sqwh30n2Sj9DZ6GZi/jymr9/7n9m28PltBd4=";
   };
 
   outputs = [
@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       # cross compiles correctly but needs the following
       lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_LINK = "-lgcc_s";
+  };
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -110,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
@@ -127,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 
@@ -149,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tor";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
       prusnak
     ];
     platforms = lib.platforms.unix;

@@ -3,29 +3,37 @@
   lib,
   fetchFromGitHub,
   unittestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtfunicode";
-  version = "2.0";
-  format = "setuptools";
+  version = "2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
-    tag = version;
-    hash = "sha256-mo3kuuK1epcH0Iyi9GYpZOYsUI4etWheyEPdw/S3tJE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dmPpMplCQIJMHhNFzOIjKwEHVio2mjFEbDmq1Y9UJkA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   nativeBuildInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "rtfunicode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Encoder for unicode to RTF 1.5 command sequences";
-    maintainers = [ maintainers.lucasew ];
-    license = licenses.bsd2;
+    maintainers = [ lib.maintainers.lucasew ];
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/mjpieters/rtfunicode";
-    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${version}";
+    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rslint";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "rslint";
     repo = "rslint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
@@ -29,10 +29,10 @@ rustPlatform.buildRustPackage rec {
     ./fix-rustc-1.89-compatibility.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

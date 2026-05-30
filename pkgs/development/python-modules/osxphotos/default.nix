@@ -17,6 +17,7 @@
   pathvalidate,
   pip,
   ptpython,
+  psutil,
   pytimeparse2,
   pyyaml,
   requests,
@@ -39,19 +40,31 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osxphotos";
-  version = "0.73.4";
+  version = "0.75.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
-    tag = "v${version}";
-    hash = "sha256-KZrTGnAAPZWzEx3qj+/rkHdmI/pOfQVW/IIL+DCs8eM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9oQ9yLNHACLgOegNRcuysGIo8cbYLhlkNa41Y+YHFTM=";
   };
 
+  pythonRelaxDeps = [
+    "bitmath"
+    "mako"
+    "more-itertools"
+    "objexplore"
+    "rich"
+    "textx"
+    "tenacity"
+    "whenever"
+  ];
+
   build-system = [ setuptools ];
+
   dependencies = [
     beautifulsoup4
     bitmath
@@ -64,12 +77,13 @@ buildPythonPackage rec {
     packaging
     pathvalidate
     pip
+    psutil
     ptpython
     pytimeparse2
     pyyaml
     requests
-    rich-theme-manager
     rich
+    rich-theme-manager
     shortuuid
     strpdatetime
     tenacity
@@ -83,16 +97,8 @@ buildPythonPackage rec {
     xdg-base-dirs
   ];
 
-  pythonRelaxDeps = [
-    "mako"
-    "more-itertools"
-    "objexplore"
-    "rich"
-    "textx"
-    "tenacity"
-  ];
-
   pythonImportsCheck = [ "osxphotos" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
@@ -111,10 +117,10 @@ buildPythonPackage rec {
   meta = {
     description = "Export photos from Apple's macOS Photos app and query the Photos library database to access metadata about images";
     homepage = "https://github.com/RhetTbull/osxphotos";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/osxphotos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     # missing utitools dependency
     broken = true && stdenv.hostPlatform.isDarwin;
   };
-}
+})

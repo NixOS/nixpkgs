@@ -2,25 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tomat";
-  version = "2.4.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "tomat";
-    tag = "v${version}";
-    hash = "sha256-xIIkyPcW/gIOS28efGR8ausBdnIj0/OkWLEM0MMTJLI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bHmVwtpDQCO8NS1dsilSsDBlMWotEZ3x1J/KD40vbVs=";
   };
 
-  cargoHash = "sha256-Ij91tU31fPUapxwCjpP0ASw96OGs/D/RzmDA1pKmrgQ=";
+  cargoHash = "sha256-wxVWYOMYVi8R1YpBp+KPirqubAPYA561R+maG1vgrl0=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -34,13 +36,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=integration::"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd tomat \
+      --bash target/completions/tomat.bash \
+      --fish target/completions/tomat.fish \
+      --zsh target/completions/_tomat
+
+    installManPage target/man/*
+  '';
+
   meta = {
     description = "Pomodoro timer for status bars";
     homepage = "https://github.com/jolars/tomat";
-    changelog = "https://github.com/jolars/tomat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jolars/tomat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "tomat";
     platforms = lib.platforms.linux;
   };
-}
+})

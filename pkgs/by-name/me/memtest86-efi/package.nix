@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.memtest86.com/";
     downloadPage = "https://www.memtest86.com/download.htm";
     changelog = "https://www.memtest86.com/whats-new.html";
@@ -58,8 +58,8 @@ stdenv.mkDerivation {
     '';
     # MemTest86 Free Edition is free to download with no restrictions on usage. However, the source code is not available.
     # https://www.memtest86.com/tech_license-information.html
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ cdepillabout ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ cdepillabout ];
+    platforms = lib.platforms.linux;
   };
 }

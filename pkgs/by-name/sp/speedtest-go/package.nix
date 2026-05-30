@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "speedtest-go";
   version = "1.7.10";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = "speedtest-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w0gIyeoQP+MfA9Q2CD7+laABmSrJ9u836E+UIhJeWdk=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = {
     description = "CLI and Go API to Test Internet Speed using speedtest.net";
     homepage = "https://github.com/showwin/speedtest-go";
-    changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${version}";
+    changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aleksana
@@ -32,4 +32,4 @@ buildGoModule rec {
     ];
     mainProgram = "speedtest-go";
   };
-}
+})

@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "49.1";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SrI6Z4l73da+LWKYIQ//YCz+wPNWiLxb/ycDYLB4TCk=";
+    hash = "sha256-MBsg60a8ZNbKcuo3F10o2orqT4YT5HG5TDGF5cTRvAU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       ;
-    hash = "sha256-Pjhpo44Zau2z6aWEQEcIPy3aUYplwdF/XIkO/1Zl+kg=";
+    hash = "sha256-6Fd6V0Ksl8jqoM1znyYI0Mve2QQU+JBf3yn2C2Bcda8=";
   };
 
   nativeBuildInputs = [
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/papers";
     changelog = "https://gitlab.gnome.org/GNOME/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
@@ -180,9 +180,9 @@ stdenv.mkDerivation (finalAttrs: {
       on the GNOME Desktop with a more modern interface.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "papers";
-    teams = [ teams.gnome ];
+    teams = [ lib.teams.gnome ];
   };
 })

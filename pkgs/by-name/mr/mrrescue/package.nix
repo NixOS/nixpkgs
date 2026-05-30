@@ -61,19 +61,19 @@ stdenv.mkDerivation {
 
     cp -v mrrescue.love $out/share/games/lovegames/mrrescue.love
 
-    makeWrapper ${love}/bin/love $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
+    makeWrapper ${lib.getExe love} $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
 
     chmod +x $out/bin/mrrescue
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Arcade-style fire fighting game";
     mainProgram = "mrrescue";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.zlib;
+    platforms = love.meta.platforms;
+    license = lib.licenses.zlib;
     downloadPage = "http://tangramgames.dk/games/mrrescue";
   };
 

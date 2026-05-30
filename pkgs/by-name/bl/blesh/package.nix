@@ -7,13 +7,14 @@
   glibcLocales,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "blesh";
-  version = "0.4.0-devel3";
+  version = "0.4.0-devel3-unstable-2026-03-10";
 
   src = fetchzip {
-    url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
-    sha256 = "sha256-kGLp8RaInYSrJEi3h5kWEOMAbZV/gEPFUjOLgBuMhCI=";
+    url = "https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly-20260310%2Bb99cadb.tar.xz";
+    name = "ble-nightly-20260310+b99cadb.tar.xz";
+    sha256 = "sha256-rJnSEY7J4wfy8dnL9Bg59u0epPe0HL1J7piPbkNyes0=";
   };
 
   dontBuild = true;
@@ -55,15 +56,15 @@ stdenvNoCC.mkDerivation rec {
     chmod +x "$out/bin/blesh-share"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/akinomyoga/ble.sh";
     description = "Bash Line Editor -- a full-featured line editor written in pure Bash";
     mainProgram = "blesh-share";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       aiotter
       matthiasbeyer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

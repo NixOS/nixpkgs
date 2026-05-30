@@ -42,11 +42,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pothosware/SoapyBladeRF";
     description = "SoapySDR plugin for BladeRF devices";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
   };
 }

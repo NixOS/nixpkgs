@@ -102,8 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ref. https://github.com/cnr-isti-vclab/meshlab/pull/1617
     # merged upstream
     ./1617_cmake-use-system-dependencies-install-exports.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+
     ./no-plist.patch
   ];
 
@@ -154,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       nim65s
       yzx9
     ];
+    teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })

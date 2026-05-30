@@ -1,9 +1,10 @@
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
-perlFlags=
+perlUseLibs='use lib'
 for i in $(IFS=:; echo $PERL5LIB); do
-    perlFlags="$perlFlags -I$i"
+    perlUseLibs="$perlUseLibs \"$i\","
 done
+perlUseLibs=$(echo "$perlUseLibs" | sed 's/,$/;/')
 
 oldPreConfigure="$preConfigure"
 preConfigure() {
@@ -15,7 +16,7 @@ preConfigure() {
             first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
             if test "$first" = "#!"; then
                 echo "patching $fn..."
-                sed -i "$fn" -e "s|^#\!\(.*\bperl\b.*\)$|#\!\1$perlFlags|"
+                sed -i "$fn" -e "s|^#\!\(.*\bperl\b.*\)$|#\!\1\n$perlUseLibs|"
             fi
         fi
     done

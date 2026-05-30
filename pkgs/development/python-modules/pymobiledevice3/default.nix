@@ -1,9 +1,9 @@
 {
   bpylist2,
   buildPythonPackage,
-  click,
   coloredlogs,
   construct,
+  construct-typing,
   cryptography,
   daemonize,
   developer-disk-image,
@@ -31,6 +31,7 @@
   pytest-asyncio,
   pytestCheckHook,
   python-pcapng,
+  pythonOlder,
   pytun-pmd3,
   pyusb,
   qh3,
@@ -40,6 +41,8 @@
   srptools,
   sslpsk-pmd3,
   tqdm,
+  typer,
+  typer-injector,
   uvicorn,
   wsproto,
   xonsh,
@@ -47,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "5.1.4";
+  version = "7.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-O7GGOYdwzArjVWkURQvNXHDcRRGaph7cUyytcuZ1WgM=";
+    hash = "sha256-dBzBvwjto0pr0EWOKStEPXbdlX1mOxBFsU1CkmQLhNw=";
   };
 
   build-system = [
@@ -64,9 +67,9 @@ buildPythonPackage rec {
 
   dependencies = [
     bpylist2
-    click
     coloredlogs
     construct
+    construct-typing
     cryptography
     daemonize
     developer-disk-image
@@ -95,13 +98,16 @@ buildPythonPackage rec {
     qh3
     requests
     srptools
-    sslpsk-pmd3
     tqdm
+    typer
+    typer-injector
     uvicorn
     wsproto
     xonsh
   ]
-  ++ fastapi.optional-dependencies.all;
+  ++ lib.optionals (pythonOlder "3.13") [
+    sslpsk-pmd3
+  ];
 
   pythonImportsCheck = [ "pymobiledevice3" ];
 

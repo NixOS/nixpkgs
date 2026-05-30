@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "esp-idf-size";
-  version = "2.0.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esp-idf-size";
     tag = "v${version}";
-    hash = "sha256-LnaS6lm2/fy9aWiV/MuRKegDAmjljQFvp+uI8FmEpdI=";
+    hash = "sha256-kjGO9uLj7/k8WCH6mARFOI4r8IhH/urGKR/23waaOFo=";
   };
 
   patches = [

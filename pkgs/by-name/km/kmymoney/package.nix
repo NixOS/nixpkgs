@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmymoney";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${finalAttrs.version}/kmymoney-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/q30C21MkNd+MnFqhY3SN2kIGGMQTYzqYpELHsPkM2s=";
+    hash = "sha256-QLZjnmohYQDSAkjtdPoVQgL5zN+8M1Inztwb746l03c=";
   };
 
   cmakeFlags = [

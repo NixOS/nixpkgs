@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "somo";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "theopfr";
     repo = "somo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k7PDCylA6KR/S1dQDSMIoOELPYwJ25dz1u+PM6ITGKg=";
+    hash = "sha256-+NXB+iOuimd3nz8EqMNL0j2N15fZtURH40dwicytd88=";
   };
 
-  cargoHash = "sha256-i3GmdBqCWPeslpr2zzOR4r8PgMP7EkC1mNFI7jSWO34=";
+  cargoHash = "sha256-TAIUgyq8NBx7gQdZeY0dTGEvkRveMdozBjINQeyJOss=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

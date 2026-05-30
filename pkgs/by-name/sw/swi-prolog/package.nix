@@ -22,7 +22,7 @@
   jdk,
 
   withOdbc ? true,
-  unixODBC,
+  unixodbc,
 
   withPcre ? true,
   pcre2,
@@ -34,13 +34,13 @@
   libyaml,
 
   withGui ? false,
-  libXpm,
-  libXext,
-  libXft,
-  libXinerama,
+  libxpm,
+  libxext,
+  libxft,
+  libxinerama,
   libjpeg,
-  libXt,
-  libSM,
+  libxt,
+  libsm,
   freetype,
   fontconfig,
 
@@ -97,18 +97,18 @@ let
     [ ]
     ++ (lib.optional withDb db)
     ++ (lib.optional withJava jdk)
-    ++ (lib.optional withOdbc unixODBC)
+    ++ (lib.optional withOdbc unixodbc)
     ++ (lib.optional withPcre pcre2)
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)
     ++ (lib.optionals withGui' [
-      libXt
-      libXext
-      libXpm
-      libXft
-      libXinerama
+      libxt
+      libxext
+      libxpm
+      libxft
+      libxinerama
       libjpeg
-      libSM
+      libsm
       freetype
       fontconfig
     ])

@@ -9,31 +9,31 @@
 
 buildGoModule rec {
   pname = "meowlnir";
-  version = "0.7.0";
+  version = "26.05";
+  tag = "v0.2605.0";
 
   src = fetchFromGitHub {
     owner = "maunium";
     repo = "meowlnir";
-    tag = "v${version}";
-    hash = "sha256-S0GrM8uKfWJh0/oAQp2f7P+yj99N0bovCNscM8b7tB8=";
+    inherit tag;
+    hash = "sha256-f2SgDFswjBDFQq9KvFo6A02vghMfYRkV26uWN8yxOz0=";
   };
 
   buildInputs = [ olm ];
 
-  vendorHash = "sha256-gzigJ2gg9jaREbFdX+38sUV8I/gcB5x+lYaABnS2Mbk=";
+  vendorHash = "sha256-rHBGTOqBfbu9EN0rWCui03aW2Co6Y4yxOvpuznjQ4qc=";
 
   doCheck = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/maunium/meowlnir";
     description = "Opinionated Matrix moderation bot";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "meowlnir";
   };
 }

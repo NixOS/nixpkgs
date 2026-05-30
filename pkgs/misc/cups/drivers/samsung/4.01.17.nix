@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.01.17";
 
   src = fetchurl {
-    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
+    url = "https://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
     sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
   };
 

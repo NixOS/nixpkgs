@@ -12,9 +12,9 @@
   libsndfile,
   libxcb,
   libxkbcommon,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
   zenity,
   curl,
   rsync,
@@ -62,13 +62,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilcursor
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
     zenity
     curl
     rsync
   ];
+
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp \
@@ -105,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       magnetophon
-      orivej
     ];
   };
 })

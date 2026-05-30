@@ -8,7 +8,6 @@ version = "0.0.0"
 
 [project.scripts]
 nixos-test-driver = "test_driver:main"
-generate-driver-symbols = "test_driver:generate_driver_symbols"
 
 [tool.setuptools.packages]
 find = {}
@@ -17,27 +16,8 @@ find = {}
 test_driver = ["py.typed"]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 line-length = 88
 
 lint.select = ["E", "F", "I", "U", "N"]
 lint.ignore = ["E501", "N818"]
-
-# xxx: we can import https://pypi.org/project/types-colorama/ here
-[[tool.mypy.overrides]]
-module = "colorama.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "ptpython.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "junit_xml.*"
-ignore_missing_imports = true
-
-[tool.mypy]
-warn_redundant_casts = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-no_implicit_optional = true

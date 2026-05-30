@@ -12,16 +12,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "tflint";
-  version = "0.59.1";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = "tflint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tE8h0sAKCJEZzZqUAcgyVWVRXdG3F7F1Vh7Je0+0Xeg=";
+    hash = "sha256-j2bP3McVCxtVEVQYs3mHWFtmUTKDIEd5aU4I/6W/Pns=";
   };
 
-  vendorHash = "sha256-KVKxtH/Hgxe7We3K8ArovsRDPz6a2wEfQ8Zx3ScCo74=";
+  vendorHash = "sha256-R4NmHSyay0FGpOSMNPbXWxNJFH3lhyWxGeJsNefkBrc=";
 
   doCheck = false;
 
@@ -35,8 +35,6 @@ buildGo125Module (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru.withPlugins =
     plugins:

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ Markdown to HTML header-only parser library";
     homepage = "https://github.com/progsource/maddy";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

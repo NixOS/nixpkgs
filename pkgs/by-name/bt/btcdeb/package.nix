@@ -29,12 +29,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Script Debugger";
     homepage = "https://github.com/bitcoin-core/btcdeb";
     changelog = "https://github.com/bitcoin-core/btcdeb/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ akru ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ akru ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -42,10 +42,9 @@ buildPythonPackage rec {
     "testOrderGetRequestTest"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/paypal/Checkout-Python-SDK/releases/tag/${version}";
+  meta = {
     description = "Python SDK for Checkout RESTful APIs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

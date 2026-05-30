@@ -14,26 +14,29 @@
   darwin,
   makeDesktopItem,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   removeReferencesTo,
   yarnBuildHook,
   yarnConfigHook,
   xcbuild,
   zip,
 
-  electron,
+  electron_39,
   git,
 }:
 
+let
+  electron = electron_39;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.14";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-jIkAiSCYIO5w/jM/Bv/odTuluRi3W/w4tTaUTmaYvEA=";
+    hash = "sha256-knosNA2Gqy10Kr9HWnBdYNlV51zzgFuL8cdioVlAk0Q=";
   };
 
   patches = [
@@ -54,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
+
+    # bumps better-sqlite3 to work with electron 39+
+    # also fixes outdated yarn.lock
+    ./bump-better-sqlite3.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -98,30 +105,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
-    inherit (finalAttrs) src;
-    hash = "sha256-eSMtHA4Ob7EVb5qEzAj+WjGyyFjA0ZEvTsaoMx0bgjc=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-xfAJ38shd92KdRfh/P7BH4eolZHQmzl4raoH1aZpGRk=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
   # ./static contains the lockfile and ./resources contains everything else
   yarnOfflineCacheStaticResources = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/static";
-    hash = "sha256-01t6lolMbBL5f6SFk4qTkTx6SQXWtHuVkBhDwW+HScc=";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./static";
+    hash = "sha256-5DBVlCWlUXYvo0bJWQwvSNMW4P9E8kjE9RQe9/ViJM0=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-amplify";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/packages/amplify";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./packages/amplify";
     hash = "sha256-IOhSwIf5goXCBDGHCqnsvWLf3EUPqq75xfQg55snIp4=";
   };
 
   yarnOfflineCacheTldraw = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-tldraw";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/tldraw";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./tldraw";
     hash = "sha256-CtMl3MPlyO5nWfFhCC1SLb/+1HUM3YfFATAPqJg3rUo=";
   };
 
@@ -143,8 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
       copyDesktopItems
       fakeGit
       makeWrapper
-      nodejs
-      (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+      nodejs-slim
+      nodejs-slim.npm
+      (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
       removeReferencesTo
       yarnBuildHook
       yarnConfigHook
@@ -192,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline --cwd tldraw postinstall
 
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     pushd packages/amplify
     npm rebuild --verbose
     popd
@@ -239,7 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # remove references to nodejs
-    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
+    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs-slim} '{}' \;
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"

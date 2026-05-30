@@ -11,15 +11,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vimb";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "fanglingsu";
     repo = "vimb";
-    tag = version;
-    hash = "sha256-NW9B/hybSOaojKIubaxiQ+Nd5f/D4XKxPl9vUyFoX/k=";
+    tag = finalAttrs.version;
+    hash = "sha256-3h4dTjGQ0Ds2BDG0cUmbNvtEmDuizDJ0BYvpCfMz+I0=";
   };
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

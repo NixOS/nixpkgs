@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tenacity,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pynws";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
@@ -48,15 +45,15 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pynws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to retrieve data from NWS/NOAA";
     homepage = "https://github.com/MatthewFlamm/pynws";
     changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

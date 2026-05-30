@@ -17,6 +17,7 @@
   flags,
   lib,
   libcublas,
+  libcudla,
   libcufft,
   libcurand,
   libcusolver,
@@ -197,6 +198,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     libnvjitlink
     libnvjpeg
   ]
+  ++ lib.optionals libcudla.meta.available [ libcudla ]
   ++ lib.optionals (cudaAtLeast "13") [ cuda_culibos ];
 
   cmakeFlags = [

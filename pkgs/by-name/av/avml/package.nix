@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "avml";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "avml";
-    tag = "v${version}";
-    hash = "sha256-QN9GLrs0wjlEdkNnN7Q4Uqu1yJlxD7Dx0SnHJnfV/so=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d8H+UPCH3yyBNndlGzamgaPlhmvP4rcUSAywx8vYky0=";
   };
 
-  cargoHash = "sha256-u9oYchTvSvlth/Kn6SYuuP2VDVWQDNqueUsKumPooFU=";
+  cargoHash = "sha256-LxoyvjFVn69s9Wf8pF+9wBgOV4fJ/th6GPzLW6hbz0E=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "avml";
   };
-}
+})

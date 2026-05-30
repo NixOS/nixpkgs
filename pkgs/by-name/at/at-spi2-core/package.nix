@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
   gobject-introspection,
   buildPackages,
+  withDconf ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform dconf,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -17,19 +17,19 @@
   dbus,
   glib,
   dconf,
-  libX11,
+  libx11,
   libxml2,
-  libXtst,
-  libXi,
-  libXext,
+  libxtst,
+  libxi,
+  libxext,
   gnome,
   systemdLibs,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
-  version = "2.58.0";
+  version = "2.60.1";
 
   outputs = [
     "out"
@@ -38,18 +38,9 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor version}/at-spi2-core-${version}.tar.xz";
-    hash = "sha256-390zANong6IZaf+t4oiYF/t8GQak75JJfrpllps9q1o=";
+    url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
+    hash = "sha256-+ZuH48FnT1+8QXzJwdniYcDymqsFUK1jaYBQMdEvaFI=";
   };
-
-  # TODO apply unconditionally on rebuild
-  patches = lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "timersub.patch";
-      url = "https://github.com/GNOME/at-spi2-core/commit/02108ea1b96db0189b2d4a9eceb843e1f13b7bdf.diff";
-      hash = "sha256-pVBhawfRnJoXmovl9CAmzh+YWJkbvlOVrCs8XanjP00=";
-    })
-  ];
 
   nativeBuildInputs = [
     glib
@@ -64,13 +55,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libxml2
     # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
-    libXtst
-    libXi
-    # libXext is a transitive dependency of libXi
-    libXext
+    libxtst
+    libxi
+    # libxext is a transitive dependency of libxi
+    libxext
   ]
   ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support
@@ -100,6 +91,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
+  ]
+  ++ lib.optionals (!withIntrospection) [
+    (lib.mesonEnable "introspection" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # The adaptor is only available as a shared object, as gtk2 loads it dynamically
+    (lib.mesonBool "gtk2_atk_adaptor" false)
   ];
 
   passthru = {
@@ -112,16 +110,16 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

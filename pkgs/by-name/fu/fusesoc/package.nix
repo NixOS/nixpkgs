@@ -5,29 +5,55 @@
   iverilog,
   verilator,
   gnumake,
+  gitMinimal,
+  openssh,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "2.4.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-M36bXBgY8hR33AVDlHoH8PZJG2Bi0KOEI07IMns7R4w=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-d04DFtV71CkrvX51x19cl0KSn2yOCMmYWGRv3AED8Xw=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = with python3Packages; [
     edalize
-    fastjsonschema
     pyparsing
     pyyaml
     simplesat
-    ipyxact
+    fastjsonschema
+    argcomplete
+  ];
+
+  nativeCheckInputs = [
+    gitMinimal
+    openssh
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "fusesoc" ];
+
+  disabledTestPaths = [
+    # These tests require network access
+    "tests/test_coremanager.py::test_export"
+    "tests/test_libraries.py::test_library_add"
+    "tests/test_libraries.py::test_library_update_with_initialize"
+    "tests/test_provider.py::test_git_provider"
+    "tests/test_provider.py::test_github_provider"
+    "tests/test_provider.py::test_url_provider"
+    "tests/test_usecases.py::test_git_library_with_default_branch_is_added_and_updated"
+    "tests/test_usecases.py::test_update_git_library_with_fixed_version"
+  ];
 
   makeWrapperArgs = [
     "--suffix PATH : ${
@@ -39,11 +65,13 @@ python3Packages.buildPythonPackage rec {
     }"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/olofk/fusesoc";
     description = "Package manager and build tools for HDL code";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ VZstless ];
+    license = lib.licenses.bsd2;
     mainProgram = "fusesoc";
   };
-}
+})

@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "coze";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "Cyphrme";
     repo = "Coze_cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/Cznx5Q0a9vVrC4oAoBmAkejT1505AQzzCW/wi3itv4=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/coze_cli $out/bin/coze
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI client for Coze, a cryptographic JSON messaging specification";
     mainProgram = "coze";
     homepage = "https://github.com/Cyphrme/coze_cli";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ qbit ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ qbit ];
   };
-}
+})

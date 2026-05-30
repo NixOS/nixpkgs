@@ -3,30 +3,39 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
+  makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "conventional-changelog";
     tag = "conventional-changelog-v${finalAttrs.version}";
-    hash = "sha256-Pgx5gM4SdSL6WCkStByA7AP2O96MjAjyeMOI+Lo2mt0=";
+    hash = "sha256-0Fee2sfLwxfE/MRLMUUMACTGVxnJJF1MPsWWzleVA3c=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-ZfG3F0J1hIhZlF2OadhVdbxhQrFcMYDG9gEXR04DgEI=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-O91ypnycBwkfLSruezx9E5CrytguBdtmvgVhKFjUzvM=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
+    makeBinaryWrapper
   ];
 
   buildPhase = ''
@@ -43,9 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/conventional-changelog/
     mkdir $out/bin
     mv * $out/lib/node_modules/conventional-changelog/
-    chmod +x $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js
-    ln -s $out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js $out/bin/conventional-changelog
-    patchShebangs $out/bin/conventional-changelog
+
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/conventional-changelog \
+      --add-flags "$out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js" \
+      --set NODE_PATH "$out/lib/node_modules/conventional-changelog/node_modules"
 
     runHook postInstall
   '';
@@ -55,14 +65,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn '"exports": "./src/index.ts"' '"exports": "./dist/index.js"'
   '';
 
-  passthru.updateScript = nix-update-script { };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "conventional-changelog-v(.*)"
+    ];
+  };
 
   meta = {
-    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/conventional-changelog-v${finalAttrs.version}";
+    changelog = "https://github.com/conventional-changelog/conventional-changelog/releases/tag/${finalAttrs.src.tag}";
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = [ ];
     mainProgram = "conventional-changelog";
   };
 })

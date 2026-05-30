@@ -46,7 +46,8 @@ symlinkJoin {
 
     # Point to wrapped binary in all service files
     for file in "share/dbus-1/services/nemo.FileManager1.service" \
-      "share/dbus-1/services/nemo.service"
+      "share/dbus-1/services/nemo.service" \
+      "share/polkit-1/actions/org.nemo.root.policy"
     do
       rm "$out/$file"
       substitute "${nemo}/$file" "$out/$file" \

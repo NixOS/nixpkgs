@@ -120,6 +120,26 @@
 
         package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
 
+        disable-hooks = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmptyStr;
+          default = [ "create-symlinks" ];
+          description = ''
+            List of hooks to disable when generating the CDI specification.
+            Each hook name will be passed as `--disable-hook <hook-name>` to nvidia-ctk.
+            Set to an empty list to disable no hooks.
+          '';
+        };
+
+        enable-hooks = lib.mkOption {
+          type = lib.types.listOf lib.types.nonEmptyStr;
+          default = [ ];
+          description = ''
+            List of hooks to enable when generating the CDI specification.
+            Each hook name will be passed as `--enable-hook <hook-name>` to nvidia-ctk.
+            Set to an empty list to enable no hooks.
+          '';
+        };
+
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
@@ -131,6 +151,17 @@
     };
 
   config = lib.mkMerge [
+    (lib.mkIf (config.virtualisation.docker.enableNvidia || config.virtualisation.podman.enableNvidia) {
+      hardware.nvidia-container-toolkit.enable = lib.mkDefault true;
+
+      warnings = lib.mkIf (!config.hardware.nvidia-container-toolkit.enable) [
+        ''
+          `virtualisation.docker.enableNvidia` or `virtualisation.podman.enableNvidia` is enabled,
+          but `hardware.nvidia-container-toolkit.enable` is disabled. The nvidia-container-toolkit
+          module is required for GPU support in containers.
+        ''
+      ];
+    })
     (lib.mkIf config.virtualisation.docker.enableNvidia {
       environment.etc."nvidia-container-runtime/config.toml".text = ''
         disable-require = true
@@ -142,7 +173,7 @@
         no-cgroups = false
         path = "${lib.getExe' pkgs.libnvidia-container "nvidia-container-cli"}"
         [nvidia-container-runtime]
-        mode = "auto"
+        mode = "cdi"
         runtimes = ["docker-runc", "runc", "crun"]
         [nvidia-container-runtime-hook]
         path = "${lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package}/bin/nvidia-container-runtime-hook"
@@ -178,7 +209,7 @@
           assertion =
             ((builtins.length config.hardware.nvidia-container-toolkit.csv-files) > 0)
             -> config.hardware.nvidia-container-toolkit.discovery-mode == "csv";
-          message = ''When CSV files are provided, `config.hardware.nvidia-container-toolkit.discovery-mode` has to be set to `csv`.'';
+          message = "When CSV files are provided, `config.hardware.nvidia-container-toolkit.discovery-mode` has to be set to `csv`.";
         }
       ];
 
@@ -189,7 +220,7 @@
       ];
 
       services.udev.extraRules = ''
-        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} restart nvidia-container-toolkit-cdi-generator.service'"
+        KERNEL=="nvidia", RUN+="${lib.getExe' config.systemd.package "systemctl"} --no-block restart nvidia-container-toolkit-cdi-generator.service'"
       '';
 
       virtualisation = {
@@ -297,44 +328,11 @@
         serviceConfig = {
           RuntimeDirectory = "cdi";
           RemainAfterExit = true;
-          ExecStartPre = pkgs.writeShellScript "wait-for-nvidia-devices" ''
-            set -eu
-
-            gpus_dir="/proc/driver/nvidia/gpus"
-            max_wait_seconds=60
-
-            if [ ! -d "$gpus_dir" ]; then
-              echo "wait-for-nvidia-devices: $gpus_dir does not exist; nothing to wait for."
-              exit 0
-            fi
-
-            gpu_count=$(find "$gpus_dir" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
-
-            if [ "$gpu_count" -eq 0 ]; then
-              echo "wait-for-nvidia-devices: no GPU entries found in $gpus_dir; nothing to wait for."
-              exit 0
-            fi
-
-            echo "wait-for-nvidia-devices: expecting $gpu_count /dev/nvidiaN device node(s)."
-
-            elapsed=0
-            while true; do
-              dev_count=$(find /dev -mindepth 1 -maxdepth 1 -type c -regex '.*/nvidia[0-9]+' 2>/dev/null | wc -l | tr -d ' ')
-
-              if [ "$dev_count" -eq "$gpu_count" ]; then
-                echo "wait-for-nvidia-devices: found $dev_count matching device node(s)."
-                exit 0
-              fi
-
-              if [ "$elapsed" -ge "$max_wait_seconds" ]; then
-                echo "wait-for-nvidia-devices: timed out after $max_wait_seconds seconds; expected $gpu_count node(s) but found $dev_count." >&2
-                exit 1
-              fi
-
-              sleep 1
-              elapsed=$((elapsed + 1))
-            done
-          '';
+          # We wait for the udev events queue to empty in the *hope* that the
+          # devices needed here become available. This is terribly broken and
+          # essentially no better than a random sleep(). See PR #452645 for
+          # an attempt to fix this issue.
+          ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
           ExecStart =
             let
               script = pkgs.callPackage ./cdi-generate.nix {
@@ -343,6 +341,8 @@
                   device-name-strategy
                   discovery-mode
                   mounts
+                  disable-hooks
+                  enable-hooks
                   extraArgs
                   ;
                 nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;

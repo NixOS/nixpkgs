@@ -24,4 +24,14 @@ buildPythonPackage rec {
     pyyaml
     versioningit
   ];
+
+  meta = {
+    inherit (ua-parser.meta)
+      description
+      homepage
+      license
+      changelog
+      ;
+    maintainers = [ ];
+  };
 }

@@ -26,6 +26,7 @@
   which,
   jq,
   writableTmpDirAsHomeHook,
+  installShellFiles,
   flutterTools ? null,
 }@args:
 
@@ -70,6 +71,7 @@ let
       makeWrapper
       jq
       gitMinimal
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
@@ -158,6 +160,12 @@ let
       runHook postInstall
     '';
 
+    postInstall = ''
+      $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      installShellCompletion --bash "$TMPDIR/flutter.bash"
+      installShellCompletion --zsh "$TMPDIR/flutter.bash"
+    '';
+
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
@@ -201,6 +209,9 @@ let
       '';
       homepage = "https://flutter.dev";
       license = lib.licenses.bsd3;
+      sourceProvenance =
+        with lib.sourceTypes;
+        if useNixpkgsEngine then [ fromSource ] else [ binaryNativeCode ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"

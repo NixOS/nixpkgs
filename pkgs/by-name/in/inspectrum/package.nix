@@ -42,12 +42,12 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     gnuradioMinimal.unwrapped.python.pkgs.thrift
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for analysing captured signals from sdr receivers";
     mainProgram = "inspectrum";
     homepage = "https://github.com/miek/inspectrum";
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
   };
 }

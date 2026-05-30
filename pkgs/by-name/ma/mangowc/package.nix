@@ -1,6 +1,6 @@
 {
   lib,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -12,7 +12,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   enableXWayland ? true,
   meson,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.10.5";
+  version = "0.12.8";
 
   src = fetchFromGitHub {
-    owner = "DreamMaoMao";
-    repo = "mangowc";
+    owner = "mangowm";
+    repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-ZESyUtCiIQh6R0VYAo8YaP95Damw3MJVvKy5qU3pgTA=";
+    hash = "sha256-k9qFn9I+eeAq1kBfw6QRLRMDb6sIV+pgd5zpKNoc1ck=";
   };
 
   nativeBuildInputs = [
@@ -52,22 +52,25 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ]
   ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
+    libx11
+    libxcb-wm
     xwayland
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" enableXWayland)
   ];
 
   passthru = {
     providedSessions = [
-      "dwl"
-      "mangowc"
+      "mango"
     ];
   };
 
   meta = {
     mainProgram = "mango";
     description = "Lightweight and feature-rich Wayland compositor based on dwl";
-    homepage = "https://github.com/DreamMaoMao/mangowc";
+    homepage = "https://mangowm.github.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hustlerone ];
     platforms = lib.platforms.linux;

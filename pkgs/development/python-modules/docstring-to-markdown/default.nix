@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docstring_to_markdown" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";
     description = "On the fly conversion of Python docstrings to markdown";
     changelog = "https://github.com/python-lsp/docstring-to-markdown/releases/tag/${src.tag}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

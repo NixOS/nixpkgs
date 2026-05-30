@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qc";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y7SjlVNiZjWDTRPNZfyoFjI5qyo2SHgTPurNJzGmN0k=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/qownnotes/qc/cmd.version=${version}"
+    "-X=github.com/qownnotes/qc/cmd.version=${finalAttrs.version}"
   ];
 
   # There are no automated tests
@@ -42,14 +42,14 @@ buildGoModule rec {
       --zsh <($out/bin/qc completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "QOwnNotes command-line snippet manager";
     mainProgram = "qc";
     homepage = "https://github.com/qownnotes/qc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pbek
       totoroot
     ];
   };
-}
+})

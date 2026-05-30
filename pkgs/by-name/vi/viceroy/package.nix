@@ -4,31 +4,32 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
-    rev = "v${version}";
-    hash = "sha256-uZdzQ3YW3RYyJMLnyzmYi+b2rMeK7gdxXZ9QPHuu8/w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WlxVXMUIby5qBsb6Uc8hiya0QJfEPKhqMSNW51JkTqs=";
   };
 
-  cargoHash = "sha256-A/XQZ/stc3sUL60aBZWfHADiCLVQRD7RmZ3bUHoVtgg=";
+  cargoHash = "sha256-K2l53MZLwLoR2I7NdTOMTBppUoM4408UvaYX2m8RyiQ=";
 
   cargoTestFlags = [
-    "--package viceroy-lib"
+    "--package"
+    "viceroy-lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides local testing for developers working with Compute@Edge";
     mainProgram = "viceroy";
     homepage = "https://github.com/fastly/Viceroy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ereslibre
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

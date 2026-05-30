@@ -5,8 +5,6 @@
 
   pytestCheckHook,
 
-  pythonOlder,
-
   setuptools,
   setuptools-scm,
   wheel,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "typing-validation";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hashberg-io";
@@ -45,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typing_validation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for runtime type-checking";
     homepage = "https://github.com/hashberg-io/typing-validation";
     changelog = "https://github.com/hashberg-io/typing-validation/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

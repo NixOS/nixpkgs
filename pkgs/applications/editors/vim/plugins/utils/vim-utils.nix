@@ -5,6 +5,7 @@
   vim,
   vimPlugins,
   buildEnv,
+  symlinkJoin,
   writeText,
   runCommand,
   makeWrapper,
@@ -200,12 +201,28 @@ let
           # and can simply pass `null`.
           depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
           startWithDeps = findDependenciesRecursively start;
-          allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+          allPluginsAndGrammars = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
+
           allPython3Dependencies =
             ps: lib.flatten (map (plugin: (plugin.python3Dependencies or (_: [ ])) ps) allPlugins);
           python3Env = python3.withPackages allPython3Dependencies;
 
-          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
+          partitionGrammars = lib.partition (
+            p: p.isTreesitterGrammar or false || p.isTreesitterQuery or false
+          );
+          allPluginsAndGrammarsPartitioned = partitionGrammars allPluginsAndGrammars;
+          allPlugins = allPluginsAndGrammarsPartitioned.wrong;
+          allGrammars = allPluginsAndGrammarsPartitioned.right;
+          allGrammarsSymlinked = symlinkJoin {
+            name = "nvim-treesitter-grammars";
+            paths = allGrammars;
+          };
+
+          allAndOptPluginNames = map (plugin: plugin.pname or null) (allPlugins ++ opt);
+
+          packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" (
+            if allGrammars != [ ] then allPlugins ++ [ allGrammarsSymlinked ] else allPlugins
+          );
           packdirOpt = vimFarm "pack/${packageName}/opt" "packdir-opt" opt;
           # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
           # for each plugin.
@@ -216,6 +233,14 @@ let
             ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
           '';
         in
+
+        assert
+          (
+            builtins.elem "nvim-treesitter" allAndOptPluginNames
+            && builtins.elem "nvim-treesitter-legacy" allAndOptPluginNames
+          )
+          -> throw "You cannot include two different versions of nvim-treesitter, perhaps you included a legacy plugin together with a new one?";
+
         [
           packdirStart
           packdirOpt
@@ -421,6 +446,7 @@ rec {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/vim-gen-doc-hook.sh
   ) { };
 
@@ -433,6 +459,7 @@ rec {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/vim-command-check-hook.sh
   ) { };
 
@@ -445,6 +472,7 @@ rec {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/neovim-require-check-hook.sh
   ) { };
 
@@ -486,8 +514,11 @@ rec {
 
   toVimPlugin =
     drv:
+    let
+      drv-name = drv.name or "${drv.pname}-${drv.version}";
+    in
     drv.overrideAttrs (oldAttrs: {
-      name = "vimplugin-${oldAttrs.name}";
+      name = "vimplugin-${drv-name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [
         "man"

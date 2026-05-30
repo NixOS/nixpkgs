@@ -12,7 +12,6 @@
   rustPlatform,
   cmake,
   gn,
-  go_1_24,
   openjdk11_headless,
   ninja,
   patchelf,
@@ -39,10 +38,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.35.2";
-    rev = "2c2cd7efd119a5c9028b68a97d88a540248f8d18";
-    hash = "sha256-HhjIewZMOr9hzcnFPIckfK5PIozqdypSdmYgvb7ccds=";
+    version = "1.36.5";
+    rev = "41749943780b54b70b510b1b1a4805ae529e174a";
+    hash = "sha256-dT6ehfmW/huuyitqIlYAlEzUE6WrVA39sDKxatkZGaY=";
   };
+
+  # When GO_VERSION changes upstream, update the four sha256 hex strings in the
+  # _GO_SDKS dict in 0005-nixpkgs-pin-go-sdk-downloads.patch using output from
+  # this command (set the version literal in `select` to match GO_VERSION):
+  #   curl -s 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | select(.version == "go1.24.6") | .files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin") and (.arch == "amd64" or .arch == "arm64")) | "\(.os)_\(.arch): \(.sha256)"'
 
   # these need to be updated for any changes to fetchAttrs
   depsHash' =
@@ -50,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-xBSSDxvp6VjZt+Fc62/eP5Z2WWfpkAGl1Z+PupyDpg4=";
-        aarch64-linux = "sha256-2g8x12zkyZyjkv5NubG4bVmiLiN8uoEZ33e6Azd1guw=";
+        x86_64-linux = "sha256-+oEQV3VfZu+p/f6Sif9pj2AkaA9+u0M8k+czdlcDLXI=";
+        aarch64-linux = "sha256-FcZfRinOd5KO6VnO9cx6ZQxJJ+KCFfB3Nk2k7zMuVU4";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -76,14 +80,14 @@ buildBazelPackage rec {
       # use system Python, not bazel-fetched binary Python
       ./0001-nixpkgs-use-system-Python.patch
 
-      # use system Go, not bazel-fetched binary Go
-      ./0002-nixpkgs-use-system-Go.patch
-
       # use system C/C++ tools
       ./0003-nixpkgs-use-system-C-C-toolchains.patch
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # pin Go SDK downloads so the deps hash doesn't drift on every Go release
+      ./0005-nixpkgs-pin-go-sdk-downloads.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -124,7 +128,6 @@ buildBazelPackage rec {
     cmake
     python3
     gn
-    go_1_24
     jdk
     ninja
     patchelf
@@ -149,14 +152,14 @@ buildBazelPackage rec {
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      # Envoy uses --noenable_bzlmod so BCR modules are not needed.
+      # Populate the repository cache with entries the build needs from the empty
+      # workspace.  Use `bazel sync` (which fetches WORKSPACE repos) rather than
+      # `bazel fetch` (which requires bzlmod for its --all mode).
       mkdir $NIX_BUILD_TOP/empty
       pushd $NIX_BUILD_TOP/empty
-      touch MODULE.bazel
-      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
-      # This really bloats the size of the FOD.
-      # TODO: lukegb - figure out how to make this suck less.
-      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
-      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      touch MODULE.bazel WORKSPACE
+      bazel sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
       popd
 
       # Strip out the path to the build location (by deleting the comment line).
@@ -177,6 +180,48 @@ buildBazelPackage rec {
 
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Drop prebuilt JDK toolchains and non-Linux java tool bundles; we force @local_jdk anyway.
+      shopt -s nullglob
+      rm -rf $bazelOut/external/remotejdk*
+      for dir in $bazelOut/external/remote_java_tools*; do
+        base=$(basename "$dir")
+        if [[ "$base" != remote_java_tools_linux ]]; then
+          rm -rf "$dir"
+        fi
+      done
+      rm -rf $bazelOut/external/android_tools $bazelOut/external/android_gmaven_r8
+      find $bazelOut/external/repository_cache -maxdepth 1 -type f \
+        \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) -delete
+
+      # Prune repository_cache entries for unused remote JDK/tool bundles.
+      keep_patterns=()
+      case ${stdenv.hostPlatform.system} in
+        x86_64-linux)
+          keep_patterns+=("remotejdk8_linux" "remotejdk11_linux" "remotejdk17_linux" "remotejdk21_linux" "remote_java_tools_linux")
+          ;;
+        aarch64-linux)
+          keep_patterns+=("remotejdk8_linux_aarch64" "remotejdk11_linux_aarch64" "remotejdk17_linux_aarch64" "remotejdk21_linux_aarch64" "remote_java_tools_linux")
+          ;;
+      esac
+
+      find $bazelOut/external/repository_cache -type f \( -iname '*remotejdk*' -o -iname '*remote_java_tools*' -o -iname '*android*' \) | while read f; do
+        keep=false
+        for pat in $keep_patterns; do
+          if [[ $(basename "$f") == *"$pat"* ]]; then
+            keep=true
+            break
+          fi
+        done
+        if ! $keep; then
+          rm -f "$f"
+        fi
+      done
+      shopt -u nullglob
+
+      # CMake 4.1 drops compatibility with <3.5; bump libevent's floor to avoid configure failure.
+      sed -i 's/cmake_minimum_required(VERSION 3\\.1.2 FATAL_ERROR)/cmake_minimum_required(VERSION 3.5 FATAL_ERROR)/' \
+        $bazelOut/external/com_github_libevent_libevent/CMakeLists.txt
 
       # Remove compiled python
       find $bazelOut -name '*.pyc' -delete
@@ -200,6 +245,7 @@ buildBazelPackage rec {
     dontUseNinjaInstall = true;
     bazel = null;
     preConfigure = ''
+      export CMAKE_POLICY_VERSION_MINIMUM=3.5
       echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
       echo "common --repository_disable_download" >> .bazelrc
 

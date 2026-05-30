@@ -8,13 +8,13 @@
   nix-update-script,
 }:
 let
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
     tag = "v${version}";
-    hash = "sha256-IfnFSusQMm6LujE1AmihK9wEF2RSGfKYwpV2fedg0fc=";
+    hash = "sha256-PTbj6jlXNRUOmwFSplvRDDiyyGqkBzUKtuBrvZm9kzM=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {
@@ -23,7 +23,12 @@ let
 
     cargoHash = "sha256-Cn9zRsQkBwaKbBD/JEpFMBOF6CBZTDx7fQa6Aoic4YU=";
 
-    env.RUSTC_BOOTSTRAP = 1;
+    env = {
+      RUSTC_BOOTSTRAP = 1;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+    };
 
     # NOTE: Disabled upstream too
     doCheck = false;
@@ -45,6 +50,12 @@ vimUtils.buildVimPlugin {
       mkdir -p target/release
       ln -s ${blink-pairs-lib}/lib/libblink_pairs${ext} target/release/
     '';
+
+  nvimSkipModules = [
+    # a module to quickly setup a minimal reproduction environment for testing
+    # bugs. therefore mostly useless from a consumer side
+    "repro"
+  ];
 
   passthru = {
     updateScript = nix-update-script {

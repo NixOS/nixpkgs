@@ -23,12 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://www.hadrons.org/software/libmd/";
     changelog = "https://archive.hadrons.org/software/libmd/libmd-${finalAttrs.version}.announce";
     # Git: https://git.hadrons.org/cgit/libmd.git
     description = "Message Digest functions from BSD systems";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       bsd2
       isc
@@ -36,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

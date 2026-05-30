@@ -14,18 +14,19 @@
   ninja,
   util-linux,
   libnl,
-  systemd,
+  systemdLibs,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rauc";
-  version = "1.15";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "rauc";
     repo = "rauc";
-    rev = "v${version}";
-    sha256 = "sha256-TnOpWLJREbx707W3W2w1WkMQoV6R2A5+jA4hGIT8V9E=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-wWj4tOUFVn+dgt4741YPF0+x85wRb46DM9lGLNon03Q=";
   };
 
   enableParallelBuilding = true;
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     openssl
     util-linux
     libnl
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.rauc = nixosTests.rauc;
   };
 
   meta = {
@@ -74,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "rauc";
   };
-}
+})

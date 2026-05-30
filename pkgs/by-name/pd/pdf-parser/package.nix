@@ -5,24 +5,21 @@
   writeScript,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdf-parser";
-  version = "0.7.10";
+  version = "0.7.14";
   pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdf-parser_V${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
-    hash = "sha256-RhgEGue3RcALjLXKOnnXyx/0subXHNuXfDg8hbO3VDg=";
+    hash = "sha256-oAmTzkBxwrXXSSimaN1Uo4wP+7ySrmyJNb9jD2uWglA=";
   };
 
   postPatch = ''
     # quote regular expressions correctly
     substituteInPlace pdf-parser.py \
-      --replace-fail \
-        "re.sub('" \
-        "re.sub(r'" \
       --replace-fail \
         "re.match('" \
         "re.match(r'"
@@ -57,8 +54,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
     license = lib.licenses.publicDomain;
-    maintainers = [ lib.maintainers.lightdiscord ];
+    maintainers = with lib.maintainers; [ cbrxyz ];
     platforms = lib.platforms.all;
     mainProgram = "pdf-parser.py";
   };
-}
+})

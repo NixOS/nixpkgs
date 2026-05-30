@@ -123,16 +123,25 @@ perlPackages.buildPerlPackage rec {
   ]);
 
   checkPhase = ''
+    # Skip a failing test, due to a change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/439/
+    rm t/04_Page.t
+
+    # Skip a failing test, due to a breaking change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/442/
+    # https://github.com/ImageMagick/ImageMagick/issues/8714
+    rm t/113_save_pdf_with_downsample.t
+
     export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ euxane ];
     mainProgram = "gscan2pdf";
   };
 }

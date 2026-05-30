@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudio";
-  version = "0.11.23";
+  version = "0.11.25";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
     tag = finalAttrs.version;
-    hash = "sha256-ZrfKw5a3AtIER2btCKWhuvygasNaHNf9EURf1Kv96Vc=";
+    hash = "sha256-2k346Z/ueINPbaY20P2cbBvRfFXXH0ugdv4d7WaYt2w=";
   };
 
   outputs = [
@@ -66,16 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
     changelog = "https://github.com/mackron/miniaudio/blob/${finalAttrs.version}/CHANGES.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit0
     ];
-    maintainers = [ maintainers.jansol ];
+    maintainers = [ lib.maintainers.jansol ];
     pkgConfigModules = [ "miniaudio" ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

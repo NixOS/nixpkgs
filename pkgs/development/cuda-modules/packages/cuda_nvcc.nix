@@ -6,8 +6,10 @@
   cudaAtLeast,
   cudaOlder,
   cuda_cccl,
+  glibc,
   lib,
   libnvvm,
+  makeBinaryWrapper,
 }:
 buildRedist (finalAttrs: {
   redistName = "cuda";
@@ -21,6 +23,10 @@ buildRedist (finalAttrs: {
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs
   propagatedBuildInputs = [ setupCudaHook ];
@@ -82,7 +88,7 @@ buildRedist (finalAttrs: {
         ++ lib.optionals (cudaOlder "12.5") [ "$(_NVVM_BRANCH_)" ]
         ++ lib.optionals (cudaAtLeast "12.5") [ "nvvm" ]
       );
-      newNvvmDir = ''''${!outputBin:?}/nvvm'';
+      newNvvmDir = "\${!outputBin:?}/nvvm";
     in
     lib.optionalString finalAttrs.finalPackage.meta.available (
       # From CUDA 13.0, NVVM is available as a separate library and not bundled in the NVCC redist.
@@ -144,13 +150,87 @@ buildRedist (finalAttrs: {
         EOF
       ''
       # Add the dependency on backendStdenv.cc to the nvcc.profile.
+      # NOTE: NVCC explodes in horrifying fashion if GCC is not on PATH -- it fails even before
+      # reading nvcc.profile!
       + ''
-        nixLog "adding backendStdenv.cc to nvcc.profile"
+        nixLog "setting compiler-bindir to backendStdenv.cc in nvcc.profile"
         cat << EOF >> "''${!outputBin:?}/bin/nvcc.profile"
-
         # Fix a compatible backend compiler
-        PATH += "${backendStdenv.cc}/bin":
+        compiler-bindir = ${backendStdenv.cc}/bin
         EOF
+
+        nixLog "wrapping nvcc to add backendStdenv.cc to its PATH"
+        wrapProgramBinary \
+          "''${!outputBin:?}/bin/nvcc" \
+          --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
+      ''
+      # Fix compatibility with glibc 2.42:
+      # The cospi|sinpi|rsqrt function signatures in include/common/math_functions.h do not match
+      # glibc 2.42's.
+      # Indeed, there they are declared with noexcept(true) which is not the case in cuda_nvcc.
+      # - In CUDA < 13.0, sinpi/cospi/rsqrt all lack exception specifiers.
+      # - In CUDA >= 13.0, NVIDIA fixed sinpi/cospi (using __NV_IEC_60559_FUNCS_EXCEPTION_SPECIFIER)
+      #   but rsqrt/rsqrtf still lack noexcept, so we only patch those.
+      #   As the CRT headers (including math_functions.h) moved to the cuda_crt package, the glibc
+      #   2.42 compatibility patch is applied there instead.
+      + lib.optionalString (cudaOlder "13.0" && lib.versionAtLeast glibc.version "2.42") ''
+        nixLog "Patching math_functions.h signatures to match glibc's ones"
+        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.h" \
+          --replace-fail \
+            "sinpi(double x);" \
+            "sinpi(double x) noexcept (true);" \
+          --replace-fail \
+            "sinpif(float x);" \
+            "sinpif(float x) noexcept (true);" \
+          --replace-fail \
+            "cospi(double x);" \
+            "cospi(double x) noexcept (true);" \
+          --replace-fail \
+            "cospif(float x);" \
+            "cospif(float x) noexcept (true);" \
+          --replace-fail \
+            "rsqrt(double x);" \
+            "rsqrt(double x) noexcept (true);" \
+          --replace-fail \
+            "rsqrtf(float x);" \
+            "rsqrtf(float x) noexcept (true);"
+
+        # math_functions.hpp has the same functions wrapped in __func__() macros.
+        # These also need throw() annotations to match glibc 2.42's declarations.
+        nixLog "Patching math_functions.hpp signatures to match glibc's ones"
+        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.hpp" \
+          --replace-fail \
+            "__func__(double rsqrt(const double a))" \
+            "__func__(double rsqrt(const double a) throw())" \
+          --replace-fail \
+            "__func__(double sinpi(double a))" \
+            "__func__(double sinpi(double a) throw())" \
+          --replace-fail \
+            "__func__(double cospi(double a))" \
+            "__func__(double cospi(double a) throw())" \
+          --replace-fail \
+            "__func__(float rsqrtf(const float a))" \
+            "__func__(float rsqrtf(const float a) throw())" \
+          --replace-fail \
+            "__func__(float sinpif(const float a))" \
+            "__func__(float sinpif(const float a) throw())" \
+          --replace-fail \
+            "__func__(float cospif(const float a))" \
+            "__func__(float cospif(const float a) throw())"
+      ''
+
+      # Fix clang CUDA compilation: host_defines.h redefines __noinline__ as
+      # __attribute__((noinline)), which conflicts with libstdc++ >=12 using
+      # __attribute__((__noinline__)) — the macro expands to
+      # __attribute__((__attribute__((noinline)))) which is invalid.
+      # Clang natively understands __noinline__ as an attribute so the macro
+      # is unnecessary. Skip it when clang is the compiler.
+      + lib.optionalString (cudaOlder "13.0") ''
+        nixLog "Patching host_defines.h to skip __noinline__ macro under clang"
+        substituteInPlace "''${!outputInclude:?}/include/crt/host_defines.h" \
+          --replace-fail \
+            '#if defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)' \
+            '#if (defined(__CUDACC__) || defined(__CUDA_ARCH__) || defined(__CUDA_LIBDEVICE__)) && !defined(__clang__)'
       ''
     );
 

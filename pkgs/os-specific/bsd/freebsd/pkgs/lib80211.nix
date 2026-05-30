@@ -10,4 +10,9 @@ mkDerivation {
     libbsdxml
   ];
   clangFixup = true;
+
+  installTargets = [
+    "install"
+    "installconfig"
+  ];
 }

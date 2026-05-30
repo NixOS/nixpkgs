@@ -47,6 +47,11 @@ buildDotnetModule rec {
       --replace-fail "patch" "latestFeature"
   '';
 
+  dotnetFlags = [
+    # this removes the Microsoft.WindowsDesktop.App.Ref dependency
+    "-p:EnableWindowsTargeting=false"
+  ];
+
   buildPhase = ''
     runHook preBuild
 
@@ -54,7 +59,8 @@ buildDotnetModule rec {
       -p:Configuration=Release \
       -p:RepositoryUrl="${meta.homepage}" \
       -p:RepositoryCommit="v${version}" \
-      src/NuGet/Microsoft.Net.Compilers.Toolset/Framework/Microsoft.Net.Compilers.Toolset.Framework.Package.csproj
+      $dotnetFlags \
+      $dotnetProjectFiles
 
     runHook postBuild
   '';
@@ -78,11 +84,11 @@ buildDotnetModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
     mainProgram = "csc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ corngood ];
   };
 }

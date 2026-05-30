@@ -8,7 +8,7 @@
 {
   lib,
   stdenv,
-  llvmPackages_19,
+  llvmPackages_21,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -22,6 +22,7 @@
   findutils,
   libiconv,
   removeReferencesTo,
+  zstd,
   rustSupport ? true,
   rustc,
   cargo,
@@ -30,7 +31,8 @@
   versionCheckHook,
 }:
 let
-  llvmStdenv = llvmPackages_19.stdenv;
+  llvmPackages = llvmPackages_21;
+  llvmStdenv = llvmPackages.stdenv;
 in
 llvmStdenv.mkDerivation (finalAttrs: {
   pname = "clickhouse";
@@ -42,8 +44,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
     repo = "ClickHouse";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    name = "clickhouse-${tag}.tar.gz";
+    name = "clickhouse-${tag}.tar.zst";
     inherit hash;
+    nativeBuildInputs = [ zstd ];
     postFetch = ''
       # Delete files that make the source too big
       rm -rf $out/contrib/arrow/docs/
@@ -78,7 +81,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
       # Compress to not exceed the 2GB output limit
       echo "Creating deterministic source tarball..."
 
-      tar -I 'gzip -n' \
+      tar -I 'zstd --no-progress' \
         --sort=name \
         --mtime=1970-01-01 \
         --owner=0 --group=0 \
@@ -99,15 +102,19 @@ llvmStdenv.mkDerivation (finalAttrs: {
     ninja
     python3
     perl
-    llvmPackages_19.lld
+    llvmPackages.lld
+    # Provides llvm-ar/llvm-objcopy.
+    # Required by cmake/strip_rust_symbols.sh to match the LLVM toolchain
+    # Otherwise it corrupts .eh_frame in the Rust staticlibs
+    llvmPackages.bintools
     removeReferencesTo
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
     yasm
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages_19.bintools
     findutils
     darwin.bootstrap_cmds
   ]
@@ -120,21 +127,6 @@ llvmStdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dontCargoSetupPostUnpack = true;
-
-  patches =
-    lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
-      # Disable building WASM lexer
-      url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
-    })
-    ++
-
-      lib.optional (lib.versions.majorMinor version == "25.8" && stdenv.hostPlatform.isDarwin)
-        (fetchpatch {
-          # Do not intercept memalign on darwin
-          url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        });
 
   postPatch = ''
     patchShebangs src/ utils/
@@ -188,6 +180,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_CHDIG=OFF"
     "-DENABLE_TESTS=OFF"
     "-DENABLE_DELTA_KERNEL_RS=0"
+    "-DENABLE_XRAY=OFF"
     "-DCOMPILER_CACHE=disabled"
   ]
   ++ lib.optional (
@@ -207,7 +200,10 @@ llvmStdenv.mkDerivation (finalAttrs: {
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
-  hardeningDisable = [ "fortify" ];
+  hardeningDisable = [
+    "fortify"
+    "libcxxhardeningfast"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -246,19 +242,21 @@ llvmStdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     changelog = "https://github.com/ClickHouse/ClickHouse/blob/v${version}/CHANGELOG.md";
 
     mainProgram = "clickhouse";
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (
+      lib.platforms.linux ++ lib.platforms.darwin
+    );
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thevar1able
     ];
   };

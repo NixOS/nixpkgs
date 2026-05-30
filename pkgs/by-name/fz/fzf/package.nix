@@ -6,22 +6,23 @@
   installShellFiles,
   bc,
   ncurses,
-  testers,
-  fzf,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fzf";
-  version = "0.67.0";
+  version = "0.73.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
-    rev = "v${version}";
-    hash = "sha256-P6jyKskc2jT6zMLAMxklN8e/630oWYT4bWim20IMKvo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xdhlbokeCzeBUP3YHA5u5tr3NTQz7n5TKPlJANp7yvM=";
   };
 
-  vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";
+  vendorHash = "sha256-MLuoKPEAqrpCbUphYOCpHdo8MdW5kvueeDU/3loK33Q=";
 
   env.CGO_ENABLED = 0;
 
@@ -37,7 +38,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version} -X main.revision=${src.rev}"
+    "-X main.version=${finalAttrs.version} -X main.revision=${finalAttrs.src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -75,21 +76,19 @@ buildGoModule rec {
     chmod +x $out/bin/fzf-share
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = fzf;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
-    changelog = "https://github.com/junegunn/fzf/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/junegunn/fzf/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Command-line fuzzy finder written in Go";
     homepage = "https://github.com/junegunn/fzf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       ma27
       zowoq
     ];
     mainProgram = "fzf";
     platforms = lib.platforms.unix;
   };
-}
+})

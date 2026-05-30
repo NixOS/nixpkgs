@@ -13,7 +13,7 @@
   taglib,
   shared-mime-info,
   libappimage,
-  xorg,
+  libxcursor,
   kio,
 }:
 mkKdeDerivation {
@@ -37,7 +37,7 @@ mkKdeDerivation {
     openexr
     taglib
     libappimage
-    xorg.libXcursor
+    libxcursor
   ];
 
   postInstall = ''

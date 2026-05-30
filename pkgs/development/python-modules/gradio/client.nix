@@ -2,8 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
   nix-update-script,
+  jq,
 
   # build-system
   hatchling,
@@ -23,34 +23,42 @@
   pydub,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   rich,
   safehttpx,
   tomlkit,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gradio-client";
-  version = "1.11.0";
+  version = "2.3.0";
   pyproject = true;
 
   # no tests on pypi
-  src = fetchFromGitHub {
-    owner = "gradio-app";
-    repo = "gradio";
-    # not to be confused with @gradio/client@${version}
-    tag = "gradio_client@${version}";
-    sparseCheckout = [ "client/python" ];
-    hash = "sha256-dj8hJPXUBbFG9awP3o0vgyPt+gcCgzKKEQTEHkrEimA=";
-  };
+  # they've stopped tagging "gradio_client@.*" and "@gradio/client@.*" tags on github
+  inherit (gradio) src;
+  sourceRoot = "${finalAttrs.src.name}/client/python";
 
-  sourceRoot = "${src.name}/client/python";
+  # Because we set sourceRoot above, the folders "client/python"
+  # don't exist, as far as this is concerned.
+  postPatch = ''
+    substituteInPlace test/conftest.py \
+      --replace-fail 'from client.python.test import media_data' 'import media_data'
+  '';
 
-  # upstream adds upper constraints because they can, not because the need to
-  # https://github.com/gradio-app/gradio/pull/4885
-  pythonRelaxDeps = [
-    # only backward incompat is dropping py3.7 support
-    "websockets"
+  preConfigure = ''
+    # sanity check
+    if [[ "$(jq <gradio_client/package.json .version -r)" != "$version" ]]; then
+      echo >&2 "ERROR: version mismatch with package.json:"
+      echo >&2 "version = $version"
+      (set -x; cat >&2 gradio_client/package.json)
+      false
+    fi
+  '';
+
+  nativeBuildInputs = [
+    jq
   ];
 
   build-system = [
@@ -73,6 +81,7 @@ buildPythonPackage rec {
     pydub
     pytest-asyncio
     pytestCheckHook
+    requests
     rich
     safehttpx
     tomlkit
@@ -81,14 +90,15 @@ buildPythonPackage rec {
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
+  postInstall = ''
+    mkdir -p $out/lib/gradio
+    cp -r ../../gradio/media_assets $out/lib/gradio
+  '';
+
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
-
-  pytestFlags = [
-    #"-x" "-Wignore" # uncomment for debugging help
-  ];
 
   enabledTestPaths = [
     "test/"
@@ -110,18 +120,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "gradio_client@(.*)"
-    ];
+  passthru = {
+    inherit (gradio) updateScript;
   };
 
   meta = {
-    homepage = "https://www.gradio.app/";
-    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio_client@${version}";
     description = "Lightweight library to use any Gradio app as an API";
+    homepage = "https://www.gradio.app/";
+    downloadPage = "https://github.com/gradio-app/gradio/tree/main/client/python";
+    changelog = "https://github.com/gradio-app/gradio/blob/${finalAttrs.src.tag}/client/python/gradio_client/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

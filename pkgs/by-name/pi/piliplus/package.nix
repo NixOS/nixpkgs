@@ -1,22 +1,24 @@
 {
   lib,
   fetchFromGitHub,
-  flutter335,
+  flutter341,
   makeDesktopItem,
   copyDesktopItems,
   alsa-lib,
   mpv-unwrapped,
   libplacebo,
   libappindicator,
+  webkitgtk_4_1,
 }:
 
 let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
+  version = "2.0.7.2";
 in
-flutter335.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "piliplus";
-  inherit (srcInfo) version;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "bggRGjQaUbCoE";
@@ -36,6 +38,7 @@ flutter335.buildFlutterApplication {
     mpv-unwrapped
     libplacebo
     libappindicator
+    webkitgtk_4_1
   ];
 
   # See lib/scripts/build.sh.
@@ -43,7 +46,7 @@ flutter335.buildFlutterApplication {
     cat <<EOL > lib/build_config.dart
     class BuildConfig {
       static const int versionCode = ${toString srcInfo.revCount};
-      static const String versionName = '${srcInfo.version}';
+      static const String versionName = '${version}';
 
       static const int buildTime = ${toString srcInfo.commitDate};
       static const String commitHash = '${srcInfo.rev}';
@@ -85,7 +88,7 @@ flutter335.buildFlutterApplication {
   meta = {
     inherit description;
     homepage = "https://github.com/bggRGjQaUbCoE/PiliPlus";
-    changelog = "https://github.com/bggRGjQaUbCoE/PiliPlus/releases/tag/${srcInfo.version}";
+    changelog = "https://github.com/bggRGjQaUbCoE/PiliPlus/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     platforms = lib.platforms.linux;

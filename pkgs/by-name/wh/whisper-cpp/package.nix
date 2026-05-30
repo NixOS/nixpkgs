@@ -8,6 +8,7 @@
   SDL2,
   wget,
   which,
+  ffmpeg,
   autoAddDriverRunpath,
   makeWrapper,
   nix-update-script,
@@ -29,10 +30,13 @@
   vulkan-loader,
 
   withSDL ? true,
+
+  withFFmpegSupport ? false,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
 assert coreMLSupport -> stdenv.hostPlatform.isDarwin;
+assert withFFmpegSupport -> stdenv.hostPlatform.isLinux;
 
 let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
@@ -44,6 +48,13 @@ let
     cmakeFeature
     optional
     optionals
+    ;
+
+  inherit (effectiveStdenv.hostPlatform)
+    isStatic
+    isLinux
+    isAarch64
+    isx86
     ;
 
   cudaBuildInputs = with cudaPackages; [
@@ -70,13 +81,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.2";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OU5mDnLZHmtdSEN5u0syJcU91L+NCO45f9eG6OsgFfU=";
+    hash = "sha256-YCuWKDKlrhbx+t3t2kDpAwuKt4rkipDsOXO6uqIU/W0=";
   };
 
   # The upstream download script tries to download the models to the
@@ -89,7 +100,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
-        ${lib.optionalString stdenv.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
       fi
     done
   '';
@@ -108,6 +119,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
+    ++ optional withFFmpegSupport ffmpeg
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
@@ -120,11 +132,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "WHISPER_SDL2" withSDL)
     (cmakeBool "GGML_LTO" true)
     (cmakeBool "GGML_NATIVE" false)
-    (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
+    (cmakeBool "BUILD_SHARED_LIBS" (!isStatic))
   ]
-  ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
+  ++ optionals isLinux [
+    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
+  ]
+  ++ optionals (isx86 && !isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
     (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/lib")
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
@@ -136,7 +152,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
     # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
     # and select the line that matches the current nixpkgs version of rocBLAS.
-    "-DAMDGPU_TARGETS=${rocmGpuTargets}"
+    (cmakeFeature "AMDGPU_TARGETS" rocmGpuTargets)
   ]
   ++ optionals coreMLSupport [
     (cmakeBool "WHISPER_COREML" true)
@@ -149,18 +165,22 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    # Add "whisper-cpp" prefix before every command
-    mv -v "$out/bin/"{quantize,whisper-quantize}
-
     install -v -D -m755 "$src/models/download-ggml-model.sh" "$out/bin/whisper-cpp-download-ggml-model"
 
     wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
+  ''
+  + lib.optionalString withFFmpegSupport ''
+    wrapProgram "$out/bin/whisper-server" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
 
-  doInstallCheck = true;
+  # libcuda.so is provided by the driver at runtime and is not available in the sandbox
+  # /nix/store/...-whisper-cpp-1.8.3/bin/whisper-cli: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
+  # NOTE: it is unclear why this isn't an issue on x86_64-linux
+  doInstallCheck = !(isLinux && isAarch64 && cudaSupport);
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -182,7 +202,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      dit7ya
       hughobrien
       aviallon
     ];

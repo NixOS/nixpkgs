@@ -1,7 +1,6 @@
 {
   lib,
   aiodns,
-  async-timeout,
   buildPythonPackage,
   cached-ipaddress,
   fetchFromGitHub,
@@ -12,19 +11,18 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodiscover";
-  version = "2.7.1";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
-    tag = "v${version}";
-    hash = "sha256-q0HXANSfoDPlGdokfiQcsMHkt9ZmD604JRL/SDQx2hw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GivEYa0/i/ufudYSHWQwYRhTEpzmwhlOyPHWH/JpdfU=";
   };
 
   build-system = [ poetry-core ];
@@ -35,9 +33,6 @@ buildPythonPackage rec {
     ifaddr
     netifaces
     pyroute2
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -53,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodiscover" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
-    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

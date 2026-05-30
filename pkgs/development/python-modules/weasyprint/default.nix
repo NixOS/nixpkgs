@@ -7,7 +7,9 @@
   fontconfig,
   glib,
   harfbuzz,
+  makeFontsConf,
   pango,
+  twemoji-color-font,
 
   # build-system
   flit-core,
@@ -30,9 +32,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "66.0";
+  version = "68.1-unstable-2026-05-18";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -40,8 +42,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
-    tag = "v${version}";
-    hash = "sha256-wmEDVEbikBpOQ5394IBPWQRjWZOLfMzEGxTtq4tt2Tw=";
+    # Includes upstream's Ghostscript 10.07-compatible rasterization tests.
+    # Drop the pin when the next WeasyPrint release is packaged.
+    rev = "2cb9b3d2378c67e2bfde646344ca4c2cb7c0f25f";
+    hash = "sha256-zQ8gvYy72ROMwprT5dWA3N1vC7y+6ZKNwKESwtPS21w=";
   };
 
   patches = [
@@ -76,7 +80,6 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)
@@ -98,21 +101,37 @@ buildPythonPackage rec {
     "test_visibility_3"
     "test_visibility_4"
     "test_woff_simple"
+    # AssertionError
+    "test_2d_transform"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Test include some emoji characters that require a custom fontconfig configuration to be found.
+  preCheck = ''
+    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ twemoji-color-font ]; }}
+  '';
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
+
+  # Upstream still reports the last release version from weasyprint.__version__.
+  # Remove when the next release is packaged.
+  preVersionCheck = ''
+    version=68.1
+  '';
 
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kozea/WeasyPrint/commits/${finalAttrs.src.rev}";
     description = "Converts web documents to PDF";
-    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.apm ];
+    mainProgram = "weasyprint";
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
-}
+})

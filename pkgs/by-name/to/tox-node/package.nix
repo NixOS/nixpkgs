@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tox-node";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tox-rs";
     repo = "tox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
   };
 
@@ -22,15 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Server application to run tox node written in pure Rust";
     homepage = "https://github.com/tox-rs/tox";
-    license = [ licenses.gpl3Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl3Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       suhr
       kurnevsky
     ];
     mainProgram = "tox-node";
   };
-}
+})

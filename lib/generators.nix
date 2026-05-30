@@ -23,9 +23,12 @@
 let
   inherit (lib)
     addErrorContext
+    any
     assertMsg
     attrNames
+    attrValues
     concatLists
+    concatMap
     concatMapStringsSep
     concatStrings
     concatStringsSep
@@ -52,6 +55,7 @@ let
     isString
     last
     length
+    genAttrs
     mapAttrs
     mapAttrsToList
     optionals
@@ -129,11 +133,11 @@ rec {
       err "this value is" (toString v);
 
   /**
-    Generate a line of key k and value v, separated by
-    character sep. If sep appears in k, it is escaped.
-    Helper for synaxes with different separators.
+    Generate a line of key `k` and value `v`, separated by
+    character `sep`. If `sep` appears in `k`, it is escaped.
+    Helper for syntaxes with different separators.
 
-    mkValueString specifies how values should be formatted.
+    `mkValueString` specifies how values should be formatted.
 
     ```nix
     mkKeyValueDefault {} ":" "f:oo" "bar"
@@ -350,7 +354,7 @@ rec {
     1. values are indented with tabs
     2. sections can have sub-sections
 
-    Further: https://git-scm.com/docs/git-config#EXAMPLES
+    Further: [git-config examples](https://git-scm.com/docs/git-config#EXAMPLES)
 
     # Examples
     :::{.example}
@@ -376,67 +380,81 @@ rec {
     `attrs`
 
     : Key-value pairs to be converted to a git-config file.
-      See: https://git-scm.com/docs/git-config#_variables for possible values.
+      See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
   */
   toGitINI =
-    attrs:
     let
       mkSectionName =
+        let
+          containsQuote = hasInfix ''"'';
+        in
         name:
         let
-          containsQuote = hasInfix ''"'' name;
           sections = splitString "." name;
-          section = head sections;
-          subsections = tail sections;
-          subsection = concatStringsSep "." subsections;
         in
-        if containsQuote || subsections == [ ] then name else ''${section} "${subsection}"'';
+        if containsQuote name || length sections == 1 then
+          name
+        else
+          ''${head sections} "${concatStringsSep "." (tail sections)}"'';
 
       mkValueString =
-        v:
         let
-          escapedV = ''"${replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v}"'';
+          escape = replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ];
         in
-        mkValueStringDefault { } (if isString v then escapedV else v);
+        v: mkValueStringDefault { } (if isString v then ''"${escape v}"'' else v);
 
       # generation for multiple ini values
       mkKeyValue =
-        k: v:
         let
-          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
+          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = ";
+          attrToString = k: v: "\t" + mkKeyValue k v;
         in
-        concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (toList v));
+        k: v: if isList v then concatStringsSep "\n" (map (attrToString k) v) else attrToString k v;
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs =
         let
+          isNonDrvAttrs = value: isAttrs value && !isDerivation value;
           recurse =
             path: value:
-            if isAttrs value && !isDerivation value then
-              mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+            if isNonDrvAttrs value then
+              concatMap (name: recurse ([ name ] ++ path) value.${name}) (attrNames value)
             else if length path > 1 then
-              {
-                ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
-              }
+              [
+                {
+                  ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
+                }
+              ]
             else
-              {
-                ${head path} = value;
-              };
+              [
+                {
+                  ${head path} = value;
+                }
+              ];
         in
-        attrs: foldl recursiveUpdate { } (flatten (recurse [ ] attrs));
+        attrs:
+        let
+          # Filter the names for any that contain nested attrsets. attrs that
+          # don't contain nested attrsets can stay the same =
+          namesToRewrite = filter (
+            name: isAttrs attrs.${name} && any isNonDrvAttrs (attrValues attrs.${name})
+          ) (attrNames attrs);
+          attrsToRewrite = genAttrs namesToRewrite (name: attrs.${name});
+        in
+        removeAttrs attrs namesToRewrite // foldl recursiveUpdate { } (recurse [ ] attrsToRewrite);
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
-    toINI_ (gitFlattenAttrs attrs);
+    attrs: toINI_ (gitFlattenAttrs attrs);
 
   /**
-    mkKeyValueDefault wrapper that handles dconf INI quirks.
+    `mkKeyValueDefault` wrapper that handles dconf INI quirks.
     The main differences of the format is that it requires strings to be quoted.
   */
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
 
   /**
-    Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+    Generates INI in dconf keyfile style. See the [GNOME documentation](https://help.gnome.org/system-admin-guide/dconf-keyfiles.html)
     for details.
   */
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
@@ -509,9 +527,9 @@ rec {
 
     Structured function argument
     : allowPrettyValues
-      : If this option is true, attrsets like { __pretty = fn; val = …; }
-        will use fn to convert val to a pretty printed representation.
-        (This means fn is type Val -> String.)
+      : If this option is true, attrsets like `{ __pretty = fn; val = …; }`
+        will use `fn` to convert `val` to a pretty printed representation.
+        (This means `fn` is type `Val -> String`.)
     : multiline
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
@@ -748,17 +766,17 @@ rec {
 
   /**
     Translate a simple Nix expression to Lua representation with occasional
-    Lua-inlines that can be constructed by mkLuaInline function.
+    Lua-inlines that can be constructed by `mkLuaInline` function.
 
     Configuration:
 
-    * multiline - by default is true which results in indented block-like view.
-    * indent - initial indent.
-    * asBindings - by default generate single value, but with this use attrset to set global vars.
+    * `multiline` - by default is true which results in indented block-like view.
+    * `indent` - initial indent.
+    * `asBindings` - by default generate single value, but with this use attrset to set global vars.
 
-    Attention:
-
+    ::: {.note}
     Regardless of multiline parameter there is no trailing newline.
+    :::
 
     # Inputs
 
@@ -778,7 +796,7 @@ rec {
     # Type
 
     ```
-    toLua :: AttrSet -> Any -> String
+    toLua :: { multiline :: Bool; indent :: String; asBindings :: Bool; } -> Any -> String
     ```
 
     # Examples
@@ -868,7 +886,7 @@ rec {
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
   /**
-    Mark string as Lua expression to be inlined when processed by toLua.
+    Mark string as Lua expression to be inlined when processed by `toLua`.
 
     # Inputs
 
@@ -879,7 +897,7 @@ rec {
     # Type
 
     ```
-    mkLuaInline :: String -> AttrSet
+    mkLuaInline :: String -> { _type = "lua-inline"; expr :: String; }
     ```
   */
   mkLuaInline = expr: {

@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   stdenv,
   flex,
@@ -12,8 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lcagent";
   version = "0.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "librecast";
     repo = "lcagent";
     tag = finalAttrs.version;

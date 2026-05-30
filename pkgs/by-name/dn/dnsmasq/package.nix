@@ -28,14 +28,19 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.91";
+  version = "2.92rel2";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-9iJoKEizNnetsratCCZGGKKuCgHaSGqT/YzZEYaz0VM=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Q9crjBKb3zPRe6/tyYgj9j5GtQBRKAZr8NKkcqMs4Go=";
   };
+
+  patches = [
+    # https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=9ad74926d4f7f34ff902e1db5235535aa813c33f
+    ./CVE-2026-6507.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
@@ -106,17 +111,17 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-proxy;
     kubernetes-dns-single = nixosTests.kubernetes.dns-single-node;
     kubernetes-dns-multi = nixosTests.kubernetes.dns-multi-node;
+    pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "dnsmasq";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
-}
+})

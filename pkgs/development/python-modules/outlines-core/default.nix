@@ -32,17 +32,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "outlines-core";
-  version = "0.2.11";
-
+  version = "0.2.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dottxt-ai";
     repo = "outlines-core";
-    tag = version;
-    hash = "sha256-lLMTHFytJT2MhnzT0RlRCaSBPijA81fjxUqx4IGfVo8=";
+    tag = finalAttrs.version;
+    hash = "sha256-XmXD2tWG2277bC318Bn9RqeEE7j9VdauvWnBmFS8Lsk=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     substituteInPlace Cargo.toml \
       --replace-fail \
         'version = "0.0.0"' \
-        'version = "${version}"'
+        'version = "${finalAttrs.version}"'
 
     cp --no-preserve=mode ${./Cargo.lock} Cargo.lock
   '';
@@ -67,7 +66,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    openssl.dev
+    openssl
   ];
 
   build-system = [
@@ -97,7 +96,10 @@ buildPythonPackage rec {
     rm -rf outlines_core
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Tests that need to download from Hugging Face Hub.
@@ -116,8 +118,8 @@ buildPythonPackage rec {
   meta = {
     description = "Structured text generation (core)";
     homepage = "https://github.com/outlines-dev/outlines-core";
-    changelog = "https://github.com/dottxt-ai/outlines-core/releases/tag/${version}";
+    changelog = "https://github.com/dottxt-ai/outlines-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danieldk ];
   };
-}
+})

@@ -19,14 +19,14 @@
   xz, # for liblzma
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libappimage";
   version = "1.0.4-5";
 
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "libappimage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V9Ilo0zFo9Urke+jCA4CSQB5tpzLC/S5jmon+bA+TEU=";
   };
 
@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Implements functionality for dealing with AppImage files";
     homepage = "https://github.com/AppImageCommunity/libappimage/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

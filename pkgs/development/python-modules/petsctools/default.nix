@@ -9,16 +9,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "petsctools";
-  version = "2025.2";
+  version = "2025.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "petsctools";
-    tag = version;
-    hash = "sha256-DC0jFybDEacA6otYvID5DfbUe1ANz5W4UmPXCSsRvOo=";
+    tag = finalAttrs.version;
+    hash = "sha256-5SV34KhympX58lWfFaQo5lVOeafcc/Y8HvYtZtY+4Eo=";
   };
 
   build-system = [
@@ -41,13 +41,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ optional-dependencies.petsc4py;
+  ++ finalAttrs.passthru.optional-dependencies.petsc4py;
 
   meta = {
     homepage = "https://github.com/firedrakeproject/petsctools";
     description = "Pythonic extensions for petsc4py and slepc4py";
-    changelog = "https://github.com/firedrakeproject/petsctools/releases/tag/${src.tag}";
+    changelog = "https://github.com/firedrakeproject/petsctools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

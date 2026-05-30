@@ -8,6 +8,7 @@
   nodejs,
   makeBinaryWrapper,
   gcc,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasm-text-gen";
@@ -58,11 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Toolbox for WebAssembly";
     homepage = "https://webassembly.js.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "wasmgen";
   };
 })

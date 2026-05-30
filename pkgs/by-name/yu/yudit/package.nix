@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,13 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ];
 
   meta = {
     description = "Free Unicode plain-text editor for Unix-like systems";
     homepage = "https://www.yudit.org/";
-    changelog = "https://www.yudit.org/download/CHANGELOG.TXT";
     mainProgram = "yudit";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];

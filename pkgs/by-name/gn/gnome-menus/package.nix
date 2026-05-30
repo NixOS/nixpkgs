@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-menus/${lib.versions.majorMinor version}/gnome-menus-${version}.tar.xz";
     sha256 = "EZipHNvc+yMt+U5x71QnYX0mAp4ye+P4YMOwkhxEgRg=";
   };
 
@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-menus";
     description = "Library that implements freedesktops's Desktop Menu Specification in GNOME";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

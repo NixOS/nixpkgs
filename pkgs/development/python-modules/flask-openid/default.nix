@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # no tests for repo...
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "OpenID support for Flask";
     homepage = "https://pythonhosted.org/Flask-OpenID/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

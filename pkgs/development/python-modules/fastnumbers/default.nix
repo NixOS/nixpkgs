@@ -6,28 +6,29 @@
   hypothesis,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "fastnumbers";
-  version = "5.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "5.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
     repo = "fastnumbers";
     tag = version;
-    hash = "sha256-TC9+xOvskABpChlrSJcHy6O7D7EnIKL6Ekt/vaLBX2E=";
+    hash = "sha256-7UjUkZPGsrtdQhgisI5IA37WvgGGiEXsey9NhATy064=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   # Tests fail due to numeric precision differences on ARM
   # See https://github.com/SethMMorton/fastnumbers/issues/28
@@ -43,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastnumbers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
-    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

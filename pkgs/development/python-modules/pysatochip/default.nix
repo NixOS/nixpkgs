@@ -8,14 +8,12 @@
   pyaes,
   pyopenssl,
   pyscard,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysatochip";
   version = "0.17.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "toporin";
@@ -36,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysatochip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple python library to communicate with a Satochip hardware wallet";
     homepage = "https://github.com/Toporin/pysatochip";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ oxalica ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ oxalica ];
   };
 }

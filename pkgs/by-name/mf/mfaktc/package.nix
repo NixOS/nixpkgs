@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mfaktc";
-  version = "0.23.6";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "primesearch";
     repo = "mfaktc";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-+oO2zMGxcnkEUlD1q5Sy79aXp7BtGTTsvbKjPqBt7sw=";
+    hash = "sha256-t1YaNHFndgNJ5VnUXI8cDJ62bBL7M6Q+by2XKlUleyc=";
   };
 
   enableParallelBuilding = true;

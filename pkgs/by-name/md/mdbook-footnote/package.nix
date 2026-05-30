@@ -3,18 +3,18 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-footnote";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "daviddrysdale";
     repo = "mdbook-footnote";
-    tag = "v${version}";
-    hash = "sha256-WUMgm1hwsU9BeheLfb8Di0AfvVQ6j92kXxH2SyG3ses=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YFMo+gufUEvHRnA9I98fGRXHcQjSTHY7DSRo90wcSHk=";
   };
 
-  cargoHash = "sha256-3tuejWMZlEAOgnBKEqZP2a72a8QP1yamfE/g2BJDEbg=";
+  cargoHash = "sha256-Gr/6Et+TlVBlDf++1z3YgzqRfIolHc5qT9BwtIkjnM4=";
 
   meta = {
     description = "Preprocessor for mdbook to support the inclusion of automatically numbered footnotes";
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

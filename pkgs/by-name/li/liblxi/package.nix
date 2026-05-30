@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxml2
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for communicating with LXI compatible instruments";
     longDescription = ''
       liblxi is an open source software library which offers a simple
@@ -56,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
       on networks and communicate SCPI commands.
     '';
     homepage = "https://lxi-tools.github.io/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vq ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vq ];
   };
 })

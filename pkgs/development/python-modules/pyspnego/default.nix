@@ -3,33 +3,30 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  glibcLocales,
   gssapi,
   krb5,
-  ruamel-yaml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+  ruamel-yaml,
   setuptools,
-  glibcLocales,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspnego";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "pyspnego";
-    tag = "v${version}";
-    hash = "sha256-dkss+8Z0dS4MTunBZWEH+WK1+kGikCHf7VPCR1reMS0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nO+WNpgPAunBSFbrCRb/W511z0nXUIK7XT/SisTk2+0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ cryptography ];
+  dependencies = [ cryptography ];
 
   optional-dependencies = {
     kerberos = [
@@ -49,12 +46,12 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  meta = with lib; {
-    changelog = "https://github.com/jborean93/pyspnego/blob/${src.tag}/CHANGELOG.md";
+  meta = {
     description = "Python SPNEGO authentication library";
-    mainProgram = "pyspnego-parse";
     homepage = "https://github.com/jborean93/pyspnego";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jborean93/pyspnego/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pyspnego-parse";
   };
-}
+})

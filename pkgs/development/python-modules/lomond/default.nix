@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
   pythonAtLeast,
-  pythonOlder,
 
   # runtime
   six,
@@ -54,10 +53,10 @@ buildPythonPackage rec {
     "tests/test_integration.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Websocket Client Library";
     homepage = "https://github.com/wildfoundry/dataplicity-lomond";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

@@ -27,23 +27,23 @@ let
     multiPkgs =
       let
         xorgDeps =
-          pkgs: with pkgs.xorg; [
-            libpthreadstubs
-            libSM
-            libX11
-            libXaw
+          pkgs: with pkgs; [
+            libpthread-stubs
+            libsm
+            libx11
+            libxaw
             libxcb
-            libXcomposite
-            libXcursor
-            libXdmcp
-            libXext
-            libXi
-            libXinerama
-            libXmu
-            libXrandr
-            libXrender
-            libXv
-            libXxf86vm
+            libxcomposite
+            libxcursor
+            libxdmcp
+            libxext
+            libxi
+            libxinerama
+            libxmu
+            libxrandr
+            libxrender
+            libxv
+            libxxf86vm
           ];
         gstreamerDeps =
           pkgs: with pkgs.gst_all_1; [
@@ -53,6 +53,11 @@ let
             gst-plugins-ugly
             gst-plugins-bad
             gst-libav
+          ];
+        waylandDeps =
+          pkgs: with pkgs; [
+            libxkbcommon
+            wayland
           ];
       in
       pkgs:
@@ -106,11 +111,12 @@ let
       ]
       ++ xorgDeps pkgs
       ++ gstreamerDeps pkgs
-      ++ extraLibraries pkgs;
+      ++ extraLibraries pkgs
+      ++ waylandDeps pkgs;
   };
 in
 symlinkJoin {
-  name = "bottles";
+  pname = "bottles";
   paths = [
     (buildFHSEnv (
       fhsEnv
@@ -133,5 +139,5 @@ symlinkJoin {
     ln -s ${bottles-unwrapped}/share/icons $out/share
   '';
 
-  inherit (bottles-unwrapped) meta;
+  inherit (bottles-unwrapped) meta version;
 }

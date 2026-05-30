@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   elfutils,
   vendorCertFile ? null,
@@ -19,17 +20,25 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shim";
   version = "16.1";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "shim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qHZfr7ncJOsb1Cijlp6eJSMzxa34H1h4lACqceOzg+s=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build with binutils 2.46.
+    (fetchpatch2 {
+      url = "https://github.com/rhboot/shim/commit/c4665d282072df2ed8ab6ae1d5fa0de41e5db02f.patch?full_index=1";
+      hash = "sha256-0QGqEo5qu3TrG9yqwQLZGuKhgoeReF+RrJzlOVQYDmA=";
+    })
+  ];
 
   buildInputs = [ elfutils ];
 
@@ -54,17 +63,17 @@ stdenv.mkDerivation rec {
     fallbackTarget = "fb${archSuffix}.efi";
   };
 
-  meta = with lib; {
+  meta = {
     description = "UEFI shim loader";
     homepage = "https://github.com/rhboot/shim";
-    license = licenses.bsd1;
+    license = lib.licenses.bsd1;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       baloo
       raitobezarius
     ];
   };
-}
+})

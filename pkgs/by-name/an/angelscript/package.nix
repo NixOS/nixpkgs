@@ -6,12 +6,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "angelscript";
   version = "2.38.0";
 
   src = fetchurl {
-    url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
+    url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${finalAttrs.version}.zip";
     sha256 = "sha256-sztdvNoQMX72fWKDU9gyRphM5vysEC1Nwq7RIeulLm8=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     cp -r $ROOT/docs/* "$out/share/docs/angelscript"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight scripting library";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.all;
     downloadPage = "https://www.angelcode.com/angelscript/downloads.html";
     homepage = "https://www.angelcode.com/angelscript/";
   };
-}
+})

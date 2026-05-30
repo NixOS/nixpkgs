@@ -31,11 +31,7 @@ let
 
     {
       name = "forgejo-${type}";
-      meta.maintainers = with lib.maintainers; [
-        bendlas
-        emilylange
-        tebriel
-      ];
+      meta.maintainers = lib.teams.forgejo.members;
 
       nodes = {
         server =
@@ -274,7 +270,7 @@ let
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
               server.systemctl("start forgejo-dump")
               assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
-              server.copy_from_vm("${dumpFile}")
+              server.copy_from_machine("${dumpFile}")
         '';
     };
 in

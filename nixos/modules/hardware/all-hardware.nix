@@ -60,7 +60,6 @@ in
       "pata_oldpiix"
       "pata_pcmcia"
       "pata_pdc2027x"
-      "pata_qdi"
       "pata_rz1000"
       "pata_serverworks"
       "pata_sil680"
@@ -68,7 +67,6 @@ in
       "pata_sl82c105"
       "pata_triflex"
       "pata_via"
-      "pata_winbond"
 
       # SCSI support (incomplete).
       "3w-9xxx"
@@ -106,7 +104,11 @@ in
       "vmxnet3"
       "vsock"
     ]
-    ++ lib.optional platform.isx86 "vmw_balloon"
+    ++ lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "7.0") [
+      "pata_qdi"
+      "pata_winbond"
+    ]
+    ++ lib.optionals platform.isx86 [ "vmw_balloon" ]
     ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
       "vmw_vmci"
       "vmwgfx"

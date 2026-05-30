@@ -44,13 +44,13 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-09";
+    version = "2025-07-19";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
       tag = version;
-      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+      hash = "sha256-CzFEMY3oJE3sHdIMQQi9qizG8jKo72gR8FlVK0w0p74=";
     };
 
     nativeBuildInputs = [
@@ -86,13 +86,18 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       runHook postInstall
     '';
 
+    # Drop dangling symlinks from the upstream icon set.
+    postFixup = ''
+      find $out/share/icons -xtype l -delete
+    '';
+
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colloid icon theme";
       homepage = "https://github.com/vinceliuice/colloid-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

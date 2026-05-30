@@ -9,16 +9,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wapiti";
-  version = "3.2.10";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
-    tag = version;
-    hash = "sha256-/w5t/BcMPewl0Wp6vx9kZamqHArb7+fnfktfEIUDL8Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-hUkEwyIzYhlip6vtwO8EYcUsL5B/ZVnbJKpTR6osVuc=";
   };
 
   pythonRelaxDeps = true;
@@ -70,8 +70,6 @@ python3Packages.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTests = [
     # Tests requires network access
     "test_attr"
@@ -89,11 +87,15 @@ python3Packages.buildPythonApplication rec {
     "test_explorer_extract_links"
     "test_explorer_filtering"
     "test_false"
+    "test_fetch_source_files_typo3"
+    "test_fetch_source_files"
     "test_frame"
     "test_headers_detection"
     "test_html_detection"
     "test_implies_detection"
     "test_inclusion_detection"
+    "test_magento_multi_version_detected"
+    "test_magento_version_detected"
     "test_merge_with_and_without_redirection"
     "test_meta_detection"
     "test_multi_detection"
@@ -173,9 +175,9 @@ python3Packages.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${src.tag}/doc/ChangeLog_Wapiti";
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${finalAttrs.src.tag}/doc/ChangeLog_Wapiti";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wapiti";
   };
-}
+})

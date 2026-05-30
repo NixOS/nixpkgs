@@ -2,32 +2,32 @@
   lib,
   stdenv,
   fetchFromSourcehut,
+  scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swipe-guess";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromSourcehut {
     owner = "~earboxer";
     repo = "swipeGuess";
-    rev = "v${version}";
-    hash = "sha256-8bPsnqjLeeZ7btTre9j1T93VWY9+FdBdJdxyvBVt34s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zpV7A42wzoRZBpDBQUKGFCnLNJELqQE69fJTx8TN4uE=";
   };
 
-  dontConfigure = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    ${lib.getExe stdenv.cc} swipeGuess.c -o swipeGuess
-
-    runHook postBuild
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "docs words-qwerty-en" "docs" \
+      --replace-fail 'install -m644 words-qwerty-en -D -t "$(DESTDIR)/$(PREFIX)/share/swipeGuess/words/"' ""
   '';
 
-  postInstall = ''
-    install -Dm555 swipeGuess -t $out/bin
-  '';
+  nativeBuildInputs = [ scdoc ];
+
+  makeFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+  ];
 
   meta = {
     description = "Completion plugin for touchscreen-keyboards on mobile devices";
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

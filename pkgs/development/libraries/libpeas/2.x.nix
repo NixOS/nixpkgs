@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.2.0";
+  version = "2.2.1";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-wohyM/CEpp+r/H+gFA1BBJGGPXBQr7KGd/mlU7JYCtk=";
+    hash = "sha256-WJ7KibQ3AG7fN1VHjfA3x0CiqEz6XSAtutYJXoKOJIg=";
   };
 
   patches = [
@@ -111,11 +111,11 @@ stdenv.mkDerivation rec {
     tests.cross = pkgsCross.aarch64-multiplatform.libpeas2;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject-based plugins engine";
     homepage = "https://gitlab.gnome.org/GNOME/libpeas";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

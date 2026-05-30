@@ -4,9 +4,9 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
-  libXmu,
-  libXt,
+  libx11,
+  libxmu,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -16,7 +16,6 @@
   perl,
   readline,
   tcl,
-  texlive,
   texliveSmall,
   tk,
   xz,
@@ -46,7 +45,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.1";
+  version = "4.5.3";
 
   src =
     let
@@ -54,11 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
+      hash = "sha256-qlwe1Ck8cnGsUT1lRnA1asDopq1eQr4BQ2XREVC1uPI=";
     };
 
   outputs = [
     "out"
+    "man"
     "tex"
   ];
 
@@ -72,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
-    libXmu
-    libXt
-    libXt
+    libx11
+    libxmu
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff
@@ -156,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --disable-R-framework
     --without-x
+    --without-static-cairo
     OBJC="clang"
     CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
@@ -196,30 +197,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  # make tex output available to texlive.combine
-  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
-  passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
-  passthru.tlDeps = with texlive; [
-    amsfonts
-    amsmath
-    fancyvrb
-    graphics
-    hyperref
-    iftex
-    jknapltx
-    latex
-    lm
-    tools
-    upquote
-    url
+  passthru.tlDeps = ps: [
+    ps.amsfonts
+    ps.amsmath
+    ps.fancyvrb
+    ps.graphics
+    ps.hyperref
+    ps.iftex
+    ps.jknapltx
+    ps.latex
+    ps.lm
+    ps.tools
+    ps.upquote
+    ps.url
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     mainProgram = "R";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -241,9 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ];
-    teams = [ teams.sage ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

@@ -12,18 +12,22 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vpc-access";
-  version = "1.14.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vpc_access";
-    inherit version;
-    hash = "sha256-N1CpDs/TgSCjJOnNwOJCaS7MWur95uoztvl+R5DjYC0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-cVJ8Ok3K1dKGuTsBhDJUqhYEimNTEqOjfVSTqxke0NQ=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -44,11 +48,11 @@ buildPythonPackage rec {
     "google.cloud.vpcaccess_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Virtual Private Cloud";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vpc-access";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vpc-access-v${version}/packages/google-cloud-vpc-access/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vpc-access-v${finalAttrs.version}/packages/google-cloud-vpc-access/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

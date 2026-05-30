@@ -13,14 +13,14 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linbox";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "linbox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WUSQI9svxbrDTtWBjCF2XMhRFdKwCht8XBmJIJ3DR1E=";
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for exact, high-performance linear algebra";
     mainProgram = "linbox-config";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
     homepage = "https://linalg.org/";
   };
-}
+})

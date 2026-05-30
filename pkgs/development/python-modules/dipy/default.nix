@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   meson-python,
   packaging,
   cython,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "dipy";
   version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dipy";

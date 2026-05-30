@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -16,13 +16,15 @@ stdenv.mkDerivation {
     sha256 = "sha256-cRqgIxF6H1WyJs5hhaAXVdWAlv6t22BZLp3p/qRlCSM=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   postPatch = ''
     # avoid -Werror
     substituteInPlace Makefile --replace "-Werror" ""
     # avoid host-specific options
     substituteInPlace Makefile --replace "-march=native" ""
+    # fix signal handler signature
+    substituteInPlace src/main.c --replace-fail "void handle_signal()" "void handle_signal(int sig)"
   '';
 
   postConfigure = ''

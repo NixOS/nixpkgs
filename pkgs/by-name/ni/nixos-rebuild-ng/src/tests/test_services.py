@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from subprocess import CompletedProcess
 from unittest.mock import ANY, Mock, call, patch
 
 from pytest import MonkeyPatch
@@ -12,8 +13,13 @@ from .helpers import get_qualified_name
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)
+@patch(get_qualified_name(n.nix.run_wrapper, n.nix), autospec=True)
 @patch(get_qualified_name(s.nix.build), autospec=True)
-def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -> None:
+def test_reexec(
+    mock_build: Mock, mock_run: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
+) -> None:
+    mock_run.return_value = CompletedProcess([], 0, stdout="")
+
     monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
     args, _ = n.parse_args(argv)
@@ -23,8 +29,8 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
         build_flags={"build": True},
         common_flags={"common": True},
         copy_flags={"copy": True},
+        flake_eval_flags={"flake_eval": True},
         flake_build_flags={"flake_build": True},
-        flake_common_flags={"flake_common": True},
     )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_has_calls(
@@ -76,14 +82,14 @@ def test_reexec_flake(
         build_flags={"build": True},
         common_flags={"common": True},
         copy_flags={"copy": True},
+        flake_eval_flags={"flake_eval": True},
         flake_build_flags={"flake_build": True},
-        flake_common_flags={"flake_common": True},
     )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_called_once_with(
         s.NIXOS_REBUILD_ATTR,
         n.models.Flake(ANY, ANY),
-        {"flake_build": True, "no_link": True},
+        {"flake_build": True, "flake_eval": True, "no_link": True},
     )
     # do not exec if there is no new version
     mock_execve.assert_not_called()
@@ -122,8 +128,8 @@ def test_reexec_skip_if_already_reexec(mock_build: Mock, mock_execve: Mock) -> N
         build_flags={"build": True},
         common_flags={"common": True},
         copy_flags={"copy": True},
+        flake_eval_flags={"flake_eval": True},
         flake_build_flags={"flake_build": True},
-        flake_common_flags={"flake_common": True},
     )
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_not_called()

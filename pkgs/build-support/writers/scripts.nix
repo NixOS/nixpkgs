@@ -17,6 +17,7 @@ let
     last
     optionalString
     strings
+    toFunction
     types
     ;
 in
@@ -31,7 +32,7 @@ rec {
       : the [interpreter](https://en.wikipedia.org/wiki/Shebang_(Unix)) to use for the script.
     : `check` (String)
       : A command to check the script. For example, this could be a linting check.
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper].
 
     `nameOrPath` (String)
@@ -195,7 +196,7 @@ rec {
     : `strip` (Boolean, Default: true)
       : Whether to [strip](https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase) the executable or not.
 
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
 
     `nameOrPath` (String)
@@ -751,7 +752,7 @@ rec {
     ## `pkgs.writers.writeHaskell` usage example
 
     ```nix
-    writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
+    writeHaskell "missiles" { libraries = hpkgs: [ hpkgs.acme-missiles ]; } ''
       import Acme.Missiles
 
       main = launchMissiles
@@ -777,7 +778,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${(ghc.withPackages (_: libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (toFunction libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit makeWrapperArgs strip;
@@ -1086,21 +1087,13 @@ rec {
     in
     writeDash name ''
       export NODE_PATH=${node-env}/lib/node_modules
-      exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
+      exec ${lib.getExe pkgs.nodejs-slim} ${pkgs.writeText "js" content} "$@"
     '';
 
   /**
     writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
   */
   writeJSBin = name: writeJS "/bin/${name}";
-
-  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
 
   writeNginxConfig =
     name: text:
@@ -1111,8 +1104,9 @@ rec {
         nativeBuildInputs = [ gixy ];
       } # sh
       ''
-        # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        cp "$textPath" $out
+        ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 $out
+        ${lib.getExe pkgs.gnused} -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 

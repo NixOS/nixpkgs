@@ -10,24 +10,25 @@
   glib-networking,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "monophony";
-  version = "4.1.2";
+  version = "4.4.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    tag = "v${version}";
-    hash = "sha256-nX4GXuQd+WzaRGBtsWduUpwtA3DGjpRkcxPmoEj7FIA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aDtz1VKOx+HvZxzXVEkFe2JMwMfdXmSJKq6ilI24TnI=";
   };
 
-  sourceRoot = "${src.name}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   dependencies = with python3Packages; [
     mprisify
     requests
     ytmusicapi
+    logboth
   ];
 
   build-system = with python3Packages; [
@@ -51,7 +52,9 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
-  postInstall = "make install prefix=$out";
+  postInstall = ''
+    make install prefix=$out
+  '';
 
   dontWrapGApps = true;
 
@@ -70,7 +73,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/zehkira/monophony";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ quadradical ];
+    maintainers = with lib.maintainers; [
+      aleksana
+    ];
     mainProgram = "monophony";
   };
-}
+})

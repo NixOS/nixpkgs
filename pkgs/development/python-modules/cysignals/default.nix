@@ -48,11 +48,11 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interrupt and signal handling for Cython";
     mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
-    teams = [ teams.sage ];
-    license = licenses.lgpl3Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

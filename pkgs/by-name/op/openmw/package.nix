@@ -10,7 +10,7 @@
   cmake,
   collada-dom,
   ffmpeg,
-  libXt,
+  libxt,
   lua,
   luajit,
   lz4,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     collada-dom
     ffmpeg
-    libXt
+    libxt
     (if isAarch64Linux then lua else luajit)
     lz4
     mygui

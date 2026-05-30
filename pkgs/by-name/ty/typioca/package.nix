@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-fViYwewzhJUJjMupCYk1UsnnPAhByYZqYkuKD6MJNnE=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/bloznelis/typioca";
     changelog = "https://github.com/bloznelis/typioca/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "typioca";
   };
 })

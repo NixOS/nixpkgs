@@ -4,31 +4,36 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  libx11,
   makeWrapper,
-  xsel,
   wl-clipboard,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "discordo";
-  version = "0-unstable-2025-10-22";
+  version = "0-unstable-2026-05-12";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = "discordo";
-    rev = "55e31cfb477ffdb2cdba8fc81db84f45574fe218";
-    hash = "sha256-x8ZIcMEtnya32BuHN7HgG8WbLu+fPOiFrAAI49alpbM=";
+    rev = "af65e21854ccb4cb39cafebfd6afbd5f4858a9f0";
+    hash = "sha256-0Eiil0gaLlgQRcLIa2XbBF95+pGNGzAIiFRJ7X0r/W0=";
   };
 
-  vendorHash = "sha256-UVjwirGN1A8SJRLr6L4bweFcwkXJolHrF6kRST2ShRA=";
+  vendorHash = "sha256-g/kGDK0QKZZAGczrXtVskqpsbES+MZGiuqycJ8YO6DA=";
 
-  env.CGO_ENABLED = 0;
+  env.CGO_ENABLED = 1;
 
   ldflags = [
     "-s"
   ];
 
-  # Clipboard support on X11 and Wayland
+  # Clipboard support on X11
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+  ];
+
+  # Clipboard support on Wayland
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     makeWrapper
   ];
@@ -37,7 +42,6 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/discordo \
       --prefix PATH : ${
         lib.makeBinPath [
-          xsel
           wl-clipboard
         ]
       }
@@ -50,8 +54,11 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arian-d ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      arian-d
+      siphc
+    ];
     mainProgram = "discordo";
   };
 })

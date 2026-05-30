@@ -15,15 +15,15 @@
   go-md2man,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cri-o";
-  version = "1.34.2";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
-    rev = "v${version}";
-    hash = "sha256-StvHYzWe/LKgA9NQByfti/xAiHMRuRSF8QVsVcw/A+g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I+oqb8TeI7dBX4ecmEEWNKM7EAdCfGWYv6dpz8emvuA=";
   };
   vendorHash = null;
 
@@ -52,7 +52,14 @@ buildGoModule rec {
     glibc.static
   ];
 
-  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
+  env.BUILDTAGS = toString [
+    "apparmor"
+    "seccomp"
+    "selinux"
+    "containers_image_openpgp"
+    "containers_image_ostree_stub"
+  ];
+
   buildPhase = ''
     runHook preBuild
     sed -i 's;\thack/;\tbash ./hack/;g' Makefile
@@ -77,14 +84,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the
       Kubernetes Container Runtime Interface
     '';
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
-}
+})

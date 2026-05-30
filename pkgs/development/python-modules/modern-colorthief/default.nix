@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "modern-colorthief";
-  version = "0.1.7";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baseplate-admin";
     repo = "modern_colorthief";
     tag = version;
-    hash = "sha256-tALF9EIBTyVi3Ca4kQl9x+V12gjr0xH9OOmuoToxuJA=";
+    hash = "sha256-pBCL4ejBcqTWRxb5t/L4fiJLj8Jm8diwXE91RoQ/NSU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-DldfoDpE7epb99Huq0RXkS3cAw0RtIzdWvr9OuZRZTI=";
+    hash = "sha256-x9TxXE0BGXnTFCTbbctAKWlT37NE18IpevvTFzfb/G0=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.attrValues optional-dependencies;
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires `fast_colorthief`, which isn't packaged

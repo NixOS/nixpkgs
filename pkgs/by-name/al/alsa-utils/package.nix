@@ -12,8 +12,9 @@
   libsamplerate,
   pciutils,
   procps,
+  tree,
   which,
-  fftw,
+  fftwFloat,
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
@@ -31,11 +32,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.14";
+  version = "1.2.15.2";
 
   src = fetchurl {
     url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
+    hash = "sha256-eqqvv7AZQhE+wMMeUfcFkQ6BB5IFCIyi+PE3o4aeGjo=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     ncurses
     libsamplerate
-    fftw
+    fftwFloat
   ];
 
   configureFlags = [
@@ -64,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
         which
         pciutils
         procps
+        tree
       ]
-    }"
+    }" --prefix PATH : $out/bin
     for program in $out/bin/*; do
         wrapProgram "$program" --set-default ALSA_PLUGIN_DIR "${plugin-dir}"
     done

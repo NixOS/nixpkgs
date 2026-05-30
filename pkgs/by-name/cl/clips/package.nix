@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.4.2";
   pname = "clips";
 
   src = fetchurl {
-    url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    url = "mirror://sourceforge/clipsrules/CLIPS/${finalAttrs.version}/clips_core_source_${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.tar.gz";
     hash = "sha256-YIoesvxunK/zDWPWhAlfC8pxCPIpTSHub1YXQnwQRVo=";
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for Building Expert Systems";
     mainProgram = "clips";
     homepage = "http://www.clipsrules.net/";
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       expert systems and other programs where a heuristic solution is
       easier to implement and maintain than an algorithmic solution.
     '';
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.league ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.league ];
+    platforms = lib.platforms.unix;
   };
-}
+})

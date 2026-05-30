@@ -11,12 +11,12 @@
 let
   bigpemu-unwrapped = stdenv.mkDerivation rec {
     pname = "BigPEmu";
-    version = "1.19";
+    version = "1.22";
     src = fetchurl {
       url = "https://www.richwhitehouse.com/jaguar/builds/BigPEmu_Linux64_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }.tar.gz";
-      hash = "sha256-kiZ9yzDRkDLzd5EtjIn32TL27Y2GG8ysG0zTM1JRyTU=";
+      hash = "sha256-z1r04qdZ6LNqGb3HwpCMeyKP6vYJz2hAVsIyHAfJsbU=";
     };
 
     installPhase = ''
@@ -27,7 +27,7 @@ let
   };
 in
 buildFHSEnv {
-  name = "bigpemu";
+  pname = "bigpemu";
   version = bigpemu-unwrapped.version;
   targetPkgs = pkgs: [
     glui

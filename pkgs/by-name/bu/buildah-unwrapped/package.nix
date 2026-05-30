@@ -18,13 +18,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildah";
-  version = "1.42.0";
+  version = "1.43.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-40SYqPo4BUer0Mvw8ts8uPNAlfec8ma/TYRkvyFQczw=";
+    hash = "sha256-Xshe0EvsGhtP8ffoo6yV9iY9YZy1krJjnVUmYouSpAM=";
   };
 
   outputs = [
@@ -74,7 +74,6 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     substituteInPlace libarchive/ffi.py --replace-fail \
@@ -45,9 +45,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

@@ -55,12 +55,12 @@ let
       null;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musl";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    url = "https://musl.libc.org/releases/musl-${finalAttrs.version}.tar.gz";
     sha256 = "qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
   };
 
@@ -94,11 +94,24 @@ stdenv.mkDerivation rec {
       url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
       hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
     })
+    # required for systemd user namespacing and oomd to work correctly on musl
+    # drop next release
+    # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
+    ./stdio-skip-empty-iovec-when-buffering-is-disabled.patch
   ];
-  CFLAGS = [
-    "-fstack-protector-strong"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
+
+  env = {
+    CFLAGS = toString (
+      [
+        "-fstack-protector-strong"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-mlong-double-64"
+      ]
+    );
+
+    NIX_DONT_SET_RPATH = true;
+  };
 
   configureFlags = [
     "--enable-shared"
@@ -117,8 +130,6 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
   separateDebugInfo = true;
-
-  NIX_DONT_SET_RPATH = true;
 
   preBuild = ''
     ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
@@ -172,7 +183,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org/";
-    changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
+    changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
@@ -203,7 +214,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       thoughtpolice
-      dtzWill
     ];
   };
-}
+})

@@ -9,25 +9,28 @@
   rustPlatform,
   stdenv,
   xdg-utils,
+  versionCheckHook,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.20.0";
-  env.RADICLE_VERSION = version;
+  version = "0.25.0";
+
+  env.RADICLE_VERSION = finalAttrs.version;
 
   # You must update the radicle-explorer source hash when changing this.
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    node = "z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM";
-    tag = "v${version}";
+    tag = "releases/${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];
-    hash = "sha256-9rJH4ECqOJ9wnYxCbEFHXo3PlhbPdeOnF+Pf1MzX25c=";
+    hash = "sha256-gejNiCQ511OGGItmqXoyB+TmsUw+ozoEmOWooBXBkQ8=";
   };
 
-  sourceRoot = "${src.name}/radicle-httpd";
+  sourceRoot = "${finalAttrs.src.name}/radicle-httpd";
 
-  cargoHash = "sha256-1GWWtrSYzTXUAgjeWaxyOuDqTDuTMWleug8SmxTHXbI=";
+  cargoHash = "sha256-Oawin/2R5dZ46pf3SarwNgILF9dXSkw02Z4gYQ4HtzE=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -59,13 +62,23 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) radicle; };
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
       A Radicle HTTP daemon exposing a JSON HTTP API that allows someone to browse local
       repositories on a Radicle node via their web browser.
     '';
-    homepage = "https://radicle.xyz";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/radicle-httpd/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
@@ -73,10 +86,8 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      gador
-      lorenzleutgeb
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "radicle-httpd";
   };
-}
+})

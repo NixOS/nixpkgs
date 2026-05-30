@@ -33,12 +33,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.14.1";
+  version = "4.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YPBJdtFyISDRi51QVTQIoCRmS1z4iPNvJYr8pL8DXKw=";
+    hash = "sha256-2ZqRcpjBynJBtRu6mtIhLyr0Qe9mSIBZskJlCOmip3Y=";
   };
 
   postPatch = ''
@@ -98,12 +98,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwn" ];
 
-  meta = with lib; {
+  meta = {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bennofs
       kristoff3r
       pamplemousse

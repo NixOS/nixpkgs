@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "typedunits";
-  version = "0.0.1";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "TypedUnits";
     tag = "v${version}";
-    hash = "sha256-g/kUPEtdyNvcWJOqcTCF27pW22WTg0EiHoEXgSs2xMs=";
+    hash = "sha256-dADN9zBwspfDPdgce5EKEclI1qLcqc0N09RGsiPrJ0c=";
   };
 
   build-system = [

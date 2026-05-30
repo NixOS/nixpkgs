@@ -10,7 +10,8 @@ buildPythonPackage rec {
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     sha256 = "sha256-/z5P91bCTXK58/LzBODtqv0PWK2w5vS5DZMEQM2osgc=";
     dist = "py3";
     python = "py3";
@@ -19,10 +20,10 @@ buildPythonPackage rec {
   # This package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Offline text-to-speech synthesis library";
     homepage = "https://github.com/nateshmbhat/pyttsx3";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.ethindp ];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.ethindp ];
   };
 }

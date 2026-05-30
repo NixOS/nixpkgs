@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vmtouch";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "vmtouch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "08da6apzfkfjwasn4dxrlfxqfx7arl28apdzac5nvm0fhvws0dxk";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "vmtouch";
   };
-}
+})

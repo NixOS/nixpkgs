@@ -1,6 +1,7 @@
 {
   lib,
   buildNpmPackage,
+  nodejs_22,
   fetchFromGitHub,
   nix-update-script,
   jq,
@@ -13,16 +14,21 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.2.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/g2S4QymLkQGly0h0cx/R+6BPgZmQfZrE8i7ZcGY11w=";
+    hash = "sha256-XWhQ5GlAGW0WAyiPwBULLz1yQps2IdjVkusQ0a88tCs=";
   };
 
-  npmDepsHash = "sha256-NEkctY0lLtiKfiiEv6FZuyf7GbVLKgRRmZdzOUTbkSE=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-dRc+hTk5ELw0rJhT71heFnLjTmjN1UpIOHUMXKt4YwU=";
+
+  # npm 11 incompatible with fetchNpmDeps
+  # https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   nativeBuildInputs = [
     jq
@@ -70,6 +76,13 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # Build several internal packages first (required by main bundle)
+    npm run build --workspace=@qwen-code/channel-base
+    npm run build --workspace=@qwen-code/channel-telegram
+    npm run build --workspace=@qwen-code/channel-weixin
+    npm run build --workspace=@qwen-code/channel-dingtalk
+    npm run build --workspace=@qwen-code/web-templates
+
     npm run generate
     npm run bundle
 
@@ -102,7 +115,6 @@ buildNpmPackage (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       lonerOrz
-      taranarmo
     ];
   };
 })

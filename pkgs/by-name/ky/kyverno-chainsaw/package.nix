@@ -2,32 +2,31 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  kyverno-chainsaw,
   lib,
   nix-update-script,
   stdenv,
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kyverno-chainsaw";
-  version = "0.2.13";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
-    rev = "v${version}";
-    hash = "sha256-DbwqcHBmKAzq3xzUVGOdXjF8uaUWkEKRlz9m7tfyIdY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BULaac8UBF6pX7EWDKY3MFJjEEk1e5fJzTAahp/IRjs=";
   };
 
-  vendorHash = "sha256-e4hSfmnROnfLRNvmfN0VFoIR0zVaqBhd0/c4lIyScvY=";
+  vendorHash = "sha256-DTFtbinBKWmtkbCr9+j3md00tCR9Dh2i+15NvxHjuEw=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
+    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,15 +41,15 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kyverno-chainsaw;
+    package = finalAttrs.finalPackage;
     command = "chainsaw version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
+    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${finalAttrs.version}";
     description = "Declarative approach to test Kubernetes operators and controllers";
     homepage = "https://kyverno.github.io/chainsaw/";
     license = lib.licenses.asl20;
@@ -60,6 +59,8 @@ buildGoModule rec {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      LorenzBischof
+    ];
   };
-}
+})

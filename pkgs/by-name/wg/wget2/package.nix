@@ -26,9 +26,9 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wget2";
-  version = "2.2.0";
+  version = "2.2.1";
 
   outputs = [
     "out"
@@ -39,13 +39,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = "wget2";
-    tag = "v${version}";
-    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-od5Zyeod3auMY3u0IxMEMHnGeKGzEgMk+W5jjMQqSXc=";
   };
-
-  patches = [
-    ./gettext-0.25.patch
-  ];
 
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
@@ -101,8 +97,7 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
     description = "Successor of GNU Wget, a file and recursive website downloader";
@@ -122,4 +117,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };
-}
+})

@@ -63,14 +63,39 @@ in
       "networking"
       "wicd"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "programs"
+        "adb"
+      ]
+      "This option is no longer needed as systemd 258 handles uaccess rules automatically. Please add `pkgs.android-tools` to your system packages to get the adb command."
+    )
     (mkRemovedOptionModule [
       "programs"
       "cardboard"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
+      "ecryptfs"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pqos-wrapper"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-05-13
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -88,6 +113,11 @@ in
       consider using `programs.pay-respects` instead.
     '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "unity3d"
+      "enable"
+    ] "The corresponding package was removed from nixpkgs in 2022.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
@@ -124,6 +154,10 @@ in
     ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
+      "charybdis"
+    ] "The charybdis module has been removed, the project was archived in 2021.")
+    (mkRemovedOptionModule [
+      "services"
       "chatgpt-retrieval-plugin"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -141,6 +175,9 @@ in
       "services"
       "couchpotato"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "crabfit" ]
+      "The corresponding packages were removed from nixpkgs because they are unmaintained upstream and insecure."
+    )
     (mkRemovedOptionModule [ "services" "crowd" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
@@ -157,6 +194,9 @@ in
       moreover the NixOS module had to rely on an abandoned version of dnscrypt-proxy v1 for the rotation of keys.
 
       To wrap a resolver with DNSCrypt you can instead use dnsdist. See options `services.dnsdist.dnscrypt.*`
+    '')
+    (mkRemovedOptionModule [ "services" "ethercalc" ] ''
+      The ethercalc module has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -181,9 +221,27 @@ in
     (mkRemovedOptionModule
       [
         "services"
+        "globalprotect"
+      ]
+      "The corresponding package was removed from nixpkgs, as it depended on qt5 webengine. A replacements based on tauri exist upstream, but requires non-trivial maintainance in nixpkgs to update."
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
         "grafana-agent"
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "promtail"
+      ]
+      ''
+        The promtail module has been removed, as promtail reached its end of life.
+        Consider migrating to `grafana-alloy` (`services.alloy.enable`), or, if you are looking for something light-weight, `fluent-bit` (`services.fluent-bit.enable`).
+        See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
+      ''
     )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
@@ -199,6 +257,9 @@ in
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "light" ]
+      "The corresponding package was removed from nixpkgs due to being unmaintained upstream. `brightnessctl` and `hardware.acpilight` offer replacements."
+    )
     (mkRemovedOptionModule [ "services" "lshd" ]
       "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades."
     )
@@ -242,6 +303,9 @@ in
       The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
       and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
     '')
+    (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
+      The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
     '')
@@ -277,11 +341,11 @@ in
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
     '')
+    (mkRemovedOptionModule [ "services" "statsd" ] ''
+      The statsd module was removed because the packages it uses have been removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
-    '')
-    (mkRemovedOptionModule [ "services" "tt-rss" ] ''
-      The tt-rss package and module have been removed, since upstream development ceased 2025-11-01 and the source is no longer available officially.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
@@ -289,6 +353,10 @@ in
     (mkRemovedOptionModule [ "services" "unifi-video" ]
       "The unifi-video package and the corresponding module have been removed as the software has been unsupported since 2021 and requires a MongoDB version that has reached end of life."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "uptime"
+    ] "The package for services.uptime has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"
@@ -321,6 +389,10 @@ in
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
+      The services.xserver.windowManager.ragnarwm module has been removed
+      because the corresponding package was removed from nixpkgs.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -406,14 +478,14 @@ in
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
+    (mkRemovedOptionModule [ "services" "opengfw" ] ''
+      The opengfw package and services.opengfw module have been removed since the upstream
+      GitHub repository and website have been shut down.
+    '')
     (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-    '')
-    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
-      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
-      and removed from nixpkgs.
     '')
     (mkRemovedOptionModule [ "services" "filesender" ] ''
       services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
@@ -425,11 +497,29 @@ in
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
+    (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
+      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+    '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises
       as an hardware RNG, as it will automatically run the krngd task
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
+    '')
+    (mkRemovedOptionModule [ "programs" "spacefm" ] ''
+      spacefm has been removed since it was unmaintained upstream.
+    '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xtreemfs" ] ''
+      services.xtreemfs has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
+      services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
     # Do NOT add any option renames here, see top of the file
   ];

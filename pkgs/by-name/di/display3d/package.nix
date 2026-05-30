@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "display3d";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "renpenguin";
     repo = "display3d";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dFfU80/1fhBz9/0fVZigo+nZx6Lj66OsP52oMDpS+BY=";
   };
 
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -32,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ renpenguin ];
     mainProgram = "display3d";
   };
-}
+})

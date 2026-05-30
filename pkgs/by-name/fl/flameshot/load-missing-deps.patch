@@ -3,7 +3,7 @@
 @@ -24,28 +24,8 @@
  #Needed due to linker error with QtColorWidget
  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
- 
+
 +find_package(QtColorWidgets REQUIRED)
  
 -# Dependency can be fetched via flatpak builder
@@ -32,7 +32,7 @@
    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
 @@ -133,12 +113,7 @@
  option(BUILD_STATIC_LIBS ON)
- 
+
  if (APPLE)
 -  FetchContent_Declare(
 -      qHotKey
@@ -42,5 +42,5 @@
 -  FetchContent_MakeAvailable(QHotKey)
 +  find_package(QHotKey REQUIRED)
  endif()
- 
+
  add_subdirectory(src)

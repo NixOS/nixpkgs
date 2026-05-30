@@ -24,10 +24,9 @@ cat >sources.nix <<EOF
 {
   aarch64-darwin = {
     version = "$aarch64_darwin_version";
-    src = fetchzip {
+    src = fetchurl {
       url = "$aarch64_darwin_url";
       hash = "$aarch64_darwin_hash";
-      stripRoot = false;
     };
   };
   x86_64-linux = {

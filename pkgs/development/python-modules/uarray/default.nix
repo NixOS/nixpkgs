@@ -9,7 +9,6 @@
   ninja,
   matchpy,
   numpy,
-  astunparse,
   typing-extensions,
   nix-update-script,
   pytestCheckHook,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
-    astunparse
     matchpy
     numpy
     typing-extensions
@@ -64,11 +62,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

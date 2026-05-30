@@ -6,7 +6,9 @@
   cmake,
   ninja,
   makeWrapper,
-  xorg,
+  libxinerama,
+  libx11,
+  libice,
   libGLU,
   libGL,
   SDL2,
@@ -50,9 +52,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libICE
-    xorg.libX11
-    xorg.libXinerama
+    libice
+    libx11
+    libxinerama
     libGLU
     libGL
     SDL2
@@ -74,12 +76,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
     homepage = "https://www.viewizard.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "astromenace";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

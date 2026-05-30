@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix QML install path
     substituteInPlace CMakeLists.txt \
       --replace-fail 'QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}"' 'QT_IMPORTS_DIR "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"' \
-      --replace-fail "\''${QT_IMPORTS_DIR}/\''${PLUGIN}" "\''${QT_IMPORTS_DIR}" \
+      --replace-fail "\''${QT_IMPORTS_DIR}/\''${PLUGIN}" "\''${QT_IMPORTS_DIR}"
   '';
 
   strictDeps = true;
@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Only a QML module
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for using rlottie via QML";
     homepage = "https://gitlab.com/mymike00/rlottie-qml";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

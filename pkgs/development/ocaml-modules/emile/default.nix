@@ -11,7 +11,7 @@
   cmdliner,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "emile";
   version = "1.1";
 
@@ -19,7 +19,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/emile/releases/download/v${version}/emile-v${version}.tbz";
+    url = "https://github.com/dinosaure/emile/releases/download/v${finalAttrs.version}/emile-v${finalAttrs.version}.tbz";
     hash = "sha256:0r1141makr0b900aby1gn0fccjv1qcqgyxib3bzq8fxmjqwjan8p";
   };
 
@@ -36,10 +36,10 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser of email address according RFC822";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/emile";
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

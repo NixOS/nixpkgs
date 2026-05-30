@@ -16,9 +16,11 @@
   enableJemalloc ? true,
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
+  enableLdap ? true,
   liburing,
   nixosTests,
   writeTextFile,
+  rustc-unwrapped,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -42,8 +44,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "cf7f65d0b377af019661c240f9165b3ef60640c3";
-            hash = "sha256-ZSjvAZBfZkJrBIpw8ANZMbJVb8AeuogvuAipGVE4Qe4=";
+            rev = "9a3a213b55df0b11408102c899a940675c0d90e4";
+            hash = "sha256-aOV/jJjRjNJ3hrRqhCsXlIz05NvEhDF/j5Q5UOQuvp8=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -87,20 +89,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.6";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EmIBhSxYD52BzwewcIL53e3/7GLY+5nccmAYGf1LPqI=";
+    hash = "sha256-GIYG2fKiUSOx2aAumCZLrc4vuWj1UWJf8nXyuDdj1oI=";
   };
 
-  cargoHash = "sha256-aVMJr216gkYpanCee6UhNGINAi/EZ0V5m0WaTYpQJcY=";
+  cargoHash = "sha256-V8byPrtgUQPri36pNtgOEtTlblxMAm90cSf8fgmx4tA=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+  ];
+
+  patches = [
+    # reduce closure size by not storing a reference to rustc-unwrapped
+    # alternative to https://github.com/NixOS/nixpkgs/pull/462394
+    ./dont-record-compilation-flags.patch
   ];
 
   buildInputs = [
@@ -137,7 +145,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jemalloc"
     "jemalloc_conf"
   ]
-  ++ lib.optional enableLiburing "io_uring";
+  ++ lib.optional enableLiburing "io_uring"
+  ++ lib.optional enableLdap "ldap";
 
   nativeCheckInputs = [
     libredirect.hook
@@ -171,6 +180,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       inherit (nixosTests) matrix-tuwunel;
     };
   };
+
+  disallowedReferences = [ rustc-unwrapped ];
 
   meta = {
     description = "Matrix homeserver written in Rust, official successor to conduwuit";

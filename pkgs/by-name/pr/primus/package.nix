@@ -7,29 +7,29 @@
   stdenv,
   pkgsi686Linux,
   lib,
-  primusLib,
+  primus-lib,
   writeScriptBin,
   runtimeShell,
-  primusLib_i686 ?
-    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primusLib else null,
+  primus-lib_i686 ?
+    if stdenv.hostPlatform.system == "x86_64-linux" then pkgsi686Linux.primus-lib else null,
   useNvidia ? true,
 }:
 
 let
   # We override stdenv in case we need different ABI for libGL
-  primusLib_ = primusLib.override { inherit stdenv; };
-  primusLib_i686_ = primusLib_i686.override { stdenv = pkgsi686Linux.stdenv; };
+  primus-lib_ = primus-lib.override { inherit stdenv; };
+  primus-lib_i686_ = primus-lib_i686.override { stdenv = pkgsi686Linux.stdenv; };
 
-  primus = if useNvidia then primusLib_ else primusLib_.override { nvidia_x11 = null; };
+  primus = if useNvidia then primus-lib_ else primus-lib_.override { nvidia_x11 = null; };
   primus_i686 =
-    if useNvidia then primusLib_i686_ else primusLib_i686_.override { nvidia_x11 = null; };
+    if useNvidia then primus-lib_i686_ else primus-lib_i686_.override { nvidia_x11 = null; };
   ldPath = lib.makeLibraryPath (
     lib.filter (x: x != null) (
       [
         primus
         primus.glvnd
       ]
-      ++ lib.optionals (primusLib_i686 != null) [
+      ++ lib.optionals (primus-lib_i686 != null) [
         primus_i686
         primus_i686.glvnd
       ]

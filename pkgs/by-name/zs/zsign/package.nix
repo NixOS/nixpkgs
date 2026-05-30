@@ -4,8 +4,7 @@
   stdenv,
   openssl,
   pkg-config,
-  minizip,
-  zlib,
+  nix-update-script,
   versionCheckHook,
 }:
 let
@@ -13,27 +12,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsign";
-  version = "0.7";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "zhlynn";
     repo = "zsign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAG9ewROyIGN5VOZbs0X1W88HdZ3H1sxaRJ7JpDbw3o=";
+    hash = "sha256-NuwV8s+rzsXBha/vqnemvUo6Etm70ZVYL/CZKBJ1szA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${platformName}";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    minizip
-    zlib
-  ];
+  buildInputs = [ openssl ];
 
   makeFlags = [
     "BINDIR=bin/"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "VERSION=${finalAttrs.version}"
   ];
 
   installPhase = ''
@@ -49,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform codesign alternative for iOS 12+";

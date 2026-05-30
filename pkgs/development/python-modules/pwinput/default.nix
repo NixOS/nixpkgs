@@ -3,15 +3,12 @@
   fetchPypi,
   setuptools,
   lib,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "pwinput";
   version = "1.0.3";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

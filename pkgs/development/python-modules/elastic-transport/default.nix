@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "elastic-transport";
   version = "8.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "elastic";
@@ -90,11 +87,11 @@ buildPythonPackage rec {
     "test_async_transport_httpbin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
     homepage = "https://github.com/elastic/elastic-transport-python";
     changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -20,7 +20,7 @@
   lcms2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colord-gtk";
   version = "0.3.1";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/colord-gtk-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/colord-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "wXa4ibdWMKF/Tj1+8kwJo+EjaOYzSWCHRZyLU6w6Ei0=";
   };
 
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     "-Dgtk3=${lib.boolToString (!withGtk4)}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "cd-convert";
   };
-}
+})

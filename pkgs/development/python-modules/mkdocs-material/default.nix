@@ -26,16 +26,16 @@
   trove-classifiers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-material";
-  version = "9.7.0";
+  version = "9.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
-    tag = version;
-    hash = "sha256-lZ2GDB8Kb25GYVNZ+6vDbJVj7dYBVk3r6Lm3mRXVzc4=";
+    tag = finalAttrs.version;
+    hash = "sha256-qQtVnWNSh7rJhVyufkebEq6n4lpBI3tZxHRT07AIZFA=";
   };
 
   build-system = [
@@ -83,15 +83,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
+  meta = {
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dandellion
       jaysa68
     ];
   };
-}
+})

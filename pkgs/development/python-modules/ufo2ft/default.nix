@@ -18,21 +18,19 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.6.2";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufo2ft";
     tag = "v${version}";
-    hash = "sha256-TIeq4As5nThYck5jQLTdZySfOg51DtkiiYiiWEVSzxo=";
+    hash = "sha256-g8nPtIGUiUVV0exddKGBRbLhO/XW+5bBNlYXRDlkIZM=";
   };
 
   build-system = [
     setuptools-scm
   ];
-
-  pythonRelaxDeps = [ "cffsubr" ];
 
   dependencies = [
     cu2qu

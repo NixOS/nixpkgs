@@ -12,7 +12,9 @@
   libtiff,
   udev,
   gtk3,
-  xorg,
+  libxv,
+  libxtst,
+  libxdamage,
   cups,
   pango,
   runCommandLocal,
@@ -74,9 +76,9 @@ stdenv.mkDerivation rec {
     udev
     gtk3
     libsForQt5.qt5.qtbase
-    xorg.libXdamage
-    xorg.libXtst
-    xorg.libXv
+    libxdamage
+    libxtst
+    libxv
   ];
 
   dontWrapQtApps = true;
@@ -126,14 +128,14 @@ stdenv.mkDerivation rec {
     ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       mlatus
       th0rgal
       wineee

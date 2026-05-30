@@ -54,6 +54,5 @@ buildGoModule (finalAttrs: {
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
     mainProgram = "atmos";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cloudposse ];
   };
 })

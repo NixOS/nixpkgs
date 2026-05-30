@@ -7,24 +7,24 @@
 
 buildDotnetModule rec {
   pname = "gh-gei";
-  version = "1.20.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-gei";
     rev = "v${version}";
-    hash = "sha256-00+yHDvDTJux2XKhJ3u1W1SrYArFGJtYusT/adC2XDE=";
+    hash = "sha256-Ykd2/Y5Duw2yDO0uKhdt8mYLG85SeolByj/UK7ACJCo=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx;
   projectFile = "src/gei/gei.csproj";
   nugetDeps = ./deps.json; # File generated with `nix-build -A gh-gei.passthru.fetch-deps`.
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/github/gh-gei";
     description = "Migration CLI for GitHub to GitHub migrations";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lafrenierejm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "gei";
   };
 }

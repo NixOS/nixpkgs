@@ -243,4 +243,7 @@ in
     };
     users.groups.etcd = { };
   };
+
+  meta.maintainers = pkgs.etcd.meta.maintainers;
+
 }

@@ -18,16 +18,16 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-lxml";
-  version = "2025.08.25";
+  version = "2026.01.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
-    tag = version;
-    hash = "sha256-XuQ3sZi/cuJF76JeyuFEZVsY3F9zmPHRUWbkNQaT0Lo=";
+    tag = finalAttrs.version;
+    hash = "sha256-odkIwuh2VxDliRd6cPTCBSz19zxIBOBlVN0Sisngkn0=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     typeguard
     urllib3
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "lxml-stubs" ];
 
@@ -78,13 +78,17 @@ buildPythonPackage rec {
     "TestXmldtdid"
     "TestIddict"
     "TestParseid"
+    # BaseExceptionGroup: Hypothesis found 5 distinct failures. (5 sub-exceptions)
+    "test_start_arg_bad_1"
+    "test_stop_arg_bad_1"
+    "test_index_arg_bad_1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
-    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -73,11 +73,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.1";
+  version = "15.0.14";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-xnSi+0i5yG/sporHj+kIm39bE5KSpoBooFCpTcPfXiA=";
+      hash = "sha256-E/q2wXeTGcEhiAvUCrFKv34gc4vP4o3ZPjqkcS6Dxgk=";
     };
   };
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -291,7 +291,7 @@ stdenv.mkDerivation rec {
     inherit sources;
     updateScript = callPackage ./update.nix {
       inherit pname version meta;
-      baseUrl = "https://cdn.mullvad.net/browser/";
+      baseUrl = "https://dist.torproject.org/mullvadbrowser/";
       name = "mullvad-browser";
     };
   };
@@ -305,6 +305,7 @@ stdenv.mkDerivation rec {
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

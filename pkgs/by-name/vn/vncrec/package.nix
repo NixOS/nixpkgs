@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   xorgproto,
   imake,
   gccmakedep,
-  libXt,
-  libXmu,
-  libXaw,
-  libXext,
-  libSM,
-  libICE,
-  libXpm,
-  libXp,
+  libxt,
+  libxmu,
+  libxaw,
+  libxext,
+  libsm,
+  libice,
+  libxpm,
+  libxp,
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   version = "0.2"; # version taken from Arch AUR
 
   src = fetchurl {
-    url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";
+    url = "https://ronja.twibright.com/utils/vncrec-twibright.tgz";
     sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
   };
 
@@ -41,16 +41,16 @@ stdenv.mkDerivation {
     gccmakedep
   ];
   buildInputs = [
-    libX11
+    libx11
     xorgproto
-    libXt
-    libXmu
-    libXaw
-    libXext
-    libSM
-    libICE
-    libXpm
-    libXp
+    libxt
+    libxmu
+    libxaw
+    libxext
+    libsm
+    libice
+    libxpm
+    libxp
   ];
 
   makeFlags = [

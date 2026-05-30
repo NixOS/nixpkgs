@@ -10,12 +10,12 @@
   ruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpid-cpp";
   version = "1.39.0";
 
   src = fetchurl {
-    url = "mirror://apache/qpid/cpp/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://apache/qpid/cpp/${finalAttrs.version}/qpid-cpp-${finalAttrs.version}.tar.gz";
     hash = "sha256-eYDQ6iHVV1WUFFdyHGnbqGIjE9CrhHzh0jP7amjoDSE=";
   };
 
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qpid.apache.org";
     description = "AMQP message broker and a C++ messaging API";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

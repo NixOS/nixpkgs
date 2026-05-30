@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sphinx-lint";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "sphinx-lint";
-    tag = "v${version}";
-    hash = "sha256-9xqGb/RdaySTys3gjIU0GJSqGOWXQQ/NeSRS8dmx5lg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cg/14asXB1ivKSoGuLghne7kmQiXuimYTUqmdVqba6M=";
   };
 
   build-system = [
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sphinx-lint";
   };
-}
+})

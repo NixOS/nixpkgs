@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   libngspice,
   numpy,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "pyspice";
   version = "1.5";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PySpice";
@@ -48,10 +46,10 @@ buildPythonPackage rec {
         "ffi.dlopen('${libngspice}/lib/libngspice${stdenv.hostPlatform.extensions.sharedLibrary}')"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simulate electronic circuit using Python and the Ngspice / Xyce simulators";
     homepage = "https://github.com/FabriceSalvaire/PySpice";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

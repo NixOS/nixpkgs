@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aks-mcp-server";
-  version = "0.0.11";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "aks-mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VkX9zqR10h5bvFAfnNpei3f89dv7RQoZysjSRvxkdHQ=";
+    hash = "sha256-h/zLbnc2ffcQkx+KE6vglaSG6QAySZSg8EB4zyqH4sg=";
   };
 
-  vendorHash = "sha256-qN7qqzMnl3l3Z40Mfv9jNWP7Ux7bgDCxKm+QocoruRk=";
+  vendorHash = "sha256-HYIEGnQOVNNVJxzoOiLTXwRFOBvCwikAwqky18VqFSQ=";
 
   subPackages = [ "cmd/aks-mcp" ];
 
@@ -74,6 +74,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ priyaananthasankar ];
     platforms = lib.platforms.unix; # Now supports both Linux and macOS with withoutebpf
-    mainProgram = "aks-mcp-server";
+    mainProgram = "aks-mcp";
   };
 })

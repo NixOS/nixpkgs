@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   requests,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage {
@@ -26,6 +27,8 @@ buildPythonPackage {
 
   # The tests require an internet connection and an API key
   doCheck = false;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Wrapper for The Movie Database API v3";

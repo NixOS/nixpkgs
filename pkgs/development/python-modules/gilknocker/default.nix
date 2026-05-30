@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pkg-config,
@@ -17,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "gilknocker";
-  version = "0.4.2";
+  version = "0.4.2-post3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "gilknocker";
     tag = "v${version}";
-    hash = "sha256-RFLThZRxAXqF/Yzjpmafn2dVavOGJrM9U258FfLej/I=";
+    hash = "sha256-GSybOILOP0lwxUPB9a8whQvEPS7OdeHcm0pxky7gwkg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -52,6 +54,24 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-benchmark
     pytest-rerunfailures
+  ];
+
+  enabledTestPaths = [
+    # skip the benchmarks as they can segfault
+    # https://github.com/milesgranger/gilknocker/issues/35
+    "tests"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # segfaults
+    # https://github.com/milesgranger/gilknocker/issues/35
+    "benchmarks"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # depends on an empirically-derived threshold that fails on fast and slow machines.
+    # https://github.com/milesgranger/gilknocker/issues/36
+    "test_knockknock_some_gil"
   ];
 
   pytestFlags = [ "--benchmark-disable" ];

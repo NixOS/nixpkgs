@@ -1,5 +1,7 @@
 {
   lib,
+  bash,
+  replaceVars,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -8,22 +10,37 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.34.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-HPPDsvWEFfh/GNMUPiVjQr28YBBs2DACBGM3cxo5Nx4=";
+    hash = "sha256-S3phcTwZlG9VBHdYzcbsLzj0uqBUDy4Xfy/tlp3AQZg=";
   };
 
   buildAndTestSubdir = "pyrefly";
-  cargoHash = "sha256-46kcoBG/PWwf8VdlvLNzEhfYRTmmKi/uTjwFkl7Wozg=";
+
+  cargoPatches = [
+    # https://github.com/facebook/pyrefly/issues/3383
+    ./fix-cargo-lock.patch
+  ];
+  cargoHash = "sha256-OfbPPANsAhrp2MbzDEHGRLWWmUkbMMGKR5B4R6lXdE4=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  patches = [
+    (replaceVars ./fix-shebang.patch { bash = lib.getExe bash; })
+  ];
+
+  # redirect tests writing to /tmp
+  preCheck = ''
+    export TMPDIR=$(mktemp -d)
+  '';
 
   # requires unstable rust features
   env.RUSTC_BOOTSTRAP = 1;

@@ -8,7 +8,7 @@
   libglut,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libcdio,
   libiconv,
   libjack2,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libGL
     libGLU
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

@@ -1,33 +1,28 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "shrikhand";
   version = "unstable-2016-03-03";
 
-  src = fetchurl {
-    url = "https://github.com/jonpinhorn/shrikhand/raw/c11c9b0720fba977fad7cb4f339ebacdba1d1394/build/Shrikhand-Regular.ttf";
-    hash = "sha256-wHP1Bwu5Yw3a+RwDOHrmthsnuvwyCV4l6ma5EjA6EMA=";
+  src = fetchFromGitHub {
+    owner = "jonpinhorn";
+    repo = "shrikhand";
+    rev = "c11c9b0720fba977fad7cb4f339ebacdba1d1394";
+    hash = "sha256-cxYS99ZZv3FED7pF91VMiKl/M7Dr5TZr/iAiTuReQbQ=";
   };
 
-  dontUnpack = true;
+  nativeBuildInputs = [ installFonts ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m644 $src $out/share/fonts/truetype/Shrikhand-Regular.ttf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://jonpinhorn.github.io/shrikhand/";
     description = "Vibrant and playful typeface for both Latin and Gujarati writing systems";
-    maintainers = with maintainers; [ sternenseemann ];
-    platforms = platforms.all;
-    license = licenses.ofl;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.ofl;
   };
 }

@@ -5,14 +5,14 @@
   umu-launcher,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "game-rs";
   version = "5";
 
   src = fetchFromGitHub {
     owner = "amanse";
     repo = "game-rs";
-    rev = "z${version}";
+    rev = "z${finalAttrs.version}";
     hash = "sha256-+LQxU4jWBAOk+qHNvGxYXudX5dG6szQt3PiPI41Zxlo=";
   };
 
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimal CLI game launcher for linux";
     homepage = "https://github.com/amanse/game-rs";
-    changelog = "https://github.com/Amanse/game-rs/releases/tag/v${version}";
+    changelog = "https://github.com/Amanse/game-rs/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ amanse ];
     platforms = lib.platforms.linux;
   };
-}
+})

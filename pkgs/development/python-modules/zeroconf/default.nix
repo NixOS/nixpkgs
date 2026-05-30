@@ -1,7 +1,6 @@
 {
   lib,
   cython,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   ifaddr,
@@ -10,7 +9,6 @@
   pytest-codspeed,
   pytest-cov-stub,
   pytest-timeout,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.148.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
@@ -35,7 +31,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [ ifaddr ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -52,6 +48,9 @@ buildPythonPackage rec {
     "test_launch_and_close"
     "test_launch_and_close_context_manager"
     "test_launch_and_close_v4_v6"
+
+    # Flaky (see e.g. https://hydra.nixos.org/build/326378736); https://github.com/python-zeroconf/python-zeroconf/issues/1663
+    "test_run_coro_with_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -61,11 +60,11 @@ buildPythonPackage rec {
     "zeroconf.asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
     changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

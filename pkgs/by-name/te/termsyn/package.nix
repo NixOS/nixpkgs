@@ -5,12 +5,12 @@
   mkfontscale,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termsyn";
   version = "1.8.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/termsyn/termsyn-${version}.tar.gz";
+    url = "mirror://sourceforge/termsyn/termsyn-${finalAttrs.version}.tar.gz";
     sha256 = "15vsmc3nmzl0pkgdpr2993da7p38fiw2rvcg01pwldzmpqrmkpn6";
   };
 
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     mkfontdir "$out/share/fonts"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced font based on terminus and tamsyn";
     homepage = "https://sourceforge.net/projects/termsyn/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sophrosyne ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sophrosyne ];
   };
-}
+})

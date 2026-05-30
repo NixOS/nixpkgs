@@ -5,24 +5,24 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slowhttptest";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "shekyan";
     repo = "slowhttptest";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rIvd3LykVAbDXtFWZ1EQ+QKeALzqwK6pq7In0BsCOFo=";
   };
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Application Layer DoS attack simulator";
     homepage = "https://github.com/shekyan/slowhttptest";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "slowhttptest";
   };
-}
+})

@@ -11,14 +11,14 @@
   debug ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "badvpn";
   version = "1.999.130";
 
   src = fetchFromGitHub {
     owner = "ambrop72";
     repo = "badvpn";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
 
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
       -i CMakeLists.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of network-related (mostly VPN-related) tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

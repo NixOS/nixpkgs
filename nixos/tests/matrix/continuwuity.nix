@@ -1,6 +1,8 @@
 { lib, ... }:
 let
   name = "continuwuity";
+  user = "alice";
+  pass = "my-secret-password";
 in
 {
   inherit name;
@@ -12,8 +14,7 @@ in
         settings.global = {
           server_name = name;
           address = [ "0.0.0.0" ];
-          allow_registration = true;
-          yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = true;
+          admin_execute = [ "users create ${user} ${pass}" ];
         };
         extraEnvironment.RUST_BACKTRACE = "yes";
       };
@@ -30,13 +31,10 @@ in
 
             async def main() -> None:
                 # Connect to continuwuity
-                client = nio.AsyncClient("http://continuwuity:6167", "alice")
-
-                # Register as user alice
-                response = await client.register("alice", "my-secret-password")
+                client = nio.AsyncClient("http://continuwuity:6167", "${user}")
 
                 # Log in as user alice
-                response = await client.login("my-secret-password")
+                response = await client.login("${pass}")
 
                 # Create a new room
                 response = await client.room_create(federate=False)

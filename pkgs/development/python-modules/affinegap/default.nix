@@ -41,6 +41,9 @@ buildPythonPackage rec {
     "affinegap"
   ];
 
+  # Bulk updater will see an older tag ending with a "2" and switch to it
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Cython implementation of the affine gap string distance";
     homepage = "https://github.com/dedupeio/affinegap";

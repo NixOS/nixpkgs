@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nss-mdns";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "avahi";
     repo = "nss-mdns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = [ ];
   };
-}
+})

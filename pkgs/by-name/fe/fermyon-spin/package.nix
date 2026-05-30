@@ -20,23 +20,23 @@ let
     .${system} or (throw "Unsupported system: ${system}");
 
   packageHashes = {
-    x86_64-linux = "sha256-TWWT60H8KtZlJTRY+RnS2pP7r0eKBDzGVm890uGdtHU=";
-    aarch64-linux = "sha256-MBZ/AgUz5dg8tFj4q+alnwlHu3d6/rfYZk9B1jYnGbw=";
-    x86_64-darwin = "sha256-F2wgyyf0L2Ci5MV0VQD5CnjckudbgvQEpNbZUIkw9Gc=";
-    aarch64-darwin = "sha256-9Onvzsc2UInjgX9AeWMFNvpUv2Y4i5wUR6z3Igyrzy0=";
+    x86_64-linux = "sha256-L0Jwo4jY/HhRJGVtKWJ5qdZY+7y59bZClry86f87Snw=";
+    aarch64-linux = "sha256-wCUt6cDAohU8kG3uII/u9gP3K6uVssGnAS1QP0B/kgE=";
+    x86_64-darwin = "sha256-G7G9hzhtL1ILQTS96qEoZU//yVozvyFjnGT8Vot4pbk=";
+    aarch64-darwin = "sha256-xwXeiyWMrN7iXk2e4m7PQmcgtLcUgHt67xShBGmn3Mk=";
   };
 
   packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.5.0";
+  version = "3.6.3";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script
   # by allowing it to use the output of `nix store prefetch-file`.
   src = fetchurl {
-    url = "https://github.com/spinframework/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
+    url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
     hash = packageHash;
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = builtins.attrNames packageHashes;
   };
-}
+})

@@ -57,8 +57,8 @@ in
           "BAIKAL_PATH_SPECIFIC" = "/var/lib/baikal/specific/";
         };
         settings = lib.mapAttrs (name: lib.mkDefault) {
-          "listen.owner" = "nginx";
-          "listen.group" = "nginx";
+          "listen.owner" = config.services.nginx.user;
+          "listen.group" = config.services.nginx.group;
           "listen.mode" = "0600";
           "pm" = "dynamic";
           "pm.max_children" = 75;
@@ -83,11 +83,11 @@ in
             rewrite ^/.well-known/caldav  /dav.php redirect;
             rewrite ^/.well-known/carddav /dav.php redirect;
           '';
-          "~ /(\.ht|Core|Specific|config)".extraConfig = ''
+          "~ /(\\.ht|Core|Specific|config)".extraConfig = ''
             deny all;
             return 404;
           '';
-          "~ ^(.+\.php)(.*)$".extraConfig = ''
+          "~ ^(.+\\.php)(.*)$".extraConfig = ''
             try_files $fastcgi_script_name =404;
             include                   ${config.services.nginx.package}/conf/fastcgi.conf;
             fastcgi_split_path_info   ^(.+\.php)(.*)$;

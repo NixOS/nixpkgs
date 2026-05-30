@@ -5,20 +5,20 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Parchive";
     repo = "par2cmdline";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Parchive/par2cmdline";
     description = "PAR 2.0 compatible file verification and repair tool";
     longDescription = ''
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       damage in data files and repair them if necessary. It can be used with
       any kind of file.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

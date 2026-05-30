@@ -93,7 +93,7 @@ in
       meta = {
         description = "Wrapper to create jupyter notebook kernel definitions";
         homepage = "https://jupyter.org/";
-        maintainers = with lib.maintainers; [ aborsu ];
+        maintainers = [ ];
       };
     };
 }

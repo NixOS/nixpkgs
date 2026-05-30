@@ -12,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "smp";
-  version = "4.0.0";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JPHutchins";
     repo = "smp";
     tag = version;
-    hash = "sha256-V6TGDG05sebn0IF3j0EbkozfO4X1DL3nnwrGOSh+Wuc=";
+    hash = "sha256-dATsVGG0b5SBZh7R7NT1deJFDRYi7BwtWzT7/QPjkJw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0"' 'version = "${version}"'
+  '';
 
   build-system = [
     poetry-core

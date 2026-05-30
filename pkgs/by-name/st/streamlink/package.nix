@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.5.0";
+  version = "8.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wJG8d6PMjhKaIy2z4sjYuuLf75aBP83sYu4CB5QGj7k=";
+    hash = "sha256-9HfpSTM2vLfDorEO6nKmCumn9J6WitoNTQG/946sRLs=";
   };
 
   patches = [
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     requests-mock
     freezegun
     pytest-trio
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -57,7 +58,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       websocket-client
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     decompress = urllib3.optional-dependencies.brotli ++ urllib3.optional-dependencies.zstd;
@@ -77,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd2;
     mainProgram = "streamlink";
     maintainers = with lib.maintainers; [
-      dezgeg
       zraexy
       DeeUnderscore
     ];

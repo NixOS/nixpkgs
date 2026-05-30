@@ -5,15 +5,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.3.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.0";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
-    rev = "v${version}";
-    sha256 = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
   };
 
   buildInputs = [ python3 ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nginx config file formatter";
-    maintainers = with maintainers; [ Baughn ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ Baughn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/slomkowski/nginx-config-formatter";
     mainProgram = "nginxfmt";
   };
-}
+})

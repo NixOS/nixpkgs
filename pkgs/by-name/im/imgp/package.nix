@@ -4,16 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "imgp";
   version = "2.9";
-  format = "pyproject";
-  disabled = python3Packages.pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "imgp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yQ2BzOBn6Bl9ieZkREKsj1zLnoPcf0hZhZ90Za5kiKA=";
   };
 
@@ -36,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     $out/bin/imgp --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance CLI batch image resizer & rotator";
     mainProgram = "imgp";
     homepage = "https://github.com/jarun/imgp";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

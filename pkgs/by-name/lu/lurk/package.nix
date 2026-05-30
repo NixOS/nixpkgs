@@ -2,25 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lurk";
-  version = "0.3.10";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = "lurk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5riwosaT7QjRFnIFRAcyLul7i1g8OpHyUuuJNOROTF0=";
+    hash = "sha256-Q7lxPjEfzbGPes11fP7qJY4cYetem7tKQasQcy67oRU=";
   };
 
-  cargoHash = "sha256-CDrqcKNhQYbtDaasyCQ6VPGdIrW34VBKPDpbFeommAc=";
+  cargoHash = "sha256-QOdqA3gHfhBUWL5CHA5p4ueKwZusE5NBlGezBG//3FA=";
 
   postPatch = ''
     substituteInPlace src/lib.rs \
       --replace-fail '/usr/bin/ls' 'ls'
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";

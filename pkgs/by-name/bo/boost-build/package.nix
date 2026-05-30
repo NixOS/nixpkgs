@@ -74,10 +74,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.boost.org/build/";
     license = lib.licenses.boost;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
   };
 }

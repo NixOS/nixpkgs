@@ -1,7 +1,7 @@
-diff --git a/src/installation.ml b/src/installation.ml
+diff --git a/base/Installation.ml b/base/Installation.ml
 index 3c64e395..be7d6e7b 100644
---- a/src/installation.ml
-+++ b/src/installation.ml
+--- a/base/Installation.ml
++++ b/base/Installation.ml
 @@ -39,13 +39,4 @@ let rec normalize fn =
     and hope that it is of the form [.../bin/menhir]. We change this to
     [.../lib/menhirLib], and hope that this is where MenhirLib is installed. *)

@@ -110,7 +110,7 @@ in
                 default = null;
                 example = literalExpression "/etc/wpa_supplicant.conf";
                 description = ''
-                  External `wpa_supplicant.conf` configuration file.
+                  External {file}`wpa_supplicant.conf` configuration file.
                   The configuration options defined declaratively within `networking.supplicant` have
                   precedence over options defined in `configFile`.
                 '';
@@ -145,7 +145,7 @@ in
                 model_number=2015
               '';
               description = ''
-                Configuration options for `wpa_supplicant.conf`.
+                Configuration options for {file}`wpa_supplicant.conf`.
                 Options defined here have precedence over options in `configFile`.
                 NOTE: Do not write sensitive data into `extraConf` as it will
                 be world-readable in the `nix-store`. For sensitive information

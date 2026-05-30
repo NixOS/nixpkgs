@@ -76,11 +76,11 @@ let
     // passthru;
 
     meta =
-      with lib;
+
       {
         homepage = "https://gitlab.xfce.org/${category}/${pname}";
-        license = licenses.gpl2Plus; # some libraries are under LGPLv2+
-        platforms = platforms.linux;
+        license = lib.licenses.gpl2Plus; # some libraries are under LGPLv2+
+        platforms = lib.platforms.linux;
       }
       // meta;
   };

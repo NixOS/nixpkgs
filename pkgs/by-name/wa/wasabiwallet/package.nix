@@ -8,7 +8,9 @@
   lttng-ust_2_12,
   fontconfig,
   openssl,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -19,9 +21,9 @@ let
     fontconfig.lib
     openssl
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libice
+    libsm
     zlib
   ];
 in
@@ -71,12 +73,12 @@ stdenv.mkDerivation rec {
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

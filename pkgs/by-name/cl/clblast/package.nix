@@ -9,14 +9,14 @@
   ocl-icd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clblast";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "CNugteren";
     repo = "CLBlast";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fzenYFCAQ0B2NQgh5OaErv/yNEzjznB6ogRapqfL6P4=";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tuned OpenCL BLAS library";
     homepage = "https://github.com/CNugteren/CLBlast";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Tungsten842 ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Tungsten842 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

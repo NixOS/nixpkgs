@@ -9,13 +9,13 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunderbolt";
   version = "0.9.3";
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thunderbolt-software-user-space";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/thunderbolt-sw";
     platforms = lib.platforms.linux;
   };
-}
+})

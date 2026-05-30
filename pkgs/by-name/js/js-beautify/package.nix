@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nodejs,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -35,12 +36,14 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-Tr8kYawvPBt+jC7SW8dnKJVWynQyOpKbRD8yd+qbvIs=";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/beautifier/js-beautify/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Beautifier for javascript";
     homepage = "https://beautifier.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "js-beautify";
   };
 })

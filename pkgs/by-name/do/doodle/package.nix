@@ -6,7 +6,7 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doodle";
   version = "0.7.3";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://grothoff.org/christian/doodle/download/doodle-${version}.tar.gz";
+    url = "https://grothoff.org/christian/doodle/download/doodle-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-qodp2epYyolg38MNhBV+/NMLmfXjhsn2X9uKTUniv2s=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "doodle";
   };
-}
+})

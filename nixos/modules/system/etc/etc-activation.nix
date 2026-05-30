@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -51,6 +50,9 @@
       ];
 
       boot.initrd.systemd = {
+        storePaths = lib.mkIf config.system.etc.overlay.mutable [
+          "${config.system.nixos-init.package}/bin/clear-etc-opaque"
+        ];
         mounts = [
           {
             where = "/run/nixos-etc-metadata";
@@ -131,13 +133,20 @@
               before = [ "initrd-fs.target" ];
               unitConfig = {
                 DefaultDependencies = false;
-                RequiresMountsFor = "/sysroot";
+                RequiresMountsFor = [
+                  "/sysroot"
+                  # Needed so we can clear stale opaque markers from the
+                  # upperdir based on the contents of the new metadata layer
+                  # before the overlay is mounted.
+                  "/run/nixos-etc-metadata"
+                ];
               };
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = ''
-                  /bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work
-                '';
+                ExecStart = [
+                  "/bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work"
+                  "${config.system.nixos-init.package}/bin/clear-etc-opaque /run/nixos-etc-metadata /sysroot/.rw-etc/upper"
+                ];
               };
             };
           })

@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  jdk,
+  jre,
   makeWrapper,
   buildNativeImage ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
   version = "0.2.2";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    jdk
+    jre
     makeWrapper
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
-      -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
+      -H:CLibraryPath=${lib.getLib jre}/lib -J-Dfile.encoding=UTF-8 \
       -jar BQN.jar dbqn
   ''
   + ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
         mkdir -p $out/share/dbqn
         mv BQN.jar $out/share/dbqn/
 
-        makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dbqn" \
+        makeWrapper "${lib.getBin jre}/bin/java" "$out/bin/dbqn" \
           --add-flags "-jar $out/share/dbqn/BQN.jar"
       ''
   )
@@ -69,15 +69,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dzaima/BQN";
     description =
       "BQN implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       sternenseemann
     ];
-    inherit (jdk.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
+    inherit (jre.meta) platforms;
+    broken = stdenvNoCC.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
   };
 }

@@ -2,23 +2,24 @@
   lib,
   fetchFromGitHub,
   buildDotnetModule,
-  dotnet-sdk_6,
-  dotnet-runtime_6,
+  dotnet-sdk_9,
+  dotnet-runtime_9,
+  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "tshock";
-  version = "5.2.3";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "Pryaxis";
     repo = "TShock";
     rev = "v${version}";
-    sha256 = "sha256-1EtHpBZ7bbwVbl+tMfwpjgPuxu98XKvxlZ2+SbUlWV4=";
+    hash = "sha256-s6v/OUZmU0/kOH83N7xnurXdAtf49q/X69XWcKrKi/c=";
     fetchSubmodules = true;
   };
 
-  dotnet-sdk = dotnet-sdk_6;
-  dotnet-runtime = dotnet-runtime_6;
+  dotnet-sdk = dotnet-sdk_9;
+  dotnet-runtime = dotnet-runtime_9;
   executables = [ "TShock.Server" ];
 
   projectFile = [
@@ -34,11 +35,13 @@ buildDotnetModule rec {
   nugetSource = "https://api.nuget.org/v3/index.json";
   nugetDeps = ./deps.json;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/Pryaxis/TShock";
     description = "Modded server software for Terraria, providing a plugin system and inbuilt tools such as anti-cheat, server-side characters, groups, permissions, and item bans";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.proggerx ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.proggerx ];
     mainProgram = "TShock.Server";
   };
 }

@@ -30,24 +30,24 @@
   proj,
   qhull,
   vigra,
-  wxGTK32,
+  wxwidgets_3_2,
   xz,
   # darwin-specific
   netcdf,
   poppler,
   sqlite,
-  unixODBC,
+  unixodbc,
 
   cudaSupport ? config.cudaSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saga";
-  version = "9.10.1";
+  version = "9.12.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6V7KSdaU3TkdsGr6ll7Q8oSH7/rItgSrgN7Fjn+f9dM=";
+    hash = "sha256-hI7l0XiIACD65/i+Mhwlp2FMYrpXKHnGr3oYhwNEw3U=";
   };
 
   sourceRoot = "saga-${finalAttrs.version}/saga-gis";
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     qhull
     vigra
-    wxGTK32
+    wxwidgets_3_2
     xz
   ]
   ++ lib.optionals cudaSupport [
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     netcdf
     poppler
     sqlite
-    unixODBC
+    unixodbc
   ];
 
   cmakeFlags = [
@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog%20${finalAttrs.version}/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      michelk
       mpickering
     ];
     teams = [ lib.teams.geospatial ];

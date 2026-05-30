@@ -9,7 +9,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poweralertd";
   version = "0.3.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "poweralertd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WzqThv3Vu8R+g6Bn8EfesRk18rchCvw/UMPwbn9YC80=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "UPower-powered power alerter";
     homepage = "https://git.sr.ht/~kennylevinsen/poweralertd";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ thibautmarty ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thibautmarty ];
     mainProgram = "poweralertd";
   };
-}
+})

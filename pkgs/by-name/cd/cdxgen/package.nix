@@ -6,11 +6,11 @@
   node-gyp,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   stdenv,
-  xcbuild,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
   version = "11.10.0";
@@ -26,18 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     node-gyp # required for sqlite3 bindings
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     python3 # required for sqlite3 bindings
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    xcbuild
-    cctools.libtool
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-o5pNgn+ZqaEfsWO97jXkRyPH+0pffR6TBZcF6nApWVg=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-o7u/ZZS/5PgOtWd07zO4a01mUWZowUTL+JDJ2442mGc=";
   };
 
   buildPhase = ''
@@ -63,13 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
     homepage = "https://github.com/CycloneDX/cdxgen";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      dit7ya
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       quincepie
     ];
   };

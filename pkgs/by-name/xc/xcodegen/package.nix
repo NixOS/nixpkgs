@@ -55,7 +55,6 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -65,7 +64,7 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Swift command line tool for generating your Xcode project";
     homepage = "https://github.com/yonaskolb/XcodeGen";
-    changelog = "https://github.com/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/yonaskolb/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.samasaur ];

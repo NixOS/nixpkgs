@@ -6,8 +6,10 @@
   pkg-config,
   wrapGAppsHook4,
   bashNonInteractive,
+  clinfo,
   gdk-pixbuf,
   gtk4,
+  libadwaita,
   libdrm,
   ocl-icd,
   vulkan-loader,
@@ -23,16 +25,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfUzsSdMLv6IaSbLkz9LBvdB4cS4oBE+R5toi9T7vR0=";
+    hash = "sha256-c5GJf8AYgaAN3O6AVSEbJybEYb6lSHf7R24/1PKYhyM=";
   };
 
-  cargoHash = "sha256-K1/D5vi88Wjcvu/KZOkVr4q2MdMHTkhtyV8k8bvcGwg=";
+  cargoHash = "sha256-Y+XdCmaDXdP7x22bYm//Ov7+IzlCr8GpFOgCXGFCfbA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gdk-pixbuf
     gtk4
+    libadwaita
     libdrm
     ocl-icd
     vulkan-loader
@@ -53,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # we do this here so that the binary is usable during integration tests
-  RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
+  env.RUSTFLAGS = lib.optionalString stdenv.targetPlatform.isElf (
     lib.concatStringsSep " " [
       "-C link-arg=-Wl,-rpath,${
         lib.makeLibraryPath [
@@ -69,17 +72,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   postPatch = ''
-    substituteInPlace lact-daemon/src/system.rs \
-      --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
-
     substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'run_command("journalctl",'  'run_command("${systemdMinimal}/bin/journalctl",'
 
     substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${bashNonInteractive}/bin/bash")'
 
+    substituteInPlace lact-daemon/src/server/handler.rs \
+      --replace-fail 'Command::new("clinfo")' 'Command::new("${clinfo}/bin/clinfo")'
+
     substituteInPlace lact-daemon/src/server/vulkan.rs \
       --replace-fail 'Command::new("vulkaninfo")' 'Command::new("${vulkan-tools}/bin/vulkaninfo")'
+
+    substituteInPlace lact-daemon/src/server/opencl.rs \
+      --replace-fail 'Command::new("clinfo")' 'Command::new("${clinfo}/bin/clinfo")'
+
 
     substituteInPlace lact-daemon/src/socket.rs \
       --replace-fail 'run_command("chown"' 'run_command("${coreutils}/bin/chown"'
@@ -95,7 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm444 res/lactd.service -t $out/lib/systemd/system
     install -Dm444 res/io.github.ilya_zlobintsev.LACT.desktop -t $out/share/applications
-    install -Dm444 res/io.github.ilya_zlobintsev.LACT.svg -t $out/share/pixmaps
+    install -Dm444 res/io.github.ilya_zlobintsev.LACT.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preFixup = ''

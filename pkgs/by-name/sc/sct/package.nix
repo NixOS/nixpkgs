@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   xorgproto,
 }:
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     xorgproto
   ];
 
@@ -28,14 +28,14 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.umaxx.net/";
     description = "Minimal utility to set display colour temperature";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       somasis
     ];
-    license = licenses.isc;
-    platforms = with platforms; linux ++ freebsd ++ openbsd;
+    license = lib.licenses.isc;
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
   };
 }

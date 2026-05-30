@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "AlexxIT";
   domain = "yandex_station";
-  version = "3.20.1";
+  version = "3.21.1";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "YandexStation";
     tag = "v${version}";
-    hash = "sha256-AP0GAJrGZq2z0HlsARfhVZiv7yaeOKg05GjV95ljVdU=";
+    hash = "sha256-5a+631Gu7xaPq8EF+34bybm40YVTXPA/ylq6k8LPBNU=";
   };
 
   dependencies = [
@@ -43,6 +43,5 @@ buildHomeAssistantComponent rec {
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";
     homepage = "https://github.com/AlexxIT/YandexStation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ferrine ];
   };
 }

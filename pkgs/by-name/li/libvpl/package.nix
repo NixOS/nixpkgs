@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvpl";
-  version = "2.15.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libvpl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aCoyIHgX3ftlk0CKg/cXNAVjuGI8GMT358GoiyaNjnI=";
+    hash = "sha256-TbneMexrGShBE83WRCHvECucG2/eYMtljwb3yvCTP7k=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Video Processing Library";
     homepage = "https://intel.github.io/libvpl/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 })

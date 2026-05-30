@@ -12,16 +12,6 @@
   extraDescription ? "",
   extraMeta ? { },
 }:
-
-let
-  # Backward compatibility layer for the obsolete workaround of
-  # the "vendor-related attributes not overridable" issue (#86349),
-  # whose solution (#225051) is merged and released.
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  _defaultGoVendorArgs = {
-    inherit vendorHash deleteVendor proxyVendor;
-  };
-in
 {
   lib,
   buildGoModule,
@@ -97,28 +87,9 @@ in
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
   sourceFilesWithDefaultPaths ? { },
-  # Placeholders for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  vendorHash ? null,
-  deleteVendor ? null,
-  proxyVendor ? null,
-}@args:
+}:
 
 let
-  # Backward compatibility layer for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Convert to simple inheritance after the Nixpkgs 25.05 branch-off.
-  moduleArgsOverridingCompat =
-    argName:
-    if args.${argName} or null == null then
-      _defaultGoVendorArgs.${argName}
-    else
-      lib.warn
-        "${projectName}: Override ${argName} with .override is deprecated. Use .overrideAttrs instead."
-        args.${argName};
-  vendorHash = moduleArgsOverridingCompat "vendorHash";
-  deleteVendor = moduleArgsOverridingCompat "deleteVendor";
-  proxyVendor = moduleArgsOverridingCompat "proxyVendor";
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
@@ -138,6 +109,7 @@ in
   # go is used to compile extensions when building container images
   allowGoReference = true;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   passthru = {
@@ -228,22 +200,17 @@ in
           lib.concatStringsSep " " [
             "--replace-fail"
             (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+            (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
   '';
 
   postConfigure = ''
-    # Code borrowed from pkgs/stdenv/generic/setup.sh configurePhase()
-
     # set to empty if unset
     : ''${configureFlags=}
 
-    # shellcheck disable=SC2086
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" $configureFlags "''${configureFlagsArray[@]}"
-
-    # End of the code from pkgs/stdenv/generic/setup.sh configurPhase()
+    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" "''${configureFlags[@]}"
   '';
 
   buildPhase = ''
@@ -306,7 +273,6 @@ in
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

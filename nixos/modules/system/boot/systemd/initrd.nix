@@ -7,9 +7,29 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    filter
+    elem
+    filterAttrs
+    concatLists
+    mapAttrsToList
+    getBin
+    concatStringsSep
+    mkEnableOption
+    mkOption
+    types
+    literalExpression
+    mkIf
+    any
+    isBool
+    isString
+    optionalAttrs
+    mapAttrs'
+    nameValuePair
+    listToAttrs
+    ;
+
   inherit (utils) systemdUtils escapeSystemdPath;
   inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
@@ -27,8 +47,18 @@ let
 
   cfg = config.boot.initrd.systemd;
 
+  withKmod =
+    let
+      kconfig = config.system.build.kernel.config;
+    in
+    kconfig.isSet "MODULES" -> kconfig.isYes "MODULES";
+
   upstreamUnits = [
     "basic.target"
+    "breakpoint-pre-udev.service"
+    "breakpoint-pre-basic.service"
+    "breakpoint-pre-mount.service"
+    "breakpoint-pre-switch-root.service"
     "ctrl-alt-del.target"
     "debug-shell.service"
     "emergency.service"
@@ -65,6 +95,8 @@ let
     "syslog.socket"
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
+    "systemd-factory-reset-complete.service"
+    "factory-reset-now.target"
     "systemd-fsck@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume.service"
@@ -151,6 +183,7 @@ in
 
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
+      default = true;
       description = ''
         Whether to enable systemd in initrd. The unit options such as
         {option}`boot.initrd.systemd.services` are the same as their
@@ -241,7 +274,7 @@ in
       '';
       example = literalExpression ''
         {
-          umount = ''${pkgs.util-linux}/bin/umount;
+          umount = "''${pkgs.util-linux}/bin/umount";
         }
       '';
       type = types.attrsOf types.path;
@@ -258,10 +291,12 @@ in
     };
 
     root = lib.mkOption {
-      type = lib.types.enum [
-        "fstab"
-        "gpt-auto"
-      ];
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "fstab"
+          "gpt-auto"
+        ]
+      );
       default = "fstab";
       example = "gpt-auto";
       description = ''
@@ -270,6 +305,7 @@ in
         allow specifying the root file system itself this
         way. Instead, the `fstab` value is used in order to interpret
         the root file system specified with the `fileSystems` option.
+        If root shall be omitted, set this option to `null`.
       '';
     };
 
@@ -421,42 +457,57 @@ in
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
-    assertions = [
-      {
-        assertion =
-          cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
-        message = "The ‘fileSystems’ option does not specify your root file system.";
-      }
-    ]
-    ++
-      map
-        (name: {
-          assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
-          message = ''
-            systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
-              convert it to analogous systemd units in 'boot.initrd.systemd'.
-
-                Definitions:
-            ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-              (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
-            }
-          '';
-        })
-        [
-          [ "preFailCommands" ]
-          [ "preDeviceCommands" ]
-          [ "preLVMCommands" ]
-          [ "postDeviceCommands" ]
-          [ "postResumeCommands" ]
-          [ "postMountCommands" ]
-          [ "extraUdevRulesCommands" ]
-          [ "extraUtilsCommands" ]
-          [ "extraUtilsCommandsTest" ]
+    assertions =
+      let
+        obsoleteOpt =
+          opts: msgFn:
+          lib.flip map opts (opt: {
+            assertion = lib.attrByPath opt (throw "impossible") config.boot.initrd == "";
+            message = ''
+              ${msgFn (lib.concatStringsSep "." opt)}
+                  Definitions:
+              ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+                (lib.attrByPath opt (throw "impossible") options.boot.initrd).definitionsWithLocations
+              }
+            '';
+          });
+      in
+      [
+        {
+          assertion =
+            cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+          message = "The ‘fileSystems’ option does not specify your root file system.";
+        }
+      ]
+      ++
+        obsoleteOpt
           [
-            "network"
-            "postCommands"
+            [ "preFailCommands" ]
+            [ "preDeviceCommands" ]
+            [ "preLVMCommands" ]
+            [ "postDeviceCommands" ]
+            [ "postResumeCommands" ]
+            [ "postMountCommands" ]
+            [
+              "network"
+              "postCommands"
+            ]
           ]
-        ];
+          (name: ''
+            systemd stage 1 does not support `boot.initrd.${name}`. Instead, create systemd services using the `boot.initrd.systemd.services` options, which has an API matching the stage 2 `systemd.services` options. Refer to `bootup(7)`, specifically the sections on "Bootup in the Initrd" and "System Manager Bootup", for information about when various units happen, and order services accordingly.
+          '')
+      ++
+        obsoleteOpt
+          [
+            [ "extraUtilsCommands" ]
+            [ "extraUtilsCommandsTest" ]
+          ]
+          (name: ''
+            systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.systemd.initrdBin`, `boot.initrd.systemd.extraBin`, `boot.initrd.systemd.contents`, or `boot.initrd.systemd.storePaths` to add files to the initrd.
+          '')
+      ++ obsoleteOpt [ [ "extraUdevRulesCommands" ] ] (name: ''
+        systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.services.udev` to configure udev.
+      '');
 
     system.build = { inherit initialRamdisk; };
 
@@ -467,20 +518,20 @@ in
     ]
     ++ lib.optional cfg.package.withEfi "efivarfs";
 
-    boot.kernelParams = [
-      "root=${config.boot.initrd.systemd.root}"
-    ]
-    ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
-    # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
-    # For NixOS activation to succeed, we need to have root writable in initrd.
-    ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
+    boot.kernelParams =
+      lib.optional (config.boot.initrd.systemd.root != null) "root=${config.boot.initrd.systemd.root}"
+
+      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+      # For NixOS activation to succeed, we need to have root writable in initrd.
+      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
       initrdBin = [
         pkgs.coreutils
         cfg.package
       ]
-      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod
+      ++ lib.optional withKmod cfg.package.kmod
       ++ lib.optionals cfg.shell.enable [
         # bashInteractive is easier to use and also required by debug-shell.service
         pkgs.bashInteractive
@@ -530,7 +581,7 @@ in
       // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
       }
-      // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+      // optionalAttrs withKmod {
         "/lib".source = "${config.system.build.modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
@@ -555,6 +606,7 @@ in
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
         "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
+        "${cfg.package}/lib/systemd/systemd-factory-reset"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -562,6 +614,7 @@ in
         "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
         "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-factory-reset-generator"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
@@ -569,7 +622,7 @@ in
         "${cfg.package.util-linux}/bin/sulogin"
 
         # Resolving sysroot symlinks without code exec
-        "${config.system.nixos-init.package}/bin/chroot-realpath"
+        "${config.system.nixos-init.package}/bin/resolve-in-root"
         # Find the etc paths
         "${config.system.nixos-init.package}/bin/find-etc"
       ]
@@ -583,7 +636,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
-      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
+      ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
       targets.initrd.aliases = [ "default.target" ];
@@ -612,6 +665,10 @@ in
             nameValuePair "${n}.automount" (automountToUnit v)
           ) cfg.automounts
         );
+
+      services."modprobe@" = lib.mkIf withKmod {
+        serviceConfig.ExecSearchPath = lib.makeBinPath [ cfg.package.kmod ];
+      };
 
       services.initrd-find-nixos-closure = lib.mkIf (!config.system.nixos-init.enable) {
         description = "Find NixOS closure";
@@ -660,7 +717,7 @@ in
 
             # Resolve symlinks in the init parameter. We need this for some boot loaders
             # (e.g. boot.loader.generationsDir).
-            closure="$(chroot-realpath /sysroot "$closure")"
+            closure="$(resolve-in-root /sysroot "$closure")"
 
             # Assume the directory containing the init script is the closure.
             closure="$(dirname "$closure")"
@@ -729,17 +786,6 @@ in
               cfg.package.util-linux
               config.system.nixos-init.package
             ];
-            environment = {
-              FIRMWARE = "${config.hardware.firmware}/lib/firmware";
-              MODPROBE_BINARY = "${pkgs.kmod}/bin/modprobe";
-              NIX_STORE_MOUNT_OPTS = lib.concatStringsSep "," config.boot.nixStoreMountOpts;
-            }
-            // lib.optionalAttrs (config.environment.usrbinenv != null) {
-              ENV_BINARY = config.environment.usrbinenv;
-            }
-            // lib.optionalAttrs (config.environment.binsh != null) {
-              SH_BINARY = config.environment.binsh;
-            };
             serviceConfig = {
               ExecStart = [
                 ""

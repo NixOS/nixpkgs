@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.1";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libnsutils-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/libnsutils-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-VpS0Um5FjtAAQTzmAnWJy+EKJXp+zwZaAUIdxymd6pI=";
   };
 

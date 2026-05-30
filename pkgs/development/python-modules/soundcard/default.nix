@@ -10,7 +10,7 @@
 }:
 let
   pname = "soundcard";
-  version = "0.4.5";
+  version = "0.4.6";
 in
 buildPythonPackage {
   inherit pname version;
@@ -18,7 +18,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BycrqSfjLK/fY05KHKU7mjIYMhpgx9Lgj1S4MqVpRqo=";
+    hash = "sha256-m0bWSib5fNfYi8/Dhcl8Bp+Xxew0BOTnwjdxWYqM9Hs=";
   };
 
   patchPhase = ''

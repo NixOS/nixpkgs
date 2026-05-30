@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cubeb";
-  version = "0-unstable-2025-09-17";
+  version = "0-unstable-2026-05-06";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cubeb";
-    rev = "e495bee4cd630c9f99907a764e16edba37a4b564";
-    hash = "sha256-iBxYZppjJhFAwGi9v4/lTsyqC9Gy04Dc7bJNzgv18rE=";
+    rev = "6ad18e2b523a2c721ee1ed8ad0940521a19f5f84";
+    hash = "sha256-Q+UepE/mNIKBvltLKr1RGmuP7ulVd5sxHwaVCeb0BzM=";
   };
 
   outputs = [

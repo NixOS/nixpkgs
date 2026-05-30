@@ -2,44 +2,47 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
-  go_1_24,
+  go,
   git,
   cacert,
   nixosTests,
 }:
 let
   pname = "homebox";
-  version = "0.21.0";
+  version = "0.25.0";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     tag = "v${version}";
-    hash = "sha256-JA0LawQHWLCJQno1GsajVSsLG3GGgDp2ttIa2xELX48=";
+    hash = "sha256-mAC7n8AjsSHzO+l0ILJhf4LPAuVZ5KIYO6mXftZpVbE=";
   };
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-fklNsQEqAjbiaAwTAh5H3eeANkNRDVRuJZ8ithJsfZs=";
+  vendorHash = "sha256-FuZEGUduKZyTuW63z3rk8g1KE8wyx55xoNSvqbvF0PA=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
   # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go_1_24
+      go
       git
       cacert
     ];
     preBuild = "";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname version;
     src = "${src}/frontend";
-    fetcherVersion = 1;
-    hash = "sha256-gHx4HydL33i1SqzG1PChnlWdlO5NFa5F/R5Yq3mS4ng=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-LrK0ijH8ahmDU4t9ckmIf1TJmybLLDRRHA67djUwRBk=";
   };
   pnpmRoot = "../frontend";
 
@@ -57,8 +60,8 @@ buildGoModule {
   '';
 
   nativeBuildInputs = [
-    pnpm_9
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
   ];
 
@@ -99,7 +102,10 @@ buildGoModule {
       patrickdag
       tebriel
     ];
-    license = lib.licenses.agpl3Only;
+    license = [
+      lib.licenses.agpl3Only
+      lib.licenses.mit
+    ];
     platforms = lib.platforms.linux;
   };
 }

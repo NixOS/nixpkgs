@@ -5,7 +5,6 @@
   mock,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
   twisted,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
     setuptools
     versioneer
   ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -52,11 +49,11 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "foolscap" ];
 
-  meta = with lib; {
+  meta = {
     description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol, intended to
@@ -64,7 +61,7 @@ buildPythonPackage rec {
       implement a distributed object-capabilities model in Python.
     '';
     homepage = "https://github.com/warner/foolscap";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

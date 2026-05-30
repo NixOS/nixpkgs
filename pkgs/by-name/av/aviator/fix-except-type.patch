@@ -1,0 +1,24 @@
+--- /nix/store/vi2p09s1xk39c6r8p8r0rm0p5c7nka62-source/processor/processor_test.go	1970-01-01 08:00:01
++++ source-orig/processor/processor_test.go	2026-03-27 11:41:40
+@@ -496,7 +496,7 @@
+ 						cfg.Merge[0].With.Files = []string{"fake1", "fake2"}
+ 						cfg.ForEach.In = "integration/yamls/addons/"
+ 						cfg.ForEach.SubDirs = true
+-						cfg.ForEach.Except = "fake2"
++						cfg.ForEach.Except = []string{"fake2"}
+ 						cfg.ForEach.ForAll = "integration/yamls/"
+ 
+ 						spruceConfig = []aviator.Spruce{cfg}
+@@ -507,10 +507,10 @@
+ 						Expect(err).ToNot(HaveOccurred())
+ 
+ 						cc := spruceClient.MergeWithOptsCallCount()
+-						Expect(cc).To(Equal(8))
++						Expect(cc).To(Equal(9))
+ 
+ 						mergeOpts := spruceClient.MergeWithOptsArgsForCall(0)
+-						Expect(len(mergeOpts.Files)).To(Equal(4))
++						Expect(len(mergeOpts.Files)).To(Equal(5))
+ 					})
+ 				})
+ 			})

@@ -7,6 +7,7 @@ nvidia_x11: sha256:
   patchelf,
   zlib,
   glibc,
+  versionCheckHook,
 }:
 
 let
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
       ${patchelf}/bin/patchelf \
@@ -48,10 +51,28 @@ stdenv.mkDerivation rec {
     done
     patchShebangs $out/bin
 
+    runHook postInstall
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
     for b in $out/bin/*;do
       ${ldd} $b | grep -vqz "not found"
     done
+
+    runHook postCheck
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  # Default stdenv fixup shrinkings cause undefined symbols when trying to run
+  # meta.mainProgram
+  dontFixup = true;
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";

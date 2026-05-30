@@ -123,7 +123,7 @@ let
       libjack2
       libpulseaudio
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ apple-sdk_14 ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
 
     cmakeFlags = [
       (lib.cmakeBool "RTAUDIO_API_ALSA" stdenv.hostPlatform.isLinux)
@@ -249,13 +249,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     zstd
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
     imagemagick
     libicns
     wrapGAppsHook3
   ]
-  ++ lib.optionals stdenv.isDarwin [ rsync ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ];
 
   buildInputs = [
     curl
@@ -320,7 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
     done;
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{bin,Applications}
     mv dist/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app' \
       $out/Applications
@@ -348,22 +348,22 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags "-s $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/Resources"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source virtual modular synthesizer";
     homepage = "https://vcvrack.com/";
     # The source is GPL3+ licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-nc-40
       unfreeRedistributable
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nathyong
       jpotier
       ddelabru
     ];
     mainProgram = "Rack";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

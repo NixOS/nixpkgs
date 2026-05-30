@@ -10,14 +10,14 @@
   protobufc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libomemo-c";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "libomemo-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HoZykdGVDsj4L5yN3SHGF5tjMq5exJyC15zTLBlpX/c=";
   };
 
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fork of libsignal-protocol-c adding support for OMEMO XEP-0384 0.5.0+";
     homepage = "https://github.com/dino/libomemo-c";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.astro ];
   };
-}
+})

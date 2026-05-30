@@ -24,9 +24,9 @@ buildPythonPackage rec {
   # circular dependencies for tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Backport of traceback to older supported Pythons";
-    homepage = "https://pypi.python.org/pypi/traceback2/";
-    license = licenses.psfl;
+    homepage = "https://pypi.org/project/traceback2/";
+    license = lib.licenses.psfl;
   };
 }

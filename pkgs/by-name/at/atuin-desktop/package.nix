@@ -9,8 +9,10 @@
   cargo-tauri,
   nodejs,
   pkg-config,
-  pnpm,
+  bun,
+  writableTmpDirAsHomeHook,
 
+  alsa-lib,
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -18,35 +20,85 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.1.11";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ySws3R4CatOrKjjGrLJQU9feXIb5MdVX1uKK0fFV21s=";
+    hash = "sha256-8FMB64UeGhXpWD5w33okpOVwKInrQ5R33aZuKIRCFEs=";
   };
 
-  cargoRoot = "backend";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoHash = "sha256-gyDg8XBPiMovOtzmb0eHVWuXmavZTBMvPPgbcdNU6xo=";
+  cargoRoot = "./.";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-68yQkgIVpqUo5tOcvxKh6NOkW565V94zHIZeI4q7nNA=";
+  };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-6YDYrFo5iCelRGBnDFoI8V3Nv/8w3XPNwuArc+nSShU=";
+  node_modules = stdenv.mkDerivation {
+    inherit (finalAttrs) src version;
+    pname = "${finalAttrs.pname}-node_modules";
+
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+    dontFixup = true;
+    dontPatchShebangs = true; # Patch shebangs manually in configurePhase after copying node_modules in the main derivation.
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+      # Install dependencies without running lifecycle scripts:
+      #  - Skip scripts to avoid running ts-tiny-activerecord's prepare script with unpatched shebangs.
+      #  - Rebuild in the main derivation after shebangs are patched there manually.
+      bun install \
+        --force \
+        --no-progress \
+        --frozen-lockfile \
+        --ignore-scripts
+
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+    outputHash =
+      {
+        aarch64-darwin = "sha256-YbjDAa2KG8U0ODqIYc5h7iNr5px+6+iforDrPomOVDo=";
+        aarch64-linux = "sha256-JoUPAfBF4xdQxtx+J/VNpYomBACNsL7Wes0XXuGByGk=";
+        x86_64-darwin = "sha256-YzxQyZPfcQci8QsGEDRTcc2A9tmvem3cHkv/OBFlWDQ=";
+        x86_64-linux = "sha256-w8fMS6f+F+23EtMjjl0RsHMm6b5jOXSwUDAc21vqLAg=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet.");
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    pnpm.configHook
-
+    rustPlatform.bindgenHook
+    bun
     nodejs
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     glib-networking
     libappindicator-gtk3
     openssl
@@ -54,28 +106,56 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # Used upstream: https://github.com/atuinsh/desktop/blob/2f9a90963c4a6299bf35d8a49b0a2ffb8a28ee32/.envrc.
-    NODE_OPTIONS = "--max-old-space-size=5120";
+    # Used upstream: https://github.com/atuinsh/desktop/blob/v0.2.19/.envrc#L1
+    NODE_OPTIONS = "--max-old-space-size=6144";
+
+    # TMP: Fix build failure with GCC 15.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
   # Otherwise tauri will look for a private key we don't have.
   tauriConf = builtins.toJSON { bundle.createUpdaterArtifacts = false; };
-  passAsFile = [ "tauriConf" ];
   preBuild = ''
-    npm rebuild ts-tiny-activerecord
+    tauriConfPath="tauriConf"
+    printf "%s" "$tauriConf" > "$tauriConfPath"
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
     )
   '';
 
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules} node_modules/
+
+    # Bun takes executables from this folder.
+    chmod -R u+rw node_modules
+    chmod -R u+x node_modules/.bin
+
+    patchShebangs node_modules
+
+    # Run lifecycle scripts for ts-tiny-activerecord with patched shebangs:
+    #  - ts-tiny-activerecord has a `prepare` script that compiles TypeScript into JavaScript.
+    cd node_modules/ts-tiny-activerecord
+    npm run prepare
+    cd ../..
+
+    export HOME=$TMPDIR
+    export PATH="$PWD/node_modules/.bin:$PATH"
+
+    runHook postConfigure
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   checkFlags = [
-    # Failing for unknown reason.
-    "--skip=runtime::blocks::handlers::script_output_test::tests::test_multiple_scripts"
+    "--skip=ui::viewport::tests::test_add_line_scrolling"
+    "--skip=ui::viewport::tests::test_line_wrapping"
   ];
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Local-first, executable runbook editor";

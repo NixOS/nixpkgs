@@ -6,18 +6,19 @@
   gotools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mtail";
-  version = "3.2.24";
+  version = "3.2.53";
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
     repo = "mtail";
-    rev = "v${version}";
-    hash = "sha256-eRcVpnXc0H/yt5yD693rsT14xzAw0T3QqvhpxqHzn1E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fyVUsIBQNhaNJoCrOzl8G0BHrScfw7nOt1zPWSbefsM=";
   };
 
-  vendorHash = "sha256-fbsITz+Xn0xxol9ismRDl16BW8trwdSGrehX5sClhdw=";
+  proxyVendor = true;
+  vendorHash = "sha256-QWIVIEhnDoU8omWEL2GJLUCr3U7fqJ5znTt7yehtq8g=";
 
   nativeBuildInputs = [
     gotools # goyacc
@@ -25,8 +26,8 @@ buildGoModule rec {
 
   ldflags = [
     "-X=main.Branch=main"
-    "-X=main.Version=${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.rev}"
   ];
 
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
@@ -48,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "mtail";
   };
-}
+})

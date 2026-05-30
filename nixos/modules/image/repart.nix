@@ -81,7 +81,7 @@ let
             SizeMaxBytes = "2G";
           };
           description = ''
-            Specify the repart options for a partiton as a structural setting.
+            Specify the repart options for a partition as a structural setting.
             See {manpage}`repart.d(5)`
             for all available options.
           '';
@@ -201,6 +201,14 @@ in
       '';
     };
 
+    imageSize = lib.mkOption {
+      type = lib.types.strMatching "^([0-9]+[KMGTP]?|auto)$";
+      default = "auto";
+      example = "512G";
+      description = "Size of the produced image in bytes with optional K, M, G, T suffix,
+        or 'auto' to determine the minimal size automatically";
+    };
+
     package = lib.mkPackageOption pkgs "systemd-repart" {
       # We use buildPackages so that repart images are built with the build
       # platform's systemd, allowing for cross-compiled systems to work.
@@ -220,7 +228,7 @@ in
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
                 "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
-            }
+            };
             repartConfig = {
               Type = "esp";
               Format = "vfat";
@@ -271,6 +279,15 @@ in
       readOnly = true;
       description = ''
         Convenience option to access partitions with added closures.
+      '';
+    };
+
+    image = lib.mkOption {
+      type = lib.types.package;
+      internal = true;
+      readOnly = true;
+      description = ''
+        The image built by this module. Used as the default for `system.build.image`.
       '';
     };
 
@@ -348,6 +365,37 @@ in
 
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
+        image =
+          let
+            fileSystems = lib.filter (f: f != null) (
+              lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions
+            );
+
+            format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
+
+            definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
+              lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
+            );
+
+            mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
+            val = pkgs.callPackage ./repart-image.nix {
+              systemd = cfg.package;
+              inherit (config.image) baseName;
+              inherit (cfg)
+                name
+                version
+                compression
+                split
+                seed
+                imageSize
+                sectorSize
+                finalPartitions
+                ;
+              inherit fileSystems definitionsDirectory mkfsEnv;
+            };
+          in
+          lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+
         assertions = lib.mapAttrsToList (
           fileName: partitionConfig:
           let
@@ -377,7 +425,7 @@ in
               defined for '${fileName}' is ${toString labelLength} characters long.
               The suggested maximum label length is ${toString suggestedMaxLabelLength}.
 
-              If you use sytemd-sysupdate style A/B updates, this might
+              If you use systemd-sysupdate style A/B updates, this might
               not leave enough space to increment the version number included in
               the label in a future release. For example, if your label is
               ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
@@ -393,35 +441,7 @@ in
         );
       };
 
-    system.build.image =
-      let
-        fileSystems = lib.filter (f: f != null) (
-          lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions
-        );
-
-        format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
-
-        definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
-          lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
-        );
-
-        mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
-        val = pkgs.callPackage ./repart-image.nix {
-          systemd = cfg.package;
-          inherit (config.image) baseName;
-          inherit (cfg)
-            name
-            version
-            compression
-            split
-            seed
-            sectorSize
-            finalPartitions
-            ;
-          inherit fileSystems definitionsDirectory mkfsEnv;
-        };
-      in
-      lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+    system.build.image = cfg.image;
   };
 
   meta.maintainers = with lib.maintainers; [

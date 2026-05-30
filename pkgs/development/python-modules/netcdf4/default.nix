@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   python,
-  pythonOlder,
   setuptools-scm,
   stdenv,
   wheel,
@@ -30,7 +29,7 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.8";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "Unidata";
@@ -81,11 +80,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "netCDF4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to netCDF library (versions 3 and 4)";
     homepage = "https://github.com/Unidata/netcdf4-python";
     changelog = "https://github.com/Unidata/netcdf4-python/raw/${tag}/Changelog";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

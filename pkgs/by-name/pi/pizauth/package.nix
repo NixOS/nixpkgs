@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.8";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${finalAttrs.version}";
-    hash = "sha256-KLHccRCJ19CrGKePhUgW4GhQzn+ULE861cW2ykGoaZk=";
+    hash = "sha256-e9YBeYMC9tfxZoXZi/QBW3FO5V6BAe7RSvVWs7rv0PI=";
   };
 
-  cargoHash = "sha256-m1kOV0b/HCSAGfbEh4GdtrlphoELe7ebG+kgKKNYihY=";
+  cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";

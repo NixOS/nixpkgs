@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ci_info" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gather continuous integration information on the fly";
     homepage = "https://github.com/mgxd/ci-info";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

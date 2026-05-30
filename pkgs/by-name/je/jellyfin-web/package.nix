@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_20,
+  nodejs_22,
   nix-update-script,
   pkg-config,
   xcbuild,
@@ -11,27 +11,27 @@
   giflib,
   jellyfin,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
-  version = "10.11.2";
+  version = "10.11.10";
 
   src =
-    assert version == jellyfin.version;
+    assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      rev = "v${version}";
-      hash = "sha256-xgZ2fh2dMpcvXXUWcZSvcARm4Qy8qgi8T5nFyk+sOgs=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-fSpzF6Arx0JfL9fuQHjzf3m82XZR2BZkV0lA37L4DN4=";
     };
 
-  nodejs = nodejs_20; # does not build with 22
+  nodejs = nodejs_22;
 
   postPatch = ''
     substituteInPlace webpack.common.js \
-      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}"
   '';
 
-  npmDepsHash = "sha256-Uikude8cNBA79KNPf6D0McwR/AoaaWJVMw2Q08AiK3U=";
+  npmDepsHash = "sha256-DCFgivbZrDufRaB+4PeFxO6ISbEM9lXhXmlzc/5GbVU=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -60,15 +60,15 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       minijackson
       purcell
       jojosch
     ];
   };
-}
+})

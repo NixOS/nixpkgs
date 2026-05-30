@@ -10,14 +10,14 @@
   libfido2,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gocryptfs";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "gocryptfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uQLFcabN418m1dvogJ71lJeTF3F9JycK/8qCPaXblSU=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
   propagatedBuildInputs = [ libfido2 ];
 
   ldflags = [
-    "-X main.GitVersion=${version}"
+    "-X main.GitVersion=${finalAttrs.version}"
     "-X main.GitVersionFuse=[vendored]"
     "-X main.BuildDate=unknown"
   ];
@@ -63,15 +63,14 @@ buildGoModule rec {
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Encrypted overlay filesystem written in Go";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://nuetzlich.net/gocryptfs/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       flokli
-      offline
       prusnak
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

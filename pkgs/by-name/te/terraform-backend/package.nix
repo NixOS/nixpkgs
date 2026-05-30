@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "terraform-backend";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nimbolus";
     repo = "terraform-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S3ih7dLSQs3xJMHyQyWy43OG1maizBPVT8IsrWcSRUM=";
+    hash = "sha256-8tC5g0qqKWYQlzu8ZEMCbxkaZ0nP5Z2GuSkRA+9SFwU=";
   };
 
-  vendorHash = "sha256-5L8MNhjEPI3OOmtHdkB9ZQp02d7nzPp5h0/gVHTiCws=";
+  vendorHash = "sha256-2krZ1JVioWiVuAGflMzw0W0wITpHTMu8j1Kio+uCkvM=";
 
   ldflags = [
     "-s"

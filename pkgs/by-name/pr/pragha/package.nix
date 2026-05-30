@@ -20,7 +20,7 @@
   withGstPlugins ? true,
   glyr,
   withGlyr ? true,
-  liblastfmSF,
+  liblastfm-vambrose,
   withLastfm ? true,
   libcdio-paranoia,
   withCD ? true,
@@ -34,12 +34,13 @@
   withGudev ? false, # experimental
   libmtp,
   withMtp ? false, # experimental
-  xfce,
+  libxfce4ui,
+  xfce4-dev-tools,
   withXfce4ui ? false,
   totem-pl-parser,
   withTotemPlParser ? false,
-# , grilo, withGrilo ? false
-# , rygel, withRygel ? true
+  # , grilo, withGrilo ? false
+  # , rygel, withRygel ? true
 }:
 
 assert withGlyr -> withLastfm;
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     intltool
     pkg-config
-    xfce.xfce4-dev-tools
+    xfce4-dev-tools
     desktop-file-utils
     installShellFiles
     libsForQt5.wrapQtAppsHook
@@ -92,19 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGudev libgudev
     ++ lib.optional withKeybinder keybinder3
     ++ lib.optional withLibnotify libnotify
-    ++ lib.optional withLastfm liblastfmSF
+    ++ lib.optional withLastfm liblastfm-vambrose
     ++ lib.optional withGlyr glyr
     ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp
-    ++ lib.optional withXfce4ui xfce.libxfce4ui
+    ++ lib.optional withXfce4ui libxfce4ui
     ++ lib.optional withTotemPlParser totem-pl-parser
   # ++ lib.optional withGrilo grilo
   # ++ lib.optional withRygel rygel
   ;
 
-  CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  env = {
+    CFLAGS = toString [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  };
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
@@ -119,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mbaeten ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

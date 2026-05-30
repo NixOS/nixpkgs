@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
     tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-E+O5NbDX1ycDJTht6kW8JzYnhEL6Wd1xp0rcLpdm2HQ=";
+    hash = "sha256-pknZHHIIhjfOxdp+qCOOGvo0W5ByTHXRiIQzzN7Z6M4=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -518,7 +518,7 @@ in
 
         useEmbeddedBitmaps = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = true;
           description = "Use embedded bitmaps in fonts like Calibri.";
         };
 

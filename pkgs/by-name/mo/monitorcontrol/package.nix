@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
     cp -R . "$out/Applications/MonitorControl.app"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MacOS system extension to control brightness and volume of external displays with native OSD";
     longDescription = "Controls your external display brightness and volume and shows native OSD. Use menulet sliders or the keyboard, including native Apple keys!";
     homepage = "https://github.com/MonitorControl/MonitorControl#readme";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cbleslie
       cottand
     ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

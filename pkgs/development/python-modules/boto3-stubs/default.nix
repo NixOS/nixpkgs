@@ -356,15 +356,15 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "boto3-stubs";
-  version = "1.40.73";
+  version = "1.43.17";
   pyproject = true;
 
   src = fetchPypi {
     pname = "boto3_stubs";
-    inherit version;
-    hash = "sha256-/WI+/g1Hl3Hc0RXbYXPx3Z4yHPhn7xY4F3woKFGaeKk=";
+    inherit (finalAttrs) version;
+    hash = "sha256-noNa6wsJD4OKnDr3vJ8TGHWv5kOUyJW6Ht4V9OZcNb8=";
   };
 
   build-system = [ setuptools ];
@@ -1090,13 +1090,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boto3-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for boto3";
     homepage = "https://pypi.org/project/boto3-stubs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      fab
-      mbalatsko
-    ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

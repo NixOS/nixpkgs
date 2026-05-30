@@ -6,14 +6,14 @@
   pkg-config,
   cacert,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prr";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "danobi";
     repo = "prr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-G8/T3Jyr0ZtY302AvYxhaC+8Ld03cVL5Cuflz62e0mw=";
   };
 
@@ -23,14 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
   checkInputs = [ cacert ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that brings mailing list style code reviews to Github PRs";
     homepage = "https://github.com/danobi/prr";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "prr";
-    maintainers = with maintainers; [ evalexpr ];
+    maintainers = with lib.maintainers; [ evalexpr ];
   };
-}
+})

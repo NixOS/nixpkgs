@@ -10,7 +10,6 @@
   mock,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
   zipfile2,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "okonomiyaki";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";
@@ -57,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testfixtures
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
@@ -68,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "okonomiyaki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     homepage = "https://github.com/enthought/okonomiyaki";
     changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd3;
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
   };
 }

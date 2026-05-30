@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "37.5.3";
+  version = "40.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gxXY/01vT1iL1C/+Y6vVmYhseFBz4mpEcH4Q7rpXE9w=";
+    hash = "sha256-t2poFjql8XHSYPwkgnqDSbwdtnL2pmU1no0AlegTXTA=";
   };
 
   build-system = [ setuptools ];
@@ -43,11 +43,11 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for generating fake user data";
     mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

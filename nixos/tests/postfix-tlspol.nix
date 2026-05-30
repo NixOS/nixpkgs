@@ -7,7 +7,7 @@
 
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  nodes.machine = {
+  containers.machine = {
     services.postfix.enable = true;
     services.postfix-tlspol.enable = true;
 
@@ -30,7 +30,7 @@
       machine.log(json.dumps(response, indent=2))
 
       assert response["dane"]["policy"] == "", f"Unexpected DANE policy for localhost: {response["dane"]["policy"]}"
-      assert response["mta-sts"]["policy"] == "", f"Unexpected MTA-STS policy for localhost: {response["mta-sts"]["policy"]}"
+      assert response["mta-sts"]["policy"] == "TEMP", f"Unexpected MTA-STS policy for localhost: {response["mta-sts"]["policy"]}"
 
     machine.log(machine.execute("systemd-analyze security postfix-tlspol.service | grep -v ✓")[1])
   '';

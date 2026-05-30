@@ -9,12 +9,12 @@
   wordnet,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "artha";
   version = "1.0.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/artha/${version}/artha-${version}.tar.bz2";
+    url = "mirror://sourceforge/artha/${finalAttrs.version}/artha-${finalAttrs.version}.tar.bz2";
     sha256 = "034r7vfk5y7705k068cdlq52ikp6ip10w6047a5zjdakbn55c3as";
   };
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     wordnet
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Offline thesaurus based on WordNet";
     homepage = "https://artha.sourceforge.net";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "artha";
   };
-}
+})

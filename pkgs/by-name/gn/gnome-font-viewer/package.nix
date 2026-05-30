@@ -14,15 +14,16 @@
   wrapGAppsHook4,
   gnome,
   harfbuzz,
+  desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-font-viewer";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/gnome-font-viewer-${version}.tar.xz";
-    hash = "sha256-fAGJJcKFdxtV19Gm8VcRwMGT10UO2YceINRPJUhWJAQ=";
+    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major finalAttrs.version}/gnome-font-viewer-${finalAttrs.version}.tar.xz";
+    hash = "sha256-lWSwiMWxUMVOKjp7xwFN7sbuVRJh6YSI+JGx8bjca4A=";
   };
 
   doCheck = true;
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     libxml2
     glib
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -45,24 +47,17 @@ stdenv.mkDerivation rec {
     fribidi
   ];
 
-  # Do not run meson-postinstall.sh
-  preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
-
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-font-viewer";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program that can preview fonts and create thumbnails for fonts";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-font-viewer";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

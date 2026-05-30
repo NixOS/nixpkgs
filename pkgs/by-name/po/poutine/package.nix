@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "poutine";
-  version = "1.0.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "boostsecurityio";
     repo = "poutine";
-    tag = "v${version}";
-    hash = "sha256-Rk4Fd/h83NKIVlz/QXOSLnCKfxfKFXUfvUF5FSjomQY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Gyxwcm45301zmMJWYPwzMPdJwBNsDLXKkmuJHBWZt8=";
   };
 
-  vendorHash = "sha256-qp3Ko+01kk9AH0oCT2Si/si+74gT5KFtPFslwih/IBE=";
+  vendorHash = "sha256-Ktsk01YqBHVZDOu+Xp1p3sVDwqozl35iLYbVavpiWq0=";
 
   ldflags = [
     "-s"
@@ -30,18 +30,18 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} completion bash) \
-      --fish <($out/bin/${meta.mainProgram} completion fish) \
-      --zsh <($out/bin/${meta.mainProgram} completion zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} completion bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} completion fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completion zsh)
   '';
 
   meta = {
     description = "Security scanner that detects misconfigurations and vulnerabilities in build pipelines of repositories";
     homepage = "https://github.com/boostsecurityio/poutine";
-    changelog = "https://github.com/boostsecurityio/poutine/releases/tag/v${version}";
+    changelog = "https://github.com/boostsecurityio/poutine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "poutine";
   };
-}
+})

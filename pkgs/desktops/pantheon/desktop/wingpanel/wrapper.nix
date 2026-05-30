@@ -3,7 +3,7 @@
   wrapGAppsHook3,
   glib,
   stdenv,
-  xorg,
+  lndir,
   wingpanel,
   wingpanelIndicators,
   switchboard-with-plugs,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs) ++ selectedIndicators;
+  buildInputs = lib.concatMap (x: x.buildInputs) selectedIndicators ++ selectedIndicators;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lndir}/bin/lndir -silent $i $out
     done
   '';
 

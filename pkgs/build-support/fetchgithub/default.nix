@@ -3,9 +3,46 @@
   repoRevToNameMaybe,
   fetchgit,
   fetchzip,
-}:
+}@args:
+let
+  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # The attribute value is their default values.
+  # As fetchFromGitHub prefers fetchzip for hash stability,
+  # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
+  useFetchGitArgsDefault = {
+    deepClone = false;
+    fetchSubmodules = false; # This differs from fetchgit's default
+    fetchLFS = false;
+    forceFetchGit = false;
+    leaveDotGit = null;
+    postCheckout = "";
+    rootDir = "";
+    sparseCheckout = null;
+  };
+  useFetchGitArgsDefaultNullable = {
+    leaveDotGit = false;
+    sparseCheckout = [ ];
+  };
 
-lib.makeOverridable (
+  useFetchGitargsDefaultNonNull = useFetchGitArgsDefault // useFetchGitArgsDefaultNullable;
+
+  # useFetchGitArgsWD to exclude from automatic passing.
+  # Other useFetchGitArgsWD will pass down to fetchgit.
+  excludeUseFetchGitArgNames = [
+    "forceFetchGit"
+  ];
+
+  faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
+
+  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
+
+  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+
+  # fetchzip may not be overridable when using external tools, for example nix-prefetch
+  fetchzip =
+    if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
+in
+decorate (
   {
     owner,
     repo,
@@ -13,28 +50,30 @@ lib.makeOverridable (
     rev ? null,
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
-    fetchSubmodules ? false,
-    leaveDotGit ? null,
-    deepClone ? false,
     private ? false,
-    forceFetchGit ? false,
-    fetchLFS ? false,
-    rootDir ? "",
-    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
     meta ? { },
-    ... # For hash agility
+    ... # For hash agility and additional fetchgit arguments
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
+    lib.xor (tag == null) (rev == null)
+    || throw "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   let
+    useFetchGit =
+      lib.mapAttrs (
+        name: nonNullDefault:
+        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
+          args.${name}
+        else
+          nonNullDefault
+      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
+
+    useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
 
     position = (
       if args.meta.description or null != null then
@@ -49,41 +88,43 @@ lib.makeOverridable (
       meta
       // {
         homepage = meta.homepage or baseUrl;
+        identifiers = {
+          purlParts =
+            if githubBase == "github.com" then
+              {
+                type = "github";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
+              }
+            else
+              {
+                type = "generic";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
+              };
+        }
+        // meta.identifiers or { };
       }
       // lib.optionalAttrs (position != null) {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args [
-      "owner"
-      "repo"
-      "tag"
-      "rev"
-      "fetchSubmodules"
-      "forceFetchGit"
-      "private"
-      "githubBase"
-      "varPrefix"
-    ];
+    passthruAttrs = removeAttrs args (
+      [
+        "owner"
+        "repo"
+        "tag"
+        "rev"
+        "private"
+        "githubBase"
+        "varPrefix"
+      ]
+      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
+    );
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    useFetchGit =
-      fetchSubmodules
-      || (leaveDotGit == true)
-      || deepClone
-      || forceFetchGit
-      || fetchLFS
-      || (rootDir != "")
-      || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
-    fetcher =
-      if useFetchGit then
-        fetchgit
-      # fetchzip may not be overridable when using external tools, for example nix-prefetch
-      else if fetchzip ? override then
-        fetchzip.override { withUnzip = false; }
-      else
-        fetchzip;
+    fetcher = if useFetchGit then fetchgit else fetchzip;
     privateAttrs = lib.optionalAttrs private {
       netrcPhase =
         # When using private repos:
@@ -116,15 +157,9 @@ lib.makeOverridable (
       passthruAttrs
       // (
         if useFetchGit then
-          {
-            inherit
-              tag
-              rev
-              deepClone
-              fetchSubmodules
-              sparseCheckout
-              fetchLFS
-              ;
+          useFetchGitArgsWDPassing
+          // {
+            inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
             derivationArgs = {
@@ -135,7 +170,6 @@ lib.makeOverridable (
                 ;
             };
           }
-          // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
           let
             revWithTag = finalAttrs.rev;

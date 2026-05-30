@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yay";
-  version = "12.5.2";
+  version = "12.5.7";
 
   src = fetchFromGitHub {
     owner = "Jguer";
     repo = "yay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-obLGR4924hzDNJdTy7116oRXIHSOMFm3etV4fqJ+Yfg=";
+    hash = "sha256-ampSNPa/PkYM6zEbukToDDmLQ5Bq9gmxwgD3RsnX3vU=";
   };
 
-  vendorHash = "sha256-Rwws/Uw/gsTUbNLjJJ71DBLjVAH9wbOeb8CxjNmR25c=";
+  vendorHash = "sha256-Lkqrtb37bq1uwIZ4PzJdSM7QOZ28JMyDx68huxHHuGg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

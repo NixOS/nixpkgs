@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-
   # Deps
   gdk-pixbuf,
   glib,
@@ -16,21 +15,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "20250919.1";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
-    tag = finalAttrs.version;
-    hash = "sha256-IbWURGWiCRjTJSD8qPc1TmJeOm/WdCAFuK57laIXfXY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5SXek64kccyUs+vSyA8QCX+UpRSm0aDEZwULYZgmIUw=";
   };
 
-  cargoHash = "sha256-Px/TlR3BhiFCv73v06VNq0/W0bQM/ORRE/9ndv5hbpY=";
+  cargoHash = "sha256-sL6kIkYWnD7QKw/RGMDS9ZZK/LcKtYjFr5pQ6758IuQ=";
 
   # Tests require network access and a running Steam client. Skipping.
   doCheck = false;
 
   nativeBuildInputs = [
+    glib
     pkg-config
     wrapGAppsHook4
   ];
@@ -44,7 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
   ];
 
-  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+  postInstall = ''
+    install -Dm644 assets/org.samrewritten.SamRewritten.gschema.xml \
+      $out/share/glib-2.0/schemas/org.samrewritten.SamRewritten.gschema.xml
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
   passthru.updateScript = nix-update-script { };
 

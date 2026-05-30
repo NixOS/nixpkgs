@@ -6,7 +6,13 @@
   autoPatchelfHook,
   makeWrapper,
   nss,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxext,
+  libxdamage,
+  libx11,
+  libsm,
+  libice,
   desktop-file-utils,
   libpulseaudio,
   libgcrypt,
@@ -68,9 +74,9 @@ let
       libsForQt5.qtwayland
       opencv4WithoutCuda
       pipewire
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libX11
+      libxdamage
+      libxrandr
+      libx11
     ];
 
     dontWrapQtApps = true;
@@ -100,7 +106,7 @@ let
     buildInputs = [
       openssl
       libpulseaudio
-      xorg.libX11
+      libx11
     ];
 
     buildPhase = ''
@@ -126,6 +132,47 @@ let
 
     meta.license = lib.licenses.unfree;
   };
+
+  # Fix for Wayland crash when XSetInputFocus is called
+  wemeet-x11-fix = stdenv.mkDerivation {
+    pname = "wemeet-x11-fix";
+    version = "0-unstable-2025-11-07";
+
+    src = ./wemeet-x11-fix.c;
+
+    dontUnpack = true;
+    dontWrapQtApps = true;
+
+    nativeBuildInputs = [ pkg-config ];
+
+    buildInputs = [
+      libx11
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      $CC $CFLAGS -Wall -Wextra -fPIC -shared \
+        -o libwemeet-x11-fix.so $src \
+        -ldl -lX11
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 ./libwemeet-x11-fix.so $out/lib/libwemeet-x11-fix.so
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Fix for wemeet Wayland XSetInputFocus crash";
+      license = lib.licenses.mit;
+    };
+  };
+
   selectSystem =
     attrs:
     attrs.${stdenv.hostPlatform.system}
@@ -154,10 +201,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     nss
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
-    xorg.libXtst
+    libx11
+    libsm
+    libice
+    libxtst
     desktop-file-utils
     libpulseaudio
     libgcrypt
@@ -232,12 +279,12 @@ stdenv.mkDerivation {
         "--set QT_STYLE_OVERRIDE fusion"
         "--set IBUS_USE_PORTAL 1"
         "--set XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
-        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${xorg.libXext}/lib:${xorg.libXdamage}/lib:${opencv4WithoutCuda}/lib:${xorg.libXrandr}/lib"
+        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${libxext}/lib:${libxdamage}/lib:${opencv4WithoutCuda}/lib:${libxrandr}/lib"
         "--prefix PATH : $out/app/wemeet/bin"
         "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
       ];
       commonWrapperArgs = baseWrapperArgs ++ [
-        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so"
+        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-x11-fix}/lib/libwemeet-x11-fix.so"
         "--run 'if [[ $XDG_SESSION_TYPE == \"wayland\" ]]; then export LD_PRELOAD=${wemeet-wayland-screenshare}/lib/wemeet/libhook.so\${LD_PRELOAD:+:$LD_PRELOAD}; fi'"
       ];
       xwaylandWrapperArgs = baseWrapperArgs ++ [

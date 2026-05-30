@@ -210,7 +210,7 @@ in
               root * ${cfg.ui.package}/dist
               file_server
             }
-            handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
+            handle_path /static/${cfg.ui.package.version}/* {
               root * ${cfg.ui.package}/dist
               file_server
             }
@@ -377,7 +377,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           WorkingDirectory = "${cfg.ui.package}";
-          ExecStart = "${pkgs.nodejs}/bin/node ${cfg.ui.package}/dist/js/server.js";
+          ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} ${cfg.ui.package}/dist/js/server.js";
         };
       };
     };

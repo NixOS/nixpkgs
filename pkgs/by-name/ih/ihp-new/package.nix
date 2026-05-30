@@ -6,19 +6,19 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ihp-new";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "digitallyinduced";
     repo = "ihp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DmaIr9kF+TG24wVNPVufxC74TYMCLziLYS9hCZHBDTc=";
   };
 
   dontConfigure = true;
-  sourceRoot = "${src.name}/ProjectGenerator";
+  sourceRoot = "${finalAttrs.src.name}/ProjectGenerator";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" "${lib.makeBinPath [ git ]}";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Project generator for the IHP (Integrated Haskell Platform) web framework";
     mainProgram = "ihp-new";
     homepage = "https://ihp.digitallyinduced.com";
-    license = licenses.mit;
-    maintainers = [ maintainers.mpscholten ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mpscholten ];
+    platforms = lib.platforms.unix;
   };
-}
+})

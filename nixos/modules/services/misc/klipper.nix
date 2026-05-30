@@ -14,7 +14,14 @@ let
         lib.generators.mkValueStringDefault { } (lib.head l)
       else
         lib.concatMapStrings (s: "\n  ${lib.generators.mkValueStringDefault { } s}") l;
-    mkKeyValue = lib.generators.mkKeyValueDefault { } ":";
+    mkKeyValue =
+      key: value:
+      lib.generators.mkKeyValueDefault { } ":" key (
+        if builtins.isString value && lib.hasInfix "\n" value then
+          "\n  ${lib.replaceString "\n" "\n  " value}"
+        else
+          value
+      );
   };
   firmwareSubmodule = lib.types.submodule (
     { name, ... }@local:

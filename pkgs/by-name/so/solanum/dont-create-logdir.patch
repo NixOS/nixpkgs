@@ -1,13 +1,15 @@
 diff --git a/Makefile.am b/Makefile.am
-index 19e7b396..21093521 100644
+index 99444f6c..1804c50a 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -35,9 +35,6 @@ include/serno.h:
+@@ -34,11 +34,6 @@ include/serno.h:
  		echo '#define DATECODE 0UL' >>include/serno.h; \
  	fi
  
 -install-data-hook:
 -	test -d ${DESTDIR}${logdir} || mkdir -p ${DESTDIR}${logdir}
+-	@# needed for FHS paths:
+-	test -d ${DESTDIR}${pkglocalstatedir} || mkdir -p ${DESTDIR}${pkglocalstatedir}
 -
  install-exec-hook:
  	rm -f ${DESTDIR}${libdir}/*.la

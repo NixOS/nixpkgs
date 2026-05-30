@@ -6,14 +6,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ioztat";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = "ioztat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8svMijgVxSuquPFO2Q2HeqGLdMkwhiujS1DSxC/LRRk=";
   };
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    inherit version;
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs) version;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Storage load analysis tool for OpenZFS";
     longDescription = ''
       ioztat is a storage load analysis tool for OpenZFS. It provides
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       systems -- particularly those with many VMs or containers operating
       essentially independent workloads.
     '';
-    license = licenses.bsd2;
-    platforms = with platforms; linux ++ freebsd;
-    maintainers = with maintainers; [ numinit ];
+    license = lib.licenses.bsd2;
+    platforms = with lib.platforms; linux ++ freebsd;
+    maintainers = with lib.maintainers; [ numinit ];
     mainProgram = "ioztat";
   };
-}
+})

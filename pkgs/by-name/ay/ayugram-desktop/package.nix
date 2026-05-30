@@ -1,8 +1,9 @@
 {
   lib,
-  fetchpatch2,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
+  stdenvNoCC,
   telegram-desktop,
   withWebkit ? true,
 }:
@@ -13,24 +14,22 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "5.16.3";
+      version = "6.7.8";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
-        rev = "aafdac6da465e6498e39e1b55566fc8fe2402843";
-        hash = "sha256-GNFkGw/CxtbeoEMBjExNudBcKFwlfXee5VVnXa4wGko=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-X0g/zl5pJE8S5rkk7o81LiDNClLEMDyHVxmdoO4X9DE=";
         fetchSubmodules = true;
       };
 
-      # fix build failure with Qt 6.10
-      patches = fetchpatch2 {
-        name = "fix-build-with-qt-610.patch";
-        url = "https://github.com/desktop-app/cmake_helpers/commit/682f1b57.patch";
-        hash = "sha256-DHwgxAEFc1byQkVvrPwyctQKvUsK/KQ/cnzRv6PQuTM=";
-        stripLen = 1;
-        extraPrefix = "cmake/";
-      };
+      patches =
+        (previousAttrs.patches or [ ])
+        ++ (lib.optional stdenvNoCC.hostPlatform.isDarwin (fetchpatch2 {
+          url = "https://github.com/telegramdesktop/tdesktop/commit/923efd9e7ef8ff72d9b83973502e587682119e54.patch?full_index=1";
+          hash = "sha256-XcmH9SSI3K2SsFjHDEMnKA6YOyWF1kRVJJAWP2/vdf8=";
+        }));
 
       passthru.updateScript = nix-update-script { };
 

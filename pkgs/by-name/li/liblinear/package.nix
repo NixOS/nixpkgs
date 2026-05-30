@@ -7,14 +7,14 @@
 let
   soVersion = "5";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblinear";
   version = "2.47";
 
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "liblinear";
-    rev = "v${builtins.replaceStrings [ "." ] [ "" ] version}";
+    rev = "v${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
     sha256 = "sha256-so7uCc/52NdN0V2Ska8EUdw/wSegaudX5AF+c0xe5jk=";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $dev/include linear.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for large linear classification";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

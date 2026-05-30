@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "honeycomb-refinery";
-  version = "3.0.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "refinery";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jt8aEqglGXzBL5UDOz8e7qRDmE3RnMb2y+eLFI9jJSE=";
+    hash = "sha256-slINvCsw4s5I9s9LaTXuR/5Rvv1K1qzqNiatwr6p4FM=";
   };
 
-  NO_REDIS_TEST = true;
+  env.NO_REDIS_TEST = true;
 
   patches = [
     # Allows turning off the one test requiring a Redis service during build.
@@ -37,14 +37,13 @@ buildGoModule (finalAttrs: {
     "-X main.BuildID=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-/1IT3GxKANBltetRKxP/jUG05GGbg9mc7aWEcbrwUT0=";
+  vendorHash = "sha256-DxqVKGox3NbRwvkGrW29MbsE4KKK0/Og8uH5hgtgPMo=";
 
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -53,6 +52,9 @@ buildGoModule (finalAttrs: {
     description = "Tail-sampling proxy for OpenTelemetry";
     mainProgram = "refinery";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+      lf-
+    ];
   };
 })

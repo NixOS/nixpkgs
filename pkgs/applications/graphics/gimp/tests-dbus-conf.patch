@@ -1,5 +1,5 @@
---- a/build/meson/run_test_env.sh
-+++ b/build/meson/run_test_env.sh
+--- a/tools/run_test_env.sh
++++ b/tools/run_test_env.sh
 @@ -33,7 +33,7 @@ if [ -n "${UI_TEST}" ]; then
      OPT="--auto-servernum"
    fi

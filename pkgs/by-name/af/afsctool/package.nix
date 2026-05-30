@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-cZ0P9cygj+5GgkDRpQk7P9z8zh087fpVfrYXMRRVUAI=";
   };
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake

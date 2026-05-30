@@ -7,7 +7,7 @@
   iwqr,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwqr";
   version = "0.1.1";
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.kroner.dev";
     owner = "kreny";
     repo = "iwqr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z9CjCJvi6MlZGghZKx13gGSKwUnECAf0cr9P2ABskh0=";
   };
 
@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating qr codes for iwd networks";
     homepage = "https://git.kroner.dev/kreny/iwqr";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "iwqr";
   };
-}
+})

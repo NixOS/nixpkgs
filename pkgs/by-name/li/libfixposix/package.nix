@@ -7,14 +7,14 @@
   getconf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfixposix";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sionescu";
     repo = "libfixposix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5qA6ytbqE+/05XQGxP9/4vEs9gFcuI3k7eJJYucW7fM=";
   };
 
@@ -24,14 +24,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sionescu/libfixposix";
     description = "Thin wrapper over POSIX syscalls and some replacement functionality";
-    license = licenses.boost;
-    maintainers = with maintainers; [
-      orivej
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

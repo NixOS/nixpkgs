@@ -16,12 +16,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.1.12";
+  version = "1.1.13";
   pname = "acsccid";
 
   src = fetchurl {
     url = "mirror://sourceforge/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-KPYHWlSUpWjOL9hmbEifb0pRWZtE+8k5Dh3bSNPMxb0=";
+    sha256 = "sha256-ixmroQPsA8RIudG1YsgyL40v83zyHUy4sM9SLF84XJ8=";
   };
 
   nativeBuildInputs = [

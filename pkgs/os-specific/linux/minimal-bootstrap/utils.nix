@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPlatform,
   callPackage,
   kaem,
@@ -7,6 +8,12 @@
   checkMeta,
 }:
 rec {
+  maybeContentAddressed = lib.optionalAttrs config.contentAddressedByDefault {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
   derivationWithMeta =
     attrs:
     let
@@ -18,6 +25,7 @@ rec {
           inherit (buildPlatform) system;
           inherit (meta) name;
         }
+        // maybeContentAddressed
         // (removeAttrs attrs [
           "meta"
           "passthru"

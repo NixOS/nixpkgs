@@ -6,14 +6,14 @@
   kdePackages,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "krunner-vscodeprojects";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "krunner-vscodeprojects";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-a24MFSXYFR4VVUVMOAY0n0sKqY0L9lUhnpgSeDFtceI=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ js6pak ];
     inherit (kdePackages.krunner.meta) platforms;
   };
-}
+})

@@ -50,24 +50,11 @@ index 162af04..4322049 100644
 +set cscopeprg=@CSCOPE@
  
  " vim: sw=2 ts=2 et
-diff --git a/src/Makefile b/src/Makefile
-index 5b4cdff..72fee3a 100644
---- a/src/Makefile
-+++ b/src/Makefile
-@@ -1290,7 +1290,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
- 		  MacVim/MacVim.m
- MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o \
- 		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o
--MACVIMGUI_DEFS	= -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
-+MACVIMGUI_DEFS	= -DMACOS_X_DARWIN -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
- MACVIMGUI_IPATH	=
- MACVIMGUI_LIBS_DIR =
- MACVIMGUI_LIBS1	=
 diff --git a/src/auto/configure b/src/auto/configure
-index ecf10c4..4b691d0 100755
+index 0487236..da22ff5 100755
 --- a/src/auto/configure
 +++ b/src/auto/configure
-@@ -6247,10 +6247,7 @@ printf "%s\n" "not found" >&6; }
+@@ -6686,10 +6686,7 @@ printf "%s\n" "not found" >&6; }
  
      for path in "${vi_cv_path_mzscheme_pfx}/lib" "${SCHEME_LIB}"; do
        if test "X$path" != "X"; then
@@ -79,7 +66,7 @@ index ecf10c4..4b691d0 100755
  	  MZSCHEME_LIBS="${path}/libmzscheme3m.a"
  	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
  	elif test -f "${path}/libracket3m.a"; then
-@@ -6646,23 +6643,6 @@ printf "%s\n" ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
+@@ -7128,23 +7125,6 @@ printf "%s\n" ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
    fi
  
    if test "x$MACOS_X" = "xyes"; then
@@ -97,13 +84,13 @@ index ecf10c4..4b691d0 100755
 -    if test -n "$PERL"; then
 -      PERL_DIR="$dir"
 -      PERL_CFLAGS="-DFEAT_PERL -I$darwindir/CORE"
--      PERL_OBJ="objects/if_perl.o objects/if_perlsfio.o $darwindir/auto/DynaLoader/DynaLoader.a"
+-      PERL_OBJ="objects/if_perl.o $darwindir/auto/DynaLoader/DynaLoader.a"
 -      PERL_LIBS="-L$darwindir/CORE -lperl"
 -    fi
                  PERL_LIBS=`echo "$PERL_LIBS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
      PERL_CFLAGS=`echo "$PERL_CFLAGS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
    fi
-@@ -6902,13 +6882,7 @@ __:
+@@ -7393,13 +7373,7 @@ __:
  eof
  	    	    eval "`cd ${PYTHON_CONFDIR} && make -f "${tmp_mkf}" __ | sed '/ directory /d'`"
  	    rm -f -- "${tmp_mkf}"
@@ -114,19 +101,11 @@ index ecf10c4..4b691d0 100755
 -		  vi_cv_path_python_plibs="-F${python_PYTHONFRAMEWORKPREFIX} -framework Python"
 -	      fi
 -	    else
-+
++	    if true; then
  	      vi_cv_path_python_plibs="-L${PYTHON_CONFDIR} -lpython${vi_cv_var_python_version}"
  	      	      	      	      if test -n "${python_LINKFORSHARED}" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
  	        python_link_symbol=`echo ${python_LINKFORSHARED} | sed 's/\([^ \t][^ \t]*[ \t][ \t]*[^ \t][^ \t]*\)[ \t].*/\1/'`
-@@ -6923,7 +6897,6 @@ eof
- 	      fi
- 	      vi_cv_path_python_plibs="${vi_cv_path_python_plibs} ${python_BASEMODLIBS} ${python_LIBS} ${python_SYSLIBS} ${python_LINKFORSHARED}"
- 	      	      vi_cv_path_python_plibs=`echo $vi_cv_path_python_plibs | sed s/-ltermcap//`
--	    fi
- 
- fi
- 
-@@ -7004,13 +6977,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
+@@ -7498,13 +7472,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
  printf "%s\n" "no" >&6; }
  	fi
  
@@ -140,7 +119,7 @@ index ecf10c4..4b691d0 100755
  			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if compile and link flags for Python are sane" >&5
  printf %s "checking if compile and link flags for Python are sane... " >&6; }
  	cflags_save=$CFLAGS
-@@ -8060,11 +8026,7 @@ printf "%s\n" "$tclver - OK" >&6; };
+@@ -8593,11 +8560,7 @@ printf "%s\n" "$tclver - OK" >&6; };
  
        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of Tcl include" >&5
  printf %s "checking for location of Tcl include... " >&6; }
@@ -152,7 +131,7 @@ index ecf10c4..4b691d0 100755
        TCL_INC=
        for try in $tclinc; do
  	if test -f "$try/tcl.h"; then
-@@ -8082,13 +8044,8 @@ printf "%s\n" "<not found>" >&6; }
+@@ -8615,13 +8578,8 @@ printf "%s\n" "<not found>" >&6; }
        if test -z "$SKIP_TCL"; then
  	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of tclConfig.sh script" >&5
  printf %s "checking for location of tclConfig.sh script... " >&6; }
@@ -166,9 +145,9 @@ index ecf10c4..4b691d0 100755
  	for try in $tclcnf; do
  	  if test -f "$try/tclConfig.sh"; then
  	    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $try/tclConfig.sh" >&5
-@@ -8285,10 +8242,6 @@ printf "%s\n" "$rubyhdrdir" >&6; }
+@@ -8819,10 +8777,6 @@ printf "%s\n" "$rubyhdrdir" >&6; }
  	rubylibdir=`$vi_cv_path_ruby -r rbconfig -e "print $ruby_rbconfig.expand($ruby_rbconfig::CONFIG['libdir'])"`
- 	if test -f "$rubylibdir/$librubya" || expr "$librubyarg" : "-lruby"; then
+ 	if test -f "$rubylibdir/$librubya" || expr "$librubyarg" : "-lruby" >/dev/null; then
  	  RUBY_LIBS="$RUBY_LIBS -L$rubylibdir"
 -        elif test "$vi_cv_path_ruby" = "/usr/bin/ruby" -a -d "/System/Library/Frameworks/Ruby.framework"; then
 -                        RUBY_LIBS="-framework Ruby"
@@ -177,25 +156,3 @@ index ecf10c4..4b691d0 100755
  	fi
  
  	if test "X$librubyarg" != "X"; then
-diff --git a/src/vim.h b/src/vim.h
-index 6e33142..6185f45 100644
---- a/src/vim.h
-+++ b/src/vim.h
-@@ -270,17 +270,6 @@
- # define SUN_SYSTEM
- #endif
- 
--// If we're compiling in C++ (currently only KVim), the system
--// headers must have the correct prototypes or nothing will build.
--// Conversely, our prototypes might clash due to throw() specifiers and
--// cause compilation failures even though the headers are correct.  For
--// a concrete example, gcc-3.2 enforces exception specifications, and
--// glibc-2.2.5 has them in their system headers.
--#if !defined(__cplusplus) && defined(UNIX) \
--	&& !defined(MACOS_X) // MACOS_X doesn't yet support osdef.h
--# include "auto/osdef.h"	// bring missing declarations in
--#endif
--
- #ifdef AMIGA
- # include "os_amiga.h"
- #endif

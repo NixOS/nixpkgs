@@ -13,13 +13,13 @@
 buildGoModule (finalAttrs: {
   pname = "opengist";
 
-  version = "1.11.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TlUaen8uCj4Ba2gOWG32Gk4KIDvitXai5qv4PTeizYo=";
+    hash = "sha256-MZ7aKT4qmWH4NyT32ZUpBmqqLJYCtLpdlSJHh+h7IPI=";
   };
 
   frontend = buildNpmPackage {
@@ -31,22 +31,15 @@ buildGoModule (finalAttrs: {
       ${lib.getExe jq} '.version = "${finalAttrs.version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
     '';
 
-    # copy pasta from the Makefile upstream, seems to be a workaround of sass
-    # issues, unsure why it is not done in vite:
-    # https://github.com/thomiceli/opengist/blob/05eccfa8e728335514a40476cd8116cfd1ca61dd/Makefile#L16-L19
-    postBuild = ''
-      EMBED=1 npx postcss 'public/assets/embed-*.css' -c public/postcss.config.js --replace
-    '';
-
     installPhase = ''
       mkdir -p $out
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-zBao/EoAolkgMvqQPqN0P2VC4tT6gkQPqIk4HyfXC7o=";
+    npmDepsHash = "sha256-KDdXBE5X+fOuXF/hIkyRHscMmBQ/E0PCUednfEm5i8k=";
   };
 
-  vendorHash = "sha256-NGRJuNSypmIc8G0wMW7HT+LkP5i5n/p3QH8FyU9pF5w=";
+  vendorHash = "sha256-lhDga5shastI7BfnEnekFnUc2L8Ju6LazeqvD7+CK/o=";
 
   tags = [ "fs_embed" ];
 
@@ -71,7 +64,9 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    cp -R ${finalAttrs.frontend}/public/{manifest.json,assets} public/
+    mkdir -p public/.vite
+    cp ${finalAttrs.frontend}/public/.vite/manifest.json public/.vite/manifest.json
+    cp -R ${finalAttrs.frontend}/public/assets public/
   '';
 
   passthru = {

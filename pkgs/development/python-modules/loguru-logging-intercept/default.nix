@@ -6,7 +6,7 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "loguru-logging-intercept";
   version = "0.1.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # no tags on git
   src = fetchPypi {
     pname = "loguru_logging_intercept";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-WBA4vxMQ+7Bs2kivvTc+crvAHVHE3wWPSQgat6fF+YQ=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.mit;
   };
-}
+})

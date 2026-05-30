@@ -30,7 +30,7 @@ let
     );
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pytrainer";
   version = "2.2.1";
   pyproject = true;
@@ -38,7 +38,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
@@ -116,15 +116,15 @@ python.pkgs.buildPythonApplication rec {
       ${python.interpreter} -m unittest
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rycee
       dotlambda
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

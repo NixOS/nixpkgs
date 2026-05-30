@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.14.2";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     tag = "Version_${finalAttrs.version}";
-    hash = "sha256-A2x7Ar/Ihk4iGb7J93hGULtfoI8xidkGtpkVWgicSFI=";
+    hash = "sha256-r1NHutP2b5hq8v/TXyk3WQ7hVmWHVaJPZ200NbC2HLk=";
   };
 
   patches = [ ./pytest-CMakeLists.patch ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${PACKAGE_PREFIX_DIR}/" ""
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = {
     description = "Templatized Header Only C++ Implementation of the Python NumPy Library";

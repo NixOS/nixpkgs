@@ -12,7 +12,7 @@
     };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     let
       aliceUid = toString nodes.machine.users.users.alice.uid;
     in

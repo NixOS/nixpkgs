@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+  nodejs_22,
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -20,26 +21,28 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.14.2";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-YJosHQ2NQAXijPj+6OQJ7zTAOXGNPBqRrhBYQ8moLQ8=";
+    hash = "sha256-eDLHXOKhQBdRWZ9QGAVk4nky8vywYFAjUXCskFTunUo=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-w/LcSiRi4iHEu3gzitqtwfmdyyPIO2ZsLa9bhvEqkRQ=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-+wr86nNT9cT7Qy0gUfkFq0xFQaaWCrDTc1tg7A80pk4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
@@ -81,7 +84,7 @@ buildNpmPackage rec {
     patchShebangs packages/*/node_modules
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
@@ -99,6 +102,7 @@ buildNpmPackage rec {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-schema-types
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
@@ -164,6 +168,11 @@ buildNpmPackage rec {
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+            --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                stdenv.cc.cc.lib
+              ]
+            } \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 

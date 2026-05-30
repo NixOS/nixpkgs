@@ -76,25 +76,26 @@ let
     text = ''
       key "rndc-key" {
         algorithm ${bindRndcMacType};
-        secret "0123456789abcdefghijklmnopqrstuvw=";
+        secret "Ini0XSebb9LrYz7zprobBLZ2iwBEK5S9vh9zj/DozR8=";
       };
     '';
   };
 
+  testFakeDir = "/tmp/test-fake-directory-for-named-checkconf";
+
   confFile = pkgs.writeTextFile {
     name = "named.conf";
     checkPhase = ''
-      runHook preCheck
-      echo "Checking named configuration file...";
-      ${lib.getExe' bindPkg "named-checkconf"} -z $target -t ${cfg.directory}
-      runHook postCheck
+      ${lib.optionalString cfg.checkConfig ''
+        echo "Checking named configuration file...";
+        mkdir -p ${testFakeDir}
+        ${lib.getExe' bindPkg "named-checkconf"} -z $target
+      ''}
+
+      substituteInPlace $target \
+        --replace-fail ${testRndcKey} ${bindRndcKeyFile} \
+        --replace-fail ${testFakeDir} ${cfg.directory}
     '';
-    derivationArgs = {
-      doCheck = true;
-      postCheck = ''
-        substituteInPlace $target --replace-fail ${testRndcKey} ${bindRndcKeyFile}
-      '';
-    };
 
     # The include path in the first line will be replaced in the postCheck hook.
     text = ''
@@ -107,13 +108,17 @@ let
       acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
       options {
-        listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+        listen-on port ${toString cfg.listenOnPort} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
+        } };
+        listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+        } };
         allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
         forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-        directory "${cfg.directory}";
+        directory "${testFakeDir}";
         pid-file "/run/named/named.pid";
         ${cfg.extraOptions}
       };
@@ -319,6 +324,16 @@ in
         '';
       };
 
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Check configuration.
+
+          The configuration will not be checked if you override the config file
+          with `configFile`.
+        '';
+      };
     };
 
   };

@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = false;
   withDistOutput = false;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
-    repo = "python-proton-vpn-local-agent";
+    repo = "local-agent-rs";
     rev = version;
-    hash = "sha256-rk3wi6q0UDuwh5yhLBqdLYsJxVqhlI+Yc7HZsiAU1Y8=";
+    hash = "sha256-QELvjPJhS8nsQqNucwhMjbwDVg2YiESuhSB1XCN0o90=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-jjSkPgGp3Yvypnlrt9pV1F/K3o2doNteQs1rwr5fhnM=";
+    hash = "sha256-28WEWWI29EYADq/z7C01LxaeBJw8oWiF24iLpduJZ5w=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
@@ -47,6 +47,14 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace scripts/build_wheel.py \
+      --replace-fail 'ARCH = "x86_64"' \
+                     'ARCH = "${stdenv.hostPlatform.uname.processor}"' \
+      --replace-fail 'LIB_PATH = get_lib_path("x86_64-unknown-linux-gnu")' \
+                     'LIB_PATH = get_lib_path("${stdenv.hostPlatform.config}")'
+  '';
+
   postBuild = ''
     ${python.interpreter} scripts/build_wheel.py
     mkdir -p ./dist
@@ -57,11 +65,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Proton VPN local agent written in Rust with Python bindings";
-    homepage = "https://github.com/ProtonVPN/python-proton-vpn-local-agent";
+    homepage = "https://github.com/ProtonVPN/local-agent-rs";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      sebtm
+      anthonyroussel
       rapiteanu
     ];
   };

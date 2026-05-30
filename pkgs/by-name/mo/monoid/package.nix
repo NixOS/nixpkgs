@@ -48,14 +48,14 @@ stdenv.mkDerivation {
     install -m444 -Dt $out/share/doc            Readme.md
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://larsenwork.com/monoid";
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [
-      licenses.ofl
-      licenses.mit
+      lib.licenses.ofl
+      lib.licenses.mit
     ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

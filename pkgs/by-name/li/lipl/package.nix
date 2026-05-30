@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-TA/EP2CJceKNzPBV8K24Pyly1oj3tyIkpdPZJ9Zh81E=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to analyse the output over time of custom shell commands";
     homepage = "https://github.com/yxdunc/lipl";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "lipl";
   };

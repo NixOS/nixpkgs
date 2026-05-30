@@ -14,20 +14,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
-  version = "2.9.4";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-cli-v${finalAttrs.version}";
-    hash = "sha256-A4Y9oRSzUP0Xm4BMXRzG1670GQk4yxxHJRkgIj5ExRg=";
+    hash = "sha256-BH/tQlrmCMAab5LqQ/xl9+A5nCnN8sk6mavvAkajYHM=";
   };
 
-  cargoHash = "sha256-dOiqNmDYOzVadeoDefZauw0zSwuxnl3VO0KeKUJbx0E=";
+  cargoHash = "sha256-QX151ckeSxbZgbFO88zhsvnNnjZffLpR5dDp1Dv1Wlo=";
 
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
     pkg-config
   ];
+
+  # Explicitly enable optional `rustls` dependency.
+  postPatch = ''
+    substituteInPlace crates/tauri/Cargo.toml \
+      --replace-fail 'dep:rustls' 'rustls'
+  '';
 
   buildInputs =
     # Required for tauri-macos-sign and RPM support in tauri-bundler
@@ -39,7 +45,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zstd
     ];
 
-  cargoBuildFlags = [ "--package tauri-cli" ];
+  patches = [
+    ./skip-icon-macos.patch
+  ];
+
+  cargoBuildFlags = [
+    "--package"
+    "tauri-cli"
+  ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -49,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     # See ./doc/hooks/tauri.section.md
     hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
+    gst-plugin = callPackage ./gst-plugin.nix { };
 
     tests = {
       hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
@@ -72,7 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
-      dit7ya
       getchoo
       happysalada
     ];

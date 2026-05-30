@@ -36,12 +36,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Broken due to click 8.2.0 update
+    # Fails with `TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_std...`
     # https://github.com/simonw/symbex/issues/48
-    "test_output"
-    "test_replace"
-    "test_replace_errors"
     "test_errors"
+    # Fails with AssertionError (SystemExit(1).stdout is '' not the expected message)
+    "test_output"
   ];
 
   meta = {

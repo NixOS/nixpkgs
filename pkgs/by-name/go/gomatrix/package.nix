@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomatrix";
   version = "101.0.0";
 
   src = fetchFromGitHub {
     owner = "GeertJohan";
     repo = "gomatrix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VeRHVR8InfU+vEw2F/w3KFbNVSKS8ziRlQ98f3cuBfM=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = ''Displays "The Matrix" in a terminal'';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ skykanin ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ skykanin ];
     homepage = "https://github.com/GeertJohan/gomatrix";
     mainProgram = "gomatrix";
   };
-}
+})

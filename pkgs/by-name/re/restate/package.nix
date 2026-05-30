@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.5.3";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5sGVVJ8Y90yJoikQnPeGbZhNlSR/d3EkMct9isSWies=";
+    hash = "sha256-i9P6Lh0Qw4ylUVwAE51UTE5rSDluZafpEmxuAtv0SYQ=";
   };
 
-  cargoHash = "sha256-+Yc7u6q4U4MwT5eHnxHC2DCG66SmEyRfNMeMqSO+GeQ=";
+  cargoHash = "sha256-LfLqScEqBJK9s+xRg2Ah1OnBEDQjXQ9LgJGusmxEDfk=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -76,6 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Have to be set to dynamically link librdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+
+    # krb5-src contains K&R-style C code incompatible with GCC 14's default C23 standard;
+    # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
+    NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=int-conversion";
   };
 
   nativeBuildInputs = [
@@ -100,13 +104,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Error: deadline has elapsed
-    "--skip replicated_loglet"
-
+    "--skip"
+    "replicated_loglet"
     # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
-
+    "--skip"
+    "fast_forward_over_trim_gap"
     # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
+    "--skip"
+    "restatectl_smoke_test"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -114,7 +119,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

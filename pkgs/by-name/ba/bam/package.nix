@@ -6,14 +6,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bam";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "matricks";
     repo = "bam";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "13br735ig7lygvzyfd15fc2rdygrqm503j6xj5xkrl1r7w2wipq6";
   };
 
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     cp bam "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another build manager";
     mainProgram = "bam";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.zlib;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.zlib;
     downloadPage = "http://matricks.github.com/bam/";
   };
-}
+})

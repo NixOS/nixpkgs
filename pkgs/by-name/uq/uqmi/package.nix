@@ -39,12 +39,12 @@ stdenv.mkDerivation {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
       mkg20001
     ];

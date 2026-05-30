@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   gphoto2,
   libgphoto2,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     gphoto2
     libgphoto2

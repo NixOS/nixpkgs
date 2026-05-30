@@ -3,9 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  pythonOlder,
-  scandir ? null,
-  typing,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +17,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     six
-  ]
-  ++ lib.optionals (pythonOlder "3.5") [
-    scandir
-    typing
   ];
 
-  meta = with lib; {
+  meta = {
     description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems";
     homepage = "https://pypi.org/project/pathlib2/";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

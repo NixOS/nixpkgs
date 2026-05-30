@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "python-bidi";
-  version = "0.6.6";
+  version = "0.6.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
     tag = "v${version}";
-    hash = "sha256-8erpcrjAp/1ugPe6cOvjH2CVfy2/hO6xg+cfWWUbj0w=";
+    hash = "sha256-IFLuUpOTZgI9KoZmeQKMlNPRQizXuaRhE0k/jk0fZvs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Oqtva9cTHAcuOXr/uPbqZczDbPVr0zeIEr5p6PoJ610=";
+    hash = "sha256-YW5BSnb4wSCTfQZ4ytiAxDmzrkyDAwTt4T1YzcZeiNY=";
   };
 
   buildInputs = [ libiconv ];
@@ -43,5 +43,9 @@ buildPythonPackage rec {
     mainProgram = "pybidi";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    license = lib.licenses.AND [
+      lib.licenses.lgpl3Only
+      lib.licenses.gpl3Only
+    ];
   };
 }

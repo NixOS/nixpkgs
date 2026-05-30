@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     gprbuild-boot
   ];
 
-  meta = with lib; {
+  meta = {
     description = "XML/Ada: An XML parser for Ada";
     homepage = "https://github.com/AdaCore/xmlada";
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
   };
 }

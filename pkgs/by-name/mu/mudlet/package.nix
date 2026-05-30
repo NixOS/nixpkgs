@@ -103,8 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
-  WITH_FONTS = "NO";
-  WITH_UPDATER = "NO";
+  env = {
+    WITH_FONTS = "NO";
+    WITH_UPDATER = "NO";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -168,7 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       wyvie
       pstn
-      cpu
       felixalbrigtsen
     ];
     platforms = with lib.platforms; linux ++ darwin;

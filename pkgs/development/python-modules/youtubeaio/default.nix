@@ -15,20 +15,15 @@
 
 buildPythonPackage rec {
   pname = "youtubeaio";
-  version = "2.1.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-qN2HV30Ds/FUOUG84cbtOgu2wVGeBRbwfYeXiP554g8=";
+    hash = "sha256-GE06T3NSA2JdPSd2kS7rf3abI+b/zegS34n3Oxj2tnE=";
   };
-
-  postPatch = ''
-    substituteInPlace tests/__snapshots__/test_video.ambr \
-      --replace-fail "TzInfo(0)" "TzInfo(UTC)"
-  '';
 
   build-system = [ poetry-core ];
 

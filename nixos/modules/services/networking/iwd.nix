@@ -11,7 +11,6 @@ let
     mkPackageOption
     mkIf
     mkOption
-    types
     recursiveUpdate
     optionalAttrs
     ;
@@ -92,5 +91,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ dtzWill ];
+  meta.maintainers = [ ];
 }

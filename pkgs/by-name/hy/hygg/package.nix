@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hygg";
-  version = "0.1.19";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "kruseio";
     repo = "hygg";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-wxgHlRqe/g9LppWWTzft9hTA8heuFvGkKvA7nG2PsxA=";
+    tag = finalAttrs.version;
+    hash = "sha256-lqN8n51nm+FtmlI0PEgTZATE+jWE9Wc+o3Gedrdg/fo=";
   };
 
-  cargoHash = "sha256-JqM7e/xfqZnN3FuXPSEaQRH4yh5hqp2HGYM0YIcnaW4=";
+  cargoHash = "sha256-x8aZKyqLaR1cdLx9JofbXGLKwgNDWORqEi2UdcSOAzI=";
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ## Skipping this test due to the high variability of its outcome
   ## When the package was merged the test was passing but on hydra its not
   ## Look at PR #448907
-  ++ (if pkgs.stdenv.isDarwin then [ "--skip=test_stdin_processing" ] else [ ]);
+  ++ (if pkgs.stdenv.hostPlatform.isDarwin then [ "--skip=test_stdin_processing" ] else [ ]);
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

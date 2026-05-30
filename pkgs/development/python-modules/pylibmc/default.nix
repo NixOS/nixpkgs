@@ -4,7 +4,6 @@
   cyrus_sasl,
   fetchPypi,
   libmemcached,
-  pythonOlder,
   zlib,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pylibmc";
   version = "1.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibmc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quick and small memcached client for Python";
     homepage = "http://sendapatch.se/projects/pylibmc/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

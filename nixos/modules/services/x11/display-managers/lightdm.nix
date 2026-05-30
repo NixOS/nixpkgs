@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -72,8 +73,8 @@ let
 
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  meta = {
+    teams = [ lib.teams.pantheon ];
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -156,7 +157,7 @@ in
       };
 
       background = mkOption {
-        type = types.either types.path (types.strMatching "^#[0-9]{6}$");
+        type = types.either types.path (types.strMatching "^#[0-9A-Fa-f]{6}$");
         # Manual cannot depend on packages, we are actually setting the default in config below.
         defaultText = literalExpression "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
@@ -215,22 +216,24 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.displayManager.preStart =
+    services.displayManager.generic.preStart =
       optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null)
         ''
           ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
         '';
 
     # setSessionScript needs session-files in XDG_DATA_DIRS
-    services.displayManager.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
+    services.displayManager.generic.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
 
     # setSessionScript wants AccountsService
     systemd.services.display-manager.wants = [
       "accounts-daemon.service"
     ];
 
+    services.displayManager.generic.enable = true;
+
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-    services.displayManager.execCmd = ''
+    services.displayManager.generic.execCmd = ''
       export PATH=${lightdm}/sbin:$PATH
       exec ${lightdm}/sbin/lightdm
     '';
@@ -277,42 +280,201 @@ in
 
     security.polkit.enable = true;
 
-    security.pam.services.lightdm.text = ''
-      auth      substack      login
-      account   include       login
-      password  substack      login
-      session   include       login
-    '';
+    security.pam.services.lightdm = {
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+          {
+            name = "time";
+            # https://github.com/elementary/switchboard-plug-parental-controls/blob/8.0.1/src/daemon/Server.vala#L325
+            enable = config.services.pantheon.parental-controls.enable;
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_time.so";
+            # Must specify conffile since pam_time defaults to ${linux-pam}/etc/security/time.conf.
+            settings.conffile = "/etc/security/time.conf";
+          }
+        ];
+        password = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+      };
+    };
 
-    security.pam.services.lightdm-greeter.text = ''
-      auth     required       pam_succeed_if.so audit quiet_success user = lightdm
-      auth     optional       pam_permit.so
+    security.pam.services.lightdm-greeter = {
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "lightdm-user";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+            settings.audit = true;
+            settings.quiet_success = true;
+            args = lib.mkAfter [
+              "user"
+              "="
+              "lightdm"
+            ];
+          }
+          {
+            name = "permit";
+            control = "optional";
+            modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+          }
+        ];
 
-      account  required       pam_succeed_if.so audit quiet_success user = lightdm
-      account  sufficient     pam_unix.so
+        account = utils.pam.autoOrderRules [
+          {
+            name = "lightdm-user";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+            settings.audit = true;
+            settings.quiet_success = true;
+            args = lib.mkAfter [
+              "user"
+              "="
+              "lightdm"
+            ];
+          }
+          {
+            name = "unix";
+            control = "sufficient";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          }
+        ];
 
-      password required       pam_deny.so
+        password = utils.pam.autoOrderRules [
+          {
+            name = "deny";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
+          }
+        ];
 
-      session  required       pam_succeed_if.so audit quiet_success user = lightdm
-      session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-      session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-      session  optional       pam_keyinit.so force revoke
-      session  optional       pam_permit.so
-    '';
+        session = utils.pam.autoOrderRules [
+          {
+            name = "lightdm-user";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+            settings.audit = true;
+            settings.quiet_success = true;
+            args = lib.mkAfter [
+              "user"
+              "="
+              "lightdm"
+            ];
+          }
+          {
+            name = "env";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+            settings.conffile = "/etc/pam/environment";
+            settings.readenv = 0;
+          }
+          {
+            name = "systemd";
+            control = "optional";
+            modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+          }
+          {
+            name = "keyinit";
+            control = "optional";
+            modulePath = "${config.security.pam.package}/lib/security/pam_keyinit.so";
+            settings.force = true;
+            settings.revoke = true;
+          }
+          {
+            name = "permit";
+            control = "optional";
+            modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+          }
+        ];
+      };
+    };
 
-    security.pam.services.lightdm-autologin.text = ''
-      auth      requisite     pam_nologin.so
+    security.pam.services.lightdm-autologin = {
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "nologin";
+            control = "requisite";
+            modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+          }
+          {
+            name = "lightdm-normal-user";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+            settings.quiet = true;
+            args = lib.mkBefore [
+              "uid"
+              ">="
+              "1000"
+            ];
+          }
+          {
+            name = "permit";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+          }
+        ];
 
-      auth      required      pam_succeed_if.so uid >= 1000 quiet
-      auth      required      pam_permit.so
+        account = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "sufficient";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          }
+        ];
 
-      account   sufficient    pam_unix.so
+        password = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "requisite";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            settings.nullok = true;
+            settings.yescrypt = true;
+          }
+        ];
 
-      password  requisite     pam_unix.so nullok yescrypt
-
-      session   optional      pam_keyinit.so revoke
-      session   include       login
-    '';
+        session = utils.pam.autoOrderRules [
+          {
+            name = "keyinit";
+            control = "optional";
+            modulePath = "${config.security.pam.package}/lib/security/pam_keyinit.so";
+            settings.revoke = true;
+          }
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+      };
+    };
 
     users.users.lightdm = {
       home = "/var/lib/lightdm";

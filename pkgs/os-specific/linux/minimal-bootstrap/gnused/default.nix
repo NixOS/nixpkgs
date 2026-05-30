@@ -22,6 +22,11 @@ let
     url = "mirror://gnu/sed/sed-${version}.tar.gz";
     hash = "sha256-20XNY/0BDmUFN9ZdXfznaJplJ0UjZgbl5ceCk3Jn2YM=";
   };
+
+  # config.sub was generated with outdated autotools, which get confused by
+  # 4-component target tuples
+  fakeBuildPlatform = lib.strings.removeSuffix "-musl" buildPlatform.config;
+  fakeHostPlatform = lib.strings.removeSuffix "-musl" hostPlatform.config;
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -52,14 +57,15 @@ bash.runCommand "${pname}-${version}"
     export CC="tcc -B ${tinycc.libs}/lib"
     export LD=tcc
     ./configure \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform} \
+      --host=${fakeHostPlatform} \
       --disable-shared \
       --disable-nls \
       --disable-dependency-tracking \
       --prefix=$out
 
     # Build
+    # NOTE: parallel build (-j) under tcc-musl is unstable; keep serial.
     make AR="tcc -ar"
 
     # Install

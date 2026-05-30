@@ -18,7 +18,7 @@
   libadwaita,
   libgee,
   libgtop,
-  libX11,
+  libx11,
   linuxPackages,
   live-chart,
   pciutils,
@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-monitor";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "monitor";
     tag = finalAttrs.version;
-    hash = "sha256-pFyDC22YzThHPElBt/JjFP1A8hoCw9QoIjS2Re8Se9w=";
+    hash = "sha256-VlyIK7UJEHw7vvc9WEHooPSPl8OQ5ZcBrjtYrI3Qx/w=";
   };
 
   strictDeps = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libgee
     libgtop
-    libX11
+    libx11
     linuxPackages.nvidia_x11.settings.libXNVCtrl
     live-chart
     pciutils
@@ -69,14 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [ "-Dindicator-wingpanel=enabled" ];
-
-  postPatch = ''
-    # Fix build with Vala 0.56.18
-    # https://github.com/elementary/monitor/issues/444
-    for i in $(find src/Resources -type f -name "*.vala"); do
-      substituteInPlace $i --replace-warn "[Compact]" ""
-    done
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

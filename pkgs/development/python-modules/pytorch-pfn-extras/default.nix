@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -15,21 +16,21 @@
 
   # tests
   onnx,
+  pyparsing,
   pytestCheckHook,
   torchvision,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-pfn-extras";
-  version = "0.8.4";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
-    tag = "v${version}";
-    hash = "sha256-OrUYO0V5fWqkIjHiYkhvjeFy0YX8CxeRqzrw3NfGK2A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4XS2Poa8lUQM0p3vks77e/HSlhaxbZOsORUyk4Iqvyw=";
   };
 
   build-system = [ setuptools ];
@@ -44,10 +45,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     onnx
     pytestCheckHook
+    pyparsing
     torchvision
   ];
 
-  pytestFlags = [
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: `torch.jit.script` is not supported in Python 3.14+ and may break.
+    # Please switch to `torch.compile` or `torch.export`.
     "-Wignore::DeprecationWarning"
   ];
 
@@ -68,6 +72,19 @@ buildPythonPackage rec {
     # RuntimeError: Dynamo is not supported on Python 3.13+
     "test_register"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: 'Ensure' object has no attribute '__annotations__'. Did you mean: '__annotate_func__'?
+    "test_torchscript_module"
+
+    # TypeError: cannot pickle '_contextvars.Context' object
+    "test_record_iterable_with_multiprocessing"
+
+    # TypeError: cannot pickle '_thread.lock' object
+    "test_report_from_other_process"
+
+    # AssertionError: assert 'foo' in {}
+    "test_global_summary"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # torch.distributed was not available on darwin at one point; revisit
     "test_create_distributed_evaluator"
@@ -85,6 +102,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_as_output.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export_testcase.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_helper.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_lax.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_load_model.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
@@ -115,7 +133,7 @@ buildPythonPackage rec {
   meta = {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
-    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${src.tag}";
+    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     badPlatforms = [
@@ -123,4 +141,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

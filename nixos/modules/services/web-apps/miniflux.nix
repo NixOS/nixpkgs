@@ -13,7 +13,6 @@ let
     types
     literalExpression
     mkIf
-    mkDefault
     ;
   cfg = config.services.miniflux;
 
@@ -64,8 +63,13 @@ in
               example = "127.0.0.1:8080, 127.0.0.1:8081";
             };
             DATABASE_URL = mkOption {
-              type = types.str;
-              defaultText = "user=miniflux host=/run/postgresql dbname=miniflux";
+              type = types.nullOr types.str;
+              defaultText = literalExpression ''
+                if createDatabaseLocally then "user=miniflux host=/run/postgresql dbname=miniflux" else null
+              '';
+              default =
+                if cfg.createDatabaseLocally then "user=miniflux host=/run/postgresql dbname=miniflux" else null;
+
               description = ''
                 Postgresql connection parameters.
                 See [lib/pq](https://pkg.go.dev/github.com/lib/pq#hdr-Connection_String_Parameters) for more details.
@@ -116,9 +120,6 @@ in
         message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
       }
     ];
-    services.miniflux.config = {
-      DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
-    };
 
     services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
@@ -148,7 +149,10 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
+      requires = lib.optionals cfg.createDatabaseLocally [
+        "miniflux-dbsetup.service"
+        "postgresql.target"
+      ];
       after = [
         "network.target"
       ]
@@ -202,20 +206,23 @@ in
         UMask = "0077";
       };
 
-      environment = lib.mapAttrs (_: toString) cfg.config;
+      environment = lib.mapAttrs (_: toString) (lib.filterAttrs (_: v: v != null) cfg.config);
     };
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor.policies."bin.miniflux".profile = ''
+      abi <abi/4.0>,
       include <tunables/global>
-      ${cfg.package}/bin/miniflux {
+
+      profile ${cfg.package}/bin/miniflux {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
         include <abstractions/golang>
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
-        r ${cfg.package}/bin/miniflux,
-        rw /run/miniflux/**,
+        ${cfg.package}/bin/miniflux r,
+        /run/miniflux/** rw,
+        include if exists <local/bin.miniflux>
       }
     '';
   };

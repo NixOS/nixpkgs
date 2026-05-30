@@ -5,7 +5,6 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -16,7 +15,6 @@
   catch2,
   numpy,
   pytestCheckHook,
-  libxcrypt,
   makeSetupHook,
 }:
 let
@@ -28,9 +26,10 @@ let
       pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
+    meta.license = lib.licenses.mit;
   } ./pybind11-setup-hook.sh;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybind11";
   version = "2.13.6";
   pyproject = true;
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 
@@ -51,7 +50,6 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
@@ -114,7 +112,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
@@ -128,4 +126,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

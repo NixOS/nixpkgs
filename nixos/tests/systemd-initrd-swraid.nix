@@ -23,12 +23,7 @@
         mdadm
         e2fsprogs
       ]; # for mdadm and mkfs.ext4
-      boot.swraid = {
-        enable = true;
-        mdadmConf = ''
-          ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
-        '';
-      };
+      boot.swraid.enable = true;
       environment.etc."mdadm.conf".text = ''
         MAILADDR test@example.com
       '';
@@ -64,12 +59,12 @@
     assert "hello" in machine.succeed("cat /test")
     assert "md0" in machine.succeed("cat /proc/mdstat")
 
-    expected_config = """MAILADDR test@example.com
+    # Verify the RAID array was properly auto-detected and assembled
+    detail = machine.succeed("mdadm --detail /dev/md0")
+    assert "raid1" in detail, f"Expected raid1 in mdadm detail output: {detail}"
+    assert "/dev/vdb" in detail, f"Expected /dev/vdb in array: {detail}"
+    assert "/dev/vdc" in detail, f"Expected /dev/vdc in array: {detail}"
 
-    ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
-    """
-    got_config = machine.execute("cat /etc/mdadm.conf")[1]
-    assert expected_config == got_config, repr((expected_config, got_config))
     machine.wait_for_unit("mdmonitor.service")
   '';
 }

@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Steam Achievement Manager for Linux";
@@ -83,6 +83,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # the libsteam_api.so supports only x86_64-linux
     platforms = [ "x86_64-linux" ];
     mainProgram = "samira";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 })

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mod";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s/i2S1BbIUEXclQlv0uXlzjEvrT+udo0uzec2Una0uY=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/mod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated Semantic Import Versioning Upgrades for Go";
     mainProgram = "mod";
     longDescription = ''
@@ -29,8 +29,8 @@ buildGoModule rec {
       Modules.
     '';
     homepage = "https://github.com/marwan-at-work/mod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

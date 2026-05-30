@@ -13,24 +13,21 @@
   webkitgtk_4_1,
   versionCheckHook,
   nix-update-script,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.29.0";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RFNROdPfJksxK5tOP1LOlV/di8AyeJbxwaIoWaZEaVU=";
+    hash = "sha256-xs8UmHKtu+fzNrw77JAifkxDOAx1w/UUKK/4rhWjf2I=";
   };
 
-  cargoRoot = "src-tauri";
-
-  buildAndTestSubdir = "src-tauri";
-
-  cargoHash = "sha256-AdatJNDqIoRHfaf81iFhOs2JGLIxy7agFJj96bFPj00=";
+  cargoHash = "sha256-iEWdN6xVXrZiAcsung9LrsTsJdx3cnlr6x3NMrKSi+k=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs)
@@ -39,13 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-ehXGLpCCN+BNqtwjEatcfR0kQHj5WOofTDR5mLSVW0U=";
+    hash = "sha256-jAzIaLRACIDjsn8bHTr3erBoC/02jz8xhyHpFxwH+Y4=";
   };
-
-  patches = [
-    # Remove after https://github.com/gulbanana/gg/pull/68 is released
-    ./update-tauri-npm-to-match-cargo.patch
-  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -62,6 +54,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
+  ];
+
+  nativeCheckInputs = [
+    # Failing tests: Could not execute the git process, found in the OS path 'git'
+    gitMinimal
+  ];
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Attempted to create a NULL object.
+    "--skip=web::tests::integration_test"
   ];
 
   env.OPENSSL_NO_VENDOR = true;

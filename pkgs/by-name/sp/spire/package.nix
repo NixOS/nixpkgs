@@ -2,12 +2,13 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   openssl,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.13.3";
+  version = "1.15.0";
 
   outputs = [
     "out"
@@ -20,12 +21,12 @@ buildGoModule (finalAttrs: {
     owner = "spiffe";
     repo = "spire";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Qph36DNnhZbO+bn1WnvBkWOWeCSusC0vrvZV1G32kFw=";
+    sha256 = "sha256-mOYPVvumMIXgfJGQeStU62DlBOIwI0Sav5cQonU28r0=";
   };
 
   # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
   proxyVendor = true;
-  vendorHash = "sha256-hkUA9L4lTSv7s/HtD1XOf07Hhk7ob2n/GCS+LnOSasI=";
+  vendorHash = "sha256-F9M7Tvo/yF1QVnjB7Gp3mbZc7159Dx7wgttjstkA/1w=";
 
   buildInputs = [ openssl ];
 
@@ -84,6 +85,10 @@ buildGoModule (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) spire;
+  };
 
   meta = {
     description = "SPIFFE Runtime Environment";

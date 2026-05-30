@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   text-unidecode,
   unidecode,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-slugify";
   version = "8.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "un33k";
@@ -37,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slugify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Slugify application that handles Unicode";
     mainProgram = "slugify";
     homepage = "https://github.com/un33k/python-slugify";
     changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

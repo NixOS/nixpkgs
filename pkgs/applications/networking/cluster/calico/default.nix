@@ -14,16 +14,16 @@ builtins.mapAttrs
     }:
     buildGoModule rec {
       inherit pname;
-      version = "3.30.4";
+      version = "3.31.5";
 
       src = fetchFromGitHub {
         owner = "projectcalico";
         repo = "calico";
         rev = "v${version}";
-        hash = "sha256-WhEdSmJxTLOYke7Jszca+P7dWCLs9tZF074Okl4vDpw=";
+        hash = "sha256-HdTnERSuqJ2ORijvI8AbzLGTwXaRl349p9onKgH4HE8=";
       };
 
-      vendorHash = "sha256-W+rHPYCuP9rK/f8yYutP4Cac8cJ6XKtoVAxCeqPtpsM=";
+      vendorHash = "sha256-LwOEshx4VU+a0oBlq/881RC/ViQVDnZZlZs/U3BMJ7M=";
 
       inherit doCheck subPackages;
 
@@ -37,7 +37,7 @@ builtins.mapAttrs
         changelog = "https://github.com/projectcalico/calico/releases/tag/v${version}";
         description = "Cloud native networking and network security";
         license = lib.licenses.asl20;
-        maintainers = with lib.maintainers; [ urandom ];
+        maintainers = [ ];
         platforms = lib.platforms.linux;
         inherit mainProgram;
       };

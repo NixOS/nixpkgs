@@ -109,6 +109,7 @@ in
 
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
+      services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -123,6 +124,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.power-profiles-daemon.enable = mkDefault true;
@@ -173,6 +175,7 @@ in
             cinnamon-translations
 
             # utils needed by some scripts
+            inxi
             killall
 
             # session requirements
@@ -270,6 +273,7 @@ in
           gnome-calendar
           gnome-screenshot
           file-roller
+          gucharmap
         ] config.environment.cinnamon.excludePackages;
     })
   ];

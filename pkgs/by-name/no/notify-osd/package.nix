@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    ''--libexecdir=$(out)/bin''
+    "--libexecdir=$(out)/bin"
   ];
 
   preFixup = ''

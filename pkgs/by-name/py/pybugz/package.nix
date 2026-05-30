@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pybugz";
   version = "0.14";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "williamh";
     repo = "pybugz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rhiCQPSh987QEM4aMd3R/7e6l+pm2eJDE7f5LckIuho=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

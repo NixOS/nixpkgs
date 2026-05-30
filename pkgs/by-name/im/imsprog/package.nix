@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imsprog";
-  version = "1.6.2";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "bigbigmdm";
     repo = "IMSProg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5aDQgpZ8sS7YZAE/L0WH1nnlBZY7R68XbsAssWkGTYQ=";
+    hash = "sha256-VV4qlMd4hj37AIRSMY/EzbJEz3gRLb9Q38ujwQddi0M=";
   };
 
   strictDeps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/bigbigmdm/IMSProg/releases/tag/v${finalAttrs.version}";
-    description = "Free I2C EEPROM programmer tool for CH341A device";
+    description = "Free I2C, MicroWire and SPI EEPROM/Flash chip programmer tool for CH341A device";
     homepage = "https://github.com/bigbigmdm/IMSProg";
     license = with lib.licenses; [
       gpl3Plus

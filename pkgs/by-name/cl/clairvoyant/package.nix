@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clairvoyant";
-  version = "3.1.10";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "clairvoyant";
     rev = finalAttrs.version;
-    hash = "sha256-CSORiNPqzliIpslV28NRPs/+bc9iblsLTPOm1WxxTjc=";
+    hash = "sha256-3TdtSa8RQkeUvw+oesHruyy7S/WnsX7FXWnDLowbEkg=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ask questions, get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "com.github.cassidyjames.clairvoyant";
+    mainProgram = "com.cassidyjames.clairvoyant";
     teams = [ lib.teams.gnome-circle ];
   };
 })

@@ -10,15 +10,15 @@
   viceroy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fastly";
-  version = "12.1.0";
+  version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-P5n1CWGVu5rdfLOlKgnx5JtwDoI35y3zlvcqp48vQ7g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bNdTvjWs43qO3gAtaKZR5CgGmOnJmNWrJUbm6Xv+q+g=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -35,7 +35,7 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-ff65Vi0BmYF72MbrMmFzqDTXQWaEtaBQaPdLub8ZToo=";
+  vendorHash = "sha256-gR8FIVk+D40ALLdM+AzMkIUWLsBlWgoLp3DfEQa3a0s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
+    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${finalAttrs.version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
     "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
     "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
@@ -76,14 +76,14 @@ buildGoModule rec {
       --zsh <($out/bin/fastly --completion-script-zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for interacting with the Fastly API";
     homepage = "https://github.com/fastly/cli";
-    changelog = "https://github.com/fastly/cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fastly/cli/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ereslibre
     ];
     mainProgram = "fastly";
   };
-}
+})

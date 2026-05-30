@@ -9,7 +9,7 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-zstd";
   version = "0.1.1";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "notabug.org";
     owner = "guile-zstd";
     repo = "guile-zstd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IAyDoqb7qHAy666hxs6CCZrFnfwwV8AaR92XlQQ6FLE=";
   };
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Guile library providing bindings to zstd";
     homepage = "https://notabug.org/guile-zstd/guile-zstd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

@@ -5,27 +5,26 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_37,
+  electron_41,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  vulkan-loader,
   which,
 }:
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.6.11";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-jx58Bg/jMGqf9M/Ss4cYIHtuUmtkej67ScrcttSxNhg=";
+    hash = "sha256-XEu0x9g2mEsmY+vZtazTOzW6KNMRbrxlPck/kPNehmo=";
   };
 
-  npmDepsHash = "sha256-tgLO4EsD3j5mg3c9M+I8jkeytw2ZrgQsKs10aryaFhw=";
+  npmDepsHash = "sha256-urLRj7668NX7CaDWAVxAoOg+c1TmMyvf23Je+RmFwHE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,22 +45,16 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_37.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron_41.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version} \
+        -c.electronDist="$electron_dist" \
+        -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -83,7 +76,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_37}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
@@ -91,7 +84,7 @@ buildNpmPackage rec {
         ]
       } \
       --add-flags "$out/share/teams-for-linux/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
@@ -106,7 +99,7 @@ buildNpmPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "teams-for-linux";
-      exec = "teams-for-linux";
+      exec = "teams-for-linux %U";
       icon = "teams-for-linux";
       desktopName = "Microsoft Teams for Linux";
       comment = meta.description;
@@ -115,17 +108,17 @@ buildNpmPackage rec {
         "InstantMessaging"
         "Chat"
       ];
+      mimeTypes = [ "x-scheme-handler/msteams" ];
     })
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       muscaln

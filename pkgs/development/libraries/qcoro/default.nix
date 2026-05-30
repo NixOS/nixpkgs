@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libpthreadstubs,
+  libpthread-stubs,
   qtbase,
   qtwebsockets,
   wrapQtAppsHook,
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebsockets
-    libpthreadstubs
+    libpthread-stubs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for using C++20 coroutines in connection with certain asynchronous Qt actions";
     homepage = "https://github.com/danvratil/qcoro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ smitop ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ smitop ];
+    platforms = lib.platforms.linux;
   };
 }

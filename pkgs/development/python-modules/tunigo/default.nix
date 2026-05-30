@@ -32,9 +32,9 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python API for the browse feature of Spotify";
     homepage = "https://github.com/trygveaa/python-tunigo";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

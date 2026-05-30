@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "onecache";
-  version = "0.7.1";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "onecache";
     tag = version;
-    hash = "sha256-uUtH2MIsnAa3cC5W1NEecrSScpKsKLFrqz7f3WdAO70=";
+    hash = "sha256-jhyszGKzmMdtPfnjc3VllfF6Zd0MkV66CpL6HiAof/A=";
   };
 
   build-system = [ poetry-core ];

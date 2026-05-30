@@ -9,6 +9,8 @@
   zarith,
   camlp5,
   camlp-streams,
+  pcre2,
+  bash,
 }:
 
 let
@@ -18,12 +20,13 @@ let
       ''
         -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith \
         -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+        -I ${pcre2}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
       ''
     else
       lib.optionalString (num != null) ''
         -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
         -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
-        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs
       '';
 
   start_script = ''
@@ -52,6 +55,8 @@ stdenv.mkDerivation {
 
   patches = [ ./0004-Fix-compilation-with-camlp5-7.11.patch ];
 
+  buildInputs = [ bash ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -61,6 +66,7 @@ stdenv.mkDerivation {
   ];
   propagatedBuildInputs = [
     camlp-streams
+    pcre2
     (if use_zarith then zarith else num)
   ];
 
@@ -71,12 +77,12 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/hol_light"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       vbgl
     ];

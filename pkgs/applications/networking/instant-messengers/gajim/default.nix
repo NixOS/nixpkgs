@@ -31,7 +31,7 @@
   enableRST ? true,
   docutils,
   enableSpelling ? true,
-  gspell,
+  libspelling,
   enableUPnP ? true,
   gupnp-igd,
   enableAppIndicator ? true,
@@ -43,17 +43,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.3.6";
+  version = "2.4.6";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-Mvi69FI2zRefcCnLsurdVNMxYaqKsUCKgeFxOh6vg/o=";
+    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = [
     gtk4
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableSpelling libspelling
   ++ lib.optional enableUPnP gupnp-igd
   ++ lib.optional enableAppIndicator libappindicator-gtk3
   ++ lib.optional enableSoundNotifications gsound;
@@ -112,7 +112,11 @@ python3.pkgs.buildPythonApplication rec {
       qrcode
       sqlalchemy
       emoji
+      httpx
+      h2
+      truststore
     ]
+    ++ httpx.optional-dependencies.socks
     ++ lib.optionals enableE2E [
       pycrypto
       python-gnupg
@@ -145,6 +149,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       raskin
       hlad
+      vbgl
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;

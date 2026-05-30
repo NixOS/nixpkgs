@@ -201,13 +201,16 @@ let
             ''}
 
             ssl_protocols ${cfg.sslProtocols};
-            ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+            ${optionalString (cfg.sslCiphers != null)
+              "ssl_ciphers ${
+                if lib.isList cfg.sslCiphers then (lib.concatStringsSep ":" cfg.sslCiphers) else cfg.sslCiphers
+              };"
+            }
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
 
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
+              ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -573,10 +576,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
-  oldHTTP2 = (
-    versionOlder cfg.package.version "1.25.1"
-    && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic")
-  );
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie"));
 in
 
 {
@@ -778,7 +778,6 @@ in
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
-          For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
       };
 
@@ -968,24 +967,31 @@ in
       };
 
       sslCiphers = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.either types.str (types.listOf types.str));
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305";
-        description = "Ciphers to choose from when negotiating TLS handshakes.";
+        default = [
+          "ECDHE-ECDSA-AES128-GCM-SHA256"
+          "ECDHE-RSA-AES128-GCM-SHA256"
+          "ECDHE-ECDSA-AES256-GCM-SHA384"
+          "ECDHE-RSA-AES256-GCM-SHA384"
+          "ECDHE-ECDSA-CHACHA20-POLY1305"
+          "ECDHE-RSA-CHACHA20-POLY1305"
+        ];
+        description = ''
+          List of available cipher suites to choose from when negotiating TLS sessions.
+
+          :::{.warn}
+          This option only handles cipher suites up to TLSv1.2. Use
+          `ssl_conf_command CipherSuites` to configure TLSv1.3 cipher suites.
+          :::
+        '';
       };
 
       sslProtocols = mkOption {
         type = types.str;
         default = "TLSv1.2 TLSv1.3";
-        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
+        example = "TLSv1.3";
         description = "Allowed TLS protocol versions.";
-      };
-
-      sslDhparam = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1287,6 +1293,13 @@ in
   };
 
   imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "sslDhparam" ] ''
+      DHE cipher suites have been removed from the default nginx cipher list.
+
+      No additional configuration is required as ECDHE is used by default already.
+
+      If you wish to use Hybrid PQ key exchange, you can set services.nginx.recommendedTlsSettings = true.
+    '')
     (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
@@ -1371,27 +1384,6 @@ in
           message = ''
             Options services.nginx.service.virtualHosts.<name>.proxyPass and
             services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
-          message = ''
-            services.nginx.enableQuicBPF requires using nginxQuic package,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
-          '';
-        }
-
-        {
-          assertion =
-            cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic"
-            -> all (host: !host.quic) (attrValues virtualHosts);
-          message = ''
-            services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
-            which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-            `services.nginx.package = pkgs.angieQuic;`.
           '';
         }
 

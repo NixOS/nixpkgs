@@ -4,61 +4,63 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (8.0.2)
+    activesupport (8.1.3)
       base64
-      benchmark (>= 0.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.3.1)
       connection_pool (>= 2.2.5)
       drb
       i18n (>= 1.6, < 2)
+      json
       logger (>= 1.4.2)
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    base64 (0.2.0)
-    benchmark (0.4.0)
-    bigdecimal (3.2.0)
-    concurrent-ruby (1.3.5)
-    connection_pool (2.5.3)
-    csv (3.3.4)
+    base64 (0.3.0)
+    bigdecimal (4.1.1)
+    concurrent-ruby (1.3.6)
+    connection_pool (3.0.2)
+    csv (3.3.5)
     drb (2.2.3)
-    gitlab-triage (1.44.5)
+    gitlab-triage (1.50.0)
       activesupport (>= 5.1)
       globalid (~> 1.0, >= 1.0.1)
       graphql (< 2.1.0)
       graphql-client (~> 0.16)
       httparty (~> 0.20.0)
-    globalid (1.2.1)
+    globalid (1.3.0)
       activesupport (>= 6.1)
     graphql (2.0.32)
       base64
-    graphql-client (0.25.0)
+    graphql-client (0.26.0)
       activesupport (>= 3.0)
       graphql (>= 1.13.0)
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    i18n (1.14.7)
+    i18n (1.14.8)
       concurrent-ruby (~> 1.0)
+    json (2.19.3)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0527)
-    minitest (5.25.5)
-    multi_xml (0.7.2)
-      bigdecimal (~> 3.1)
+    mime-types-data (3.2026.0414)
+    minitest (6.0.4)
+      drb (~> 2.0)
+      prism (~> 1.5)
+    multi_xml (0.8.1)
+      bigdecimal (>= 3.1, < 5)
+    prism (1.9.0)
     racc (1.8.1)
     securerandom (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    uri (1.0.3)
+    uri (1.1.1)
 
 PLATFORMS
   ruby
-  x86_64-linux
 
 DEPENDENCIES
   csv!
@@ -66,4 +68,4 @@ DEPENDENCIES
   racc!
 
 BUNDLED WITH
-   2.6.6
+   2.7.2

@@ -21,11 +21,11 @@ let
     else
       throw "unsupported platform";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sagittarius-scheme";
   version = "0.9.12";
   src = fetchurl {
-    url = "https://bitbucket.org/ktakashi/${pname}/downloads/sagittarius-${version}.tar.gz";
+    url = "https://bitbucket.org/ktakashi/sagittarius-scheme/downloads/sagittarius-${finalAttrs.version}.tar.gz";
     hash = "sha256-w6aQkC7/vKO8exvDpsSsLyLXrm4FSKh8XYGJgseEII0=";
   };
   preBuild = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
       -  Replaceable reader
     '';
     homepage = "https://bitbucket.org/ktakashi/sagittarius-scheme";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbe ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbe ];
   };
-}
+})

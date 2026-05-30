@@ -91,7 +91,7 @@ in
 
     systemd.services.tigerbeetle =
       let
-        replicaDataPath = "/var/lib/tigerbeetle/${builtins.toString cfg.clusterId}_${builtins.toString cfg.replicaIndex}.tigerbeetle";
+        replicaDataPath = "/var/lib/tigerbeetle/${toString cfg.clusterId}_${toString cfg.replicaIndex}.tigerbeetle";
       in
       {
         description = "TigerBeetle server";
@@ -101,7 +101,7 @@ in
 
         preStart = ''
           if ! test -e "${replicaDataPath}"; then
-            ${lib.getExe cfg.package} format --cluster="${builtins.toString cfg.clusterId}" --replica="${builtins.toString cfg.replicaIndex}" --replica-count="${builtins.toString cfg.replicaCount}" "${replicaDataPath}"
+            ${lib.getExe cfg.package} format --cluster="${toString cfg.clusterId}" --replica="${toString cfg.replicaIndex}" --replica-count="${toString cfg.replicaCount}" "${replicaDataPath}"
           fi
         '';
 

@@ -7,14 +7,11 @@
   orjson,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bond-async";
   version = "0.2.1";
-
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bond_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/bondhome/bond-async";
     changelog = "https://github.com/bondhome/bond-async/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

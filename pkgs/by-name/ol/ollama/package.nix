@@ -7,6 +7,7 @@
   stdenv,
   addDriverRunpath,
   nix-update-script,
+  coreutils,
 
   cmake,
   gitMinimal,
@@ -32,6 +33,7 @@
   ollama,
   ollama-rocm,
   ollama-cuda,
+  ollama-vulkan,
 
   config,
   # one of `[ null false "rocm" "cuda" "vulkan" ]`
@@ -56,7 +58,7 @@ let
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
-  vulkanRequested = shouldEnable "vulkan" false;
+  vulkanRequested = acceleration == "vulkan";
 
   enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
   enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
@@ -93,12 +95,15 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.4.4/llama/Makefile#L17-L18
+    # - https://github.com/ollama/ollama/blob/v0.21.1/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
+
+    # cuda_cccl and cuda_cudart both have a LICENSE file in their output
+    ignoreCollisions = true;
   };
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
@@ -119,6 +124,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
+    "--set-default OLLAMA_VULKAN '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -135,17 +141,17 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  # don't forget to invalidate all hashes each update
-  version = "0.12.9";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D61jCyOUYXyPgztgEAFHd2oL5IXsO5TnE2AGEHOnows=";
+    hash = "sha256-cSZtbF0oUI7a++baTipF6OUu+w8tBpILzE0Wm1Y6wUk=";
   };
 
-  vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
+  vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
+  proxyVendor = true;
 
   env =
     lib.optionalAttrs enableRocm {
@@ -162,10 +168,12 @@ goBuild (finalAttrs: {
     cmake
     gitMinimal
   ]
-  ++ lib.optionals enableRocm [
-    rocmPackages.llvm.bintools
+  ++ lib.optionals enableRocm (
     rocmLibs
-  ]
+    ++ [
+      rocmPackages.llvm.bintools
+    ]
+  )
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals (enableRocm || enableCuda) [
     makeBinaryWrapper
@@ -182,9 +190,31 @@ goBuild (finalAttrs: {
     ++ lib.optionals enableVulkan vulkanLibs;
 
   # replace inaccurate version number with actual release version
+  # and replace core utils tools from their FHS location to nix store
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    substituteInPlace cmd/launch/openclaw_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+      --replace-fail '/usr/bin/env' '${coreutils}/bin/env' \
+      --replace-fail '/usr/bin/sort' '${coreutils}/bin/sort' \
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    substituteInPlace cmd/launch/hermes_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    substituteInPlace cmd/launch/kimi_test.go \
+       --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+       --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    rm -r app
+  ''
+  # disable tests that fail in sandbox due to Metal init failure
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm ml/backend/ggml/ggml_test.go
+    rm ml/nn/pooling/pooling_test.go
+    rm model/models/nemotronh/model_omni_test.go
   '';
 
   overrideModAttrs = (
@@ -221,19 +251,15 @@ goBuild (finalAttrs: {
     '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.5.11/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.21.1/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
   '';
 
   postFixup =
-    # the app doesn't appear functional at the moment, so hide it
-    ''
-      mv "$out/bin/app" "$out/bin/.ollama-app"
-    ''
     # expose runtime libraries necessary to use the gpu
-    + lib.optionalString (enableRocm || enableCuda) ''
+    lib.optionalString (enableRocm || enableCuda) ''
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
@@ -254,7 +280,8 @@ goBuild (finalAttrs: {
     let
       # Skip tests that require network access
       skippedTests = [
-        "TestPushHandler/unauthorized_push" # Writes to $HOME, se https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -265,17 +292,17 @@ goBuild (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = "HOME";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
       inherit ollama;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit ollama-rocm ollama-cuda;
+      inherit ollama-rocm ollama-cuda ollama-vulkan;
       service = nixosTests.ollama;
       service-cuda = nixosTests.ollama-cuda;
       service-rocm = nixosTests.ollama-rocm;
+      service-vulkan = nixosTests.ollama-vulkan;
     };
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
@@ -293,8 +320,6 @@ goBuild (finalAttrs: {
       if (rocmRequested || cudaRequested || vulkanRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [
-      abysssol
-      dit7ya
       prusnak
     ];
   };

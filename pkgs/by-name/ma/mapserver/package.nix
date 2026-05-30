@@ -28,15 +28,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapserver";
-  version = "8.4.1";
+  version = "8.6.3";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
-    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-Q5PFOA/UGpDbzS0yROBOY6eXSgzx7nzSC+P109FrhvA=";
+    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-PVuoljsDXxDFSB+VVCEmOsSQw8fGR0RaFcaom+W5B2E=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +88,12 @@ stdenv.mkDerivation rec {
     cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
   '';
 
+  # Fix mapscript library reference on Darwin
+  postFixup = lib.optionalString (withPython && stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -change "@rpath/libmapserver.2.dylib" "$out/lib/libmapserver.2.dylib" \
+      $out/${python3.sitePackages}/mapscript/_mapscript.so
+  '';
+
   pythonImportsCheck = [ "mapscript" ];
 
   meta = {
@@ -98,4 +104,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

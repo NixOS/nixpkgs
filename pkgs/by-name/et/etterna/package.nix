@@ -9,7 +9,11 @@
   pkg-config,
   openssl,
   libGLU,
-  xorg,
+  libxvmc,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libx11,
   alsa-lib,
   libjack2,
   libpulseaudio,
@@ -32,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/etternagame/etterna/pull/1396
     ./0001-Add-aarch64-linux-support.patch
+    ./0002-replays-dir-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -49,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libogg
     sse2neon
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libXext # Needed for DPMS
-    xorg.libXvMC
+    libxinerama
+    libxrandr
+    libx11
+    libxext # Needed for DPMS
+    libxvmc
   ];
 
   desktopItems = [
@@ -106,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced cross-platform rhythm game focused on keyboard play";
     homepage = "https://etternaonline.com";
-    changelog = "https://github.com/etternagame/etterna/release/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/etternagame/etterna/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alikindsys ];
     mainProgram = "etterna";

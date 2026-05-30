@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "n2";
-  version = "0-unstable-2025-03-14";
+  version = "0-unstable-2025-11-10";
 
   src = fetchFromGitHub {
     owner = "evmar";
     repo = "n2";
-    rev = "d67d508c389ac2e6961c6f84cd668f05ec7dc7b7";
-    hash = "sha256-eWcN/iK/ToufABi4+hIyWetp2I94Vy4INHb4r6fw+TY=";
+    rev = "b1fead52ccda0c497d816696f23f4099c3e8ec1f";
+    hash = "sha256-9nS/0QrdKeR8uzcKVu8T5pNp/FX5fGmOM/BRLChTR20=";
   };
 
   cargoHash = "sha256-LTgAaTQXW0XEbe+WS47pqSb+eU7FqjdTSO2++C3J5aM=";

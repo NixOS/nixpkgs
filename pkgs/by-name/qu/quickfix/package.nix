@@ -8,14 +8,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickfix";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "quickfix";
     repo = "quickfix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fgpwgvyw992mbiawgza34427aakn5zrik3sjld0i924a9d17qwg";
   };
 
@@ -50,11 +50,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'UnitTest++' ' '
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
-    license = licenses.free; # similar to BSD 4-clause
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.free; # similar to BSD 4-clause
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

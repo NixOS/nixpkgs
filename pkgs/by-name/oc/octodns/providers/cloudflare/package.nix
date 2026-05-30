@@ -4,7 +4,6 @@
   fetchFromGitHub,
   octodns,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-cloudflare";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-cloudflare";
     tag = "v${version}";
-    hash = "sha256-8ORqUGmbmKQ1QbGLi3TFF9DCgF/raSpSEFZ62NfNAOQ=";
+    hash = "sha256-xVuUmadVhPrsfdEwShacWuf6HvFy280RrBeDjU+869M=";
   };
 
   build-system = [

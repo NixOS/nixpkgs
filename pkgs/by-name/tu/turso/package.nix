@@ -7,34 +7,35 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
-  version = "0.3.2";
+  version = "0.6.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-biElXD4d6h28Nq7LIjuL+at/y69TxnsJzvnEX8cOM9E=";
+    hash = "sha256-32bYI3pWKlQTWZr/AS5aULZt4sgBHMswMBViGlRiwjk=";
   };
 
-  cargoHash = "sha256-G2VowcxnCRulQ4pJcpfJbH73vkG+KIteeUF1Hq8TEZg=";
+  cargoHash = "sha256-bmyMjjjmKeDySDzyOJCtDHF9HD/u/A4Jt2qxpZgHVqY=";
 
   cargoBuildFlags = [
-    "-p"
-    "turso_cli"
+    "--bin"
+    "tursodb"
   ];
+
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
 
   meta = {
     description = "Interactive SQL shell for Turso";
     homepage = "https://github.com/tursodatabase/turso";
-    changelog = "https://github.com/tursodatabase/turso/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/tursodatabase/turso/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "tursodb";

@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kt";
   version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "fgeller";
     repo = "kt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1UGsiMMmAyIQZ62hNIi0uzyX2uNL03EWupIazjznqDc=";
   };
 
@@ -24,12 +24,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Kafka command line tool";
     homepage = "https://github.com/fgeller/kt";
-    maintainers = with maintainers; [ utdemir ];
-    platforms = with platforms; unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ utdemir ];
+    platforms = with lib.platforms; unix;
+    license = lib.licenses.mit;
     mainProgram = "kt";
   };
-}
+})

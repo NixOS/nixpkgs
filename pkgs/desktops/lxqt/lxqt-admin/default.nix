@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-admin";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-admin";
     rev = version;
-    hash = "sha256-FzYKmqCd61jLfbyPknsWuf7KpdF+SoAMqeSEZPOYc8w=";
+    hash = "sha256-SNEOqyLIDlOio4LttsCUgC/EnGcCSDTwPxhJo1lEvJE=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-admin";
     description = "LXQt system administration tool";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

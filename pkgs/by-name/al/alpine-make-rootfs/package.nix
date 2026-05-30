@@ -16,13 +16,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-rootfs";
     tag = "v${version}";
-    hash = "sha256-sNqaMBtbklSBcKxsc3ROI30bE1PUzJJeZqLqC9p3H+U=";
+    hash = "sha256-ktGJXPJK94RbdqcgsA3fA8+MO0inaRcwaDLx18KFo1w=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpinelinux/alpine-make-rootfs";
     description = "Make customized Alpine Linux rootfs (base image) for containers";
     mainProgram = "alpine-make-rootfs";
-    maintainers = with maintainers; [ danielsidhion ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ danielsidhion ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

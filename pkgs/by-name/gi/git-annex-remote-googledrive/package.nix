@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-annex-remote-googledrive";
   version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0rwjcdvfgzdlfgrn1rrqwwwiqqzyh114qddrbfwd46ld5spry6r1";
   };
 
@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
     "git_annex_remote_googledrive"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Git-annex special remote for Google Drive";
     homepage = "https://github.com/Lykos153/git-annex-remote-googledrive";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gravndal ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "git-annex-remote-googledrive";
   };
-}
+})

@@ -20,13 +20,13 @@
   pango,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-chess";
-  version = "49.2";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/gnome-chess-${version}.tar.xz";
-    hash = "sha256-xAoABKRz/nSawvpPrZjbZBGNGPn9msAu7Po2TwPb6bA=";
+    url = "mirror://gnome/sources/gnome-chess/${lib.versions.major finalAttrs.version}/gnome-chess-${finalAttrs.version}.tar.xz";
+    hash = "sha256-otvnxhO0ZykUF0fii7DLhhTlfeFW07ndpqzosBRqW/w=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-chess"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-chess";
     description = "Play the classic two-player boardgame of chess";
     mainProgram = "gnome-chess";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

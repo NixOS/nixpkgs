@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "simple-binary-encoding";
-  version = "1.36.1";
+  version = "1.37.1";
 
   src = fetchFromGitHub {
     owner = "aeron-io";
     repo = "simple-binary-encoding";
     tag = finalAttrs.version;
-    hash = "sha256-BP4JsxW1kTmS7yoqe1FdBDKy5bEzr3VYdfoNy9jTDEA=";
+    hash = "sha256-BYS1rkNPuECEs4Cjt8revUOcd/tCUUghR9JmYMfwqUw=";
   };
 
   nativeBuildInputs = [

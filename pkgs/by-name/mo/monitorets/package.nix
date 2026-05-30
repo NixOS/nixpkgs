@@ -11,7 +11,7 @@
   libadwaita,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "monitorets";
   version = "0.10.1";
   # built with meson, not a python format
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jorchube";
     repo = "monitorets";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Y6cd9Wf2IzHwdxzLUP/U4rervlPUr8s2gKSW8y5I7bg=";
   };
 
@@ -58,4 +58,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

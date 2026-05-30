@@ -5,21 +5,21 @@
   python3Packages,
   stdenv,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mackup";
-  version = "0.9.5";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
-    rev = "${version}";
-    hash = "sha256-10Q0lb2wiDjD4v2yFBvG3tvy9r+/T/ni4QhHUPyxFO0=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-xK/01vnJP8eyyqyeEp7lv+fSN8KdCGIscqjlI32D/xA=";
   };
 
   postPatch = ''
-    substituteInPlace mackup/utils.py \
-      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
+    substituteInPlace src/mackup/utils.py \
+      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"'
   '';
 
   build-system = with python3Packages; [ hatchling ];
@@ -37,10 +37,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Tool to keep your application settings in sync (OS X/Linux)";
-    changelog = "https://github.com/lra/mackup/releases/tag/${version}";
+    changelog = "https://github.com/lra/mackup/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/lra/mackup";
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "mackup";
   };
-}
+})

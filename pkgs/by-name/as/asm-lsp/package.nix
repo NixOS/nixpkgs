@@ -6,17 +6,15 @@
   pkg-config,
   openssl,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asm-lsp";
   version = "0.10.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "asm-lsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vEilIoIK6fxZBhmyDueP2zvbh1/t2wd4cnq/0y6p+TI=";
   };
 
@@ -42,4 +40,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "asm-lsp";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -20,31 +20,24 @@
   rich,
   tqdm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    tag = "v${version}";
-    hash = "sha256-Ms2qoq1fokhUQ1/Wus786oYPT6C2lnHOZ+D7E7qUbjI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eMtkcPvTtdy0gqedCD8NxlC85rDEB9Dam5fIKujEWp4=";
   };
-
-  postPatch =
-    # Environment version v0 for `CliffWalking` is deprecated
-    ''
-      substituteInPlace "tests/test_vec_normalize.py" \
-        --replace-fail "CliffWalking-v0" "CliffWalking-v1"
-    '';
 
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "gymnasium"
   ];
-
   dependencies = [
     cloudpickle
     gymnasium
@@ -69,6 +62,12 @@ buildPythonPackage rec {
     "tests/test_dict_env.py"
     "tests/test_her.py"
     "tests/test_save_load.py"
+
+    # gymnasium.error.DeprecatedEnv: Environment version v3 for `Taxi` is deprecated.
+    # Please use `Taxi-v4` instead.
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-A2C]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-DQN]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-PPO]"
   ];
 
   disabledTests = [
@@ -83,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch version of Stable Baselines, reliable implementations of reinforcement learning algorithms";
     homepage = "https://github.com/DLR-RM/stable-baselines3";
-    changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/v${version}";
+    changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

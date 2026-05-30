@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libiconv";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Owj19Pm064LxUacEC/1v5sb7ki7+SxZZxm6pMydpZeg=";
+    sha256 = "sha256-iN2WqMBGTsoUT8eRrmDNMc2O54Mh5nOX4l/AlcShmqY=";
   };
 
   enableParallelBuilding = true;
@@ -76,7 +76,11 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
   ]
-  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic"
+  # Work around build failure caused by the gnulib workaround for
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870.
+  # remove after gnulib is updated
+  ++ lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
 
   passthru = { inherit setupHooks; };
 

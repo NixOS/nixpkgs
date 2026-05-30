@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gonzo";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "control-theory";
     repo = "gonzo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P8Ntt8Dj5zq+Ff5MkZEvWabk2w5Cm6tXxl3ssMxDNok=";
+    hash = "sha256-fLTZwxZcwh7y83GfuOvG0R6vm/TgKIJjBWbt39mV6H8=";
   };
 
-  vendorHash = "sha256-XKwtq8EF774lHLHtyFzveFa5agJa15CvhsuwwaQdJwU=";
+  vendorHash = "sha256-uYQlZvsLUOmy7P/goNpwTGQrGFMW6LSILC6VjGbNrjI=";
 
   ldflags = [
     "-s"
@@ -33,13 +33,12 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "TUI log analysis tool";
     homepage = "https://gonzo.controltheory.com/";
     downloadPage = "https://github.com/control-theory/gonzo";
-    changelog = "https://github.com/control-theory/gonzo/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/control-theory/gonzo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kpbaks ];
     mainProgram = "gonzo";

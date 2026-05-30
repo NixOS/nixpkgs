@@ -21,6 +21,8 @@ clangStdenv.mkDerivation rec {
   version = "1.0.1";
   pname = "d-SEAMS";
 
+  strictDeps = false;
+
   src = fetchFromGitHub {
     owner = "d-SEAMS";
     repo = "seams-core";
@@ -34,6 +36,8 @@ clangStdenv.mkDerivation rec {
       url = "https://github.com/d-SEAMS/seams-core/commit/f6156057e43d0aa1a0df9de67d8859da9c30302d.patch";
       hash = "sha256-PLbT1lqdw+69lIHH96MPcGRjfIeZyb88vc875QLYyqw=";
     })
+    # Add missing <cstdint> include for uint8_t in vendored cxxopts.
+    ./cxxopts-cstdint.patch
   ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -56,7 +60,7 @@ clangStdenv.mkDerivation rec {
     blas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
     mainProgram = "yodaStruct";
     longDescription = ''
@@ -67,8 +71,8 @@ clangStdenv.mkDerivation rec {
       interface.
     '';
     homepage = "https://dseams.info";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.HaoZeke ];
+    maintainers = [ ];
   };
 }

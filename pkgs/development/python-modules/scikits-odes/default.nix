@@ -17,6 +17,19 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/packages/scikits-odes";
 
+  patches = [
+    # https://github.com/bmcage/odes/pull/205
+    ./numpy24-compat.patch
+  ];
+
+  postPatch = ''
+    # scipy 1.17.x's rewritten VODE integrator have bugs such as:
+    # https://github.com/scipy/scipy/issues/24933
+    # revisit after new scipy release
+    substituteInPlace src/scikits/odes/tests/test_dae.py \
+      --replace-fail "StiffVODECompare," ""
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

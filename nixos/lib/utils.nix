@@ -410,7 +410,7 @@ let
           stringOrDefault (concatStringsSep " | " (
             imap1 (
               index: name:
-              ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
+              "${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})"
             ) (attrNames secrets)
           )) "."
         )
@@ -532,6 +532,41 @@ let
       network = {
         units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
       };
+    };
+
+    /*
+      Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
+      - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
+      and
+      - https://github.com/qemu/qemu/blob/master/scripts/qemu-binfmt-conf.sh
+    */
+    binfmtMagics = import ./binfmt-magics.nix;
+
+    # Utilities for working with the security.pam module (pam.nix)
+    pam = {
+      /*
+        Set up the ordering for a set of PAM rules using an ordered list of rules.
+
+        The input is an ordered list of PAM rules. Each rule is an attrset similar to the options
+        in `security.pam.services.<service>.rules.<rule>`, with two modifications:
+
+        1. The `order` option may not be given.
+        2. The `name` option is required.
+
+        The output is an attrset of rules suitable for `security.pam.services.<service>.rules`.
+
+        The `order` option on the resulting rules will automatically be configured according to the
+        (implied) ordering of the input rules.
+      */
+      autoOrderRules = lib.flip lib.pipe [
+        (lib.imap1 (
+          index: rule:
+          assert lib.assertMsg (!rule ? order) "the 'order' option may not be set when using autoOrderRules";
+          rule // { order = lib.mkDefault (10000 + index * 100); }
+        ))
+        (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
+        lib.listToAttrs
+      ];
     };
   };
 in

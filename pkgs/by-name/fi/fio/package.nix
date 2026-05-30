@@ -5,26 +5,28 @@
   makeWrapper,
   libaio,
   pkg-config,
+  cunit,
   python3,
   zlib,
   withGnuplot ? false,
   gnuplot,
-  withLibnbd ? true,
+  withLibnbd ? stdenv.hostPlatform.isLinux,
   libnbd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fio";
-  version = "3.41";
+  version = "3.42";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
-    rev = "fio-${version}";
-    sha256 = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
+    tag = "fio-${finalAttrs.version}";
+    hash = "sha256-v2A2mY0Lvoje632761urfR7h1KHVcGnVDaKOMjexqis=";
   };
 
   buildInputs = [
+    cunit
     python3
     zlib
   ]
@@ -35,7 +37,10 @@ stdenv.mkDerivation rec {
   # We use $CC instead.
   configurePlatforms = [ ];
 
-  configureFlags = lib.optional withLibnbd "--enable-libnbd";
+  configureFlags = [
+    "--disable-native"
+  ]
+  ++ lib.optional withLibnbd "--enable-libnbd";
 
   dontAddStaticConfigureFlags = true;
 
@@ -50,10 +55,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
-      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
-    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+    substituteInPlace tools/plot/fio2gnuplot \
+      --replace-fail /usr/share/fio $out/share/fio
   '';
 
   pythonPath = [ python3.pkgs.six ];
@@ -63,13 +66,24 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
   '';
 
-  meta = with lib; {
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./unittests/unittest
+
+    runHook postCheck
+  '';
+
+  meta = {
+    changelog = "https://github.com/axboe/fio/releases/tag/${finalAttrs.src.tag}";
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

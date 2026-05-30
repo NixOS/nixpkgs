@@ -12,7 +12,7 @@
   libogg,
   libpng,
   libtheora,
-  libX11,
+  libx11,
   lua5_4,
   minizip,
   openal,
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     libogg
     libpng
     libtheora
-    libX11
+    libx11
     lua5_4
     minizip
     openal

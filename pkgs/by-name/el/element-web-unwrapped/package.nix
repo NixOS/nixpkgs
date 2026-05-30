@@ -2,16 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   jq,
-  yarnConfigHook,
   nodejs,
   jitsi-meet,
+  fetchPnpmDeps,
+  pnpm_10,
+  pnpmConfigHook,
+  faketty,
 }:
 
 let
-  pinData = import ./element-web-pin.nix;
-  inherit (pinData.hashes) webSrcHash webYarnHash;
+  pnpm = pnpm_10;
+
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -22,59 +24,63 @@ let
     meta = removeAttrs previousAttrs.meta [ "knownVulnerabilities" ];
   });
 in
-stdenv.mkDerivation (
-  finalAttrs:
-  removeAttrs pinData [ "hashes" ]
-  // {
-    pname = "element-web";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "element-web";
+  version = "1.12.18";
 
-    src = fetchFromGitHub {
-      owner = "element-hq";
-      repo = "element-web";
-      rev = "v${finalAttrs.version}";
-      hash = webSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "element-hq";
+    repo = "element-web";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G2HEOv1fHVgbT79bo8ibp9VmtQ8o5vA6/i6Q5TUKqdw=";
+  };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = webYarnHash;
-    };
+  pnpmDeps = fetchPnpmDeps {
+    pname = "element";
+    inherit (finalAttrs) version src;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-0iGzjwT+99tvRuxYD+1+SrYrCYAI1dcjhXT3x6E/wHg=";
+  };
 
-    nativeBuildInputs = [
-      yarnConfigHook
-      jq
-      nodejs
-    ];
+  nativeBuildInputs = [
+    jq
+    nodejs
+    pnpm
+    pnpmConfigHook
+    faketty
+  ];
 
-    buildPhase = ''
-      runHook preBuild
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
+  buildPhase = ''
+    runHook preBuild
 
-      export VERSION=${finalAttrs.version}
-      yarn --offline build:res
-      yarn --offline build:module_system
-      yarn --offline build:bundle
+    cd apps/web
 
-      runHook postBuild
-    '';
+    export VERSION=${finalAttrs.version}
+    faketty pnpm run build
 
-    installPhase = ''
-      runHook preInstall
+    runHook postBuild
+  '';
 
-      cp -R webapp $out
-      cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
-      echo "${finalAttrs.version}" > "$out/version"
-      jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
+  installPhase = ''
+    runHook preInstall
 
-      runHook postInstall
-    '';
+    cp -R webapp $out
+    cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
+    echo "${finalAttrs.version}" > "$out/version"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
-    meta = {
-      description = "Glossy Matrix collaboration client for the web";
-      homepage = "https://element.io/";
-      changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
-      teams = [ lib.teams.matrix ];
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.all;
-    };
-  }
-)
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Glossy Matrix collaboration client for the web";
+    homepage = "https://element.io/";
+    changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
+    teams = [ lib.teams.matrix ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.all;
+  };
+})

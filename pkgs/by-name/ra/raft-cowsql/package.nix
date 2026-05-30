@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raft-cowsql";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "raft";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aGw/ATu8Xdjfqa0qWg8Sld9PKCmQsMtZhuNBwagER7M=";
   };
 
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous C implementation of the Raft consensus protocol";
     homepage = "https://github.com/cowsql/raft";
-    license = licenses.lgpl3Only;
-    platforms = platforms.linux;
-    teams = [ teams.lxc ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxc ];
   };
-}
+})

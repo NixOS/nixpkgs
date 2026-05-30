@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "survey";
   version = "5.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

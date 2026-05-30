@@ -19,4 +19,5 @@ nix-update gopeed.libgopeed
 
 curl --fail --silent https://raw.githubusercontent.com/GopeedLab/gopeed/${latestTag}/ui/flutter/pubspec.lock | yq eval --output-format=json --prettyPrint >$PACKAGE_DIR/pubspec.lock.json
 
-$PACKAGE_DIR/update-gitHashes.py
+$(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json
+

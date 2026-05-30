@@ -11,18 +11,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tasks";
-  version = "0.2.0";
+  version = "0.2.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "tasks";
-    tag = version;
-    hash = "sha256-R8wXIw9Gn4uyLoXxyjp/bcK8vK7NkG/chcHe8LtTvo8=";
+    tag = finalAttrs.version;
+    hash = "sha256-u8TYKXFbrF2fseMNGNOBAkgCA53af5gi1PDKS2FIE5I=";
   };
 
-  cargoHash = "sha256-iJutA18TvsWJceacfhzfEQa5zaQBMVC7fmtF1uPN3sQ=";
+  cargoHash = "sha256-96uk8tQgvDbgZTC0ypzWRmWNToCUGnVefPyhI69nxxs=";
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -52,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/cosmic-utils/tasks/releases/tag/${version}";
+    changelog = "https://github.com/cosmic-utils/tasks/releases/tag/${finalAttrs.version}";
     description = "Simple task management application for the COSMIC desktop";
     homepage = "https://github.com/cosmic-utils/tasks";
     license = lib.licenses.gpl3Only;
@@ -63,4 +65,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "tasks";
   };
-}
+})

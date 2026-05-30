@@ -40,15 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pocketsphinx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
     changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${version}/NEWS";
-    license = with licenses; [
-      bsd2
-      bsd3
-      mit
-    ];
-    maintainers = with maintainers; [ jopejoe1 ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        bsd3
+        mit
+      ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

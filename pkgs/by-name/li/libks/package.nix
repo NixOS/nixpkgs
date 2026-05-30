@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libks";
-  version = "2.0.8";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
-    tag = "v${version}";
-    hash = "sha256-cBNNCOm+NcIvozN4Z4XnZWBBqq0LVELVqXubQB4JMTU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oLf1ECSKa6KLTA8MO0le44eEDaLmPz/RHoLa8ZSwjWs=";
   };
 
   patches = [
@@ -63,17 +63,20 @@ stdenv.mkDerivation rec {
   # Something seems to go wrong with testwebsock2 when using parallelism
   enableParallelChecking = false;
 
+  # Some tests require this on Darwin
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     tests.freeswitch = freeswitch;
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
     teams = [ lib.teams.ngi ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
-}
+})

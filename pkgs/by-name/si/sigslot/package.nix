@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sigslot";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "palacaze";
     repo = "sigslot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8JBZ6Xid/uAOfiPKgJKetpj/oBb8lRLPgjkMnrfTKaM=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Header-only, thread safe implementation of signal-slots for C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/palacaze/sigslot";
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
-}
+})

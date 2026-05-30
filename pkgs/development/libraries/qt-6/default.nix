@@ -133,21 +133,8 @@ let
           propagatedBuildInputs = [ makeBinaryWrapper ];
           depsTargetTargetPropagated = [
             (onlyPluginsAndQml qtbase)
-          ]
-          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-            (onlyPluginsAndQml qtwayland)
           ];
-        } ./hooks/wrap-qt-apps-hook.sh
-      ) { };
-
-      wrapQtAppsNoGuiHook = callPackage (
-        { makeBinaryWrapper, qtbase }:
-        makeSetupHook {
-          name = "wrap-qt6-apps-no-gui-hook";
-          propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated = [
-            (onlyPluginsAndQml qtbase)
-          ];
+          meta.license = lib.licenses.mit;
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 
@@ -159,11 +146,13 @@ let
           substitutions = {
             fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
           };
+          meta.license = lib.licenses.mit;
         } ./hooks/qmake-hook.sh
       ) { };
     }
     // lib.optionalAttrs config.allowAliases {
       full = throw "qt6.full has been removed. Please use individual packages instead."; # Added 2025-10-21
+      wrapQtAppsNoGuiHook = lib.warn "wrapQtAppsNoGuiHook is deprecated, use wrapQtAppsHook instead" self.wrapQtAppsHook;
     };
 
   baseScope = makeScopeWithSplicing' {

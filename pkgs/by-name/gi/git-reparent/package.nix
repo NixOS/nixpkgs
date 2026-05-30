@@ -7,7 +7,7 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-reparent";
   version = "0-unstable-2017-09-03";
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Git command to recommit HEAD with a new set of parents";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     mainProgram = "git-reparent";
   };
-}
+})

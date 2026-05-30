@@ -5,7 +5,7 @@
   gitUpdater,
   makeBinaryWrapper,
   pkg-config,
-  asciidoc,
+  asciidoctor,
   libxslt,
   docbook_xsl,
   bash,
@@ -27,18 +27,19 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
-  version = "059";
+  version = "111";
 
   src = fetchFromGitHub {
-    owner = "dracutdevs";
-    repo = "dracut";
-    rev = version;
-    hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
+    owner = "dracut-ng";
+    repo = "dracut-ng";
+    tag = finalAttrs.version;
+    hash = "sha256-2jdS7/LGuLSBBXv1R/o8yjgwdXl2l2wNbZWxq01wSb0";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = [
     bash
@@ -48,18 +49,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
-    asciidoc
+    asciidoctor
     libxslt
     docbook_xsl
   ];
 
   postPatch = ''
     substituteInPlace dracut.sh \
-      --replace 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
+      --replace-fail "dracutbasedir=\"$""{dracutsysrootdir-}\"/usr/lib/dracut" \
+        "if [ -n \"$""{dracutsysrootdir:-}\" ]; then dracutbasedir=\"$""{dracutsysrootdir}/usr/lib/dracut\" ; else dracutbasedir=\"$out/lib/dracut\" ; fi"
     substituteInPlace lsinitrd.sh \
-      --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
+      --replace-fail 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
 
-    echo 'DRACUT_VERSION=${version}' >dracut-version.sh
+    echo 'DRACUT_VERSION=${finalAttrs.version}' >dracut-version.sh
   '';
 
   postFixup = ''
@@ -109,11 +111,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    homepage = "https://github.com/dracutdevs/dracut/wiki";
+  meta = {
+    homepage = "https://dracut-ng.github.io/";
+    changelog = "https://github.com/dracut-ng/dracut/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Event driven initramfs infrastructure";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tbutter ];
+    platforms = lib.platforms.linux;
   };
-}
+})

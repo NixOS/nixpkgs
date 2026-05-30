@@ -2,8 +2,8 @@
   lib,
   pkgs,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
-  pythonOlder,
   click,
   joblib,
   regex,
@@ -22,15 +22,31 @@
 
 buildPythonPackage rec {
   pname = "nltk";
-  version = "3.9.1";
+  version = "3.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h9EnvT3kvYmk+BJl5fpZyxsZmydEAXU3D3QX0rx66Gg=";
+    hash = "sha256-D0CemwacpBd8GQPD6EPu+Qx+kpkvpJMa5gfabeSeFBk=";
   };
+
+  patches = [
+    # https://github.com/nltk/nltk/security/advisories/GHSA-jm6w-m3j8-898g
+    # https://github.com/NixOS/nixpkgs/issues/502599
+    (fetchpatch {
+      name = "fix-unauthed-shutdown";
+      url = "https://github.com/nltk/nltk/commit/bbaae83db86a0f49e00f5b0db44a7254c268de9b.patch";
+      hash = "sha256-1ZzOQXiNxZ6o7JQs0b9FpsUjZtuUAjXEmDkc9mV3dYU=";
+    })
+
+    # https://github.com/nltk/nltk/security/advisories/GHSA-469j-vmhf-r6v7
+    # https://github.com/NixOS/nixpkgs/issues/502535
+    (fetchpatch {
+      name = "fix-downloader-path-traversal";
+      url = "https://github.com/nltk/nltk/commit/89fe2ec2c6bae6e2e7a46dad65cc34231976ed8a.patch";
+      hash = "sha256-hQJmVEDDcio4Ew+Y10WzMV53mpYZuuDsFcEZKEzl7nk=";
+    })
+  ];
 
   dependencies = [
     click
@@ -99,11 +115,11 @@ buildPythonPackage rec {
     dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bengsparks ];
   };
 }

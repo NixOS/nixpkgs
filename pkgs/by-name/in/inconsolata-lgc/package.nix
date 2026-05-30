@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/doc/${pname}-${version} LICENSE README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";
     longDescription = ''
       Inconsolata is one of the most suitable font for programmers created by Raph
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
     '';
 
     # See `License.txt' for details.
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     homepage = "https://github.com/MihailJP/Inconsolata-LGC";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       rht
     ];

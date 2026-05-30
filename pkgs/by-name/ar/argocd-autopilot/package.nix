@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argocd-autopilot";
   version = "0.4.20";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = "argocd-autopilot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JLh41ZWiDcDrUtd8d+Ak5TFca4L6VHzUguS55P9lmj0=";
   };
 
@@ -26,19 +26,19 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}.binaryName=${pname}"
-      "-X ${package_url}.version=${src.rev}"
+      "-X ${package_url}.binaryName=argocd-autopilot"
+      "-X ${package_url}.version=${finalAttrs.src.rev}"
       "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${src.rev}"
-      "-X ${package_url}.installationManifestsURL=github.com/argoproj-labs/argocd-autopilot/manifests/base?ref=${src.rev}"
-      "-X ${package_url}.installationManifestsNamespacedURL=github.com/argoproj-labs/argocd-autopilot/manifests/insecure?ref=${src.rev}"
+      "-X ${package_url}.gitCommit=${finalAttrs.src.rev}"
+      "-X ${package_url}.installationManifestsURL=github.com/argoproj-labs/argocd-autopilot/manifests/base?ref=${finalAttrs.src.rev}"
+      "-X ${package_url}.installationManifestsNamespacedURL=github.com/argoproj-labs/argocd-autopilot/manifests/insecure?ref=${finalAttrs.src.rev}"
     ];
 
   subPackages = [ "cmd" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/argocd-autopilot version | grep ${src.rev} > /dev/null
+    $out/bin/argocd-autopilot version | grep ${finalAttrs.src.rev} > /dev/null
   '';
 
   installPhase = ''
@@ -50,15 +50,14 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ArgoCD Autopilot";
     mainProgram = "argocd-autopilot";
     downloadPage = "https://github.com/argoproj-labs/argocd-autopilot";
     homepage = "https://argocd-autopilot.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       sagikazarmark
-      bryanasdev000
     ];
   };
-}
+})

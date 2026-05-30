@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   replaceVars,
 
   # build-system
@@ -26,23 +27,37 @@
   pytestCheckHook,
   parameterized,
   tabulate,
+  torchvision,
   transformers,
   unittest-xml-reporting,
 }:
-
-buildPythonPackage rec {
-  pname = "ao";
-  version = "0.14.1";
+let
+  inherit (stdenv.hostPlatform)
+    isDarwin
+    isLinux
+    isAarch64
+    isx86_64
+    ;
+  isAarch64Darwin = isDarwin && isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
+in
+buildPythonPackage (finalAttrs: {
+  pname = "torchao";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
-    tag = "v${version}";
-    hash = "sha256-L9Eoul7Nar/+gS44+hA8JbfxCgkMH5xAMCleggAZn7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mry6jsZKkoC8dq3fYNsRyGbL4+S8ZYuHpkETNDy5qsg=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
+  # new attributes. Did you mean: '__reduce__'?
+  disabled = pythonAtLeast "3.14";
+
+  patches = lib.optionals isAarch64Darwin [
     ./use-system-cpuinfo.patch
     (replaceVars ./use-llvm-openmp.patch {
       inherit (llvmPackages) openmp;
@@ -53,16 +68,16 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  nativeBuildInputs = lib.optionals isAarch64Darwin [
     cmake
   ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  buildInputs = lib.optionals isAarch64Darwin [
     cpuinfo
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  propagatedBuildInputs = lib.optionals isDarwin [
     # Otherwise, torch will fail to include `omp.h`:
     # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
     # OpenMP support not found.
@@ -82,9 +97,7 @@ buildPythonPackage rec {
     rm -rf torchao
   '';
 
-  pythonImportsCheck = [
-    "torchao"
-  ];
+  pythonImportsCheck = [ "torchao" ];
 
   nativeCheckInputs = [
     bitsandbytes
@@ -94,6 +107,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     tabulate
+    torchvision
     transformers
     unittest-xml-reporting
   ];
@@ -150,8 +164,14 @@ buildPythonPackage rec {
     "test_qdq_per_channel"
     "test_reentrant"
     "test_static_linear"
+
+    # AttributeError: 'list' object has no attribute 'keys'
+    "test_tied_weights_quantization"
+
+    # execnet.gateway_base.DumpError: can't serialize <class 'torch.dtype'>
+    "test_numerical_consistency_per_tensor"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals isAarch64Linux [
     # AssertionError: tensor(False) is not true
     "test_quantize_per_token_cpu"
 
@@ -168,7 +188,7 @@ buildPythonPackage rec {
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals isDarwin [
     # AssertionError: Scalars are not equal!
     "test_comm"
     "test_fsdp2"
@@ -176,8 +196,10 @@ buildPythonPackage rec {
     "test_precompute_bitnet_scale"
     "test_qlora_fsdp2"
     "test_uneven_shard"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+
+    # AssertionError: tensor(42.4146, grad_fn=<MulBackward0>) not greater than 43.0
+    "test_weight_only_quant"
+
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
@@ -185,15 +207,114 @@ buildPythonPackage rec {
     # RuntimeError: quantized engine NoQEngine is not supported
     "test_smooth_linear_cpu"
     "test_smooth_linear_edge_cases"
+
+    # RuntimeError: Attempted to set the storage of a tensor on device "cpu" to a storage on
+    # different device "mps:0".
+    # This is no longer allowed; the devices must match.
+    "test_pin_memory"
+
+    # AttributeError: module 'torch.mps' has no attribute 'memory_allocated'
+    "test_get_group_qparams_symmetric_memory"
+    # AttributeError: module 'torch.mps' has no attribute 'reset_peak_memory_stats'
+    "test_quantized_model_streaming"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size0"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size1"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size2"
+    "test_dequantize_affine_float8_float8_e4m3fn_bfloat16_block_size3"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size0"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size1"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size2"
+    "test_dequantize_affine_float8_float8_e4m3fn_float32_block_size3"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size0"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size1"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size2"
+    "test_dequantize_affine_float8_float8_e5m2_bfloat16_block_size3"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size0"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size1"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size2"
+    "test_dequantize_affine_float8_float8_e5m2_float32_block_size3"
+    "test_dequantize_affine_float8_scale_broadcasting"
+    "test_subclass_slice_subclass2_shape0_device_mps"
+    "test_subclass_slice_subclass2_shape1_device_mps"
+    # torch._inductor.exc.InductorError: KeyError: torch.float8_e4m3fn
+    "test_optim_default_dtype_bf16_optim_name_AdamFp8_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_float32_device_mps"
+    "test_param_groups_optim_name_AdamFp8_device_mps"
+    "test_subclass_slice_subclass0_shape0_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
+    "test_subclass_slice_subclass0_shape1_device_mps"
+
+    # RuntimeError: Expected to find "triton_per_fused" but did not find it
+    "test_available_gpu_kernels_device_mps"
+
+    # RuntimeError: quantized engine NoQEngine is not supported
+    "test_qat_mobilenet_v2"
+    "test_qat_resnet18"
+
+    # Crash (Trace/BPT trap: 5)
+    "test_copy__mismatch_metadata_apply_quant0"
+    "test_copy__mismatch_metadata_apply_quant1"
+    "test_copy__mismatch_metadata_apply_quant2"
+    "test_copy__mismatch_metadata_apply_quant3"
+    "test_copy__mismatch_metadata_apply_quant4"
+    "test_from_scaled_tc_floatx_compile_ebits_2_mbits_2_mps"
+    "test_from_scaled_tc_floatx_compile_ebits_3_mbits_2_mps"
+    "test_from_tc_floatx_correctness_ebits_2_mbits_2_mps"
+    "test_from_tc_floatx_correctness_ebits_3_mbits_2_mp"
+    "test_gptq_with_input_recorder"
+    "test_int4wo_cuda_serialization"
+    "test_mm_int4wo_mps_bfloat16"
+    "test_module_fqn_to_config_default"
+    "test_module_fqn_to_config_module_name"
+    "test_module_fqn_to_config_skip"
+    "test_pack_tc_fp6_correctness_mps"
+    "test_qat_4w_linear"
+    "test_qat_4w_primitives"
+    "test_qat_4w_quantizer"
+    "test_quantize_api_compile_False"
+    "test_quantize_api_compile_True"
+    "test_smoketest_linear_bfloat16"
+    "test_smoketest_linear_float16"
+    "test_smoketest_linear_float32"
+    "test_tensor_core_layout_transpose"
+    "test_tensor_deepcopy_input_size1"
+    "test_tensor_deepcopy_input_size2"
+    "test_tensor_deepcopy_input_size_262144"
+    "test_to_copy_bfloat16"
+    "test_to_copy_float16"
+    "test_to_copy_float32"
+    "test_to_cuda"
+    "test_to_module"
+    "test_to_scaled_tc_floatx_compile_ebits_2_mbits_2_mps"
+    "test_to_scaled_tc_floatx_compile_ebits_3_mbits_2_mps"
+    "test_workflow_e2e_numerics_config0"
+    "test_workflow_e2e_numerics_config1"
+    "test_workflow_e2e_numerics_config4"
+    "test_workflow_e2e_numerics_config5"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  ++ lib.optionals (isDarwin && isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
     "test_int8_weight_only_quant_with_freeze_0_cpu"
     "test_int8_weight_only_quant_with_freeze_1_cpu"
     "test_int8_weight_only_quant_with_freeze_2_cpu"
+
+    # Illegal instruction in subclass_4bit.py::dequantize
+    "test_subclass_slice"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTestPaths = [
+    # ImportError: cannot import name 'ToyLinearModel' from 'torchao.testing.model_architectures'
+    "benchmarks/microbenchmarks/test/test_benchmark_profiler.py"
+    "benchmarks/microbenchmarks/test/test_utils.py"
+
+    # ImportError: cannot import name 'fp8_blockwise_weight_dequant' from 'torchao.kernel.blockwise_quantization'
+    "test/kernel/test_blockwise_triton.py"
+  ]
+  ++ lib.optionals isDarwin [
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
@@ -201,13 +322,32 @@ buildPythonPackage rec {
     "test/quantization/pt2e/test_arm_inductor_quantizer.py"
     "test/quantization/pt2e/test_x86inductor_fusion.py"
     "test/quantization/pt2e/test_x86inductor_quantizer.py"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test/quantization/quantize_/workflows/float8/test_float8_tensor.py"
+
+    # AssertionError: Torch not compiled with CUDA enabled
+    "test/integration/test_integration.py"
+
+    # Wants network access
+    "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_False"
+    "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_True"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "PyTorch native quantization and sparsity for training and inference";
     homepage = "https://github.com/pytorch/ao";
-    changelog = "https://github.com/pytorch/ao/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/ao/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
+    badPlatforms = [
+      # Many tests failing and hanging indefinitely
+      "aarch64-linux"
+    ];
   };
-}
+})

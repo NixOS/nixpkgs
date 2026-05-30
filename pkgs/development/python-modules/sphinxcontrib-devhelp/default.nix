@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_devhelp";
@@ -27,10 +24,9 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
-    license = licenses.bsd2;
-    teams = [ teams.sphinx ];
+    license = lib.licenses.bsd2;
   };
 }

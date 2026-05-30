@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   aiohttp,
@@ -15,8 +14,6 @@
 buildPythonPackage rec {
   pname = "here-transit";
   version = "1.2.1";
-
-  disabled = pythonOlder "3.10";
 
   pyproject = true;
 

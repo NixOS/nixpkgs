@@ -8,21 +8,20 @@
   pydantic,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck-core";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck-core";
     tag = "v${version}";
-    hash = "sha256-D17I6pncTnrRjA/vt4lt/Bfkko3Lx58Xyti3sM0sC3s=";
+    hash = "sha256-ZQgbraIQgfhJM4JYfZjPZcMswOddGQb8pdHjTBo53jk=";
   };
 
   build-system = [
@@ -52,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rstcheck_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for checking syntax of reStructuredText";
     homepage = "https://github.com/rstcheck/rstcheck-core";
     changelog = "https://github.com/rstcheck/rstcheck-core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

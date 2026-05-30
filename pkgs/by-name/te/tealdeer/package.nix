@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tealdeer";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "tealdeer-rs";
     repo = "tealdeer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QxkFpcEFLn98LvGDQ/PEovzzHTfNiKFQfGaHl/w5aLQ=";
   };
 
@@ -28,32 +28,24 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # Disable tests that require Internet access:
-  checkFlags = [
-    "--skip test_autoupdate_cache"
-    "--skip test_create_cache_directory_path"
-    "--skip test_pager_flag_enable"
-    "--skip test_quiet_cache"
-    "--skip test_quiet_failures"
-    "--skip test_quiet_old_cache"
-    "--skip test_spaces_find_command"
-    "--skip test_update_cache"
-    "--skip test_update_language_arg"
-  ];
+  checkFeatures = [ "ignore-online-tests" ];
+  # tealdeer requires --test-threads=1
+  dontUseCargoParallelTests = true;
 
-  meta = with lib; {
+  meta = {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/tealdeer-rs/tealdeer";
-    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       davidak
       newam
       mfrw
       ryan4yin
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     mainProgram = "tldr";
   };
-}
+})

@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
   # for when that happens despite there being none as of right now
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "DNS to DNS over HTTPS (DoH) proxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "https_dns_proxy";
   };
 }

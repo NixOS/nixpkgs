@@ -6,12 +6,12 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngcrush";
   version = "1.8.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pmt/pngcrush-${version}-nolib.tar.xz";
+    url = "mirror://sourceforge/pmt/pngcrush-${finalAttrs.version}-nolib.tar.xz";
     sha256 = "0l43c59d6v9l0g07z3q3ywhb8xb3vz74llv3mna0izk9bj6aqkiv";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "pngcrush";
   };
-}
+})

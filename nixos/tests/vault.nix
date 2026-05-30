@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "vault";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 ];
+  meta = {
+    maintainers = [ ];
   };
   nodes.machine =
     { pkgs, ... }:

@@ -8,9 +8,6 @@
         services.haproxy = {
           enable = true;
           config = ''
-            global
-              limited-quic
-
             defaults
               mode http
               timeout connect 10s
@@ -72,6 +69,8 @@
       };
   };
   testScript = ''
+    import os
+
     # Helpers
     def cmd(command):
       print(f"+{command}")

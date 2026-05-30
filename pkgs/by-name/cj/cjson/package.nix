@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cjson";
   version = "1.7.19";
 
   src = fetchFromGitHub {
     owner = "DaveGamble";
     repo = "cJSON";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WjgzokT9aHJ7dB40BtmhS7ur1slTuXmemgDimZHLVQM=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
           'cmake_minimum_required(VERSION 3.10)'
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DaveGamble/cJSON";
     description = "Ultralightweight JSON parser in ANSI C";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,16 +9,13 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pytile";
   version = "2024.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -51,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Tile Bluetooth trackers";
     longDescription = ''
       pytile is a simple Python library for retrieving information on Tile
@@ -59,7 +56,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/pytile";
     changelog = "https://github.com/bachya/pytile/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

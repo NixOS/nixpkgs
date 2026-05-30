@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   cmake,
   hwloc,
   fftw,
@@ -40,6 +41,8 @@ let
       "SSE4.1"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      "ARM_NEON_ASIMD"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
@@ -53,8 +56,8 @@ let
       }
     else
       {
-        version = "2025.3";
-        hash = "sha256-i9/KAmjz8Qp8o8BuWbYvc+oCQgxnIRwP85EvMteDPGU=";
+        version = "2026.1";
+        hash = "sha256-2VoxP1bbfgXuOiHlD1gv3uUXbC9guQC6skYf2Vxegb4=";
       };
 
 in
@@ -67,7 +70,17 @@ stdenv.mkDerivation rec {
     inherit (source) hash;
   };
 
-  patches = [ (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch) ];
+  patches = [
+    # Fix pkg-config paths for the version-specific gromacs variant.
+    (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch)
+  ]
+  ++ lib.optional enablePlumed (
+    # Backport gcc 15 cstdint include fix.
+    fetchpatch2 {
+      url = "https://gitlab.com/gromacs/gromacs/-/commit/e0180bc37f3111d7dcaffca3854c088ed910c3b4.diff";
+      hash = "sha256-TvTzfb/RETAzFpYfFFr6/L5GV1Pile16gVJhNigwAB4=";
+    }
+  );
 
   postPatch = lib.optionalString enablePlumed ''
     plumed patch -p -e gromacs-${source.version}
@@ -144,9 +157,9 @@ stdenv.mkDerivation rec {
     moveToOutput share/cmake $dev
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gromacs.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -167,8 +180,8 @@ stdenv.mkDerivation rec {
 
       See: https://www.gromacs.org/about.html for details.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

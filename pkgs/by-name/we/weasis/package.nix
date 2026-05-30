@@ -8,7 +8,9 @@
   makeDesktopItem,
   makeBinaryWrapper,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrender,
+  libx11,
 }:
 
 let
@@ -24,21 +26,19 @@ let
 
   runtimeDeps = [
     libGL
-  ]
-  ++ (with xorg; [
-    libX11
-    libXrender
-    libXxf86vm
-  ]);
+    libx11
+    libxrender
+    libxxf86vm
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
-  version = "4.6.5";
+  version = "4.6.6";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
-    hash = "sha256-wUkHHbqlFl4L0l4Bd6iXXjEgDwVay2zCJ7ucSvfAGWw=";
+    hash = "sha256-aOjYD+74yYp0+lIZpekToc6IvygJVAPyJmUsESl3gkI=";
     stripRoot = false;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeBinaryWrapper
   ]
-  ++ lib.optional stdenv.isDarwin unzip;
+  ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
 
   desktopItems = [
     (makeDesktopItem {
@@ -80,18 +80,18 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/{bin,opt/Weasis,share/{applications,pixmaps}}
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/{bin,opt/Weasis,share/{applications,icons/hicolor/64x64/apps}}
 
     mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/opt/Weasis
-    mv $out/opt/Weasis/lib/*.png $out/share/pixmaps/
+    mv $out/opt/Weasis/lib/*.png $out/share/icons/hicolor/64x64/apps
 
     for bin in $out/opt/Weasis/bin/*; do
       makeWrapper $bin $out/bin/$(basename $bin) \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDeps}
     done
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis.app $out/Applications/
   ''

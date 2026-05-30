@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "25.8.2";
+  version = "26.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-g3iSSj42QB0kr0yTIfUVR9q2NCu/peQTRStlUjKKkl8=";
+    hash = "sha256-Qbvy2YKUbV0wFB9+KG5392xYYlcjlZEah0G1m8quI6U=";
   };
 
   build-system = [
@@ -86,6 +86,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/ansible-compat";
     changelog = "https://github.com/ansible/ansible-compat/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dawidd6 ];
+    maintainers = [ ];
   };
 }

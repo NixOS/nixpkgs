@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests that hang up in the Darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
-    "python_test"
+    "PythonThriftTNonblockingServer"
 
     # fails on hydra, passes locally
     "concurrency_test"
@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     "TInterruptTest"
     "TServerIntegrationTest"
     "processor"
+    "processor_test"
     "TNonblockingServerTest"
     "TNonblockingSSLServerTest"
     "StressTest"
@@ -106,12 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 })

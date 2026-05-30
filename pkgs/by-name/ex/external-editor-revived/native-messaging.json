@@ -1,0 +1,9 @@
+{
+  "name": "external_editor_revived",
+  "description": "Edit emails in external editors such as Vim, Neovim, Emacs, etc.",
+  "path": "@OUT@/bin/external-editor-revived",
+  "type": "stdio",
+  "allowed_extensions": [
+    "external-editor-revived@tsundere.moe"
+  ]
+}

@@ -5,23 +5,26 @@
   cppunit,
   pkg-config,
   subunit,
-  pythonOlder,
 
   # python dependencies
-  extras,
   fixtures,
   hypothesis,
+  iso8601,
   pytestCheckHook,
+  pyyaml,
   setuptools,
   testscenarios,
   testtools,
 }:
 
 buildPythonPackage {
-  inherit (subunit) name src meta;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  inherit (subunit)
+    pname
+    version
+    src
+    meta
+    ;
+  pyproject = true;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -39,7 +42,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
-    extras
+    iso8601
     testtools
   ];
 
@@ -48,14 +51,15 @@ buildPythonPackage {
     hypothesis
     fixtures
     pytestCheckHook
+    pyyaml
   ];
 
-  enabledTestPaths = [ "python/subunit" ];
+  enabledTestPaths = [ "python/tests" ];
 
   disabledTestPaths = [
     # these tests require testtools and don't work with pytest
-    "python/subunit/tests/test_output_filter.py"
-    "python/subunit/tests/test_test_protocol.py"
-    "python/subunit/tests/test_test_protocol2.py"
+    "python/tests/test_output_filter.py"
+    "python/tests/test_test_protocol.py"
+    "python/tests/test_test_protocol2.py"
   ];
 }

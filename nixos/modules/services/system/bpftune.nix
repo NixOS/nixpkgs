@@ -22,6 +22,9 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
-    systemd.services.bpftune.wantedBy = [ "multi-user.target" ];
+    systemd.services.bpftune = {
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.kmod ]; # bpftune calls modprobe
+    };
   };
 }

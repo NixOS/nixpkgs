@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  crystal_1_16,
+  crystal,
   fetchFromGitHub,
   librsvg,
   pkg-config,
@@ -27,7 +27,6 @@
 let
   # normally video.js is downloaded at build time
   videojs = callPackage ./videojs.nix { inherit versions; };
-  crystal = crystal_1_16;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
@@ -51,6 +50,7 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+      tagTemplate = ''{{ "#{`git tag --points-at HEAD`.strip}" }}'';
 
       inherit (versions.invidious) commit date;
     in
@@ -63,11 +63,12 @@ crystal.buildCrystalPackage rec {
           --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
           --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
-          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
+          --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
-          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+          --replace-fail 'StaticAssetsHandler.new("assets"' 'StaticAssetsHandler.new("${placeholder "out"}/share/invidious/assets"'
       substituteInPlace src/invidious/helpers/i18n.cr \
           --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
@@ -139,7 +140,6 @@ crystal.buildCrystalPackage rec {
     maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
-      sbruder
     ];
   };
 }

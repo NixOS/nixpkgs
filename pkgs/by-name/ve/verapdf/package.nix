@@ -12,7 +12,17 @@ maven.buildMavenPackage rec {
   pname = "verapdf";
   version = "1.28.2";
 
-  mvnParameters = "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
+  mvnParameters =
+    "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z "
+    +
+      # By default, veraPDF uses version ranges for some components.
+      # These versions are pinned to the package version in order to avoid
+      # non-reproducibility of the maven dependencies.
+      lib.concatMapStringsSep " " (id: "-Dverapdf.${id}.version=${version}") [
+        "library"
+        "pdfbox.validation"
+        "validation"
+      ];
 
   src = fetchFromGitHub {
     owner = "veraPDF";
@@ -23,8 +33,7 @@ maven.buildMavenPackage rec {
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  # FIXME: this hash keeps changing over time??
-  mvnHash = "sha256-+4ccnv0S7K/S2T7KryBJHJBEFrMZSFC7cNf3Kg/wN20=";
+  mvnHash = "sha256-CrpiomKsAyD7SyVzwbjVXy8BoVnkejQVcim+kwVP5Ng=";
 
   nativeBuildInputs = [
     makeWrapper

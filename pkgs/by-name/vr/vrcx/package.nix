@@ -1,42 +1,45 @@
 {
   lib,
+  stdenv,
+  nodejs_24,
+  electron_40,
+  makeWrapper,
   fetchFromGitHub,
+  buildNpmPackage,
+  makeDesktopItem,
+  copyDesktopItems,
   buildDotnetModule,
   dotnetCorePackages,
-  buildNpmPackage,
-  electron_38,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
 }:
 let
-  electron = electron_38;
+  node = nodejs_24;
+  electron = electron_40;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.10.27";
+  version = "2026.05.03";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
-    rev = "5c3d076e10f7edb09831fba0d5ad44036a43a401";
-    hash = "sha256-XLzUfOXqikJOb8cmnpMI/SLeF6Jnuo4Xvmi8jfgt71Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TIRX1DllUaq73Aue5/2mg98luBnDoptiiMDQcZ9aBTM=";
   };
 
+  nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-pghoOI/lotorjCAFGoFjhEx3H7h9J8LhctCMfk6ZTYI=";
+  npmDepsHash = "sha256-hOfbDvBJgoPQ6QxnZ77kpeSHDXH9dSnidmrx9Mp9q08=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
-  preBuild = ''
-    # Build fails at executing dart from sass-embedded
-    rm -r node_modules/sass-embedded*
+  postPatch = ''
+    # V2026.05.03 seems to have an out of date lockfile
+    cp ${./package-lock.json} package-lock.json
   '';
 
   buildPhase = ''
@@ -61,7 +64,7 @@ buildNpmPackage (finalAttrs: {
     cp -r ${finalAttrs.passthru.backend}/build/Electron/* "$out/share/vrcx/resources/app.asar.unpacked/build/Electron/"
 
     makeWrapper '${electron}/bin/electron' "$out/bin/vrcx"  \
-      --add-flags "--ozone-platform-hint=auto"              \
+      --add-flags "--ozone-platform-hint=auto --no-updater" \
       --add-flags "$out/share/vrcx/resources/app.asar"      \
       --set NODE_ENV production                             \
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
@@ -75,11 +78,11 @@ buildNpmPackage (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "vrcx";
+      icon = "vrcx";
+      exec = "vrcx %u";
+      terminal = false;
       desktopName = "VRCX";
       comment = "Friendship management tool for VRChat";
-      icon = "vrcx";
-      exec = "vrcx";
-      terminal = false;
       categories = [
         "Utility"
         "Application"
@@ -90,8 +93,8 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     backend = buildDotnetModule {
-      pname = "${finalAttrs.pname}-backend";
       inherit (finalAttrs) version src;
+      pname = "${finalAttrs.pname}-backend";
 
       dotnet-sdk = dotnet.sdk;
       dotnet-runtime = dotnet.runtime;

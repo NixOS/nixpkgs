@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "2.1.1";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pyprusalink";
     tag = version;
-    hash = "sha256-Opip696hXV1gqFC1cWfrSCkrsldl7M7XZAqUaVkDy7M=";
+    hash = "sha256-y+onh52ES2WvfBYjksLBbnZKkm41BBXEc2ORLw9yfGM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyprusalink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
     changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

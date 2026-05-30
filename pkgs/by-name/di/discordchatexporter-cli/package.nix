@@ -23,6 +23,12 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
+  dotnetBuildFlags = [
+    # workaround for https://github.com/belav/csharpier/pull/1696
+    # remove when csharpier is updated
+    "-p:FirstTargetFrameworks=workaround-for-csharpier-pr-1696"
+  ];
+
   postFixup = ''
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli
   '';

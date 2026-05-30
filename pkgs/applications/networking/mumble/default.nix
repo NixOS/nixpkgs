@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qt5,
   cmake,
@@ -37,7 +36,7 @@
   microsoft-gsl,
   nlohmann_json,
   xar,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
 let
@@ -57,6 +56,7 @@ let
           python3
           qt5.wrapQtAppsHook
           qt5.qttools
+          makeBinaryWrapper
         ]
         ++ (overrides.nativeBuildInputs or [ ]);
 
@@ -77,6 +77,7 @@ let
           "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
+          "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -86,15 +87,15 @@ let
 
         passthru.tests.connectivity = nixosTests.mumble;
 
-        meta = with lib; {
+        meta = {
           description = "Low-latency, high quality voice chat software";
           homepage = "https://mumble.info";
-          license = licenses.bsd3;
-          maintainers = with maintainers; [
+          license = lib.licenses.bsd3;
+          maintainers = with lib.maintainers; [
             felixsinger
             lilacious
           ];
-          platforms = platforms.linux ++ (overrides.platforms or [ ]);
+          platforms = lib.platforms.linux ++ (overrides.platforms or [ ]);
         };
       }
     );
@@ -107,9 +108,6 @@ let
       platforms = lib.platforms.darwin;
       nativeBuildInputs = [
         qt5.qttools
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        makeWrapper
       ];
 
       buildInputs = [
@@ -138,7 +136,7 @@ let
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
         "-D oss=OFF"
-        "-D warnings-as-errors=OFF" # conversion error workaround
+        "-D warnings-as-errors=OFF" # `std::wstring_convert` deprecation workaround
         # building the overlay on darwin does not work in nipxkgs (yet)
         # also see the patch below to disable scripts the build option misses
         # see https://github.com/mumble-voip/mumble/issues/6816
@@ -173,11 +171,11 @@ let
         mv $out/Mumble.app $out/Applications/Mumble.app
 
         # ensure that the app can be started from the shell
-        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+        makeBinaryWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
       '';
 
       postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-        wrapProgram $out/bin/mumble \
+        wrapProgramBinary $out/bin/mumble \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath (
               lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire

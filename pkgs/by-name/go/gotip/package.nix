@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotip";
-  version = "0.5.0";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "gotip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z5Xk+lTDAvkMOJAR6eIC6rg+CP9wv+CSANdgj+KmPjA=";
+    hash = "sha256-CgTznW4SwKrJ4Q7dIo2ebn51G13nP36tv8n2G9T+MZ0=";
   };
 
-  vendorHash = "sha256-AgyFhoyPyXN5ngTi8iKzbx0wOqlu64gFdrygPOFHZT4=";
+  vendorHash = "sha256-Sj7JzyWviGxp10O1zGONN49TXtwquXYJ1KoijIVcyj0=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

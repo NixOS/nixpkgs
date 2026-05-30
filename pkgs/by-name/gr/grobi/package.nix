@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   version = "0.6.0";
   pname = "grobi";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "fd0";
     repo = "grobi";
     hash = "sha256-evgDY+OjfQ0ngf4j/D4yOeITHQXmBmw8KiJhLKjdVAw=";
@@ -26,11 +26,11 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fd0/grobi";
     description = "Automatically configure monitors/outputs for Xorg via RANDR";
-    license = with licenses; [ bsd2 ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ bsd2 ];
+    platforms = lib.platforms.linux;
     mainProgram = "grobi";
   };
-}
+})

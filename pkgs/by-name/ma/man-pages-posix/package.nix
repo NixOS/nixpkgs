@@ -9,12 +9,12 @@ let
   minor = "a";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "man-pages-posix";
   version = "${year}${minor}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/man-pages-posix/${pname}-${year}-${minor}.tar.xz";
+    url = "mirror://kernel/linux/docs/man-pages/man-pages-posix/man-pages-posix-${year}-${minor}.tar.xz";
     sha256 = "ce67bb25b5048b20dad772e405a83f4bc70faf051afa289361c81f9660318bc3";
   };
 

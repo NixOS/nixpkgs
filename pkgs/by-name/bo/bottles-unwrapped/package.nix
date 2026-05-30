@@ -9,6 +9,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  fvs2,
   librsvg,
   gtk4,
   gtksourceview5,
@@ -24,21 +25,22 @@
   gamescope,
   mangohud,
   vkbasalt-cli,
+  vulkan-tools,
   vmtouch,
   libportal,
   nix-update-script,
   removeWarningPopup ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "52.1";
+  version = "63.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-KRSFljHUB5JEk2saCb0voIukekeUSySinBICBrzY9eQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-cBqKUf96BLYyVD8onkvejL7pcxYrVCnhjhhT9FSwuNo=";
   };
 
   patches = [
@@ -86,7 +88,6 @@ python3Packages.buildPythonApplication rec {
       icoextract
       patool
       pathvalidate
-      fvs
       orjson
       pycairo
       pygobject3
@@ -95,6 +96,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
@@ -102,11 +104,13 @@ python3Packages.buildPythonApplication rec {
       xdpyinfo
       imagemagick
       vkbasalt-cli
+      vulkan-tools
 
       gamemode
       gamescope
       mangohud
       vmtouch
+      fvs2
 
       # Undocumented (subprocess.Popen())
       lsb-release
@@ -114,7 +118,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -130,11 +134,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

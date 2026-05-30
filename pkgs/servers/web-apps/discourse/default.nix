@@ -39,9 +39,11 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   svgo,
-  nodejs,
+  nodejs-slim_22,
   jq,
   moreutils,
   terser,
@@ -51,14 +53,16 @@
 }:
 
 let
-  version = "3.5.2";
+  version = "2026.1.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-8Uzb0cjC3PUrh6Nlu6OJ09GKD+8KZq/IUba2NXLm1JI=";
+    sha256 = "sha256-kQYDKZIMsWByuCZQfUlwhoIew5QykVylRMh6xvrHIBY=";
   };
+
+  pnpm = pnpm_10;
 
   ruby = ruby_3_3;
 
@@ -70,7 +74,7 @@ let
     gnutar
     git
     brotli
-    nodejs
+    nodejs-slim_22
 
     # Misc required system utils
     which
@@ -191,9 +195,9 @@ let
             cd ../..
 
             mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-            ln -s "${nodejs.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+            ln -s "${nodejs-slim_22.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-            ln -s ${nodejs.libv8}/include vendor/v8/include
+            ln -s ${nodejs-slim_22.libv8}/include vendor/v8/include
 
             mkdir -p ext/libv8-node
             echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -227,7 +231,7 @@ let
             unpackPhase
             nativeBuildInputs
             ;
-          hash = "sha256-ydSXo3wp13/mPgJv1HbavNurkd2KxuKzuJNHliPpn2I=";
+          hash = "sha256-Yxcerq4Wil1nrEzHoEmsTAj4VnUmrwRlA3WO2b72yOc=";
         };
 
         dontBuild = false;
@@ -259,7 +263,7 @@ let
             unpackPhase
             nativeBuildInputs
             ;
-          hash = "sha256-IABOxUymtFkF9sl1kRWAS5hM6GNJI6Y4VFICXdX7zF0=";
+          hash = "sha256-zyGK+XJpMls6w0Uydegqsj4TH4IrVxANm0qmpR7+95I=";
         };
 
         dontBuild = false;
@@ -299,11 +303,11 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
-      inherit version src;
-      fetcherVersion = 1;
-      hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
+      inherit version src pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-xft/2x0iti0yJ53uI9q2+FSvKgWWfKQzlMlPFz3RZsE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -315,15 +319,16 @@ let
       terser
       jq
       moreutils
-      nodejs
-      pnpm_9.configHook
+      nodejs-slim_22
+      pnpmConfigHook
+      pnpm
     ];
 
     outputs = [
       "out"
-      "javascripts"
       "node_modules"
       "generated"
+      "frontend"
     ];
 
     patches = [
@@ -343,7 +348,7 @@ let
       # Little does he know, so he decided there is no need to generate the
       # theme-transpiler over and over again. Which at the same time allows the removal
       # of javascript devDependencies from the runtime environment.
-      ./prebuild-theme-transpiler.patch
+      ./prebuild-asset-processor.patch
     ];
 
     env.RAILS_ENV = "production";
@@ -363,7 +368,7 @@ let
     preBuild = ''
       # Patch before running postinstall hook script
       patchShebangs node_modules/
-      patchShebangs --build app/assets/javascripts
+      patchShebangs --build frontend/
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
@@ -405,10 +410,8 @@ let
 
       mv node_modules $node_modules
 
-      rm -rf app/assets/javascripts/plugins
-      mv app/assets/javascripts $javascripts
-      ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
       mv app/assets/generated $generated
+      mv frontend $frontend
 
       runHook postInstall
     '';
@@ -457,7 +460,7 @@ let
       # Little does he know, so he decided there is no need to generate the
       # theme-transpiler over and over again. Which at the same time allows the removal
       # of javascript devDependencies from the runtime environment.
-      ./prebuild-theme-transpiler.patch
+      ./prebuild-asset-processor.patch
 
       # Our app/assets/generated folder is a symlink, but the ruby File.mkdir_p doesn't allow
       # a symlink in the way to the last directory. This patch explicitly resolves the symlink.
@@ -497,9 +500,9 @@ let
       ln -sf /run/discourse/assets-generated $out/share/discourse/app/assets/generated
       ln -sf ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
-      rm -r $out/share/discourse/app/assets/javascripts
       # This needs to be copied because it contains symlinks to node_modules
-      cp -r ${assets.javascripts} $out/share/discourse/app/assets/javascripts
+      rm -r $out/share/discourse/frontend
+      cp -r ${assets.frontend} $out/share/discourse/frontend
       ${lib.concatMapStringsSep "\n" (
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
@@ -529,11 +532,14 @@ let
           ;
       };
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
+        leona
+        talyz
+      ];
+      license = lib.licenses.gpl2Plus;
       description = "Open source discussion platform";
     };
   };

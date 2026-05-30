@@ -52,11 +52,11 @@ stdenv.mkDerivation {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic parser and tool package for the BTOR2 format";
     homepage = "https://github.com/Boolector/btor2tools";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

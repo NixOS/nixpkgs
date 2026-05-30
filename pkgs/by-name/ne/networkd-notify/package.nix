@@ -7,15 +7,15 @@
   wrapGAppsNoGuiHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "networkd-notify";
   version = "unstable-2022-11-29";
   # There is no setup.py, just a single Python script.
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "wavexx";
-    repo = pname;
+    repo = "networkd-notify";
     rev = "c2f3e71076a0f51c097064b1eb2505a361c7cc0e";
     hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };
@@ -50,12 +50,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop notification integration for systemd-networkd";
     mainProgram = "networkd-notify";
     homepage = "https://gitlab.com/wavexx/networkd-notify";
-    maintainers = with maintainers; [ danc86 ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ danc86 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

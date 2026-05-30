@@ -3,28 +3,28 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mid2key";
   version = "1";
 
   src = fetchFromGitHub {
     owner = "dnschneid";
     repo = "mid2key";
-    rev = "r${version}";
+    rev = "r${finalAttrs.version}";
     sha256 = "Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
   };
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     xorgproto
   ];
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   installPhase = "mkdir -p $out/bin && mv mid2key $out/bin";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://code.google.com/p/mid2key/";
     description = "Simple tool which maps midi notes to simulated keystrokes";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "mid2key";
   };
-}
+})

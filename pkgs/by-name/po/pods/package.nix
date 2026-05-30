@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  applyPatches,
-  fetchpatch2,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   glib,
@@ -22,31 +21,24 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pods";
-  version = "2.2.0";
+  version = "3.0.0";
 
-  src = applyPatches {
-    name = "pods-patched";
-    src = fetchFromGitHub {
-      owner = "marhkb";
-      repo = "pods";
-      tag = "v${version}";
-      hash = "sha256-m+0XjxY0nDAJbVX3r/Jfg+G+RU8Q51e0ZXxkdH69SiQ=";
-    };
-
-    # Based on upstream PR: https://github.com/marhkb/pods/pull/895
-    # which cannot be merged into 2.2.0 because dependencies were bumped since its release.
-    # Hopefully 2.2.1 will be released soon
-    patches = [ ./cve-2025-62516.patch ];
+  src = fetchFromGitHub {
+    owner = "marhkb";
+    repo = "pods";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-50NOkLffLbs5/qug6xzoSWSMZ3+/Lau9sTPi9za4+LA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-GBWaGCNXYCiT/favrIYB30VGMMoQQk1iUh4GTNPerK8=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-JbYJQdli3OAxnbGApVe5+KAAcGePTTH59fdXdFx0+hA=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     glib
     gtk4
@@ -69,19 +61,16 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
-    changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
+    changelog = "https://github.com/marhkb/pods/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
     mainProgram = "pods";
   };
-}
+})

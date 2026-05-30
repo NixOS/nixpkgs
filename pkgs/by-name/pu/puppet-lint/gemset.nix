@@ -4,9 +4,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1n2pffwxj1n33hc7aw74g6a4gn5v7rawcs7rglidbdq1g4kzd829";
+      sha256 = "11j46i4bankyvmknl69pqz15ysrd8l6nwhbl77lslrswx7dlwxqy";
       type = "gem";
     };
-    version = "4.2.4";
+    version = "5.1.1";
   };
 }

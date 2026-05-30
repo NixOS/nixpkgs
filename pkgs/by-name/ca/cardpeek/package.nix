@@ -25,7 +25,14 @@ stdenv.mkDerivation {
     sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    # gcc15
+    substituteInPlace lua_nodes.c \
+      --replace-fail "ui_update(1)" "ui_update()"
+    substituteInPlace ui/gtk/gui_cardview.c \
+      --replace-fail "ui_update(0)" "ui_update()"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
       --replace-fail 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \

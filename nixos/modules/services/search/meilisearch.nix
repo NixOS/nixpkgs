@@ -11,7 +11,7 @@ let
 
   # These secrets are used in the config file and can be set to paths.
   secrets-with-path =
-    builtins.map
+    map
       (
         { environment, name }:
         {
@@ -43,18 +43,17 @@ let
   master-key-placeholder = "@MASTER_KEY@";
 
   configFile = settingsFormat.generate "config.toml" (
-    builtins.removeAttrs (
+    removeAttrs (
       if cfg.masterKeyFile != null then
         cfg.settings // { master_key = master-key-placeholder; }
       else
-        builtins.removeAttrs cfg.settings [ "master_key" ]
+        removeAttrs cfg.settings [ "master_key" ]
     ) (map (secret: secret.name) secrets-with-path)
   );
 
 in
 {
   meta.maintainers = with lib.maintainers; [
-    Br1ght0ne
     happysalada
   ];
   meta.doc = ./meilisearch.md;
@@ -122,6 +121,9 @@ in
         Path to file which contains the master key.
         By doing so, all routes will be protected and will require a key to be accessed.
         If no master key is provided, all routes can be accessed without requiring any key.
+
+        You can generate a master key by running `openssl rand -base64 36`.
+        Alternatively, you can start Meilisearch without a master key and use the pre-generated key from the service's logs that can be obtained by `journalctl -u meilisearch | grep -- --master-key`.
       '';
       default = null;
       type = lib.types.nullOr lib.types.path;
@@ -140,7 +142,7 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        imports = builtins.map (secret: {
+        imports = map (secret: {
           # give them proper types, just so they're easier to consume from this file
           options.${secret.name} = lib.mkOption {
             # but they should not show up in documentation as special in any way.
@@ -180,6 +182,9 @@ in
 
       # this is intentionally different from upstream's default.
       no_analytics = lib.mkDefault true;
+
+      # allow updating without manual intervention
+      experimental_dumpless_upgrade = lib.mkDefault true;
     };
 
     # used to restore dumps
@@ -200,7 +205,7 @@ in
       ];
 
       environment = builtins.listToAttrs (
-        builtins.map (secret: {
+        map (secret: {
           name = secret.environment;
           value = lib.mkIf (secret.setting != null) "%d/${secret.name}";
         }) secrets-with-path
@@ -214,7 +219,7 @@ in
           [
             (lib.mkIf (cfg.masterKeyFile != null) [ "master_key:${cfg.masterKeyFile}" ])
           ]
-          ++ builtins.map (
+          ++ map (
             secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
           ) secrets-with-path
         );

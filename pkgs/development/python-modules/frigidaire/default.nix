@@ -10,21 +10,21 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frigidaire";
-  version = "0.18.28";
+  version = "0.18.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = "frigidaire";
-    tag = version;
-    hash = "sha256-2VleZyisva2HQPDmPoZbxnYu3t1S/HTuaZtFWFiU1nU=";
+    tag = finalAttrs.version;
+    hash = "sha256-cCfl9TQhcED/gfhLpB1Z6+lYSeY9PnuWHePWXm42vng=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn 'version = "SNAPSHOT"' 'version = "${version}"'
+      --replace-warn 'version = "SNAPSHOT"' 'version = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frigidaire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for the Frigidaire devices";
     homepage = "https://github.com/bm1549/frigidaire";
-    changelog = "https://github.com/bm1549/frigidaire/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bm1549/frigidaire/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

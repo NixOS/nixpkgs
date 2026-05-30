@@ -1,9 +1,11 @@
 {
   lib,
-  buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchNpmDeps,
+  libredirect,
   nodejs,
+  npmHooks,
   python3,
   gettext,
   nixosTests,
@@ -15,15 +17,21 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      django = super.django_4;
+      django = super.django_5;
 
-      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
+        disabledTests = [
+          # error message mismatch
+          "test_validation_failed_message"
+          # fails dns resolution
+          "test_response_when_auth_server_response_return_404"
+        ];
       });
 
       stripe = super.stripe.overridePythonAttrs rec {
@@ -34,45 +42,27 @@ let
           inherit version;
           hash = "sha256-hOXkMINaSwzU/SpXzjhTJp0ds0OREc2mtu11LjSc9KE=";
         };
+
+        build-system = with self; [ setuptools ];
       };
 
       pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };
-
+  pythonPackages = python.pkgs;
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2025.9.0";
+  version = "2026.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-d0RunBCUUvS4tosbXWkEp7mvUKEOa5KgvIZK4XydN7I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-twXz3RaFujhZmARzZ5zIjGAwWchwhV8knq8Cr3h0Gjg=";
   };
-
-  npmDeps = buildNpmPackage {
-    pname = "pretix-node-modules";
-    inherit version src;
-
-    sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-0FQldyGJXFhXFv7L7ozAoWEfpUTo+d2pibWyhnJ4F7A=";
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp -R node_modules $out/
-
-      runHook postInstall
-    '';
-  };
-in
-python.pkgs.buildPythonApplication rec {
-  inherit pname version src;
-  pyproject = true;
 
   patches = [
     # Discover pretix.plugin entrypoints during build and add them into
@@ -80,63 +70,36 @@ python.pkgs.buildPythonApplication rec {
     ./plugin-build.patch
   ];
 
-  pythonRelaxDeps = [
-    "beautifulsoup4"
-    "celery"
-    "css-inline"
-    "django-bootstrap3"
-    "django-compressor"
-    "django-formset-js-improved"
-    "django-i18nfield"
-    "django-localflavor"
-    "django-phonenumber-field"
-    "dnspython"
-    "drf_ujson2"
-    "importlib-metadata"
-    "kombu"
-    "markdown"
-    "oauthlib"
-    "phonenumberslite"
-    "pillow"
-    "protobuf"
-    "pycparser"
-    "pycryptodome"
-    "pyjwt"
-    "pypdf"
-    "python-bidi"
-    "qrcode"
-    "redis"
-    "reportlab"
-    "requests"
-    "sentry-sdk"
-    "sepaxml"
-    "ua-parser"
-    "webauthn"
-  ];
-
-  pythonRemoveDeps = [
-    "vat_moss_forked" # we provide a patched vat-moss package
-  ];
-
   postPatch = ''
-    NODE_PREFIX=src/pretix/static.dist/node_prefix
-    mkdir -p $NODE_PREFIX
-    cp -R ${npmDeps}/node_modules $NODE_PREFIX/
-    chmod -R u+w $NODE_PREFIX/
-
     # unused
     sed -i "/setuptools-rust/d" pyproject.toml
 
+    # unbreak dependency relaxation
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
 
-    # npm ci would remove and try to reinstall node_modules
+    # we take care of the npm build
     substituteInPlace src/pretix/_build.py \
-      --replace-fail "npm ci" "npm install"
+      --replace-fail "npm ci" "true" \
+      --replace-fail "npm run build" "true"
   '';
 
-  build-system = with python.pkgs; [
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-Gkcz/QJCNuvhIdZnP/mPx5GD0EOJzxoP1dGI43pyOro=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  preBuild = ''
+    npm run build
+  '';
+
+  build-system = with pythonPackages; [
     gettext
     nodejs
     setuptools
@@ -144,7 +107,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       arabic-reshaper
       babel
@@ -225,11 +188,52 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ plugins;
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = with pythonPackages; {
     memcached = [
       pylibmc
     ];
   };
+
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "celery"
+    "css-inline"
+    "cryptography"
+    "django-bootstrap3"
+    "django-compressor"
+    "django-filter"
+    "django-formset-js-improved"
+    "django-i18nfield"
+    "django-localflavor"
+    "django-phonenumber-field"
+    "dnspython"
+    "drf_ujson2"
+    "importlib_metadata"
+    "kombu"
+    "markdown"
+    "oauthlib"
+    "phonenumberslite"
+    "pillow"
+    "protobuf"
+    "pycparser"
+    "pycryptodome"
+    "pyjwt"
+    "pypdf"
+    "python-bidi"
+    "qrcode"
+    "redis"
+    "reportlab"
+    "requests"
+    "sentry-sdk"
+    "sepaxml"
+    "ua-parser"
+    "webauthn"
+  ];
+
+  pythonRemoveDeps = [
+    "vat_moss_forked" # we provide a patched vat-moss package
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -244,8 +248,9 @@ python.pkgs.buildPythonApplication rec {
   dontStrip = true; # no binaries
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
+      libredirect.hook
       pytestCheckHook
       pytest-xdist
       pytest-mock
@@ -256,7 +261,7 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     "--reruns=3"
@@ -265,33 +270,32 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
+  ];
 
-    # outdated translation files
-    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
-    "test_different_dates_spanish"
-    "test_same_day_spanish"
-    "test_same_month_spanish"
-    "test_same_year_spanish"
-
-    # broken with fakeredis>=2.27.0
-    "test_waitinglist_cache_separation"
-    "test_waitinglist_item_active"
-    "test_waitinglist_variation_active"
+  disabledTestPaths = [
+    # too expensive
+    "src/tests/e2e"
   ];
 
   preCheck = ''
     export PYTHONPATH=$(pwd)/src:$PYTHONPATH
     export DJANGO_SETTINGS_MODULE=tests.settings
+
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  postCheck = ''
+    unset NIX_REDIRECTS
   '';
 
   passthru = {
     inherit
-      npmDeps
       python
       ;
     plugins = lib.recurseIntoAttrs (
       lib.packagesFromDirectoryRecursive {
-        inherit (python.pkgs) callPackage;
+        inherit (pythonPackages) callPackage;
         directory = ./plugins;
       }
     );
@@ -300,10 +304,12 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -314,8 +320,8 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

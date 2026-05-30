@@ -10,22 +10,23 @@
   glib,
   cairo,
   pango,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-games";
-  version = "1.13.0";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "rofi-games";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Id2PfgLc9MQI82u7qKKJVaqpGfGFfCKZldVKlYHc5JE=";
+    hash = "sha256-LwzlBjRh9YdUGBl9+L3Vdetmy7lUdAIvjKvp8hSebvY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EO5gVoZIB7Dduc8LfXwcBriPYyIfGNWEog1bCkegqcI=";
+    hash = "sha256-opImhuLXj3/TtpmBjjMvrcdHalxYFyv5QZ0V8poYH7U=";
   };
 
   patches = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     cairo
     pango
+    sqlite
   ];
 
   meta = {

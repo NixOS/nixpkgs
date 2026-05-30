@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "daphne" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django ASGI (HTTP/WebSocket) server";
     homepage = "https://github.com/django/daphne";
     changelog = "https://github.com/django/daphne/blob/${src.tag}/CHANGELOG.txt";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "daphne";
   };

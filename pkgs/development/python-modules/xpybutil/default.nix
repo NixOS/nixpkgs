@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xpybutil" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BurntSushi/xpybutil";
     description = "Incomplete xcb-util port plus some extras";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

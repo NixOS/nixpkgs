@@ -1,0 +1,693 @@
+commit d9866fc537a16fc7d8f8c6116eae78a77679efbd
+Author: Sandro Jäckel <sandro.jaeckel@gmail.com>
+Date:   Wed, 1 Apr 2026 23:12:22 +0200
+
+    Fix Python 3.14 support
+
+diff --git a/pyinsteon/tools/tools_base.py b/pyinsteon/tools/tools_base.py
+index 01a6101..6ad4cb3 100644
+--- a/pyinsteon/tools/tools_base.py
++++ b/pyinsteon/tools/tools_base.py
+@@ -19,7 +19,7 @@
+ from ..constants import RelayMode, ThermostatMode, ToggleMode
+ from ..x10_address import X10Address
+ from .log_filter import NoStdoutFilter, StdoutFilter, StripPrefixFilter
+-from .utils import patch_stdin_stdout, set_loop, stdio
++from .utils import patch_stdin_stdout, stdio
+ 
+ _LOGGING = logging.getLogger(__name__)
+ LOG_FILE_NAME = "pyinsteon_tools.log"
+@@ -272,7 +272,6 @@ def start(cls):
+         )
+         args = parser.parse_args()
+ 
+-        set_loop()
+         loop = asyncio.get_event_loop()
+ 
+         intro = [
+diff --git a/pyinsteon/tools/utils.py b/pyinsteon/tools/utils.py
+index daed401..263c4a5 100644
+--- a/pyinsteon/tools/utils.py
++++ b/pyinsteon/tools/utils.py
+@@ -1,7 +1,7 @@
+ """Utilities for the tools commands."""
+ 
+ import asyncio
+-from asyncio.events import BaseDefaultEventLoopPolicy
++from asyncio import DefaultEventLoopPolicy
+ import os
+ import sys
+ 
+@@ -81,21 +81,3 @@ async def drain(self):
+             return await loop.run_in_executor(None, sys.stdout.writelines, data)
+ 
+     return Win32StdinReader(), Win32StdoutWriter()
+-
+-
+-def set_loop() -> None:
+-    """Attempt to use different loop."""
+-    if sys.platform == "win32":
+-        if hasattr(asyncio, "WindowsProactorEventLoopPolicy"):
+-            # pylint: disable=no-member
+-            policy = asyncio.WindowsProactorEventLoopPolicy()
+-        else:
+-
+-            class ProactorPolicy(BaseDefaultEventLoopPolicy):
+-                """Event loop policy to create proactor loops."""
+-
+-                _loop_factory = asyncio.ProactorEventLoop
+-
+-            policy = ProactorPolicy()
+-
+-        asyncio.set_event_loop_policy(policy)
+diff --git a/tests/test_managers/test_device_link_manager.py b/tests/test_managers/test_device_link_manager.py
+index 1eca93d..7db9d25 100644
+--- a/tests/test_managers/test_device_link_manager.py
++++ b/tests/test_managers/test_device_link_manager.py
+@@ -24,7 +24,7 @@ def _reset_devices(addresses):
+         device.async_status = AsyncMock()
+         device.aldb.clear_pending()
+         device.aldb.async_write = AsyncMock()
+-        device.aldb.async_write.call_count = 0
++        device.aldb.async_write.reset_mock()
+         device.aldb.clear = Mock()
+         device.async_status.return_value = ResponseStatus.SUCCESS
+ 
+@@ -73,7 +73,7 @@ async def test_device_links_broadcast(self):
+ 
+         topic = "1a1a1a.1.on.all_link_broadcast"
+         topic_item = TopicItem(topic, cmd_kwargs(0x11, 0xFF, None, "00.00.01"), 0)
+-        devices["3c3c3c"].async_status.call_count = 0
++        devices["3c3c3c"].async_status.reset_mock()
+         send_topics([topic_item])
+         await asyncio.sleep(0.2)
+         assert devices["3c3c3c"].async_status.call_count == 1
+@@ -89,7 +89,7 @@ async def test_device_links_cleanup(self):
+         ):
+             topic = "1a1a1a.1.off.all_link_cleanup"
+             topic_item = TopicItem(topic, cmd_kwargs(0x11, 0xFF, None, "11.11.11"), 0)
+-            devices["3c3c3c"].async_status.call_count = 0
++            devices["3c3c3c"].async_status.reset_mock()
+             send_topics([topic_item])
+             await asyncio.sleep(0.2)
+             assert devices["3c3c3c"].async_status.call_count == 1
+@@ -108,7 +108,7 @@ async def test_device_links_dedup(self):
+         topic_cleanup_item = TopicItem(
+             topic_cleanup, cmd_kwargs(0x11, 0xFF, None, "11.11.11"), 0.2
+         )
+-        devices["3c3c3c"].async_status.call_count = 0
++        devices["3c3c3c"].async_status.reset_mock()
+         send_topics([topic_broadcast_item, topic_cleanup_item])
+         await asyncio.sleep(1)
+         assert devices["3c3c3c"].async_status.call_count == 1
+@@ -250,7 +250,7 @@ async def test_device_links_broadcast_no_response(self):
+ 
+         topic = "1a1a1a.1.off.all_link_broadcast"
+         topic_item = TopicItem(topic, cmd_kwargs(0x11, 0xFF, None, "00.00.01"), 0)
+-        devices["3c3c3c"].async_status.call_count = 0
++        devices["3c3c3c"].async_status.reset_mock()
+         devices["3c3c3c"].async_status.return_value = ResponseStatus.FAILURE
+         send_topics([topic_item])
+         await asyncio.sleep(0.2)
+diff --git a/tests/test_managers/test_link_manager.py b/tests/test_managers/test_link_manager.py
+index cd2e602..8104617 100644
+--- a/tests/test_managers/test_link_manager.py
++++ b/tests/test_managers/test_link_manager.py
+@@ -23,7 +23,7 @@ def _reset_devices(addresses):
+         device.async_status = AsyncMock()
+         device.aldb.clear_pending()
+         device.aldb.async_write = AsyncMock()
+-        device.aldb.async_write.call_count = 0
++        device.aldb.async_write.reset_mock()
+         device.aldb.clear = Mock()
+         device.async_status.return_value = ResponseStatus.SUCCESS
+ 
+diff --git a/tests/test_managers/test_scene_manager.py b/tests/test_managers/test_scene_manager.py
+index 9371fdf..d816cfb 100644
+--- a/tests/test_managers/test_scene_manager.py
++++ b/tests/test_managers/test_scene_manager.py
+@@ -37,7 +37,7 @@ def _reset_devices(addresses):
+         device = devices[addr]
+         device.aldb.clear_pending()
+         device.aldb.async_write = AsyncMock(return_value=(0, 0))
+-        device.aldb.async_write.call_count = 0
++        device.aldb.async_write.reset_mock()
+         device.aldb.clear = Mock()
+ 
+ 
+diff --git a/tests/test_tools/test_advanced.py b/tests/test_tools/test_advanced.py
+index 9ebe6ee..2cc2e46 100644
+--- a/tests/test_tools/test_advanced.py
++++ b/tests/test_tools/test_advanced.py
+@@ -131,7 +131,7 @@ async def test_enter_linking_mode(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    mock_enter_linking_mode.call_count = 0
++                    mock_enter_linking_mode.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert mock_enter_linking_mode.call_count == 1
+                     mock_enter_linking_mode.assert_called_with(
+@@ -147,7 +147,7 @@ async def test_enter_linking_mode(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    mock_enter_linking_mode.call_count = 0
++                    mock_enter_linking_mode.reset_mock()
+                     stdout.buffer = []
+                     remove_log_file(curr_dir)
+                     await cmd_mgr.async_cmdloop("")
+@@ -170,7 +170,7 @@ async def test_enter_linking_mode(self):
+                     cmd_mgr, _, stdout = self.setup_cmd_tool(
+                         AdvancedTools, inputs, allow_logging=True
+                     )
+-                    mock_enter_linking_mode.call_count = 0
++                    mock_enter_linking_mode.reset_mock()
+                     stdout.buffer = []
+                     remove_log_file(curr_dir)
+                     await cmd_mgr.async_cmdloop("")
+@@ -199,7 +199,7 @@ async def test_enter_linking_mode(self):
+                         AdvancedTools,
+                         inputs,
+                     )
+-                    mock_enter_linking_mode.call_count = 0
++                    mock_enter_linking_mode.reset_mock()
+                     stdout.buffer = []
+                     remove_log_file(curr_dir)
+                     await cmd_mgr.async_cmdloop("")
+@@ -228,7 +228,7 @@ async def test_enter_linking_mode(self):
+                         AdvancedTools,
+                         inputs,
+                     )
+-                    mock_enter_linking_mode.call_count = 0
++                    mock_enter_linking_mode.reset_mock()
+                     stdout.buffer = []
+                     remove_log_file(curr_dir)
+                     await cmd_mgr.async_cmdloop("")
+@@ -275,8 +275,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 1
+                     assert good_device.aldb.async_write.call_count == 1
+@@ -291,8 +291,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -306,8 +306,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -321,8 +321,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -336,8 +336,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -349,8 +349,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -364,8 +364,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -383,8 +383,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 1
+                     assert good_device.aldb.async_write.call_count == 1
+@@ -402,8 +402,8 @@ async def test_remove_link(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    good_device.aldb.remove.call_count = 0
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.remove.reset_mock()
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert good_device.aldb.remove.call_count == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -422,8 +422,8 @@ async def test_remove_link(self):
+                     )
+ 
+                     battery_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+-                    battery_device.aldb.remove.call_count = 0
+-                    battery_device.aldb.async_write.call_count = 0
++                    battery_device.aldb.remove.reset_mock()
++                    battery_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert battery_device.aldb.remove.call_count == 1
+                     assert battery_device.aldb.async_write.call_count == 1
+@@ -884,7 +884,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -904,7 +904,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+ 
+@@ -923,7 +923,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+ 
+@@ -942,7 +942,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -969,7 +969,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -996,7 +996,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -1022,7 +1022,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -1048,7 +1048,7 @@ async def test_add_link(self):
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.EMPTY, {})
+                     good_device.aldb.async_write = AsyncMock(return_value=(0, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop()
+                     assert len(good_device.aldb.pending_changes) == 0
+                     assert good_device.aldb.async_write.call_count == 0
+@@ -1154,7 +1154,7 @@ async def test_cancel_linking_mode(self):
+                         inputs,
+                         allow_logging=True,
+                     )
+-                    mock_cancel_linking_mode.call_count = 0
++                    mock_cancel_linking_mode.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert mock_cancel_linking_mode.call_count == 1
+ 
+@@ -1356,7 +1356,7 @@ def create_random_arg_str(
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 1
+ 
+@@ -1373,7 +1373,7 @@ def create_random_arg_str(
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(0, 1))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 1
+ 
+@@ -1389,7 +1389,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1405,7 +1405,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1421,7 +1421,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1437,7 +1437,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1453,7 +1453,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1473,7 +1473,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1493,7 +1493,7 @@ def create_random_arg_str(
+                         allow_logging=True,
+                     )
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+ 
+@@ -1515,7 +1515,7 @@ def create_random_arg_str(
+                     )
+                     battery_device.aldb.load_saved_records(ALDBStatus.LOADED, records)
+                     battery_device.aldb.async_write = AsyncMock(return_value=(0, 0))
+-                    battery_device.aldb.async_write.call_count = 0
++                    battery_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert battery_device.aldb.async_write.call_count == 1
+ 
+@@ -1532,6 +1532,6 @@ def create_random_arg_str(
+                     )
+                     good_device.aldb.load_saved_records(ALDBStatus.PARTIAL, records)
+                     good_device.aldb.async_write = AsyncMock(return_value=(1, 0))
+-                    good_device.aldb.async_write.call_count = 0
++                    good_device.aldb.async_write.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert good_device.aldb.async_write.call_count == 0
+diff --git a/tests/test_tools/test_aldb.py b/tests/test_tools/test_aldb.py
+index 5edd9d6..207babd 100644
+--- a/tests/test_tools/test_aldb.py
++++ b/tests/test_tools/test_aldb.py
+@@ -130,7 +130,7 @@ async def test_add_device_to_scene(self):
+                             "exit",
+                         ],
+                     )
+-                    mock_async_link_devices.call_count = 0
++                    mock_async_link_devices.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert mock_async_link_devices.call_count == 1
+                     if device.cat == DeviceCategory.DIMMABLE_LIGHTING_CONTROL:
+@@ -153,7 +153,7 @@ async def test_add_device_to_scene(self):
+                                 "exit",
+                             ],
+                         )
+-                        mock_async_link_devices.call_count = 0
++                        mock_async_link_devices.reset_mock()
+                         await cmd_mgr.async_cmdloop("")
+                         assert mock_async_link_devices.call_count == 1
+                         if device.cat == DeviceCategory.DIMMABLE_LIGHTING_CONTROL:
+@@ -190,7 +190,7 @@ async def test_add_device_to_scene(self):
+                             "exit",
+                         ],
+                     )
+-                    mock_async_link_devices.call_count = 0
++                    mock_async_link_devices.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert mock_async_link_devices.call_count == 1
+                     if device.cat == DeviceCategory.DIMMABLE_LIGHTING_CONTROL:
+@@ -228,7 +228,7 @@ async def test_add_device_to_scene(self):
+                                 "exit",
+                             ],
+                         )
+-                        mock_async_link_devices.call_count = 0
++                        mock_async_link_devices.reset_mock()
+                         await cmd_mgr.async_cmdloop("")
+                         assert mock_async_link_devices.call_count == 1
+                         if device.cat == DeviceCategory.DIMMABLE_LIGHTING_CONTROL:
+@@ -262,7 +262,7 @@ async def test_add_device_to_scene(self):
+                                 "exit",
+                             ],
+                         )
+-                        mock_async_link_devices.call_count = 0
++                        mock_async_link_devices.reset_mock()
+                         await cmd_mgr.async_cmdloop("")
+                         assert mock_async_link_devices.call_count == 0
+ 
+@@ -275,7 +275,7 @@ async def test_add_device_to_scene(self):
+                         "exit",
+                     ],
+                 )
+-                mock_async_link_devices.call_count = 0
++                mock_async_link_devices.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_async_link_devices.call_count == 0
+ 
+@@ -287,7 +287,7 @@ async def test_add_device_to_scene(self):
+                         "exit",
+                     ],
+                 )
+-                mock_async_link_devices.call_count = 0
++                mock_async_link_devices.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_async_link_devices.call_count == 0
+ 
+@@ -299,7 +299,7 @@ async def test_add_device_to_scene(self):
+                         "exit",
+                     ],
+                 )
+-                mock_async_link_devices.call_count = 0
++                mock_async_link_devices.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_async_link_devices.call_count == 0
+ 
+@@ -311,7 +311,7 @@ async def test_add_device_to_scene(self):
+                         "exit",
+                     ],
+                 )
+-                mock_async_link_devices.call_count = 0
++                mock_async_link_devices.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_async_link_devices.call_count == 0
+ 
+@@ -496,7 +496,7 @@ def __init__(self):
+                     cmd_mgr, _, _ = self.setup_cmd_tool(
+                         ToolsAldb, [f"{command} {mock_device.address} y", "exit"]
+                     )
+-                    mock_device.aldb.async_load.call_count = 0
++                    mock_device.aldb.async_load.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     assert mock_device.aldb.async_load.call_count == 1  # no retry
+ 
+@@ -504,7 +504,7 @@ def __init__(self):
+                 cmd_mgr, _, _ = self.setup_cmd_tool(
+                     ToolsAldb, [f"load_aldb {devices.modem.address}", "exit"]
+                 )
+-                devices.modem.aldb.async_load.call_count = 0
++                devices.modem.aldb.async_load.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert devices.modem.aldb.async_load.call_count == 1
+                 devices.modem.aldb.async_load.assert_called_with()
+diff --git a/tests/test_tools/test_commands.py b/tests/test_tools/test_commands.py
+index e9ac640..91cdea6 100644
+--- a/tests/test_tools/test_commands.py
++++ b/tests/test_tools/test_commands.py
+@@ -221,8 +221,8 @@ async def test_scene_on_off(self):
+                             "exit",
+                         ],
+                     )
+-                    mock_trigger_scene_on.call_count = 0
+-                    mock_trigger_scene_off.call_count = 0
++                    mock_trigger_scene_on.reset_mock()
++                    mock_trigger_scene_off.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     if cmd == "scene_on":
+                         assert mock_trigger_scene_on.call_count == 1
+@@ -241,8 +241,8 @@ async def test_scene_on_off(self):
+                                 "exit",
+                             ],
+                         )
+-                        mock_trigger_scene_on.call_count = 0
+-                        mock_trigger_scene_off.call_count = 0
++                        mock_trigger_scene_on.reset_mock()
++                        mock_trigger_scene_off.reset_mock()
+                         await cmd_mgr.async_cmdloop("")
+                         if cmd == "scene_on":
+                             assert mock_trigger_scene_on.call_count == 1
+@@ -263,8 +263,8 @@ async def test_scene_on_off(self):
+                     device_01.async_on = AsyncMock()
+                     device_01.async_off = AsyncMock()
+                     stdout.buffer = []
+-                    mock_trigger_scene_on.call_count = 0
+-                    mock_trigger_scene_off.call_count = 0
++                    mock_trigger_scene_on.reset_mock()
++                    mock_trigger_scene_off.reset_mock()
+                     await cmd_mgr.async_cmdloop("")
+                     buffer = clean_buffer(stdout.buffer)
+                     assert buffer[2] == "Scene number is required\n"
+@@ -472,7 +472,7 @@ async def mock_missing_arg(on_level: int, group: int = 0, fast: bool = False):
+                         "exit",
+                     ],
+                 )
+-                mock_method.call_count = 0
++                mock_method.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_method.call_count == 1
+                 mock_method.assert_called_with(on_level=255, group=0, fast=False)
+@@ -491,7 +491,7 @@ async def mock_missing_arg(on_level: int, group: int = 0, fast: bool = False):
+                         "exit",
+                     ],
+                 )
+-                mock_method.call_count = 0
++                mock_method.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_method.call_count == 1
+                 mock_method.assert_called_with(on_level=on_level, group=0, fast=False)
+@@ -509,7 +509,7 @@ async def mock_missing_arg(on_level: int, group: int = 0, fast: bool = False):
+                         "exit",
+                     ],
+                 )
+-                mock_method.call_count = 0
++                mock_method.reset_mock()
+                 await cmd_mgr.async_cmdloop("")
+                 assert mock_method.call_count == 1
+                 mock_method.assert_called_with(on_level=255, group=0, fast=True)
+@@ -568,7 +568,7 @@ async def mock_missing_arg(on_level: int, group: int = 0, fast: bool = False):
+                         "exit",
+                     ],
+                 )
+-                mock_method.call_count = 0
++                mock_method.reset_mock()
+                 stdout.buffer = []
+                 await cmd_mgr.async_cmdloop("")
+                 buffer = clean_buffer(stdout.buffer)
+diff --git a/tests/test_tools/test_main.py b/tests/test_tools/test_main.py
+index 0f8b038..e6b562e 100644
+--- a/tests/test_tools/test_main.py
++++ b/tests/test_tools/test_main.py
+@@ -978,7 +978,7 @@ async def test_remove_device(self):
+                 await cmd_mgr.async_cmdloop()
+                 assert mock_unlink_devices.call_count == 3
+ 
+-                mock_unlink_devices.call_count = 0
++                mock_unlink_devices.reset_mock()
+                 # Remove known device using command line mode
+                 cmd_mgr, _, _ = self.setup_cmd_tool(
+                     InsteonCmd, [f"remove_device {str(good_address)}", 1, "exit"]
+@@ -987,7 +987,7 @@ async def test_remove_device(self):
+                 assert mock_unlink_devices.call_count == 0
+                 assert devices.async_remove_device.call_count == 1
+ 
+-                mock_unlink_devices.call_count = 0
++                mock_unlink_devices.reset_mock()
+                 # Remove known device using input mode
+                 cmd_mgr, _, _ = self.setup_cmd_tool(
+                     InsteonCmd, ["remove_device", str(good_address), 1, "exit"]
+@@ -996,8 +996,8 @@ async def test_remove_device(self):
+                 assert mock_unlink_devices.call_count == 0
+                 assert devices.async_remove_device.call_count == 2
+ 
+-                mock_unlink_devices.call_count = 0
+-                # Remove known device using bakcground mode
++                mock_unlink_devices.reset_mock()
++                # Remove known device using background mode
+                 cmd_mgr, _, _ = self.setup_cmd_tool(
+                     InsteonCmd, [f"remove_device -b {str(good_address)}", 1, "exit"]
+                 )
+@@ -1005,7 +1005,7 @@ async def test_remove_device(self):
+                 assert mock_unlink_devices.call_count == 0
+                 assert devices.async_remove_device.call_count == 3
+ 
+-                mock_unlink_devices.call_count = 0
++                mock_unlink_devices.reset_mock()
+                 # Remove known device using command line mode with force
+                 cmd_mgr, _, _ = self.setup_cmd_tool(
+                     InsteonCmd, [f"remove_device {str(good_address)} f", 1, "exit"]

@@ -11,6 +11,7 @@ let
     "kvantum"
     "lazygit"
     "lxqt"
+    "palette"
     "plymouth"
     "qt5ct"
     "refind"
@@ -18,6 +19,7 @@ let
     "starship"
     "thunderbird"
     "waybar"
+    "whoogle"
   ];
 in
 {
@@ -124,8 +126,8 @@ let
       name = "kvantum";
       owner = "catppuccin";
       repo = "Kvantum";
-      rev = "c7cb144b041395e83e4f510a62526b7adfb79911";
-      hash = "sha256-YNUkri+no+rNLTJHf6cPdy4AmQLzPiRK1Jbp2o8e1LE=";
+      rev = "71105d224fef95dd023691303477ce3eea487457";
+      hash = "sha256-gcvCVZjVbj5fRZWaM+mZTwH/g158MH36JmMuMgCBuqQ=";
     };
 
     lazygit = fetchFromGitHub {
@@ -144,12 +146,20 @@ let
       hash = "sha256-3TuUkOwk6BSc7BnLnTowGAkSlNTOtGTRlEcjJ6MNJ5g=";
     };
 
+    palette = fetchFromGitHub {
+      name = "palette";
+      owner = "catppuccin";
+      repo = "palette";
+      rev = "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd";
+      hash = "sha256-hsy+GhuM4MSjnwGq1YJSLBFIbVm67SSdPRgObP00mxw=";
+    };
+
     plymouth = fetchFromGitHub {
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
-      hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
+      rev = "da38011d25f6f36152f2409372dfadb11c8f047c";
+      hash = "sha256-3JK4lX2ZmxysITDEEkhBLkyINUeCzvu5nUgrpvWZ+ZE=";
     };
 
     qt5ct = fetchFromGitHub {
@@ -199,6 +209,14 @@ let
       rev = "ee8ed32b4f63e9c417249c109818dcc05a2e25da";
       hash = "sha256-za0y6hcN2rvN6Xjf31xLRe4PP0YyHu2i454ZPjr+lWA=";
     };
+
+    whoogle = fetchFromGitHub {
+      name = "whoogle";
+      owner = "catppuccin";
+      repo = "whoogle";
+      rev = "9d961dc6e2ac405fee18ee1da9a14db1f139db39";
+      hash = "sha256-GyJD/xAF481ZMHOEfwW1SrWW6LT8ARRFizbfjl526XE=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListOfEnum
@@ -213,7 +231,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2025-10-07";
+    version = "0-unstable-2026-03-24";
 
     srcs = selectedSources;
 
@@ -233,43 +251,43 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     ''
     + lib.optionalString (lib.elem "alacritty" themeList) ''
       mkdir -p "$out/alacritty"
-      cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
+      cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty"
 
     ''
     + lib.optionalString (lib.elem "bat" themeList) ''
       mkdir -p "$out/bat"
-      cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
+      cp "${sources.bat}/themes/Catppuccin $capitalizedVariant.tmTheme" "$out/bat"
 
     ''
     + lib.optionalString (lib.elem "btop" themeList) ''
       mkdir -p "$out/btop"
-      cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop/"
+      cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop"
 
     ''
     + lib.optionalString (lib.elem "bottom" themeList) ''
       mkdir -p "$out/bottom"
-      cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+      cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom"
 
     ''
     + lib.optionalString (lib.elem "element" themeList) ''
       mkdir -p "$out/element"
-      cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
+      cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element"
 
     ''
     + lib.optionalString (lib.elem "grub" themeList) ''
       mkdir -p "$out/grub"
-      cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme/"* "$out/grub/"
+      cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme"/* "$out/grub"
 
     ''
     + lib.optionalString (lib.elem "hyprland" themeList) ''
       mkdir -p "$out/hyprland"
-      cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
+      cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland"
 
     ''
     + lib.optionalString (lib.elem "k9s" themeList) ''
       mkdir -p "$out/k9s"
-      cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
-      cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
+      cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s"
+      cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s"
 
     ''
     + lib.optionalString (lib.elem "kvantum" themeList) ''
@@ -278,20 +296,25 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
 
     ''
     + lib.optionalString (lib.elem "lazygit" themeList) ''
-      mkdir -p "$out/lazygit/"{themes,themes-mergable}
-      cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
-      cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
+      mkdir -p "$out/lazygit"/themes{,-mergable}
+      cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes"
+      cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable"
 
     ''
     + lib.optionalString (lib.elem "lxqt" themeList) ''
       mkdir -p "$out/share/lxqt/themes/catppuccin-${variant}"
-      cp -r "${sources.lxqt}/src/catppuccin-${variant}/"* "$out/share/lxqt/themes/catppuccin-${variant}"
+      cp -r "${sources.lxqt}/src/catppuccin-${variant}"/* "$out/share/lxqt/themes/catppuccin-${variant}"
+
+    ''
+    + lib.optionalString (lib.elem "palette" themeList) ''
+      mkdir -p "$out/palette"
+      cp "${sources.palette}/palette.json" "$out/palette"
 
     ''
     + lib.optionalString (lib.elem "plymouth" themeList) ''
       mkdir -p "$out/share/plymouth/themes/catppuccin-${variant}"
-      cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
-      sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+      cp "${sources.plymouth}/themes/catppuccin-${variant}"/* "$out/share/plymouth/themes/catppuccin-${variant}"
+      sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' "$out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth"
 
     ''
     + lib.optionalString (lib.elem "qt5ct" themeList) ''
@@ -299,15 +322,15 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       cp "${sources.qt5ct}/themes/catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
 
     ''
-    + lib.optionalString (lib.elem "rofi" themeList) ''
-      mkdir -p "$out/rofi"
-      cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
-
-    ''
     + lib.optionalString (lib.elem "refind" themeList) ''
       mkdir -p "$out/refind/assets"
       cp "${sources.refind}/${variant}.conf" "$out/refind"
       cp -r "${sources.refind}/assets/${variant}" "$out/refind/assets"
+
+    ''
+    + lib.optionalString (lib.elem "rofi" themeList) ''
+      mkdir -p "$out/rofi"
+      cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
 
     ''
     + lib.optionalString (lib.elem "starship" themeList) ''
@@ -323,6 +346,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "waybar" themeList) ''
       mkdir -p "$out/waybar"
       cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
+
+    ''
+    + lib.optionalString (lib.elem "whoogle" themeList) ''
+      mkdir -p "$out/whoogle"
+      cp "${sources.whoogle}/css/${variant}.css" "$out/whoogle"
 
     ''
     + ''

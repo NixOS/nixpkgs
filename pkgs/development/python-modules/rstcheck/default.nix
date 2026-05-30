@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   rstcheck-core,
   sphinx,
   typer,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "rstcheck";
   version = "6.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
@@ -48,12 +45,12 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
     changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ staccato ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ staccato ];
     mainProgram = "rstcheck";
   };
 }

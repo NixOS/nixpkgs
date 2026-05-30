@@ -5,7 +5,7 @@
 }:
 mkKdeDerivation {
   pname = "alpaka";
-  version = "unstable-2024-02-27";
+  version = "0-unstable-2024-02-27";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";

@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-when-merged";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mhagger";
     repo = "git-when-merged";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Yp/GNzD+7EPlk/kzZnT1eiSNsSxpYEiZezRbUU3HfLc=";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -D --target-directory $out/bin/ bin/git-when-merged
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helps you figure out when and why a commit was merged into a branch";
     longDescription = ''
       If you use standard Git workflows, then you create a feature
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       merged into the current branch?"
     '';
     homepage = "https://github.com/mhagger/git-when-merged";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = python3.meta.platforms;
-    maintainers = with maintainers; [ DamienCassou ];
+    maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "git-when-merged";
   };
-}
+})

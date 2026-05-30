@@ -9,15 +9,19 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "android-file-transfer";
-  version = "4.5";
+  version = "4.5-unstable-2026-04-17";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
-    tag = "v${version}";
-    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
+    # tag = "v${finalAttrs.version}";
+    # Switch to unreleased version for recent fixes, especially to fix the build on Darwin
+    # https://github.com/whoozle/android-file-transfer-linux/pull/360
+    # TODO: Switch back when the next version releases
+    rev = "88926930db41238c7b4d7237fc5849b9586cc7b8";
+    sha256 = "sha256-rk1QXq8JiLRZu+dz9HvWkOj5JyaLMXzTybByl46obE8=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];
@@ -39,11 +43,11 @@ stdenv.mkDerivation rec {
     mv $out/*.app $out/Applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.xaverdh ];
+    platforms = lib.platforms.unix;
   };
-}
+})

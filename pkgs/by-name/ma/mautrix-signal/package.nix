@@ -20,14 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "25.10";
-  tag = "v0.2510.0";
+  version = "26.05";
+  tag = "v0.2605.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    tag = tag;
-    hash = "sha256-Bz4jBI/lLhCxZW7JmaX6dlVwbB3dLXn5v/8gMKcFKSE=";
+    inherit tag;
+    hash = "sha256-IGDVfauU+zRbwEN6FdI9t5TjnKAm22NsuxiUiDPhK2Q=";
   };
 
   buildInputs =
@@ -42,9 +42,11 @@ buildGoModule rec {
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
+  env = lib.optionalAttrs withGoolm {
+    CGO_LDFLAGS = toString [ cppStdLib ];
+  };
 
-  vendorHash = "sha256-Sur29i5ih7xK85maVAaq9cwWJVGtwS7hPOxQI4YduNI=";
+  vendorHash = "sha256-Njl4kwhx+vlqQI8CeA8gfanEKClvMefoM3Sy3UUYllc=";
 
   ldflags = [
     "-X"
@@ -67,13 +69,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       pentane
       ma27
       SchweGELBin

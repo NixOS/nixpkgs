@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.9";
+  version = "1.12.11";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-IBULO03og+aXmpYAXZdsesTFkc7HkeXol+A7yzDzcfQ=";
+    hash = "sha256-EoohVYrnGN3dJUlXAd+10glcKA0AdZSyQ3wy2luycMQ=";
   };
 
   outputs = [
@@ -112,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

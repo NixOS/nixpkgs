@@ -6,6 +6,8 @@
   autoPatchelfHook,
   python3,
   libxcrypt-legacy,
+  tcl-8_6,
+  tclPackages,
 }:
 
 let
@@ -166,7 +168,7 @@ let
         fi
 
         # Write the snapshot file to the `.install` folder
-        cp $snapshotPath $out/google-cloud-sdk/.install/${pname}.snapshot.json
+        printf "%s" "$snapshot" > $out/google-cloud-sdk/.install/${pname}.snapshot.json
       '';
       nativeBuildInputs = [
         python3
@@ -177,11 +179,13 @@ let
       ];
       buildInputs = [
         libxcrypt-legacy
+        tcl-8_6
+        tclPackages.tk
       ];
       passthru = {
         dependencies = filterForSystem dependencies;
       };
-      passAsFile = [ "snapshot" ];
+      __structuredAttrs = true;
       meta = {
         inherit description platforms;
       };

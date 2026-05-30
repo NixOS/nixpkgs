@@ -5,7 +5,6 @@
   graphql-core,
   promise,
   fetchpatch,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "graphql-server-core";
   version = "2.0.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
@@ -39,10 +37,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

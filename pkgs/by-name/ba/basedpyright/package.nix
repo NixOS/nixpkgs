@@ -18,16 +18,16 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.33.0";
+  version = "1.39.3";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-7msVXU2ypoohLxTfJ6qt1zFF1zG2GBPD3zSBjA2EhMM=";
+    hash = "sha256-80RQO0UwDA9ZxIGQ0/8WaEj9QlqrQ4g7m9+WJDZrZbI=";
   };
 
-  npmDepsHash = "sha256-zNmZ4wXxe31NnQ+VlTLoPM2zTDmKdw1D28pi/roybdQ=";
+  npmDepsHash = "sha256-jut63CiYGTNIP27wYCPZnE/Ab90EWJnVkx58Oy3uo9o=";
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -40,7 +40,7 @@ buildNpmPackage rec {
     docify
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 
@@ -52,7 +52,6 @@ buildNpmPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

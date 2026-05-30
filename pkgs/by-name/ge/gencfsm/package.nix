@@ -14,18 +14,19 @@
   gtk3,
   vala,
   wrapGAppsHook3,
-  xorg,
+  libsm,
+  libice,
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.9";
   pname = "gnome-encfs-manager";
 
   src = fetchurl {
     url =
       with lib.versions;
-      "https://launchpad.net/gencfsm/trunk/${major version}.${minor version}/+download/gnome-encfs-manager_${version}.tar.xz";
+      "https://launchpad.net/gencfsm/trunk/${major finalAttrs.version}.${minor finalAttrs.version}/+download/gnome-encfs-manager_${finalAttrs.version}.tar.xz";
     sha256 = "RXVwg/xhfAQv3pWp3UylOhMKDh9ZACTuKM4lPrn1dk8=";
   };
 
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
     encfs
     gtk3
     libgee
-    xorg.libSM
-    xorg.libICE
+    libsm
+    libice
     libsecret
   ];
 
@@ -67,13 +68,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
     mainProgram = "gnome-encfs-manager";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.spacefrogg ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.spacefrogg ];
   };
-}
+})

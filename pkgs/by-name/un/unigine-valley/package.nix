@@ -13,11 +13,11 @@
   # Runtime dependencies
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libglvnd,
   openal,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://assets.unigine.com/d/Unigine_Valley-${version}.run";
-    sha256 = "sha256-XwyL0kMRGFURgrq79fHCD7FOekB4lpckDcr1RkQ2YPQ=";
+    hash = "sha256-L7R6nEXQbLTEi76VUoUyhS2LFeTdgdaTaIQVWGn/1+8=";
   };
 
   sourceRoot = "Unigine_Valley-${version}";
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc # libstdc++.so.6
     fontconfig
     freetype
-    libX11
-    libXext
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxrender
     libglvnd
     openal
   ];

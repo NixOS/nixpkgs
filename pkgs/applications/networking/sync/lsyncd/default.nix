@@ -11,11 +11,11 @@
   docbook_xml_dtd_45,
   docbook_xsl,
   libxslt,
-  apple-sdk,
+  darwin,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = darwin.sourceRelease "xnu";
 in
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/axkibe/lsyncd";
     description = "Utility that synchronizes local directories with remote targets";
     mainProgram = "lsyncd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bobvanderlinden ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
   };
 }

@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication {
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability fingerprinting and vulnerability finder for Wordpress blog engine";
     mainProgram = "plecost";
     homepage = "https://github.com/iniqua/plecost";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

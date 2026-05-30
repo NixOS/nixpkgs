@@ -16,10 +16,10 @@
   gtkspell2,
   intltool,
   lib,
-  libICE,
-  libSM,
-  libXScrnSaver,
-  libXext,
+  libice,
+  libsm,
+  libxscrnsaver,
+  libxext,
   libgcrypt,
   libgnt,
   libidn,
@@ -74,10 +74,10 @@ let
         gst_all_1.gst-plugins-base
         gst_all_1.gst-plugins-good
         gst_all_1.gstreamer
-        libICE
-        libSM
-        libXScrnSaver
-        libXext
+        libice
+        libsm
+        libxscrnsaver
+        libxext
         libgnt
         libidn
         libstartup_notification

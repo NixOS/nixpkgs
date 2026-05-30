@@ -20,6 +20,9 @@
   ascend ? false,
   v3d ? false,
   tpu ? false,
+  rockchip ? false,
+  metax ? false,
+  enflame ? false,
 }:
 
 let
@@ -39,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.2.0";
+  version = "3.3.2";
 
   # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
   # nixpkgs-update: no auto update
@@ -47,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Syllo";
     repo = "nvtop";
     rev = finalAttrs.version;
-    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
+    hash = "sha256-w3g/9VbZz1qrEMaBBHEf9Y93z0vo8LbWnENL2wEEaSw=";
   };
 
   cmakeFlags = with lib.strings; [
@@ -63,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ASCEND_SUPPORT" ascend)
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
+    (cmakeBool "ROCKCHIP_SUPPORT" rockchip)
+    (cmakeBool "METAX_SUPPORT" metax)
+    (cmakeBool "ENFLAME_SUPPORT" enflame)
   ];
   nativeBuildInputs = [
     cmake
@@ -98,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "htop-like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
@@ -106,9 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/Syllo/nvtop";
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    platforms = if apple then platforms.darwin else platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = if apple then lib.platforms.darwin else lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       gbtb
       anthonyroussel
       moni

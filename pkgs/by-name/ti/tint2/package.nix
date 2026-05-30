@@ -11,15 +11,15 @@
   glib,
   imlib2,
   gtk3,
-  libXinerama,
-  libXrender,
-  libXcomposite,
-  libXdamage,
-  libX11,
-  libXrandr,
+  libxinerama,
+  libxrender,
+  libxcomposite,
+  libxdamage,
+  libx11,
+  libxrandr,
   librsvg,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libstartup_notification,
   wrapGAppsHook3,
   versionCheckHook,
@@ -64,15 +64,15 @@ stdenv.mkDerivation rec {
     glib
     imlib2
     gtk3
-    libXinerama
-    libXrender
-    libXcomposite
-    libXdamage
-    libX11
-    libXrandr
+    libxinerama
+    libxrender
+    libxcomposite
+    libxdamage
+    libx11
+    libxrandr
     librsvg
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libstartup_notification
   ];
 

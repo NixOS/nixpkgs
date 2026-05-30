@@ -9,15 +9,12 @@
   pytest-sugar,
   pymysql,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
   version = "1.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "penguinolog";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_jsonfield" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
     changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
   };
 }

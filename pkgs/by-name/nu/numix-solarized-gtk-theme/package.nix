@@ -10,14 +10,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "numix-solarized-gtk-theme";
   version = "20230408";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "numix-solarized-gtk-theme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Solarized versions of Numix GTK2 and GTK3 theme";
     longDescription = ''
       This is a fork of the Numix GTK theme that replaces the colors of the theme
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.offline ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

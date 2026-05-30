@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/lightparam";
     description = "Another attempt at parameters in Python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

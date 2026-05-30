@@ -5,6 +5,7 @@
   lndir,
   formats,
   runCommand,
+  nix-update-script,
 }:
 {
   buildAnkiAddon = lib.extendMkDerivation {
@@ -13,9 +14,6 @@
       finalAttrs:
       {
         pname,
-        version,
-        src,
-        sourceRoot ? "",
         configurePhase ? ''
           runHook preConfigure
           runHook postConfigure
@@ -24,9 +22,9 @@
           runHook preBuild
           runHook postBuild
         '',
+        strictDeps ? true,
         dontPatchELF ? true,
         dontStrip ? true,
-        nativeBuildInputs ? [ ],
         passthru ? { },
         meta ? { },
         # Script run after "user_files" folder is populated.
@@ -37,14 +35,11 @@
       }:
       {
         inherit
-          version
-          src
-          sourceRoot
           configurePhase
           buildPhase
+          strictDeps
           dontPatchELF
           dontStrip
-          nativeBuildInputs
           ;
 
         pname = "anki-addon-${pname}";
@@ -61,6 +56,7 @@
         '';
 
         passthru = {
+          updateScript = nix-update-script { };
           withConfig =
             {
               # JSON add-on config. The available options for an add-on are in its

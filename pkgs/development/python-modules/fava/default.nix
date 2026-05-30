@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   buildNpmPackage,
+  fetchpatch2,
   fetchFromGitHub,
   stdenv,
   babel,
@@ -24,17 +25,17 @@
 let
   src = buildNpmPackage (finalAttrs: {
     pname = "fava-frontend";
-    version = "1.30.7";
+    version = "1.30.13";
 
     src = fetchFromGitHub {
       owner = "beancount";
       repo = "fava";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-gO6eJIFp/yWAXFWhUcqkkfk2pA8/vyTxgPRPBmv4a6Q=";
+      hash = "sha256-h4mjZIINR6RLYycGl2RFIEGuPPbJYYSg1TBGlZupCMw=";
     };
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-cXIhEzYFpLOxUEY7lhTWW7R3/ptkx7hB9K92Fd2m1Ng=";
+    npmDepsHash = "sha256-DQQISV615wZjNbvZwmF/AGJyJJIIs3iBS1tJCNPpT/o=";
     makeCacheWritable = true;
 
     preBuild = ''
@@ -55,7 +56,9 @@ buildPythonPackage {
 
   inherit src;
 
-  patches = [ ./dont-compile-frontend.patch ];
+  patches = [
+    ./dont-compile-frontend.patch
+  ];
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
@@ -103,9 +106,9 @@ buildPythonPackage {
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bhipple
       prince213
       sigmanificient
+      cbrxyz
     ];
   };
 }

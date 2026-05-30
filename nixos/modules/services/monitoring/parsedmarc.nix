@@ -33,7 +33,6 @@ let
     isAttrs
     isString
     isInt
-    isList
     typeOf
     hashString
     ;
@@ -404,7 +403,7 @@ in
           "batch_size"
         ];
       in
-      builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
+      map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 

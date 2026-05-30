@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diffr";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "mookid";
     repo = "diffr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ylZE2NtTXbGqsxE72ylEQCacTyxBO+/WgvEpoXd5OZI=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another diff highlighting tool";
     mainProgram = "diffr";
     homepage = "https://github.com/mookid/diffr";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})

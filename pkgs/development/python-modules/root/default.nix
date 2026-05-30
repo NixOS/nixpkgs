@@ -18,7 +18,7 @@ buildPythonPackage {
 
   src = null;
 
-  format = "other"; # disables setuptools/pyproject logic
+  pyproject = false; # disables setuptools/pyproject logic
 
   dontUnpack = true;
   dontConfigure = true;

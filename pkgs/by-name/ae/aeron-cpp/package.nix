@@ -60,10 +60,10 @@ stdenv.mkDerivation {
     makeWrapper
     patchelf
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -125,15 +125,15 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Aeron Messaging C++ Library";
     homepage = "https://aeron.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "aeronmd";
-    maintainers = [ maintainers.vaci ];
+    maintainers = [ lib.maintainers.vaci ];
     sourceProvenance = [
-      sourceTypes.fromSource
-      sourceTypes.binaryBytecode
+      lib.sourceTypes.fromSource
+      lib.sourceTypes.binaryBytecode
     ];
   };
 }

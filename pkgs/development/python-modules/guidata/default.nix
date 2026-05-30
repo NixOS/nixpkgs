@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -30,15 +31,18 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.12.0";
+  version = "3.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${version}";
-    hash = "sha256-dh1WyUgJ+rkBFtcyXEFgU8UNPQEkJfiJBwmkT1eqKoI=";
+    hash = "sha256-iUfZX51Ef1PY7roy9ER8hG34BAhCLs3Sagoasd5BT3E=";
   };
+
+  # https://github.com/PlotPyStack/guidata/issues/97
+  disabled = pythonAtLeast "3.14";
 
   build-system = [
     setuptools
@@ -109,7 +113,12 @@ buildPythonPackage rec {
   meta = {
     description = "Python library generating graphical user interfaces for easy dataset editing and display";
     homepage = "https://github.com/PlotPyStack/guidata";
-    changelog = "https://github.com/PlotPyStack/guidata/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/guidata/blob/master/doc/release_notes/release_${lib.versions.major version}.${
+      lib.pipe version [
+        lib.versions.minor
+        (lib.fixedWidthString 2 "0")
+      ]
+    }.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

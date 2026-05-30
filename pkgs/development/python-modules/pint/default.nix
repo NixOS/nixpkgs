@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -16,8 +15,6 @@
 
   # tests
   pytestCheckHook,
-  pytest-subtests,
-  pytest-benchmark,
   numpy,
   matplotlib,
   uncertainties,
@@ -28,8 +25,6 @@ buildPythonPackage rec {
   pname = "pint";
   version = "0.25.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hgrecco";
@@ -58,13 +53,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-subtests
-    pytest-benchmark
     matplotlib
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  disabledTestPaths = [
+    "pint/testsuite/benchmarks"
+  ];
 
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";

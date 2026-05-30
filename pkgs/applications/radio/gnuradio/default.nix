@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   # Remove gcc and python references
   removeReferencesTo,
@@ -309,28 +310,29 @@ stdenv.mkDerivation (
       patches = [
         # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
         ./modtool-newmod-permissions.patch
+
+        # Finding `boost_system` fails because the stub compiled library of
+        # Boost.System, which has been a header-only library since 1.69, was
+        # removed in 1.89.
+        (fetchpatch {
+          url = "https://github.com/gnuradio/gnuradio/commit/d8814e0c3ef68372e5a1093603ef602e2119cd8a.patch";
+          hash = "sha256-TQxqsce1AhSjdwaG2IP11QTeOgdJHN6cAAnznBl8eM8=";
+        })
       ];
-      passthru =
-        shared.passthru
-        // {
-          # Deps that are potentially overridden and are used inside GR plugins - the same version must
-          inherit
-            boost
-            volk
-            ;
-          # Used by many gnuradio modules, the same attribute is present in
-          # previous gnuradio versions where there it's log4cpp.
-          logLib = spdlog;
-        }
-        // lib.optionalAttrs (hasFeature "gr-uhd") {
-          inherit uhd;
-        }
-        // lib.optionalAttrs (hasFeature "gr-pdu") {
-          inherit libiio libad9361;
-        }
-        // lib.optionalAttrs (hasFeature "gr-qtgui") {
-          inherit (libsForQt5) qwt;
-        };
+      passthru = shared.passthru // {
+        # Deps that are potentially overridden and are used inside GR plugins - the same version must
+        inherit
+          uhd
+          boost
+          volk
+          libiio
+          libad9361
+          ;
+        # Used by many gnuradio modules, the same attribute is present in
+        # previous gnuradio versions where there it's log4cpp.
+        logLib = spdlog;
+        inherit (libsForQt5) qwt;
+      };
 
       postInstall =
         shared.postInstall

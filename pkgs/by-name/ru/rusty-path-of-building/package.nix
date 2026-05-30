@@ -1,7 +1,6 @@
 {
   lib,
   rustPlatform,
-  fetchurl,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
@@ -13,20 +12,22 @@
   libxkbcommon,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
-  version = "0.2.8";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
-    rev = "v${version}";
-    hash = "sha256-GJP5kuDHDyKFzlDW3EiMzd2KruYB1L51QgK4NT6B3Cc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=";
   };
 
-  cargoHash = "sha256-RfF53qd/crWDgEDveP58FPInlH7vtpprMU3aLf9KO8A=";
+  cargoHash = "sha256-8J1tZukp/Cchxj0QireOhu/eZd0N7uZa86XDLTBmHQk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,8 +45,8 @@ rustPlatform.buildRustPackage rec {
     # this is weird and vendored and should probably stay that way
     (luajit.pkgs.buildLuaPackage {
       pname = "lzip";
-      inherit version;
-      src = "${src}/lua/libs/lzip";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/lua/libs/lzip";
 
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ zlib ];
@@ -66,9 +67,9 @@ rustPlatform.buildRustPackage rec {
           libxkbcommon
           vulkan-loader
           wayland
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
+          libx11
+          libxcursor
+          libxi
         ]
       }
 
@@ -117,9 +118,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "A cross-platform runtime for Path of Building and Path of Building 2.";
     homepage = "https://github.com/meehl/rusty-path-of-building";
-    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ k900 ];
+    maintainers = with lib.maintainers; [
+      k900
+      cholli
+    ];
     mainProgram = "rusty-path-of-building";
   };
-}
+})

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-sdl2";
-  version = "8.4.0.25071206";
+  version = "8.5.3.26051504";
   pyproject = true;
 
   src = fetchFromGitHub {

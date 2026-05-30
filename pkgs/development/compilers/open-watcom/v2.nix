@@ -3,33 +3,36 @@
   lib,
   fetchFromGitHub,
   unstableGitUpdater,
-  dosbox,
 
   # Docs cause an immense increase in build time, up to 2 additional hours
   withDocs ? false,
+  dosbox,
+  mesa,
   ghostscript,
-  withGUI ? false,
+
+  # GUI tools aren't ported to non-MS platforms, building them usually just wastes time
+  withGUI ? stdenv.hostPlatform.isWindows,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "${passthru.prettyName}-unwrapped";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "${finalAttrs.passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "0-unstable-2025-05-07";
+  version = "0-unstable-2026-04-11";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "b168de07a7c32ad82b77dd56671b6a51a11dab70";
-    hash = "sha256-9NNJcDHxOo+NKZraGqsHqK5whO3nL0QTeh+imzhThTg=";
+    rev = "e724d4a0e7cc1593ae2430e07a62352b7852dd68";
+    hash = "sha256-Xu0oCNO8WyIwe12CjDWXP+2LUzexZcw6Rgzpb80M5cA=";
   };
 
   postPatch = ''
     patchShebangs *.sh
-
-    for dateSource in bld/wipfc/configure; do
-      substituteInPlace $dateSource \
-        --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
-    done
+  ''
+  # Patch references to current time & date into SOURCE_DATE_EPOCH-respecting ones
+  + ''
+    substituteInPlace bld/wipfc/configure \
+      --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
 
     substituteInPlace bld/watcom/h/banner.h \
       --replace-fail '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
@@ -38,29 +41,43 @@ stdenv.mkDerivation rec {
     substituteInPlace build/makeinit \
       --replace-fail '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   ''
+  # (SDL? DOSBox?) needs OpenGL now, and that doesn't seem to play nicely anymore with the dummy driver
+  + ''
+    substituteInPlace build/mif/wgmlcmd.mif \
+      --replace-fail 'SDL_VIDEODRIVER=dummy' 'SDL_VIDEODRIVER=offscreen'
+  ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
       --replace-fail '-static' ""
   '';
 
-  nativeBuildInputs = [
-    dosbox
-  ]
-  ++ lib.optionals withDocs [
+  # https://github.com/open-watcom/open-watcom-v2/issues/1608
+  hardeningDisable = [ "strictflexarrays1" ];
+
+  nativeBuildInputs = lib.optionals withDocs [
+    dosbox # running prebuilt WGML tool to create docs
     ghostscript
+    mesa.llvmpipeHook # DOSBox doesn't seem to launch without OpenGL available, even on SDL dummy platform
   ];
 
   configurePhase = ''
     runHook preConfigure
 
     export OWROOT=$(realpath $PWD)
-    export OWTOOLS=${if stdenv.cc.isClang then "CLANG" else "GCC"}
+    export OWTOOLS=${
+      if stdenv.cc.isClang then
+        "CLANG"
+      else if stdenv.cc.isGNU then
+        "GCC"
+      else
+        throw "Don't know what compiler ID to use for ${stdenv.cc.name} in open-watcom-v2 build"
+    }
     export OWDOCBUILD=${if withDocs then "1" else "0"}
-    export OWGHOSTSCRIPTPATH=${lib.optionalString withDocs "${ghostscript}/bin"}
+    export OWGHOSTSCRIPTPATH=${lib.optionalString withDocs "${lib.makeBinPath [ ghostscript ]}"}
     export OWGUINOBUILD=${if withGUI then "0" else "1"}
     export OWNOBUILD=
     export OWDISTRBUILD=0
-    export OWDOSBOX=${dosbox}/bin/dosbox
+    export OWDOSBOX=${lib.getExe dosbox}
     export OWVERBOSE=0
     export OWRELROOT=$out
 
@@ -97,7 +114,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "V2 fork of the Open Watcom suite of compilers and tools";
     longDescription = ''
       A fork of Open Watcom: A C/C++/Fortran compiler and assembler suite
@@ -128,13 +145,13 @@ stdenv.mkDerivation rec {
       https://github.com/open-watcom/open-watcom-v2/wiki/Open-Watcom-Documentation
     '';
     homepage = "https://open-watcom.github.io";
-    license = licenses.watcom;
-    platforms = with platforms; windows ++ unix;
-    badPlatforms = platforms.riscv ++ [
+    license = lib.licenses.watcom;
+    platforms = with lib.platforms; windows ++ unix;
+    badPlatforms = lib.platforms.riscv ++ [
       "powerpc64-linux"
       "powerpc64le-linux"
       "mips64el-linux"
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})

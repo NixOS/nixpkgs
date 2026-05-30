@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High level HTTP/2 C++ library";
     longDescription = ''
       libnghttp2_asio is C++ library built on top of libnghttp2
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       OpenSSL. libnghttp2_asio provides both client and server APIs.
     '';
     homepage = "https://github.com/nghttp2/nghttp2-asio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ izorkin ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

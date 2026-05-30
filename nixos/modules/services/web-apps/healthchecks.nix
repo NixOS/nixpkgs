@@ -19,7 +19,7 @@ let
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
   }
-  // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
+  // lib.filterAttrs (_: v: !isNull v) cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (
     lib.generators.toKeyValue { } environment

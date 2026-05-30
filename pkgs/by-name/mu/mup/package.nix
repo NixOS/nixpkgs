@@ -9,8 +9,8 @@
   groff,
   netpbm,
   fltk,
-  libXinerama,
-  libXpm,
+  libxinerama,
+  libxpm,
   libjpeg,
 }:
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fltk
-    libXinerama
-    libXpm
+    libxinerama
+    libxpm
     libjpeg
   ];
 
@@ -60,13 +60,17 @@ stdenv.mkDerivation {
       --replace-fail /usr/share/doc $out/share/doc
   '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

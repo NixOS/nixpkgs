@@ -61,6 +61,12 @@ Release branch. Used to specify that a package is not going to receive updates t
 
 The package’s homepage. Example: `https://www.gnu.org/software/hello/manual/`
 
+### `donationPage` {#var-meta-donationPage}
+
+The package or project's donation page, if it exists. Example: `https://neovim.io/sponsors/`
+
+Authoritative project URLs are preferred.
+
 ### `downloadPage` {#var-meta-downloadPage}
 
 The page where a link to the current version can be found. Example: `https://ftp.gnu.org/gnu/hello/`
@@ -151,9 +157,11 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 }
 ```
 
+Note that this does not affect whether reverse dependencies of the package are built on Hydra.
+
 ### `broken` {#var-meta-broken}
 
-If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_BROKEN`](#opt-allowBroken) is set.
+If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless [explicitly allowed](#sec-allow-broken).
 Such unconditionally-broken packages should be removed from Nixpkgs eventually unless they are fixed.
 
 The value of this attribute can depend on a package's arguments, including `stdenv`.
@@ -180,6 +188,15 @@ This means that `broken` can be used to express constraints, for example:
 
 This makes `broken` strictly more powerful than `meta.badPlatforms`.
 However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
+
+Underneath, `meta.broken = true;` is the same as
+```nix
+{
+  meta.problems.broken.message = "This package is broken.";
+}
+```
+
+By specifying this manually, the error message can be customised.
 
 ## `knownVulnerabilities` {#var-meta-knownVulnerabilities}
 
@@ -249,6 +266,10 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
 
+### `lib.sourceTypes.obfuscatedCode` {#lib.sourceTypes.obfuscatedCode}
+
+Code which is intentionally obfuscated by a third party, for example by using a code obfuscator or by being distributed in an obfuscated form.
+
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
@@ -278,14 +299,17 @@ Some of them are as follows:
 * *vendor* - can point to the source of the package, or to Nixpkgs itself
 * *product* - name of the package
 * *version* - version of the package
-* *update* - name of the latest update, can be a patch version for semantically versioned packages
-* *edition* - any additional specification about the version
+* *update* - vendor-specific string part of the version string of the latest update (e.g. `rc1`, `beta`, etc...)
+* *edition* - deprecated and should be set to `*`
 
 You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
 
-Any fields that don't have a value are set to either `-` if the value is not available or `*` when the field can match any value.
+Any fields that don't have a value are set to either:
 
-For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40:1:*:*:*:*:*:*`.
+* `*` (ANY) when the field can match any value
+* `-` (NA) when the value is not meaningful or not used in the description
+
+For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40.1:*:*:*:*:*:*:*`.
 
 #### `meta.identifiers.cpeParts` {#var-meta-identifiers-cpeParts}
 
@@ -301,14 +325,13 @@ It is up to the package author to make sure all parts are correct and match expe
 Following functions help with filling out `version` and `update` fields:
 
 * [`lib.meta.cpeFullVersionWithVendor`](#function-library-lib.meta.cpeFullVersionWithVendor)
-* [`lib.meta.cpePatchVersionInUpdateWithVendor`](#function-library-lib.meta.cpePatchVersionInUpdateWithVendor)
 
 For many packages to make CPE available it should be enough to specify only:
 
 ```nix
 {
   # ...
-  meta.identifiers.cpeParts = lib.meta.cpePatchVersionInUpdateWithVendor vendor version;
+  meta.identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor vendor version;
 }
 ```
 
@@ -319,3 +342,30 @@ A readonly attribute that concatenates all CPE parts in one string.
 #### `meta.identifiers.possibleCPEs` {#var-meta-identifiers-possibleCPEs}
 
 A readonly attribute containing the list of guesses for what CPE for this package can look like. It includes all variants of version handling mentioned above. Each item is an attrset with attributes `cpeParts` and `cpe` for each guess.
+
+### Package URL {#sec-meta-identifiers-purl}
+
+[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages.
+Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management.
+Package-URLs shall default to the `mkDerivation.src`, as the original consumed software package is the single source of truth.
+
+#### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
+
+This attribute contains an attribute set of all parts of the PURL for this package.
+
+* `type` mandatory [type](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/docs/standard/summary.md) which needs to be provided
+* `spec` specify the PURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/purl-specification.md)
+
+#### `meta.identifiers.purl` {#var-meta-identifiers-purl}
+
+An extendable attribute which is built based on `purlParts`.
+This is the main identifier of the software package.
+For handling edge cases, consider using the list interface [`meta.identifiers.purls`](#var-meta-identifiers-purls).
+
+#### `meta.identifiers.purls` {#var-meta-identifiers-purls}
+
+An extendable list attribute which defaults to a single element equal to [`meta.identifiers.purl`](#var-meta-identifiers-purl).
+It provides an interface for additional identifiers of `mkDerivation.src` or for identifiers of vendored dependencies inside `mkDerivation.src`, which maintainers may carefully consider to specify as well.
+
+Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
+For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.

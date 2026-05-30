@@ -6,15 +6,15 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cproto";
   version = "4.7y";
 
   src = fetchurl {
     urls = [
-      "mirror://debian/pool/main/c/cproto/cproto_${version}.orig.tar.gz"
+      "mirror://debian/pool/main/c/cproto/cproto_${finalAttrs.version}.orig.tar.gz"
       # No version listings and apparently no versioned tarball over http(s).
-      "ftp://ftp.invisible-island.net/cproto/cproto-${version}.tgz"
+      "https://invisible-island.net/archives/cproto/cproto-${finalAttrs.version}.tgz"
     ];
     sha256 = "sha256-C9HYvo/wpMpD+Uf5V1DTT2TtqTyeLKeRAP1gFAt8YzE=";
   };
@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    [ "$("$out/bin/cproto" -V 2>&1)" = '${version}' ]
+    [ "$("$out/bin/cproto" -V 2>&1)" = '${finalAttrs.version}' ]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate C function prototypes from C source code";
     mainProgram = "cproto";
     homepage = "https://invisible-island.net/cproto/";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
   };
-}
+})

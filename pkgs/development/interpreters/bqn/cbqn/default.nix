@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     "o3"
     "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
+    "version=${sources.cbqn.version}"
   ]
   ++ lib.optionals stdenv.hostPlatform.avx2Support [
     "has=avx2"
@@ -113,16 +114,8 @@ stdenv.mkDerivation {
     # main test suite from mlochbaum/BQN
     $out/bin/BQN ${mbqn-source}/test/this.bqn
 
-    # CBQN tests that do not require compiling with test-only flags
-    $out/bin/BQN test/cmp.bqn
-    $out/bin/BQN test/equal.bqn
-    $out/bin/BQN test/copy.bqn
-    $out/bin/BQN test/bit.bqn
-    $out/bin/BQN test/hash.bqn
-    $out/bin/BQN test/squeezeValid.bqn
-    $out/bin/BQN test/squeezeExact.bqn
-    $out/bin/BQN test/various.bqn
-    $out/bin/BQN test/random.bqn
+    # run tests in test/cases/
+    $out/bin/BQN test/run.bqn lint
 
     runHook postInstallCheck
   '';
@@ -144,7 +137,6 @@ stdenv.mkDerivation {
       detegr
       shnarazk
       sternenseemann
-      synthetica
     ];
     platforms = lib.platforms.all;
   };

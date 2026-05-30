@@ -16,12 +16,18 @@ let
     "name"
     "dependencies"
     "meta"
+    "shellInit"
   ];
 in
 {
   name,
   dependencies,
   meta ? { },
+  # Config for the `shellInit` passthru (a `shell -> string`
+  # function returning the shell-specific init snippet for the bat-extras
+  # package). Specified as an attrset with a 'flags' string list argument.
+  # If null, there is no shell init for the package.
+  shellInit ? null,
   ...
 }@args:
 stdenv.mkDerivation (
@@ -75,6 +81,36 @@ stdenv.mkDerivation (
 
     # We have already patched
     dontPatchShebangs = true;
+
+    passthru =
+      let
+        initScript =
+          {
+            program,
+            shell,
+            flags ? [ ],
+          }:
+          if (shell != "fish") then
+            ''
+              eval "$(${lib.getExe program} ${toString flags})"
+            ''
+          else
+            ''
+              ${lib.getExe program} ${toString flags} | source
+            '';
+      in
+      {
+        shellInit =
+          shell:
+          if shellInit == null then
+            ""
+          else
+            initScript {
+              program = finalAttrs.finalPackage;
+              inherit shell;
+              flags = shellInit.flags or [ ];
+            };
+      };
 
     meta = core.meta // { mainProgram = name; } // meta;
   }

@@ -10,23 +10,20 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
   gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.9.7";
+  version = "1.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-http-v${version}";
-    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
+    hash = "sha256-KBCjVNZDPMh0wxWm8UVLsrfl2AYp3rKMjAT5c8F7+64=";
   };
 
   sourceRoot = "${src.name}/packages/http/httpx/";
@@ -54,11 +51,11 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-http-v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP request adapter implementation for Kiota clients for Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

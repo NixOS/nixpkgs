@@ -15,7 +15,7 @@
   makeWrapper,
   fmt,
   proj,
-  wxGTK32,
+  wxwidgets_3_2,
   vtk,
   freetype,
   libjpeg,
@@ -28,14 +28,14 @@
   catch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "therion";
   version = "6.3.4";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kus5MoiUrLadpzq0wPB+J85F0RVva7NAYM6E6HX4eJ8=";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     expat
     tclPackages.tkimg
     proj
-    wxGTK32
+    wxwidgets_3_2
     vtk
     tk
     freetype
@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cave surveying software";
     homepage = "https://therion.speleo.sk/";
-    changelog = "https://github.com/therion/therion/blob/${src.rev}/CHANGES";
+    changelog = "https://github.com/therion/therion/blob/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})

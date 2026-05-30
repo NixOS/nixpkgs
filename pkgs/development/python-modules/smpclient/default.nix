@@ -4,9 +4,9 @@
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   intelhex,
-  poetry-core,
-  poetry-dynamic-versioning,
   pyserial,
   pytest-asyncio,
   pytestCheckHook,
@@ -15,40 +15,41 @@
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "5.1.0";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-/prS2w14yTT2t/CKDAVimh6lyXx4wRT3wQ1d18dhpSo=";
+    hash = "sha256-5o2z+cyOVpTNpOdc9GfFNmqcOhbGgbFM0qGng44E1xE=";
   };
 
-  pythonRelaxDeps = [
-    "bleak"
-    "smp"
-  ];
+  env.HATCH_BUILD_HOOK_VCS_VERSION = version;
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     async-timeout
-    bleak
     intelhex
-    pyserial
     smp
   ];
+
+  optional-dependencies = {
+    serial = [ pyserial ];
+    ble = [ bleak ];
+    udp = [ ];
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  patches = [ ./bleak-compat.patch ];
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "smpclient" ];
 

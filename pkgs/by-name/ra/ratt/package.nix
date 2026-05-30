@@ -35,11 +35,11 @@ buildGoModule {
     installManPage doc/ratt.5
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for converting websites to rss/atom feeds";
     homepage = "https://git.sr.ht/~ghost08/ratt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
     mainProgram = "ratt";
   };
 }

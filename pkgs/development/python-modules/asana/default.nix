@@ -6,24 +6,21 @@
   pytestCheckHook,
   python-dateutil,
   python-dotenv,
-  pythonOlder,
   setuptools,
   six,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asana";
-  version = "5.2.2";
+  version = "5.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
-    tag = "v${version}";
-    hash = "sha256-5GgBFZuiQDQXvZECIqY+kXTrUzkuoD8pJGKIg4TD1fw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bfq3FKJoZE8edAAFVNYYrLJ8vp44QYboEVsCGsI5WMY=";
   };
 
   build-system = [ setuptools ];
@@ -45,11 +42,11 @@ buildPythonPackage rec {
     "build_tests/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
-    changelog = "https://github.com/Asana/python-asana/releases/tag/${src.tag}";
-    license = licenses.mit;
+    changelog = "https://github.com/Asana/python-asana/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loadwatch";
-  version = "1.1-4-g868bd29";
+  version = "1.1-unstable-2026-05-04";
 
   src = fetchFromSourcehut {
     owner = "~woffs";
     repo = "loadwatch";
-    hash = "sha256-/4kfGdpYJWQyb7mRaVUpyQQC5VP96bDsBDfM3XhcJXw=";
-    rev = finalAttrs.version;
+    rev = "f79b9cfad44a9f24aaab69cfad85a9ea14252b79";
+    hash = "sha256-CNf3NpTbTfFQDg0G/I7ydH7ML4YNd8TlvPv8+RVa/sI=";
   };
 
   makeFlags = [ "bindir=$(out)/bin" ];

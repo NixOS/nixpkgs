@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  stdenv,
+  clangStdenv,
   cmake,
   pkg-config,
   installShellFiles,
@@ -15,7 +15,7 @@
   enableLibcxx ? false,
   debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
   version = "0.6.2";
 
@@ -79,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Customizable automatic UML diagram generator for C++ based on Clang";

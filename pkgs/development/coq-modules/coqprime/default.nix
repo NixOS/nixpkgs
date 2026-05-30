@@ -15,6 +15,10 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch coq.coq-version [
       {
+        case = range "8.20" "9.1";
+        out = "8.20";
+      }
+      {
         case = range "8.14" "8.20";
         out = "8.18";
       }
@@ -36,6 +40,7 @@ mkCoqDerivation {
       }
     ] null;
 
+  release."8.20".sha256 = "sha256-bwQPgxCVm6iFRJjNplPtUJqRfr6vXPaWs7OxLNnMjs8=";
   release."8.18".sha256 = "sha256-KObBEYerWhIStmq90G3vs9K5LUEOfB2SPxirwLiWQ6E=";
   release."8.17".sha256 = "sha256-D878t/PijVCopRKHYqfwdNvt3arGlI8yxbK/vI6qZUY=";
   release."8.15".sha256 = "sha256:1zr2q52r08na8265019pj9spcz982ivixk6cnzk6l1srn2g328gv";
@@ -50,9 +55,9 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ bignums ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to certify primality using Pocklington certificate and Elliptic Curve Certificate";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

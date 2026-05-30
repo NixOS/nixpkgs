@@ -11,24 +11,24 @@ Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mkosi/sandbox.py b/mkosi/sandbox.py
-index c79b48739f3d7127375274bc0b1ef3463cae9032..1d7ad421f4534e25c6456c3a169ea9189668aefd 100755
+index 4a41f333a764bc41abbd36302bd9fe86baa45a3f..1f7f133912c022a9fb3258437f4ed09872d79dd4 100755
 --- a/mkosi/sandbox.py
 +++ b/mkosi/sandbox.py
-@@ -92,7 +92,7 @@ class cap_user_data_t(ctypes.Structure):
+@@ -124,7 +124,7 @@ class cap_user_data_t(ctypes.Structure):
      ]
  
  
 -libc = ctypes.CDLL(None, use_errno=True)
-+libc = ctypes.CDLL("@LIBC@", use_errno=True)
++libc = ctypes.CDLL("@LIBC@" if os.path.exists("@LIBC@") else None, use_errno=True)
  
  libc.syscall.restype = ctypes.c_long
  libc.unshare.argtypes = (ctypes.c_int,)
-@@ -221,7 +221,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
+@@ -291,7 +291,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
      if not chown and not sync:
          return
  
 -    libseccomp = ctypes.CDLL("libseccomp.so.2")
-+    libseccomp = ctypes.CDLL("@LIBSECCOMP@")
++    libseccomp = ctypes.CDLL("@LIBSECCOMP@" if os.path.exists("@LIBSECCOMP@") else "libseccomp.so.2")
      if libseccomp is None:
          raise FileNotFoundError("libseccomp.so.2")
  

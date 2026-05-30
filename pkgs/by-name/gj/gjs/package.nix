@@ -8,7 +8,6 @@
   pkg-config,
   gnome,
   gtk3,
-  gtk4,
   atk,
   gobject-introspection,
   spidermonkey_140,
@@ -31,7 +30,8 @@
 let
   testDeps = [
     gtk3
-    gtk4
+    # FIXME: Gtk4Warnings fails
+    # gtk4
     atk
     pango.out
     gdk-pixbuf
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.86.0";
+  version = "1.88.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Y0SPeleATUwqjQx/XpDiJNBNTrLVYBQsB2xlqO2gB5k=";
+    hash = "sha256-MKC58zF+jmCxiW2ykDxw6LDNM9+VPDKHVYA6dRkdxFM=";
   };
 
   patches = [
@@ -95,8 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ]
-  ++ testDeps;
+  ];
+
+  checkInputs = testDeps;
 
   propagatedBuildInputs = [
     glib
@@ -104,12 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonBool "skip_gtk_tests" (!finalAttrs.finalPackage.doCheck))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -169,12 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "gjs";
-    teams = [ teams.gnome ];
+    teams = [ lib.teams.gnome ];
     inherit (gobject-introspection.meta) platforms badPlatforms;
   };
 })

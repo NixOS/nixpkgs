@@ -6,7 +6,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ssh-mitm";
   version = "5.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FmxVhYkPRZwS+zFwuId9nRGN832LRkgCNgDYb8Pg01U=";
   };
 
@@ -60,8 +60,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
-    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

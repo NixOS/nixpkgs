@@ -3,45 +3,50 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  SDL2,
+  sdl3,
   cmake,
   libpng,
   libzip,
   openal,
   pkg-config,
   yaml-cpp,
-  fmt,
-  xorg,
+  fmt_11,
+  libx11,
 }:
 let
   sfl-src = fetchFromGitHub {
     owner = "slavenf";
     repo = "sfl-library";
-    tag = "1.9.2";
-    hash = "sha256-/3++CtSuZJ5Sdg8U8mJ/gT+FTatKhBx8QeYjUVQCDWA=";
+    tag = "2.2.0";
+    hash = "sha256-U1InclhSF3pte2AhKUVYBYOXZagksDMkUWgFn5ZB/tk=";
   };
 
   openloco-objects = fetchurl {
-    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.3/objects.zip";
-    sha256 = "c08937691b9d7a956305864b535c6e4537a84b81a9dc5d4c9016edff83dcceb6";
+    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.8/objects.zip";
+    sha256 = "sha256-ZYiR2UpGBAt79x39fwG7wd2mRwcSyz3AdIKTH+tQE8c=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "25.08";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     tag = "v${version}";
-    hash = "sha256-f4GZxLibQM/od0tJoszaG94FkRH5vb9qwQ7OqVdt1cU=";
+    hash = "sha256-tOvqDJfF6iG05EatUdWGp4wv8UDXdDs1frQ9FMF5myU=";
   };
 
   postPatch = ''
-    # the upstream build process determines the version tag from git; since we
-    # are not using a git checkout, we patch it manually
-    sed -i '/#define NAME "OpenLoco"/a#define OPENLOCO_VERSION_TAG "${version}"' src/OpenLoco/src/Version.cpp
+    # the upstream build process determines the version tag, branch
+    # and commit hash from git; since we are not using a git checkout,
+    # we patch it manually
+    sed -i '/#define OPENLOCO_NAME "OpenLoco"/a\
+    #define OPENLOCO_VERSION_TAG "${version}"\
+    #define OPENLOCO_BRANCH "master"\
+    #define OPENLOCO_COMMIT_SHA1_SHORT "b79ace0"'\
+      src/Version/include/OpenLoco/Version.hpp
 
     # prefetch sfl header sources
     grep -q 'GIT_TAG \+${sfl-src.tag}' thirdparty/CMakeLists.txt
@@ -51,7 +56,7 @@ stdenv.mkDerivation rec {
     sed -i 's#URL \+${openloco-objects.url}#URL ${openloco-objects}#' CMakeLists.txt
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
 
   cmakeFlags = [
     "-DOPENLOCO_BUILD_TESTS=NO"
@@ -63,13 +68,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2
+    sdl3
     libpng
     libzip
     openal
     yaml-cpp
-    fmt
-    xorg.libX11
+    fmt_11
+    libx11
   ];
 
   meta = {
@@ -78,5 +83,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ icewind1991 ];
+    mainProgram = "OpenLoco";
   };
 }

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.7.5";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jieter";
     repo = "django-tables2";
     tag = "v${version}";
-    hash = "sha256-Cb8XhCLqhc2Dx/5uAHnN9zTVL6/1+WekC4qTloBurzM=";
+    hash = "sha256-hy1eh+cSYK7TPgenCEo8J7msKgvk7i69PUb6m9NuCIA=";
   };
 
   build-system = [ hatchling ];
@@ -53,13 +53,13 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -491,11 +491,18 @@ in
 
     users.groups.${cfg.group} = { };
 
-    environment.etc."pihole/pihole.toml" = {
-      source = settingsFile;
-      user = cfg.user;
-      group = cfg.group;
-      mode = "400";
+    environment.etc = {
+      "pihole/pihole.toml" = {
+        source = settingsFile;
+        user = cfg.user;
+        group = cfg.group;
+        mode = "400";
+      };
+
+      "pihole/versions".text = ''
+        CORE_VERSION=${cfg.piholePackage.src.src.tag}
+        FTL_VERSION=${cfg.package.src.tag}
+      '';
     };
 
     environment.systemPackages = [ cfg.pihole ];

@@ -8,12 +8,12 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiimms-iso-tools";
   version = "3.05a";
 
   src = fetchurl {
-    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${version}.txz";
+    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${finalAttrs.version}.txz";
     hash = "sha256-5aikiPJkZf9OwD8QmQ7ijhBOtFQpkIErvb6gOvEu2L0=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace gcc "$CC"
   '';
 
-  INSTALL_PATH = "$out";
+  env.INSTALL_PATH = "$out";
 
   installPhase = ''
     mkdir "$out"
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     ./install.sh --no-sudo
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wit.wiimm.de";
     description = "Set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nilp0inter ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nilp0inter ];
   };
-}
+})
