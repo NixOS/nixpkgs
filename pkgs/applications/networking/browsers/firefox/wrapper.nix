@@ -211,7 +211,7 @@ let
           terminal = false;
         }
         // (
-          if libName == "thunderbird" then
+          if lib.strings.hasPrefix "thunderbird" libName then
             {
               genericName = "Email Client";
               comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
