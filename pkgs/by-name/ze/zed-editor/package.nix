@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_94,
   fetchFromGitHub,
   cmake,
   copyDesktopItems,
@@ -15,6 +15,7 @@
   sqlite,
   zlib,
   zstd,
+  glib,
   alsa-lib,
   libxkbcommon,
   wayland,
@@ -49,6 +50,8 @@
 assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
+  inherit (rustPackages_1_94) rustPlatform;
+  channel = "stable";
   executableName = "zeditor";
   # Based on vscode.fhs
   # Zed allows for users to download and use extensions
@@ -106,7 +109,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.218.6";
+  version = "0.229.0";
 
   outputs = [
     "out"
@@ -119,7 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fNwJWC48DqUECadQ12p+iCHR7pIueFFdu6QRdomJ6/o=";
+    hash = "sha256-ZO4HzzzTb5rlBbzVCpE14DEzLkE3a7v2IKdyzlCTpaA=";
   };
 
   postPatch = ''
@@ -131,6 +134,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # newer versions work just as well.
     substituteInPlace script/generate-licenses \
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # webrtc-sys expects glib headers to be in the sysroot, so we have to point it in the right direction
+    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+      --replace-fail 'builder.include(&glib_path);' 'builder.include("${lib.getInclude glib}/include/glib-2.0");' \
+      --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
   # remove package that has a broken Cargo.toml
@@ -139,7 +148,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-+8L4BaR7J+j7ytQ7JM8XbuAYDKzq8Hv3oKQFnN0TdK0=";
+  cargoHash = "sha256-Q7sjd5u1jPIK6WogCByaXAVU7D6jcev1oRmfQ7y39i4=";
 
   nativeBuildInputs = [
     cmake
@@ -167,6 +176,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib
     alsa-lib
     libxkbcommon
     wayland
@@ -191,7 +201,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui_platform/runtime_shaders" ];
+
+  # Some crates define extra types or enum values in test configuration which then lead
+  # to type checking errors in other crates unless this feature is enabled.
+  # gpui_platform/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # without it, build.rs invokes the proprietary Metal shader compiler.
+  checkFeatures = [
+    "visual-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
 
   env = {
     ALLOW_MISSING_LICENSES = true;
@@ -228,6 +247,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
     runHook preInstall
 
@@ -285,7 +305,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   ''
   + lib.optionalString buildRemoteServer ''
-    install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
+    install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
   ''
   + ''
     runHook postInstall
@@ -320,7 +340,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       remoteServerVersion = testers.testVersion {
         package = finalAttrs.finalPackage.remote_server;
-        command = "zed-remote-server-stable-${finalAttrs.version} version";
+        command = "${finalAttrs.remoteServerExecutableName} version";
       };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {

@@ -15,7 +15,7 @@
       {
         virtualisation.docker.enable = true;
         virtualisation.docker.autoPrune.enable = true;
-        virtualisation.docker.package = pkgs.docker;
+        virtualisation.docker.package = pkgs.docker_29;
 
         users.users = {
           noprivs = {
@@ -48,7 +48,7 @@
     docker.succeed("docker stop sleeping")
 
     # Must match version 4 times to ensure client and server git commits and versions are correct
-    docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
+    docker.succeed('[ $(docker version | grep ${pkgs.docker_29.version} | wc -l) = "4" ]')
     docker.succeed("systemctl restart systemd-sysctl")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/all/forwarding")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/default/forwarding")

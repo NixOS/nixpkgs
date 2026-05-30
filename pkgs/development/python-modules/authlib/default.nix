@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.6.11";
+  version = "1.6.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "authlib";
     tag = "v${version}";
-    hash = "sha256-GZemNZavmGSFoCocpIHM0RMiR+phCxyQsV8I91azvR0=";
+    hash = "sha256-HLUv9HdVS5RM2TVIN7Vg6hP/X3iYy9LH7Uj1G+ueAW4=";
   };
 
   build-system = [ setuptools ];
