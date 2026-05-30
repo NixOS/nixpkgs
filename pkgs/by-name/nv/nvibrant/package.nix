@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvibrant";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Tremeschin";
     repo = "nvibrant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RZIi1V3hcwZdaI84Nd0YSQOjDng9/ZDg7aqfTL7GJIU=";
+    hash = "sha256-pEOZQjfAlNWUEbrfFEuPAaabWjilvMaAjpdJedNPDs0=";
     fetchSubmodules = true;
   };
 
