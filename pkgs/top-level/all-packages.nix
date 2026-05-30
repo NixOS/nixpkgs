@@ -1359,8 +1359,6 @@ with pkgs;
     enableX11 = false;
   };
 
-  rxvt-unicode = callPackage ../applications/terminal-emulators/rxvt-unicode/wrapper.nix { };
-
   rxvt-unicode-emoji = rxvt-unicode.override {
     rxvt-unicode-unwrapped = rxvt-unicode-unwrapped-emoji;
   };
@@ -1370,8 +1368,6 @@ with pkgs;
       inherit callPackage;
     }
   );
-
-  rxvt-unicode-unwrapped = callPackage ../applications/terminal-emulators/rxvt-unicode { };
 
   rxvt-unicode-unwrapped-emoji = rxvt-unicode-unwrapped.override {
     emojiSupport = true;
