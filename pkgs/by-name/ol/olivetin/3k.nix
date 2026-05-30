@@ -16,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "olivetin";
-  version = "3000.12.0";
+  version = "3000.13.0";
 
   src = fetchFromGitHub {
     owner = "OliveTin";
     repo = "OliveTin";
     tag = finalAttrs.version;
-    hash = "sha256-xMtvxsDWt9Dpf01rzMxivAL76TVdl1QKs6sz03XeP70=";
+    hash = "sha256-WqqUOl42o8C6eAv0lZ44bolgt9jdZwOLmbzA174Nk8s=";
   };
 
   modRoot = "service";
