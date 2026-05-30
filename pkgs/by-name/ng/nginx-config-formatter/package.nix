@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ python3 ];
 
+  nativeCheckInputs = [ python3 ];
+
+  strictDeps = true;
+
   doCheck = true;
   checkPhase = ''
     python3 $src/test_nginxfmt.py
