@@ -11,7 +11,7 @@
   pytest-benchmark,
   pytest-cov-stub,
   redis,
-  setuptools,
+  setuptools_80,
   watchdog,
   watchdog-gevent,
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-VqMHSn2mdkO140t7IpZt32OHoEU0nEXiRWJ0w6Km0o8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ prometheus-client ];
 
