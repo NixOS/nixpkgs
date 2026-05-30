@@ -26,7 +26,7 @@ let
   inherit (darwin) autoSignDarwinBinariesHook;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "SDL_compat";
+  pname = "sdl12-compat";
   version = "1.2.76";
 
   src = fetchFromGitHub {
@@ -35,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release-" + finalAttrs.version;
     hash = "sha256-hSHtYFn4gr8Y9cNyLBT6frDgidNCRENPtTrtGfgH3po=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake

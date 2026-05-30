@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    # libgdata
     lua5_4
     liboauth
     sqlite

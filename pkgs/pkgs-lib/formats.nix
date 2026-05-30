@@ -82,7 +82,7 @@ let
       ;
   };
 
-  json2x = pkgs.callPackage ./formats/json2x/package.nix { };
+  json2x = pkgs.buildPackages.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
