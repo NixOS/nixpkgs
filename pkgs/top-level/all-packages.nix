@@ -1501,8 +1501,6 @@ with pkgs;
 
   gancioPlugins = recurseIntoAttrs (callPackage ../by-name/ga/gancio/plugins.nix { });
 
-  github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
-
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
