@@ -14,14 +14,18 @@
 
 stdenv.mkDerivation {
   pname = "wf-touch";
-  version = "0-unstable-2021-03-19";
+  version = "0-unstable-2025-02-11";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-touch";
-    rev = "8974eb0f6a65464b63dd03b842795cb441fb6403";
-    hash = "sha256-MjsYeKWL16vMKETtKM5xWXszlYUOEk3ghwYI85Lv4SE=";
+    rev = "093d8943df03cc8a2667990a065513c1bf2b57e0";
+    hash = "sha256-gEBwXTd42UePgxI8rYmdLBF6cVagmtVANYzeleq0c7s=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -30,11 +34,16 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  buildInputs = [ doctest ];
-
   propagatedBuildInputs = [ glm ];
 
   mesonBuildType = "release";
+
+  postPatch = ''
+    # doctest is header-only, fix the meson build to not try to link against a library
+    substituteInPlace meson.build \
+      --replace-fail "doctest = dependency('doctest', required: get_option('tests'))" \
+      "doctest = declare_dependency(include_directories: include_directories('${doctest}/include'))"
+  '';
 
   # Patch wf-touch to generate pkgconfig
   patches = fetchpatch {
