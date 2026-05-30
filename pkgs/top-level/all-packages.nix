@@ -1642,8 +1642,6 @@ with pkgs;
 
   intelLlvmStdenv = intel-llvm.stdenv;
 
-  cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
   cot = with python3Packages; toPythonApplication cot;
@@ -2206,8 +2204,6 @@ with pkgs;
   expect = tclPackages.expect;
 
   Fabric = with python3Packages; toPythonApplication fabric;
-
-  fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
 
@@ -2886,10 +2882,6 @@ with pkgs;
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
-  ola = callPackage ../applications/misc/ola {
-    protobuf = protobuf_21;
-  };
-
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
@@ -3277,10 +3269,6 @@ with pkgs;
   trytond = with python3Packages; toPythonApplication trytond;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
-
-  twitch-chat-downloader =
-    python3Packages.callPackage ../applications/misc/twitch-chat-downloader
-      { };
 
   uftraceFull = uftrace.override {
     withLuaJIT = true;
@@ -4455,6 +4443,7 @@ with pkgs;
     cargo-pgrx_0_16_0
     cargo-pgrx_0_16_1
     cargo-pgrx_0_17_0
+    cargo-pgrx_0_18_0
     cargo-pgrx
     ;
 
@@ -7101,7 +7090,7 @@ with pkgs;
     };
   };
 
-  SDL = SDL_compat;
+  SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
@@ -9998,6 +9987,7 @@ with pkgs;
   thunderbird-bin = thunderbird-latest-bin;
   thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     pname = "thunderbird-bin";
+    libName = "thunderbird-bin-${thunderbird-latest-bin-unwrapped.version}";
   };
   thunderbird-latest-bin-unwrapped =
     callPackage ../applications/networking/mailreaders/thunderbird-bin
@@ -10006,6 +9996,7 @@ with pkgs;
       };
   thunderbird-esr-bin = wrapThunderbird thunderbird-esr-bin-unwrapped {
     pname = "thunderbird-esr-bin";
+    libName = "thunderbird-bin-${thunderbird-esr-bin-unwrapped.version}";
   };
   thunderbird-esr-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_esr_sources.nix;

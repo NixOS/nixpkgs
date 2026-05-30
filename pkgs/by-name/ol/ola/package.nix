@@ -9,7 +9,7 @@
   libftdi1,
   libuuid,
   cppunit,
-  protobuf,
+  protobuf_21,
   zlib,
   avahi,
   libmicrohttpd,
@@ -18,14 +18,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ola";
   version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "OpenLightingProject";
     repo = "ola";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8w8ZT3D/+8Pxl9z2KTXeydVxE5xiPjxZevgmMFgrblU=";
   };
   patches = [
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     libftdi1
     libuuid
     cppunit
-    protobuf
+    protobuf_21
     zlib
     avahi
     libmicrohttpd
     python3
   ];
   propagatedBuildInputs = [
-    (python3.pkgs.protobuf4.override { protobuf = protobuf; })
+    (python3.pkgs.protobuf4.override { protobuf = protobuf_21; })
     python3.pkgs.numpy
   ];
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
