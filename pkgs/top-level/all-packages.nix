@@ -11749,8 +11749,6 @@ with pkgs;
   vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
   wrapVdr = callPackage ../applications/video/vdr/wrapper.nix { };
 
-  chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing { };
-
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
     openfst = openfst.overrideAttrs rec {
