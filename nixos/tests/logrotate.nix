@@ -28,10 +28,7 @@ in
       {
         services.logrotate = {
           enable = true;
-          configFile = pkgs.writeText "logrotate.conf" ''
-            # self-written config file
-            su notarealuser notagroupeither
-          '';
+          settings.header.su = "notarealuser notagroupeither";
         };
       };
     machine =
@@ -113,20 +110,13 @@ in
         machine.succeed("systemctl cat logrotate.service | grep -- --mail")
     with subtest("check generated config matches expectation"):
         machine.succeed(
-            # copy conf to /tmp/logrotate.conf for easy grep
-            "conf=$(systemctl cat logrotate | grep -oE '/nix/store[^ ]*logrotate.conf'); cp $conf /tmp/logrotate.conf",
-            "! grep weekly /tmp/logrotate.conf",
-            "grep -E '^delaycompress' /tmp/logrotate.conf",
-            "tail -n 1 /tmp/logrotate.conf | grep shred",
-            "sed -ne '/\"sendmail\" {/,/}/p' /tmp/logrotate.conf | grep 'mail user@domain.tld'",
-            "sed -ne '/\"postrotate\" {/,/}/p' /tmp/logrotate.conf | grep endscript",
-            "grep '\"file1\"\n\"file2\" {' /tmp/logrotate.conf",
-            "sed -ne '/\"import\" {/,/}/p' /tmp/logrotate.conf | grep noolddir",
-        )
-        # also check configFile option
-        failingMachine.succeed(
-            "conf=$(systemctl cat logrotate | grep -oE '/nix/store[^ ]*logrotate.conf'); cp $conf /tmp/logrotate.conf",
-            "grep 'self-written config' /tmp/logrotate.conf",
+            "! grep weekly /etc/logrotate.conf",
+            "grep -E '^delaycompress' /etc/logrotate.conf",
+            "tail -n 1 /etc/logrotate.conf | grep shred",
+            "sed -ne '/\"sendmail\" {/,/}/p' /etc/logrotate.conf | grep 'mail user@domain.tld'",
+            "sed -ne '/\"postrotate\" {/,/}/p' /etc/logrotate.conf | grep endscript",
+            "grep '\"file1\"\n\"file2\" {' /etc/logrotate.conf",
+            "sed -ne '/\"import\" {/,/}/p' /etc/logrotate.conf | grep noolddir",
         )
     with subtest("Check logrotate-checkconf service"):
         machine.wait_for_unit("logrotate-checkconf.service")
