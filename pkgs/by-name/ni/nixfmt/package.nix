@@ -8,9 +8,10 @@
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
 
-  cabalOverrides = {
+  cabalOverrides = drv: {
     passthru.updateScript = ./update.sh;
     teams = [ lib.teams.formatter ];
+    changelog = "https://github.com/NixOS/nixfmt/releases/tag/v${drv.version}";
   };
 
   # haskellPackages.mkDerivation and haskell.lib.compose.overrideCabal
