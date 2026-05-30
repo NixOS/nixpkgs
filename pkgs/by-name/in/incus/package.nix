@@ -78,6 +78,26 @@ import ./generic.nix {
       url = "https://github.com/lxc/incus/commit/5b29ecc164ef28239d2e2a874a7c871a2e419083.patch?full_index=1";
       hash = "sha256-jpyJYjiZvRw/aOGsykEx8uotRBF7p1q5O08PVhyQtvk=";
     })
+    (fetchpatch2 {
+      name = "incusd-storage_Fix-unsafe-access-to-backup-data.patch";
+      url = "https://github.com/lxc/incus/commit/d71c5053a4c8318e6eb07337a7a4a07a6608ef73.patch?full_index=1";
+      hash = "sha256-/mH0/KmX9sG8HZTcdk8MT+QZtNqZa934wcHptvdVtXM=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage_Guard-nil-ExpiresAt-in-CreateCustomVolumeFromBackup.patch";
+      url = "https://github.com/lxc/incus/commit/ab6b7dff0c770044875d9d26a6254a7075b4d00b.patch?full_index=1";
+      hash = "sha256-d7VUetQzUTBq3GLYM1JKy2KDbBxOW5Lg7Di1/JPNzSE=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage_Guard-nil-fields-in-createDependentVolumesFromBackup.patch";
+      url = "https://github.com/lxc/incus/commit/98e64f0a6fcfdc9676eea0246418d490c53297bf.patch?full_index=1";
+      hash = "sha256-+lB7eHsGZ/dW7aL4/wIWD4AF6t7s4QYfAld1bQOw2tQ=";
+    })
+    (fetchpatch2 {
+      name = "incusd-storage-s3_Confine-multipart-uploads-with-os.Root.patch";
+      url = "https://github.com/lxc/incus/commit/a6012422b45c86f3b1956788cff5d75c604ad838.patch?full_index=1";
+      hash = "sha256-u3NLKE8Rh8i6HMbJ0KNhH7gbuwIpJ1SPqiyVoiuw9Sc=";
+    })
   ];
   nixUpdateExtraArgs = [
     "--override-filename=pkgs/by-name/in/incus/package.nix"
