@@ -5791,6 +5791,12 @@ assertNoAdditions {
   vim-tabby = super.vim-tabby.overrideAttrs {
   };
 
+  vim-table-mode = super.vim-table-mode.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-tabpagecd = super.vim-tabpagecd.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;

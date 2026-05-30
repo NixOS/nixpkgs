@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch2,
 
   cmake,
   ninja,
@@ -142,6 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/facebook/folly/pull/2561
     ./memset-memcpy-aarch64.patch
+
+    # Use feature detection directly instead of private standard library
+    # macros to detect the presence of ASAN and otherwise fallback to
+    # _not_ having ASAN.
+    (fetchpatch2 {
+      url = "https://github.com/facebook/folly/commit/fdde9bc360d525a1b2889b9ba89d671c3a13e72e.patch?full_index=1";
+      hash = "sha256-+1XJRAl4o9YubjqdIgQZpyrMmcb2imBfQUmiHNmFMRE=";
+    })
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
