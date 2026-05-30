@@ -19792,6 +19792,8 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tokenspeed-mla = callPackage ../development/python-modules/tokenspeed-mla { };
+
   tokenspeed-triton = callPackage ../development/python-modules/tokenspeed-triton {
     llvm = pkgs.tokenspeed-triton-llvm;
   };
