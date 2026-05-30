@@ -1642,8 +1642,6 @@ with pkgs;
 
   intelLlvmStdenv = intel-llvm.stdenv;
 
-  cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
   cot = with python3Packages; toPythonApplication cot;
@@ -2884,10 +2882,6 @@ with pkgs;
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
-  ola = callPackage ../applications/misc/ola {
-    protobuf = protobuf_21;
-  };
-
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
@@ -3275,10 +3269,6 @@ with pkgs;
   trytond = with python3Packages; toPythonApplication trytond;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
-
-  twitch-chat-downloader =
-    python3Packages.callPackage ../applications/misc/twitch-chat-downloader
-      { };
 
   uftraceFull = uftrace.override {
     withLuaJIT = true;
