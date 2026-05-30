@@ -29199,6 +29199,12 @@
     githubId = 45292658;
     name = "Julius Schmitt";
   };
+  voidhartt = {
+    email = "voidhartt@gmail.com";
+    github = "voidhartt";
+    githubId = 235449536;
+    name = "voidhartt";
+  };
   voidnoi = {
     email = "voidnoi@proton.me";
     github = "VoidNoi";
