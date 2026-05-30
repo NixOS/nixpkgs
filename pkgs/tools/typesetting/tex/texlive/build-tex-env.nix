@@ -509,7 +509,7 @@ lib.fix (
 
         postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
 
-        # whethe to include doc, source containers
+        # whether to include doc, source containers
         withDocs = false;
         withSources = false;
 
