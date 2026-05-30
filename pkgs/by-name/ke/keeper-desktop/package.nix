@@ -36,7 +36,8 @@
 stdenv.mkDerivation rec {
   pname = "keeper-password-manager-desktop";
   version = "17.5.0";
-
+  __structuredAttrs = true;
+  
   src = fetchurl {
     url = "https://www.keepersecurity.com/desktop_electron/Linux/repo/deb/keeperpasswordmanager_${version}_amd64.deb";
     hash = "sha256-aezUmacR4FcGRLM/tLpLAnCmt0hWilFLL20NwMPDI/o=";
