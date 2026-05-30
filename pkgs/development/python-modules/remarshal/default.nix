@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "dbohdan";
+    owner = "remarshal-project";
     repo = "remarshal";
     tag = "v${version}";
     hash = "sha256-/K8x6ij23pk5O1+XJdFHaGbZ47nFMbXzp+4UMO5dGp4=";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${src.tag}";
     description = "Convert between TOML, YAML and JSON";
     license = lib.licenses.mit;
-    homepage = "https://github.com/dbohdan/remarshal";
+    homepage = "https://github.com/remarshal-project/remarshal";
     maintainers = [ ];
     mainProgram = "remarshal";
   };
