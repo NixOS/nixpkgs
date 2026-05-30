@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
@@ -20,8 +20,7 @@ buildGoModule (finalAttrs: {
   pname = "searchix";
   version = "0.4.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
