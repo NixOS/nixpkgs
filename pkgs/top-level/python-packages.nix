@@ -19824,6 +19824,8 @@ self: super: with self; {
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
+  torch-memory-saver = callPackage ../development/python-modules/torch-memory-saver { };
+
   # Required to test triton
   torch-no-triton = self.torch.override { tritonSupport = false; };
 
