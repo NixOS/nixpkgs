@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   openssl,
+  versionCheckHook,
 }:
 
 lib.extendMkDerivation {
@@ -52,6 +53,9 @@ lib.extendMkDerivation {
         # test name in versions < 0.18
         "--skip=command::schema::tests::test_parse_managed_postmasters"
       ];
+
+      nativeInstallCheckInputs = [ versionCheckHook ];
+      doInstallCheck = true;
 
       meta = {
         description = "Build Postgres Extensions with Rust";
