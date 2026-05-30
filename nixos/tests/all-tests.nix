@@ -1771,7 +1771,7 @@ in
   userborn-mutable-users = runTest ./userborn-mutable-users.nix;
   userborn-static = runTest ./userborn-static.nix;
   ustreamer = runTest ./ustreamer.nix;
-  utils = import ./utils { inherit runTest; };
+  utils = pkgs.callPackage ./utils { inherit runTest; };
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
   varnish80 = runTest {

@@ -6,8 +6,10 @@
 
 let
   inherit (lib)
+    all
     any
     attrNames
+    concatImapStringsSep
     concatMapStringsSep
     concatStringsSep
     elem
@@ -27,8 +29,11 @@ let
     isList
     isPath
     isString
+    length
     listToAttrs
+    literalMD
     mapAttrs
+    mkOption
     nameValuePair
     optionalString
     removePrefix
@@ -36,8 +41,10 @@ let
     splitString
     stringToCharacters
     types
+    versionOlder
     ;
 
+  inherit (lib.lists) findFirstIndex;
   inherit (lib.strings) toJSON escapeC;
 in
 
@@ -603,6 +610,123 @@ let
         lib.listToAttrs
       ];
     };
+
+    /**
+      Creates a per-module `stateRevision` option that takes an int value, with a
+      default that is derived from `system.stateVersion`.
+
+      # Inputs
+
+      `descriptionName`
+      : A human-friendly name for your module, used for the description of the
+        created option.
+
+      `migrations`
+      : Attribute set that maps from values of `system.stateVersion`
+        (representing the breakpoints at which the default value of this option
+        will change) to Markdown instructions to users for manually migrating
+        their data to this breakpoint. The migration instructions will be
+        included in the NixOS documentation for this option. (These instructions
+        must only contain Markdown inlines, because they will be rendered in a
+        table. In particular, lists will not render correctly.)
+
+        `migrations` will also be exposed as an attribute on the result.
+
+      # Examples
+      :::{.example}
+      ## `lib.options.mkStateRevisionOption` usage example
+
+      ```nix
+      exampleModule =
+        { lib, config, utils, ... }:
+        {
+          options.services.whatever = {
+            stateRevision = utils.mkStateRevisionOption {
+              descriptionName = "the whatever service";
+              migrations = {
+                "26.05" = "Rename `/var/lib/old_name` to `/var/lib/new_name`.";
+                "26.11" = "Run the `upgrade_whatever` utility.";
+                };
+              };
+            };
+          };
+        }
+
+      (pkgs.nixos [
+        exampleModule
+        { system.stateVersion = "25.11"; }
+      ]).config.services.whatever.stateRevision # => 0
+      (pkgs.nixos [
+        exampleModule
+        { system.stateVersion = "26.05"; }
+      ]).config.services.whatever.stateRevision # => 1
+      (pkgs.nixos [
+        exampleModule
+        { system.stateVersion = "27.05"; }
+      ]).config.services.whatever.stateRevision # => 2
+      ```
+
+      :::
+
+      Modules should use this function when they change how data managed by the
+      module is persisted on the system between NixOS releases.
+
+      The default value of the option will be the number of attributes in the
+      `migrations` parameter with name less than or equal to the value of
+      `system.stateVersion`.
+
+      When using this function, don't forget to add the option's value to
+      `system.moduleStateRevisions."your.module.stateRevision"` when your module is
+      enabled.
+    */
+    mkStateRevisionOption =
+      {
+        descriptionName,
+        migrations,
+      }:
+      let
+        versions = attrNames migrations;
+        maxVal = length versions;
+      in
+      assert all (v: builtins.match "[0-9]{2}\\.[0-9]{2}" v != null) versions;
+      mkOption {
+        type = types.ints.between 0 maxVal;
+        description = ''
+          This option versions the format of state persisted by
+          ${descriptionName}. Its default value depends on the value of
+          {option}`system.stateVersion`.
+
+          Users who wish to increment this option will need to take manual
+          migration steps to preserve their data. **If you perform these
+          migrations, rolling back to an older generation will require also
+          reversing the migrations to the state expected by that generation.**
+          The migrations needed to advance to each value of this option are as
+          follows (perform all instructions after the row for the current
+          `stateRevision`, up to and including the row for the new
+          `stateRevision`):
+
+          | `stateRevision` | Migration instructions |
+          |-----------------|------------------------|
+          | 0               | (none)                 |
+          ${concatImapStringsSep "\n" (
+            v: sv: "| ${toString v} | ${replaceStrings [ "\n" ] [ " " ] migrations.${sv}} |"
+          ) versions}
+
+          Note that you do **not** need to change {option}`system.stateVersion`
+          in order to update this option. {option}`system.stateVersion` only
+          determines the default value of this option. Most users should not
+          change {option}`system.stateVersion` at all.
+        '';
+        default = findFirstIndex (versionOlder config.system.stateVersion) maxVal versions;
+        defaultText = literalMD ''
+          If {option}`system.stateVersion` is:
+          ${concatImapStringsSep "\n" (v: sv: "* &lt;${sv}: ${toString (v - 1)}") versions}
+          * otherwise: ${toString maxVal}
+        '';
+      }
+      // {
+        inherit migrations;
+      };
   };
 in
 utils
