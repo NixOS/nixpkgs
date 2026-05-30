@@ -5533,6 +5533,10 @@ self: super: with self; {
 
   favicon = callPackage ../development/python-modules/favicon { };
 
+  fdp-scan = callPackage ../development/python-modules/fdp-scan {
+    inherit (pkgs) prototools;
+  };
+
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feather-format = callPackage ../development/python-modules/feather-format { };
@@ -13158,6 +13162,15 @@ self: super: with self; {
   proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
+
+  protoscan = callPackage ../development/python-modules/protoscan {
+    inherit (pkgs) prototools;
+  };
+
+  prototext-codec = callPackage ../development/python-modules/prototext-codec {
+    inherit (pkgs) prototools;
+    pythonProtobuf = self.protobuf;
+  };
 
   prov = callPackage ../development/python-modules/prov { };
 
