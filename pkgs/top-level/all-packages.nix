@@ -2556,8 +2556,6 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
-
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -3139,8 +3137,6 @@ with pkgs;
   rpm = callPackage ../tools/package-management/rpm {
     lua = lua5_4;
   };
-
-  rsibreak = kdePackages.callPackage ../applications/misc/rsibreak { };
 
   rubocop = rubyPackages.rubocop;
 
@@ -9686,10 +9682,6 @@ with pkgs;
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
-  opencpn = callPackage ../applications/misc/opencpn {
-    inherit (darwin) DarwinTools;
-  };
-
   open-music-kontrollers = recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
@@ -10434,8 +10426,6 @@ with pkgs;
   groestlcoind = groestlcoin.override {
     withGui = false;
   };
-
-  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   napari = with python312Packages; toPythonApplication napari;
 
