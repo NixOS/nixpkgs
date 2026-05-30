@@ -2,34 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
   aiohttp,
-  pytz,
-  voluptuous,
+  pydantic,
+  aioresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygti";
-  version = "0.10.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "pygti";
-    tag = version;
-    hash = "sha256-2T4Yw4XEOkv+IWyB4Xa2dPu929VH0tLeUjQ5S8EVXz0=";
+    tag = "v${version}";
+    hash = "sha256-B+jz91xoN7GiU4PnJTG5Kt1eA4ST63d+ZEgRrr9Xio8=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp
-    pytz
-    voluptuous
+    pydantic
   ];
 
-  # no tests implemented
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pygti.auth"
