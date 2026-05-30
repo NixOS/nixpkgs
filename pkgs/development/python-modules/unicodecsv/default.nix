@@ -1,18 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "0.14.1";
+  version = "0.14.2";
   pname = "unicodecsv";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
+  src = fetchFromGitHub {
+    owner = "jdunck";
+    repo = "python-unicodecsv";
+    tag = finalAttrs.version;
+    hash = "sha256-LBYJ7evrcKj2WsWroflyQEhFkElp6zrmG9EDrp5+onM=";
   };
 
   build-system = [ setuptools ];
