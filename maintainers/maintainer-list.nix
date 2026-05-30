@@ -2111,6 +2111,12 @@
     githubId = 4923335;
     name = "Alexey Orlenko";
   };
+  aquifolly = {
+    email = "oliviafloof@disroot.org";
+    github = "aquifolly";
+    githubId = 35699052;
+    name = "holly";
+  };
   ar1a = {
     email = "aria@ar1as.space";
     github = "ar1a";
@@ -11005,12 +11011,6 @@
     github = "HollowMan6";
     githubId = 43995067;
     name = "Songlin Jiang";
-  };
-  aquifolly = {
-    email = "oliviafloof@disroot.org";
-    github = "aquifolly";
-    githubId = 35699052;
-    name = "holly";
   };
   holymonson = {
     email = "holymonson@gmail.com";
