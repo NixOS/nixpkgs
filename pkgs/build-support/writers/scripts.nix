@@ -1100,12 +1100,11 @@ rec {
     pkgs.runCommandLocal name
       {
         inherit text;
-        passAsFile = [ "text" ];
+        __structuredAttrs = true;
         nativeBuildInputs = [ gixy ];
       } # sh
       ''
-        cp "$textPath" $out
-        ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 $out
+        printf "%s" "$text" | ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 - > $out
         ${lib.getExe pkgs.gnused} -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
