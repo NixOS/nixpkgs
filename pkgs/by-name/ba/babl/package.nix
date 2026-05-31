@@ -46,9 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
-    # On Linux, this would be disabled by default but we have -Dauto_features=enabled.
-    # Disable it on other platforms too, since I cannot test it there.
-    "-Drelocatable-bundle=no"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Docs are opt-out in native but opt-in in cross builds.
