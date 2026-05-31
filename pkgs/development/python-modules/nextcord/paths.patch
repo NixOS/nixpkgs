@@ -1,0 +1,74 @@
+diff --git a/nextcord/opus.py b/nextcord/opus.py
+index b1119a8e..b7c9c713 100644
+--- a/nextcord/opus.py
++++ b/nextcord/opus.py
+@@ -233,7 +233,7 @@ def _load_default() -> bool:
+             _filename = os.path.join(_basedir, "bin", f"libopus-0.{_target}.dll")
+             _lib = libopus_loader(_filename)
+         else:
+-            opus = ctypes.util.find_library("opus")
++            opus = "@libopus@"
+ 
+             if opus is None:
+                 _lib = None
+diff --git a/nextcord/player.py b/nextcord/player.py
+index 5c7daf52..48a11eb7 100644
+--- a/nextcord/player.py
++++ b/nextcord/player.py
+@@ -127,7 +127,7 @@ class FFmpegAudio(AudioSource):
+         self,
+         source: Union[str, io.BufferedIOBase],
+         *,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         args: Any,
+         **subprocess_kwargs: Any,
+     ) -> None:
+@@ -254,7 +254,7 @@ class FFmpegPCMAudio(FFmpegAudio):
+         self,
+         source: Union[str, io.BufferedIOBase],
+         *,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         pipe: bool = False,
+         stderr: Optional[IO[str]] = None,
+         before_options: Optional[str] = None,
+@@ -357,7 +357,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+         *,
+         bitrate: int = 128,
+         codec: Optional[str] = None,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         pipe: bool = False,
+         stderr=None,
+         before_options=None,
+@@ -510,7 +510,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+         """
+ 
+         method = method or "native"
+-        executable = executable or "ffmpeg"
++        executable = executable or "@ffmpeg@"
+         probefunc = fallback = None
+ 
+         if isinstance(method, str):
+@@ -555,9 +555,9 @@ class FFmpegOpusAudio(FFmpegAudio):
+ 
+     @staticmethod
+     def _probe_codec_native(
+-        source, executable: str = "ffmpeg"
++        source, executable: str = "@ffmpeg@"
+     ) -> Tuple[Optional[str], Optional[int]]:
+-        exe = executable[:2] + "probe" if executable in ("ffmpeg", "avconv") else executable
++        exe = executable[:-4] + "probe" if executable.endswith(("ffmpeg", "avconv")) else executable
+         args = [
+             exe,
+             "-v",
+@@ -584,7 +584,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+ 
+     @staticmethod
+     def _probe_codec_fallback(
+-        source, executable: str = "ffmpeg"
++        source, executable: str = "@ffmpeg@"
+     ) -> Tuple[Optional[str], Optional[int]]:
+         args = [executable, "-hide_banner", "-i", source]
+         proc = subprocess.Popen(

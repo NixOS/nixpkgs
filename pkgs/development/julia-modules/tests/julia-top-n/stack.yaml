@@ -1,0 +1,11 @@
+
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/4.yaml
+
+packages:
+  - .
+
+nix:
+  pure: false
+  packages:
+    - zlib

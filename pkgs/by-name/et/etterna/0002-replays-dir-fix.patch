@@ -1,0 +1,58 @@
+diff --git a/src/Etterna/Models/HighScore/Replay.cpp b/src/Etterna/Models/HighScore/Replay.cpp
+index 77e85b7ca0..1375e59142 100644
+--- a/src/Etterna/Models/HighScore/Replay.cpp
++++ b/src/Etterna/Models/HighScore/Replay.cpp
+@@ -344,7 +344,7 @@ Replay::WriteReplayData() -> bool
+ 		return false;
+ 	}
+ 
+-	const auto path = FULL_REPLAY_DIR + scoreKey;
++	const auto path = FILEMAN->ResolvePath(FULL_REPLAY_DIR + scoreKey);
+ 
+ 	std::ofstream fileStream(path, std::ios::binary);
+ 	if (!fileStream) {
+@@ -412,7 +412,7 @@ Replay::WriteInputData() -> bool
+ 		SetHighScoreMods();
+ 	}
+ 
+-	const auto path = INPUT_DATA_DIR + scoreKey;
++	const auto path = FILEMAN->ResolvePath(INPUT_DATA_DIR + scoreKey);
+ 	const auto path_z = path + "z";
+ 
+ 	std::ofstream fileStream(path, std::ios::binary);
+@@ -566,7 +566,7 @@ Replay::LoadInputData(const std::string& replayDir) -> bool
+ 		return loadResultInputData;
+ 	}
+ 
+-	const auto path = replayDir + scoreKey;
++	const auto path = FILEMAN->ResolvePath(replayDir + scoreKey);
+ 	const auto path_z = path + "z";
+ 	std::vector<InputDataEvent> readInputs;
+ 	std::vector<HoldReplayResult> vHoldReplayDataVector;
+@@ -827,7 +827,7 @@ Replay::LoadReplayDataBasic(const std::string& replayDir) -> bool
+ 	std::string profiledir;
+ 	std::vector<int> vNoteRowVector;
+ 	std::vector<float> vOffsetVector;
+-	const auto path = replayDir + scoreKey;
++	const auto path = FILEMAN->ResolvePath(replayDir + scoreKey);
+ 
+ 	std::ifstream fileStream(path, std::ios::binary);
+ 	std::string line;
+@@ -917,7 +917,7 @@ Replay::LoadReplayDataFull(const std::string& replayDir) -> bool
+ 	std::vector<int> vTrackVector;
+ 	std::vector<TapNoteType> vTapNoteTypeVector;
+ 	std::vector<HoldReplayResult> vHoldReplayDataVector;
+-	const auto path = replayDir + scoreKey;
++	const auto path = FILEMAN->ResolvePath(replayDir + scoreKey);
+ 
+ 	std::ifstream fileStream(path, std::ios::binary);
+ 	std::string line;
+@@ -1050,7 +1050,7 @@ Replay::LoadOnlineDataFromDisk(const std::string& replayDir) -> bool
+ 	std::vector<int> tracks;
+ 	std::vector<int> rows;
+ 	std::vector<TapNoteType> types;
+-	const auto path = replayDir + scoreKey;
++	const auto path = FILEMAN->ResolvePath(replayDir + scoreKey);
+ 
+ 	std::ifstream fileStream(path, std::ios::binary);
+ 

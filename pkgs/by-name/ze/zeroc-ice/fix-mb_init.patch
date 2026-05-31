@@ -1,0 +1,34 @@
+From faa694a7171a06f83034fd869adc4cffa2ae0c18 Mon Sep 17 00:00:00 2001
+From: laurensmiers <laurensmiers@protonmail.com>
+Date: Wed, 22 Oct 2025 14:50:23 +0200
+Subject: [PATCH] fix: mb_init does not accept any parameter
+
+Defined in mbchar.c:114 :
+```c
+void    mb_init()
+/*
+ * Initialize multi-byte character settings.
+ * First called prior to setting the 'mcpp_mode'.
+ * Will be called again each time the multibyte character encoding is changed.
+ */
+{
+```
+
+It does not expect any parameters.
+---
+ mcpp_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mcpp_main.c b/mcpp_main.c
+index 54a62b2..44265ad 100644
+--- a/mcpp_main.c
++++ b/mcpp_main.c
+@@ -302,7 +302,7 @@ int     mcpp_lib_main
+     inc_dirp = &null;   /* Initialize to current (null) directory   */
+     cur_fname = cur_fullname = "(predefined)";  /* For predefined macros    */
+     init_defines();                         /* Predefine macros     */
+-    mb_init(TRUE);      /* Should be initialized prior to get options   */
++    mb_init();      /* Should be initialized prior to get options   */
+     do_options( argc, argv, &in_file, &out_file);   /* Command line options */
+ 
+     /* Open input file, "-" means stdin.    */

@@ -1,0 +1,13 @@
+diff --git a/session/meson.build b/session/meson.build
+index 3e23650..e1f9792 100644
+--- a/session/meson.build
++++ b/session/meson.build
+@@ -79,8 +79,6 @@ if get_option('detect-program-prefixes') == true
+   autostarts = {
+     'gnome-keyring-pkcs11': join_paths(gnome_keyring_prefix, 'etc/xdg/autostart', 'gnome-keyring-pkcs11.desktop'),
+     'gnome-keyring-secrets': join_paths(gnome_keyring_prefix, 'etc/xdg/autostart', 'gnome-keyring-secrets.desktop'),
+-    'gnome-keyring-ssh': join_paths(gnome_keyring_prefix, 'etc/xdg/autostart', 'gnome-keyring-ssh.desktop'),
+-    'onboard-autostart': join_paths(onboard_prefix, 'etc/xdg/autostart', 'onboard-autostart.desktop'),
+     'orca-autostart': join_paths(orca_prefix, 'etc/xdg/autostart', 'orca-autostart.desktop'),
+   }
+ else

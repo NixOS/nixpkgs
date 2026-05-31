@@ -1,0 +1,31 @@
+#!/bin/sh
+# This file is copied from https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/clang-tools/wrapper
+# The clang-tools wrapper is commonly used together with the clang package on
+# nix, because without the wrapper, clang tools fail to find stdlib includes on
+# nix.
+
+buildcpath() {
+  local path after
+  while (( $# )); do
+    case $1 in
+        -isystem)
+            shift
+            path=$path${path:+':'}$1
+            ;;
+        -idirafter)
+            shift
+            after=$after${after:+':'}$1
+            ;;
+    esac
+    shift
+  done
+  echo $path${after:+':'}$after
+}
+
+export CPATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
+                                               $(<@clang@/nix-support/libc-cflags)):@clang@/resource-root/include
+export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
+                                                                                      $(<@clang@/nix-support/libcxx-cxxflags) \
+                                                                                      $(<@clang@/nix-support/libc-cflags)):@clang@/resource-root/include
+
+exec @unwrapped_clang_uml@ "$@"

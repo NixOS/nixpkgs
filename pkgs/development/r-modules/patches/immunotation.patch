@@ -1,0 +1,47 @@
+diff --git a/R/AFND_interface.R b/R/AFND_interface.R
+index b62e8e0..0f22d85 100644
+--- a/R/AFND_interface.R
++++ b/R/AFND_interface.R
+@@ -244,9 +244,9 @@ check_population <- function(hla_population) {
+ #' @return list of valid countries, regions and ethnic origin
+ #' @keywords internal
+ get_valid_geographics <- function() {
+-    url <- "http://www.allelefrequencies.net/hla6006a.asp?"
+-    html_input <- getURL(url, read_method = "html")
+-    
++    # http://www.allelefrequencies.net/hla6006a.asp?
++    html_input <- xml2::read_html("nix-valid-geographics")
++      
+     rvest_tables <- rvest::html_table(html_input, fill = TRUE)
+     
+     # country
+diff --git a/R/external_resources_input.R b/R/external_resources_input.R
+index c4b1dc1..8fc5881 100644
+--- a/R/external_resources_input.R
++++ b/R/external_resources_input.R
+@@ -74,16 +74,17 @@ getURL <- function(URL, N.TRIES=2L,
+ # MHC I
+ # netmhcI_input_template is an internal variable containing list of valid 
+ # NetMHCpan input alleles
+-netmhcI_input_template <- getURL(
+-    URL="https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list",
+-    read_method = "delim", delim = "\t",
+-    col_names = c("netmhc_input", "hla_chain_name", "HLA_gene"))
++netmhcI_input_template <- readr::read_delim(
++        # https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list
++	"nix-NetMHCpan-4.1-allele-list",
++	delim = "\t",
++	skip = 0,
++        col_names = c("netmhc_input", "hla_chain_name", "HLA_gene")
++    )
+ 
+ # MHC II
+-lines <- getURL(
+-    URL = paste0("https://services.healthtech.dtu.dk/services/",
+-    "NetMHCIIpan-4.0/alleles_name.list"),
+-    read_method = "lines")
++# https://services.healthtech.dtu.dk/services/NetMHCIIpan-4.0/alleles_name.list
++lines <- readr::read_lines("nix-NETMHCIIpan-4.0-alleles-name-list")
+ lines_rep <- stringr::str_replace_all(lines, "\t+|\\s\\s+", "\t")
+ netmhcII_input_template <- suppressWarnings(
+     suppressMessages(read.delim(textConnection(lines_rep), sep = "\t")))

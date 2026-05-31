@@ -1,0 +1,13 @@
+diff --git a/src/nemo-python.c b/src/nemo-python.c
+index 8d2acdb..ee24143 100644
+--- a/src/nemo-python.c
++++ b/src/nemo-python.c
+@@ -197,7 +197,7 @@ nemo_python_init_python (void)
+ 	}
+ 	
+ 	debug("Sanitize the python search path");
+-	PyRun_SimpleString("import sys; sys.path = [path for path in sys.path if path]");
++	PyRun_SimpleString("import sys; import os; sys.path = [path for path in sys.path if path]; sys.path += os.getenv(\"NEMO_PYTHON_SEARCH_PATH\").split(os.pathsep)");
+ 	if (PyErr_Occurred())
+ 	{
+ 		PyErr_Print();

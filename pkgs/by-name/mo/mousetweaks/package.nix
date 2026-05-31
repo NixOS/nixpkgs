@@ -1,0 +1,69 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gtk3,
+  gnome,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
+  libxtst,
+  libxfixes,
+  libxcursor,
+  libx11,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "mousetweaks";
+  version = "3.32.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/mousetweaks/${lib.versions.majorMinor version}/mousetweaks-${version}.tar.xz";
+    sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    gsettings-desktop-schemas
+    libx11
+    libxtst
+    libxfixes
+    libxcursor
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = {
+    description = "Provides mouse accessibility enhancements for the GNOME desktop";
+    longDescription = ''
+      Mousetweaks provides mouse accessibility enhancements for the GNOME
+      desktop. These enhancements are:
+
+      - It offers a way to perform the various clicks without using any
+      physical mouse buttons. (Hover Click)
+
+      - It allows users to perform a secondary click by keeping the primary
+      mouse button pressed for a predetermined amount of time. (Simulated
+      Secondary Click)
+
+      The features can be activated and configured through the Universal Access
+      panel of the GNOME Control Center.
+    '';
+    homepage = "https://gitlab.gnome.org/Archive/mousetweaks";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.johnazoidberg ];
+    mainProgram = "mousetweaks";
+  };
+}

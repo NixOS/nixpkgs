@@ -1,0 +1,16 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8aac546..ec809e8 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -14,11 +14,9 @@ if(USE_WIDE)
+     set(CURSES_NEED_WIDE TRUE)
+ endif()
+ 
+-include(FetchContent)
+ include(GNUInstallDirs)
+ 
+ if (BUILD_MANPAGES)
+-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake.deps/FetchPandocMan.cmake")
+     include(PandocMan)
+     add_pandoc_man("${CMAKE_CURRENT_SOURCE_DIR}/man/ncpamixer.1.md")
+ endif()

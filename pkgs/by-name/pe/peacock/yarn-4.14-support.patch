@@ -1,0 +1,23 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -14,4 +14,7 @@ plugins:
+   - path: .yarn/plugins/@yarnpkg/plugin-outdated.cjs
+     spec: "https://mskelton.dev/yarn-outdated/v2"
+ 
+-yarnPath: .yarn/releases/yarn-4.7.0.cjs
++approvedGitRepositories:
++  - "**"
++
++enableScripts: true
+diff --git a/yarn.lock b/yarn.lock
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,6 +2,6 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10
+ 

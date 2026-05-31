@@ -1,0 +1,6 @@
+{
+  mkPrelude,
+}:
+mkPrelude {
+  name = "prelude";
+}

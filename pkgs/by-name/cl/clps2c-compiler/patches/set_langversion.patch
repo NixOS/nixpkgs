@@ -1,0 +1,12 @@
+diff --git a/CLPS2C-Compiler/CLPS2C-Compiler.csproj b/CLPS2C-Compiler/CLPS2C-Compiler.csproj
+index 867533e..34b30a4 100644
+--- a/CLPS2C-Compiler/CLPS2C-Compiler/CLPS2C-Compiler.csproj
++++ b/CLPS2C-Compiler/CLPS2C-Compiler/CLPS2C-Compiler.csproj
+@@ -5,6 +5,7 @@
+     <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>CLPS2C_Compiler</RootNamespace>
+     <ImplicitUsings>enable</ImplicitUsings>
++    <LangVersion>10.0</LangVersion>
+     <Nullable>enable</Nullable>
+     <PlatformTarget>x86</PlatformTarget>
+     <ApplicationIcon>256x256.ico</ApplicationIcon>

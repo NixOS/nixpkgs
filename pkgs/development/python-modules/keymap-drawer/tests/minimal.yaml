@@ -1,0 +1,13 @@
+layout:
+  ortho_layout:
+    rows: 2
+    columns: 3
+layers:
+  default:
+    - [ESC, A, B]
+    - [SPACE, C, D]
+
+  fn:
+    - [F1, F2, F3]
+    - [F4, F5, F6]
+
