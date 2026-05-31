@@ -86,10 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glycin thumbnailers for several formats";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
     changelog = "https://gitlab.gnome.org/GNOME/glycin/-/tags/${finalAttrs.version}";
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     maintainers = with lib.maintainers; [ thunze ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
