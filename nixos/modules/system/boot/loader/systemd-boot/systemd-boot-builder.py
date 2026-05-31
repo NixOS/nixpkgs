@@ -634,13 +634,11 @@ def write_boot_files(boot_files: BootFileList) -> None:
             assert isinstance(boot_file.writer, InitrdWithSecretsWriter)
             CopyWriter(source=boot_file.writer.source).write_boot_file(boot_path)
             print(
-                "warning: failed to create initrd secrets for generation "
-                f"{boot_file.system_identifier.generation}, an older generation",
-                file=sys.stderr,
-            )
-            print(
-                "note: this is normal after having removed "
-                "or renamed a file in `boot.initrd.secrets`",
+                "warning: failed to update initrd secrets for an older "
+                f"generation ({boot_file.system_identifier.generation}). The "
+                "previous secrets in this initrd will continue to be used. "
+                "To silence this warning, restore the secret files to their "
+                "original locations or delete this generation.",
                 file=sys.stderr,
             )
 
