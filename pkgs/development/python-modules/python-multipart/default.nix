@@ -50,6 +50,9 @@ buildPythonPackage (finalAttrs: {
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      ris
+    ];
   };
 })
