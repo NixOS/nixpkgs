@@ -1,0 +1,11 @@
+--- a/version_provider.py
++++ b/version_provider.py
+@@ -45,7 +45,7 @@
+     version = base_version
+ 
+     # generate git version for sdist
+-    get_git_commit_id()
++    # get_git_commit_id()
+ 
+     if not _read_cmake_bool(os.environ.get("NO_VERSION_LABEL")):
+         exts = []

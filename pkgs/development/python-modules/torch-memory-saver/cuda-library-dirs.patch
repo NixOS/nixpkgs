@@ -1,0 +1,13 @@
+--- a/setup.py
++++ b/setup.py
+@@ -105,8 +105,8 @@
+     else:  # cuda
+         include_dirs = [str((platform_home / 'include').resolve())]
+         library_dirs = [
+-            str((platform_home / 'lib64').resolve()),
+-            str((platform_home / 'lib64/stubs').resolve()),
++            str((platform_home / 'lib').resolve()),
++            str((platform_home / 'lib/stubs').resolve()),
+         ]
+         libraries = ['cuda', 'cudart']
+         platform_macros = [('USE_CUDA', '1')]

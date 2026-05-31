@@ -5701,6 +5701,8 @@ self: super: with self; {
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
 
+  flash-attn-4 = callPackage ../development/python-modules/flash-attn/4.nix { };
+
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
   flashinfer = callPackage ../development/python-modules/flashinfer { };
@@ -16680,6 +16682,8 @@ self: super: with self; {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  quack-kernels = callPackage ../development/python-modules/quack-kernels { };
+
   quadprog = callPackage ../development/python-modules/quadprog { };
 
   qualysclient = callPackage ../development/python-modules/qualysclient { };
@@ -17848,6 +17852,12 @@ self: super: with self; {
 
   sfrbox-api = callPackage ../development/python-modules/sfrbox-api { };
 
+  sgl-deep-gemm = callPackage ../development/python-modules/sgl-deep-gemm { };
+
+  sglang = callPackage ../development/python-modules/sglang { };
+
+  sglang-kernel = callPackage ../development/python-modules/sglang-kernel { };
+
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
   sgp4 = callPackage ../development/python-modules/sgp4 { };
@@ -18170,6 +18180,10 @@ self: super: with self; {
   smbus2 = callPackage ../development/python-modules/smbus2 { };
 
   smdebug-rulesconfig = callPackage ../development/python-modules/smdebug-rulesconfig { };
+
+  smg-grpc-proto = callPackage ../development/python-modules/smg-grpc-proto { };
+
+  smg-grpc-servicer = callPackage ../development/python-modules/smg-grpc-servicer { };
 
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
@@ -19643,6 +19657,8 @@ self: super: with self; {
 
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
+  tilelang = callPackage ../development/python-modules/tilelang { };
+
   tilequant = callPackage ../development/python-modules/tilequant { };
 
   tiler = callPackage ../development/python-modules/tiler { };
@@ -19769,6 +19785,12 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tokenspeed-mla = callPackage ../development/python-modules/tokenspeed-mla { };
+
+  tokenspeed-triton = callPackage ../development/python-modules/tokenspeed-triton {
+    llvm = pkgs.tokenspeed-triton-llvm;
+  };
+
   tokentrim = callPackage ../development/python-modules/tokentrim { };
 
   tololib = callPackage ../development/python-modules/tololib { };
@@ -19804,6 +19826,8 @@ self: super: with self; {
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
+
+  torch-memory-saver = callPackage ../development/python-modules/torch-memory-saver { };
 
   # Required to test triton
   torch-no-triton = self.torch.override { tritonSupport = false; };

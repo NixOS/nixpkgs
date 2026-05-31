@@ -1,0 +1,10 @@
+--- a/setup.py
++++ b/setup.py
+@@ -42,6 +42,7 @@
+ 
+ def is_git_repo() -> bool:
+     """Return True if this file resides at the root of a git repository."""
++    return False
+     expected_toplevel = Path(__file__).parent.resolve()
+ 
+     try:

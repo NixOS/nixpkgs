@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -104,8 +104,8 @@
+ find_package(Threads REQUIRED)
+ 
+ include(FetchContent)
+-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+-FetchContent_MakeAvailable(json)
++FetchContent_Declare(nlohmann_json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
++FetchContent_MakeAvailable(nlohmann_json)
+ 
+ add_library(mscclpp_obj OBJECT)
+ target_include_directories(mscclpp_obj
