@@ -13,6 +13,9 @@
   which,
 }:
 
+let
+  electron = electron_41;
+in
 buildNpmPackage rec {
   pname = "teams-for-linux";
   version = "2.10.0";
@@ -46,7 +49,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     electron_dist="$(mktemp -d)"
-    cp -r ${electron_41.dist}/. "$electron_dist"
+    cp -r ${electron.dist}/. "$electron_dist"
     chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
@@ -54,7 +57,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist="$electron_dist" \
-        -c.electronVersion=${electron_41.version} \
+        -c.electronVersion=${electron.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -76,7 +79,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
