@@ -8,6 +8,7 @@
   makeSetupHook,
   pnpm,
   pnpm-fixup-state-db,
+  sqlite,
   writableTmpDirAsHomeHook,
   yq,
   zstd,
@@ -19,6 +20,7 @@ let
     1 # First version. Here to preserve backwards compatibility
     2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
+    4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
   ];
 in
 {
@@ -58,17 +60,17 @@ in
           pnpm-fixup-state-db;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
-    assert (lib.throwIf (args ? pnpmWorkspace)
-      "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
-    ) true;
+    assert
+      !args ? pnpmWorkspace
+      || throw "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`.";
 
-    assert (lib.throwIf (fetcherVersion == null)
-      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      fetcherVersion != null
+      || throw "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
-    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      builtins.elem fetcherVersion supportedFetcherVersions
+      || throw "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     lib.warnIf (fetcherVersion < 3)
       "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
@@ -87,6 +89,7 @@ in
               moreutils
               pnpm # from args
               pnpm-fixup-state-db'
+              sqlite
               writableTmpDirAsHomeHook
               yq
               zstd
@@ -128,9 +131,9 @@ in
                 export pnpm_config_pm_on_fail=ignore
 
                 # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-                export pnpm_config_side_effects_cache false
+                export pnpm_config_side_effects_cache=false
 
-                export pnpm_config_update_notifier false
+                export pnpm_config_update_notifier=false
               else
                 pnpm config set manage-package-manager-versions false
                 pnpm config set side-effects-cache false
@@ -142,6 +145,10 @@ in
 
               # Run any additional pnpm configuration commands that users provide.
               ${prePnpmInstall}
+
+              echo "Final pnpm config:"
+              pnpm config list
+              echo
 
               # pnpm is going to warn us about using --force
               # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
@@ -172,6 +179,13 @@ in
 
               if [ -f "$storePath/v11/index.db" ]; then
                 pnpm-fixup-state-db "$storePath/v11";
+                # Dump the SQLite database to a SQL text file for reproducibility.
+                # SQLite's binary format is non-deterministic (version-valid-for number, etc),
+                # so we store the logical contents as SQL statements and reconstruct during build.
+                if [[ ${toString fetcherVersion} -ge 4 ]]; then
+                  sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
+                  rm "$storePath/v11/index.db"
+                fi
               fi
 
               # This folder contains symlinks to /build/source which we don't need
@@ -231,6 +245,7 @@ in
   pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
+      sqlite
       writableTmpDirAsHomeHook
       zstd
     ];
@@ -238,5 +253,6 @@ in
       npmArch = stdenvNoCC.targetPlatform.node.arch;
       npmPlatform = stdenvNoCC.targetPlatform.node.platform;
     };
+    meta.license = lib.licenses.mit;
   } ./pnpm-config-hook.sh;
 }

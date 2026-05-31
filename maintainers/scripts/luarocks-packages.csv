@@ -49,6 +49,7 @@ lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,
+lrexlib-pcre2,,,,,,wishstudio
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
 lsqlite3,,,,,,
@@ -167,6 +168,7 @@ telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
+tomlua,,,,,,birdee
 tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb

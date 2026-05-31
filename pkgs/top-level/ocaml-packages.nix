@@ -676,7 +676,7 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override {
+          frama-c = pkgs.frama-c.override {
             ocamlPackages = self;
             why3 = pkgs.why3.override { ocamlPackages = self; };
           };
@@ -2093,9 +2093,7 @@ let
           inherit (pkgs) git;
         };
 
-        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
-          inherit (pkgs) git;
-        };
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix { };
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 

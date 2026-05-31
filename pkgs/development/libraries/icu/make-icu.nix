@@ -143,6 +143,7 @@ let
 
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+          substituteInPlace "$out/lib/pkgconfig/icu-uc.pc" --replace-fail "$out/lib" "$dev/lib"
         ''
       );
 

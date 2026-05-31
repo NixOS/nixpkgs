@@ -342,10 +342,52 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = "...";
   };
 })
+```
+
+It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnpm_10`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
+
+<!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
+
+```diff
+ {
+   fetchPnpmDeps,
+   nodejs,
+-  pnpm,
++  pnpm_10,
+   pnpmConfigHook,
+   stdenv,
+ }:
++let
++  # Optionally override pnpm to use a custom nodejs version
++  # Make sure that the same nodejs version is referenced in nativeBuildInputs
++  # pnpm = pnpm_10.override { nodejs = nodejs-slim_22; };
++in
+ stdenv.mkDerivation (finalAttrs: {
+   pname = "foo";
+   version = "0-unstable-1980-01-01";
+
+   src = {
+     #...
+   };
+
+   nativeBuildInputs = [
+     nodejs # in case scripts are run outside of a pnpm call
+     pnpmConfigHook
+-    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
++    pnpm_10 # At least required by pnpmConfigHook, if not other (custom) phases
+   ];
+
+   pnpmDeps = fetchPnpmDeps {
+     inherit (finalAttrs) pname version src;
++    pnpm = pnpm_10;
+     fetcherVersion = 4;
+     hash = "...";
+   };
+ })
 ```
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`.
@@ -456,7 +498,7 @@ This is the version of the output of `fetchPnpmDeps`. New packages should use `3
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -474,6 +516,7 @@ Version 3 is the recommended value for new packages. Versions 1 and 2 are deprec
 - 1: Initial version, nothing special.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+- 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
 
 ### Yarn {#javascript-yarn}
 

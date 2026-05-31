@@ -10,6 +10,8 @@
   zlib,
   kdePackages,
   libgcc,
+  libxfixes,
+  libjack2,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -156,6 +158,8 @@ stdenv.mkDerivation rec {
     bzip2
     zlib
     libxpm
+    libxfixes
+    libjack2
     libgcc
   ];
 

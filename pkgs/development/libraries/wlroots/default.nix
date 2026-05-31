@@ -168,7 +168,7 @@ in
   };
 
   wlroots_0_20 = generic {
-    version = "0.20.0";
-    hash = "sha256-hVJlJiJK6+9RkgkmQzUzb8ypVMqsNhbQG6KfeCvxtb0=";
+    version = "0.20.1";
+    hash = "sha256-uuc1dn13FXvFSBvE3+QOi35rLJZmWIUst64oaXGdPFk=";
   };
 }

@@ -1158,8 +1158,10 @@ let
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
       warnDeprecation =
-        warnIf (opt.type.deprecationMessage != null)
-          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+        if (opt.type.deprecationMessage != null) then
+          warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}"
+        else
+          x: x;
 
     in
     warnDeprecation opt
@@ -1597,6 +1599,28 @@ let
     _type = "order";
     inherit priority content;
   };
+
+  /**
+    Applies a function to the value inside a definition,
+    preserving all surrounding properties (`mkForce`, `mkOrder`, `mkIf`, etc.).
+  */
+  mapDefinitionValue =
+    f: def:
+    if def ? _type then
+      if def._type == "merge" then
+        def // { contents = map (mapDefinitionValue f) def.contents; }
+      else if def._type == "if" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "override" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "order" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "definition" then
+        def // { value = mapDefinitionValue f def.value; }
+      else
+        f def
+    else
+      f def;
 
   mkBefore = mkOrder 500;
   defaultOrderPriority = 1000;
@@ -2302,6 +2326,7 @@ private
     importApply
     importJSON
     importTOML
+    mapDefinitionValue
     mergeDefinitions
     mergeAttrDefinitionsWithPrio
     mergeOptionDecls # should be private?

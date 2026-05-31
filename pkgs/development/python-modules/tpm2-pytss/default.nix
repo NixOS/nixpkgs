@@ -45,6 +45,13 @@ buildPythonPackage rec {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
       hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
     })
+    # support cryptography >= 47.0.0, which made __deepcopy__ an abstract
+    # method on the private-key base classes
+    # https://github.com/tpm2-software/tpm2-pytss/pull/689
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/5d15cad4bde28902a4becb8e2a8e915aba8abbd0.patch";
+      hash = "sha256-b2zVD7KJGVzJ765HO8LFAe9MyQmjOTpERmEqUrIg3oM=";
+    })
     # Properly restore environment variables upon exit from
     # FAPIConfig context. Accepted into upstream, not yet released.
     (fetchpatch2 {

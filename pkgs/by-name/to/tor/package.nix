@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 

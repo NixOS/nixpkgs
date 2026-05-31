@@ -35,7 +35,7 @@ patch -d "$workdir" -p1 < "$ROOT/replace-sentry-fork.patch"
 
 export PUB_CACHE="$workdir/.pub-cache"
 flutter --no-version-check config --no-analytics >/dev/null
-flutter --no-version-check pub --directory "$workdir" get
+(cd "$workdir" && flutter --no-version-check pub get)
 
 yq eval --output-format=json --prettyPrint "$workdir/pubspec.lock" > "$ROOT/pubspec.lock.json"
 

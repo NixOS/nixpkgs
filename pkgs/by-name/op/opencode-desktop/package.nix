@@ -67,6 +67,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # isn't patched for Nix. Disable it at source.
     substituteInPlace packages/desktop/src/main/constants.ts \
       --replace-fail 'app.isPackaged && CHANNEL !== "dev"' 'false'
+
+    # Relax Bun version check to be a warning instead of an error
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
   '';
 
   configurePhase = ''

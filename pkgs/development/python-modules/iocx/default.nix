@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  idna,
   pefile,
   pytestCheckHook,
   python-magic,
@@ -10,26 +11,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iocx";
-  version = "0.7.0";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iocx-dev";
     repo = "iocx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QLnlxCFVN2hxQtprNuete9iEAy3k4lxJUwbZcPhHMH0=";
+    hash = "sha256-z/l6i+RKYfEC02OxFHEXvo38VYty2FVt48pP+HBLJco=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    idna
     pefile
     python-magic
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "iocx" ];
 

@@ -30,12 +30,16 @@ let
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
       # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2040877
       extraPostPatch =
-        lib.optionalString (lib.versionAtLeast version "147" && lib.versionOlder version "149")
-          ''
-            find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
-          '';
+        lib.optionalString (lib.versionAtLeast version "151" && lib.versionOlder version "152") ''
+          echo https://hg.mozilla.org/releases/comm-release/rev/becfb8fb2c70f1603882a2787e2170d5d8013949 >> sourcestamp.txt
+          echo https://hg.mozilla.org/releases/mozilla-release/rev/fc12dc911f904307729760a817deb829cbf8feb4 >> sourcestamp.txt
+        ''
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+        + lib.optionalString (lib.versionAtLeast version "140.8" && lib.versionOlder version "151") ''
+          find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+        '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
@@ -73,8 +77,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "150.0.2";
-    sha512 = "3e52220ff34aa6cd1bf46a910dba1f30d0abf7d19ed7f501ffeeb8f5901b8d97fdc0adb0cceb434ef8e83c7f7b83f28024b872280237af72ff2da9d89fafe065";
+    version = "151.0.1";
+    sha512 = "a09c1e18faa8d7fdccf39e905542c21e817230e68c7cc6050beec048d0fec0f8eb92e51278d2ccd8d8cfa842762662235517e20238b555a4ad48ee5648dc3589";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -87,8 +91,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.7.2esr";
-    sha512 = "513bcaa496f987d0f3906aeb6fe3ea651331470646b0c58479c91bb2c8eb52e389bc8aa646437a03b611ab78bda1df7252545960ffe38086d1fc462e65421819";
+    version = "140.11.1esr";
+    sha512 = "93dfdd26e6f4c7dd2f7dcc2e4994980d017868341c60c93775721467abd9192b815f2de63928e7d10c965fc045ed72ca5b49ed6502a61e50104ee5cd00941d1e";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

@@ -129,10 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  postgresqlTestUserOptions = "LOGIN CREATEDB";
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
 
   postgresqlTestSetupPost = ''
-    for database in $(seq 0 15); do
+    for database in $(seq 0 3); do
       createdb "test$database"
     done
   '';

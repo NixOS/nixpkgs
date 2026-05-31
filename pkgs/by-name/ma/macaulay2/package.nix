@@ -155,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Macaulay2/packages/DeterminantalRepresentations.m2 \
       --replace-fail "eps = 1e-15" "eps = 1e-14"
   ''
+  # TODO remove in v1.26.06 (see https://github.com/Macaulay2/M2/pull/4334)
   # ForeignFunctions.m2 uses `brew --prefix` to discover potential library paths,
   # which fails when Homebrew is not installed.
   # We patch it to return an empty path instead, which should be harmless
@@ -172,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-download"
     "--enable-shared"
-    "--with-issue=nixos"
+    "--with-issue=Nix"
     "--with-boost-libdir=${boost}/lib"
     "--with-system-libs"
     "CPPFLAGS=-I${lib.getDev cddlib}/include/cddlib"
@@ -293,5 +294,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://macaulay2.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

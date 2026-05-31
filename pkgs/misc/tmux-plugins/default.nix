@@ -770,6 +770,42 @@ in
     };
   };
 
+  search-panes = mkTmuxPlugin {
+    pluginName = "search-panes";
+    version = "0-unstable-2025-07-27";
+    src = fetchFromGitHub {
+      owner = "multi-io";
+      repo = "tmux-search-panes";
+      rev = "3996b5c56c6be69d3a85ef26065b1877d9ac71c6";
+      hash = "sha256-Z9Gu4v2LAyG6UxXVLTvQUz1wU4PaJlBQXjLiSzfSP7s=";
+    };
+    rtpFilePath = "tmux-search-panes.tmux";
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in search-panes.sh _fzf-and-switch.sh _render-preview.sh; do
+        chmod +x $target/bin/$f
+        wrapProgram $target/bin/$f \
+          --prefix PATH : ${
+            with pkgs;
+            lib.makeBinPath [
+              coreutils
+              fzf
+              gnugrep
+              gnused
+              tmux
+            ]
+          }
+      done
+    '';
+    meta = {
+      homepage = "https://github.com/multi-io/tmux-search-panes";
+      description = "Tmux plugin that allows you to perform a fulltext search";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.DieracDelta ];
+    };
+  };
+
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
     version = "unstable-2022-08-14";
@@ -1064,6 +1100,49 @@ in
     };
   };
 
+  tmux-sm = mkTmuxPlugin {
+    pluginName = "tmux-sm";
+    version = "0-unstable-2026-05-14";
+    src = fetchFromGitHub {
+      owner = "vimlinuz";
+      repo = "tmux-sm";
+      rev = "97d411a11d124443c982d17fde03c1e09809d7b1";
+      hash = "sha256-7HW/TLP/yyQp4j0/utA0tibTv+suV1B2K56pUS3Z004=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    rtpFilePath = "main.tmux";
+    postInstall = ''
+      chmod +x $target/scripts/session-manager
+      wrapProgram $target/scripts/session-manager \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            fzf
+            gawk
+            coreutils
+          ]
+        }
+      chmod +x $target/scripts/sessionizer
+      wrapProgram $target/scripts/sessionizer \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            fzf
+            tree
+            findutils
+            coreutils
+          ]
+        }
+    '';
+    meta = {
+      homepage = "https://github.com/vimlinuz/tmux-sm";
+      description = "Fuzzy terminal popup to manage tmux sessions using `fzf`";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ vimlinuz ];
+    };
+  };
+
   tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
     inherit mkTmuxPlugin;
   };
@@ -1080,7 +1159,7 @@ in
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
+      wrapProgram $target/bin/t \
           --prefix PATH : ${
 
             lib.makeBinPath [

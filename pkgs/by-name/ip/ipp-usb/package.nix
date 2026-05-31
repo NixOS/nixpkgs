@@ -23,7 +23,8 @@ buildGoModule (finalAttrs: {
     rm ipp-usb.8
     substituteInPlace Makefile \
       --replace-fail "install: all" "install: man" \
-      --replace-fail "/usr/" "/"
+      --replace-fail "/usr/" "/" \
+      --replace-fail "install -s" "install" # Nix already strips binaries in $out/sbin, this also fixes cross
     substituteInPlace systemd-udev/ipp-usb.service --replace-fail "/sbin" "$out/bin"
     for i in paths.go ipp-usb.8.md; do
       substituteInPlace $i --replace-fail "/usr" "$out"

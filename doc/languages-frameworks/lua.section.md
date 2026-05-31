@@ -232,7 +232,7 @@ The following is an example:
         vyp
         lblasc
       ];
-      license.fullName = "MIT/X11";
+      license = lib.licenses.mit;
     };
   };
 }

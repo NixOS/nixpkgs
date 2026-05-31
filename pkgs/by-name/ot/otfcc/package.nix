@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     ./move-makefiles.patch
   ];
 
+  postPatch = ''
+    substituteInPlace premake5.lua \
+      --replace-fail 'flags { "StaticRuntime" }' 'staticruntime "On"'
+  '';
+
   buildFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
@@ -39,11 +44,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
-    # Build fails on all platforms with
-    #        > configure flags: gmake
-    #   > ** Warning: action 'xcode4' sets 'os' field, which is deprecated, use 'targetos' instead.
-    #   > Error: invalid value 'StaticRuntime' for flags
-    broken = true;
   };
-
 }

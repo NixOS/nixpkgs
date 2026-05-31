@@ -28,14 +28,14 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "9.0.2";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-OAPgJBSBHCyuy/VPlIeNwAM87cnyuHBuaMn6QKisTcA=";
+    hash = "sha256-YMaDCYdCNJQ8zXfCkV5tb3RA3foXRlKo2TWv6pgk8VM=";
   };
 
   pdf-js = buildNpmPackage {
@@ -213,8 +213,8 @@ buildNpmPackage (finalAttrs: {
     # Skip some flaky/failing tests
     rm test/tests/retractionsTest.js
     for test in \
-      "should use BrowserDownload for 403 when enforcing file type" \
-      "should use BrowserDownload for a JS redirect page" \
+      "should use BrowserRequest for 403 when enforcing file type" \
+      "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
       "should switch dialog from add note to add/edit citation" \
       "should vacuum the database with force option" \

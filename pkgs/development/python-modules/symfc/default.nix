@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "symfc";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "symfc";
     repo = "symfc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UTiVJQQxMmjZjgqfeDJn6g0XQ6i1JVktwgEt2StSsGE=";
+    hash = "sha256-bMG22yQszrAAh7qbQjIuaY3KjDXB95Y2OgkwKU+FW0E=";
   };
 
   build-system = [

@@ -28,6 +28,7 @@
   htop,
   jq,
   khard,
+  kulala-core,
   languagetool,
   libgit2,
   llvmPackages,
@@ -363,12 +364,22 @@ assertNoAdditions {
     };
   });
 
+  bclose-vim = super.bclose-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.cc-by-sa-30;
+    };
+  });
+
   bitbake = super.bitbake.overrideAttrs (old: {
     sourceRoot = "source/contrib/vim";
     meta = old.meta // {
       license = lib.licenses.gpl2Only;
     };
   });
+
+  blink-calc = super.blink-calc.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
 
   blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
     dependencies = [ self.blink-cmp ];
@@ -445,6 +456,12 @@ assertNoAdditions {
     nvimSkipModules = [ "bufferline.commands" ];
   };
 
+  BufOnly-vim = super.BufOnly-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   bufresize-nvim = super.bufresize-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
@@ -474,6 +491,12 @@ assertNoAdditions {
       "catppuccin.lib.detect_integrations"
     ];
   };
+
+  caw-vim = super.caw-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
 
   ccc-nvim = super.ccc-nvim.overrideAttrs {
     # ccc auto-discover requires all pass
@@ -525,7 +548,7 @@ assertNoAdditions {
     ];
   };
 
-  clang_complete = super.clang_complete.overrideAttrs {
+  clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
     # These usually implicitly set by cc-wrapper around clang (pkgs/build-support/cc-wrapper).
@@ -541,7 +564,14 @@ assertNoAdditions {
             substituteInPlace "$out"/plugin/libclang.py \
               --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
-  };
+    meta = old.meta // {
+      # Docs say bsd3, except some LLVM project files under ncsa.
+      license = with lib.licenses; [
+        bsd3
+        ncsa
+      ];
+    };
+  });
 
   clangd_extensions-nvim = super.clangd_extensions-nvim.overrideAttrs (old: {
     meta = old.meta // {
@@ -903,6 +933,18 @@ assertNoAdditions {
       "repro_cmp"
     ];
   };
+
+  colorizer = super.colorizer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  Colour-Sampler-Pack = super.Colour-Sampler-Pack.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
 
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
@@ -1378,6 +1420,13 @@ assertNoAdditions {
     dependencies = [ self.nvim-lspconfig ];
   };
 
+  eldritch-nvim = super.eldritch-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "A theme for the Ancient Ones! (NVIM)";
+      maintainers = with lib.maintainers; [ neonvoid ];
+    };
+  });
+
   elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     fixupPhase = ''
@@ -1403,6 +1452,13 @@ assertNoAdditions {
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
+
+  fastfold = super.fastfold.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
 
   faust-nvim = super.faust-nvim.overrideAttrs {
     dependencies = with self; [
@@ -1599,6 +1655,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  gitv = super.gitv.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   go-nvim = super.go-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
@@ -1668,6 +1730,12 @@ assertNoAdditions {
   gundo-vim = super.gundo-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl2Plus;
+    };
+  });
+
+  gv-vim = super.gv-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -1759,6 +1827,12 @@ assertNoAdditions {
     ];
   };
 
+  hoon-vim = super.hoon-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   hop-nvim = super.hop-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.bsd3;
@@ -1814,6 +1888,18 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
+  Improved-AnsiEsc = super.Improved-AnsiEsc.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  incsearch-easymotion-vim = super.incsearch-easymotion-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
     nvimSkipModules = "ibl.config.types";
@@ -1850,9 +1936,21 @@ assertNoAdditions {
     };
   });
 
+  iosvkem = super.iosvkem.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   iswap-nvim = super.iswap-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
+
+  jdaddy-vim = super.jdaddy-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1870,6 +1968,12 @@ assertNoAdditions {
   jellybeans-nvim = super.jellybeans-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
+
+  jellybeans-vim = super.jellybeans-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   jinja-vim = super.jinja-vim.overrideAttrs (old: {
     meta = old.meta // {
@@ -1946,16 +2050,17 @@ assertNoAdditions {
     in
     {
       dependencies = [ kulala-http-grammar ];
-      buildInputs = [ curl ];
 
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
-          --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+          --replace-fail 'path = nil' 'path = "${lib.getExe kulala-core}"'
       '';
 
       nvimSkipModules = [
         # Requires some extra work to get CLI working in nixpkgs
         "cli.kulala_cli"
+        # Legacy parser module; active parsing is handled by kulala-core
+        "kulala.parser.treesitter"
       ];
     }
   );
@@ -1963,6 +2068,12 @@ assertNoAdditions {
   LanguageTool-nvim = super.LanguageTool-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
+    };
+  });
+
+  last256 = super.last256.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -2132,13 +2243,22 @@ assertNoAdditions {
     };
   });
 
+  lexima-vim = super.lexima-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   lf-nvim = super.lf-nvim.overrideAttrs {
     dependencies = [ self.toggleterm-nvim ];
   };
 
-  lf-vim = super.lf-vim.overrideAttrs {
+  lf-vim = super.lf-vim.overrideAttrs (old: {
     dependencies = [ self.vim-floaterm ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   lh-brackets = super.lh-brackets.overrideAttrs (old: {
     meta = old.meta // {
@@ -2192,17 +2312,32 @@ assertNoAdditions {
     ];
   };
 
-  litee-calltree-nvim = super.litee-calltree-nvim.overrideAttrs {
+  litee-calltree-nvim = super.litee-calltree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
-  litee-filetree-nvim = super.litee-filetree-nvim.overrideAttrs {
+  litee-filetree-nvim = super.litee-filetree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
-  litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs {
+  litee-nvim = super.litee-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   live-preview-nvim = super.live-preview-nvim.overrideAttrs (old: {
     checkInputs = with self; [
@@ -2239,6 +2374,12 @@ assertNoAdditions {
   lsp-format-nvim = super.lsp-format-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
+    };
+  });
+
+  lsp-rooter-nvim = super.lsp-rooter-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
     };
   });
 
@@ -2312,6 +2453,12 @@ assertNoAdditions {
   maple-nvim = super.maple-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
+
+  mark-radar-nvim = super.mark-radar-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   markdoc-nvim = super.markdoc-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2485,6 +2632,12 @@ assertNoAdditions {
     ];
   };
 
+  moonscript-vim = super.moonscript-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   mru = super.mru.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
@@ -2508,6 +2661,12 @@ assertNoAdditions {
     dependencies = [ self.nvim-yarp ];
   };
 
+  ncm2-dictionary = super.ncm2-dictionary.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   ncm2-jedi = super.ncm2-jedi.overrideAttrs {
     dependencies = with self; [
       nvim-yarp
@@ -2528,9 +2687,12 @@ assertNoAdditions {
     dependencies = [ self.neco-syntax ];
   };
 
-  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs {
+  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs (old: {
     dependencies = [ self.ultisnips ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neco-ghc = super.neco-ghc.overrideAttrs (old: {
     meta = old.meta // {
@@ -2560,6 +2722,12 @@ assertNoAdditions {
       "neo-tree.types.fixes.compat-0.10"
     ];
   };
+
+  neocomplete-vim = super.neocomplete-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neoconf-nvim = super.neoconf-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
@@ -2681,13 +2849,19 @@ assertNoAdditions {
     ];
   };
 
-  neotest-foundry = super.neotest-foundry.overrideAttrs {
+  neotest-foundry = super.neotest-foundry.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = with lib.licenses; [
+        asl20
+        mit
+      ];
+    };
+  });
 
   neotest-go = super.neotest-go.overrideAttrs {
     dependencies = with self; [
@@ -2768,13 +2942,16 @@ assertNoAdditions {
     ];
   };
 
-  neotest-mocha = super.neotest-mocha.overrideAttrs {
+  neotest-mocha = super.neotest-mocha.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neotest-pest = super.neotest-pest.overrideAttrs {
     dependencies = with self; [
@@ -2846,13 +3023,16 @@ assertNoAdditions {
     ];
   };
 
-  neotest-testthat = super.neotest-testthat.overrideAttrs {
+  neotest-testthat = super.neotest-testthat.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neotest-vitest = super.neotest-vitest.overrideAttrs {
     dependencies = with self; [
@@ -2936,8 +3116,11 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
-  };
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
@@ -3043,6 +3226,13 @@ assertNoAdditions {
   nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
+
+  nvim-dap-disasm = super.nvim-dap-disasm.overrideAttrs (old: {
+    dependencies = [ self.nvim-dap ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   nvim-dap-lldb = super.nvim-dap-lldb.overrideAttrs {
     dependencies = [ self.nvim-dap ];
@@ -3284,12 +3474,6 @@ assertNoAdditions {
       self.fzf-lua
     ];
   };
-
-  nvim-sioyek-highlights = super.nvim-sioyek-highlights.overrideAttrs (old: {
-    meta = old.meta // {
-      license = lib.licenses.mit;
-    };
-  });
 
   nvim-snippets = super.nvim-snippets.overrideAttrs {
     checkInputs = [
@@ -3539,6 +3723,12 @@ assertNoAdditions {
     nvimSkipModules = "omni-lightline";
   };
 
+  omnisharp-extended-lsp-nvim = super.omnisharp-extended-lsp-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   one-nvim = super.one-nvim.overrideAttrs (old: {
     # E5108: /lua/one-nvim.lua:14: Unknown option 't_Co'
     # https://github.com/Th3Whit3Wolf/one-nvim/issues/23
@@ -3718,6 +3908,12 @@ assertNoAdditions {
     ];
   };
 
+  pgsql-vim = super.pgsql-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
     dependencies = [ self.LibDeflate-nvim ];
   };
@@ -3731,6 +3927,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  PreserveNoEOL = super.PreserveNoEOL.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   Preview-nvim = super.Preview-nvim.overrideAttrs {
     runtimeDeps = [
       md-tui
@@ -3743,6 +3945,15 @@ assertNoAdditions {
       self.telescope-nvim
     ];
   };
+
+  psc-ide-vim = super.psc-ide-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        mit
+        wtfpl
+      ];
+    };
+  });
 
   python-mode = super.python-mode.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
@@ -3772,6 +3983,12 @@ assertNoAdditions {
     # Optional feline integration
     nvimSkipModules = "pywal.feline";
   };
+
+  QFEnter = super.QFEnter.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   qmk-nvim = super.qmk-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -3805,6 +4022,12 @@ assertNoAdditions {
     };
   });
 
+  quickfixstatus = super.quickfixstatus.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs (old: {
     nvimSkipModules = [
       # rainbow-delimiters.types.lua
@@ -3830,6 +4053,12 @@ assertNoAdditions {
   rcshell-vim = super.rcshell-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.publicDomain;
+    };
+  });
+
+  readline-vim = super.readline-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
     };
   });
 
@@ -3864,6 +4093,12 @@ assertNoAdditions {
       sshfs
     ];
   };
+
+  Rename = super.Rename.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   renamer-nvim = super.renamer-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -4120,6 +4355,12 @@ assertNoAdditions {
     };
   });
 
+  starrynight = super.starrynight.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   startup-nvim = super.startup-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -4202,6 +4443,18 @@ assertNoAdditions {
       nvim-web-devicons
     ];
   };
+
+  tabmerge = super.tabmerge.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  tabpagebuffer-vim = super.tabpagebuffer-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   tabular = super.tabular.overrideAttrs (old: {
     meta = old.meta // {
@@ -4443,6 +4696,12 @@ assertNoAdditions {
     dependencies = [ self.nvzone-volt ];
   };
 
+  timestamp-vim = super.timestamp-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   tinted-vim = super.tinted-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
@@ -4466,6 +4725,12 @@ assertNoAdditions {
       "todo-comments.fzf"
     ];
   };
+
+  todo-txt-vim = super.todo-txt-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   tokyonight-nvim = super.tokyonight-nvim.overrideAttrs {
     checkInputs = [ self.fzf-lua ];
@@ -4618,6 +4883,12 @@ assertNoAdditions {
     };
   });
 
+  verilog_systemverilog-vim = super.verilog_systemverilog-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-abolish = super.vim-abolish.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
@@ -4631,9 +4902,12 @@ assertNoAdditions {
     ];
   };
 
-  vim-addon-async = super.vim-addon-async.overrideAttrs {
+  vim-addon-async = super.vim-addon-async.overrideAttrs (old: {
     dependencies = [ self.vim-addon-signs ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-addon-background-cmd = super.vim-addon-background-cmd.overrideAttrs {
     dependencies = [ self.vim-addon-mw-utils ];
@@ -4840,6 +5114,13 @@ assertNoAdditions {
     };
   });
 
+  vim-CtrlXA = super.vim-CtrlXA.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   vim-dadbod = super.vim-dadbod.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
@@ -4866,6 +5147,18 @@ assertNoAdditions {
   vim-DetectSpellLang = super.vim-DetectSpellLang.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.unlicense;
+    };
+  });
+
+  vim-diminactive = super.vim-diminactive.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  vim-dirdiff = super.vim-dirdiff.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
     };
   });
 
@@ -4919,13 +5212,31 @@ assertNoAdditions {
     };
   });
 
+  vim-emoji = super.vim-emoji.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-endwise = super.vim-endwise.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
     };
   });
 
+  vim-erlang-compiler = super.vim-erlang-compiler.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-erlang-omnicomplete = super.vim-erlang-omnicomplete.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-erlang-runtime = super.vim-erlang-runtime.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
     };
@@ -4938,6 +5249,12 @@ assertNoAdditions {
   });
 
   vim-eunuch = super.vim-eunuch.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-figlet = super.vim-figlet.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
     };
@@ -4960,6 +5277,18 @@ assertNoAdditions {
     nvimSkipModules = "flog.graph_bin";
     meta = old.meta // {
       license = lib.licenses.vim;
+    };
+  });
+
+  vim-fold-cycle = super.vim-fold-cycle.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
+  vim-ft-diff_fold = super.vim-ft-diff_fold.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.zlib;
     };
   });
 
@@ -5051,6 +5380,12 @@ assertNoAdditions {
     };
   });
 
+  vim-habamax = super.vim-habamax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-hcl = super.vim-hcl.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
@@ -5077,6 +5412,7 @@ assertNoAdditions {
       '';
 
     meta = old.meta // {
+      license = lib.licenses.vim;
       platforms = lib.platforms.all;
     };
   });
@@ -5084,6 +5420,12 @@ assertNoAdditions {
   vim-hier = super.vim-hier.overrideAttrs {
     buildInputs = [ vim ];
   };
+
+  vim-hybrid = super.vim-hybrid.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
     runtimeDeps = [ jq ];
@@ -5145,6 +5487,12 @@ assertNoAdditions {
     };
   });
 
+  vim-lion = super.vim-lion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-llvm = super.vim-llvm.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
@@ -5166,11 +5514,23 @@ assertNoAdditions {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  vim-merginal = super.vim-merginal.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-metamath = super.vim-metamath.overrideAttrs {
     preInstall = "cd vim";
   };
 
   vim-misc = super.vim-misc.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-niceblock = super.vim-niceblock.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
     };
@@ -5182,13 +5542,31 @@ assertNoAdditions {
     };
   });
 
+  vim-opencl = super.vim-opencl.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3;
+    };
+  });
+
   vim-openscad = super.vim-openscad.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.publicDomain;
     };
   });
 
+  vim-operator-replace = super.vim-operator-replace.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-operator-surround = super.vim-operator-surround.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-operator-user = super.vim-operator-user.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
     };
@@ -5226,9 +5604,39 @@ assertNoAdditions {
     dependencies = [ self.denops-vim ];
   };
 
+  vim-pony = super.vim-pony.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-prettyprint = super.vim-prettyprint.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.zlib;
+    };
+  });
+
+  vim-printer = super.vim-printer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-projectionist = super.vim-projectionist.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
+    };
+  });
+
+  vim-prosession = super.vim-prosession.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-protobuf = super.vim-protobuf.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
     };
   });
 
@@ -5293,6 +5701,13 @@ assertNoAdditions {
     };
   });
 
+  vim-sentence-chopper = super.vim-sentence-chopper.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   vim-sexp-mappings-for-regular-people =
     super.vim-sexp-mappings-for-regular-people.overrideAttrs
       (old: {
@@ -5301,18 +5716,37 @@ assertNoAdditions {
         };
       });
 
+  vim-sile = super.vim-sile.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        bsd0
+        cc0
+        gpl2Plus
+      ];
+    };
+  });
+
   vim-sleuth = super.vim-sleuth.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
     };
   });
 
-  vim-snipmate = super.vim-snipmate.overrideAttrs {
+  vim-smalls = super.vim-smalls.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.cc-by-30;
+    };
+  });
+
+  vim-snipmate = super.vim-snipmate.overrideAttrs (old: {
     dependencies = with self; [
       vim-addon-mw-utils
       tlib_vim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-speeddating = super.vim-speeddating.overrideAttrs (old: {
     dependencies = [ self.vim-repeat ];
@@ -5357,7 +5791,25 @@ assertNoAdditions {
   vim-tabby = super.vim-tabby.overrideAttrs {
   };
 
+  vim-table-mode = super.vim-table-mode.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-tabpagecd = super.vim-tabpagecd.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-tbone = super.vim-tbone.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-textobj-comment = super.vim-textobj-comment.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
     };
@@ -5367,6 +5819,13 @@ assertNoAdditions {
     dependencies = [ self.vim-textobj-user ];
     meta = old.meta // {
       maintainers = with lib.maintainers; [ workflow ];
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-textobj-function = super.vim-textobj-function.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -5374,6 +5833,7 @@ assertNoAdditions {
     dependencies = [ self.vim-textobj-user ];
     meta = old.meta // {
       maintainers = with lib.maintainers; [ llakala ];
+      license = lib.licenses.mit;
     };
   });
 
@@ -5390,10 +5850,26 @@ assertNoAdditions {
     };
   });
 
+  vim-tmux = super.vim-tmux.overrideAttrs (old: {
+    meta = old.meta // {
+      # original code publicDomain, MIT after fork
+      license = with lib.licenses; [
+        mit
+        publicDomain
+      ];
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
   };
+
+  vim-twiggy = super.vim-twiggy.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-ultest = super.vim-ultest.overrideAttrs {
     # NOTE: vim-ultest is no longer maintained.
@@ -5420,6 +5896,12 @@ assertNoAdditions {
     };
   });
 
+  vim-visualstar = super.vim-visualstar.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.zlib;
+    };
+  });
+
   vim-waikiki = super.vim-waikiki.overrideAttrs (old: {
     meta = old.meta // {
       # README-only CC-BY-SA-4.0 notice; GitHub detection missed it.
@@ -5438,6 +5920,13 @@ assertNoAdditions {
     '';
   };
 
+  vim-watchdogs = super.vim-watchdogs.overrideAttrs (old: {
+    meta = old.meta // {
+      # Plugin file licenses it under Perl terms (artistic1).
+      license = lib.licenses.artistic1;
+    };
+  });
+
   vim-wordy = super.vim-wordy.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
@@ -5455,12 +5944,15 @@ assertNoAdditions {
     buildInputs = [ xkb-switch ];
   };
 
-  vim-yapf = super.vim-yapf.overrideAttrs {
+  vim-yapf = super.vim-yapf.overrideAttrs (old: {
     buildPhase = ''
       substituteInPlace ftplugin/python_yapf.vim \
         --replace-fail '"yapf"' '"${python3.pkgs.yapf}/bin/yapf"'
     '';
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [
@@ -5518,13 +6010,19 @@ assertNoAdditions {
     };
   });
 
+  VimOrganizer = super.VimOrganizer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vimoutliner = super.vimoutliner.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Only;
     };
   });
 
-  vimproc-vim = super.vimproc-vim.overrideAttrs {
+  vimproc-vim = super.vimproc-vim.overrideAttrs (old: {
     buildInputs = [ which ];
 
     # TODO: revisit
@@ -5535,7 +6033,11 @@ assertNoAdditions {
         --replace-fail vimproc_linux32.so vimproc_unix.so
       make -f make_unix.mak
     '';
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vimsence = super.vimsence.overrideAttrs (old: {
     meta = old.meta // {
@@ -5545,9 +6047,12 @@ assertNoAdditions {
     };
   });
 
-  vimshell-vim = super.vimshell-vim.overrideAttrs {
+  vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = [ self.vimproc-vim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vimtex = super.vimtex.overrideAttrs {
     checkInputs = with self; [
@@ -5571,6 +6076,18 @@ assertNoAdditions {
   vis = super.vis.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
+    };
+  });
+
+  vissort-vim = super.vissort-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vivify-vim = super.vivify-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3;
     };
   });
 
@@ -5600,6 +6117,12 @@ assertNoAdditions {
       self.telescope-nvim
     ];
   };
+
+  whitespace-nvim = super.whitespace-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
@@ -5706,6 +6229,12 @@ assertNoAdditions {
     };
   });
 
+  zeavim-vim = super.zeavim-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
     checkInputs = with self; [
       # Optional lush-nvim integration
@@ -5760,6 +6289,12 @@ assertNoAdditions {
       "zk.pickers.fzf_lua"
     ];
   };
+
+  zoomwintab-vim = super.zoomwintab-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   zotcite = super.zotcite.overrideAttrs {
     dependencies = with self; [

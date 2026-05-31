@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   abseil-cpp_202508,
+  buildPackages,
   cmake,
   cpuinfo,
   eigen,
@@ -25,6 +26,7 @@
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
   rocmSupport ? config.rocmSupport,
+  coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
   cudaPackages ? { },
   rocmPackages,
@@ -60,16 +62,16 @@ let
     name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.20.1";
-    hash = "sha256-XZJXD6sBvVJ6cLPyDkKOW8oSkjqcw9whUqDWd7dxY3c=";
+    tag = "v1.21.0";
+    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
   };
 
   cutlass-src = fetchFromGitHub {
     name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.2.1";
-    hash = "sha256-iP560D5Vwuj6wX1otJhwbvqe/X4mYVeKTpK533Wr5gY=";
+    tag = "v4.4.2";
+    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
   };
 
   dlpack-src = fetchFromGitHub {
@@ -80,18 +82,42 @@ let
     hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
   };
 
+  coremltools-src = fetchFromGitHub {
+    name = "coremltools-src";
+    owner = "apple";
+    repo = "coremltools";
+    tag = "7.1";
+    hash = "sha256-kajQFHpl+4UK6fp+rM8TP0GiqIFYXPVFc2x1p19rBSw=";
+  };
+
+  fp16-src = fetchFromGitHub {
+    name = "fp16-src";
+    owner = "Maratyszcza";
+    repo = "FP16";
+    rev = "0a92994d729ff76a58f692d3028ca1b64b145d91";
+    hash = "sha256-m2d9bqZoGWzuUPGkd29MsrdscnJRtuIkLIMp3fMmtRY=";
+  };
+
+  psimd-src = fetchFromGitHub {
+    name = "psimd-src";
+    owner = "Maratyszcza";
+    repo = "psimd";
+    rev = "072586a71b55b7f8c584153d223e95687148a900";
+    hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
+  };
+
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.24.4";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-CjPgRkPyp7dUPAOo3cePWQvucOlQAwtT4NO5w3NkV+E=";
+    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
   };
 
   patches = [
@@ -106,10 +132,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # https://github.com/microsoft/onnxruntime/issues/9155
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
-
-    # Fix build of ignored outputs after Protobuf 34 added `[[nodiscard]]` to
-    # many functions.
-    ./protobuf34-nodiscard.patch
   ];
 
   postPatch = ''
@@ -121,6 +143,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     substituteInPlace onnxruntime/core/platform/posix/env.cc --replace-fail \
       "return PathString{};" \
       "return PathString(\"$out/lib/\");"
+  ''
+  + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/onnxruntime.cmake \
+      --replace-fail "INSTALL_NAME_DIR @rpath" "INSTALL_NAME_DIR $out/lib"
   ''
   + lib.optionalString rocmSupport ''
     patchShebangs tools/ci_build/hipify-perl
@@ -138,7 +164,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     python3Packages.python
-    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -215,10 +240,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (darwinMinVersionHook "13.3")
   ];
 
-  nativeCheckInputs = [
-    gtest
-  ]
-  ++ lib.optionals pythonSupport (
+  nativeCheckInputs = lib.optionals pythonSupport (
     with python3Packages;
     [
       onnx
@@ -226,6 +248,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       sympy
     ]
   );
+
+  checkInputs = [
+    gtest
+  ];
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -242,9 +268,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
+    # Library updates and similar often cause build failures with -Werror.
+    # There is utility in this for upstream, but for Nixpkgs it mostly causes
+    # churn to work around, so we make warnings non-fatal.
+    "--compile-no-warning-as-error"
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
-    # leads to failing builds, which isn't particularly useful for Nixpkgs
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=unused-variable")
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
@@ -256,21 +284,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint-src}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
+    (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
-    # Werror and cudnn_frontend deprecations make for a bad time.
-    "--compile-no-warning-as-error"
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass-src}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
@@ -284,6 +311,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Incompatible with packaged version, far too slow to build vendored version
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL" false)
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
+  ]
+  ++ lib.optionals coremlSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_COREMLTOOLS" "${coremltools-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FP16" "${fp16-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PSIMD" "${psimd-src}")
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # needed for psimd
   ];
 
   env =
@@ -314,6 +347,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     !(
       cudaSupport
       || rocmSupport
+      || coremlSupport
       # cross-compiled test binaries can't execute on the build platform
       || (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform)
       || builtins.elem effectiveStdenv.buildPlatform.system [
@@ -337,8 +371,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -m644 -Dt $out/include \
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
-      ../include/onnxruntime/core/session/onnxruntime_*.h
+      ../include/onnxruntime/core/session/onnxruntime_*.h \
+      ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
+
+  strictDeps = true;
 
   # See comments in `cudaPackages.nccl`
   postFixup = lib.optionalString cudaSupport ''

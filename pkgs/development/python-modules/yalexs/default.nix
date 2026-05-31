@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "9.2.0";
+  version = "9.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-t7C2x3aH3ltDthBlt+ghSj9SEfZ4jm4Fgs0KAIm7cBA=";
+    hash = "sha256-YI/wGI5EVnLXBFEDHGzgRJQYb79uc5wgMdkbNRYgi2E=";
   };
 
   build-system = [ poetry-core ];

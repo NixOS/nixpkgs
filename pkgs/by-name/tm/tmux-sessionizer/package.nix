@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmux-sessionizer";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
     repo = "tmux-sessionizer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6eMKwp5639DIyhM6OD+db7jr4uF34JSt0Xg+lpyIPSI=";
+    hash = "sha256-pRf381gxyf4leoEfSZKb5foVYYdVEsxuaTU27mbd46o=";
   };
 
-  cargoHash = "sha256-gIsqHbCmfYs1c3LPNbE4zLVjzU3GJ4MeHMt0DC5sS3c=";
+  cargoHash = "sha256-AJqlzLr6MDFfPssSFMxslxFFuPVxoQGcuG7sZeu+8pg=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

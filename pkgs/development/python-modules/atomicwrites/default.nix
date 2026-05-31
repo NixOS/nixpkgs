@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Atomic file writes on POSIX";
-    homepage = "https://pypi.python.org/pypi/atomicwrites";
+    homepage = "https://pypi.org/project/atomicwrites/";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     license = lib.licenses.mit;
   };

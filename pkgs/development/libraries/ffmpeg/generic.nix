@@ -452,6 +452,8 @@ stdenv.mkDerivation (
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
+      ]
+      ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.1.4") [
         (fetchpatch2 {
           name = "unbreak-hardcoded-tables.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
@@ -490,7 +492,7 @@ stdenv.mkDerivation (
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "8.0") [
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.4") [
         (fetchpatch2 {
           name = "lcevcdec-4.0.0-compat.patch";
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
@@ -1061,6 +1063,7 @@ stdenv.mkDerivation (
         No matter if they were designed by some standards committee, the community or
         a corporation.
       '';
+      donationPage = "https://ffmpeg.org/donations.html";
       license =
         with lib.licenses;
         [ lgpl21Plus ]

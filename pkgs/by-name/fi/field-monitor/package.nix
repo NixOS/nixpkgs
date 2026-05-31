@@ -34,7 +34,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "field-monitor";
-  version = "50.0";
+  version = "50.1";
 
   strictDeps = true;
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "theCapypara";
     repo = "field-monitor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IVHzMUjjVZHDTI6Jjq7i8wrENPerKzEiDT15otPFx9A=";
+    hash = "sha256-waMa70oLKvIoljvE+MjWWKVL1Cd0xnasVeB17tfMQW8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-c4ANjQ1OoDMMifAUpU8iNE9lSBamAR+XbEmYrYphixU=";
+    hash = "sha256-fsrczFhoIilxgZRH2PVXC67YdkMsIjA6zTfix57TTzo=";
   };
 
   mesonBuildType = "release";

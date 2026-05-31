@@ -114,6 +114,11 @@ stdenv.mkDerivation {
   # disksup requires a shell
   postPatch = ''
     substituteInPlace lib/os_mon/src/disksup.erl --replace-fail '"sh ' '"${runtimeShell} '
+  ''
+  # https://github.com/erlang/otp/issues/11151
+  + lib.optionalString (!wxSupport && major == "27") ''
+    substituteInPlace lib/wx/doc/Makefile \
+      --replace-fail $'ifneq ($(CAN_BUILD_DRIVER), true)\nDOC_TARGETS=\nendif\n' ""
   '';
 
   debugInfo = enableDebugInfo;

@@ -116,7 +116,7 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if [[ ! -f "$${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
+        if [[ ! -f "''${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
         eval "$(${cfg.package}/bin/starship init bash --print-full-init)"
@@ -154,7 +154,7 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if [[ ! -f "$${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
+        if [[ ! -f "''${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
         eval "$(${cfg.package}/bin/starship init zsh)"

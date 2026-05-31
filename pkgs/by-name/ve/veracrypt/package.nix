@@ -74,10 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20 # and
       unfree # TrueCrypt License version 3.0
     ];
-    maintainers = with lib.maintainers; [
-      dsferruzza
-      ryand56
-    ];
+    maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.linux;
   };
 })

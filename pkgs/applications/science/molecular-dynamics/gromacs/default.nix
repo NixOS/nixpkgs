@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   cmake,
   hwloc,
   fftw,
@@ -69,7 +70,17 @@ stdenv.mkDerivation rec {
     inherit (source) hash;
   };
 
-  patches = [ (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch) ];
+  patches = [
+    # Fix pkg-config paths for the version-specific gromacs variant.
+    (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch)
+  ]
+  ++ lib.optional enablePlumed (
+    # Backport gcc 15 cstdint include fix.
+    fetchpatch2 {
+      url = "https://gitlab.com/gromacs/gromacs/-/commit/e0180bc37f3111d7dcaffca3854c088ed910c3b4.diff";
+      hash = "sha256-TvTzfb/RETAzFpYfFFr6/L5GV1Pile16gVJhNigwAB4=";
+    }
+  );
 
   postPatch = lib.optionalString enablePlumed ''
     plumed patch -p -e gromacs-${source.version}

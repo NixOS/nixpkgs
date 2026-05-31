@@ -43,6 +43,7 @@ self: super: {
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
+  ghc-experimental = null;
   ghc-heap = null;
   ghc-internal = null;
   ghc-platform = null;

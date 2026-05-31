@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcp-gateway";
-  version = "2.11.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "MikkoParkkola";
     repo = "mcp-gateway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7IALz7hOnCeKtiEm8b3M7v5oy4hw173viyhNeqQIhTI=";
+    hash = "sha256-ig8fDgGBAKKiH6VmJxpsSpzYv8h5nWWi32YhktSR1XE=";
   };
 
-  cargoHash = "sha256-B5HRETFryzLqQhdIqRFj0apZS0wMggW2MHE2VsbB22Y=";
+  cargoHash = "sha256-WitIK6fpbMEQWaw60rX6BVLTRo3WoN449WRfXwm2QfY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

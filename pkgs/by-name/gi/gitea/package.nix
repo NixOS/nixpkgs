@@ -30,7 +30,7 @@ let
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 3;
-      hash = "sha256-dewYYPO2wmNyYiQadoEKWJ10cghm6Lv7UE1iVlyNiEY=";
+      hash = "sha256-Qo0DLuZv+2GVLsBfCv/6CC9E/qhSE4HwV4StQL4HX4Y=";
     };
 
     nativeBuildInputs = [
@@ -51,18 +51,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.26.1";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-UlPS+gcSEzKY+g5y+k3NsL3b8FRVHnlqkiuJTz5ijFM=";
+    hash = "sha256-S7KV7soOnVQbw+2Ru7+DOL3Q4uWmSSdR6K90yofQlqw=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-JSyjJIdRePbSnKL6GHdjx5Xbnsniq6KHOlEFsYvMmbw=";
+  vendorHash = "sha256-7+M1n8RSgB3gZ/2na4RF9kYOf90H0bnsJZMDKpgAy64=";
 
   outputs = [
     "out"
@@ -77,14 +77,14 @@ buildGoModule rec {
   overrideModAttrs = _: {
     postPatch = ''
       substituteInPlace go.mod \
-        --replace-fail "go 1.26.2" "go 1.26"
+        --replace-fail "go 1.26.3" "go 1.26"
     '';
   };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
     substituteInPlace go.mod \
-      --replace-fail "go 1.26.2" "go 1.26"
+      --replace-fail "go 1.26.3" "go 1.26"
   '';
 
   subPackages = [ "." ];

@@ -412,6 +412,9 @@
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
   ],
+  "sec-meta-identifiers-purl": [
+    "index.html#sec-meta-identifiers-purl"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -432,6 +435,30 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-26.11": [
+    "release-notes.html#sec-nixpkgs-release-26.11"
+  ],
+  "sec-nixpkgs-release-26.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.11-highlights"
+  ],
+  "sec-nixpkgs-release-26.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib"
+  ],
+  "sec-nixpkgs-release-26.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.11-notable-changes"
   ],
   "sec-nixpkgs-release-26.05": [
     "release-notes.html#sec-nixpkgs-release-26.05"
@@ -899,6 +926,9 @@
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
   ],
+  "var-meta-donationPage": [
+    "index.html#var-meta-donationPage"
+  ],
   "var-meta-identifiers-cpe": [
     "index.html#var-meta-identifiers-cpe"
   ],
@@ -907,6 +937,15 @@
   ],
   "var-meta-identifiers-possibleCPEs": [
     "index.html#var-meta-identifiers-possibleCPEs"
+  ],
+  "var-meta-identifiers-purl": [
+    "index.html#var-meta-identifiers-purl"
+  ],
+  "var-meta-identifiers-purlParts": [
+    "index.html#var-meta-identifiers-purlParts"
+  ],
+  "var-meta-identifiers-purls": [
+    "index.html#var-meta-identifiers-purls"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -1015,6 +1054,9 @@
   ],
   "tar-files": [
     "index.html#tar-files"
+  ],
+  "writableTmpDirAsHomeHook": [
+    "index.html#writableTmpDirAsHomeHook"
   ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
@@ -3049,19 +3091,28 @@
   "available-versions-and-deprecations-schedule": [
     "index.html#available-versions-and-deprecations-schedule"
   ],
+  "erlang": [
+    "index.html#erlang"
+  ],
   "elixir": [
     "index.html#elixir"
   ],
   "beam-structure": [
     "index.html#beam-structure"
   ],
-  "build-tools": [
+  "beam-build-tools": [
+    "index.html#beam-build-tools",
     "index.html#build-tools"
   ],
-  "build-tools-rebar3": [
+  "beam-build-tools-rebar3": [
+    "index.html#beam-build-tools-rebar3",
     "index.html#build-tools-rebar3"
   ],
-  "build-tools-other": [
+  "beam-build-tools-erlangmk": [
+    "index.html#beam-build-tools-erlangmk"
+  ],
+  "beam-build-tools-mix": [
+    "index.html#beam-build-tools-mix",
     "index.html#build-tools-other"
   ],
   "how-to-install-beam-packages": [
@@ -3078,6 +3129,9 @@
   ],
   "packaging-erlang-applications": [
     "index.html#packaging-erlang-applications"
+  ],
+  "packaging-elixir-applications": [
+    "index.html#packaging-elixir-applications"
   ],
   "rebar3-packages": [
     "index.html#rebar3-packages"
@@ -4428,11 +4482,9 @@
   "sec-language-texlive": [
     "index.html#sec-language-texlive"
   ],
-  "sec-language-texlive-user-guide-experimental": [
-    "index.html#sec-language-texlive-user-guide-experimental"
-  ],
   "sec-language-texlive-user-guide": [
-    "index.html#sec-language-texlive-user-guide"
+    "index.html#sec-language-texlive-user-guide",
+    "index.html#sec-language-texlive-user-guide-experimental"
   ],
   "sec-language-texlive-custom-packages": [
     "index.html#sec-language-texlive-custom-packages"

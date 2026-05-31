@@ -16,8 +16,8 @@
   },
   {
     "pname": "DiscordRichPresence",
-    "version": "1.6.1.70",
-    "hash": "sha256-uXTNIWfZU7Gf/JpXQ5ufKA3SQdXYSkg3yLm5yCrBDd8="
+    "version": "1.5.0.51",
+    "hash": "sha256-ZfyXXsJ7c8u0EAfKjquv/pAL3ZajKLnVIJWADQYJ6wI="
   },
   {
     "pname": "FFmpeg.AutoGen",
@@ -616,8 +616,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.428.0",
-    "hash": "sha256-mlf9kFMjtBLx+9VV7Z08VaQicnH4Z8EV3CHzH60+JAQ="
+    "version": "2026.513.0",
+    "hash": "sha256-9mrCn7mBxDYUAhD4cJSDRanPD1fghDlmJEu3rqExJbY="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -631,8 +631,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2026.427.0",
-    "hash": "sha256-vrPesDiu08qqdcm06Lzs0iKY2rH/pOfkVXvvr7rMsQY="
+    "version": "2026.516.0",
+    "hash": "sha256-jMm4uJBhaqfi8QKayMWlN4IDn8mR+gtHDGRZgzbYFtI="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -646,8 +646,8 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2026.302.0",
-    "hash": "sha256-7e+HN9StGkK4je1QITNT2Fsk/wrPVDEXb97xjlZx6yY="
+    "version": "2026.512.0",
+    "hash": "sha256-JWa1njiqY0Cz1bME5uQ4jSxfY9VCThNcmMttMXKGH5Y="
   },
   {
     "pname": "ppy.Veldrid",
@@ -956,8 +956,8 @@
   },
   {
     "pname": "SharpCompress",
-    "version": "0.47.0",
-    "hash": "sha256-eeTuwUXeH9gw54bczkwrYCze2bHX22Rclx8QZm4zoxY="
+    "version": "0.48.0",
+    "hash": "sha256-2MXainbTJeuBwRA6eJU+AlUT8ireNrWxHYNCMkFG8Lc="
   },
   {
     "pname": "SharpFNT",

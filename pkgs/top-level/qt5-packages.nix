@@ -74,9 +74,9 @@ makeScopeWithSplicing' {
 
         qgpgme = callPackage ../development/libraries/qgpgme { };
 
-        grantlee = callPackage ../development/libraries/grantlee/5 { };
+        grantlee = pkgs.grantlee;
 
-        herqq = callPackage ../development/libraries/herqq { };
+        herqq = callPackage ../by-name/he/herqq/package.nix { };
 
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
@@ -192,8 +192,6 @@ makeScopeWithSplicing' {
         signond = callPackage ../development/libraries/signond { };
 
         timed = callPackage ../applications/system/timed { };
-
-        xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
       }
       // lib.optionalAttrs config.allowAliases {
         futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01

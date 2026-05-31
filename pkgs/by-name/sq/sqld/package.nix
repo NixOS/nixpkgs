@@ -16,31 +16,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqld";
-  version = "0.24.32";
+  version = "0.24.33";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "libsql";
     tag = "libsql-server-v${finalAttrs.version}";
-    hash = "sha256-CiTJ9jLANBrncz/O/0k2/UI/qGCTGWLZuLQdncunlX8";
+    hash = "sha256-ufpYZdw/96QIQ43ex4FTA/aulouZPDkbmSt7X4YnEzo=";
   };
 
-  patches = [
-    # https://github.com/tursodatabase/libsql/pull/1981
-    # A CMakeLists.txt broke builds by forcing the '-msse4.2' and '-maes' x86-specific compile flags,
-    # when compiling with Clang, regardless of the host platform's architecture.
-    (fetchpatch {
-      url = "https://github.com/tursodatabase/libsql/commit/5ce88e8cf9476ea64453bf1532d75c8faf037aad.patch";
-      hash = "sha256-5M6XNp0EpCZMZb7NC7TBGBVdZLkC74vwqEnVTCZ7n5U=";
-    })
-  ];
+  patches = [ ];
 
   cargoBuildFlags = [
     "--bin"
     "sqld"
   ];
 
-  cargoHash = "sha256-4Ma/17t+EmmjiYICBLhJifQez0dnwtjhlkmoQrAIG+s";
+  cargoHash = "sha256-n2STJfX1sEeSbr3v9xst3S7UgLrUIdqfokqlHLWCVzY=";
 
   nativeBuildInputs = [
     cmake

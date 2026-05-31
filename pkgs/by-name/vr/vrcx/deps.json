@@ -91,8 +91,8 @@
   },
   {
     "pname": "NLog",
-    "version": "6.0.7",
-    "hash": "sha256-Le6ocjCN29rtgRiAroVfjUbMXCrjk0pSv2GEtZZy0qU="
+    "version": "6.1.2",
+    "hash": "sha256-rcBEHtjkg3ZaG3zVoy5aPLTPxbuV2gMdEU3vPpneKfI="
   },
   {
     "pname": "runtime.native.System.Data.SqlClient.sni",
@@ -146,8 +146,8 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "10.0.2",
-    "hash": "sha256-MAKLNGx7mczcSE6n7b3HvQOLPC8Afk5Mv6PUV2hlHC0="
+    "version": "10.0.7",
+    "hash": "sha256-6ZKsH6PnSzrPrvAuLZppePupB2RaQ+lddqpsY8kth54="
   },
   {
     "pname": "System.CodeDom",
@@ -201,8 +201,8 @@
   },
   {
     "pname": "System.Management",
-    "version": "10.0.2",
-    "hash": "sha256-u0Dn4zJUvSpftmtvR24enqKPDxxAMXJpav2/sfiwYiE="
+    "version": "10.0.7",
+    "hash": "sha256-qIFAiT52Fkg2yMziif3O6E1ApvlUllqeMT1Iq48gsKg="
   },
   {
     "pname": "System.Memory",

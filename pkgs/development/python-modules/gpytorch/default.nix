@@ -31,6 +31,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1CavS+qrV8YqnsT87GjmJV2LOtvExFYQE5YpYZEw9ts=";
   };
 
+  pythonRelaxDeps = [ "mpmath" ];
+
   build-system = [
     setuptools
     setuptools-scm

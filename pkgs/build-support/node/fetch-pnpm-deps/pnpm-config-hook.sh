@@ -28,6 +28,11 @@ pnpmConfigHook() {
     if versionAtLeast "$pnpmVersion" "11"; then
       # pnpm 11 uses a different mechanism to manage package manager versions
       export pnpm_config_pm_on_fail=ignore
+
+      # Disable lockfile verification against supply-chain policies. This is
+      # already done in fetchPnpmDeps, so if these checks failed there, we
+      # wouldn't be here in the first place
+      export pnpm_config_trust_lockfile=true
     else
       pnpm config set manage-package-manager-versions false
     fi
@@ -55,6 +60,14 @@ pnpmConfigHook() {
 
     chmod -R +w "$STORE_PATH"
 
+    # Reconstruct the SQLite database from the SQL dump if needed.
+    # The fetch phase stores a text SQL dump instead of the binary db
+    # to ensure reproducibility across platforms.
+    if [ -f "$STORE_PATH/v11/index.db.sql" ]; then
+      sqlite3 "$STORE_PATH/v11/index.db" < "$STORE_PATH/v11/index.db.sql"
+      rm "$STORE_PATH/v11/index.db.sql"
+    fi
+
     pnpm config set store-dir "$STORE_PATH"
 
     # Prevent hard linking on file systems without clone support.
@@ -76,6 +89,10 @@ pnpmConfigHook() {
 
     runHook prePnpmInstall
 
+    echo "Final pnpm config:"
+    pnpm config list
+    echo
+
     if ! pnpm install \
         --offline \
         --ignore-scripts \
@@ -89,6 +106,9 @@ pnpmConfigHook() {
         echo '1. Set pnpmDeps.hash to "" (empty string)'
         echo "2. Build the derivation and wait for it to fail with a hash mismatch"
         echo "3. Copy the 'got: sha256-' value back into the pnpmDeps.hash field"
+        echo
+        echo "If you see ERR_PNPM_LOCKFILE_CONFIG_MISMATCH above this, try changing the pnpm version"
+        echo "Found 'pnpm' with version '$pnpmVersion'"
         echo
 
         exit 1

@@ -3,50 +3,49 @@
   enableJavaFX ? false,
   ...
 }@args:
-
+let
+  zuluVersion = "17.66.19";
+  jdkVersion = "17.0.19";
+in
 callPackage ./common.nix (
   {
     # Details from https://www.azul.com/downloads/?version=java-17-lts&package=jdk
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        zuluVersion = "17.64.17";
-        jdkVersion = "17.0.18";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-jQ2ByIKtivoc9nJ/LPMZCktyjceqXY+B6a36sXmwUbE="
+            "sha256-FCp5FoevH8ekD+AZhapvcqc8EpD08ubJ+UFCzwzDWJQ="
           else
-            "sha256-gZ4/CepiiQGiGyEE7Y9SVuF66RpBRbJysushMfgyrx0=";
+            "sha256-rTGaq+ZZwY+mP620RgJqfH9SYPAqYVn1EZVzXSDnqhw=";
       };
 
       aarch64-linux = {
-        zuluVersion = "17.64.17";
-        jdkVersion = "17.0.18";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-ciyywX9R72RRt6HPfdmmsgFo/0ebr2xzNhnroAEDT7E="
+            "sha256-NzY55vSha3gxmPS9dQK2827q8eAfkcfPXoiZ6KODpfQ="
           else
-            "sha256-21fcnh+CIsL47604yMo2CxAR2Ln7m+oJVths1157Lb0=";
+            "sha256-wX1WV6ZzwM/AmenYA+0wSYSViU1zWf0QZNRjCT7ZhQs=";
       };
 
       x86_64-darwin = {
-        zuluVersion = "17.64.17";
-        jdkVersion = "17.0.18";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-td551xWmeHcD26J0gxboKS6Y3f5iLRhcUy97pfxhHxk="
+            "sha256-3DHXEjYN9RXYD4sB/75/fATzPAwJmZv3D+PaSU8qrog="
           else
-            "sha256-mHVhWicg6xAn8BaT4uCN93ChT8gYSYAfX7h7kRgdqyI=";
+            "sha256-anuLI/JBnqHd5+6s4NWkzF2+e7yDqN2jXcZKoSJp0EE=";
       };
 
       aarch64-darwin = {
-        zuluVersion = "17.64.17";
-        jdkVersion = "17.0.18";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-TnN+tPJ8HJSlZ0EUDq5SHo40EviO0iMX0P9eYHyRVP4="
+            "sha256-szuMbtvi8wbKnbtwRjKIUQgb9LReDk6jCooECnpn6nM="
           else
-            "sha256-EiRGuK028dyAZ3Jy29rXH9XKjXbfd0wB54Oce/TSZ9Y=";
+            "sha256-8r1a+qqkwj60vyx4kTx+t9PSKORCCf/sZS+3I4ii8lw=";
       };
     };
   }

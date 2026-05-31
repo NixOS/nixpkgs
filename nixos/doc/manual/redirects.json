@@ -2363,6 +2363,21 @@
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
   ],
+  "sec-release-26.11": [
+    "release-notes.html#sec-release-26.11"
+  ],
+  "sec-release-26.11-highlights": [
+    "release-notes.html#sec-release-26.11-highlights"
+  ],
+  "sec-release-26.11-new-modules": [
+    "release-notes.html#sec-release-26.11-new-modules"
+  ],
+  "sec-release-26.11-incompatibilities": [
+    "release-notes.html#sec-release-26.11-incompatibilities"
+  ],
+  "sec-release-26.11-notable-changes": [
+    "release-notes.html#sec-release-26.11-notable-changes"
+  ],
   "sec-release-26.05": [
     "release-notes.html#sec-release-26.05"
   ],

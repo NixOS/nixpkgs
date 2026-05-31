@@ -16,13 +16,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.15.3";
+  version = "1.15.12";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OKQR76q7trKQTvlMxH8tG2jNnRtBe3YeFfvNw8c3+8I=";
+    hash = "sha256-ecSZVJ1uyubWcIhp29FS0MA2MCgURN2jo6CFRJ1mm2I=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -75,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-O6czNd9n6b0TTIsPseZn9qOlxsPzRTrePu3L6gM13oM=";
+    outputHash = "sha256-x5qbmA4/EhEbqyGHAy8VRXw9Do8QYHTRLeZXuyvd4QY=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -134,7 +137,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
            sysctl
          ]
        )
-     }
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
 
     install -Dm644 config.json $out/share/opencode/config.json
     install -Dm644 tui.json $out/share/opencode/tui.json
@@ -187,13 +191,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
-    badPlatforms = [
-      # Broken as 2026-04-23, errors as:
-      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
-      "x86_64-darwin"
-    ];
   };
 })

@@ -14,7 +14,9 @@
   nodejs,
   npmHooks,
   openssl,
+  pipewire, # pw-metadata for bit-perfect sample rate queries
   pkg-config,
+  pulseaudio, # pactl for PipeWire device enumeration and sink routing
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -22,16 +24,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qbz";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchFromGitHub {
     owner = "vicrodh";
     repo = "qbz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LlpMCO8RHbC+MNCcsaUqAGNuaK2CSk4GEpVtmfKtsFo=";
+    hash = "sha256-WWTigVnsCex/7DPu4way80UL6Tusj38qTAQe9WGwc04=";
   };
 
-  cargoHash = "sha256-X5YJb1Pu+phAHOLUX9YnKDL0lJQqUXxK4J3S4PVt1YY=";
+  cargoHash = "sha256-Pj+60pr8IUXlDsDYVO9ahlZdeWDwTRzzYXIHn3y336o=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "qbz-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-HfdYKnjXf6/LqdTy7RCPfVfh8NdXuGHYrqDWAT3ozk4=";
+    hash = "sha256-FOj1wPFOiswm2GGfkgrUtMGtqPbwjjYqp09ccrDz8AY=";
   };
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
@@ -66,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     gappsWrapperArgs+=(
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pulseaudio
+          pipewire
+        ]
+      }
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libappindicator

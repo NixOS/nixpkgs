@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # See:
     #
-    # * <https://github.com/LnL7/nix-darwin/issues/122>
+    # * <https://github.com/nix-darwin/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
 

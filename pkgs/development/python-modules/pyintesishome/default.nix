@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyintesishome";
-  version = "1.8.7";
+  version = "1.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
     tag = finalAttrs.version;
-    hash = "sha256-TwZAuu/mnChZwhZ5uGPiQ23curCiqTKWNgDrvwpgojc=";
+    hash = "sha256-wB4rrguafKEzAVYRTKQQTG4Z48obWrigLHbeGdoNQrQ=";
   };
 
   build-system = [ setuptools ];

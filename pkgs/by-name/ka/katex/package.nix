@@ -2,12 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry,
+  yarn-berry_4,
   nodejs,
+  nodejs_22,
   makeBinaryWrapper,
   nix-update-script,
 }:
 
+let
+  # rollup 2.x breaks on nodejs 24.15+ require.extensions regression. https://github.com/nodejs/node/issues/62786
+  yarn-berry = yarn-berry_4.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
   version = "0.16.28";
@@ -33,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarn-berry.yarnBerryConfigHook
     yarn-berry
-    nodejs
+    nodejs_22
     makeBinaryWrapper
   ];
 

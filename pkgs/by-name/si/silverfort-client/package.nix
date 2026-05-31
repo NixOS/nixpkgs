@@ -11,11 +11,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverfort-client";
-  version = "3.7.6";
+  version = "3.8.0";
 
   src = requireFile rec {
     name = "${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-r/za9JNQoVVowYp3DQ7nHfS+W74v5SZWOmRmIiRvOKw=";
+    hash = "sha256-L2AZ3XXAE91cfRg3tnPhiQfv3TiuI19dD+kuDPlClSc=";
     message = ''
       Due to the commercial license of Silverfort, Nix is unable to download
       Silverfort automatically. Please download ${name} manually and add it

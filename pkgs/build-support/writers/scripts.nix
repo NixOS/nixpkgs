@@ -1095,25 +1095,17 @@ rec {
   */
   writeJSBin = name: writeJS "/bin/${name}";
 
-  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
   writeNginxConfig =
     name: text:
     pkgs.runCommandLocal name
       {
         inherit text;
-        passAsFile = [ "text" ];
+        __structuredAttrs = true;
         nativeBuildInputs = [ gixy ];
       } # sh
       ''
-        # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        printf "%s" "$text" | ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 - > $out
+        ${lib.getExe pkgs.gnused} -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 

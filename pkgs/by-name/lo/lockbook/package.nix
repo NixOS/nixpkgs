@@ -12,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook";
-  version = "26.4.13";
+  version = "26.5.22";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = finalAttrs.version;
-    hash = "sha256-KkYe07uEj/AO1rxsa4bwVsNO6iyjAFJwHeWAyMH8RPY=";
+    hash = "sha256-KqqiaM0txuZsylbr1+7faTdJINy1sNttT9n/YUpqyCc=";
   };
 
-  cargoHash = "sha256-/FLR2IXsxBEV9Z6GSJ0MTjIZjApNUN9J2ellKiKtL74=";
+  cargoHash = "sha256-d4yKch2c1w5gFBjyrYZQT/6lscRi3p05wKiJEIaXhjA=";
 
   doCheck = false; # there are no cli tests
   cargoBuildFlags = [

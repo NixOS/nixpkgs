@@ -23,13 +23,13 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgmstream";
-  version = "2083";
+  version = "2117";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-iSl4rkyJhZIyxVnX55zFu98PTv3ekEJrOaPIb+KOcRE=";
+    hash = "sha256-8huZ4ClAkAZDT0veLbbqz6G8C3OFjhGOy9+DvF9a+FM=";
   };
 
   outputs = [ "out" ] ++ lib.optional audaciousSupport "audacious";

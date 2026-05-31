@@ -34,6 +34,13 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  patches = [
+    # Python update caused one of the tests to fail. A patch that fixes this
+    # has been submitted upstream, yet to be applied.
+    # https://github.com/tlsfuzzer/python-ecdsa/pull/371
+    ./pr-371-fix-test-2026-05-23.patch
+  ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "python-ecdsa-";
   };

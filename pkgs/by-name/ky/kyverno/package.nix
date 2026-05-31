@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kyverno";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-emjXUd9yr6Rwv3I/em+BicC2MppGdT736DMuWBLdSZM=";
+    hash = "sha256-zo02ABieJ+CykuqGJlnthXibgBzNGB3t3UdlKMTIkFo=";
   };
 
   ldflags = [

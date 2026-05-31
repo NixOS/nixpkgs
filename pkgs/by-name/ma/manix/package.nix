@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       lecoqjacob
+      iogamaster
     ];
     mainProgram = "manix";
   };

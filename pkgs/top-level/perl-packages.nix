@@ -7965,10 +7965,10 @@ with self;
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.088";
+    version = "0.089";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.088.tar.gz";
-      hash = "sha256-kUn4t0JjRWbpgbmUn7fZs/Qa7zbvBOziG1HPNRU8SUA=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.089.tar.gz";
+      hash = "sha256-8Od8few5ZxqFnzjfJdK/8wARvPVfLZ0PIMJrekR8n7Q=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -17146,12 +17146,12 @@ with self;
     };
   };
 
-  Imager = buildPerlPackage {
+  Imager = buildPerlPackage rec {
     pname = "Imager";
-    version = "1.025";
+    version = "1.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.025.tar.gz";
-      hash = "sha256-TwJ1y7HgEdfz/sYE3GtgwaxvAt78KYs9A31ur3vqcFg=";
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-${version}.tar.gz";
+      hash = "sha256-kL59G9/F7bfxfPgreeamYUxbAuv+Mm67b2afzaeRNAE=";
     };
     buildInputs = [
       pkgs.freetype
@@ -17168,6 +17168,7 @@ with self;
       "${pkgs.libpng.out}/lib"
     ];
     meta = {
+      changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
       homepage = "http://imager.perl.org";
       license = with lib.licenses; [
@@ -18573,10 +18574,6 @@ with self;
         }
       done
     '';
-    passthru = {
-      tlType = "run";
-      pkgs = [ LaTeXML.tex ];
-    };
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
       homepage = "https://dlmf.nist.gov/LaTeXML/";
@@ -30638,6 +30635,13 @@ with self;
       (fetchpatch {
         url = "https://github.com/hoytech/Session-Token/commit/cd64e7b69986054bb715755290811308159b7959.patch";
         hash = "sha256-nMQmdvVQW8cQYO0+bLJcdVfSOLVIsongk+71fQ7fQdU=";
+      })
+      (fetchDebianPatch {
+        version = "1.503";
+        pname = "libsession-token-perl";
+        debianRevision = "3";
+        patch = "fix-gcc15-build.patch";
+        hash = "sha256-b6Yr5w++3lQcaI8JilthLykq4D4nEczz0h+r6LJ8hGI=";
       })
     ];
     meta = {

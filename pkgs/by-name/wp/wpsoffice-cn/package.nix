@@ -13,7 +13,6 @@
   libjpeg,
   libtool,
   libxkbcommon,
-  nss,
   nspr,
   udev,
   gtk3,
@@ -168,9 +167,9 @@ else
       tar -xf data.tar.xz
 
       # Remove unneeded files
-      rm -rf usr/share/{fonts,locale}
+      rm -rf usr/share/{fonts,locale,templates}
       rm -f usr/bin/misc
-      rm -rf opt/kingsoft/wps-office/{desktops,INSTALL}
+      rm -rf opt/kingsoft/wps-office/{desktops,INSTALL,templates}
       rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,dbus-1}.so*
     '';
 
@@ -189,7 +188,7 @@ else
 
       for i in $out/share/applications/*; do
         substituteInPlace $i \
-          --replace-fail /usr/bin $out/bin
+          --replace-fail /usr/bin/ ""
       done
 
       runHook postInstall
