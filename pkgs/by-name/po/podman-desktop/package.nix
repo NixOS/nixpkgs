@@ -51,11 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
 
         new_node_major="$(get_major_version '.engines.node')"
         new_electron_major="$(get_major_version '.devDependencies.electron')"
-        new_pnpm_major="$(get_major_version '.packageManager')"
 
         sed -i -E "s/nodejs_[0-9]+/nodejs_$new_node_major/g" "$PKG_FILE"
         sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
-        sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
       '';
     }))
     (nix-update-script {
