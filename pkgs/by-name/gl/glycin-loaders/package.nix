@@ -124,10 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
     teams = [ lib.teams.gnome ];
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     platforms = lib.platforms.linux;
   };
 })
