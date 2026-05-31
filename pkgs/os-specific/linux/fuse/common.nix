@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional (!isFuse3 && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64))
       (fetchpatch {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
-        hash = "sha256-UsLE14P50Ell0xo3PESk5tIHH2HLalsaWiEubO9KdPE=";
+        hash = "sha256-6hqu5npSUN8I7XLZRiCl+b60Sweb1n2ZZz5LroIzkvA=";
       })
     ++ (
       if isFuse3 then
