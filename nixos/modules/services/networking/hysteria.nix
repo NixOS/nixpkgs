@@ -12,8 +12,7 @@ in
 {
   meta.maintainers = with lib.maintainers; [ blaobla ];
 
-  options = {
-    services.hysteria = with lib; {
+  options.services.hysteria = {
       enable = mkEnableOption "Hysteria proxy service";
 
       package = mkPackageOption pkgs "hysteria" { };
