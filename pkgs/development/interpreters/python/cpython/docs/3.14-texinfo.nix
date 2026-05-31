@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "pythonMAJORMINOR-docs-TYPE";
-  version = "VERSION";
+  pname = "python314-docs-texinfo";
+  version = "3.14";
 
   src = fetchurl {
-    url = "URL";
-    sha256 = "SHA";
+    url = "https://docs.python.org/3.14/archives/python-3.14-docs-texinfo.tar.bz2";
+    sha256 = "0r89zg2dzh90iv3qff9rx0ckfsds8hin5z53ai31cchxhglg4b8s";
   };
   installPhase = ''
     mkdir -p $out/share/info
