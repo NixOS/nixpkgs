@@ -39,8 +39,8 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
 
   # https://github.com/superg/redumper/blob/main/.github/workflows/cmake.yml
   cmakeFlags = [
-    "-DREDUMPER_VERSION_BUILD=${finalAttrs.src.tag}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
+    (lib.cmakeFeature "REDUMPER_VERSION_BUILD" "${finalAttrs.src.tag}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
   ];
 
   doCheck = true;
