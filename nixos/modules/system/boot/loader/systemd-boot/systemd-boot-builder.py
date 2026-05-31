@@ -158,31 +158,24 @@ class SystemIdentifier(NamedTuple):
 
 @dataclass
 class BootFile:
-    system_identifier: SystemIdentifier
-    current: bool
     path: Path
     writer: WriteBootFile
 
     @staticmethod
-    def from_source(
-        system_identifier: SystemIdentifier, current: bool, source: Path
-    ) -> "BootFile":
+    def from_source(source: Path) -> "BootFile":
         return BootFile(
-            system_identifier=system_identifier,
-            current=current,
             path=boot_path(source),
             writer=CopyWriter(source=source),
         )
 
     @staticmethod
     def from_initrd(
-        system_identifier: SystemIdentifier,
-        current: bool,
+        generation: int,
         source: Path,
         initrd_secrets: Path | None,
     ) -> "BootFile":
         if initrd_secrets is None:
-            return BootFile.from_source(system_identifier, current, source)
+            return BootFile.from_source(source)
         else:
             # We're trying to calculate a canonical path unique to
             # this initrd and secret-appender. The boot_path is the
@@ -198,20 +191,16 @@ class BootFile:
             )
             combined_hash = hashlib.sha256(combined.encode("utf-8")).hexdigest()
             return BootFile(
-                system_identifier=system_identifier,
-                current=current,
                 path=NIXOS_DIR / f"{combined_hash}-initrd.efi",
                 writer=InitrdWithSecretsWriter(
                     source=source,
                     initrd_secrets=initrd_secrets,
-                    generation=system_identifier.generation,
+                    generation=generation,
                 ),
             )
 
     @staticmethod
-    def from_entry(
-        system_identifier: SystemIdentifier, current: bool, contents: bytes
-    ) -> tuple["BootFile", str]:
+    def from_entry(contents: bytes) -> tuple["BootFile", str]:
         contents_hash = hashlib.sha256(contents).hexdigest()
         path_prefix = f"nixos-{contents_hash}"
         pat = re.compile(rf"{re.escape(path_prefix)}(\+[0-9]+(-[0-9]+)?)?\.conf")
@@ -230,8 +219,6 @@ class BootFile:
             path = Path(f"loader/entries/{path_prefix}{counters}.conf")
         return (
             BootFile(
-                system_identifier=system_identifier,
-                current=current,
                 path=path,
                 writer=ContentsWriter(contents=contents),
             ),
@@ -370,23 +357,18 @@ def boot_file(
     specialisation: str | None,
     machine_id: str | None,
     bootspec: BootSpec,
-    current: bool,
 ) -> tuple[BootFileList, str]:
-    system_identifier = SystemIdentifier(profile, generation, specialisation)
     if specialisation:
         bootspec = bootspec.specialisations[specialisation]
-    kernel = BootFile.from_source(system_identifier, current, bootspec.kernel)
+    kernel = BootFile.from_source(bootspec.kernel)
     initrd = BootFile.from_initrd(
-        system_identifier,
-        current,
+        generation,
         bootspec.initrd,
         Path(bootspec.initrdSecrets) if bootspec.initrdSecrets is not None else None,
     )
     devicetree = None
     if bootspec.devicetree is not None:
-        devicetree = BootFile.from_source(
-            system_identifier, current, bootspec.devicetree
-        )
+        devicetree = BootFile.from_source(bootspec.devicetree)
 
     kernel_params = " ".join([f"init={bootspec.init}"] + bootspec.kernelParams)
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
@@ -409,9 +391,7 @@ def boot_file(
         f"sort-key {bootspec.sortKey}",
     ]
     contents = "\n".join(filter(None, boot_entry))
-    entry, bootctl_id = BootFile.from_entry(
-        system_identifier, current, contents.encode("utf-8")
-    )
+    entry, bootctl_id = BootFile.from_entry(contents.encode("utf-8"))
     return (list(filter(None, [kernel, initrd, devicetree, entry])), bootctl_id)
 
 
@@ -561,9 +541,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
         is_default = Path(bootspec.init).parent == default_config
-        new_boot_files, new_bootctl_id = boot_file(
-            *gen, machine_id, bootspec, current=is_default
-        )
+        new_boot_files, new_bootctl_id = boot_file(*gen, machine_id, bootspec)
         boot_files.extend(new_boot_files)
         if is_default:
             default_entry_id = new_bootctl_id
@@ -576,7 +554,6 @@ def install_bootloader(args: argparse.Namespace) -> None:
                 specialisation_name,
                 machine_id,
                 bootspec,
-                current=is_default,
             )
             boot_files.extend(new_boot_files)
             if is_default:
