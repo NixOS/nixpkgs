@@ -7,6 +7,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adguardian";
   version = "1.6.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Lissy93";
