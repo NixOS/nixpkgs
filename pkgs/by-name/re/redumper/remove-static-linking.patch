@@ -1,9 +1,15 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 2abda97..e5d9760 100644
+index 2f5d66a..e437573 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -218,33 +218,6 @@ target_link_libraries(redumper ${libs})
+@@ -221,39 +221,8 @@ endif()
  
+ target_link_libraries(redumper ${libs})
+ 
+-if(REDUMPER_TARGET_LINUX)
+-    target_link_options(redumper PRIVATE "-static")
+-endif()
+-
  install(TARGETS redumper DESTINATION "bin")
  
 -# bundle LLVM libc++ for C++20 support (system libc++ is too old, static linking not allowed on macOS)

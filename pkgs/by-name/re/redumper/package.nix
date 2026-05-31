@@ -2,25 +2,27 @@
   lib,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
   ninja,
   llvmPackages,
+  gtest,
   nix-update-script,
 }:
 
 # redumper is using C++ modules, this requires latest C++20 compiler and build tools
 llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
-  version = "709";
+  version = "720";
 
   src = fetchFromGitHub {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-3J+/v8Rhu5yT+MgAxcNBiHLAPAcNWc/YJXxFMgOZnPs=";
+    hash = "sha256-Gl+BJV9yWFGHk5HZudre+YUaaqCYcQpT50oeDcc39ds=";
   };
 
   patches = [
-    ./darwin-fixes.patch
+    ./remove-static-linking.patch
   ];
 
   __structuredAttrs = true;
@@ -29,6 +31,7 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ctestCheckHook
     ninja
     llvmPackages.clang-tools
   ];
@@ -36,7 +39,10 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   # https://github.com/superg/redumper/blob/main/.github/workflows/cmake.yml
   cmakeFlags = [
     "-DREDUMPER_VERSION_BUILD=${finalAttrs.version}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
   ];
+
+  doCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
