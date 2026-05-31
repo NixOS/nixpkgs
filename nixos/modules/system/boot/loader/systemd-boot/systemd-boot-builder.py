@@ -532,6 +532,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         gens += get_generations(profile)
 
     boot_files: BootFileList = []
+    critical_paths: set[Path] = set()
 
     default_config = Path(args.default_config)
     default_entry_id: str | None = None
@@ -545,6 +546,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         boot_files.extend(new_boot_files)
         if is_default:
             default_entry_id = new_bootctl_id
+            critical_paths.update(bf.path for bf in new_boot_files)
         for specialisation_name, specialisation in bootspec.specialisations.items():
             is_default = Path(specialisation.init).parent == default_config
             new_boot_files, new_bootctl_id = boot_file(
@@ -558,13 +560,14 @@ def install_bootloader(args: argparse.Namespace) -> None:
             boot_files.extend(new_boot_files)
             if is_default:
                 default_entry_id = new_bootctl_id
+                critical_paths.update(bf.path for bf in new_boot_files)
 
     # Garbage-collect stale kernels/initrds/entries before re-populating extra
     # files, so that user-supplied extraEntries (which may also live under
     # loader/entries and start with `nixos-`) are not removed again.
     garbage_collect(boot_files)
 
-    write_boot_files(boot_files)
+    write_boot_files(boot_files, critical_paths)
 
     write_loader_conf(default_entry_id)
 
@@ -612,20 +615,18 @@ def garbage_collect(gc_roots: BootFileList) -> None:
             delete_path(e)
 
 
-def write_boot_files(boot_files: BootFileList) -> None:
+def write_boot_files(boot_files: BootFileList, critical_paths: set[Path]) -> None:
     # Deduplicate by destination path so shared files are written once.
-    # Prefer the current configuration's entry so its failures are fatal.
-    unique: dict[Path, BootFile] = {}
-    for bf in boot_files:
-        if bf.path not in unique or bf.current:
-            unique[bf.path] = bf
-
-    for boot_file in unique.values():
+    seen: set[Path] = set()
+    for boot_file in boot_files:
+        if boot_file.path in seen:
+            continue
+        seen.add(boot_file.path)
         boot_path = BOOT_MOUNT_POINT / boot_file.path
         try:
             boot_file.writer.write_boot_file(boot_path)
         except subprocess.CalledProcessError:
-            if boot_file.current:
+            if boot_file.path in critical_paths:
                 print("failed to create initrd secrets!", file=sys.stderr)
                 sys.exit(1)
             # Keep the entry bootable by leaving at least a pristine initrd
