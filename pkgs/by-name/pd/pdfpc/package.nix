@@ -9,10 +9,7 @@
   libgee,
   poppler,
   libpthread-stubs,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-libav,
+  gst_all_1,
   gobject-introspection,
   wrapGAppsHook3,
   qrencode,
@@ -23,6 +20,15 @@
   libsoup_3,
   librsvg,
 }:
+
+let
+  inherit (gst_all_1)
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-libav
+    ;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfpc";
