@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-graph";
-  version = "1.103.0";
+  version = "1.104.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eWusMERC1yZ/BltZPcYkrBGpbdG0EyWZVwYDqMLD/kY=";
+    hash = "sha256-8oIOCR958L0eW7UY4cZtCsQkZNtQNGVqwoNAHzjltvY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_graph";
