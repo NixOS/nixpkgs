@@ -957,6 +957,7 @@ mapAliases {
   gui-for-clash = throw "'gui-for-clash' has been removed, as it is unmaintained"; # Added 2026-05-28
   guile-disarchive = throw "'guile-disarchive' has been renamed to/replaced by 'disarchive'"; # Converted to throw 2025-10-27
   guile-sdl = throw "guile-sdl has been removed, as it was broken"; # Added 2025-08-25
+  gupnp = throw "'gupnp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using 'gupnp_1_6' instead"; # Added 2026-06-07
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
