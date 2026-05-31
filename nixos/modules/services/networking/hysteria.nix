@@ -10,9 +10,7 @@ let
   cfg = config.services.hysteria;
 in
 {
-  meta = with lib.maintainers; {
-    maintainers = [ blaobla ];
-  };
+  meta.maintainers = with lib.maintainers; [ blaobla ];
 
   options = {
     services.hysteria = with lib; {
