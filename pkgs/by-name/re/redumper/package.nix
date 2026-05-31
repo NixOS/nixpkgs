@@ -4,6 +4,7 @@
   cmake,
   ninja,
   llvmPackages,
+  nix-update-script,
 }:
 
 # redumper is using C++ modules, this requires latest C++20 compiler and build tools
@@ -36,6 +37,13 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DREDUMPER_VERSION_BUILD=${finalAttrs.version}"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/superg/redumper";
