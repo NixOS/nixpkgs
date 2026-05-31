@@ -8,12 +8,13 @@
   orjson,
   pytest-asyncio,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopyarr";
   version = "23.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkdrob";
@@ -22,12 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-CzNB6ymvDTktiOGdcdCvWLVQ3mKmbdMpc/vezSXCpG4=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'version="master"' 'version="${version}"'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     ciso8601
     orjson
