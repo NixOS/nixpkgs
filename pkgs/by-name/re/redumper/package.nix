@@ -18,6 +18,10 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3J+/v8Rhu5yT+MgAxcNBiHLAPAcNWc/YJXxFMgOZnPs=";
   };
 
+  patches = [
+    ./darwin-fixes.patch
+  ];
+
   __structuredAttrs = true;
 
   strictDeps = true;
@@ -28,13 +32,9 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
     llvmPackages.clang-tools
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-isystem ${llvmPackages.libcxx.dev}/include/c++/v1";
-
   # https://github.com/superg/redumper/blob/main/.github/workflows/cmake.yml
   cmakeFlags = [
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DREDUMPER_VERSION_BUILD=${finalAttrs.version}"
-    "-DREDUMPER_CLANG_LINK_OPTIONS=" # overrides the '-static' default
   ];
 
   meta = {
@@ -42,7 +42,7 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
     description = "Low level CD dumper utility";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hughobrien ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "redumper";
   };
 })
