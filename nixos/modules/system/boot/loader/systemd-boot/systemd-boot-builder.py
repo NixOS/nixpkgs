@@ -91,24 +91,23 @@ class InitrdWithSecretsWriter:
     def write_boot_file(self, path: Path) -> None:
         # Secrets can change between rebuilds, so always rebuild from the
         # pristine initrd into a temp file and rename into place.
-        tmp = tempfile.NamedTemporaryFile(
+        with tempfile.NamedTemporaryFile(
             mode="wb",
             dir=path.parent,
             delete=False,
             prefix=path.name,
             suffix=".tmp",
-        )
-        try:
-            with open(self.source, mode="rb") as source_file:
-                shutil.copyfileobj(source_file, tmp)
-            tmp.close()
-            run([self.initrd_secrets, tmp.name])
-            with open(tmp.name, "rb") as f:
-                os.fsync(f.fileno())
-        except BaseException:
-            os.unlink(tmp.name)
-            raise
-        os.rename(tmp.name, path)
+        ) as tmp:
+            try:
+                with open(self.source, mode="rb") as source_file:
+                    shutil.copyfileobj(source_file, tmp)
+                tmp.flush()
+                run([self.initrd_secrets, tmp.name])
+                os.fsync(tmp.fileno())
+            except BaseException:
+                os.unlink(tmp.name)
+                raise
+            os.rename(tmp.name, path)
 
 
 @dataclass
