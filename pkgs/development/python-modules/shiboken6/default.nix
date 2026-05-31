@@ -25,16 +25,16 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.packaging
       ps.setuptools
     ]))
+    python.pkgs.qt6.qtbase
   ];
 
   propagatedNativeBuildInputs = [
     shiboken6-generator
   ];
 
-  buildInputs = [
-    python.pkgs.qt6.qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin python.pkgs.qt6.darwinVersionInputs;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin python.pkgs.qt6.darwinVersionInputs;
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -62,6 +62,8 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   dontWrapQtApps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - Python library";
