@@ -7,6 +7,7 @@
   h5py,
   pkgconfig,
   c-blosc2,
+  bzip2,
   charls,
   lz4,
   zlib,
@@ -41,7 +42,7 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     #c-blosc
     c-blosc2
-    # bzip2_1_1
+    bzip2
     charls
     lz4
     # snappy
@@ -54,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
     #"blosc" # AssertionError: 4000 not less than 4000
     "blosc2"
-    # "bz2" # only works with bzip2_1_1
+    "bz2"
     "charls"
     "lz4"
     # "snappy" # snappy tests fail
@@ -82,6 +83,10 @@ buildPythonPackage (finalAttrs: {
 
   preBuild = ''
     mkdir src/hdf5plugin/plugins
+
+    mkdir -p pkg-config-bz2
+    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config-bz2/bz2.pc
+    export PKG_CONFIG_PATH="$PWD/pkg-config-bz2''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
   '';
 
   meta = {
