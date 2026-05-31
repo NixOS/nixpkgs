@@ -33,13 +33,15 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.packaging
       ps.setuptools
     ]))
+    python.pkgs.qt6.qtbase
   ];
 
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
-    python.pkgs.qt6.qtbase
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-Dis_pyside6_superproject_build=1"
@@ -53,6 +55,8 @@ stdenv'.mkDerivation (finalAttrs: {
     python3 setup.py egg_info --build-type=shiboken6-generator
     cp -r shiboken6_generator.egg-info $out/${python.sitePackages}/
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - tools";
