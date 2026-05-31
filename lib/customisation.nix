@@ -189,6 +189,8 @@ rec {
               # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
               #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
               fdrv: makeOverridable (mirrorArgs (args: (f args).overrideAttrs fdrv)) origArgs;
+            ${if result ? overrideScope then "overrideScope" else null} =
+              fscope: makeOverridable (mirrorArgs (args: (f args).overrideScope fscope)) origArgs;
           }
         else if isFunction result then
           # Transform the result into a functor while propagating its arguments

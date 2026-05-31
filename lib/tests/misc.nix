@@ -319,6 +319,58 @@ runTests {
       expected = functionArgs f;
     };
 
+  # Test that makeOverridable composes with overrideScope (like it does with overrideAttrs)
+  testMakeOverridableOverrideScopeComposition =
+    let
+      mkScope =
+        { prefix ? "pkg" }:
+        lib.makeScope lib.callPackageWith (self: {
+          foo = self.callPackage ({ }: "${prefix}-foo") { };
+          bar = self.callPackage ({ foo }: "${foo}+bar") { };
+        });
+      scope0 = makeOverridable mkScope { };
+    in
+    {
+      expr = {
+        # Both override mechanisms are present initially
+        has-override = scope0 ? override;
+        has-overrideScope = scope0 ? overrideScope;
+
+        # overrideScope preserves override
+        overrideScope-then-override-exists =
+          (scope0.overrideScope (_final: _prev: { })) ? override;
+
+        # override preserves overrideScope
+        override-then-overrideScope-exists =
+          (scope0.override { prefix = "custom"; }) ? overrideScope;
+
+        # overrideScope result is correct
+        overrideScope-result =
+          (scope0.overrideScope (_final: prev: { foo = prev.foo + "+overlay"; })).bar;
+
+        # override then overrideScope composes (override is NOT reverted)
+        override-then-overrideScope =
+          ((scope0.override { prefix = "custom"; }).overrideScope
+            (_final: prev: { foo = prev.foo + "+overlay"; })
+          ).bar;
+
+        # overrideScope then override composes (overrideScope is NOT reverted)
+        overrideScope-then-override =
+          ((scope0.overrideScope (_final: prev: { foo = prev.foo + "+overlay"; })).override
+            { prefix = "custom"; }
+          ).bar;
+      };
+      expected = {
+        has-override = true;
+        has-overrideScope = true;
+        overrideScope-then-override-exists = true;
+        override-then-overrideScope-exists = true;
+        overrideScope-result = "pkg-foo+overlay+bar";
+        override-then-overrideScope = "custom-foo+overlay+bar";
+        overrideScope-then-override = "custom-foo+overlay+bar";
+      };
+    };
+
   # TRIVIAL
 
   testId = {
