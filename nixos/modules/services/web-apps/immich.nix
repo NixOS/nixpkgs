@@ -55,13 +55,14 @@ let
     if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 
   machineLearningPackage =
-    if cfg.machine-learning.acceleration == "rocm" then
+    if cfg.machine-learning.acceleration != null then
       cfg.package.machine-learning.override {
         python3 = pkgs.python3.override {
           packageOverrides = _: pyPrev: {
             onnxruntime = pyPrev.onnxruntime.override {
               onnxruntime = pkgs.onnxruntime.override {
-                rocmSupport = true;
+                cudaSupport = cfg.machine-learning.acceleration == "cuda";
+                rocmSupport = cfg.machine-learning.acceleration == "rocm";
               };
             };
           };
@@ -215,13 +216,18 @@ in
           default = true;
         };
       acceleration = mkOption {
-        type = types.nullOr (types.enum [ "rocm" ]);
+        type = types.nullOr (
+          types.enum [
+            "cuda"
+            "rocm"
+          ]
+        );
         default = null;
-        example = "rocm";
+        example = "cuda";
         description = ''
           Hardware acceleration backend for Immich machine learning.
 
-          When set to `rocm`, this sets `DEVICE=rocm` and runs Immich machine learning with a ROCm-enabled `onnxruntime`.
+          When set, this sets `DEVICE` to the selected backend and runs Immich machine learning with an `onnxruntime` package built with the matching accelerator support.
         '';
       };
       hsaGfxVersion = mkOption {
@@ -311,6 +317,11 @@ in
       {
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
+      }
+      {
+        assertion =
+          cfg.machine-learning.hsaGfxVersion == null || cfg.machine-learning.acceleration == "rocm";
+        message = "`services.immich.machine-learning.hsaGfxVersion` can only be set when `services.immich.machine-learning.acceleration` is `\"rocm\"`.";
       }
     ];
 
@@ -420,8 +431,8 @@ in
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
     }
-    // lib.optionalAttrs (cfg.machine-learning.acceleration == "rocm") {
-      DEVICE = "rocm";
+    // lib.optionalAttrs (cfg.machine-learning.acceleration != null) {
+      DEVICE = cfg.machine-learning.acceleration;
     }
     // lib.optionalAttrs (cfg.machine-learning.hsaGfxVersion != null) {
       HSA_OVERRIDE_GFX_VERSION = cfg.machine-learning.hsaGfxVersion;
