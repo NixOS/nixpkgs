@@ -326,9 +326,9 @@ in
       virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
         cfg.virtualHost
         {
-          documentRoot = mkForce "${cfg.package}/share/moodle";
+          documentRoot = mkForce "${cfg.package}/share/moodle/public";
           extraConfig = ''
-            <Directory "${cfg.package}/share/moodle">
+            <Directory "${cfg.package}/share/moodle/public">
               <FilesMatch "\.php$">
                 <If "-f %{REQUEST_FILENAME}">
                   SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
