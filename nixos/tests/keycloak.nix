@@ -52,6 +52,9 @@ let
                   keycloak-discord
                   keycloak-metrics-spi
                 ];
+                vault = {
+                  master_test = "${pkgs.writeText "test" "test"}";
+                };
               };
               environment.systemPackages = with pkgs; [
                 htmlq
@@ -180,6 +183,22 @@ let
             # realm with.
             keycloak.succeed(
                 "curl -sSf -H @auth_header '${frontendUrl}/realms/${realm.realm}/protocol/openid-connect/userinfo' | jq -f ${jqCheckUserinfo}"
+            )
+
+            ### Vault testing ###
+
+            # Verify that secrets are correctly placed into the runtime directory
+            keycloak.succeed(
+                """[[ "$(cat /run/keycloak/secrets/master_test)" = "test" ]]"""
+            )
+
+            keycloak.succeed(
+                "systemctl restart keycloak.service"
+            )
+
+            # Make sure they are correctly recreated after Keycloak restarts
+            keycloak.succeed(
+                """[[ "$(cat /run/keycloak/secrets/master_test)" = "test" ]]"""
             )
           '';
       }
