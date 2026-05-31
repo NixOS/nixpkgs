@@ -847,6 +847,11 @@ rec {
 
     Can be called with or without extra arguments.
 
+    The contents of the script are checked using the `nu-check` built-in.
+    Unfortunately, when `nu-check` detects a problem, it reports it in a
+    somewhat confusing manner and without informing the user of its location
+    within the code (https://github.com/nushell/nushell/issues/16127).
+
     # Examples
     :::{.example}
     ## `pkgs.writers.writeNu` without arguments
@@ -876,12 +881,21 @@ rec {
   */
   writeNu =
     name: argsOrScript:
+    let
+      interpreter = "${lib.getExe pkgs.nushell} --no-config-file";
+      # The only tool that can serve this purpose seems to be the Nushell
+      # built-in `nu-check`. Since that is a built-in, a Nushell script that
+      # invokes it is created here and used as the check. `writeNu` is not
+      # used in the creation of this wrapper, because that would be infinitely
+      # recursive.
+      check = makeScriptWriter {
+        inherit interpreter;
+      } "nu-check-wrapper" "def main [path] { nu-check --debug $path }";
+    in
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (
-        argsOrScript // { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; }
-      ) name
+      makeScriptWriter (argsOrScript // { inherit interpreter check; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; } name argsOrScript;
+      makeScriptWriter { inherit interpreter check; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to nu
