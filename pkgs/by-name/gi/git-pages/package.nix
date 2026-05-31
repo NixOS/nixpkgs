@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
   versionCheckHook,
 }:
@@ -11,8 +11,7 @@ buildGoModule (finalAttrs: {
   version = "0.9.0";
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "git-pages";
     repo = "git-pages";
     tag = "v${finalAttrs.version}";
