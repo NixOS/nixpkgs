@@ -29,7 +29,10 @@ buildGoModule (finalAttrs: {
     description = "Bulk port forwarding Kubernetes services for local development";
     homepage = "https://kubefwd.com";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cjimti ];
+    maintainers = with lib.maintainers; [
+      cjimti
+      iogamaster
+    ];
     mainProgram = "kubefwd";
   };
 })
