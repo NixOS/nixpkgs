@@ -24,6 +24,15 @@ in
       '';
     };
 
+    keepDefaultStrategies = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Keep the default strategies of the fw-fanctrl package.
+        Set this to false if you only want to see your own strategies defined with `hardware.fw-fanctrl.config.strategies`
+      '';
+    };
+
     config = lib.mkOption {
       default = { };
       description = ''
@@ -97,7 +106,11 @@ in
 
   config =
     let
-      defaultConfig = builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json");
+      defaultConfig =
+        if cfg.keepDefaultStrategies then
+          builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json")
+        else
+          { };
       finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.config;
       configFile = configFormat.generate "custom.json" finalConfig;
     in
