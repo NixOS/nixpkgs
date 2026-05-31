@@ -17,13 +17,13 @@ let
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-VgLlMlCPLT8lu2tn+lrkqVCp2eoYhtyNnrWGGqesMd0=";
+    hash = "sha256-DayFHFNKmYgH+LfXbQ/7h57Rw0iqtu3/snbyDd/EfkI=";
   };
 
   patches = [
