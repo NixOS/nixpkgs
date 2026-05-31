@@ -777,7 +777,25 @@ in
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = "Whether to open the firewall for the specified port.";
+      description = ''
+        Whether to open the firewall for the specified frontend port
+
+        :::{.note}
+        For components specific ports see {option}`services.home-assistant.openFirewallForComponents`.
+        :::
+      '';
+    };
+
+    openFirewallForComponents = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to open required firewall ports for enabled components.
+
+        :::{.note}
+        For the frontend see {option}`services.home-assistant.openFirewall`.
+        :::
+      '';
     };
 
     blueprints = mergeAttrsList (
@@ -845,7 +863,13 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
+    networking.firewall.allowedTCPPorts = mkMerge [
+      (mkIf cfg.openFirewall [ cfg.config.http.server_port ])
+      (mkIf cfg.openFirewallForComponents
+        # https://www.home-assistant.io/integrations/sonos/#network-requirements
+        (optionals (useComponent "sonos") [ 1400 ])
+      )
+    ];
 
     # symlink the configuration to /etc/home-assistant
     environment.etc = mkMerge [

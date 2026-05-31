@@ -28,10 +28,17 @@ let
       }
       .${region};
   };
-  result = runCommand "baserom-${region}-safety-dir" { } ''
-    mkdir $out
-    ln -s ${file} $out/${file.name}
-  '';
+  result =
+    runCommand "baserom-${region}-safety-dir"
+      {
+        # Prevent Hydra from trying to build `file` because Hydra won't have
+        # the baserom file in its store.
+        meta.hydraPlatforms = [ ];
+      }
+      ''
+        mkdir $out
+        ln -s ${file} $out/${file.name}
+      '';
 in
 result
 // {
