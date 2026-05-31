@@ -2,6 +2,7 @@
   newScope,
   lib,
   stdenv,
+  callPackages,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
@@ -124,6 +125,7 @@ let
 
       wrapQtAppsHook = callPackage (
         {
+          wrapQtAppsHook,
           makeBinaryWrapper,
           qtwayland,
           qtbase,
@@ -134,6 +136,9 @@ let
           depsTargetTargetPropagated = [
             (onlyPluginsAndQml qtbase)
           ];
+          passthru.tests = callPackages ./tests/wrap-qt-apps-hook.nix {
+            inherit qtbase wrapQtAppsHook;
+          };
           meta.license = lib.licenses.mit;
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
