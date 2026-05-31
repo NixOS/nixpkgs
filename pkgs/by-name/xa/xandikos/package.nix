@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     tag = "v${version}";
-    hash = "sha256-udKhJUsWFcyapEzYJOoujpq/VioFLGCCKq5WAlXsHnU=";
+    hash = "sha256-lVxbqgxBhHJHxG3QozX9xvCZAOPSa85ATSE88i3zayA=";
   };
 
   build-system = with python3Packages; [
@@ -24,12 +24,12 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     aiohttp
     aiohttp-openmetrics
+    aiosmtpd
     dulwich
     defusedxml
     icalendar
     jinja2
     multidict
-    pytz
     vobject
   ];
 

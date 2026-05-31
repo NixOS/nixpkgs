@@ -11,7 +11,6 @@
   inotify-tools,
   systemd,
   zlib,
-  pcre,
   rapidjson,
   small,
   libb64,
@@ -24,7 +23,6 @@
   miniupnpc,
   dht,
   libnatpmp,
-  libiconv,
   # Build options
   enableGTK3 ? false,
   gtkmm3,
@@ -54,7 +52,6 @@ let
       libpsl
       miniupnpc
       openssl
-      pcre
       zlib
     ]
     ++ optionals enableSystemd [ systemd ]
@@ -136,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     libutp
     miniupnpc
     openssl
-    pcre
     rapidjson
     small
     utf8cpp

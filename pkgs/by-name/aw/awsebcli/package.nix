@@ -41,6 +41,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "botocore"
     "colorama"
+    "fabric"
     "pathspec"
     "packaging"
     "PyYAML"
