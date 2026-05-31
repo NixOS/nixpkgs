@@ -1,6 +1,8 @@
 { lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
+  __structuredAttrs = true;
+
   pname = "tetro-tui";
   version = "3.5.2";
 
