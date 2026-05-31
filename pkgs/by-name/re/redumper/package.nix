@@ -18,6 +18,8 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3J+/v8Rhu5yT+MgAxcNBiHLAPAcNWc/YJXxFMgOZnPs=";
   };
 
+  __structuredAttrs = true;
+
   strictDeps = true;
 
   nativeBuildInputs = [
