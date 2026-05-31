@@ -6,6 +6,7 @@
   makeWrapper,
   formats,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
 }:
@@ -13,6 +14,12 @@
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -57,7 +64,7 @@ buildNpmPackage (finalAttrs: {
 
   preBuild = ''
     npm run set:${db false}
-    npm run set:oss
+    npm run set:${edition}
     npm run db:generate
   '';
 
@@ -160,7 +167,7 @@ buildNpmPackage (finalAttrs: {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
       water-sucks
