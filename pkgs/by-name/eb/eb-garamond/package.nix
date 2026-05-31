@@ -39,13 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  # installFonts adds a hook to `postInstall` that installs fonts
-  # into the correct directories
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";

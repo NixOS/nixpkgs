@@ -25,11 +25,6 @@ stdenvNoCC.mkDerivation {
 
   preInstall = "rm -r legacy/";
 
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "Reworking of the classic gothic typeface style";
     longDescription = ''

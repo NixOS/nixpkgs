@@ -31,11 +31,6 @@ stdenvNoCC.mkDerivation {
     installFonts
   ];
 
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   preInstall = "rm -r docs/proof";
   postInstall = ''
     mkfontdir $out/share/fonts

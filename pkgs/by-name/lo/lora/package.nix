@@ -29,13 +29,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ installFonts ];
 
-  # installFonts adds a hook to `postInstall` that installs fonts
-  # into the correct directories
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
     homepage = "https://github.com/cyrealtype/lora";
