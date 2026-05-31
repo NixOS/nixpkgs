@@ -40,6 +40,7 @@ PKG_SET = "home-assistant.python3Packages"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "av": "av",
+    "caldav": "caldav_2",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "fints": "fints",
     "HAP-python": "hap-python",
