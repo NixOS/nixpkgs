@@ -42,6 +42,11 @@
   sdl3,
   icu78,
   simdjson,
+  gtk4,
+  libadwaita,
+  bison,
+  libxkbcommon,
+  withGui ? if stdenv.hostPlatform.isDarwin then "AppKit" else "Qt", # or "Gtk"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,8 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     rustPlatform.cargoSetupHook
     rustc
-    qt6Packages.wrapQtAppsHook
     libtommath
+  ]
+  ++ lib.optionals (withGui == "Qt") [
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -121,8 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     mimalloc
     openssl
-    qt6Packages.qtbase
-    qt6Packages.qtmultimedia
     sdl3
     simdutf
     (skia.overrideAttrs (prev: {
@@ -147,7 +152,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
+  ]
+  ++ lib.optionals (withGui == "Qt") [
     qt6Packages.qtwayland
+    qt6Packages.qtbase
+    qt6Packages.qtmultimedia
+  ]
+  ++ lib.optionals (withGui == "Gtk" && stdenv.hostPlatform.isLinux) [
+    gtk4
+    libadwaita
+    bison
+    libxkbcommon
   ];
 
   cmakeFlags = [
@@ -162,9 +177,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+  ]
+  ++ lib.optionals (withGui == "Gtk") [
+    "-DLADYBIRD_GUI_FRAMEWORK=Gtk"
+  ]
+  ++ lib.optionals (withGui == "Qt" && stdenv.hostPlatform.isDarwin) [
+    "-DLADYBIRD_GUI_FRAMEWORK=Qt"
   ];
-
-  # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
@@ -205,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt, GTK, or Appkit GUI";
     homepage = "https://ladybird.org";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
