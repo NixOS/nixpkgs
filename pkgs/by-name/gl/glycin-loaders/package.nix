@@ -71,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dglycin-loaders=true"
-    "-Dglycin-thumbnailer=false"
-    "-Dlibglycin=false"
-    "-Dlibglycin-gtk4=false"
-    "-Dvapi=false"
+    (lib.mesonBool "glycin-loaders" true)
+    (lib.mesonBool "glycin-thumbnailer" false)
+    (lib.mesonBool "libglycin" false)
+    (lib.mesonBool "libglycin-gtk4" false)
+    (lib.mesonBool "vapi" false)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonOption "loaders" (
       lib.concatMapStringsSep "," (loader: "glycin-${loader}") enabledLoaders
