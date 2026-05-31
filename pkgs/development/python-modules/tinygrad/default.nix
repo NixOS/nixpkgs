@@ -314,7 +314,11 @@ buildPythonPackage (finalAttrs: {
         "test_hevc_decode"
 
         # AssertionError: Not equal to tolerance
+        "test_fp8e5m2"
         "test_svd_general"
+
+        # TypeError: unsupported operand type(s) for //: 'method' and 'int'
+        "TestFP8Linear"
       ];
 
       pytestFlags = (old.pytestFlags or [ ]) ++ [

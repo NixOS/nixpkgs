@@ -16,6 +16,9 @@
   nix-update-script,
 }:
 
+let
+  electron = electron_40;
+in
 buildNpmPackage (finalAttrs: {
   pname = "winboat";
   version = "0.9.0";
@@ -59,8 +62,8 @@ buildNpmPackage (finalAttrs: {
     node scripts/build.ts
     npm exec electron-builder --linux -- \
       --dir \
-      -c.electronDist=${electron_40.dist} \
-      -c.electronVersion=${electron_40.version}
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
@@ -81,7 +84,7 @@ buildNpmPackage (finalAttrs: {
     ln -sf $out/share/winboat/resources/data $out/share/winboat/data
     ln -sf $out/share/winboat/resources/guest_server $out/share/winboat/guest_server
 
-    makeWrapper ${electron_40}/bin/electron $out/bin/winboat \
+    makeWrapper ${electron}/bin/electron $out/bin/winboat \
       --add-flag "$out/share/winboat/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --suffix PATH : ${

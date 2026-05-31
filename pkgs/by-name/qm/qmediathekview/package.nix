@@ -8,14 +8,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "QMediathekView";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "adamreichold";
     repo = "QMediathekView";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0i9hac9alaajbra3lx23m0iiq6ww4is00lpbzg5x70agjrwj0nd6";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Alternative Qt-based front-end for the database maintained by the MediathekView project";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "QMediathekView";
   };
-}
+})

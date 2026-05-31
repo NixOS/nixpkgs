@@ -11711,6 +11711,12 @@
     githubId = 7348004;
     name = "Benjamin Levy";
   };
+  iogamaster = {
+    email = "iogamastercode+nixpkgs@gmail.com";
+    name = "IogaMaster";
+    github = "IogaMaster";
+    githubId = 67164465;
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
@@ -14373,12 +14379,6 @@
     github = "kirelagin";
     githubId = 451835;
     name = "Kirill Elagin";
-  };
-  kirikaza = {
-    email = "k@kirikaza.ru";
-    github = "kirikaza";
-    githubId = 804677;
-    name = "Kirill Kazakov";
   };
   kirillrdy = {
     email = "kirillrdy@gmail.com";
@@ -18727,10 +18727,10 @@
     keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
   };
   mshnwq = {
-    email = "mshnwq.com@gmail.com";
+    email = "hmachnouk@proton.me";
     github = "mshnwq";
     githubId = 68467027;
-    name = "Hayan Al-Machnouk";
+    name = "Mshnwq";
   };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
@@ -19398,6 +19398,11 @@
     github = "nekowinston";
     githubId = 79978224;
     name = "winston";
+  };
+  nelind = {
+    name = "Nel";
+    github = "nelind3";
+    githubId = 57587152;
   };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
@@ -23369,12 +23374,6 @@
     github = "rhoriguchi";
     githubId = 6047658;
     name = "Ryan Horiguchi";
-  };
-  rht = {
-    email = "rhtbot@protonmail.com";
-    github = "rht";
-    githubId = 395821;
-    name = "rht";
   };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
