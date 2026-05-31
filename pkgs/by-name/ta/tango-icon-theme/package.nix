@@ -23,21 +23,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./rsvg-convert.patch ];
 
-  nativeBuildInputs = [
+  depsBuildBuild = [
     pkg-config
+  ];
+
+  nativeBuildInputs = [
     intltool
     gtk3
-  ];
-  buildInputs = [
-    iconnamingutils
-    imagemagick
     librsvg
+    imagemagick
+    iconnamingutils
+    gnome-icon-theme
+    hicolor-icon-theme
   ];
+
   propagatedBuildInputs = [
     gnome-icon-theme
     hicolor-icon-theme
   ];
   # still missing parent icon themes: cristalsvg
+
+  strictDeps = true;
 
   dontDropIconThemeCache = true;
 
@@ -46,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     gtk-update-icon-cache $out/share/icons/Tango
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Basic set of icons";
