@@ -30,18 +30,6 @@
   in
   {
 
-    python27 = callPackage ./cpython/2.7 {
-      self = __splicedPackages.python27;
-      sourceVersion = {
-        major = "2";
-        minor = "7";
-        patch = "18";
-        suffix = ".12"; # ActiveState's Python 2 extended support
-      };
-      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
-      inherit passthruFun;
-    };
-
     python311 = callPackage ./cpython {
       self = __splicedPackages.python311;
       sourceVersion = {
