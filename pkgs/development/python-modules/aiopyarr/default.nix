@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopyarr";
   version = "23.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aiopyarr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CzNB6ymvDTktiOGdcdCvWLVQ3mKmbdMpc/vezSXCpG4=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'version="master"' 'version="${version}"'
+      --replace-fail 'version="master"' 'version="${finalAttrs.version}"'
   '';
 
   dependencies = [
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client for Lidarr/Radarr/Readarr/Sonarr";
     homepage = "https://github.com/tkdrob/aiopyarr";
-    changelog = "https://github.com/tkdrob/aiopyarr/releases/tag/${version}";
+    changelog = "https://github.com/tkdrob/aiopyarr/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
