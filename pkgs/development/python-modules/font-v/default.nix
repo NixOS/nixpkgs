@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python utility for manipulating font version headers";
+    changelog = "https://github.com/source-foundry/font-v/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
     license = lib.licenses.mit;
