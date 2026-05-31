@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   flac,
-  fuse,
+  fuse3,
   lame,
   libid3tag,
   libvorbis,
@@ -24,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lueF8fEV+0LQOxf2MhK9dPWkfsTF4nP3PijqjJvDPzo=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "Enable fuse3 support.patch";
+      # https://github.com/khenriks/mp3fs/pull/81
+      url = "https://github.com/khenriks/mp3fs/commit/6e1326de4a19b236eef88b89599755adf394526f.patch?full_index=1";
+      hash = "sha256-V2HZy0jiXAHGAjre+QtCdGev7maWJ8hW3F2e/87CEKA=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -32,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     flac
-    fuse
+    fuse3
     lame
     libid3tag
     libvorbis
