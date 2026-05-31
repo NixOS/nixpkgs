@@ -22,6 +22,14 @@
 #
 preInstallHooks+=(installFonts)
 
+# Default installPhase so font packages needn't hand-write one just to skip
+# stdenv's `make install` (font sources often ship a Makefile with no install
+# target). Must be a variable, not a function: stdenv defines installPhase()
+# after setup hooks load. The -z guard lets a package's own installPhase win.
+if [ -z "${installPhase:-}" ]; then
+  installPhase=$'runHook preInstall\nrunHook postInstall'
+fi
+
 installFont() {
   if (($# != 2)); then
     nixErrorLog "expected 2 arguments!"
