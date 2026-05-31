@@ -19,6 +19,7 @@
   libxcrypt,
   mimalloc,
   openssl,
+  perl,
   python3,
   qt6Packages,
   woff2,
@@ -58,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
 
+    perl -0pi -e \
+      's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
+      Meta/CMake/check_for_dependencies.cmake
+
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
@@ -86,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cmake
     ninja
+    perl
     pkg-config
     python3
     rustPlatform.cargoSetupHook
@@ -179,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fgaz
       jk
+      schembriaiden
     ];
     platforms = [
       "x86_64-linux"

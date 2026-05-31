@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
   fetchpatch,
-  python314,
+  python314Packages,
   replaceVars,
   ffmpeg-headless,
   inetutils,
@@ -246,10 +246,9 @@ let
     })
   ];
 
-  python = python314.override {
-    self = python;
-    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
-  };
+  python3Packages = python314Packages.overrideScope (
+    final: prev: lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]) final prev
+  );
 
   componentPackages = import ./component-packages.nix;
 
@@ -259,16 +258,18 @@ let
 
   getPackages = component: componentPackages.components.${component};
 
-  componentBuildInputs = lib.concatMap (component: getPackages component python.pkgs) extraComponents;
+  componentBuildInputs = lib.concatMap (
+    component: getPackages component python3Packages
+  ) extraComponents;
 
   # Ensure that we are using a consistent package set
-  extraBuildInputs = extraPackages python.pkgs;
+  extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
   hassVersion = "2026.5.4";
 
 in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "homeassistant";
   version =
     assert (componentPackages.version == hassVersion);
@@ -276,7 +277,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.14";
+  disabled = python3Packages.pythonOlder "3.14";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -295,7 +296,7 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-o5S6rnOTqzPLZpMBxgmp9IpmLlEHLvHTH68ql2EkVbI=";
   };
 
-  build-system = with python.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -347,7 +348,7 @@ python.pkgs.buildPythonApplication rec {
     "uv"
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
     # Mirror what gets installed for Home Assistant Container, which means
     # installing what is in requirements.txt. The PEP517 specification gets
     # embedded in wheel metadata but only represents a subset.
@@ -421,7 +422,7 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
-  requirementsTest = with python.pkgs; [
+  requirementsTest = with python3Packages; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
     pytest-asyncio
@@ -440,7 +441,7 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     requirementsTest
     ++ [ versionCheckHook ]
-    ++ (with python.pkgs; [
+    ++ (with python3Packages; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
       # Used in tests/scripts/test_check_config.py
@@ -448,7 +449,7 @@ python.pkgs.buildPythonApplication rec {
       # Used in tests/helpers/test_httpx_client.py
       h2
     ])
-    ++ lib.concatMap (component: getPackages component python.pkgs) [
+    ++ lib.concatMap (component: getPackages component python3Packages) [
       # some components are needed even if tests in tests/components are disabled
       "frontend"
       "hue"
@@ -506,12 +507,12 @@ python.pkgs.buildPythonApplication rec {
       availableComponents
       extraComponents
       getPackages
-      python
+      python3Packages
       supportedComponentsWithTests
       ;
-    pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
-    frontend = python.pkgs.home-assistant-frontend;
-    intents = python.pkgs.home-assistant-intents;
+    pythonPath = python3Packages.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python3Packages.home-assistant-frontend;
+    intents = python3Packages.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };

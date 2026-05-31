@@ -4,7 +4,6 @@
   fetchPypi,
   fetchpatch,
   python,
-  isPy27,
   six,
   zope-testing,
 }:
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "manuel";
   version = "1.13.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

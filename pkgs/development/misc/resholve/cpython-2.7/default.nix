@@ -146,7 +146,7 @@ let
     # It does break aarch64-darwin, which we do support. See:
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
-    ../3.7/no-win64-workaround.patch
+    ./no-win64-workaround.patch
 
     # fix openssl detection by reverting irrelevant change for us, to enable hashlib which is required by pip
     (fetchpatch {
@@ -378,7 +378,7 @@ stdenv.mkDerivation (
 
     postFixup = ''
       # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
-      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+      cp ${../../../interpreters/python/sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     ''
     + lib.optionalString strip2to3 ''
       rm -R $out/bin/2to3 $out/lib/python*/lib2to3

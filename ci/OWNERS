@@ -56,6 +56,12 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
+/pkgs/top-level/config.nix                       @jopejoe1
+/pkgs/top-level/make-tarball.nix                 @jopejoe1
+/pkgs/top-level/packages-config.nix              @jopejoe1
+/pkgs/top-level/packages-info.nix                @jopejoe1
+/pkgs/top-level/release-lib.nix                  @jopejoe1
+/pkgs/top-level/release.nix                      @jopejoe1
 /pkgs/stdenv                                     @philiptaron @NixOS/stdenv
 /pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
 /pkgs/stdenv/generic/problems.nix                @infinisil
