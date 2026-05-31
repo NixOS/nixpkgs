@@ -8,7 +8,6 @@
   installShellFiles,
   libredirect,
   versionCheckHook,
-  fuse,
 }:
 
 buildGoModule (finalAttrs: {
@@ -42,9 +41,12 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin libredirect.hook;
 
-  buildInputs = [ fuse ];
-
   tags = [ "jsoniter" ];
+
+  subPackages = [
+    "."
+    "pkg/gowebdav/cmd/gowebdav"
+  ];
 
   ldflags = [
     "-s"
