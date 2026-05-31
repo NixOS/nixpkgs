@@ -15,20 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mp3fs";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "khenriks";
     repo = "mp3fs";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
+    rev = "cd2ca80eb3912ff8385e6d537df10d9a768a3a96";
+    hash = "sha256-lueF8fEV+0LQOxf2MhK9dPWkfsTF4nP3PijqjJvDPzo=";
   };
-
-  postPatch = ''
-    substituteInPlace src/mp3fs.cc \
-      --replace-fail "#include <fuse_darwin.h>" "" \
-      --replace-fail "osxfuse_version()" "fuse_version()"
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
