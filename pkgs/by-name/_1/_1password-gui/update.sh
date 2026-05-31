@@ -17,11 +17,7 @@ CURL=(
   "-H" "user-agent: nixpkgs#_1password-gui update.sh" # repology requires a descriptive user-agent
 )
 
-JQ=(
-  "jq"
-  "--raw-output"
-  "--exit-status" # exit non-zero if no output is produced
-)
+JQ=("jq" "--raw-output")
 
 
 read_local_versions() {
@@ -37,7 +33,7 @@ read_local_versions() {
 
 read_remote_versions() {
   local channel="$1"
-  local darwin_beta_maybe
+  local chan_os ver
 
   if [[ ${channel} == "stable" ]]; then
     remote_versions["stable/linux"]=$(
@@ -60,13 +56,15 @@ read_remote_versions() {
     # Handle macOS Beta app-update feed quirk.
     # If there is a newer release in the stable channel, queries for beta
     # channel will return the stable channel version; masking the current beta.
-    darwin_beta_maybe=$(
+    chan_os="${channel}/darwin"
+    ver=$(
       "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" \
-        | "${JQ[@]}" 'select(.available == "1") | .version'
+        | "${JQ[@]}" 'select(.available == "1" and (.version | endswith(".BETA"))) | .version'
     )
-    # Only consider versions that end with '.BETA'
-    if [[ ${darwin_beta_maybe} =~ \.BETA$ ]]; then
-      remote_versions["beta/darwin"]=${darwin_beta_maybe}
+    if [[ -n ${ver} ]]; then
+      remote_versions["${chan_os}"]="${ver}"
+    else
+      echo "No remote version for ${chan_os}" >&2
     fi
   fi
 }
