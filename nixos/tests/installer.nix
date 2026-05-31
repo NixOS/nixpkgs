@@ -1118,6 +1118,7 @@ let
         enableOCR = fallback;
         extraInstallerConfig = {
           boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
           environment.systemPackages = with pkgs; [ clevis ];
         };
         createPartitions = ''
