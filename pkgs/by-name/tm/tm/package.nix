@@ -22,6 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
+
+    substituteInPlace main.h \
+      --replace-fail "void install_signal_forwarders()" "void install_signal_forwarders(int _child)"
+    substituteInPlace filter.h \
+      --replace-fail "struct FFilter *new_ftildes()" "struct FFilter *new_ftildes(char *p)"
+    substituteInPlace client.c \
+      --replace-fail "ff = new_ftildes()" "ff = new_ftildes(NULL)"
   '';
 
   meta = {
