@@ -8,16 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giflib";
-  version = "5.2.2";
+  version = "6.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/giflib/giflib-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vn/70FfK3r4qoURUL9kMaDjGoIO16KkEi47jtmsp1fs=";
+    hash = "sha256-tltmuZ8EJLk1JfmHOG8i/F77naK/ySrUpTIkmq/7qw4=";
   };
 
   patches = [
-    ./CVE-2021-40633.patch
-    ./CVE-2025-31344.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
