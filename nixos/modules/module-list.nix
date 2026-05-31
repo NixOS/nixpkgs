@@ -1533,6 +1533,7 @@
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
   ./services/security/esdm.nix
+  ./services/security/fail2ban-ui.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
   ./services/security/haveged.nix
