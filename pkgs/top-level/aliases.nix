@@ -764,6 +764,7 @@ mapAliases {
   flutter327 = throw "flutter327 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-10-28
   fmsynth = throw "'fmsynth' has been removed as it was broken and unmaintained both upstream and in nixpkgs."; # Added 2025-09-01
   follow = warnAlias "follow has been renamed to folo" folo; # Added 2025-05-18
+  fondo = throw "'fondo' has been removed as it was unmaintained upstream and depended on libsoup 2.4"; # Added 2026-06-07
   fontadobe75dpi = font-adobe-75dpi; # Added 2026-01-19
   fontadobe100dpi = font-adobe-100dpi; # Added 2026-02-04
   fontadobeutopia75dpi = font-adobe-utopia-75dpi; # Added 2026-01-19
