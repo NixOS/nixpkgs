@@ -1476,10 +1476,6 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
-  esbuild = callPackage ../development/tools/esbuild { };
-
-  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
-
   libfx2 = with python3Packages; toPythonApplication fx2;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
@@ -1898,8 +1894,6 @@ with pkgs;
   binlore = callPackage ../development/tools/analysis/binlore { };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
-
-  anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -3200,10 +3194,6 @@ with pkgs;
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     extraFonts = true;
   };
-
-  tinc = callPackage ../tools/networking/tinc { };
-
-  tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tldr-hs = haskellPackages.tldr;
 
@@ -6203,8 +6193,6 @@ with pkgs;
   };
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
-
-  grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
@@ -9470,9 +9458,7 @@ with pkgs;
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
-  mendeley = libsForQt5.callPackage ../applications/office/mendeley {
-    gconf = gnome2.GConf;
-  };
+  mendeley = callPackage ../applications/office/mendeley { };
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
@@ -9784,6 +9770,7 @@ with pkgs;
     rke2_1_33
     rke2_1_34
     rke2_1_35
+    rke2_1_36
     rke2_stable
     rke2_latest
     ;

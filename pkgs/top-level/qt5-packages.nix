@@ -74,7 +74,7 @@ makeScopeWithSplicing' {
 
         qgpgme = callPackage ../development/libraries/qgpgme { };
 
-        grantlee = callPackage ../development/libraries/grantlee/5 { };
+        grantlee = pkgs.grantlee;
 
         herqq = callPackage ../by-name/he/herqq/package.nix { };
 

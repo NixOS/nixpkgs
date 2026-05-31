@@ -2472,6 +2472,8 @@ self: super: with self; {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  caldav_2 = callPackage ../development/python-modules/caldav/2.nix { };
+
   callee = callPackage ../development/python-modules/callee { };
 
   calmjs = callPackage ../development/python-modules/calmjs { };
@@ -20919,6 +20921,8 @@ self: super: with self; {
   uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
 
   uploadserver = callPackage ../development/python-modules/uploadserver { };
+
+  upnpclient = callPackage ../development/python-modules/upnpclient { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 
