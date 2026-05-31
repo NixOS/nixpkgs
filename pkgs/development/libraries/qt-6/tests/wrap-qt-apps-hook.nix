@@ -68,6 +68,7 @@ let
         inherit qtWrapperArgs;
         buildInputs = [ qtbase ];
         nativeBuildInputs = [ wrapQtAppsHook ];
+        __structuredAttrs = true;
       }
       ''
         ${lib.toShellVars {
@@ -126,7 +127,7 @@ let
       '';
 in
 
-{
+lib.fix (self: {
 
   simple = checkWrapperArgsArray {
     name = "simple";
@@ -135,6 +136,11 @@ in
       "/foo"
     ];
   };
+
+  simple-no-structuredAttrs = self.simple.overrideAttrs (prevAttrs: {
+    name = prevAttrs.name + "-no-structuredAttrs";
+    __structuredAttrs = false;
+  });
 
   # Integration test: assert program is wrapped with the expected environment
   runtime =
@@ -148,6 +154,7 @@ in
 
         buildInputs = [ qtbase ];
         nativeBuildInputs = [ wrapQtAppsHook ];
+        __structuredAttrs = true;
       }
       ''
         # Install the test program
@@ -159,4 +166,9 @@ in
         "$out/bin/test"
       '';
 
-}
+  runtime-no-structuredAttrs = self.runtime.overrideAttrs (prevAttrs: {
+    name = prevAttrs.name + "-no-structuredAttrs";
+    __structuredAttrs = false;
+  });
+
+})
