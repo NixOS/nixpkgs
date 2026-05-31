@@ -6,7 +6,7 @@
   installShellFiles,
   nix-update-script,
   tzdata,
-  fuse,
+  fuse3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ];
 
   nativeCheckInputs = [ tzdata ];
 
