@@ -149,11 +149,14 @@ in
       };
 
       vault = lib.mkOption {
-        type = lib.types.nullOr (lib.types.attrsOf lib.types.path);
+        type = nullOr (lib.types.attrsOf path);
+        apply = value: builtins.mapAttrs (name: value: assertStringPath name value) value;
         default = null;
         description = ''
-          Secrets that will available to Keycloak inside the file vault.
-          The `keycloak` user must have read access to the secret files.
+          Secrets that will be available to Keycloak inside the file vault.
+
+          The attribute name must be in the format of `<realm name>_<secret name>` for the
+          secrets to be accessible.
 
           See [Keycloak documentation](https://www.keycloak.org/server/vault) for more info.
         '';
@@ -533,7 +536,7 @@ in
             quarkus-systemd-notify
             quarkus-systemd-notify-deployment
           ]);
-        vaultType = if (cfg.vault != null) then "file" else null;
+        vaultType = if (cfg.vault != null && cfg.vault != { }) then "file" else null;
       };
     in
     mkIf cfg.enable {
@@ -726,18 +729,8 @@ in
               "L+".argument = "${f}";
             };
           }) cfg.realmFiles;
-          vaultList =
-            if (cfg.vault != null) then
-              (lib.mapAttrsToList (name: value: {
-                name = "/run/keycloak/secrets/${name}";
-                value = {
-                  "L+".argument = value;
-                };
-              }) cfg.vault)
-            else
-              [ ];
         in
-        builtins.listToAttrs (settingsList ++ vaultList);
+        builtins.listToAttrs settingsList;
 
       systemd.services.keycloak =
         let
@@ -786,7 +779,10 @@ in
               ++ optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null) [
                 "ssl_cert:${cfg.sslCertificate}"
                 "ssl_key:${cfg.sslCertificateKey}"
-              ];
+              ]
+              ++ optionals (cfg.vault != null && cfg.vault != { }) (
+                lib.mapAttrsToList (name: value: "${name}:${value}") cfg.vault
+              );
             User = "keycloak";
             Group = "keycloak";
             DynamicUser = true;
@@ -820,6 +816,18 @@ in
             mkdir -p /run/keycloak/ssl
             cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
           ''
+          + optionalString (cfg.vault != null && cfg.vault != { }) (
+            lib.concatStrings (
+              [
+                ''
+                  mkdir -p /run/keycloak/secrets
+                ''
+              ]
+              ++ (lib.mapAttrsToList (name: value: ''
+                cp "$CREDENTIALS_DIRECTORY"/${name} /run/keycloak/secrets/
+              '') cfg.vault)
+            )
+          )
           + ''
             kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
           '';
