@@ -24,14 +24,14 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfpc";
   version = "4.7.0";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fPhCrn1ELC03/II+e021BUNJr1OKCBIcFCM7z+2Oo+s=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 
-}
+})
