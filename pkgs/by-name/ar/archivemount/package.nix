@@ -3,7 +3,7 @@
   stdenv,
   fetchFromSourcehut,
   pkg-config,
-  fuse,
+  fuse3,
   libarchive,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    fuse
+    fuse3
     libarchive
   ];
 
