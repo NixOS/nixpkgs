@@ -58,14 +58,14 @@ class BootSpec:
 
 
 class WriteBootFile(Protocol):
-    def write_boot_file(self, path: Path) -> None: ...
+    def write_boot_file(self, path: Path, *, critical: bool) -> None: ...
 
 
 @dataclass
 class CopyWriter:
     source: Path
 
-    def write_boot_file(self, path: Path) -> None:
+    def write_boot_file(self, path: Path, *, critical: bool) -> None:
         if path.exists():
             return
         with tempfile.NamedTemporaryFile(
@@ -87,8 +87,9 @@ class CopyWriter:
 class InitrdWithSecretsWriter:
     source: Path
     initrd_secrets: Path
+    generation: int
 
-    def write_boot_file(self, path: Path) -> None:
+    def write_boot_file(self, path: Path, *, critical: bool) -> None:
         # Secrets can change between rebuilds, so always rebuild from the
         # pristine initrd into a temp file and rename into place.
         with tempfile.NamedTemporaryFile(
@@ -104,6 +105,24 @@ class InitrdWithSecretsWriter:
                 tmp.flush()
                 run([self.initrd_secrets, tmp.name])
                 os.fsync(tmp.fileno())
+            except subprocess.CalledProcessError:
+                os.unlink(tmp.name)
+                if critical:
+                    print("failed to create initrd secrets!", file=sys.stderr)
+                    sys.exit(1)
+                # Keep the entry bootable by leaving at least a pristine
+                # initrd in place. CopyWriter is a no-op if one already
+                # exists.
+                CopyWriter(source=self.source).write_boot_file(path, critical=False)
+                print(
+                    "warning: failed to update initrd secrets for an older "
+                    f"generation ({self.generation}). The previous secrets "
+                    "in this initrd will continue to be used. To silence "
+                    "this warning, restore the secret files to their "
+                    "original locations or delete this generation.",
+                    file=sys.stderr,
+                )
+                return
             except BaseException:
                 os.unlink(tmp.name)
                 raise
@@ -114,7 +133,7 @@ class InitrdWithSecretsWriter:
 class ContentsWriter:
     contents: bytes
 
-    def write_boot_file(self, path: Path) -> None:
+    def write_boot_file(self, path: Path, *, critical: bool) -> None:
         if path.exists():
             return
         with tempfile.NamedTemporaryFile(
@@ -183,7 +202,9 @@ class BootFile:
                 current=current,
                 path=NIXOS_DIR / f"{combined_hash}-initrd.efi",
                 writer=InitrdWithSecretsWriter(
-                    source=source, initrd_secrets=initrd_secrets
+                    source=source,
+                    initrd_secrets=initrd_secrets,
+                    generation=system_identifier.generation,
                 ),
             )
 
@@ -622,25 +643,10 @@ def write_boot_files(boot_files: BootFileList, critical_paths: set[Path]) -> Non
         if boot_file.path in seen:
             continue
         seen.add(boot_file.path)
-        boot_path = BOOT_MOUNT_POINT / boot_file.path
-        try:
-            boot_file.writer.write_boot_file(boot_path)
-        except subprocess.CalledProcessError:
-            if boot_file.path in critical_paths:
-                print("failed to create initrd secrets!", file=sys.stderr)
-                sys.exit(1)
-            # Keep the entry bootable by leaving at least a pristine initrd
-            # in place. CopyWriter is a no-op if one already exists.
-            assert isinstance(boot_file.writer, InitrdWithSecretsWriter)
-            CopyWriter(source=boot_file.writer.source).write_boot_file(boot_path)
-            print(
-                "warning: failed to update initrd secrets for an older "
-                f"generation ({boot_file.system_identifier.generation}). The "
-                "previous secrets in this initrd will continue to be used. "
-                "To silence this warning, restore the secret files to their "
-                "original locations or delete this generation.",
-                file=sys.stderr,
-            )
+        boot_file.writer.write_boot_file(
+            BOOT_MOUNT_POINT / boot_file.path,
+            critical=boot_file.path in critical_paths,
+        )
 
 
 def main() -> None:
