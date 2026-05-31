@@ -8,13 +8,13 @@
 
 buildOctavePackage rec {
   pname = "netcdf";
-  version = "1.0.19";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-netcdf";
     tag = "v${version}";
-    sha256 = "sha256-yt39bd6EBLj7mr6EYngPfPXEMusncc9tx5So1Cp1zkM=";
+    sha256 = "sha256-47+8daOrPjjsVWi6Sz2V/GNK4vQ5nbGCrQmgnZRap+k=";
   };
 
   propagatedBuildInputs = [
