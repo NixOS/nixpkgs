@@ -892,7 +892,7 @@ rec {
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile = lib.extendMkDerivation {
-    constructDrv = stdenv.mkDerivation;
+    constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
       "hash"
