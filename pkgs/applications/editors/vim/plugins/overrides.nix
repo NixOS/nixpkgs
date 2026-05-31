@@ -150,7 +150,6 @@ let
       }"
       overrides;
 in
-
 assertNoAdditions {
   # keep-sorted start case=no block=yes newline_separated=yes
   ack-vim = super.ack-vim.overrideAttrs (old: {
@@ -1579,7 +1578,6 @@ assertNoAdditions {
     ];
     dependencies = [ self.fzf-vim ];
     passthru = old.passthru // {
-
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
   });
@@ -1776,6 +1774,13 @@ assertNoAdditions {
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  harpoon-lualine = super.harpoon-lualine.overrideAttrs {
+    dependencies = [
+      self.lualine-nvim
+      self.harpoon2
+    ];
   };
 
   harpoon2 = super.harpoon2.overrideAttrs {
@@ -4122,7 +4127,6 @@ assertNoAdditions {
           }
       '';
     };
-
   });
 
   rtorrent-syntax-file = super.rtorrent-syntax-file.overrideAttrs (old: {
@@ -4419,6 +4423,7 @@ assertNoAdditions {
       # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
       pythonWrapper =
         writeText "evinceSync-wrapper.py" # python
+
           ''
             #!${python3}/bin/python3
             import os
@@ -4824,7 +4829,6 @@ assertNoAdditions {
        --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
        --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
     '';
-
   };
 
   unicode-vim =
