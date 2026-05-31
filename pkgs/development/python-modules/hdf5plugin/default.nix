@@ -6,6 +6,7 @@
   py-cpuinfo,
   h5py,
   pkgconfig,
+  c-blosc,
   c-blosc2,
   bzip2,
   charls,
@@ -19,6 +20,9 @@
   avx512Support ? stdenv.hostPlatform.avx512Support,
 }:
 
+let
+  c-blosc' = c-blosc.override { snappySupport = true; };
+in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
   version = "6.0.0";
@@ -40,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ h5py ];
 
   buildInputs = [
-    #c-blosc
+    c-blosc'
     c-blosc2
     bzip2
     charls
@@ -53,12 +57,12 @@ buildPythonPackage (finalAttrs: {
 
   # opt-in to use use system libs instead
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
-    #"blosc" # AssertionError: 4000 not less than 4000
+    "blosc"
     "blosc2"
     "bz2"
     "charls"
     "lz4"
-    # "snappy" # snappy tests fail
+    # "snappy" # not a standalone filter; provided via the snappy-enabled c-blosc above
     # "sperr" # not packaged?
     # "zfp" #  pkgconfig: (lib)zfp not found
     "zlib"
