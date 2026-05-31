@@ -53,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gobject-introspection
     desktop-file-utils # for validate-desktop-file
+    appstream
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Ddocumentation=true"
@@ -63,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream
     fribidi
   ];
 
@@ -126,6 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.tag}/NEWS";
