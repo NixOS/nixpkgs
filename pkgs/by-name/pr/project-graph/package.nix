@@ -75,9 +75,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "app/src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  docheck = true;
+  doInstallCheck = true;
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
