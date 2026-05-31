@@ -228,7 +228,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
     tmp_path.rename(entry_file)
 
 
-def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
+def get_generations(profile: str | None = None, limit: int = CONFIGURATION_LIMIT) -> list[SystemIdentifier]:
     gen_list = run(
         [
             f"{NIX}/bin/nix-env",
@@ -242,7 +242,6 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
     gen_lines = gen_list.split("\n")
     gen_lines.pop()
 
-    configurationLimit = CONFIGURATION_LIMIT
     configurations = [
         SystemIdentifier(
             profile=profile,
@@ -251,7 +250,7 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
         )
         for line in gen_lines
     ]
-    return configurations[-configurationLimit:]
+    return configurations[-limit:]
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
@@ -296,6 +295,18 @@ def get_profiles() -> list[str]:
             if not x.name.endswith("-link")]
     else:
         return []
+
+def generation_toplevel(gen: SystemIdentifier) -> Path:
+    return system_dir(*gen).resolve()
+
+
+def get_default_generation(default_config: Path) -> SystemIdentifier | None:
+    for profile in [None, *get_profiles()]:
+        for gen in reversed(get_generations(profile, limit=0)):
+            if generation_toplevel(gen) == default_config:
+                return gen
+    return None
+
 
 def install_bootloader(args: argparse.Namespace) -> None:
     try:
@@ -379,6 +390,18 @@ def install_bootloader(args: argparse.Namespace) -> None:
     gens = get_generations()
     for profile in get_profiles():
         gens += get_generations(profile)
+
+    # The toplevel that switch-to-configuration handed us to make the default may
+    # have been truncated out of the lists above by `configurationLimit`. `configurationLimit`
+    # is only meant to cap how many old generations appear in the menu, not to stop
+    # the requested configuration from getting an entry and becoming the default.
+    # Re-add it; otherwise the `if is_default` branch below never runs and the
+    # default boot entry is silently left unchanged.
+    default_config = Path(args.default_config).resolve()
+    if not any(generation_toplevel(gen) == default_config for gen in gens):
+        default_gen = get_default_generation(default_config)
+        if default_gen is not None:
+            gens.append(default_gen)
 
     remove_old_entries(gens)
 
