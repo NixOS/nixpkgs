@@ -155,8 +155,6 @@ crate_:
 lib.makeOverridable
   (
     # The rust compiler to use.
-    #
-    # Default: pkgs.rustc
     {
       rust ? rustc,
       # The cargo package to use for getting some metadata.

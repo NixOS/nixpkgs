@@ -4401,11 +4401,20 @@ with pkgs;
       );
     in
     callPackage ../build-support/rust/build-rust-crate (
-      { }
-      // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
+      lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
         stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
       }
-      // lib.optionalAttrs targetAlreadyIncluded { inherit (pkgsBuildBuild) rustc cargo; } # Optimization.
+      // (
+        if targetAlreadyIncluded then
+          # Optimization
+          {
+            inherit (pkgsBuildBuild) rustc cargo;
+          }
+        else
+          {
+            inherit (pkgsBuildHost) rustc cargo;
+          }
+      )
     );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
