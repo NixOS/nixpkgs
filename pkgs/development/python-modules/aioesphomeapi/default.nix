@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "44.23.0";
+  version = "44.23.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
