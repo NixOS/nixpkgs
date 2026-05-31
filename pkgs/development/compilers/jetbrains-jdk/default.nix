@@ -21,19 +21,20 @@ let
       url = "https://raw.githubusercontent.com/GNOME/gtk/${rev}/gdk/wayland/protocol/gtk-shell.xml";
       hash = hash;
     };
+  # To get the new tag:
+  # git clone https://github.com/jetbrains/jetbrainsruntime
+  # cd jetbrainsruntime
+  # git tag --points-at [revision]
+  # Look for the line that starts with jbr-
+  javaVersion = "25.0.2";
+  build = "329.72";
 in
 callPackage ./common.nix
   {
     inherit jdk debugBuild withJcef;
   }
   {
-    # To get the new tag:
-    # git clone https://github.com/jetbrains/jetbrainsruntime
-    # cd jetbrainsruntime
-    # git tag --points-at [revision]
-    # Look for the line that starts with jbr-
-    javaVersion = "25.0.2";
-    build = "329.72";
+    inherit javaVersion build;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
     sourceDateEpoch = 1769205294;
     srcHash = "sha256-K4Izbij+1YO4UERHS0mwGKZX/VtIaxyNPZD068Vf99Q=";
