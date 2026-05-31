@@ -49,7 +49,6 @@ buildPythonPackage (finalAttrs: {
     bzip2
     charls
     lz4
-    # snappy
     # zfp
     zlib
     zstd
@@ -62,7 +61,6 @@ buildPythonPackage (finalAttrs: {
     "bz2"
     "charls"
     "lz4"
-    # "snappy" # not a standalone filter; provided via the snappy-enabled c-blosc above
     # "sperr" # not packaged?
     # "zfp" #  pkgconfig: (lib)zfp not found
     "zlib"
