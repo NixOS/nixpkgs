@@ -6,6 +6,7 @@
   ninja,
   llvmPackages,
   gtest,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -43,6 +44,10 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
