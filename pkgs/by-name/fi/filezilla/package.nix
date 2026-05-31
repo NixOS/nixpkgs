@@ -35,12 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
+    "--with-wx-prefix=${wxwidgets_3_2}"
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     wrapGAppsHook3
+    xdg-utils
   ];
 
   buildInputs = [
@@ -55,12 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     sqlite
     tinyxml
-    wxwidgets_3_2
     gtk3
-    xdg-utils
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+    )
+  '';
 
   meta = {
     homepage = "https://filezilla-project.org/";
