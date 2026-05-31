@@ -6,7 +6,7 @@
   copyDesktopItems,
   electron_41,
   nodejs-slim_24,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeDesktopItem,
@@ -22,7 +22,7 @@
 
 let
   nodejs-slim = nodejs-slim_24;
-  pnpm = pnpm_10_29_2.override { inherit nodejs-slim; };
+  pnpm = pnpm_10.override { inherit nodejs-slim; };
   electron = electron_41;
   appName = "Podman Desktop";
 in
