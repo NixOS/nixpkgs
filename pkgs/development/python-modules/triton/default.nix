@@ -42,7 +42,10 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage (finalAttrs: {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
   version = "3.7.0";
   pyproject = true;
@@ -105,9 +108,7 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace python/triton/runtime/build.py \
         --replace-fail \
           'cc = os.environ.get("CC")' \
-          'cc = os.environ.get("CC", "${
-            lib.getExe' (if cudaSupport then cudaPackages.backendStdenv.cc else stdenv.cc) "cc"
-          }")'
+          'cc = os.environ.get("CC", "${lib.getExe' effectiveStdenv.cc "cc"}")'
     ''
 
     # triton will try dlopening libcublas.so at runtime
@@ -178,9 +179,6 @@ buildPythonPackage (finalAttrs: {
     TRITON_OFFLINE_BUILD = true;
   }
   // lib.optionalAttrs cudaSupport {
-    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
-    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
-
     NIX_CFLAGS_COMPILE = toString [
       # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
       # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
@@ -220,7 +218,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    gpuCheck = stdenv.mkDerivation {
+    gpuCheck = effectiveStdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;
 
@@ -384,7 +382,7 @@ buildPythonPackage (finalAttrs: {
               if os.environ.get("HOME", None) == "/homeless-shelter":
                 os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
               if "CC" not in os.environ:
-                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+                os.environ["CC"] = "${lib.getExe' effectiveStdenv.cc "cc"}"
               torch.manual_seed(0)
               size = 12345
               x = torch.rand(size, device='cuda')
