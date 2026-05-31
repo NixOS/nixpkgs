@@ -36,6 +36,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/internetarchive/Zeno/releases/tag/v${finalAttrs.version}";
     mainProgram = "Zeno";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.RossSmyth ];
+    maintainers = [ ];
   };
 })
