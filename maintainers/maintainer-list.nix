@@ -19905,6 +19905,12 @@
     githubId = 7829481;
     name = "Noah Loomans";
   };
+  nmatavka = {
+    email = "teamhermes@gmx.com";
+    github = "nmatavka";
+    githubId = 50931263;
+    name = "Nick Matavka";
+  };
   nmattia = {
     email = "nicolas@nmattia.com";
     github = "nmattia";
