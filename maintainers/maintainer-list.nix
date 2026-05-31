@@ -16483,6 +16483,12 @@
     githubId = 8094643;
     keys = [ { fingerprint = "BAA9 7711 58CA D457 B4AE  8B06 8188 423D 2FA2 0A65"; } ];
   };
+  m4r1vs = {
+    email = "marius.niveri@gmail.com";
+    name = "Marius Niveri";
+    github = "m4r1vs";
+    githubId = 26097311;
+  };
   m7medvision = {
     name = "Mohammed";
     github = "m7medVision";
