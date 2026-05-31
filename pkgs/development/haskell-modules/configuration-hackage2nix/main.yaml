@@ -137,11 +137,14 @@ package-maintainers:
     - basic-sop
     - commutative-semigroups
     - generics-sop
+    - ghcide
     - ghcjs-base
     - ghcjs-dom
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haskell-debugger
+    - hie-bios
+    - hiedb
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
@@ -152,6 +155,9 @@ package-maintainers:
     - large-records
     - lens-sop
     - linux-namespaces
+    - lsp
+    - lsp-test
+    - lsp-types
     - monoidal-containers
     - proto-lens-arbitrary
     - proto3-suite
