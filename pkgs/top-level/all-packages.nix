@@ -3390,6 +3390,9 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+  temurin-bin-26 = javaPackages.compiler.temurin-bin.jdk-26;
+  temurin-jre-bin-26 = javaPackages.compiler.temurin-bin.jre-26;
+
   temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
   temurin-jre-bin-25 = javaPackages.compiler.temurin-bin.jre-25;
 
@@ -4855,11 +4858,9 @@ with pkgs;
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
-  python2 = python27;
   python3 = python313;
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  python2Packages = dontRecurseIntoAttrs python27Packages;
   python3Packages = dontRecurseIntoAttrs python313Packages;
 
   pypy = pypy2;
@@ -4868,16 +4869,6 @@ with pkgs;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
-  python2Full = python2.override {
-    self = python2Full;
-    pythonAttr = "python2Full";
-    x11Support = true;
-  };
-  python27Full = python27.override {
-    self = python27Full;
-    pythonAttr = "python27Full";
-    x11Support = true;
-  };
 
   # https://py-free-threading.github.io
   python313FreeThreading = python313.override {
@@ -4898,7 +4889,6 @@ with pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
-    python27
     python311
     python312
     python313
@@ -4914,7 +4904,6 @@ with pkgs;
   pythonPackagesExtensions = [ ];
 
   # Python package sets.
-  python27Packages = python27.pkgs;
   python311Packages = python311.pkgs;
   python312Packages = python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
@@ -7727,7 +7716,7 @@ with pkgs;
     lib.makeExtensible (
       self:
       lib.packagesFromDirectoryRecursive {
-        inherit (home-assistant.python.pkgs) callPackage;
+        inherit (home-assistant.python3Packages) callPackage;
         directory = ../servers/home-assistant/custom-components;
       }
     )
@@ -9378,10 +9367,6 @@ with pkgs;
   kubernetes-helmPlugins = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
-
-  lemonbar = callPackage ../applications/window-managers/lemonbar { };
-
-  lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
 
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
