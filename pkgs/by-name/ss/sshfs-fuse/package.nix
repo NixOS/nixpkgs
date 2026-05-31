@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sshfs-fuse";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     tag = "sshfs-${finalAttrs.version}";
-    hash = "sha256-6SFjYYWx+p9tZQ670nbjbPtH/QvCAGCB0YwkaQbKIqA=";
+    hash = "sha256-BT9qttXyryliR2kV1xVYvcwJhB6gkGf7IEwrTB38SvI=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/libfuse/sshfs/blob/${finalAttrs.src.tag}/ChangeLog.rst";
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     longDescription = macfuse-stubs.warning;
     homepage = "https://github.com/libfuse/sshfs";
