@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  config,
   autoconf-archive,
   autoreconfHook,
   cmocka,
@@ -19,21 +20,28 @@
   pkg-config,
   readline,
   sqlite,
-  autoAwaySupport ? true,
+
+  # Read from config.profanity, falling back to true
+  autoAwaySupport ? config.profanity.autoAwaySupport or true,
   libxscrnsaver,
   libx11,
-  notifySupport ? true,
+
+  notifySupport ? config.profanity.notifySupport or true,
   libnotify,
   gdk-pixbuf,
-  omemoSupport ? true,
+
+  omemoSupport ? config.profanity.omemoSupport or true,
   libsignal-protocol-c,
   libgcrypt,
   qrencode,
-  pgpSupport ? true,
+
+  pgpSupport ? config.profanity.pgpSupport or true,
   gpgme,
-  pythonPluginSupport ? true,
+
+  pythonPluginSupport ? config.profanity.pythonPluginSupport or true,
   python3,
-  traySupport ? true,
+
+  traySupport ? config.profanity.traySupport or true,
   gtk3,
 }:
 
@@ -44,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-fZFLEkbwiYeAtnqDOImV8aXbYGMqO9TEcXPFMuchJaE=";
   };
 
