@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   makeWrapper,
   openssl,
   pandoc,
@@ -59,7 +59,7 @@ buildGoModule (finalAttrs: {
   # as the setuid wrapper is required to use gocryptfs as non-root on NixOS
   postInstall = ''
     wrapProgram $out/bin/gocryptfs \
-      --suffix PATH : ${lib.makeBinPath [ fuse ]}
+      --suffix PATH : ${lib.makeBinPath [ fuse3 ]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 
