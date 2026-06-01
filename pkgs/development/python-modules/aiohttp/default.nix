@@ -41,6 +41,7 @@
   pytest-codspeed,
   pytest-cov-stub,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   re-assert,
@@ -48,7 +49,7 @@
   zlib-ng,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
   version = "3.14.0";
   pyproject = true;
@@ -56,7 +57,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RRXdDDkQlL7erfYgs4+gSy6GMlVUG7PrDLTQBYJJ1To=";
   };
 
@@ -99,7 +100,7 @@ buildPythonPackage rec {
     propcache
     yarl
   ]
-  ++ optional-dependencies.speedups;
+  ++ finalAttrs.passthru.optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
@@ -119,6 +120,7 @@ buildPythonPackage rec {
     pytest-codspeed
     pytest-cov-stub
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     re-assert
@@ -167,10 +169,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
+    changelog = "https://docs.aiohttp.org/en/${finalAttrs.src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
