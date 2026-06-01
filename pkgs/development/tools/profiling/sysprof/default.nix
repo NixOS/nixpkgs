@@ -70,6 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstall-static=false"
   ];
 
+  # need to only wrap the binaries in $out, otherwise $out<->$lib end up with a dependency cycle
+  dontWrapGApps = true;
+
+  postFixup = ''
+    for program in $out/bin/*; do
+      wrapProgram "$program" "''${gappsWrapperArgs[@]}"
+    done
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "sysprof";
