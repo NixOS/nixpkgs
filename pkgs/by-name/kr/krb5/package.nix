@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krb5";
-  version = "1.22.1";
+  version = "1.22.2";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor finalAttrs.version}/krb5-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GogyuMrZI+u/E5T2fi789B46SfRgKFpm41reyPoAU68=";
+    hash = "sha256-MkP/vI6k1Kwi3cfdKh3FTFeHTEBki2D/lwCXY1VOrxM=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
@@ -170,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://web.mit.edu/Kerberos/krb5-${lib.versions.majorMinor finalAttrs.version}/";
     description = "MIT Kerberos 5";
     homepage = "http://web.mit.edu/kerberos/";
     license = lib.licenses.mit;
