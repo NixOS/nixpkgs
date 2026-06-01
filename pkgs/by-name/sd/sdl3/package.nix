@@ -87,10 +87,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch =
-    # Tests timeout on Darwin
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      # intermittent test failure
+      # https://github.com/libsdl-org/SDL/issues/15346
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 20)' \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 300)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
