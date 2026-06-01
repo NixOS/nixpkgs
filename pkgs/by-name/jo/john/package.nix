@@ -18,6 +18,7 @@
   withOpenCL ? true,
   opencl-headers,
   ocl-icd,
+  libxcrypt-legacy,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
   replaceVars,
@@ -65,6 +66,8 @@ stdenv.mkDerivation {
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
+    "LDFLAGS=-L${libxcrypt-legacy}/lib"
+    "CPPFLAGS=-I${libxcrypt-legacy}/include"
   ]
   ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
@@ -77,6 +80,7 @@ stdenv.mkDerivation {
     zlib
     libpcap
     re2
+    libxcrypt-legacy
   ]
   ++ lib.optionals withOpenCL [
     opencl-headers
