@@ -85,7 +85,7 @@ let
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
   gnulib = fetchgit {
-    url = "https://git.savannah.gnu.org/git/gnulib.git";
+    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
     # NOTE: get $GNULIB_REVISION from bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
@@ -121,56 +121,60 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchgit {
-    url = "https://git.savannah.gnu.org/git/grub.git";
+    url = "https://https.git.savannah.gnu.org/git/grub.git";
     tag = "grub-${version}";
     hash = "sha256-Gkpde5CeJOQ+0p5WGwXZ2P881jxrWkuFw3Fh4lul/so=";
   };
 
-  patches = [
-    ./fix-bash-completion.patch
-    ./add-hidden-menu-entries.patch
-    ./bootstrap-po-downloads.patch
+  patches =
+    let
+      grubPatch = commit: "https://cgit.git.savannah.gnu.org/cgit/grub.git/patch/?id=${commit}";
+    in
+    [
+      ./fix-bash-completion.patch
+      ./add-hidden-menu-entries.patch
+      ./bootstrap-po-downloads.patch
 
-    /*
-      Restore gfxterm_menu (and cmdline_cat). The NixOS installer uses it.
+      /*
+        Restore gfxterm_menu (and cmdline_cat). The NixOS installer uses it.
 
-      I want to mention that dead code gets automatically removed by the bootstrapper.
-      This would include files like `grub-core/tests/gfxterm_menu.c`.
+        I want to mention that dead code gets automatically removed by the bootstrapper.
+        This would include files like `grub-core/tests/gfxterm_menu.c`.
 
-      Luckily for us, it doesn't have to be this way. We can re-run `autogen.sh`.
-    */
-    (fetchpatch {
-      name = "03_restore_gfxterm_menu.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ca2a91f43bf6e1df23a07c295534f871ddf2d401";
-      revert = true;
-      hash = "sha256-nFOoIyJqORY3I/mFGB9rcdpsnUcoUwfsQ7F+TQr4Aps=";
-    })
+        Luckily for us, it doesn't have to be this way. We can re-run `autogen.sh`.
+      */
+      (fetchpatch {
+        name = "03_restore_gfxterm_menu.patch";
+        url = grubPatch "ca2a91f43bf6e1df23a07c295534f871ddf2d401";
+        revert = true;
+        hash = "sha256-nFOoIyJqORY3I/mFGB9rcdpsnUcoUwfsQ7F+TQr4Aps=";
+      })
 
-    /*
-      The commit that we're reverting below breaks the `kernel.img` payload that's generated at runtime.
+      /*
+        The commit that we're reverting below breaks the `kernel.img` payload that's generated at runtime.
 
-      If we don't do this, we can't install GRUB.
-    */
-    (fetchpatch {
-      name = "01_fix_kernel-img_load_offset.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=1a5417f39a0ccefcdd5440f2a67f84d2d2e26960";
-      revert = true;
-      hash = "sha256-mHaVrzGs7uqYqSSAHOw1qgZSHLWG3CmVcZWrSLvVOy8=";
-    })
-    (fetchpatch {
-      name = "00_fix_kernel-img_load_offset.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb";
-      revert = true;
-      hash = "sha256-uYlS4r0frL62H35Bts+W9l4MOHCcoBGOhbCQtxU363s=";
-    })
-    # Required to build grub2_efi with GCC 16, or fails with "error: 'regparm'
-    # attribute ignored [-Werror=attributes]"
-    (fetchpatch {
-      name = "gcc16_make_regparm_attribute_more_conditional.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9922ed133c2c754ec9f37198da2b3e3e8a4fd5ff";
-      hash = "sha256-V2vffDxL/qQ14YN5scc3CFPBFBWvkh57dc5/hWd/6F4=";
-    })
-  ];
+        If we don't do this, we can't install GRUB.
+      */
+      (fetchpatch {
+        name = "01_fix_kernel-img_load_offset.patch";
+        url = grubPatch "1a5417f39a0ccefcdd5440f2a67f84d2d2e26960";
+        revert = true;
+        hash = "sha256-mHaVrzGs7uqYqSSAHOw1qgZSHLWG3CmVcZWrSLvVOy8=";
+      })
+      (fetchpatch {
+        name = "00_fix_kernel-img_load_offset.patch";
+        url = grubPatch "ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb";
+        revert = true;
+        hash = "sha256-uYlS4r0frL62H35Bts+W9l4MOHCcoBGOhbCQtxU363s=";
+      })
+
+      # Required to build grub2_efi with GCC 16, or fails with "error: 'regparm' attribute ignored [-Werror=attributes]"
+      (fetchpatch {
+        name = "gcc16_make_regparm_attribute_more_conditional.patch";
+        url = grubPatch "9922ed133c2c754ec9f37198da2b3e3e8a4fd5ff";
+        hash = "sha256-V2vffDxL/qQ14YN5scc3CFPBFBWvkh57dc5/hWd/6F4=";
+      })
+    ];
 
   postPatch = ''
     ${
