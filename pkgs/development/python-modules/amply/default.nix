@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amply";
   version = "0.1.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YUIRA8z44QZnFxFf55F2ENgx1VHGjTGhEIdqW2x4rqQ=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ris ];
     license = lib.licenses.epl10;
   };
-}
+})
