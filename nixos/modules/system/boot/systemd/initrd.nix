@@ -748,6 +748,8 @@ in
           };
           requiredBy = [ "initrd-fs.target" ];
           before = [ "initrd-fs.target" ];
+          requires = [ "initrd-root-fs.target" ];
+          after = [ "initrd-root-fs.target" ];
         }
       ];
 
