@@ -16,18 +16,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.09";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
     tag = finalAttrs.version;
-    hash = "sha256-s+93NoJ1O6/Af33pUobSA0kAhpw7W0IdA9H6CVxShQY=";
+    hash = "sha256-Rp7BgtJnV3fPed/QlWSxH8nL7cCTgMDpRGcgX5VI2l0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-2c8Q7+97jSGo8lwWOYBg76K04+TFXG1DdQzVMR8G7ik=";
+  vendorHash = "sha256-yAM1jzebUlNkVWiY8lPtlelfqpFQonNcAqNmmghCdPU=";
 
   ldflags = [
     "-s"
@@ -49,6 +49,9 @@ buildGoModule (finalAttrs: {
     wrapGAppsHook3
     writableTmpDirAsHomeHook
   ];
+
+  # git ls-files doesn't work as source is not a git repo
+  checkFlags = [ "-skip=^TestOldVersionLiteralsAreAllowlisted$" ];
 
   env.CGO_ENABLED = 1;
 
