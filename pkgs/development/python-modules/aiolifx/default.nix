@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiolifx";
     repo = "aiolifx";
     tag = version;
-    hash = "sha256-9FTsY/VFfzLlDEjF8ueBQxr30YasdQwei1/KfHiXwMo=";
+    hash = "sha256-v2001UY12HTi1pgugfRQSUg1R6uZAfVpwCASZZW9S0o=";
   };
 
   build-system = [ setuptools ];
