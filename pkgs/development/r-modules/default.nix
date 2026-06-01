@@ -2004,6 +2004,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    ramr = old.ramr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     roxigraph = old.roxigraph.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         LIBCLANG_PATH = "${lib.getLib pkgs.libclang}/lib";
