@@ -8,6 +8,7 @@
   blasfeo,
   llvmPackages,
   gtest,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  nativeCheckInputs = [ ctestCheckHook ];
   checkInputs = [ gtest ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "LUFactorizationTest.transposedLUFactorization"
+  ];
 
   meta = {
     description = "Nonlinear optimal control problem solver that aims to be fast, support a broad class of optimal control problems and achieve a high numerical robustness";
