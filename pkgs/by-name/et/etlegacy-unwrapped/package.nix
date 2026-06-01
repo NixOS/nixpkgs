@@ -19,6 +19,7 @@
   SDL2,
   sqlite,
   zlib,
+  versionCheckHook,
 }:
 let
   version = "2.84.0";
@@ -107,6 +108,9 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
     (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
