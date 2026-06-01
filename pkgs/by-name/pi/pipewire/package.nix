@@ -73,7 +73,6 @@
     x11Support
     && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
     && lib.meta.availableOn stdenv.hostPlatform ffado,
-  ldacBtDecodeSupport ? false,
   ffado,
   libselinux,
   libebur128,
@@ -243,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
-    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport && ldacBtDecodeSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
