@@ -6,14 +6,15 @@
 }:
 
 let
+  inherit (home-assistant) python3Packages;
+
   manifestRequirementsCheckHook = import ./manifest-requirements-check-hook.nix {
-    inherit makeSetupHook;
-    inherit (home-assistant) python;
+    inherit makeSetupHook python3Packages;
   };
 in
 
 lib.extendMkDerivation {
-  constructDrv = home-assistant.python.pkgs.buildPythonPackage;
+  constructDrv = python3Packages.buildPythonPackage;
   excludeDrvArgNames = [
     "meta"
     "nativeBuildInputs"
@@ -52,7 +53,7 @@ lib.extendMkDerivation {
       '';
 
       nativeBuildInputs =
-        with home-assistant.python.pkgs;
+        with home-assistant.python3Packages;
         [
           manifestRequirementsCheckHook
           packaging

@@ -2783,8 +2783,6 @@ with pkgs;
     }
   );
 
-  mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
-
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
 
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
@@ -2874,8 +2872,6 @@ with pkgs;
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
-  ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
-
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf_21;
   };
@@ -2885,8 +2881,6 @@ with pkgs;
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
-
-  openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openmvs = callPackage ../applications/science/misc/openmvs {
     inherit (llvmPackages) openmp;
@@ -3060,8 +3054,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
-
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
@@ -3084,13 +3076,7 @@ with pkgs;
 
   mpi = openmpi; # this attribute should used to build MPI applications
 
-  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
-
-  qmarkdowntextedit = libsForQt5.callPackage ../development/libraries/qmarkdowntextedit { };
-
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
-
-  radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
@@ -3200,8 +3186,6 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
-  subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
-
   sumorobot-manager =
     python3Packages.callPackage ../applications/science/robotics/sumorobot-manager
       { };
@@ -3247,8 +3231,6 @@ with pkgs;
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     extraFonts = true;
   };
-
-  tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   tinc = callPackage ../tools/networking/tinc { };
 
@@ -6265,8 +6247,6 @@ with pkgs;
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 
-  grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
-
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   # Not moved to aliases while we decide if we should split the package again.
@@ -6556,8 +6536,6 @@ with pkgs;
     ;
 
   libmicrohttpd = libmicrohttpd_1_0;
-
-  libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
   libpeas = callPackage ../development/libraries/libpeas { };
   libpeas2 = callPackage ../development/libraries/libpeas/2.x.nix { };
@@ -6937,8 +6915,6 @@ with pkgs;
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
-  pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
-
   inherit
     (callPackage ../development/libraries/physfs {
     })
@@ -7007,8 +6983,6 @@ with pkgs;
   nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
-
-  qdjango = libsForQt5.callPackage ../development/libraries/qdjango { };
 
   quartoMinimal = quarto.override {
     rWrapper = null;
@@ -7233,8 +7207,6 @@ with pkgs;
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
 
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix { };
-
-  structuresynth = libsForQt5.callPackage ../development/libraries/structuresynth { };
 
   szurubooru = callPackage ../servers/web-apps/szurubooru { };
 
@@ -7812,7 +7784,7 @@ with pkgs;
     lib.makeExtensible (
       self:
       lib.packagesFromDirectoryRecursive {
-        inherit (home-assistant.python.pkgs) callPackage;
+        inherit (home-assistant.python3Packages) callPackage;
         directory = ../servers/home-assistant/custom-components;
       }
     )
@@ -7908,8 +7880,6 @@ with pkgs;
       xclip
     ];
   };
-
-  mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
 
@@ -8868,8 +8838,6 @@ with pkgs;
 
   activitywatch = callPackage ../applications/office/activitywatch/wrapper.nix { };
 
-  masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
-
   inherit
     ({
       pdfstudio2021 = callPackage ../applications/misc/pdfstudio { year = "2021"; };
@@ -9304,11 +9272,7 @@ with pkgs;
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix { };
 
-  manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
-
   minari = python3Packages.toPythonApplication python3Packages.minari;
-
-  molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
@@ -9512,10 +9476,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  lemonbar = callPackage ../applications/window-managers/lemonbar { };
-
-  lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
-
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
   libreoffice = hiPrio libreoffice-still;
@@ -9606,8 +9566,6 @@ with pkgs;
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
-
-  moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
   mopidyPackages = recurseIntoAttrs (
     callPackages ../applications/audio/mopidy {
@@ -9834,8 +9792,6 @@ with pkgs;
 
   qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
 
-  qelectrotech = libsForQt5.callPackage ../applications/misc/qelectrotech { };
-
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
@@ -9853,8 +9809,6 @@ with pkgs;
   };
 
   wrapQemuBinfmtP = callPackage ../by-name/qe/qemu/binfmt-p-wrapper.nix { };
-
-  qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
@@ -10096,6 +10050,7 @@ with pkgs;
   thunderbird-bin = thunderbird-latest-bin;
   thunderbird-latest-bin = wrapThunderbird thunderbird-latest-bin-unwrapped {
     pname = "thunderbird-bin";
+    libName = "thunderbird-bin-${thunderbird-latest-bin-unwrapped.version}";
   };
   thunderbird-latest-bin-unwrapped =
     callPackage ../applications/networking/mailreaders/thunderbird-bin
@@ -10104,6 +10059,7 @@ with pkgs;
       };
   thunderbird-esr-bin = wrapThunderbird thunderbird-esr-bin-unwrapped {
     pname = "thunderbird-esr-bin";
+    libName = "thunderbird-bin-${thunderbird-esr-bin-unwrapped.version}";
   };
   thunderbird-esr-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_esr_sources.nix;
@@ -11061,8 +11017,6 @@ with pkgs;
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 
-  wolfram-engine = libsForQt5.callPackage ../applications/science/math/wolfram-engine { };
-
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
@@ -11328,8 +11282,6 @@ with pkgs;
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
     python3 = python312; # fails to build otherwise
   };
-
-  vite = libsForQt5.callPackage ../applications/science/misc/vite { };
 
   ### SCIENCE / PHYSICS
 
