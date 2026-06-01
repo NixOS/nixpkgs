@@ -43,15 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
@@ -59,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs)
       src
       missingHashes
-      patches
-      postPatch
       ;
     hash = releaseData.deps_hash;
   };

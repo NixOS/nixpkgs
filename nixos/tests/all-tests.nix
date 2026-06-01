@@ -455,7 +455,6 @@ in
   dependency-track = runTest ./dependency-track.nix;
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
-  dhparams = runTest ./dhparams.nix;
   dictd = runTest ./dictd.nix;
   disable-installer-tools = runTest ./disable-installer-tools.nix;
   discourse = runTest {
@@ -495,6 +494,7 @@ in
   drupal = runTest ./drupal.nix;
   dublin-traceroute = runTest ./dublin-traceroute.nix;
   dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
+  e57inspector = runTest ./e57inspector.nix;
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
@@ -1759,10 +1759,6 @@ in
   utils = import ./utils { inherit runTest; };
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
-  varnish60 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish60;
-  };
   varnish80 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish80;

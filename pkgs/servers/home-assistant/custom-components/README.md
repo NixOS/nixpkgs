@@ -12,7 +12,7 @@ function arguments. Pass them into `dependencies` for them to
 be available to Home Assistant.
 
 Out-of-tree components need to use Python packages from
-`home-assistant.python.pkgs` as to not introduce conflicting package
+`home-assistant.python3Pacakges` as to not introduce conflicting package
 versions into the Python environment.
 
 

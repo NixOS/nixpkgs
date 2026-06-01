@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./dev-prefix.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -44,11 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
-    # On Linux, this would be disabled by default but we have -Dauto_features=enabled.
-    # Disable it on other platforms too, since I cannot test it there.
-    "-Drelocatable-bundle=no"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Docs are opt-out in native but opt-in in cross builds.
@@ -60,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Image pixel format conversion library";

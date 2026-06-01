@@ -4936,6 +4936,8 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
+  ecoji = callPackage ../development/python-modules/ecoji { };
+
   ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
@@ -8985,7 +8987,6 @@ self: super: with self; {
       p.overrideAttrs (super: {
         meta = super.meta // {
           outputsToInstall = [ "py" ];
-          broken = super.meta.broken or isPy27;
         };
       })
     )
@@ -21863,6 +21864,8 @@ self: super: with self; {
   zabbix-utils = callPackage ../development/python-modules/zabbix-utils { };
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
+
+  zalgolib = callPackage ../development/python-modules/zalgolib { };
 
   zamg = callPackage ../development/python-modules/zamg { };
 

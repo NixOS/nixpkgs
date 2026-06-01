@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
   version = "0.4.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
@@ -60,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     makeWrapper ${nodejs}/bin/node $out/bin/ctx7 \
       --add-flags "$out/lib/ctx7/dist/index.js"
+
+    cp -R $src/{plugins,rules,skills} $out
 
     runHook postInstall
   '';

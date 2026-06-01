@@ -125,6 +125,9 @@ in
     (mkRemovedOptionModule [ "programs" "yabar" ]
       "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
     )
+    (mkRemovedOptionModule [ "security" "dhparams" ] ''
+      The security.dhparams module has been removed as RFC 7919 has shown that generating your own params is problematic.
+    '')
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.

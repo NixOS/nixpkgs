@@ -107,7 +107,6 @@ let
       maintainers = with lib.maintainers; [
         louis-thevenet
         getchoo
-        RossSmyth
       ];
     };
   });
