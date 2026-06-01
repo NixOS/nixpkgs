@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
   version = "0.1.58";
 
   src = fetchFromGitHub {
-    owner = "jy-tan";
+    owner = "fencesandbox";
     repo = "fence";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ACe3N4bXYJW6QDQHtRChFWOTXTZTbEUbZ4d8cuFRqMY=";
