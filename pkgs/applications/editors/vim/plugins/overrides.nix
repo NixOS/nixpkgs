@@ -2809,6 +2809,13 @@ assertNoAdditions {
     ];
   };
 
+  neotest-bun = super.neotest-bun.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+  };
+
   neotest-ctest = super.neotest-ctest.overrideAttrs {
     dependencies = with self; [
       neotest
