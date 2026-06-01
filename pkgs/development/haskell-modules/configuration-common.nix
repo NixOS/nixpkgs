@@ -1335,10 +1335,6 @@ with haskellLib;
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
-  # The test suite depends on an impure cabal-install installation in
-  # $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck super.cabal-install-parsers;
-
   # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
 
@@ -1839,29 +1835,47 @@ with haskellLib;
   # https://github.com/minimapletinytools/linear-tests/issues/1
   linear-tests = dontCheck super.linear-tests;
 
-  # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
-  # 2024-03-21: pins specific version of ShellCheck
   # 2025-03-10: jailbreak, https://github.com/haskell-CI/haskell-ci/issues/771
-  haskell-ci = doJailbreak (
-    super.haskell-ci.overrideScope (
-      self: super: {
-        Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-        ShellCheck = self.ShellCheck_0_9_0;
+  haskell-ci = lib.pipe super.haskell-ci [
+    (warnAfterVersion "0.18.1")
+    (overrideSrc {
+      # ATTN: also update cabal-install-parsers version below
+      version = "0.19.20260331-unstable-2026-04-15";
+      src = pkgs.fetchFromGitHub {
+        owner = "haskell-CI";
+        repo = "haskell-ci";
+        rev = "30692865b767dcab15086e63f2f4fd3d3d1fe8a5";
+        hash = "sha256-t1urzATbWwdRWkpCygg2kLZ3i8/0qG9ZOjDsNpnUBt0=";
+      };
+    })
+    (addBuildDepends [ self.tasty-hunit ])
+    # https://github.com/haskell-CI/haskell-ci/issues/819
+    doJailbreak
+    (
+      haskell-ci:
+      haskell-ci.override {
+        ShellCheck = self.ShellCheck_0_10_0;
+        cabal-install-parsers = lib.pipe self.cabal-install-parsers [
+          (warnAfterVersion "0.6.3")
+          (overrideSrc {
+            version = "0.6.4-unstable-2026-04-15";
+            inherit (self.haskell-ci) src;
+          })
+          (overrideCabal {
+            # Too strict bounds on tree-diff, tar
+            # https://github.com/haskell-CI/haskell-ci/issues/807
+            jailbreak = true;
+            postUnpack = ''
+              sourceRoot+="/cabal-install-parsers"
+            '';
+          })
+        ];
       }
     )
-  );
+  ];
 
-  # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
-  # https://github.com/koalaman/shellcheck/issues/2677
-  ShellCheck_0_9_0 = doJailbreak (
-    appendPatches [
-      (fetchpatch {
-        name = "shellcheck-fgl-5.8.1.1.patch";
-        url = "https://github.com/koalaman/shellcheck/commit/c05380d518056189412e12128a8906b8ca6f6717.patch";
-        sha256 = "0gbx46x1a2sh5mvgpqxlx9xkqcw4wblpbgqdkqccxdzf7vy50xhm";
-      })
-    ] super.ShellCheck_0_9_0
-  );
+  # Allow QuickCheck >= 2.16
+  ShellCheck_0_10_0 = doDistribute (doJailbreak super.ShellCheck_0_10_0);
 
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
