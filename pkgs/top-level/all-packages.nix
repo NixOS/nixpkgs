@@ -9639,9 +9639,7 @@ with pkgs;
       ;
   };
 
-  peaclock = callPackage ../applications/misc/peaclock {
-    stdenv = gccStdenv;
-  };
+  peaclock = callPackage ../applications/misc/peaclock { };
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
