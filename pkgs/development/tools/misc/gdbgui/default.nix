@@ -9,11 +9,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gdbgui";
 
   version = "0.15.3.0";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   buildInputs = [ gdb ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     eventlet
     flask-compress
     flask-socketio
