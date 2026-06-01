@@ -102,6 +102,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
       sed -i "1i #include <cstdint>" backends/apple/coreml/runtime/inmemoryfs/memory_buffer.hpp
       sed -i "1i #include <cstdint>" extension/llm/tokenizers/third-party/sentencepiece/src/sentencepiece_processor.h
+    ''
+    + ''
+      substituteInPlace extension/llm/tokenizers/test/test_python_bindings.py \
+        --replace-fail \
+          'self.assertEqual(pytorch_tokenizers.__version__, "0.1.0")' \
+          'self.assertEqual(pytorch_tokenizers.__version__, "${pytorch-tokenizers.version}")'
     '';
 
   env = {

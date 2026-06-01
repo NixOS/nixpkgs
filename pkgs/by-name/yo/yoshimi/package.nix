@@ -14,7 +14,6 @@
   libxdmcp,
   lv2,
   minixml,
-  pcre,
   pkg-config,
   readline,
   libpthread-stubs,
@@ -56,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     lv2
     minixml
-    pcre
     readline
     libpthread-stubs
     zlib

@@ -4,6 +4,8 @@
   symlinkJoin,
   fetchurl,
   fetchzip,
+  makeWrapper,
+  runCommand,
   scons,
   zlib,
   libiconv,
@@ -29,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ scons ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   env = {
@@ -67,6 +69,36 @@ stdenv.mkDerivation (finalAttrs: {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
+  # NSIS can crash when compiling Unicode installers under non-UTF-8 locales on macOS
+  # see https://sourceforge.net/p/nsis/bugs/1165/ for more info
+  # code adapted from the makensis formulae in Homebrew
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapProgram $out/bin/makensis \
+      --run '
+        case "''${LC_ALL:-}" in
+          *UTF-8*|*utf8*) ;;
+          "")
+            case "''${LC_CTYPE:-} ''${LANG:-}" in
+              *UTF-8*|*utf8*) ;;
+              *) export LC_ALL=en_US.UTF-8 ;;
+            esac
+            ;;
+          *) export LC_ALL=en_US.UTF-8 ;;
+        esac
+      '
+  '';
+
+  passthru.tests = {
+    compile-bigtest =
+      runCommand "nsis-compile-bigtest" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+        ''
+          pushd ${finalAttrs.srcWinDistributable}/Examples >/dev/null
+          makensis bigtest.nsi "-XOutfile /dev/null"
+          popd >/dev/null
+          touch $out
+        '';
+  };
+
   meta = {
     description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
@@ -74,6 +106,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pombeirp ];
     mainProgram = "makensis";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
