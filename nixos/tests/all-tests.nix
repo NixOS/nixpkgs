@@ -1749,6 +1749,7 @@ in
   warzone2100 = runTest ./warzone2100.nix;
   wasabibackend = runTest ./wasabibackend.nix;
   wastebin = runTest ./wastebin.nix;
+  watcharr = runTest ./watcharr.nix;
   watchdogd = runTest ./watchdogd.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
