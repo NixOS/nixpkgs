@@ -10,6 +10,7 @@ let
     literalExpression
     maintainers
     mkDefault
+    mkEnableOption
     mkIf
     mkOption
     mkRemovedOptionModule
@@ -66,6 +67,8 @@ in
   options = {
 
     services.getty = {
+
+      enable = mkEnableOption "getty";
 
       autologinUser = mkOption {
         type = types.nullOr types.str;
@@ -143,7 +146,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.console.enable {
+  config = mkIf cfg.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';

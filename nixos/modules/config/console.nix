@@ -162,6 +162,8 @@ in
     (lib.mkIf cfg.enable (
       lib.mkMerge [
         {
+          services.getty.enable = true;
+
           environment.systemPackages = [ pkgs.kbd ];
 
           # Let systemd-vconsole-setup.service do the work of setting up the

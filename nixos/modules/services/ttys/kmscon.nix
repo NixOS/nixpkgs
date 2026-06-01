@@ -148,6 +148,8 @@ in
       }
     ];
 
+    services.getty.enable = true;
+
     services.kmscon.config = lib.mkIf cfg.useXkbConfig (
       lib.mapAttrs (_: lib.mkDefault) (
         lib.filterAttrs (_: v: v != "") {
@@ -189,14 +191,9 @@ in
 
       restartIfChanged = false;
       # logind spawns autovt@ttyN.service on VT switch; point it at kmscon
+      # getty module also uses autovt@tty1 to pull tty1 in
       aliases = [ "autovt@.service" ];
     };
-
-    # tty1 is special: logind does not spawn autovt@tty1, it expects a static
-    # pull-in via getty.target. With getty@ suppressed, we must replace it.
-    systemd.targets.getty.wants = lib.mkIf (!config.services.displayManager.enable) [
-      "kmsconvt@tty1.service"
-    ];
 
     systemd.suppressedSystemUnits = [ "getty@.service" ];
 
