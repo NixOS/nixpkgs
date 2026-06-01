@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.13.5";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-bAP1/a2COHbe+39KY3GHXSo1Iq9x9xX8O2mLhmFlMlE=";
+    hash = "sha256-RRXdDDkQlL7erfYgs4+gSy6GMlVUG7PrDLTQBYJJ1To=";
   };
 
   postPatch = ''
@@ -68,6 +68,10 @@ buildPythonPackage rec {
     # don't install Cython using pip
     substituteInPlace Makefile \
       --replace-fail "cythonize: .install-cython" "cythonize:"
+
+    # don't depend on coverage for tests
+    substituteInPlace setup.cfg \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   '';
 
   build-system = [
