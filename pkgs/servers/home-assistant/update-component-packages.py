@@ -34,7 +34,7 @@ from rich.console import Console
 from rich.table import Table
 
 COMPONENT_PREFIX = "homeassistant.components"
-PKG_SET = "home-assistant.python.pkgs"
+PKG_SET = "home-assistant.python3Packages"
 
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
