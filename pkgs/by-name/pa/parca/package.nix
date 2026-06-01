@@ -10,13 +10,13 @@
   stdenv,
 }:
 let
-  version = "0.27.1";
+  version = "0.28.0";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-pI2SV2BiBqqga4RADEE5Z0FffdGb3fxhRRNj4S9Hxzc=";
+    hash = "sha256-7ndRiOYa7HiOwwHRXqeCr3A+5EAVvbo4I4vkoqSya+E=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ let
       inherit (finalAttrs) pname src version;
       pnpm = pnpm_9;
       fetcherVersion = 3;
-      hash = "sha256-3eICZpJJacvcD9MGQ9AmoMMnlcNt/LCxIIM+H+oJdR8=";
+      hash = "sha256-zHdMwJyeafzbIlp+Fhh1khcUVrLsoUg6ViSGm/ByGAA=";
     };
 
     nativeBuildInputs = [
@@ -61,7 +61,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-dAFGcavDaN1vW4SdjZ78IRWCnfqaRipLOQHc+V6MuDw=";
+  vendorHash = "sha256-eZPAgxOi1jgTHmisFG/Sz2y3vhxUu/L3Iodb5mrKnVs=";
 
   ldflags = [
     "-X=main.version=${version}"

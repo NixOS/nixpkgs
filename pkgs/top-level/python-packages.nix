@@ -2472,6 +2472,8 @@ self: super: with self; {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  caldav_2 = callPackage ../development/python-modules/caldav/2.nix { };
+
   callee = callPackage ../development/python-modules/callee { };
 
   calmjs = callPackage ../development/python-modules/calmjs { };
@@ -2748,8 +2750,6 @@ self: super: with self; {
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
   chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
-
-  chromaprint = callPackage ../development/python-modules/chromaprint { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
 
@@ -3711,6 +3711,8 @@ self: super: with self; {
   dbfread = callPackage ../development/python-modules/dbfread { };
 
   dbglib = callPackage ../development/python-modules/dbglib { };
+
+  dbgpu = callPackage ../development/python-modules/dbgpu { };
 
   dbt-adapters = callPackage ../development/python-modules/dbt-adapters { };
 
@@ -4936,6 +4938,8 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
+  ecoji = callPackage ../development/python-modules/ecoji { };
+
   ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
@@ -5700,6 +5704,8 @@ self: super: with self; {
   flasgger = callPackage ../development/python-modules/flasgger { };
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
+
+  flash-attn-4 = callPackage ../development/python-modules/flash-attn-4 { };
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
@@ -8378,8 +8384,6 @@ self: super: with self; {
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
-  keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
-
   kegtron-ble = callPackage ../development/python-modules/kegtron-ble { };
 
   keke = callPackage ../development/python-modules/keke { };
@@ -8728,8 +8732,6 @@ self: super: with self; {
       }
     )).py;
 
-  ledger-agent = callPackage ../development/python-modules/ledger-agent { };
-
   ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
@@ -8989,7 +8991,6 @@ self: super: with self; {
       p.overrideAttrs (super: {
         meta = super.meta // {
           outputsToInstall = [ "py" ];
-          broken = super.meta.broken or isPy27;
         };
       })
     )
@@ -9531,8 +9532,6 @@ self: super: with self; {
   lzfse = callPackage ../development/python-modules/lzfse { };
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
-
-  m2r = callPackage ../development/python-modules/m2r { };
 
   m3u8 = callPackage ../development/python-modules/m3u8 { };
 
@@ -11637,10 +11636,6 @@ self: super: with self; {
   online-judge-api-client = callPackage ../development/python-modules/online-judge-api-client { };
 
   online-judge-tools = callPackage ../development/python-modules/online-judge-tools { };
-
-  online-judge-verify-helper =
-    callPackage ../development/python-modules/online-judge-verify-helper
-      { };
 
   onlinepayments-sdk-python3 =
     callPackage ../development/python-modules/onlinepayments-sdk-python3
@@ -16691,6 +16686,8 @@ self: super: with self; {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  quack-kernels = callPackage ../development/python-modules/quack-kernels { };
+
   quadprog = callPackage ../development/python-modules/quadprog { };
 
   qualysclient = callPackage ../development/python-modules/qualysclient { };
@@ -16903,6 +16900,8 @@ self: super: with self; {
   redis = callPackage ../development/python-modules/redis { };
 
   redis-om = callPackage ../development/python-modules/redis-om { };
+
+  redisvl = callPackage ../development/python-modules/redisvl { };
 
   redshift-connector = callPackage ../development/python-modules/redshift-connector { };
 
@@ -20930,6 +20929,8 @@ self: super: with self; {
 
   uploadserver = callPackage ../development/python-modules/uploadserver { };
 
+  upnpclient = callPackage ../development/python-modules/upnpclient { };
+
   upnpy = callPackage ../development/python-modules/upnpy { };
 
   uproot = callPackage ../development/python-modules/uproot { };
@@ -21134,7 +21135,7 @@ self: super: with self; {
 
   vilfo-api-client = callPackage ../development/python-modules/vilfo-api-client { };
 
-  vina = callPackage ../applications/science/chemistry/autodock-vina/python-bindings.nix { };
+  vina = callPackage ../by-name/au/autodock-vina/python-bindings.nix { };
 
   vincenty = callPackage ../development/python-modules/vincenty { };
 
@@ -21869,6 +21870,8 @@ self: super: with self; {
   zabbix-utils = callPackage ../development/python-modules/zabbix-utils { };
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
+
+  zalgolib = callPackage ../development/python-modules/zalgolib { };
 
   zamg = callPackage ../development/python-modules/zamg { };
 

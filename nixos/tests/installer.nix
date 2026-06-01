@@ -1118,6 +1118,7 @@ let
         enableOCR = fallback;
         extraInstallerConfig = {
           boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
           environment.systemPackages = with pkgs; [ clevis ];
         };
         createPartitions = ''
@@ -1276,6 +1277,7 @@ in
   separateBootZfs = makeInstallerTest "separateBootZfs" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
@@ -1348,6 +1350,7 @@ in
   zfsroot = makeInstallerTest "zfs-root" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''

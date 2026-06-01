@@ -275,9 +275,16 @@ in
             k3s = ''
               machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik")
             '';
-            rke2 = ''
-              machine.wait_until_succeeds("kubectl -n kube-system rollout status daemonset rke2-ingress-nginx-controller")
-            '';
+            rke2 =
+              # Starting from v1.36, RKE2 also uses traefik as default load balancer
+              if lib.versionAtLeast rancherPackage.version "1.36" then
+                ''
+                  machine.wait_until_succeeds("kubectl -n kube-system rollout status daemonset rke2-traefik")
+                ''
+              else
+                ''
+                  machine.wait_until_succeeds("kubectl -n kube-system rollout status daemonset rke2-ingress-nginx-controller")
+                '';
           }
           .${rancherDistro}
         }

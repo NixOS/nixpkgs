@@ -5,11 +5,11 @@
 }:
 
 let
-  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python3Packages;
   inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
-  extraCheckInputs = with home-assistant.python.pkgs; {
+  extraCheckInputs = with home-assistant.python3Packages; {
     alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
@@ -185,7 +185,7 @@ lib.listToAttrs (
 
         nativeCheckInputs =
           old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ home-assistant.getPackages component home-assistant.python3Packages
           ++ extraCheckInputs.${component} or [ ];
 
         disabledTests = extraDisabledTests.${component} or [ ];

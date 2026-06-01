@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddcutil-service";
-  version = "1.0.14";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "digitaltrails";
     repo = "ddcutil-service";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IZ6s9z0zxMZT7qd+yuQJGLnKc1WISIvhJlIGsM/Dw3w=";
+    hash = "sha256-r66Ua+4jGl1wFEX3RoRHN60GujNApGbDHtJnVDtP3Z4=";
   };
 
   nativeBuildInputs = [

@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
     owner = "RJVB";
     repo = "afsctool";
     tag = "v${version}";
-    hash = "sha256-cZ0P9cygj+5GgkDRpQk7P9z8zh087fpVfrYXMRRVUAI=";
+    fetchSubmodules = true;
+    gitConfigFile = builtins.toFile "gitconfig" ''
+      [url "https://github.com/"]
+      insteadOf = "git://github.com/"
+    '';
+    hash = "sha256-irWPQnnV5mHZS7pw9PAWp6MO/3MahKaOIZCr6awcwEg=";
   };
 
   cmakeFlags = [

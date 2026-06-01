@@ -1300,6 +1300,19 @@ in
     '';
   };
 
+  vicious = prev.vicious.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [
+        makefu
+        mic92
+        mrcjkb
+        McSinyx
+      ];
+      platforms = lib.platforms.linux;
+    };
+  });
+
   vstruct = prev.vstruct.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = luaOlder "5.1" || luaAtLeast "5.4";

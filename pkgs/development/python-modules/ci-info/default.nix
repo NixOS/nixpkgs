@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   pytest,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
   pname = "ci-info";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

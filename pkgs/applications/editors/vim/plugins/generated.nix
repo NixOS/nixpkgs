@@ -5544,6 +5544,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  eldritch-nvim = buildVimPlugin {
+    pname = "eldritch.nvim";
+    version = "0-unstable-2026-05-12";
+    src = fetchFromGitHub {
+      owner = "eldritch-theme";
+      repo = "eldritch.nvim";
+      rev = "c9131a5a11f00a2f428f563a4eb2c4aeb680d963";
+      hash = "sha256-7gK3a2zwQqDgdfeIMfsSHyMIEa4oVBwDAKYHaFqyBFw=";
+    };
+    meta.homepage = "https://github.com/eldritch-theme/eldritch.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   elixir-tools-nvim = buildVimPlugin {
     pname = "elixir-tools.nvim";
     version = "0.18.0";
@@ -7155,6 +7169,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  harpoon-lualine = buildVimPlugin {
+    pname = "harpoon-lualine";
+    version = "0-unstable-2025-07-28";
+    src = fetchFromGitHub {
+      owner = "letieu";
+      repo = "harpoon-lualine";
+      rev = "215c0847dfb787b19268f7b42eed83bdcf06b966";
+      hash = "sha256-HGbz/b2AVl8145BCy8I47dDrhBVMSQQIr+mWbOrmj5Q=";
+    };
+    meta.homepage = "https://github.com/letieu/harpoon-lualine/";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   harpoon2 = buildVimPlugin {
     pname = "harpoon2";
     version = "0-unstable-2025-10-31";
@@ -8147,6 +8175,20 @@ final: prev: {
     };
     meta.homepage = "https://git.myzel394.app/Myzel394/jsonfly.nvim";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  jujutsu-nvim = buildVimPlugin {
+    pname = "jujutsu.nvim";
+    version = "0-unstable-2026-05-14";
+    src = fetchFromGitHub {
+      owner = "yannvanhalewyn";
+      repo = "jujutsu.nvim";
+      rev = "17ab008d71cbcd31f8c2891e11cb758579f597c0";
+      hash = "sha256-KygJ73YZNPtTfECWyrwK86AfO7jXDEfIMFia3yvorM0=";
+    };
+    meta.homepage = "https://github.com/yannvanhalewyn/jujutsu.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11213,6 +11255,20 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/rcasia/neotest-bash/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  neotest-bun = buildVimPlugin {
+    pname = "neotest-bun";
+    version = "0-unstable-2026-01-05";
+    src = fetchFromGitHub {
+      owner = "Arthur944";
+      repo = "neotest-bun";
+      rev = "af0f8684cd00a96f1e0359f1aeff2b9bf7a0ec88";
+      hash = "sha256-Y1I0zW8S8/Fz46rPIkHzTGbm7C8BXOfjq+V19YrzPlo=";
+    };
+    meta.homepage = "https://github.com/Arthur944/neotest-bun/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
@@ -15341,6 +15397,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/vim-scripts/rcshell.vim/";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  reactive-nvim = buildVimPlugin {
+    pname = "reactive.nvim";
+    version = "1.2.1";
+    src = fetchFromGitHub {
+      owner = "rasulomaroff";
+      repo = "reactive.nvim";
+      tag = "v1.2.1";
+      hash = "sha256-LZCCboM/fw+Kw6wVskrPs6nr4SFLoD0pi6EMxSIGelw=";
+    };
+    meta.homepage = "https://github.com/rasulomaroff/reactive.nvim/";
+    meta.license = getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 

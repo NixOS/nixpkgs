@@ -150,7 +150,6 @@ let
       }"
       overrides;
 in
-
 assertNoAdditions {
   # keep-sorted start case=no block=yes newline_separated=yes
   ack-vim = super.ack-vim.overrideAttrs (old: {
@@ -1420,6 +1419,13 @@ assertNoAdditions {
     dependencies = [ self.nvim-lspconfig ];
   };
 
+  eldritch-nvim = super.eldritch-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "A theme for the Ancient Ones! (NVIM)";
+      maintainers = with lib.maintainers; [ neonvoid ];
+    };
+  });
+
   elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     fixupPhase = ''
@@ -1572,7 +1578,6 @@ assertNoAdditions {
     ];
     dependencies = [ self.fzf-vim ];
     passthru = old.passthru // {
-
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
   });
@@ -1769,6 +1774,13 @@ assertNoAdditions {
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  harpoon-lualine = super.harpoon-lualine.overrideAttrs {
+    dependencies = [
+      self.lualine-nvim
+      self.harpoon2
+    ];
   };
 
   harpoon2 = super.harpoon2.overrideAttrs {
@@ -2799,6 +2811,13 @@ assertNoAdditions {
     dependencies = with self; [
       neotest
       plenary-nvim
+    ];
+  };
+
+  neotest-bun = super.neotest-bun.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
     ];
   };
 
@@ -4115,7 +4134,6 @@ assertNoAdditions {
           }
       '';
     };
-
   });
 
   rtorrent-syntax-file = super.rtorrent-syntax-file.overrideAttrs (old: {
@@ -4412,6 +4430,7 @@ assertNoAdditions {
       # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
       pythonWrapper =
         writeText "evinceSync-wrapper.py" # python
+
           ''
             #!${python3}/bin/python3
             import os
@@ -4817,7 +4836,6 @@ assertNoAdditions {
        --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
        --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
     '';
-
   };
 
   unicode-vim =
@@ -5783,6 +5801,12 @@ assertNoAdditions {
 
   vim-tabby = super.vim-tabby.overrideAttrs {
   };
+
+  vim-table-mode = super.vim-table-mode.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-tabpagecd = super.vim-tabpagecd.overrideAttrs (old: {
     meta = old.meta // {

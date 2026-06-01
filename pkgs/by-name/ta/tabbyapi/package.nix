@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-01-20";
+  version = "0-unstable-2026-05-29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "54e3ea1fb30c48217f82dcb4ab1359f4784da4c8";
-    hash = "sha256-cwxpW4s8LKxS+2A2Grfhx8XaxbfT8U1LG59yhbu1lD8=";
+    rev = "95c1101bd2a18abec818a1bc2eb013438d1b55d0";
+    hash = "sha256-VOHoPD8tb1ewOQL4LOhAYxsMBrahLAIEppYA8BXHOfc=";
   };
 
   build-system = with python3Packages; [
@@ -53,6 +53,7 @@ python3Packages.buildPythonApplication {
       psutil
       httptools
       pillow
+      requests
       numpy
       setuptools
 

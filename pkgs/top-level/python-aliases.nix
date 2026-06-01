@@ -131,6 +131,7 @@ mapAliases {
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
   chart-studio = throw "'chart-studio' has been removed as it is no longer maintained upstream"; # Added 2026-03-12
+  chromeprint = throw "'chromaprint' was removed as it depended on m2r which was removed."; # Added 2026-05-27
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
@@ -293,7 +294,8 @@ mapAliases {
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
   kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
-  keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-29
+  keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
+  keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   Keras = throw "'Keras' has been renamed to/replaced by 'keras'"; # Converted to throw 2025-10-29
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25
@@ -305,7 +307,8 @@ mapAliases {
   lazy_imports = throw "'lazy_imports' has been renamed to/replaced by 'lazy-imports'"; # Converted to throw 2025-10-29
   lcov_cobertura = throw "'lcov_cobertura' has been renamed to/replaced by 'lcov-cobertura'"; # Converted to throw 2025-10-29
   ldap = throw "'ldap' has been renamed to/replaced by 'python-ldap'"; # Converted to throw 2025-10-29
-  ledger_agent = throw "'ledger_agent' has been renamed to/replaced by 'ledger-agent'"; # Converted to throw 2025-10-29
+  ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
+  ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   libarcus = throw "'libarcus' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   libgpiod = gpiod; # added 2026-03-30
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
@@ -327,6 +330,7 @@ mapAliases {
   lsprotocol_2025 = lsprotocol; # added 2026-01-05
   lxml-stubs = throw "'lxml-stubs' has been removed as it was broken and unmaintained upstream. Consider using 'types-lxml' instead."; # Converted to throw 2025-11-07
   lzstring = throw "'lzstring' has been removed as it was unmaintained upstream"; # Added 2025-11-22
+  m2r = throw "'m2r' has been removed because it was marked broken for a long time."; # Added 2026-05-27
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29

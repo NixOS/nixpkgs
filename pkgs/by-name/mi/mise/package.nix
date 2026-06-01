@@ -86,6 +86,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
 
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     installManPage ./man/man1/mise.1
 

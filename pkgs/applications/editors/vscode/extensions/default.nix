@@ -1007,8 +1007,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.14.5";
-          hash = "sha256-08GsGOtgLhq5vLpQ9VDdVk/q5VSW6d7cXXflNQOpB50=";
+          version = "1.14.6";
+          hash = "sha256-dABM44pSD0srzNl6J+1OsqugWb++soVFmtEIzliByDs=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.5.1777808848";
-          hash = "sha256-HzevH4HO9QVkSwARx5EF5ylKE3bjOgWt7eSPP5rHEUw=";
+          version = "2026.5.1779885478";
+          hash = "sha256-8RU6JWHeYOAxof2TXpeXlXSVD9+0e0E46X85A11l4Pk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -3213,8 +3213,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.29";
-          hash = "sha256-FzNVg925O76GTmc/14W/IjC5VLkKoRIlK1p/b+xRsiw=";
+          version = "1.4.0";
+          hash = "sha256-t64OF+rxTphnWr1BNUYxG0/W+gAP8dziARpQK8FIzU4=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3967,8 +3967,8 @@ let
           publisher = "rocq-prover";
           name = "vsrocq";
           # When updating the version here, also update the language server vsrocq-language-server
-          version = "2.3.4";
-          hash = "sha256-2zYoCUtyhboQt68UJEmWOvrTrIOV2QmpaXU5mUhJfsA=";
+          version = "2.4.3";
+          hash = "sha256-o9rsSDCDYRWZQBMDA7DtWay50tBI76kw7H7CivrZpKo=";
         };
         meta = {
           description = "VsRocq is an extension for Visual Studio Code with support for the Rocq Prover";
@@ -4361,8 +4361,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "5.2.3";
-          hash = "sha256-HSQjoYIQa8CVw6Fjb3H+et6U3urptNjrIT8HLgHirxA=";
+          version = "5.3.0";
+          hash = "sha256-ic1/RhQdkY0WbHkLiw618Rg2jblkYKjprS8w98I7Pgc=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -5200,8 +5200,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.2.9";
-          hash = "sha256-LkoytGAAZwjm3Mm3EixCHjnh1dkxB0lKMv5KJVYSwGY=";
+          version = "3.3.2";
+          hash = "sha256-aGjhpgBhXVl/0dpWtfn7Eps5r7PJr99Dyu4FlPYtCw0=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";

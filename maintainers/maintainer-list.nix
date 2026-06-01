@@ -4567,6 +4567,12 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  castorNova2 = {
+    email = "solemnsquire@gmail.com";
+    github = "castorNova2";
+    githubId = 84083897;
+    name = "Nidhish Chauhan";
+  };
   catap = {
     email = "kirill@korins.ky";
     github = "catap";
@@ -11711,6 +11717,12 @@
     githubId = 7348004;
     name = "Benjamin Levy";
   };
+  iogamaster = {
+    email = "iogamastercode+nixpkgs@gmail.com";
+    name = "IogaMaster";
+    github = "IogaMaster";
+    githubId = 67164465;
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
@@ -14374,12 +14386,6 @@
     githubId = 451835;
     name = "Kirill Elagin";
   };
-  kirikaza = {
-    email = "k@kirikaza.ru";
-    github = "kirikaza";
-    githubId = 804677;
-    name = "Kirill Kazakov";
-  };
   kirillrdy = {
     email = "kirillrdy@gmail.com";
     github = "kirillrdy";
@@ -16476,6 +16482,12 @@
     github = "m3l6h";
     githubId = 8094643;
     keys = [ { fingerprint = "BAA9 7711 58CA D457 B4AE  8B06 8188 423D 2FA2 0A65"; } ];
+  };
+  m4r1vs = {
+    email = "marius.niveri@gmail.com";
+    name = "Marius Niveri";
+    github = "m4r1vs";
+    githubId = 26097311;
   };
   m7medvision = {
     name = "Mohammed";
@@ -18727,10 +18739,10 @@
     keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
   };
   mshnwq = {
-    email = "mshnwq.com@gmail.com";
+    email = "hmachnouk@proton.me";
     github = "mshnwq";
     githubId = 68467027;
-    name = "Hayan Al-Machnouk";
+    name = "Mshnwq";
   };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
@@ -19399,6 +19411,11 @@
     githubId = 79978224;
     name = "winston";
   };
+  nelind = {
+    name = "Nel";
+    github = "nelind3";
+    githubId = 57587152;
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
@@ -19426,6 +19443,12 @@
     githubId = 55792153;
     name = "neo";
     email = "chojs990222@gmail.com";
+  };
+  neonvoid = {
+    email = "me@neonvoid.dev";
+    github = "neonvoidx";
+    githubId = 25580051;
+    name = "neonvoid";
   };
   neosimsim = {
     email = "me@abn.sh";
@@ -22130,6 +22153,12 @@
     githubId = 246631;
     keys = [ { fingerprint = "3E46 7EF1 54AA A1D0 C7DF  A694 E45C B17F 1940 CA52"; } ];
   };
+  pretentiousUsername = {
+    name = "Ian Mitchell";
+    email = "mitchell.ian.2001@gmail.com";
+    github = "pretentiousUsername";
+    githubId = 94192644;
+  };
   priegger = {
     email = "philipp@riegger.name";
     github = "priegger";
@@ -23364,12 +23393,6 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
-  rht = {
-    email = "rhtbot@protonmail.com";
-    github = "rht";
-    githubId = 395821;
-    name = "rht";
-  };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
     github = "RhydianJenkins";
@@ -23404,6 +23427,13 @@
     github = "RicArch97";
     githubId = 61013287;
     name = "Ricardo Steijn";
+  };
+  ricardomaps = {
+    email = "ricardomapurungajunior@gmail.com";
+    github = "ricardomaps";
+    githubId = 49507078;
+    name = "Ricardo Mapurunga Junior";
+    matrix = "@ricmaps:matrix.org";
   };
   richar = {
     github = "ri-char";
@@ -26113,6 +26143,12 @@
     name = "sportshead";
     keys = [ { fingerprint = "A6B6 D031 782E BDF7 631A  8E7E A874 DB2C BFD3 CFD0"; } ];
   };
+  spotdemo4 = {
+    email = "me@trev.xyz";
+    github = "spotdemo4";
+    githubId = 3732640;
+    name = "spotdemo4";
+  };
   spreetin = {
     email = "spreetin@protonmail.com";
     name = "David Falk";
@@ -28358,12 +28394,6 @@
     githubId = 77488956;
     name = "Timothy Tschnitzel";
   };
-  ttuegel = {
-    email = "ttuegel@mailbox.org";
-    github = "ttuegel";
-    githubId = 563054;
-    name = "Thomas Tuegel";
-  };
   tu-maurice = {
     email = "valentin.gehrke+nixpkgs@zom.bi";
     github = "tu-maurice";
@@ -29646,6 +29676,11 @@
         fingerprint = "7238 7123 8EAC EB63 4548  5857 167F 8EA5 001A FA9C";
       }
     ];
+  };
+  wilaz = {
+    name = "Wilaz";
+    github = "Wilaz";
+    githubId = 98198668;
   };
   wildsebastian = {
     name = "Sebastian Wild";
