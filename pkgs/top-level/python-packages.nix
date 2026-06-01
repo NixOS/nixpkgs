@@ -3712,6 +3712,8 @@ self: super: with self; {
 
   dbglib = callPackage ../development/python-modules/dbglib { };
 
+  dbgpu = callPackage ../development/python-modules/dbgpu { };
+
   dbt-adapters = callPackage ../development/python-modules/dbt-adapters { };
 
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
@@ -5702,6 +5704,8 @@ self: super: with self; {
   flasgger = callPackage ../development/python-modules/flasgger { };
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
+
+  flash-attn-4 = callPackage ../development/python-modules/flash-attn-4 { };
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
