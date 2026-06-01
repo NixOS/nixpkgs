@@ -1,0 +1,21 @@
+diff --git a/gcc/ada/gcc-interface/Makefile.in b/gcc/ada/gcc-interface/Makefile.in
+index 0666fc00b..0e2d53eb8 100644
+--- a/gcc/ada/gcc-interface/Makefile.in
++++ b/gcc/ada/gcc-interface/Makefile.in
+@@ -793,14 +793,14 @@ gnatlib-shared-darwin:
+ 		-o libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(GNATRTL_NONTASKING_OBJS) $(LIBGNAT_OBJS) \
+ 		$(SO_OPTS) \
+-		-Wl,-install_name,@rpath/libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
++		-Wl,-install_name,$(ADA_RTL_DSO_DIR)/libgnat$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		-nodefaultrpaths -Wl,-rpath,@loader_path/,-rpath,@loader_path/.. \
+ 		-Wl,-rpath,@loader_path/../../../../ $(MISCLIB)
+ 	cd $(RTSDIR); $(GCC_FOR_ADA_RTS) -dynamiclib $(PICFLAG_FOR_TARGET) \
+ 		-o libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		$(GNATRTL_TASKING_OBJS) \
+ 		$(SO_OPTS) \
+-		-Wl,-install_name,@rpath/libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
++		-Wl,-install_name,$(ADA_RTL_DSO_DIR)/libgnarl$(hyphen)$(LIBRARY_VERSION)$(soext) \
+ 		-nodefaultrpaths -Wl,-rpath,@loader_path/,-rpath,@loader_path/.. \
+ 		-Wl,-rpath,@loader_path/../../../../ \
+ 		$(THREADSLIB) -Wl,libgnat$(hyphen)$(LIBRARY_VERSION)$(soext)

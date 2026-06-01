@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.10)
+
+ project(Grabber)
+
+diff --git a/lib/vendor/lexbor/CMakeLists.txt b/lib/vendor/lexbor/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/lib/vendor/lexbor/CMakeLists.txt
++++ b/lib/vendor/lexbor/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+
+ project(lexbor C)
+

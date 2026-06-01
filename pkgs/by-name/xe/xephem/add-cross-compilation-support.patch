@@ -1,0 +1,153 @@
+diff --git a/libastro/Makefile b/libastro/Makefile
+index 0a8ecb6..b24e827 100644
+--- a/libastro/Makefile
++++ b/libastro/Makefile
+@@ -3,6 +3,9 @@
+ 
+ # compiler and flags
+ 
++AR = ar
++RANLIB = ranlib
++
+ # gcc
+ CC = gcc
+ CFLAGS= -O2 -Wall
+@@ -83,8 +86,8 @@ OBJS =			\
+ 	vsop87_data.o
+ 
+ libastro.a: $(HS) $(OBJS)
+-	ar rv $@ $(OBJS)
+-	ranlib $@
++	$(AR) rv $@ $(OBJS)
++	$(RANLIB) $@
+ 
+ libastro.so: $(HS) $(OBJS)
+ 	$(CC) -shared -o $@ $(OBJS)
+diff --git a/libip/Makefile b/libip/Makefile
+index 5c36ac8..e223dca 100644
+--- a/libip/Makefile
++++ b/libip/Makefile
+@@ -1,6 +1,9 @@
+ # Makefile for image processing routines, libip.
+ # (C) 2001 Elwood Charles Downey
+ 
++AR = ar
++RANLIB = ranlib
++
+ # gcc
+ CC = gcc
+ CFLAGS= -I../libastro -O2 -Wall
+@@ -36,11 +39,11 @@ OBJS =	\
+ HS = ip.h fsmatch.h
+ 
+ libip.a: $(HS)	$(OBJS)
+-	ar rv $@ $(OBJS)
+-	ranlib $@
++	$(AR) rv $@ $(OBJS)
++	$(RANLIB) $@
+ 
+ libip.so:    $(OBJS)
+-	gcc -shared -o $@ $(OBJS)
++	$(CC) -shared -o $@ $(OBJS)
+ 
+ clobber:
+ 	rm -f *.o libip.a
+diff --git a/libjpegd/Makefile b/libjpegd/Makefile
+index 46ea040..7562fc5 100644
+--- a/libjpegd/Makefile
++++ b/libjpegd/Makefile
+@@ -2,6 +2,9 @@
+ 
+ # compiler and flags
+ 
++AR = ar
++RANLIB = ranlib
++
+ # gcc
+ CC = gcc
+ CFLAGS= -O2 -Wall
+@@ -62,8 +65,8 @@ OBJS = \
+ 	jutils.o
+ 
+ libjpegd.a: $(HS) $(OBJS)
+-	ar r $@ $(OBJS)
+-	ranlib $@
++	$(AR) r $@ $(OBJS)
++	$(RANLIB) $@
+ 
+ clobber:
+ 	touch x.o x.a
+diff --git a/liblilxml/Makefile b/liblilxml/Makefile
+index 2e73761..7f3f2c3 100644
+--- a/liblilxml/Makefile
++++ b/liblilxml/Makefile
+@@ -3,6 +3,9 @@
+ 
+ # compiler and flags
+ 
++AR = ar
++RANLIB = ranlib
++
+ # gcc
+ CC = gcc
+ CFLAGS= -O2 -Wall
+@@ -27,8 +30,8 @@ HS = lilxml.h
+ OBJS = lilxml.o base64.o
+ 
+ liblilxml.a: $(HS) $(OBJS)
+-	ar r $@ $(OBJS)
+-	ranlib $@
++	$(AR) r $@ $(OBJS)
++	$(RANLIB) $@
+ 
+ liltest: liltest.o liblilxml.a
+ 	$(CC) $(LDFLAGS) -o liltest liltest.o liblilxml.a
+diff --git a/libpng/Makefile b/libpng/Makefile
+index 5f332cc..6217f2f 100644
+--- a/libpng/Makefile
++++ b/libpng/Makefile
+@@ -10,7 +10,7 @@ ZLIBLIB = ../libz
+ # Compiler, linker, lib and other tools
+ CC = gcc
+ LD = $(CC)
+-AR = ar rcs
++AR = ar
+ RANLIB = ranlib
+ RM = rm -f
+ 
+@@ -38,7 +38,7 @@ OBJS = png$(O) pngerror$(O) pngget$(O) pngmem$(O) pngpread$(O) \
+ all: libpng$(A)
+ 
+ libpng$(A): $(OBJS)
+-	$(AR) $@ $(OBJS)
++	$(AR) rcs $@ $(OBJS)
+ 	$(RANLIB) $@
+ 
+ clean:
+diff --git a/libz/Makefile b/libz/Makefile
+index 773f3ed..0fc73c0 100644
+--- a/libz/Makefile
++++ b/libz/Makefile
+@@ -1,3 +1,7 @@
++AR = ar
++RANLIB = ranlib
++
++CC = cc
+ CLDFLAGS =
+ CFLAGS = $(CLDFLAGS) -Wall -O2
+ LDFLAGS =
+@@ -17,11 +21,11 @@ OBJS =	adler32.o	\
+ 	inffast.o
+ 
+ libz.a: $(OBJS)
+-	ar rc libz.a $(OBJS)
+-	-ranlib libz.a
++	$(AR) rc libz.a $(OBJS)
++	$(RANLIB) libz.a
+ 
+ testzlib: testzlib.o libz.a
+-	cc $(LDFLAGS) -o testzlib testzlib.o libz.a
++	$(CC) $(LDFLAGS) -o testzlib testzlib.o libz.a
+ 
+ clean:
+ 	rm -f *.o *.a testzlib

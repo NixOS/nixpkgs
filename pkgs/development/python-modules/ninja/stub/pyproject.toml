@@ -1,0 +1,11 @@
+[build-system]
+requires = ["flit_core"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "ninja"
+version = "@version@"
+description = "Ninja is a small build system with a focus on speed"
+
+[project.scripts]
+ninja = "ninja:ninja"

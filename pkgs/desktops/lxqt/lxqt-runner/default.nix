@@ -1,0 +1,65 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  muparser,
+  pcre,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "lxqt-runner";
+  version = "2.4.0";
+
+  src = fetchFromGitHub {
+    owner = "lxqt";
+    repo = "lxqt-runner";
+    rev = version;
+    hash = "sha256-L/9STKrYTZP/Ey1BCLaZFRdeipBAWdKkXIoiHvd3vq4=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    lxqt-build-tools
+    qttools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    kwindowsystem
+    layer-shell-qt
+    liblxqt
+    libqtxdg
+    lxqt-globalkeys
+    muparser
+    pcre
+    qtbase
+    qtsvg
+    qtwayland
+  ];
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
+    homepage = "https://github.com/lxqt/lxqt-runner";
+    description = "Tool used to launch programs quickly by typing their names";
+    mainProgram = "lxqt-runner";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
+  };
+}

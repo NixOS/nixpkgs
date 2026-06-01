@@ -1,0 +1,28 @@
+diff --git a/src/procmime.c b/src/procmime.c
+index bd3239e..06a3b26 100644
+--- a/src/procmime.c
++++ b/src/procmime.c
+@@ -1144,20 +1144,16 @@ GList *procmime_get_mime_type_list(void)
+ 	MimeType *mime_type;
+ 	gboolean fp_is_glob_file = TRUE;
+ 
+ 	if (mime_type_list) 
+ 		return mime_type_list;
+-	
+-#if defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__)
+-	if ((fp = claws_fopen(DATAROOTDIR "/mime/globs", "rb")) == NULL) 
+-#else
+-	if ((fp = claws_fopen("/usr/share/mime/globs", "rb")) == NULL) 
+-#endif
++
++	if ((fp = claws_fopen("@MIMEROOTDIR@/mime/globs", "rb")) == NULL)
+ 	{
+ 		fp_is_glob_file = FALSE;
+ 		if ((fp = claws_fopen("/etc/mime.types", "rb")) == NULL) {
+ 			if ((fp = claws_fopen(SYSCONFDIR "/mime.types", "rb")) 
+ 				== NULL) {
+ 				FILE_OP_ERROR(SYSCONFDIR "/mime.types", 
+ 					"claws_fopen");
+ 				return NULL;
+ 			}
+

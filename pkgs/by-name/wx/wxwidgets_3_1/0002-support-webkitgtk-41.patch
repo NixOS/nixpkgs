@@ -1,0 +1,318 @@
+diff --git a/build/cmake/init.cmake b/build/cmake/init.cmake
+index 3ff14ab91f..e47e9b0ceb 100644
+--- a/build/cmake/init.cmake
++++ b/build/cmake/init.cmake
+@@ -429,15 +429,21 @@ if(wxUSE_GUI)
+     if(wxUSE_WEBVIEW)
+         if(WXGTK)
+             if(wxUSE_WEBVIEW_WEBKIT)
+-                find_package(LIBSOUP)
++                set(WEBKIT_LIBSOUP_VERSION 2.4)
+                 if(WXGTK2)
+                     find_package(WEBKIT 1.0)
+                 elseif(WXGTK3)
+-                    find_package(WEBKIT2)
++                    find_package(WEBKIT2 4.1)
++                    if(WEBKIT2_FOUND)
++                        set(WEBKIT_LIBSOUP_VERSION 3.0)
++                    else()
++                        find_package(WEBKIT2 4.0)
++                    endif()
+                     if(NOT WEBKIT2_FOUND)
+                         find_package(WEBKIT 3.0)
+                     endif()
+                 endif()
++                find_package(LIBSOUP ${WEBKIT_LIBSOUP_VERSION})
+             endif()
+             set(wxUSE_WEBVIEW_WEBKIT OFF)
+             set(wxUSE_WEBVIEW_WEBKIT2 OFF)
+diff --git a/build/cmake/modules/FindLIBSOUP.cmake b/build/cmake/modules/FindLIBSOUP.cmake
+index cbfba1cf93..2433d141ea 100644
+--- a/build/cmake/modules/FindLIBSOUP.cmake
++++ b/build/cmake/modules/FindLIBSOUP.cmake
+@@ -31,19 +31,27 @@
+ # LibSoup does not provide an easy way to retrieve its version other than its
+ # .pc file, so we need to rely on PC_LIBSOUP_VERSION and REQUIRE the .pc file
+ # to be found.
++SET(LIBSOUP_VERSION 2.4)
++if(DEFINED LIBSOUP_FIND_VERSION)
++    SET(LIBSOUP_VERSION ${LIBSOUP_FIND_VERSION})
++endif()
++
++set(LIBSOUP_INCLUDE_DIRS LIBSOUP_INCLUDE_DIRS-NOTFOUND)
++set(LIBSOUP_LIBRARIES LIBSOUP_LIBRARIES-NOTFOUND)
++
+ FIND_PACKAGE(PkgConfig)
+-PKG_CHECK_MODULES(PC_LIBSOUP QUIET libsoup-2.4)
++PKG_CHECK_MODULES(PC_LIBSOUP QUIET libsoup-${LIBSOUP_VERSION})
+ 
+ if(PC_LIBSOUP_FOUND)
+     FIND_PATH(LIBSOUP_INCLUDE_DIRS
+         NAMES libsoup/soup.h
+         HINTS ${PC_LIBSOUP_INCLUDEDIR}
+         ${PC_LIBSOUP_INCLUDE_DIRS}
+-        PATH_SUFFIXES libsoup-2.4
++        PATH_SUFFIXES libsoup-${LIBSOUP_VERSION}
+         )
+ 
+     FIND_LIBRARY(LIBSOUP_LIBRARIES
+-        NAMES soup-2.4
++        NAMES soup-${LIBSOUP_VERSION}
+         HINTS ${PC_LIBSOUP_LIBDIR}
+         ${PC_LIBSOUP_LIBRARY_DIRS}
+         )
+diff --git a/build/cmake/modules/FindWEBKIT2.cmake b/build/cmake/modules/FindWEBKIT2.cmake
+index 133e7a4563..e39077ac4a 100644
+--- a/build/cmake/modules/FindWEBKIT2.cmake
++++ b/build/cmake/modules/FindWEBKIT2.cmake
+@@ -5,7 +5,10 @@
+ #  WEBKIT2_LIBRARIES   - List of libraries when using Webkit2.
+ #  WEBKIT2_FOUND       - True if Webkit2 found.
+ 
+-SET( WEBKIT2_VERSION 4.0)
++SET(WEBKIT2_VERSION 4.0)
++if(DEFINED WEBKIT2_FIND_VERSION)
++    SET(WEBKIT2_VERSION ${WEBKIT2_FIND_VERSION})
++endif()
+ 
+ set(WEBKIT2_INCLUDE_DIR WEBKIT2_INCLUDE_DIR-NOTFOUND)
+ set(WEBKIT2_LIBRARY WEBKIT2_LIBRARY-NOTFOUND)
+diff --git a/configure b/configure
+index 41e811071d..2f3ad0113e 100755
+--- a/configure
++++ b/configure
+@@ -1047,7 +1047,6 @@ infodir
+ docdir
+ oldincludedir
+ includedir
+-runstatedir
+ localstatedir
+ sharedstatedir
+ sysconfdir
+@@ -1495,7 +1494,6 @@ datadir='${datarootdir}'
+ sysconfdir='${prefix}/etc'
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
+-runstatedir='${localstatedir}/run'
+ includedir='${prefix}/include'
+ oldincludedir='/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+@@ -1748,15 +1746,6 @@ do
+   | -silent | --silent | --silen | --sile | --sil)
+     silent=yes ;;
+ 
+-  -runstatedir | --runstatedir | --runstatedi | --runstated \
+-  | --runstate | --runstat | --runsta | --runst | --runs \
+-  | --run | --ru | --r)
+-    ac_prev=runstatedir ;;
+-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+-  | --run=* | --ru=* | --r=*)
+-    runstatedir=$ac_optarg ;;
+-
+   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
+     ac_prev=sbindir ;;
+   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
+@@ -1894,7 +1883,7 @@ fi
+ for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
+ 		datadir sysconfdir sharedstatedir localstatedir includedir \
+ 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
+-		libdir localedir mandir runstatedir
++		libdir localedir mandir
+ do
+   eval ac_val=\$$ac_var
+   # Remove trailing slashes.
+@@ -2047,7 +2036,6 @@ Fine tuning of the installation directories:
+   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+   --libdir=DIR            object code libraries [EPREFIX/lib]
+   --includedir=DIR        C header files [PREFIX/include]
+   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+@@ -41677,6 +41665,86 @@ pkg_failed=no
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
+ $as_echo_n "checking for WEBKIT... " >&6; }
+ 
++if test -n "$PKG_CONFIG"; then
++    if test -n "$WEBKIT_CFLAGS"; then
++        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
++    else
++        if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.1" 2>/dev/null`
++else
++  pkg_failed=yes
++fi
++    fi
++else
++	pkg_failed=untried
++fi
++if test -n "$PKG_CONFIG"; then
++    if test -n "$WEBKIT_LIBS"; then
++        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
++    else
++        if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.1" 2>/dev/null`
++else
++  pkg_failed=yes
++fi
++    fi
++else
++	pkg_failed=untried
++fi
++
++
++
++if test $pkg_failed = yes; then
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
++fi
++        if test $_pkg_short_errors_supported = yes; then
++	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.1"`
++        else
++	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.1"`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$WEBKIT_PKG_ERRORS" >&5
++
++
++                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
++$as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
++
++elif test $pkg_failed = untried; then
++
++                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
++$as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
++
++else
++	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
++	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++
++                                    USE_WEBVIEW_WEBKIT2=1
++                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
++                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
++
++fi
++                if test "$USE_WEBVIEW_WEBKIT2" = 0; then
++
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
++$as_echo_n "checking for WEBKIT... " >&6; }
++
+ if test -n "$PKG_CONFIG"; then
+     if test -n "$WEBKIT_CFLAGS"; then
+         pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+@@ -41732,13 +41800,13 @@ fi
+ 	echo "$WEBKIT_PKG_ERRORS" >&5
+ 
+ 
+-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+-$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
++                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
++$as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
+ 
+ elif test $pkg_failed = untried; then
+ 
+-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+-$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
++                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
++$as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
+ 
+ else
+ 	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+@@ -41746,11 +41814,12 @@ else
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
+-                                    USE_WEBVIEW_WEBKIT2=1
+-                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+-                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
++                                        USE_WEBVIEW_WEBKIT2=1
++                                        CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
++                                        EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+ 
+ fi
++                fi
+             fi
+             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                 webkitgtk=webkit-1.0
+diff --git a/configure.in b/configure.in
+index 41c4813def..a964272d51 100644
+--- a/configure.in
++++ b/configure.in
+@@ -7474,15 +7474,27 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
+         if test "$wxUSE_GTK" = 1; then
+             if test "$WXGTK3" = 1; then
+                 PKG_CHECK_MODULES([WEBKIT],
+-                                  [webkit2gtk-4.0],
++                                  [webkit2gtk-4.1],
+                                   [
+                                     USE_WEBVIEW_WEBKIT2=1
+                                     CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                   ],
+                                   [
+-                                    AC_MSG_WARN([webkit2gtk not found, falling back to webkitgtk])
++                                    AC_MSG_WARN([webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0])
+                                   ])
++                if test "$USE_WEBVIEW_WEBKIT2" = 0; then
++                    PKG_CHECK_MODULES([WEBKIT],
++                                      [webkit2gtk-4.0],
++                                      [
++                                        USE_WEBVIEW_WEBKIT2=1
++                                        CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
++                                        EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
++                                      ],
++                                      [
++                                        AC_MSG_WARN([webkit2gtk-4.0 not found, falling back to webkitgtk])
++                                      ])
++                fi
+             fi
+             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                 webkitgtk=webkit-1.0
+diff --git a/src/gtk/webview_webkit2.cpp b/src/gtk/webview_webkit2.cpp
+index a0161243f9..0fb9e823ca 100644
+--- a/src/gtk/webview_webkit2.cpp
++++ b/src/gtk/webview_webkit2.cpp
+@@ -166,15 +166,18 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
+     {
+         switch (error->code)
+         {
++#if SOUP_MAJOR_VERSION < 3
+             case SOUP_STATUS_CANCELLED:
+                 type = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
+                 break;
+ 
+             case SOUP_STATUS_CANT_RESOLVE:
++#endif
+             case SOUP_STATUS_NOT_FOUND:
+                 type = wxWEBVIEW_NAV_ERR_NOT_FOUND;
+                 break;
+ 
++#if SOUP_MAJOR_VERSION < 3
+             case SOUP_STATUS_CANT_RESOLVE_PROXY:
+             case SOUP_STATUS_CANT_CONNECT:
+             case SOUP_STATUS_CANT_CONNECT_PROXY:
+@@ -186,6 +189,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
+             case SOUP_STATUS_MALFORMED:
+                 type = wxWEBVIEW_NAV_ERR_REQUEST;
+                 break;
++#endif
+ 
+             case SOUP_STATUS_BAD_REQUEST:
+                 type = wxWEBVIEW_NAV_ERR_REQUEST;

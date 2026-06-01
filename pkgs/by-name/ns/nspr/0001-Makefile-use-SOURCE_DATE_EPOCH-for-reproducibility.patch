@@ -1,0 +1,45 @@
+diff --git a/nspr/lib/ds/Makefile.in b/nspr/lib/ds/Makefile.in
+index fa8c783..eff1ac3 100644
+--- a/nspr/lib/ds/Makefile.in
++++ b/nspr/lib/ds/Makefile.in
+@@ -91,8 +91,8 @@ ECHO = echo
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/lib/libc/src/Makefile.in b/nspr/lib/libc/src/Makefile.in
+index 9ef2007..2d5db8f 100644
+--- a/nspr/lib/libc/src/Makefile.in
++++ b/nspr/lib/libc/src/Makefile.in
+@@ -93,8 +93,8 @@ ECHO = echo
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/pr/src/Makefile.in b/nspr/pr/src/Makefile.in
+index a9e86f5..854c0a9 100644
+--- a/nspr/pr/src/Makefile.in
++++ b/nspr/pr/src/Makefile.in
+@@ -276,8 +276,8 @@ TINC = $(OBJDIR)/_pr_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ 
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64

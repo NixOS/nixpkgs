@@ -1,0 +1,40 @@
+diff --git a/server.go b/server.go
+index 4499a6d..4c14d1a 100644
+--- a/server.go
++++ b/server.go
+@@ -24,6 +24,7 @@ import (
+ 	"github.com/sagernet/sing-box/experimental/clashapi"
+ 	"github.com/sagernet/sing/common"
+ 	E "github.com/sagernet/sing/common/exceptions"
++	"golang.org/x/sys/unix"
+ 	"github.com/sagernet/sing/service"
+ 	"github.com/xtls/xray-core/core"
+ )
+@@ -462,6 +463,27 @@ func (s *server) IsPrivileged(ctx context.Context, _ *gen.EmptyReq) (*gen.IsPriv
+ 		}, nil
+ 	}
+ 
++	if runtime.GOOS == "linux" {
++		caps := unix.CapUserHeader{
++			Version: unix.LINUX_CAPABILITY_VERSION_3,
++			Pid:     0, // current
++		}
++
++		var data [2]unix.CapUserData
++		err := unix.Capget(&caps, &data[0])
++
++		if err != nil {
++			return &gen.IsPrivilegedResponse{
++				HasPrivilege: To(false),
++			}, nil
++		}
++
++		// CAP_NET_ADMIN = 12
++		return &gen.IsPrivilegedResponse{
++			HasPrivilege: To((data[0].Effective & (1 << unix.CAP_NET_ADMIN)) != 0),
++		}, nil
++	}
++
+ 	return &gen.IsPrivilegedResponse{HasPrivilege: To(os.Geteuid() == 0)}, nil
+ }
+ 

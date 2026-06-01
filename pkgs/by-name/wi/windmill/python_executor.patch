@@ -1,0 +1,31 @@
+diff --git a/windmill-worker/src/python_executor.rs b/windmill-worker/src/python_executor.rs
+index eb6a6e7f30..eb29758c0a 100644
+--- a/windmill-worker/src/python_executor.rs
++++ b/windmill-worker/src/python_executor.rs
+@@ -273,7 +273,7 @@ pub async fn uv_pip_compile(
+             UV_CACHE_DIR,
+         ];
+ 
+-        args.extend(["-p", &py_version_str, "--python-preference", "only-managed"]);
++        args.extend(["-p", &py_version_str, "--python-preference", "only-system"]);
+ 
+         if no_cache {
+             args.extend(["--no-cache"]);
+@@ -1332,7 +1332,7 @@ async fn spawn_uv_install(
+         let _owner;
+         if let Some(py_path) = py_path.as_ref() {
+             _owner = format!(
+-                "-p {} --python-preference only-managed",
++                "-p {} --python-preference only-system",
+                 py_path.as_str() //
+             );
+             vars.push(("PY_PATH", &_owner));
+@@ -1399,7 +1399,7 @@ async fn spawn_uv_install(
+                 "-p",
+                 py_path.as_str(),
+                 "--python-preference",
+-                "only-managed", //
++                "only-system", //
+             ]);
+         } else {
+             command_args.extend([

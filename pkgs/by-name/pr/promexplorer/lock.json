@@ -1,0 +1,16 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "illwill"
+      ],
+      "path": "/nix/store/3lmm3z36qn4gz7bfa209zv0pqrpm3di9-source",
+      "ref": "v0.3.2",
+      "rev": "1d12cb36ab7b76c31d2d25fa421013ecb382e625",
+      "sha256": "0f9yncl5gbdja18mrqf5ixrdgrh95k0khda923dm1jd1x1b7ar8z",
+      "srcDir": "",
+      "url": "https://github.com/johnnovak/illwill/archive/1d12cb36ab7b76c31d2d25fa421013ecb382e625.tar.gz"
+    }
+  ]
+}
