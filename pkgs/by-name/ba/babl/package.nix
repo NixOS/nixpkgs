@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./dev-prefix.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -43,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     lcms2
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
@@ -60,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Image pixel format conversion library";

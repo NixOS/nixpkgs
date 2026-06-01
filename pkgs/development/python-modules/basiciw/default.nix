@@ -4,7 +4,6 @@
   fetchPypi,
   gcc,
   wirelesstools,
-  isPy27,
   isPyPy,
 }:
 
@@ -13,7 +12,7 @@ buildPythonPackage rec {
   version = "0.2.2";
   format = "setuptools";
 
-  disabled = isPy27 || isPyPy;
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;

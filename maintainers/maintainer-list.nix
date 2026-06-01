@@ -16483,6 +16483,12 @@
     githubId = 8094643;
     keys = [ { fingerprint = "BAA9 7711 58CA D457 B4AE  8B06 8188 423D 2FA2 0A65"; } ];
   };
+  m4r1vs = {
+    email = "marius.niveri@gmail.com";
+    name = "Marius Niveri";
+    github = "m4r1vs";
+    githubId = 26097311;
+  };
   m7medvision = {
     name = "Mohammed";
     github = "m7medVision";
@@ -23416,6 +23422,13 @@
     githubId = 61013287;
     name = "Ricardo Steijn";
   };
+  ricardomaps = {
+    email = "ricardomapurungajunior@gmail.com";
+    github = "ricardomaps";
+    githubId = 49507078;
+    name = "Ricardo Mapurunga Junior";
+    matrix = "@ricmaps:matrix.org";
+  };
   richar = {
     github = "ri-char";
     githubId = 17962023;
@@ -26123,6 +26136,12 @@
     githubId = 32637656;
     name = "sportshead";
     keys = [ { fingerprint = "A6B6 D031 782E BDF7 631A  8E7E A874 DB2C BFD3 CFD0"; } ];
+  };
+  spotdemo4 = {
+    email = "me@trev.xyz";
+    github = "spotdemo4";
+    githubId = 3732640;
+    name = "spotdemo4";
   };
   spreetin = {
     email = "spreetin@protonmail.com";
@@ -29657,6 +29676,11 @@
         fingerprint = "7238 7123 8EAC EB63 4548  5857 167F 8EA5 001A FA9C";
       }
     ];
+  };
+  wilaz = {
+    name = "Wilaz";
+    github = "Wilaz";
+    githubId = 98198668;
   };
   wildsebastian = {
     name = "Sebastian Wild";

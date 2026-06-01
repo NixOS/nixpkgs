@@ -16,8 +16,11 @@
   pkg-config,
   docbook_xsl,
   docbook_xml_dtd_42,
+  python3,
+  ncurses,
   libxslt,
   libgbm,
+  seatd,
   ninja,
   check,
   bash,
@@ -29,13 +32,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.3.5";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QBN1rSDmwVg7cgljhe6kVIg/xLoolmOPqS8JXZuQiXs=";
+    hash = "sha256-M3830e1GzzLT2fhheWwNRkURzYkHv4k8uEMoCqKkjJY=";
   };
 
   strictDeps = true;
@@ -57,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     systemdLibs
     libgbm
+    seatd
     check
     # Needed for autoPatchShebangs when strictDeps = true
     bash
@@ -69,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libxslt # xsltproc
     docbook_xml_dtd_42
+    python3
+    ncurses
   ];
 
   outputs = [
@@ -76,9 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  patches = [
-    ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
-  ];
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    DESTDIR = "/";
+  };
+
+  postPatch = ''
+    patchShebangs scripts/terminfo
+  '';
 
   postFixup = ''
     substituteInPlace $out/bin/kmscon \

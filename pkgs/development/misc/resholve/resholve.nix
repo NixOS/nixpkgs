@@ -1,32 +1,16 @@
 {
   lib,
   callPackage,
-  python27,
-  fetchFromGitHub,
   installShellFiles,
   rSrc,
   version,
-  oildev,
-  configargparse,
   gawk,
   binlore,
   resholve,
   resholve-utils,
 }:
-
 let
-  sedparse = python27.pkgs.buildPythonPackage {
-    pname = "sedparse";
-    version = "0.1.2";
-    format = "setuptools";
-    src = fetchFromGitHub {
-      owner = "aureliojargas";
-      repo = "sedparse";
-      rev = "0.1.2";
-      hash = "sha256-Q17A/oJ3GZbdSK55hPaMdw85g43WhTW9tuAuJtDfHHU=";
-    };
-  };
-
+  python27 = callPackage ./python27.nix { };
 in
 python27.pkgs.buildPythonApplication {
   pname = "resholve";
@@ -35,7 +19,7 @@ python27.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python27.pkgs; [
     oildev
     configargparse
     sedparse
