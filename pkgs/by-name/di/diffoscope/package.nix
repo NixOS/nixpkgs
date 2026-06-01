@@ -202,7 +202,7 @@ python.pkgs.buildPythonApplication rec {
       jsbeautifier
       jsondiff
       libarchive-c
-      progressbar33
+      progressbar
       pypdf
       python-magic
       pyxattr
