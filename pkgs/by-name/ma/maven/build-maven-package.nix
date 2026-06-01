@@ -34,6 +34,7 @@ let
       manualMvnArtifacts ? [ ],
       manualMvnSources ? [ ],
       mvnParameters ? "",
+      useDefaultMavenPlugins ? true,
       ...
     }@args:
 
@@ -42,6 +43,17 @@ let
 
     let
       mvnSkipTests = lib.optionalString (!doCheck) "-DskipTests";
+
+      # Path to this Maven version's implicit default plugins, or "" when it
+      # should not (or cannot) contribute any. Not every Maven exposes
+      # `defaultPluginsRepo` (e.g. maven_4, or a custom distribution built via
+      # `overrideMavenAttrs`), and this builder is shared across all of them via
+      # `mkBuildMavenPackage`; resolving to "" here lets the build phase skip the
+      # merge instead of failing to evaluate on a missing attribute. Laziness
+      # keeps `maven.defaultPluginsRepo` unforced when the guard is false.
+      defaultPluginsRepo = lib.optionalString (
+        useDefaultMavenPlugins && maven ? defaultPluginsRepo
+      ) "${maven.defaultPluginsRepo}/default-plugins-repo";
 
       writeProxySettings = writers.writePython3 "write-proxy-settings" { } ./maven-proxy.py;
 
@@ -152,6 +164,17 @@ let
           runHook preBuild
 
           mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
+
+          # Merge this Maven version's implicit default plugins into the build
+          # repository. Empty when the Maven in use does not provide them (see
+          # the defaultPluginsRepo binding above), in which case the merge is
+          # skipped.
+          defaultPluginsRepo=${lib.escapeShellArg defaultPluginsRepo}
+          if [ -n "$defaultPluginsRepo" ]; then
+            cp -dpRn "$defaultPluginsRepo/." "$mvnDeps/.m2/"
+            chmod +w -R "$mvnDeps/.m2"
+          fi
+
           runHook afterDepsSetup
           mvn ${mvnGoal} ${
             if mvnOffline then "-o" else ""

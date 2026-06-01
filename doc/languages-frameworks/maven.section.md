@@ -55,6 +55,8 @@ maven.buildMavenPackage (finalAttrs: {
 
 This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
 
+Whenever the set of dependencies changes (for example when bumping the package version, or adding or removing a dependency), `mvnHash` must be recomputed: set it to an empty string `""`, run the build, and copy the corrected hash from the resulting error message.
+
 ::: {.tip}
 After setting `maven.buildMavenPackage`, we then do standard Java `.jar` installation by saving the `.jar` to `$out/share/java` and then making a wrapper which allows executing that file; see [](#sec-language-java) for additional generic information about packaging Java applications.
 :::
@@ -145,13 +147,25 @@ maven.buildMavenPackage {
 
 ### Stable Maven plugins {#stable-maven-plugins}
 
-Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
+Maven binds default versions for its core plugins (e.g. `maven-compiler-plugin`, `maven-resources-plugin`) for projects that do not pin these versions themselves. These defaults are baked into each Maven release, so they change whenever Maven is upgraded.
 
-When `maven` is upgraded, `mvnHash` for the derivation must be updated as well: otherwise, the project will be built on the derivation of old plugins, and fail because the requested plugins are missing.
+Historically this broke the offline build of any such project after a Maven upgrade: the `fetchedMavenDeps` [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) still contained the plugin versions captured with the old Maven, while the new Maven requested newer ones that were not present, so resolution failed unless every affected `mvnHash` was recomputed.
 
-This clearly prevents automatic upgrades of Maven: a manual effort must be made throughout nixpkgs by any maintainer wishing to push the upgrades.
+`buildMavenPackage` now handles this automatically. It merges the default plugins of the Maven version in use, exposed as `maven.defaultPluginsRepo`, into the local repository during the main build phase. Because this happens outside the fixed-output derivation, upgrading Maven no longer requires recomputing the `mvnHash` of projects that rely on these implicit plugin versions; only the single `maven.defaultPluginsRepo` hash is updated alongside the Maven version (handled by maven's update script).
 
-To make sure that your package does not add extra manual effort when upgrading Maven, explicitly define versions for all plugins. You can check if this is the case by adding the following plugin to your (parent) POM:
+If you need to opt out of this behaviour, set `useDefaultMavenPlugins = false`:
+
+```nix
+maven.buildMavenPackage {
+  useDefaultMavenPlugins = false;
+}
+```
+
+::: {.warning}
+If you opt out of `useDefaultMavenPlugins` and do not explicitly pin your plugin versions, your package will again require manual effort (recomputing `mvnHash`) on every Maven upgrade. In the future we may mark such packages as broken.
+:::
+
+Explicitly pinning plugin versions in your (parent) POM is still good practice, because it makes the build self-contained and independent of the packaged Maven version. You can enforce that every plugin has an explicit version by adding the following plugin to your (parent) POM:
 
 ```xml
 <plugin>
