@@ -7,14 +7,14 @@
   pnpm_10_29_2,
   pnpmConfigHook,
   python3,
-  electron_39,
+  electron_40,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
 }:
 
 let
-  electron = electron_39;
+  electron = electron_40;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
