@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromCodeberg,
+  makeWrapper,
   runtimeShell,
 }:
 
@@ -16,10 +17,7 @@ stdenv.mkDerivation {
     hash = "sha256-rUMi+VetQc139PjbFJXlSkmYEuK5wtM6LpQ/f1tcB1s=";
   };
 
-  patches = [
-    ./repl-license-path.patch
-    ./repl-argv-1.patch
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
     # don't use hardcoded /bin/sh
@@ -46,11 +44,13 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm755 k "$out/bin/k"
-    install -Dm755 repl.k "$out/bin/k-repl"
+    install -Dm755 repl.k "$out/bin/repl.k"
     install -Dm755 libk.so "$lib/lib/libk.so"
     install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
-    substituteInPlace "$out/bin/k-repl" --replace-fail "#!k" "#!$out/bin/k"
+    substituteInPlace "$out/bin/repl.k" --replace-fail "#!k" "#!$out/bin/k"
+    ln -s ../share/ngn-k/LICENSE "$out/bin/LICENSE"
+    makeWrapper "$out/bin/repl.k" "$out/bin/k-repl"
     runHook postInstall
   '';
 
