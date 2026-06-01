@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
       gpl3
       lgpl21
     ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
   };
 }
