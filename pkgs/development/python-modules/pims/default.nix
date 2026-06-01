@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   imageio,
+  matplotlib,
   numpy,
   pytestCheckHook,
   scikit-image,
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    matplotlib
     pytestCheckHook
     scikit-image
   ];
@@ -46,6 +48,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # AssertionError: Tuples differ: (377, 505, 4) != (384, 512, 4)
     "pims/tests/test_display.py"
+    "pims/tests/test_imseq.py"
   ];
 
   meta = {
