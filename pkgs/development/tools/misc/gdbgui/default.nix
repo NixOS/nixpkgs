@@ -5,7 +5,7 @@
   gdb,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gdbgui";
 
   version = "0.15.3.0";
@@ -22,12 +22,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/HyFE0JnoN03CDyCQCo/Y9RyH4YOMoeB7khReIb8t7Y=";
   };
 
   postPatch = ''
-    echo ${version} > gdbgui/VERSION.txt
+    echo ${finalAttrs.version} > gdbgui/VERSION.txt
     # relax version requirements
     sed -i 's/==.*$//' requirements.txt
   '';
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
       dump_stack
     ];
   };
-}
+})
