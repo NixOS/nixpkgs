@@ -3942,6 +3942,9 @@
   "maven": [
     "index.html#maven"
   ],
+  "maven-4": [
+    "index.html#maven-4"
+  ],
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
   ],
