@@ -3294,11 +3294,9 @@ with pkgs;
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   inherit (callPackages ../servers/varnish { })
-    varnish60
     varnish80
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages
     varnish80Packages
     ;
   varnishPackages = varnish80Packages;

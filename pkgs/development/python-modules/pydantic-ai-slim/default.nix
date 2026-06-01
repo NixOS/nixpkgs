@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "1.103.0";
+  version = "1.104.0";
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -26,12 +26,12 @@ lib.extendMkDerivation {
       owner,
       domain,
       version,
-      format ? "other",
       ...
     }@args:
     {
       pname = "${owner}/${domain}";
-      inherit version format;
+      inherit version;
+      pyproject = false;
 
       installPhase = ''
         runHook preInstall

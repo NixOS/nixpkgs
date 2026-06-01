@@ -3,12 +3,7 @@ let
   testPath = pkgs.hello;
 
   # Same stateDir logic as in nixos/modules/services/web-servers/varnish/default.nix
-  stateDir =
-    hostName:
-    if (pkgs.lib.versionOlder package.version "7") then
-      "/var/run/varnish/${hostName}"
-    else
-      "/var/run/varnishd";
+  stateDir = "/var/run/varnishd";
 in
 {
   name = "varnish";
@@ -46,14 +41,11 @@ in
               proto = "PROXY";
             }
             {
-              address = "${stateDir config.networking.hostName}/client.http.sock";
+              address = "/var/run/varnishd/client.http.sock";
               user = "varnish";
               group = "varnish";
               mode = "660";
             }
-          ]
-          ++ lib.optionals (lib.versionAtLeast package.version "7.3") [
-            # Support added in 7.3.0
             { address = "@asdf"; }
           ];
           config = ''
@@ -78,17 +70,13 @@ in
               assertion = lib.hasInfix pattern cmdline;
               message = "Address argument `${pattern}` missing in commandline `${cmdline}`.";
             })
-            (
-              [
-                " -a 0.0.0.0:80,HTTP "
-                " -a proxyport=0.0.0.0:8080,PROXY "
-                " -a ${stateDir config.networking.hostName}/client.http.sock,HTTP,user=varnish,group=varnish,mode=660 "
-                " -a 0.0.0.0:81 "
-              ]
-              ++ lib.optionals (lib.versionAtLeast package.version "7.3") [
-                " -a @asdf,HTTP "
-              ]
-            );
+            [
+              " -a 0.0.0.0:80,HTTP "
+              " -a proxyport=0.0.0.0:8080,PROXY "
+              " -a /var/run/varnishd/client.http.sock,HTTP,user=varnish,group=varnish,mode=660 "
+              " -a 0.0.0.0:81 "
+              " -a @asdf,HTTP "
+            ];
       };
 
     client =
