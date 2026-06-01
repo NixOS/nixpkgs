@@ -6,10 +6,7 @@
 #
 # See https://github.com/NixOS/nixpkgs/pull/430969 for measurements.
 
-{ lib, config }:
-
-stdenv:
-
+lib:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
@@ -52,7 +49,6 @@ let
     unsafeDiscardStringContext
     unsafeGetAttrPos
     warn
-    warnIf
     zipAttrsWith
     any
     ;
@@ -60,8 +56,153 @@ let
   inherit (lib.generators) toPretty;
   inherit (lib.strings) sanitizeDerivationName;
 
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "strictflexarrays1"
+    "strictflexarrays3"
+    "shadowstack"
+    "nostrictaliasing"
+    "pacret"
+    "pic"
+    "relro"
+    "stackprotector"
+    "glibcxxassertions"
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
+    "stackclashprotection"
+    "strictoverflow"
+    "trivialautovarinit"
+    "zerocallusedregs"
+  ];
+
+  removedOrReplacedAttrNames = [
+    "checkInputs"
+    "installCheckInputs"
+    "nativeCheckInputs"
+    "nativeInstallCheckInputs"
+    "__contentAddressed"
+    "__darwinAllowLocalNetworking"
+    "__impureHostDeps"
+    "__propagatedImpureHostDeps"
+    "sandboxProfile"
+    "propagatedSandboxProfile"
+    "disallowedReferences"
+    "disallowedRequisites"
+    "allowedReferences"
+    "allowedRequisites"
+    "allowedImpureDLLs"
+  ];
+
+  referenceCheckingAttrsToRemove = [
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+  ];
+
+  argumentAttrsToRemove = [
+    "meta"
+    "passthru"
+    "pos"
+    "env"
+  ];
+
+  attrsToRemoveLast = [
+    # Fixed-output derivations may not reference other paths, which means that for a fixed-output
+    # derivation, the corresponding inputDerivation should *not* be fixed-output. To achieve this we
+    # simply delete the attributes that would make it fixed-output.
+    "outputHashAlgo"
+    "outputHash"
+    "outputHashMode"
+
+    # inputDerivation produces the inputs; not the outputs, so any restrictions on what used to be
+    # the outputs don't serve a purpose anymore.
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+    "outputChecks"
+  ];
+
+  defaultBuilderArgs = [
+    "-e"
+    ./source-stdenv.sh
+    ./default-builder.sh
+  ];
+
+  isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
+
+  cachedOutputChecks = {
+    out = { };
+  };
+  debugCachedOutputChecks = {
+    out = { };
+    debug = { };
+  };
+
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath =
+    drv:
+    if isDerivation drv && (!drv.__contentAddressed or false) then
+      unsafeDiscardStringContext drv.outPath
+    else
+      drv;
+
+  makeOutputChecks =
+    attrs:
+    # If we use derivations directly here, they end up as build-time dependencies.
+    # This is especially problematic in the case of disallowed*, since the disallowed
+    # derivations will be built by nix as build-time dependencies, while those
+    # derivations might take a very long time to build, or might not even build
+    # successfully on the platform used.
+    # We can improve on this situation by instead passing only the outPath,
+    # without an attached string context, to nix. The out path will be a placeholder
+    # which will be replaced by the actual out path if the derivation in question
+    # is part of the final closure (and thus needs to be built). If it is not
+    # part of the final closure, then the placeholder will be passed along,
+    # but in that case we know for a fact that the derivation is not part of the closure.
+    # This means that passing the out path to nix does the right thing in either
+    # case, both for disallowed and allowed references/requisites, and we won't
+    # build the derivation if it wouldn't be part of the closure, saving time and resources.
+    # While the problem is less severe for allowed*, since we want the derivation
+    # to be built eventually, we would still like to get the error early and without
+    # having to wait while nix builds a derivation that might not be used.
+    # See also https://github.com/NixOS/nix/issues/4629
+    {
+      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+    };
+in
+config:
+let
+  doCheckByDefault = config.doCheckByDefault or false;
+  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
+  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
+  userHook = config.stdenv.userHook or null;
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+  };
+in
+stdenv:
+
+let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+
+  # Nix itself uses the `system` field of a derivation to decide where
+  # to build it. This is a bit confusing for cross compilation.
+  commonMeta = checkMeta.commonMeta hostPlatform;
+  assertValidity = checkMeta.assertValidity hostPlatform;
 
   /**
     This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
@@ -82,13 +223,6 @@ let
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
-
-  checkMeta = import ./check-meta.nix {
-    inherit lib config;
-    # Nix itself uses the `system` field of a derivation to decide where
-    # to build it. This is a bit confusing for cross compilation.
-    inherit (stdenv) hostPlatform;
-  };
 
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible =
@@ -176,89 +310,6 @@ let
     in
     finalPackage;
 
-  knownHardeningFlags = [
-    "bindnow"
-    "format"
-    "fortify"
-    "fortify3"
-    "strictflexarrays1"
-    "strictflexarrays3"
-    "shadowstack"
-    "nostrictaliasing"
-    "pacret"
-    "pic"
-    "relro"
-    "stackprotector"
-    "glibcxxassertions"
-    "libcxxhardeningfast"
-    "libcxxhardeningextensive"
-    "stackclashprotection"
-    "strictoverflow"
-    "trivialautovarinit"
-    "zerocallusedregs"
-  ];
-
-  removedOrReplacedAttrNames = [
-    "checkInputs"
-    "installCheckInputs"
-    "nativeCheckInputs"
-    "nativeInstallCheckInputs"
-    "__contentAddressed"
-    "__darwinAllowLocalNetworking"
-    "__impureHostDeps"
-    "__propagatedImpureHostDeps"
-    "sandboxProfile"
-    "propagatedSandboxProfile"
-    "disallowedReferences"
-    "disallowedRequisites"
-    "allowedReferences"
-    "allowedRequisites"
-    "allowedImpureDLLs"
-  ];
-
-  referenceCheckingAttrsToRemove = [
-    "allowedReferences"
-    "allowedRequisites"
-    "disallowedReferences"
-    "disallowedRequisites"
-  ];
-
-  argumentAttrsToRemove = [
-    "meta"
-    "passthru"
-    "pos"
-    "env"
-  ];
-
-  attrsToRemoveLast = [
-    # Fixed-output derivations may not reference other paths, which means that
-    # for a fixed-output derivation, the corresponding inputDerivation should
-    # *not* be fixed-output. To achieve this we simply delete the attributes that
-    # would make it fixed-output.
-    "outputHashAlgo"
-    "outputHash"
-    "outputHashMode"
-
-    # inputDerivation produces the inputs; not the outputs, so any
-    # restrictions on what used to be the outputs don't serve a purpose
-    # anymore.
-    "allowedReferences"
-    "allowedRequisites"
-    "disallowedReferences"
-    "disallowedRequisites"
-    "outputChecks"
-  ];
-
-  defaultBuilderArgs = [
-    "-e"
-    ./source-stdenv.sh
-    ./default-builder.sh
-  ];
-
-  doCheckByDefault = config.doCheckByDefault or false;
-  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
-  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
-
   inherit (stdenv)
     hostPlatform
     buildPlatform
@@ -303,14 +354,11 @@ let
   # TODO(@Ericson2314): Make always true and remove / resolve #178468
   defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
 
-  isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
-
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or knownHardeningFlags;
   hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
   stdenvHostSuffix = "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
-  userHook = config.stdenv.userHook or null;
 
   requiredSystemFeaturesShouldBeSet =
     buildPlatform ? gcc.arch
@@ -325,54 +373,6 @@ let
       )
     );
   gccArchFeature = [ "gccarch-${buildPlatform.gcc.arch}" ];
-
-  cachedOutputChecks = {
-    out = { };
-  };
-  debugCachedOutputChecks = {
-    out = { };
-    debug = { };
-  };
-
-  # Turn a derivation into its outPath without a string context attached.
-  # See the comment at the usage site.
-  unsafeDerivationToUntrackedOutpath =
-    drv:
-    if isDerivation drv && (!drv.__contentAddressed or false) then
-      unsafeDiscardStringContext drv.outPath
-    else
-      drv;
-
-  makeOutputChecks =
-    attrs:
-    # If we use derivations directly here, they end up as build-time dependencies.
-    # This is especially problematic in the case of disallowed*, since the disallowed
-    # derivations will be built by nix as build-time dependencies, while those
-    # derivations might take a very long time to build, or might not even build
-    # successfully on the platform used.
-    # We can improve on this situation by instead passing only the outPath,
-    # without an attached string context, to nix. The out path will be a placeholder
-    # which will be replaced by the actual out path if the derivation in question
-    # is part of the final closure (and thus needs to be built). If it is not
-    # part of the final closure, then the placeholder will be passed along,
-    # but in that case we know for a fact that the derivation is not part of the closure.
-    # This means that passing the out path to nix does the right thing in either
-    # case, both for disallowed and allowed references/requisites, and we won't
-    # build the derivation if it wouldn't be part of the closure, saving time and resources.
-    # While the problem is less severe for allowed*, since we want the derivation
-    # to be built eventually, we would still like to get the error early and without
-    # having to wait while nix builds a derivation that might not be used.
-    # See also https://github.com/NixOS/nix/issues/4629
-    {
-      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
-        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
-        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
-    };
 
   makeDerivationArgument =
 
@@ -972,7 +972,7 @@ let
         }
       );
 
-      meta = checkMeta.commonMeta {
+      meta = commonMeta {
         inherit validity attrs pos;
         references =
           attrs.nativeBuildInputs or [ ]
@@ -980,7 +980,7 @@ let
           ++ attrs.propagatedNativeBuildInputs or [ ]
           ++ attrs.propagatedBuildInputs or [ ];
       };
-      validity = checkMeta.assertValidity { inherit meta attrs; };
+      validity = assertValidity { inherit meta attrs; };
 
       checkedEnv =
         let
