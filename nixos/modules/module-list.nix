@@ -1779,6 +1779,7 @@
   ./services/web-apps/umami.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
+  ./services/web-apps/watcharr.nix
   ./services/web-apps/weblate.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/whoami.nix
