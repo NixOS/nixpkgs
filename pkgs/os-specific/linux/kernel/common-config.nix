@@ -773,6 +773,9 @@ let
       SQUASHFS_LZ4 = yes;
       SQUASHFS_ZSTD = yes;
 
+      EROFS_FS_ZIP_DEFLATE = whenAtLeast "6.6" yes;
+      EROFS_FS_ZIP_ZSTD = whenAtLeast "6.10" yes;
+
       # Native Language Support modules, needed by some filesystems
       NLS = yes;
       NLS_DEFAULT = freeform "utf8";
