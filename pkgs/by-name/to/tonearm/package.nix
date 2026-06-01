@@ -2,7 +2,7 @@
   buildGo126Module,
   cairo,
   copyDesktopItems,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gdk-pixbuf,
   glib,
   glib-networking,
@@ -41,8 +41,7 @@ in
 buildGo126Module (finalAttrs: {
   pname = "tonearm";
   version = "1.4.0";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dergs";
     repo = "Tonearm";
     tag = "v${finalAttrs.version}";
