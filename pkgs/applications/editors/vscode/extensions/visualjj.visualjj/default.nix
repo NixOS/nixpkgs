@@ -3,6 +3,8 @@
   lib,
   vscode-utils,
   vscode-extension-update-script,
+  stdenv,
+  autoPatchelfHook,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -34,6 +36,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   passthru.updateScript = vscode-extension-update-script { };
 
