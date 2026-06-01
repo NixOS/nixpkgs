@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Allow the systemd service to mlock the daemon's entropy buffer.
     (fetchpatch {
-      url = "https://github.com/smuellerDD/jitterentropy-rngd/compare/v1.3.1...61ad2e7c83b95402536b90b52eabe20ce60cfbd7.patch";
-      hash = "sha256-Twg59vrqJGF0bH4pkIewbReCjabOFuqq+MtCnwjO9lw=";
+      url = "https://github.com/smuellerDD/jitterentropy-rngd/compare/v1.3.1...cee0c7a035e9564d161053012c6ea36b2ce27383.patch";
+      hash = "sha256-zwcY9z9EikrhxZa39p4+gl+/EeZ4sAKaItQfrL1DFSo=";
     })
   ];
 

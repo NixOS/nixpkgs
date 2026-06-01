@@ -1772,7 +1772,7 @@ with pkgs;
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
@@ -2060,6 +2060,7 @@ with pkgs;
     cudaPackages_13_0
     cudaPackages_13_1
     cudaPackages_13_2
+    cudaPackages_13_3
     ;
 
   cudaPackages_12 = cudaPackages_12_9;
@@ -8297,7 +8298,7 @@ with pkgs;
         inherit (stdenv.buildPlatform) system;
         inherit (config) rewriteURL;
       };
-      checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
     }
   );
   minimal-bootstrap-sources =
@@ -9637,10 +9638,6 @@ with pkgs;
       gst-plugins-good
       gst-libav
       ;
-  };
-
-  peaclock = callPackage ../applications/misc/peaclock {
-    stdenv = gccStdenv;
   };
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
@@ -10995,7 +10992,7 @@ with pkgs;
     enableUnfree = true;
   };
 
-  inherit (ocaml-ng.ocamlPackages_5_3) hol_light;
+  inherit (ocamlPackages) hol_light;
 
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
