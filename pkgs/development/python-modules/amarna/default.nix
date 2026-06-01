@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amarna";
   version = "0.1.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "amarna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tyvHWBhanR7YH87MDWdXUsDEzZG6MgnbshezAbxWO+I=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})
