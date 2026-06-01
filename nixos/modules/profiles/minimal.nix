@@ -36,6 +36,7 @@ in
   xdg = {
     autostart.enable = mkDefault false;
     icons.enable = mkDefault false;
+    menus.enable = mkDefault false;
     mime.enable = mkDefault false;
     sounds.enable = mkDefault false;
   };
