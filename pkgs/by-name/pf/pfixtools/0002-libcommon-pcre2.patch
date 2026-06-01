@@ -1,0 +1,82 @@
+diff --git a/regexp.c b/regexp.c
+index f9b4e55..cbe17d5 100644
+--- a/common/regexp.c
++++ b/common/regexp.c
+@@ -42,8 +42,8 @@ regexp_t *regexp_new(void)
+ 
+ void regexp_wipe(regexp_t *re)
+ {
+-    pcre_free(re->re);
+-    pcre_free(re->extra);
++    pcre2_code_free(re->re);
++    re->re = NULL;
+ }
+ 
+ void regexp_delete(regexp_t **re)
+@@ -56,21 +56,20 @@ void regexp_delete(regexp_t **re)
+ 
+ bool regexp_compile(regexp_t *re, const char *str, bool cs)
+ {
+-    const char *error = NULL;
+-    int erroffset = 0;
++    int errcode = 0;
++    PCRE2_SIZE erroffset = 0;
++    PCRE2_UCHAR errbuf[256];
+ 
+-    int flags = (cs ? 0 : PCRE_CASELESS);
++    uint32_t flags = (cs ? 0 : PCRE2_CASELESS);
+ 
+     debug("compiling regexp: %s", str);
+-    re->re = pcre_compile(str, flags, &error, &erroffset, NULL);
++    re->re = pcre2_compile((PCRE2_SPTR)str, PCRE2_ZERO_TERMINATED,
++                           flags, &errcode, &erroffset, NULL);
+     if (re->re == NULL) {
+-        err("cannot compile regexp: %s (at %d)", error, erroffset);
++        pcre2_get_error_message(errcode, errbuf, sizeof(errbuf));
++        err("cannot compile regexp: %s (at %zu)", errbuf, erroffset);
+         return false;
+     }
+-    re->extra = pcre_study(re->re, 0, &error);
+-    if (re->extra == NULL && error != NULL) {
+-        warn("regexp inspection failed: %s", error);
+-    }
+     return true;
+ }
+ 
+@@ -89,8 +88,12 @@ bool regexp_compile_str(regexp_t *re, const clstr_t *str, bool cs)
+ 
+ bool regexp_match_str(const regexp_t *re, const clstr_t *str)
+ {
+-    return 0 == pcre_exec(re->re, re->extra, str->str, str->len,
+-                          0, 0, NULL, 0);
++    pcre2_match_data *md =
++        pcre2_match_data_create_from_pattern(re->re, NULL);
++    int rc = pcre2_match(re->re, (PCRE2_SPTR)str->str, str->len,
++                         0, 0, md, NULL);
++    pcre2_match_data_free(md);
++    return rc >= 0;
+ }
+ 
+ bool regexp_match(const regexp_t *re, const char *str)
+diff --git a/regexp.h b/regexp.h
+index 488f38b..2f49ab5 100644
+--- a/common/regexp.h
++++ b/common/regexp.h
+@@ -36,14 +36,14 @@
+ #ifndef PFIXTOOLS_REGEXP_H
+ #define PFIXTOOLS_REGEXP_H
+ 
+-#include <pcre.h>
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include <pcre2.h>
+ #include "str.h"
+ #include "array.h"
+ #include "buffer.h"
+ 
+ struct regexp_t {
+-    pcre *re;
+-    pcre_extra *extra;
++    pcre2_code *re;
+ };
+ 
+ typedef struct regexp_t regexp_t;
