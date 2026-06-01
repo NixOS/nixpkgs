@@ -44,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Nonlinear optimal control problem solver that aims to be fast, support a broad class of optimal control problems and achieve a high numerical robustness";
     homepage = "https://github.com/meco-group/fatrop";
-    license = lib.licenses.lgpl3Only;
+    license = with lib.licenses; [
+      bsd2
+      epl20
+    ];
     maintainers = with lib.maintainers; [ nim65s ];
   };
 })
