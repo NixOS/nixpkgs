@@ -52,7 +52,6 @@
   fdk_aac,
   libopus,
   ldacbt,
-  libldac-dec,
   spandsp,
   modemmanager,
   libpulseaudio,
@@ -74,7 +73,6 @@
     x11Support
     && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
     && lib.meta.availableOn stdenv.hostPlatform ffado,
-  ldacBtDecodeSupport ? false,
   ffado,
   libselinux,
   libebur128,
@@ -176,7 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
   ++ lib.optional ldacbtSupport ldacbt
-  ++ lib.optional (ldacBtDecodeSupport && ldacbtSupport) libldac-dec
   ++ lib.optional libcameraSupport libcamera
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
@@ -245,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
-    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport && ldacBtDecodeSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
