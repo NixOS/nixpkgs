@@ -309,6 +309,20 @@ in
       '';
     };
 
+    allowFileSystemsDevRoot = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to allow {option}`fileSystems.*.device` to be set to
+        `/dev/root` when systemd stage 1 is enabled.
+
+        The scripted stage 1 init script creates `/dev/root` from the `root=`
+        kernel command line, but systemd stage 1, which became the default from
+        26.05, does not provide that symlink. Set this to true if you know that
+        `/dev/root` is being configured elsewhere.
+      '';
+    };
+
     emergencyAccess = mkOption {
       type =
         with types;
@@ -477,6 +491,25 @@ in
           assertion =
             cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
           message = "The ‘fileSystems’ option does not specify your root file system.";
+        }
+        {
+          assertion =
+            cfg.allowFileSystemsDevRoot
+            || !any (fs: fs.device == "/dev/root") (builtins.attrValues config.fileSystems);
+          message =
+            let
+              devRootFileSystems = filter (fs: fs.device == "/dev/root") (builtins.attrValues config.fileSystems);
+            in
+            ''
+              systemd stage 1 does not provide the `/dev/root` compatibility symlink used by scripted stage 1.
+
+              The following fileSystems entries set device = "/dev/root":
+              ${concatStringsSep "\n" (map (fs: "- ${fs.mountPoint}") devRootFileSystems)}
+
+              Replace `/dev/root` with a stable device path such as `/dev/disk/by-label/...`, `/dev/disk/by-uuid/...`,
+              or the appropriate `/dev/mapper/...` path, or set `boot.initrd.systemd.allowFileSystemsDevRoot = true` if
+              you know that `/dev/root` is being configured elsewhere.
+            '';
         }
       ]
       ++
