@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (fetchpatch {
       name = "fix-segfault-on-linux.patch";
-      url = "https://github.com/VCVRack/Rack/pull/1944.patch";
+      url = "https://github.com/VCVRack/Rack/commit/9f0eb9a0da8e9d6f1729f823555fdac2135214f0.patch";
       hash = "sha256-dlndyCfCznGDzlWNWrQTgh+FtmsrrL2DVuRE0xCxUck=";
     })
   ];
