@@ -1,21 +1,31 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhangul";
   version = "0.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/libhangul/libhangul/releases/download/libhangul-${finalAttrs.version}/libhangul-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6gTmoM9IQKKjtWQcF2EGjHhpEDbbg50IOPTnplU6USA=";
+  src = fetchFromGitHub {
+    owner = "libhangul";
+    repo = "libhangul";
+    hash = "sha256-1cTDsRJpT5TLdJN8D2LfOISWeAOlSO6zKZOaCrTxooM=";
+    tag = "libhangul-${finalAttrs.version}";
   };
 
+  preAutoreconf = "./autogen.sh";
   configureFlags = [
     # detection doesn't work for cross builds
     "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
   ];
 
   meta = {
