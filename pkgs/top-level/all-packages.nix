@@ -9639,8 +9639,6 @@ with pkgs;
       ;
   };
 
-  peaclock = callPackage ../applications/misc/peaclock { };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
