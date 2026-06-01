@@ -4,19 +4,32 @@
   fetchFromGitHub,
   boost,
   xz,
+  cargo,
   pkg-config,
-  libsForQt5,
+  qt6Packages,
+  rustPlatform,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "QMediathekView";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "adamreichold";
     repo = "QMediathekView";
     tag = "v${finalAttrs.version}";
-    sha256 = "0i9hac9alaajbra3lx23m0iiq6ww4is00lpbzg5x70agjrwj0nd6";
+    hash = "sha256-miqCzNTqbZwPuy6P911wlf5TF1lECzNW/02/edK8XaU=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-89ogtmtJRgMoPOjyW+OGoptKE8VP9lUhbsB5vrdP7zQ=";
   };
 
   postPatch = ''
@@ -25,16 +38,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libsForQt5.qtbase
+    qt6Packages.qtbase
+    sqlite
     xz
     boost
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    qt6Packages.qmake
+    cargo
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
+    rustPlatform.cargoSetupHook
   ];
+
+  cargoRoot = "internals";
+
+  env.HOST_AR = lib.getExe' stdenv.cc.bintools.bintools "ar";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
