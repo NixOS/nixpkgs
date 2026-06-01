@@ -12,13 +12,9 @@
   fftw,
   curl,
   gcc,
-  libsForQt5,
   libxt,
-  qtbase,
-  qttools,
+  qt6,
   readline,
-  qtwebsockets,
-  qtwayland,
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -30,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "supercollider";
-  version = "3.13.1";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-aXnAFdqs/bVZMovoDV1P4mv2PtdFD2QuXHjnsnEyMSs=";
+    sha256 = "sha256:ee640c68777ae697682066ce5c4a8b7e56c5b223e76c79c13b5be5387ee55bb2";
   };
 
   patches = [
@@ -63,8 +59,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    libsForQt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals useSCEL [ emacs ];
 
@@ -75,9 +71,9 @@ stdenv.mkDerivation rec {
     fftw
     curl
     libxt
-    qtbase
-    qtwebsockets
-    qtwayland
+    qt6.qtbase
+    qt6.qtwebsockets
+    qt6.qtwayland
     readline
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
