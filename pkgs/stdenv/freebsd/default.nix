@@ -7,6 +7,7 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
   bootstrapFiles ?
     let
       table = {
@@ -17,6 +18,7 @@
           or (throw "unsupported platform ${localSystem.system} for the pure FreeBSD stdenv");
     in
     files,
+  ...
 }:
 
 assert crossSystem == localSystem;
@@ -389,6 +391,7 @@ let
           initialPath
           shell
           fetchurlBoot
+          mkStdenvDevShell
           ;
         name = "stdenvNoCC-${name}";
         buildPlatform = localSystem;
@@ -407,6 +410,7 @@ let
           initialPath
           shell
           fetchurlBoot
+          mkStdenvDevShell
           ;
         name = "stdenv-${name}";
         buildPlatform = localSystem;

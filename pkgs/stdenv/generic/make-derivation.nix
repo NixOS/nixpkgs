@@ -6,7 +6,12 @@
 #
 # See https://github.com/NixOS/nixpkgs/pull/430969 for measurements.
 
-{ lib, config }:
+{
+  lib,
+  config,
+  # Function to construct the default devShell attribute; when not set via passthru.
+  mkStdenvDevShell ? _: null,
+}:
 
 stdenv:
 
@@ -214,6 +219,7 @@ let
     "allowedReferences"
     "allowedRequisites"
     "allowedImpureDLLs"
+    "mkDevShell"
   ];
 
   referenceCheckingAttrsToRemove = [
@@ -1059,6 +1065,10 @@ let
             ];
           }
         );
+
+        devShell = attrs.mkDevShell or mkStdenvDevShell {
+          drvAttrs = derivationArg // checkedEnv;
+        };
 
         inherit passthru overrideAttrs;
         inherit meta;

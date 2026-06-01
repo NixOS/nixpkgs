@@ -80,6 +80,8 @@ in
   # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays,
+
+  mkStdenvDevShell ? _: null,
 }@args:
 
 let
