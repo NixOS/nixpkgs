@@ -1,21 +1,21 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   libpthread-stubs,
   icu,
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "peaclock";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "octobanana";
     repo = "peaclock";
-    rev = version;
-    sha256 = "1582vgslhpgbvcd7ipgf1d1razrvgpq1f93q069yr2bbk6xn8i16";
+    tag = finalAttrs.version;
+    hash = "sha256-JkRku5lrieyTAXgkF/B9O3+VQwvu3Xga2+tdSPXbApU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ djanatyn ];
     mainProgram = "peaclock";
   };
-}
+})

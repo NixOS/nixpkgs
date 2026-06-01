@@ -9639,10 +9639,6 @@ with pkgs;
       ;
   };
 
-  peaclock = callPackage ../applications/misc/peaclock {
-    stdenv = gccStdenv;
-  };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
