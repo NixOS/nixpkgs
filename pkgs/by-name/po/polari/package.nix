@@ -17,12 +17,11 @@
   gtk4,
   tinysparql,
   libadwaita,
-  gtk3,
   glib,
   glib-networking,
   libsecret,
   libsoup_3,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   gobject-introspection,
   gnome,
   wrapGAppsHook4,
@@ -32,11 +31,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "polari";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/polari/${lib.versions.major finalAttrs.version}/polari-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UmJv3jkJkhrFhsxMwQ8w8SOq9hVaF374hhyg5V1t6FA=";
+    hash = "sha256-pSiWuSZHJf19WtCOYp10r6ZKNOT2PnP2ELl87TblZ9s=";
   };
 
   patches = [
@@ -88,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     tinysparql
     libadwaita
-    gtk3 # for thumbnailer
     glib
     glib-networking
     gsettings-desktop-schemas
@@ -98,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libsecret
     libsoup_3
-    webkitgtk_4_1 # for thumbnailer
+    webkitgtk_6_0 # for thumbnailer
   ];
 
   postFixup = ''
