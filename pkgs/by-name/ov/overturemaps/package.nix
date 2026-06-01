@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "overturemaps";
   version = "0.20.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rvc1MpqCdRGuMWS5CSDev9SFgyVX8VczopXU/lWAyxg=";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ crimeminister ];
   };
-}
+})

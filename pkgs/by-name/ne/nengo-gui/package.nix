@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "nengo-gui";
   version = "0.4.9";
   format = "setuptools";
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo-gui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
   };
 
@@ -28,4 +28,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
   };
-}
+})

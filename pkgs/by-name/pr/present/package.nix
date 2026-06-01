@@ -19,13 +19,13 @@ let
     }
   );
 in
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage (finalAttrs: {
   pname = "present";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-l9W5L4LD9qRo3rLBkgd2I/aDaj+ucib5UYg+X4RYg6c=";
   };
 
@@ -51,4 +51,4 @@ pythonPackages.buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "present";
   };
-}
+})

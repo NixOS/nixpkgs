@@ -5,7 +5,7 @@
   bgpq4,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "arouteserver";
   version = "1.23.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pierky";
     repo = "arouteserver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qPU1eBEAlF6wcI1KEBtSuf0a+pKsqoCN0mtAPjIr+0c=";
   };
 
@@ -59,11 +59,11 @@ python3Packages.buildPythonPackage rec {
     description = "Automatically build (and test) feature-rich configurations for BGP route servers";
     mainProgram = "arouteserver";
     homepage = "https://github.com/pierky/arouteserver";
-    changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/pierky/arouteserver/blob/v${finalAttrs.version}/CHANGES.rst";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [
       marcel
       johannwagner
     ];
   };
-}
+})

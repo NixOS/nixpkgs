@@ -6,7 +6,7 @@
   libsForQt5,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "qnotero";
 
   version = "2.3.1";
@@ -15,7 +15,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ealbiter";
     repo = "qnotero";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Rym7neluRbYCpuezRQyLc6gSl3xbVR9fvhOxxW5+Nzo=";
   };
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonPackage rec {
     broken = stdenv.hostPlatform.isDarwin; # Build fails even after adding cx-freeze to `buildInputs`
     maintainers = [ lib.maintainers.nico202 ];
   };
-}
+})
