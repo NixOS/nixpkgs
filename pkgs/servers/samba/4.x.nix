@@ -345,9 +345,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
-    version = testers.testVersion {
+    smbdVersion = testers.testVersion {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
+      version = "Version ${finalAttrs.version}";
+    };
+    sambaVersion = testers.testVersion {
+      command = "${finalAttrs.finalPackage}/bin/samba --version";
+      package = finalAttrs.finalPackage;
+      version = "Version ${finalAttrs.version}";
+    };
+    sambatoolVersion = testers.testVersion {
+      command = "${finalAttrs.finalPackage}/bin/samba-tool --version";
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
   };
 
