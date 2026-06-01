@@ -24,11 +24,16 @@
   freetype,
   harfbuzz,
   sqlite,
+  which,
   vulkan-headers,
   vulkan-loader,
   shaderc,
   protobuf,
   libzip,
+
+  makeBinaryWrapper,
+
+  makeWrapper,
 
   testers,
   warzone2100,
@@ -86,8 +91,14 @@ stdenv.mkDerivation (finalAttrs: {
     p7zip
     asciidoctor
     gettext
+    makeBinaryWrapper
     shaderc
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    makeWrapper
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fobjc-arc";
 
   postPatch =
     let
@@ -119,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
       DOLLAR='$'
       substituteInPlace 3rdparty/basis_universal_host_build/CMakeLists.txt \
         --replace-fail "''${DOLLAR}{CMAKE_COMMAND} chdir" "''${DOLLAR}{CMAKE_COMMAND} -E chdir"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail 'if(CMAKE_SYSTEM_NAME MATCHES "Darwin")' 'if(FALSE)'
     '';
 
   cmakeFlags = [
@@ -133,11 +148,49 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ];
-
-  postInstall = lib.optionalString withVideos ''
-    ln -sn ${sequences} $out/share/warzone2100/sequences.wz
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ''
+    -DWZ_ENABLE_BACKEND_VULKAN=OFF
   '';
+
+  postInstall =
+    (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      wrapProgram $out/bin/warzone2100 \
+        --prefix PATH : ${lib.makeBinPath [ which ]}
+    '')
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      appBundle="$out/Applications/Warzone 2100.app"
+      mkdir -p "$appBundle/Contents/MacOS"
+      mkdir -p "$appBundle/Contents/Resources"
+
+      mv "$out/bin/warzone2100" "$appBundle/Contents/MacOS/Warzone 2100"
+
+      ln -s "$out/share/warzone2100" "$appBundle/Contents/Resources/data"
+      ln -s "$out/share/locale" "$appBundle/Contents/Resources/locale"
+      ln -s "$out/share/doc/warzone2100" "$appBundle/Contents/Resources/docs"
+      cp "$NIX_BUILD_TOP/$sourceRoot/platforms/macos/Resources/Warzone.icns" \
+        "$appBundle/Contents/Resources/Warzone.icns"
+
+      plist="$appBundle/Contents/Info.plist"
+      cp "$NIX_BUILD_TOP/$sourceRoot/platforms/macos/Resources/Warzone-Info.plist.in" "$plist"
+      substituteInPlace "$plist" \
+        --replace-fail '$(EXECUTABLE_NAME)' 'Warzone 2100' \
+        --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' 'net.wz2100.Warzone2100' \
+        --replace-fail '$(MACOSX_DEPLOYMENT_TARGET)' '14' \
+        --replace-fail '@WZINFO_CFBundleGetInfoString@' 'Warzone 2100 ${finalAttrs.version}' \
+        --replace-fail '@MAC_VERSION_NUMBER@' '${finalAttrs.version}' \
+        --replace-fail '@MAC_BUILD_NUMBER@' '${finalAttrs.version}' \
+        --replace-fail '@WZINFO_NSHumanReadableCopyright@' 'Copyright The Warzone 2100 Project' \
+        --replace-fail '@VCS_FULL_HASH@' '0000000000000000000000000000000000000000' \
+        --replace-fail '@VCS_SHORT_HASH@' '0000000'
+
+      makeBinaryWrapper \
+        "$appBundle/Contents/MacOS/Warzone 2100" \
+        "$out/bin/warzone2100"
+    ''
+    + lib.optionalString withVideos ''
+      ln -sn ${sequences} $out/share/warzone2100/sequences.wz
+    '';
 
   passthru.tests = {
     version = testers.testVersion {
