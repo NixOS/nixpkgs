@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = lib.optionalString withDoc ''
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME="$(mktemp -d)"
+
     cmake --build . -t install-doc
   '';
 
