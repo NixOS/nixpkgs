@@ -7,20 +7,23 @@
   numpy,
   pytestCheckHook,
   scikit-image,
+  setuptools,
   slicerator,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pims";
   version = "0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = "pims";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3SBZk11w6eTZFmETMRJaYncxY38CYne1KzoF5oRgzuY=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     slicerator
@@ -40,6 +43,10 @@ buildPythonPackage rec {
     "-Wignore::Warning"
   ];
 
+  enabledTestPaths = [
+    "pims/tests"
+  ];
+
   disabledTests = [
     # NotImplementedError: Do not know how to deal with infinite readers
     "TestVideo_ImageIO"
@@ -54,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to load video and sequential images in various formats";
     homepage = "https://github.com/soft-matter/pims";
-    changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
+    changelog = "https://github.com/soft-matter/pims/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
