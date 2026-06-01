@@ -4,10 +4,20 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    escapeShellArgs
+    literalExpression
+    maintainers
+    mkDefault
+    mkIf
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionals
+    types
+    ;
+
   cfg = config.services.getty;
 
   baseArgs = [
