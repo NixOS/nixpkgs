@@ -76,7 +76,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Picocrypt-NG/Picocrypt-NG";
     changelog = "https://github.com/Picocrypt-NG/Picocrypt-NG/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ tbutter ];
+    maintainers = with lib.maintainers; [
+      tbutter
+      ryand56
+    ];
     mainProgram = "picocrypt-ng-gui";
   };
 })
