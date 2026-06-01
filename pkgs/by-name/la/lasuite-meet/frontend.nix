@@ -13,7 +13,7 @@ buildNpmPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) version src sourceRoot;
-    hash = "sha256-LDH8aR+FSiIFYMDaQ3wNYAzv6VpHtH5X+DMHGBhPkm0=";
+    hash = "sha256-oqz8oYogBNLlJT/iw5okhskZGy60U/sQ/ASrg/KGkXE=";
   };
   npmBuildScript = "build";
 
