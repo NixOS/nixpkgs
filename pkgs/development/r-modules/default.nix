@@ -2004,6 +2004,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    ramr = old.ramr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     roxigraph = old.roxigraph.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         LIBCLANG_PATH = "${lib.getLib pkgs.libclang}/lib";
@@ -2977,6 +2981,9 @@ let
     );
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
+      };
       preConfigure = ''
         patchShebangs configure
       '';
