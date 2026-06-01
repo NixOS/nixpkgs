@@ -314,13 +314,16 @@ It must be one of the following:
 	be made using _nixos_ function in nixpkgs or importing and calling
 	nixos/lib/eval-config.nix from nixpkgs. If specified without *--attr*
 	option, builds the configuration from the top-level attribute set of the
-	file.
+	file. Using this option disables automatic flake detection, same as
+	*--no-flake*.
 
 *--attr* _attrPath_, *-A* _attrPath_
 	Build the NixOS system from a nix file and use the specified
 	attribute path from the file specified by the *--file* option.
 	If specified without *--file* option, uses _system.nix_ in current directory,
 	the system-wide _<nixos-system>_ file, or finally, /etc/nixos/system.nix.
+	Using this option disables automatic flake detection, same as
+	*--no-flake*.
 
 *--flake* _flake-uri[#name]_, *-F* _flake-uri[#name]_
 	Build the NixOS system from the specified flake. It defaults to the
