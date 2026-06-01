@@ -3191,7 +3191,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
+  texmacs = callPackage ../applications/editors/texmacs {
     extraFonts = true;
   };
 
@@ -10514,8 +10514,6 @@ with pkgs;
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
-
-  openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
   openraPackages_2019 = import ../games/openra_2019 {
     inherit lib;
