@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VsgF5zmrMPuXrRsxb4YBx+hXkFltxgbgskAe0b3k9bw=";
+    hash = "sha256-ELjxZKWCsAQte+KtSdwseMGnMdw65H9PrjuJP0PHtIM=";
   };
 
   build-system = [
