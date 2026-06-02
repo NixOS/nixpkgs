@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ePgVR7VHXWKqOShuAEQG3BJ08W2aZS/vfcPUCqTw7X4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zjajNtj4jKbt3pLjfLrgtYljyMDYJtnzAC5JPdt+Wys=";
   };
 
   outputs = [
@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/PJK/libcbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = lib.licenses.mit;
