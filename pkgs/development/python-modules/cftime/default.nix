@@ -35,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Time-handling functionality from netcdf4-python";
+    changelog = "https://github.com/Unidata/cftime/blob/v${finalAttrs.version}rel/Changelog";
     homepage = "https://github.com/Unidata/cftime";
     license = lib.licenses.mit;
     maintainers = [ ];
