@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";
