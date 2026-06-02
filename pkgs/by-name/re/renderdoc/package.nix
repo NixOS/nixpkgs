@@ -14,7 +14,7 @@
   nix-update-script,
   pcre2,
   pkg-config,
-  python312Packages,
+  python3,
   qt5,
   stdenv,
   vulkan-loader,
@@ -83,12 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxdmcp
     libpthread-stubs
-    python312Packages.pyside2
-    python312Packages.pyside2-tools
-    python312Packages.shiboken2
     qt5.qtbase
     qt5.qtsvg
     vulkan-loader
+    # TODO: make sure pyrenderdoc is installed properly
+    # TODO: unbreak shiboken2 on python>3.12
+    # python312Packages.pyside2
+    # python312Packages.pyside2-tools
+    # python312Packages.shiboken2
   ]
   ++ lib.optionals waylandSupport [
     wayland
@@ -103,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre2
     pkg-config
-    python312Packages.python
+    python3
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -115,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
     (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
+    # TODO: build python bindings
+    # https://github.com/NixOS/nixpkgs/issues/525939
+    (lib.cmakeBool "ENABLE_PYRENDERDOC" false)
+    (lib.cmakeBool "QRENDERDOC_ENABLE_PYSIDE2" false)
   ];
 
   dontWrapQtApps = true;
