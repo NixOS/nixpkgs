@@ -311,8 +311,8 @@ in
       "sha256-CavBKgp+dEMR2poR+bG2PgZb+wX1zlNmuOyJsV3LfVM=";
 
   mypy-boto3-cognito-idp =
-    buildMypyBoto3Package "cognito-idp" "1.43.0"
-      "sha256-oxmjIvweCKsN/QybmuHCKeGPzQMZsJOZ4HXvUnA15h8=";
+    buildMypyBoto3Package "cognito-idp" "1.43.19"
+      "sha256-Aihq5V9TmK5erGX06KeGzHftyu68BYhkifn2HnMXBG0=";
 
   mypy-boto3-cognito-sync =
     buildMypyBoto3Package "cognito-sync" "1.43.0"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.18"
-      "sha256-+cfQUyFlqWRQtkX28raVgZjdwnqhyK5vNyZjpWW3aEI=";
+    buildMypyBoto3Package "quicksight" "1.43.19"
+      "sha256-7KjkPWai+mZzPUwwC93YyvSQVbWgpvFlr41T08YzT6M=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
