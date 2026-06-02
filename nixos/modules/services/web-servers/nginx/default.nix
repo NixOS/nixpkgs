@@ -166,7 +166,7 @@ let
 
         pid ${cfg.pidFile};
         error_log ${cfg.logError};
-        daemon off;
+        daemon ${if cfg.daemon then "on" else "off"};
 
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
@@ -828,6 +828,15 @@ in
         '';
       };
 
+      daemon = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether NGINX runs in the background (daemon mode) or in the foreground (default).
+          Note that running nginx in daemon mode requires manual adjustments to the systemd service.
+        '';
+      };
+
       preStart = mkOption {
         type = types.lines;
         default = "";
@@ -847,6 +856,7 @@ in
           - [](#opt-services.nginx.httpConfig)
           - [](#opt-services.nginx.pidFile)
           - [](#opt-services.nginx.logError)
+          - [](#opt-services.nginx.daemon)
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
