@@ -25,14 +25,6 @@ let
       hash = "sha256-fMIyMR9RA60hdy1eniJkvLHK+WJPuVehWMyS9Lt6iQ4=";
     };
 
-    patches = [
-      (fetchpatch {
-        name = "shellscript-crash-fix.patch";
-        url = "https://gitlab.com/saalen/highlight/-/commit/2c0e95290fe7ca26185851f38ac205d81e4b7015.patch";
-        hash = "sha256-aan2s7wKzBO/QbK+Q+Zq1RiyFORJjEYDcscjCAxMJg8=";
-      })
-    ];
-
     enableParallelBuilding = true;
 
     nativeBuildInputs = [
