@@ -877,6 +877,10 @@ assertNoAdditions {
     dependencies = [ self.luasnip ];
   };
 
+  cmp_yanky = super.cmp_yanky.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {
     dependencies = with self; [ colorbuddy-nvim ];
     # Few broken themes
