@@ -2583,9 +2583,9 @@
   };
 
   swift = rec {
-    version = "0.7.2";
+    version = "0.7.3";
     url = "github:alex-pinkus/tree-sitter-swift/${version}-with-generated-files";
-    hash = "sha256-tG+tM7B6901QP4QyJdf55V38b4XduSU1eb+gaP7BikE=";
+    hash = "sha256-SnWwqk6IRpaNldsraSKwHGtS64LiCndxDksrvLMs1P8=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
