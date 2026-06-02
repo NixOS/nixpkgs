@@ -25,6 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
+  # macOS's ld64 has no --version-script, so translate the data/playerctl.syms
+  # filter to an -exported_symbols_list to keep the same symbols exported on darwin
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    printf '%s\n' '_Playerctl*' '_PLAYERCTL*' '_playerctl_*' '_pctl_*' > data/playerctl.syms
+    substituteInPlace playerctl/meson.build \
+      --replace-fail '--version-script' '-exported_symbols_list'
+  '';
+
   nativeBuildInputs = [
     docbook_xsl
     gobject-introspection
@@ -49,8 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/acrisci/playerctl";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ puffnfresh ];
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      anish
+    ];
     mainProgram = "playerctl";
   };
 })
