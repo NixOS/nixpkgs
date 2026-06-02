@@ -1242,6 +1242,11 @@ let
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive ];
+    lpsymphony = with pkgs; [
+      symphony
+      cgl
+      clp
+    ];
     gdalcubes = with pkgs; [
       proj.dev
       gdal
@@ -2981,7 +2986,10 @@ let
     );
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
-      preConfigure = ''
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail '--libs SYMPHONY' '--libs symphony' \
+          --replace-fail '--cflags SYMPHONY' '--cflags symphony'
         patchShebangs configure
       '';
     });
