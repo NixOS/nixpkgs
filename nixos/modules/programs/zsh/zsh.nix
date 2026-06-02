@@ -250,7 +250,7 @@ in
       ''}
 
       # Determine current fqdn hostname
-      HOST=$(hostname --fqdn)
+      HOST=$(${lib.getExe' pkgs.inetutils "hostname"} --fqdn)
 
       # Setup command line history.
       # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
