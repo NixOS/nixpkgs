@@ -1,0 +1,22 @@
+diff --git a/tests/unittests/cmd/devel/test_logs.py b/tests/unittests/cmd/devel/test_logs.py
+index 78466e8d0..cc2b7246d 100644
+--- a/tests/unittests/cmd/devel/test_logs.py
++++ b/tests/unittests/cmd/devel/test_logs.py
+@@ -179,7 +179,7 @@ class TestCollectLogs:
+ 
+         for to_write in to_collect:
+             write_file(
+-                tmp_path / to_write, pathlib.Path(to_write).name, mode=0x700
++                tmp_path / to_write, pathlib.Path(to_write).name
+             )
+ 
+         collect_dir = tmp_path / "collect"
+@@ -225,7 +225,7 @@ class TestCollectLogs:
+ 
+         for to_write in to_collect:
+             write_file(
+-                tmp_path / to_write, pathlib.Path(to_write).name, mode=0x700
++                tmp_path / to_write, pathlib.Path(to_write).name
+             )
+ 
+         collect_dir = tmp_path / "collect"

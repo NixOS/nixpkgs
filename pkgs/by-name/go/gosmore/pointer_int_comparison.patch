@@ -1,0 +1,11 @@
+--- blah_/jni/gosmore.cpp	1970-01-01 01:00:01.000000000 +0100
++++ /dev/stdin	2018-03-18 00:21:08.474217132 +0100
+@@ -1273,7 +1273,7 @@
+       if (deg[i] < -180 || deg[i] > 180) break;
+       if (i == 0 && (strncasecmp (t, "lat", 3) == 0 ||
+                      strncasecmp (t, "lon", 3) == 0)) { // lat=-25.7 lon=28.2
+-        for (t += 3; t != '\0' && !isalnum (*t); t++) {}
++        for (t += 3; *t != '\0' && !isalnum (*t); t++) {}
+       }
+       if (i == 1) { // Success !
+         //printf ("%lf %lf %u\n", deg[lonFirst ? 1 : 0], deg[lonFirst ? 0 : 1],

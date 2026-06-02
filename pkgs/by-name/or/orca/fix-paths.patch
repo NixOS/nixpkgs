@@ -1,0 +1,70 @@
+diff --git a/src/orca/ax_utilities_application.py b/src/orca/ax_utilities_application.py
+index 218c7bf22..4474f26cd 100644
+--- a/src/orca/ax_utilities_application.py
++++ b/src/orca/ax_utilities_application.py
+@@ -180,7 +180,7 @@ class AXUtilitiesApplication:
+ 
+         pid = AXUtilitiesApplication.get_process_id(app)
+         try:
+-            state = subprocess.getoutput(f"cat /proc/{pid}/status | grep State")
++            state = subprocess.getoutput(f"@cat@ /proc/{pid}/status | @grep@ State")
+             state = state.split()[1]
+         except (GLib.GError, IndexError) as error:
+             tokens = [f"AXUtilitiesApplication: Exception checking state of pid {pid}: {error}"]
+diff --git a/src/orca/debugging_tools_manager.py b/src/orca/debugging_tools_manager.py
+index 5c607f3cd..18ddcd920 100644
+--- a/src/orca/debugging_tools_manager.py
++++ b/src/orca/debugging_tools_manager.py
+@@ -169,7 +169,7 @@ class DebuggingToolsManager:
+             else:
+                 name = AXObject.get_name(app) or "[DEAD]"
+             try:
+-                cmdline = subprocess.getoutput(f"cat /proc/{pid}/cmdline")
++                cmdline = subprocess.getoutput(f"@cat@ /proc/{pid}/cmdline")
+             except subprocess.SubprocessError as error:
+                 cmdline = f"EXCEPTION: {error}"
+             else:
+diff --git a/src/orca/orca_bin.py.in b/src/orca/orca_bin.py.in
+index 86a1413ca..f272c431d 100755
+--- a/src/orca/orca_bin.py.in
++++ b/src/orca/orca_bin.py.in
+@@ -211,7 +211,7 @@ def in_graphical_desktop() -> bool:
+ def other_orcas() -> list[int]:
+     """Returns the pid of any other instances of Orca owned by this user."""
+ 
+-    with subprocess.Popen(f"pgrep -u {os.getuid()} -x orca",
++    with subprocess.Popen(f"@pgrep@ -u {os.getuid()} -x orca",
+                           shell=True,
+                           stdout=subprocess.PIPE) as proc:
+         pids = proc.stdout.read() if proc.stdout else b""
+diff --git a/src/orca/orca_modifier_manager.py b/src/orca/orca_modifier_manager.py
+index d1d95f5b9..e57993521 100644
+--- a/src/orca/orca_modifier_manager.py
++++ b/src/orca/orca_modifier_manager.py
+@@ -289,7 +289,7 @@ class OrcaModifierManager:
+ 
+         self._restore_original_xkbcomp()
+         with subprocess.Popen(
+-            ["xkbcomp", display, "-"],
++            ["@xkbcomp@", display, "-"],
+             stdout=subprocess.PIPE,
+             stderr=subprocess.DEVNULL,
+         ) as p:
+@@ -338,7 +338,7 @@ class OrcaModifierManager:
+ 
+         self._caps_lock_cleared = False
+         with subprocess.Popen(
+-            ["xkbcomp", "-w0", "-", display],
++            ["@xkbcomp@", "-w0", "-", display],
+             stdin=subprocess.PIPE,
+             stdout=None,
+             stderr=None,
+@@ -449,7 +449,7 @@ class OrcaModifierManager:
+         debug.print_message(debug.LEVEL_INFO, msg, True)
+ 
+         with subprocess.Popen(
+-            ["xkbcomp", "-w0", "-", display],
++            ["@xkbcomp@", "-w0", "-", display],
+             stdin=subprocess.PIPE,
+             stdout=None,
+             stderr=None,

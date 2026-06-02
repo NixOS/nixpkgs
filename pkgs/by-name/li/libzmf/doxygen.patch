@@ -1,0 +1,30 @@
+diff --git a/docs/doxygen/Makefile.am b/docs/doxygen/Makefile.am
+index 4351042..40a02e8 100644
+--- a/docs/doxygen/Makefile.am
++++ b/docs/doxygen/Makefile.am
+@@ -6,9 +6,7 @@ if WITH_LIBZMF_DOCS
+ 
+ install-data-am:
+ 	mkdir -p $(DESTDIR)$(docdir)/html
+-	$(INSTALL_DATA) html/*.html $(DESTDIR)$(docdir)/html/
+-	$(INSTALL_DATA) html/*.png $(DESTDIR)$(docdir)/html/
+-	$(INSTALL_DATA) html/*.css $(DESTDIR)$(docdir)/html/
++	$(INSTALL_DATA) html/* $(DESTDIR)$(docdir)/html/
+ 
+ uninstall-am:
+ 	-rm -rf $(DESTDIR)$(docdir)/html
+diff --git a/docs/doxygen/Makefile.in b/docs/doxygen/Makefile.in
+index 9ad8360..0ff329d 100644
+--- a/docs/doxygen/Makefile.in
++++ b/docs/doxygen/Makefile.in
+@@ -476,9 +476,7 @@ ps-am:
+ 
+ @WITH_LIBZMF_DOCS_TRUE@install-data-am:
+ @WITH_LIBZMF_DOCS_TRUE@	mkdir -p $(DESTDIR)$(docdir)/html
+-@WITH_LIBZMF_DOCS_TRUE@	$(INSTALL_DATA) html/*.html $(DESTDIR)$(docdir)/html/
+-@WITH_LIBZMF_DOCS_TRUE@	$(INSTALL_DATA) html/*.png $(DESTDIR)$(docdir)/html/
+-@WITH_LIBZMF_DOCS_TRUE@	$(INSTALL_DATA) html/*.css $(DESTDIR)$(docdir)/html/
++@WITH_LIBZMF_DOCS_TRUE@	$(INSTALL_DATA) html/* $(DESTDIR)$(docdir)/html/
+ 
+ @WITH_LIBZMF_DOCS_TRUE@uninstall-am:
+ @WITH_LIBZMF_DOCS_TRUE@	-rm -rf $(DESTDIR)$(docdir)/html

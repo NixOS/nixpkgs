@@ -1,0 +1,18 @@
+diff --git a/tests/test_trash.py b/tests/test_trash.py
+index 2637256..e89d45c 100644
+--- a/tests/test_trash.py
++++ b/tests/test_trash.py
+@@ -13,13 +13,6 @@ class TestTrash:
+     def test_version(self, portals, dbus_con):
+         xdp.check_version(dbus_con, "Trash", 1)
+ 
+-    def test_trash_file_fails(self, portals, dbus_con):
+-        trash_intf = xdp.get_portal_iface(dbus_con, "Trash")
+-        with open("/proc/cmdline") as fd:
+-            result = trash_intf.TrashFile(fd.fileno())
+-
+-        assert result == 0
+-
+     def test_trash_file(self, portals, dbus_con):
+         trash_intf = xdp.get_portal_iface(dbus_con, "Trash")
+ 

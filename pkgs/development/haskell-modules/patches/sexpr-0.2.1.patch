@@ -1,0 +1,86 @@
+diff -Naurw sexpr-0.2.1/Codec/Sexpr/Internal.hs sexpr-0.2.1-patched/Codec/Sexpr/Internal.hs
+--- sexpr-0.2.1/Codec/Sexpr/Internal.hs	2009-04-30 00:51:06.000000000 +0200
++++ sexpr-0.2.1-patched/Codec/Sexpr/Internal.hs	2018-08-03 01:38:08.000000000 +0200
+@@ -62,11 +62,6 @@
+                               return $ List []]
+           arbSexpr n = oneof [Atom <$> arbitrary,
+                               List <$> (resize (n `div` 2) arbitrary)]
+-    coarbitrary (Atom s) = variant 0 . coarbitrary s
+-    coarbitrary (HintedAtom h s) = variant 1 . coarbitrary_h . coarbitrary s
+-        where coarbitrary_h = 
+-                foldr (\a b -> variant (ord a) . variant 1 . b) (variant 0) h
+-    coarbitrary (List ss) = variant 2 . coarbitrary ss
+ 
+ -- |@fold f s@ applies f to each sub-S-expression of s, from each leaf
+ -- to the root.  @f@ need not preserve the shape of @s@, in contrast
+diff -Naurw sexpr-0.2.1/Codec/Sexpr/Printer.hs sexpr-0.2.1-patched/Codec/Sexpr/Printer.hs
+--- sexpr-0.2.1/Codec/Sexpr/Printer.hs	2009-04-30 00:51:06.000000000 +0200
++++ sexpr-0.2.1-patched/Codec/Sexpr/Printer.hs	2018-08-03 01:41:56.000000000 +0200
+@@ -1,4 +1,4 @@
+-{-# LANGUAGE FlexibleInstances, OverlappingInstances #-}
++{-# LANGUAGE FlexibleInstances #-}
+ 
+ -- | Export S-expressions in any of the three ordinary forms: 
+ -- 
+@@ -17,6 +17,8 @@
+ 
+ module Codec.Sexpr.Printer where
+ 
++import Prelude hiding ((<>))
++
+ import Codec.Sexpr.Internal
+ 
+ import Data.Binary.Put
+@@ -30,7 +32,7 @@
+ instance Show (Sexpr String) where
+     show s = advancedString s
+ 
+-instance Show s => Show (Sexpr s) where
++instance {-# OVERLAPPABLE #-} Show s => Show (Sexpr s) where
+     show s = advancedString $ fmap show s
+ 
+ raw :: String -> String -> String
+diff -Naurw sexpr-0.2.1/Codec/Sexpr/Tests.hs sexpr-0.2.1-patched/Codec/Sexpr/Tests.hs
+--- sexpr-0.2.1/Codec/Sexpr/Tests.hs	2009-04-30 00:51:06.000000000 +0200
++++ sexpr-0.2.1-patched/Codec/Sexpr/Tests.hs	2018-08-03 01:46:32.000000000 +0200
+@@ -67,11 +67,9 @@
+ 
+ instance Arbitrary B.ByteString where
+     arbitrary = B.pack `fmap` arbitrary
+-    coarbitrary = undefined
+ 
+ instance Arbitrary Char where
+   arbitrary     = choose (32,255) >>= \n -> return (chr n)
+-  coarbitrary n = variant (ord n)
+ 
+ 
+ main :: IO ()
+diff -Naurw sexpr-0.2.1/sexpr.cabal sexpr-0.2.1-patched/sexpr.cabal
+--- sexpr-0.2.1/sexpr.cabal	2018-08-03 01:36:11.000000000 +0200
++++ sexpr-0.2.1-patched/sexpr.cabal	2018-08-03 01:49:13.000000000 +0200
+@@ -13,23 +13,9 @@
+ maintainer:          bts@evenmere.org
+ build-type: 	     Simple
+ 
+-flag testing
+-    description: build test executable
+-    default: False
+-
+ library
+-    if flag(testing)
+-       ghc-options: -Wall
+-    Build-Depends: base, base64-string, pretty, bytestring, binary
++    Build-Depends: base, base64-string, pretty, bytestring, binary, QuickCheck
+     Exposed-modules: Codec.Sexpr
+-
+-executable sexpr-test
+-    if !flag(testing)
+-        buildable: False
+-        ghc-options: -Wall
+-    main-is: Codec/Sexpr/Tests.hs
+-    other-modules:  Codec.Sexpr
+-                    Codec.Sexpr.Parser
++    other-modules:  Codec.Sexpr.Parser
+                     Codec.Sexpr.Printer
+                     Codec.Sexpr.Internal
+-    build-depends: QuickCheck, random

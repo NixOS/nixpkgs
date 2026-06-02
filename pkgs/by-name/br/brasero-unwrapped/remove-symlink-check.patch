@@ -1,0 +1,29 @@
+diff --git a/libbrasero-burn/burn-plugin.c b/libbrasero-burn/burn-plugin.c
+index f97bc5f..88e9d35 100644
+--- a/libbrasero-burn/burn-plugin.c
++++ b/libbrasero-burn/burn-plugin.c
+@@ -221,21 +221,10 @@ brasero_plugin_test_app (BraseroPlugin *plugin,
+ 		return;
+ 	}
+ 
+-	/* make sure that's not a symlink pointing to something with another
+-	 * name like wodim.
+-	 * NOTE: we used to test the target and see if it had the same name as
+-	 * the symlink with GIO. The problem is, when the symlink pointed to
+-	 * another symlink, then GIO didn't follow that other symlink. And in
+-	 * the end it didn't work. So forbid all symlink. */
+-	if (g_file_test (prog_path, G_FILE_TEST_IS_SYMLINK)) {
+-		brasero_plugin_add_error (plugin,
+-		                          BRASERO_PLUGIN_ERROR_SYMBOLIC_LINK_APP,
+-		                          name);
+-		g_free (prog_path);
+-		return;
+-	}
++	/* disable symlink check on nixos */
++
+ 	/* Make sure it's a regular file */
+-	else if (!g_file_test (prog_path, G_FILE_TEST_IS_REGULAR)) {
++	if (!g_file_test (prog_path, G_FILE_TEST_IS_REGULAR)) {
+ 		brasero_plugin_add_error (plugin,
+ 		                          BRASERO_PLUGIN_ERROR_MISSING_APP,
+ 		                          name);

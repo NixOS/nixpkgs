@@ -1,0 +1,35 @@
+[project]
+name = "botan3"
+description = "Python bindings for Botan C++ cryptography library"
+license = "BSD-2-Clause"
+dynamic = [ "version" ]
+authors = [
+    {name = "Jack Lloyd", email = "jack@randombit.net"},
+    {name = "Botan contributors" }
+]
+maintainers = [ {name = "Jack Lloyd", email = "jack@randombit.net"} ]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Topic :: Security :: Cryptography",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy"
+]
+# adapt from time to time with the latest still supported version
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://botan.randombit.net/"
+Issues = "https://github.com/randombit/botan/issues"
+
+[build-system]
+requires = [ "setuptools>=61", "setuptools-scm>=8" ]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["botan3"]
+
+# read version information from git
+[tool.setuptools_scm]
+root = "../.."

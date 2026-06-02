@@ -1,0 +1,246 @@
+From f74059ffbcf53d8ff4db59ca9e7b07d58bd3e3c6 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Fri, 4 Sep 2020 10:15:57 -0300
+Subject: [PATCH] Cygwin: store tls pointer in win32 tls
+
+Use WIN32 TLS instead of stack-relative pointers for TLS. This allows windows
+fibers and boost coroutines to be used without crashing whenever a syscall is
+made from a fiber.
+
+NOTE: This should be submitted upstream, but there is a blocker first. In the
+main branch there are conflicts with new ARM64 support. In addition to fixing
+the conflicts, we should actually test whether ARM64 builds work too, first.
+---
+ winsup/cygwin/create_posix_thread.cc  |  2 ++
+ winsup/cygwin/cygtls.cc               | 15 +++++++++++++++
+ winsup/cygwin/dcrt0.cc                |  1 +
+ winsup/cygwin/fork.cc                 |  1 +
+ winsup/cygwin/include/cygwin/config.h |  2 +-
+ winsup/cygwin/init.cc                 | 12 ++++++++----
+ winsup/cygwin/local_includes/cygtls.h |  7 +++++--
+ winsup/cygwin/scripts/gendef          | 15 ++++++++++-----
+ 8 files changed, 43 insertions(+), 12 deletions(-)
+
+diff --git a/winsup/cygwin/create_posix_thread.cc b/winsup/cygwin/create_posix_thread.cc
+index 3fcd61707..85c1a8af3 100644
+--- a/winsup/cygwin/create_posix_thread.cc
++++ b/winsup/cygwin/create_posix_thread.cc
+@@ -52,6 +52,7 @@ pthread_wrapper (PVOID arg)
+   /* Set stack values in TEB */
+   PTEB teb = NtCurrentTeb ();
+   teb->Tib.StackBase = wrapper_arg.stackbase;
++  _set_tls();
+   teb->Tib.StackLimit = wrapper_arg.stacklimit ?: wrapper_arg.stackaddr;
+   /* Set DeallocationStack value.  If we have an application-provided stack,
+      we set DeallocationStack to NULL, so NtTerminateThread does not deallocate
+@@ -250,6 +251,7 @@ create_new_main_thread_stack (PVOID &allocationbase)
+     return NULL;
+   NtCurrentTeb()->Tib.StackBase = ((PBYTE) allocationbase + stacksize);
+   NtCurrentTeb()->Tib.StackLimit = stacklimit;
++  _set_tls();
+   return ((PBYTE) allocationbase + stacksize - 16);
+ }
+ 
+diff --git a/winsup/cygwin/cygtls.cc b/winsup/cygwin/cygtls.cc
+index 13d133f47..d23f9b42a 100644
+--- a/winsup/cygwin/cygtls.cc
++++ b/winsup/cygwin/cygtls.cc
+@@ -17,6 +17,20 @@ details. */
+ #include "sigproc.h"
+ #include "exception.h"
+ 
++extern DWORD cygtls_slot;
++
++void _set_tls(TEB *teb)
++{
++  TlsSetValue(cygtls_slot, teb->Tib.StackBase);
++}
++
++_cygtls* _current_tls()
++{
++  register void *ret;
++  __asm __volatile__ ("movl cygtls_slot(%%rip),%%r10d\nmovq %%gs:0x1480(,%%r10d,8),%0" : "=r" (ret) : : "r10");
++  return (_cygtls *) ((PBYTE) ret - __CYGTLS_PADSIZE__);
++}
++
+ /* Two calls to get the stack right... */
+ void
+ _cygtls::call (DWORD (*func) (void *, void *), void *arg)
+@@ -25,6 +39,7 @@ _cygtls::call (DWORD (*func) (void *, void *), void *arg)
+   /* Initialize this thread's ability to respond to things like
+      SIGSEGV or SIGFPE. */
+   exception protect;
++  _set_tls();
+   _my_tls.call2 (func, arg, buf);
+ }
+ 
+diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
+index f4c09befd..e6ba488f2 100644
+--- a/winsup/cygwin/dcrt0.cc
++++ b/winsup/cygwin/dcrt0.cc
+@@ -462,6 +462,7 @@ child_info_fork::alloc_stack ()
+ 	 StackBase in the child to be the same as in the parent, so that the
+ 	 computation of _my_tls is correct. */
+       teb->Tib.StackBase = (PVOID) stackbase;
++      _set_tls(teb);
+     }
+ }
+ 
+diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+index f88acdbbf..582f1a454 100644
+--- a/winsup/cygwin/fork.cc
++++ b/winsup/cygwin/fork.cc
+@@ -141,6 +141,7 @@ frok::child (volatile char * volatile here)
+ 		myself->pid, myself->ppid, __builtin_frame_address (0));
+   sigproc_printf ("hParent %p, load_dlls %d", hParent, load_dlls);
+ 
++  _set_tls();
+   /* Make sure threadinfo information is properly set up. */
+   if (&_my_tls != _main_tls)
+     {
+diff --git a/winsup/cygwin/include/cygwin/config.h b/winsup/cygwin/include/cygwin/config.h
+index 2a7083278..21ce484cf 100644
+--- a/winsup/cygwin/include/cygwin/config.h
++++ b/winsup/cygwin/include/cygwin/config.h
+@@ -37,7 +37,7 @@ extern inline struct _reent *__getreent (void)
+ {
+   register char *ret;
+ #ifdef __x86_64__
+-  __asm __volatile__ ("movq %%gs:8,%0" : "=r" (ret));
++  __asm __volatile__ ("movl cygtls_slot(%%rip),%%r10d\nmovq %%gs:0x1480(,%%r10d,8),%0" : "=r" (ret) : : "r10");
+ #else
+ #error unimplemented for this target
+ #endif
+diff --git a/winsup/cygwin/init.cc b/winsup/cygwin/init.cc
+index ce6484aff..392ac8600 100644
+--- a/winsup/cygwin/init.cc
++++ b/winsup/cygwin/init.cc
+@@ -11,7 +11,7 @@ details. */
+ #include "ntdll.h"
+ #include "shared_info.h"
+ 
+-static DWORD _my_oldfunc;
++DWORD NO_COPY cygtls_slot;
+ 
+ static char *search_for  = (char *) cygthread::stub;
+ unsigned threadfunc_ix[8];
+@@ -22,7 +22,9 @@ static bool dll_finished_loading;
+ static void
+ threadfunc_fe (VOID *arg)
+ {
+-  _cygtls::call ((DWORD (*)  (void *, void *)) TlsGetValue (_my_oldfunc), arg);
++  PVOID f = TlsGetValue (cygtls_slot);
++  _set_tls();
++  _cygtls::call ((DWORD (*)  (void *, void *)) f, arg);
+ }
+ 
+ /* If possible, redirect the thread entry point to a cygwin routine which
+@@ -59,7 +61,7 @@ munge_threadfunc ()
+ 	  for (i = 0; threadfunc_ix[i]; i++)
+ 	    if (!threadfunc || ebp[threadfunc_ix[i]] == threadfunc)
+ 	       ebp[threadfunc_ix[i]] = (char *) threadfunc_fe;
+-	  TlsSetValue (_my_oldfunc, threadfunc);
++	  TlsSetValue (cygtls_slot, threadfunc);
+ 	}
+     }
+ }
+@@ -78,6 +80,8 @@ dll_entry (HANDLE h, DWORD reason, void *static_load)
+   switch (reason)
+     {
+     case DLL_PROCESS_ATTACH:
++      cygtls_slot = TlsAlloc ();
++      _set_tls();
+       init_console_handler (false);
+ 
+       cygwin_hmodule = (HMODULE) h;
+@@ -94,7 +98,6 @@ dll_entry (HANDLE h, DWORD reason, void *static_load)
+       memcpy (_REENT, _GLOBAL_REENT, sizeof (struct _reent));
+ 
+       dll_crt0_0 ();
+-      _my_oldfunc = TlsAlloc ();
+       dll_finished_loading = true;
+       break;
+     case DLL_PROCESS_DETACH:
+@@ -102,6 +105,7 @@ dll_entry (HANDLE h, DWORD reason, void *static_load)
+ 	shared_destroy ();
+       break;
+     case DLL_THREAD_ATTACH:
++      _set_tls();
+       if (dll_finished_loading)
+ 	munge_threadfunc ();
+       break;
+diff --git a/winsup/cygwin/local_includes/cygtls.h b/winsup/cygwin/local_includes/cygtls.h
+index 306497a33..e3a216280 100644
+--- a/winsup/cygwin/local_includes/cygtls.h
++++ b/winsup/cygwin/local_includes/cygtls.h
+@@ -301,8 +301,11 @@ private:
+ #include "cygerrno.h"
+ #include "ntdll.h"
+ 
+-#define _my_tls (*((_cygtls *) ((PBYTE) NtCurrentTeb()->Tib.StackBase \
+-		                - __CYGTLS_PADSIZE__)))
++void _set_tls(TEB*);
++inline void _set_tls() { _set_tls(NtCurrentTeb()); }
++_cygtls* _current_tls();
++
++#define _my_tls (*_current_tls())
+ extern _cygtls *_main_tls;
+ extern _cygtls *_sig_tls;
+ 
+diff --git a/winsup/cygwin/scripts/gendef b/winsup/cygwin/scripts/gendef
+index 861a2405b..9a4479bd8 100755
+--- a/winsup/cygwin/scripts/gendef
++++ b/winsup/cygwin/scripts/gendef
+@@ -118,7 +118,8 @@ EOF
+ 	.seh_proc _sigfe_maybe
+ _sigfe_maybe:					# stack is aligned on entry!
+ 	.seh_endprologue
+-	movq	%gs:8,%r10			# location of bottom of stack
++	movl	cygtls_slot(%rip),%r10d
++	movq	%gs:0x1480(,%r10d,8),%r10	# location of bottom of stack
+ 	leaq	_cygtls.initialized(%r10),%r11	# where we will be looking
+ 	cmpq	%r11,%rsp			# stack loc > than tls
+ 	jge	0f				# yep.  we don't have a tls.
+@@ -131,7 +132,8 @@ _sigfe_maybe:					# stack is aligned on entry!
+ 	.seh_proc _sigfe
+ _sigfe:						# stack is aligned on entry!
+ 	.seh_endprologue
+-	movq	%gs:8,%r10			# location of bottom of stack
++	movl	cygtls_slot(%rip),%r10d
++	movq	%gs:0x1480(,%r10d,8),%r10	# location of bottom of stack
+ 1:	movl	\$1,%r11d
+ 	xchgl	%r11d,_cygtls.stacklock(%r10)	# try to acquire lock
+ 	testl	%r11d,%r11d			# it will be zero
+@@ -154,7 +156,8 @@ _sigfe:						# stack is aligned on entry!
+ _sigbe:						# return here after cygwin syscall
+ 						# stack is aligned on entry!
+ 	.seh_endprologue
+-	movq	%gs:8,%r10			# address of bottom of tls
++	movl	cygtls_slot(%rip),%r10d
++	movq	%gs:0x1480(,%r10d,8),%r10	# address of bottom of tls
+ 1:	movl	\$1,%r11d
+ 	xchgl	%r11d,_cygtls.stacklock(%r10)	# try to acquire lock
+ 	testl	%r11d,%r11d			# it will be zero
+@@ -249,7 +252,8 @@ sigdelayed:
+ 2:
+ 	.seh_endprologue
+ 
+-	movq	%gs:8,%r12			# get tls
++	movl	cygtls_slot(%rip),%r12d
++	movq	%gs:0x1480(,%r12d,8),%r12	# get tls
+ 	movl	_cygtls.saved_errno(%r12),%r15d	# temporarily save saved_errno
+ 	movq	\$_cygtls.start_offset,%rcx	# point to beginning of tls block
+ 	addq	%r12,%rcx			#  and store as first arg to method
+@@ -316,7 +320,8 @@ stabilize_sig_stack:
+ 	subq	\$0x20,%rsp
+ 	.seh_stackalloc 32
+ 	.seh_endprologue
+-	movq	%gs:8,%r12
++	movl	cygtls_slot(%rip),%r12d
++	movq	%gs:0x1480(,%r12d,8),%r12
+ 1:	movl	\$1,%r10d
+ 	xchgl	%r10d,_cygtls.stacklock(%r12)	# try to acquire lock
+ 	testl	%r10d,%r10d
+-- 
+2.50.1
+

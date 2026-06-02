@@ -1,0 +1,37 @@
+diff --git a/windmill-worker/nsjail/run.csharp.config.proto b/windmill-worker/nsjail/run.csharp.config.proto
+index 389448eff..ee51c1bfb 100644
+--- a/windmill-worker/nsjail/run.csharp.config.proto
++++ b/windmill-worker/nsjail/run.csharp.config.proto
+@@ -15,16 +15,24 @@ keep_caps: false
+ keep_env: true
+ mount_proc: true
+ 
++mount {
++    src: "/nix/store"
++    dst: "/nix/store"
++    is_bind: true
++}
++
+ mount {
+     src: "/bin"
+     dst: "/bin"
+     is_bind: true
++    mandatory: false
+ }
+ 
+ mount {
+     src: "/lib"
+     dst: "/lib"
+     is_bind: true
++    mandatory: false
+ }
+ 
+ 
+@@ -40,6 +48,7 @@ mount {
+     src: "/usr"
+     dst: "/usr"
+     is_bind: true
++    mandatory: false
+ }
+ 
+ mount {

@@ -1,0 +1,13 @@
+diff --git a/pylama/hook.py b/pylama/hook.py
+index 029c9dc..9f1a9b9 100644
+--- a/pylama/hook.py
++++ b/pylama/hook.py
+@@ -26,7 +26,7 @@ def run(command: str) -> Tuple[int, List[bytes], List[bytes]]:
+ 
+ def git_hook(error=True):
+     """Run pylama after git commit."""
+-    _, files_modified, _ = run("git diff-index --cached --name-only HEAD")
++    _, files_modified, _ = run("@git@ diff-index --cached --name-only HEAD")
+ 
+     options = parse_options()
+     setup_logger(options)

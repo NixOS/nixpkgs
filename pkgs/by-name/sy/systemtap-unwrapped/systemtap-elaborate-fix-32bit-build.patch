@@ -1,0 +1,102 @@
+From 94efb7c4eb02de0e3565cb165b53963602d3dcb6 Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sun, 30 Nov 2025 20:58:01 +0000
+Subject: [PATCH] elaborate.cxx: fix 32-bit build
+
+Without the change the build fails on i686-linux as:
+
+    elaborate.cxx:5119:33: error:
+      format '%ld' expects argument of type 'long int',
+      but argument 2 has type 'int64_t' {aka 'long long int'} [-Werror=format=]
+     5119 |       session.print_warning (_F("Collapsing unresolved @define to %ld [stapprobes]", value), e->tok);
+          |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---
+ elaborate.cxx    | 2 +-
+ po/cs.po         | 2 +-
+ po/en.po         | 2 +-
+ po/fr.po         | 2 +-
+ po/pl.po         | 2 +-
+ po/systemtap.pot | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/elaborate.cxx b/elaborate.cxx
+index 93ecffa1a..3ad3614e7 100644
+--- a/elaborate.cxx
++++ b/elaborate.cxx
+@@ -5116,7 +5116,7 @@ const_folder::visit_defined_op (defined_op* e)
+       // Don't be greedy... we'll only collapse one at a time so type
+       // resolution can have another go at it.
+       relaxed_p = false;
+-      session.print_warning (_F("Collapsing unresolved @define to %ld [stapprobes]", value), e->tok);
++      session.print_warning (_F("Collapsing unresolved @define to %lld [stapprobes]", (long long)value), e->tok);
+       literal_number* n = new literal_number (value);
+       n->tok = e->tok;
+       n->visit (this);
+diff --git a/po/cs.po b/po/cs.po
+index df6412772..92fdef7ad 100644
+--- a/po/cs.po
++++ b/po/cs.po
+@@ -2039,7 +2039,7 @@ msgstr "Zahazuji kontrolu '@defined' bez vedlejších účinků "
+ 
+ #: elaborate.cxx:5119
+ #, fuzzy, c-format
+-msgid "Collapsing unresolved @define to %ld [stapprobes]"
++msgid "Collapsing unresolved @define to %lld [stapprobes]"
+ msgstr "Zahazuji kontrolu '@defined' bez vedlejších účinků "
+ 
+ #: elaborate.cxx:5127
+diff --git a/po/en.po b/po/en.po
+index 8847639e8..1db2292bd 100644
+--- a/po/en.po
++++ b/po/en.po
+@@ -2050,7 +2050,7 @@ msgstr ""
+ 
+ #: elaborate.cxx:5119
+ #, c-format
+-msgid "Collapsing unresolved @define to %ld [stapprobes]"
++msgid "Collapsing unresolved @define to %lld [stapprobes]"
+ msgstr ""
+ 
+ #: elaborate.cxx:5127
+diff --git a/po/fr.po b/po/fr.po
+index b8677707b..55e409919 100644
+--- a/po/fr.po
++++ b/po/fr.po
+@@ -2090,7 +2090,7 @@ msgstr ""
+ 
+ #: elaborate.cxx:5119
+ #, c-format
+-msgid "Collapsing unresolved @define to %ld [stapprobes]"
++msgid "Collapsing unresolved @define to %lld [stapprobes]"
+ msgstr ""
+ 
+ #: elaborate.cxx:5127
+diff --git a/po/pl.po b/po/pl.po
+index e3b6700ee..0b35880c1 100644
+--- a/po/pl.po
++++ b/po/pl.po
+@@ -1977,7 +1977,7 @@ msgstr ""
+ 
+ #: elaborate.cxx:5119
+ #, c-format
+-msgid "Collapsing unresolved @define to %ld [stapprobes]"
++msgid "Collapsing unresolved @define to %lld [stapprobes]"
+ msgstr ""
+ 
+ #: elaborate.cxx:5127
+diff --git a/po/systemtap.pot b/po/systemtap.pot
+index 32ddb2290..4ec0d9a8c 100644
+--- a/po/systemtap.pot
++++ b/po/systemtap.pot
+@@ -1973,7 +1973,7 @@ msgstr ""
+ 
+ #: elaborate.cxx:5119
+ #, c-format
+-msgid "Collapsing unresolved @define to %ld [stapprobes]"
++msgid "Collapsing unresolved @define to %lld [stapprobes]"
+ msgstr ""
+ 
+ #: elaborate.cxx:5127
+-- 
+2.52.0
+
