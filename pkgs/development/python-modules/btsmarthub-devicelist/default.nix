@@ -5,11 +5,12 @@
   pytestCheckHook,
   requests,
   responses,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "btsmarthub-devicelist";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     responses
