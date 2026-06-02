@@ -5,6 +5,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # dependencies
   cairocffi,
   django,
@@ -53,6 +56,8 @@ buildPythonPackage {
     substituteInPlace webapp/tests/test_render.py \
       --replace-fail "test_render_view" "_dont_test_render_view"
   '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     cairocffi
