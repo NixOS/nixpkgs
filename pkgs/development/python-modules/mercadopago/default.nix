@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mercadopago";
-  version = "2.4.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mercadopago";
     repo = "sdk-python";
     tag = version;
-    hash = "sha256-AYgYGY55hhvVY1lB6anJvjRquDRiNoDnpOFTuVdQniM=";
+    hash = "sha256-WpzrXGKQk4sZjD62LuC6AynHaaoU+2jxlx6nREQNqZU=";
   };
 
   build-system = [
