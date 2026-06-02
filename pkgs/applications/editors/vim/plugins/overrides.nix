@@ -822,6 +822,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-snippy ];
   };
 
+  cmp-spell = super.cmp-spell.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-tabby = super.cmp-tabby.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
