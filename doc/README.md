@@ -207,6 +207,8 @@ When needed, each convention explains why it exists, so you can make a decision 
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
+**For prose style, see the [documentation styleguide](./styleguide.md).**
+
 ### One sentence per line
 
 Put each sentence in its own line.
@@ -219,17 +221,16 @@ When changing existing content, update formatting if possible, but avoid excessi
 
 ### Examples first
 
-Readers look at examples first: an example communicates what something does faster than a description.
-Put examples before detailed explanations.
+Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
 
-Prefer this structure for each documented item:
+Use this structure for each documented item:
 
 1. Title
-2. Abstract (optional, one sentence max, the example often speaks for itself)
+2. Abstract (optional, one sentence max)
 3. Example
 4. Explanation (details, edge cases, types, defaults)
 
-For instance:
+Rendered example:
 
 ````markdown
 ## `lib.toUpper`
@@ -281,11 +282,9 @@ Returns the difference as a number.
 
 Use the [admonition syntax](#admonitions) for callouts and examples.
 
-### Provide self-contained examples
+### `callPackage`-compatible examples
 
-Provide at least one example per function, and make examples self-contained.
-This is easier to understand for beginners.
-It also helps with testing that it actually works – especially once we introduce automation.
+Provide at least one example per function.
 
 Example code should be such that it can be passed to `pkgs.callPackage`.
 Instead of something like:
