@@ -73,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     mainProgram = "hx";
     maintainers = with lib.maintainers; [
+      aciceri
       Ra77a3l3-jar
     ];
   };
