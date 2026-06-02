@@ -3680,6 +3680,17 @@
     github = "blghnks";
     githubId = 175811412;
   };
+  blind-guess-senior = {
+    name = "Wu ShengQiao";
+    email = "Blind-Guess-Senior@outlook.com";
+    github = "Blind-Guess-Senior";
+    githubId = 94767867;
+    keys = [
+      {
+        fingerprint = "D97B 3B92 8B46 CEF6 ACC2 A5C0 803C 6290 9078 0959";
+      }
+    ];
+  };
   blinry = {
     name = "blinry";
     email = "mail@blinry.org";
