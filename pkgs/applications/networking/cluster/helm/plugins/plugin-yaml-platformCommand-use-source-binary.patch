@@ -1,0 +1,51 @@
+--- a/plugin.yaml
++++ b/plugin.yaml
+@@ -6,41 +6,22 @@
+ platformCommand:
+   - os: linux
+     arch: amd64
+-    command: "$HELM_PLUGIN_DIR/untt-linux-amd64"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: linux
+     arch: arm64
+-    command: "$HELM_PLUGIN_DIR/untt-linux-arm64"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: linux
+     arch: ppc64le
+-    command: "$HELM_PLUGIN_DIR/untt-linux-ppc64le"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: linux
+     arch: s390x
+-    command: "$HELM_PLUGIN_DIR/untt-linux-s390x"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: darwin
+     arch: amd64
+-    command: "$HELM_PLUGIN_DIR/untt-macos-amd64"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: darwin
+     arch: arm64
+-    command: "$HELM_PLUGIN_DIR/untt-macos-arm64"
++    command: "$HELM_PLUGIN_DIR/untt"
+   - os: windows
+     arch: amd64
+     command: "$HELM_PLUGIN_DIR\\untt-windows-amd64.exe"
+-platformHooks:
+-  install:
+-    - command: "$HELM_PLUGIN_DIR/install-binary.sh"
+-    - os: windows
+-      command: "powershell.exe"
+-      args: 
+-        - -ExecutionPolicy 
+-        - Bypass 
+-        - -File 
+-        - "$HELM_PLUGIN_DIR\\install-binary.ps1"
+-  update:
+-    - command: "$HELM_PLUGIN_DIR/install-binary.sh"
+-    - os: windows
+-      command: "powershell.exe" 
+-      args: 
+-        - -ExecutionPolicy 
+-        - Bypass 
+-        - -File 
+-        - "$HELM_PLUGIN_DIR\\install-binary.ps1"
+\ No newline at end of file

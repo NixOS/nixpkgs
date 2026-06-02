@@ -22,10 +22,7 @@ buildGoModule {
 
   vendorHash = "sha256-4ckjM520MGYb64LbjYURe7AIScm4aGbj81rGKSSYaAo=";
 
-  # NOTE: Remove the install and upgrade hooks.
-  postPatch = ''
-    sed -i '/^hooks:/,+2 d' plugin.yaml
-  '';
+  patches = [ ./plugin-yaml-platformCommand-use-source-binary.patch ];
 
   postInstall = ''
     install -dm755 $out/helm-unittest
