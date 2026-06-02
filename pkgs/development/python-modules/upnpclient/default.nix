@@ -7,6 +7,7 @@
   python-dateutil,
   lxml,
   ifaddr,
+  nix-update-script,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -38,6 +39,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "upnpclient" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python 3 library for accessing UPnP devices";
