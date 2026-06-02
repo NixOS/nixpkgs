@@ -173,6 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
                      "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
+  depsBuildBuild = lib.optionals rustSupport [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     deterministic-host-uname
     gettext
