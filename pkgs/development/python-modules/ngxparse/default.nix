@@ -20,7 +20,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "ngxparse" ];
+  # The ngxparse distribution ships its importable module as `crossplane`
+  # (it's a drop-in replacement for the upstream nginxinc/crossplane).
+  pythonImportsCheck = [ "crossplane" ];
 
   meta = {
     description = "Reliable and fast NGINX configuration file parser (maintained fork of crossplane)";
