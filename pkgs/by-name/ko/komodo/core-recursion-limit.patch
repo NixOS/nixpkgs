@@ -1,0 +1,7 @@
+--- a/bin/core/src/main.rs
++++ b/bin/core/src/main.rs
+@@ -1,2 +1,4 @@
++#![recursion_limit = "512"]
++
+ #[macro_use]
+ extern crate tracing;

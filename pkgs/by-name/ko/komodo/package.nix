@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Temporary fix to get build to pass until https://github.com/moghtech/komodo/pull/1122
   patches = [
     ./rustc-1_9_2-fixes.patch
+    # rustc 1.95 computes the listener router's async block layout deeply enough
+    # that komodo_core overflows the default recursion_limit (128). Raise it on
+    # the `core` crate so the binary compiles.
+    ./core-recursion-limit.patch
   ];
 
   cargoHash = "sha256-jf/Jp28g3inGn5jQp3cACdhl//tbXTMc1vP1K3g/CyQ=";
