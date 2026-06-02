@@ -10,6 +10,12 @@
     echo "docker" > /run/systemd/container
   '';
 
+  # Prevent resolvconf from overriding Docker managed resolv.conf
+  environment.etc."resolv.conf".enable = false;
+
+  # Let Docker manage /etc/resolv.conf
+  networking.resolvconf.enable = false;
+
   # Iptables do not work in Docker.
   networking.firewall.enable = false;
 
