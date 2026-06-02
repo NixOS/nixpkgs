@@ -45,7 +45,7 @@ buildPythonPackage {
 
   meta = {
     description = "Library for managing Btrfs filesystems";
-    homepage = "https://btrfs.wiki.kernel.org/";
+    homepage = "https://btrfs.readthedocs.io/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       raskin
