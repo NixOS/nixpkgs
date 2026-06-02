@@ -3051,11 +3051,11 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xorg-server";
-      version = "21.1.22";
+      version = "21.1.23";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/xserver/xorg-server-21.1.22.tar.xz";
-        sha256 = "sha256-GiQsiRfEm6KczB9gIWE9iiuYBd0NJxpmrp0J9LC7BrM=";
+        url = "mirror://xorg/individual/xserver/xorg-server-21.1.23.tar.xz";
+        sha256 = "sha256-45gy5WF9ra8HL9+fDhnl0uHCoTYHrCgLrBq6n4/hRjQ=";
       };
       hardeningDisable = [
         "bindnow"
