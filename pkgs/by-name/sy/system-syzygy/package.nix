@@ -4,11 +4,14 @@
   rustPlatform,
   fetchFromGitHub,
   SDL2,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
+let
+  dataDirFlag = "--set SYZYGY_DATA_DIR $out/share/syzygy";
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system-syzygy";
   version = "1.0.2";
@@ -29,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ];
   buildInputs = [ SDL2 ];
@@ -51,7 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hicolor="$out/share/icons/hicolor"
     mkdir -p $out/share/syzygy/
     cp -r ${finalAttrs.src}/data/* $out/share/syzygy/
-    wrapProgram $out/bin/syzygy --set SYZYGY_DATA_DIR $out/share/syzygy
 
     for res in 128x128 32x32 512x512; do
       install -Dm644 data/icon/$res.png \
@@ -60,6 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     install -Dm644 data/icon/512x512@2x.png \
       "$hicolor/512x512@2/apps/syzygy.png"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/syzygy ${dataDirFlag}
   '';
 
   meta = {
