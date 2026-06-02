@@ -8,6 +8,7 @@
   pandoc,
   pkg-config,
   libfido2,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -62,6 +63,8 @@ buildGoModule (finalAttrs: {
       --suffix PATH : ${lib.makeBinPath [ fuse ]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
+
+  passthru.tests.gocryptfs = nixosTests.gocryptfs;
 
   meta = {
     description = "Encrypted overlay filesystem written in Go";
