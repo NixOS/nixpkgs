@@ -3,19 +3,22 @@
   fetchFromGitHub,
   rustPlatform,
   icu,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "actool";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "actool";
     tag = finalAttrs.version;
-    hash = "sha256-LN35yD9iynU1sCkp5kWL9jUgRIvNTkssherTBaSBenU=";
+    hash = "sha256-+KSJo9kWvgaDkH+09oWDuQaljm78LeULVomu7xVwLak=";
   };
 
-  cargoHash = "sha256-Fw/0KmFDqXs3IjqnoYfvdrQS3QzF7QhIwmTRt18JEq4=";
+  cargoHash = "sha256-wpoPWQAxb/LN4EuLx1d5XrRgr1iP2mfbRyS3zb7C66k=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Apple's actool reimplementation";
