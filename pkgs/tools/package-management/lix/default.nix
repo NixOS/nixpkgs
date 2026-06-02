@@ -107,6 +107,7 @@ let
 
           nixpkgs-review = nixpkgs-review.override {
             nix = self.lix;
+            inherit (self) nix-eval-jobs;
           };
 
           # surprisingly nixpkgs-reviewFull.override { nix = self.lix; }
