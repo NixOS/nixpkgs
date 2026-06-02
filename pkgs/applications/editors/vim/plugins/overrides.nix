@@ -845,6 +845,10 @@ assertNoAdditions {
     dependencies = [ tmux ];
   };
 
+  cmp-treesitter = super.cmp-treesitter.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.vim-lsp ];
