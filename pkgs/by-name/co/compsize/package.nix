@@ -5,15 +5,15 @@
   btrfs-progs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "compsize";
-  version = "1.5";
+  version = "1.5-unstable-2023-12-24";
 
   src = fetchFromGitHub {
     owner = "kilobyte";
     repo = "compsize";
-    rev = "v${version}";
-    sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
+    rev = "d79eacf77abe3b799387bb8a4e07a18f1f1031e8";
+    sha256 = "sha256-pwHFllwTznhgZAGtGsULoLLBZlCllGt1eBmUKoJ/2wk=";
   };
 
   patches = [
@@ -25,10 +25,6 @@ stdenv.mkDerivation rec {
   installFlags = [
     "PREFIX=${placeholder "out"}"
   ];
-
-  preInstall = ''
-    mkdir -p $out/share/man/man8
-  '';
 
   meta = {
     description = "Find compression type/ratio on a file or set of files in the Btrfs filesystem";
