@@ -5413,6 +5413,8 @@ let
         };
       };
 
+      yltx.vscode-luogu = callPackage ./yltx.vscode-luogu { };
+
       yoshi47.selection-path-copier = callPackage ./yoshi47.selection-path-copier { };
 
       yy0931.vscode-sqlite3-editor = callPackage ./yy0931.vscode-sqlite3-editor { };
