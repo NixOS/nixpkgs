@@ -9,13 +9,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "skye-harris";
   domain = "local_openai";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "hass_local_openai_llm";
     tag = finalAttrs.version;
-    hash = "sha256-S7gtm9JRaxNh6xbeKRyW6l6nXqE4+h9kgyUZ9RkbLR0=";
+    hash = "sha256-hY5pBuQQ3/Ayr9jZ5clYaxn5aAZcub0XXtiqgBjdfxM=";
   };
 
   dependencies = [
