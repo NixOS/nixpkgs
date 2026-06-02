@@ -7,6 +7,8 @@
 
 let
   cfg = config.virtualisation.incus.agent;
+
+  package = pkgs.incus;
 in
 {
   meta = {
@@ -18,8 +20,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.udev.packages = [ config.virtualisation.incus.package.agent_loader ];
-    systemd.packages = [ config.virtualisation.incus.package.agent_loader ];
+    services.udev.packages = [ package.agent_loader ];
+    systemd.packages = [ package.agent_loader ];
 
     systemd.services.incus-agent = {
       enable = true;
