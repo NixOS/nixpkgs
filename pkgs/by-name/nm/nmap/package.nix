@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgsStatic,
   fetchurl,
   versionCheckHook,
   libpcap,
@@ -53,11 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pcre2
-    liblinear
     libssh2
     libpcap
     openssl
     zlib
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    # If we omit liblinear, nmap will build it from vendored sources, which they patch for broader
+    # platform support v.s. upstream liblinear (e.g. it supports static linking).
+    liblinear
   ];
 
   enableParallelBuilding = true;
@@ -69,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckProgramArg = "-V";
   doInstallCheck = true;
+
+  passthru.tests = {
+    static = pkgsStatic.nmap;
+  };
 
   meta = {
     description = "Free and open source utility for network discovery and security auditing";
