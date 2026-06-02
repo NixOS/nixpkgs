@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,11 +19,21 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-BjkTMBrQPv8uZzme02WFdobuYdbe1RvRkZ8RjHGubo8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   subPackages = [
     "cmd/crowdsec"
     "cmd/crowdsec-cli"
+    "cmd/notification-dummy"
+    "cmd/notification-email"
+    "cmd/notification-file"
+    "cmd/notification-http"
+    "cmd/notification-sentinel"
+    "cmd/notification-slack"
+    "cmd/notification-splunk"
   ];
 
   ldflags = [
@@ -39,12 +50,19 @@ buildGoModule (finalAttrs: {
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";
 
   postInstall = ''
+    # so that `bin/crowdsec` is available for `cscli explain` for example
+    wrapProgram $out/bin/cscli --prefix PATH : $out/bin/
+
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
 
-    mkdir -p $out/lib/systemd/system
-    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
-      --replace-fail /usr/local $out
+    install -D $out/bin/notification-dummy -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-email -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-file -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-http -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-sentinel -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-slack -t $out/libexec/crowdsec/plugins/
+    install -D $out/bin/notification-splunk -t $out/libexec/crowdsec/plugins/
 
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
@@ -63,6 +81,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
+    mainProgram = "crowdsec";
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${finalAttrs.version}";
     description = "Free, open-source and collaborative IPS";
