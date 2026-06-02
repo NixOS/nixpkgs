@@ -796,6 +796,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-omni = super.cmp-omni.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.plenary-nvim ];
