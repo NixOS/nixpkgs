@@ -1773,6 +1773,13 @@ with haskellLib;
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
+  # Too strict version bounds (<0.4) on network-run
+  # https://github.com/abhinav/pinch/pull/72
+  pinch = lib.pipe super.pinch [
+    (warnAfterVersion "0.5.2.0")
+    doJailbreak
+  ];
+
   # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
   dataframe-persistent = lib.pipe super.dataframe-persistent [
     doJailbreak # 2026-01-23: too strict bounds on dataframe >= 0.4

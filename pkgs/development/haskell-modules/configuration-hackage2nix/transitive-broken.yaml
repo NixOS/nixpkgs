@@ -451,6 +451,7 @@ dont-distribute-packages:
  - clash
  - clash-protocols
  - clash-protocols-base
+ - clash-vexriscv
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -668,7 +669,6 @@ dont-distribute-packages:
  - datafix
  - dataflow
  - dataframe
- - dataframe-hasktorch
  - dataframe-lazy
  - dataframe-parquet
  - dataframe-parquet-th
@@ -1296,6 +1296,7 @@ dont-distribute-packages:
  - halma-gui
  - halma-telegram-bot
  - hamusic
+ - hanalyze
  - hans-pcap
  - happlets-lib-gtk
  - HAppS-Data
@@ -1687,6 +1688,7 @@ dont-distribute-packages:
  - hsqml-demo-morris
  - hsqml-morris
  - hsreadability
+ - hsrs
  - hssourceinfo
  - hssqlppp-th
  - hstar
@@ -1963,6 +1965,7 @@ dont-distribute-packages:
  - kif-parser
  - kind-integer
  - kind-rational
+ - kiroku-otel
  - kit
  - kmeans-par
  - kmeans-vector
