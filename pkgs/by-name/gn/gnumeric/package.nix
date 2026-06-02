@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/ChangeLog";
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
