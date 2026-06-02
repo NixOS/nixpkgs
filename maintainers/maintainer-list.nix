@@ -23500,6 +23500,11 @@
     githubId = 14910534;
     name = "Riey";
   };
+  rignchen = {
+    github = "Rignchen";
+    githubId = 119439839;
+    name = "Maggy Hofstetter";
+  };
   rika = {
     email = "rika@paymentswit.ch";
     github = "ScarletHg";
