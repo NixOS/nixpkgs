@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Package manager for Lua";
+    homepage = "https://github.com/luarocks/luarocks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin

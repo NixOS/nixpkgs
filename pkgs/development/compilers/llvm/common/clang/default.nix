@@ -249,6 +249,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man page for Clang ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )
