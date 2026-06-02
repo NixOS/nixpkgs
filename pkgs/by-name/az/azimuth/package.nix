@@ -6,7 +6,6 @@
   pkg-config,
   libGL,
   which,
-  installTool ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,16 +32,29 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
   ];
 
-  makeFlags = [
-    "BUILDTYPE=release"
-    "PREFIX=${placeholder "out"}"
-    "INSTALLTOOL=${if installTool then "true" else "false"}"
-  ];
+  makeFlags = [ "BUILDTYPE=release" ];
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs src/azimuth/system/generate_blob_index.sh
+
+    # Modern Clang over-erroring measures
+    substituteInPlace Makefile \
+      --replace-fail \
+        '-Werror' \
+        '-Werror -Wno-uninitialized-const-pointer -Wno-default-const-init-var-unsafe'
+  '';
+
   doCheck = true;
   checkTarget = "test";
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -m755 out/release/host/bin/azimuth $out/bin/
+    runHook postInstall
+  '';
 
   meta = {
     description = "Metroidvania game using only vectorial graphic";
