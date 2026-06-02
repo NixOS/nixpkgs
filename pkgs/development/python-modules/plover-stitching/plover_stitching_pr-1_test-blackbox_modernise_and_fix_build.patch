@@ -1,0 +1,31 @@
+From 2751875916f23d42c81602d082fa2fd06a396fb1 Mon Sep 17 00:00:00 2001
+From: Yueh-Shun Li <shamrocklee@posteo.net>
+Date: Tue, 5 May 2026 16:34:28 +0800
+Subject: [PATCH] test_blackbox: modernize to fix build
+
+Use `@blackbox_test` (decorator) from `plover_build_utils.testing`
+instead of the historical `BlackboxTester`.
+---
+ test/test_blackbox.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/test/test_blackbox.py b/test/test_blackbox.py
+index 71eb6d0676e39e4e916b04ae9cc290dff3de9e02..e746705fe21174ac05ee3c6087f9a19171f68189 100644
+--- a/test/test_blackbox.py
++++ b/test/test_blackbox.py
+@@ -1,12 +1,12 @@
+-from plover_build_utils.testing import BlackboxTester
++from plover_build_utils.testing import blackbox_test
+ from plover.registry import registry
+ from plover import system
+ 
+-class TestsBlackbox(BlackboxTester):
++@blackbox_test
++class TestsBlackbox:
+ 
+     @classmethod
+     def setup_class(cls):
+-        super().setup_class()
+         registry.update()
+         system.setup('English Stenotype')
+ 

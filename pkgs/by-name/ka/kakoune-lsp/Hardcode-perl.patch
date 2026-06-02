@@ -1,0 +1,51 @@
+From 14bdb9c39cfd813697a4f5d83ed2b4c4c043a309 Mon Sep 17 00:00:00 2001
+From: V <v@anomalous.eu>
+Date: Tue, 9 Apr 2024 06:15:00 +0200
+Subject: [PATCH] Hardcode perl
+
+---
+ rc/lsp.kak | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/rc/lsp.kak b/rc/lsp.kak
+index 306b405..6662d29 100644
+--- a/rc/lsp.kak
++++ b/rc/lsp.kak
+@@ -280,12 +280,8 @@ define-command -hidden lsp-menu -params 1.. %{
+ }
+ define-command -hidden lsp-menu-impl %{
+     evaluate-commands %sh{
+-        if ! command -v perl > /dev/null; then
+-            echo "lsp-show-error %{'perl' must be installed to use the 'lsp-menu' command}"
+-            exit
+-        fi
+         echo >$kak_command_fifo "echo -to-file $kak_response_fifo -quoting kakoune -- %reg{a}"
+-        perl < $kak_response_fifo -we '
++        @perl@/bin/perl < $kak_response_fifo -we '
+             use strict;
+             my $Q = "'\''";
+             my @args = ();
+@@ -2467,11 +2463,6 @@ define-command -hidden lsp-snippets-insert-completion -params 1 %{ evaluate-comm
+ }}
+ 
+ define-command lsp-snippets-insert -hidden -params 1 %[
+-    evaluate-commands %sh{
+-        if ! command -v perl > /dev/null; then
+-            printf "fail %{'perl' must be installed to use the 'lsp-snippets-insert' command'}"
+-        fi
+-    }
+     evaluate-commands -draft -save-regs '^"' %[
+         set-register '"' %arg{1}
+         execute-keys <a-P>
+@@ -2526,7 +2517,7 @@ define-command lsp-snippets-insert -hidden -params 1 %[
+ define-command -hidden lsp-snippets-insert-perl-impl %[
+     set-register x nop
+     evaluate-commands %sh[ # $kak_quoted_selections
+-        perl -e '
++        @perl@/bin/perl -e '
+ use strict;
+ use warnings;
+ use Text::ParseWords();
+-- 
+2.45.2
+

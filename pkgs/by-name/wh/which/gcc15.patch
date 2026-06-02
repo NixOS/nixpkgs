@@ -1,0 +1,44 @@
+From 16a1647fc26953fab659de5f55d4c0defdfb894f Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sat, 22 Mar 2025 17:56:19 -0700
+Subject: [PATCH] getopt: Fix signature of getenv function
+
+This happens on musl systems using GCC 15
+
+../which-2.21/getopt.h:106:12: error: conflicting types for 'getopt'; have 
+'int(void)'
+  106 | extern int getopt ();
+      |            ^~~~~~
+---
+Link: https://lists.gnu.org/archive/html/which-bugs/2025-03/msg00000.html
+ getopt.c | 2 +-
+ getopt.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/getopt.c b/getopt.c
+index 9ac2ed6..7e14270 100644
+--- a/getopt.c
++++ b/getopt.c
+@@ -205,7 +205,7 @@ static char *posixly_correct;
+ /* Avoid depending on library functions or files
+    whose names are inconsistent.  */
+ 
+-char *getenv();
++char *getenv(const char*);
+ 
+ static char *my_index(str, chr) const char *str;
+ int chr;
+diff --git a/getopt.h b/getopt.h
+index f080053..635fc46 100644
+--- a/getopt.h
++++ b/getopt.h
+@@ -102,7 +102,7 @@ struct option {
+    errors, only prototype getopt for the GNU C library.  */
+ extern int getopt(int argc, char *const *argv, const char *shortopts);
+ #else  /* not __GNU_LIBRARY__ */
+-extern int getopt();
++extern int getopt(int, char * const [], const char *);
+ #endif /* __GNU_LIBRARY__ */
+ extern int getopt_long(int argc, char *const *argv, const char *shortopts, const struct option *longopts, int *longind);
+ extern int getopt_long_only(int argc, char *const *argv, const char *shortopts, const struct option *longopts,
+

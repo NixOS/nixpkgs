@@ -1,0 +1,101 @@
+commit cfc05af26b571e9ca09e9c709c0fb8934e9e46dd
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Sat Aug 20 17:48:01 2022 +0200
+
+    Fix finding cuneiform
+
+diff --git a/src/pyocr/cuneiform.py b/src/pyocr/cuneiform.py
+index 2e5b717..35647e2 100644
+--- a/src/pyocr/cuneiform.py
++++ b/src/pyocr/cuneiform.py
+@@ -25,13 +25,9 @@ from . import builders
+ from .error import CuneiformError
+ 
+ 
+-# CHANGE THIS IF CUNEIFORM IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
+-CUNEIFORM_CMD = 'cuneiform'
++CUNEIFORM_CMD = '@cuneiform@/bin/cuneiform'
+ 
+-CUNEIFORM_DATA_POSSIBLE_PATHS = [
+-    "/usr/local/share/cuneiform",
+-    "/usr/share/cuneiform",
+-]
++CUNEIFORM_DATA_POSSIBLE_PATHS = ['@cuneiform@/share/cuneiform']
+ 
+ LANGUAGES_LINE_PREFIX = "Supported languages: "
+ LANGUAGES_SPLIT_RE = re.compile("[^a-z]")
+diff --git a/tests/test_cuneiform.py b/tests/test_cuneiform.py
+index b76e93c..266f6b2 100644
+--- a/tests/test_cuneiform.py
++++ b/tests/test_cuneiform.py
+@@ -21,7 +21,7 @@ class TestCuneiform(BaseTest):
+         # XXX is it useful?
+         which.return_value = True
+         self.assertTrue(cuneiform.is_available())
+-        which.assert_called_once_with("cuneiform")
++        which.assert_called_once_with("@cuneiform@/bin/cuneiform")
+ 
+     @patch("subprocess.Popen")
+     def test_version(self, popen):
+@@ -54,7 +54,7 @@ class TestCuneiform(BaseTest):
+         self.assertIn("eng", langs)
+         self.assertIn("fra", langs)
+         popen.assert_called_once_with(
+-            ["cuneiform", "-l"],
++            ["@cuneiform@/bin/cuneiform", "-l"],
+             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+         )
+ 
+@@ -110,7 +110,7 @@ class TestCuneiformTxt(BaseTest):
+         output = cuneiform.image_to_string(self.image)
+         self.assertEqual(output, self._get_file_content("text").strip())
+         popen.assert_called_once_with(
+-            ["cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
++            ["@cuneiform@/bin/cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT
+         )
+@@ -126,7 +126,7 @@ class TestCuneiformTxt(BaseTest):
+                                            builder=self.builder)
+         self.assertEqual(output, self._get_file_content("text").strip())
+         popen.assert_called_once_with(
+-            ["cuneiform", "-l", "fra", "-f", "text", "-o", self.tmp_filename,
++            ["@cuneiform@/bin/cuneiform", "-l", "fra", "-f", "text", "-o", self.tmp_filename,
+              "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT
+@@ -143,7 +143,7 @@ class TestCuneiformTxt(BaseTest):
+                                            builder=self.builder)
+         self.assertEqual(output, self._get_file_content("text").strip())
+         popen.assert_called_once_with(
+-            ["cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
++            ["@cuneiform@/bin/cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT
+         )
+@@ -174,7 +174,7 @@ class TestCuneiformTxt(BaseTest):
+         output = cuneiform.image_to_string(image, builder=self.builder)
+         self.assertEqual(output, self._get_file_content("text").strip())
+         popen.assert_called_once_with(
+-            ["cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
++            ["@cuneiform@/bin/cuneiform", "-f", "text", "-o", self.tmp_filename, "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT
+         )
+@@ -230,7 +230,7 @@ class TestCuneiformWordBox(BaseTest):
+         output = cuneiform.image_to_string(self.image,
+                                            builder=self.builder)
+         popen.assert_called_once_with(
+-            ["cuneiform", "-f", "hocr", "-o", self.tmp_filename, "-"],
++            ["@cuneiform@/bin/cuneiform", "-f", "hocr", "-o", self.tmp_filename, "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT
+         )
+@@ -284,7 +284,7 @@ class TestCuneiformLineBox(BaseTest):
+         output = cuneiform.image_to_string(self.image,
+                                            builder=self.builder)
+         popen.assert_called_once_with(
+-            ["cuneiform", "-f", "hocr", "-o", self.tmp_filename, "-"],
++            ["@cuneiform@/bin/cuneiform", "-f", "hocr", "-o", self.tmp_filename, "-"],
+             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT

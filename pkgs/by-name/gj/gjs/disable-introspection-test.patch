@@ -1,0 +1,10 @@
+--- a/installed-tests/js/meson.build
++++ b/installed-tests/js/meson.build
+@@ -37,7 +37,6 @@ jasmine_tests = [
+     'GObjectInterface',
+     'GObjectValue',
+     'GTypeClass',
+-    'Introspection',
+     'Namespace',
+     'ParamSpec',
+     'Print',

@@ -1,0 +1,26 @@
+https://github.com/torvalds/linux/commit/5f60d5f6bbc12e782fac78110b0ee62698f3b576
+---
+ veikk_vdev.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/veikk_vdev.c b/veikk_vdev.c
+index 9d0b49f..83e9efa 100644
+--- a/veikk_vdev.c
++++ b/veikk_vdev.c
+@@ -6,7 +6,13 @@
+  * - Set up the module parameters
+  */
+
++#include <linux/version.h>
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
+ #include <asm/unaligned.h>
++#else
++#include <linux/unaligned.h>
++#endif
+ #include <linux/module.h>
+ #include "veikk.h"
+
+--
+2.49.0
+

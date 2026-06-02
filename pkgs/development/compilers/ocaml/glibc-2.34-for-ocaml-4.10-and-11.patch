@@ -1,0 +1,37 @@
+From dfb5e954a04f59b0456cc4c0ddf3acaf22e0ff07 Mon Sep 17 00:00:00 2001
+From: Richard W.M. Jones <rjones@redhat.com>
+Date: Feb 28 2021 20:45:47 +0000
+Subject: Workaround for glibc non-constant SIGSTKSZ
+
+
+https://github.com/ocaml/ocaml/issues/10250
+
+Signed-off-by: Richard W.M. Jones <rjones@redhat.com>
+
+---
+
+diff --git a/runtime/signals_nat.c b/runtime/signals_nat.c
+index 8b64ab4..7f0a975 100644
+--- a/runtime/signals_nat.c
++++ b/runtime/signals_nat.c
+@@ -181,7 +181,19 @@ DECLARE_SIGNAL_HANDLER(trap_handler)
+ #error "CONTEXT_SP is required if HAS_STACK_OVERFLOW_DETECTION is defined"
+ #endif
+ 
++#ifndef __GLIBC__
+ static char sig_alt_stack[SIGSTKSZ];
++#else
++/* glibc 2.34 has non-constant SIGSTKSZ */
++static char *sig_alt_stack;
++
++static void allocate_sig_alt_stack(void) __attribute__((constructor));
++static void
++allocate_sig_alt_stack(void)
++{
++  sig_alt_stack = malloc(SIGSTKSZ);
++}
++#endif
+ 
+ /* Code compiled with ocamlopt never accesses more than
+    EXTRA_STACK bytes below the stack pointer. */
+

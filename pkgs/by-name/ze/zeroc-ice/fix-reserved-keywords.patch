@@ -1,0 +1,55 @@
+From bd5ddbde9e4ed24101cdc86007f26e95f38dd5b1 Mon Sep 17 00:00:00 2001
+From: laurensmiers <laurensmiers@protonmail.com>
+Date: Wed, 22 Oct 2025 14:52:30 +0200
+Subject: [PATCH] fix: don't use reserved keyword for goto statement
+
+Rename:
+- 'true' to 'exit_success'
+- 'false' to 'exit_fail'
+
+Chose not to change the flow of the code by removing the goto's to
+avoid regressions.
+---
+ system.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/system.c b/system.c
+index 646caf6..0a15aec 100644
+--- a/system.c
++++ b/system.c
+@@ -1738,7 +1738,7 @@ static int  open_file(
+     if (! fullname)                 /* Non-existent or directory    */
+         return  FALSE;
+     if (included( fullname))        /* Once included    */
+-        goto  true;
++        goto  exit_success;
+ 
+     if ((max_open != 0 && max_open <= include_nest)
+                             /* Exceed the known limit of open files */
+@@ -1765,12 +1765,12 @@ static int  open_file(
+         if ((fp = mcpp_fopen( fullname, "r")) == NULL) {
+             file->fp = mcpp_fopen( cur_fullname, "r");
+             fseek( file->fp, file->pos, SEEK_SET);
+-            goto  false;
++            goto  exit_fail;
+         }
+         if (max_open == 0)      /* Remember the limit of the system */
+             max_open = include_nest;
+     } else if (fp == NULL)                  /* No read permission   */
+-        goto  false;
++        goto  exit_fail;
+     /* Truncate buffer of the includer to save memory   */
+     len = (int) (file->bptr - file->buffer);
+     if (len) {
+@@ -1802,9 +1802,9 @@ static int  open_file(
+     if (mkdep && ((mkdep & MD_SYSHEADER) || ! infile->sys_header))
+         put_depend( fullname);          /* Output dependency line   */
+ 
+-true:
++exit_success:
+     return  TRUE;
+-false:
++exit_fail:
+     free( fullname);
+     return  FALSE;
+ }

@@ -1,0 +1,396 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/text_cmds/blob/main/text_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('text_cmds', 'c', version : '@version@')
+add_global_arguments(
+    # Many programs use old prototypes
+    '-Wno-deprecated-non-prototype',
+    # Needed to build errx functions from Libc
+    '-include', 'crt_externs.h',
+    '-D_getprogname()=(*_NSGetProgname())',
+    language : 'c',
+)
+
+fs = import('fs')
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+bzip2 = dependency('bzip2')
+libmd = dependency('libmd')
+libresolv = cc.find_library('resolv')
+libutil = cc.find_library('util')
+libxo = dependency('libxo')
+ncurses = dependency('ncurses')
+xz = dependency('liblzma')
+zlib = dependency('zlib')
+
+
+# Binaries
+executable(
+    'banner',
+    install : true,
+    sources : [ 'banner/banner.c' ],
+)
+install_man('banner/banner.6')
+
+executable(
+    'bintrans',
+    dependencies : [ libresolv ],
+    install : true,
+    sources : [
+        'bintrans/apple_base64.c',
+        'bintrans/bintrans.c',
+        'bintrans/qp.c',
+        'bintrans/uudecode.c',
+        'bintrans/uuencode.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
+)
+install_man(
+    'bintrans/base64.1',
+    'bintrans/bintrans.1',
+    'bintrans/uuencode.format.5',
+)
+install_symlink(
+    'base64',
+    install_dir : get_option('bindir'),
+    pointing_to : 'bintrans',
+)
+foreach cmd : [ 'b64decode', 'b64encode', 'uudecode', 'uuencode' ]
+    install_symlink(
+        cmd,
+        install_dir : get_option('bindir'),
+        pointing_to : 'bintrans',
+    )
+    install_symlink(
+        f'@cmd@.1',
+        install_dir : get_option('mandir') + '/man1',
+        pointing_to : 'bintrans.1',
+    )
+endforeach
+
+executable(
+    'cat',
+    install : true,
+    sources : [ 'cat/cat.c' ],
+)
+install_man('cat/cat.1')
+
+executable(
+    'col',
+    install : true,
+    sources : [
+        'col/col.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
+)
+install_man('col/col.1')
+
+executable(
+    'colrm',
+    install : true,
+    sources : [
+        'colrm/colrm.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
+)
+install_man('colrm/colrm.1')
+
+executable(
+    'column',
+    install : true,
+    sources : [ 'column/column.c' ],
+)
+install_man('column/column.1')
+
+executable(
+    'comm',
+    install : true,
+    sources : [
+        'comm/comm.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
+)
+install_man('comm/comm.1')
+
+executable(
+    'csplit',
+    install : true,
+    sources : [
+        'csplit/csplit.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
+)
+install_man('csplit/csplit.1')
+
+executable(
+    'cut',
+    install : true,
+    sources : [ 'cut/cut.c' ],
+)
+install_man('cut/cut.1')
+
+executable(
+    'ed',
+    install : true,
+    sources : [
+        'ed/buf.c',
+        'ed/glbl.c',
+        'ed/io.c',
+        'ed/main.c',
+        'ed/re.c',
+        'ed/sub.c',
+        'ed/undo.c',
+    ],
+)
+install_man(
+    'ed/ed.1',
+    'ed/red.1',
+)
+
+executable(
+    'expand',
+    install : true,
+    sources : [ 'expand/expand.c' ],
+)
+install_man('expand/expand.1')
+
+executable(
+    'fmt',
+    install : true,
+    sources : [ 'fmt/fmt.c' ],
+)
+install_man('fmt/fmt.1')
+
+executable(
+    'fold',
+    install : true,
+    sources : [ 'fold/fold.c' ],
+)
+install_man('fold/fold.1')
+
+executable(
+    'grep',
+    dependencies : [ bzip2, xz, zlib ],
+    install : true,
+    sources : [
+        'grep/file.c',
+        'grep/grep.c',
+        'grep/queue.c',
+        'grep/util.c',
+    ],
+)
+install_man('grep/grep.1')
+
+install_data(
+    'grep/zgrep.sh',
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    rename : 'zgrep',
+)
+install_man('grep/zgrep.1')
+
+executable(
+    'head',
+    install : true,
+    sources : [ 'head/head.c' ],
+)
+install_man('head/head.1')
+
+executable(
+    'join',
+    install : true,
+    sources : [ 'join/join.c' ],
+)
+install_man('join/join.1')
+
+executable(
+    'lam',
+    install : true,
+    sources : [ 'lam/lam.c' ],
+)
+install_man('lam/lam.1')
+
+executable(
+    'look',
+    install : true,
+    sources : [ 'look/look.c' ],
+)
+install_man('look/look.1')
+
+executable(
+    'md5',
+    dependencies : [ libmd ],
+    install : true,
+    sources : [ 'md5/md5.c' ],
+)
+install_man('md5/md5.1')
+foreach cmd : [ 'md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512' ]
+    foreach suffix : [ '', 'sum' ]
+        cmd += suffix
+        if cmd != 'md5'
+            install_symlink(
+                cmd,
+                install_dir : get_option('bindir'),
+                pointing_to : 'md5',
+            )
+            install_symlink(
+                f'@cmd@.1',
+                install_dir : get_option('mandir') + '/man1',
+                pointing_to : 'md5.1',
+            )
+        endif
+    endforeach
+endforeach
+
+executable(
+    'nl',
+    install : true,
+    sources : [ 'nl/nl.c' ],
+)
+install_man('nl/nl.1')
+
+executable(
+    'paste',
+    install : true,
+    sources : [ 'paste/paste.c' ],
+)
+install_man('paste/paste.1')
+
+executable(
+    'pr',
+    install : true,
+    sources : [
+        'pr/egetopt.c',
+        'pr/pr.c',
+    ],
+)
+install_man('pr/pr.1')
+
+executable(
+    'rev',
+    install : true,
+    sources : [
+        'rev/rev.c',
+    ],
+)
+install_man('rev/rev.1')
+
+executable(
+    'rs',
+    install : true,
+    sources : [ 'rs/rs.c' ],
+)
+install_man('rs/rs.1')
+
+executable(
+    'sed',
+    install : true,
+    sources : [
+        'sed/compile.c',
+        'sed/main.c',
+        'sed/misc.c',
+        'sed/process.c',
+    ],
+)
+install_man('sed/sed.1')
+
+executable(
+    'sort',
+    c_args : [ '-DSORT_VERSION="@version@"' ],
+    install : true,
+    sources : [
+        'sort/bwstring.c',
+        'sort/coll.c',
+        'sort/file.c',
+        'sort/mem.c',
+        'sort/radixsort.c',
+        'sort/sort.c',
+        'sort/vsort.c',
+    ],
+)
+
+executable(
+    'split',
+    dependencies : [ libutil ],
+    install : true,
+    sources : [ 'split/split.c' ],
+)
+install_man('split/split.1')
+
+executable(
+    'tail',
+    dependencies : [ libutil ],
+    install : true,
+    sources : [
+        'tail/forward.c',
+        'tail/misc.c',
+        'tail/read.c',
+        'tail/reverse.c',
+        'tail/tail.c',
+    ],
+)
+install_man('tail/tail.1')
+
+executable(
+    'tr',
+    install : true,
+    link_args : [ '-Wl,-undefined,dynamic_lookup' ],
+    sources : [
+        'tr/cmap.c',
+        'tr/cset.c',
+        'tr/str.c',
+        'tr/tr.c',
+        fs.exists('tr/collate-libc.c') ? 'tr/collate-libc.c' : [ ]
+    ],
+)
+install_man('tr/tr.1')
+
+executable(
+    'ul',
+    dependencies : [ ncurses ],
+    install : true,
+    sources : [ 'ul/ul.c' ],
+)
+install_man('ul/ul.1')
+
+executable(
+    'unexpand',
+    install : true,
+    sources : [ 'unexpand/unexpand.c' ],
+)
+
+executable(
+    'uniq',
+    install : true,
+    sources : [ 'uniq/uniq.c' ],
+)
+install_man('uniq/uniq.1')
+
+executable(
+    'unvis',
+    install : true,
+    sources : [ 'unvis/unvis.c' ],
+)
+install_man('unvis/unvis.1')
+
+executable(
+    'vis',
+    install : true,
+    sources : [
+        'vis/foldit.c',
+        'vis/vis.c',
+        fs.exists('vis/vis-libc.c') ? 'vis/vis-libc.c' : [ ],
+    ],
+)
+install_man('vis/vis.1')
+
+executable(
+    'wc',
+    dependencies : [ libxo ],
+    install : true,
+    sources : [ 'wc/wc.c' ],
+)
+install_man('wc/wc.1')
