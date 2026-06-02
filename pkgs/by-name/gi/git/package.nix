@@ -173,6 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
                      "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
+  # Git v2.54 introduced a build.rs script that requires compilation and
+  # execution on the build platform. In a cross-environment build->host is not
+  # sufficient as the host does not match the build platform, thus build->build
+  # is required.
+  depsBuildBuild = lib.optionals rustSupport [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     deterministic-host-uname
     gettext
