@@ -5,18 +5,10 @@
   fetchFromGitHub,
   SDL2,
   makeWrapper,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
-let
-  desktopFile = makeDesktopItem {
-    name = "system-syzygy";
-    exec = "@out@/bin/syzygy";
-    comment = "A puzzle game";
-    desktopName = "System Syzygy";
-    categories = [ "Game" ];
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system-syzygy";
   version = "1.0.2";
@@ -28,17 +20,46 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-wxe9+r3tWRXiznvjvxsmTgUC7YVKgbt+I3Q8A/WtcN0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  # nixpkgs SDL2 uses pkg-config, not the macOS SDL2 framework.
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail \
+        'features = ["unsafe_textures", "use_mac_framework"]' \
+        'features = ["unsafe_textures"]'
+  '';
+
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ SDL2 ];
 
   cargoHash = "sha256-H/iG6vsmtpBGYBBqNQG5EpyZaUtfXfVaHv4fkxwqrD0=";
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "system-syzygy";
+      exec = "syzygy";
+      icon = "syzygy";
+      comment = "A narrative meta-puzzle game";
+      desktopName = "System Syzygy";
+      categories = [ "Game" ];
+    })
+  ];
+
   postInstall = ''
+    hicolor="$out/share/icons/hicolor"
     mkdir -p $out/share/syzygy/
     cp -r ${finalAttrs.src}/data/* $out/share/syzygy/
     wrapProgram $out/bin/syzygy --set SYZYGY_DATA_DIR $out/share/syzygy
-    mkdir -p $out/share/applications
-    substituteAll ${desktopFile}/share/applications/system-syzygy.desktop $out/share/applications/system-syzygy.desktop
+
+    for res in 128x128 32x32 512x512; do
+      install -Dm644 data/icon/$res.png \
+        "$hicolor/$res/apps/syzygy.png"
+    done
+
+    install -Dm644 data/icon/512x512@2x.png \
+      "$hicolor/512x512@2/apps/syzygy.png"
   '';
 
   meta = {
