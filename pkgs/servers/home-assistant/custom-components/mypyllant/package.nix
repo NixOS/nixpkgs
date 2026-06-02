@@ -42,6 +42,12 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Re-enable these tests once fixed upstream (see https://github.com/signalkraft/mypyllant-component/pull/448)
+    "test_service_export[test_data6]"
+    "test_service_generate_test_data[test_data6]"
+  ];
+
   meta = {
     description = "Unofficial Home Assistant integration for interacting with myVAILLANT";
     changelog = "https://github.com/signalkraft/mypyllant-component/releases/tag/${src.tag}";
