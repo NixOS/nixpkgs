@@ -7,6 +7,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -34,6 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
   buildInputs = [ SDL2 ];
 
@@ -67,8 +71,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/syzygy ${dataDirFlag}
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    app="$out/Applications/System Syzygy.app/Contents"
+    install -m755 "$out/bin/syzygy" "$app/MacOS/System Syzygy"
+
+    makeBinaryWrapper "$app/MacOS/System Syzygy" "$out/bin/syzygy" \
+      ${dataDirFlag}
+
+    ln -s "$out/share/syzygy" "$app/Resources/data"
+  '';
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Narrative meta-puzzle game in the style of The Fool's Errand";
     longDescription = ''
       System Syzygy is a story and a puzzle game, in the style of Cliff
@@ -81,5 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mdsteele/syzygy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marius851000 ];
+    platforms = lib.platforms.unix;
   };
 })
