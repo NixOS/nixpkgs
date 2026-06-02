@@ -34,6 +34,7 @@ GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
 CHECK_MOUNTPOINTS = "@checkMountpoints@"
 STORE_DIR = "@storeDir@"
+REMEMBER_LAST_CHOICE = "@rememberLastChoice@" == "1" # noqa: PLR0133
 
 @dataclass
 class BootSpec:
@@ -86,11 +87,13 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
 
 BOOT_ENTRY = """title {title}
 sort-key {sort_key}
-version Generation {generation} {description}
+version {version_prefix} {generation} {description}
 linux {kernel}
 initrd {initrd}
 options {kernel_params}
 """
+
+CURRENT_GENERATION_ID = "nixos-current-generation.conf"
 
 def generation_conf_filename(profile: str | None, generation: int, specialisation: str | None) -> str:
     pieces = [
@@ -103,11 +106,16 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
     return "-".join(p for p in pieces if p) + ".conf"
 
 
-def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
+def write_loader_conf() -> None:
     tmp = LOADER_CONF.with_suffix(".tmp")
     with tmp.open('x') as f:
         f.write(f"timeout {TIMEOUT}\n")
-        f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
+        if REMEMBER_LAST_CHOICE:
+            default_setting = "@saved"
+        else:
+            default_setting = CURRENT_GENERATION_ID
+        f.write("default %s\n" % default_setting)
+
         if not EDITOR:
             f.write("editor 0\n")
         if REBOOT_FOR_BITLOCKER:
@@ -214,6 +222,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
     with tmp_path.open("w") as f:
         f.write(BOOT_ENTRY.format(title=title,
                     sort_key=bootspec.sortKey,
+                    version_prefix="Generation",
                     generation=generation,
                     kernel=f"/{kernel}",
                     initrd=f"/{initrd}",
@@ -226,6 +235,29 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         f.flush()
         os.fsync(f.fileno())
     tmp_path.rename(entry_file)
+
+    if current:
+        current_entry_file = BOOT_MOUNT_POINT / "loader/entries" / CURRENT_GENERATION_ID
+
+        with tmp_path.open("w") as f:
+            f.write(BOOT_ENTRY.format(title=title + " - Current Profile",
+                        sort_key=bootspec.sortKey,
+                        # For ordering in list and so that shortcuts pick this generation
+                        version_prefix="z Current Generation",
+                        generation=generation,
+                        kernel=f"/{kernel}",
+                        initrd=f"/{initrd}",
+                        kernel_params=kernel_params,
+                        description=f"{bootspec.label}, built on {build_date}"))
+            if machine_id is not None:
+                f.write("machine-id %s\n" % machine_id)
+            if devicetree is not None:
+                f.write("devicetree %s\n" % devicetree)
+            f.flush()
+            os.fsync(f.fileno())
+
+        tmp_path.rename(current_entry_file)
+
 
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
@@ -381,16 +413,18 @@ def install_bootloader(args: argparse.Namespace) -> None:
         gens += get_generations(profile)
 
     remove_old_entries(gens)
+    write_loader_conf()
 
     for gen in gens:
         try:
             bootspec = get_bootspec(gen.profile, gen.generation)
             is_default = Path(bootspec.init).parent == Path(args.default_config)
-            write_entry(*gen, machine_id, bootspec, current=is_default)
             for specialisation in bootspec.specialisations.keys():
                 write_entry(gen.profile, gen.generation, specialisation, machine_id, bootspec, current=is_default)
-            if is_default:
-                write_loader_conf(*gen)
+
+            # Run this last so that the current generation file will be this
+            write_entry(*gen, machine_id, bootspec, current=is_default)
+
         except OSError as e:
             # See https://github.com/NixOS/nixpkgs/issues/114552
             if e.errno == errno.EINVAL:
