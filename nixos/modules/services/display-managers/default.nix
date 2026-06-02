@@ -10,6 +10,8 @@ let
   cfg = config.services.displayManager;
   opts = options.services.displayManager;
 
+  toPretty = lib.generators.toPretty { };
+
   installedSessions =
     pkgs.runCommand "desktops"
       {
@@ -193,9 +195,9 @@ in
       {
         assertion = cfg.defaultSession == null || lib.elem cfg.defaultSession cfg.sessionData.sessionNames;
         message = ''
-          Default graphical session, '${toString cfg.defaultSession}', not found.
+          Default graphical session, ${toPretty cfg.defaultSession}, not found. Definitions:${lib.options.showDefs opts.defaultSession.definitionsWithLocations}.
           Valid names for `${opts.defaultSession}` are:
-            ${lib.concatStringsSep "\n    " cfg.sessionData.sessionNames}
+              ${lib.concatMapStringsSep "\n    " toPretty cfg.sessionData.sessionNames}
         '';
       }
     ];
