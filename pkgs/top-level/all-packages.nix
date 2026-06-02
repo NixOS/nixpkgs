@@ -1772,7 +1772,7 @@ with pkgs;
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
@@ -2060,6 +2060,7 @@ with pkgs;
     cudaPackages_13_0
     cudaPackages_13_1
     cudaPackages_13_2
+    cudaPackages_13_3
     ;
 
   cudaPackages_12 = cudaPackages_12_9;
@@ -3191,7 +3192,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
+  texmacs = callPackage ../applications/editors/texmacs {
     extraFonts = true;
   };
 
@@ -8295,7 +8296,7 @@ with pkgs;
         inherit (stdenv.buildPlatform) system;
         inherit (config) rewriteURL;
       };
-      checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
     }
   );
   minimal-bootstrap-sources =
@@ -9637,10 +9638,6 @@ with pkgs;
       ;
   };
 
-  peaclock = callPackage ../applications/misc/peaclock {
-    stdenv = gccStdenv;
-  };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
@@ -10367,9 +10364,6 @@ with pkgs;
     )
       haskellPackages.bench;
 
-  cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
-  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
-
   ### GAMES
 
   inherit (callPackages ../games/fteqw { })
@@ -10520,8 +10514,6 @@ with pkgs;
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
-
-  openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
   openraPackages_2019 = import ../games/openra_2019 {
     inherit lib;
@@ -10995,7 +10987,7 @@ with pkgs;
     enableUnfree = true;
   };
 
-  inherit (ocaml-ng.ocamlPackages_5_3) hol_light;
+  inherit (ocamlPackages) hol_light;
 
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 

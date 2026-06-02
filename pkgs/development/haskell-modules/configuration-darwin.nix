@@ -294,6 +294,12 @@ self: super:
 
     warp = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
+      # These fail in darwin sandbox with:
+      #   Network.SendFile.MacOS.sendloopHeader: permission denied (Operation not permitted)
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/Response/range requests/"
+        "--skip=/Response/partial files/"
+      ];
     }) super.warp;
 
     ghcjs-dom-hello = overrideCabal (drv: {

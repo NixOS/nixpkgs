@@ -9,8 +9,8 @@
   uv-dynamic-versioning,
 
   # dependencies
-  certifi,
   h11,
+  truststore,
 
   # optional dependencies
   h2,
@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpcore2";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdoMDF5XVOkb4JCmytdF0JmBfTUcHuM1N+SD8r+RNiU=";
+    hash = "sha256-cW6meHx6VBMz5r/lXCKKK7Sq4e2nk+n1A5YTNtR2kB4=";
   };
 
   postPatch = ''
@@ -50,8 +50,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    certifi
     h11
+    truststore
   ];
 
   optional-dependencies = {

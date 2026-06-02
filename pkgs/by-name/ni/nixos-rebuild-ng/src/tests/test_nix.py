@@ -9,11 +9,14 @@ from unittest.mock import ANY, Mock, call, patch
 import pytest
 from pytest import MonkeyPatch
 
+import nixos_rebuild.elevate as e
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
 import nixos_rebuild.process as p
 
 from .helpers import get_qualified_name
+
+SUDO = e.SudoElevator()
 
 
 @patch(
@@ -83,7 +86,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
 def test_build_remote(
     mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
-    build_host = m.Remote("user@host", [], None, "ssh")
+    build_host = m.Remote("user@host", [], "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     def run_wrapper_side_effect(
@@ -177,7 +180,7 @@ def test_build_remote_flake(
 ) -> None:
     monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse("/flake.nix#hostname")
-    build_host = m.Remote("user@host", [], None, "ssh")
+    build_host = m.Remote("user@host", [], "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.build_remote_flake(
@@ -237,9 +240,9 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, None)
         mock_run.assert_not_called()
 
-    target_host = m.Remote("user@target.host", [], None, "ssh")
-    build_host = m.Remote("user@build.host", [], None, "ssh")
-    target_host_ng = m.Remote("user@target.host", [], None, "ssh-ng")
+    target_host = m.Remote("user@target.host", [], "ssh")
+    build_host = m.Remote("user@build.host", [], "ssh")
+    target_host_ng = m.Remote("user@target.host", [], "ssh-ng")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
@@ -531,15 +534,15 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             ["nix-env", "-p", path, "--list-generations"],
             stdout=PIPE,
             remote=None,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
         )
 
-    remote = m.Remote("user@host", [], "password", "ssh")
+    remote = m.Remote("user@host", [], "ssh")
     with patch(
         get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
     ) as mock_run:
         assert n.get_generations_from_nix_env(
-            m.Profile("system", path), remote, True
+            m.Profile("system", path), remote, SUDO
         ) == [
             m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
             m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
@@ -549,7 +552,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             ["nix-env", "-p", path, "--list-generations"],
             stdout=PIPE,
             remote=remote,
-            sudo=True,
+            elevate=SUDO,
         )
 
 
@@ -640,19 +643,19 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
 
     profile = m.Profile("system", path)
 
-    assert n.rollback(profile, None, False) == profile.path
+    assert n.rollback(profile, None, e.NO_ELEVATOR) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
         remote=None,
-        sudo=False,
+        elevate=e.NO_ELEVATOR,
     )
 
-    target_host = m.Remote("user@localhost", [], None, "ssh")
-    assert n.rollback(profile, target_host, True) == profile.path
+    target_host = m.Remote("user@localhost", [], "ssh")
+    assert n.rollback(profile, target_host, SUDO) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
         remote=target_host,
-        sudo=True,
+        elevate=SUDO,
     )
 
 
@@ -672,7 +675,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
                 """),
         )
         assert (
-            n.rollback_temporary_profile(m.Profile("system", path), None, False)
+            n.rollback_temporary_profile(m.Profile("system", path), None, e.NO_ELEVATOR)
             == path.parent / "system-2083-link"
         )
         mock_run.assert_called_with(
@@ -684,12 +687,12 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             ],
             stdout=PIPE,
             remote=None,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
         )
 
-        target_host = m.Remote("user@localhost", [], None, "ssh")
+        target_host = m.Remote("user@localhost", [], "ssh")
         assert (
-            n.rollback_temporary_profile(m.Profile("foo", path), target_host, True)
+            n.rollback_temporary_profile(m.Profile("foo", path), target_host, SUDO)
             == path.parent / "foo-2083-link"
         )
         mock_run.assert_called_with(
@@ -701,12 +704,12 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             ],
             stdout=PIPE,
             remote=target_host,
-            sudo=True,
+            elevate=SUDO,
         )
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess([], 0, stdout="")
-        assert n.rollback_temporary_profile(profile, None, False) is None
+        assert n.rollback_temporary_profile(profile, None, e.NO_ELEVATOR) is None
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -719,25 +722,25 @@ def test_set_profile(mock_run: Mock) -> None:
         m.Profile("system", profile_path),
         config_path,
         target_host=None,
-        sudo=False,
+        elevate=e.NO_ELEVATOR,
     )
 
     mock_run.assert_called_with(
         ["nix-env", "-p", profile_path, "--set", config_path],
         remote=None,
-        sudo=False,
+        elevate=e.NO_ELEVATOR,
     )
 
     mock_run.return_value = CompletedProcess([], 1)
 
-    with pytest.raises(m.NixOSRebuildError) as e:
+    with pytest.raises(m.NixOSRebuildError) as exc:
         n.set_profile(
             m.Profile("system", profile_path),
             config_path,
             target_host=None,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
         )
-    assert str(e.value).startswith(
+    assert str(exc.value).startswith(
         "error: your NixOS configuration path seems to be missing essential files."
     )
 
@@ -756,7 +759,7 @@ def test_switch_to_configuration_without_systemd_run(
         n.switch_to_configuration(
             profile_path,
             m.Action.SWITCH,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -764,29 +767,29 @@ def test_switch_to_configuration_without_systemd_run(
     mock_run.assert_called_with(
         [profile_path / "bin/switch-to-configuration", "switch"],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
-        sudo=False,
+        elevate=e.NO_ELEVATOR,
         remote=None,
         stdout=sys.stderr,
     )
 
-    with pytest.raises(m.NixOSRebuildError) as e:
+    with pytest.raises(m.NixOSRebuildError) as exc:
         n.switch_to_configuration(
             config_path,
             m.Action.BOOT,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
             target_host=None,
             specialisation="special",
         )
     assert (
-        str(e.value)
+        str(exc.value)
         == "error: '--specialisation' can only be used with 'switch' and 'test'"
     )
 
-    target_host = m.Remote("user@localhost", [], None, "ssh")
+    target_host = m.Remote("user@localhost", [], "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
@@ -795,7 +798,7 @@ def test_switch_to_configuration_without_systemd_run(
         n.switch_to_configuration(
             Path("/path/to/config"),
             m.Action.TEST,
-            sudo=True,
+            elevate=SUDO,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -806,11 +809,11 @@ def test_switch_to_configuration_without_systemd_run(
             "test",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
-        sudo=True,
+        elevate=SUDO,
         remote=target_host,
         stdout=sys.stderr,
     )
@@ -830,7 +833,7 @@ def test_switch_to_configuration_with_systemd_run(
         n.switch_to_configuration(
             profile_path,
             m.Action.SWITCH,
-            sudo=False,
+            elevate=e.NO_ELEVATOR,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -842,16 +845,16 @@ def test_switch_to_configuration_with_systemd_run(
             "switch",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
         },
-        sudo=False,
+        elevate=e.NO_ELEVATOR,
         remote=None,
         stdout=sys.stderr,
     )
 
-    target_host = m.Remote("user@localhost", [], None, "ssh")
+    target_host = m.Remote("user@localhost", [], "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
@@ -860,7 +863,7 @@ def test_switch_to_configuration_with_systemd_run(
         n.switch_to_configuration(
             Path("/path/to/config"),
             m.Action.TEST,
-            sudo=True,
+            elevate=SUDO,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -872,11 +875,11 @@ def test_switch_to_configuration_with_systemd_run(
             "test",
         ],
         env={
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "1",
         },
-        sudo=True,
+        elevate=SUDO,
         remote=target_host,
         stdout=sys.stderr,
     )
@@ -887,11 +890,13 @@ def test_switch_to_configuration_with_systemd_run(
 def test_upgrade_channels(mock_run: Mock, mock_geteuid: Mock, tmpdir: Path) -> None:
     tmp_path = Path(tmpdir)
 
-    with pytest.raises(m.NixOSRebuildError) as e:
-        n.upgrade_channels(all_channels=False, sudo=False, channels_dir=tmp_path)
-    assert str(e.value) == (
+    with pytest.raises(m.NixOSRebuildError) as exc:
+        n.upgrade_channels(
+            all_channels=False, elevate=e.NO_ELEVATOR, channels_dir=tmp_path
+        )
+    assert str(exc.value) == (
         "error: if you pass the '--upgrade' or '--upgrade-all' flag, you must "
-        "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        "also pass '--elevate' or run the command as root"
     )
 
     (tmp_path / "nixos").mkdir()
@@ -899,19 +904,20 @@ def test_upgrade_channels(mock_run: Mock, mock_geteuid: Mock, tmpdir: Path) -> N
     (tmp_path / "nixos-hardware" / ".update-on-nixos-rebuild").touch()
     (tmp_path / "home-manager").mkdir()
 
-    # should work because we are passing sudo=True even with os.geteuid == 1000
-    n.upgrade_channels(all_channels=False, sudo=True, channels_dir=tmp_path)
+    # should work because we are passing an elevator even with os.geteuid == 1000
+    n.upgrade_channels(all_channels=False, elevate=SUDO, channels_dir=tmp_path)
+    # Path.glob order is filesystem-dependent, so don't assert call order.
     mock_run.assert_has_calls(
         [
             call(
                 ["nix-channel", "--update", "nixos-hardware"],
                 check=False,
-                sudo=True,
+                elevate=SUDO,
             ),
             call(
                 ["nix-channel", "--update", "nixos"],
                 check=False,
-                sudo=True,
+                elevate=SUDO,
             ),
         ],
         any_order=True,
@@ -921,23 +927,23 @@ def test_upgrade_channels(mock_run: Mock, mock_geteuid: Mock, tmpdir: Path) -> N
     # root check
     mock_geteuid.return_value = 0
 
-    n.upgrade_channels(all_channels=True, sudo=False, channels_dir=tmp_path)
+    n.upgrade_channels(all_channels=True, elevate=e.NO_ELEVATOR, channels_dir=tmp_path)
     mock_run.assert_has_calls(
         [
             call(
                 ["nix-channel", "--update", "home-manager"],
                 check=False,
-                sudo=False,
+                elevate=e.NO_ELEVATOR,
             ),
             call(
                 ["nix-channel", "--update", "nixos-hardware"],
                 check=False,
-                sudo=False,
+                elevate=e.NO_ELEVATOR,
             ),
             call(
                 ["nix-channel", "--update", "nixos"],
                 check=False,
-                sudo=False,
+                elevate=e.NO_ELEVATOR,
             ),
         ],
         any_order=True,

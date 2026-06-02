@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "slothy";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slothy-optimizer";
     repo = "slothy";
     tag = version;
-    hash = "sha256-1seD/wqAyEcv5HJFO8j53ARd64fddGropA6xk0dq2yk=";
+    hash = "sha256-/xjOhf/Z4IQjrI05IfLWurZ0x0zTH97pr9F8dtEEsbA=";
   };
 
   build-system = [ setuptools ];

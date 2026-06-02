@@ -19,6 +19,12 @@ assert lib.elem variant [
   "tdx"
 ];
 
+let
+  kernelSrc = fetchurl {
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.76.tar.xz";
+    hash = "sha256-u7Q+g0xG5r1JpcKPIuZ5qTdENATh9lMgTUskkp862JY=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
   version = "5.3.0";
@@ -30,14 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fhG/bP1HzmhyU2N+wnr1074WEGsD9RdTUUBhYUFpWlA=";
   };
 
-  kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.76.tar.xz";
-    hash = "sha256-u7Q+g0xG5r1JpcKPIuZ5qTdENATh9lMgTUskkp862JY=";
-  };
-
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)'
+      --replace-fail 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s ${kernelSrc} $(KERNEL_TARBALL)'
   '';
 
   nativeBuildInputs = [

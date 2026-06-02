@@ -10,12 +10,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchgit {
     url = "https://tangled.org/tranquil.farm/tranquil-pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TORNOFPlbCt4QWNd+bmxkShTUvT/5ynOj+UBYITAhg8=";
+    hash = "sha256-kGB5jFwghMsjlAoS4mj94s9peo7PL54UKTH/3TS567w=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-qbmIAvE/3u/NB5x9bERCGQqwiDLkzjff3QchgR+ZDFs=";
+    hash = "sha256-9G74AVRXPgR+aj00ksCc1+dDqgE2GQR4cpjJsY6yjro=";
   };
 
   strictDeps = true;
