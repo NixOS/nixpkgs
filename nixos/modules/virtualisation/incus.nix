@@ -93,6 +93,9 @@ let
     ]
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
+    ]
+    ++ lib.optionals cfg.storage.truenas.enable [
+      truenas-incus-ctl
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
@@ -284,6 +287,8 @@ in
         '';
       };
 
+      storage.truenas.enable = lib.mkEnableOption "TrueNAS storage driver support";
+
       ui = {
         enable = lib.mkEnableOption "Incus Web UI";
 
@@ -313,6 +318,10 @@ in
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
+      }
+      {
+        assertion = cfg.storage.truenas.enable -> config.services.openiscsi.enable;
+        messages = "`virtualisation.incus.storage.truenas.enable` requires `services.openiscsi.enable`";
       }
     ];
 
@@ -346,6 +355,9 @@ in
 
       # gui console support
       pkgs.spice-gtk
+    ]
+    ++ lib.optionals cfg.storage.truenas.enable [
+      pkgs.truenas-incus-ctl
     ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
