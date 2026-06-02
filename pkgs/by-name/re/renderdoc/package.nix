@@ -12,7 +12,7 @@
   libpthread-stubs,
   makeWrapper,
   nix-update-script,
-  pcre,
+  pcre2,
   pkg-config,
   python312Packages,
   qt5,
@@ -61,6 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ];
+  swig_patches = [
+    # use PCRE2 instead of PCRE
+    (fetchpatch {
+      name = "renderdoc-swig-pcre2-1.patch";
+      url = "https://src.fedoraproject.org/rpms/renderdoc/raw/19ce666d120a229e5c1ab62fc142610ab3b21b3c/f/renderdoc-swig-pcre2-1.patch";
+      hash = "sha256-xuqHu72vAbxFELNTfJT5SbQOsnG/ee++MZgpuEGLT/w=";
+    })
+    (fetchpatch {
+      name = "renderdoc-swig-pcre2-2.patch";
+      url = "https://src.fedoraproject.org/rpms/renderdoc/raw/19ce666d120a229e5c1ab62fc142610ab3b21b3c/f/renderdoc-swig-pcre2-2.patch";
+      hash = "sha256-LUm5Ekmccy4x+hR+iK49zJc75VxuhDhpNw8rkVnn4rc=";
+    })
+  ];
+  postPatch = ''
+    pushd ../swig
+    prePatch="" postPatch="" patches="$swig_patches" runPhase patchPhase
+    popd
+  '';
 
   buildInputs = [
     libxdmcp
@@ -83,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     makeWrapper
-    pcre
+    pcre2
     pkg-config
     python312Packages.python
     qt5.qtx11extras
