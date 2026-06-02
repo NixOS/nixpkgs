@@ -5,21 +5,24 @@
   fetchFromGitHub,
   pillow,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansi2image";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "ansi2image";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GWrVo1WJux+ATvG5F9J4WMDlI0XAeTpQg7NrkN1P4Co=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     pillow
   ];
@@ -34,8 +37,8 @@ buildPythonPackage rec {
     description = "Module to convert ANSI text to an image";
     mainProgram = "ansi2image";
     homepage = "https://github.com/helviojunior/ansi2image";
-    changelog = "https://github.com/helviojunior/ansi2image/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/helviojunior/ansi2image/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
