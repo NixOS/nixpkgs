@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.57.0";
+  version = "0.59.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EoxKq8aEfc0XoSm92mZgxc2Zoc9B7Oo6NAjcFOlSZfw=";
+    hash = "sha256-d9FA2nWJO548HJIAxYxqPoi6Dyrb4zPjAAnd0FJdl4Y=";
   };
-  cargoHash = "sha256-MBTUSNbOWOhrYL18+yPCg6Ydjym50JMuqTt/U0kQiL4=";
+  cargoHash = "sha256-o1/vGkYGNNZjSNnzlgAJN/rBIsYLcGXv6GtG5wAza38=";
 
   nativeBuildInputs = [
     pkg-config
