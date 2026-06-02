@@ -5,7 +5,6 @@
   autoreconfHook,
   pkg-config,
   glib,
-  pcre,
   json_c,
   flex,
   bison,
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    pcre
     json_c
     flex
     bison
