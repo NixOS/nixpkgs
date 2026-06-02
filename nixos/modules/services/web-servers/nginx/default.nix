@@ -152,8 +152,9 @@ let
     include ${cfg.defaultMimeTypes};
     types_hash_max_size ${toString cfg.typesHashMaxSize};
 
-    include ${cfg.package}/conf/fastcgi.conf;
-    include ${cfg.package}/conf/uwsgi_params;
+    ${concatMapStringsSep "\n" (i: ''
+      include ${i};
+    '') cfg.commonHttpIncludes}
 
     default_type application/octet-stream;
   '';
@@ -761,6 +762,19 @@ in
           Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
           we use by default the ones bundled in the mailcap package, used by most of the other
           Linux distributions.
+        '';
+      };
+
+      commonHttpIncludes = mkOption {
+        type = types.listOf types.path;
+        default = [
+          "${cfg.package}/conf/fastcgi.conf"
+          "${cfg.package}/conf/uwsgi_params"
+        ];
+        defaultText = literalExpression ''[ "''${cfg.package}/conf/fastcgi.conf" "''${cfg.package}/conf/uwsgi_params" ]'';
+        example = literalExpression "[ ]";
+        description = ''
+          List of configuration files to include in the http block.
         '';
       };
 
