@@ -163,7 +163,7 @@ let
       ''
         ${cfg.prependConfig}
 
-        pid /run/nginx/nginx.pid;
+        pid ${cfg.pidFile};
         error_log ${cfg.logError};
         daemon off;
 
@@ -791,6 +791,12 @@ in
         '';
       };
 
+      pidFile = mkOption {
+        type = types.str;
+        default = "/run/nginx/nginx.pid";
+        description = "Location of Nginx pid file";
+      };
+
       logError = mkOption {
         default = "stderr";
         type = types.str;
@@ -825,6 +831,7 @@ in
           {file}`nginx.conf` except for
           - [](#opt-services.nginx.appendConfig)
           - [](#opt-services.nginx.httpConfig)
+          - [](#opt-services.nginx.pidFile)
           - [](#opt-services.nginx.logError)
 
           If additional verbatim config in addition to other options is needed,
@@ -1696,7 +1703,7 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
-      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+      postrotate = "[ ! -f ${cfg.pidFile} ] || kill -USR1 `cat ${cfg.pidFile}`";
     };
   };
 }
