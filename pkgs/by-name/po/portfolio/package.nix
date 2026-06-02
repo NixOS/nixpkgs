@@ -4,10 +4,11 @@
   glib,
   glib-networking,
   gtk3,
+  jdk21_headless,
+  jre_minimal,
   lib,
   libsecret,
   makeDesktopItem,
-  openjdk21,
   stdenvNoCC,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -15,6 +16,26 @@
   gitUpdater,
 }:
 let
+  jre = jre_minimal.override {
+    jdk = jdk21_headless;
+    modules = [
+      "java.base"
+      "java.desktop"
+      "jdk.localedata"
+      "java.management"
+      "java.naming"
+      "java.net.http"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.net"
+      "jdk.httpserver"
+      "jdk.unsupported"
+      "jdk.xml.dom"
+    ];
+  };
+
   desktopItem = makeDesktopItem {
     name = "Portfolio";
     exec = "portfolio";
@@ -89,9 +110,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     win32-x86-64\
     }
 
+    # Eclipse source bundles are not needed at runtime.
+    rm -f $out/portfolio/plugins/*.source_*.jar
+    rm -rf $out/portfolio/configuration/org.eclipse.equinox.source
+
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix PATH : ${openjdk21}/bin
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME "${jre}"
 
     # Create desktop item
     mkdir -p $out/share/applications
