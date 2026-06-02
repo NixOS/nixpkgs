@@ -664,6 +664,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-buffer = super.cmp-buffer.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = with self; [
