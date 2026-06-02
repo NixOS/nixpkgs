@@ -4,6 +4,7 @@
   cython,
   fetchPypi,
   numpy,
+  setuptools,
   pytest-cov-stub,
   pytestCheckHook,
 }:
@@ -11,19 +12,19 @@
 buildPythonPackage rec {
   pname = "cftime";
   version = "1.6.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-giX+1rm0P7h2g+urUhMEUPwXMAERUNMJIJapDlTR6B4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
-    numpy
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytest-cov-stub
