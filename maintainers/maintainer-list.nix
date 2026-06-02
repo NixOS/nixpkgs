@@ -7491,6 +7491,12 @@
     email = "email@dvdznf.xyz";
     matrix = "@dvdznf:gitter.im";
   };
+  dvershinin = {
+    email = "ciapnz@gmail.com";
+    github = "dvershinin";
+    githubId = 250071;
+    name = "Danila Vershinin";
+  };
   dvn0 = {
     email = "git@dvn.me";
     github = "dvn0";
