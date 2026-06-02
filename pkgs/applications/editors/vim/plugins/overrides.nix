@@ -776,6 +776,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  cmp-nvim-lsp-document-symbol = super.cmp-nvim-lsp-document-symbol.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
