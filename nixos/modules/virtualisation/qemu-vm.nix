@@ -551,7 +551,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display (relevant only if virtualised machine uses grub bootloader).
+        The resolution of the virtual machine display.
       '';
     };
 
@@ -1379,6 +1379,7 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
+        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
