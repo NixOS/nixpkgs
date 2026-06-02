@@ -12530,6 +12530,8 @@ self: super: with self; {
 
   peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
 
+  peewee_4 = callPackage ../development/python-modules/peewee/4.nix { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   peft = callPackage ../development/python-modules/peft { };
