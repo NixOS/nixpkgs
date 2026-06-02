@@ -74,11 +74,6 @@ pnpmConfigHook() {
     # See: https://pnpm.io/settings#packageimportmethod
     pnpm config set package-import-method clone-or-copy
 
-    if [[ -n "$pnpmWorkspace" ]]; then
-        echo "'pnpmWorkspace' is deprecated, please migrate to 'pnpmWorkspaces'."
-        exit 2
-    fi
-
     echo "Installing dependencies"
     if [[ -n "$pnpmWorkspaces" ]]; then
         local IFS=" "
