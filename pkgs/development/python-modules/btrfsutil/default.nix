@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   btrfs-progs,
   autoreconfHook,
   pkg-config,
@@ -11,8 +12,11 @@
 buildPythonPackage {
   pname = "btrfsutil";
   inherit (btrfs-progs) version src;
-  format = "setuptools";
+  pyproject = true;
 
+  build-system = [
+    setuptools
+  ];
   buildInputs = [
     btrfs-progs
     e2fsprogs
