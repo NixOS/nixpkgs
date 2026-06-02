@@ -6,6 +6,8 @@
   pkg-config,
   libGL,
   which,
+  makeBinaryWrapper,
+  icnsify,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,12 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    makeBinaryWrapper
     which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    icnsify
   ];
 
   buildInputs = [
-    libGL
     SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
   ];
 
   makeFlags = [ "BUILDTYPE=release" ];
@@ -41,6 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         '-Werror' \
         '-Werror -Wno-uninitialized-const-pointer -Wno-default-const-init-var-unsafe'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # iconutil is not available in the build sandbox
+    substituteInPlace Makefile \
+      --replace-fail \
+        'iconutil -c icns $(OUTDIR)/icon.iconset -o $@ 2> /dev/null' \
+        'icnsify $(OUTDIR)/icon.iconset/icon_128x128.png -o $@'
   '';
 
   doCheck = true;
@@ -50,7 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/bin
     install -m755 out/release/host/bin/azimuth $out/bin/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -R out/release/host/Azimuth.app $out/Applications/
+  ''
+  + ''
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeBinaryWrapper "$out/Applications/Azimuth.app/Contents/MacOS/Azimuth" \
+      "$out/bin/azimuth"
   '';
 
   meta = {
@@ -69,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     homepage = "https://mdsteele.games/azimuth/index.html";
     maintainers = with lib.maintainers; [ marius851000 ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 
 })
