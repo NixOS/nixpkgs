@@ -38,9 +38,11 @@
 
   # python check dependencies
   flaky,
+  pytest-asyncio,
   pytest-freezegun,
   pytest-mock,
   pytest-snapshot,
+  requests-mock,
   types-freezegun,
 }:
 
@@ -124,9 +126,11 @@ buildPythonPackage rec {
     pytestCheckHook
 
     flaky
+    pytest-asyncio
     pytest-freezegun
     pytest-mock
     pytest-snapshot
+    requests-mock
     types-freezegun
   ];
 
