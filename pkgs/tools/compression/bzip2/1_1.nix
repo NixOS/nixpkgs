@@ -51,5 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "bz2" ];
     platforms = lib.platforms.all;
     maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2026-42250"
+    ];
   };
 })
