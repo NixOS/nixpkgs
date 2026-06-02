@@ -40,6 +40,7 @@ buildGo125Module rec {
 
   meta = {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
+    homepage = "https://gitlab.com/gitlab-org/container-registry";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ e1mo ];
     teams = with lib.teams; [ gitlab ];

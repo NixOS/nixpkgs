@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
     tag = "v${version}";
-    hash = "sha256-xEVsYYwpcHMyvlmUYDviM5MLVz8bWLShUW6GOpfAmro=";
+    hash = "sha256-lRLyGvCat6nBixFKkrn4NxeVF52Hl32admAL37mf9wc=";
   };
 
   build-system = [ flit-core ];

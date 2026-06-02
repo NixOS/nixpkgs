@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.8.2";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rKP2YsBjccPu/NVTo6aHyUulinrkYNDGOQf2y59pztk=";
+    hash = "sha256-xez++JWHcQIx5Mk+TUeBrhcnbQNE4tqX31T9bthqGdU=";
   };
 
   nativeBuildInputs = with kdePackages; [

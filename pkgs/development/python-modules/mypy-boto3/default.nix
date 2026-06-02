@@ -586,8 +586,8 @@ in
       "sha256-kw8ncmITgoIGnWIOk9X3S8klQ4B56LtH1CVLFKwA2ic=";
 
   mypy-boto3-groundstation =
-    buildMypyBoto3Package "groundstation" "1.43.0"
-      "sha256-nTKK7qqa2apyNM4/U2AphLGvoSqemVKfpAciilJ0pRE=";
+    buildMypyBoto3Package "groundstation" "1.43.18"
+      "sha256-+DDeD9YWo98meLZU2Mzu5AE0S7HFg6kfxeUWUh9XcQA=";
 
   mypy-boto3-guardduty =
     buildMypyBoto3Package "guardduty" "1.43.15"
@@ -962,8 +962,8 @@ in
       "sha256-BUl/wnJKR3TB1YsTCLrJdEoH9Lz8DZ6H94STOOX8gkQ=";
 
   mypy-boto3-omics =
-    buildMypyBoto3Package "omics" "1.43.0"
-      "sha256-by5t5x+vu84vjqe176tFcz1zhDUIsmUo6dH5f3OyWOw=";
+    buildMypyBoto3Package "omics" "1.43.18"
+      "sha256-aMV1kli90lXUsGmOwP1lPW9yTH+0/520hBonZC3AIjY=";
 
   mypy-boto3-opensearch =
     buildMypyBoto3Package "opensearch" "1.43.16"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.10"
-      "sha256-I+J24XB8hRjuklH5dlYAyTfOI6f7cN+EhKMI2UYFHQw=";
+    buildMypyBoto3Package "quicksight" "1.43.18"
+      "sha256-+cfQUyFlqWRQtkX28raVgZjdwnqhyK5vNyZjpWW3aEI=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
@@ -1086,8 +1086,8 @@ in
       "sha256-ZKRhSBcrpdi3T2Qdw5v8WFg7dDbGCUlZBgIrmgHSUFs=";
 
   mypy-boto3-rds-data =
-    buildMypyBoto3Package "rds-data" "1.43.0"
-      "sha256-sgjEU7RqruiFWqUxxiDt/mx0uTJFhJQxkJsXvo5lYbk=";
+    buildMypyBoto3Package "rds-data" "1.43.18"
+      "sha256-dpTlWnEq5++iAsccn0Jj4C2yyvs8Cs5tMph5yzpbjcc=";
 
   mypy-boto3-redshift =
     buildMypyBoto3Package "redshift" "1.43.7"
@@ -1150,8 +1150,8 @@ in
       "sha256-F1xhitFa4Eac9VlCpfqjCObUH+YvLz7TYDYfI/bPYbc=";
 
   mypy-boto3-route53resolver =
-    buildMypyBoto3Package "route53resolver" "1.43.6"
-      "sha256-/KAlBKNGLO+PLapddz4kSW3ymsGc7Bf/tlhiIV/K9Bs=";
+    buildMypyBoto3Package "route53resolver" "1.43.18"
+      "sha256-IoIpgRY94hxtu0keb2KrqrL/mUmY4Cun0JPNpdEVwF0=";
 
   mypy-boto3-rum =
     buildMypyBoto3Package "rum" "1.43.0"
@@ -1250,8 +1250,8 @@ in
       "sha256-JO9Mm6dTJuFnbyRzuSaPpT2lvDNaSUMlspWgeH+bt5M=";
 
   mypy-boto3-sesv2 =
-    buildMypyBoto3Package "sesv2" "1.43.0"
-      "sha256-rHuTd77z8sOL25W1F+LaRabZpqOkv/J+oiclvHvnGuc=";
+    buildMypyBoto3Package "sesv2" "1.43.18"
+      "sha256-2wRWO4EF6lH/69o8UvavMG5tlsqOSP4hdvF5bwOcS1M=";
 
   mypy-boto3-shield =
     buildMypyBoto3Package "shield" "1.43.0"

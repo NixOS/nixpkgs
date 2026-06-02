@@ -28,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Boot 64-bit Marvell EBU SoC over UART";
+    homepage = "https://github.com/pali/mvebu64boot";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.all;

@@ -48,6 +48,15 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     jax
   ];
+
+  # disable lto on darwin, cmake cannot find llvm-ar
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ale/CMakeLists.txt \
+      --replace-fail \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
+  '';
+
   dontUseCmakeConfigure = true;
 
   buildInputs = [
@@ -104,10 +113,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    badPlatforms = [
-      # FAILED: src/ale/libale.a
-      # /bin/sh: CMAKE_CXX_COMPILER_AR-NOTFOUND: command not found
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 })

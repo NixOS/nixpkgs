@@ -59,7 +59,6 @@ python27.pkgs.buildPythonApplication {
       inherit
         rSrc
         binlore
-        python27
         resholve
         ;
     };

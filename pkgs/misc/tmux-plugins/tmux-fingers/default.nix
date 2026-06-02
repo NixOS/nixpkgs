@@ -29,6 +29,10 @@ let
     # Unhandled exception: Missing ENV key: "TMUX" (KeyError)
     doCheck = false;
     doInstallCheck = false;
+
+    meta = {
+      homepage = "https://github.com/Morantron/tmux-fingers";
+    };
   };
 in
 mkTmuxPlugin {

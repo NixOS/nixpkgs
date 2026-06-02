@@ -10366,9 +10366,6 @@ with pkgs;
     )
       haskellPackages.bench;
 
-  cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
-  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
-
   ### GAMES
 
   inherit (callPackages ../games/fteqw { })
