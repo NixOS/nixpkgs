@@ -3,12 +3,13 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs-types";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "calmjs.types";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     hash = "sha256-EGWYv9mx3RPqs9dnB5t3Bu3hiujL2y/XxyMP7JkjjAQ=";
     extension = "zip";
   };
+
+  build-system = [ setuptools ];
 
   checkInputs = [ pytestCheckHook ];
 
