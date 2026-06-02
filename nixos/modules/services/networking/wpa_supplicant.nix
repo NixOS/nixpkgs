@@ -123,7 +123,8 @@ let
             # set up imperative config file
             "+${pkgs.coreutils}/bin/touch /etc/wpa_supplicant/imperative.conf"
             "+${pkgs.coreutils}/bin/chmod 664 /etc/wpa_supplicant/imperative.conf"
-            "+${pkgs.coreutils}/bin/chown -R wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /etc/wpa_supplicant/imperative.conf"
           ]
           ++ lib.optionals cfg.userControlled [
             # set up client sockets directory
