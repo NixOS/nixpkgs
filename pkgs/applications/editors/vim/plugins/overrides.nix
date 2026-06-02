@@ -725,6 +725,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-emoji = super.cmp-emoji.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
