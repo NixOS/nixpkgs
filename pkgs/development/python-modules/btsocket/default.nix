@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "btsocket";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ukBaz";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-/T89GZJth7pBGQuN1ytCf649oWv7aZcfPHjYoftbLw8=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
