@@ -1,0 +1,17 @@
+diff --git a/Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt b/Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt
+index 1a33064..d791805 100644
+--- a/Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt
++++ b/Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt
+@@ -17,6 +17,12 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ #
++# Add ITK
++find_package(ITK REQUIRED)
++include(${ITK_USE_FILE})
++include_directories(${ITK_INCLUDE_DIRS})
++message(STATUS "ITK FOUND: ${ITK_INCLUDE_DIRS}")
++
+ include_directories( ${Python_INCLUDE_DIRS} )
+ include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
+ set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )

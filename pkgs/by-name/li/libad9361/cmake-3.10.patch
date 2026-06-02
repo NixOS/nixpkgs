@@ -1,0 +1,34 @@
+From a54a5ff97c4ce0125207544e8c4e2586551dfded Mon Sep 17 00:00:00 2001
+From: Dave Walker <dave@daviey.com>
+Date: Thu, 9 Oct 2025 15:27:42 +0100
+Subject: [PATCH] Update CMake minimum required version to 3.10
+
+CMake 4 removed compatibility with CMake versions < 3.5, and versions
+between 3.5-3.10 are deprecated.
+
+This change updates the minimum required version to 3.10 to ensure
+compatibility with modern CMake versions including CMake 4.x.
+
+This issue is affecting NixOS users (see
+https://github.com/NixOS/nixpkgs/issues/450318) and will likely impact
+other distributions as they upgrade to CMake 4.x.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04d5c45..8316999 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,7 +10,7 @@
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ # Lesser General Public License for more details.
+ 
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ project(ad9361 C)
+ 
+ set(LIBAD9361_VERSION_MAJOR 0)
+-- 
+2.51.0
+

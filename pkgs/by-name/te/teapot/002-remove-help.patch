@@ -1,0 +1,49 @@
+diff -Naur teapot-2.3.0-old/CMakeLists.txt teapot-2.3.0-new/CMakeLists.txt
+--- teapot-2.3.0-old/CMakeLists.txt	1969-12-31 21:00:01.000000000 -0300
++++ teapot-2.3.0-new/CMakeLists.txt	2021-11-25 18:16:06.594423660 -0300
+@@ -64,46 +64,6 @@
+ 	install(TARGETS fteapot DESTINATION bin)
+ endif ()
+ 
+-if (ENABLE_HELP)
+-	add_custom_command(
+-		OUTPUT teapot.tex teapot.lyx
+-		MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/doc/teapot.lyx
+-		VERBATIM
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/teapot.lyx teapot.lyx
+-		COMMAND lyx -e pdflatex -f main teapot.lyx
+-	)
+-	add_custom_command(
+-		OUTPUT teapot.pdf teapot.aux.old teapot.log teapot.toc
+-		MAIN_DEPENDENCY teapot.tex
+-		VERBATIM
+-		COMMAND pdflatex teapot.tex; diff -q teapot.aux.old teapot.aux && cp teapot.aux teapot.aux.old
+-		COMMAND pdflatex teapot.tex; diff -q teapot.aux.old teapot.aux && cp teapot.aux teapot.aux.old
+-	)
+-	add_custom_command(OUTPUT teapot.pdf teapot.out MAIN_DEPENDENCY teapot.tex teapot.aux.old VERBATIM COMMAND pdflatex teapot.tex; diff -q teapot.aux.old teapot.aux && cp teapot.aux teapot.aux.old)
+-	add_custom_command(
+-		OUTPUT html/ html/index.html .latex2html-init
+-		MAIN_DEPENDENCY teapot.tex
+-		DEPENDS teapot.tex teapot.pdf ${CMAKE_CURRENT_SOURCE_DIR}/doc/.latex2html-init
+-		VERBATIM
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/.latex2html-init .latex2html-init
+-		COMMAND ${CMAKE_COMMAND} -E make_directory html
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/contents.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/next.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/next_g.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/prev.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/prev_g.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/up.png html/
+-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/up_g.png html/
+-		COMMAND latex2html teapot.tex
+-	)
+-	add_custom_target(pdf DEPENDS teapot.pdf)
+-	add_custom_target(html DEPENDS html/index.html)
+-	add_custom_target(doc ALL DEPENDS teapot.pdf html/index.html)
+-	install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc/teapot FILES_MATCHING PATTERN *.html PATTERN *.png)
+-	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/teapot.pdf DESTINATION share/doc/teapot)
+-	set(HELPFILE "${CMAKE_INSTALL_PREFIX}/share/doc/teapot/index.html")
+-endif ()
+-
+ install(FILES COPYING README DESTINATION share/doc/teapot)
+ install(FILES teapot.1 DESTINATION share/man/man1)

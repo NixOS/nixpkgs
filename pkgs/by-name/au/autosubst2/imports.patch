@@ -1,0 +1,72 @@
+diff --git a/Src/Autosubst/GenAutomation.hs b/Src/Autosubst/GenAutomation.hs
+index f1c205c..6f48895 100755
+--- a/Src/Autosubst/GenAutomation.hs
++++ b/Src/Autosubst/GenAutomation.hs
+@@ -7,6 +7,7 @@ import           Autosubst.Names
+ import           Autosubst.Syntax
+ import           Autosubst.Tactics
+ import           Autosubst.Types
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.State.Lazy
+diff --git a/Src/Autosubst/GenCode.hs b/Src/Autosubst/GenCode.hs
+index 9145915..d4b7569 100755
+--- a/Src/Autosubst/GenCode.hs
++++ b/Src/Autosubst/GenCode.hs
+@@ -5,6 +5,7 @@ module Autosubst.GenCode (generateCode) where
+ import           Autosubst.Generator
+ import           Autosubst.ModularGenerator
+ import           Autosubst.Types
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.RWS          hiding ((<>))
+diff --git a/Src/Autosubst/GenM.hs b/Src/Autosubst/GenM.hs
+index 59483c1..3a4a447 100755
+--- a/Src/Autosubst/GenM.hs
++++ b/Src/Autosubst/GenM.hs
+@@ -2,6 +2,7 @@
+ {-# LANGUAGE MultiParamTypeClasses #-}
+ module Autosubst.GenM where
+ 
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.RWS
+diff --git a/Src/Autosubst/Generator.hs b/Src/Autosubst/Generator.hs
+index 576db42..264b836 100755
+--- a/Src/Autosubst/Generator.hs
++++ b/Src/Autosubst/Generator.hs
+@@ -8,6 +8,7 @@ import           Autosubst.Names
+ import           Autosubst.Syntax
+ import           Autosubst.Tactics
+ import           Autosubst.Types
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.RWS          hiding ((<>))
+diff --git a/Src/Autosubst/ModularGenerator.hs b/Src/Autosubst/ModularGenerator.hs
+index 323c1b1..dae8346 100755
+--- a/Src/Autosubst/ModularGenerator.hs
++++ b/Src/Autosubst/ModularGenerator.hs
+@@ -7,6 +7,7 @@ import           Autosubst.Names
+ import           Autosubst.Syntax
+ import           Autosubst.Tactics
+ import           Autosubst.Types
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.State.Lazy
+diff --git a/Src/Autosubst/Tactics.hs b/Src/Autosubst/Tactics.hs
+index ef3545c..cdd38fb 100755
+--- a/Src/Autosubst/Tactics.hs
++++ b/Src/Autosubst/Tactics.hs
+@@ -2,6 +2,7 @@
+ {-# LANGUAGE MultiParamTypeClasses #-}
+ module Autosubst.Tactics where
+ 
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Reader
+ import           Control.Monad.RWS       hiding ((<>))

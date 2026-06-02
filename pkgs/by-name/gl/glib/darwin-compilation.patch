@@ -1,0 +1,24 @@
+Fix compilation on Mac OS X with gcc 4.8.
+
+diff -ru glib-2.40.0-orig/gio/gdummyfile.c glib-2.40.0/gio/gdummyfile.c
+--- glib-2.40.0-orig/gio/gdummyfile.c   2014-02-03 18:40:41.000000000 +0100
++++ glib-2.40.0/gio/gdummyfile.c        2014-07-15 10:58:31.000000000 +0200
+@@ -454,7 +454,8 @@
+   result = g_malloc (escaped_string_end - escaped_string + 1);
+        
+   out = result;
+-  for (in = escaped_string; in < escaped_string_end; in++) 
++  in = escaped_string;
++  for (; in < escaped_string_end; in++) 
+     {
+       character = *in;
+       if (*in == '%') 
+@@ -551,6 +552,7 @@
+   
+   decoded->scheme = g_malloc (p - uri);
+   out = decoded->scheme;
+-  for (in = uri; in < p - 1; in++)
++  in = uri;
++  for (; in < p - 1; in++)
+     *out++ = g_ascii_tolower (*in);
+   *out = 0;

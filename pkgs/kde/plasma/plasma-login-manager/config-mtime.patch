@@ -1,0 +1,14 @@
+diff --git a/src/common/ConfigReader.cpp b/src/common/ConfigReader.cpp
+index bb44514..abbdf57 100644
+--- a/src/common/ConfigReader.cpp
++++ b/src/common/ConfigReader.cpp
+@@ -184,9 +184,6 @@ void ConfigBase::load()
+ 
+     files << m_path;
+ 
+-    if (latestModificationTime <= m_fileModificationTime) {
+-        return;
+-    }
+     m_fileModificationTime = latestModificationTime;
+ 
+     for (const QString &filepath : std::as_const(files)) {

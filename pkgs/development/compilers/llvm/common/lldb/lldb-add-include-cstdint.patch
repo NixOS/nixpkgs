@@ -1,0 +1,16 @@
+Rebase of upstream commit:
+https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
+
+diff --git a/include/lldb/Utility/AddressableBits.h b/include/lldb/Utility/AddressableBits.h
+index 0d27c3561ec27..8c7a1ec5f52c0 100644
+--- a/include/lldb/Utility/AddressableBits.h
++++ b/include/lldb/Utility/AddressableBits.h
+@@ -12,6 +12,8 @@
+ #include "lldb/lldb-forward.h"
+ 
++#include <cstdint>
++
+ namespace lldb_private {
+ 
+ /// \class AddressableBits AddressableBits.h "lldb/Core/AddressableBits.h"
+

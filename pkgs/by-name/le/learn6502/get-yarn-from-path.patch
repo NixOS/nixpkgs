@@ -1,0 +1,15 @@
+diff --git a/packages/app-gnome/meson.build b/packages/app-gnome/meson.build
+--- a/packages/app-gnome/meson.build
++++ b/packages/app-gnome/meson.build
+@@ -3,10 +3,7 @@ gnome = import('gnome')
+ dependency('gjs-1.0', version: '>= 1.80.2')
+ gjs_console = find_program('gjs-console', required: true)
+ 
+-# TODO: Autodetect yarn version
+-yarn_path = meson.project_source_root() / '.yarn' / 'releases' / 'yarn-4.12.0.cjs'
+-node = find_program('node')
+-yarn = [node, yarn_path]
++yarn = find_program('yarn', required: true)
+ 
+ 
+ yarn_args = ['--cwd', meson.project_source_root()]

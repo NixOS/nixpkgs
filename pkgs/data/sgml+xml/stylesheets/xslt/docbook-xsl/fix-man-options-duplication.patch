@@ -1,0 +1,11 @@
+--- a/manpages/lists.xsl
++++ b/manpages/lists.xsl
+@@ -110,7 +110,7 @@
+   <xsl:text>.RE&#10;</xsl:text>
+ </xsl:template>
+ 
+-<xsl:template match="d:varlistentry/d:term"/>
++<xsl:template match="d:varlistentry/d:term" priority="1"/>
+ <xsl:template match="d:glossentry/d:glossterm"/>
+ 
+ <xsl:template match="d:variablelist[ancestor::d:listitem or ancestor::d:step or ancestor::d:glossdef]|

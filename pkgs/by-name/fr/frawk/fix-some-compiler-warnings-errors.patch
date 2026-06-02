@@ -1,0 +1,55 @@
+From ad649637b9a1c8ac1fdae72bdc3ccd12f04b5800 Mon Sep 17 00:00:00 2001
+From: Gert Hulselmans <gert.hulselmans@kuleuven.be>
+Date: Fri, 29 Aug 2025 23:49:53 +0200
+Subject: [PATCH] Fix some compiler warnings/errors.
+
+  - error: implicit autoref creates a reference to the dereference of a raw pointer
+  - unsafe precondition(s) violated: slice::get_unchecked_mut requires that the index is within the slice
+---
+ src/interp.rs                 | 2 +-
+ src/runtime/splitter/batch.rs | 4 ++--
+ src/runtime/str_impl.rs       | 3 ++-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/interp.rs b/src/interp.rs
+index 587afbab83c3440e0364ee33dd89afd6a1b9e1d2..7b88ce32e9eedab648cc3eae8f6f98721d2cc976 100644
+--- a/src/interp.rs
++++ b/src/interp.rs
+@@ -653,7 +653,7 @@ impl<'a, LR: LineReader> Interp<'a, LR> {
+             cur = loop {
+                 debug_assert!(cur < unsafe { (*instrs).len() });
+                 use Variable::*;
+-                match unsafe { (*instrs).get_unchecked(cur) } {
++                match unsafe { (&(*instrs)).get_unchecked(cur) } {
+                     StoreConstStr(sr, s) => {
+                         let sr = *sr;
+                         *self.get_mut(sr) = s.clone_str()
+diff --git a/src/runtime/splitter/batch.rs b/src/runtime/splitter/batch.rs
+index cc8d05e44b49c6a0a0e930c527e35bd6773ba120..1d4c53dcb4ceca6bc6739ce5c226777b6f6a1e34 100644
+--- a/src/runtime/splitter/batch.rs
++++ b/src/runtime/splitter/batch.rs
+@@ -1128,8 +1128,8 @@ mod generic {
+         let len = buf.len();
+         let len_minus_64 = len.saturating_sub(V::INPUT_SIZE);
+         let mut ix = 0;
+-        let field_base_ptr: *mut u64 = field_offsets.fields.get_unchecked_mut(0);
+-        let newline_base_ptr: *mut u64 = newline_offsets.fields.get_unchecked_mut(0);
++        let field_base_ptr: *mut u64 = field_offsets.fields.as_mut_ptr();
++        let newline_base_ptr: *mut u64 = newline_offsets.fields.as_mut_ptr();
+         let mut field_base = 0;
+         let mut newline_base = 0;
+ 
+diff --git a/src/runtime/str_impl.rs b/src/runtime/str_impl.rs
+index e34176f86b7d0c4ba77f2107d3ebe571f207fbbd..4f8fbca5ac56b94765efdb3e03edfb0e82370e05 100644
+--- a/src/runtime/str_impl.rs
++++ b/src/runtime/str_impl.rs
+@@ -727,7 +727,8 @@ impl<'a> Str<'a> {
+         );
+         let new_len = to - from;
+         if new_len <= MAX_INLINE_SIZE {
+-            return Str::from_rep(Inline::from_unchecked(&(*self.get_bytes())[from..to]).into());
++            let bytes: &[u8] = &*self.get_bytes();
++            return Str::from_rep(Inline::from_unchecked(&bytes[from..to]).into());
+         }
+         let tag = self.rep().get_tag();
+         let u32_max = u32::max_value() as usize;

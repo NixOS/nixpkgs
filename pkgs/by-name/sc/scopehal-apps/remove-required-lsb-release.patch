@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 69d8c7b..a2f3b8c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -337,14 +337,14 @@ set(CPACK_STRIP_FILES TRUE)
+
+ # Figure out what distro version we're on
+ if(LINUX)
+-	find_program(LSB_RELEASE_EXEC lsb_release REQUIRED)
++	find_program(LSB_RELEASE_EXEC lsb_release)
+ 	execute_process(COMMAND ${LSB_RELEASE_EXEC} -is
+ 		OUTPUT_VARIABLE DISTRO_NAME
+ 		OUTPUT_STRIP_TRAILING_WHITESPACE
+-		COMMAND_ERROR_IS_FATAL ANY)
++		)
+ 	execute_process(COMMAND ${LSB_RELEASE_EXEC} -rs
+ 		OUTPUT_VARIABLE DISTRO_VER
+ 		OUTPUT_STRIP_TRAILING_WHITESPACE
+-		COMMAND_ERROR_IS_FATAL ANY)
++		)
+
+ 	message(STATUS "Linux distribution target for packaging: name ${DISTRO_NAME}, version ${DISTRO_VER}")

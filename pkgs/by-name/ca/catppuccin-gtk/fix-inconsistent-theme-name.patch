@@ -1,0 +1,32 @@
+The theme name uses `default` as fallback for tweaks when they aren't
+set, which not only is not a valid tweak name, but can lead to confusion 
+and inconsistencies (See: https://github.com/catppuccin/nix/pull/261).
+---
+ sources/build/context.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sources/build/context.py b/sources/build/context.py
+index 3d43c01..6167f14 100644
+--- a/sources/build/context.py
++++ b/sources/build/context.py
+@@ -45,7 +45,8 @@ class BuildContext:
+         return f"{self.output_root}/{self.build_id()}"
+ 
+     def build_id(self) -> str:
+-        return f"{self.theme_name}-{self.flavor.identifier}-{self.accent.identifier}-{self.size}+{self.tweaks.id() or 'default'}"
++        tweaks = f"+{self.tweaks.id()}" if self.tweaks.id() != "" else ""
++        return f"{self.theme_name}-{self.flavor.identifier}-{self.accent.identifier}-{self.size}" + tweaks
+ 
+     def apply_suffix(self, suffix: Suffix) -> str:
+         if suffix.test(self):
+@@ -59,6 +60,7 @@ class BuildContext:
+             Subsitution(find=f"\\${key}: {default}", replace=f"${key}: {value}"),
+         )
+ 
++
+ IS_DARK = Suffix(true_value="-Dark", test=lambda ctx: ctx.flavor.dark)
+ IS_LIGHT = Suffix(true_value="-Light", test=lambda ctx: not ctx.flavor.dark)
+ IS_WINDOW_NORMAL = Suffix(
+-- 
+2.45.1
+
