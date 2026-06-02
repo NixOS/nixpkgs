@@ -93,7 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mdsteele.games/azimuth/";
     changelog = "https://github.com/mdsteele/azimuth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ marius851000 ];
+    maintainers = with lib.maintainers; [
+      philocalyst
+      marius851000
+    ];
     mainProgram = "azimuth";
     platforms = lib.platforms.unix;
   };
