@@ -320,7 +320,7 @@ let
         ${cfg.appendConfig}
       '';
 
-  configPath = if cfg.enableReload then "/etc/nginx/nginx.conf" else configFile;
+  configPath = if cfg.enableReload then "/etc/nginx/nginx.conf" else cfg.configFile;
 
   execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
@@ -860,6 +860,14 @@ in
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
+        '';
+      };
+
+      configFile = mkOption {
+        type = types.path;
+        readOnly = true;
+        description = ''
+          Path to the nginx configuration file.
         '';
       };
 
@@ -1479,6 +1487,8 @@ in
         }
       ) vhostCertNames;
 
+    services.nginx.configFile = configFile;
+
     services.nginx.additionalModules =
       optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd;
@@ -1624,7 +1634,7 @@ in
           wantedBy = [ "multi-user.target" ] ++ optionals cfg.enableReload sslServices;
           after = optionals cfg.enableReload sslServices;
           before = optionals cfg.enableReload sslOrderRenewServices;
-          restartTriggers = optionals cfg.enableReload [ configFile ];
+          restartTriggers = optionals cfg.enableReload [ cfg.configFile ];
           # Block reloading if not all certs exist yet.
           # Happens when config changes add new vhosts/certs.
           unitConfig = {
@@ -1665,7 +1675,7 @@ in
     );
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = configFile;
+      source = cfg.configFile;
     };
 
     security.acme.certs =
