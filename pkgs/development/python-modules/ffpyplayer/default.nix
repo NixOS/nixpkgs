@@ -11,7 +11,7 @@
   # buildInputs
   SDL2,
   # ffpyplayer is not compatible with ffmpeg 7
-  # https://github.com/matham/ffpyplayer/issues/166
+  # https://github.com/matham/ffpyplayer/issues/16
   ffmpeg_6,
 }:
 

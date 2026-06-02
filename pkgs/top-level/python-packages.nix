@@ -14713,6 +14713,8 @@ self: super: with self; {
     callPackage ../development/python-modules/pyobjc-framework-libdispatch
       { };
 
+  pyobjus = callPackage ../development/python-modules/pyobjus { };
+
   pyocd = callPackage ../development/python-modules/pyocd { };
 
   pyocd-pemicro = callPackage ../development/python-modules/pyocd-pemicro { };
