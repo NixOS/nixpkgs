@@ -24,6 +24,9 @@
 }:
 
 let
+  # forked from swig v3 in 2017
+  # primarily to include https://github.com/swig/swig/pull/251
+  # (cherry-picked as https://github.com/swig/swig/commit/8d79491a329825ad24294509fc6a0b0a0b8947c4)
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -101,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postUnpack = ''
-    cp -r ${custom_swig} swig
+    cp -r ${finalAttrs.passthru.custom_swig} swig
     chmod -R +w swig
     patchShebangs swig/autogen.sh
   '';
@@ -136,7 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/librenderdoc.so
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit custom_swig;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://renderdoc.org/";
