@@ -50,6 +50,16 @@ stdenv.mkDerivation rec {
       --replace-fail "-no_uuid" ""
   '';
 
+  # fpmake.pp is the only compilation that runs without -n (skip-config), so it reads
+  # fpc.cfg from the compiler's directory. Writing the glibc paths there gives fpmake
+  # the correct ELF interpreter BEFORE it is executed
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
+    printf '%s\n' \
+      "-Fl${stdenv.cc.libc.out}/lib" \
+      "-Xd${stdenv.cc.bintools.dynamicLinker}" \
+      > compiler/fpc.cfg
+  '';
+
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # SYSROOTPATH prevents the Makefile from hardcoding /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
     export SYSROOTPATH="$SDKROOT"
