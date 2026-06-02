@@ -7,7 +7,7 @@
   responses,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btsmarthub-devicelist";
   version = "0.2.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
     repo = "btsmarthub_devicelist";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})
