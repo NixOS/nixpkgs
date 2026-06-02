@@ -93,7 +93,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://mdsteele.games/syzygy";
     changelog = "https://github.com/mdsteele/syzygy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.marius851000 ];
+    maintainers = with lib.maintainers; [
+      marius851000
+      philocalyst
+    ];
     platforms = lib.platforms.unix;
   };
 })
