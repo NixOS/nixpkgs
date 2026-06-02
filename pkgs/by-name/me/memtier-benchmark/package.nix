@@ -21,11 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N5oSAtlB8CSUSMQGxKHKHGakmUGJOq80LSkCdJw4H7U=";
   };
 
-  patchPhase = ''
-    substituteInPlace ./configure.ac \
-      --replace '1.2.8' '${finalAttrs.version}'
-  '';
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
