@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   typing-extensions,
   heapdict,
   pytestCheckHook,
@@ -9,19 +10,26 @@
 buildPythonPackage rec {
   pname = "cachey";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "dask";
     repo = "cachey";
     rev = version;
     hash = "sha256-5USmuufrrWtmgibpfkjo9NtgN30hdl8plJfythmxM4s=";
   };
-  propagatedBuildInputs = [
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     typing-extensions
     heapdict
   ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "cachey" ];
+
   meta = {
     description = "Caching based on computation time and storage space";
     homepage = "https://github.com/dask/cachey/";
