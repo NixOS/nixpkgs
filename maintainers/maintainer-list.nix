@@ -9259,6 +9259,12 @@
     githubId = 119691;
     name = "Michael Gough";
   };
+  fraggerfox = {
+    email = "santhosh.raju@gmail.com";
+    github = "fraggerfox";
+    githubId = 189939;
+    name = "Santhosh Raju";
+  };
   fraioveio = {
     email = "francesco@vecchia.lol";
     github = "FraioVeio";
@@ -21437,6 +21443,12 @@
     github = "petertriho";
     githubId = 7420227;
     name = "Peter Tri Ho";
+  };
+  peterwaller-arm = {
+    email = "peter.waller@arm.com";
+    github = "peterwaller-arm";
+    githubId = 52030119;
+    name = "Peter Waller";
   };
   peterwilli = {
     email = "peter@codebuffet.co";
