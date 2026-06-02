@@ -69,6 +69,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     imagemagick
   ];
 
+  dontWrapGApps = true;
+
   dontConfigure = true;
   dontBuild = true;
 
@@ -115,6 +117,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm -rf $out/portfolio/configuration/org.eclipse.equinox.source
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --set JAVA_HOME "${jre}"
