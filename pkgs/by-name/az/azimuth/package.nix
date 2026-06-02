@@ -2,30 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  SDL2,
+  pkg-config,
   libGL,
-  SDL,
   which,
   installTool ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "azimuth";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "mdsteele";
     repo = "azimuth";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N5Ahetw/zOXDrEiR1umQNF6i3yeawavoLceiU+xD//g=";
   };
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [
-    libGL
-    SDL
+  nativeBuildInputs = [
+    pkg-config
+    which
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
+  buildInputs = [
+    libGL
+    SDL2
+  ];
 
   preConfigure = ''
     substituteInPlace data/azimuth.desktop \
