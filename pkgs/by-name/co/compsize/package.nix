@@ -2,22 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   btrfs-progs,
 }:
 
-let
-  # https://github.com/kilobyte/compsize/issues/52
-  btrfs-progs' = btrfs-progs.overrideAttrs (old: rec {
-    pname = "btrfs-progs";
-    version = "6.10";
-    src = fetchurl {
-      url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-      hash = "sha256-M4KoTj/P4f/eoHphqz9OhmZdOPo18fNFSNXfhnQj4N8=";
-    };
-  });
-
-in
 stdenv.mkDerivation rec {
   pname = "compsize";
   version = "1.5";
@@ -29,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
   };
 
-  buildInputs = [ btrfs-progs' ];
+  patches = [
+    ./btrfs-progs-6-10-1.patch
+  ];
+
+  buildInputs = [ btrfs-progs ];
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
