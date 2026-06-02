@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  callPackage,
   fetchFromGitHub,
   semgrep-core,
 
