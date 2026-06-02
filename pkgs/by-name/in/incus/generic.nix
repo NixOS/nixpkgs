@@ -213,5 +213,20 @@ buildGoModule (finalAttrs: {
     teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "incus";
+    knownVulnerabilities = lib.optionals (lib.versions.major finalAttrs.version == "6") [
+      "CVE-2026-35527 (Moderate)"
+      "CVE-2026-40195 (Moderate)"
+      "CVE-2026-40197 (Moderate)"
+      "CVE-2026-40251 (Moderate)"
+      "CVE-2026-41647 (Moderate)"
+      "CVE-2026-41684 (Moderate)"
+      "CVE-2026-41685 (Moderate)"
+      "CVE-2026-40243 (Low)"
+      "CVE-2026-41648 (Low)"
+      ''
+        incus-lts v6 is no longer supported in nixpkgs given the unpatched security vulnerabilities.
+        Please upgrade to NixOS 26.05 which includes incus-lts v7 or switch to the incus package.
+      ''
+    ];
   };
 })
