@@ -6,13 +6,14 @@
   pytest-cov-stub,
   pytestCheckHook,
   pyyaml,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-flip";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     pyyaml
     six
