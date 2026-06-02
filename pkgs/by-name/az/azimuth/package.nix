@@ -83,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Metroidvania game using only vectorial graphic";
-    mainProgram = "azimuth";
+    description = "Metroidvania game with vector graphics, inspired by Super Metroid and Star Control II";
     longDescription = ''
       Azimuth is a metroidvania game, and something of an homage to the previous
       greats of the genre (Super Metroid in particular). You will need to pilot
@@ -94,10 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
       weapons and upgrades to find and use, and a wide variety of enemies and
       bosses to tangle with.
     '';
-
+    homepage = "https://mdsteele.games/azimuth/";
+    changelog = "https://github.com/mdsteele/azimuth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    homepage = "https://mdsteele.games/azimuth/index.html";
     maintainers = with lib.maintainers; [ marius851000 ];
+    mainProgram = "azimuth";
     platforms = lib.platforms.unix;
   };
 
