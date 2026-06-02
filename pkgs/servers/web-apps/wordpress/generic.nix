@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wordpress.org";
     description = "Open source software you can use to create a beautiful website, blog, or app";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ basvandijk ];
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      basvandijk
+    ];
     platforms = lib.platforms.all;
   };
 })
