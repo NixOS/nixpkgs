@@ -683,6 +683,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-cmdline-history = super.cmp-cmdline-history.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-conjure = super.cmp-conjure.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.conjure ];
