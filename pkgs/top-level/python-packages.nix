@@ -11469,6 +11469,8 @@ self: super: with self; {
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
 
+  nvidia-cudnn-frontend = callPackage ../development/python-modules/nvidia-cudnn-frontend { };
+
   nvidia-cutlass = callPackage ../development/python-modules/nvidia-cutlass { };
 
   nvidia-cutlass-dsl = callPackage ../development/python-modules/nvidia-cutlass-dsl { };
