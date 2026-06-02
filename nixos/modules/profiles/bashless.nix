@@ -37,6 +37,8 @@
   services.logrotate.enable = lib.mkDefault false;
   # The resize helper pulls in bash
   services.lvm.resizeHelper.enable = false;
+  # Relies on gnupg. gnupg pulls in pinentry-gtk2 by default. pinentry-gtk2 has multiple dependencies that pull-in bash
+  systemd.services.systemd-importd.enable = false;
 
   # Check that the system does not contain a Nix store path that contains the
   # string "bash".
