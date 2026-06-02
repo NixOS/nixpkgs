@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linux-rdma/rdma-core";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = [ lib.maintainers.markuskowa ];
   };
 })

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    hash = "sha256-QVxDBVOUVwqMuJZo+RbwIbVxWJSPQpbjbHvuCVPfYUs=";
+    hash = "sha256-mCqppkfqf6QWWmdnTidxH4vdaB3gpRYS200vme0GUjQ=";
   };
 
   outputs = [
