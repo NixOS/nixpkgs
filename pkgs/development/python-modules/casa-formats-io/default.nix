@@ -12,8 +12,7 @@
 buildPythonPackage rec {
   pname = "casa-formats-io";
   version = "0.3.0";
-  format = "setuptools";
-  prproject = true;
+  pyproject = true;
 
   src = fetchPypi {
     pname = "casa_formats_io";
