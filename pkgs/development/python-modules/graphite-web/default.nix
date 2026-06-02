@@ -34,14 +34,14 @@
 
 buildPythonPackage {
   pname = "graphite-web";
-  version = "1.1.10-unstable-2025-02-24";
+  version = "1.2.1-pre2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = "graphite-web";
-    rev = "49c28e2015d605ad9ec93524f7076dd924a4731a";
-    hash = "sha256-TxsQPhnI5WhQvKKkDEYZ8xnyg/qf+N9Icej6d6A0jC0=";
+    tag = "1.2.1-pre2";
+    hash = "sha256-2C5iWn5/BoX0OPT/UQO94V1oZ/xiRzgoipp0551dnpM=";
   };
 
   postPatch = ''
