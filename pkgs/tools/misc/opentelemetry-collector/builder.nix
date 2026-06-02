@@ -7,17 +7,17 @@ buildGoModule rec {
   pname = "ocb";
   # Also update `pkgs/tools/misc/opentelemetry-collector/releases.nix`
   # whenever that version changes.
-  version = "0.144.0";
+  version = "0.151.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    hash = "sha256-u7OVkRmSn0DomwkFByOHSNCmpPaLwQnMumJYKHbqdl0=";
+    hash = "sha256-X7Ke4X6t0HXKlf0hJb1CXE18T8Ov2GZwjX4HSGJ1gtw=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
-  vendorHash = "sha256-W+Ap4JMQTI7g9s668VL1rMj4CErbyczW+nKh5ZW94/Y=";
+  vendorHash = "sha256-rRrLHqwLQQAB5u2vbtAjInUjvj6sGMyKPjOKVnwvQSM=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   # Some tests download new dependencies for a modified go.mod. Nix doesn't allow network access so skipping.
   checkFlags = [
-    "-skip TestGenerateAndCompile|TestReplaceStatementsAreComplete|TestVersioning"
+    "-skip TestGenerateAndCompile|TestReplaceStatementsAreComplete|TestVersioning|TestRunInit"
   ];
 
   # Rename to ocb (it's generated as "builder")

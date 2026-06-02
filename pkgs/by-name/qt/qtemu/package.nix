@@ -7,14 +7,14 @@
   qemu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtemu";
   version = "2.1";
 
   src = fetchFromGitLab {
     owner = "qtemu";
     repo = "gui";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1555178mkfw0gwmw8bsxmg4339j2ifp0yb4b2f39nxh9hwshg07j";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "qtemu";
   };
-}
+})

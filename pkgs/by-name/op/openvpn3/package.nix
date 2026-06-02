@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitHub,
   asio_1_32_0,
   glib,
+  fmt_11,
   jsoncpp,
   libcap_ng,
   libnl,
@@ -23,28 +25,41 @@
   cmake,
   git,
   nix-update-script,
+  unzip,
   enableSystemdResolved ? true,
 }:
-
+let
+  # Derived from subprojects/fmt.wrap
+  libfmt-meson-patch = fetchurl {
+    url = "https://wrapdb.mesonbuild.com/v2/fmt_11.2.0-1/get_patch";
+    hash = "sha256-ZFvxwzWiRgi0s08W7RC5I3u7ATFIhmj7hkVCAiOeCGw=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  version = "25";
+  version = "27";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     tag = "v${version}";
-    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
+    hash = "sha256-H+QF0Z1IUKx2U0+V7KHaAd/AKbuJEKLIwqyK2srD8DM=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
 
   patches = [
-    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
-    ./v25-latest-linux-fix.patch
     ./0001-handle-result-from-DcoKeyConfig_ParseFromString.patch
   ];
+
+  prePatch = ''
+    cp -r ${fmt_11.src} subprojects/fmt-11.2.0
+    chmod +w -R subprojects/fmt-11.2.0 # Allow patches for subprojects to work
+    tmp=$(mktemp -d)
+    unzip ${libfmt-meson-patch} -d $tmp
+    cp -r $tmp/*/* subprojects/fmt-11.2.0
+  '';
 
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
@@ -72,6 +87,7 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     git
+    unzip
 
     python3.pkgs.wrapPython
     python3.pkgs.docutils
@@ -107,6 +123,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonOption "systemd_user_unit_dir" "${placeholder "out"}/lib/systemd/user")
     (lib.mesonOption "create_statedir" "false")
     (lib.mesonOption "sharedstatedir" "/etc")
   ];

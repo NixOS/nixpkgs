@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
   cmake,
-  lua,
   pkg-config,
+
   rsync,
+  lua5_2_compat,
   asciidoc,
   libxml2,
   docbook_xml_dtd_45,
@@ -17,14 +19,14 @@
 let
   xnu = darwin.sourceRelease "xnu";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsyncd";
   version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "axkibe";
+    owner = "lsyncd";
     repo = "lsyncd";
-    rev = "release-${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QBmvS1HGF3VWS+5aLgDr9AmUfEsuSz+DTFIeql2XHH4=";
   };
 
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Special flags needed on Darwin:
-  # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
+  # https://github.com/lsyncd/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DWITH_INOTIFY=OFF"
     "-DWITH_FSEVENTS=ON"
@@ -47,9 +49,10 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     rsync
-    lua
+    lua5_2_compat
     asciidoc
     libxml2
     docbook_xml_dtd_45
@@ -58,11 +61,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://github.com/axkibe/lsyncd";
+    homepage = "https://github.com/lsyncd/lsyncd";
     description = "Utility that synchronizes local directories with remote targets";
     mainProgram = "lsyncd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bobvanderlinden ];
   };
-}
+})

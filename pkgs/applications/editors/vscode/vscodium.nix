@@ -44,6 +44,7 @@ buildVscode rec {
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
   version = "1.116.02821";
+  vscodeVersion = "1.116.0";
   pname = "vscodium";
 
   executableName = "codium";

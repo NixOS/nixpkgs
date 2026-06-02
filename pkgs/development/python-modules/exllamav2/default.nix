@@ -25,7 +25,7 @@
   torch,
   websockets,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav2";
   version = "0.3.2";
   pyproject = true;

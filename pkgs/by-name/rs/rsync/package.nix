@@ -2,32 +2,37 @@
   lib,
   stdenv,
   fetchurl,
+
   updateAutotoolsGnuConfigScriptsHook,
   perl,
   python3,
   libiconv,
   zlib,
   popt,
-  enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl,
+
+  config,
+
+  enableACLs ? config.rsync.enableACLs or (lib.meta.availableOn stdenv.hostPlatform acl),
   acl,
-  enableLZ4 ? true,
+  enableLZ4 ? config.rsync.enableLZ4 or true,
   lz4,
-  enableOpenSSL ? true,
+  enableOpenSSL ? config.rsync.enableOpenSSL or true,
   openssl,
-  enableXXHash ? true,
+  enableXXHash ? config.rsync.enableXXHash or true,
   xxhash,
-  enableZstd ? true,
+  enableZstd ? config.rsync.enableZstd or true,
   zstd,
+
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
   version = "3.4.3";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
-    url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
+    url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
     hash = "sha256-xy5jyjAhy8gLqG7DAQJ3P0xWMfvEkrUudzs5WPgqU9M=";
   };
 
@@ -98,8 +103,8 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     identifiers.cpeParts = {
       vendor = "samba";
-      inherit version;
+      inherit (finalAttrs) version;
       update = "-";
     };
   };
-}
+})
