@@ -774,6 +774,16 @@ in
         '';
       };
 
+      enableAarch64VirtioGpuPciDevice = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to add to QEMU's command arguments `-device virtio-gpu-pci`.
+          Relevant only for virtualisations of Aarch64 hosts.
+          The motivation for disabling this option is for cases where you don't need any display, or when you want to pass only `-device virtio-gpu-gl-pci`, without any other ``virtio-gpu` device argument.
+        '';
+      };
+
       options = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -1378,8 +1388,10 @@ in
         "-usb"
         "-device usb-tablet,bus=usb-bus.0"
       ])
-      (mkIf pkgs.stdenv.hostPlatform.isAarch [
+      (mkIf (pkgs.stdenv.hostPlatform.isAarch && cfg.qemu.enableAarch64VirtioGpuPciDevice) [
         "-device virtio-gpu-pci"
+      ])
+      (mkIf pkgs.stdenv.hostPlatform.isAarch [
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
