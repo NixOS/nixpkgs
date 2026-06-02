@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libGL,
   SDL2,
-  which,
   pkg-config,
+  libGL,
+  which,
   installTool ? false,
 }:
 
@@ -32,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     SDL2
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
 
   makeFlags = [
     "BUILDTYPE=release"
