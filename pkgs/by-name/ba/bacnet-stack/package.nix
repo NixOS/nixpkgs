@@ -2,35 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bacnet-stack";
-  version = "1.3.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bacnet-stack";
     repo = "bacnet-stack";
-    rev = "bacnet-stack-${finalAttrs.version}";
-    sha256 = "sha256-Iwo0bNulKdFNwNU2xj6Uin+5hQt1I3N6+zso5BHrIOU=";
+    tag = "bacnet-stack-${finalAttrs.version}";
+    hash = "sha256-CJmEEIGT6u2nsnl3btWL/JJPxQM53JF6l+mLBSF+Q8Q=";
   };
 
-  hardeningDisable = [ "all" ];
+  nativeBuildInputs = [ cmake ];
 
-  buildPhase = ''
-    make BUILD=debug BACNET_PORT=linux BACDL_DEFINE=-DBACDL_BIP=1 BACNET_DEFINES=" -DPRINT_ENABLED=1 -DBACFILE -DBACAPP_ALL -DBACNET_PROPERTY_LISTS"
-  '';
-
-  installPhase = ''
-    mkdir $out
-    cp -r bin $out/bin
+  # bacnet-stack's CMakeLists builds the apps via add_executable() but never
+  # adds install(TARGETS ...) rules for them, so `make install` skips them.
+  # Copy them out of the CMake build tree manually.
+  postInstall = ''
+    mkdir -p $out/bin
+    find . -maxdepth 2 -type f -executable -not -name '*.so*' -not -name '*.a' \
+      -exec cp -t $out/bin {} +
   '';
 
   meta = {
     description = "BACnet open source protocol stack for embedded systems, Linux, and Windows";
     homepage = "https://github.com/bacnet-stack/bacnet-stack";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    changelog = "https://github.com/bacnet-stack/bacnet-stack/blob/bacnet-stack-${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      gpl2Plus # Core stack (WITH GCC-exception-2.0)
+      mit # Examples and applications
+      asl20 # Auxiliary files (SPDX identified)
+      bsd3 # Auxiliary files (SPDX identified)
+    ];
     maintainers = with lib.maintainers; [ WhittlesJr ];
+    platforms = lib.platforms.linux;
   };
 })
