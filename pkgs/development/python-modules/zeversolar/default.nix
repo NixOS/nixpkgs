@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "zeversolar";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kvanzuijlen";
     repo = "zeversolar";
     tag = version;
-    hash = "sha256-HnF21B7k2MmugMjGIF2EKwwXJWD/WdDvPdz1oaPSS5Y=";
+    hash = "sha256-6hAvZL4PbtuFnDXRrVeYuylR9SIZ9B46CA0Ms/w4Y24=";
   };
 
   build-system = [ poetry-core ];
