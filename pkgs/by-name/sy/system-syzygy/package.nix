@@ -43,9 +43,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    description = "Story and a puzzle game, where you solve a variety of puzzle";
+    description = "Narrative meta-puzzle game in the style of The Fool's Errand";
+    longDescription = ''
+      System Syzygy is a story and a puzzle game, in the style of Cliff
+      Johnson's The Fool's Errand and 3 in Three, and of Andrew Plotkin's
+      System's Twilight.  By the end of the game, all the different puzzles and
+      pieces of the story come together into a single meta-puzzle.
+    '';
     mainProgram = "syzygy";
     homepage = "https://mdsteele.games/syzygy";
+    changelog = "https://github.com/mdsteele/syzygy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marius851000 ];
   };
