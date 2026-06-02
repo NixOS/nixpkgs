@@ -8,14 +8,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "0.9.8";
+  version = "1.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "lxmf";
     tag = finalAttrs.version;
-    hash = "sha256-26T8f4WCf5q5/2RKA2Dh5xxqUOR3XXRFOzezCuDRA6c=";
+    hash = "sha256-ohbZSpjIyCiiwXUjvr0UBXKN4OScdTzxx5QimPWnCAI=";
   };
 
   build-system = [ setuptools ];
