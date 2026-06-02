@@ -752,6 +752,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-latex-symbols = super.cmp-look.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-look = super.cmp-look.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
