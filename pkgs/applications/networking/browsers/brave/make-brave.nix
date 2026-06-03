@@ -128,9 +128,8 @@ let
       appIdStem = "com.brave.Origin";
       darwinStem = "Brave Origin";
       changelogFile = "CHANGELOG_DESKTOP_ORIGIN.md";
-      # origin keeps icons un-suffixed, because the parent directory already
-      # encodes the channel.
-      iconsCarryChannelSuffix = false;
+      # origin ships its icons with a channel suffix in the filename.
+      iconsCarryChannelSuffix = true;
       homepages = {
         beta = "https://brave.com/origin/download-beta/";
         nightly = "https://brave.com/origin/download-nightly/";
