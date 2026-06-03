@@ -7,6 +7,7 @@
   pkg-config,
   sqlite,
   pcre2,
+  installShellFiles,
 }:
 
 let
@@ -28,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-biVR932wHiUG56mvXoKWFzrzpkclbW9RWM4vY1+OMZ0=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [
     fuse
     pcre2
@@ -77,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -D tup -t $bin/bin/
-    install -D tup.1 -t $man/share/man/man1/
+    installBin tup
+    installManPage tup.1
     runHook postInstall
   '';
 
