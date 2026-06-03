@@ -18,13 +18,13 @@ let
   mathlib__archive = buildLakePackage (finalAttrs: {
     pname = "lean4-mathlib";
     # nixpkgs-update: no auto update
-    version = "4.29.1";
+    version = "4.30.0";
 
     src = fetchFromGitHub {
       owner = "leanprover-community";
       repo = "mathlib4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-K/QPTOytsV+OX25xyKlspeB9G0a28IjmJxcUAKXFP9U=";
+      hash = "sha256-RxOxdUiVUAxUbfVhxlkjmPX1V64EtmIIn1eW75TiJWA=";
     };
 
     leanPackageName = "mathlib";
