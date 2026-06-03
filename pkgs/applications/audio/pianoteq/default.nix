@@ -12,7 +12,7 @@
   librsvg,
   makeDesktopItem,
   makeWrapper,
-  p7zip,
+  _7zz,
   writeShellScript,
 }:
 let
@@ -46,11 +46,12 @@ let
 
       pname = "pianoteq-${name}";
 
-      unpackPhase = ''
-        ${p7zip}/bin/7z x $src
-      '';
+      # preserve same behavior as previous manual unpack to the current dir
+      # and avoid automatic move to extracted subdir
+      sourceRoot = ".";
 
       nativeBuildInputs = [
+        _7zz
         autoPatchelfHook
         copyDesktopItems
         makeWrapper

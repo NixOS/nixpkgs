@@ -1,0 +1,17 @@
+diff --git a/builtins/extractcode_7z_system_provided/src/extractcode_7z/__init__.py b/builtins/extractcode_7z_system_provided/src/extractcode_7z/__init__.py
+index 7d448b9..16a24a5 100755
+--- a/builtins/extractcode_7z_system_provided/src/extractcode_7z/__init__.py
++++ b/builtins/extractcode_7z_system_provided/src/extractcode_7z/__init__.py
+@@ -34,7 +34,11 @@ class SevenzipPaths(LocationProviderPlugin):
+         """
+         lib_dir = None
+         lib_7z = environ.get('EXTRACTCODE_7Z_PATH')
+-        if not lib_7z:
++        nix_7z_dir = None
++        if not lib_7z and nix_7z_dir:
++            lib_dir = nix_7z_dir
++            lib_7z = path.join(lib_dir, '7zz')
++        elif not lib_7z:
+             mainstream_system = platform.system().lower()
+ 
+             if mainstream_system == 'linux':

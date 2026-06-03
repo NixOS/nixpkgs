@@ -11,7 +11,6 @@
   coreutils,
   zip,
   unzip,
-  p7zip,
   unar,
   gnutar,
   bzip2,
@@ -54,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.makeBinPath [
         zip
         unzip
-        p7zip
         unar
         gnutar
         bzip2

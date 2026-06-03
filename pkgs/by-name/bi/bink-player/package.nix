@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  p7zip,
+  _7zz,
   libGL,
   libx11,
 }:
@@ -17,17 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A3IDQtdYlIcU2U8uieQI6xe1SvW4BqH+5ZwPYJxr83M=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    7z x $src
-
-    runHook postUnpack
-  '';
+  # Work around the "unpacker appears to have produced no directories"
+  # case that happens when the archive doesn't have a subdirectory.
+  sourceRoot = ".";
 
   nativeBuildInputs = [
     autoPatchelfHook
-    p7zip
+    _7zz
   ];
 
   buildInputs = [

@@ -5,7 +5,7 @@
   requireFile,
   pkg-config,
   libusb1,
-  p7zip,
+  _7zz,
 }:
 
 let
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
     libusb1
     pkg-config
   ];
@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 kinect_upload_fw/kinect_upload_fw $out/libexec/
 
-    # 7z extract "assume yes on all queries" "only extract/keep files/directories matching UACFIRMWARE.* recursively"
-    7z e -y -r "${finalAttrs.env.FIRMWARE}" "UACFirmware.*" >/dev/null
+    # 7zz extract "assume yes on all queries" "only extract/keep files/directories matching UACFIRMWARE.* recursively"
+    7zz e -y -r "${finalAttrs.env.FIRMWARE}" "UACFirmware.*" >/dev/null
     # The filename is bound to change with the Firmware SDK
     mv UACFirmware.* $out/lib/firmware/UACFirmware
 

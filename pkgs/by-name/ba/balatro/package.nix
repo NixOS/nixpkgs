@@ -5,7 +5,7 @@
   love,
   lovely-injector,
   curl,
-  p7zip,
+  _7zz,
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    p7zip
+    _7zz
     copyDesktopItems
     makeWrapper
   ];
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     tmpdir=$(mktemp -d)
-    7z x ${finalAttrs.src} -o$tmpdir -y
+    7zz x ${finalAttrs.src} -o$tmpdir -y
 
     if [ -d "$tmpdir/assets" ]; then
       mv "$tmpdir/assets/"* "$tmpdir/"
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     loveFile=game.love
-    7z a -tzip $loveFile $tmpdir/*
+    7zz a -tzip $loveFile $tmpdir/*
 
     runHook postBuild
   '';

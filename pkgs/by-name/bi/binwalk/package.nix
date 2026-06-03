@@ -33,7 +33,7 @@
   xz,
   zlib,
   zstd,
-  p7zip,
+  _7zz,
   makeBinaryWrapper,
 }:
 
@@ -101,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/binwalk --suffix PATH : ${
       lib.makeBinPath (
         [
-          p7zip
+          _7zz
           cabextract
           dmg2img
           dumpifs
