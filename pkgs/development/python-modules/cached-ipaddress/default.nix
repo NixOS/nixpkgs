@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
     tag = "v${version}";
-    hash = "sha256-VIIcScaZwd5BAidgG30edYsAQaFnqxEQX+F/t+HR278=";
+    hash = "sha256-+A1kMD1L2K+dAWrZJ96qJpx0udRGMWbWApyWtMrE7lk=";
   };
 
   build-system = [
