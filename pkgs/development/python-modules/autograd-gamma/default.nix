@@ -5,12 +5,13 @@
   pytestCheckHook,
   autograd,
   scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "autograd-gamma";
   version = "0.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "0v03gly5k3a1hzb54zpw6409m3riak49qd27hkq2f66ai42ivqz2";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     autograd
     scipy
   ];
