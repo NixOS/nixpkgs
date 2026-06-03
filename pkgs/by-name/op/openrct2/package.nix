@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
   version = "0.5.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
