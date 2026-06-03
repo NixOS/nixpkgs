@@ -9077,6 +9077,8 @@ self: super: with self; {
 
   licomp-reclicense = callPackage ../development/python-modules/licomp-reclicense { };
 
+  licomp-toolkit = callPackage ../development/python-modules/licomp-toolkit { };
+
   lida = callPackage ../development/python-modules/lida { };
 
   lief = (toPythonModule (pkgs.lief.override { python3 = python; })).py;
