@@ -620,6 +620,7 @@
   ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/default.nix
   ./services/display-managers/dms-greeter.nix
+  ./services/display-managers/emptty.nix
   ./services/display-managers/gdm.nix
   ./services/display-managers/generic.nix
   ./services/display-managers/greetd.nix
