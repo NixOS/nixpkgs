@@ -9065,6 +9065,8 @@ self: super: with self; {
 
   licomp-dwheeler = callPackage ../development/python-modules/licomp-dwheeler { };
 
+  licomp-gnuguide = callPackage ../development/python-modules/licomp-gnuguide { };
+
   lida = callPackage ../development/python-modules/lida { };
 
   lief = (toPythonModule (pkgs.lief.override { python3 = python; })).py;
