@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   paramiko,
   python,
 }:
@@ -9,12 +10,14 @@
 buildPythonPackage rec {
   pname = "scp";
   version = "0.16.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PysmC/m9TCtoV/aXodfo7cJvpWkoK3cCfoSd/h5IWAo=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ paramiko ];
 
