@@ -11,13 +11,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-cosmosdb-table";
   version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "5f061d2ab8dcf2f0b4e965d5976e7b7aeb1247ea896911f0e1d29092aaaa29c7";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})
