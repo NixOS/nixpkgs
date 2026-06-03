@@ -339,7 +339,30 @@ let
 
     # Start virtiofsd workers.
     # Note: using --sandboxing namespace would break permissions.
-    ${lib.concatLines (lib.mapAttrsToList (tag: share: ''
+    # TODO: Use "--nix-store ${builtins.storeDir}" once its implemented
+    ${lib.concatLines (lib.mapAttrsToList (tag: share:
+    if (tag == "nix-store" && cfg.mountHostNixStoreClosureOnly) then ''
+      # For the nix-store, we use unshare to create a user namespace. That
+      # makes the store owned by nobody:nogroup (65534:65534).
+      # Some services fail to start and Nix would certainly fail at some point
+      # if we left the store that way.
+      # We use virtiofsd to translate nobody:nogroup to 0:0, so that the store
+      # files are owned by root in the guest.
+      unshare -U -m -r -- \
+        ${pkgs.nix-substore}/bin/nix-substore \
+          --mount-path "$TMPDIR/nix-substore" \
+          --closure-file "${regInfo}/store-paths" -- \
+          ${pkgs.virtiofsd}/bin/virtiofsd \
+            --socket-path "$TMPDIR/virtiofsd-${tag}.sock" \
+            --shared-dir "$TMPDIR/nix-substore" \
+            --thread-pool-size "$(nproc)" \
+            --translate-uid "host:65534:0:1" \
+            --translate-gid "host:65534:0:1" \
+            --sandbox none \
+            ${lib.optionalString share.readOnly "--readonly"} \
+            --no-announce-submounts \
+              &
+    '' else ''
       ${pkgs.virtiofsd}/bin/virtiofsd \
         --socket-path "$TMPDIR/virtiofsd-${tag}.sock" \
         --shared-dir "${share.source}" \
@@ -900,6 +923,19 @@ in
       defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
       description = ''
         Mount the host Nix store as a virtiofsd mount.
+
+        Enable the option {option}`virtualisation.mountHostNixStoreClosureOnly`
+        to mount only the closure used by the VM.
+      '';
+    };
+
+    virtualisation.mountHostNixStoreClosureOnly = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Expose only the closure referenced by the VM in the Nix store mounted
+        from the host.
+        This avoids exposing store paths unrelated to the VM inside the guest.
       '';
     };
 
