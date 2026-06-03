@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brux-gdk";
-  version = "0-unstable-2026-05-25";
+  version = "0.2.11-unstable-2026-08-18";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromCodeberg {
     owner = "KelvinShadewing";
     repo = "brux-gdk";
-    rev = "3011d9921294c1a07009e0d981e66c5d15a1dc2c";
-    hash = "sha256-MBbqx+LFHwnmYN/5Wsx2vD0TGdgZ9CVC/qeO6A8rQ24=";
+    rev = "d8e73aa44d39029421738a1606ac78c79b98d2c1";
+    hash = "sha256-/7EZ8DLpwEEqx7Nxu/Td35fBYqH42rYtGz4PH/aeaRE=";
     fetchSubmodules = true;
   };
 
