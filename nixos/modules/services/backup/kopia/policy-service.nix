@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.kopia;
+  helpers = import ./helpers.nix { inherit lib config; };
 in
 {
   options.services.kopia.backups = lib.mkOption {
@@ -53,13 +54,30 @@ in
     );
   };
 
-  config = lib.mkIf (cfg.backups != { }) {
+  config =
+    let
+      effectivePolicies =
+        backup:
+        let
+          snapshotPolicyEntries = lib.foldl' lib.mergeAttrs { } (
+            lib.mapAttrsToList (
+              _: snapshot:
+              lib.optionalAttrs (snapshot.policy != { }) {
+                ${helpers.snapshotTarget backup snapshot} = snapshot.policy;
+              }
+            ) backup.snapshots
+          );
+        in
+        lib.recursiveUpdate snapshotPolicyEntries backup.policies.entries;
+    in
+    lib.mkIf (cfg.backups != { }) {
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
         kopiaExe = lib.getExe cfg.package;
+        policies = effectivePolicies backup;
         policyFile = pkgs.writeText "kopia-policy-${name}.json" (
-          builtins.toJSON backup.policies.entries
+          builtins.toJSON policies
         );
       in
       lib.nameValuePair "kopia-policy-${name}" {
@@ -91,6 +109,6 @@ in
             --from-file=${policyFile}
         '';
       }
-    ) (lib.filterAttrs (_: backup: backup.policies.entries != { }) cfg.backups);
+    ) (lib.filterAttrs (_: backup: effectivePolicies backup != { }) cfg.backups);
   };
 }
