@@ -6,7 +6,12 @@
   - ./nix.nix
   - ./nix-flakes.nix
 */
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
     mkIf
@@ -98,7 +103,9 @@ in
     ];
 
     system.preSwitchChecks.no-nix-channel = mkIf (!cfg.channel.enable) (
-      builtins.readFile ./nix-channel/pre-switch-check.sh
+      lib.replaceStrings [ "@getent@" ] [ (lib.getExe pkgs.getent) ] (
+        builtins.readFile ./nix-channel/pre-switch-check.sh
+      )
     );
   };
 }

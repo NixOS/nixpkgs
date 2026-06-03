@@ -16,7 +16,7 @@ while IFS=: read -r _ _ _ _ _ home _ ; do
         warn "$home/.nix-defexpr/channels exists, but channels have been disabled."
         explainChannelWarning=1
     fi
-done < <(getent passwd)
+done < <(@getent@ passwd)
 if [[ $explainChannelWarning -eq 1 ]]; then
     echo "Due to https://github.com/NixOS/nix/issues/9574, Nix may still use these channels when NIX_PATH is unset." >&2
     echo "Delete the above directory or directories to prevent this." >&2
