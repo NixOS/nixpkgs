@@ -315,7 +315,13 @@ in
             export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
             exec ${datadogPkg}/bin/agent run -c /etc/datadog-agent/datadog.yaml
           '';
-          serviceConfig.PermissionsStartOnly = true;
+          serviceConfig = {
+            PermissionsStartOnly = true;
+            StateDirectory = "datadog-agent";
+          };
+          environment = {
+            DD_RUN_PATH = "%S/datadog-agent";
+          };
         };
 
         dd-jmxfetch = lib.mkIf (lib.hasAttr "jmx" cfg.checks) (makeService {
