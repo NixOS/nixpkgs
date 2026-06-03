@@ -278,16 +278,8 @@ in
       ''}
     '';
 
-    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] (
-      lib.optionalString cfg.createBinSh ''
-        # Create the required /bin/sh symlink; otherwise lots of things
-        # (notably the system() function) won't work.
-        mkdir -p /bin
-        chmod 0755 /bin
-        ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-        mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-      ''
-    );
+    # Handled by nixos-init activate, kept as an empty stub for deps compat.
+    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] "";
 
   };
 
