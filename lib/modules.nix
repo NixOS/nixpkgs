@@ -878,7 +878,6 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [ name ];
-          defns = pushedDownDefinitionsByName.${name} or [ ];
           defns' = rawDefinitionsByName.${name} or [ ];
           isOptionDecl =
             m:
@@ -948,7 +947,7 @@ let
               (head optionDecls).options.type.description or "<no description>"
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
-          mergeModules' loc decls defns
+          mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ])
       ) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
