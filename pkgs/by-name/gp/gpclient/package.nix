@@ -26,6 +26,9 @@
 rustPlatform.buildRustPackage {
   pname = "gpclient";
 
+  # Keep automatic updates anchored on gpauth so the bot updates both
+  # package outputs in one PR.
+  # nixpkgs-update: no auto update
   inherit (gpauth)
     cargoHash
     meta
