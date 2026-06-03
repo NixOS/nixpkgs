@@ -1197,9 +1197,7 @@ let
           let
             d = head defs;
           in
-          addErrorContext "while evaluating definitions from `${d.file}':" (
-            !(isAttrs d.value && d.value ? _type)
-          )
+          addErrorContext "while evaluating definitions from `${d.file}':" (!d.value ? _type)
         )
       then
         {
