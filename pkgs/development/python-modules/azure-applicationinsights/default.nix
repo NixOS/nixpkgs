@@ -4,12 +4,13 @@
   fetchPypi,
   azure-common,
   msrest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-applicationinsights";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-qIRbgDZbfyALrR9xqA0NMfO+wB7f1GfftsE+or1xupY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     msrest
   ];
