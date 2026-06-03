@@ -7,11 +7,12 @@
   augeas,
   cffi,
   pkgs, # for libxml2
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "augeas";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hercules-team";
@@ -20,6 +21,8 @@ buildPythonPackage rec {
     hash = "sha256-Lq8ckra3sqN38zo1d5JsEq6U5TtLKRmqysoWNwR9J9A=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -27,7 +30,7 @@ buildPythonPackage rec {
     pkgs.libxml2
   ];
 
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
