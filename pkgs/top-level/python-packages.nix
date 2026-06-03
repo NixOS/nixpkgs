@@ -9061,6 +9061,8 @@ self: super: with self; {
 
   licomp = callPackage ../development/python-modules/licomp { };
 
+  licomp-doubleopen = callPackage ../development/python-modules/licomp-doubleopen { };
+
   lida = callPackage ../development/python-modules/lida { };
 
   lief = (toPythonModule (pkgs.lief.override { python3 = python; })).py;
