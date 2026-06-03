@@ -2571,9 +2571,7 @@ with pkgs;
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { apiVersion = "v110"; };
-  };
+  medfile = callPackage ../development/libraries/medfile { };
 
   mhonarc = perlPackages.MHonArc;
 
