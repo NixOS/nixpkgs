@@ -248,6 +248,19 @@ in
           };
         };
 
+        # Test: declarative policy mode (--delete-other-policies)
+        with-declarative-policy = {
+          repository.filesystem.path = "/var/lib/kopia-repo-declarative-policy";
+          inherit passwordFile;
+          snapshots.default = {
+            path = "/opt";
+          };
+          policies = {
+            declarative = true;
+            entries."(global)".retention.keepDaily = 13;
+          };
+        };
+
         # Test: per-snapshot policy sugar (auto-derived into policies.entries)
         with-snapshot-policy = {
           repository.filesystem.path = "/var/lib/kopia-repo-snapshot-policy";
@@ -423,6 +436,32 @@ in
             "${kopiaEnv "with-expanded-policy"}"
             " kopia policy show /opt --json"
             " | jq -e '.compression.compressorName == \"zstd\"'"
+        )
+
+    with subtest("with-declarative-policy: --delete-other-policies removes external entries"):
+        machine.wait_for_unit("kopia-policy-with-declarative-policy.service")
+        # Inject a per-path policy not declared by the module
+        machine.succeed(
+            "${kopiaEnv "with-declarative-policy"}"
+            " kopia policy set /srv --keep-daily=99"
+        )
+        machine.succeed(
+            "${kopiaEnv "with-declarative-policy"}"
+            " kopia policy export"
+            " | jq -e 'has(\"root@machine:/srv\")'"
+        )
+        # Re-run policy import; declarative mode should drop the extra entry
+        machine.succeed("systemctl restart kopia-policy-with-declarative-policy.service")
+        machine.succeed(
+            "${kopiaEnv "with-declarative-policy"}"
+            " kopia policy export"
+            " | jq -e 'has(\"root@machine:/srv\") | not'"
+        )
+        # The module's (global) policy survived
+        machine.succeed(
+            "${kopiaEnv "with-declarative-policy"}"
+            " kopia policy show /opt --json"
+            " | jq -e '.retention.keepDaily == 13'"
         )
 
     with subtest("with-snapshot-policy: per-snapshot policy is auto-derived"):
