@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "CamDavidsonPilon";
     repo = "autograd-gamma";
     tag = "v${finalAttrs.version}";
-    sha256 = "0v03gly5k3a1hzb54zpw6409m3riak49qd27hkq2f66ai42ivqz2";
+    hash = "sha256-4uMdBYnKGCfwhEc0nMhUMY+aADH8flLWh0GNWTx9A2w=";
   };
 
   build-system = [ setuptools ];
