@@ -34,26 +34,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
-    # ./supercollider-3.12.0-env-dirs.patch
-
     # add support for Qt 6.11 in SuperCollider 3.14.1
     (fetchpatch {
       url = "https://github.com/supercollider/supercollider/commit/e997e47890a9cee137756dede664811a58dbf85a.patch";
       hash = "sha256-Koh5CwkedDEXwvSFyZSrdKyVIKpX7nPrIcsr2FXaejo=";
     })
-
-    # # Fixes the build with CMake 4
-    # (fetchpatch {
-    #   url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
-    #   hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
-    # })
-
-    # # Fixes the build with GCC 15
-    # (fetchpatch {
-    #   url = "https://github.com/supercollider/supercollider/commit/edfac5e24959b12286938a9402326e521c2d2b63.patch";
-    #   hash = "sha256-8DNCO5VEX6V0Q29A/v5tFC7u835bwNHvcNlZzmS0ADg=";
-    # })
   ];
 
   postPatch = ''
