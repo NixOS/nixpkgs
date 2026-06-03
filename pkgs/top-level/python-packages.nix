@@ -7493,6 +7493,8 @@ self: super: with self; {
 
   id = callPackage ../development/python-modules/id { };
 
+  ida-domain = callPackage ../development/python-modules/ida-domain { };
+
   idapro = callPackage ../development/python-modules/idapro { };
 
   idasen = callPackage ../development/python-modules/idasen { };
