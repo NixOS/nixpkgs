@@ -9,8 +9,8 @@
   writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withOdbcAdapter ? true,
 }:
-
 let
   python = python3.override {
     packageOverrides = _final: prev: {
@@ -75,7 +75,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tree-sitter-sql
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
-    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
+    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withOdbcAdapter [ harlequin-odbc ];
 
   pythonImportsCheck = [
     "harlequin"
