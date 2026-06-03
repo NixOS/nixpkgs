@@ -6,12 +6,13 @@
   fetchPypi,
   msal,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-datalake-store";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "azure_datalake_store";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-U2TURFqrFUocfLECFWKcPORs5ceqrxYHGJDAP65ToDU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     adal
     azure-common
     msal
