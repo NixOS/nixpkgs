@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitLab,
+  fetchpatch,
   pkg-config,
   sqlite,
   openssl,
@@ -23,6 +24,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "arti-v${finalAttrs.version}";
     hash = "sha256-YLOdrHstmN2pLl75uclkbpN5h3iBs3xpraZ8XN6R/+Q=";
   };
+
+  patches = [
+    # Fixes a panic that could allow malicious directory caches to crash
+    # clients.
+    # https://gitlab.torproject.org/tpo/core/arti/-/merge_requests/4062
+    (fetchpatch {
+      name = "TROVE-2026-024.patch";
+      url = "https://gitlab.torproject.org/tpo/core/arti/-/commit/f69be8c70561629e63004788f0aa4bf898025f93.patch";
+      hash = "sha256-P0sXTKOBW7ulqQZwmTVJfrpLksLyaonuDpxGF2keDqE=";
+    })
+  ];
 
   # Working around a bug in cargo that appears with cargo-auditable, see
   # https://github.com/rust-secure-code/cargo-auditable/issues/124.
