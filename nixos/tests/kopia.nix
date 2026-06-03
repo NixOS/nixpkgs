@@ -82,8 +82,17 @@ in
     };
 
   nodes.machine =
-    { pkgs, ... }:
     {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
+    {
+      systemd.tmpfiles.rules = lib.mapAttrsToList (
+        _: backup: "d ${backup.repository.filesystem.path} 0700 root root -"
+      ) (lib.filterAttrs (_: backup: backup.repository ? filesystem) config.services.kopia.backups);
+
       services.kopia.backups = {
         # Test: filesystem backend basic
         filesystem-basic = {
@@ -257,7 +266,6 @@ in
         machine.require_unit_state("kopia-snapshot-with-timer.timer", "active")
 
     with subtest("filesystem-basic: repository connect and snapshot"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo")
         machine.succeed("systemctl start kopia-repository-filesystem-basic.service")
         machine.succeed("systemctl start kopia-snapshot-filesystem-basic.service")
         machine.succeed(
@@ -314,7 +322,6 @@ in
         )
 
     with subtest("with-hooks: prepare and cleanup commands execute"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-hooks")
         machine.succeed("systemctl start kopia-repository-with-hooks.service")
         machine.succeed("systemctl start kopia-snapshot-with-hooks.service")
         machine.succeed("test -e /var/lib/kopia/with-hooks/prepare-ran")
@@ -325,7 +332,6 @@ in
         )
 
     with subtest("with-extra-args: extra snapshot args applied"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-extra-args")
         machine.succeed("systemctl start kopia-repository-with-extra-args.service")
         machine.succeed("systemctl start kopia-snapshot-with-extra-args.service")
         machine.succeed(
@@ -339,7 +345,6 @@ in
         )
 
     with subtest("with-policy: retention and compression"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-policy")
         machine.succeed("systemctl start kopia-repository-with-policy.service")
         machine.succeed("systemctl start kopia-policy-with-policy.service")
         machine.succeed(
@@ -359,7 +364,6 @@ in
         )
 
     with subtest("with-expanded-policy: retention, files, error handling"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-expanded-policy")
         machine.succeed("systemctl start kopia-repository-with-expanded-policy.service")
         machine.succeed("systemctl start kopia-policy-with-expanded-policy.service")
         machine.succeed(
@@ -384,7 +388,6 @@ in
         )
 
     with subtest("with-web: web UI responds with 401"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-web")
         machine.succeed("systemctl start kopia-repository-with-web.service")
         machine.succeed("systemctl start kopia-web-with-web.service")
         machine.wait_for_open_port(51515)
@@ -394,7 +397,6 @@ in
         )
 
     with subtest("with-web-custom-port: web UI on port 9999"):
-        machine.succeed("mkdir -p /var/lib/kopia-repo-web-custom")
         machine.succeed("systemctl start kopia-repository-with-web-custom-port.service")
         machine.succeed("systemctl start kopia-web-with-web-custom-port.service")
         machine.wait_for_open_port(9999)
