@@ -1,0 +1,12 @@
+diff --git a/src/Ryujinx.Graphics.Vulkan/Ryujinx.Graphics.Vulkan.csproj b/src/Ryujinx.Graphics.Vulkan/Ryujinx.Graphics.Vulkan.csproj
+index 5481e57f2..867f5a2b1 100644
+--- a/src/Ryujinx.Graphics.Vulkan/Ryujinx.Graphics.Vulkan.csproj
++++ b/src/Ryujinx.Graphics.Vulkan/Ryujinx.Graphics.Vulkan.csproj
+@@ -51,7 +51,6 @@
+   </ItemGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+     <PackageReference Include="shaderc.net" />
+     <PackageReference Include="Silk.NET.Vulkan" />
+     <PackageReference Include="Silk.NET.Vulkan.Extensions.EXT" />
