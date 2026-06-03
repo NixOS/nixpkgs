@@ -1378,6 +1378,15 @@ assertNoAdditions {
     };
   });
 
+  diffview-plus-nvim = super.diffview-plus-nvim.overrideAttrs (old: {
+    dependencies = [ self.plenary-nvim ];
+    doInstallCheck = true;
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+      description = "Cycle through diffs for all modified files for any git rev (dlyongemallo's active fork)";
+    };
+  });
+
   direnv-vim = super.direnv-vim.overrideAttrs (old: {
     preFixup = old.preFixup or "" + ''
       substituteInPlace $out/autoload/direnv.vim \

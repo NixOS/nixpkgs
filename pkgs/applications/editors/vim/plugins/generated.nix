@@ -5235,6 +5235,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  diffview-plus-nvim = buildVimPlugin {
+    pname = "diffview.nvim";
+    version = "0.34";
+    src = fetchFromGitHub {
+      owner = "dlyongemallo";
+      repo = "diffview-plus.nvim";
+      tag = "v0.34";
+      hash = "sha256-M3Hf4y9HGFquBOK/Stv5FIxoVYX4aoO4dbbYQNPhisk=";
+    };
+    meta.homepage = "https://github.com/dlyongemallo/diffview.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   dirbuf-nvim = buildVimPlugin {
     pname = "dirbuf.nvim";
     version = "0-unstable-2022-08-28";
