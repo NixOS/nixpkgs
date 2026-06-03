@@ -23,7 +23,7 @@
   docling-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-parse";
   version = "6.2.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f6PoA+N/Idu9ImpdiZ0STQft7U+UyKNVcRbizDHXag0=";
   };
 
@@ -102,10 +102,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/docling-project/docling-parse/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-parse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/docling-project/docling-parse";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
