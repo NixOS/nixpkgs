@@ -7493,6 +7493,8 @@ self: super: with self; {
 
   id = callPackage ../development/python-modules/id { };
 
+  idapro = callPackage ../development/python-modules/idapro { };
+
   idasen = callPackage ../development/python-modules/idasen { };
 
   idasen-ha = callPackage ../development/python-modules/idasen-ha { };
