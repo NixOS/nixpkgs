@@ -1154,10 +1154,6 @@ let
           throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
-
-      # Apply the 'apply' function to the merged value. This allows options to
-      # yield a value computed from the definitions
-      value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
     in
     (
       if opt.type.deprecationMessage != null then
@@ -1166,7 +1162,11 @@ let
         opt
     )
     // {
-      value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+      value = addErrorContext "while evaluating the option `${showOption loc}':" (
+        # Apply the 'apply' function to the merged value. This allows options to
+        # yield a value computed from the definitions
+        if opt ? apply then opt.apply res.mergedValue else res.mergedValue
+      );
       inherit (res.defsFinal') highestPrio;
       definitions = map (def: def.value) res.defsFinal;
       files = map (def: def.file) res.defsFinal;
