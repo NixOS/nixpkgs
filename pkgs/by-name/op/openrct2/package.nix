@@ -35,6 +35,7 @@
   zstd,
 
   withDiscordRpc ? false,
+  verifyAssets ? true,
   # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
   rct1Path ? null,
   rct2Path ? null,
@@ -135,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure =
     # Verify that the correct version of each third party repository is used.
-    (
+    lib.optionalString verifyAssets (
       lib.concatStringsSep "\n" (
         lib.mapAttrsToList (assetName: asset: ''
           grep -qF '"${asset.url}"' assets.json \
