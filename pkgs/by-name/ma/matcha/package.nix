@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   pkg-config,
   pcsclite,
@@ -10,7 +10,7 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "matcha";
