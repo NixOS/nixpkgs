@@ -12,13 +12,13 @@
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "13.58";
+  version = "13.59";
 
   src = fetchFromGitHub {
     owner = "exiftool";
     repo = "exiftool";
     tag = version;
-    hash = "sha256-Mzn1m26uBlulwlfkW+CSRBR8CVqy5oL8cv+85NGgwRc=";
+    hash = "sha256-GA2chp9xyPgjYNW6RQWjK83xmJvHlAvBhpA06uP3XRY=";
   };
 
   postPatch = ''
