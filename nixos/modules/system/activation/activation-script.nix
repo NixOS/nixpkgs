@@ -237,7 +237,18 @@ in
       visible = false;
       description = ''
         The {manpage}`env(1)` executable that is linked system-wide to
-        `/usr/bin/env`.
+        `/usr/bin/env`. When set to `null`, `/usr/bin/env` is removed
+        at activation.
+      '';
+    };
+
+    environment.createUsrBinEnv = mkOption {
+      default = true;
+      type = types.bool;
+      internal = true;
+      description = ''
+        Whether the system manages `/usr/bin/env` at activation.
+        Modules that provide `/usr/bin` themselves set this to `false`.
       '';
     };
 
@@ -285,7 +296,9 @@ in
     ];
 
     system.activationScripts.usrbinenv =
-      if config.environment.usrbinenv != null then
+      if !config.environment.createUsrBinEnv then
+        ""
+      else if config.environment.usrbinenv != null then
         ''
           mkdir -p /usr/bin
           chmod 0755 /usr/bin
