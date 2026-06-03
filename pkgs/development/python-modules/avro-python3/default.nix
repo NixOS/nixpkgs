@@ -5,18 +5,21 @@
   isPy3k,
   pycodestyle,
   isort,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "avro-python3";
   version = "1.10.2";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "3b63f24e6b04368c3e4a6f923f484be0230d821aad65ac36108edbff29e9aaab";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [
     pycodestyle
