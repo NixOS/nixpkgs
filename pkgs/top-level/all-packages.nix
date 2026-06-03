@@ -2460,6 +2460,8 @@ with pkgs;
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
+  iocaine_2 = callPackage ../by-name/io/iocaine/2.nix { };
+
   iocextract = with python3Packages; toPythonApplication iocextract;
 
   iocsearcher = with python3Packages; toPythonApplication iocsearcher;

@@ -1,32 +1,46 @@
 {
-  stdenv,
-  lib,
-  rustPlatform,
+  callPackage,
   fetchFromGitea,
+  lib,
+  llvmPackages,
+  nftables,
+  nixosTests,
+  pkg-config,
+  stdenv,
+  ...
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "iocaine";
-  version = "2.5.1";
+callPackage ./generic.nix {
+  version = "3.5.0";
 
   src = fetchFromGitea {
     domain = "git.madhouse-project.org";
     owner = "iocaine";
     repo = "iocaine";
-    tag = "iocaine-${finalAttrs.version}";
-    hash = "sha256-213QLpGBKSsT9r8O27PyMom5+OGPz0VtRBevxswISZA=";
+    tag = "iocaine-3.5.0";
+    hash = "sha256-adsQuSL4F1mfSsUtLwdgUtHVYessBM31tlBU8Rbbst4=";
   };
 
-  cargoHash = "sha256-EgPGDlJX/m+v3f/tGIO+saGHoYrtiWLZuMlXEvsgnxE=";
+  cargoHash = "sha256-rGPT0YKQ+p11V4+EOMVZrvEmF1Ylbg0hFpSao+Hqn/4=";
 
-  meta = {
-    description = "Deadliest poison known to AI";
-    homepage = "https://iocaine.madhouse-project.org/";
-    changelog = "https://git.madhouse-project.org/iocaine/iocaine/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sugar700 ];
-    mainProgram = "iocaine";
-    # Lacking OS access to fix, and upstream doesn't support macOS.
-    broken = stdenv.hostPlatform.isDarwin;
+  buildInputs = [
+    nftables
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    llvmPackages.libclang
+  ];
+
+  env = {
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+    BINDGEN_EXTRA_CLANG_ARGS = lib.concatStringsSep " " [
+      "-I${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.release_version}/include"
+      "-I${nftables}/include"
+      "-I${stdenv.cc.libc.dev}/include"
+    ];
   };
-})
+
+  passthru = {
+    tests = { inherit (nixosTests) iocaine; };
+  };
+}
