@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Garmelon/PFERD";
     description = "Tool for downloading course-related files from ILIAS";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ _0xbe7a ];
+    maintainers = [ ];
     mainProgram = "pferd";
   };
 })
