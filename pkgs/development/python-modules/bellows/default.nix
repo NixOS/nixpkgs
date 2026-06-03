@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.49.1";
+  version = "0.49.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     tag = version;
-    hash = "sha256-dt4cwew/jRpmXaZORfjNCivUMynFbRJITOnmP34Aq+I=";
+    hash = "sha256-upnlzuzkogMwcAkOd98NZrBHv9pmcPsYIgR7j6It54c=";
   };
 
   postPatch = ''
