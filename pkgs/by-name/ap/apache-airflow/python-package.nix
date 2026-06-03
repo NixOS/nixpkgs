@@ -99,10 +99,10 @@ let
 
   pnpm = pnpm_10;
 
-  airflowUi = stdenv.mkDerivation rec {
+  airflowUi = stdenv.mkDerivation (finalAttrs: {
     pname = "airflow-ui-assets";
     inherit src version;
-    sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
+    sourceRoot = "${finalAttrs.src.name}/airflow-core/src/airflow/ui";
 
     nativeBuildInputs = [
       nodejs
@@ -112,12 +112,10 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
-      inherit
-        sourceRoot
-        src
-        version
-        pnpm
-        ;
+      src = finalAttrs.src;
+      version = finalAttrs.version;
+      sourceRoot = finalAttrs.sourceRoot;
+      inherit pnpm;
       fetcherVersion = 3;
       hash = "sha256-OkSDQoWsHQ6w1vIoX5W9zXHghV0obvL6Wji0HYN6CSs=";
     };
@@ -131,12 +129,12 @@ let
       mkdir -p $out/share/airflow/ui
       cp -r dist $out/share/airflow/ui/
     '';
-  };
+  });
 
-  airflowSimpleAuthUi = stdenv.mkDerivation rec {
+  airflowSimpleAuthUi = stdenv.mkDerivation (finalAttrs: {
     pname = "airflow-simple-ui-assets";
     inherit src version;
-    sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
+    sourceRoot = "${finalAttrs.src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
 
     nativeBuildInputs = [
       nodejs
@@ -146,7 +144,9 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "simple-auth-manager-ui";
-      inherit sourceRoot src version;
+      src = finalAttrs.src;
+      version = finalAttrs.version;
+      sourceRoot = finalAttrs.sourceRoot;
       fetcherVersion = 3;
       hash = "sha256-uQIVHzX0BcJuxgbPp6wqKhALbsfACSJjiMOdmrpuzOk=";
     };
@@ -160,7 +160,7 @@ let
       mkdir -p $out/share/airflow/simple-ui
       cp -r dist $out/share/airflow/simple-ui/
     '';
-  };
+  });
 
   requiredProviders = [
     "common_compat"
@@ -174,13 +174,13 @@ let
 
   buildProvider =
     provider:
-    buildPythonPackage {
+    buildPythonPackage (finalAttrs: {
       pname = "apache-airflow-providers-${provider}";
       version = providers.${provider}.version;
       pyproject = true;
 
       inherit src;
-      sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
+      sourceRoot = "${finalAttrs.src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
 
       buildInputs = [ flit-core ];
 
@@ -193,14 +193,14 @@ let
       pythonRelaxDeps = [
         "flit-core"
       ];
-    };
+    });
 
-  airflowCore = buildPythonPackage {
+  airflowCore = buildPythonPackage (finalAttrs: {
     pname = "apache-airflow-core";
     inherit src version;
     pyproject = true;
 
-    sourceRoot = "${src.name}/airflow-core";
+    sourceRoot = "${finalAttrs.src.name}/airflow-core";
 
     postPatch = ''
       # remove cyclic dependency
@@ -291,14 +291,14 @@ let
       uvicorn
     ]
     ++ (map buildProvider requiredProviders);
-  };
+  });
 
-  taskSdk = buildPythonPackage {
+  taskSdk = buildPythonPackage (finalAttrs: {
     pname = "task-sdk";
     inherit src version;
     pyproject = true;
 
-    sourceRoot = "${src.name}/task-sdk";
+    sourceRoot = "${finalAttrs.src.name}/task-sdk";
 
     postPatch = ''
       # resolve cyclic dependency
@@ -341,10 +341,10 @@ let
       tenacity
       types-requests
     ];
-  };
+  });
 
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apache-airflow";
   inherit src version;
   pyproject = true;
@@ -414,11 +414,11 @@ buildPythonPackage rec {
   meta = {
     description = "Platform to programmatically author, schedule and monitor workflows";
     homepage = "https://airflow.apache.org/";
-    changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
+    changelog = "https://airflow.apache.org/docs/apache-airflow/${finalAttrs.version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       taranarmo
     ];
     mainProgram = "airflow";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "agkozak-zsh-prompt";
   version = "3.11.5";
 
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-C9lyOm2+RVLOUSO5Vz013uTobnN+SBE1Jm8GuJZ7T7U=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

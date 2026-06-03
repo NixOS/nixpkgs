@@ -6,12 +6,12 @@
   mkfontscale,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arphic-ukai";
   version = "0.2.20080216.2";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${finalAttrs.version}.orig.tar.bz2";
     hash = "sha256-tJaNc1GfT4dH6FVI+4XSG2Zdob8bqQCnxJmXbmqK49I=";
   };
 
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.changlinli ];
     platforms = lib.platforms.all;
   };
-}
+})

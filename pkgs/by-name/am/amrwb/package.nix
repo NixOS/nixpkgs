@@ -5,7 +5,7 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amrwb";
   version = "11.0.0.0";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://www.penguin.cz/~utx/ftp/amr/amrwb-${version}.tar.bz2";
+    url = "http://www.penguin.cz/~utx/ftp/amr/amrwb-${finalAttrs.version}.tar.bz2";
     sha256 = "1p6m9nd08mv525w14py9qzs9zwsa5i3vxf5bgcmcvc408jqmkbsw";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     # some countries, not redistributable.
     license = lib.licenses.unfree;
   };
-}
+})

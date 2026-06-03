@@ -8,9 +8,23 @@
   makeWrapper,
   bashNonInteractive,
 }:
-let
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "apksigner";
+  # Major version is derived from the API version of the corresponding Android release.
+  # Patch version is derived from the release number.
+  # For example, Android 15 had releases starting at r24 -> r30 is patch 6.
+
+  version = "35.0.6";
+
+  src = fetchgit {
+    name = "apksigner";
+    url = "https://android.googlesource.com/platform/tools/apksig";
+    tag = "android-15.0.0_r30";
+    hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
+  };
+
+  # Define jre directly inside finalAttrs so it's accessible to the build phases
   jre = jre_minimal.override {
     modules = [
       "java.base"
@@ -22,25 +36,22 @@ let
       "jdk.unsupported"
     ];
   };
-in
-stdenv.mkDerivation rec {
-  pname = "apksigner";
-  # Major version is derived from the API version of the corresponding Android release.
-  # Patch version is derived from the release number.
-  # For example, Android 15 had releases starting at r24 -> r30 is patch 6.
-  version = "35.0.6";
 
-  src = fetchgit {
-    # use pname here because the final jar uses this as the filename
-    name = pname;
-    url = "https://android.googlesource.com/platform/tools/apksig";
-    tag = "android-15.0.0_r30";
-    hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
+  # Reference gradle_8 directly
+  mitmCache = gradle_8.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
   };
 
-  mitmCache = gradle.fetchDeps {
-    inherit pname;
-    data = ./deps.json;
+  # Force Gradle to run in the foreground and resolve IPv4/IPv6 localhost sandbox issues
+  gradleFlags = [
+    "--no-daemon"
+  ];
+
+  # NEW: Force ALL spawned Java processes to use IPv4
+  # This fixes the IPC daemon connection timeout in the macOS sandbox
+  env = {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -48,7 +59,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    gradle
+    jdk_headless
+    gradle_8
     makeWrapper
   ];
 
@@ -65,7 +77,7 @@ stdenv.mkDerivation rec {
     mv apksigner $out/opt
     mkdir -p $out/bin
     makeWrapper $out/opt/apksigner/bin/apksigner $out/bin/apksigner \
-      --set JAVA_HOME ${jre.home}
+      --set JAVA_HOME ${finalAttrs.jre.home}
 
     runHook postInstall
   '';
@@ -83,4 +95,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.android ];
     platforms = lib.platforms.unix;
   };
-}
+})

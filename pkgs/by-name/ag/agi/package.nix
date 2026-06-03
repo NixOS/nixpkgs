@@ -13,12 +13,12 @@
   android-tools,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "agi";
   version = "3.3.1";
 
   src = fetchzip {
-    url = "https://github.com/google/agi/releases/download/${version}/agi-${version}-linux.zip";
+    url = "https://github.com/google/agi/releases/download/${finalAttrs.version}/agi-${finalAttrs.version}-linux.zip";
     sha256 = "sha256-Yawl6InBYSWNw3clHyGAeC2PVfXEzWmbd6vcYrqAPO0=";
   };
 
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation rec {
     cp -r lib $out
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ${src}/icon.png $out/share/icons/hicolor/''${i}x$i/apps/agi.png
+      install -D ${finalAttrs.src}/icon.png $out/share/icons/hicolor/''${i}x$i/apps/agi.png
     done
 
     runHook postInstall
@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Android GPU Inspector";
     homepage = "https://gpuinspector.dev";
-    changelog = "https://github.com/google/agi/releases/tag/v${version}";
+    changelog = "https://github.com/google/agi/releases/tag/v${finalAttrs.version}";
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kashw2 ];
@@ -80,4 +80,4 @@ stdenvNoCC.mkDerivation rec {
       binaryNativeCode
     ];
   };
-}
+})

@@ -24,14 +24,14 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argyllcms";
   version = "3.4.1";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
-    url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
+    url = "https://www.argyllcms.com/Argyll_V${finalAttrs.version}_src.zip";
     hash = "sha256-QVugWtAk8xBn+/fRFqCoi072Q2q8OlB0LRhavrHC5MI=";
   };
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
         HAVE_SSL = true ;
 
         LINKFLAGS +=
-          ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
+          ${lib.concatStringsSep " " (map (x: "-L${x}/lib") finalAttrs.buildInputs)}
           -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
           -ljpeg -ltiff -lpng -lssl ;
       '';
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
       # Expect the text in format of 'Current Version 3.0.1 (19th October 2023)'
       new_version="$(curl -s https://www.argyllcms.com/ |
           pcregrep -o1 '>Current Version ([0-9.]+) ')"
-      update-source-version ${pname} "$new_version"
+      update-source-version argyllcms "$new_version"
     '';
   };
 
@@ -189,4 +189,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

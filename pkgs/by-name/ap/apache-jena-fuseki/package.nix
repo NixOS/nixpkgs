@@ -10,11 +10,11 @@
   pkgs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-jena-fuseki";
   version = "5.1.0";
   src = fetchurl {
-    url = "mirror://apache/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+    url = "mirror://apache/jena/binaries/apache-jena-fuseki-${finalAttrs.version}.tar.gz";
     hash = "sha256-GcwXcLVM2txPC+kkHjEIpqK9dTkQEN9Jkka0EaJRO7Q=";
   };
   nativeBuildInputs = [
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     mainProgram = "fuseki";
   };
-}
+})

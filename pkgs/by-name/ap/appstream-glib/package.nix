@@ -24,7 +24,7 @@
   pkg-config,
   pngquant,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appstream-glib";
   version = "0.8.3";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    tag = "appstream_glib_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "appstream_glib_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-GjXrYV+EBduhG88LaxQWICKuUDJeeotcZgqgaG0/dqo=";
   };
 
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/hughsie/appstream-glib/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/hughsie/appstream-glib/blob/${finalAttrs.src.tag}/NEWS";
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
