@@ -9071,6 +9071,8 @@ self: super: with self; {
 
   licomp-osadl = callPackage ../development/python-modules/licomp-osadl { };
 
+  licomp-oslc-handbook = callPackage ../development/python-modules/licomp-oslc-handbook { };
+
   lida = callPackage ../development/python-modules/lida { };
 
   lief = (toPythonModule (pkgs.lief.override { python3 = python; })).py;
