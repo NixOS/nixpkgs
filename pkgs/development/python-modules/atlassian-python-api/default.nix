@@ -13,12 +13,13 @@
   six,
   typing-extensions,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
   version = "4.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
@@ -26,6 +27,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-8zfM/3apGMo6sTPA5ESu2SkgVOJUA09Wz/pGR12fA7c=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     beautifulsoup4
