@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p nixfmt pyright ruff isort
+#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.pythonPackages.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p nixfmt pyright ruff isort
 import asyncio
 import json
 import os.path
@@ -50,7 +50,7 @@ ROOT: Final = (
     .strip()
 )
 
-PACKAGE_SET = "music-assistant.python.pkgs"
+PACKAGE_SET = "music-assistant.pythonPackages"
 PACKAGE_MAP = {
     "git+https://github.com/MarvinSchenkel/pytube.git": "pytube",
 }
@@ -143,7 +143,7 @@ def packageset_attributes():
             ROOT,
             "-qa",
             "-A",
-            "music-assistant.python.pkgs",
+            "music-assistant.pythonPackages",
             "--arg",
             "config",
             "{ allowAliases = false; }",
@@ -162,7 +162,7 @@ class NoMatch(Exception):
 
 
 def resolve_package_attribute(package: str) -> str:
-    pattern = re.compile(rf"^music-assistant\.python\.pkgs\.{package}$", re.I)
+    pattern = re.compile(rf"^music-assistant\.pythonPackages\.{package}$", re.I)
     packages = packageset_attributes()
     matches = []
     for attr in packages.keys():
