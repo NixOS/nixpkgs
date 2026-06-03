@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "autograd-gamma";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0v03gly5k3a1hzb54zpw6409m3riak49qd27hkq2f66ai42ivqz2";
   };
 
