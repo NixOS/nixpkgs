@@ -230,7 +230,7 @@ self: super: {
       homepage = "https://github.com/catppuccin/kakoune/";
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ philipwilk ];
+      maintainers = with lib.maintainers; [ jadewilk ];
     };
   };
 }
