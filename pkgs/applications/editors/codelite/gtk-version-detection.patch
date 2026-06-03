@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 39bf47fcf..be3e49034 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -235,6 +235,7 @@ if(UNIX AND NOT MINGW)
+             COMMAND ${WX_TOOL} --selected_config
+             OUTPUT_VARIABLE WX_GTK_VERSION
+             OUTPUT_STRIP_TRAILING_WHITESPACE)
++        string(REGEX MATCH "gtk." WX_GTK_VERSION "${WX_GTK_VERSION}")
+         string(SUBSTRING "${WX_GTK_VERSION}" "3" "1" GTK_VERSION)
+         message("-- gtk version is: ${GTK_VERSION}")
+     endif()
