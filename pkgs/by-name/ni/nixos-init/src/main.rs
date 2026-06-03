@@ -2,7 +2,9 @@ use std::{env, io::Write, process::ExitCode};
 
 use log::Level;
 
-use nixos_init::{clear_etc_opaque, env_generator, find_etc, initrd_init, resolve_in_root};
+use nixos_init::{
+    activate_main, clear_etc_opaque, env_generator, find_etc, initrd_init, resolve_in_root,
+};
 
 fn main() -> ExitCode {
     let arg0 = env::args()
@@ -12,6 +14,7 @@ fn main() -> ExitCode {
 
     setup_logger();
     let entrypoint = match arg0.as_str() {
+        "activate" => activate_main,
         "clear-etc-opaque" => clear_etc_opaque,
         "find-etc" => find_etc,
         "resolve-in-root" => resolve_in_root,
