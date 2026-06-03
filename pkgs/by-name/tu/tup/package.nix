@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${finalAttrs.version}'
 
     for path in Tupfile build.sh src/tup/server/Tupfile ; do
@@ -65,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     CONFIG_AR=${stdenv.cc.targetPrefix}ar
     CONFIG_TUP_USE_SYSTEM_SQLITE=y
     EOF
+
+    runHook postConfigure
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
