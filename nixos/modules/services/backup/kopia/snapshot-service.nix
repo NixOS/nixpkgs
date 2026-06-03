@@ -115,34 +115,20 @@ in
                   '';
                 };
 
-                nice = lib.mkOption {
-                  type = lib.types.ints.between (-20) 19;
-                  default = 19;
-                  description = "Niceness value for the snapshot service. See {manpage}`nice(1)`.";
-                };
-
-                ioSchedulingClass = lib.mkOption {
-                  type = lib.types.enum [
-                    "idle"
-                    "best-effort"
-                    "realtime"
-                    "none"
-                  ];
-                  default = "idle";
+                extraServiceConfig = lib.mkOption {
+                  type = lib.types.attrsOf unitOption;
+                  default = {
+                    Nice = 19;
+                    CPUWeight = 10;
+                    IOSchedulingClass = "idle";
+                    IOWeight = 10;
+                  };
                   description = ''
-                    I/O scheduling class for the snapshot service (see
-                    {manpage}`ionice(1)`). Only effective with the CFQ I/O
-                    scheduler; use {option}`ioWeight` instead on systems with
-                    mq-deadline / bfq / none. Set to `"none"` to leave unset.
-                  '';
-                };
-
-                ioWeight = lib.mkOption {
-                  type = with lib.types; nullOr (ints.between 1 10000);
-                  default = 10;
-                  description = ''
-                    cgroup v2 I/O weight for the snapshot service (1-10000).
-                    Set to `null` to leave unset.
+                    Extra systemd service config merged on top of the module's
+                    hardening defaults. The default value sets background-task
+                    priority via `Nice`, `CPUWeight`, `IOSchedulingClass`, and
+                    `IOWeight`; override individual keys to tune. Any systemd
+                    {manpage}`systemd.exec(5)` directive can be set here.
                   '';
                 };
 
@@ -259,10 +245,8 @@ in
                 "/var/lib/kopia/${backupName}"
               ]
               ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
-              Nice = snapshot.nice;
-              IOSchedulingClass = lib.mkIf (snapshot.ioSchedulingClass != "none") snapshot.ioSchedulingClass;
-              IOWeight = lib.mkIf (snapshot.ioWeight != null) snapshot.ioWeight;
-            };
+            }
+            // snapshot.extraServiceConfig;
           };
         }
       ) backup.snapshots
