@@ -35,11 +35,19 @@ pub fn activate(prefix: &str, toplevel: impl AsRef<Path>, config: &Config) -> Re
     let system_path = PathBuf::from(prefix).join("run/current-system");
     atomic_symlink(&toplevel, system_path)?;
 
-    log::info!("Setting up modprobe...");
-    setup_modprobe(&config.modprobe_binary)?;
+    if let Some(modprobe_binary) = &config.modprobe_binary {
+        log::info!("Setting up modprobe...");
+        setup_modprobe(modprobe_binary)?;
+    } else {
+        log::info!("No modprobe binary provided. Not setting up modprobe.");
+    }
 
-    log::info!("Setting up firmware search paths...");
-    setup_firmware_search_path(&config.firmware)?;
+    if let Some(firmware) = &config.firmware {
+        log::info!("Setting up firmware search paths...");
+        setup_firmware_search_path(firmware)?;
+    } else {
+        log::info!("No firmware path provided. Not setting up firmware search paths.");
+    }
 
     if let Some(env_path) = &config.env_binary {
         log::info!("Setting up /usr/bin/env...");

@@ -7,8 +7,8 @@ use bootspec::BootJson;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub firmware: String,
-    pub modprobe_binary: String,
+    pub firmware: Option<String>,
+    pub modprobe_binary: Option<String>,
     pub nix_store_mount_opts: Vec<String>,
     pub env_binary: Option<String>,
     pub sh_binary: Option<String>,
