@@ -59,11 +59,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.12";
+  version = "3.8.13";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-p7NBQhv9RZrPejdMpK87ngZgjc1715Kyv0cL6gErjlE=";
+    hash = "sha256-/+2Owb8JwkJtTxSq43feR1O1PlN9aF5gTpmosWypyX4=";
   };
 
   outputs = [

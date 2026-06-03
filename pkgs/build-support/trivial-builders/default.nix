@@ -620,7 +620,10 @@ rec {
     in
     runCommand name args ''
       mkdir -p $out
-      for i in $(cat $pathsPath); do
+      if [ -n "''${pathsPath:-}" ] && [ -f "$pathsPath" ]; then
+        mapfile -d " " -t paths < "$pathsPath"
+      fi
+      for i in "''${paths[@]}"; do
         ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
           optionalString (!failOnMissing) "; fi"
         }
