@@ -92,6 +92,8 @@ in
       ...
     }:
     {
+      virtualisation.memorySize = 2048;
+
       systemd.tmpfiles.rules = lib.mapAttrsToList (
         _: backup: "d ${backup.repository.filesystem.path} 0700 root root -"
       ) (lib.filterAttrs (_: backup: backup.repository ? filesystem) config.services.kopia.backups);
