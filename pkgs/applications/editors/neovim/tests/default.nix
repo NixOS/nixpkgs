@@ -444,4 +444,51 @@ pkgs.lib.recurseIntoAttrs rec {
   '';
 
   inherit (vimPlugins) corePlugins;
+
+  nvim_require_check_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luaexpat luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-luamods"
+        mkdir -p "$out/plugin"
+        cat > "$out/plugin/require-check-luamods.vim" <<'EOF'
+        let g:require_check_luamods_plugin_loaded = 1
+        EOF
+        cat > "$out/lua/require-check-luamods/init.lua" <<'EOF'
+        if vim.g.require_check_luamods_plugin_loaded ~= 1 then
+          error("plugin script was not sourced")
+        end
+        -- lxp: direct C dependency from luaexpat (package.cpath)
+        require("lxp")
+        -- say: transitive dependency of luassert (package.path closure)
+        require("say")
+        return {}
+        EOF
+      '';
+      requiredLuaModules = [
+        luaexpat
+        luassert
+      ];
+    };
+
+  nvim_require_check_passthru_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-passthru-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-passthru-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-passthru-luamods"
+        cat > "$out/lua/require-check-passthru-luamods/init.lua" <<'EOF'
+        require("say")
+        return {}
+        EOF
+      '';
+      passthru.requiredLuaModules = [ luassert ];
+    };
 }

@@ -12,7 +12,6 @@
   glib,
   glib-networking,
   pkg-config,
-  cmake,
   gtk4,
   python3,
   python3Packages,
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
     glib
     pkg-config
-    cmake
     gtk4
     python3
   ];
@@ -64,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   pythonDependencies = [
@@ -73,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.syncedlyrics
     python3Packages.pycairo
     python3Packages.colorthief
-    python3Packages.favicon
     python3Packages.mpris-server
     python3Packages.pillow
   ];
@@ -85,8 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  # avoid installing Navidrome at runtime if not available, incompatible with the nix store
+  patches = [ ./disable-navidrome-setup.patch ];
+
   meta = {
-    description = "Adwaita Music Player and Library Manager";
+    description = "Adwaita music player for OpenSubsonic servers like Navidrome";
     homepage = "https://jeffser.com/nocturne/";
     changelog = "https://github.com/Jeffser/Nocturne/releases";
     license = lib.licenses.gpl3Plus;
