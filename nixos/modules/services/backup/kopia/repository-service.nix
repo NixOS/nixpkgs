@@ -526,8 +526,6 @@ in
             RequiresMountsFor = lib.optional (
               backup.repository ? filesystem
             ) backup.repository.filesystem.path;
-          }
-          // {
             RemainAfterExit = true;
             ExecStart = startScript;
             ExecStop = "${kopiaExe} repository disconnect";

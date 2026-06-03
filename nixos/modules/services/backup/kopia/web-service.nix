@@ -116,7 +116,7 @@ in
           KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
         };
         serviceConfig = {
-          Type = "oneshot";
+          Type = "simple";
           User = backup.user;
           StateDirectory = "kopia/${name}";
           PrivateTmp = true;
@@ -126,9 +126,6 @@ in
             "/var/lib/kopia/${name}"
           ]
           ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
-        }
-        // {
-          Type = "simple";
           Restart = "on-failure";
           RestartSec = 30;
           ExecStart = webScript;
