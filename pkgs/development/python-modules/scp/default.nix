@@ -33,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/jbardin/scp.py";
     description = "SCP module for paramiko";
+    changelog = "https://github.com/jbardin/scp.py/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ xnaveira ];
   };
