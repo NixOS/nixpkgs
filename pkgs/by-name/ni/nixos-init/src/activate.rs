@@ -1,11 +1,16 @@
 use std::{
     env, fs,
+    os::unix::fs::PermissionsExt,
     path::{Path, PathBuf},
 };
 
 use anyhow::{Context, Result, bail};
 
-use crate::{config::Config, fs::atomic_symlink};
+use crate::{
+    config::{Config, SpecialMount},
+    fs::{atomic_symlink, mount},
+    proc_mounts::Mounts,
+};
 
 /// Entrypoint for the `activate` binary.
 ///
@@ -24,7 +29,38 @@ pub fn activate_main() -> Result<()> {
     let config =
         Config::from_toplevel(&toplevel, "/").context("Failed to load nixos-init config")?;
 
+    log::info!("Setting up special filesystems...");
+    setup_special_filesystems(&config.special_filesystems)?;
+
     activate("/", &toplevel, &config)
+}
+
+/// Mount or remount each entry in `boot.specialFileSystems`.
+fn setup_special_filesystems(mounts: &[SpecialMount]) -> Result<()> {
+    let existing = Mounts::parse_from_proc_mounts()?;
+    for m in mounts {
+        let opts = m.options.join(",");
+        if existing.find_mountpoint(&m.mountpoint).is_some() {
+            mount(&[
+                "-t",
+                &m.fstype,
+                "-o",
+                &format!("remount,{opts}"),
+                &m.device,
+                &m.mountpoint,
+            ])
+            .with_context(|| format!("Failed to remount {}", m.mountpoint))?;
+        } else {
+            fs::create_dir_all(&m.mountpoint)
+                .with_context(|| format!("Failed to create {}", m.mountpoint))?;
+            let mut perms = fs::metadata(&m.mountpoint)?.permissions();
+            perms.set_mode(0o755);
+            fs::set_permissions(&m.mountpoint, perms)?;
+            mount(&["-t", &m.fstype, "-o", &opts, &m.device, &m.mountpoint])
+                .with_context(|| format!("Failed to mount {}", m.mountpoint))?;
+        }
+    }
+    Ok(())
 }
 
 /// Activate the system.

@@ -1,8 +1,13 @@
-use std::{fs, os::unix::fs::PermissionsExt, path::Path, process::Command};
+use std::{fs, os::unix::fs::PermissionsExt, path::Path};
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 
-use crate::{activate::activate, config::Config, fs::atomic_symlink, proc_mounts::Mounts};
+use crate::{
+    activate::activate,
+    config::Config,
+    fs::{atomic_symlink, mount},
+    proc_mounts::Mounts,
+};
 
 const NIX_STORE_PATH: &str = "/nix/store";
 
@@ -83,23 +88,6 @@ fn remount_nix_store(prefix: &str, nix_store_mount_opts: &[String]) -> Result<()
             &format!("remount,bind,{}", missing_opts.join(",")),
             &nix_store_path,
         ])?;
-    }
-
-    Ok(())
-}
-
-/// Call `mount` with the provided `args`.
-fn mount(args: &[&str]) -> Result<()> {
-    let output = Command::new("mount")
-        .args(args)
-        .output()
-        .context("Failed to run mount. Most likely, the binary is not on PATH")?;
-
-    if !output.status.success() {
-        return Err(anyhow::anyhow!(
-            "mount executed unsuccessfully: {}",
-            String::from_utf8_lossy(&output.stdout)
-        ));
     }
 
     Ok(())
