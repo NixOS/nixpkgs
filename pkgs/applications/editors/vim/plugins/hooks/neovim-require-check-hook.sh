@@ -4,7 +4,7 @@ echo "Sourcing neovim-require-check-hook.sh"
 
 # Discover modules automatically if nvimRequireCheck is not set
 discover_modules() {
-    echo "Running module discovery in source directory..."
+    echo "Running module discovery in output directory..."
 
     # Create unique lists so we can organize later
     modules=()
@@ -30,7 +30,7 @@ discover_modules() {
             echo "$lua_file"
             modules+=("${BASH_REMATCH[1]}")
         fi
-    done < <(find "$src" -name '*.lua' | xargs -n 1 realpath --relative-to="$src")
+    done < <(find "$out" -name '*.lua' -exec realpath --relative-to="$out" {} +)
 
     nvimRequireCheck=("${modules[@]}")
     echo "Discovered modules: ${nvimRequireCheck[*]}"
