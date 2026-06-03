@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.kopia;
-  helpers = import ./helpers.nix { inherit lib; };
 in
 {
   options.services.kopia.backups = lib.mkOption {
