@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -7,6 +8,9 @@
 
 let
   cfg = config.services.displayManager;
+  opts = options.services.displayManager;
+
+  toPretty = lib.generators.toPretty { };
 
   installedSessions =
     pkgs.runCommand "desktops"
@@ -79,7 +83,7 @@ in
                 default = config.user != null;
                 defaultText = lib.literalExpression "config.${options.user} != null";
                 description = ''
-                  Automatically log in as {option}`autoLogin.user`.
+                  Automatically log in as {option}`${options.user}`.
                 '';
               };
 
@@ -185,15 +189,15 @@ in
       {
         assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
-          services.displayManager.autoLogin.enable requires services.displayManager.autoLogin.user to be set
+          `${opts.autoLogin}.enable` requires `${opts.autoLogin}.user` to be set
         '';
       }
       {
         assertion = cfg.defaultSession == null || lib.elem cfg.defaultSession cfg.sessionData.sessionNames;
         message = ''
-          Default graphical session, '${toString cfg.defaultSession}', not found.
-          Valid names for 'services.displayManager.defaultSession' are:
-            ${lib.concatStringsSep "\n    " cfg.sessionData.sessionNames}
+          Default graphical session, ${toPretty cfg.defaultSession}, not found. Definitions:${lib.options.showDefs opts.defaultSession.definitionsWithLocations}.
+          Valid names for `${opts.defaultSession}` are:
+              ${lib.concatMapStringsSep "\n    " toPretty cfg.sessionData.sessionNames}
         '';
       }
     ];

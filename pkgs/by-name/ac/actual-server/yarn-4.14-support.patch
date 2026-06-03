@@ -1,14 +1,17 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -6,4 +6,7 @@ enableTransparentWorkspaces: false
+@@ -6,8 +6,9 @@ enableTransparentWorkspaces: false
 
  nodeLinker: node-modules
 
 -yarnPath: .yarn/releases/yarn-4.13.0.cjs
 +approvedGitRepositories:
 +  - "**"
-+
+
+ # Secure default: don't run postinstall scripts.
+ # If a new package requires them, add it to dependenciesMeta in package.json.
+-enableScripts: false
 +enableScripts: true
 diff --git a/yarn.lock b/yarn.lock
 --- a/yarn.lock

@@ -33,6 +33,7 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
+  nix,
   nodejs,
   openscad,
   openssh,
@@ -664,6 +665,14 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-buffer = super.cmp-buffer.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-calc = super.cmp-calc.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = with self; [
@@ -672,6 +681,10 @@ assertNoAdditions {
   };
 
   cmp-cmdline = super.cmp-cmdline.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-cmdline-history = super.cmp-cmdline-history.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
@@ -713,6 +726,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-emoji = super.cmp-emoji.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -736,6 +753,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-latex-symbols = super.cmp-look.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-look = super.cmp-look.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -746,12 +767,17 @@ assertNoAdditions {
   };
 
   cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs {
+    nativeCheckInputs = [ nix ];
     checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.plenary-nvim ];
+  };
+
+  cmp-nvim-lsp-document-symbol = super.cmp-nvim-lsp-document-symbol.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
@@ -767,6 +793,10 @@ assertNoAdditions {
   };
 
   cmp-nvim-ultisnips = super.cmp-nvim-ultisnips.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-omni = super.cmp-omni.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
@@ -792,6 +822,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-snippy ];
   };
 
+  cmp-spell = super.cmp-spell.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-tabby = super.cmp-tabby.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -809,6 +843,10 @@ assertNoAdditions {
   cmp-tmux = super.cmp-tmux.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ tmux ];
+  };
+
+  cmp-treesitter = super.cmp-treesitter.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs {
@@ -837,6 +875,10 @@ assertNoAdditions {
   cmp_luasnip = super.cmp_luasnip.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.luasnip ];
+  };
+
+  cmp_yanky = super.cmp_yanky.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {

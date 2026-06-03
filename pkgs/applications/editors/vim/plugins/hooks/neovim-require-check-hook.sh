@@ -60,6 +60,15 @@ run_require_checks() {
         echo "WARNING: nvimSkipModule got renamed to nvimSkipModules, please update package $name"
     fi
 
+    # Some modules rely on things like globals or user commands being initialised by plugin/ scripts.
+    # So this hook sets up a dummy packpath containing only the plugin to be tested
+    # and adds it with packadd before requiring each module.
+    nvimDataDir=$(nvim -u NONE -i NONE --headless --cmd "lua io.write(vim.fn.stdpath('data'))" +q)
+    packPathDir="$nvimDataDir/site"
+    packdir="$nvimDataDir/site/pack/nvimRequireCheckHook/opt"
+    mkdir -p "$packdir"
+    ln -s "$out" "$packdir/testPlugin"
+
     for name in "${nvimRequireCheck[@]}"; do
         local skip=false
         for module in "${nvimSkipModules[@]}"; do
@@ -76,6 +85,8 @@ run_require_checks() {
                 --cmd "set rtp+=$out,${deps// /,}" \
                 --cmd "set rtp+=$out,${nativeCheckInputs// /,}" \
                 --cmd "set rtp+=$out,${checkInputs// /,}" \
+                --cmd "set packpath^=$packPathDir" \
+                --cmd "packadd testPlugin" \
                 --cmd "lua require('$name')"; then
                 check_passed=true
                 successful_modules+=("$name")
