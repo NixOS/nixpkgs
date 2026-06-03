@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncio-rlock";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "asyncio_rlock";
-    inherit version;
+    inherit (finalAttrs) version;
     sha256 = "7e29824331619873e10d5d99dcc46d7b8f196c4a11b203f4eeccc0c091039d43";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
