@@ -9,14 +9,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-datalake-store";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_datalake_store";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-U2TURFqrFUocfLECFWKcPORs5ceqrxYHGJDAP65ToDU=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})
