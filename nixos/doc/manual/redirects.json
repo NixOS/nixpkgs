@@ -178,6 +178,24 @@
   "module-services-tdarr-server-only": [
     "index.html#module-services-tdarr-server-only"
   ],
+  "module-services-zapret2": [
+    "index.html#module-services-zapret2"
+  ],
+  "module-services-zapret2-configuration": [
+    "index.html#module-services-zapret2-configuration"
+  ],
+  "module-services-zapret2-configuration-firewall": [
+    "index.html#module-services-zapret2-configuration-firewall"
+  ],
+  "module-services-zapret2-configuration-lua-files": [
+    "index.html#module-services-zapret2-configuration-lua-files"
+  ],
+  "module-services-zapret2-configuration-profiles": [
+    "index.html#module-services-zapret2-configuration-profiles"
+  ],
+  "module-services-zapret2-quick-start": [
+    "index.html#module-services-zapret2-quick-start"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
