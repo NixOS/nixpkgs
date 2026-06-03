@@ -10,6 +10,7 @@ let
   # breaking users.
   useNewConfigLocation = lib.versionAtLeast config.system.stateVersion "26.05";
   usePostgresql = cfg.database.type == "postgres";
+  localPostgresql = usePostgresql && cfg.database.createLocally;
 in
 {
   imports = [
@@ -57,6 +58,14 @@ in
     };
 
     database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to automatically create a local PostgreSQL database and user.
+        '';
+      };
+
       type = lib.mkOption {
         type = lib.types.enum [
           "sqlite"
@@ -89,7 +98,10 @@ in
 
       socketPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
+        default = if cfg.database.createLocally then "/run/postgresql" else null;
+        defaultText = lib.literalExpression ''
+          if config.services.seerr.database.createLocally then "/run/postgresql" else null
+        '';
         example = "/run/postgresql";
         description = ''
           Directory of the PostgreSQL Unix-domain socket to connect through. When
@@ -105,10 +117,10 @@ in
       };
 
       user = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
+        type = lib.types.str;
+        default = "seerr";
         example = "seerr";
-        description = "PostgreSQL user name. Required when {option}`services.seerr.database.type` is `postgres`.";
+        description = "PostgreSQL user name.";
       };
     };
   };
@@ -116,18 +128,34 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = usePostgresql -> cfg.database.user != null;
-        message = "services.seerr.database.user must be set when services.seerr.database.type is \"postgres\".";
+        assertion = cfg.database.createLocally -> usePostgresql;
+        message = "services.seerr.database.createLocally requires services.seerr.database.type to be \"postgres\".";
       }
       {
         assertion = usePostgresql -> (cfg.database.socketPath != null || cfg.database.host != null);
         message = "services.seerr.database: set either socketPath (peer authentication) or host when type is \"postgres\".";
       }
+      {
+        assertion = localPostgresql -> cfg.database.user == "seerr";
+        message = "services.seerr.database.user must be \"seerr\" when services.seerr.database.createLocally is true.";
+      }
     ];
+
+    services.postgresql = lib.mkIf localPostgresql {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
 
     systemd.services.seerr = {
       description = "Seerr, a requests manager for Jellyfin";
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ lib.optional localPostgresql "postgresql.target";
+      requires = lib.optional localPostgresql "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       environment = {
         PORT = toString cfg.port;

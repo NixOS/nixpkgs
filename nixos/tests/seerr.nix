@@ -16,28 +16,13 @@
     postgres =
       { ... }:
       {
-        services.postgresql = {
-          enable = true;
-          ensureDatabases = [ "seerr" ];
-          ensureUsers = [
-            {
-              name = "seerr";
-              ensureDBOwnership = true;
-            }
-          ];
-        };
-
         services.seerr = {
           enable = true;
           database = {
             type = "postgres";
-            socketPath = "/run/postgresql";
-            user = "seerr";
-            name = "seerr";
+            createLocally = true;
           };
         };
-
-        systemd.services.seerr.after = [ "postgresql.service" ];
       };
   };
 
