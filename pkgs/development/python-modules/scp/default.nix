@@ -7,19 +7,19 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scp";
   version = "0.16.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PysmC/m9TCtoV/aXodfo7cJvpWkoK3cCfoSd/h5IWAo=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ paramiko ];
+  dependencies = [ paramiko ];
 
   checkPhase = ''
     SCPPY_PORT=10022 ${python.interpreter} test.py
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ xnaveira ];
   };
-}
+})
