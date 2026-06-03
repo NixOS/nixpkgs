@@ -7497,6 +7497,8 @@ self: super: with self; {
 
   ida-hcli = callPackage ../development/python-modules/ida-hcli { };
 
+  ida-settings = callPackage ../development/python-modules/ida-settings { };
+
   idapro = callPackage ../development/python-modules/idapro { };
 
   idasen = callPackage ../development/python-modules/idasen { };
