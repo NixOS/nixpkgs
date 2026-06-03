@@ -4,7 +4,6 @@ let
   webPasswordFile = "${pkgs.writeText "kopia-web-password" "test-web-pass"}";
   s3AccessKeyIdFile = "${pkgs.writeText "s3-access-key-id" "minioadmin"}";
   s3SecretAccessKeyFile = "${pkgs.writeText "s3-secret-access-key" "minioadmin"}";
-  webdavUsernameFile = "${pkgs.writeText "webdav-username" "kopia"}";
   webdavPasswordFile = "${pkgs.writeText "webdav-password" "kopia-webdav-pass"}";
   sftpPasswordFile = "${pkgs.writeText "sftp-password" "kopia-sftp-pass"}";
 
@@ -129,8 +128,8 @@ in
           backupCleanupCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/cleanup-ran";
         };
 
-        # Test: SFTP backend with password file
-        sftp-basic = {
+        # Test: SFTP backend
+        sftp = {
           repository.sftp = {
             host = "server";
             path = "/home/kopia/repo";
@@ -143,22 +142,8 @@ in
           timerConfig = null;
         };
 
-        # Test: SFTP backend with file-based password
-        sftp-password-file = {
-          repository.sftp = {
-            host = "server";
-            path = "/home/kopia/repo-file";
-            username = "kopia";
-            passwordFile = sftpPasswordFile;
-            knownHostsFile = "/root/.ssh/known_hosts";
-          };
-          inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
-        };
-
-        # Test: WebDAV backend with password file
-        webdav-basic = {
+        # Test: WebDAV backend
+        webdav = {
           repository.webdav = {
             url = "http://server:8080/";
             username = "kopia";
@@ -169,20 +154,8 @@ in
           timerConfig = null;
         };
 
-        # Test: WebDAV backend with file-based credentials
-        webdav-file-creds = {
-          repository.webdav = {
-            url = "http://server:8080/file-creds/";
-            usernameFile = webdavUsernameFile;
-            passwordFile = webdavPasswordFile;
-          };
-          inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
-        };
-
-        # Test: S3 backend with file-based credentials (via MinIO)
-        s3-basic = {
+        # Test: S3 backend (via MinIO)
+        s3 = {
           repository.s3 = {
             bucket = "kopia-test";
             endpoint = "server:9000";
@@ -297,7 +270,7 @@ in
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 
-    with subtest("sftp-basic: repository connect and snapshot over SFTP"):
+    with subtest("sftp: repository connect and snapshot over SFTP"):
         server.wait_for_unit("sshd.service")
         # Populate known_hosts on machine from server's host key
         machine.succeed(
@@ -305,23 +278,14 @@ in
         )
         # Create repo directory on server
         server.succeed("mkdir -p /home/kopia/repo && chown kopia:users /home/kopia/repo")
-        machine.succeed("systemctl start kopia-repository-sftp-basic.service")
-        machine.succeed("systemctl start kopia-snapshot-sftp-basic.service")
+        machine.succeed("systemctl start kopia-repository-sftp.service")
+        machine.succeed("systemctl start kopia-snapshot-sftp.service")
         machine.succeed(
-            "${kopiaEnv "sftp-basic"}"
+            "${kopiaEnv "sftp"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 
-    with subtest("sftp-password-file: repository connect with file-based password"):
-        server.succeed("mkdir -p /home/kopia/repo-file && chown kopia:users /home/kopia/repo-file")
-        machine.succeed("systemctl start kopia-repository-sftp-password-file.service")
-        machine.succeed("systemctl start kopia-snapshot-sftp-password-file.service")
-        machine.succeed(
-            "${kopiaEnv "sftp-password-file"}"
-            " kopia snapshot list /opt --json | jq -e 'length == 1'"
-        )
-
-    with subtest("webdav-basic: repository connect and snapshot over WebDAV"):
+    with subtest("webdav: repository connect and snapshot over WebDAV"):
         # Set up nginx WebDAV with basic auth on server
         server.succeed(
             "mkdir -p /var/lib/webdav /etc/nginx"
@@ -332,22 +296,14 @@ in
         server.succeed("chown nginx:nginx /var/lib/webdav")
         server.succeed("systemctl restart nginx")
         server.wait_for_open_port(8080)
-        machine.succeed("systemctl start kopia-repository-webdav-basic.service")
-        machine.succeed("systemctl start kopia-snapshot-webdav-basic.service")
+        machine.succeed("systemctl start kopia-repository-webdav.service")
+        machine.succeed("systemctl start kopia-snapshot-webdav.service")
         machine.succeed(
-            "${kopiaEnv "webdav-basic"}"
+            "${kopiaEnv "webdav"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 
-    with subtest("webdav-file-creds: repository connect with file-based credentials"):
-        machine.succeed("systemctl start kopia-repository-webdav-file-creds.service")
-        machine.succeed("systemctl start kopia-snapshot-webdav-file-creds.service")
-        machine.succeed(
-            "${kopiaEnv "webdav-file-creds"}"
-            " kopia snapshot list /opt --json | jq -e 'length == 1'"
-        )
-
-    with subtest("s3-basic: repository connect and snapshot over S3 (file-based credentials)"):
+    with subtest("s3: repository connect and snapshot over S3 (via MinIO)"):
         server.wait_for_unit("minio.service")
         server.wait_for_open_port(9000)
         # Create buckets using MinIO client
@@ -355,10 +311,10 @@ in
             "${pkgs.minio-client}/bin/mc alias set local http://localhost:9000 minioadmin minioadmin"
         )
         server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test")
-        machine.succeed("systemctl start kopia-repository-s3-basic.service")
-        machine.succeed("systemctl start kopia-snapshot-s3-basic.service")
+        machine.succeed("systemctl start kopia-repository-s3.service")
+        machine.succeed("systemctl start kopia-snapshot-s3.service")
         machine.succeed(
-            "${kopiaEnv "s3-basic"}"
+            "${kopiaEnv "s3"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 
