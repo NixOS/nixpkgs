@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       your project rather than on your build system.
     '';
     homepage = "https://gittup.org/tup/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
