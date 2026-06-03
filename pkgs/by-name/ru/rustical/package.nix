@@ -6,6 +6,7 @@
   openssl,
   cacert,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,8 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) rustical;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) rustical;
+    };
   };
 
   meta = {
