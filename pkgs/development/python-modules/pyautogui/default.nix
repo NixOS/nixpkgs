@@ -26,16 +26,6 @@ buildPythonPackage {
     hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
-  nativeCheckInputs = [
-    xvfb-run
-    scrot
-  ];
-  checkPhase = ''
-    xvfb-run python -c 'import pyautogui'
-    # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
-    # xvfb-run python -m unittest tests.test_pyautogui
-  '';
-
   patches = [
     # https://github.com/asweigart/pyautogui/issues/598
     ./fix-locateOnWindow-and-xlib.patch
@@ -55,6 +45,17 @@ buildPythonPackage {
     pyscreeze
     pytweening
   ];
+
+  nativeCheckInputs = [
+    xvfb-run
+    scrot
+  ];
+
+  checkPhase = ''
+    xvfb-run python -c 'import pyautogui'
+    # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
+    # xvfb-run python -m unittest tests.test_pyautogui
+  '';
 
   meta = {
     description = "PyAutoGUI lets Python control the mouse and keyboard, and other GUI automation tasks";
