@@ -1,11 +1,31 @@
 use std::{
-    fs,
+    env, fs,
     path::{Path, PathBuf},
 };
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
 
 use crate::{config::Config, fs::atomic_symlink};
+
+/// Entrypoint for the `activate` binary.
+///
+/// Activate a `NixOS` system configuration on the running system.
+pub fn activate_main() -> Result<()> {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() != 2 {
+        bail!("Usage: {} <toplevel>", args[0]);
+    }
+
+    // Canonicalize so /run/current-system points at the resolved store path.
+    let toplevel = fs::canonicalize(&args[1])
+        .with_context(|| format!("Failed to canonicalize toplevel path {}", args[1]))?;
+
+    let config =
+        Config::from_toplevel(&toplevel, "/").context("Failed to load nixos-init config")?;
+
+    activate("/", &toplevel, &config)
+}
 
 /// Activate the system.
 ///
