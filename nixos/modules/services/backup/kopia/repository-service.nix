@@ -177,6 +177,11 @@ let
           ::: {.warning}
           Password authentication is less secure than key-based authentication.
           Prefer setting {option}`keyFile` with an SSH private key instead.
+
+          The password is briefly exposed in `/proc/<pid>/cmdline` during
+          `kopia repository connect` (kopia's SFTP backend has no env-var
+          or file-input alternative;
+          see [kopia/kopia#5180](https://github.com/kopia/kopia/issues/5180)).
           :::
         '';
       };
