@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hiredis";
   version = "3.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-TXhl9ny6hdd4n/hHfTAL0ewGcnjZ1vvNwovklSgzkKk=";
   };
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
-    changelog = "https://github.com/redis/hiredis-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/redis/hiredis-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
