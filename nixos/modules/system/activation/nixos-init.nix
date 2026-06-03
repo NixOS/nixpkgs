@@ -24,15 +24,19 @@ in
     {
       boot.bootspec.extensions = {
         "org.nixos.nixos-init.v1" = {
-          firmware = "${config.hardware.firmware}/lib/firmware";
-          modprobe_binary = "${pkgs.kmod}/bin/modprobe";
           nix_store_mount_opts = config.boot.nixStoreMountOpts;
         }
-        // lib.optionalAttrs (config.environment.binsh != null) {
-          sh_binary = config.environment.binsh;
+        // lib.optionalAttrs config.boot.kernel.enable {
+          firmware = "${config.hardware.firmware}/lib/firmware";
         }
-        // lib.optionalAttrs (config.environment.usrbinenv != null) {
-          env_binary = config.environment.usrbinenv;
+        // lib.optionalAttrs config.boot.modprobeConfig.enable {
+          modprobe_binary = "${pkgs.kmod}/bin/modprobe";
+        }
+        // lib.optionalAttrs config.environment.createBinSh {
+          sh_binary = toString config.environment.binsh;
+        }
+        // lib.optionalAttrs config.environment.createUsrBinEnv {
+          env_binary = toString config.environment.usrbinenv;
         }
         // lib.optionalAttrs config.system.etc.overlay.enable {
           etc_metadata_image = config.system.build.etcMetadataImage;
