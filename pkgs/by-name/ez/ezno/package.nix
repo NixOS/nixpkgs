@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ezno";
-  version = "0.0.23";
+  version = "parser-0.1.7";
 
   src = fetchFromGitHub {
     owner = "kaleidawave";
