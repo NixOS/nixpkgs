@@ -20,6 +20,8 @@
   zip,
   which,
   simple-http-server,
+  fakeroot,
+  writeShellScriptBin,
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -60,6 +62,11 @@ let
 
   pname = "busybox";
   version = "1.37.0";
+
+  # To use as an alternative for /bin/false in the testsuite
+  falseAlt = writeShellScriptBin "false-alt" ''
+    exit 1
+  '';
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -214,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
         zip
         which
         simple-http-server
+        fakeroot
       ];
 
       preCheck = ''
@@ -240,28 +248,32 @@ stdenv.mkDerivation (finalAttrs: {
         # There are some semi-expected locale-related issues, disable tests that rely on it
         export CONFIG_UNICODE_USING_LOCALE=y
 
-        # DISABLE SOME TESTS
-        # TODO(balsoft): fix the tests instead of skipping
+        # Fix/skip tests
 
         pushd testsuite
 
-        # Weird failures, may or may not be related to locales
-        skip-files du/du-{h,k,l}-works
+        # /usr/bin doesn't exist in the sandbox, so use /nix/store instead
+        sed -i "s|/usr/bin|/nix/store|" cpio.tests
+        sed -i "s/usr/nix/g" cpio.tests
+
+        # Run only the cpio metadata testcase under fakeroot so the test can create and observe setuid/setgid bits on the sandbox
+        mv cpio.tests cpio.tests.orig
+        cat > cpio.tests <<'EOF'
+        #!${stdenv.shell}
+        fakeroot cpio.tests.orig -- "$@"
+        EOF
+        chmod +x cpio.tests
 
         # Relies on a default PATH (/bin/ls in particular)
         skip-files which/which-uses-default-path
 
-        # Hangs indefinitely if run from sandbox
-        skip-files md5sum.tests
+        # busybox 'yes' is not compatible with the SIGPIPE behavior of the sandbox, which causes the test to hang
+        # Use coreutils 'yes' instead
+        sed -i 's|yes "$text"|${lib.getExe' coreutils "yes"} "$text"|' md5sum.tests
 
-        # Doesn't work with coreutils's "false"
-        skip-testcase start-stop-daemon.tests "start-stop-daemon with both -x and -a"
-
-        # Relies on /usr/bin
-        skip-testcase cpio.tests "cpio -p with absolute paths"
-
-        # Relies on suid/guid bits
-        skip-testcase cpio.tests "cpio restores suid/sgid bits"
+        # start-stop-daemon test with '-a' option doesn't work with a multicall binary such as busybox, coreutils, ...
+        # Use a custom script that exits with 1 instead
+        sed -i 's|/bin/false|${lib.getExe' falseAlt "false-alt"}|' start-stop-daemon.tests
 
         # Weird failures, looks related to our sandbox
         skip-testcase tar.tests "tar does not extract into symlinks"
