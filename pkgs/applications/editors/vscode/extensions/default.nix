@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.20.6";
-          hash = "sha256-QDs+zi2Kb2APYxZOzvBnrEZqlmhzNFmQ3bpSfIaPjlc=";
+          version = "3.20.14";
+          hash = "sha256-jD+e+s4iaX1p+KR3neJUwvPm/DQiX1gSTt595ryw8xE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -3803,8 +3803,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.10.0";
-          hash = "sha256-2KJdvzIKrNcFwxvTmXKl3z7AkClfJhyl0ZUmdUcMnzg=";
+          version = "31.11.0";
+          hash = "sha256-vvHr5jZ2lccO93O82OKnRF4wyVv3n/H3nKJIqZdIjlY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4534,8 +4534,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "110.0.0";
-          hash = "sha256-l5L0uqHpBR6nWzr8/edz3EU8+BP9yqRRFhpnngG0RGY=";
+          version = "110.1.0";
+          hash = "sha256-i6FObecuMylaCZYl/KLMscE07JIzQz+NSkfRdxtSfgg=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
