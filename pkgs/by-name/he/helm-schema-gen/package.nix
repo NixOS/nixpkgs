@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "helm-schema-gen";
-  version = "0.23.2";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "dadav";
     repo = "helm-schema";
     tag = "${finalAttrs.version}";
-    hash = "sha256-stOu9UOp+QvMifYdXMoet2DWSAEsJYQzgfdVJH1i+L0=";
+    hash = "sha256-1vz+42RfBAmlmecVKRWyIUXaPRbJhYTh/tXQ5Mtyir4=";
   };
 
-  vendorHash = "sha256-I05Pe9dkhj28YxUFVsVw1DKMG4pqyYI1VF1E/Hbv1Es=";
+  vendorHash = "sha256-jbK+XD5CbjMQJUJCcKbNN8LhYuhuy+Z3XcCmgiYw25Y=";
 
   subPackages = [ "cmd/helm-schema" ];
 
