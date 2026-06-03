@@ -1,11 +1,14 @@
 { pkgs, lib, ... }:
 let
+  # opensnitch ebpf seems to handle non-x86 syscalls incorrectly
+  test_ebpf = pkgs.stdenv.hostPlatform.isx86;
+
   monitorMethods = [
-    "ebpf"
     "proc"
     "ftrace"
     "audit"
-  ];
+  ]
+  ++ lib.optional test_ebpf "ebpf";
 in
 {
   name = "opensnitch";
@@ -97,7 +100,7 @@ in
         client_allowed_${m}.succeed("curl http://server")
       '') monitorMethods
     )
-    + ''
+    + lib.optionalString test_ebpf ''
       # make sure the kernel modules were actually properly loaded
       client_blocked_ebpf.succeed(r"journalctl -u opensnitchd --grep '\[eBPF\] module loaded: /nix/store/.*/etc/opensnitchd/opensnitch\.o'")
       client_blocked_ebpf.succeed(r"journalctl -u opensnitchd --grep '\[eBPF\] module loaded: /nix/store/.*/etc/opensnitchd/opensnitch-procs\.o'")
