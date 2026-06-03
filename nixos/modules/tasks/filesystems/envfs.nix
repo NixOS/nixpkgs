@@ -71,13 +71,14 @@ in
     # we also want these mounts in virtual machines.
     fileSystems = if config.virtualisation ? qemu then lib.mkVMOverride mounts else mounts;
 
-    # We no longer need those when using envfs
-    system.activationScripts.usrbinenv = lib.mkForce "";
-    system.activationScripts.binsh = lib.mkForce "";
+    # envfs provides /bin and /usr/bin itself.
+    environment.createBinSh = false;
+    environment.createUsrBinEnv = false;
 
-    # Disabling the activation scripts above prevents the creation of 2
-    # directories, which would normally be created just before switch-root at
-    # stage1. This causes problems when systemd is used in the initrd.
+    # Disabling /bin/sh and /usr/bin/env creation above prevents the
+    # creation of 2 directories, which would normally be created just
+    # before switch-root at stage1. This causes problems when systemd
+    # is used in the initrd.
     #
     # This only affects fresh installations or systems using impermanence/tmpfs
     # root, where these directories don't persist from a previous activation.
