@@ -49,18 +49,28 @@ pub fn activate(prefix: &str, toplevel: impl AsRef<Path>, config: &Config) -> Re
         log::info!("No firmware path provided. Not setting up firmware search paths.");
     }
 
-    if let Some(env_path) = &config.env_binary {
-        log::info!("Setting up /usr/bin/env...");
-        setup_usrbinenv(prefix, env_path)?;
-    } else {
-        log::info!("No env binary provided. Not setting up /usr/bin/env.");
+    match config.env_binary.as_deref() {
+        None => log::info!("/usr/bin/env not managed by nixos-init."),
+        Some("") => {
+            log::info!("Removing /usr/bin/env...");
+            remove_usrbinenv(prefix)?;
+        }
+        Some(path) => {
+            log::info!("Setting up /usr/bin/env...");
+            setup_usrbinenv(prefix, path)?;
+        }
     }
 
-    if let Some(sh_path) = &config.sh_binary {
-        log::info!("Setting up /bin/sh...");
-        setup_binsh(prefix, sh_path)?;
-    } else {
-        log::info!("No sh binary provided. Not setting up /bin/sh.");
+    match config.sh_binary.as_deref() {
+        None => log::info!("/bin/sh not managed by nixos-init."),
+        Some("") => {
+            log::info!("Removing /bin/sh...");
+            remove_binsh(prefix)?;
+        }
+        Some(path) => {
+            log::info!("Setting up /bin/sh...");
+            setup_binsh(prefix, path)?;
+        }
     }
 
     Ok(())
@@ -129,6 +139,16 @@ fn setup_usrbinenv(prefix: &str, env_binary: impl AsRef<Path>) -> Result<()> {
     atomic_symlink(&env_binary, usrbin_path.join("env"))
 }
 
+/// Remove `/usr/bin/env`.
+///
+/// `/usr/bin` is kept (and created if missing) so that `/usr` is never empty,
+/// which systemd treats as a fatal boot error.
+fn remove_usrbinenv(prefix: &str) -> Result<()> {
+    let usrbin = PathBuf::from(prefix).join("usr/bin");
+    fs::create_dir_all(&usrbin).context("Failed to create /usr/bin")?;
+    remove_if_exists(&usrbin.join("env"))
+}
+
 /// Setup /bin/sh.
 ///
 /// `/bin/sh` is an essential part of a Linux system as this path is hardcoded in the `system()` call
@@ -136,4 +156,19 @@ fn setup_usrbinenv(prefix: &str, env_binary: impl AsRef<Path>) -> Result<()> {
 fn setup_binsh(prefix: &str, sh_binary: impl AsRef<Path>) -> Result<()> {
     let binsh_path = PathBuf::from(prefix).join("bin/sh");
     atomic_symlink(&sh_binary, binsh_path)
+}
+
+/// Remove `/bin/sh`. `/bin` is kept (and created if missing).
+fn remove_binsh(prefix: &str) -> Result<()> {
+    let bin = PathBuf::from(prefix).join("bin");
+    fs::create_dir_all(&bin).context("Failed to create /bin")?;
+    remove_if_exists(&bin.join("sh"))
+}
+
+fn remove_if_exists(path: &Path) -> Result<()> {
+    match fs::remove_file(path) {
+        Ok(()) => Ok(()),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(e) => Err(e).with_context(|| format!("Failed to remove {}", path.display())),
+    }
 }
