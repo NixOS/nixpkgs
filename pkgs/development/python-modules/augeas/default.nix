@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "python-augeas";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lq8ckra3sqN38zo1d5JsEq6U5TtLKRmqysoWNwR9J9A=";
   };
 
