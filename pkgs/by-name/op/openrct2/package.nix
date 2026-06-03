@@ -32,6 +32,7 @@
   speexdsp,
   versionCheckHook,
   zlib,
+  zstd,
 
   withDiscordRpc ? false,
   # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
@@ -107,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     speexdsp
     zlib
+    zstd
   ]
   ++ lib.optional withDiscordRpc discord-rpc;
 
