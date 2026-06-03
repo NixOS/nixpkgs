@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atomicwrites";
   version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gbLJBxpJNnp/dwFw5e7Iy2ZWfPu8jHPSDOXKSo1xzxE=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     license = lib.licenses.mit;
   };
-}
+})
