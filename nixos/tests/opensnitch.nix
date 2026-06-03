@@ -11,7 +11,10 @@ in
   name = "opensnitch";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ onny ];
+    maintainers = [
+      onny
+      grimmauld
+    ];
   };
 
   nodes = {
