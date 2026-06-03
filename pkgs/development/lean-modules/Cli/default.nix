@@ -6,13 +6,13 @@
 
 buildLakePackage {
   pname = "lean4-cli";
-  version = "4.30.0";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4-cli";
-    tag = "v4.30.0";
-    hash = "sha256-oMaqHvWlEfk1601JfNKPvkGIWgMW6tiF7Mej7g63vh0=";
+    tag = "v4.29.0";
+    hash = "sha256-jCUl4sXVmwtYPuQecEUFH6mwFzPaQY7au4624EOiWjk=";
   };
 
   leanPackageName = "Cli";
@@ -31,9 +31,6 @@ buildLakePackage {
     description = "Command-line argument parser for Lean 4";
     homepage = "https://github.com/leanprover/lean4-cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }

@@ -22,9 +22,6 @@ buildLakePackage {
     description = "Lean 4 client for LeanSearch and Moogle proof search";
     homepage = "https://github.com/leanprover-community/LeanSearchClient";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }

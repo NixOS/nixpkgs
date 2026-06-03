@@ -62,9 +62,6 @@ buildLakePackage {
     description = "Interactive UI framework for Lean 4 proof assistants";
     homepage = "https://github.com/leanprover-community/ProofWidgets4";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }
