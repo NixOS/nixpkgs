@@ -307,7 +307,6 @@ in
         machine.require_unit_state("kopia-snapshot-with-timer-default.timer", "active")
 
     with subtest("filesystem-basic: repository connect and snapshot"):
-        machine.succeed("systemctl start kopia-repository-filesystem-basic.service")
         machine.succeed("systemctl start kopia-snapshot-filesystem-basic-default.service")
         machine.succeed(
             "${kopiaEnv "filesystem-basic"}"
@@ -316,13 +315,12 @@ in
 
     with subtest("sftp: repository connect and snapshot over SFTP"):
         server.wait_for_unit("sshd.service")
-        # Populate known_hosts on machine from server's host key
+        # Populate machine's known_hosts from server's host key (host keys are generated
+        # per-VM-boot, so we can't pin them declaratively without committing test keys).
         machine.succeed(
             "mkdir -p /root/.ssh && ssh-keyscan server > /root/.ssh/known_hosts 2>/dev/null"
         )
-        # Create repo directory on server
         server.succeed("mkdir -p /home/kopia/repo && chown kopia:users /home/kopia/repo")
-        machine.succeed("systemctl start kopia-repository-sftp.service")
         machine.succeed("systemctl start kopia-snapshot-sftp-default.service")
         machine.succeed(
             "${kopiaEnv "sftp"}"
@@ -332,7 +330,6 @@ in
     with subtest("webdav: repository connect and snapshot over WebDAV"):
         server.wait_for_unit("nginx.service")
         server.wait_for_open_port(8080)
-        machine.succeed("systemctl start kopia-repository-webdav.service")
         machine.succeed("systemctl start kopia-snapshot-webdav-default.service")
         machine.succeed(
             "${kopiaEnv "webdav"}"
@@ -342,12 +339,10 @@ in
     with subtest("s3: repository connect and snapshot over S3 (via MinIO)"):
         server.wait_for_unit("minio.service")
         server.wait_for_open_port(9000)
-        # Create buckets using MinIO client
         server.succeed(
             "${pkgs.minio-client}/bin/mc alias set local http://localhost:9000 minioadmin minioadmin"
         )
         server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test")
-        machine.succeed("systemctl start kopia-repository-s3.service")
         machine.succeed("systemctl start kopia-snapshot-s3-default.service")
         machine.succeed(
             "${kopiaEnv "s3"}"
@@ -355,7 +350,6 @@ in
         )
 
     with subtest("with-hooks: prepare and cleanup commands execute"):
-        machine.succeed("systemctl start kopia-repository-with-hooks.service")
         machine.succeed("systemctl start kopia-snapshot-with-hooks-default.service")
         machine.succeed("test -e /var/lib/kopia/with-hooks/prepare-ran")
         machine.succeed("test -e /var/lib/kopia/with-hooks/cleanup-ran")
@@ -365,7 +359,6 @@ in
         )
 
     with subtest("with-extra-args: extra snapshot args applied"):
-        machine.succeed("systemctl start kopia-repository-with-extra-args.service")
         machine.succeed("systemctl start kopia-snapshot-with-extra-args-default.service")
         machine.succeed(
             "${kopiaEnv "with-extra-args"}"
@@ -392,8 +385,7 @@ in
         )
 
     with subtest("with-policy: retention and compression"):
-        machine.succeed("systemctl start kopia-repository-with-policy.service")
-        machine.succeed("systemctl start kopia-policy-with-policy.service")
+        machine.wait_for_unit("kopia-policy-with-policy.service")
         machine.succeed(
             "${kopiaEnv "with-policy"}"
             " kopia policy show /opt --json"
@@ -411,8 +403,7 @@ in
         )
 
     with subtest("with-expanded-policy: retention, files, error handling"):
-        machine.succeed("systemctl start kopia-repository-with-expanded-policy.service")
-        machine.succeed("systemctl start kopia-policy-with-expanded-policy.service")
+        machine.wait_for_unit("kopia-policy-with-expanded-policy.service")
         machine.succeed(
             "${kopiaEnv "with-expanded-policy"}"
             " kopia policy show /opt --json"
@@ -443,8 +434,7 @@ in
         )
 
     with subtest("with-web: web UI responds with 401"):
-        machine.succeed("systemctl start kopia-repository-with-web.service")
-        machine.succeed("systemctl start kopia-web-with-web.service")
+        machine.wait_for_unit("kopia-web-with-web.service")
         machine.wait_for_open_port(51515)
         machine.succeed(
             "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:51515/"
@@ -452,8 +442,7 @@ in
         )
 
     with subtest("with-web-custom-port: web UI on port 9999"):
-        machine.succeed("systemctl start kopia-repository-with-web-custom-port.service")
-        machine.succeed("systemctl start kopia-web-with-web-custom-port.service")
+        machine.wait_for_unit("kopia-web-with-web-custom-port.service")
         machine.wait_for_open_port(9999)
         machine.succeed(
             "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9999/"
