@@ -4,10 +4,7 @@
   fetchFromGitHub,
   gnum4,
   pam,
-  fscrypt-experimental,
 }:
-
-# Don't use this for anything important yet!
 
 buildGoModule rec {
   pname = "fscrypt";
