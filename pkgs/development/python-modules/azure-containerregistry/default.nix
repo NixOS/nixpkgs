@@ -6,12 +6,13 @@
   msrest,
   msrestazure,
   isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-containerregistry";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     msrest
     msrestazure
