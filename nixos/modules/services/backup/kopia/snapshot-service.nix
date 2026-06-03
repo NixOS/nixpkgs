@@ -13,167 +13,244 @@ in
   options.services.kopia.backups = lib.mkOption {
     type = lib.types.attrsOf (
       lib.types.submodule {
-        options = {
-          paths = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = ''
-              Paths to back up with Kopia snapshots.
-            '';
-            example = [
-              "/home"
-              "/var/lib/postgresql"
-            ];
-          };
+        options.snapshots = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule {
+              options = {
+                path = lib.mkOption {
+                  type = lib.types.str;
+                  description = "Path to back up with `kopia snapshot create`.";
+                  example = "/home";
+                };
 
-          extraSnapshotArgs = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ ];
-            description = ''
-              Extra arguments passed to `kopia snapshot create`.
-            '';
-          };
+                user = lib.mkOption {
+                  type = with lib.types; nullOr str;
+                  default = null;
+                  description = ''
+                    OS user the systemd snapshot service runs as. Defaults to
+                    the enclosing backup's {option}`user`. The user component
+                    of the kopia source identifier (`user@host:/path`) is
+                    derived from this by default; override independently with
+                    {option}`source.user`.
+                  '';
+                };
 
-          backupPrepareCommand = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            description = ''
-              A script that must run before starting the backup process.
-            '';
-          };
+                source = {
+                  user = lib.mkOption {
+                    type = with lib.types; nullOr str;
+                    default = null;
+                    description = ''
+                      User component of the kopia source identifier
+                      (`user@host:/path`). Defaults to the effective
+                      {option}`user`. Set this when you want the OS user the
+                      snapshot runs as to differ from the logical user the
+                      snapshot is registered under in the repository.
+                    '';
+                  };
 
-          backupCleanupCommand = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            description = ''
-              A script that must run after finishing the backup process.
-              This runs in ExecStopPost, so it executes even if the backup fails.
-            '';
-          };
+                  host = lib.mkOption {
+                    type = with lib.types; nullOr str;
+                    default = null;
+                    description = ''
+                      Host component of the kopia source identifier
+                      (`user@host:/path`). Defaults to
+                      {option}`networking.hostName`. Set this to consolidate
+                      snapshots from multiple machines under one logical
+                      hostname.
+                    '';
+                  };
 
-          nice = lib.mkOption {
-            type = lib.types.ints.between (-20) 19;
-            default = 19;
-            description = ''
-              Niceness value for the backup service process.
-              See {manpage}`nice(1)`.
-            '';
-          };
+                  path = lib.mkOption {
+                    type = with lib.types; nullOr str;
+                    default = null;
+                    description = ''
+                      Path component of the kopia source identifier
+                      (`user@host:/path`). Defaults to {option}`path` (the
+                      filesystem location being walked). Set this when the
+                      logical identity of the snapshot should differ from the
+                      physical path, e.g. to make snapshots portable across
+                      machines that mount the same source under different
+                      paths.
+                    '';
+                  };
+                };
 
-          ioSchedulingClass = lib.mkOption {
-            type = lib.types.enum [
-              "idle"
-              "best-effort"
-              "realtime"
-              "none"
-            ];
-            default = "idle";
-            description = ''
-              I/O scheduling class for the backup service (see {manpage}`ionice(1)`).
-              Note that this only takes effect with the CFQ I/O scheduler.
-              NVMe drives typically use mq-deadline or none, which do not
-              honor this setting. Use {option}`ioWeight` instead on such
-              systems.
-              Set to `"none"` to leave unset.
-            '';
-          };
+                extraSnapshotArgs = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = "Extra arguments passed to `kopia snapshot create`.";
+                };
 
-          ioWeight = lib.mkOption {
-            type = with lib.types; nullOr (ints.between 1 10000);
-            default = 10;
-            description = ''
-              cgroup v2 I/O weight for the backup service (1–10000, default 100).
-              Lower values mean lower I/O priority. This works with modern I/O
-              schedulers (mq-deadline, bfq, none) where {option}`ioSchedulingClass`
-              has no effect.
-              Set to `null` to leave unset.
-            '';
-          };
+                backupPrepareCommand = lib.mkOption {
+                  type = with lib.types; nullOr str;
+                  default = null;
+                  description = "Script that runs before starting the snapshot.";
+                };
 
-          timerConfig = lib.mkOption {
-            type = lib.types.nullOr (lib.types.attrsOf unitOption);
-            default = {
-              OnCalendar = "daily";
-              Persistent = true;
-            };
-            description = ''
-              When to run the backup. See {manpage}`systemd.timer(5)` for details.
-              If null no timer is created and the backup will only run when
-              explicitly started.
-            '';
-            example = {
-              OnCalendar = "00:05";
-              RandomizedDelaySec = "5h";
-              Persistent = true;
-            };
-          };
+                backupCleanupCommand = lib.mkOption {
+                  type = with lib.types; nullOr str;
+                  default = null;
+                  description = ''
+                    Script that runs after the snapshot finishes (ExecStopPost,
+                    so it executes even if the snapshot fails).
+                  '';
+                };
+
+                nice = lib.mkOption {
+                  type = lib.types.ints.between (-20) 19;
+                  default = 19;
+                  description = "Niceness value for the snapshot service. See {manpage}`nice(1)`.";
+                };
+
+                ioSchedulingClass = lib.mkOption {
+                  type = lib.types.enum [
+                    "idle"
+                    "best-effort"
+                    "realtime"
+                    "none"
+                  ];
+                  default = "idle";
+                  description = ''
+                    I/O scheduling class for the snapshot service (see
+                    {manpage}`ionice(1)`). Only effective with the CFQ I/O
+                    scheduler; use {option}`ioWeight` instead on systems with
+                    mq-deadline / bfq / none. Set to `"none"` to leave unset.
+                  '';
+                };
+
+                ioWeight = lib.mkOption {
+                  type = with lib.types; nullOr (ints.between 1 10000);
+                  default = 10;
+                  description = ''
+                    cgroup v2 I/O weight for the snapshot service (1-10000).
+                    Set to `null` to leave unset.
+                  '';
+                };
+
+                timer = {
+                  enable = lib.mkOption {
+                    type = lib.types.bool;
+                    default = false;
+                    description = ''
+                      Whether to create a systemd timer for this snapshot.
+                      Off by default. Flip this on to schedule
+                      recurring snapshots via {option}`timer.options`.
+
+                      Keep in mind that kopia has its own in-built
+                      scheduler. It's advised to turn it off for
+                      snapshots you intend to manage via systemd
+                      to avoid redundant snapshots.
+                    '';
+                  };
+                  options = lib.mkOption {
+                    type = lib.types.attrsOf unitOption;
+                    default = {
+                      OnCalendar = "daily";
+                      Persistent = true;
+                    };
+                    description = "When to run the snapshot. See {manpage}`systemd.timer(5)`.";
+                    example = {
+                      OnCalendar = "00:05";
+                      RandomizedDelaySec = "5h";
+                      Persistent = true;
+                    };
+                  };
+                };
+              };
+            }
+          );
+          default = { };
+          description = ''
+            Snapshots to take against this backup's repository. Each entry
+            produces a `kopia-snapshot-<backupName>-<snapshotName>.service` unit
+            (and optional matching `.timer`).
+          '';
+          example = lib.literalExpression ''
+            {
+              home = {
+                path = "/home";
+                timer.options.OnCalendar = "hourly";
+              };
+              db = {
+                path = "/var/lib/postgresql";
+                user = "postgres";
+              };
+            }
+          '';
         };
       }
     );
   };
 
   config = lib.mkIf (cfg.backups != { }) {
-    systemd.timers = lib.mapAttrs' (
-      name: backup:
-      lib.nameValuePair "kopia-snapshot-${name}" {
-        wantedBy = [ "timers.target" ];
-        inherit (backup) timerConfig;
-      }
-    ) (lib.filterAttrs (_: b: b.timerConfig != null && b.paths != [ ]) cfg.backups);
+    systemd.timers = lib.concatMapAttrs (
+      backupName: backup:
+      lib.concatMapAttrs (
+        snapName: snapshot:
+        lib.optionalAttrs snapshot.timer.enable {
+          "kopia-snapshot-${backupName}-${snapName}" = {
+            wantedBy = [ "timers.target" ];
+            timerConfig = snapshot.timer.options;
+          };
+        }
+      ) backup.snapshots
+    ) cfg.backups;
 
-    systemd.services = lib.mapAttrs' (
-      name: backup:
-      let
-        kopiaExe = lib.getExe cfg.package;
-        extraArgs = lib.concatStringsSep " " (map lib.escapeShellArg backup.extraSnapshotArgs);
-        snapshotScript = ''
-          set -euo pipefail
-          export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
-
-          ${lib.concatMapStringsSep "\n" (path: ''
-            ${kopiaExe} snapshot create ${lib.escapeShellArg path} ${extraArgs}
-          '') backup.paths}
-        '';
-      in
-      lib.nameValuePair "kopia-snapshot-${name}" (
+    systemd.services = lib.concatMapAttrs (
+      backupName: backup:
+      lib.concatMapAttrs (
+        snapName: snapshot:
+        let
+          kopiaExe = lib.getExe cfg.package;
+          user = if snapshot.user != null then snapshot.user else backup.user;
+          sourceUser = if snapshot.source.user != null then snapshot.source.user else user;
+          sourceHost =
+            if snapshot.source.host != null then snapshot.source.host else config.networking.hostName;
+          sourcePath = if snapshot.source.path != null then snapshot.source.path else snapshot.path;
+          source = "${sourceUser}@${sourceHost}:${sourcePath}";
+          extraArgs = lib.concatStringsSep " " (
+            [ "--override-source=${lib.escapeShellArg source}" ]
+            ++ map lib.escapeShellArg snapshot.extraSnapshotArgs
+          );
+        in
         {
-          description = "Kopia snapshot for ${name}";
-          requires = [ "kopia-repository-${name}.service" ];
-          after = [ "kopia-repository-${name}.service" ];
-          environment = {
-            KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+          "kopia-snapshot-${backupName}-${snapName}" = {
+            description = "Kopia snapshot ${snapName} for ${backupName}";
+            requires = [ "kopia-repository-${backupName}.service" ];
+            wants = [ "kopia-policy-${backupName}.service" ];
+            after = [
+              "kopia-repository-${backupName}.service"
+              "kopia-policy-${backupName}.service"
+            ];
+            environment = {
+              KOPIA_CONFIG_PATH = "/var/lib/kopia/${backupName}/repository.config";
+            };
+            restartIfChanged = false;
+            preStart = lib.mkIf (snapshot.backupPrepareCommand != null) snapshot.backupPrepareCommand;
+            postStop = lib.mkIf (snapshot.backupCleanupCommand != null) snapshot.backupCleanupCommand;
+            script = ''
+              set -euo pipefail
+              export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
+              ${kopiaExe} snapshot create ${lib.escapeShellArg snapshot.path} ${extraArgs}
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+              User = user;
+              StateDirectory = "kopia/${backupName}";
+              PrivateTmp = true;
+              NoNewPrivileges = true;
+              ProtectSystem = "strict";
+              ReadWritePaths = [
+                "/var/lib/kopia/${backupName}"
+              ]
+              ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+              Nice = snapshot.nice;
+              IOSchedulingClass = lib.mkIf (snapshot.ioSchedulingClass != "none") snapshot.ioSchedulingClass;
+              IOWeight = lib.mkIf (snapshot.ioWeight != null) snapshot.ioWeight;
+            };
           };
-          restartIfChanged = false;
-          script = snapshotScript;
-          serviceConfig = {
-            Type = "oneshot";
-            User = backup.user;
-            StateDirectory = "kopia/${name}";
-            PrivateTmp = true;
-            NoNewPrivileges = true;
-            ProtectSystem = "strict";
-            ReadWritePaths = [
-              "/var/lib/kopia/${name}"
-            ]
-            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
-          }
-          // {
-            Nice = backup.nice;
-          }
-          // lib.optionalAttrs (backup.ioSchedulingClass != "none") {
-            IOSchedulingClass = backup.ioSchedulingClass;
-          }
-          // lib.optionalAttrs (backup.ioWeight != null) {
-            IOWeight = backup.ioWeight;
-          };
         }
-        // lib.optionalAttrs (backup.backupPrepareCommand != null) {
-          preStart = backup.backupPrepareCommand;
-        }
-        // lib.optionalAttrs (backup.backupCleanupCommand != null) {
-          postStop = backup.backupCleanupCommand;
-        }
-      )
-    ) (lib.filterAttrs (_: b: b.paths != [ ]) cfg.backups);
+      ) backup.snapshots
+    ) cfg.backups;
   };
 }

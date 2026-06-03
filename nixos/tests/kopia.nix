@@ -103,16 +103,18 @@ in
         filesystem-basic = {
           repository.filesystem.path = "/var/lib/kopia-repo";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
         };
 
         # Test: filesystem with policy
         with-policy = {
           repository.filesystem.path = "/var/lib/kopia-repo-policy";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
           policies.entries."(global)" = {
             retention.keepDaily = 3;
             compression.compressorName = "zstd";
@@ -123,8 +125,9 @@ in
         with-web = {
           repository.filesystem.path = "/var/lib/kopia-repo-web";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
           web.enable = true;
           web.serverPasswordFile = webPasswordFile;
         };
@@ -133,10 +136,11 @@ in
         with-hooks = {
           repository.filesystem.path = "/var/lib/kopia-repo-hooks";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
-          backupPrepareCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/prepare-ran";
-          backupCleanupCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/cleanup-ran";
+          snapshots.default = {
+            path = "/opt";
+            backupPrepareCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/prepare-ran";
+            backupCleanupCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/cleanup-ran";
+          };
         };
 
         # Test: SFTP backend
@@ -149,8 +153,9 @@ in
             knownHostsFile = "/root/.ssh/known_hosts";
           };
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
         };
 
         # Test: WebDAV backend
@@ -161,8 +166,9 @@ in
             passwordFile = webdavPasswordFile;
           };
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
         };
 
         # Test: S3 backend (via MinIO)
@@ -175,35 +181,52 @@ in
             disableTLS = true;
           };
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
         };
 
-        # Test: timer (uses default timerConfig)
+        # Test: timer enabled (verifies snapshots.<name>.timer.enable + default schedule)
         with-timer = {
           repository.filesystem.path = "/var/lib/kopia-repo-timer";
           inherit passwordFile;
-          paths = [ "/opt" ];
+          snapshots.default = {
+            path = "/opt";
+            timer.enable = true;
+          };
         };
 
         # Test: extra snapshot args
         with-extra-args = {
           repository.filesystem.path = "/var/lib/kopia-repo-extra-args";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
-          extraSnapshotArgs = [
-            "--parallel=1"
-            "--description=test-snapshot"
-          ];
+          snapshots.default = {
+            path = "/opt";
+            extraSnapshotArgs = [
+              "--parallel=1"
+              "--description=test-snapshot"
+            ];
+          };
+        };
+
+        # Test: kopia source identifier overrides (source.user / source.host)
+        with-source-override = {
+          repository.filesystem.path = "/var/lib/kopia-repo-source-override";
+          inherit passwordFile;
+          snapshots.default = {
+            path = "/opt";
+            source.user = "logical-user";
+            source.host = "logical-host";
+          };
         };
 
         # Test: expanded policy options
         with-expanded-policy = {
           repository.filesystem.path = "/var/lib/kopia-repo-expanded-policy";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
           policies.entries."(global)" = {
             retention = {
               keepDaily = 7;
@@ -229,8 +252,9 @@ in
         with-web-custom-port = {
           repository.filesystem.path = "/var/lib/kopia-repo-web-custom";
           inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
+          snapshots.default = {
+            path = "/opt";
+          };
           web = {
             enable = true;
             address = "127.0.0.1:9999";
@@ -257,24 +281,24 @@ in
 
     with subtest("service-properties: verify hardening on snapshot service"):
         machine.succeed(
-            "systemctl show -p Nice --value kopia-snapshot-filesystem-basic.service"
+            "systemctl show -p Nice --value kopia-snapshot-filesystem-basic-default.service"
             " | grep -q '^19$'"
         )
         machine.succeed(
-            "systemctl show -p ProtectSystem --value kopia-snapshot-filesystem-basic.service"
+            "systemctl show -p ProtectSystem --value kopia-snapshot-filesystem-basic-default.service"
             " | grep -q 'strict'"
         )
         machine.succeed(
-            "systemctl show -p NoNewPrivileges --value kopia-snapshot-filesystem-basic.service"
+            "systemctl show -p NoNewPrivileges --value kopia-snapshot-filesystem-basic-default.service"
             " | grep -q 'yes'"
         )
 
     with subtest("with-timer: timer unit is active"):
-        machine.require_unit_state("kopia-snapshot-with-timer.timer", "active")
+        machine.require_unit_state("kopia-snapshot-with-timer-default.timer", "active")
 
     with subtest("filesystem-basic: repository connect and snapshot"):
         machine.succeed("systemctl start kopia-repository-filesystem-basic.service")
-        machine.succeed("systemctl start kopia-snapshot-filesystem-basic.service")
+        machine.succeed("systemctl start kopia-snapshot-filesystem-basic-default.service")
         machine.succeed(
             "${kopiaEnv "filesystem-basic"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
@@ -289,7 +313,7 @@ in
         # Create repo directory on server
         server.succeed("mkdir -p /home/kopia/repo && chown kopia:users /home/kopia/repo")
         machine.succeed("systemctl start kopia-repository-sftp.service")
-        machine.succeed("systemctl start kopia-snapshot-sftp.service")
+        machine.succeed("systemctl start kopia-snapshot-sftp-default.service")
         machine.succeed(
             "${kopiaEnv "sftp"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
@@ -299,7 +323,7 @@ in
         server.wait_for_unit("nginx.service")
         server.wait_for_open_port(8080)
         machine.succeed("systemctl start kopia-repository-webdav.service")
-        machine.succeed("systemctl start kopia-snapshot-webdav.service")
+        machine.succeed("systemctl start kopia-snapshot-webdav-default.service")
         machine.succeed(
             "${kopiaEnv "webdav"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
@@ -314,7 +338,7 @@ in
         )
         server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test")
         machine.succeed("systemctl start kopia-repository-s3.service")
-        machine.succeed("systemctl start kopia-snapshot-s3.service")
+        machine.succeed("systemctl start kopia-snapshot-s3-default.service")
         machine.succeed(
             "${kopiaEnv "s3"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
@@ -322,7 +346,7 @@ in
 
     with subtest("with-hooks: prepare and cleanup commands execute"):
         machine.succeed("systemctl start kopia-repository-with-hooks.service")
-        machine.succeed("systemctl start kopia-snapshot-with-hooks.service")
+        machine.succeed("systemctl start kopia-snapshot-with-hooks-default.service")
         machine.succeed("test -e /var/lib/kopia/with-hooks/prepare-ran")
         machine.succeed("test -e /var/lib/kopia/with-hooks/cleanup-ran")
         machine.succeed(
@@ -332,7 +356,7 @@ in
 
     with subtest("with-extra-args: extra snapshot args applied"):
         machine.succeed("systemctl start kopia-repository-with-extra-args.service")
-        machine.succeed("systemctl start kopia-snapshot-with-extra-args.service")
+        machine.succeed("systemctl start kopia-snapshot-with-extra-args-default.service")
         machine.succeed(
             "${kopiaEnv "with-extra-args"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
@@ -341,6 +365,20 @@ in
             "${kopiaEnv "with-extra-args"}"
             " kopia snapshot list /opt --json"
             " | jq -e '.[0].description == \"test-snapshot\"'"
+        )
+
+    with subtest("with-source-override: snapshot registers under overridden source identifier"):
+        machine.succeed("systemctl start kopia-snapshot-with-source-override-default.service")
+        machine.succeed(
+            "${kopiaEnv "with-source-override"}"
+            " kopia snapshot list logical-user@logical-host:/opt --json"
+            " | jq -e 'length >= 1'"
+        )
+        # And NOT under the OS-derived identifier
+        machine.succeed(
+            "${kopiaEnv "with-source-override"}"
+            " kopia snapshot list root@machine:/opt --json"
+            " | jq -e 'length == 0'"
         )
 
     with subtest("with-policy: retention and compression"):
@@ -356,7 +394,7 @@ in
             " kopia policy show /opt --json"
             " | jq -e '.compression.compressorName == \"zstd\"'"
         )
-        machine.succeed("systemctl start kopia-snapshot-with-policy.service")
+        machine.succeed("systemctl start kopia-snapshot-with-policy-default.service")
         machine.succeed(
             "${kopiaEnv "with-policy"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
