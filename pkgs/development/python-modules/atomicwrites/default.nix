@@ -3,17 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "atomicwrites";
   version = "1.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-gbLJBxpJNnp/dwFw5e7Iy2ZWfPu8jHPSDOXKSo1xzxE=";
   };
+
+  build-system = [ setuptools ];
 
   # Tests depend on pytest but atomicwrites is a dependency of pytest
   doCheck = false;
