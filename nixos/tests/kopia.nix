@@ -53,6 +53,10 @@ in
         9000
       ];
 
+      systemd.tmpfiles.rules = [
+        "d /var/lib/webdav 0750 nginx nginx -"
+      ];
+
       systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/lib/webdav" ];
 
       services.nginx = {
@@ -66,6 +70,7 @@ in
             }
           ];
           locations."/" = {
+            basicAuth.kopia = "kopia-webdav-pass";
             extraConfig = ''
               dav_methods PUT DELETE MKCOL COPY MOVE;
               dav_ext_methods PROPFIND OPTIONS;
@@ -73,8 +78,6 @@ in
               create_full_put_path on;
               autoindex on;
               root /var/lib/webdav;
-              auth_basic "WebDAV";
-              auth_basic_user_file /etc/nginx/htpasswd;
             '';
           };
         };
@@ -289,15 +292,7 @@ in
         )
 
     with subtest("webdav: repository connect and snapshot over WebDAV"):
-        # Set up nginx WebDAV with basic auth on server
-        server.succeed(
-            "mkdir -p /var/lib/webdav /etc/nginx"
-        )
-        server.succeed(
-            "${pkgs.apacheHttpd}/bin/htpasswd -bc /etc/nginx/htpasswd kopia kopia-webdav-pass"
-        )
-        server.succeed("chown nginx:nginx /var/lib/webdav")
-        server.succeed("systemctl restart nginx")
+        server.wait_for_unit("nginx.service")
         server.wait_for_open_port(8080)
         machine.succeed("systemctl start kopia-repository-webdav.service")
         machine.succeed("systemctl start kopia-snapshot-webdav.service")
