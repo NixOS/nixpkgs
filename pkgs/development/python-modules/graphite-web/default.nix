@@ -104,9 +104,12 @@ buildPythonPackage {
   ];
 
   preCheck =
-    # Start a redis server
+    # Start a redis server on a per-build port. Darwin builds share the host
+    # network (no netns isolation), so concurrent builds would otherwise
+    # collide on the default port 6379. test_redis_tagdb reads TEST_REDIS_PORT.
     ''
-      ${pkgs.valkey}/bin/redis-server &
+      export TEST_REDIS_PORT=$(( ($$ % 20000) + 20000 ))
+      ${pkgs.valkey}/bin/redis-server --port "$TEST_REDIS_PORT" &
       REDIS_PID=$!
     '';
 
