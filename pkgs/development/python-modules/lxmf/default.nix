@@ -4,11 +4,12 @@
   fetchFromGitHub,
   rns,
   setuptools,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,17 +17,18 @@ buildPythonPackage (finalAttrs: {
     owner = "markqvist";
     repo = "lxmf";
     tag = finalAttrs.version;
-    hash = "sha256-ohbZSpjIyCiiwXUjvr0UBXKN4OScdTzxx5QimPWnCAI=";
+    hash = "sha256-Lx7eG7idbqjJrOE15/OJ8kh++4STQHxNVMTRVXdAEYE=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "rns" ];
+
   dependencies = [ rns ];
 
-  # Module has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "LXMF" ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Lightweight Extensible Message Format for Reticulum";

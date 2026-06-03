@@ -16,6 +16,7 @@ buildPythonPackage (finalAttrs: {
   pname = "rns";
   version = "1.3.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
