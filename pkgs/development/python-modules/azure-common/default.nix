@@ -9,14 +9,14 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.1.28";
   pyproject = true;
   pname = "azure-common";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-SsDNMhTja2obakQmhnIqXYzESWA6qDPz8PQL2oNnBKM=";
   };
@@ -40,4 +40,4 @@ buildPythonPackage rec {
       maxwilson
     ];
   };
-}
+})
