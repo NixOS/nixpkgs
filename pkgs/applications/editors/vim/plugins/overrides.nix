@@ -1372,35 +1372,6 @@ assertNoAdditions {
   diffview-nvim = super.diffview-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
 
-    nvimSkipModules = [
-      # https://github.com/sindrets/diffview.nvim/issues/498
-      "diffview.api.views.diff.diff_view"
-      "diffview.scene.layouts.diff_2"
-      "diffview.scene.layouts.diff_2_hor"
-      "diffview.scene.layouts.diff_2_ver"
-      "diffview.scene.layouts.diff_3"
-      "diffview.scene.layouts.diff_3_hor"
-      "diffview.scene.layouts.diff_3_mixed"
-      "diffview.scene.layouts.diff_3_ver"
-      "diffview.scene.layouts.diff_4"
-      "diffview.scene.layouts.diff_4_mixed"
-      "diffview.scene.views.diff.diff_view"
-      "diffview.scene.views.file_history.file_history_panel"
-      "diffview.scene.views.file_history.option_panel"
-      "diffview.scene.window"
-      "diffview.ui.panels.commit_log_panel"
-      "diffview.ui.panels.help_panel"
-      "diffview.ui.panel"
-      "diffview.vcs.adapters.git.init"
-      "diffview.vcs.adapters.hg.init"
-      "diffview.vcs.adapter"
-      "diffview.vcs.init"
-      "diffview.vcs.utils"
-      "diffview.job"
-      "diffview.lib"
-      "diffview.multi_job"
-    ];
-
     doInstallCheck = true;
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
