@@ -5,13 +5,14 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   version = "3.11.0";
   pname = "asgiref";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-2ZaUIWGF5cQVNj95b7WiKGsn2wYsoJmJ/CfPhIEZdjc=";
   };
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
