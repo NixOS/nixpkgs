@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -43,6 +44,11 @@ buildPythonPackage {
     tag = "1.2.1-pre2";
     hash = "sha256-2C5iWn5/BoX0OPT/UQO94V1oZ/xiRzgoipp0551dnpM=";
   };
+
+  patches = [
+    # https://github.com/graphite-project/graphite-web/pull/2914
+    ./epoch-django5-localize-via-pytz.patch
+  ];
 
   postPatch = ''
     substituteInPlace webapp/graphite/settings.py \
