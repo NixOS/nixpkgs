@@ -14,7 +14,8 @@
       ];
 
       specialisation.fstab-test.configuration = {
-        fileSystems."/plain" = {
+        # This can't be fileSytems, as the qemu machinery doesn't honor it.
+        virtualisation.fileSystems."/plain" = {
           device = "/encrypted";
           fsType = "fuse.gocryptfs";
           options = [
@@ -27,31 +28,24 @@
     };
 
   testScript = ''
+    # Initialize a gocryptfs filesystem and mount it
+    machine.succeed("openssl rand -base64 32 > /tmp/password.txt")
+    machine.succeed("mkdir -p /encrypted /plain")
+    machine.succeed("gocryptfs -init /encrypted  -passfile /tmp/password.txt -quiet")
+    machine.succeed("gocryptfs /encrypted /plain  -passfile /tmp/password.txt -quiet")
 
-    # Generate a password
-    machine.execute("openssl rand -base64 32 > /tmp/password.txt")
+    # Drop a canary file and unmount
+    machine.succeed("echo success > /plain/data.txt")
+    machine.succeed("fusermount -u /plain")
 
-    # Initialize an encrypted vault
-    machine.execute("mkdir -p /encrypted /plain")
-    machine.execute("gocryptfs -init /encrypted  -passfile /password.txt -quiet")
+    # Switch to a specialisation that has this in /etc/fstab
+    machine.succeed("/run/current-system/specialisation/fstab-test/bin/switch-to-configuration switch")
 
-    # Open and mount vault
-    machine.execute("gocryptfs /encrypted /plain  -passfile /tmp/password.txt -quiet")
-
-    machine.execute("echo test > /plain/data.txt")
-    machine.execute("echo test > /tmp/data.txt")
-
-    # Unmount
-    machine.execute("fusermount -u /plain")
-
-    # Switch to the specialisation
-    machine.succeed("/run/current-system/specialisation/fstab-test/bin/switch-to-configuration test")
-
-    # Wait for mount
+    # Wait for mounts
     machine.wait_for_unit("local-fs.target")
 
-    # Check data
-    machine.succeed("diff /plain/data.txt /tmp/data.txt")
+    # Ensure the canary is alive
+    machine.succeed("grep -q success /plain/data.txt")
 
   '';
 }

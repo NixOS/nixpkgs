@@ -7832,6 +7832,10 @@ self: super: with self; {
 
   irm-kmi-api = callPackage ../development/python-modules/irm-kmi-api { };
 
+  ironcalc = callPackage ../by-name/ir/ironcalc/python.nix {
+    inherit (pkgs) ironcalc;
+  };
+
   isal = callPackage ../development/python-modules/isal { };
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
@@ -19829,6 +19833,8 @@ self: super: with self; {
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
+
+  torch-memory-saver = callPackage ../development/python-modules/torch-memory-saver { };
 
   # Required to test triton
   torch-no-triton = self.torch.override { tritonSupport = false; };
