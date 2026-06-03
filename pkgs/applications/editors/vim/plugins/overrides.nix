@@ -229,14 +229,6 @@ assertNoAdditions {
     ];
   };
 
-  artio-nvim = super.artio-nvim.overrideAttrs {
-    # Requires extui enabled
-    nvimSkipModules = [
-      "artio.view"
-      "artio.picker"
-    ];
-  };
-
   astrocore = super.astrocore.overrideAttrs {
     dependencies = [ self.lazy-nvim ];
   };
@@ -1636,15 +1628,8 @@ assertNoAdditions {
       "go.ai.init"
       "go.comment"
       "go.format"
-      "go.ginkgo"
-      "go.gotest"
       "go.gotests"
       "go.project"
-      "go.snips"
-      "go.tags"
-      "go.ts.go"
-      "go.ts.nodes"
-      "snips.go"
     ];
   };
 
@@ -1746,10 +1731,6 @@ assertNoAdditions {
 
   harpoon2 = super.harpoon2.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
-    nvimSkipModules = [
-      # Access harpoon data file
-      "harpoon.scratch.toggle"
-    ];
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
@@ -1804,12 +1785,6 @@ assertNoAdditions {
   hotpot-nvim = super.hotpot-nvim.overrideAttrs {
     # NOTE: Vim:E919: Directory not found in 'packpath': "pack/*/opt/hotpot-fennel-update"
     doCheck = false;
-  };
-
-  hover-nvim = super.hover-nvim.overrideAttrs {
-    # Single provider issue with reading from config
-    # /lua/hover/providers/fold_preview.lua:27: attempt to index local 'config' (a nil value)
-    nvimSkipModules = "hover.providers.fold_preview";
   };
 
   html5-vim = super.html5-vim.overrideAttrs (old: {
@@ -2070,7 +2045,6 @@ assertNoAdditions {
       "lazyvim.plugins.extras.ai.copilot-native"
       "lazyvim.plugins.extras.ai.sidekick"
       "lazyvim.plugins.extras.ai.tabnine"
-      "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
       "lazyvim.plugins.extras.editor.fzf"
@@ -2079,8 +2053,6 @@ assertNoAdditions {
       "lazyvim.plugins.extras.formatting.prettier"
       "lazyvim.plugins.extras.lang.dotnet"
       "lazyvim.plugins.extras.lang.markdown"
-      "lazyvim.plugins.extras.lang.python"
-      "lazyvim.plugins.extras.lang.svelte"
       "lazyvim.plugins.extras.lang.typescript.init"
       "lazyvim.plugins.extras.lang.typescript.vtsls"
       "lazyvim.plugins.init"
@@ -2256,12 +2228,6 @@ assertNoAdditions {
       telescope-nvim
       plenary-nvim
     ];
-    nvimSkipModules = [
-      # Attempt to connect to sqlitedb
-      "lispdocs.db"
-      "lispdocs.finder"
-      "lispdocs"
-    ];
   };
 
   litee-calltree-nvim = super.litee-calltree-nvim.overrideAttrs (old: {
@@ -2302,16 +2268,6 @@ assertNoAdditions {
     meta = old.meta // {
       license = lib.licenses.gpl3Only;
     };
-  });
-
-  live-share-nvim = super.live-share-nvim.overrideAttrs (old: {
-    nvimSkipModules = (old.nvimSkipModules or [ ]) ++ [
-      # These modules unconditionally load OpenSSL via LuaJIT FFI and abort in
-      # the headless require check on Darwin.
-      "live-share.host"
-      "live-share.guest"
-      "live-share.collab.crypto"
-    ];
   });
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
@@ -2689,8 +2645,6 @@ assertNoAdditions {
       # E5108: Error executing lua ...vim-2024-06-13/lua/diffview/api/views/diff/diff_view.lua:13: attempt to index global 'DiffviewGlobal' (a nil value)
       # Requires diffview-nvim's plugin script to be sourced.
       "neogit.integrations.diffview"
-      "neogit.popups.diff.actions"
-      "neogit.popups.diff.init"
     ];
   };
 
@@ -2849,18 +2803,6 @@ assertNoAdditions {
       nvim-nio
       plenary-nvim
       nvim-treesitter-parsers.cpp
-    ];
-    nvimSkipModules = [
-      # lua/plenary/path.lua:511: FileNotFoundError from mkdir because of stdpath parent path missing
-      "neotest-gtest.executables.global_registry"
-      "neotest-gtest.executables.init"
-      "neotest-gtest.executables.registry"
-      "neotest-gtest.executables.ui"
-      "neotest-gtest"
-      "neotest-gtest.neotest_adapter"
-      "neotest-gtest.report"
-      "neotest-gtest.storage"
-      "neotest-gtest.utils"
     ];
   };
 
@@ -3109,7 +3051,6 @@ assertNoAdditions {
       # Requires global config setup
       "nvchad.configs.cmp"
       "nvchad.configs.gitsigns"
-      "nvchad.configs.luasnip"
       "nvchad.configs.mason"
       "nvchad.configs.nvimtree"
       "nvchad.configs.telescope"
@@ -3120,7 +3061,6 @@ assertNoAdditions {
     dependencies = [ self.nvzone-volt ];
     nvimSkipModules = [
       # Requires global config setup
-      "nvchad.tabufline.modules"
       "nvchad.term.init"
       "nvchad.themes.init"
       "nvchad.themes.mappings"
@@ -3448,12 +3388,6 @@ assertNoAdditions {
       nvim-treesitter-parsers.typescript
       nvim-treesitter-parsers.zig
     ];
-    nvimSkipModules = [
-      # Broken runners
-      "nvim-test.runners.zig"
-      "nvim-test.runners.hspec"
-      "nvim-test.runners.stack"
-    ];
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
@@ -3689,7 +3623,6 @@ assertNoAdditions {
     # FIXME: can't find plugin root dir
     nvimSkipModules = [
       "openscad"
-      "openscad.snippets.openscad"
       "openscad.utilities"
     ];
   };
@@ -3711,13 +3644,6 @@ assertNoAdditions {
 
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
-    nvimSkipModules = [
-      # requires config setup
-      "otter.keeper"
-      "otter.lsp.handlers"
-      "otter.lsp.init"
-      "otter.diagnostics"
-    ];
   };
 
   outline-nvim = super.outline-nvim.overrideAttrs {
@@ -3793,21 +3719,6 @@ assertNoAdditions {
   perfanno-nvim = super.perfanno-nvim.overrideAttrs {
     checkInputs = with self; [
       fzf-lua
-    ];
-    nvimSkipModules = [
-      # Address in use error from fzf-lua on darwin
-      # https://github.com/NixOS/nixpkgs/issues/431458
-      "perfanno.fzf_lua"
-    ];
-  };
-
-  persisted-nvim = super.persisted-nvim.overrideAttrs {
-    nvimSkipModules = [
-      # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)
-      # https://github.com/olimorris/persisted.nvim/issues/146
-      "persisted"
-      "persisted.config"
-      "persisted.utils"
     ];
   };
 
@@ -3911,9 +3822,6 @@ assertNoAdditions {
     dependencies = with self; [
       nvim-lspconfig
       otter-nvim
-    ];
-    nvimSkipModules = [
-      "quarto.runner.init"
     ];
     meta = old.meta // {
       # LICENSE says GPL-2.0-or-later.
@@ -4148,36 +4056,6 @@ assertNoAdditions {
     # Optional trouble integration
     checkInputs = [ self.trouble-nvim ];
     nvimSkipModules = [
-      # Requires setup call first
-      # attempt to index global 'Snacks' (a nil value)
-      "snacks.dashboard"
-      "snacks.debug"
-      "snacks.dim"
-      "snacks.explorer.init"
-      "snacks.gh.actions"
-      "snacks.gh.buf"
-      "snacks.gh.init"
-      "snacks.gh.render.init"
-      "snacks.git"
-      "snacks.image.convert"
-      "snacks.image.image"
-      "snacks.image.init"
-      "snacks.image.placement"
-      "snacks.indent"
-      "snacks.input"
-      "snacks.lazygit"
-      "snacks.notifier"
-      "snacks.picker.actions"
-      "snacks.picker.config.highlights"
-      "snacks.picker.core.list"
-      "snacks.picker.source.gh"
-      "snacks.picker.util.diff"
-      "snacks.scratch"
-      "snacks.scroll"
-      "snacks.terminal"
-      "snacks.win"
-      "snacks.words"
-      "snacks.zen"
       # TODO: Plugin requires libsqlite available, create a test for it
       "snacks.picker.util.db"
     ];
@@ -4192,9 +4070,6 @@ assertNoAdditions {
       "snap.consumer.fzy.score"
       # circular import
       "snap.producer.create"
-      # https://github.com/camspiers/snap/pull/97
-      "snap.preview.help"
-      "snap.producer.vim.help"
     ];
   };
 
@@ -4239,8 +4114,6 @@ assertNoAdditions {
       nvimSkipModules = [
         # Require "sql.utils" ?
         "sqlite.tbl.cache"
-        # attempt to write to read only database
-        "sqlite.examples.bookmarks"
       ];
     }
   );
@@ -4634,8 +4507,6 @@ assertNoAdditions {
     nvimSkipModules = [
       # Meta file
       "tokyonight.docs"
-      # Optional integration
-      "tokyonight.extra.fzf"
     ];
   };
 
