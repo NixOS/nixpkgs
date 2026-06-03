@@ -25,7 +25,7 @@
    - `keys` is a list of your PGP/GPG key fingerprints.
 
    Specifying a GitHub account is required, because:
-   - you will get invited to the @NixOS/nixpkgs-maintainers team
+   - you will get invited to the @NixOS/nixpkgs-maintainers team;
    - once you are part of the @NixOS org, you can be requested for review;
    - once you can be requested for review, CI will request you review pull requests that modify a package for which you are a maintainer.
 
