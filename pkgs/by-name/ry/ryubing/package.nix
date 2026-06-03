@@ -24,10 +24,12 @@
   gtk3,
   wrapGAppsHook3,
 }:
-
-buildDotnetModule rec {
+let
   pname = "ryubing";
   version = "1.3.3";
+in
+buildDotnetModule {
+  inherit pname version;
 
   src = fetchFromForgejo {
     domain = "git.ryujinx.app";
@@ -47,7 +49,9 @@ buildDotnetModule rec {
   ];
 
   nativeBuildInputs =
-    lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3
+    lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       darwin.sigtool
@@ -80,19 +84,17 @@ buildDotnetModule rec {
     ffmpeg_6
     libsoundio
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    udev
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin moltenvk;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moltenvk ];
 
-  projectFile = "Ryujinx.sln";
+  projectFile = "src/Ryujinx/Ryujinx.csproj";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
 
   # Tests on Darwin currently fail because of Ryujinx.Tests.Unicorn
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   dotnetFlags = [
-    "/p:ExtraDefineConstants=DISABLE_UPDATER%2CFORCE_EXTERNAL_BASE_DIR"
+    "/p:ExtraDefineConstants=DISABLE_UPDATER"
   ];
 
   executables = [
@@ -101,28 +103,27 @@ buildDotnetModule rec {
 
   makeWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
-    "--set SDL_VIDEODRIVER x11"
+    "--set"
+    "SDL_VIDEODRIVER"
+    "x11"
+    # From upstream wrapper script
+    "--set"
+    "DOTNET_EnableAlternateStackCheck"
+    "1"
   ];
 
   # Remove vendored SDL.
-  preFixup = "rm $out/lib/${pname}/libSDL2.*";
+  preFixup = ''
+    rm $out/lib/${pname}/libSDL2.*
+  '';
 
-  postFixup = ''
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
-
-      pushd ${src}/distribution/linux
-
-      install -D ./Ryujinx.desktop  $out/share/applications/Ryujinx.desktop
-      install -D ./Ryujinx.sh       $out/bin/Ryujinx.sh
-      install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
-      install -D ../misc/Logo.svg   $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
-
-      popd
-    ''}
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -D distribution/linux/Ryujinx.desktop $out/share/applications/Ryujinx.desktop
+    install -D distribution/linux/mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
+    install -D distribution/misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
     # Don't make a softlink on OSX because of its case insensitivity
-    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "ln -s $out/bin/Ryujinx $out/bin/ryujinx"}
+    ln -s $out/bin/Ryujinx $out/bin/ryujinx
   '';
 
   passthru.updateScript = ./updater.sh;
@@ -130,7 +131,7 @@ buildDotnetModule rec {
   meta = {
     homepage = "https://ryujinx.app";
     # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
-    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${version}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
