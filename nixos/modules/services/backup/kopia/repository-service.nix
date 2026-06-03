@@ -6,8 +6,6 @@
 }:
 let
   cfg = config.services.kopia;
-  helpers = import ./helpers.nix { inherit lib; };
-
   filesystemSubmodule = lib.types.submodule {
     options = {
       path = lib.mkOption {

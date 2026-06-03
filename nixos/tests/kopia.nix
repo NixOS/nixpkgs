@@ -113,8 +113,10 @@ in
           inherit passwordFile;
           paths = [ "/opt" ];
           timerConfig = null;
-          policy.retention.keep-daily = 3;
-          policy.compression = "zstd";
+          policies.entries."(global)" = {
+            retention.keepDaily = 3;
+            compression.compressorName = "zstd";
+          };
         };
 
         # Test: web UI
@@ -202,23 +204,23 @@ in
           inherit passwordFile;
           paths = [ "/opt" ];
           timerConfig = null;
-          policy = {
+          policies.entries."(global)" = {
             retention = {
-              keep-daily = 7;
-              keep-weekly = 4;
-              keep-monthly = 6;
+              keepDaily = 7;
+              keepWeekly = 4;
+              keepMonthly = 6;
             };
-            compression = "zstd";
+            compression.compressorName = "zstd";
             files = {
               ignore = [
                 "*.tmp"
                 "*.log"
               ];
-              ignore-cache-dirs = true;
+              ignoreCacheDirs = true;
             };
             errorHandling = {
-              ignore-file-errors = true;
-              ignore-dir-errors = true;
+              ignoreFileErrors = true;
+              ignoreDirectoryErrors = true;
             };
           };
         };
