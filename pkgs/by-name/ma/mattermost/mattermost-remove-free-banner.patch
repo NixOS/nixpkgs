@@ -1,7 +1,7 @@
-diff --git a/webapp/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx b/webapp/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
+diff --git a/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx b/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
 index 93cb8ab263..3d12cd5e54 100644
---- a/webapp/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
-+++ b/webapp/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
+--- a/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
++++ b/channels/src/components/global_header/left_controls/product_menu/product_branding_team_edition/product_branding_free_edition.tsx
 @@ -57,7 +57,6 @@ const ProductBrandingFreeEdition = (): JSX.Element => {
                  width={116}
                  height={20}
@@ -10,10 +10,10 @@ index 93cb8ab263..3d12cd5e54 100644
          </ProductBrandingFreeEditionContainer>
      );
  };
-diff --git a/webapp/channels/src/components/header_footer_route/header.scss b/webapp/channels/src/components/header_footer_route/header.scss
-index c2e6fbd187..bc1cedcff1 100644
---- a/webapp/channels/src/components/header_footer_route/header.scss
-+++ b/webapp/channels/src/components/header_footer_route/header.scss
+diff --git a/channels/src/components/header_footer_route/header.scss b/channels/src/components/header_footer_route/header.scss
+index c2e6fbd187..828955cc79 100644
+--- a/channels/src/components/header_footer_route/header.scss
++++ b/channels/src/components/header_footer_route/header.scss
 @@ -47,20 +47,7 @@
              }
  
@@ -36,23 +36,10 @@ index c2e6fbd187..bc1cedcff1 100644
              }
          }
      }
-@@ -83,12 +70,6 @@
-             margin-top: 12px;
-         }
-     }
--
--    &.has-free-banner.has-custom-site-name {
--        .header-back-button {
--            bottom: -20px;
--        }
--    }
- }
- 
- @media screen and (max-width: 699px) {
-diff --git a/webapp/channels/src/components/widgets/menu/menu_items/menu_item.scss b/webapp/channels/src/components/widgets/menu/menu_items/menu_item.scss
+diff --git a/channels/src/components/widgets/menu/menu_items/menu_item.scss b/channels/src/components/widgets/menu/menu_items/menu_item.scss
 index dee9b57f8c..8ef4aa073a 100644
---- a/webapp/channels/src/components/widgets/menu/menu_items/menu_item.scss
-+++ b/webapp/channels/src/components/widgets/menu/menu_items/menu_item.scss
+--- a/channels/src/components/widgets/menu/menu_items/menu_item.scss
++++ b/channels/src/components/widgets/menu/menu_items/menu_item.scss
 @@ -316,14 +316,7 @@
      }
  
@@ -69,11 +56,11 @@ index dee9b57f8c..8ef4aa073a 100644
  
          button {
              padding: 3px 0;
-diff --git a/webapp/channels/webpack.config.js b/webapp/channels/webpack.config.js
-index f29f19f9ab..ab85fc3b86 100644
---- a/webapp/channels/webpack.config.js
-+++ b/webapp/channels/webpack.config.js
-@@ -469,6 +469,9 @@ if (targetIsDevServer) {
+diff --git a/channels/webpack.config.js b/channels/webpack.config.js
+index 852046de70..cf28fdcbd6 100644
+--- a/channels/webpack.config.js
++++ b/channels/webpack.config.js
+@@ -470,6 +470,9 @@ if (targetIsDevServer) {
              historyApiFallback: {
                  index: '/static/root.html',
              },
