@@ -176,6 +176,9 @@
   "module-services-rnsd-quickstart": [
     "index.html#module-services-rnsd-quickstart"
   ],
+  "module-services-keycloak-vault": [
+    "index.html#module-services-keycloak-vault"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
