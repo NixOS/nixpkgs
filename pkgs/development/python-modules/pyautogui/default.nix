@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mouseinfo,
   pygetwindow,
   pymsgbox,
@@ -16,7 +17,7 @@
 buildPythonPackage {
   pname = "pyautogui";
   version = "0.9.53";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asweigart";
@@ -40,7 +41,11 @@ buildPythonPackage {
     ./fix-locateOnWindow-and-xlib.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     mouseinfo
     pygetwindow
     pymsgbox
