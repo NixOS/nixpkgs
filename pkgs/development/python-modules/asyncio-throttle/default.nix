@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hallazzang";
     repo = "asyncio-throttle";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1hsjcymdcm0hf4l68scf9n8j7ba89azgh96xhxrnyvwxfs5acnmv";
   };
 
