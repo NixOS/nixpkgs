@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
+#! nix-shell -i python3 -p "python314.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -40,7 +40,7 @@ PKG_SET = "home-assistant.python3Packages"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "av": "av",
-    "caldav": "caldav_2",
+    "caldav": "caldav",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "fints": "fints",
     "HAP-python": "hap-python",
