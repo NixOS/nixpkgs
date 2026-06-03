@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.17";
+  version = "1.6.18";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Fng9EPqiiEenlczgv4be6qcrj75x0fDcEQHROmtQHsE=";
+    sha256 = "sha256-gJiyOCADitCqOavw+aAS4kaD04TZ+R52CssqaLRl4P4=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
