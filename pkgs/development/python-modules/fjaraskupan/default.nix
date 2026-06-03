@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fjaraskupan";
-  version = "2.3.3";
+  version = "2.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "fjaraskupan";
     tag = version;
-    hash = "sha256-xu5u3hvtD1gbN1f1UuxDQVIHF5pyCOWVwUq36vAgW/Y=";
+    hash = "sha256-0rJoUQYexB+4ehOXKa1aca401E7opDtdoBmIW/2uOOE=";
   };
 
   build-system = [ setuptools ];
