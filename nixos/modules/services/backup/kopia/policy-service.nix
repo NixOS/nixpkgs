@@ -71,44 +71,42 @@ in
         lib.recursiveUpdate snapshotPolicyEntries backup.policies.entries;
     in
     lib.mkIf (cfg.backups != { }) {
-    systemd.services = lib.mapAttrs' (
-      name: backup:
-      let
-        kopiaExe = lib.getExe cfg.package;
-        policies = effectivePolicies backup;
-        policyFile = pkgs.writeText "kopia-policy-${name}.json" (
-          builtins.toJSON policies
-        );
-      in
-      lib.nameValuePair "kopia-policy-${name}" {
-        description = "Kopia policy import for ${name}";
-        requires = [ "kopia-repository-${name}.service" ];
-        after = [ "kopia-repository-${name}.service" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = backup.user;
-          StateDirectory = "kopia/${name}";
-          PrivateTmp = true;
-          NoNewPrivileges = true;
-          ProtectSystem = "strict";
-          ReadWritePaths = [
-            "/var/lib/kopia/${name}"
-          ]
-          ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
-        };
-        script = ''
-          set -euo pipefail
-          export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
-          ${kopiaExe} policy import \
-            ${lib.optionalString backup.policies.declarative "--delete-other-policies"} \
-            --from-file=${policyFile}
-        '';
-      }
-    ) (lib.filterAttrs (_: backup: effectivePolicies backup != { }) cfg.backups);
-  };
+      systemd.services = lib.mapAttrs' (
+        name: backup:
+        let
+          kopiaExe = lib.getExe cfg.package;
+          policies = effectivePolicies backup;
+          policyFile = pkgs.writeText "kopia-policy-${name}.json" (builtins.toJSON policies);
+        in
+        lib.nameValuePair "kopia-policy-${name}" {
+          description = "Kopia policy import for ${name}";
+          requires = [ "kopia-repository-${name}.service" ];
+          after = [ "kopia-repository-${name}.service" ];
+          wantedBy = [ "multi-user.target" ];
+          environment = {
+            KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+          };
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = backup.user;
+            StateDirectory = "kopia/${name}";
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [
+              "/var/lib/kopia/${name}"
+            ]
+            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+          };
+          script = ''
+            set -euo pipefail
+            export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
+            ${kopiaExe} policy import \
+              ${lib.optionalString backup.policies.declarative "--delete-other-policies"} \
+              --from-file=${policyFile}
+          '';
+        }
+      ) (lib.filterAttrs (_: backup: effectivePolicies backup != { }) cfg.backups);
+    };
 }

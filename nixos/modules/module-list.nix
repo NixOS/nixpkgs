@@ -464,8 +464,8 @@
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
   ./services/backup/kopia/default.nix
-  ./services/backup/kopia/repository-service.nix
   ./services/backup/kopia/policy-service.nix
+  ./services/backup/kopia/repository-service.nix
   ./services/backup/kopia/snapshot-service.nix
   ./services/backup/kopia/web-service.nix
   ./services/backup/libvirtd-autosnapshot.nix
