@@ -207,11 +207,13 @@ in
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/network_aliases.json - - - - ${cfg.package}/etc/opensnitchd/network_aliases.json"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
 
+    environment.etc."opensnitchd/network_aliases.json".source =
+      "${cfg.package}/etc/opensnitchd/network_aliases.json";
+    environment.etc."opensnitchd/system-fw.json".source =
+      "${cfg.package}/etc/opensnitchd/system-fw.json";
   };
 
   meta.maintainers = with lib.maintainers; [
