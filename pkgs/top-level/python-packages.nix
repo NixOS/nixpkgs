@@ -5709,6 +5709,8 @@ self: super: with self; {
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
 
+  flash-attn-3 = callPackage ../development/python-modules/flash-attn-3 { };
+
   flash-attn-4 = callPackage ../development/python-modules/flash-attn-4 { };
 
   flash-linear-attention = callPackage ../development/python-modules/flash-linear-attention { };
