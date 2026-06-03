@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "authres";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1dr5zpqnb54h4f5ax8334l1dcp8j9083d7v4vdi1xqkwmnavklck";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/authentication-results-python";
     license = lib.licenses.bsd3;
   };
-}
+})
