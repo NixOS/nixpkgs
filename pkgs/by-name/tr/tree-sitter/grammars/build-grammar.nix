@@ -22,6 +22,8 @@ stdenv.mkDerivation (
 
     inherit version src;
 
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       jq
     ]
@@ -30,14 +32,16 @@ stdenv.mkDerivation (
       tree-sitter
     ];
 
-    CFLAGS = [
-      "-Isrc"
-      "-O2"
-    ];
-    CXXFLAGS = [
-      "-Isrc"
-      "-O2"
-    ];
+    env = {
+      CFLAGS = toString [
+        "-Isrc"
+        "-O2"
+      ];
+      CXXFLAGS = toString [
+        "-Isrc"
+        "-O2"
+      ];
+    };
 
     stripDebugList = [ "parser" ];
 
