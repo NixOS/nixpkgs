@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxst";
-  version = "0.4.4";
+  version = "libs-6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "markqvist";
     repo = "lxst";
     tag = finalAttrs.version;
-    hash = "sha256-MAJ1n6EUZ6FmIfKKuM2ppbTVrWkxpjC5KIICo5stc+k=";
+    hash = "sha256-6fh10TditFG7GMpOfOsgOxxgBXpVmsmwtFN65m5IrYc=";
   };
 
   build-system = [
