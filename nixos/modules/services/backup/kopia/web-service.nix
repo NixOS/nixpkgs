@@ -2,9 +2,11 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
+  inherit (utils.systemdUtils.unitOptions) unitOption;
   cfg = config.services.kopia;
 in
 {
@@ -69,6 +71,24 @@ in
               Path to a TLS key file for the Kopia web server.
             '';
           };
+
+          extraServiceConfig = lib.mkOption {
+            type = lib.types.attrsOf unitOption;
+            default = {
+              Nice = 19;
+              CPUWeight = 10;
+              IOSchedulingClass = "idle";
+              IOWeight = 10;
+            };
+            description = ''
+              Extra systemd service config merged on top of the module's
+              hardening and restart defaults. The default value sets
+              background-task priority (the web service runs a full kopia
+              process that handles its own scheduled snapshots and
+              maintenance). Override individual keys to tune. Any systemd
+              {manpage}`systemd.exec(5)` directive can be set here.
+            '';
+          };
         };
       }
     );
@@ -128,7 +148,8 @@ in
           Restart = "on-failure";
           RestartSec = 30;
           ExecStart = webScript;
-        };
+        }
+        // backup.web.extraServiceConfig;
       }
     ) (lib.filterAttrs (_: b: b.web.enable) cfg.backups);
   };
