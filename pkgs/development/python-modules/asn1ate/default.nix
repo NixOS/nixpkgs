@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asn1ate";
-  format = "setuptools";
   version = "0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     sha256 = "1p8hv4gsyqsdr0gafcq497n52pybiqmc22di8ai4nsj60fv0km45";
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     repo = "asn1ate";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
+
+  pythonImportsCheck = [ "asn1ate" ];
 
   meta = {
     description = "Python library for translating ASN.1 into other forms";
