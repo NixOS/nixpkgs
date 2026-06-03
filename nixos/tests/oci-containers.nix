@@ -40,6 +40,8 @@ let
               };
             };
 
+            virtualisation.docker.package = lib.mkIf (backend == "docker") pkgs.docker_29;
+
             # Stop systemd from killing remaining processes if ExecStop script
             # doesn't work, so that proper stopping can be tested.
             systemd.services.${serviceName}.serviceConfig.KillSignal = "SIGCONT";

@@ -62,7 +62,8 @@ import ../make-test-python.nix (
           virtualisation.podman.dockerSocket.enable = true;
 
           environment.systemPackages = [
-            pkgs.docker-client
+            # docker-client for docker 29
+            (pkgs.docker_29.override { clientOnly = true; })
           ];
 
           users.users.alice = {
