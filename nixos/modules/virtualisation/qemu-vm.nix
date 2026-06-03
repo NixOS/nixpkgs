@@ -106,6 +106,8 @@ let
 
   drivesCmdLine = drives: concatStringsSep "\\\n    " (imap1 driveCmdline drives);
 
+  hasSharedDirectories = cfg.sharedDirectories != { };
+
   # Shell script to start the VM.
   startVM = ''
     #! ${hostPkgs.runtimeShell}
@@ -335,6 +337,19 @@ let
         ''
     )}
 
+    # Start virtiofsd workers.
+    # Note: using --sandboxing namespace would break permissions.
+    ${lib.concatLines (lib.mapAttrsToList (tag: share: ''
+      ${pkgs.virtiofsd}/bin/virtiofsd \
+        --socket-path "$TMPDIR/virtiofsd-${tag}.sock" \
+        --shared-dir "${share.source}" \
+        --thread-pool-size "$(nproc)" \
+        --sandbox none \
+        ${lib.optionalString share.readOnly "--readonly"} \
+        --no-announce-submounts \
+          &
+    '') cfg.sharedDirectories)}
+
     # Start QEMU.
     exec ${
       qemu-common.qemuBinaryWith {
@@ -347,14 +362,6 @@ let
         -smp ${toString config.virtualisation.cores} \
         -device virtio-rng-pci \
         ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
-        ${
-          concatStringsSep " \\\n    " (
-            mapAttrsToList (
-              tag: share:
-              "-virtfs local,path=${share.source},security_model=${share.securityModel},mount_tag=${tag}"
-            ) config.virtualisation.sharedDirectories
-          )
-        } \
         ${drivesCmdLine config.virtualisation.qemu.drives} \
         ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
         $QEMU_OPTS \
@@ -430,6 +437,20 @@ in
       ]
       "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`"
     )
+    (mkRemovedOptionModule
+      [
+        "virtualisation"
+        "msize"
+      ]
+      "This option was removed as shared directories no longer use 9p."
+    )
+    (mkRemovedOptionModule
+      [
+        "virtualisation"
+        "nixStore9pCache"
+      ]
+      "This option was removed as shared directories no longer use 9p."
+    )
   ];
 
   options = {
@@ -441,16 +462,6 @@ in
       default = 1024;
       description = ''
         The memory size of the virtual machine in MiB (1024×1024 bytes).
-      '';
-    };
-
-    virtualisation.msize = mkOption {
-      type = types.ints.positive;
-      default = 16384;
-      description = ''
-        The msize (maximum packet size) option passed to 9p file systems, in
-        bytes. Increasing this should increase performance significantly,
-        at the cost of higher RAM usage.
       '';
     };
 
@@ -568,6 +579,11 @@ in
     virtualisation.sharedDirectories = mkOption {
       type = types.attrsOf (
         types.submodule {
+          # This option has been removed, but we cannot use mkRemovedOptionModule since it is in a submodule.
+          options.securityModel = mkOption {
+            visible = false;
+          };
+
           options.source = mkOption {
             type = types.str;
             description = "The path of the directory to share, can be a shell variable";
@@ -576,22 +592,10 @@ in
             type = types.path;
             description = "The mount point of the directory inside the virtual machine";
           };
-          options.securityModel = mkOption {
-            type = types.enum [
-              "passthrough"
-              "mapped-xattr"
-              "mapped-file"
-              "none"
-            ];
-            default = "mapped-xattr";
-            description = ''
-              The security model to use for this share:
-
-              - `passthrough`: files are stored using the same credentials as they are created on the guest (this requires QEMU to run as root)
-              - `mapped-xattr`: some of the file attributes like uid, gid, mode bits and link target are stored as file attributes
-              - `mapped-file`: the attributes are stored in the hidden .virtfs_metadata directory. Directories exported by this security model cannot interact with other unix tools
-              - `none`: same as "passthrough" except the sever won't report failures if it fails to set file attributes like ownership
-            '';
+          options.readOnly = mkOption {
+            type = types.bool;
+            default = false;
+            description = "The mount point is read-only";
           };
         }
       );
@@ -600,12 +604,13 @@ in
         my-share = {
           source = "/path/to/be/shared";
           target = "/mnt/shared";
+          readOnly = true;
         };
       };
       description = ''
         An attributes set of directories that will be shared with the
-        virtual machine using VirtFS (9P filesystem over VirtIO).
-        The attribute name will be used as the 9P mount tag.
+        virtual machine using virtiofsd.
+        The attribute name will be used as the virtiofs mount tag.
       '';
     };
 
@@ -616,11 +621,10 @@ in
         A list of paths whose closure should be made available to
         the VM.
 
-        When 9p is used, the closure is registered in the Nix
-        database in the VM. All other paths in the host Nix store
-        appear in the guest Nix store as well, but are considered
-        garbage (because they are not registered in the Nix
-        database of the guest).
+        When the nix store is mounted from the host, the closure is registered
+        in the Nix database in the VM. All other paths in the host Nix store
+        appear in the guest Nix store as well, but are considered garbage
+        (because they are not registered in the Nix database of the guest).
 
         When {option}`virtualisation.useNixStoreImage` is
         set, the closure is copied to the Nix store image.
@@ -873,7 +877,7 @@ in
       default = false;
       description = ''
         Build and use a disk image for the Nix store, instead of
-        accessing the host's one through 9p.
+        accessing the host's one through virtiofsd.
 
         For applications which do a lot of reads from the store,
         this can drastically improve performance, but at the cost of
@@ -895,24 +899,7 @@ in
       default = !cfg.useNixStoreImage && !cfg.useBootLoader;
       defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
       description = ''
-        Mount the host Nix store as a 9p mount.
-      '';
-    };
-
-    virtualisation.nixStore9pCache = mkOption {
-      type = types.enum [
-        "loose"
-        "none"
-        "fscache"
-      ];
-      default = "loose";
-      description = ''
-        Type of 9p cache to use when mounting host nix store. "none" provides
-        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
-        fscache subsystem.
-
-        This option is only respected when {option}`virtualisation.mountHostNixStore`
-        is enabled.
+        Mount the host Nix store as a virtiofsd mount.
       '';
     };
 
@@ -1256,7 +1243,19 @@ in
             Please enable it in your configuration.
           '';
         }
-      ];
+      ]
+      # This option has been removed, but we cannot use mkRemovedOptionModule since it is in a submodule.
+      ++ (lib.mapAttrsToList (name: attr:
+      let
+        opt = attr.configuration.options.securityModel;
+        optName = [ "virtualisation" "sharedDirectories" name "securityModel" ];
+      in {
+        assertion = !opt.isDefined;
+        message = ''
+          The option definition `${lib.showOption optName}' in ${lib.showFiles opt.files} no longer has any effect; please remove it.
+          This option was removed as shared directories no longer use 9p.
+        '';
+      }) options.virtualisation.sharedDirectories.valueMeta.attrs);
 
     warnings = optional (cfg.directBoot.enable && cfg.useBootLoader) ''
       You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
@@ -1316,7 +1315,8 @@ in
     };
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis"
+      ++ optional hasSharedDirectories "virtiofs";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1326,22 +1326,18 @@ in
         # Always mount this to /nix/.ro-store because we never want to actually
         # write to the host Nix Store.
         target = "/nix/.ro-store";
-        securityModel = "none";
       };
       xchg = {
         source = ''"$TMPDIR"/xchg'';
-        securityModel = "none";
         target = "/tmp/xchg";
       };
       shared = {
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
-        securityModel = "none";
       };
       certs = mkIf cfg.useHostCerts {
         source = ''"$TMPDIR"/certs'';
         target = "/etc/ssl/certs";
-        securityModel = "none";
       };
     };
 
@@ -1431,6 +1427,14 @@ in
         else
           "-smbios type=11,path=<(echo 'io.systemd.credential.binary:${name}='; base64 -w0 '${cred.source}')"
       ) cfg.credentials)
+      (mkIf (hasSharedDirectories) [
+        "-object memory-backend-memfd,id=mem0,size=${toString config.virtualisation.memorySize}M,share=on"
+        "-numa node,memdev=mem0"
+      ])
+      (lib.flatten (lib.mapAttrsToList (tag: _: [
+        "-chardev socket,id=virtiofsd-socket-${tag},path=$TMPDIR/virtiofsd-${tag}.sock"
+        "-device vhost-user-fs-pci,chardev=virtiofsd-socket-${tag},tag=${tag}"
+      ]) cfg.sharedDirectories))
     ];
 
     virtualisation.qemu.drives = mkMerge [
@@ -1478,15 +1482,12 @@ in
         mkSharedDir = tag: share: {
           name = share.target;
           value.device = tag;
-          value.fsType = "9p";
+          value.fsType = "virtiofs";
           value.neededForBoot = true;
           value.options = [
-            "trans=virtio"
-            "version=9p2000.L"
-            "msize=${toString cfg.msize}"
-            "x-systemd.requires=modprobe@9pnet_virtio.service"
+            "x-systemd.requires=modprobe@virtiofs.service"
           ]
-          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
+          ++ lib.optional (share.readOnly) "ro";
         };
       in
       lib.mkMerge [
@@ -1601,8 +1602,6 @@ in
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
         (isEnabled "EXT4_FS")
-        (isEnabled "NET_9P_VIRTIO")
-        (isEnabled "9P_FS")
         (isYes "BLK_DEV")
         (isYes "PCI")
         (isYes "NETDEVICES")
@@ -1616,6 +1615,9 @@ in
       ]
       ++ optionals (cfg.writableStore) [
         (isEnabled "OVERLAY_FS")
+      ]
+      ++ optionals (hasSharedDirectories) [
+        (isEnabled "VIRTIO_FS")
       ];
 
   };
