@@ -34,6 +34,7 @@ let
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
