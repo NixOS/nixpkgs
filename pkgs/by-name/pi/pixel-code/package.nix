@@ -1,25 +1,53 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
+  installFonts,
+  python3,
+  woff2,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pixel-code";
   version = "2.2";
 
-  src = fetchzip {
-    url = "https://github.com/qwerasd205/PixelCode/releases/download/v${version}/otf.zip";
-    hash = "sha256-GNYEnv0bIWz5d8821N46FD2NBNBf3Dd7DNqjSdJKDoE=";
-    stripRoot = false;
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "qwerasd205";
+    repo = "PixelCode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jpOj6MndjCTTPESIjh3VJW1FKK5n99W8GBgPqloaKFM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        fontmake
+        fonttools
+        ufolib2
+        pillow
+      ]
+    ))
+    woff2
+    installFonts
+  ];
 
-    install -D -m444 -t $out/share/fonts/opentype $src/otf/*.otf
+  postPatch = ''
+        substituteInPlace src/build.sh \
+          --replace-fail \
+    '# Activate python virtual environment.
+    ../activate.sh
+    source ../.venv/bin/activate' ""
+  '';
 
-    runHook postInstall
+  buildPhase = ''
+    runHook preBuild
+    src/build.sh
+    runHook postBuild
   '';
 
   meta = {
@@ -28,4 +56,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ mattpolzin ];
   };
-}
+})
