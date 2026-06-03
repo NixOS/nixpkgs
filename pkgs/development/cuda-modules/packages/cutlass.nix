@@ -220,7 +220,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "CUDA Templates for Linear Algebra Subroutines";
     homepage = "https://github.com/NVIDIA/cutlass";
-    license = licenses.asl20;
+    license = licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
