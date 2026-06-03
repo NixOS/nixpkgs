@@ -207,6 +207,7 @@ in
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
+        "L+ /etc/opensnitchd/network_aliases.json - - - - ${cfg.package}/etc/opensnitchd/network_aliases.json"
         "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
