@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       name = pname;
       exec = pname;
       desktopName = "Abaddon";
-      genericName = meta.description;
+      genericName = "Discord client reimplementation, written in C++";
       startupWMClass = pname;
       categories = [
         "Network"

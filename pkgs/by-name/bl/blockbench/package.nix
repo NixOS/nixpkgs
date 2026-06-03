@@ -93,7 +93,7 @@ buildNpmPackage rec {
       exec = "blockbench %U";
       icon = "blockbench";
       desktopName = "Blockbench";
-      comment = meta.description;
+      comment = "Low-poly 3D modeling and animation software";
       categories = [ "3DGraphics" ];
       startupWMClass = "Blockbench";
       terminal = false;

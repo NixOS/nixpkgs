@@ -33,7 +33,7 @@ let
   pname = "celeste-unwrapped";
   version = "1.4.0.0";
   downloadPage = "https://maddymakesgamesinc.itch.io/celeste";
-  description = "2D platformer game about climing a mountain";
+  description = "2D platformer game about climbing a mountain";
   phome = "$out/lib/Celeste";
 
   launchFlags' =

@@ -72,7 +72,7 @@ buildNpmPackage rec {
       exec = "caprine %U";
       icon = "caprine";
       desktopName = "Caprine";
-      comment = meta.description;
+      comment = "Elegant Facebook Messenger desktop app";
       categories = [
         "Network"
         "InstantMessaging"

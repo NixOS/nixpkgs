@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
           exec = "alephone";
           genericName = "alephone";
           categories = [ "Game" ];
-          comment = meta.description;
+          comment = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
           inherit desktopName icon;
         };
 
