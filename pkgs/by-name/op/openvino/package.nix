@@ -74,8 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
+    # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
+    addDriverRunpath
+
     cmake
     git
     libarchive
@@ -173,11 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    # Link to OpenCL
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addDriverRunpath "$lib"
-    done
-
     substituteInPlace $dev/lib/pkgconfig/openvino.pc \
       --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
       --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
