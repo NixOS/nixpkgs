@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autologging";
   version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Autologging";
-    inherit version;
+    inherit (finalAttrs) version;
     sha256 = "117659584d8aab8cf62046f682f8e57b54d958b8571c737fa8bf15c32937fbb6";
     extension = "zip";
   };
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
   };
-}
+})
