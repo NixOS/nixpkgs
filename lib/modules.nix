@@ -1043,10 +1043,11 @@ let
       (
         res: opt:
         let
-          mergedType = res.type.typeMerge opt.options.type.functor;
-
           typeSet =
             if opt.options ? type && res ? type then
+              let
+                mergedType = res.type.typeMerge opt.options.type.functor;
+              in
               if mergedType != null then
                 {
                   type = mergedType;
