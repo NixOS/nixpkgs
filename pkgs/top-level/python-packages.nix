@@ -12053,6 +12053,8 @@ self: super: with self; {
 
   os-service-types = callPackage ../development/python-modules/os-service-types { };
 
+  osadl-matrix = callPackage ../development/python-modules/osadl-matrix/default.nix { };
+
   osc = callPackage ../development/python-modules/osc { };
 
   osc-diagram = callPackage ../development/python-modules/osc-diagram { };
