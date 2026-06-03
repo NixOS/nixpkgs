@@ -9,6 +9,7 @@
 */
 {
   vimUtils,
+  neovimUtils,
   writeText,
   neovim,
   vimPlugins,
@@ -491,4 +492,37 @@ pkgs.lib.recurseIntoAttrs rec {
       '';
       passthru.requiredLuaModules = [ luassert ];
     };
+
+  nvim_require_check_neovim_plugin =
+    let
+      luaPkg = neovim-unwrapped.lua.pkgs.buildLuarocksPackage {
+        pname = "neovim-require-check-fails";
+        version = "0.0.1-1";
+        src = runCommandLocal "neovim-require-check-fails-src" { } ''
+          mkdir -p "$out"
+          cat > "$out/neovim-require-check-fails-0.0.1-1.rockspec" <<'EOF'
+          package = "neovim-require-check-fails"
+          version = "0.0.1-1"
+          source = {
+            url = "."
+          }
+          build = {
+            type = "none"
+          }
+          EOF
+        '';
+      };
+    in
+    testers.testBuildFailure (
+      neovimUtils.buildNeovimPlugin {
+        luaAttr = luaPkg;
+        doCheck = true;
+        postInstall = ''
+          mkdir -p "$out/lua"
+          cat > "$out/lua/require_check_fails.lua" <<'EOF'
+          error("neovimRequireCheckHook required installed module")
+          EOF
+        '';
+      }
+    );
 }
