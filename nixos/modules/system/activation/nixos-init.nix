@@ -2,14 +2,23 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
 let
   cfg = config.system.nixos-init;
 
+  specialFileSystems =
+    (lib.toposort utils.fsBefore (lib.attrValues config.boot.specialFileSystems)).result;
+
   nixosInitConfig = {
     nix_store_mount_opts = config.boot.nixStoreMountOpts;
+    special_filesystems = map (fs: {
+      mountpoint = fs.mountPoint;
+      inherit (fs) device options;
+      fstype = fs.fsType;
+    }) specialFileSystems;
   }
   // lib.optionalAttrs config.boot.kernel.enable {
     firmware = "${config.hardware.firmware}/lib/firmware";

@@ -1,6 +1,23 @@
-use std::{fs, path::Path};
+use std::{fs, path::Path, process::Command};
 
 use anyhow::{Context, Result, anyhow};
+
+/// Call `mount` with the provided `args`.
+pub fn mount(args: &[&str]) -> Result<()> {
+    let output = Command::new("mount")
+        .args(args)
+        .output()
+        .context("Failed to run mount. Most likely, the binary is not on PATH")?;
+
+    if !output.status.success() {
+        return Err(anyhow!(
+            "mount executed unsuccessfully: {}",
+            String::from_utf8_lossy(&output.stderr)
+        ));
+    }
+
+    Ok(())
+}
 
 /// Atomically symlink a file.
 ///
