@@ -2571,8 +2571,6 @@ with pkgs;
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile { };
-
   mhonarc = perlPackages.MHonArc;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
