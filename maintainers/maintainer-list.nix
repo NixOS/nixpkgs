@@ -20436,6 +20436,12 @@
     githubId = 7420227;
     name = "Peter Tri Ho";
   };
+  peterwaller-arm = {
+    email = "peter.waller@arm.com";
+    github = "peterwaller-arm";
+    githubId = 52030119;
+    name = "Peter Waller";
+  };
   peterwilli = {
     email = "peter@codebuffet.co";
     github = "peterwilli";
