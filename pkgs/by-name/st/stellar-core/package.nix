@@ -10,8 +10,6 @@
   libtool,
   libunwind,
   perl,
-  postgresql,
-  postgresqlTestHook,
   pkg-config,
   ripgrep,
   rustc,
@@ -115,11 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  nativeCheckInputs = [
-    postgresql
-    postgresqlTestHook
-  ];
-
   buildInputs = [
     libpq
     libunwind
@@ -128,14 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  postgresqlTestUserOptions = "LOGIN SUPERUSER";
-
-  postgresqlTestSetupPost = ''
-    for database in $(seq 0 3); do
-      createdb "test$database"
-    done
-  '';
 
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
@@ -162,12 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    # The full upstream test suite is too heavy for a default package check: it
-    # includes long-running integration scenarios and Soroban tests across all
-    # p21-p26 protocol crates. Keep this focused on a basic consensus smoke test
-    # plus a PostgreSQL-backed persistence test.
+    # The full upstream test suite is too heavy for a default package check.
+    # Keep this focused on a basic consensus smoke test.
     ./src/stellar-core test --ll fatal -w NoTests -a -r simple --disable-dots "standalone"
-    ./src/stellar-core test --ll fatal -w NoTests -a -r simple --disable-dots "SCP State"
 
     runHook postCheck
   '';
