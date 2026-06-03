@@ -2,7 +2,7 @@
   lib,
   buildLakePackage,
   runCommand,
-  xz,
+  leangz,
   fetchFromGitHub,
   batteries,
   aesop,
@@ -15,6 +15,8 @@
 }:
 
 let
+  leangz-raw = leangz.overrideAttrs { cargoBuildNoDefaultFeatures = true; };
+
   mathlib__archive = buildLakePackage (finalAttrs: {
     pname = "lean4-mathlib";
     # nixpkgs-update: no auto update
@@ -38,17 +40,23 @@ let
       importGraph
     ];
 
-    nativeBuildInputs = [ xz ];
+    nativeBuildInputs = [ leangz-raw ];
 
-    # Compress the installed output into an xz archive so the derivation
-    # fits Hydra's max_output_size. The user-facing mathlib derivation
-    # decompresses transparently from this archive, at the de minimis
-    # compliance cost of nested compression.
+    # Per-module lgz preprocessing strips olean structural overhead,
+    # providing significant compression benefit over a raw xz invocation.
+    # This also brings the output under Hydra's max_output_size. The
+    # user-facing mathlib derivation unpacks transparently.
     postInstall = ''
-      tar cf - -C "$out" . | xz -T0 > "$TMPDIR/archive.tar.xz"
-      rm -rf "$out"
-      mkdir -p "$out"
-      mv "$TMPDIR/archive.tar.xz" "$out/"
+      local lib="$out/.lake/build/lib/lean"
+      local ir="$out/.lake/build/ir"
+      find "$lib" -name '*.trace' -print0 \
+        | xargs -0 -P"$NIX_BUILD_CORES" -I{} bash -c '
+            base="''${1%.trace}"; rel="''${base#'"$lib"'/}"
+            leantar -C "'"$lib"'" -C "'"$ir"'" "$base.ltar" \
+              "$rel.trace" "$rel.olean" "$rel.olean.server" "$rel.olean.private" \
+              "$rel.ilean" -i 1 "$rel.c"
+            rm "$base".{trace,olean,olean.server,olean.private,ilean} "'"$ir"'/$rel.c"
+          ' _ {}
     '';
 
     meta = {
@@ -62,7 +70,7 @@ in
 
 runCommand mathlib__archive.name
   {
-    nativeBuildInputs = [ xz ];
+    nativeBuildInputs = [ leangz-raw ];
     passthru = {
       inherit mathlib__archive;
       inherit (mathlib__archive)
@@ -84,5 +92,9 @@ runCommand mathlib__archive.name
   }
   ''
     mkdir -p $out
-    xz -dT0 < ${mathlib__archive}/archive.tar.xz | tar xf - -C $out
+    cp -rT ${mathlib__archive} $out
+    chmod -R u+w $out
+    find $out/.lake/build/lib -name '*.ltar' \
+      -exec leantar -C $out/.lake/build/lib/lean -C $out/.lake/build/ir -x {} +
+    find $out/.lake/build/lib -name '*.ltar' -delete
   ''

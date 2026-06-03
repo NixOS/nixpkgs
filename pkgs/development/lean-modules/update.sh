@@ -1,18 +1,15 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update curl jq gh
+#!nix-shell -i bash -p curl jq gh
 
-# Usage: ./pkgs/development/lean-modules/update.sh [version]
+# Updates the leanPackages dependency tree to match mathlib's
+# lake-manifest.json for the current lean4 version.
 
 set -euo pipefail
 
-lean4_version="${1:-$(curl -sL https://api.github.com/repos/leanprover/lean4/releases/latest | jq -r '.tag_name' | sed 's/^v//')}"
+lean4_version=$(nix eval --raw .#leanPackages.lean4.version 2>/dev/null)
 
 dir=$(dirname "$0")
 FAKE="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-
-old_lean4=$(nix eval --raw .#leanPackages.lean4.version 2>/dev/null || echo "")
-
-nix-update leanPackages.lean4 --version="$lean4_version"
 
 manifest=$(curl -sL "https://raw.githubusercontent.com/leanprover-community/mathlib4/v${lean4_version}/lake-manifest.json")
 
@@ -97,6 +94,5 @@ sed -i "0,/hash = \"sha256-[^\"]*\"/!{s|hash = \"sha256-[^\"]*\"|hash = \"$FAKE\
 newhash=$(prefetch proofwidgets npmDeps)
 sed -i "s|$FAKE|$newhash|" "$dir/proofwidgets/default.nix"
 
-echo "leanPackages.lean4: $old_lean4 -> $lean4_version"
+echo "leanPackages: updated dependency tree for lean4 $lean4_version"
 echo "https://github.com/leanprover-community/mathlib4/blob/v${lean4_version}/lake-manifest.json"
-echo "https://github.com/leanprover/lean4/releases/tag/v${lean4_version}"
