@@ -18,6 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-7y31iZoSJ98XDiC+Akahgfp/lI5haaek6UpFtaCtGW8=";
 
+  # Copy the default configs so the mihomo/sing-box service can read.
+  postInstall = ''
+    mkdir -p $out/share/clashtui
+    cp -r contrib/default_configs $out/share/clashtui/default_configs
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
