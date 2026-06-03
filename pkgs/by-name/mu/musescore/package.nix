@@ -181,6 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages'.qtwayland
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
