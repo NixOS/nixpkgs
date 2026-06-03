@@ -69,8 +69,39 @@ in
           );
         in
         lib.recursiveUpdate snapshotPolicyEntries backup.policies.entries;
+
+      # Snapshots whose `policy` field would collide in `policies.entries`
+      # because they resolve to the same `user@host:/path` source identifier.
+      # `lib.mergeAttrs` is shallow right-biased, so a collision would silently
+      # drop the earlier snapshot's policy; assert instead.
+      duplicatePolicyTargets =
+        backup:
+        let
+          policied = lib.filterAttrs (_: s: s.policy != { }) backup.snapshots;
+          entries = lib.mapAttrsToList (snapName: snapshot: {
+            inherit snapName;
+            target = helpers.snapshotTarget backup snapshot;
+          }) policied;
+        in
+        lib.filterAttrs (_: es: lib.length es > 1) (lib.groupBy (e: e.target) entries);
     in
     lib.mkIf (cfg.backups != { }) {
+      assertions = lib.concatLists (
+        lib.mapAttrsToList (
+          backupName: backup:
+          lib.mapAttrsToList (target: entries: {
+            assertion = false;
+            message =
+              "services.kopia.backups.${backupName}: snapshots "
+              + lib.concatMapStringsSep ", " (e: ''"${e.snapName}"'') entries
+              + " all resolve to the kopia source identifier `${target}`; "
+              + "their `policy` attributes would silently overwrite each "
+              + "other in `policies.entries`. Distinguish them via "
+              + "`source.{user,host,path}` overrides.";
+          }) (duplicatePolicyTargets backup)
+        ) cfg.backups
+      );
+
       systemd.services = lib.mapAttrs' (
         name: backup:
         let
