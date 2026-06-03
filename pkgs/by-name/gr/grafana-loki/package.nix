@@ -22,12 +22,24 @@ buildGoModule (finalAttrs: {
   vendorHash = null;
 
   subPackages = [
-    # TODO split every executable into its own package
     "cmd/loki"
     "cmd/loki-canary"
     "cmd/logcli"
     "cmd/lokitool"
   ];
+
+  outputs = [
+    "out"
+    "logcli"
+    "lokitool"
+    "canary"
+  ];
+
+  postInstall = ''
+    moveToOutput bin/logcli "$logcli"
+    moveToOutput bin/lokitool "$lokitool"
+    moveToOutput bin/loki-canary "$canary"
+  '';
 
   passthru = {
     tests = {
