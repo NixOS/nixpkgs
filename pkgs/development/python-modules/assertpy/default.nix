@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
     owner = "assertpy";
     repo = "assertpy";
     tag = finalAttrs.version;
-    sha256 = "0hnfh45cmqyp7zasrllwf8gbq3mazqlhhk0sq1iqlh6fig0yfq2f";
+    hash = "sha256-TmDnwYvOQIpjwBpMCCn+qg68HnKc0qzVP9fjygqBzkI=";
   };
 
   build-system = [ setuptools ];
