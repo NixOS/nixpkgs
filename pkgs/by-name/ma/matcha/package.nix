@@ -10,7 +10,7 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildLatestGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "matcha";
