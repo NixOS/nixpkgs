@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "trdsql";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "trdsql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gcEzOgoVhXJ5PqgQ9sV6dGiQlhk4cCpcPBBAKPoyNKg=";
+    hash = "sha256-lYBdroPg0Z+7p4akwBV3ey9S3s1uemQMfkyfZC8xeGQ=";
   };
 
   vendorHash = "sha256-1s2fQue0mLhJ9dKILrERa21Ut05/zVCwL2txZlqcCqE=";
