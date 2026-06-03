@@ -3,17 +3,20 @@
   fetchPypi,
   buildPythonPackage,
   python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "authres";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1dr5zpqnb54h4f5ax8334l1dcp8j9083d7v4vdi1xqkwmnavklck";
   };
+
+  build-system = [ setuptools ];
 
   checkPhase = ''
     # run doctests
