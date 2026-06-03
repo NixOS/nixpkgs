@@ -32,6 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
 
+  # Copy the default configs so the mihomo/sing-box service can read.
+  postInstall = ''
+    mkdir -p $out/share/clashtui
+    cp -r contrib/default_configs $out/share/clashtui/default_configs
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
