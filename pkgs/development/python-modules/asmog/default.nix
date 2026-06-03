@@ -4,19 +4,22 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asmog";
   version = "0.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "14b8hdxcks6qyrqpp4mm77fvzznbskqn7fw9qgwgcqx81pg45iwk";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
