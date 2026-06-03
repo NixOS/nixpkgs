@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libharu";
     repo = "libharu";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uy16fOZgGC7z8eUtQ6Y0R0B9vXEJcSnyBGQQamkDkik=";
   };
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://github.com/libharu/libharu/releases/tag/${finalAttrs.src.tag}";
     description = "Cross platform, open source library for generating PDF files";
     homepage = "http://libharu.org/";
     license = lib.licenses.zlib;
