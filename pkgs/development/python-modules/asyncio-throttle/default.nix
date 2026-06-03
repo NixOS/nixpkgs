@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "hallazzang";
     repo = "asyncio-throttle";
     tag = "v${finalAttrs.version}";
-    sha256 = "1hsjcymdcm0hf4l68scf9n8j7ba89azgh96xhxrnyvwxfs5acnmv";
+    hash = "sha256-u1qminadb29zh90k+L5KSK0jkU2OaWQocRBU1qpnUsM=";
   };
 
   build-system = [ setuptools ];
