@@ -7,17 +7,12 @@ let
   webdavPasswordFile = "${pkgs.writeText "webdav-password" "kopia-webdav-pass"}";
   sftpPasswordFile = "${pkgs.writeText "sftp-password" "kopia-sftp-pass"}";
 
-  testDir = pkgs.stdenvNoCC.mkDerivation {
-    name = "test-files-to-backup";
-    unpackPhase = "true";
-    installPhase = ''
-      mkdir $out
-      echo some_file > $out/some_file
-      echo some_other_file > $out/some_other_file
-      mkdir $out/a_dir
-      echo a_file > $out/a_dir/a_file
-    '';
-  };
+  testDir = pkgs.runCommand "test-files-to-backup" { } ''
+    mkdir -p $out/a_dir
+    echo some_file > $out/some_file
+    echo some_other_file > $out/some_other_file
+    echo a_file > $out/a_dir/a_file
+  '';
 
   kopiaEnv =
     name: "KOPIA_CONFIG_PATH=/var/lib/kopia/${name}/repository.config KOPIA_PASSWORD=test-password";
