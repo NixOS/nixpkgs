@@ -10,11 +10,21 @@ discover_modules() {
     modules=()
 
     while IFS= read -r lua_file; do
-        # Ignore certain infra directories
-        if [[ "$lua_file" =~ (^|/)(debug|script|scripts|test|tests|spec)(/|$) || "$lua_file" =~ .*\meta.lua ]]; then
-            continue
+        # Ignore infrastructure directories and non-runtime module files
+        case "/$lua_file/" in
+            */debug/* | */script/* | */scripts/* | */test/* | */tests/* | */spec/* | */_meta/*)
+                continue
+                ;;
+        esac
+
+        case "${lua_file##*/}" in
+            *meta.lua | *_spec.lua | *.spec.lua | *.test.lua)
+                continue
+                ;;
+        esac
+
         # Ignore optional telescope and lualine modules
-        elif [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
+        if [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
             continue
         # Grab main module names
         elif [[ "$lua_file" =~ ^lua/([^/]+)/init.lua$ ]]; then
