@@ -2508,6 +2508,8 @@ self: super: with self; {
 
   cantools = callPackage ../development/python-modules/cantools { };
 
+  capa = callPackage ../development/python-modules/capa { };
+
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
   capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
