@@ -309,6 +309,8 @@ pnpm is available as the top-level package `pnpm`. Additionally, there are varia
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
 
+There is also the [`pnpmBuildHook`](#pnpm-build-hook) for building packages with `pnpm`, as seen in [](#ex-pnpm-build-hook).
+
 ```nix
 {
   fetchPnpmDeps,
