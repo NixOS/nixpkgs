@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.gphoto.org/proj/libgphoto2/";
+    changelog = "https://github.com/gphoto/libgphoto2/blob/${src.tag}/NEWS";
     description = "Library for accessing digital cameras";
     longDescription = ''
       This is the library backend for gphoto2. It contains the code for PTP,
