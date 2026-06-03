@@ -13,6 +13,7 @@ let
       file = pkgs.writeText "rule" (builtins.toJSON cfg);
     }
   );
+  stateDir = lib.strings.match "/var/lib/([^/]+)/.+" cfg.settings.Rules.Path;
 in
 {
   options = {
@@ -139,7 +140,10 @@ in
             };
 
             Rules.Path = lib.mkOption {
-              type = lib.types.path;
+              type = lib.types.pathWith {
+                inStore = false;
+                absolute = true;
+              };
               default = "/var/lib/opensnitch/rules";
               description = ''
                 Path to the directory where firewall rules can be found and will
@@ -158,6 +162,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = stateDir != null;
+        message = "`config.services.opensnitch.settings.Rules.Path` must be a sub-directory of /var/lib/, currently is ${cfg.settings.Rules.Path}";
+      }
+    ];
 
     security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
       enable = true;
@@ -174,8 +184,14 @@ in
             ""
             "${lib.getExe' cfg.package "opensnitchd"} --config-file ${cfg.configFile}"
           ];
+          StateDirectory = builtins.head stateDir; # match produces a list. Null case covered by assertion.
         };
-        preStart = lib.mkIf (cfg.rules != { }) (
+        preStart = ''
+          # assert rules directory exists before service starts
+          # will be in StateDirectory due to assertion
+          mkdir -p ${cfg.settings.Rules.Path}
+        ''
+        + lib.optionalString (cfg.rules != { }) (
           let
             rules = lib.flip lib.mapAttrsToList predefinedRules (
               file: content: {
@@ -205,9 +221,6 @@ in
           ''
         );
       };
-      tmpfiles.rules = [
-        "d ${cfg.settings.Rules.Path} 0750 root root - -"
-      ];
     };
 
     environment.etc."opensnitchd/network_aliases.json".source =
