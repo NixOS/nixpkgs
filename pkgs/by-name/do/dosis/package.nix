@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.impallari.com/dosis";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 })
