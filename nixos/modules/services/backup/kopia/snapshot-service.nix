@@ -8,6 +8,7 @@
 let
   inherit (utils.systemdUtils.unitOptions) unitOption;
   cfg = config.services.kopia;
+  helpers = import ./helpers.nix { inherit lib config; };
 in
 {
   options.services.kopia.backups = lib.mkOption {
@@ -73,6 +74,24 @@ in
                       paths.
                     '';
                   };
+                };
+
+                policy = lib.mkOption {
+                  type = lib.types.attrsOf lib.types.anything;
+                  default = { };
+                  description = ''
+                    Per-snapshot kopia policy. Merged into
+                    {option}`services.kopia.backups.<name>.policies.entries`
+                    under the target `''${user}@''${host}:''${path}`, with explicit
+                    entries from `policies.entries` taking precedence. Use
+                    `kopia policy export` to inspect the format.
+                  '';
+                  example = lib.literalExpression ''
+                    {
+                      retention.keepDaily = 7;
+                      compression.compressorName = "zstd";
+                    }
+                  '';
                 };
 
                 extraSnapshotArgs = lib.mkOption {
@@ -202,12 +221,8 @@ in
         snapName: snapshot:
         let
           kopiaExe = lib.getExe cfg.package;
-          user = if snapshot.user != null then snapshot.user else backup.user;
-          sourceUser = if snapshot.source.user != null then snapshot.source.user else user;
-          sourceHost =
-            if snapshot.source.host != null then snapshot.source.host else config.networking.hostName;
-          sourcePath = if snapshot.source.path != null then snapshot.source.path else snapshot.path;
-          source = "${sourceUser}@${sourceHost}:${sourcePath}";
+          user = helpers.resolveOsUser backup snapshot;
+          source = helpers.snapshotTarget backup snapshot;
           extraArgs = lib.concatStringsSep " " (
             [ "--override-source=${lib.escapeShellArg source}" ]
             ++ map lib.escapeShellArg snapshot.extraSnapshotArgs

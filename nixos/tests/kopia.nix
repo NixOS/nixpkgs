@@ -248,6 +248,16 @@ in
           };
         };
 
+        # Test: per-snapshot policy sugar (auto-derived into policies.entries)
+        with-snapshot-policy = {
+          repository.filesystem.path = "/var/lib/kopia-repo-snapshot-policy";
+          inherit passwordFile;
+          snapshots.default = {
+            path = "/opt";
+            policy.retention.keepDaily = 11;
+          };
+        };
+
         # Test: custom web port
         with-web-custom-port = {
           repository.filesystem.path = "/var/lib/kopia-repo-web-custom";
@@ -422,6 +432,14 @@ in
             "${kopiaEnv "with-expanded-policy"}"
             " kopia policy show /opt --json"
             " | jq -e '.compression.compressorName == \"zstd\"'"
+        )
+
+    with subtest("with-snapshot-policy: per-snapshot policy is auto-derived"):
+        machine.wait_for_unit("kopia-policy-with-snapshot-policy.service")
+        machine.succeed(
+            "${kopiaEnv "with-snapshot-policy"}"
+            " kopia policy show /opt --json"
+            " | jq -e '.retention.keepDaily == 11'"
         )
 
     with subtest("with-web: web UI responds with 401"):
