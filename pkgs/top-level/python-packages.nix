@@ -5165,8 +5165,6 @@ self: super: with self; {
 
   eseries = callPackage ../development/python-modules/eseries { };
 
-  esig = callPackage ../development/python-modules/esig { };
-
   esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
@@ -5577,6 +5575,8 @@ self: super: with self; {
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
+
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
@@ -9533,6 +9533,8 @@ self: super: with self; {
   lxml = callPackage ../development/python-modules/lxml { inherit (pkgs) libxml2 libxslt zlib; };
 
   lxml-html-clean = callPackage ../development/python-modules/lxml-html-clean { };
+
+  lxst = callPackage ../development/python-modules/lxst { };
 
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
@@ -13716,6 +13718,8 @@ self: super: with self; {
 
   pycocotools = callPackage ../development/python-modules/pycocotools { };
 
+  pycodec2 = callPackage ../development/python-modules/pycodec2 { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -14719,6 +14723,8 @@ self: super: with self; {
   pyobjc-framework-libdispatch =
     callPackage ../development/python-modules/pyobjc-framework-libdispatch
       { };
+
+  pyobjus = callPackage ../development/python-modules/pyobjus { };
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 

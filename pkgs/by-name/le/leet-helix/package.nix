@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication {
   pname = "leet-helix";
-  version = "0.2.3-unstable-2026-02-24";
+  version = "0-unstable-2026-03-01";
 
   src = fetchFromGitHub {
     owner = "Jarrlist";
     repo = "LeetHelix";
-    rev = "d6e07920242ce852453d3d3b47d9418fda8baa8a";
-    hash = "sha256-29RMI66tvSJxh1P2osRCJLvIXbwPy2lPPqtEsKQIWe4=";
+    rev = "abfb38e8cfb9086a58306f3032ba7f0c4b1588ea";
+    hash = "sha256-ec9LWK/Vtb5+UoN9QKvYW3+RDOw6Dp4UxkeCW1BVnUQ=";
   };
 
   pyproject = true;
