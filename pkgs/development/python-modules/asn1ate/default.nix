@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     hash = "sha256-hdQJtgNGakuiQrEJwSqOy19R7EkEM6ceyE1jrx/ZEN0=";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     owner = "schneider-electric";
     repo = "asn1ate";
   };
