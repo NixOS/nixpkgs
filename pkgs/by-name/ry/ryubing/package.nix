@@ -48,6 +48,9 @@ buildDotnetModule {
     ./remove-unused-glfw.patch
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       wrapGAppsHook3
