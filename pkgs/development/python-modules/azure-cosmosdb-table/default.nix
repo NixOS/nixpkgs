@@ -8,19 +8,22 @@
   azure-cosmosdb-nspkg,
   futures ? null,
   isPy3k,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-cosmosdb-table";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "5f061d2ab8dcf2f0b4e965d5976e7b7aeb1247ea896911f0e1d29092aaaa29c7";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     azure-common
     azure-storage-common
