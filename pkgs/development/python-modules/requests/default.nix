@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests";
-  version = "2.34.0";
+  version = "2.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psf";
     repo = "requests";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DDx+UV3OuCLUXM7ESbURCGeZ7t2acFEfMTOMcJdfUbI=";
+    hash = "sha256-J2/sNpFUDHkNBeN7BfiMamv7YaWixZAZHxaqmPVEptc=";
   };
 
   build-system = [ setuptools ];
