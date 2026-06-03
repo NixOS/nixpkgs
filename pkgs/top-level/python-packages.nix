@@ -3438,6 +3438,8 @@ self: super: with self; {
 
   cuda-pathfinder = callPackage ../development/python-modules/cuda-pathfinder { };
 
+  cuda-tile = callPackage ../development/python-modules/cuda-tile { };
+
   cupy = callPackage ../development/python-modules/cupy { };
 
   curated-tokenizers = callPackage ../development/python-modules/curated-tokenizers { };
@@ -5156,8 +5158,6 @@ self: super: with self; {
 
   eseries = callPackage ../development/python-modules/eseries { };
 
-  esig = callPackage ../development/python-modules/esig { };
-
   esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
@@ -5569,6 +5569,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
+
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
@@ -5706,6 +5708,8 @@ self: super: with self; {
   flash-attn = callPackage ../development/python-modules/flash-attn { };
 
   flash-attn-4 = callPackage ../development/python-modules/flash-attn-4 { };
+
+  flash-linear-attention = callPackage ../development/python-modules/flash-linear-attention { };
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
@@ -9523,6 +9527,8 @@ self: super: with self; {
 
   lxml-html-clean = callPackage ../development/python-modules/lxml-html-clean { };
 
+  lxst = callPackage ../development/python-modules/lxst { };
+
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
   lz4 = callPackage ../development/python-modules/lz4 { };
@@ -11461,6 +11467,8 @@ self: super: with self; {
   nvdlfw-inspect = callPackage ../development/python-modules/nvdlfw-inspect { };
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
+
+  nvidia-cudnn-frontend = callPackage ../development/python-modules/nvidia-cudnn-frontend { };
 
   nvidia-cutlass = callPackage ../development/python-modules/nvidia-cutlass { };
 
@@ -13699,6 +13707,8 @@ self: super: with self; {
 
   pycocotools = callPackage ../development/python-modules/pycocotools { };
 
+  pycodec2 = callPackage ../development/python-modules/pycodec2 { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
@@ -14702,6 +14712,8 @@ self: super: with self; {
   pyobjc-framework-libdispatch =
     callPackage ../development/python-modules/pyobjc-framework-libdispatch
       { };
+
+  pyobjus = callPackage ../development/python-modules/pyobjus { };
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 

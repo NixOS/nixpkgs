@@ -597,6 +597,7 @@ in
   firezone = runTest ./firezone/firezone.nix;
   fish = runTest ./fish.nix;
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
+  flap-alerted = runTest ./flap-alerted.nix;
   flaresolverr = runTest ./flaresolverr.nix;
   flood = runTest ./flood.nix;
   fluent-bit = runTest ./fluent-bit.nix;
@@ -1593,7 +1594,10 @@ in
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
-  systemd-boot = import ./systemd-boot.nix { inherit runTest runTestOn; };
+  systemd-boot = import ./systemd-boot.nix {
+    inherit runTest runTestOn;
+    inherit (pkgs) lib;
+  };
   systemd-bpf = runTest ./systemd-bpf.nix;
   systemd-capsules = runTest ./systemd-capsules.nix;
   systemd-confinement = handleTest ./systemd-confinement { };

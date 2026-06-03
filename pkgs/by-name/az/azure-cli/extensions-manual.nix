@@ -330,9 +330,9 @@
 
   storage-preview = mkAzExtension rec {
     pname = "storage-preview";
-    version = "1.0.0b7";
+    version = "1.0.0b8";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
-    hash = "sha256-wtf+4TBDzpWO55w5VXnoERAbksP2QaSc29FHL3MNOBo=";
+    hash = "sha256-qgDslmBX/XJA5nn95hJJb06vMC3izdbz7qlmQpx74T8=";
     description = "Provides a preview for upcoming storage features";
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];

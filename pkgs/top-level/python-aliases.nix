@@ -199,6 +199,7 @@ mapAliases {
   emailthreads = throw "'emailthreads' has been removed because the upstream repository was archived in 2024"; # Added 2026-04-09
   enocean = throw "'enocean' was removed because Home Assistant switched to 'enocean-async'"; # added 2026-03-31
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+  esig = throw "'esig' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-27
   et_xmlfile = throw "'et_xmlfile' has been renamed to/replaced by 'et-xmlfile'"; # Converted to throw 2025-10-29
   ev3dev2 = throw "'ev3dev2' has been renamed to/replaced by 'python-ev3dev2'"; # Converted to throw 2025-10-29
   eyeD3 = throw "'eyeD3' has been renamed to/replaced by 'eyed3'"; # Converted to throw 2025-10-29
