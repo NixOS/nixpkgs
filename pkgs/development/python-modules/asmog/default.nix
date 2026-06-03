@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asmog";
   version = "0.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "14b8hdxcks6qyrqpp4mm77fvzznbskqn7fw9qgwgcqx81pg45iwk";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
