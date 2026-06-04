@@ -13,7 +13,6 @@
   # tests
   click,
   pytestCheckHook,
-  spsdk,
   writableTmpDirAsHomeHook,
 
   # passthru
@@ -55,7 +54,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     click
     pytestCheckHook
-    spsdk
     writableTmpDirAsHomeHook
   ];
 

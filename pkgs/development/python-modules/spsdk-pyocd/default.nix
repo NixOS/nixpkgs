@@ -9,7 +9,6 @@
   # dependencies
   pyocd,
   pyocd-pemicro,
-  spsdk,
 
   # tests
   pytestCheckHook,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    spsdk
     writableTmpDirAsHomeHook
   ];
 
