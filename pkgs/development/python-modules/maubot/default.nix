@@ -23,12 +23,16 @@ let
       sqlalchemy = final.buildPythonPackage rec {
         pname = "SQLAlchemy";
         version = "1.3.24";
-        format = "setuptools";
+        pyproject = true;
 
         src = fetchPypi {
           inherit pname version;
           sha256 = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+
+        build-system = with final; [
+          setuptools
+        ];
 
         postInstall = ''
           sed -e 's:--max-worker-restart=5::g' -i setup.cfg
@@ -43,7 +47,7 @@ let
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
     version = "0.6.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
@@ -58,7 +62,11 @@ let
       })
     ];
 
-    propagatedBuildInputs =
+    build-system = with python.pkgs; [
+      setuptools
+    ];
+
+    dependencies =
       with python.pkgs;
       [
         # requirements.txt
@@ -76,7 +84,6 @@ let
         colorama
         questionary
         jinja2
-        setuptools
       ]
       # optional-requirements.txt
       ++ lib.optionals encryptionSupport [
@@ -97,6 +104,11 @@ let
     postInstall = ''
       rm $out/example-config.yaml
     '';
+
+    pythonRelaxDeps = [
+      "bcrypt"
+      "ruamel.yaml"
+    ];
 
     pythonImportsCheck = [
       "maubot"
