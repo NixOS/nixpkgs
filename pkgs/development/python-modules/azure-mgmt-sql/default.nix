@@ -8,12 +8,13 @@
   azure-mgmt-core,
   azure-mgmt-nspkg,
   isPy3k,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-sql";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "129042cc011225e27aee6ef2697d585fa5722e5d1aeb0038af6ad2451a285457";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
