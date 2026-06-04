@@ -20,8 +20,9 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   meta = {
-    homepage = "https://ninthtest.info/python-autologging/";
     description = "Easier logging and tracing for Python classes";
+    homepage = "https://github.com/mzipay/Autologging";
+    changelog = "https://github.com/mzipay/Autologging/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
   };
