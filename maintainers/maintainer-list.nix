@@ -445,6 +445,12 @@
     githubId = 567653;
     name = "Andreas Schmid";
   };
+  aashiks = {
+    email = "services@inflo.ws";
+    github = "aashiks";
+	githubId = 202316;
+    name = "Ashik Salahudeen";
+  };
   abaldeau = {
     email = "andreas@baldeau.net";
     github = "baldo";
