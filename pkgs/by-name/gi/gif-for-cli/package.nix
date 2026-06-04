@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
   version = "1.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -30,16 +30,22 @@ python3Packages.buildPythonApplication {
   ];
 
   # coverage is not needed to build and test this package
+  # The symlinking of third_party in setup.py doesn't work correctly with pyproject = true, so we copy instead
   postPatch = ''
     sed -i '/coverage>=/d' setup.py
+    cp -r third_party gif_for_cli
   '';
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   buildInputs = [
     zlib
     libjpeg
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     ffmpeg
     pillow
     requests
