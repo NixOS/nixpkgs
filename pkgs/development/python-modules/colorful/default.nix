@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "colorful";
-  version = "0.5.8";
+  version = "0.6.0a1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "timofurrer";
     repo = "colorful";
     tag = "v${version}";
-    hash = "sha256-nztVTfBimRDXwPYk3LNMZKa1ItbgqM2ukgZs8hI8TwE=";
+    hash = "sha256-6ed7RgaYAr4eUtaiD4o+gJhgIWYA3wFR32nHoazV10s=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
