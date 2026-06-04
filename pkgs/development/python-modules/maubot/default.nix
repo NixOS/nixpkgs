@@ -20,13 +20,13 @@ let
       # SQLAlchemy>=1,<1.4
       # SQLAlchemy 2.0's derivation is very different, so don't override, just write it from scratch
       # (see https://github.com/NixOS/nixpkgs/blob/65dbed73949e4c0207e75dcc7271b29f9e457670/pkgs/development/python-modules/sqlalchemy/default.nix)
-      sqlalchemy = final.buildPythonPackage rec {
+      sqlalchemy = final.buildPythonPackage (finalAttrs: {
         pname = "SQLAlchemy";
         version = "1.3.24";
         pyproject = true;
 
         src = fetchPypi {
-          inherit pname version;
+          inherit (finalAttrs) pname version;
           sha256 = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
 
@@ -40,17 +40,17 @@ let
 
         # tests are pretty annoying to set up for this version, and these dependency overrides are already long enough
         doCheck = false;
-      };
+      });
     };
   };
 
-  maubot = python.pkgs.buildPythonPackage rec {
+  maubot = python.pkgs.buildPythonPackage (finalAttrs: {
     pname = "maubot";
     version = "0.6.0";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-ZXwyctTjKg1ssYE6Ehc1s1DPhWyc08dIQ4MQz6EQXGg=";
     };
 
@@ -123,7 +123,7 @@ let
       in
       {
         tests = {
-          simple = runCommand "${pname}-tests" { } ''
+          simple = runCommand "${finalAttrs.pname}-tests" { } ''
             ${maubot}/bin/mbc --help > $out
           '';
         };
@@ -147,7 +147,7 @@ let
     meta = {
       description = "Plugin-based Matrix bot system written in Python";
       homepage = "https://maubot.xyz/";
-      changelog = "https://github.com/maubot/maubot/blob/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/maubot/maubot/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.agpl3Plus;
       # Presumably, people running "nix run nixpkgs#maubot" will want to run the tool
       # for interacting with Maubot rather than Maubot itself, which should be used as
@@ -155,7 +155,7 @@ let
       mainProgram = "mbc";
       maintainers = with lib.maintainers; [ chayleaf ];
     };
-  };
+  });
 
 in
 maubot
