@@ -5,12 +5,13 @@
   azure-common,
   azure-mgmt-core,
   msrest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicelinker";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
