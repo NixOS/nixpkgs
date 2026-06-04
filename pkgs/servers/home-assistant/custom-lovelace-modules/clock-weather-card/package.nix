@@ -2,38 +2,49 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn-berry,
 }:
-stdenvNoCC.mkDerivation rec {
+
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "clock-weather-card";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "pkissling";
     repo = "clock-weather-card";
-    tag = "v${version}";
-    hash = "sha256-8srE601xz8AcFv+5swIUUqUlHif/Qfm1TdfA5HfDAnU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CeOrJFdvl9O6TF9E2W34mR6VmLnTzhXGmrBmbtsBLxA=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-hCniXzBsnTozR0PWEleTo7K9P/lqoKNF+L8EErjOdEg=";
-  };
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    ./yarn-4.14-support.patch
+  ];
 
   nativeBuildInputs = [
-    nodejs
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
+
+  missingHashes = ./missing-hashes.json;
+
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src patches missingHashes;
+    hash = "sha256-d0xLK8CwunIsa6qdp/4iQIQhO8GJT20pztbJDNcoYrY=";
+  };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp ./dist/clock-weather-card.js $out/
+    install dist/clock-weather-card.js -Dt $out
 
     runHook postInstall
   '';
@@ -41,9 +52,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Home Assistant Card indicating today's date/time, along with an iOS inspired weather forecast for the next days with animated icons";
     homepage = "https://github.com/pkissling/clock-weather-card";
-    changelog = "https://github.com/pkissling/clock-weather-card/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pkissling/clock-weather-card/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.all;
   };
-}
+})
