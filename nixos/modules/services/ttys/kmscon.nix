@@ -236,10 +236,6 @@ in
             name = "systemd";
             control = "optional";
             modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
-            settings = {
-              type = "tty";
-              class = "greeter";
-            };
           }
         ];
       };
