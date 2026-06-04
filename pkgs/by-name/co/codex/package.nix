@@ -55,8 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # but nixpkgs provides libwebrtc as a shared library.
     # use LK_CUSTOM_WEBRTC to point to the packaged library and adjust linking
     # to use the shared library instead
+    # also, fix a typo (Appkit -> AppKit) in https://github.com/juberti-oai/rust-sdks/blob/main/webrtc-sys/build.rs
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
-      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc" \
+      --replace-fail "cargo:rustc-link-lib=framework=Appkit" "cargo:rustc-link-lib=framework=AppKit"
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "fat"' "" \
       --replace-fail 'codegen-units = 1' ""
