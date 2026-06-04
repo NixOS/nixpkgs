@@ -445,6 +445,7 @@ nixos/tests/forgejo.nix               @adamcstephens @bendlas @christoph-heiss @
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
+/pkgs/test/pnpm                                 @Scrumplex @gepbird
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

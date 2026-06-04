@@ -1089,10 +1089,6 @@ in
     # TODO: figure out darwin failure
     doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
-    nvimSkipModules = [
-      "bootstrap" # tries to install luarocks from network
-    ];
-
     bustedFlags = [
       "--run=offline"
     ];

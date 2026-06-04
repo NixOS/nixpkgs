@@ -2508,6 +2508,8 @@ self: super: with self; {
 
   cantools = callPackage ../development/python-modules/cantools { };
 
+  capa = callPackage ../development/python-modules/capa { };
+
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
   capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
@@ -7492,6 +7494,16 @@ self: super: with self; {
   ics = callPackage ../development/python-modules/ics { };
 
   id = callPackage ../development/python-modules/id { };
+
+  ida-domain = callPackage ../development/python-modules/ida-domain { };
+
+  ida-hcli = callPackage ../development/python-modules/ida-hcli { };
+
+  ida-netnode = callPackage ../development/python-modules/ida-netnode { };
+
+  ida-settings = callPackage ../development/python-modules/ida-settings { };
+
+  idapro = callPackage ../development/python-modules/idapro { };
 
   idasen = callPackage ../development/python-modules/idasen { };
 
@@ -18939,8 +18951,6 @@ self: super: with self; {
 
   steampy = callPackage ../development/python-modules/steampy { };
 
-  steamship = callPackage ../development/python-modules/steamship { };
-
   steamworkspy = callPackage ../development/python-modules/steamworkspy { };
 
   stem = callPackage ../development/python-modules/stem { };
@@ -20757,6 +20767,8 @@ self: super: with self; {
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
+  ua-generator = callPackage ../development/python-modules/ua-generator { };
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
