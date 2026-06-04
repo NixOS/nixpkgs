@@ -138,8 +138,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
     echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
-  ''
-  + ''
     substituteInPlace onnxruntime/core/platform/posix/env.cc --replace-fail \
       "return PathString{};" \
       "return PathString(\"$out/lib/\");"
@@ -289,7 +287,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
-    (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+    (lib.cmakeBool "onnxruntime_USE_NCCL" ncclSupport)
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
