@@ -44,10 +44,15 @@ in
               file-name dup reload deploy
           ] bi ;
 
+      ! Factor 0.101 added a .out extension on not macOS. Rather than
+      ! having shell scripts dealing path name changes per-OS &
+      ! per-version, the deploy script prints its deploy path to a file.
       : deploy-vocab ( path/vocab path/target -- )
           normalize-path deploy-directory set
           f open-directory-after-deploy? set
-          load-and-deploy ;
+          dup file-name
+          [ load-and-deploy ] dip
+          deploy-path "deploy-path.txt" utf8 set-file-contents ;
 
       : deploy-me ( -- )
           command-line get dup length 2 = [
@@ -97,8 +102,15 @@ in
         mkdir -p "$out/lib/factor" "$TMPDIR/.cache"
         export XDG_CACHE_HOME="$TMPDIR/.cache"
 
+        # Deploy script writes the deploy path to to $PWD/deploy-path.txt
         factor "${deployScript}" "./$vocabName" "$out/lib/factor"
-        cp "$TMPDIR/factor-temp"/*.image "$out/lib/factor/$vocabBaseName"
+        deploy_path=$(cat "$PWD/deploy-path.txt")
+        if [ ! -x "$deploy_path" ]; then
+          echo "Not a valid deploy path for Factor: $deploy_path"
+          exit 1
+        fi
+
+        cp "$TMPDIR/factor-temp"/*.image "$(dirname "$deploy_path")/$(basename "$deploy_path").image"
         runHook postBuild
       '';
 
@@ -119,7 +131,7 @@ in
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath wrapped-factor.runtimeLibs}"
         ''}
         mkdir -p "$out/bin"
-        makeWrapper "$out/lib/factor/$vocabBaseName/$vocabBaseName" \
+        makeWrapper "$deploy_path" \
           "$out/bin/$binName" \
           --prefix PATH : "${lib.makeBinPath runtimePaths}" \
           "''${makeWrapperArgs[@]}"
