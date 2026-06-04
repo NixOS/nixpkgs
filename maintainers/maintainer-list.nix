@@ -1882,7 +1882,10 @@
     github = "ap-1";
     githubId = 67872951;
     name = "Anish Pallati";
-    keys = [ { fingerprint = "2A0A 16F5 E026 BE3B A47F B7A6 841A FB68 9A5B ACCB"; } ];
+    keys = [
+      { fingerprint = "2A0A 16F5 E026 BE3B A47F B7A6 841A FB68 9A5B ACCB"; }
+      { fingerprint = "B89E A3F3 16A7 411C B5B2 8A14 B1CA 8321 35A8 C503"; }
+    ];
   };
   ankhers = {
     email = "me@ankhers.dev";
@@ -18305,13 +18308,6 @@
     github = "mk3z";
     githubId = 52108954;
     name = "Matias Zwinger";
-  };
-  mkf = {
-    email = "m@mikf.pl";
-    github = "mkf";
-    githubId = 7753506;
-    name = "Michał Krzysztof Feiler";
-    keys = [ { fingerprint = "1E36 9940 CC7E 01C4 CFE8  F20A E35C 2D7C 2C6A C724"; } ];
   };
   mkg = {
     email = "mkg@vt.edu";
