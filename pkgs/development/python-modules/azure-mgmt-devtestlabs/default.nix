@@ -11,15 +11,17 @@
   azure-mgmt-nspkg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-devtestlabs";
   version = "9.0.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "d8160d93fd3d947e5613c6919176b0edf72c94ac69679ea3b92cf27ff7398e64";
+    hash = "sha256-2BYNk/09lH5WE8aRkXaw7fcslKxpZ56juSzyf/c5jmQ=";
   };
 
   build-system = [ setuptools ];
@@ -34,6 +36,8 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "azure.mgmt" ];
 
+  pythonImportsCheck = [ "azure.mgmt.devtestlabs" ];
+
   # has no tests
   doCheck = false;
 
@@ -45,4 +49,4 @@ buildPythonPackage rec {
       maxwilson
     ];
   };
-}
+})
