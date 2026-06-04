@@ -521,16 +521,11 @@ let
             ];
           }
       */
+
       collectStructuredModules =
-        let
-          collectResults = modules: {
-            disabled = concatLists (catAttrs "disabled" modules);
-            inherit modules;
-          };
-        in
         parentFile: parentKey: initialModules: args:
-        collectResults (
-          imap1 (
+        let
+          modules = imap1 (
             n: x:
             let
               module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
@@ -554,8 +549,12 @@ let
                 )
                 ++ collectedImports.disabled;
             }
-          ) initialModules
-        );
+          ) initialModules;
+        in
+        {
+          disabled = concatLists (catAttrs "disabled" modules);
+          inherit modules;
+        };
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
