@@ -3,11 +3,12 @@
   lib,
   fetchPypi,
   portalocker,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.11.10";
-  format = "setuptools";
+  pyproject = true;
   pname = "applicationinsights";
 
   src = fetchPypi {
@@ -15,7 +16,9 @@ buildPythonPackage rec {
     sha256 = "0b761f3ef0680acf4731906dfc1807faa6f2a57168ae74592db0084a6099f7b3";
   };
 
-  propagatedBuildInputs = [ portalocker ];
+  build-system = [ setuptools ];
+
+  dependencies = [ portalocker ];
 
   meta = {
     description = "This project extends the Application Insights API surface to support Python";
