@@ -3888,6 +3888,8 @@ self: super: with self; {
 
   deprecation-alias = callPackage ../development/python-modules/deprecation-alias { };
 
+  deptry = callPackage ../development/python-modules/deptry { };
+
   depyf = callPackage ../development/python-modules/depyf { };
 
   derpconf = callPackage ../development/python-modules/derpconf { };
@@ -5707,6 +5709,8 @@ self: super: with self; {
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
 
+  flash-attn-3 = callPackage ../development/python-modules/flash-attn-3 { };
+
   flash-attn-4 = callPackage ../development/python-modules/flash-attn-4 { };
 
   flash-linear-attention = callPackage ../development/python-modules/flash-linear-attention { };
@@ -7129,8 +7133,6 @@ self: super: with self; {
 
   hfst = callPackage ../development/python-modules/hfst { };
 
-  hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
-
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
   hg-git = callPackage ../development/python-modules/hg-git { };
@@ -7829,6 +7831,10 @@ self: super: with self; {
   irisclient = callPackage ../development/python-modules/irisclient { };
 
   irm-kmi-api = callPackage ../development/python-modules/irm-kmi-api { };
+
+  ironcalc = callPackage ../by-name/ir/ironcalc/python.nix {
+    inherit (pkgs) ironcalc;
+  };
 
   isal = callPackage ../development/python-modules/isal { };
 
@@ -19827,6 +19833,8 @@ self: super: with self; {
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
 
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
+
+  torch-memory-saver = callPackage ../development/python-modules/torch-memory-saver { };
 
   # Required to test triton
   torch-no-triton = self.torch.override { tritonSupport = false; };

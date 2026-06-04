@@ -10,6 +10,7 @@
   openssl,
   writableTmpDirAsHomeHook,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -75,6 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/zellij setup --generate-completion fish) \
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal workspace with batteries included";

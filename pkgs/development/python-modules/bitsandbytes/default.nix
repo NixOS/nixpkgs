@@ -9,6 +9,7 @@
   cmake,
 
   # build-system
+  ninja,
   scikit-build-core,
   setuptools,
 
@@ -121,6 +122,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [
+    ninja
     scikit-build-core
     setuptools
   ];

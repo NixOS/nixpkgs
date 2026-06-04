@@ -138,13 +138,9 @@ buildMattermost rec {
     '';
   };
 
-  patches =
-    lib.optionals removeFreeBadge [
-      ./mattermost-remove-free-banner.patch
-    ]
-    ++ lib.optionals removeUserLimit [
-      ./mattermost-remove-user-limit.patch
-    ];
+  patches = lib.optionals removeUserLimit [
+    ./mattermost-remove-user-limit.patch
+  ];
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
@@ -247,6 +243,10 @@ buildMattermost rec {
       inherit version src;
 
       sourceRoot = "${src.name}/webapp";
+
+      patches = lib.optionals removeFreeBadge [
+        ./mattermost-remove-free-banner.patch
+      ];
 
       # Remove deprecated image-webpack-loader causing build failures
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated
