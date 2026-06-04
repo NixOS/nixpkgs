@@ -4,13 +4,14 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
+  setuptools,
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "anyqt";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ales-erjavec";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-iDUgu+x9rnpxpHzO7Rf2rJFXsheivrK7HI3FUbomkTU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pyqt5
