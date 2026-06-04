@@ -105,30 +105,26 @@ in
     __structuredAttrs = true;
 
     installPhase =
-      attrs.installPhase or
-        /* bash */ ''
-          runHook preInstall
-        ''
-        + (lib.optionalString finalAttrs.enableUI /* bash */ ''
+      attrs.installPhase or /* bash */ ''
+        runHook preInstall
+        ${lib.optionalString finalAttrs.enableUI /* bash */ ''
           # Set Gdk pixbuf loaders file to the one from the build dependencies here
           unset GDK_PIXBUF_MODULE_FILE
           # Defined in gdk-pixbuf setup hook
           findGdkPixbufLoaders "${librsvg}"
           appendToVar makeWrapperArgs --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
-        '')
-        + (lib.optionalString (wrapped-factor.runtimeLibs != [ ])) /* bash */ ''
+        ''}
+        ${lib.optionalString (wrapped-factor.runtimeLibs != [ ]) /* bash */ ''
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath wrapped-factor.runtimeLibs}"
-        ''
-        + /* bash */ ''
-          mkdir -p "$out/bin"
-          makeWrapper "$out/lib/factor/$vocabBaseName/$vocabBaseName" \
-            "$out/bin/$binName" \
-            --prefix PATH : "${lib.makeBinPath runtimePaths}" \
-            "''${makeWrapperArgs[@]}"
-          runHook postInstall
-        ''
-      );
+        ''}
+        mkdir -p "$out/bin"
+        makeWrapper "$out/lib/factor/$vocabBaseName/$vocabBaseName" \
+          "$out/bin/$binName" \
+          --prefix PATH : "${lib.makeBinPath runtimePaths}" \
+          "''${makeWrapperArgs[@]}"
+        runHook postInstall
+      '';
 
     passthru = {
       vocab = finalAttrs.src;
