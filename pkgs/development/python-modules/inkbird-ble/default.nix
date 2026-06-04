@@ -12,16 +12,16 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inkbird-ble";
-  version = "1.3.0";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
-    tag = "v${version}";
-    hash = "sha256-e5bRq4XIcHaAAUXxdBeaZMNPDRWlS1QeD/9v7W0QeB4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-URmWIsWoPctuYtSLeX8AU4ml6o9c5BH6YgqCINppQdk=";
   };
 
   build-system = [ poetry-core ];
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
-    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

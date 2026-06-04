@@ -4,14 +4,10 @@
   fetchurl,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
   qt5,
   libGLU,
   libGL,
-  libglut ? null,
-  openal ? null,
-  SDL2 ? null,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,15 +22,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    qt5.qtbase
     qt5.qtmultimedia
     libGLU
     libGL
-    libglut
-    openal
     SDL2
   ];
 
