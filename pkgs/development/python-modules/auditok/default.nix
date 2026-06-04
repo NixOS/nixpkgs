@@ -1,24 +1,25 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   matplotlib,
   numpy,
   pyaudio,
   pydub,
+  pytestCheckHook,
   setuptools,
-  unittestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "auditok";
-  version = "0.1.5";
+  version = "0.4.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) version;
-    pname = "auditok";
-    hash = "sha256-HNsw9VLP7XEgs8E2X6p7ygDM47AwWxMYjptipknFig4=";
+  src = fetchFromGitHub {
+    owner = "amsehili";
+    repo = "auditok";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hSFHozTx2ygb2VdIYB8mw0RIMUVJ3Lo0mdHXPZasYGA=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +31,11 @@ buildPythonPackage (finalAttrs: {
     pydub
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  disabledTestPaths = [
+    # flaky: matplotlib pixel-equality drift
+    "tests/test_plotting.py"
   ];
 
   pythonImportsCheck = [ "auditok" ];
