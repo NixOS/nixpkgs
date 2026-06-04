@@ -1375,13 +1375,16 @@ let
           val;
     in
     cfg:
-    if cfg._type or "" == "merge" then
-      concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
-      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
-      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
-    # FIXME: handle mkOrder?
+    if cfg ? _type then
+      if cfg._type == "if" then
+        map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      else if cfg._type == "merge" then
+        concatMap pushDownProperties cfg.contents
+      else if cfg._type == "override" then
+        map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      # FIXME: handle mkOrder?
+      else
+        [ cfg ]
     else
       [ cfg ];
 
@@ -1404,13 +1407,16 @@ let
   */
   dischargeProperties =
     def:
-    if def._type or "" == "merge" then
-      concatMap dischargeProperties def.contents
-    else if def._type or "" == "if" then
-      if isBool def.condition then
-        if def.condition then dischargeProperties def.content else [ ]
+    if def ? _type then
+      if def._type == "if" then
+        if isBool def.condition then
+          if def.condition then dischargeProperties def.content else [ ]
+        else
+          throw "‘mkIf’ called with a non-Boolean condition"
+      else if def._type == "merge" then
+        concatMap dischargeProperties def.contents
       else
-        throw "‘mkIf’ called with a non-Boolean condition"
+        [ def ]
     else
       [ def ];
 
