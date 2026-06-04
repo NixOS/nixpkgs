@@ -86,9 +86,7 @@ makeScopeWithSplicing' {
       };
 
       libquotient = callPackage ../development/libraries/libquotient { };
-      mlt = pkgs.mlt.override {
-        qt = qt6;
-      };
+      mlt = callPackage ../by-name/ml/mlt/package.nix { };
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
