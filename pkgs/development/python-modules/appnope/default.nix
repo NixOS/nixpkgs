@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Disable App Nap on macOS";
     homepage = "https://github.com/minrk/appnope";
+    changelog = "https://github.com/minrk/appnope/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     # Not Darwin-specific because dummy fallback may be used cross-platform
