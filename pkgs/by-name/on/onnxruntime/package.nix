@@ -3,7 +3,7 @@
   config,
   stdenv,
   fetchFromGitHub,
-  abseil-cpp_202508,
+  abseil-cpp,
   buildPackages,
   cmake,
   cpuinfo,
@@ -275,7 +275,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11-src}")
