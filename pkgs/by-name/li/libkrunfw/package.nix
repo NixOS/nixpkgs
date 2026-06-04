@@ -10,6 +10,7 @@
   perl,
   elfutils,
   python3,
+  buildPackages,
   variant ? null,
 }:
 
@@ -19,6 +20,12 @@ assert lib.elem variant [
   "tdx"
 ];
 
+let
+  kernelSrc = fetchurl {
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.76.tar.xz";
+    hash = "sha256-u7Q+g0xG5r1JpcKPIuZ5qTdENATh9lMgTUskkp862JY=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
   version = "5.3.0";
@@ -30,14 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fhG/bP1HzmhyU2N+wnr1074WEGsD9RdTUUBhYUFpWlA=";
   };
 
-  kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.76.tar.xz";
-    hash = "sha256-u7Q+g0xG5r1JpcKPIuZ5qTdENATh9lMgTUskkp862JY=";
-  };
-
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)'
+      --replace-fail 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s ${kernelSrc} $(KERNEL_TARBALL)'
   '';
 
   nativeBuildInputs = [
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
   ]
   ++ lib.optionals (variant == "sev") [
     "SEV=1"
@@ -64,9 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     "TDX=1"
   ];
 
+  depsBuildBuild = [
+    elfutils
+    buildPackages.stdenv.cc
+  ];
+
   # Fixes https://github.com/containers/libkrunfw/issues/55
   env = lib.optionalAttrs stdenv.targetPlatform.isAarch64 {
-    NIX_CFLAGS_COMPILE = "-march=armv8-a+crypto";
+    NIX_CFLAGS_COMPILE_FOR_TARGET = "-march=armv8-a+crypto";
   };
 
   enableParallelBuilding = true;

@@ -380,8 +380,6 @@ in
       MACHINE_LEARNING_WORKERS = "1";
       MACHINE_LEARNING_WORKER_TIMEOUT = "120";
       MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
-      # TODO: drop when insightface no longer unconditionally imports matplotlib
-      MPLCONFIGDIR = "/var/cache/immich";
       XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";

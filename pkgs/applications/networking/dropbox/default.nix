@@ -114,7 +114,7 @@ buildFHSEnv {
     description = "Online stored folders (daemon version)";
     homepage = "https://www.dropbox.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "dropbox";
   };

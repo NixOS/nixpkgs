@@ -9,6 +9,8 @@ let
   # these invalid dependencies.
   invalidDependencies = [
     "srfi-4"
+    "cond-expand"
+    "http-curl"
   ];
 in
 lib.makeScope newScope (self: {

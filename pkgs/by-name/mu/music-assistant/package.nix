@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   ffmpeg_7-headless,
   nixosTests,
@@ -10,34 +10,33 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      music-assistant-frontend = self.callPackage ./frontend.nix { };
+  pythonPackages = python3Packages.overrideScope (
+    prev: final: {
+      music-assistant-frontend = prev.callPackage ./frontend.nix { };
 
-      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: {
+      music-assistant-models = final.music-assistant-models.overridePythonAttrs (oldAttrs: {
         version = "1.1.115";
 
         src = oldAttrs.src.override {
           hash = "sha256-oEXL0B8JNH4PcltpES375ov7QGs+gtYKlMGr1B7BlKY=";
         };
       });
-    };
-  };
+    }
+  );
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
   providerDependencies = lib.concatMap (
-    provider: (providerPackages.${provider} python.pkgs)
+    provider: (providerPackages.${provider} pythonPackages)
   ) providers;
 
-  pythonPath = python.pkgs.makePythonPath providerDependencies;
+  pythonPath = pythonPackages.makePythonPath providerDependencies;
 in
 
 assert
   (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
 
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "music-assistant";
   version = "2.8.7";
   pyproject = true;
@@ -99,7 +98,7 @@ python.pkgs.buildPythonApplication rec {
     fi
   '';
 
-  build-system = with python.pkgs; [
+  build-system = with pythonPackages; [
     setuptools
   ];
 
@@ -118,7 +117,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       # Only packages required in pyproject.toml
       aiodns
@@ -162,7 +161,7 @@ python.pkgs.buildPythonApplication rec {
     ++ gql.optional-dependencies.all
     ++ pyjwt.optional-dependencies.crypto;
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = with pythonPackages; {
     # Required subset of optional-dependencies in pyproject.toml
     test = [
       pytest-aiohttp
@@ -172,7 +171,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
       pytestCheckHook
     ]
@@ -206,7 +205,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit
-      python
+      pythonPackages
       pythonPath
       providerPackages
       providerNames

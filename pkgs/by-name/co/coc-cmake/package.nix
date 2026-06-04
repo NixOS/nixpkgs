@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/voldikss/coc-extensions";
     license = lib.licenses.mit;
   };
 })

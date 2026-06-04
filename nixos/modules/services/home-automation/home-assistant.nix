@@ -30,7 +30,6 @@ let
     mapAttrsToList
     mergeAttrsList
     mkEnableOption
-    mkDefault
     mkIf
     mkMerge
     mkOption

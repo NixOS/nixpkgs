@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lattice algorithms using floating-point arithmetic";
+    homepage = "https://github.com/fplll/fplll";
     changelog = [
       # Some release notes are added to the github tags, though they are not
       # always complete.

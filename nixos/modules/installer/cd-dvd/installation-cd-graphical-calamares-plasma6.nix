@@ -36,25 +36,22 @@
   # Avoid bundling an entire MariaDB installation on the ISO.
   programs.kde-pim.enable = false;
 
-  system.activationScripts.installerDesktop =
+  systemd.tmpfiles.settings."10-installer-desktop" =
     let
-
       # Comes from documentation.nix when xserver and nixos.enable are true.
       manualDesktopFile = "/run/current-system/sw/share/applications/nixos-manual.desktop";
-
-      homeDir = "/home/nixos/";
-      desktopDir = homeDir + "Desktop/";
-
     in
-    ''
-      mkdir -p ${desktopDir}
-      chown nixos ${homeDir} ${desktopDir}
-
-      ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
-      ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop ${desktopDir + "gparted.desktop"}
-      ln -sfT ${pkgs.calamares-nixos}/share/applications/calamares.desktop ${
-        desktopDir + "calamares.desktop"
-      }
-    '';
+    {
+      "/home/nixos/Desktop".d = {
+        user = "nixos";
+        group = "users";
+        mode = "0755";
+      };
+      "/home/nixos/Desktop/nixos-manual.desktop"."L+".argument = manualDesktopFile;
+      "/home/nixos/Desktop/gparted.desktop"."L+".argument =
+        "${pkgs.gparted}/share/applications/gparted.desktop";
+      "/home/nixos/Desktop/calamares.desktop"."L+".argument =
+        "${pkgs.calamares-nixos}/share/applications/calamares.desktop";
+    };
 
 }

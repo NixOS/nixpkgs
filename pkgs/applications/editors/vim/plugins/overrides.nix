@@ -33,6 +33,7 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
+  nix,
   nodejs,
   openscad,
   openssh,
@@ -150,7 +151,6 @@ let
       }"
       overrides;
 in
-
 assertNoAdditions {
   # keep-sorted start case=no block=yes newline_separated=yes
   ack-vim = super.ack-vim.overrideAttrs (old: {
@@ -665,6 +665,14 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-buffer = super.cmp-buffer.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-calc = super.cmp-calc.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = with self; [
@@ -673,6 +681,10 @@ assertNoAdditions {
   };
 
   cmp-cmdline = super.cmp-cmdline.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-cmdline-history = super.cmp-cmdline-history.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
@@ -714,6 +726,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-emoji = super.cmp-emoji.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -737,6 +753,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-latex-symbols = super.cmp-look.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-look = super.cmp-look.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -747,12 +767,17 @@ assertNoAdditions {
   };
 
   cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs {
+    nativeCheckInputs = [ nix ];
     checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.plenary-nvim ];
+  };
+
+  cmp-nvim-lsp-document-symbol = super.cmp-nvim-lsp-document-symbol.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
@@ -768,6 +793,10 @@ assertNoAdditions {
   };
 
   cmp-nvim-ultisnips = super.cmp-nvim-ultisnips.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
+  cmp-omni = super.cmp-omni.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
@@ -793,6 +822,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-snippy ];
   };
 
+  cmp-spell = super.cmp-spell.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-tabby = super.cmp-tabby.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -810,6 +843,10 @@ assertNoAdditions {
   cmp-tmux = super.cmp-tmux.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ tmux ];
+  };
+
+  cmp-treesitter = super.cmp-treesitter.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs {
@@ -838,6 +875,10 @@ assertNoAdditions {
   cmp_luasnip = super.cmp_luasnip.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ self.luasnip ];
+  };
+
+  cmp_yanky = super.cmp_yanky.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
   };
 
   cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {
@@ -1331,38 +1372,18 @@ assertNoAdditions {
   diffview-nvim = super.diffview-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
 
-    nvimSkipModules = [
-      # https://github.com/sindrets/diffview.nvim/issues/498
-      "diffview.api.views.diff.diff_view"
-      "diffview.scene.layouts.diff_2"
-      "diffview.scene.layouts.diff_2_hor"
-      "diffview.scene.layouts.diff_2_ver"
-      "diffview.scene.layouts.diff_3"
-      "diffview.scene.layouts.diff_3_hor"
-      "diffview.scene.layouts.diff_3_mixed"
-      "diffview.scene.layouts.diff_3_ver"
-      "diffview.scene.layouts.diff_4"
-      "diffview.scene.layouts.diff_4_mixed"
-      "diffview.scene.views.diff.diff_view"
-      "diffview.scene.views.file_history.file_history_panel"
-      "diffview.scene.views.file_history.option_panel"
-      "diffview.scene.window"
-      "diffview.ui.panels.commit_log_panel"
-      "diffview.ui.panels.help_panel"
-      "diffview.ui.panel"
-      "diffview.vcs.adapters.git.init"
-      "diffview.vcs.adapters.hg.init"
-      "diffview.vcs.adapter"
-      "diffview.vcs.init"
-      "diffview.vcs.utils"
-      "diffview.job"
-      "diffview.lib"
-      "diffview.multi_job"
-    ];
-
     doInstallCheck = true;
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
+    };
+  });
+
+  diffview-plus-nvim = super.diffview-plus-nvim.overrideAttrs (old: {
+    dependencies = [ self.plenary-nvim ];
+    doInstallCheck = true;
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+      description = "Cycle through diffs for all modified files for any git rev (dlyongemallo's active fork)";
     };
   });
 
@@ -1579,7 +1600,6 @@ assertNoAdditions {
     ];
     dependencies = [ self.fzf-vim ];
     passthru = old.passthru // {
-
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
   });
@@ -1776,6 +1796,13 @@ assertNoAdditions {
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  harpoon-lualine = super.harpoon-lualine.overrideAttrs {
+    dependencies = [
+      self.lualine-nvim
+      self.harpoon2
+    ];
   };
 
   harpoon2 = super.harpoon2.overrideAttrs {
@@ -2741,6 +2768,7 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # E5108: Error executing lua ...vim-2024-06-13/lua/diffview/api/views/diff/diff_view.lua:13: attempt to index global 'DiffviewGlobal' (a nil value)
+      # Requires diffview-nvim's plugin script to be sourced.
       "neogit.integrations.diffview"
       "neogit.popups.diff.actions"
       "neogit.popups.diff.init"
@@ -2806,6 +2834,13 @@ assertNoAdditions {
     dependencies = with self; [
       neotest
       plenary-nvim
+    ];
+  };
+
+  neotest-bun = super.neotest-bun.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
     ];
   };
 
@@ -4122,7 +4157,6 @@ assertNoAdditions {
           }
       '';
     };
-
   });
 
   rtorrent-syntax-file = super.rtorrent-syntax-file.overrideAttrs (old: {
@@ -4419,6 +4453,7 @@ assertNoAdditions {
       # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
       pythonWrapper =
         writeText "evinceSync-wrapper.py" # python
+
           ''
             #!${python3}/bin/python3
             import os
@@ -4824,7 +4859,6 @@ assertNoAdditions {
        --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
        --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
     '';
-
   };
 
   unicode-vim =

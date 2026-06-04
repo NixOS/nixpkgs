@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkOption types literalMD;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    literalMD
+    ;
 
   inherit (config) sshBackdoor;
 
@@ -117,9 +122,10 @@ in
 {
   options = {
     pythonTestDriverPackage = mkOption {
-      description = "Package containing the python NixOS test driver implemetnation";
+      description = "Package containing the python NixOS test driver implementation";
       type = types.package;
       default = hostPkgs.nixos-test-driver;
+      defaultText = literalExpression "hostPkgs.nixos-test-driver";
       readOnly = true;
     };
 

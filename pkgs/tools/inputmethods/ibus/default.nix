@@ -238,6 +238,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     mainProgram = "ibus";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 })

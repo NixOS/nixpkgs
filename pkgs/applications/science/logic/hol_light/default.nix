@@ -1,61 +1,51 @@
 {
   lib,
   stdenv,
-  runtimeShell,
   fetchFromGitHub,
+  makeBinaryWrapper,
+  writeText,
   ocaml,
   findlib,
-  num,
   zarith,
   camlp5,
   camlp-streams,
+  fmt,
   pcre2,
+  ledit,
   bash,
 }:
 
 let
-  use_zarith = lib.versionAtLeast ocaml.version "4.14";
-  load_num =
-    if use_zarith then
-      ''
-        -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith \
-        -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
-        -I ${pcre2}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
-      ''
-    else
-      lib.optionalString (num != null) ''
-        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
-        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
-        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs
-      '';
-
-  start_script = ''
-    #!${runtimeShell}
-    cd $out/lib/hol_light
-    export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}${camlp5}/lib/ocaml/${ocaml.version}/site-lib/"
-    exec ${ocaml}/bin/ocaml \
-      -I \`${camlp5}/bin/camlp5 -where\` \
-      ${load_num} \
-      -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ \
-      -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma \
-      -init make.ml
-  '';
+  ocamlPath = lib.makeSearchPath "/lib/ocaml/${ocaml.version}/site-lib" [
+    camlp5
+    camlp-streams
+    fmt
+    pcre2
+    zarith
+  ];
+  stublibsPath = lib.makeSearchPath "/lib/ocaml/${ocaml.version}/site-lib/stublibs" [
+    zarith
+    pcre2
+  ];
 in
 
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2024-07-07";
+  version = "0-unstable-2026-05-19";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "16b184e30e7e3fe9add7d1ee93242323ed2e1726";
-    hash = "sha256-V0OtsmX5pa+CH3ZXmNG3juXwXZ5+A0k13eMCAfaRziQ=";
+    rev = "9b510bc76da4cecf6e509be44d327c9236ec273f";
+    hash = "sha256-QaTDrGHpHvEde2AK/SD7eM+bAC9vN5o+dQqW1oau1Yo=";
   };
 
-  patches = [ ./0004-Fix-compilation-with-camlp5-7.11.patch ];
-
-  buildInputs = [ bash ];
+  patches = [
+    # Accept camlp5 8.05 in the pa_j chooser; submitted upstream.
+    ./0001-pa_j-accept-camlp5-8.05-for-OCaml-5.4.patch
+    # Link findlib into ocaml-hol so `#use "topfind"` works in the sandbox.
+    ./0002-link-findlib-into-ocaml-hol.patch
+  ];
 
   strictDeps = true;
 
@@ -63,28 +53,77 @@ stdenv.mkDerivation {
     ocaml
     findlib
     camlp5
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    bash
+    ocaml
+    findlib
+    camlp5
+    ledit
   ];
   propagatedBuildInputs = [
     camlp-streams
+    fmt
     pcre2
-    (if use_zarith then zarith else num)
+    zarith
   ];
 
+  setupHook = writeText "hol-light-setup-hook.sh" ''
+    addHolLight () {
+      if test -d "''$1/lib/hol_light"; then
+        export HOLLIGHT_DIR="''$1/lib/hol_light"
+      fi
+    }
+    addEnvHooks "$targetOffset" addHolLight
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    patchShebangs .
+    HOLLIGHT_USE_MODULE=1 make hol.sh
+    HOLLIGHT_USE_MODULE=1 make
+    runHook postBuild
+  '';
+
   installPhase = ''
-    mkdir -p "$out/lib/hol_light" "$out/bin"
-    cp -a  . $out/lib/hol_light
-    echo "${start_script}" > "$out/bin/hol_light"
-    chmod a+x "$out/bin/hol_light"
+    runHook preInstall
+    mkdir -p "$out/lib/hol_light"
+    cp -a . "$out/lib/hol_light"
+    # The Makefile bakes the build directory into hol.sh; regenerate it
+    # pointing at the install location.
+    sed "s^__DIR__^$out/lib/hol_light^g; s^__USE_MODULE__^1^g" hol_4.14.sh \
+      > "$out/lib/hol_light/hol.sh"
+    chmod +x "$out/lib/hol_light/hol.sh"
+    # Add the findlib site-lib so the toplevel can `#use "topfind"`.
+    substituteInPlace "$out/lib/hol_light/hol.sh" \
+      --replace-fail '-init ''${HOL_ML_PATH} -I ''${HOLLIGHT_DIR}' \
+        '-init ''${HOL_ML_PATH} -I ''${HOLLIGHT_DIR} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib'
+    makeWrapper "$out/lib/hol_light/hol.sh" "$out/bin/hol_light" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ocaml
+          findlib
+          camlp5
+          ledit
+        ]
+      } \
+      --set OCAMLPATH "${ocamlPath}" \
+      --prefix CAML_LD_LIBRARY_PATH : "${stublibsPath}"
+    ln -s hol_light "$out/bin/hol.sh"
+    runHook postInstall
   '';
 
   meta = {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
+    mainProgram = "hol_light";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
       vbgl
+      mkannwischer
     ];
   };
 }

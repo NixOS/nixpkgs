@@ -27,6 +27,7 @@ assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system;
+  genericStdenv = import ../generic { defaultConfig = config; };
 
   llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
   sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
@@ -104,14 +105,12 @@ let
 
       bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
-      thisStdenv = import ../generic {
+      thisStdenv = genericStdenv {
         name = "${name}-stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         extraBuildInputs = [ prevStage.apple-sdk ];
         inherit extraNativeBuildInputs;
@@ -975,14 +974,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     in
     {
       inherit config overlays;
-      stdenv = import ../generic {
+      stdenv = genericStdenv {
         name = "stdenv-darwin";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-
-        inherit config;
 
         preHook = ''
           ${commonPreHook}

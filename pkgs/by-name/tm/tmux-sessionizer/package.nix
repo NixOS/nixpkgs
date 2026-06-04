@@ -6,19 +6,20 @@
   rustPlatform,
   stdenv,
   versionCheckHook,
+  git,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tmux-sessionizer";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
     repo = "tmux-sessionizer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pRf381gxyf4leoEfSZKb5foVYYdVEsxuaTU27mbd46o=";
+    hash = "sha256-u2PfLFwqO+VFPWeFumrAJWZjK9JMZF/v0pB0uJ8jfq8=";
   };
 
-  cargoHash = "sha256-AJqlzLr6MDFfPssSFMxslxFFuPVxoQGcuG7sZeu+8pg=";
+  cargoHash = "sha256-YVR1m1cosymAKgcsgxSA/iIIF+AJfA92Ibapw0AMfoE=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -29,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    git
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

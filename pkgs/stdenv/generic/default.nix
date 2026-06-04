@@ -1,5 +1,37 @@
+{
+  defaultConfig ? null,
+}@args:
 let
   lib = import ../../../lib;
+
+  # By taking defaultConfig early, we can cache the result of calling
+  # make-derivation.nix with config, which leads to more memoisation between
+  # bootstrapping stages. We only have to re-call the file with another config
+  # if stdenv-overridable is actually called with config, otherwise we stick to
+  # defaultConfig. No stdenvs currently specify a non-default config, but we
+  # leave it open as a possibility.
+  makeDerivationFile = import ./make-derivation.nix lib;
+  makeDerivationFileWithConfig =
+    assert args ? defaultConfig;
+    makeDerivationFile args.defaultConfig;
+
+  defaultNativeBuildInputs0 = [
+    ../../build-support/setup-hooks/no-broken-symlinks.sh
+    ../../build-support/setup-hooks/audit-tmpdir.sh
+    ../../build-support/setup-hooks/compress-man-pages.sh
+    ../../build-support/setup-hooks/make-symlinks-relative.sh
+    ../../build-support/setup-hooks/move-docs.sh
+    ../../build-support/setup-hooks/move-lib64.sh
+    ../../build-support/setup-hooks/move-sbin.sh
+    ../../build-support/setup-hooks/move-systemd-user-units.sh
+    ../../build-support/setup-hooks/multiple-outputs.sh
+    ../../build-support/setup-hooks/patch-shebangs.sh
+    ../../build-support/setup-hooks/prune-libtool-files.sh
+    ../../build-support/setup-hooks/reproducible-builds.sh
+    ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+    ../../build-support/setup-hooks/strip.sh
+  ];
+
   stdenv-overridable = lib.makeOverridable (
 
     argsStdenv@{
@@ -21,7 +53,7 @@ let
       allowedRequisites ? null,
       extraAttrs ? { },
       overrides ? (self: super: { }),
-      config,
+      config ? args.defaultConfig,
       disallowedRequisites ? [ ],
 
       # The `fetchurl' to use for downloading curl and its dependencies
@@ -64,29 +96,16 @@ let
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
       # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
-        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+        let
+          makeDerivationWithConfig' =
+            if argsStdenv ? config then makeDerivationFile config else makeDerivationFileWithConfig;
+        in
+        stdenv: (makeDerivationWithConfig' stdenv).mkDerivation,
     }:
 
     let
       defaultNativeBuildInputs =
-        extraNativeBuildInputs
-        ++ [
-          ../../build-support/setup-hooks/no-broken-symlinks.sh
-          ../../build-support/setup-hooks/audit-tmpdir.sh
-          ../../build-support/setup-hooks/compress-man-pages.sh
-          ../../build-support/setup-hooks/make-symlinks-relative.sh
-          ../../build-support/setup-hooks/move-docs.sh
-          ../../build-support/setup-hooks/move-lib64.sh
-          ../../build-support/setup-hooks/move-sbin.sh
-          ../../build-support/setup-hooks/move-systemd-user-units.sh
-          ../../build-support/setup-hooks/multiple-outputs.sh
-          ../../build-support/setup-hooks/patch-shebangs.sh
-          ../../build-support/setup-hooks/prune-libtool-files.sh
-          ../../build-support/setup-hooks/reproducible-builds.sh
-          ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-          ../../build-support/setup-hooks/strip.sh
-        ]
-        ++ lib.optionals hasCC [ cc ];
+        extraNativeBuildInputs ++ defaultNativeBuildInputs0 ++ lib.optionals hasCC [ cc ];
 
       defaultBuildInputs = extraBuildInputs;
 

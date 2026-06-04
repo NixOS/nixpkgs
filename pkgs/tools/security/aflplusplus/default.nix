@@ -53,7 +53,7 @@ let
 
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "4.35c";
+    version = "4.40c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
@@ -61,9 +61,9 @@ let
       tag = "v${version}";
       hash =
         if withNyx then
-          "sha256-srHrYPEb0UAP/G9cOxJOZ9D6v9pxqez28suPsa70E2M="
+          "sha256-901rJfuMZvgUpQ6zzboa7lu9yhSyX+0u+HUk8oGsqgo="
         else
-          "sha256-j5YH39JKcjYuDqyl+KRMtgn3UoeWEW1z7m4ysf2uilc=";
+          "sha256-QtGazGShjybvjOONoWjqSg/c+l5sPpaFuuTI2S85YQM=";
       fetchSubmodules = withNyx;
     };
 
@@ -89,10 +89,16 @@ let
     # warning: "_FORTIFY_SOURCE" redefined
     hardeningDisable = [ "fortify" ];
 
-    # We build nyx mode dependencies ourselves, so this patch skips
-    # build_nyx_support.sh in the aflplusplus source code. It also skips
-    # test-nyx-mode.sh because we can't test nyx mode in the sandbox.
-    patches = lib.optional withNyx ./nyx_mode/nyx_mode.patch;
+    patches = [
+      # skip performance test: it's skipped anyway, but exits with code 1
+      ./aflpp-v4.40c.patch
+    ]
+    ++ lib.optionals withNyx [
+      # We build nyx mode dependencies ourselves, so this patch skips
+      # build_nyx_support.sh in the aflplusplus source code. It also skips
+      # test-nyx-mode.sh because we can't test nyx mode in the sandbox.
+      ./nyx_mode/nyx_mode.patch
+    ];
     postPatch = ''
       # Don't care about this.
       rm Android.bp

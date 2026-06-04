@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/KhronosGroup/glslang/blob/${finalAttrs.src.tag}/CHANGES.md";
     description = "Khronos reference front-end for GLSL and ESSL";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

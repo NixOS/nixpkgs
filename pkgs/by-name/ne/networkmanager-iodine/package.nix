@@ -72,6 +72,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "NetworkManager's iodine plugin";
+    homepage = "https://gitlab.gnome.org/GNOME/network-manager-iodine";
     inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
   };

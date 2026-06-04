@@ -6357,6 +6357,36 @@ final: prev: {
     }
   ) { };
 
+  vicious = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "vicious";
+      version = "2.7.1-3";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/vicious-2.7.1-4.rockspec";
+          sha256 = "1yvc9mbalsyrqysxkc1lf92ki5gzizn79y2azyavmgjwljif6lfi";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/vicious-widgets/vicious/archive/refs/tags/v2.7.1.zip";
+        sha256 = "0bfj3bc1gmbwwvpwkmqp658iwrwdifc78hzwwy1qpn7rbmarg2qv";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://vicious.rtfd.io";
+        license = lib.licenses.gpl2Plus;
+        description = "Modular widget library for the \"awesome\" window manager";
+      };
+    }
+  ) { };
+
   vstruct = callPackage (
     {
       buildLuarocksPackage,

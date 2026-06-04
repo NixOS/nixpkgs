@@ -48,8 +48,8 @@ buildHomeAssistantComponent rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
-  ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python3Packages)
+  ++ (homeassistant.getPackages "stream" homeassistant.python3Packages);
 
   disabledTests = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/922

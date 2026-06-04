@@ -868,7 +868,7 @@
       ];
     "caldav" =
       ps: with ps; [
-        caldav
+        caldav_2
         icalendar
         vobject
       ];

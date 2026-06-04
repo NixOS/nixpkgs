@@ -21,6 +21,8 @@
 
 assert crossSystem == localSystem;
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
@@ -383,9 +385,8 @@ let
         bsdcp
       ];
       shell = "${prevStage.bashNonInteractive}/bin/bash";
-      stdenvNoCC = import ../generic {
+      stdenvNoCC = genericStdenv {
         inherit
-          config
           initialPath
           shell
           fetchurlBoot
@@ -401,9 +402,8 @@ let
         inherit (prevStage) curl;
         inherit (config) hashedMirrors rewriteURL;
       };
-      stdenv = import ../generic {
+      stdenv = genericStdenv {
         inherit
-          config
           initialPath
           shell
           fetchurlBoot

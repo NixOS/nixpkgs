@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2026.5.4";
   pyproject = true;
 
-  disabled = python.version != home-assistant.python.version;
+  disabled = python.version != home-assistant.python3Packages.python.version;
 
   src = fetchFromGitHub {
     owner = "KapJI";

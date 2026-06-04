@@ -8,16 +8,18 @@
   git,
   gmp,
   cadical,
+  leangz,
   pkg-config,
   libuv,
   perl,
   testers,
 }:
-
 let
+  cadical' = cadical.override { version = "2.1.3"; };
+
   lean4 = stdenv.mkDerivation (finalAttrs: {
     pname = "lean4";
-    version = "4.29.0";
+    version = "4.30.0";
 
     mimalloc-src = fetchFromGitHub {
       owner = "microsoft";
@@ -30,7 +32,7 @@ let
       owner = "leanprover";
       repo = "lean4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-0v4OTrCLdHBbWJUq7hIjJonqget9SvsG3izGlOwhwyU=";
+      hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
     };
 
     # Vendor mimalloc. Upstream has since partially adopted FetchContent:
@@ -70,12 +72,13 @@ let
     nativeBuildInputs = [
       cmake
       pkg-config
+      leangz # Provides leantar
     ];
 
     buildInputs = [
       gmp
       libuv
-      cadical
+      cadical'
     ];
 
     nativeCheckInputs = [
@@ -103,7 +106,10 @@ let
       changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ nadja-y ];
+      maintainers = with lib.maintainers; [
+        nadja-y
+        niklashh
+      ];
       mainProgram = "lean";
     };
   });

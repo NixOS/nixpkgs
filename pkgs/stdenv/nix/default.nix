@@ -9,15 +9,15 @@
 }:
 
 assert crossSystem == localSystem;
-
+let
+  genericStdenv = import ../generic { defaultConfig = config; };
+in
 bootStages
 ++ [
   (prevStage: {
     inherit config overlays;
 
-    stdenv = import ../generic rec {
-      inherit config;
-
+    stdenv = genericStdenv rec {
       inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
 
       preHook = ''

@@ -246,6 +246,16 @@ in
               };
             };
 
+            splitInvoice = {
+              enabled = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether to allow splitting invoices.
+                '';
+              };
+            };
+
             transaction = {
               enabled = mkOption {
                 type = types.bool;
@@ -464,26 +474,22 @@ in
         wants = unitDependencies;
         after = unitDependencies;
         inherit (cfg) environment;
-        preStart = ''
-          set -ex
-          if [ ! -e "/var/lib/strichliste/.db-init" ]; then
-            ${lib.optionalString (lib.hasInfix "sqlite" cfg.environment.DATABASE_URL) ''
-              ${lib.getExe cfg.packages.backend} doctrine:database:create
-            ''}
-            ${lib.getExe cfg.packages.backend} doctrine:schema:create
-            touch "/var/lib/strichliste/.db-init"
-          fi
-        '';
         serviceConfig = {
-          Type = "exec";
+          Type = "oneshot";
           User = "strichliste";
           Group = "strichliste";
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = toString [
-            (lib.getExe cfg.packages.backend)
-            "doctrine:migrations:migrate"
-            "--allow-no-migration"
-            "--no-interaction"
+          ExecStart = map toString [
+            [
+              (lib.getExe cfg.packages.backend)
+              "cache:clear"
+            ]
+            [
+              (lib.getExe cfg.packages.backend)
+              "doctrine:migrations:migrate"
+              "--allow-no-migration"
+              "--no-interaction"
+            ]
           ];
         };
       };

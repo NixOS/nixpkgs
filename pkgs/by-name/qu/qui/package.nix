@@ -67,6 +67,14 @@ buildGo126Module (finalAttrs: {
     "-X main.PolarOrgID="
   ];
 
+  # some season-pack tests use non-existent source paths (e.g. /media/...) and
+  # assert on a same-filesystem check that resolves them up to /. go's
+  # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
+  # something sane
+  preCheck = ''
+    export TMPDIR=/tmp
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

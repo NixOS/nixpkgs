@@ -176,6 +176,7 @@ tree-sitter-norg-meta,,,,,,
 tree-sitter-orgmode,,,,,5.1,
 utf8,,,,,,
 tree-sitter-teal,,,,,,
+vicious,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
 xml2lua,,,,,,teto

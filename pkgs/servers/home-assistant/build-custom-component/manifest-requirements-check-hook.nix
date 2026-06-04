@@ -1,13 +1,14 @@
 {
   lib,
-  python,
+  python3Packages,
   makeSetupHook,
 }:
 
 makeSetupHook {
   name = "manifest-check-hook";
+  propagatedNativeBuildInputs = [ python3Packages.packaging ];
   substitutions = {
-    pythonCheckInterpreter = python.interpreter;
+    pythonCheckInterpreter = python3Packages.python.interpreter;
     checkManifest = ./check_manifest.py;
   };
   meta.license = lib.licenses.mit;

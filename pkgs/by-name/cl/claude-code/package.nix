@@ -19,7 +19,7 @@
 }:
 let
   stdenv = stdenvNoCC;
-  baseUrl = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases";
+  baseUrl = "https://downloads.claude.ai/claude-code-releases";
   manifest = lib.importJSON ./manifest.json;
   platformKey = "${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}";
   platformManifestEntry = manifest.platforms.${platformKey};

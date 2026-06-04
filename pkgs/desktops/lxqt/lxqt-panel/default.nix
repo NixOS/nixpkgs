@@ -23,7 +23,7 @@
   lxqt-build-tools,
   lxqt-globalkeys,
   lxqt-menu-data,
-  pcre,
+  pcre2,
   qtbase,
   qtsvg,
   qttools,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     lm_sensors
     lxqt-globalkeys
     lxqt-menu-data
-    pcre
+    pcre2
     qtbase
     qtsvg
     qtwayland

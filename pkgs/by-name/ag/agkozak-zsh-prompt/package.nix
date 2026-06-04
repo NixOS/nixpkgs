@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agkozak-zsh-prompt";
-  version = "3.11.4";
+  version = "3.11.5";
 
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
     tag = "v${version}";
-    sha256 = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
+    sha256 = "sha256-C9lyOm2+RVLOUSO5Vz013uTobnN+SBE1Jm8GuJZ7T7U=";
   };
 
   strictDeps = true;

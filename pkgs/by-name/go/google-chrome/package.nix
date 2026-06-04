@@ -79,11 +79,6 @@
   bzip2,
   libcap,
 
-  # Fonts (See issue #463615)
-  makeFontsConf,
-  noto-fonts-cjk-sans,
-  noto-fonts-cjk-serif,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
@@ -184,11 +179,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "148.0.7778.215";
+    version = "149.0.7827.53";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-IyKMotjgwLJ9AKAl+gE86DWd0GCtQoBjvbbvBiYULSQ=";
+      hash = "sha256-iqNNjJy9Wje5jcpJrQYHu/gZptaBwZg0WZzbZTKUmPg=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -219,13 +214,6 @@ let
 
     rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
     binpath = lib.makeBinPath deps;
-
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-      ];
-    };
 
     installPhase = ''
       runHook preInstall
@@ -278,7 +266,6 @@ let
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-        --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
@@ -302,11 +289,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "148.0.7778.216";
+    version = "149.0.7827.54";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/ac3wy6ujyaf3yzk7hqzmyw4nopha_148.0.7778.216/GoogleChrome-148.0.7778.216.dmg";
-      hash = "sha256-NauJr7eRVb5q1s38WXijxBAhJ2RryfrrlBc9oBg5HH4=";
+      url = "http://dl.google.com/release2/chrome/dk75rnebngodpmukle2jjrfx6u_149.0.7827.54/GoogleChrome-149.0.7827.54.dmg";
+      hash = "sha256-O48opD0Ea336/mbs5RFjBITjf8MWOL2BAuf6gX+pnmo=";
     };
 
     dontPatch = true;

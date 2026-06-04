@@ -56,6 +56,8 @@ in
       default = { };
       description = ''
         Extra environment variables to pass to DocuSeal services.
+
+        Refer to <https://www.docuseal.com/docs/configuring-docuseal-via-environment-variables>.
       '';
     };
 

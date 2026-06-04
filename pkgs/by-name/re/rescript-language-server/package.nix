@@ -73,6 +73,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     # https://github.com/rescript-lang/rescript-vscode/blob/1.62.0/CONTRIBUTING.md?plain=1#L186
     platforms = with lib.platforms; linux ++ darwin ++ windows ++ freebsd;
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
   };
 })

@@ -36,7 +36,7 @@ buildHomeAssistantComponent rec {
     home-assistant
     pytestCheckHook
   ]
-  ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ++ (home-assistant.getPackages "stream" home-assistant.python3Packages);
 
   meta = {
     changelog = "https://github.com/AlexxIT/YandexStation/releases/tag/${src.tag}";
