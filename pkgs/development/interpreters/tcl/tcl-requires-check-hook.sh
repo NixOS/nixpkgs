@@ -6,7 +6,7 @@ tclRequiresCheckPhase () {
 
     if [ -n "$tclRequiresCheck" ]; then
         export TCLLIBPATH="$out/lib $TCLLIBPATH" # Redundant if tcl-package-hook is also used
-        tclsh <<'EOF'
+        @tclsh@ <<'EOF'
           if {[info exists env(NIX_ATTRS_JSON_FILE)]} {
             set nix_attrs_json_file [open $env(NIX_ATTRS_JSON_FILE)]
             set nix_attrs_json [read $nix_attrs_json_file]
