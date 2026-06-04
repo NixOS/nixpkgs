@@ -11953,6 +11953,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-logging
       { };
 
+  opentelemetry-instrumentation-psycopg =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg
+      { };
+
   opentelemetry-instrumentation-psycopg2 =
     callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2
       { };
