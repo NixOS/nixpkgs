@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  qrcode,
   rns,
   setuptools,
   versionCheckHook,
@@ -24,7 +25,10 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [ "rns" ];
 
-  dependencies = [ rns ];
+  dependencies = [
+    qrcode
+    rns
+  ];
 
   pythonImportsCheck = [ "LXMF" ];
 
