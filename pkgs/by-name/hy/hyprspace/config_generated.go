@@ -6,6 +6,11 @@ import "encoding/json"
 import "fmt"
 
 type Config struct {
+	// Whether to enable filtering of private/link-local addresses from peer
+	// discovery. When enabled, the node will not attempt to connect to RFC1918,
+	// link-local, or loopback addresses advertised by other peers.
+	FilterPrivateAddresses bool `json:"filterPrivateAddresses,omitempty"`
+
 	// List of addresses to listen on for libp2p traffic.
 	ListenAddresses []string `json:"listenAddresses,omitempty"`
 
@@ -134,6 +139,9 @@ func (j *Config) UnmarshalJSON(value []byte) error {
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
+	}
+	if v, ok := raw["filterPrivateAddresses"]; !ok || v == nil {
+		plain.FilterPrivateAddresses = false
 	}
 	if v, ok := raw["listenAddresses"]; !ok || v == nil {
 		plain.ListenAddresses = []string{
