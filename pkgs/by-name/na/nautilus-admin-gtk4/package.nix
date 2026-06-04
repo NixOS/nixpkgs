@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/MacTavishAO/nautilus-admin-gtk4";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ verantor ];
+    maintainers = with lib.maintainers; [ "verantor" ];
   };
 })
