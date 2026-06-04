@@ -4,17 +4,27 @@ echo "Sourcing neovim-require-check-hook.sh"
 
 # Discover modules automatically if nvimRequireCheck is not set
 discover_modules() {
-    echo "Running module discovery in source directory..."
+    echo "Running module discovery in output directory..."
 
     # Create unique lists so we can organize later
     modules=()
 
     while IFS= read -r lua_file; do
-        # Ignore certain infra directories
-        if [[ "$lua_file" =~ (^|/)(debug|script|scripts|test|tests|spec)(/|$) || "$lua_file" =~ .*\meta.lua ]]; then
-            continue
+        # Ignore infrastructure directories and non-runtime module files
+        case "/$lua_file/" in
+            */debug/* | */script/* | */scripts/* | */test/* | */tests/* | */spec/* | */_meta/*)
+                continue
+                ;;
+        esac
+
+        case "${lua_file##*/}" in
+            *meta.lua | *_spec.lua | *.spec.lua | *.test.lua)
+                continue
+                ;;
+        esac
+
         # Ignore optional telescope and lualine modules
-        elif [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
+        if [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
             continue
         # Grab main module names
         elif [[ "$lua_file" =~ ^lua/([^/]+)/init.lua$ ]]; then
@@ -30,7 +40,7 @@ discover_modules() {
             echo "$lua_file"
             modules+=("${BASH_REMATCH[1]}")
         fi
-    done < <(find "$src" -name '*.lua' | xargs -n 1 realpath --relative-to="$src")
+    done < <(find "$out" -name '*.lua' -exec realpath --relative-to="$out" {} +)
 
     nvimRequireCheck=("${modules[@]}")
     echo "Discovered modules: ${nvimRequireCheck[*]}"
