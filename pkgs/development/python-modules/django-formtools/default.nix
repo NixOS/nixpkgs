@@ -40,6 +40,9 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # mismatch between test collection of django and pytest-django
     "TestStorage"
+    # Django 6.0.6/5.2.15 compat issue
+    # https://github.com/jazzband/django-formtools/issues/298
+    "test_reset_cookie"
   ];
 
   pythonImportsCheck = [ "formtools" ];

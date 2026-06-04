@@ -6,7 +6,6 @@
 
 makeSetupHook {
   name = "manifest-check-hook";
-  propagatedNativeBuildInputs = [ python3Packages.packaging ];
   substitutions = {
     pythonCheckInterpreter = python3Packages.python.interpreter;
     checkManifest = ./check_manifest.py;

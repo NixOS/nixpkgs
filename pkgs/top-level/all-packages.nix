@@ -1341,11 +1341,6 @@ with pkgs;
   x16-rom = x16.rom;
   x16-run = x16.run;
 
-  yabause = libsForQt5.callPackage ../applications/emulators/yabause {
-    libglut = null;
-    openal = null;
-  };
-
   ### APPLICATIONS/FILE-MANAGERS
 
   vifm-full = vifm.override {
@@ -4845,10 +4840,6 @@ with pkgs;
 
   php85Extensions = recurseIntoAttrs php85.extensions;
   php85Packages = recurseIntoAttrs php85.packages;
-
-  polyml = callPackage ../development/compilers/polyml { };
-  polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
-  polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
