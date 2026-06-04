@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "executor";
   version = "23.2";
-  format = "setuptools";
+  pyproject = true;
 
   # pipes is removed in python 3.13
   disabled = pythonAtLeast "3.13";
