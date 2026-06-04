@@ -15,6 +15,7 @@
 }:
 
 let
+  # build leangz without zstd support, to improve Hydra's xz compression ratio
   leangz-raw = leangz.overrideAttrs { cargoBuildNoDefaultFeatures = true; };
 
   mathlib__archive = buildLakePackage (finalAttrs: {
