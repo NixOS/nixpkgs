@@ -56,6 +56,7 @@ buildPythonPackage (finalAttrs: {
     description = "Generic modularized configuration file manager";
     mainProgram = "update-dotdee";
     homepage = "https://github.com/xolox/python-update-dotdee";
+    changelog = "https://github.com/xolox/python-update-dotdee/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
