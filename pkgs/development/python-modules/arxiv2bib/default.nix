@@ -3,13 +3,14 @@
   lib,
   fetchFromGitHub,
   mock,
+  setuptools,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "arxiv2bib";
   version = "1.0.8";
-  format = "setuptools";
+  pyproject = true;
 
   # Missing tests on Pypi
   src = fetchFromGitHub {
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1kp2iyx20lpc9dv4qg5fgwf83a1wx6f7hj1ldqyncg0kn9xcrhbg";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     unittestCheckHook
