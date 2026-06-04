@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "apcaccess";
   version = "0.0.13";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flyte";
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires='pytest-runner'," ""
   '';
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "apcaccess" ];
 
