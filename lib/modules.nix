@@ -567,10 +567,20 @@ let
           isDisabledModule = isDisabled modulesPath disabled;
           keyFilter = filter (attrs: !isDisabledModule attrs);
         in
-        catAttrs "module" (genericClosure {
-          startSet = keyFilter modules;
-          operator = attrs: keyFilter attrs.modules;
-        });
+        catAttrs "module" (
+          genericClosure (
+            if disabled == [ ] then
+              {
+                startSet = modules;
+                operator = attrs: attrs.modules;
+              }
+            else
+              {
+                startSet = keyFilter modules;
+                operator = attrs: keyFilter attrs.modules;
+              }
+          )
+        );
 
       toGraph =
         modulesPath:
