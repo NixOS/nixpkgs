@@ -10990,10 +10990,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
   };
 
-  prooftree = callPackage ../applications/science/logic/prooftree {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
-  };
-
   satallax = callPackage ../applications/science/logic/satallax {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };

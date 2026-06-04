@@ -2,31 +2,25 @@
   lib,
   stdenv,
   fetchurl,
-  pkg-config,
-  ncurses,
   ocamlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prooftree";
   version = "0.14";
 
   src = fetchurl {
-    url = "https://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
-    sha256 = "sha256-nekV2UnjibOk4h0jZ1jV7W5pE/hXWb3fUoLTJb3Jzc0=";
+    url = "https://askra.de/software/prooftree/releases/prooftree-${finalAttrs.version}.tar.gz";
+    hash = "sha256-nekV2UnjibOk4h0jZ1jV7W5pE/hXWb3fUoLTJb3Jzc0=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ (with ocamlPackages; [
+  nativeBuildInputs = with ocamlPackages; [
     ocaml
     findlib
-    camlp5
-  ]);
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ lablgtk ]);
+  ];
+  buildInputs = with ocamlPackages; [ lablgtk ];
 
   prefixKey = "--prefix ";
 
@@ -55,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jwiegley ];
     license = lib.licenses.gpl3;
   };
-}
+})
