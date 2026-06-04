@@ -96,6 +96,7 @@ let
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
+        sierra-breeze-enhanced = self.callPackage ./third-party/sierra-breeze-enhanced { };
 
         qtstyleplugin-kvantum = self.callPackage ../development/libraries/qtstyleplugin-kvantum { };
       }
