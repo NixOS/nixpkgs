@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
   buildInputs = [
     zlib
   ];
