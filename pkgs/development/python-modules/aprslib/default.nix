@@ -4,12 +4,13 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aprslib";
   version = "0.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
@@ -24,6 +25,8 @@ buildPythonPackage rec {
       hash = "sha256-uxiLIagz1PIUUa6/qdBW15yhm/0QXqznVzZnzUVCWuQ=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   doCheck = false; # mox3 is disabled on python311
 
