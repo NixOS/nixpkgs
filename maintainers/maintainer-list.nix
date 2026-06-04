@@ -18671,6 +18671,14 @@
     githubId = 66489839;
     name = "MrSmör";
   };
+  MrSnowy = {
+    name = "Snowy";
+    github = "MrSn0wy";
+    githubId = 61592704;
+
+    email = "snow@mrsnowy.dev";
+    keys = [ { fingerprint = "D40C E157 9C09 BFD7 EF4A  B7E6 3125 0420 8343 10B5"; } ];
+  };
   MrSom3body = {
     email = "nix@sndh.dev";
     matrix = "@mrsom3body:matrix.org";
