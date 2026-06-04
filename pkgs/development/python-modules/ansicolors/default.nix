@@ -29,6 +29,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/verigak/colors/";
+    changelog = "https://pypi.org/project/ansicolors/${finalAttrs.version}/";
     description = "ANSI colors for Python";
     license = lib.licenses.isc;
     maintainers = [ ];
