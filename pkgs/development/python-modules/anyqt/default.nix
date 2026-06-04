@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anyqt";
   version = "0.2.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ales-erjavec";
     repo = "anyqt";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-iDUgu+x9rnpxpHzO7Rf2rJFXsheivrK7HI3FUbomkTU=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = [ lib.licenses.gpl3Only ];
     maintainers = [ lib.maintainers.lucasew ];
   };
-}
+})
