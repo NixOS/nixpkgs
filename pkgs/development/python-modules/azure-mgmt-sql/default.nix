@@ -11,15 +11,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-sql";
   version = "3.0.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "129042cc011225e27aee6ef2697d585fa5722e5d1aeb0038af6ad2451a285457";
+    hash = "sha256-EpBCzAESJeJ67m7yaX1YX6VyLl0a6wA4r2rSRRooVFc=";
   };
 
   build-system = [ setuptools ];
@@ -43,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})
