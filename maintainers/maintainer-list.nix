@@ -25770,6 +25770,7 @@
   };
   skyesoss = {
     name = "Skye Soss";
+    email = "skye@soss.website";
     matrix = "@skyesoss:matrix.org";
     github = "Skyb0rg007";
     githubId = 30806179;
