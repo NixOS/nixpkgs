@@ -62,6 +62,9 @@ buildPythonPackage (finalAttrs: {
     ./6.x/pythonpath.patch
     # test_incorrect_timezone should raise but doesn't
     ./6.x/disable-failing-test.patch
+    # https://code.djangoproject.com/ticket/36997
+    # https://github.com/django/django/pull/21019
+    ./6.x/invalidate-importlib-cache.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./6.x/gdal.patch {
