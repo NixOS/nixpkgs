@@ -36,7 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/manic-systems/dix";
     description = "Blazingly fast tool to diff Nix related things";
+    changelog = "https://github.com/manic-systems/dix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       faukah
       NotAShelf
