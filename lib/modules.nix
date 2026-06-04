@@ -543,9 +543,9 @@ let
                   # only include a disabled attribute if any modules have to be
                   # disabled. most people don't disable any modules, which lets
                   # us skip the work of merging the lists together
-                  ${if module.disabledModules != [ ] || collectedImports ? disabled then "disabled" else null} =
+                  ${if module ? disabledModules || collectedImports ? disabled then "disabled" else null} =
                     (
-                      if module.disabledModules != [ ] then
+                      if module ? disabledModules then
                         [
                           {
                             file = module._file;
@@ -688,7 +688,7 @@ let
           _file = toString m._file or file;
           _class = m._class or null;
           key = toString m.key or key;
-          disabledModules = m.disabledModules or [ ];
+          ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
           imports = m.imports or [ ];
           options = m.options or { };
           config = addFreeformType (addMeta (m.config or { }));
@@ -699,7 +699,7 @@ let
         _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
-        disabledModules = m.disabledModules or [ ];
+        ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
         imports = m.require or [ ] ++ m.imports or [ ];
         options = { };
         config = addFreeformType (
