@@ -5,12 +5,13 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
   version = "7.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-XfAE/QyST8ZVlJR6nP9Pdgh97hfIhFM6G7sLINsn06M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     isodate
     azure-common
     azure-mgmt-core
