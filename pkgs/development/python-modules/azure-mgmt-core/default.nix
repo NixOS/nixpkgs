@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   azure-core,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   version = "1.6.0";
-  format = "setuptools";
+  pyproject = true;
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-smIyr4V7Ah5h2BPZ9K5TBGUlXLELPd6UWtN0P3pY55w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     typing-extensions
   ];
