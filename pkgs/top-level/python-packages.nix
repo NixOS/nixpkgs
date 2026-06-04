@@ -8507,8 +8507,6 @@ self: super: with self; {
 
   kombu = callPackage ../development/python-modules/kombu { };
 
-  konnected = callPackage ../development/python-modules/konnected { };
-
   kopf = callPackage ../development/python-modules/kopf { };
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
