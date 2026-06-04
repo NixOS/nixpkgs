@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrestazure,
   azure-common,
   azure-mgmt-nspkg,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-devspaces";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     sha256 = "0dvjsr9i87j1ggbj3dcmgifpk64xr5f5ziwf7z1fwkcx0szcid7k";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrestazure
     azure-common
     azure-mgmt-nspkg
