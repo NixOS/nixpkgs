@@ -467,6 +467,12 @@ with haskellLib;
   # https://github.com/LaurentRDC/hakyll-images/issues/14
   hakyll-images = dontCheck super.hakyll-images;
 
+  # Too strict upper bound on hakyll (<4.17)
+  # https://gitlab.com/lysxia/hakyll-alectryon/-/work_items/2
+  hakyll-alectryon = doJailbreak super.hakyll-alectryon;
+  # https://gitlab.com/aergus/hakyll-filestore/-/work_items/1
+  hakyll-filestore = doJailbreak super.hakyll-filestore;
+
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
