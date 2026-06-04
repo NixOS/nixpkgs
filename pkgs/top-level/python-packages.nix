@@ -19802,6 +19802,8 @@ self: super: with self; {
 
   tokenspeed-triton = callPackage ../development/python-modules/tokenspeed-triton { };
 
+  tokenspeed-triton-bin = callPackage ../development/python-modules/tokenspeed-triton/bin.nix { };
+
   tokentrim = callPackage ../development/python-modules/tokentrim { };
 
   tololib = callPackage ../development/python-modules/tololib { };
