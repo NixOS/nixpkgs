@@ -209,10 +209,7 @@ in
 
           passthru = args.passthru or { } // {
             inherit fetcherVersion;
-            serve = callPackage ./serve.nix {
-              inherit pnpm; # from args
-              pnpmDeps = finalAttrs.finalPackage;
-            };
+            serve = throw "fetchPnpmDeps: `serve` has been deprecated as it was removed in pnpm 11 and only had a niche use case."; # Added 2026-06-04
           };
 
           dontConfigure = true;
