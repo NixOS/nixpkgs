@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-karumbi";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/karumbi/karumbi.zip";
     hash = "sha256-aeKH7CWbJNtkgv1PsaWWxyBZor+UO9q9Cctpc/qnEQU=";

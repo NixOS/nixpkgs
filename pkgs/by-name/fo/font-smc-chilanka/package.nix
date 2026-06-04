@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-chilanka";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/chilanka/chilanka.zip";
     hash = "sha256-z+pRvm/8alA3TbUBuR4oDD/kpvuXJTqOBlzXEKBZvnE=";

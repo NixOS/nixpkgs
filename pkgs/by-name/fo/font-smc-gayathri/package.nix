@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-gayathri";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/gayathri/gayathri.zip";
     hash = "sha256-p9KZi31Na4hfUuDsKj4OXjc9s6J/8xMeuszlL5oVauQ=";

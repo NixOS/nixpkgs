@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-suruma";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/suruma/suruma.zip";
     hash = "sha256-x4ybBr5oCwD5Stu8rRGndOYRzaV6ikE+VnLJ/src+1U=";

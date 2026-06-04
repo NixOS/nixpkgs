@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-raghumalayalamsans";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/raghumalayalamsans/raghumalayalamsans.zip";
     hash = "sha256-rSM77MiFqRzs67mme8xkJZkw13esB9eG13j8OzytCaA=";

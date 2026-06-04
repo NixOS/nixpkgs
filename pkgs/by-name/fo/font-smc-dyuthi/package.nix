@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-dyuthi";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/dyuthi/dyuthi.zip";
     hash = "sha256-H+2ccvHmlZjtH8KfWBSQKPtMkY/NsydHqFNaTzLS4S8=";

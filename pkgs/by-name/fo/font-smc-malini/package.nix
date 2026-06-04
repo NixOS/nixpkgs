@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-malini";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/malini/Malini.zip";
     hash = "sha256-2Go6HNy2s2ZcybkuhM62UhwLehnrMMoG89YHDldflZs=";

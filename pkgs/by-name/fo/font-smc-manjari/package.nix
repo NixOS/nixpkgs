@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-manjari";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/manjari/manjari.zip";
     hash = "sha256-Sq/7UOBO54c3id6FMZeOmnZTRceEkMAAN8W+C7v7Mtw=";

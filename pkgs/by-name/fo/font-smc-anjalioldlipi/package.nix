@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-anjalioldlipi";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/anjalioldlipi/anjalioldlipi.zip";
     hash = "sha256-c3ScpdN2h39Q6GLFL97pBBGrsillcMXmhlGilOAdF1w=";

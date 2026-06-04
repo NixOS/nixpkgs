@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-keraleeyam";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/keraleeyam/keraleeyam.zip";
     hash = "sha256-UEhDtBaWof/2C36IapGhtYgdeQInUn+A/UAJIF7+RuA=";

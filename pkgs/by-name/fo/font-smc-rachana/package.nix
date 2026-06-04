@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-rachana";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/rachana/rachana.zip";
     hash = "sha256-csfMs4B6BD+yap/AaWpm4kQDsR/WNMrym6szM5iZNJo=";

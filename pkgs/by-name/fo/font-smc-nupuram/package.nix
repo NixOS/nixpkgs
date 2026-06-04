@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-nupuram";
   version = "20241013";
 
+  strictDeps = true;
+
   srcs = [
     (fetchzip {
       name = "Nupuram-Arrows-Color";

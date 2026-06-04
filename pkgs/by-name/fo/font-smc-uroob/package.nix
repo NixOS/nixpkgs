@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-uroob";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/uroob/uroob.zip";
     hash = "sha256-IJcKD3cDRMA7G7foKtXtJxOrv6OeOujkq9+uGo+R/dY=";

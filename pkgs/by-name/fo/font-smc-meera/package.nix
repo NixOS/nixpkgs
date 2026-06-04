@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-smc-meera";
   version = "20241013";
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/meera/meera.zip";
     hash = "sha256-yaqA2gYKc4OJ9YxmvQPUZ3qZFyKj0YciMaUoY1SST4I=";
