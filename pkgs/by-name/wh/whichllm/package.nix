@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       rich
       typer
     ]
-    ++ python3Packages.dbgpu.optional-dependencies.fuzz;
+    ++ dbgpu.optional-dependencies.fuzz;
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
