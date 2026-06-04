@@ -296,6 +296,28 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-qNWe3iw+bYDtvBZ2KVfcy4VKu/waOyhoKZ0L8bqLdNc=";
     })
 
+    # XSA #493
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-01.patch";
+      hash = "sha256-SvAj+9CIyedpFENCB/lQTJUB4kpVkGh+z+NNk82lQqM=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-02.patch";
+      hash = "sha256-4fajBBBKMnMTy7mvFSUghwkRbYo833s3jATeGfiOrjc=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-03.patch";
+      hash = "sha256-/AI9gtd60UWf89NNd7+Zx1g+KyAIM2wCih/07LN5zt4=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-04.patch";
+      hash = "sha256-qvXQG9VZkgca/za3bx1zTDkmRz5lFT3JPkbdI1mlBGY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-05.patch";
+      hash = "sha256-6pGjjPjalw6TY0n9TInE3nCXNmt6BUxwy1r1xf55U7k=";
+    })
+
     # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
