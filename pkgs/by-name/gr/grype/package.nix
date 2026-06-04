@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.112.0";
+  version = "0.113.0";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8gCJ+hCClpYbDOTierJJfH5JP1imuQ3ZV2xDoeE0TtM=";
+    hash = "sha256-wNInrYI7cxn/WsPLZp01rEzQm4gUG0xUgvSLlv27WUM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-VDhKMg+3rovhpSFgDUqeLOrf56jtT9c0e090FvY87Yo=";
+  vendorHash = "sha256-VZutEOKZK0aYiS5e9WWXCBOw7epr3xfYJo0xrpSecdk=";
 
   patches = [
     # several test golden files have unstable paths based on the platform
@@ -82,6 +82,13 @@ buildGoModule (finalAttrs: {
 
     # patch utility script
     patchShebangs grype/db/v5/distribution/testdata/tls/generate-x509-cert-pair.sh
+
+    # test build fingerprinting expects a git repository
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+    git add .
+    git commit -m "initial commit"
   '';
 
   checkFlags =
