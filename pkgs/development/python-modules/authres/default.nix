@@ -31,6 +31,7 @@ buildPythonPackage (finalAttrs: {
       Python/Python3.
     '';
     homepage = "https://launchpad.net/authentication-results-python";
+    changelog = "https://git.launchpad.net/authentication-results-python/tree/CHANGES";
     license = lib.licenses.bsd3;
   };
 })
