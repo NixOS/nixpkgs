@@ -42,7 +42,6 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # NameError: name 'TT' is not defined
     "tests/schema/test_jsonschema.py"
-    "tests/backend/loaders/pickle/test_pickle_stdlib.py"
   ];
 
   pythonImportsCheck = [ "anyconfig" ];
