@@ -43,6 +43,7 @@ lib.extendMkDerivation {
         name = "ocaml${ocaml.version}-${pname}-${version}";
 
         strictDeps = true;
+        __structuredAttrs = true;
 
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
