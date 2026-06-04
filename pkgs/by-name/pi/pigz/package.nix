@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   zlib,
+  ncompress,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.hostPlatform.isLinux;
   checkTarget = "tests";
+  nativeCheckInputs = [
+    which
+    ncompress
+  ];
+
   installPhase = ''
     runHook preInstall
 
