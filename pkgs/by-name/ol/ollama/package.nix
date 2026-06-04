@@ -110,13 +110,13 @@ let
 
   # Since v0.30, llama.cpp is consumed via CMake FetchContent rather than
   # vendored in-tree. Pre-stage the pinned commit (read from upstream's
-  # `LLAMA_CPP_VERSION` file — currently `b9493`) so the FetchContent step
+  # `LLAMA_CPP_VERSION` file — currently `b9509`) so the FetchContent step
   # uses our copy instead of trying to clone over the network in the sandbox.
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    rev = "a731805cedc83c0514cbd808a2e38ec46c759cc2"; # tag b9493
-    hash = "sha256-DO9J1mx9Jlp6qtCiJp2ZEi6R7H2YX1/sD7DGgBCtt0U=";
+    rev = "6f3a9f3dee3c27545371044a3a38005721ac8a8e"; # tag b9509
+    hash = "sha256-bO1ucb/+vidj/EYzNCssotjte9NlVLdjC794jToNNeM=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.30.4";
+  version = "0.30.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IHX8o1Ty4Sdht5YeUYLnNPjOV7O95WeNng/coO+MHS8=";
+    hash = "sha256-jh/B/FkmAliCVzqc8DGCPYa5+XejE3cFZTzSuRxjPvw=";
   };
 
   vendorHash = "sha256-lZdGzGb9xRjTm1Rm7/wHjqM490gLznLEndmb4mNbCX0=";
