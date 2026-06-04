@@ -5,6 +5,7 @@
   zlib,
   ncompress,
   which,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://www.zlib.net/pigz/";
