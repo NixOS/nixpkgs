@@ -23,6 +23,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-jpOj6MndjCTTPESIjh3VJW1FKK5n99W8GBgPqloaKFM=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     (python3.withPackages (
       ps: with ps; [
