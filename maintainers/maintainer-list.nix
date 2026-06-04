@@ -18306,13 +18306,6 @@
     githubId = 52108954;
     name = "Matias Zwinger";
   };
-  mkf = {
-    email = "m@mikf.pl";
-    github = "mkf";
-    githubId = 7753506;
-    name = "Michał Krzysztof Feiler";
-    keys = [ { fingerprint = "1E36 9940 CC7E 01C4 CFE8  F20A E35C 2D7C 2C6A C724"; } ];
-  };
   mkg = {
     email = "mkg@vt.edu";
     github = "mkgvt";
