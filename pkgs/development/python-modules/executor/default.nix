@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
-  pythonAtLeast,
   coloredlogs,
   humanfriendly,
   property-manager,
@@ -19,15 +19,21 @@ buildPythonPackage (finalAttrs: {
   version = "23.2";
   pyproject = true;
 
-  # pipes is removed in python 3.13
-  disabled = pythonAtLeast "3.13";
-
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-executor";
     tag = finalAttrs.version;
     hash = "sha256-Gjv+sUtnP11cM8GMGkFzXHVx0c2XXSU56L/QwoQxINc=";
   };
+
+  patches = [
+    # https://github.com/xolox/python-executor/pull/26
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/xolox/python-executor/commit/4c5f4b44543bfb48ad790c440d1d7d0933e12499.patch?full_index=1";
+      hash = "sha256-pfWdLaREikzBaey75Tb+GiE+pUCl1h2OmsjlpzKOlno=";
+    })
+  ];
 
   build-system = [
     setuptools
