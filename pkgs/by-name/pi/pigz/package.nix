@@ -21,6 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   enableParallelBuilding = true;
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
@@ -32,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 pigz "$out/bin/pigz"
     ln -s pigz "$out/bin/unpigz"
-    install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
-    ln -s pigz.1 "$out/share/man/man1/unpigz.1"
-    install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
+    install -Dm755 pigz.1 "$man/share/man/man1/pigz.1"
+    ln -s pigz.1 "$man/share/man/man1/unpigz.1"
+    install -Dm755 pigz.pdf "$doc/share/doc/pigz/pigz.pdf"
 
     runHook postInstall
   '';
