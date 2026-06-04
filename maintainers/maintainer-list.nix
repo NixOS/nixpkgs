@@ -4377,12 +4377,6 @@
     githubId = 1516457;
     name = "Christian Albrecht";
   };
-  callahad = {
-    email = "dan.callahan@gmail.com";
-    github = "callahad";
-    githubId = 24193;
-    name = "Dan Callahan";
-  };
   callumio = {
     email = "git@cleslie.uk";
     github = "callumio";
