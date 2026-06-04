@@ -6,19 +6,21 @@
   lib,
   makeDesktopItem,
   nix-update-script,
-  npm-lockfile-fix,
   prefetch-npm-deps,
   rsync,
   stdenv,
-  nodejs_24,
+  nodejs_22,
+  rustPlatform,
+  cacert,
+  cargo,
 }:
 let
   electron = electron_41;
-  nodejs = nodejs_24;
+  nodejs = nodejs_22;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "18.5.0";
+  version = "18.12.0";
 
   inherit nodejs;
 
@@ -26,11 +28,7 @@ buildNpmPackage rec {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-LPLbHmUsFS0iw0iUfWrc4fXJ+/R33ne7aWcPKEtgtyc=";
-
-    postFetch = ''
-      find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
-    '';
+    hash = "sha256-v4/fPfgiUMOWAcmWdr13oCmu7NTZI3ki6uWJPWTcWzM=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -47,14 +45,21 @@ buildNpmPackage rec {
         rsync
       ];
 
-      # Some lockfiles do not include any dependencies to install so
-      # prefertch-npm-deps produces an error.  Those can be ignored with
-      # this flag.
-      env.FORCE_EMPTY_CACHE = true;
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      env = {
+        # Some lockfiles do not include any dependencies to install so
+        # prefertch-npm-deps produces an error.  Those can be ignored with
+        # this flag.
+        FORCE_EMPTY_CACHE = true;
+        NPM_FETCHER_VERSION = "2";
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
 
       buildPhase = ''
         mkdir -p $out
-        find -name package-lock.json | while read -r lockfile; do
+        find -name package-lock.json | sort | while read -r lockfile; do
           prefetch-npm-deps $lockfile /tmp/cache
           # Merge output
           rsync -a /tmp/cache/ $out
@@ -69,22 +74,44 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-/hv9ItFH6k3Gn94/j2dp51LdVoGrUgDRHWewsLjq1Lg=";
+      hash = "sha256-inutOgoQ+xvdVizK2ff6Ro4F/5n4l6dAYjfXJTHWfpo=";
     }
   );
 
   makeCacheWritable = true;
+  npmDepsFetcherVersion = 2;
+
+  cargoRoot = "electron/wayland-idle-helper";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-u/GjzX8zykIqJlMR/611ADX2EcD1cb4Qr94EkI2sdlA=";
+  };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    cargo
+    copyDesktopItems
+    rustPlatform.cargoSetupHook
+  ];
 
   postPatch = ''
     substituteInPlace electron-builder.yaml \
       --replace-fail "notarize: true" "notarize: false"
+
+    # At runtime the helper is looked up via app.getAppPath() (the dirname of
+    # the asar file).  process.execPath points to the system electron binary,
+    # not our app directory, so it would search the wrong location.
+    substituteInPlace electron/idle-time-handler.ts \
+      --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
   '';
 
   buildPhase = ''
@@ -125,7 +152,7 @@ buildNpmPackage rec {
       else
         ''
           mkdir -p $out/share/{super-productivity,icons/hicolor/scalable/apps}
-          cp -r .tmp/app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
+          cp -r .tmp/app-builds/*-unpacked/{resources/app.asar,wayland-idle-helper} $out/share/super-productivity
           cp electron/assets/icons/ico-circled.svg $out/share/icons/hicolor/scalable/apps/super-productivity.svg
 
           makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \
