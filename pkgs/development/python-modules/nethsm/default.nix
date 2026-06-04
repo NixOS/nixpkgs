@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Nitrokey/nethsm-sdk-py";
     changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ ];
   };
 }
