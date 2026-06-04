@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
   enableParallelBuilding = true;
 
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
