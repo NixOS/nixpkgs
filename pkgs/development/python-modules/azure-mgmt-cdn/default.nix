@@ -5,19 +5,22 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cdn";
   version = "13.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-RmMwTzG2Zy3sMgx857qXFcK5nn2LaEs3XwtO/9qQIQw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     isodate
     azure-common
     azure-mgmt-core
