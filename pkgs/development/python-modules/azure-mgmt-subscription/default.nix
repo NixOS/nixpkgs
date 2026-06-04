@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-subscription";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-TiVbTOm5JDV7uMUAmzyIogFNMgOySV4iVvoCe/hOgA4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
