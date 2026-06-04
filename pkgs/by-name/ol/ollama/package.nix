@@ -230,12 +230,6 @@ goBuild (finalAttrs: {
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
         -P $NIX_BUILD_TOP/source/llama/compat/apply-patch.cmake )
-  ''
-  # disable tests that fail in sandbox due to Metal init failure
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rm ml/backend/ggml/ggml_test.go
-    rm ml/nn/pooling/pooling_test.go
-    rm model/models/nemotronh/model_omni_test.go
   '';
 
   overrideModAttrs = _: _: {
@@ -319,7 +313,9 @@ goBuild (finalAttrs: {
   # `.so` payloads end up with build-dir entries in RPATH. Drop them
   # before the forbidden-references check. $ORIGIN is preserved
   # unconditionally; only absolute /nix/store entries are kept.
-  preFixup = ''
+  # ELF-only (patchelf doesn't know Mach-O); darwin builds Mach-O dylibs
+  # that don't carry the build-dir RPATH problem in the first place.
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib/ollama -type f \( -name '*.so' -o -name '*.so.*' \) \
       -exec patchelf --shrink-rpath --allowed-rpath-prefixes /nix/store {} +
   '';
