@@ -310,6 +310,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       effectiveStdenv.hostPlatform.system == "x86_64-linux"
     ))
     (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
+    # RTTI is disabled in default non-python builds (https://onnxruntime.ai/docs/build/custom.html#basic),
+    # but disabling it with OpenVINO will fail with `error: cannot use 'typeid' with '-fno-rtti'`
+    (lib.cmakeBool "onnxruntime_DISABLE_RTTI" false)
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
