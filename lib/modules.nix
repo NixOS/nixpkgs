@@ -31,7 +31,6 @@ let
     length
     mapAttrs
     mapAttrsToList
-    mapAttrsRecursiveCond
     min
     optional
     optionalAttrs
@@ -280,7 +279,11 @@ let
         let
 
           # For definitions that have an associated option
-          declaredConfig = mapAttrsRecursiveCond (v: !isOption v) (_: v: v.value) options;
+          declaredConfig =
+            let
+              recurse = mapAttrs (n: v: if isOption v then v.value else recurse v);
+            in
+            recurse options;
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
