@@ -820,6 +820,38 @@ def test_switch_to_configuration_without_systemd_run(
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_switch_to_configuration_without_systemd_run_env_var(
+    mock_run: Any, monkeypatch: MonkeyPatch
+) -> None:
+    profile_path = Path("/path/to/profile")
+    mock_run.return_value = CompletedProcess([], 0)
+
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "")
+        mp.setenv("NIXOS_REBUILD_NO_SYSTEMD_RUN", "1")
+
+        n.switch_to_configuration(
+            profile_path,
+            m.Action.SWITCH,
+            elevate=e.NO_ELEVATOR,
+            target_host=None,
+            specialisation=None,
+            install_bootloader=False,
+        )
+    mock_run.assert_called_with(
+        [profile_path / "bin/switch-to-configuration", "switch"],
+        env={
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        },
+        elevate=e.NO_ELEVATOR,
+        remote=None,
+        stdout=sys.stderr,
+    )
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_switch_to_configuration_with_systemd_run(
     mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:

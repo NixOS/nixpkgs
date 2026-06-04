@@ -708,6 +708,8 @@ def switch_to_configuration(
             "not working in target host"
         )
         cmd = []
+    elif os.environ.get("NIXOS_REBUILD_NO_SYSTEMD_RUN"):
+        cmd = []
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],

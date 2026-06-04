@@ -379,6 +379,10 @@ NIX_SSHOPTS
 NIX_SUDOOPTS
 	Additional options to be passed to sudo on the command line.
 
+NIXOS_REBUILD_NO_SYSTEMD_RUN
+	If set, then *nixos-rebuild* will run without the
+	_systemd-run_ wrapper.
+
 # FILES
 
 /etc/nixos/system.nix
