@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ hdf5 ];
+  buildInputs = [ (hdf5.override { apiVersion = "v110"; }) ];
 
   checkPhase = "make test";
 
