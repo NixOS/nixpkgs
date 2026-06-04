@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  # rns optionally depends on lxmf but we can't have two versions of rns in a closure
+  propagateRns ? false,
   qrcode,
   rns,
   setuptools,
@@ -25,14 +27,22 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [ "rns" ];
 
+  buildInputs = lib.optionals (!propagateRns) [
+    rns
+  ];
+
   dependencies = [
     qrcode
+  ]
+  ++ lib.optionals propagateRns [
     rns
   ];
 
   pythonImportsCheck = [ "LXMF" ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = lib.optionals propagateRns [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Lightweight Extensible Message Format for Reticulum";
