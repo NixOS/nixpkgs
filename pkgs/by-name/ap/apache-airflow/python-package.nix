@@ -19,6 +19,7 @@
   attrs,
   babel,
   buildPythonPackage,
+  cachetools,
   cadwyn,
   colorlog,
   cron-descriptor,
@@ -88,13 +89,13 @@
   enabledProviders,
 }:
 let
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-jwWxH9fTTCFdLAaAN18/FUAbN0cTCPkkk9+0ZMYNXek=";
+    hash = "sha256-nAFSLdcKmP2CNm3rx+/fwIsJnpju7wBl+fYWQV8p+sU=";
   };
 
   pnpm = pnpm_10;
@@ -119,7 +120,7 @@ let
         pnpm
         ;
       fetcherVersion = 3;
-      hash = "sha256-OkSDQoWsHQ6w1vIoX5W9zXHghV0obvL6Wji0HYN6CSs=";
+      hash = "sha256-wJ2u+y3umecL4IeVW/29/yDgYZ77ffOBQLHeplD3XlQ=";
     };
 
     buildPhase = ''
@@ -146,9 +147,14 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "simple-auth-manager-ui";
-      inherit sourceRoot src version;
+      inherit
+        sourceRoot
+        src
+        version
+        pnpm
+        ;
       fetcherVersion = 3;
-      hash = "sha256-uQIVHzX0BcJuxgbPp6wqKhALbsfACSJjiMOdmrpuzOk=";
+      hash = "sha256-AKaafmDjIlg4eFJT1JGyelXVjcId8f0iXTR3JK4ZMq0=";
     };
 
     buildPhase = ''
@@ -212,6 +218,7 @@ let
       sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
       sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
       sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
+      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
 
       # Copy built UI assets
       cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
@@ -235,6 +242,7 @@ let
       argcomplete
       asgiref
       attrs
+      cachetools
       cadwyn
       colorlog
       cron-descriptor
@@ -291,6 +299,8 @@ let
       uvicorn
     ]
     ++ (map buildProvider requiredProviders);
+
+    pythonRelaxDeps = [ "starlette" ];
   };
 
   taskSdk = buildPythonPackage {
@@ -308,6 +318,7 @@ let
       sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
       sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
       sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
 
       # task-sdk needs config.yml from core subpackage
       mkdir -p src/airflow/config_templates
@@ -354,6 +365,7 @@ buildPythonPackage rec {
     sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
     sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
     sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+    sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
   '';
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
