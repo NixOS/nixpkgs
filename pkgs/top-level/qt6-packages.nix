@@ -110,8 +110,6 @@ makeScopeWithSplicing' {
 
       qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-      qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
-
       qtutilities = callPackage ../development/libraries/qtutilities { };
 
       qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
@@ -158,6 +156,9 @@ makeScopeWithSplicing' {
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
       ''; # Added 2026-06-06
+      qtstyleplugin-kvantum = throw ''
+        'qt6Packages.qtstyleplugin-kvantum' has been replaced by 'kdePackages.qtstyleplugin-kvantum'.
+      ''; # Added 2026-06-04
       qwlroots = throw ''
         'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
         The upstream no longer provides it as a standalone development library.
