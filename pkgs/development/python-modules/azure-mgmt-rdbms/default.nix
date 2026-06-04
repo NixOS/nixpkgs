@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-rdbms";
   version = "10.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-qH1AHIdshHNM3UiIr1UeShRhtLMo2YFq9gy4rFl58DU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
