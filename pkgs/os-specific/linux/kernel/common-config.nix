@@ -248,6 +248,10 @@ let
       BOUNCE = option yes;
     };
 
+    iommu = lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+      ARM_SMMU_V3_SVA = whenAtLeast "5.9" yes;
+    };
+
     memtest = {
       MEMTEST = yes;
     };
