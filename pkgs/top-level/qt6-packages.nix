@@ -144,10 +144,6 @@ makeScopeWithSplicing' {
       sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
       sddm = callPackage ../applications/display-managers/sddm { };
 
-      sierra-breeze-enhanced =
-        kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
-          { };
-
       signond = callPackage ../development/libraries/signond { };
 
       timed = callPackage ../applications/system/timed { };
@@ -161,6 +157,9 @@ makeScopeWithSplicing' {
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
       ''; # Added 2026-06-06
+      sierra-breeze-enhanced = throw ''
+        'qt6Packages.sierra-breeze-enhanced' has been replaced by 'kdePackages.sierra-breeze-enhanced'.
+      ''; # Added 2026-06-04
       qtstyleplugin-kvantum = throw ''
         'qt6Packages.qtstyleplugin-kvantum' has been replaced by 'kdePackages.qtstyleplugin-kvantum'.
       ''; # Added 2026-06-04
