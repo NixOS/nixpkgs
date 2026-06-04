@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-trafficmanager";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-Nb8ZAr8VidYm41lx5aqgCeiECUZytHm3mM0buNTy/fk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
