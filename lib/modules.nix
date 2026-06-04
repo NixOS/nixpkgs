@@ -523,38 +523,43 @@ let
       */
 
       collectStructuredModules =
-        parentFile: parentKey: initialModules: args:
+        initialModules: args:
         let
-          modules = imap1 (
-            n: x:
+          recurse =
+            parentFile: parentKey: imports:
             let
-              module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-              collectedImports = collectStructuredModules module._file module.key module.imports args;
+              modules = imap1 (
+                n: x:
+                let
+                  module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
+                  collectedImports = recurse module._file module.key module.imports;
+                in
+                {
+                  key = module.key;
+                  module = module;
+                  modules = collectedImports.modules;
+                  disabled =
+                    (
+                      if module.disabledModules != [ ] then
+                        [
+                          {
+                            file = module._file;
+                            disabled = module.disabledModules;
+                          }
+                        ]
+                      else
+                        [ ]
+                    )
+                    ++ collectedImports.disabled;
+                }
+              ) imports;
             in
             {
-              key = module.key;
-              module = module;
-              modules = collectedImports.modules;
-              disabled =
-                (
-                  if module.disabledModules != [ ] then
-                    [
-                      {
-                        file = module._file;
-                        disabled = module.disabledModules;
-                      }
-                    ]
-                  else
-                    [ ]
-                )
-                ++ collectedImports.disabled;
-            }
-          ) initialModules;
+              disabled = concatLists (catAttrs "disabled" modules);
+              inherit modules;
+            };
         in
-        {
-          disabled = concatLists (catAttrs "disabled" modules);
-          inherit modules;
-        };
+        recurse unknownModule "" initialModules;
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
@@ -587,11 +592,11 @@ let
         map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
     modulesPath: initialModules: args: {
-      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      modules = filterModules modulesPath (collectStructuredModules initialModules args);
       # Intentionally not shared with `modules` above: this allows
       # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
-      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules initialModules args);
     };
 
   /**
