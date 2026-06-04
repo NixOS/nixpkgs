@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   zlib,
-  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
-
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
+  buildInputs = [
+    zlib
+  ];
 
   doCheck = stdenv.hostPlatform.isLinux;
   checkTarget = "tests";
