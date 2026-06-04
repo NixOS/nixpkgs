@@ -5,6 +5,7 @@
   cached-ipaddress,
   fetchFromGitHub,
   ifaddr,
+  libredirect,
   netifaces,
   poetry-core,
   pyroute2,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiodiscover";
-  version = "3.2.3";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GivEYa0/i/ufudYSHWQwYRhTEpzmwhlOyPHWH/JpdfU=";
+    hash = "sha256-QQwEYxflOzNN+J0lCIp+LzwB7m000PgZH8MSsKTUEMw=";
   };
 
   build-system = [ poetry-core ];
@@ -35,16 +36,19 @@ buildPythonPackage (finalAttrs: {
     pyroute2
   ];
 
+  pythonRelaxDeps = [ "aiodns" ];
+
   nativeCheckInputs = [
+    libredirect.hook
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Tests require access to /etc/resolv.conf
-    "test_async_discover_hosts"
-  ];
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
 
   pythonImportsCheck = [ "aiodiscover" ];
 

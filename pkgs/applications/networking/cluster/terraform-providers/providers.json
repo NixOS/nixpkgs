@@ -9,11 +9,11 @@
     "vendorHash": "sha256-RTfj2Omiqe92Ad0swEY/aGIMvcXb39bdQoObYKiekiw="
   },
   "a10networks_thunder": {
-    "hash": "sha256-RX3mP5btzyvuBjoMNiUL6ZeFLEo5SqmwwSK/eE0gWEw=",
+    "hash": "sha256-mqCXiBtVHzEOdLW0KudPWJO6kGi0SiGawN/NQvjAJdg=",
     "homepage": "https://registry.terraform.io/providers/a10networks/thunder",
     "owner": "a10networks",
     "repo": "terraform-provider-thunder",
-    "rev": "v1.5.0",
+    "rev": "v1.6.0",
     "spdx": "BSD-2-Clause",
     "vendorHash": null
   },
@@ -517,13 +517,13 @@
     "vendorHash": "sha256-XnVGjEz4mxqkNFrvgpRQ4W9s+j03mk0NTgEx4p5Z6qk="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-kpLC5NdlpBNXj2V0hR8ZvsJjyVgKCXFt7xK8Z7AOyoQ=",
+    "hash": "sha256-ywRxQKGrQ+kT08gNgNgdT5FmvsHYucT/W29+uyz1mwg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.85.0",
+    "rev": "v1.87.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ryLMz2eh5LO0e6OLJJUoMbM+U53uDTq9sHNcnSuuWt4="
+    "vendorHash": "sha256-Bf2XnjX0G5iufWOi6E/imRQ+qgr8Yse73rrnY8CbSMg="
   },
   "hashicorp_azuread": {
     "hash": "sha256-BkQwLkGu8Xmb4laoXOLDbSPyya5v8HBBNIya5hUBlV8=",
@@ -851,11 +851,11 @@
     "vendorHash": "sha256-OgKOjLwDQxJiv+VWdOzjMcUDPu9LOuhyTRyLyM39vLM="
   },
   "linode_linode": {
-    "hash": "sha256-FUOVV0gyUMb7VnZkK0ua92IHOUJ4wmnkbjh0fSQ9vGc=",
+    "hash": "sha256-ZDU8rEmbq9tIXq9+jL30i5GnTIWM6lMJ+rljVJhBJis=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.13.0",
+    "rev": "v3.14.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-6wWNt0TDqqwtRFMCLH81WQ55XLEn4dHx+prM0DA+e4U="
   },
