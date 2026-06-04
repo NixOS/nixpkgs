@@ -463,10 +463,6 @@ with haskellLib;
   # https://github.com/input-output-hk/io-sim/issues/248
   io-sim = dontCheck super.io-sim;
 
-  # Test suites broken by hakyll 4.16, but lib is still okay
-  # https://github.com/LaurentRDC/hakyll-images/issues/14
-  hakyll-images = dontCheck super.hakyll-images;
-
   # Too strict upper bound on hakyll (<4.17)
   # https://gitlab.com/lysxia/hakyll-alectryon/-/work_items/2
   hakyll-alectryon = doJailbreak super.hakyll-alectryon;
