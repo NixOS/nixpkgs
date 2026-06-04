@@ -43,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MkP/vI6k1Kwi3cfdKh3FTFeHTEBki2D/lwCXY1VOrxM=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
+  patches = [
+    # https://github.com/krb5/krb5/pull/1506
+    ./CVE-2026-40355-and-CVE-2026-40356.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     (fetchpatch {
       name = "fix-missing-ENODATA.patch";
       url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
