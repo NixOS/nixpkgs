@@ -6,15 +6,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
+  pname = "azure-mgmt-nspkg";
   version = "3.0.2";
   pyproject = true;
-  pname = "azure-mgmt-nspkg";
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "8b2287f671529505b296005e6de9150b074344c2c7d1c805b3f053d081d58c52";
+    hash = "sha256-iyKH9nFSlQWylgBebekVCwdDRMLH0cgFs/BT0IHVjFI=";
   };
 
   build-system = [ setuptools ];
@@ -32,4 +34,4 @@ buildPythonPackage rec {
       maxwilson
     ];
   };
-}
+})
