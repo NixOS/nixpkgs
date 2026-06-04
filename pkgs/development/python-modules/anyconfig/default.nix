@@ -10,7 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "anyconfig";
   version = "0.14.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssato";
@@ -23,7 +23,9 @@ buildPythonPackage (finalAttrs: {
     sed -i '/addopts =/d' setup.cfg
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
