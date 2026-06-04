@@ -78,6 +78,14 @@ stdenv.mkDerivation rec {
     "OpenEXR.testSampleImages"
     "OpenEXR.testSharedFrameBuffer"
     "OpenEXR.testTiledRgba"
+
+    # Lack of proper endianness handling in OpenJPH
+    # https://github.com/aous72/OpenJPH/issues/266
+    # "ojph error 0x00050041 at ojph_params.cpp:687: error reading SIZ marker", and similar errors
+    "OpenEXR.testConversion"
+    "OpenEXR.testExistingStreams"
+    "OpenEXR.testLargeDataWindowOffsets"
+    "OpenEXR.testTiledCompression"
   ];
 
   passthru.tests = {
