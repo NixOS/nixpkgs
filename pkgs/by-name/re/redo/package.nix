@@ -21,11 +21,15 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     package/compile
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     package/export $out/
+    runHook postInstall
   '';
 
   meta = {
