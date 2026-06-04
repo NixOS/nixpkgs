@@ -10,7 +10,6 @@
   __splicedPackages,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
-  stdenv,
   pkgsHostTarget,
   kdePackages,
 }:
