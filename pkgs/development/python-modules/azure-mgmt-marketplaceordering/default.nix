@@ -8,12 +8,13 @@
   azure-mgmt-nspkg,
   isPy3k,
   azure-mgmt-core,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-marketplaceordering";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "68b381f52a4df4435dacad5a97e1c59ac4c981f667dcca8f9d04453417d60ad8";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
