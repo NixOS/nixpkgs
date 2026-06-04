@@ -4355,6 +4355,14 @@ with pkgs;
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
+  # Full-source Rust bootstrap chain: mrustc -> rustc 1.90.0 -> ... -> 1.96.0.
+  # Opt-in; the default `rustc`/`rustPackages` above remain binary-bootstrapped.
+  rustcBootstrapChain = callPackage ../development/compilers/rust/make-rustc-chain.nix {
+    mrustcStage0 = {
+      rustc = mrustc-bootstrap;
+      cargo = mrustc-bootstrap;
+    };
+  };
   rustPackages_1_96 = rust_1_96.packages.stable;
   rustPackages = rustPackages_1_96;
 

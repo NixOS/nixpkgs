@@ -29,6 +29,10 @@
   libffi,
   withBundledLLVM ? false,
   enableRustcDev ? true,
+  # Build a reduced compiler suitable only for bootstrapping the next rustc in a
+  # source chain: host target only, no docs, no rustc-dev. Used by the mrustc
+  # bootstrap chain's intermediate links; the final link builds normally.
+  minimal ? false,
   version,
   sha256,
   patches ? [ ],
@@ -151,7 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--target=${
         concatStringsSep "," (
           # Other targets that don't need any extra dependencies to build.
-          optionals (!fastCross) [
+          # Skipped for `minimal` chain links, which only need the host target.
+          optionals (!fastCross && !minimal) [
             "wasm32-unknown-unknown"
             "wasm32v1-none"
             "bpfel-unknown-none"
@@ -234,6 +239,11 @@ stdenv.mkDerivation (finalAttrs: {
       # Since fastCross only builds std, it doesn't make sense (and
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
+    ]
+    ++ optionals minimal [
+      # Intermediate chain links only need a working host compiler to
+      # bootstrap the next rustc version; skip docs to save build time.
+      "--disable-docs"
     ]
     ++ optionals (!fastCross && stdenv.targetPlatform.config != "wasm32-unknown-none") [
       # See https://github.com/rust-lang/rust/issues/132802
@@ -419,7 +429,12 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
 
   postInstall =
-    lib.optionalString (enableRustcDev && !fastCross) ''
+    lib.optionalString minimal ''
+      # `minimal` links build with --disable-docs; make sure the doc/man
+      # outputs still exist so Nix does not error on missing outputs.
+      mkdir -p $doc $man
+    ''
+    + lib.optionalString (enableRustcDev && !fastCross && !minimal) ''
       # install rustc-dev components. Necessary to build rls, clippy...
       python x.py dist rustc-dev
       tar xf build/dist/rustc-dev*tar.gz
@@ -469,7 +484,9 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    platforms = rustc.targetPlatformsWithHostTools;
+    # The bootstrap compiler may run on fewer platforms than the rustc it can
+    # target, e.g. the mrustc source bootstrap chain is x86_64-linux-only.
+    platforms = rustc.meta.platforms or rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;

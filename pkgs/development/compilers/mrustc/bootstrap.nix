@@ -4,7 +4,7 @@
   fetchurl,
   mrustc,
   mrustc-minicargo,
-  #llvm_12,
+  llvmPackages_21,
   libffi,
   cmake,
   perl,
@@ -18,11 +18,34 @@
 }:
 
 let
-  mrustcTargetVersion = "1.54";
-  rustcVersion = "1.54.0";
+  # rustc 1.90 builds against LLVM 21, so the codegen backend is pinned to
+  # llvmPackages_21 explicitly. This currently coincides with the Nixpkgs
+  # default `llvmPackages`, but the pin is deliberate and must not be assumed to
+  # track that default: when the default moves ahead, this should stay on
+  # whatever LLVM the targeted rustc supports (bump it together with
+  # `rustcVersion`). mrustc builds rustc's LLVM codegen backend (minicargo
+  # `--features llvm`), so it needs a working llvm-config at build time and links
+  # libLLVM at runtime. Use a shared libLLVM, mirroring rust/1_95.nix's
+  # `llvmSharedFor`.
+  llvmShared = llvmPackages_21.libllvm.override { enableSharedLibraries = true; };
+
+  # mrustc v0.12.0 is tested upstream to fully bootstrap rustc 1.90.0; the mrustc
+  # README phrases this as "fully bootstrap (with a binary-equal 1.91.1) version
+  # 1.90.0". To verify that assertion: build rustc 1.90.0 with mrustc, use that
+  # rustc to build rustc 1.91.1 from source, and check the result is bit-
+  # identical to the official 1.91.1 release (the comparison mrustc's own
+  # bootstrap tests run; the same chain is exercised by dtolnay/bootstrap). Note
+  # this derivation does NOT itself depend on bit-identity -- the rustc it
+  # produces differs from the binary toolchain by construction (e.g. it reports
+  # "built from a source tarball"); the upstream reproduction is only what gives
+  # confidence mrustc compiles rustc faithfully. The per-version source patch
+  # `rustc-1.90.0-src.patch` and `rustc-1.90.0-overrides.toml` ship in the
+  # mrustc tree and are applied/used by the build below.
+  mrustcTargetVersion = "1.90";
+  rustcVersion = "1.90.0";
   rustcSrc = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${rustcVersion}-src.tar.gz";
-    sha256 = "0xk9dhfff16caambmwij67zgshd8v9djw6ha0fnnanlv7rii31dc";
+    hash = "sha256-eZqfnLpO1TUeBxBIvPa1VgdV2QCWSN7zOkB91JYfm34=";
   };
   rustcDir = "rustc-${rustcVersion}-src";
   outputDir = "output-${rustcVersion}";
@@ -64,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    #llvm_12
+    llvmShared.lib
     libffi
     zlib
     libxml2
@@ -75,8 +98,13 @@ stdenv.mkDerivation rec {
   makeFlags = [
     # Use shared mrustc/minicargo/llvm instead of rebuilding them
     "MRUSTC=${mrustc}/bin/mrustc"
-    #"MINICARGO=${mrustc-minicargo}/bin/minicargo"  # FIXME: we need to rebuild minicargo locally so --manifest-overrides is applied
-    #"LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
+    # minicargo is intentionally NOT passed: it is rebuilt in-tree so that
+    # `--manifest-overrides rustc-1.90.0-overrides.toml` is honoured.
+    #"MINICARGO=${mrustc-minicargo}/bin/minicargo"
+    # Point at our LLVM so mrustc does not try to build rustc's vendored LLVM
+    # via cmake (which dontUseCmakeConfigure would break). Because this is an
+    # existing store path, Make treats the prerequisite as satisfied.
+    "LLVM_CONFIG=${llvmShared.dev}/bin/llvm-config"
     "RUSTC_TARGET=${stdenv.targetPlatform.rust.rustcTarget}"
   ];
 
@@ -118,10 +146,15 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  # Bootstrapping rustc 1.90 through mrustc is a multi-hour, many-GB build.
+  requiredSystemFeatures = [ "big-parallel" ];
+
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    run_rustc/${outputDir}/prefix/bin/hello_world | grep "hello, world"
+    # samples/hello.rs prints "Hello, world!"; match case-insensitively and
+    # echo the output so the smoke test is debuggable.
+    run_rustc/${outputDir}/prefix/bin/hello_world | tee /dev/stderr | grep -iF "hello, world"
     runHook postCheck
   '';
 
@@ -153,24 +186,5 @@ stdenv.mkDerivation rec {
       asl20
     ];
     platforms = [ "x86_64-linux" ];
-    # rustc 1.54 only supports LLVM 12, which was removed from Nixpkgs.
-    # mrustc can bootstrap up to rustc 1.74, which supported LLVM 17,
-    # which has also been removed.
-    #
-    # 1.74 also shipped with the Cranelift backend, so perhaps that
-    # could be used instead? Alternatively, it may be possible to
-    # backport the upstream patches to support LLVM 18 to 1.74.
-    # Assuming LLVM 18 is still in Nixpkgs by the time you read this
-    # comment, anyway. But if not, then maybe mrustc has been updated
-    # to support newer rustc versions? Hope springs eternal.
-    #
-    # (Note that you still have to “draw the rest of the owl” to
-    # bootstrap the chain of rustc versions between this bootstrap
-    # and the version currently used in Nixpkgs, anyway, so this was
-    # already not useful for bootstrapping a Rust compiler for use with
-    # Nixpkgs without a lot of additional work. See Guix’s Rust
-    # bootstrap chain, or the non‐Rust minimal bootstrap in Guix and
-    # Nixpkgs, for inspiration.)
-    broken = true;
   };
 }
