@@ -545,6 +545,7 @@
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
   ./services/databases/pgbouncer.nix
+  ./services/databases/pgdog.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgres-websockets.nix
   ./services/databases/postgresql.nix
