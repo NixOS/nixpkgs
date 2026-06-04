@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "osrm-backend";
-  version = "26.6.0";
+  version = "26.6.4";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-004vgTKqY6prrmV7KAv4rCHQdk4VGk25d4QVBW/5FMg=";
+    hash = "sha256-13Qwi/RNChWHoL4bbY2O3O73jYQZpzRJW4Omtp6t1SI=";
   };
 
   nativeBuildInputs = [
