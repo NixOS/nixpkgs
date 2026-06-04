@@ -54,7 +54,7 @@ in
               first2 deploy-vocab
           ] [
               drop
-              "usage: deploy-me <PATH-TO-VOCAB> <TARGET-DIR>" print
+              "Usage: deploy-me <PATH-TO-VOCAB> <TARGET-DIR>" print
               nl
           ] if ;
 
