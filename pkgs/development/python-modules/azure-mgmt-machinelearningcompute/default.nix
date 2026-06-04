@@ -9,15 +9,17 @@
   azure-mgmt-nspkg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-machinelearningcompute";
   version = "0.4.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "7a52f85591114ef33a599dabbef840d872b7f599b7823e596af9490ec51b873f";
+    hash = "sha256-elL4VZERTvM6WZ2rvvhA2HK39Zm3gj5ZavlJDsUbhz8=";
   };
 
   build-system = [ setuptools ];
@@ -38,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})
