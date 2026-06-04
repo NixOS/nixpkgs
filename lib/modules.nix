@@ -509,6 +509,8 @@ let
                 # All modules imported by the module for key1
                 modules = [
                   {
+                    # no disabled attribute, since this module doesn't disable
+                    # anything
                     key = <key1-1>;
                     module = <module for key1-1>;
                     # All modules imported by the module for key1-1
@@ -521,13 +523,13 @@ let
             ];
           }
       */
-
       collectStructuredModules =
         initialModules: args:
         let
           recurse =
             parentFile: parentKey: imports:
             let
+              disabled = catAttrs "disabled" modules;
               modules = imap1 (
                 n: x:
                 let
@@ -538,7 +540,10 @@ let
                   key = module.key;
                   module = module;
                   modules = collectedImports.modules;
-                  disabled =
+                  # only include a disabled attribute if any modules have to be
+                  # disabled. most people don't disable any modules, which lets
+                  # us skip the work of merging the lists together
+                  ${if module.disabledModules != [ ] || collectedImports ? disabled then "disabled" else null} =
                     (
                       if module.disabledModules != [ ] then
                         [
@@ -550,16 +555,21 @@ let
                       else
                         [ ]
                     )
-                    ++ collectedImports.disabled;
+                    ++ collectedImports.disabled or [ ];
                 }
               ) imports;
             in
             {
-              disabled = concatLists (catAttrs "disabled" modules);
+              ${if disabled != [ ] then "disabled" else null} = concatLists disabled;
               inherit modules;
             };
+
+          result = recurse unknownModule "" initialModules;
         in
-        recurse unknownModule "" initialModules;
+        {
+          disabled = result.disabled or [ ];
+          inherit (result) modules;
+        };
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
