@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-machinelearningcompute";
   version = "0.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "7a52f85591114ef33a599dabbef840d872b7f599b7823e596af9490ec51b873f";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
