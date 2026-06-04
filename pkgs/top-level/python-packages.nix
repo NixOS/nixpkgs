@@ -20768,6 +20768,8 @@ self: super: with self; {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  ua-generator = callPackage ../development/python-modules/ua-generator { };
+
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   ua-parser-builtins = callPackage ../development/python-modules/ua-parser-builtins { };
