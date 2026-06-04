@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "3.11.0";
+  version = "3.11.1";
   pname = "asgiref";
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "asgiref";
     tag = finalAttrs.version;
-    hash = "sha256-2ZaUIWGF5cQVNj95b7WiKGsn2wYsoJmJ/CfPhIEZdjc=";
+    hash = "sha256-Mhnaowgv5a+O2hN0ZSdtdhCBQx8HoKSwtRC3gHodgKY=";
   };
 
   build-system = [ setuptools ];
