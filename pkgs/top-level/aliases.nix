@@ -918,6 +918,7 @@ mapAliases {
   goocanvas2 = warnAlias "'goocanvas2' has been renamed to goocanvas_2" goocanvas_2; # Added 2026-01-17
   goocanvas3 = warnAlias "'goocanvas3' has been renamed to goocanvas_3" goocanvas_3; # Added 2026-01-17
   goocanvas = warnAlias "'goocanvas' has been renamed to goocanvas_1" goocanvas_1; # Added 2026-01-17
+  goredo = throw "`goredo` has been removed, because its source is no longer available"; # Added 2026-04-06
   gphotos-sync = throw "'gphotos-sync' has been removed, as it was archived upstream due to API changes that ceased its functions"; # Added 2025-11-06
   gprbuild-boot = throw "'gprbuild-boot' has been renamed to/replaced by 'gnatPackages.gprbuild-boot'"; # Converted to throw 2025-10-27
   gpredict-unstable = throw "'gpredict-unstable' has been removed, as it was behind 'gpredict'"; # Added 2026-04-29
