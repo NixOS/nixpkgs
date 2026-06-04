@@ -445,6 +445,9 @@ with haskellLib;
   # https://github.com/sol/ghc-bench/issues/81
   ghc-bench = dontCheck super.ghc-bench;
 
+  # Too strict upper bound on hakyll (<4.17)
+  # https://gitlab.com/lysxia/hakyll-alectryon/-/work_items/2
+  hakyll-alectryon = doJailbreak super.hakyll-alectryon;
 
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
