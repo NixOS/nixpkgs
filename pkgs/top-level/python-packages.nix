@@ -3561,6 +3561,26 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
+  dagster = callPackage ../development/python-modules/dagster { };
+
+  dagster-cloud-cli = callPackage ../development/python-modules/dagster-cloud-cli { };
+
+  dagster-dg-cli = callPackage ../development/python-modules/dagster-dg-cli { };
+
+  dagster-dg-core = callPackage ../development/python-modules/dagster-dg-core { };
+
+  dagster-graphql = callPackage ../development/python-modules/dagster-graphql { };
+
+  dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
+
+  dagster-postgres = callPackage ../development/python-modules/dagster-postgres { };
+
+  dagster-rest-resources = callPackage ../development/python-modules/dagster-rest-resources { };
+
+  dagster-shared = callPackage ../development/python-modules/dagster-shared { };
+
+  dagster-webserver = callPackage ../development/python-modules/dagster-webserver { };
+
   dahlia = callPackage ../development/python-modules/dahlia { };
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
