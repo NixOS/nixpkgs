@@ -656,8 +656,10 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # Requires file-io >= 0.2 if using OsPath flag (which we want for GHC >= 9.10)
-  git-annex = lib.pipe (super.git-annex.override { file-io = self.file-io_0_2_0; }) [
+  # Requires file-io >= 0.2 if using OsPath flag which is incompatible with the directory
+  # version shipped with GHC 9.12 and 9.14, so we're sticking with filepath-bytestring for now.
+  # TODO(@sternenseemann): look into restoring compat for file-io < 0.2 or upgrade to file-io
+  git-annex = lib.pipe (super.git-annex.override { file-io = self.filepath-bytestring; }) [
     (overrideCabal (drv: {
       # Hackage tarball only includes what is supported by `cabal install git-annex`,
       # but we want e.g. completions as well. See
