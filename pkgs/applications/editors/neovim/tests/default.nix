@@ -9,6 +9,7 @@
 */
 {
   vimUtils,
+  neovimUtils,
   writeText,
   neovim,
   vimPlugins,
@@ -491,4 +492,70 @@ pkgs.lib.recurseIntoAttrs rec {
       '';
       passthru.requiredLuaModules = [ luassert ];
     };
+
+  nvim_require_check_neovim_plugin =
+    let
+      luaPkg = neovim-unwrapped.lua.pkgs.buildLuarocksPackage {
+        pname = "neovim-require-check-fails";
+        version = "0.0.1-1";
+        src = runCommandLocal "neovim-require-check-fails-src" { } ''
+          mkdir -p "$out"
+          cat > "$out/neovim-require-check-fails-0.0.1-1.rockspec" <<'EOF'
+          package = "neovim-require-check-fails"
+          version = "0.0.1-1"
+          source = {
+            url = "."
+          }
+          build = {
+            type = "none"
+          }
+          EOF
+        '';
+      };
+    in
+    testers.testBuildFailure (
+      neovimUtils.buildNeovimPlugin {
+        luaAttr = luaPkg;
+        doCheck = true;
+        postInstall = ''
+          mkdir -p "$out/lua"
+          cat > "$out/lua/require_check_fails.lua" <<'EOF'
+          error("neovimRequireCheckHook required installed module")
+          EOF
+        '';
+      }
+    );
+
+  nvim_require_check_ignores_test_modules = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-ignores-test-modules";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-ignores-test-modules-src" { } ''
+      mkdir -p \
+        "$out/lua/require-check-ignores"/{debug,script,scripts,test,tests,spec,_meta} \
+        "$out/lua/require-check-ignores"
+      cat > "$out/lua/require-check-ignores/init.lua" <<'EOF'
+      return {}
+      EOF
+      for dir in debug script scripts test tests spec _meta; do
+        cat > "$out/lua/require-check-ignores/$dir/failing.lua" <<EOF
+      error("excluded $dir directory was required")
+      EOF
+      done
+      cat > "$out/lua/require-check-ignores/failing_meta.lua" <<'EOF'
+      error("excluded _meta module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing_spec.lua" <<'EOF'
+      error("excluded _spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.spec.lua" <<'EOF'
+      error("excluded .spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.test.lua" <<'EOF'
+      error("excluded .test module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/meta.lua" <<'EOF'
+      error("excluded meta module was required")
+      EOF
+    '';
+  };
 }
