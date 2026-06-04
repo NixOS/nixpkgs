@@ -8,12 +8,13 @@
   azure-mgmt-core,
   azure-mgmt-nspkg,
   isPy3k,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iotcentral";
   version = "9.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "64df73df449a6f3717f3d0963e5869224ed3e6216c79de571493bea7c1b52cb6";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
