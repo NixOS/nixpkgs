@@ -17,7 +17,6 @@ rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [
       dandellion
-      momeemt
       juaningan
     ];
   };

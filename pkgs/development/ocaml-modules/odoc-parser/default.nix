@@ -65,7 +65,7 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
     meta = {
       description = "Parser for Ocaml documentation comments";
       license = lib.licenses.isc;
-      maintainers = with lib.maintainers; [ momeemt ];
+      maintainers = [ ];
       homepage = "https://github.com/ocaml-doc/odoc-parser";
       changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
     };
