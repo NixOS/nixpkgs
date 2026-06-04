@@ -33,6 +33,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
     mainProgram = "apcaccess";
     homepage = "https://github.com/flyte/apcaccess";
+    changelog = "https://github.com/flyte/apcaccess/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
   };
