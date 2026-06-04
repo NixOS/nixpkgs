@@ -25104,6 +25104,12 @@
     githubId = 2049686;
     name = "Sebastián Estrella";
   };
+  seudonym = {
+    name = "Wahid Khan";
+    email = "wk170179@gmail.com";
+    github = "Seudonym";
+    githubId = 80459261;
+  };
   seven_bear = {
     name = "Edmond Freeman";
     email = "edmondfreeman7@gmail.com";
