@@ -9,6 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "20241013";
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://smc.org.in/downloads/fonts/gayathri/gayathri.zip";

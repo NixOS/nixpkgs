@@ -9,6 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "20241013";
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   srcs = [
     (fetchzip {
