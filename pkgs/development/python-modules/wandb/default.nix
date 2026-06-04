@@ -52,6 +52,7 @@
   jsonschema,
   kubernetes,
   kubernetes-asyncio,
+  looptime,
   matplotlib,
   moviepy,
   pandas,
@@ -76,12 +77,12 @@
 }:
 
 let
-  version = "0.27.0";
+  version = "0.27.1";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-A/tEyY47BDgahOhQWlmeF2koEDpIsV9QVoYMIBEbKqA=";
+    hash = "sha256-gaZUp4yOnajEyJ5pXXOMCPk7uQ5GEGPrrKMgC6NxIAY=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -143,7 +144,7 @@ let
       ''
         substituteInPlace go.mod \
           --replace-fail \
-            "go 1.26.3" \
+            "go 1.26.4" \
             "go 1.26.2"
       ''
       # hardcode the `wandb-xpu` binary path.
@@ -269,6 +270,7 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     kubernetes
     kubernetes-asyncio
+    looptime
     matplotlib
     moviepy
     pandas
