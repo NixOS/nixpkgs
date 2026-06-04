@@ -7,6 +7,7 @@
   fetchFromGitHub,
   netifaces,
   pyserial,
+  lxmf,
   replaceVars,
   setuptools,
   versionCheckHook,
@@ -39,6 +40,10 @@ buildPythonPackage (finalAttrs: {
     netifaces
     pyserial
   ];
+
+  optional-dependencies = {
+    lxmf = [ lxmf ];
+  };
 
   pythonImportsCheck = [ "RNS" ];
 
