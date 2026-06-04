@@ -5,6 +5,7 @@
   makeBinaryWrapper,
   factor-lang,
   factor-no-gui,
+  factor-unwrapped,
   librsvg,
   gdk-pixbuf,
 }@initAttrs:
@@ -33,7 +34,8 @@ in
     extraVocabs ? [ ],
     deployScriptText ? /* factor */ ''
       USING: command-line io io.backend io.pathnames kernel namespaces sequences
-      tools.deploy tools.deploy.config tools.deploy.backend vocabs.loader ;
+      tools.deploy tools.deploy.config tools.deploy.config.editor
+      tools.deploy.backend vocabs.loader ;
 
       IN: deploy-me
 
@@ -44,18 +46,20 @@ in
               file-name dup reload deploy
           ] bi ;
 
-      : deploy-vocab ( path/vocab path/target -- )
-          normalize-path deploy-directory set
-          f open-directory-after-deploy? set
-          load-and-deploy ;
+      : deploy-vocab ( path/vocab executable -- )
+          swap normalize-path
+          [ parent-directory add-vocab-root ]
+          [ file-name dup reload ] bi
+          [ deployed-image-name ] keep
+          [ deploy-config ] keep swap
+          make-deploy-image-executable drop ;
 
       : deploy-me ( -- )
           command-line get dup length 2 = [
               first2 deploy-vocab
           ] [
               drop
-              "Usage: deploy-me <PATH-TO-VOCAB> <TARGET-DIR>" print
-              nl
+              "Usage: deploy-me <PATH-TO-VOCAB> <EXECUTABLE-PATH>" print nl
           ] if ;
 
       MAIN: deploy-me
@@ -93,12 +97,11 @@ in
     buildPhase =
       attrs.buildPhase or /* bash */ ''
         runHook preBuild
-        vocabBaseName=$(basename "$vocabName")
-        mkdir -p "$out/lib/factor" "$TMPDIR/.cache"
-        export XDG_CACHE_HOME="$TMPDIR/.cache"
 
-        factor "${deployScript}" "./$vocabName" "$out/lib/factor"
-        cp "$TMPDIR/factor-temp"/*.image "$out/lib/factor/$vocabBaseName"
+        vocabBaseName=$(basename "$vocabName")
+        export XDG_CACHE_HOME="$TMPDIR/.cache"
+        mkdir -p "$out/bin" "$XDG_CACHE_HOME"
+
         runHook postBuild
       '';
 
@@ -107,6 +110,7 @@ in
     installPhase =
       attrs.installPhase or /* bash */ ''
         runHook preInstall
+
         ${lib.optionalString finalAttrs.enableUI /* bash */ ''
           # Set Gdk pixbuf loaders file to the one from the build dependencies here
           unset GDK_PIXBUF_MODULE_FILE
@@ -118,12 +122,26 @@ in
         ${lib.optionalString (wrapped-factor.runtimeLibs != [ ]) /* bash */ ''
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath wrapped-factor.runtimeLibs}"
         ''}
+
         mkdir -p "$out/bin"
-        makeWrapper "$out/lib/factor/$vocabBaseName/$vocabBaseName" \
-          "$out/bin/$binName" \
+
+        # Stage copy of the raw VM binary into the output directory with correct
+        # permissions for embed-image to modify in place
+        install -m755 "${lib.getLib factor-unwrapped}/lib/factor/factor" "$out/bin/$binName"
+
+        wrapProgram "$out/bin/$binName" \
           --prefix PATH : "${lib.makeBinPath runtimePaths}" \
           "''${makeWrapperArgs[@]}"
+
         runHook postInstall
+      '';
+
+    # strip & patchelf in base fixupPhase rewrite the the ELF — *including*
+    # appended sections like the magic footer bits Factor writes — so the
+    # deploy script must be be run after
+    postFixup =
+      attrs.postFixup or /* bash */ ''
+        factor "${deployScript}" "./$vocabName" "$out/bin/.$binName-wrapped"
       '';
 
     passthru = {
