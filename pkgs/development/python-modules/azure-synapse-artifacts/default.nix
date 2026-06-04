@@ -6,12 +6,13 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
   version = "0.22.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "azure_synapse_artifacts";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-3cD7Yic4w+q3RlzkKM+gzUGtAahw+9RTYeTVjRdcYjw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-core
     azure-mgmt-core
