@@ -7,6 +7,7 @@
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   buildPackages,
   zstd,
+  fetchpatch,
 
   # apparmor deps
   libapparmor,
@@ -34,14 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
-
-    # strict format check causes yacc auto-generated code to fail.
-    # This is known, see https://gitlab.com/apparmor/apparmor/-/merge_requests/2039
-    # removing the compile-time check here downgrades the issue and allows compilation to succeed
-    substituteInPlace parser.h \
-      --replace-fail 'extern void yyerror(const char *msg, ...) __attribute__((noreturn, format(printf, 1, 2)));' \
-        'extern void yyerror(const char *msg, ...);'
   '';
+
+  patches = [
+    (fetchpatch {
+      # https://gitlab.com/apparmor/apparmor/-/merge_requests/2133
+      # Patches generated yacc parser code to compile with format-security
+      url = "https://gitlab.com/apparmor/apparmor/-/commit/6bdec74d5e74660b97e00b4b8fafc014b05907b7.diff";
+      hash = "sha256-7c5EFByrGIDj2lc31bRttyeybwndDm4iS4qdPMVaG/I=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
