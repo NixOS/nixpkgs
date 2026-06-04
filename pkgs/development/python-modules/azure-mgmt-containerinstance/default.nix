@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
   version = "10.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
