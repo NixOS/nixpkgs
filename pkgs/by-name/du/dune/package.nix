@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     hash =
       {
         "3.22.2" = "sha256-wsz4vGsXr6R8RQKXNXSWMDqnyGgOMpt52Yxo41AToRg=";
+        "3.21.1" = "sha256-hPeoLG2ApxJPOEfppInoDPvq+3vtNXOsAShu9W/QjZQ=";
         "2.9.3" = "sha256:1ml8bxym8sdfz25bx947al7cvsi2zg5lcv7x9w6xb01cmdryqr9y";
       }
       ."${version}";
