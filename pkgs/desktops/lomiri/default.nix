@@ -5,11 +5,11 @@
   ayatana-indicator-datetime,
   useQt6 ? false,
   libsForQt5,
-  qt6Packages,
+  kdePackages,
 }:
 
 let
-  qtPackages = if useQt6 then qt6Packages else libsForQt5;
+  qtPackages = if useQt6 then kdePackages else libsForQt5;
   packages =
     self:
     let
@@ -61,9 +61,9 @@ let
       #### Core Apps
       # Yoinked from the real lomiri package, referenced by other packages
       lomiri.passthru.shellPlugindirSuffix =
-        assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qt6Packages.qtbase.qtQmlPrefix)
-          "Assumption that qtbase.qtQmlPrefix (${qt6Packages.qtbase.qtQmlPrefix}) starts with 'lib/' no longer holds, lomiri & its dependencies needs to be adjusted!";
-        lib.strings.removePrefix "lib/" qt6Packages.qtbase.qtQmlPrefix;
+        assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" kdePackages.qtbase.qtQmlPrefix)
+          "Assumption that qtbase.qtQmlPrefix (${kdePackages.qtbase.qtQmlPrefix}) starts with 'lib/' no longer holds, lomiri & its dependencies needs to be adjusted!";
+        lib.strings.removePrefix "lib/" kdePackages.qtbase.qtQmlPrefix;
 
       morph-browser = callPackage ./applications/morph-browser {
         # get_target_property() called with non-existent target "Qt6::qdoc".
