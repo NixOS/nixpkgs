@@ -33,6 +33,7 @@
   huggingface-hub,
   jinja2,
   markupsafe,
+  matplotlib,
   numpy,
   orjson,
   packaging,
@@ -124,6 +125,7 @@ buildPythonPackage (finalAttrs: {
     "aiofiles"
     "tomlkit"
   ];
+
   dependencies = [
     aiofiles
     anyio
@@ -136,6 +138,7 @@ buildPythonPackage (finalAttrs: {
     huggingface-hub
     jinja2
     markupsafe
+    matplotlib
     numpy
     orjson
     packaging
