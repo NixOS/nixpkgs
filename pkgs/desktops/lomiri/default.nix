@@ -5,11 +5,11 @@
   ayatana-indicator-datetime,
   useQt6 ? false,
   libsForQt5,
-  qt6Packages,
+  kdePackages,
 }:
 
 let
-  qtPackages = if useQt6 then qt6Packages else libsForQt5;
+  qtPackages = if useQt6 then kdePackages else libsForQt5;
   packages =
     self:
     let
