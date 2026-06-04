@@ -8,6 +8,7 @@ let
   tests =
     tests-stdenv
     // test-extendMkDerivation
+    // tests-fetchgit
     // tests-fetchhg
     // tests-fetchurl
     // tests-go
