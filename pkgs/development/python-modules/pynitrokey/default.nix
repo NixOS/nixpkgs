@@ -89,7 +89,6 @@ buildPythonPackage {
       mit
     ];
     maintainers = with lib.maintainers; [
-      frogamic
       panicgh
     ];
     inherit mainProgram;

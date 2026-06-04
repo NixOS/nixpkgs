@@ -41,7 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
     license = [ lib.licenses.cc0 ];
     maintainers = with lib.maintainers; [
-      frogamic
       robinkrahl
     ];
   };

@@ -35,8 +35,7 @@ buildPythonPackage rec {
     description = "LIBUSBSIO Host Library for USB Enabled MCUs";
     homepage = "https://www.nxp.com/design/design-center/software/development-software/libusbsio-host-library-for-usb-enabled-mcus:LIBUSBSIO";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      frogamic
+    maintainers = [
     ];
   };
 }
