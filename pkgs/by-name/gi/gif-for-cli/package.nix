@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication {
     longDescription = "Takes in a GIF, short video, or a query to the Tenor GIF API and converts it to animated ASCII art.";
     homepage = "https://github.com/google/gif-for-cli";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ambossmann ];
     mainProgram = "gif-for-cli";
   };
 }
