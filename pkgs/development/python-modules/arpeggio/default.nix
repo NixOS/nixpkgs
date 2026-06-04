@@ -3,18 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "arpeggio";
   version = "2.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
     hash = "sha256-noWtNc/GyThnaBfHrpoQAKfHKjTHHbDGhxNsRg0SuF4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
