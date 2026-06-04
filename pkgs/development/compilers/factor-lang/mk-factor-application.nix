@@ -31,7 +31,7 @@ in
     extraPaths ? [ ],
     # Extra vocabularies needed by this application
     extraVocabs ? [ ],
-    deployScriptText ? ''
+    deployScriptText ? /* factor */ ''
       USING: command-line io io.backend io.pathnames kernel namespaces sequences
       tools.deploy tools.deploy.config tools.deploy.backend vocabs.loader ;
 
@@ -91,7 +91,7 @@ in
     buildInputs = (lib.optional enableUI gdk-pixbuf) ++ attrs.buildInputs or [ ];
 
     buildPhase =
-      attrs.buildPhase or ''
+      attrs.buildPhase or /* bash */ ''
         runHook preBuild
         vocabBaseName=$(basename "$vocabName")
         mkdir -p "$out/lib/factor" "$TMPDIR/.cache"
@@ -105,11 +105,11 @@ in
     __structuredAttrs = true;
 
     installPhase =
-      attrs.installPhase or (
-        ''
+      attrs.installPhase or
+        /* bash */ ''
           runHook preInstall
         ''
-        + (lib.optionalString finalAttrs.enableUI ''
+        + (lib.optionalString finalAttrs.enableUI /* bash */ ''
           # Set Gdk pixbuf loaders file to the one from the build dependencies here
           unset GDK_PIXBUF_MODULE_FILE
           # Defined in gdk-pixbuf setup hook
@@ -117,10 +117,10 @@ in
           appendToVar makeWrapperArgs --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
         '')
-        + (lib.optionalString (wrapped-factor.runtimeLibs != [ ])) ''
+        + (lib.optionalString (wrapped-factor.runtimeLibs != [ ])) /* bash */ ''
           appendToVar makeWrapperArgs --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath wrapped-factor.runtimeLibs}"
         ''
-        + ''
+        + /* bash */ ''
           mkdir -p "$out/bin"
           makeWrapper "$out/lib/factor/$vocabBaseName/$vocabBaseName" \
             "$out/bin/$binName" \
