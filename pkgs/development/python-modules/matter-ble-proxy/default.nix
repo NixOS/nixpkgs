@@ -2,25 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
+  pythonOlder,
   setuptools,
-
-  # dependencies
   aiohttp,
-  orjson,
-  home-assistant-chip-clusters,
-
-  # tests
+  bleak,
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "matter-python-client";
+  pname = "matter-ble-proxy";
   version = "0.8.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "matter-js";
@@ -29,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-AjCfPovhYKUeU4Xrsh6uL0pPG+ja0n+efFTbwre83m4=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/python_client";
+  sourceRoot = "${finalAttrs.src.name}/python_ble_proxy";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -40,8 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiohttp
-    orjson
-    home-assistant-chip-clusters
+    bleak
   ];
 
   nativeCheckInputs = [
@@ -50,21 +45,16 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # requires npx and network access to start matterjs
-    "tests/test_client_integration.py"
-    "tests/test_integration.py"
-  ];
+  pythonImportsCheck = [ "matter_ble_proxy" ];
 
-  pythonImportsCheck = [
-    "matter_server.client"
-  ];
+  __structuredAttrs = true;
 
   meta = {
+    description = "Client library for the OHF Matter Server BLE proxy protocol";
+    homepage = "https://github.com/matter-js/matterjs-server/tree/main/python_ble_proxy";
     changelog = "https://github.com/matter-js/matterjs-server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    description = "Python Client for the OHF Matter Server";
-    homepage = "https://github.com/matter-js/matterjs-server/tree/main/python_client";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.home-assistant ];
+    maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "matter-ble-proxy";
   };
 })
