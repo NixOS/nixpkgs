@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   paramiko,
-  python,
+  testers,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,14 +21,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ paramiko ];
 
-  checkPhase = ''
-    SCPPY_PORT=10022 ${python.interpreter} test.py
-  '';
-
-  #The Pypi package doesn't include the test
-  doCheck = false;
-
   pythonImportsCheck = [ "scp" ];
+
+  # The test needs a running sshd
+  passthru.tests.test = testers.runNixOSTest ./test.nix;
 
   meta = {
     homepage = "https://github.com/jbardin/scp.py";
