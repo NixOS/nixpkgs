@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "This project extends the Application Insights API surface to support Python";
     homepage = "https://github.com/Microsoft/ApplicationInsights-Python";
+    changelog = "https://pypi.org/project/applicationinsights/${finalAttrs.version}/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
