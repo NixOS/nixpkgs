@@ -14,7 +14,7 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "executor";
   version = "23.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-executor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gjv+sUtnP11cM8GMGkFzXHVx0c2XXSU56L/QwoQxINc=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/xolox/python-executor/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/xolox/python-executor/blob/${finalAttrs.version}/CHANGELOG.rst";
     description = "Programmer friendly subprocess wrapper";
     mainProgram = "executor";
     homepage = "https://github.com/xolox/python-executor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})
