@@ -1,23 +1,64 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
   installFonts,
+  git,
   nix-update-script,
+  python3,
+  ttfautohint,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dinish";
   version = "4.007";
 
-  src = fetchzip {
-    url = "https://github.com/playbeing/dinish/releases/download/v${finalAttrs.version}/dinish-ttf.zip";
-    stripRoot = false;
-    hash = "sha256-u/AYA9/8piZ6hz4XD3uSruOM0deeXQ5Gb0N/8rlDiP0=";
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "playbeing";
+    repo = "dinish";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3kJlE7qCLoCtSZo4s7WgxTnj+H08UbVetGlDzb8xrEw=";
+    leaveDotGit = true;
+    fetchTags = true;
   };
 
-  nativeBuildInputs = [ installFonts ];
+  strictDeps = true;
+  __structuredAttrs = true;
 
+  postPatch = ''
+    patchShebangs tools
+    substituteInPlace Makefile \
+      --replace-fail 'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs zips install_ofl' \
+      'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs'
+  '';
+
+  preInstall = ''
+    rm -r ofl
+  '';
+  installPhase = ''
+    runHook preInstall
+    runHook postInstall
+  '';
+
+  nativeBuildInputs = [
+    installFonts
+    git
+    (python3.withPackages (
+      ps: with ps; [
+        fontmake
+        gftools
+      ]
+    ))
+    ttfautohint
+  ];
+  dontUseNinjaBuild = true;
+
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   passthru.updateScript = nix-update-script { };
 
   meta = {
