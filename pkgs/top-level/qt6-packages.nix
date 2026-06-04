@@ -61,7 +61,6 @@ makeScopeWithSplicing' {
       kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
       futuresql = callPackage ../development/libraries/futuresql { };
-      kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
       ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
 
@@ -161,6 +160,9 @@ makeScopeWithSplicing' {
       ''; # Added 2026-11-01
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
+      ''; # Added 2026-11-01
+      kquickimageedit = throw ''
+        'qt6Packages.kquickimageedit' has been replaced by 'kdePackages.kquickimageeditor'.
       ''; # Added 2026-11-01
       qt6gtk2 = throw "'qt6Packages.qt6gtk2' has been removed, as it relies on gtk2 libraries"; # Added 2026-09-21
       qwlroots = throw ''

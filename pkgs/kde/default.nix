@@ -63,8 +63,7 @@ let
           zxing-cpp
           ;
 
-        # Alias to match metadata
-        kquickimageeditor = self.kquickimageedit;
+        kquickimageeditor = self.callPackage ./misc/kquickimageeditor { };
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
