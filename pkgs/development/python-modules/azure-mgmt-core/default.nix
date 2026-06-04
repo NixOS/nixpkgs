@@ -7,14 +7,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
+  pname = "azure-mgmt-core";
   version = "1.6.0";
   pyproject = true;
-  pname = "azure-mgmt-core";
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_core";
-    inherit version;
+    inherit (finalAttrs) version;
     extension = "tar.gz";
     hash = "sha256-smIyr4V7Ah5h2BPZ9K5TBGUlXLELPd6UWtN0P3pY55w=";
   };
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
