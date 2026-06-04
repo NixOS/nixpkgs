@@ -445,9 +445,6 @@ with haskellLib;
   # https://github.com/sol/ghc-bench/issues/81
   ghc-bench = dontCheck super.ghc-bench;
 
-  # Test suites broken by hakyll 4.16, but lib is still okay
-  # https://github.com/LaurentRDC/hakyll-images/issues/14
-  hakyll-images = dontCheck super.hakyll-images;
 
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
