@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Convert PNGs to .icns";
     homepage = "https://github.com/uncenter/icnsify";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ uncenter ];
     mainProgram = "icnsify";
   };
