@@ -29,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
   ];
 
   buildInputs = [
-    extra-cmake-modules
     qtbase
     qtmultimedia
   ];
