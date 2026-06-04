@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "netbox-secrets";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Onemind-Services-LLC";
     repo = "netbox-secrets";
     tag = "v${version}";
-    hash = "sha256-4qUbzQTfSCXT7b8DfrsP9y3tatJZa5F40kl9tuMKed4=";
+    hash = "sha256-DnC0ZcaEwBEhYf/HOsNB7MuLMNP2QIKK4Et1iHf+QRc=";
   };
 
   build-system = [ setuptools ];
