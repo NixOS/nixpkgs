@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_textsearch";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "pg_textsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aFuaz/gd72rdMdQKI12ENF+CrKPaiqxysHUYidkLsHc=";
+    hash = "sha256-vVBUbt/iDLeuDDD6fuTRvTFFDqyA6IEK15qcww0GijA=";
   };
 
   passthru.tests.extension = postgresqlTestExtension {
