@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   azure-mgmt-nspkg,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datalake-nspkg";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +17,9 @@ buildPythonPackage rec {
     sha256 = "deb192ba422f8b3ec272ce4e88736796f216f28ea5b03f28331d784b7a3f4880";
   };
 
-  propagatedBuildInputs = [ azure-mgmt-nspkg ];
+  build-system = [ setuptools ];
+
+  dependencies = [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;
