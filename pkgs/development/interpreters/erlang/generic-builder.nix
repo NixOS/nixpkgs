@@ -21,6 +21,7 @@
   parallelBuild ? true,
 
   fetchFromGitHub,
+  fetchpatch2,
   gawk,
   gnum4,
   gnused,
@@ -111,14 +112,18 @@ stdenv.mkDerivation {
   ++ optionals javacSupport [ openjdk11 ]
   ++ optionals enableSystemd [ systemd ];
 
+  patches = lib.optionals (!wxSupport && major == "27") [
+    # https://github.com/erlang/otp/pull/11162
+    (fetchpatch2 {
+      name = "otp-27-doc-target-fix.patch";
+      url = "https://github.com/erlang/otp/commit/7ce587b61a2557fca79f1c130794abf834f37ee1.patch?full_index=1";
+      hash = "sha256-Ce6tWUzeF6TQMxus7ultxG2piFllw/xa5IPLCxSd024=";
+    })
+  ];
+
   # disksup requires a shell
   postPatch = ''
     substituteInPlace lib/os_mon/src/disksup.erl --replace-fail '"sh ' '"${runtimeShell} '
-  ''
-  # https://github.com/erlang/otp/issues/11151
-  + lib.optionalString (!wxSupport && major == "27") ''
-    substituteInPlace lib/wx/doc/Makefile \
-      --replace-fail $'ifneq ($(CAN_BUILD_DRIVER), true)\nDOC_TARGETS=\nendif\n' ""
   '';
 
   debugInfo = enableDebugInfo;
