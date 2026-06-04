@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-notificationhubs";
   version = "8.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     sha256 = "4dd924f4704993e3ebf1d42e2be1cbe0b0d908e695857fa08c4369ae11d0eb36";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
