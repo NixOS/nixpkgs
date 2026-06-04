@@ -20,7 +20,7 @@ let
   ntpIP = "192.0.2.1";
 in
 {
-  name = "systemd-timesyncd";
+  name = "systemd-timesyncd-nscd-dnssec";
   nodes.machine =
     {
       pkgs,
