@@ -87,9 +87,24 @@ let
     name = "named.conf";
     checkPhase = ''
       ${lib.optionalString cfg.checkConfig ''
+        cp $target $TMPDIR/target_unpatched
+
+        echo "Patching named configuration file...";
+        ${cfg.preCheckConfig}
+
         echo "Checking named configuration file...";
         mkdir -p ${testFakeDir}
-        ${lib.getExe' bindPkg "named-checkconf"} -z $target
+        if ! ${lib.getExe' bindPkg "named-checkconf"} -z $target; then
+          echo
+          echo "Check failed. Is your configuration using impure files?"
+          echo
+          echo "If your configuration is not checkable in sandbox, you can either:"
+          echo "- Disable the check with 'services.bind.checkConfig = false', or"
+          echo "- Patch your file for the check phase with 'services.bind.preCheckConfig'."
+          exit 1
+        fi
+
+        mv $TMPDIR/target_unpatched $target
       ''}
 
       substituteInPlace $target \
@@ -332,6 +347,21 @@ in
 
           The configuration will not be checked if you override the config file
           with `configFile`.
+        '';
+      };
+      preCheckConfig = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = ''
+          Run a script during the configuration check phase.
+
+          This can be used to patch the configuration file if, for example, it
+          contains elements not available in the sandbox.
+          The configuration file is located in the variable `$target`.
+        '';
+        example = ''
+          substituteInPlace $target \
+            --replace-fail 'include "/secrets/domain.key"' ""
         '';
       };
     };
