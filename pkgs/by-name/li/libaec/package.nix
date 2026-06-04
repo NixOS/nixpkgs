@@ -1,20 +1,19 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libaec";
-  version = "1.1.4";
+  version = "1.1.7";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.dkrz.de";
-    owner = "k202009";
+  src = fetchFromGitHub {
+    owner = "Deutsches-Klimarechenzentrum";
     repo = "libaec";
     rev = "v${version}";
-    sha256 = "sha256-MJFx0gErfrSK6EeeGDk8CQWj6j4PVvFPJEI/iys3bI8=";
+    sha256 = "sha256-aBm+CXCq7sdJb6Qq9sNuTzNj0nRwTJI20HsqUg1Qi/8=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +23,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://gitlab.dkrz.de/k202009/libaec";
+    changelog = "https://github.com/Deutsches-Klimarechenzentrum/libaec/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/Deutsches-Klimarechenzentrum/libaec";
     description = "Adaptive Entropy Coding library";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ tbenst ];
