@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   isPy3k,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-devtestlabs";
   version = "9.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "d8160d93fd3d947e5613c6919176b0edf72c94ac69679ea3b92cf27ff7398e64";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
