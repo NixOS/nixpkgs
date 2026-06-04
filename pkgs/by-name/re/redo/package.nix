@@ -35,7 +35,14 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/jdebp/redo";
     description = "System for building target files from source files";
-    license = lib.licenses.bsd2;
+    # https://github.com/jdebp/redo/blob/trunk/source/COPYING
+    license =
+      with lib.licenses;
+      OR [
+        bsd2 # for some reason BSD-2-Clause and FreeBSD, despite being synonyms, are listed separately
+        isc
+        mit
+      ];
     maintainers = [ ];
     mainProgram = "redo";
     platforms = lib.platforms.unix;
