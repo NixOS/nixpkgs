@@ -62,7 +62,6 @@ makeScopeWithSplicing' {
       kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
       futuresql = callPackage ../development/libraries/futuresql { };
-      kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
       ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
 
@@ -157,6 +156,9 @@ makeScopeWithSplicing' {
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
       ''; # Added 2026-06-06
+      kquickimageedit = throw ''
+        'qt6Packages.kquickimageedit' has been replaced by 'kdePackages.kquickimageeditor'.
+      ''; # Added 2026-06-04
       sierra-breeze-enhanced = throw ''
         'qt6Packages.sierra-breeze-enhanced' has been replaced by 'kdePackages.sierra-breeze-enhanced'.
       ''; # Added 2026-06-04
