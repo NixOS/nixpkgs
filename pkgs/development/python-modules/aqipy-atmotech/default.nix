@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aqipy-atmotech";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atmotube";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-tqHhfJmtVFUSO57Cid9y3LK4pOoG7ROtwDT2hY5IE1Y=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
