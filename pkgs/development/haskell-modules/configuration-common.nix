@@ -1617,6 +1617,11 @@ with haskellLib;
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
 
+  # 2026-06-04: strict upper bound on random
+  # https://github.com/haskell-servant/servant-multipart/issues/76
+  # https://github.com/haskell-servant/servant-multipart/pull/77
+  servant-multipart-client = doJailbreak super.servant-multipart-client;
+
   # Disable test cases that were broken by insignificant changes in icu 76
   # https://github.com/haskell/text-icu/issues/108
   text-icu = overrideCabal (drv: {
