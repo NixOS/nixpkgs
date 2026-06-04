@@ -6366,7 +6366,7 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "vicious";
-      version = "2.7.1-3";
+      version = "2.7.1-4";
       knownRockspec =
         (fetchurl {
           url = "mirror://luarocks/vicious-2.7.1-4.rockspec";
