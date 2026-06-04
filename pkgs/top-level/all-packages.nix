@@ -6934,20 +6934,7 @@ with pkgs;
 
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
-  qt6Packages = recurseIntoAttrs (
-    import ./qt6-packages.nix {
-      inherit
-        lib
-        config
-        __splicedPackages
-        makeScopeWithSplicing'
-        generateSplicesForMkScope
-        pkgsHostTarget
-        kdePackages
-        ;
-      inherit stdenv;
-    }
-  );
+  qt6Packages = recurseIntoAttrs (callPackage ./qt6-packages.nix { });
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
