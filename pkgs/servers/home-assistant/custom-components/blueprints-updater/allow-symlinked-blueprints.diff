@@ -1,12 +1,11 @@
 diff --git a/custom_components/blueprints_updater/coordinator.py b/custom_components/blueprints_updater/coordinator.py
-index 9cbbe32..92a5ab5 100644
+index 441b870..54551d1 100644
 --- a/custom_components/blueprints_updater/coordinator.py
 +++ b/custom_components/blueprints_updater/coordinator.py
-@@ -3234,21 +3234,6 @@ def scan_blueprints(
-                         continue
+@@ -3731,19 +3731,6 @@ def scan_blueprints(
  
                      full_path = os.path.join(root, file)
--                    real_full_path = os.path.realpath(full_path)
+                     real_full_path = os.path.realpath(full_path)
 -                    try:
 -                        if (
 -                            os.path.commonpath([real_full_path, real_blueprint_path])
@@ -20,7 +19,6 @@ index 9cbbe32..92a5ab5 100644
 -                    except (ValueError, OSError):
 -                        _LOGGER.warning("Skipping blueprint with invalid path: %s", full_path)
 -                        continue
--
+ 
                      if relative_path := get_blueprint_relative_path(hass, full_path):
                          try:
-                             with open(full_path, encoding="utf-8") as f:
