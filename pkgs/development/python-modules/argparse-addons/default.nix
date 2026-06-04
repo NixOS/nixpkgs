@@ -5,14 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argparse-addons";
   version = "0.12.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "argparse_addons";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YyKg3NcGiH52MI0jE21bhtoOq3WigtxklnAdEhC0YK8=";
   };
 
@@ -28,4 +30,4 @@ buildPythonPackage rec {
       frogamic
     ];
   };
-}
+})
