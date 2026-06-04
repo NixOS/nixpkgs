@@ -1,14 +1,11 @@
 {
   lib,
-  pkgs,
-  hostPkgs,
   ...
 }:
 {
   name = "systemd-initrd-luks-fido2";
 
-  qemu.package = hostPkgs.qemu_test.override { canokeySupport = true; };
-
+  # Non minimal QEMU contains Canokey by default now.
   nodes.machine =
     { pkgs, config, ... }:
     {
