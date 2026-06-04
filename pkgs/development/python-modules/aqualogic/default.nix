@@ -5,13 +5,14 @@
   fetchFromGitHub,
   pyserial,
   pytestCheckHook,
+  setuptools,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "aqualogic";
   version = "3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swilson";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-hBg02Wypd+MyqM2SUD53djhm5OMP2QAmsp8Stf+UT2c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     pyserial
     websockets
