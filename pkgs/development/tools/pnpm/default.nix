@@ -43,8 +43,8 @@ let
       ];
     };
     "10" = {
-      version = "10.34.0";
-      hash = "sha256-WOFDJYhx31FYm2UcBiBdq+xIdmpdu6PCWZm2m1C+WY4=";
+      version = "10.34.4";
+      hash = "sha256-mM1XGNvYxLJokVZJO5WWzs9rZLGpjUoIfoITWhdbQOs=";
     };
     "11" = {
       version = "11.9.0";
