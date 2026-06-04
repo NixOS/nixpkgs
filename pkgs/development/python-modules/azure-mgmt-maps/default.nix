@@ -6,19 +6,22 @@
   fetchPypi,
   isodate,
   msrest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-maps";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-XVaml4UuVBanYYHxjB1YT/PvExzgAPbD4gI3Hbc0dI0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     isodate
     azure-common
     azure-mgmt-core
