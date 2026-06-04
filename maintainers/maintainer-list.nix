@@ -12633,6 +12633,12 @@
     githubId = 30251156;
     name = "Jesse Moore";
   };
+  jesssullivan = {
+    email = "jess@sulliwood.org";
+    github = "Jesssullivan";
+    githubId = 37297218;
+    name = "Jess Sullivan";
+  };
   jethair = {
     email = "jethair@duck.com";
     github = "JetHair";
@@ -25375,12 +25381,6 @@
     github = "shlevy";
     githubId = 487050;
     name = "Shea Levy";
-  };
-  shlok = {
-    email = "sd-nix-maintainer@quant.is";
-    github = "shlok";
-    githubId = 3000933;
-    name = "Shlok Datye";
   };
   shmish111 = {
     email = "shmish111@gmail.com";

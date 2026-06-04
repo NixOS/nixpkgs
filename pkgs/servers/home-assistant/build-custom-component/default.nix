@@ -52,10 +52,13 @@ lib.extendMkDerivation {
         runHook postInstall
       '';
 
-      nativeBuildInputs = [
-        manifestRequirementsCheckHook
-      ]
-      ++ (args.nativeBuildInputs or [ ]);
+      nativeBuildInputs =
+        with home-assistant.python3Packages;
+        [
+          manifestRequirementsCheckHook
+          packaging
+        ]
+        ++ (args.nativeBuildInputs or [ ]);
 
       passthru = {
         isHomeAssistantComponent = true;

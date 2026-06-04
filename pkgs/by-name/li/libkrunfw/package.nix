@@ -10,7 +10,6 @@
   perl,
   elfutils,
   python3,
-  buildPackages,
   variant ? null,
 }:
 
@@ -58,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "STRIP=${stdenv.cc.targetPrefix}strip"
   ]
   ++ lib.optionals (variant == "sev") [
     "SEV=1"
@@ -67,14 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     "TDX=1"
   ];
 
-  depsBuildBuild = [
-    elfutils
-    buildPackages.stdenv.cc
-  ];
-
   # Fixes https://github.com/containers/libkrunfw/issues/55
   env = lib.optionalAttrs stdenv.targetPlatform.isAarch64 {
-    NIX_CFLAGS_COMPILE_FOR_TARGET = "-march=armv8-a+crypto";
+    NIX_CFLAGS_COMPILE = "-march=armv8-a+crypto";
   };
 
   enableParallelBuilding = true;

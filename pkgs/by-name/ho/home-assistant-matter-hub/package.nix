@@ -13,13 +13,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-assistant-matter-hub";
-  version = "2.0.45";
+  version = "2.0.46";
 
   src = fetchFromGitHub {
     owner = "RiDDiX";
     repo = "home-assistant-matter-hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fEPcUq0OejfJXhzxfxXzQMIZ+L6nYEjoflA2GZdu3hg=";
+    hash = "sha256-lVsLvniPU7VAgxrUMZsGh9/cWgqap6iyX44r+Ap2Tjk=";
   };
 
   # The bundled cli.js imports transitive dependencies (e.g. @noble/curves)
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-n/LQhY6HWFlkslodO6ERuTcm5ux+vd+8CwzX19oC7c8=";
+    hash = "sha256-CuO+DTLPBr1WMyUMPKKzwYUrdWJLdWfj0IqmOyysaFo=";
   };
 
   __structuredAttrs = true;
