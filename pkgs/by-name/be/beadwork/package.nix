@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "beadwork";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "jallum";
     repo = "beadwork";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SuIQygsd/X8khQ1+S/af5haREBxsznFfcefLwsJRv/g=";
+    hash = "sha256-NlmnoFz4gYIB3g3C/7rmgKhUkh8q/Vn1drhHIuUScTg=";
   };
 
   vendorHash = "sha256-LjqZSI7F3C8GyNrPK/BwG9QTmNg89hFAvhUuBjmbHTU=";
