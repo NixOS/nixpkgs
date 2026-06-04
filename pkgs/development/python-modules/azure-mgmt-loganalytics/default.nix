@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-loganalytics";
   version = "12.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "da128a7e0291be7fa2063848df92a9180cf5c16d42adc09d2bc2efd711536bfb";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
