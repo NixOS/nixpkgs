@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apcaccess";
   version = "0.0.13";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flyte";
     repo = "apcaccess";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-XLoNRh6MgXCfRtWD9NpVZSyroW6E9nRYw6Grxa+AQkc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setup_requires='pytest-runner'," ""
+      --replace-fail "setup_requires='pytest-runner'," ""
   '';
 
   build-system = [ setuptools ];
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
   };
-}
+})
