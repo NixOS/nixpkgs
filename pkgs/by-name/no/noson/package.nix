@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "noson-app";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
   };
 })
