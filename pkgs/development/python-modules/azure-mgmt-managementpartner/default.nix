@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrestazure,
   azure-common,
   azure-mgmt-core,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-managementpartner";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "1cd591848454a115c216d216a3fb7802c1b5de04b105e2696e4237b0f8768f2f";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrestazure
     azure-common
     azure-mgmt-core
