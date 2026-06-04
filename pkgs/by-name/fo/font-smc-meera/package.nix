@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam typeface for body text by SMC";
+    description = "Meera font is a Malayalam font designed by Hussain K H and maintained by Swathanthra Malayalam Computing project. This is a comprehensive Malayalam font with 1000+ glyphs for all common Malayalam ligatures. Malayalam typeface for body text by SMC";
     homepage = "https://smc.org.in/fonts/meera";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

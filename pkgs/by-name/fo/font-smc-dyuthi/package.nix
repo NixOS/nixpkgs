@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam typeface for general use by SMC";
+    description = "Dyuthi is the first decorative Unicode font for Malayalam, designed by Hiran Venugopalan. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/dyuthi";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

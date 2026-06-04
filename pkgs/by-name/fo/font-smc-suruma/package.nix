@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam typeface for body text by SMC";
+    description = "Suruma is a traditional orthography font designed by Suresh P. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/suruma";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

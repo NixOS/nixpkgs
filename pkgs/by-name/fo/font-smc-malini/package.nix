@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam serif typeface by SMC";
+    description = "Malini is a variable typeface designed for reading — long-form Malayalam text set at body sizes, where clarity and typographic color matter most. The name means garland. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/malini";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

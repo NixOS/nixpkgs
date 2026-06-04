@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Calligraphic-style Malayalam typeface by SMC";
+    description = "A traditional style Malayalam font, designed by Kevin Siji. Maintaines by SMC";
     homepage = "https://smc.org.in/fonts/anjalioldlipi";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

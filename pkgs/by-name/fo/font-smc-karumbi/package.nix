@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Rounded Malayalam typeface by SMC";
+    description = "The Karumbi opentype font, is a Malayalam traditional script font designed by Kevin Siji. The characters are literally written directly into a computer by Kevin Siji using a tablet pen. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/karumbi";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

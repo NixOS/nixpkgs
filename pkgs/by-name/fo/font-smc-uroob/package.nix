@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Stylistic Malayalam typeface by SMC";
+    description = "Uroob is Malayalam heading style font designed by Hussain K H. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/uroob";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

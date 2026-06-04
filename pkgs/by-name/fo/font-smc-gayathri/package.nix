@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Thin Malayalam typeface with regular and bold styles by SMC";
+    description = "A gentle and modern Malayalam display typeface. Available in three weights, Gayathri is best suited for headlines, posters, titles and captions. Unicode compliant and libre licensed. Designed by Binoy Dominic. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/gayathri";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

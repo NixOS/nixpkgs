@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam variable typeface with decorative variants by SMC";
+    description = "Nupuram is a Malayalam variable typeface inspired by the early Malayalam movie title designs of the 1960s–70s, particularly the work of title designer S. Appukkuttan Nair. This is a superfamily of related typefaces. Designed by Santhosh Thottingal. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/nupuram";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

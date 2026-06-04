@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Elegant Malayalam typeface with thin, regular, and bold styles by SMC";
+    description = "This is a multipurpose font suitable for body and titles. This font is available in regular, bold, thin style variants. The glyph shapes follow a spiral theme, true to the beautiful curves of Malayalam. The glyphs are equal width with rounded terminals. The font has comprehensive glyph set including all widely used ligatures. Designed by Santhosh Thottingal. Maintained by SMC";
     homepage = "https://smc.org.in/fonts/manjari";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

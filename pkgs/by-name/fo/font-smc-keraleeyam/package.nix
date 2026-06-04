@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Traditional-style Malayalam typeface by SMC";
+    description = "Traditional-style Malayalam typeface designed by K H Hussain. This is the last version maintained by SMC";
     homepage = "https://smc.org.in/fonts/keraleeyam";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

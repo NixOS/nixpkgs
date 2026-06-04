@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Malayalam sans-serif typeface by SMC";
+    description = "A collaborative effort of Hussain K H, Prof. R. K. Joshi (TypeFont Design Director), Mr. Rajith Kumar K. M. (TypeFont Designer), assisted by Mr. Nirmal Biswas, Ms. Jui Mhatre and Ms. Supriya Kharkar at C-DAC Mumbai. This is the last version maintained by SMC";
     homepage = "https://smc.org.in/fonts/raghumalayalamsans";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
