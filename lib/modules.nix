@@ -524,6 +524,11 @@ let
           }
       */
       collectStructuredModules =
+        let
+          defaultCollectedImports = {
+            modules = [ ];
+          };
+        in
         initialModules: args:
         let
           recurse =
@@ -534,7 +539,11 @@ let
                 n: x:
                 let
                   module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-                  collectedImports = recurse module._file module.key module.imports;
+                  collectedImports =
+                    if module ? imports then
+                      recurse module._file module.key module.imports
+                    else
+                      defaultCollectedImports;
                 in
                 {
                   key = module.key;
@@ -689,7 +698,7 @@ let
           _class = m._class or null;
           key = toString m.key or key;
           ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
-          imports = m.imports or [ ];
+          ${if m ? imports then "imports" else null} = m.imports;
           options = m.options or { };
           config = addFreeformType (addMeta (m.config or { }));
         }
@@ -700,7 +709,7 @@ let
         _class = m._class or null;
         key = toString m.key or key;
         ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
-        imports = m.require or [ ] ++ m.imports or [ ];
+        ${if m ? imports || m ? require then "imports" else null} = m.require or [ ] ++ m.imports or [ ];
         options = { };
         config = addFreeformType (
           removeAttrs m [
