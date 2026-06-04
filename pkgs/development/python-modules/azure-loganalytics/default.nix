@@ -7,15 +7,17 @@
   azure-common,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   pyproject = true;
+
+  __structuredAttrs = true;
   pname = "azure-loganalytics";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "68ffb9a2206e06b9672100a8e6351cc04f75bb81867f30d416c68b55d624d793";
+    hash = "sha256-aP+5oiBuBrlnIQCo5jUcwE91u4GGfzDUFsaLVdYk15M=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.loganalytics" ];
+
   meta = {
     description = "This is the Microsoft Azure Log Analytics Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
@@ -38,4 +42,4 @@ buildPythonPackage rec {
       maxwilson
     ];
   };
-}
+})
