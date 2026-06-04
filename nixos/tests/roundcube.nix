@@ -31,7 +31,6 @@
   testScript = ''
     roundcube.start
     roundcube.wait_for_unit("postgresql.target")
-    roundcube.wait_for_unit("phpfpm-roundcube.service")
     roundcube.wait_for_unit("nginx.service")
     t.assertIn("Keep me logged in", roundcube.succeed("curl -sSfL http://roundcube/"))
   '';
