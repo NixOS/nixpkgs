@@ -9,11 +9,15 @@
   pkg-config,
   which,
   libnl,
-  protobuf,
+  protobuf_21,
   protobufc,
   shadow,
   installShellFiles,
 }:
+
+let
+  protobuf = protobuf_21;
+in
 
 stdenv.mkDerivation rec {
   pname = "nsjail";

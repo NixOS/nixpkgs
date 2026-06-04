@@ -1565,8 +1565,6 @@ with pkgs;
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
-
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
@@ -1621,8 +1619,6 @@ with pkgs;
     ;
 
   intelLlvmStdenv = intel-llvm.stdenv;
-
-  cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
   cot = with python3Packages; toPythonApplication cot;
 
@@ -1888,11 +1884,7 @@ with pkgs;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 
-  bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
-
   bzip2 = callPackage ../tools/compression/bzip2 { };
-
-  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -2426,8 +2418,6 @@ with pkgs;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
-
   hyphen = callPackage ../development/libraries/hyphen { };
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
@@ -2523,13 +2513,7 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  keybase = callPackage ../tools/security/keybase { };
-
-  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
-
   kbdVlock = callPackage ../by-name/kb/kbd/package.nix { withVlock = true; };
-
-  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
@@ -2581,9 +2565,6 @@ with pkgs;
     )
   );
 
-  netdata = callPackage ../tools/system/netdata {
-    protobuf = protobuf_21;
-  };
   netdataCloud = netdata.override {
     withCloudUi = true;
   };
@@ -2830,12 +2811,6 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
-
-  nsjail = callPackage ../tools/security/nsjail {
-    protobuf = protobuf_21;
-  };
-
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
@@ -2921,10 +2896,6 @@ with pkgs;
 
   optifine = optifinePackages.optifine-latest;
 
-  p4c = callPackage ../development/compilers/p4c {
-    protobuf = protobuf_21;
-  };
-
   packagekit = callPackage ../tools/package-management/packagekit { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -2967,12 +2938,6 @@ with pkgs;
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
   };
-
-  phosh = callPackage ../applications/window-managers/phosh { };
-
-  phosh-mobile-settings =
-    callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
-      { };
 
   inherit (callPackages ../tools/security/pinentry { })
     pinentry-curses
@@ -3063,8 +3028,6 @@ with pkgs;
     opensslSupport = false;
   };
 
-  recoll-nox = recoll.override { withGui = false; };
-
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
 
   reptor = with python3.pkgs; toPythonApplication reptor;
@@ -3076,10 +3039,6 @@ with pkgs;
   reuse = with python3.pkgs; toPythonApplication reuse;
 
   rmate = rubyPackages.rmate;
-
-  rmlint = callPackage ../tools/misc/rmlint {
-    inherit (python3Packages) sphinx;
-  };
 
   rpatool = with python3Packages; toPythonApplication rpatool;
 
@@ -3144,10 +3103,6 @@ with pkgs;
   sumorobot-manager =
     python3Packages.callPackage ../applications/science/robotics/sumorobot-manager
       { };
-
-  sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl.override { withZlib = true; };
-  };
 
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
@@ -7117,13 +7072,7 @@ with pkgs;
     sqlite-rsync
     ;
 
-  sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
-
-  sqlite-interactive = (sqlite.override { interactive = true; }).bin;
-
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
-
-  streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix { };
 
   szurubooru = callPackage ../servers/web-apps/szurubooru { };
 
@@ -7966,8 +7915,6 @@ with pkgs;
 
   postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
-
-  public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
 
   pypiserver = with python3Packages; toPythonApplication pypiserver;
 
@@ -11584,9 +11531,7 @@ with pkgs;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
-  ape = callPackage ../applications/misc/ape { };
-  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
-  apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
+  apeClex = callPackage ../by-name/ap/ape/apeclex.nix { };
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unixtools.nix { });

@@ -17,7 +17,8 @@
   gtk2,
   libxtst,
   glibcLocales,
-  releasePath ? null,
+  config,
+  releasePath ? config.cplex.releasePath or null,
 }:
 
 # To use this package, you need to download your own cplex installer from IBM

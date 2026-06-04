@@ -7,7 +7,7 @@
   boehmgc,
   bison,
   flex,
-  protobuf,
+  protobuf_21,
   gmp,
   boost,
   python3,
@@ -26,6 +26,7 @@
 }:
 let
   toCMakeBoolean = v: if v then "ON" else "OFF";
+  protobuf = protobuf_21;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "p4c";
