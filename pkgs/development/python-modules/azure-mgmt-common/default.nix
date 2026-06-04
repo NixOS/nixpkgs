@@ -7,12 +7,13 @@
   azure-mgmt-nspkg,
   requests,
   msrestazure,
+  setuptools,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   version = "0.20.0";
-  format = "setuptools";
+  pyproject = true;
   pname = "azure-mgmt-common";
 
   src = fetchPypi {
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "c63812c13d9f36615c07f874bc602b733bb516f1ed62ab73189b8f71c6bfbfe6";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-nspkg
     requests
