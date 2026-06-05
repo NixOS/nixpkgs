@@ -18,7 +18,6 @@
   pipewire,
   krunner,
   python3,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";
@@ -32,6 +31,11 @@ mkKdeDerivation {
   postPatch = ''
     patchShebangs src/plugins/strip-effect-metadata.py
   '';
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   # TZDIR may be unset when running through the kwin_wayland wrapper,
   # but we need it for the lockscreen clock to render
