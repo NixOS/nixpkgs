@@ -7309,6 +7309,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  heirline-components-nvim = buildVimPlugin {
+    pname = "heirline-components.nvim";
+    version = "2026-02-25";
+    src = fetchFromGitHub {
+      owner = "Zeioth";
+      repo = "heirline-components.nvim";
+      rev = "5ea9a16286c01b7c36d58c91903d1f8ff0b7ddeb";
+      sha256 = "0gij9c9qgmqc99fnqnvp6icxp32q0wkz536ric2x5vpbqlzsdkik";
+    };
+    meta.homepage = "https://github.com/Zeioth/heirline-components.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   heirline-nvim = buildVimPlugin {
     pname = "heirline.nvim";
     version = "1.0.8";
