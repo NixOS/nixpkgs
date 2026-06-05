@@ -4,7 +4,9 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
+  qt5,
   setuptools,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -25,19 +27,13 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pyqt5
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  # All of these fail because Qt modules cannot be imported
-  disabledTestPaths = [
-    "tests/test_qabstractitemview.py"
-    "tests/test_qaction_set_menu.py"
-    "tests/test_qactionevent_action.py"
-    "tests/test_qfontdatabase_static.py"
-    "tests/test_qpainter_draw_pixmap_fragments.py"
-    "tests/test_qsettings.py"
-    "tests/test_qstandarditem_insertrow.py"
-    "tests/test_qtest.py"
-  ];
+  preCheck = ''
+    export QT_PLUGIN_PATH="${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
+  '';
 
   pythonImportsCheck = [ "AnyQt" ];
 
