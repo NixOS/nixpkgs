@@ -5,13 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bangla";
   version = "0.0.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rX2/rUUf9g4otYMNX0LDPXSIDRbIE8xRl95NamHzRwQ=";
   };
 
@@ -28,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})
