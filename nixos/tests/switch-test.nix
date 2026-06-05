@@ -788,6 +788,11 @@ in
         echo this will fail
         false
       '';
+      specialisation.failingMidCheck.configuration.system.preSwitchChecks.failsInTheMiddle = ''
+        echo before
+        nonexistent-command
+        echo after
+      '';
     };
   };
 
@@ -888,6 +893,11 @@ in
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
+          # errexit must be honoured inside the check body
+          out = switch_to_specialisation("${otherSystem}", "failingMidCheck", action="check", fail=True)
+          assert_contains(out, "before")
+          assert_contains(out, "Pre-switch check 'failsInTheMiddle' failed")
+          assert_lacks(out, "after")
 
       with subtest("switch inhibitors"):
           # Start without any inhibitors

@@ -30,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-GL9Cpk6NDhRV0npVXwGjR3Dm0H/uo9cD4ebaI751VLM=";
+    hash = "sha256-QhKc5GBUnI1ae6+XK14YRWEpWuVtL6s90sSuWKLwNpk=";
   };
 
   # hide update feature
