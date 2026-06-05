@@ -118,13 +118,6 @@
     github = "0xB10C";
     githubId = 19157360;
   };
-  _0xbe7a = {
-    email = "nix@be7a.de";
-    name = "Bela Stoyan";
-    github = "0xbe7a";
-    githubId = 6232980;
-    keys = [ { fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99"; } ];
-  };
   _0xC45 = {
     email = "jason@0xc45.com";
     name = "Jason Vigil";
@@ -4376,12 +4369,6 @@
     github = "calbrecht";
     githubId = 1516457;
     name = "Christian Albrecht";
-  };
-  callahad = {
-    email = "dan.callahan@gmail.com";
-    github = "callahad";
-    githubId = 24193;
-    name = "Dan Callahan";
   };
   callumio = {
     email = "git@cleslie.uk";
@@ -9377,14 +9364,6 @@
     github = "froozen";
     githubId = 1943632;
     name = "fro_ozen";
-  };
-  frogamic = {
-    email = "frogamic@protonmail.com";
-    github = "frogamic";
-    githubId = 10263813;
-    name = "Dominic Shelton";
-    matrix = "@frogamic:beeper.com";
-    keys = [ { fingerprint = "779A 7CA8 D51C C53A 9C51  43F7 AAE0 70F0 67EC 00A5"; } ];
   };
   frontear = {
     name = "Ali Rizvi";

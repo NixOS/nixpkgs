@@ -30,8 +30,7 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      frogamic
+    maintainers = [
     ];
   };
 })

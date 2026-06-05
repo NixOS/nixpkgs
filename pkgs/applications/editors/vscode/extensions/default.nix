@@ -262,8 +262,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "21.2.4";
-          hash = "sha256-2oTZLOQfcbqrSpEhJ0p7et/8X2JkTi4Kf2jfqVS2DKo=";
+          version = "22.0.0";
+          hash = "sha256-3b77hepFW03I2hwsVvCA3f1Jqwnq5WfGAq2yqBDIt5Q=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
@@ -4962,7 +4962,7 @@ let
 
         meta = {
           license = lib.licenses.mpl20;
-          maintainers = [ lib.maintainers._0xbe7a ];
+          maintainers = [ ];
         };
       };
 
@@ -5200,8 +5200,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.3.2";
-          hash = "sha256-aGjhpgBhXVl/0dpWtfn7Eps5r7PJr99Dyu4FlPYtCw0=";
+          version = "3.3.3";
+          hash = "sha256-Q2PnfjO7wzHrmWAeD4dOFT+GFe8qGG8wHU1FpwYeDnA=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
