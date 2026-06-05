@@ -798,10 +798,13 @@ let
     mergeModules' prefix modules (
       concatMap (
         m:
-        map (config: {
-          file = m._file;
-          inherit config;
-        }) (pushDownProperties m.config)
+        if m.config != { } then
+          map (config: {
+            file = m._file;
+            inherit config;
+          }) (pushDownProperties m.config)
+        else
+          [ ]
       ) modules
     );
 
