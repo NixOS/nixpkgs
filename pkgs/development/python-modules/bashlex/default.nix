@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
+  setuptools,
   pytestCheckHook,
 }:
 
@@ -10,7 +11,7 @@ buildPythonPackage rec {
   pname = "bashlex";
   version = "0.18";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idank";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-ddZN91H95RiTLXx4lpES1Dmz7nNsSVUeuFuOEpJ7LQI=";
   };
+
+  build-system = [ setuptools ];
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''
