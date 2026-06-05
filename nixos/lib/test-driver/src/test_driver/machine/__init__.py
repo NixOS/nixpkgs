@@ -1164,24 +1164,25 @@ class QemuMachine(BaseMachine):
         # to match multiline regexes.
         console = io.StringIO()
 
-        def console_matches(_last_try: bool) -> bool:
+        def console_matches(_last_try: bool, block: bool = False) -> bool:
             nonlocal console
             try:
-                # This will return as soon as possible and
-                # sleep 1 second.
-                console.write(self.last_lines.get(block=False))
+                while True:
+                    # This will return as soon as possible and
+                    # sleep 1 second.
+                    console.write(self.last_lines.get(block=block))
+                    console.seek(0)
+                    matches = re.search(regex, console.read())
+                    if matches is not None:
+                        return True
             except queue.Empty:
-                pass
-            console.seek(0)
-            matches = re.search(regex, console.read())
-            return matches is not None
+                return False
 
         with self.nested(f"waiting for {regex} to appear on console"):
             if timeout is not None:
                 retry(console_matches, timeout)
             else:
-                while not console_matches(False):
-                    pass
+                console_matches(False, block=True)
 
     def get_console_log(self) -> str:
         """
