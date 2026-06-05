@@ -261,6 +261,7 @@ mapAliases {
 
   _0verkill = throw "'_0verkill' has been removed due to lack of maintenance"; # Added 2025-08-27
   _1password = throw "'_1password' has been renamed to/replaced by '_1password-cli'"; # Converted to throw 2025-10-27
+  _9pfs = throw "'9pfs' was removed as it is unmaintained and depends on fuse2, which is deprecated";
   _86Box = warnAlias "'_86Box' has been renamed to '_86box'" _86box; # Added 2026-02-08
   _86Box-with-roms = warnAlias "'_86Box-with-roms' has been renamed to '_86box-with-roms'" _86box-with-roms; # Added 2026-02-08
   _2048-cli = throw "'_2048-cli' has been removed due to archived upstream. Consider using '_2048-in-terminal' instead."; # Added 2025-06-07
