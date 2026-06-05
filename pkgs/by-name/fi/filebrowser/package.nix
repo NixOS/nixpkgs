@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  nodejs_24,
+  nodejs-slim,
   pnpm_10,
   nix-update-script,
   nixosTests,
@@ -29,7 +29,7 @@ let
     sourceRoot = "${src.name}/frontend";
 
     nativeBuildInputs = [
-      nodejs_24
+      nodejs-slim
       pnpmConfigHook
       pnpmBuildHook
       pnpm_10
