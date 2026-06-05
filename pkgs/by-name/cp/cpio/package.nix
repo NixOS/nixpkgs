@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
 
   separateDebugInfo = true;
+  outputs = [
+    "out"
+    "man"
+  ];
 
   # The code won't compile in c23 mode.
   # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
