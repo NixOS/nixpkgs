@@ -165,6 +165,14 @@ machines in a NixOS test, whether they are virtual machines or containers:
     [`nat.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nat.nix)
     for an example.
 
+`virtualisation.writableStore`
+
+:   By default, the Nix store in the test is not writable. If you enable
+    this option, a writable union file system is mounted on top of the
+    Nix store to make it appear writable. This is necessary for tests
+    that run Nix operations that modify the store. The QEMU test driver
+    uses `overlayfs` for this; the nspawn test driver uses bind mounts.
+
 #### Configuring `systemd-nspawn` containers {#ssec-nixos-test-nspawn-containers}
 
 Some options are specific to `systemd-nspawn` containers:
@@ -192,14 +200,6 @@ Some options are specific to QEMU virtual machines:
 `virtualisation.memorySize`
 
 :   The memory of the VM in MiB (1024×1024 bytes).
-
-
-`virtualisation.writableStore`
-
-:   By default, the Nix store in the VM is not writable. If you enable
-    this option, a writable union file system is mounted on top of the
-    Nix store to make it appear writable. This is necessary for tests
-    that run Nix operations that modify the store.
 
 For more options, see the module
 [`qemu-vm.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix).

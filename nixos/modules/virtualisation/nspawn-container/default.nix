@@ -63,6 +63,18 @@ in
       };
 
     };
+
+    virtualisation.writableStore = lib.mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Makes the container's `/nix/store` writable so new paths can be pushed
+        into the running container, e.g. by `nix-copy-closure --to`. Less
+        efficient than the read-only default. Unlike the overlay-based VM store
+        (`qemu-vm.nix`), store paths already in the container's closure cannot
+        be modified; only new paths can be added.
+      '';
+    };
   };
 
   config = {
@@ -113,8 +125,11 @@ in
     virtualisation.systemd-nspawn.options = [
       "--private-network"
       "--machine=${config.system.name}"
-      "--bind-ro=/nix/store:/nix/store"
-
+    ]
+    # With a writable store the wrapper below binds a per-container store
+    # clone over `/nix/store`, so drop the read-only host-store bind here.
+    ++ lib.optional (!cfg.writableStore) "--bind-ro=/nix/store:/nix/store"
+    ++ [
       # systemd-nspawn does some cleverness to mount a procfs and sysfs in an
       # unprivileged container, see
       # <https://github.com/systemd/systemd/blob/v258.2/src/nspawn/nspawn.c#L4341-L4349>.
@@ -146,9 +161,27 @@ in
           init = "${config.system.build.toplevel}/init";
           cmdline-json = builtins.toJSON cfg.cmdline;
         };
+
+        # store paths to bind into the writable store
+        closure = pkgs.closureInfo {
+          rootPaths = [ config.system.build.toplevel ];
+        };
+
+        # binds: writable store + read-only `closure` paths (only known at run-time)
+        stageWritableStore = ''
+          : "''${RUN_NSPAWN_STORE_DIR:=$PWD/${config.system.name}-store}"
+          ${pkgs.coreutils}/bin/mkdir -p "$RUN_NSPAWN_STORE_DIR"
+          while IFS= read -r entry; do
+            set -- "--bind=$entry:/nix/store/''${entry##*/}" "$@"
+          done < ${closure}/store-paths
+          set -- "--bind=$RUN_NSPAWN_STORE_DIR:/nix/store" "$@"
+        '';
       in
       pkgs.writers.writeDashBin "run-${config.system.name}-nspawn" ''
-        exec ${lib.getExe run-nspawn} ${commandLineOptions} ${lib.escapeShellArgs config.virtualisation.systemd-nspawn.options} "$@"
+        set -eu
+        ${lib.optionalString cfg.writableStore stageWritableStore}
+        exec ${lib.getExe run-nspawn} ${commandLineOptions} \
+          ${lib.escapeShellArgs config.virtualisation.systemd-nspawn.options} "$@"
       '';
   };
 }
