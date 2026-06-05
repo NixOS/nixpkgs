@@ -2,6 +2,7 @@
   lib,
   stdenv,
   cmake,
+  cctools,
   fetchFromGitHub,
   git,
   gmp,
@@ -67,7 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
     leangz # Provides leantar
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
   buildInputs = [
     gmp
