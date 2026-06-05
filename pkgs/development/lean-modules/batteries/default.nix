@@ -6,12 +6,13 @@
 
 buildLakePackage {
   pname = "lean4-batteries";
-  version = "4.30.0";
+  # nixpkgs-update: no auto update
+  version = "4.30.0-unstable-2026-05-26";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "batteries";
-    tag = "v4.30.0";
+    rev = "32dc18cde3684679f3c003de608743b57498c56f";
     hash = "sha256-OOcKCQEgnn9zkkwjHOovMb/IprNomTDufLOfEXs7hFU=";
   };
 
@@ -31,9 +32,6 @@ buildLakePackage {
     description = "The batteries-included extended library for Lean 4";
     homepage = "https://github.com/leanprover-community/batteries";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }
