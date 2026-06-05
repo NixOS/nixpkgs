@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   isPy3k,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage {
   pname = "baseline";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -18,6 +19,8 @@ buildPythonPackage {
     rev = "95a0b71806ed16310eb0f27bc48aa5e21f731423";
     sha256 = "0qjg46ipyfjflvjqzqr5p7iylwwqn2mhhrq952d01vi8wvfds10d";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
