@@ -13,9 +13,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.10.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "af822ad44d4eb425c8516df4239ac4fdba9fdb398ef77e4924cd7c9b4045bc2f";
+    hash = "sha256-r4Iq1E1OtCXIUW30I5rE/bqf2zmO935JJM18m0BFvC8=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +27,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = isPy3k;
+
+  pythonImportsCheck = [ "baron" ];
 
   meta = {
     homepage = "https://github.com/PyCQA/baron";
