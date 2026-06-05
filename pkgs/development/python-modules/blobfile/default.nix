@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   filelock,
   lxml,
   pycryptodomex,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "blobfile";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "christopher-hesse";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-aTHEJ1P+v9IWXPg9LN+KG1TlEVJh0qTl8J41iWpoPWk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodomex
     filelock
     urllib3
