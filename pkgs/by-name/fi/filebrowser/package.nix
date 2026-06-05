@@ -22,7 +22,7 @@ let
     hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
-  frontend = stdenvNoCC.mkDerivation rec {
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "filebrowser-frontend";
     inherit version src;
 
@@ -36,7 +36,7 @@ let
     ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit
+      inherit (finalAttrs)
         pname
         version
         src
@@ -55,7 +55,7 @@ let
 
       runHook postInstall
     '';
-  };
+  });
 
 in
 buildGoModule {
