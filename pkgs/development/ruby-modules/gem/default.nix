@@ -308,6 +308,7 @@ lib.makeOverridable (
         # default to Ruby's platforms
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
+        generated = true;
       }
       // meta;
     }
