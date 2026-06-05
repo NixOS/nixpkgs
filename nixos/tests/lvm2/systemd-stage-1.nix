@@ -116,23 +116,29 @@ in
       };
     };
 
-  testScript = ''
-    machine.wait_for_unit("multi-user.target")
-    # Create a VG for the root
-    ${preparationCode}
-    machine.succeed("mkfs.xfs ${mkXfsFlags} /dev/test_vg/test_lv")
-    machine.succeed("mkdir -p /mnt && mount /dev/test_vg/test_lv /mnt && echo hello > /mnt/test && umount /mnt")
+  testScript =
+    { nodes, ... }:
+    let
+      boot-lvm = nodes.machine.specialisation.boot-lvm.configuration.system.build.toplevel;
+    in
+    # python
+    ''
+      machine.wait_for_unit("multi-user.target")
+      # Create a VG for the root
+      ${preparationCode}
+      machine.succeed("mkfs.xfs ${mkXfsFlags} /dev/test_vg/test_lv")
+      machine.succeed("mkdir -p /mnt && mount /dev/test_vg/test_lv /mnt && echo hello > /mnt/test && umount /mnt")
 
-    # Boot from LVM
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-lvm.conf")
-    machine.succeed("sync")
-    machine.crash()
-    machine.wait_for_unit("multi-user.target")
+      # Boot from LVM
+      machine.succeed("${boot-lvm}/bin/switch-to-configuration boot")
+      machine.succeed("sync")
+      machine.crash()
+      machine.wait_for_unit("multi-user.target")
 
-    # Ensure we have successfully booted from LVM
-    assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
-    assert "/dev/mapper/test_vg-test_lv on / type xfs" in machine.succeed("mount")
-    assert "hello" in machine.succeed("cat /test")
-    ${extraCheck}
-  '';
+      # Ensure we have successfully booted from LVM
+      assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
+      assert "/dev/mapper/test_vg-test_lv on / type xfs" in machine.succeed("mount")
+      assert "hello" in machine.succeed("cat /test")
+      ${extraCheck}
+    '';
 }
