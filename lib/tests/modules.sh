@@ -773,6 +773,12 @@ checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-con
 checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-no-enable.nix
 checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-migrated.nix
 
+# mkRemoveOptionModule
+checkConfigError 'error: The option `a\.b. can no longer be used since it'\''s been removed\. instructions\s*$' config.a.b ./mkRemoveOptionModule.nix
+checkConfigError 'error: The option `c\.d\.e. can no longer be used since it'\''s been removed\.\s*$' config.c.d.e ./mkRemoveOptionModule.nix
+checkConfigError 'error: list index . in .* is out of range\s*$' config.errors.1 ./mkRemoveOptionModule.nix
+checkConfigOutput '^"The option definition `a\.b. in `example-file. no longer has any effect; please remove it\.\\ninstructions\\n"$' config.errors.0 ./mkRemoveOptionModule.nix
+
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
