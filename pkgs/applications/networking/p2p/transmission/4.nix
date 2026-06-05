@@ -248,6 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "https://www.transmissionbt.com/";
+    maintainers = with lib.maintainers; [ nyanloutre ];
     license = with lib.licenses; [
       gpl2Plus
       mit
