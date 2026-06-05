@@ -99,6 +99,7 @@ python.pkgs.buildPythonApplication rec {
     "django-compressor"
     "django-filter"
     "django-formset-js-improved"
+    "django-formtools"
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
