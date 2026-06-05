@@ -13,9 +13,6 @@
   installShellFiles,
   version ? "2026.5.12",
 }:
-let
-  pnpm = pnpm_11.override { nodejs = nodejs_22; };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
   version = version;
@@ -31,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    inherit pnpm;
+    pnpm = pnpm_11;
     fetcherVersion = 4;
     hash = finalAttrs.pnpmDepsHash;
   };
@@ -40,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm
+    pnpm_11
     nodejs_22
     makeWrapper
     installShellFiles
