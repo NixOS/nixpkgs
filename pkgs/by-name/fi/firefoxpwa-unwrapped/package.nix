@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
     # Create empty `lib/firefoxpwa` directory so the Firefox wrapper won't fail
     # trying to disable the update checks. It will try to write to
     # `$out/lib/firefoxpwa/is-packaged-app`, which doesn't exist by default.
-    # mkdir $out/lib/firefoxpwa
+    mkdir $out/lib/firefoxpwa
   '';
 
   passthru = {
