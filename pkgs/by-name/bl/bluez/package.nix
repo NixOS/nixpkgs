@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "man"
   ]
   ++ lib.optional installTests "test";
 
