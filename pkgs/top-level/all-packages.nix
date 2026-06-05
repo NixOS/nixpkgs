@@ -3886,6 +3886,8 @@ with pkgs;
 
   ghdl-llvm = ghdl.override { backend = "llvm"; };
 
+  ghdl-llvm-jit = ghdl.override { backend = "llvm-jit"; };
+
   gcc-arm-embedded = gcc-arm-embedded-15;
 
   # Haskell and GHC
