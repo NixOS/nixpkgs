@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "bech32" ];
 
   meta = {
-    homepage = "https://pypi.org/project/bech32/";
+    homepage = "https://github.com/fiatjaf/bech32";
     license = with lib.licenses; [ mit ];
   };
 })
