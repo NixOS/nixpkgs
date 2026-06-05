@@ -103,8 +103,8 @@ in
       "sha256-7QYZuOxO32+VYpWBoDlOBYhRHP3bVBLChVmor7tuyuA=";
 
   mypy-boto3-appintegrations =
-    buildMypyBoto3Package "appintegrations" "1.43.0"
-      "sha256-8nS9kfOsFIRMoiF9Iy8czuGCBV1JNF3AHyMjIjcvp3U=";
+    buildMypyBoto3Package "appintegrations" "1.43.23"
+      "sha256-ddcr8HAgFnhGDYPGx8WrNi16Rg++W1A7ccpBXn86hbc=";
 
   mypy-boto3-application-autoscaling =
     buildMypyBoto3Package "application-autoscaling" "1.43.0"
