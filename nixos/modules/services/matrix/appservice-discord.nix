@@ -144,7 +144,6 @@ in
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
