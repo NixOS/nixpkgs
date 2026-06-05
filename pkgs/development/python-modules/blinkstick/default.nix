@@ -11,6 +11,8 @@ buildPythonPackage {
   version = "unstable-2023-05-04";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "arvydas";
     repo = "blinkstick-python";
