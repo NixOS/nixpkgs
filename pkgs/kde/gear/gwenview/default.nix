@@ -15,6 +15,11 @@
 mkKdeDerivation {
   pname = "gwenview";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtmultimedia
