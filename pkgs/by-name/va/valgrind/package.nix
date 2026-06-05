@@ -111,6 +111,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl3Plus;
+    mainProgram = "valgrind";
 
     platforms =
       with lib.platforms;
