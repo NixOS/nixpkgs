@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   beautifulsoup4,
   demjson3,
   html5lib,
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   pname = "bandcamp-api";
   version = "0.2.3";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "bandcamp_api";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-7/WXMo7fCDMHATp4hEB8b7fNJWisUv06hbP+O878Phs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     demjson3
     html5lib
