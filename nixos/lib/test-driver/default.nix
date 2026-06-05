@@ -11,6 +11,7 @@
   ptpython,
   pydantic,
   python,
+  ovmfvartool,
   remote-pdb,
   ruff,
   ty,
@@ -49,6 +50,7 @@ buildPythonApplication {
     junit-xml
     ptpython
     pydantic
+    ovmfvartool
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
