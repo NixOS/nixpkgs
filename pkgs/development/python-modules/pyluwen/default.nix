@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "pyluwen";
   version = "0.7.11";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
