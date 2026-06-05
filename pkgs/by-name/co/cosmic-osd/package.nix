@@ -25,6 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-jv28hxhQUcUDLnOwU3xQJwCU+s52pwDNs8Gf4I5Hp9k=";
   };
 
+  cargoPatches = [
+    # The Cargo.lock file contains two different references to cosmic-settings
+    # causing issues with cargo vendor
+    # This is a temporal fix and should be removed on next update
+    ./dedup-cosmic-settings.patch
+  ];
+
   cargoHash = "sha256-YwZXlhggrUddxour+/S1mSL3Fq1mzvFaOHArLSnfPvc=";
 
   separateDebugInfo = true;
