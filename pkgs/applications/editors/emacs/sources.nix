@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchzip,
+  fetchgit,
 }:
 
 let
@@ -26,9 +26,9 @@ let
       src =
         {
           "mainline" = (
-            fetchzip {
-              url = "mirror://gnu/emacs/${rev}.tar.xz";
-              inherit hash;
+            fetchgit {
+              url = "https://https.git.savannah.gnu.org/git/emacs.git";
+              inherit rev hash;
             }
           );
           "macport" = (

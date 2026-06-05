@@ -66,7 +66,7 @@
   # Boolean flags
   withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
-  srcRepo ? false,
+  srcRepo ? true,
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
