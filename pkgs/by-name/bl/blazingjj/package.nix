@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    broken = true;
     description = "TUI for Jujutsu/jj";
     homepage = "https://github.com/blazingjj/blazingjj";
     changelog = "https://github.com/blazingjj/blazingjj/releases/tag/v${finalAttrs.version}";
