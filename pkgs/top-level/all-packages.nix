@@ -7117,8 +7117,6 @@ with pkgs;
     sqlite-rsync
     ;
 
-  sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
-
   sqlite-interactive = (sqlite.override { interactive = true; }).bin;
 
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
