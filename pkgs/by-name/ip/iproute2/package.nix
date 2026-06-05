@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "scripts"
+    "man"
+    "doc"
   ];
 
   configureFlags = [
@@ -44,7 +46,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
