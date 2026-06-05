@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "scripts"
+    "man"
   ];
 
   configureFlags = [
