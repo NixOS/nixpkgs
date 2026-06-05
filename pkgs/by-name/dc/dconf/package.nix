@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "lib"
     "dev"
+    "man"
   ]
   ++ lib.optional withDocs "devdoc";
 
