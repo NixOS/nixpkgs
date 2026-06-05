@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pysunspec2";
-  version = "1.3.5";
+  version = "1.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunspec";
     repo = "pysunspec2";
     tag = "v${version}";
-    hash = "sha256-5iexVb6qXHmVczLydjXu+blGm9zwKGqUBLDUwl8HBrs=";
+    hash = "sha256-9VZy0QwMh9JK0DpECRMhF279lo125Dq1AUaa6gtHuV0=";
     fetchSubmodules = true;
   };
 
