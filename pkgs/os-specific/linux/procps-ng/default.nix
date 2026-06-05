@@ -31,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z76m+8OkKlNaAjDJ6JHl3ftNnTlCLUZWWimQ0azhUhY=";
   };
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ]
+  ++ lib.optionals (!watchOnly) [
+    "doc"
+  ];
+
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
     pkg-config
