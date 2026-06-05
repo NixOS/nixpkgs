@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -202,13 +201,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.1";
+  version = "260.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
+    hash = "sha256-NXmmSV7/9WIW6C8wjdOwaerCy4v7Zcrd8+XDzcS8rEk=";
   };
 
   # PATCH POLICY
@@ -238,13 +237,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
     ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0005-core-don-t-taint-on-unmerged-usr.patch
-
-    # TODO: remove the following patch when systemd v261 is released.
-    # see upstream PR: https://github.com/systemd/systemd/pull/41232
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/df45055942330fcd2b77389e449905e7f6ca34ec.patch";
-      hash = "sha256-PDh4mP9rYGCglp25346nExU2v6P0WYPfLZgu+YwzZ9c=";
-    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
