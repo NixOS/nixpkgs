@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   buildPackages,
   ninja,
   gn,
@@ -83,6 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+  ];
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L604-L612
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+    (fetchpatch {
+      name = "chromium-146-revert-Update-fsanitizer=array-bounds-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7539408
+      url = "https://chromium.googlesource.com/chromium/src/+/acb47d9a6b56c4889a2ed4216e9968cfc740086c^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
+    })
   ];
 
   postPatch = ''

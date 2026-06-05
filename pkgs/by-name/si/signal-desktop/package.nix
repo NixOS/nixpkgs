@@ -40,13 +40,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.9.1";
+  version = "8.13.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-HXxIjCVGh3JFAj0UUEAvmVnm7jMZdxRqWDILRDFCGw4=";
+    hash = "sha256-gOYnjNCjI1eNVzcb7sx0XDXbhrAdvlgsZQaRuyBXpwI=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -114,16 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Custom fonts currently don't work on windows other than the main one,
-    # which causes some of the text to look messed up. We want to include
-    # this patch since we are overriding the emoji font by default.
-    # Upstream PR: https://github.com/signalapp/Signal-Desktop/pull/7864
-    # This patch can be removed after `v8.11.0`.
-    (fetchpatch {
-      url = "https://github.com/signalapp/Signal-Desktop/commit/52ecd0d931e6071da79b016d2af1f508167b2a98.patch";
-      hash = "sha256-dtc0bwv9aLz92j5Zfm/SREWtQ43ljXN9Vm2VkeDbAx8=";
-    })
     ./force-90-days-expiration.patch
+
+    # Drop once https://github.com/NixOS/nixpkgs/pull/520553 and https://github.com/NixOS/nixpkgs/pull/525241 land.
+    ./dont-assert-unicode-17-emoji.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
     # Signal ships the Apple emoji set without a licence and upstream
@@ -180,13 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-ls7DYPI5Dq06KI7WCdEkKHPsHTMJ3kO0qJDZsHZQHBQ=";
+    hash = "sha256-3EEeHmtOAdcm2Q3eNUEl2RbTFRB4YBKcZLFtEmwbVOk=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1778260300;
+    SOURCE_DATE_EPOCH = 1780508208;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Disable code signing during local macOS builds.
