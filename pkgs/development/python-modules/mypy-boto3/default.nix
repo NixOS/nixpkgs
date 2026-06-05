@@ -331,8 +331,8 @@ in
       "sha256-TYrnhgzhH6+o+cTpBBpiEO6MPkz4xbLOqiOJf/IAvto=";
 
   mypy-boto3-config =
-    buildMypyBoto3Package "config" "1.43.0"
-      "sha256-kPG0jzeHlRm8dNKCrxJY2Jw/N06PL+C/34gB9qhz2BY=";
+    buildMypyBoto3Package "config" "1.43.23"
+      "sha256-6FyB/VCGsMYDBFUu0VzWpge94lASfg6CVewhkmpxycQ=";
 
   mypy-boto3-connect =
     buildMypyBoto3Package "connect" "1.43.22"
