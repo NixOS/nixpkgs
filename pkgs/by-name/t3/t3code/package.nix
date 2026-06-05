@@ -1,9 +1,9 @@
 {
-  bun,
   cctools,
   copyDesktopItems,
   electron_40,
   fetchFromGitHub,
+  fetchPnpmDeps,
   installShellFiles,
   lib,
   libicns,
@@ -12,6 +12,8 @@
   nix-update-script,
   node-gyp,
   nodejs,
+  pnpm_10,
+  pnpmConfigHook,
   python3,
   stdenv,
   stdenvNoCC,
@@ -27,6 +29,10 @@
   claude-code,
   enableCodex ? true,
   codex,
+  enableCursor ? false,
+  code-cursor,
+  enableCursorAgent ? false,
+  cursor-cli,
   enableGitHub ? true,
   gh,
   enableGit ? true,
@@ -35,6 +41,8 @@
   glab,
   enableJujutsu ? false,
   jujutsu,
+  enableOpenCode ? true,
+  opencode,
 }:
 
 stdenv.mkDerivation (
@@ -55,41 +63,58 @@ stdenv.mkDerivation (
       ++ lib.optionals enableBitbucket [ bitbucket-cli ]
       ++ lib.optionals enableClaude [ claude-code ]
       ++ lib.optionals enableCodex [ codex ]
+      ++ lib.optionals enableCursor [ code-cursor ]
+      ++ lib.optionals enableCursorAgent [ cursor-cli ]
       ++ lib.optionals enableGitHub [ gh ]
       ++ lib.optionals enableGit [ git ]
       ++ lib.optionals enableGitLab [ glab ]
-      ++ lib.optionals enableJujutsu [ jujutsu ];
-    runtimePathWrapperArgs = lib.optionalString (runtimePackages != [ ]) ''
+      ++ lib.optionals enableJujutsu [ jujutsu ]
+      ++ lib.optionals enableOpenCode [ opencode ];
+    runtimeBinPath = lib.optionalString enableCursorAgent "$out/libexec/t3code/runtime-bin";
+    runtimePath =
+      runtimeBinPath
+      + lib.optionalString (enableCursorAgent && runtimePackages != [ ]) ":"
+      + lib.makeBinPath runtimePackages;
+    runtimePathWrapperArgs = lib.optionalString (runtimePath != "") ''
       \
-        --prefix PATH : ${lib.makeBinPath runtimePackages}
+        --prefix PATH : ${runtimePath}
+    '';
+    patchPackageManager = ''
+      substituteInPlace package.json \
+        --replace-fail '"packageManager": "pnpm@10.24.0"' \
+                       '"packageManager": "pnpm"'
     '';
     nodeModules = stdenvNoCC.mkDerivation {
       pname = "${finalAttrs.pname}-node_modules";
       inherit (finalAttrs) src version strictDeps;
 
       nativeBuildInputs = [
-        bun
+        git
         nodejs
+        pnpm_10
+        pnpmConfigHook
         writableTmpDirAsHomeHook
       ];
 
-      dontConfigure = true;
+      pnpmDeps = fetchPnpmDeps {
+        inherit (finalAttrs) pname src version;
+        pnpm = pnpm_10;
+        fetcherVersion = 3;
+        hash = "sha256-Cwzn5LtfJiRKBtV6OpvZ+dxvvjsth99lLcOwfm0s1wc=";
+      };
+
       dontFixup = true;
+
+      postPatch = patchPackageManager;
 
       buildPhase = ''
         runHook preBuild
 
-        # Use hoisted linker: Bun's default/isolated layout can race and omit
-        # cyclic peer dependency bin links (e.g. update-browserslist-db →
-        # browserslist). A manual .bin/browserslist symlink under .bun did not
-        # reliably fix builds; see https://github.com/oven-sh/bun/pull/29014.
-        bun install \
-          --linker=hoisted \
-          --cpu="*" \
+        pnpm install \
+          --offline \
+          --config.node-linker=hoisted \
           --ignore-scripts \
-          --no-progress \
-          --frozen-lockfile \
-          --os="*"
+          --frozen-lockfile
 
         runHook postBuild
       '';
@@ -99,17 +124,20 @@ stdenv.mkDerivation (
 
         mkdir --parents $out
         cp --recursive node_modules $out
+        for packageDir in apps/* oxlint-plugin-t3code packages/* scripts; do
+          if [ -d "$packageDir/node_modules" ]; then
+            mkdir --parents "$out/$packageDir"
+            cp --recursive "$packageDir/node_modules" "$out/$packageDir"
+          fi
+        done
 
         runHook postInstall
       '';
-
-      outputHash = "sha256-0wA39cSxybKPbZ1xXf+mcI4QSXJhLcNQ6x+o2xvLuq8=";
-      outputHashMode = "recursive";
     };
   in
   {
     pname = "t3code";
-    version = "0.0.24";
+    version = "0.0.25";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -117,21 +145,23 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-7mqRuWft9h9MAEVzuwC6K1aj2UUAcjheWrwncXhpbro=";
+      hash = "sha256-R9FTqKT67POU9dED/EdPJVsu/rSEQ2C4WoNUwgkL0e8=";
     };
 
     postPatch = ''
+      ${patchPackageManager}
+
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = process.env.HOST?.trim() || "localhost";' \
                        'const host = process.env.HOST?.trim() || "127.0.0.1";'
     '';
 
     nativeBuildInputs = [
-      bun
       installShellFiles
       makeBinaryWrapper
       node-gyp
       nodejs
+      pnpm_10
       python3
       writableTmpDirAsHomeHook
     ]
@@ -153,7 +183,7 @@ stdenv.mkDerivation (
 
       # Upstream bumps package.json versions after tagging releases, then applies
       # the same bump in the release workflow before building artifacts.
-      bun scripts/update-release-package-versions.ts ${finalAttrs.version}
+      node scripts/update-release-package-versions.ts ${finalAttrs.version}
 
       # Compile node-pty's native addon (hoisted into node_modules).
       export npm_config_nodedir=${nodejs}
@@ -168,9 +198,9 @@ stdenv.mkDerivation (
     buildPhase = ''
       runHook preBuild
 
-      for app in web server desktop; do
-        bun run --cwd apps/"$app" build
-      done
+      pnpm --dir apps/web build
+      pnpm --dir apps/server build:bundle
+      pnpm --dir apps/desktop exec vp pack
 
       runHook postBuild
     '';
@@ -197,6 +227,11 @@ stdenv.mkDerivation (
         "$out"/libexec/t3code/apps/desktop/prod-resources/icon.png
 
       find "$out"/libexec/t3code -xtype l -delete
+
+      ${lib.optionalString enableCursorAgent ''
+        mkdir --parents "$out"/libexec/t3code/runtime-bin
+        ln --symbolic ${lib.getExe cursor-cli} "$out"/libexec/t3code/runtime-bin/agent
+      ''}
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3code \
         --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs ${runtimePathWrapperArgs}
@@ -248,6 +283,7 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit nodeModules;
+      inherit runtimePackages;
       updateScript = nix-update-script {
         extraArgs = [
           "--subpackage"
