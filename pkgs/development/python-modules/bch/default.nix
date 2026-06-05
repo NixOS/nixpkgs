@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   click,
   click-log,
   paho-mqtt,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "bch";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     sha256 = "/C+NbJ0RrWZ/scv/FiRBTh4h7u0xS4mHVDWQ0WwmlEY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     click-log
     paho-mqtt
