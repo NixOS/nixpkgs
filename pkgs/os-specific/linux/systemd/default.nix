@@ -270,7 +270,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ]
-  ++ (lib.optional (!buildLibsOnly) "man");
+  ++ (lib.optionals (!buildLibsOnly) [
+    "man"
+    "doc"
+  ]);
   separateDebugInfo = true;
   __structuredAttrs = true;
 
