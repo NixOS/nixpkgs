@@ -18,7 +18,7 @@ let
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
@@ -90,6 +90,7 @@ buildGoModule {
   meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
+    changelog = "https://github.com/filebrowser/filebrowser/releases/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
