@@ -59,6 +59,11 @@ mkKdeDerivation {
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ libusb1 ];
 
