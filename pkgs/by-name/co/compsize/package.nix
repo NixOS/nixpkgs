@@ -20,6 +20,11 @@ stdenv.mkDerivation {
     ./btrfs-progs-6-10-1.patch
   ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   buildInputs = [ btrfs-progs ];
 
   installFlags = [
