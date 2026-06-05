@@ -33,9 +33,21 @@ in
     extraVocabs ? [ ],
     deployScriptText ? /* factor */ ''
       USING: command-line io io.backend io.pathnames kernel namespaces sequences
-      tools.deploy tools.deploy.config tools.deploy.backend vocabs.loader ;
+      tools.deploy tools.deploy.config tools.deploy.backend vocabs.loader
+      io.directories.unix ;
 
       IN: deploy-me
+
+      ! The Nix sandbox’s seccomp filter blocks chmod(2). Factor’s
+      ! copy-file calls set-file-permissions which chmod’s the target
+      ! to the source’s mode, 0o444. The blocked syscall returns
+      ! EACCES, crashing the deploys. The method override skips the
+      ! set-file-permissions call (Nix will manage its output
+      ! permissions).
+      !
+      ! Surfaced with Factor 0.101 which added icon PNG resources to
+      ! the definitions.icons vocab to copy-vocab-resources.
+      M: unix copy-file call-next-method ;
 
       : load-and-deploy ( path/vocab -- )
           normalize-path [
