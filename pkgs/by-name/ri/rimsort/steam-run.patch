@@ -1,9 +1,18 @@
+From 9f009901fc5340b957f691d31ea85f0df83c266a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20Chocholat=C3=BD?= <chocholaty.david@protonmail.com>
+Date: Fri, 5 Jun 2026 10:02:54 +0200
+Subject: [PATCH] fix(steam-run): Run steam-run from Nix-resolved path
+
+---
+ app/utils/generic.py                | 3 +++
+ app/utils/steam/steamcmd/wrapper.py | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
 diff --git a/app/utils/generic.py b/app/utils/generic.py
-index f23aa5c..9ff4a04 100644
+index a1d22358..4431bd46 100644
 --- a/app/utils/generic.py
 +++ b/app/utils/generic.py
-@@ -299,7 +299,10 @@ def launch_game_process(game_install_path: Path, args: list[str]) -> None:
-     logger.info(
+@@ -343,6 +343,9 @@ def launch_game_process(game_install_path: Path, run_args: str = "") -> None:
          f"Launching the game with subprocess.Popen(): `{executable_path}` "
          f"with env_vars: {list(env_vars.keys())}, wrappers: {wrapper_commands}, args: {game_args}"
      )
@@ -14,17 +23,20 @@ index f23aa5c..9ff4a04 100644
          executable_path,
          game_args,
 diff --git a/app/utils/steam/steamcmd/wrapper.py b/app/utils/steam/steamcmd/wrapper.py
-index 398e0fd..79bb162 100644
+index 1bd2d88c..bec80cb4 100644
 --- a/app/utils/steam/steamcmd/wrapper.py
 +++ b/app/utils/steam/steamcmd/wrapper.py
-@@ -317,8 +317,8 @@ class SteamcmdInterface:
-                 script_output.write("\n".join(script))
-             runner.message(f"Compiled & using script: {script_path}")
-             runner.execute(
--                self.steamcmd,
--                [f'+runscript "{script_path}"'],
-+                "@steam-run@/bin/steam-run",
-+                [self.steamcmd, f'+runscript "{script_path}"'],
-                 len(publishedfileids),
-             )
-         else:
+@@ -374,8 +374,8 @@ class SteamcmdInterface:
+         script_path = self._build_download_script(first_batch)
+         runner.message(f"Compiled & using script: {script_path}")
+         runner.execute(
+-            self.steamcmd,
+-            [f'+runscript "{script_path}"'],
++            "@steam-run@/bin/steam-run",
++            [self.steamcmd, f'+runscript "{script_path}"'],
+             total,
+         )
+ 
+-- 
+2.54.0
+
