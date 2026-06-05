@@ -11752,6 +11752,8 @@ self: super: with self; {
 
   opencc = callPackage ../development/python-modules/opencc { };
 
+  openccu-data = callPackage ../development/python-modules/openccu-data { };
+
   opencensus = callPackage ../development/python-modules/opencensus { };
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
