@@ -1753,6 +1753,10 @@ assertNoAdditions {
     checkInputs = [ self.telescope-nvim ];
   };
 
+  heirline-components-nvim = super.heirline-components-nvim.overrideAttrs {
+    nvimRequireCheck = "heirline-components.all";
+  };
+
   helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
     runtimeDeps = [
       helm-ls
