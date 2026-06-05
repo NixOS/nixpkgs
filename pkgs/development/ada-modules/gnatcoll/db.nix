@@ -105,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNAT Components Collection - Database packages";
     homepage = "https://github.com/AdaCore/gnatcoll-db";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.all;
   };
 })
