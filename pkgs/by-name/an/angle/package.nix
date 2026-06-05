@@ -17,6 +17,7 @@
   pciutils,
   libGL,
   apple-sdk_15,
+  fixDarwinDylibNames,
   xcbuild,
 }:
 let
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.bintools
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
     xcbuild
   ];
 
@@ -99,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     # clang++: error: argument unused during compilation: '-stdlib=libc++'
     "treat_warnings_as_errors=false"
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   patches = [
     # https://issues.chromium.org/issues/432275627
@@ -173,6 +177,13 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool \
+        -change ./libGLESv2.dylib \
+        $out/lib/libGLESv2.dylib \
+        $out/lib/libGLESv1_CM.dylib
   '';
 
   meta = {
