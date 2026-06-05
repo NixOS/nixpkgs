@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "base36";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tonyseek";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "076nmk9s0zkmgs2zqzkaqij5cmzhf4mrhivbb9n6cvz52i1mppr5";
   };
+
+  build-system = [ setuptools ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
