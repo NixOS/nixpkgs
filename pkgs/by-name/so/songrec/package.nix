@@ -14,24 +14,26 @@
   libpulseaudio,
   versionCheckHook,
   nix-update-script,
+  pipewire,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "songrec";
-  version = "0.6.7";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
     tag = finalAttrs.version;
-    hash = "sha256-lCwFMBQ6IimNtXYMfTnFOpwOO2qbwijOEZ+oMsQKAP0=";
+    hash = "sha256-6DT5KY6Y3CPTFLNG+EostAlMgZ35SLv8r9EXtRadC2U=";
   };
 
-  cargoHash = "sha256-BhDFGkvY6c8XbhJpFX1w8CSXK9IY/HiysNoooytFT9I=";
+  cargoHash = "sha256-9R7HwTwjeCBIxX2xHs++9Zl0SMRmHPHDD1OHNa4q+jI=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libadwaita
     libpulseaudio
     libsoup_3
+    pipewire
   ];
 
   preFixup = ''
