@@ -2,9 +2,10 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  buildNpmPackage,
+  stdenvNoCC,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs_24,
   pnpm_10,
   nix-update-script,
@@ -21,16 +22,18 @@ let
     hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
-  frontend = buildNpmPackage rec {
+  frontend = stdenvNoCC.mkDerivation rec {
     pname = "filebrowser-frontend";
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    nativeBuildInputs = [ pnpm_10 ];
-    npmConfigHook = pnpmConfigHook;
-    npmDeps = pnpmDeps;
-    nodejs = nodejs_24;
+    nativeBuildInputs = [
+      nodejs_24
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_10
+    ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit
