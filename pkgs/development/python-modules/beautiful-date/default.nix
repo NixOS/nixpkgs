@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   freezegun,
   python-dateutil,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "beautiful-date";
   version = "2.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-e6YJBaDwWqVehxBPOvsIdV4FIXlIwj29H5untXGJvT0=";
   };
 
-  propagatedBuildInputs = [ python-dateutil ];
+  build-system = [ setuptools ];
+
+  dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [
     freezegun
