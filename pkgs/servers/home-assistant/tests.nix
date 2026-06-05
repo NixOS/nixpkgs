@@ -130,6 +130,10 @@ let
       # [2026.6.1] AssertionError: assert <ConfigEntryState.LOADED: 'loaded'> is <ConfigEntryState.SETUP_RETRY: 'setup_retry'>
       "test_usb_device_reactivity"
     ];
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
+    ];
     opendisplay = [
       # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
       # https://github.com/home-assistant/core/pull/172909

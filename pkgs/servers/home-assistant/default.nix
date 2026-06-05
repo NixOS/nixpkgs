@@ -317,6 +317,9 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about not running in a docker or a venv
     ./patches/pythonpath-is-a-venv.patch
 
+    # No scaring our users about our install method
+    ./patches/nixos-was-never-supported.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
