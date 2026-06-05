@@ -44,6 +44,18 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+  # The Makefile sets `LDFLAGS = -L=-flto=full`, which ldc2 forwards as
+  # `-flto=full` to whatever cc it invokes as the linker. GCC and LLVM
+  # lld accept this; Apple's `ld` does not ("ld: unknown option:
+  # -flto=full") and the link fails. Drop LTO on darwin — slightly
+  # larger binary, but builds. The aarch64-darwin path is already
+  # excluded via meta.platforms = x86_64; this only affects
+  # x86_64-darwin.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail 'LDFLAGS     = -L=-flto=full' 'LDFLAGS     ='
+  '';
+
   # Upstream's install target is broken; copy manually
   installPhase = ''
     runHook preInstall
