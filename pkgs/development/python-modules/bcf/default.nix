@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   appdirs,
   click,
   colorama,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "bcf";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -25,12 +26,14 @@ buildPythonPackage rec {
     sha256 = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     sed -ri 's/@@VERSION@@/${version}/g' \
       bcf/__init__.py setup.py
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     click
     colorama
