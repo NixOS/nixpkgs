@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   numpy,
   scipy,
   matplotlib,
@@ -11,14 +12,16 @@
 buildPythonPackage rec {
   pname = "baycomp";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MrJa17FtWyUd259hEKMtezlTuYcJbaHSXvJ3k10l2uw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
     matplotlib
