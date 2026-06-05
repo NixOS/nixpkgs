@@ -81,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       isabelroses
       nullcube
       defelo
+      Misaka13514
     ];
   };
 })
