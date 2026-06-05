@@ -7117,8 +7117,6 @@ with pkgs;
     sqlite-rsync
     ;
 
-  sqlar = callPackage ../development/libraries/sqlite/sqlar.nix { };
-
   sqlite-interactive = (sqlite.override { interactive = true; }).bin;
 
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
@@ -9936,20 +9934,6 @@ with pkgs;
 
   trustedqsl = tqsl; # Alias added 2019-02-10
 
-  transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
-    libutp = libutp_3_4;
-  };
-  libtransmission_4 = transmission_4.override {
-    installLib = true;
-    enableDaemon = false;
-    enableCli = false;
-  };
-  transmission_4-gtk = transmission_4.override { enableGTK3 = true; };
-  transmission_4-qt5 = transmission_4.override { enableQt5 = true; };
-  transmission_4-qt6 = transmission_4.override { enableQt6 = true; };
-  transmission_4-qt = transmission_4-qt5;
-  transmission_4-mac = transmission_4.override { enableMac = true; };
-
   tinywl = callPackage ../applications/window-managers/tinywl {
     wlroots = wlroots_0_20;
   };
@@ -10976,8 +10960,6 @@ with pkgs;
   glucose-syrup = glucose.override {
     enableUnfree = true;
   };
-
-  inherit (ocamlPackages) hol_light;
 
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 

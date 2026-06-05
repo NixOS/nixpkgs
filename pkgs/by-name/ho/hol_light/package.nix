@@ -4,16 +4,22 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   writeText,
-  ocaml,
-  findlib,
-  zarith,
-  camlp5,
-  camlp-streams,
-  fmt,
-  pcre2,
+  ocamlPackages,
   ledit,
   bash,
 }:
+
+let
+  inherit (ocamlPackages)
+    ocaml
+    findlib
+    zarith
+    camlp5
+    camlp-streams
+    fmt
+    pcre2
+    ;
+in
 
 let
   ocamlPath = lib.makeSearchPath "/lib/ocaml/${ocaml.version}/site-lib" [

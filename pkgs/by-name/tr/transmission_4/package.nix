@@ -14,7 +14,7 @@
   rapidjson,
   small,
   libb64,
-  libutp,
+  libutp_3_4,
   libdeflate,
   utf8cpp,
   fast-float,
@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     libnatpmp
     libpsl
-    libutp
+    libutp_3_4
     miniupnpc
     openssl
     rapidjson

@@ -37,7 +37,7 @@ index d9f558cd4..45a42ecd1 100644
  
  $largeEmojiFont: 'asset:///optional-fonts/emoji-large.woff2';
 diff --git a/stylesheets/components/fun/FunEmoji.scss b/stylesheets/components/fun/FunEmoji.scss
-index f96218420..612538cd3 100644
+index bb1464cd6..efbeca91e 100644
 --- a/stylesheets/components/fun/FunEmoji.scss
 +++ b/stylesheets/components/fun/FunEmoji.scss
 @@ -8,14 +8,12 @@
@@ -54,8 +54,8 @@ index f96218420..612538cd3 100644
 -  content-visibility: auto;
    vertical-align: top;
    letter-spacing: inherit;
- 
-@@ -24,15 +22,6 @@
+   font-style: normal;
+@@ -25,15 +23,6 @@
    color: hsl(from currentColor h s l / 100%);
  }
  
@@ -71,7 +71,7 @@ index f96218420..612538cd3 100644
  .FunStaticEmoji--Blot {
    display: inline-flex;
    margin-bottom: round(-0.4em + 3px, 1px);
-@@ -133,7 +122,6 @@ $inline-emoji-container-name: inline-emoji;
+@@ -134,7 +123,6 @@ $inline-emoji-container-name: inline-emoji;
  
  .FunInlineEmoji {
    z-index: 0;
@@ -79,20 +79,20 @@ index f96218420..612538cd3 100644
    container: $inline-emoji-container-name / inline-size;
    display: inline-block;
    flex: none;
-@@ -142,8 +130,7 @@ $inline-emoji-container-name: inline-emoji;
+@@ -143,8 +131,7 @@ $inline-emoji-container-name: inline-emoji;
    font-size: var(--fun-inline-emoji-size, round(1.4em, 1px));
    line-height: var(--fun-inline-emoji-size, round(1em, 1px));
    letter-spacing: inherit;
 -  content-visibility: auto;
 -  vertical-align: bottom;
 +  vertical-align: text-bottom;
+   font-style: normal;
+   color: hsl(from currentColor h s l / 100%);
  }
- 
- .FunInlineEmoji__Image {
-@@ -170,26 +157,6 @@ $inline-emoji-container-name: inline-emoji;
-   @container #{$inline-emoji-container-name} (width > 64px) {
-     display: none;
-   }
+@@ -169,26 +156,6 @@ $inline-emoji-container-name: inline-emoji;
+   // Inline-block so copying multiple emoji does not insert newlines around
+   // each one in the clipboard plain-text serialization.
+   display: inline-block;
 -
 -  // Emoji font images are slightly higher than optical center
 -  @container #{$inline-emoji-container-name} (width > 16px) {
@@ -117,18 +117,18 @@ index f96218420..612538cd3 100644
  
  .FunInlineEmoji__Jumbo {
 diff --git a/ts/components/fun/FunEmoji.dom.tsx b/ts/components/fun/FunEmoji.dom.tsx
-index 853f8b7cd..f4589f735 100644
+index dd022bbc6..d517f3cb4 100644
 --- a/ts/components/fun/FunEmoji.dom.tsx
 +++ b/ts/components/fun/FunEmoji.dom.tsx
-@@ -31,12 +31,6 @@ function getEmojiJumboUrl(
-   emoji: EmojiVariantData,
+@@ -21,12 +21,6 @@ function getEmojiJumboUrl(
+   emoji: Emoji.Variant,
    size: number | undefined
  ): string | null {
 -  if (size != null && size < MIN_JUMBOMOJI_SIZE) {
 -    return null;
 -  }
--  if (KNOWN_JUMBOMOJI.has(emoji.value)) {
--    return `emoji://jumbo?emoji=${encodeURIComponent(emoji.value)}`;
+-  if (KNOWN_JUMBOMOJI.has(emoji)) {
+-    return `emoji://jumbo?emoji=${encodeURIComponent(emoji)}`;
 -  }
    return null;
  }
