@@ -7,6 +7,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "luwen";
   version = "0.8.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";

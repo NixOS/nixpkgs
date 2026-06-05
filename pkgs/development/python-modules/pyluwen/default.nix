@@ -7,25 +7,25 @@
   maturin,
   protobuf_30,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyluwen";
-  version = "0.7.11";
+  version = "0.8.5";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
-    tag = "v${version}";
-    hash = "sha256-eQpKEeuy0mVrmu8ssAOWBcXi7zutStu+RbZOEF/IJ98=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lY7cZ+8C0UEGGYxufl4Vi8g0L4AJFXaGqn7XE2ivTcQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-INzF8ORkrmPQMJbGSNm5QkfMOgE+HJ3taU1EZ9i+HJg=";
+    inherit (finalAttrs) src;
+    hash = "sha256-QBGXbRiBk4WIQFopq1OccmUHgx5GzR/PKhMH4Ie+fyg=";
   };
 
-  sourceRoot = "${src.name}/crates/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/bind/${finalAttrs.pname}";
 
   prePatch = ''
     chmod -R u+w ../../
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   postPatch = ''
     cd ../$sourceRoot
     cp --no-preserve=ownership,mode ../../Cargo.lock .
-    sed -i '0,/version = /{s/version = "*.*.*"/version = "${version}"/g}' Cargo.toml
+    sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
   '';
 
   nativeBuildInputs = with rustPlatform; [
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})
