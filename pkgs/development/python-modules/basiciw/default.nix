@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   gcc,
   wirelesstools,
   isPyPy,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "basiciw";
   version = "0.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy;
 
@@ -19,8 +20,10 @@ buildPythonPackage rec {
     sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
   };
 
+  build-system = [ setuptools ];
+
   buildInputs = [ gcc ];
-  propagatedBuildInputs = [ wirelesstools ];
+  dependencies = [ wirelesstools ];
 
   meta = {
     description = "Get info about wireless interfaces using libiw";
