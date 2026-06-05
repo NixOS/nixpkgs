@@ -699,7 +699,7 @@ let
           key = toString m.key or key;
           ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
           ${if m ? imports then "imports" else null} = m.imports;
-          options = m.options or { };
+          ${if m ? options then "options" else null} = m.options;
           config = addFreeformType (addMeta (m.config or { }));
         }
     else
@@ -812,21 +812,24 @@ let
       declsByName = zipAttrs (
         map (
           module:
-          let
-            subtree = module.options;
-          in
-          if !(isAttrs subtree) then
-            throw ''
-              An option declaration for `${concatStringsSep "." prefix}' has type
-              `${typeOf subtree}' rather than an attribute set.
-              Did you mean to define this outside of `options'?
-            ''
+          if !module ? options then
+            { }
           else
-            mapAttrs (n: option: {
-              inherit (module) _file;
-              pos = unsafeGetAttrPos n subtree;
-              options = option;
-            }) subtree
+            let
+              subtree = module.options;
+            in
+            if !(isAttrs subtree) then
+              throw ''
+                An option declaration for `${concatStringsSep "." prefix}' has type
+                `${typeOf subtree}' rather than an attribute set.
+                Did you mean to define this outside of `options'?
+              ''
+            else
+              mapAttrs (n: option: {
+                inherit (module) _file;
+                pos = unsafeGetAttrPos n subtree;
+                options = option;
+              }) subtree
         ) modules
       );
 
