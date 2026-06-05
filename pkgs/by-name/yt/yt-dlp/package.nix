@@ -35,6 +35,8 @@ let
     pname = "curl-cffi";
     version = "0.14.0";
     pyproject = true;
+    __structuredAttrs = true;
+    strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "lexiforest";
@@ -61,18 +63,20 @@ let
     doCheck = false;
   });
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yt-dlp";
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
   version = "2026.03.17";
   pyproject = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=";
   };
 
@@ -97,9 +101,9 @@ python3Packages.buildPythonApplication rec {
 
   # expose optional-dependencies, but provide all features
   dependencies =
-    optional-dependencies.default
-    ++ optional-dependencies.curl-cffi
-    ++ lib.optionals withSecretStorage optional-dependencies.secretstorage;
+    finalAttrs.passthru.optional-dependencies.default
+    ++ finalAttrs.passthru.optional-dependencies.curl-cffi
+    ++ lib.optionals withSecretStorage finalAttrs.passthru.optional-dependencies.secretstorage;
 
   optional-dependencies = {
     default = with python3Packages; [
@@ -191,7 +195,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${finalAttrs.src.tag}/Changelog.md";
     description = "Feature-rich command-line audio/video downloader";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     license = lib.licenses.unlicense;
@@ -209,4 +213,4 @@ python3Packages.buildPythonApplication rec {
       FlameFlag
     ];
   };
-}
+})
