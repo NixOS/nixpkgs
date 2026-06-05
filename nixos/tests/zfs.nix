@@ -1,12 +1,11 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  system,
+  pkgs,
+  runTest,
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
 let
+  inherit (pkgs) lib;
 
   makeZfsTest =
     {
@@ -15,11 +14,9 @@ let
       zfsPackage,
       extraTest ? "",
     }:
-    makeTest {
+    runTest {
       name = zfsPackage.kernelModuleAttribute;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ elvishjerricco ];
-      };
+      meta.maintainers = with lib.maintainers; [ elvishjerricco ];
 
       nodes.machine =
         {
@@ -250,7 +247,7 @@ in
       systemdStage1 = true;
     }).zfsroot;
 
-  expand-partitions = makeTest {
+  expand-partitions = runTest {
     name = "multi-disk-zfs";
     nodes = {
       machine =
