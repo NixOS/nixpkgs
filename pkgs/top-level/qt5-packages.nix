@@ -106,7 +106,7 @@ makeScopeWithSplicing' {
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-        mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+        mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
 
         maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
