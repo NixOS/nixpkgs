@@ -24,6 +24,7 @@ let
   inherit (_cuda.lib)
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
+    _getJetsonMinSbsaCapability
     _mkFailedAssertionsString
     getRedistSystem
     mkVersionedName
@@ -121,11 +122,12 @@ let
 
   assertions =
     let
-      # Jetson devices (pre-Thor) cannot be targeted by the same binaries which target non-Jetson devices. While
+      # Jetson devices (pre-Orin) cannot be targeted by the same binaries which target non-Jetson devices. While
       # NVIDIA provides both `linux-aarch64` and `linux-sbsa` packages, which both target `aarch64`,
       # they are built with different settings and cannot be mixed.
-      preThorJetsonCudaCapabilities = filter (flip versionOlder "10.1") passthruExtra.requestedJetsonCudaCapabilities;
-      postThorJetsonCudaCapabilities = filter (flip versionAtLeast "10.1") passthruExtra.requestedJetsonCudaCapabilities;
+      sbsaJetsonCapability = _getJetsonMinSbsaCapability cudaMajorMinorVersion;
+      preSbsaJetsonCudaCapabilities = filter (flip versionOlder sbsaJetsonCapability) passthruExtra.requestedJetsonCudaCapabilities;
+      postSbsaJetsonCudaCapabilities = filter (flip versionAtLeast sbsaJetsonCapability) passthruExtra.requestedJetsonCudaCapabilities;
 
       # Remove all known capabilities from the user's list to find unrecognized capabilities.
       unrecognizedCudaCapabilities = subtractLists allSortedCudaCapabilities passthruExtra.cudaCapabilities;
@@ -166,25 +168,25 @@ let
       }
       {
         message =
-          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) cannot be "
-          + "specified with other capabilities (${toJSON (subtractLists preThorJetsonCudaCapabilities passthruExtra.cudaCapabilities)})";
+          "Requested pre-SBSA (${sbsaJetsonCapability}) Jetson CUDA capabilities (${toJSON preSbsaJetsonCudaCapabilities}) cannot be "
+          + "specified with other capabilities (${toJSON (subtractLists preSbsaJetsonCudaCapabilities passthruExtra.cudaCapabilities)})";
         assertion =
           # If there are preThorJetsonCudaCapabilities, they must be the only requested capabilities.
-          preThorJetsonCudaCapabilities != [ ]
-          -> preThorJetsonCudaCapabilities == passthruExtra.cudaCapabilities;
+          preSbsaJetsonCudaCapabilities != [ ]
+          -> preSbsaJetsonCudaCapabilities == passthruExtra.cudaCapabilities;
       }
       {
         message =
-          "Requested pre-Thor (10.1) Jetson CUDA capabilities (${toJSON preThorJetsonCudaCapabilities}) require "
+          "Requested pre-SBSA (${sbsaJetsonCapability}) Jetson CUDA capabilities (${toJSON preSbsaJetsonCudaCapabilities}) require "
           + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-aarch64";
         assertion =
-          preThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-aarch64";
+          preSbsaJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-aarch64";
       }
       {
         message =
-          "Requested post-Thor (10.1) Jetson CUDA capabilities (${toJSON postThorJetsonCudaCapabilities}) require "
+          "Requested post-SBSA (${sbsaJetsonCapability}) Jetson CUDA capabilities (${toJSON postSbsaJetsonCudaCapabilities}) require "
           + "computed NVIDIA hostRedistSystem (${passthruExtra.hostRedistSystem}) to be linux-sbsa";
-        assertion = postThorJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-sbsa";
+        assertion = postSbsaJetsonCudaCapabilities != [ ] -> passthruExtra.hostRedistSystem == "linux-sbsa";
       }
     ];
 
