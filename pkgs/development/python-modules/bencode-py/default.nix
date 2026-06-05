@@ -6,13 +6,15 @@
   pbr,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beconde-py";
   version = "4.0.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "bencode.py";
     hash = "sha256-KiTM2hclpRplCJPQtjJgE4NZ6qKZu256CZYTUKKm4Fw=";
   };
@@ -32,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bitTorrent11;
     maintainers = with lib.maintainers; [ vamega ];
   };
-}
+})
