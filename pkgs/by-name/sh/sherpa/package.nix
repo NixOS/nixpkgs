@@ -6,7 +6,7 @@
   gfortran,
   libzip,
   lhapdf,
-  patchelf,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gfortran
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ patchelf ];
+  ];
 
   buildInputs = [
     libzip
@@ -38,15 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Needed to initialize a valid SHERPA_LIBRARY_PATH
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "${placeholder "out"}/lib/SHERPA-MC")
   ];
 
-  preFixup =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -add_rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --add-rpath "$out"/lib/SHERPA-MC "$out"/bin/Sherpa
-    '';
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Monte Carlo event generator for the Simulation of High-Energy Reactions of PArticles";
@@ -54,7 +50,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/sherpa-team/sherpa";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

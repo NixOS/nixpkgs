@@ -176,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    donationPage = "https://ziglang.org/zsf/";
     license = lib.licenses.mit;
     maintainers = [ ];
     teams = [ lib.teams.zig ];
