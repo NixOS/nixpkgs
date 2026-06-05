@@ -2535,8 +2535,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  kronometer = kdePackages.callPackage ../tools/misc/kronometer { };
-
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
