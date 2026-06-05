@@ -7,14 +7,16 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "before-after";
   version = "1.0.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "before_after";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-x9T5uLi7UgldoUxLnFnqaz9bnqn9zop7/HLsrg9aP4U=";
   };
 
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
   };
-}
+})
