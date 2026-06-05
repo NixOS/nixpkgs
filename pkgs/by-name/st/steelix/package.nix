@@ -3,10 +3,10 @@
   helix,
   installShellFiles,
   lib,
+  runCommand,
   rustPlatform,
   makeBinaryWrapper,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steelix";
   version = "0-unstable-2026-05-21";
@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-    HELIX_DEFAULT_RUNTIME = helix.runtime;
+    HELIX_DEFAULT_RUNTIME = runCommand "steelix-default-runtime" { } ''
+      cp -r --no-preserve=mode ${finalAttrs.src}/runtime $out
+      rm -rf $out/grammars $out/queries
+    '';
   };
 
   postInstall = ''
