@@ -20,17 +20,22 @@
   libsecret,
   gst_all_1,
   xdg-user-dirs,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
+  libavif,
+  libheif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-CfrPmpkjcmKMB66kdFL4HqVukaIWAkIzOkwtBqZ65k4=";
+    hash = "sha256-2UtlOdxXFdWoGeEwb89qI5Xp8FES2I3Eno8DIbhkBhI=";
   };
 
   __structuredAttrs = true;
@@ -75,6 +80,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.mpris-server
     python3Packages.pillow
   ];
+
+  preInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+          libavif
+          libheif.lib
+        ];
+      }
+    }"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
