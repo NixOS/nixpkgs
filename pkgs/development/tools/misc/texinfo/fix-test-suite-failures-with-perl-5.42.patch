@@ -1,0 +1,41 @@
+>From 1af3c9b91625e4d115ea979c45a75752b872c10f Mon Sep 17 00:00:00 2001
+From: Niko Tyni <ntyni@debian.org>
+Date: Sat, 13 Sep 2025 08:57:55 +0100
+Subject: [PATCH] Fix test suite failures with Perl 5.42
+
+The precedence issues here were flagged by new diagnostics in Perl 5.42,
+and the resulting warnings caused test failures.
+---
+ tp/Texinfo/Convert/Converter.pm | 2 +-
+ tp/Texinfo/Convert/LaTeX.pm     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tp/Texinfo/Convert/Converter.pm b/tp/Texinfo/Convert/Converter.pm
+index 5e14a9e..89e623b 100644
+--- a/tp/Texinfo/Convert/Converter.pm
++++ b/tp/Texinfo/Convert/Converter.pm
+@@ -386,7 +386,7 @@ sub output_tree($$)
+ 
+   my $fh;
+   my $encoded_output_file;
+-  if (! $output_file eq '') {
++  if ($output_file ne '') {
+     my $path_encoding;
+     ($encoded_output_file, $path_encoding)
+       = $self->encoded_output_file_name($output_file);
+diff --git a/tp/Texinfo/Convert/LaTeX.pm b/tp/Texinfo/Convert/LaTeX.pm
+index ae947d1..f4ba076 100644
+--- a/tp/Texinfo/Convert/LaTeX.pm
++++ b/tp/Texinfo/Convert/LaTeX.pm
+@@ -1085,7 +1085,7 @@ sub output($$)
+ 
+   my $fh;
+   my $encoded_output_file;
+-  if (! $output_file eq '') {
++  if ($output_file ne '') {
+     my $path_encoding;
+     ($encoded_output_file, $path_encoding)
+       = $self->encoded_output_file_name($output_file);
+-- 
+2.51.0
+

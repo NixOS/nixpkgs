@@ -1,0 +1,13 @@
+diff --git a/projectepy b/project.py
+--- a/project.py
++++ b/project.py
+@@ -163,8 +163,7 @@
+ 
+         # Automatically confirm the license if there might not be a command
+         # line option to do so.
+-        if tool == 'pep517':
+-            self.confirm_license = True
++        self.confirm_license = True
+ 
+         self._check_license()
+ 

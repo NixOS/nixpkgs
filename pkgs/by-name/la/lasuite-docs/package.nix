@@ -1,0 +1,186 @@
+{
+  stdenv,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nixosTests,
+  fetchYarnDeps,
+  python3,
+  nodejs,
+  yarnBuildHook,
+  yarnConfigHook,
+}:
+let
+  version = "5.1.0";
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "docs";
+    tag = "v${version}";
+    hash = "sha256-Ptg3C+5DbUiWVS8nMCmqmSFMmNI4NW8NYBF+G5xOqSg=";
+  };
+
+  mail-templates = stdenv.mkDerivation {
+    name = "lasuite-docs-${version}-mjml";
+    inherit src;
+
+    sourceRoot = "source/src/mail";
+
+    env.DOCS_DIR_MAILS = "${placeholder "out"}";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/src/mail/yarn.lock";
+      hash = "sha256-CKKGY87C5ifv0sHm9ExCzaGM3mV4C0NsWLCbw+ALqGc=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      yarnConfigHook
+      yarnBuildHook
+    ];
+
+    dontInstall = true;
+  };
+in
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "lasuite-docs";
+  pyproject = true;
+  inherit version src;
+
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
+
+  patches = [
+    # Support configuration throught environment variables for SECURE_*
+    ./secure_settings.patch
+
+    # Fix creation of unsafe C function in postgresql migrations
+    ./postgresql_fix.patch
+
+    # Fix installing all modules with uv_build
+    # https://github.com/suitenumerique/docs/pull/2295
+    ./uv.patch
+  ];
+
+  # They use a old version of mistralai which exported a class
+  # at the top level
+  postPatch = ''
+    substituteInPlace core/services/ai_services/legacy.py \
+      --replace-fail \
+        "from mistralai import Mistral" \
+        "from mistralai.client import Mistral"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+  ''
+  # Otherwise fails with:
+  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace impress/settings.py \
+      --replace-fail \
+        "gethostname()" \
+        "gethostname() + '.local'"
+  '';
+  __darwinAllowLocalNetworking = true;
+
+  build-system = with python3Packages; [ uv-build ];
+
+  dependencies =
+    with python3Packages;
+    [
+      beautifulsoup4
+      boto3
+      celery
+      emoji
+      django
+      django-configurations
+      django-cors-headers
+      django-countries
+      django-csp
+      django-extensions
+      django-filter
+      django-lasuite
+      django-parler
+      django-redis
+      django-storages
+      django-timezone-field
+      django-treebeard
+      django-waffle
+      djangorestframework
+      drf-spectacular
+      drf-spectacular-sidecar
+      dockerflow
+      easy-thumbnails
+      factory-boy
+      gunicorn
+      jsonschema
+      langfuse
+      lxml
+      markdown
+      mistralai
+      mozilla-django-oidc
+      nested-multipart-parser
+      openai
+      psycopg
+      pycrdt
+      pydantic-ai-slim
+      pyjwt
+      pyopenssl
+      python-magic
+      redis
+      requests
+      sentry-sdk
+      uvicorn
+      whitenoise
+    ]
+    ++ celery.optional-dependencies.redis
+    ++ django-lasuite.optional-dependencies.all
+    ++ django-storages.optional-dependencies.s3;
+
+  pythonRelaxDeps = true;
+
+  postBuild = ''
+    export DATA_DIR=$(pwd)/data
+    ${python3.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
+  '';
+
+  postInstall =
+    let
+      pythonPath = python3Packages.makePythonPath finalAttrs.passthru.dependencies;
+    in
+    ''
+      mkdir -p $out/{bin,share}
+
+      cp ./manage.py $out/bin/.manage.py
+      cp -r data/static $out/share
+      chmod +x $out/bin/.manage.py
+
+      makeWrapper $out/bin/.manage.py $out/bin/docs \
+        --prefix PYTHONPATH : "${pythonPath}"
+      makeWrapper ${lib.getExe python3Packages.celery} $out/bin/celery \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
+      makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
+
+      mkdir -p $out/${python3.sitePackages}/core/templates
+      ln -sv ${mail-templates}/ $out/${python3.sitePackages}/core/templates/mail
+
+      cp -r impress/configuration $out/${python3.sitePackages}/impress/configuration
+    '';
+
+  passthru.tests = {
+    login-and-create-doc = nixosTests.lasuite-docs;
+  };
+
+  meta = {
+    description = "Collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
+    homepage = "https://github.com/suitenumerique/docs";
+    changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
+    mainProgram = "docs";
+    platforms = lib.platforms.linux;
+  };
+})

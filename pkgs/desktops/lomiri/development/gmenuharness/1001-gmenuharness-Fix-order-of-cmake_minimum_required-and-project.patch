@@ -1,0 +1,26 @@
+From 15b5a78289cbc4c0146b7e7561a3539e8cdfaa29 Mon Sep 17 00:00:00 2001
+From: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+Date: Fri, 17 Apr 2026 11:18:51 +0200
+Subject: [PATCH] CMakeLists.txt: Fix order of calling cmake_minimum_required()
+ and project().
+
+---
+ CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c1b3eb3..0d0f66d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,7 @@
+-project(gmenu-harness VERSION 0.1.5 LANGUAGES C CXX)
+ cmake_minimum_required(VERSION 3.10)
+ 
++project(gmenu-harness VERSION 0.1.5 LANGUAGES C CXX)
++
+ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
+ find_package(PkgConfig REQUIRED)
+ include(GNUInstallDirs)
+-- 
+GitLab
+

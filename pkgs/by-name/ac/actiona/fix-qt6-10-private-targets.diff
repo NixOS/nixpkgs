@@ -1,0 +1,13 @@
+diff --git a/actiontools/CMakeLists.txt b/actiontools/CMakeLists.txt
+index 94c809c4..eb3d7e8c 100644
+--- a/actiontools/CMakeLists.txt
++++ b/actiontools/CMakeLists.txt
+@@ -292,7 +292,7 @@ target_compile_definitions(${PROJECT} PRIVATE ACTIONTOOLS_LIBRARY)
+ setup_target(${PROJECT})
+ 
+ find_package(OpenCV REQUIRED core imgproc)
+-find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Widgets Qml REQUIRED)
++find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Widgets Qml QmlPrivate REQUIRED)
+ 
+ ExternalProject_Add(external_qtjsapi
+     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qtjsapi

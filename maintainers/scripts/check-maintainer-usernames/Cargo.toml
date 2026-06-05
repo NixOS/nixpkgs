@@ -1,0 +1,9 @@
+[package]
+name = "check-maintainers"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+octocrab = "0.42.1"
+serde_json = "1.0.133"
+tokio = { version = "1.41.1", features = ["fs", "macros", "rt-multi-thread"] }

@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Fri, 20 Dec 2024 16:38:55 +0100
+Subject: [PATCH] nvc: fix struct declaration
+
+---
+ src/nvcgo.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/nvcgo.c b/src/nvcgo.c
+index 2e090c9bef83e165dfb722ab27e3287407466173..643504cd485fbe4a89d5959a1adfb69ff6748576 100644
+--- a/src/nvcgo.c
++++ b/src/nvcgo.c
+@@ -33,7 +33,8 @@
+ void nvcgo_program_1(struct svc_req *, register SVCXPRT *);
+ 
+ static struct nvcgo_ext {
+-        struct nvcgo;
++        struct rpc rpc;
++        struct libnvcgo api;
+         bool initialized;
+         void *dl_handle;
+ } global_nvcgo_context;

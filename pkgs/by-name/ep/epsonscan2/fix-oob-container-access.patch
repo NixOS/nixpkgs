@@ -1,0 +1,27 @@
+From f17afb6b3782445d7484a1f2e07e1d47f1773d3c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Hubert=20Figui=C3=A8re?= <hub@figuiere.net>
+Date: Thu, 1 Jan 2026 16:02:30 +0100
+Subject: [PATCH] Fix a crash on an OOB container access
+
+Signed-off-by: Sefa Eyeoglu <contact@scrumplex.net>
+---
+ src/Controller/Src/Finder/Finder.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/Controller/Src/Finder/Finder.cpp b/src/Controller/Src/Finder/Finder.cpp
+index aa6b853..5e063e8 100755
+--- a/src/Controller/Src/Finder/Finder.cpp
++++ b/src/Controller/Src/Finder/Finder.cpp
+@@ -52,6 +52,9 @@ namespace epsonscan {
+   }
+   SDIDeviceInfo* Finder::GetDevicesPointer()
+   {
++   if (devices_.size() == 0) {
++    return nullptr;
++   }
+    return &devices_[0];
+   }
+   int32_t Finder::GetDevicesCount() const
+-- 
+2.51.2
+

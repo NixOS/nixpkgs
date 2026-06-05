@@ -1,0 +1,17 @@
+diff --git a/appleutils.mm b/appleutils.mm
+index 52058b5..afc568f 100644
+--- a/appleutils.mm
++++ b/appleutils.mm
+@@ -45,7 +45,11 @@ extern "C" void *makeViewMetalCompatible(void* handle)
+     NSView* view = (__bridge NSView*)handle;
+     assert([view isKindOfClass:[NSView class]]);
+ 
+-    void *pLayer = (__bridge void *)view.layer;
++    // In Qt 6.10+, the window has an intermediate QContainerLayer in which
++    // the actual Metal CALayer is nested.
++    // https://github.com/qt/qtbase/commit/0bdbf4688e4265a1ddf42efbe4c780770809d365
++    id containerLayer = view.layer;
++    void *pLayer = (__bridge void*)[containerLayer contentLayer];
+     return pLayer;
+ #endif
+ }

@@ -1,0 +1,20 @@
+From 5c5862071e7ae982de6f39c9d1679dc496f38a20 Mon Sep 17 00:00:00 2001
+From: "Felix J. Ogris" <fjo@core7.intra.ogris.net>
+Date: Fri, 20 Jun 2025 15:10:38 +0200
+Subject: [PATCH] bump required cmake version to 3.10
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 02ee5141d..a8ee3730d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project (ympd C)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
+

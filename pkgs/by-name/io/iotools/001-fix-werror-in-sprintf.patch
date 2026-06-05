@@ -1,0 +1,27 @@
+diff --git a/commands.c b/commands.c
+index a28e6da..0f76ac7 100644
+--- a/commands.c
++++ b/commands.c
+@@ -20,6 +20,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <limits.h>
+ #include <errno.h>
+ #include "commands.h"
+ #include "platform.h"
+@@ -150,7 +151,13 @@ build_symlink_name(const char *path_to_bin, const struct cmd_info *cmd)
+ {
+ 	static char link_name[FILENAME_MAX];
+ 
+-	snprintf(link_name, FILENAME_MAX, "%s/%s", path_to_bin, cmd->name);
++	int result = snprintf(link_name, PATH_MAX, "%s/%s", path_to_bin, cmd->name);
++
++	if (result >= PATH_MAX) {
++		link_name[PATH_MAX - 1] = '\0';
++		} else if (result < 0) {
++		link_name[0] = '\0';
++	}
+ 
+ 	return link_name;
+ }
