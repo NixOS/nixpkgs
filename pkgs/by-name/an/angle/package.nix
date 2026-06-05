@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/pkgconfig
 
-    cat > $out/lib/pkgconfig/angle.pc <<EOF
+    cat > $out/lib/pkgconfig/angle.pc <<'EOF'
     prefix=${placeholder "out"}
     exec_prefix=''${prefix}
     libdir=''${prefix}/lib
