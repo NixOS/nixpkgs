@@ -7,15 +7,18 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bap";
   version = "1.3.1";
   pyproject = true;
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-python";
-    rev = version;
-    sha256 = "1ahkrmcn7qaivps1gar8wd9mq2qqyx6zzvznf5r9rr05h17x5lbp";
+    tag = finalAttrs.version;
+    hash = "sha256-d9HST4AF5Jxycfbv/033GAtcU+Moqxf03VHhY1nNE6o=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +36,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.maurer ];
     license = lib.licenses.mit;
   };
-}
+})
