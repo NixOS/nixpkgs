@@ -16,6 +16,7 @@
   fixDarwinDylibNames,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && !stdenv.hostPlatform.isStatic
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
@@ -24,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libical";
-  version = "3.0.20";
+  version = "4.0.2";
 
   outputs = [
     "out"
@@ -34,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libical";
     repo = "libical";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KIMqZ6QAh+fTcKEYrcLlxgip91CLAwL9rwjUdKzBsQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xrPG3FBUY5OCEHBqcNN4Rj4c4j7kLXUsC0hXRRh76Vg=";
   };
 
   strictDeps = true;
@@ -79,22 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_GTK_DOC=False"
+    "-DLIBICAL_GLIB_BUILD_DOCS=False"
     "-DLIBICAL_BUILD_EXAMPLES=False"
-    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
-    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
-    "-DSTATIC_ONLY=${if stdenv.hostPlatform.isStatic then "True" else "False"}"
+    "-DLIBICAL_JAVA_BINDINGS=False"
+    "-DLIBICAL_GOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
+    "-DLIBICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+    "-DLIBICAL_STATIC=${if stdenv.hostPlatform.isStatic then "True" else "False"}"
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
-  ];
-
-  patches = [
-    # Will appear in 3.1.0
-    # https://github.com/libical/libical/issues/350
-    ./respect-env-tzdir.patch
-
-    ./static.patch
   ];
 
   # Using install check so we do not have to manually set GI_TYPELIB_PATH
@@ -124,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/libical/libical";
     description = "Open Source implementation of the iCalendar protocols";
-    changelog = "https://github.com/libical/libical/raw/v${finalAttrs.version}/ReleaseNotes.txt";
+    changelog = "https://github.com/libical/libical/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
   };
