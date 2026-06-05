@@ -13,7 +13,8 @@
 }:
 
 replaceVarsWith {
-  name = "nuget-to-json";
+  pname = "nuget-to-json";
+  version = lib.trivial.release;
   dir = "bin";
 
   src = ./nuget-to-json.sh;
