@@ -110,10 +110,6 @@ makeScopeWithSplicing' {
 
         maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-        mlt = pkgs.mlt.override {
-          qt = qt5;
-        };
-
         polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
 
         poppler = callPackage ../development/libraries/poppler {
@@ -194,6 +190,7 @@ makeScopeWithSplicing' {
         timed = callPackage ../applications/system/timed { };
       }
       // lib.optionalAttrs config.allowAliases {
+        mlt = throw "'libsForQt5.mlt' was removed due to lack of upstream support since v7.36.0, use 'qt6Packages.mlt'."; # Added 2026-06-05
         futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01
         kdb = throw "libsForQt5.kdb has been removed"; # Added 2026-05-01
         kdiagram = throw "libsForQt5.kdiagram has been removed"; # Added 2026-05-01
