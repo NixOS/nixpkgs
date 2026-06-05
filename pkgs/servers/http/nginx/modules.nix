@@ -17,6 +17,8 @@
   ffmpeg-headless,
   ffmpeg_6-headless,
   geoip,
+  jansson,
+  hiredis,
   libbsd,
   libiconv,
   libjpeg,
@@ -556,6 +558,29 @@ let
         homepage = "https://nginx.org/en/docs/njs/";
         license = with lib.licenses; [ bsd2 ];
         maintainers = with lib.maintainers; [ jvanbruegge ];
+      };
+    };
+
+    oidc = {
+      name = "oidc";
+      src = fetchFromGitHub {
+        owner = "kjdev";
+        repo = "nginx-oidc";
+        rev = "0.4.1";
+        fetchSubmodules = true;
+        sha256 = "sha256-Su9vRgORSSEGws/U6djqPqv73CrzqNAuemH++jKzCaM=";
+      };
+
+      inputs = [
+        hiredis
+        jansson
+      ];
+
+      meta = {
+        description = "nginx module for the OIDC";
+        homepage = "https://github.com/kjdev/nginx-oidc";
+        license = with lib.licenses; [ mit ];
+        maintainers = with lib.maintainers; [ nyanloutre ];
       };
     };
 
