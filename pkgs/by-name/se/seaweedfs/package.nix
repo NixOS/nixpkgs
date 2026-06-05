@@ -93,5 +93,6 @@ buildGoModule (finalAttrs: {
       wozeparrot
     ];
     mainProgram = "weed";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
