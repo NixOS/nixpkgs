@@ -120,9 +120,7 @@ makeScopeWithSplicing' {
 
         pyotherside = callPackage ../development/libraries/pyotherside { };
 
-        qca = callPackage ../development/libraries/qca {
-          inherit (libsForQt5) qtbase;
-        };
+        qca = callPackage ../development/libraries/qca { };
         qca-qt5 = self.qca;
 
         qcoro = callPackage ../development/libraries/qcoro { };
