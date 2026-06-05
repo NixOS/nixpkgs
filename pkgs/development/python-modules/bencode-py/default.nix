@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pbr,
   pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "beconde-py";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,9 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-KiTM2hclpRplCJPQtjJgE4NZ6qKZu256CZYTUKKm4Fw=";
   };
 
-  pythonImportsCheck = [ "bencodepy" ];
+  build-system = [
+    setuptools
+    pbr
+  ];
 
-  nativeBuildInputs = [ pbr ];
+  pythonImportsCheck = [ "bencodepy" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
