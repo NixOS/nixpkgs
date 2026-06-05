@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "unidata-blocks";
-  version = "0.0.24";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "unidata-blocks";
     tag = version;
-    hash = "sha256-WGo7Sn2lubsOWfLglBAEx/2PQ1YCrF/wI7/pDwoHMRk=";
+    hash = "sha256-BWcKqTMYdJ59XncPL29wCms2kCVTrcrV1zSY8mkbErs=";
   };
 
   build-system = [ uv-build ];
