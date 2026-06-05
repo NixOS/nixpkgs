@@ -13,6 +13,9 @@
   pillow,
   pydot,
   pygments,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-django,
   python,
   python-dateutil,
   pytz,
@@ -67,18 +70,17 @@ buildPythonPackage rec {
     networkx
     pydot
     factory-boy
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-django
   ];
 
   pythonImportsCheck = [ "silk" ];
 
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    export DB_ENGINE=sqlite3 DB_NAME=':memory:'
 
-    pushd project
-    DB_ENGINE=sqlite3 DB_NAME=':memory:' ${python.interpreter} manage.py test
-    popd # project
-
-    runHook postCheck
+    cd project
   '';
 
   meta = {
