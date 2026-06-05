@@ -6,6 +6,7 @@
 
 buildLakePackage {
   pname = "lean4-Qq";
+  # nixpkgs-update: no auto update
   version = "4.30.0";
 
   src = fetchFromGitHub {
@@ -21,9 +22,6 @@ buildLakePackage {
     description = "Lean 4 compile-time quote and antiquote macros for metaprogramming";
     homepage = "https://github.com/leanprover-community/quote4";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }
