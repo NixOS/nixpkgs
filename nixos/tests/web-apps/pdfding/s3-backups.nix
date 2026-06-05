@@ -92,6 +92,10 @@ in
           minio-client
           sqlite
         ];
+
+        # allows running nixos test on qemu without kvm, eg. github actions on aarch64-linux
+        systemd.settings.Manager.DefaultDeviceTimeoutSec = lib.mkForce 1800;
+        boot.initrd.kernelModules = [ "virtio_console" ];
       };
   };
 
