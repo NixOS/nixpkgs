@@ -7,15 +7,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beautifultable";
   version = "1.1.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pri22296";
     repo = "beautifultable";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/SReCEvSwiNjBoz/3tGJ9zUNBAag4mLsHlUXwm47zCw=";
   };
 
@@ -35,4 +37,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
