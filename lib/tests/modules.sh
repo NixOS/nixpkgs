@@ -776,8 +776,12 @@ checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-con
 # mkRemoveOptionModule
 checkConfigError 'error: The option `a\.b. can no longer be used since it'\''s been removed\. instructions\s*$' config.a.b ./mkRemoveOptionModule.nix
 checkConfigError 'error: The option `c\.d\.e. can no longer be used since it'\''s been removed\.\s*$' config.c.d.e ./mkRemoveOptionModule.nix
-checkConfigError 'error: list index . in .* is out of range\s*$' config.errors.1 ./mkRemoveOptionModule.nix
+checkConfigError 'error: list index . in .* is out of range\s*$' config.errors.3 ./mkRemoveOptionModule.nix
 checkConfigOutput '^"The option definition `a\.b. in `example-file. no longer has any effect; please remove it\.\\ninstructions\\n"$' config.errors.0 ./mkRemoveOptionModule.nix
+# mkRemoveOptionModule in submodule
+checkConfigError 'error: The option `submodules\.x\.sub\.opt. can no longer be used since it'\''s been removed\. suboption\s*$' config.submodules.x.sub.opt ./mkRemoveOptionModule.nix
+checkConfigOutput '^"The option definition `submodules\.y\.sub\.opt. in `another-file. no longer has any effect; please remove it\.\\nsuboption\\n"$' config.errors.1 ./mkRemoveOptionModule.nix
+checkConfigOutput '^"The option definition `submodules\.z\.sub\.opt. in `another-file. no longer has any effect; please remove it\.\\nsuboption\\n"$' config.errors.2 ./mkRemoveOptionModule.nix
 
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix

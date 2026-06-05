@@ -1710,26 +1710,25 @@ let
   mkRemovedOptionModule =
     optionName: replacementInstructions:
     { options, ... }:
+    let
+      opt = getAttrFromPath optionName options;
+    in
     {
       options = setAttrByPath optionName (mkOption {
         visible = false;
         apply =
           x:
-          throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
+          throw "The option `${opt}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
-        let
-          opt = getAttrFromPath optionName options;
-        in
-        [
-          {
-            assertion = !opt.isDefined;
-            message = ''
-              The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
-              ${replacementInstructions}
-            '';
-          }
-        ];
+      config.assertions = [
+        {
+          assertion = !opt.isDefined;
+          message = ''
+            The option definition `${opt}' in ${showFiles opt.files} no longer has any effect; please remove it.
+            ${replacementInstructions}
+          '';
+        }
+      ];
     };
 
   /**
