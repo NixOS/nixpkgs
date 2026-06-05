@@ -1,9 +1,19 @@
+From fa9420a311df176c887c6eb667068c16ffcd1eb7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20Chocholat=C3=BD?= <chocholaty.david@protonmail.com>
+Date: Fri, 5 Jun 2026 10:02:54 +0200
+Subject: [PATCH] fix(steam-run): Run the game and SteamCMD through Nix-resolved steam-run
+
+---
+ app/utils/generic.py                |  3 +++
+ app/utils/steam/steamcmd/wrapper.py |  4 ++--
+ app/windows/runner_panel.py         | 20 +++++++++++++++-----
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+
 diff --git a/app/utils/generic.py b/app/utils/generic.py
-index f23aa5c..9ff4a04 100644
+index 379d7da..1bba282 100644
 --- a/app/utils/generic.py
 +++ b/app/utils/generic.py
-@@ -299,7 +299,10 @@ def launch_game_process(game_install_path: Path, args: list[str]) -> None:
-     logger.info(
+@@ -346,6 +346,9 @@ def launch_game_process(game_install_path: Path, run_args: str = "") -> None:
          f"Launching the game with subprocess.Popen(): `{executable_path}` "
          f"with env_vars: {list(env_vars.keys())}, wrappers: {wrapper_commands}, args: {game_args}"
      )
@@ -14,17 +24,76 @@ index f23aa5c..9ff4a04 100644
          executable_path,
          game_args,
 diff --git a/app/utils/steam/steamcmd/wrapper.py b/app/utils/steam/steamcmd/wrapper.py
-index 398e0fd..79bb162 100644
+index 83d9b26..8039efa 100644
 --- a/app/utils/steam/steamcmd/wrapper.py
 +++ b/app/utils/steam/steamcmd/wrapper.py
-@@ -317,8 +317,8 @@ class SteamcmdInterface:
-                 script_output.write("\n".join(script))
-             runner.message(f"Compiled & using script: {script_path}")
-             runner.execute(
--                self.steamcmd,
--                [f'+runscript "{script_path}"'],
-+                "@steam-run@/bin/steam-run",
-+                [self.steamcmd, f'+runscript "{script_path}"'],
-                 len(publishedfileids),
-             )
-         else:
+@@ -404,8 +404,8 @@ class SteamcmdInterface:
+         runner.message(f"Compiled & using script: {script_path}")
+         runner._steamcmd_console_log_path = str(self.console_log_path)
+         runner.execute(
+-            self.steamcmd,
+-            [f'+runscript "{script_path}"'],
++            "@steam-run@/bin/steam-run",
++            [self.steamcmd, f'+runscript "{script_path}"'],
+             total,
+             environment=runner._steamcmd_environment,
+         )
+diff --git a/app/windows/runner_panel.py b/app/windows/runner_panel.py
+index 6a40435..6cf2ee0 100644
+--- a/app/windows/runner_panel.py
++++ b/app/windows/runner_panel.py
+@@ -338,6 +338,10 @@ class RunnerPanel(QWidget):
+         self.process_last_args = args
+         self.process_last_environment = dict(environment) if environment else None
+ 
++        # SteamCMD is launched through the Nix steam-run FHS wrapper, so the
++        # SteamCMD executable is the first argument instead of the program.
++        is_steamcmd = "steamcmd" in command or any("steamcmd" in arg for arg in args)
++
+         # Show control buttons
+         self.restart_process_button.show()
+         self.kill_process_button.show()
+@@ -356,7 +360,7 @@ class RunnerPanel(QWidget):
+         if progress_bar is not None:
+             self.progress_bar.show()
+             self.progress_bar.setValue(0)
+-            if progress_bar > 0 and "steamcmd" in command:
++            if progress_bar > 0 and is_steamcmd:
+                 self.progress_bar.setRange(0, progress_bar)
+                 self.progress_bar.setFormat("%v/%m")
+ 
+@@ -364,7 +368,7 @@ class RunnerPanel(QWidget):
+         if not self.todds_dry_run_support:
+             self.message(f"\nExecuting command:\n{command} {' '.join(args)}\n\n")
+ 
+-        if "steamcmd" in command and self._steamcmd_console_log_path:
++        if is_steamcmd and self._steamcmd_console_log_path:
+             self._start_steamcmd_log_tail()
+ 
+         # Start the process
+@@ -526,7 +530,11 @@ class RunnerPanel(QWidget):
+             return False
+         if self.process.state() != QProcess.ProcessState.Running:
+             return False
+-        return program_name in self.process.program()
++        if program_name in self.process.program():
++            return True
++        # The program may be the Nix steam-run FHS wrapper, which receives the
++        # real executable as its first argument.
++        return any(program_name in argument for argument in self.process.arguments())
+ 
+     def _handle_steamcmd_output(self, line: str) -> bool:
+         """
+@@ -682,8 +690,10 @@ class RunnerPanel(QWidget):
+ 
+         # Re-wire the finished signal before starting the new process.
+         self.process = QProcess(self)
+-        self.process.setProgram(self._steamcmd_executable)
+-        self.process.setArguments([f'+runscript "{script_path}"'])
++        self.process.setProgram("@steam-run@/bin/steam-run")
++        self.process.setArguments(
++            [self._steamcmd_executable, f'+runscript "{script_path}"']
++        )
+         self._apply_process_environment(self.process, self._steamcmd_environment)
+         self.process.setProcessChannelMode(QProcess.ProcessChannelMode.MergedChannels)
+         self.process.readyReadStandardError.connect(self.handle_output)
