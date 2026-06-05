@@ -36,8 +36,6 @@ buildGo125Module (finalAttrs: {
     ldflags+=" -X github.com/traefik/traefik/v${lib.versions.major finalAttrs.version}/pkg/version.Codename=$CODENAME"
   '';
 
-  doCheck = false;
-
   passthru.tests = {
     inherit (nixosTests) traefik;
   };
