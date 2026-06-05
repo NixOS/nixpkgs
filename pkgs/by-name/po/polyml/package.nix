@@ -1,20 +1,24 @@
 {
   lib,
   stdenv,
+  pkgsHostTarget,
   fetchFromGitHub,
   autoreconfHook,
   gmp,
   libffi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polyml";
   version = "5.9.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
   };
 
@@ -32,6 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libffi
     gmp
+    pkgsHostTarget.stdenv.cc
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -42,13 +47,12 @@ stdenv.mkDerivation rec {
     "--with-gmp"
   ];
 
-  doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-    make check
-    runHook postCheck
+  preInstall = ''
+    substituteInPlace polyc \
+      --replace-fail "LINK=\"$CXX\"" "LINK=\"${lib.getExe' pkgsHostTarget.stdenv.cc "c++"}\""
   '';
+
+  doCheck = true;
 
   meta = {
     description = "Standard ML compiler and interpreter";
@@ -58,8 +62,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polyml.org/";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; (linux ++ darwin);
-    maintainers = with lib.maintainers; [
-      kovirobi
-    ];
+    # Broken as make target `polyimport.o` requires running code
+    # compiled by the cross-compiler
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
   };
-}
+})
