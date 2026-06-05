@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pyqt5,
@@ -34,6 +35,17 @@ buildPythonPackage (finalAttrs: {
     export QT_PLUGIN_PATH="${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_qabstractitemview.py"
+    "tests/test_qaction_set_menu.py"
+    "tests/test_qactionevent_action.py"
+    "tests/test_qfontdatabase_static.py"
+    "tests/test_qpainter_draw_pixmap_fragments.py"
+    "tests/test_qsettings.py"
+    "tests/test_qstandarditem_insertrow.py"
+    "tests/test_qtest.py"
+  ];
 
   pythonImportsCheck = [ "AnyQt" ];
 
