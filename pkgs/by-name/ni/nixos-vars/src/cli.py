@@ -81,15 +81,3 @@ def main() -> None:
 	except VarsError as e:
 		print(str(e), file=sys.stderr)
 		exit(1)
-	# try:
-	# 	if args.command == "generate":
-	# 		handle_generate(args)
-	# 	elif args.command == "regenerate":
-	# 		handle_regenerate(args)
-	# 	elif args.command == "garbage-collect":
-	# 		handle_garbage_collect(args)
-	# 	elif args.command == "evaluate":
-	# 		handle_evaluate(args)
-	# except VarsError as e:
-	# 	print(str(e))
-	# 	exit(1)
