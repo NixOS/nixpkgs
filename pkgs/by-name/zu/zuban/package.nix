@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zubanls";
     repo = "zuban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/m66vCXutOBMXMJfulJ9nFeqRWVJCIrHVJiICOvs/+A=";
+    hash = "sha256-mbBaOwJdYJhD7qUboHRSJfFo1t7ZLA+5/7moQWYjU3M=";
     fetchSubmodules = true;
   };
 
