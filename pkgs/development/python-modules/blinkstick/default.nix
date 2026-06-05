@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyusb,
 }:
 
 buildPythonPackage {
   pname = "blinkstick";
   version = "unstable-2023-05-04";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arvydas";
@@ -17,7 +18,9 @@ buildPythonPackage {
     hash = "sha256-9bc7TD/Ilc952ywLauFd0+3Lh64lQlYuDC1KG9eWDgs=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyusb ];
 
   # Project has no tests
   doCheck = false;
