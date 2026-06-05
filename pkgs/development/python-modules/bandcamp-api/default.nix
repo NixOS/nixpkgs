@@ -10,15 +10,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bandcamp-api";
   version = "0.2.3";
-
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "bandcamp_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7/WXMo7fCDMHATp4hEB8b7fNJWisUv06hbP+O878Phs=";
   };
 
@@ -43,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
