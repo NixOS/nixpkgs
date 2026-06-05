@@ -31,9 +31,9 @@
   },
   "jaspBfpack": {
     "pname": "jaspBfpack",
-    "version": "0.96.1-release.0",
-    "tag": "0.96.1-release.0_R-4-5-2_Release",
-    "hash": "sha256-YkJ5Hh8cmA70sLXE73U8LQ+LFfLN/kTJTptwgvnW2jA="
+    "version": "0.97.2-release.0",
+    "tag": "0.97.2-release.0_R-4-5-2_Release",
+    "hash": "sha256-jIlA4qaummkbx696UJkKTGRQQviUeuqYJX6V5AFuiTA="
   },
   "jaspBsts": {
     "pname": "jaspBsts",
@@ -61,9 +61,9 @@
   },
   "jaspDistributions": {
     "pname": "jaspDistributions",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-uZWCVCOFfNkLNjJJ82x4H5rKH1m7KE3UDX1p/7dn4uY="
+    "version": "0.96.5-release.0",
+    "tag": "0.96.5-release.0_R-4-5-2_Release",
+    "hash": "sha256-zwk2CuW2gUhtnOX8LdmMlxUKCk974BjvR3zYlZAT+W8="
   },
   "jaspEquivalenceTTests": {
     "pname": "jaspEquivalenceTTests",
@@ -127,9 +127,9 @@
   },
   "jaspNetwork": {
     "pname": "jaspNetwork",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-alF9pDjBqrJvqDaJIOf9F/SWu/wrmspSFY/chE8/U9k="
+    "version": "0.96.3-release.0",
+    "tag": "0.96.3-release.0_R-4-5-2_Release",
+    "hash": "sha256-Gh4GuvNKK17Lfwncx0TNTsHOjY4g85q/yhnvoCppAxQ="
   },
   "jaspPower": {
     "pname": "jaspPower",

@@ -168,6 +168,39 @@ let
           coda
         ];
       };
+
+      DistributionS7 = buildRPackage {
+        pname = "DistributionS7";
+        version = "0.1.1";
+
+        src = fetchFromGitHub {
+          owner = "Kucharssim";
+          repo = "DistributionS7";
+          rev = "8c5a709c120abc0f26697c6009769e4c2d889b9b";
+          hash = "sha256-9kxo38CpbEMRmeXbrngSZrQ8M9iL9SzV+WDYQitXDvU=";
+        };
+
+        postPatch = ''
+          rm -f .Rprofile
+        '';
+
+        propagatedBuildInputs = with customRPackages; [
+          S7
+          assertthat
+          rlang
+          goftest
+          nortest
+          ggplot2
+          ggrepel
+          jaspGraphs
+          patchwork
+          sn
+          gnorm
+          sgt
+          generics
+        ];
+
+      };
     };
 
   moduleInfo = lib.importJSON ./module-info.json;
@@ -315,6 +348,7 @@ let
       nortest
       sgt
       sn
+      DistributionS7
     ];
     jaspEquivalenceTTests = [
       BayesFactor

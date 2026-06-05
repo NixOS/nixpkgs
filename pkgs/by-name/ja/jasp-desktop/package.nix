@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasp-desktop";
-  version = "0.97.0";
+  version = "0.97.1";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-e2ZtjxQvoeQ1e+0JbGWO2mQsFhux+vybpNJm5+EgaQw=";
+    hash = "sha256-4K6ReOJJF8Pt/RdNSp2ZVH/d64ZMCFlX1RIXDAWWWBE=";
   };
 
   patches = [
