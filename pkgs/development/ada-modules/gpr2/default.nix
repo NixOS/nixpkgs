@@ -81,7 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
       llvm-exception
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ heijligen ];
+    maintainers = with lib.maintainers; [
+      heijligen
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.all;
   };
 })

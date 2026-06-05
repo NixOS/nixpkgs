@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "XML/Ada: An XML parser for Ada";
     homepage = "https://github.com/AdaCore/xmlada";
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };

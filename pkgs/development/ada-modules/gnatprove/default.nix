@@ -251,7 +251,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Software development technology specifically designed for engineering high-reliability applications";
     homepage = "https://github.com/AdaCore/spark2014";
-    maintainers = [ lib.maintainers.jiegec ];
+    maintainers = with lib.maintainers; [
+      jiegec
+      sempiternal-aurora
+    ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

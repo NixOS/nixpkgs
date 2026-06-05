@@ -97,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AdaCore/gnatcoll-bindings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
   };
 })
