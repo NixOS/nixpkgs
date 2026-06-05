@@ -9,13 +9,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "baycomp";
   version = "1.0.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MrJa17FtWyUd259hEKMtezlTuYcJbaHSXvJ3k10l2uw=";
   };
 
@@ -36,4 +38,4 @@ buildPythonPackage rec {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.lucasew ];
   };
-}
+})
