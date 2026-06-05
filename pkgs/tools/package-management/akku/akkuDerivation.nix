@@ -115,6 +115,7 @@ stdenv.mkDerivation (
     '';
     meta = {
       inherit (akku.meta) platforms;
+      generated = true;
     }
     // args.meta or { };
     setupHook = ./setup-hook.sh;
