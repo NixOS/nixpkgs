@@ -143,8 +143,8 @@ in
       "sha256-0+/67dkC+suDivd53hHJ+d1D8Kg2ZxRJvUS0EUaZjXE=";
 
   mypy-boto3-auditmanager =
-    buildMypyBoto3Package "auditmanager" "1.43.0"
-      "sha256-23zuWICJ49no8T4AlgZV0kDkz0j5pe1xE7uKKmszm9U=";
+    buildMypyBoto3Package "auditmanager" "1.43.23"
+      "sha256-0QMHGUpHVdAUf8hw4RtgU3wManp26riDDbx49a9929U=";
 
   mypy-boto3-autoscaling =
     buildMypyBoto3Package "autoscaling" "1.43.0"
