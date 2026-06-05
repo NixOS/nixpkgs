@@ -22,12 +22,14 @@ buildPythonPackage {
   version = "0.1.6"; # remember to manually adjust the rev
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "openai";
     repo = "baselines";
     # Unfortunately releases are not tagged. This commit bumps the version in setup.py
     rev = "2bca7901f51c88cdef3ca0666c6a87c454a4dbe8";
-    sha256 = "0j2ck7rsrcyny9qbmrw9aqvzfhv70nbign8iva2dsisa2x24gbcl";
+    hash = "sha256-lK1HRBdKR92E2hHZF5cFZ0P3N1aJ57pw8tazrPOZTEg=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +59,8 @@ buildPythonPackage {
   doCheck = false;
 
   nativeCheckInputs = [ pytest ];
+
+  pythonImportsCheck = [ "baselines" ];
 
   meta = {
     description = "High-quality implementations of reinforcement learning algorithms";
