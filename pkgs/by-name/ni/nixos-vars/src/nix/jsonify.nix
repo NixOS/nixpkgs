@@ -10,7 +10,18 @@
 { config, pkgs }:
 let
   inherit (pkgs) lib;
-  cfg = config.vars;
+  cfg =
+    if config._type or null == "configuration" then
+      config.config.vars
+    else
+      # TODO: where can we get the target nixpkgs from????
+      (import <nixpkgs/nixos/lib/eval-config.nix> {
+        modules = [
+          ./module.nix
+          config
+        ];
+      }).config.vars;
+
   evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgs).drvPath;
 in
 {
