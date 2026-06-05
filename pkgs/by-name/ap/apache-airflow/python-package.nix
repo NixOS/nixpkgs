@@ -105,6 +105,10 @@ let
     inherit src version;
     sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
 
+    # vite build resolves "localhost" during the build, which the darwin
+    # sandbox blocks by default (getaddrinfo ENOTFOUND localhost).
+    __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
+
     nativeBuildInputs = [
       nodejs
       pnpm
@@ -138,6 +142,8 @@ let
     pname = "airflow-simple-ui-assets";
     inherit src version;
     sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
+
+    __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
 
     nativeBuildInputs = [
       nodejs

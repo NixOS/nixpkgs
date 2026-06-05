@@ -1341,11 +1341,6 @@ with pkgs;
   x16-rom = x16.rom;
   x16-run = x16.run;
 
-  yabause = libsForQt5.callPackage ../applications/emulators/yabause {
-    libglut = null;
-    openal = null;
-  };
-
   ### APPLICATIONS/FILE-MANAGERS
 
   vifm-full = vifm.override {
@@ -2569,10 +2564,6 @@ with pkgs;
 
   mdcat = callPackage ../tools/text/mdcat {
     inherit (python3Packages) ansi2html;
-  };
-
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   mhonarc = perlPackages.MHonArc;
@@ -4847,10 +4838,6 @@ with pkgs;
 
   php85Extensions = recurseIntoAttrs php85.extensions;
   php85Packages = recurseIntoAttrs php85.packages;
-
-  polyml = callPackage ../development/compilers/polyml { };
-  polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
-  polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
@@ -10996,10 +10983,6 @@ with pkgs;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
-  };
-
-  prooftree = callPackage ../applications/science/logic/prooftree {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
   satallax = callPackage ../applications/science/logic/satallax {

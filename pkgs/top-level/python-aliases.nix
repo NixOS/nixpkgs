@@ -301,6 +301,7 @@ mapAliases {
   Keras = throw "'Keras' has been renamed to/replaced by 'keras'"; # Converted to throw 2025-10-29
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25
+  konnected = throw "konnected has been removed, because the home-assistant integration that required it has been deprecated and removed. See https://support.konnected.io/migrating-from-konnected-legacy-home-assistant-integration-to-esphome."; # Added 2026-06-04
   langchain-standard-tests = throw "'langchain-standard-tests' has been renamed to/replaced by 'langchain-tests'"; # Converted to throw 2025-10-29
   langchainplus-sdk = throw "'langchainplus-sdk' has been renamed to/replaced by 'langsmith'"; # Converted to throw 2025-10-29
   lazr_config = throw "'lazr_config' has been renamed to/replaced by 'lazr-config'"; # Converted to throw 2025-10-29
@@ -585,6 +586,7 @@ mapAliases {
   sqlalchemy-utc = throw "'sqlalchemy-utc' has been removed as it was unmaintained upstream"; # Added 2026-03-19
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
+  steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   supafunc = throw "'supafunc' has been replaced by 'supabase-functions'"; # Added 2026-03-08
   supervise_api = throw "'supervise_api' has been renamed to/replaced by 'supervise-api'"; # Converted to throw 2025-10-29

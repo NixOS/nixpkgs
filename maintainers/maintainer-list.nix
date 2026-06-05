@@ -118,13 +118,6 @@
     github = "0xB10C";
     githubId = 19157360;
   };
-  _0xbe7a = {
-    email = "nix@be7a.de";
-    name = "Bela Stoyan";
-    github = "0xbe7a";
-    githubId = 6232980;
-    keys = [ { fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99"; } ];
-  };
   _0xC45 = {
     email = "jason@0xc45.com";
     name = "Jason Vigil";
@@ -1882,7 +1875,10 @@
     github = "ap-1";
     githubId = 67872951;
     name = "Anish Pallati";
-    keys = [ { fingerprint = "2A0A 16F5 E026 BE3B A47F B7A6 841A FB68 9A5B ACCB"; } ];
+    keys = [
+      { fingerprint = "2A0A 16F5 E026 BE3B A47F B7A6 841A FB68 9A5B ACCB"; }
+      { fingerprint = "B89E A3F3 16A7 411C B5B2 8A14 B1CA 8321 35A8 C503"; }
+    ];
   };
   ankhers = {
     email = "me@ankhers.dev";
@@ -4373,12 +4369,6 @@
     github = "calbrecht";
     githubId = 1516457;
     name = "Christian Albrecht";
-  };
-  callahad = {
-    email = "dan.callahan@gmail.com";
-    github = "callahad";
-    githubId = 24193;
-    name = "Dan Callahan";
   };
   callumio = {
     email = "git@cleslie.uk";
@@ -9375,14 +9365,6 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
-  frogamic = {
-    email = "frogamic@protonmail.com";
-    github = "frogamic";
-    githubId = 10263813;
-    name = "Dominic Shelton";
-    matrix = "@frogamic:beeper.com";
-    keys = [ { fingerprint = "779A 7CA8 D51C C53A 9C51  43F7 AAE0 70F0 67EC 00A5"; } ];
-  };
   frontear = {
     name = "Ali Rizvi";
     email = "perm-iterate-0b@icloud.com";
@@ -12629,6 +12611,12 @@
     github = "jesseDMoore1994";
     githubId = 30251156;
     name = "Jesse Moore";
+  };
+  jesssullivan = {
+    email = "jess@sulliwood.org";
+    github = "Jesssullivan";
+    githubId = 37297218;
+    name = "Jess Sullivan";
   };
   jethair = {
     email = "jethair@duck.com";
@@ -18305,13 +18293,6 @@
     github = "mk3z";
     githubId = 52108954;
     name = "Matias Zwinger";
-  };
-  mkf = {
-    email = "m@mikf.pl";
-    github = "mkf";
-    githubId = 7753506;
-    name = "Michał Krzysztof Feiler";
-    keys = [ { fingerprint = "1E36 9940 CC7E 01C4 CFE8  F20A E35C 2D7C 2C6A C724"; } ];
   };
   mkg = {
     email = "mkg@vt.edu";
@@ -25379,12 +25360,6 @@
     github = "shlevy";
     githubId = 487050;
     name = "Shea Levy";
-  };
-  shlok = {
-    email = "sd-nix-maintainer@quant.is";
-    github = "shlok";
-    githubId = 3000933;
-    name = "Shlok Datye";
   };
   shmish111 = {
     email = "shmish111@gmail.com";

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "routedns";
-  version = "0.1.188";
+  version = "0.1.191";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZVlWN8UV/R0tZKp3w/2fAAiFKZXyiwh0RtyolNaf25k=";
+    hash = "sha256-Tr15MfF0GeaKUQRbkzqaWXJhTPVtZ/kpe5foq5MCemo=";
   };
 
   vendorHash = "sha256-a4KcKb75yWv7+1vIYCypS9nnrFJ3zogXIPzUVVA7AXs=";

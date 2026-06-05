@@ -2508,6 +2508,8 @@ self: super: with self; {
 
   cantools = callPackage ../development/python-modules/cantools { };
 
+  capa = callPackage ../development/python-modules/capa { };
+
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
   capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
@@ -3558,6 +3560,8 @@ self: super: with self; {
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
   daff = callPackage ../development/python-modules/daff { };
+
+  daft = callPackage ../development/python-modules/daft { };
 
   dahlia = callPackage ../development/python-modules/dahlia { };
 
@@ -7493,6 +7497,16 @@ self: super: with self; {
 
   id = callPackage ../development/python-modules/id { };
 
+  ida-domain = callPackage ../development/python-modules/ida-domain { };
+
+  ida-hcli = callPackage ../development/python-modules/ida-hcli { };
+
+  ida-netnode = callPackage ../development/python-modules/ida-netnode { };
+
+  ida-settings = callPackage ../development/python-modules/ida-settings { };
+
+  idapro = callPackage ../development/python-modules/idapro { };
+
   idasen = callPackage ../development/python-modules/idasen { };
 
   idasen-ha = callPackage ../development/python-modules/idasen-ha { };
@@ -8494,8 +8508,6 @@ self: super: with self; {
   kokoro = callPackage ../development/python-modules/kokoro { };
 
   kombu = callPackage ../development/python-modules/kombu { };
-
-  konnected = callPackage ../development/python-modules/konnected { };
 
   kopf = callPackage ../development/python-modules/kopf { };
 
@@ -9727,6 +9739,8 @@ self: super: with self; {
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
+  matter-ble-proxy = callPackage ../development/python-modules/matter-ble-proxy { };
+
   matter-python-client = callPackage ../development/python-modules/matter-python-client { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
@@ -9897,6 +9911,8 @@ self: super: with self; {
   meshcat = callPackage ../development/python-modules/meshcat { };
 
   meshcore = callPackage ../development/python-modules/meshcore { };
+
+  meshcore-cli = callPackage ../development/python-modules/meshcore-cli { };
 
   meshio = callPackage ../development/python-modules/meshio { };
 
@@ -18937,8 +18953,6 @@ self: super: with self; {
 
   steampy = callPackage ../development/python-modules/steampy { };
 
-  steamship = callPackage ../development/python-modules/steamship { };
-
   steamworkspy = callPackage ../development/python-modules/steamworkspy { };
 
   stem = callPackage ../development/python-modules/stem { };
@@ -20755,6 +20769,8 @@ self: super: with self; {
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
+  ua-generator = callPackage ../development/python-modules/ua-generator { };
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 

@@ -7,6 +7,7 @@
 
 buildLakePackage {
   pname = "lean4-aesop";
+  # nixpkgs-update: no auto update
   version = "4.30.0";
 
   src = fetchFromGitHub {
@@ -23,9 +24,6 @@ buildLakePackage {
     description = "White-box automation for Lean 4";
     homepage = "https://github.com/leanprover-community/aesop";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      nadja-y
-      niklashh
-    ];
+    maintainers = with lib.maintainers; [ nadja-y ];
   };
 }

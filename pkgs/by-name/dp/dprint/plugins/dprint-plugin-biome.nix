@@ -1,7 +1,7 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
   description = "Biome (JS/TS/JSON) wrapper plugin";
-  hash = "sha256-k+o4eiLwzoCF6MPX0dEn/3modSwvFYFuzMe47cdJWo8=";
+  hash = "sha256-0zbtVqdL86r69ahRS61qJ2r7qUtRzfY1qO1FL+SWt+g=";
   initConfig = {
     configExcludes = [ "**/node_modules" ];
     configKey = "biome";
@@ -17,6 +17,6 @@ mkDprintPlugin {
   };
   pname = "dprint-plugin-biome";
   updateUrl = "https://plugins.dprint.dev/dprint/biome/latest.json";
-  url = "https://plugins.dprint.dev/biome-0.12.11.wasm";
-  version = "0.12.11";
+  url = "https://plugins.dprint.dev/biome-0.12.12.wasm";
+  version = "0.12.12";
 }

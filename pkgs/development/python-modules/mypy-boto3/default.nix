@@ -179,8 +179,8 @@ in
       "sha256-7xusmV+Ub1MkH3mGGYNQFlI1pfg9v69OzN2FUN3+DzY=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.43.0"
-      "sha256-RsvQvkie+k0OMjgs30ZlwiRygo0LhZk0V7vMAXU6gQ8=";
+    buildMypyBoto3Package "ce" "1.43.22"
+      "sha256-1CgG2p0ddlGj4jttaV9ejP+DA7cRtAE56rJwMNPCgYw=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.43.0"
@@ -327,16 +327,16 @@ in
       "sha256-sXIPfVu+Ss+UHCZ7W1qof+rbEb266dqrSU3V6/j5PzY=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.43.0"
-      "sha256-6fPO+EuWQP7JbsVfMzpCr502G0ewx/pvubEqEnhhln0=";
+    buildMypyBoto3Package "compute-optimizer" "1.43.22"
+      "sha256-TYrnhgzhH6+o+cTpBBpiEO6MPkz4xbLOqiOJf/IAvto=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.43.0"
       "sha256-kPG0jzeHlRm8dNKCrxJY2Jw/N06PL+C/34gB9qhz2BY=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.10"
-      "sha256-SuUSGDyoWoz8Ddr1+LTuVQ350HFrW4pXe7zR4Ye5aiw=";
+    buildMypyBoto3Package "connect" "1.43.22"
+      "sha256-XGey9ie/uGSXFaB5NfoQXeQ+LQUnqKPUOtMpq2y7aZk=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.0"
@@ -622,8 +622,8 @@ in
       "sha256-9P8m5QYikdsimepaivrYcb/tP1iThyPZWFMkyo24+bo=";
 
   mypy-boto3-inspector2 =
-    buildMypyBoto3Package "inspector2" "1.43.0"
-      "sha256-ddF5Z3B3NMKoM1RUWFQzUQTnBL75IwlVevM/R2bO9OI=";
+    buildMypyBoto3Package "inspector2" "1.43.22"
+      "sha256-iA/ajBvGRV+L3/PZoauWDrkd/FVvtOv49O88xtlQBk4=";
 
   mypy-boto3-internetmonitor =
     buildMypyBoto3Package "internetmonitor" "1.43.0"
