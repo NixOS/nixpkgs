@@ -1,7 +1,14 @@
 {
   lib,
   fetchFromGitHub,
+  makeBinaryWrapper,
   python3,
+  bash,
+  curl,
+  coreutils,
+  gnused,
+  jq,
+  scitokens-cpp,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -20,11 +27,49 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    bash
+    curl
+    coreutils
+    jq
+    scitokens-cpp
+  ];
+
   dependencies = with python3.pkgs; [
     gssapi
     paramiko
     urllib3
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/htdecodetoken \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            jq
+            scitokens-cpp
+          ]
+        }
+    wrapProgram $out/bin/htdestroytoken \
+        --prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            coreutils
+            curl
+          ]
+        }
+    wrapProgram $out/bin/httokensh \
+        --prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            coreutils
+            gnused
+            jq
+          ]
+        }
+  '';
 
   meta = {
     description = "Gets OIDC authentication tokens for High Throughput Computing via a Hashicorp vault server ";
