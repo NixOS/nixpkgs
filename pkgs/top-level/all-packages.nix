@@ -6917,18 +6917,7 @@ with pkgs;
 
   qt5 = recurseIntoAttrs (__splicedPackages.callPackage ../development/libraries/qt-5/5.15 { });
 
-  libsForQt5 = recurseIntoAttrs (
-    import ./qt5-packages.nix {
-      inherit
-        lib
-        config
-        __splicedPackages
-        makeScopeWithSplicing'
-        generateSplicesForMkScope
-        pkgsHostTarget
-        ;
-    }
-  );
+  libsForQt5 = recurseIntoAttrs (callPackage ./qt5-packages.nix { });
 
   qtEnv = qt5.env;
 
