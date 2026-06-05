@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   chardet,
   hypothesis,
 }:
@@ -9,12 +10,14 @@
 buildPythonPackage rec {
   pname = "binaryornot";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061";
   };
+
+  build-system = [ setuptools ];
 
   prePatch = ''
     # TypeError: binary() got an unexpected keyword argument 'average_size'
@@ -22,7 +25,7 @@ buildPythonPackage rec {
       --replace "average_size=512" ""
   '';
 
-  propagatedBuildInputs = [ chardet ];
+  dependencies = [ chardet ];
 
   nativeCheckInputs = [ hypothesis ];
 
