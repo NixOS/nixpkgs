@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  msrest,
-  msrestazure,
   azure-common,
   azure-mgmt-core,
+  isodate,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -25,10 +24,9 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
-    msrest
-    msrestazure
     azure-common
     azure-mgmt-core
+    isodate
   ];
 
   # has no tests
