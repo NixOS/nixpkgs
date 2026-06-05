@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   rply,
   pytestCheckHook,
   isPy3k,
@@ -10,14 +11,16 @@
 buildPythonPackage (finalAttrs: {
   pname = "baron";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     sha256 = "af822ad44d4eb425c8516df4239ac4fdba9fdb398ef77e4924cd7c9b4045bc2f";
   };
 
-  propagatedBuildInputs = [ rply ];
+  build-system = [ setuptools ];
+
+  dependencies = [ rply ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
