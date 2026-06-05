@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
+    broken = true;
     description = "TUI for Jujutsu/jj";
     homepage = "https://github.com/Cretezy/lazyjj";
     changelog = "https://github.com/Cretezy/lazyjj/releases/tag/v${finalAttrs.version}";
