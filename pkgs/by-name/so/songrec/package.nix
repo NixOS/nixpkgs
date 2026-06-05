@@ -12,6 +12,7 @@
   ffmpeg,
   glib,
   libpulseaudio,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,6 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Open-source Shazam client for Linux, written in Rust";
