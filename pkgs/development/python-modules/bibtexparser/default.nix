@@ -7,15 +7,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bibtexparser";
   version = "1.4.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "sciunto-org";
-    repo = "python-${pname}";
-    tag = "v${version}";
+    repo = "python-${finalAttrs.pname}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9zLJZAk2IBYTL7lACh6erY7A44XFZGJCr8dcpYlwKRI=";
   };
 
@@ -35,4 +37,4 @@ buildPythonPackage rec {
       bsd3
     ];
   };
-}
+})
