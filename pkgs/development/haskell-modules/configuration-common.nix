@@ -1721,6 +1721,11 @@ with haskellLib;
     ];
   }) super.duckdb-ffi;
 
+  # 2026-06-04: too strict bounds on QuickCheck <2.16
+  # https://github.com/Tritlo/duckdb-haskell/pull/13
+  # TODO: remove after PR is merged
+  duckdb-simple = doJailbreak super.duckdb-simple;
+
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
