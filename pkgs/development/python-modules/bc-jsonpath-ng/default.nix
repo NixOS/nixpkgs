@@ -5,12 +5,13 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bc-jsonpath-ng";
   version = "1.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-FWP4tzlacAWVXG3YnPwl5MKc12geaCxZ2xyKx9PSarU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     decorator
     ply
   ];
