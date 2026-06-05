@@ -8,7 +8,7 @@
   langcodes,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unidata-blocks";
   version = "0.0.25";
   pyproject = true;
@@ -16,15 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "unidata-blocks";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BWcKqTMYdJ59XncPL29wCms2kCVTrcrV1zSY8mkbErs=";
   };
 
   build-system = [ uv-build ];
 
-  dependencies = [
-    langcodes
-  ];
+  dependencies = [ langcodes ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -33,13 +31,12 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/TakWolf/unidata-blocks";
     description = "Library that helps query unicode blocks by Blocks.txt";
-    platforms = lib.platforms.all;
+    homepage = "https://github.com/TakWolf/unidata-blocks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       TakWolf
       h7x4
     ];
   };
-}
+})
