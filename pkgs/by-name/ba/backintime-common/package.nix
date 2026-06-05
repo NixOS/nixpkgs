@@ -9,7 +9,6 @@
   cron,
   openssh,
   sshfs-fuse,
-  encfs,
   gocryptfs,
   which,
   ps,
@@ -33,7 +32,6 @@ let
     cron
     rsync
     sshfs-fuse
-    encfs
     gocryptfs
   ];
 in

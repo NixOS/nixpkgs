@@ -11,25 +11,6 @@ index f425eb3..5b8cd43 100644
  }
  
  } // namespace PlasmaVault
-diff --git a/kded/engine/backends/encfs/encfsbackend.cpp b/kded/engine/backends/encfs/encfsbackend.cpp
-index 2d15fa2..870b711 100644
---- a/kded/engine/backends/encfs/encfsbackend.cpp
-+++ b/kded/engine/backends/encfs/encfsbackend.cpp
-@@ -101,12 +101,12 @@ QProcess *EncFsBackend::encfs(const QStringList &arguments) const
-     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
-     KConfigGroup backendConfig(config, "EncfsBackend");
- 
--    return process("encfs", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {});
-+    return process("@encfs@", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {});
- }
- 
- QProcess *EncFsBackend::encfsctl(const QStringList &arguments) const
- {
--    return process("encfsctl", arguments, {});
-+    return process("@encfsctl@", arguments, {});
- }
- 
- } // namespace PlasmaVault
 diff --git a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
 index b992f6f..eb828dd 100644
 --- a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
