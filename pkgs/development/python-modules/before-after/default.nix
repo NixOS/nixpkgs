@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
+  setuptools,
   pytestCheckHook,
   lib,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "before-after";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "before_after";
@@ -28,6 +29,8 @@ buildPythonPackage rec {
       hash = "sha256-8YJumF/U8H+hc7rLZLy3UhXHdYJmcuN+O8kMx8yqMJ0=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
