@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=21e13976f2e375d701b8b7032ba5c1b2e56c305f";
       hash = "sha256-JrdmYiC+U0KeMP8oVg12Z8CvkMEKWBVgiiUACx0E7dY=";
     })
+    (fetchpatch2 {
+      name = "support-libical-4.0.patch";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=e60d07255327db3fc4e3a28d7fcc792cd42c34d0";
+      hash = "sha256-1uw+5nTjh+t1/L++fRNIlQWblwDwTJifH0EvAn3dym8=";
+    })
     ./lreadline.patch
   ];
 
