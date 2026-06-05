@@ -21,6 +21,11 @@
   libsecret,
   gst_all_1,
   xdg-user-dirs,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
+  libavif,
+  libheif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,6 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.mpris-server
     python3Packages.pillow
   ];
+
+  preInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+          libavif
+          libheif.lib
+        ];
+      }
+    }"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
