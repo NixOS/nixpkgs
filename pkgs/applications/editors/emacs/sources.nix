@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchzip,
+  fetchgit,
 }:
 
 let
@@ -26,9 +26,9 @@ let
       src =
         {
           "mainline" = (
-            fetchzip {
-              url = "mirror://gnu/emacs/${rev}.tar.xz";
-              inherit hash;
+            fetchgit {
+              url = "https://https.git.savannah.gnu.org/git/emacs.git";
+              inherit rev hash;
             }
           );
           "macport" = (
@@ -74,7 +74,7 @@ let
         '';
         changelog =
           {
-            "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+            "mainline" = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/plain/etc/NEWS?h=${rev}";
             "macport" = "https://github.com/jdtsmith/emacs-mac/blob/${rev}/NEWS-mac";
           }
           .${variant};
@@ -105,6 +105,14 @@ let
     };
 in
 {
+  emacs31 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "31.0.90";
+    variant = "mainline";
+    rev = "emacs-31.0.90";
+    hash = "sha256-Rzlnn+NKQ+jICXLNop27RnVInq79myn4hueJieDO2Ck=";
+  });
+
   emacs30 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "30.2";
