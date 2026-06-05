@@ -9,16 +9,18 @@
   pyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bch";
   version = "1.2.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-control-tool";
-    rev = "v${version}";
-    sha256 = "/C+NbJ0RrWZ/scv/FiRBTh4h7u0xS4mHVDWQ0WwmlEY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/C+NbJ0RrWZ/scv/FiRBTh4h7u0xS4mHVDWQ0WwmlEY=";
   };
 
   build-system = [ setuptools ];
@@ -31,8 +33,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -ri 's/@@VERSION@@/${version}/g' \
-      bch/cli.py setup.py
+    substituteInPlace bch/cli.py setup.py \
+      --replace-fail "@@VERSION@@" "${finalAttrs.version}"
   '';
 
   pythonImportsCheck = [ "bch" ];
@@ -45,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})
