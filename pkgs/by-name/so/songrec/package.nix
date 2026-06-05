@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-lCwFMBQ6IimNtXYMfTnFOpwOO2qbwijOEZ+oMsQKAP0=";
   };
 
