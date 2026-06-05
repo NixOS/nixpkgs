@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytest,
   gym,
   scipy,
@@ -19,7 +20,7 @@
 buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
@@ -29,7 +30,9 @@ buildPythonPackage {
     sha256 = "0j2ck7rsrcyny9qbmrw9aqvzfhv70nbign8iva2dsisa2x24gbcl";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gym
     scipy
     tqdm
