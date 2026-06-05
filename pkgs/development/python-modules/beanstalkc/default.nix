@@ -2,12 +2,13 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "beanstalkc";
   version = "0.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bosondata";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1dpb1yimp2pfnikmgsb2fr9x6h8riixlsx3xfqphnfvrid49vw5s";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = false;
 
