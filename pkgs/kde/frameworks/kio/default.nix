@@ -14,6 +14,11 @@ mkKdeDerivation {
     ./allow-admin-from-store.patch
   ];
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraBuildInputs = [
     qt5compat
     qttools
