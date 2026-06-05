@@ -25,8 +25,42 @@
   bun,
   quickjs,
   quickjs-ng,
+
+  # for pinned curl-cffi
+  curl-impersonate,
 }:
 
+let
+  curl-cffi_14 = python3Packages.buildPythonPackage (finalAttrs: {
+    pname = "curl-cffi";
+    version = "0.14.0";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "lexiforest";
+      repo = "curl_cffi";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-5Q9oHAOjefihxj6xU1UGVTl6Ib31XqhrxLtOgI5VABs=";
+    };
+
+    patches = [ ./use-system-libs.patch ];
+
+    buildInputs = [ curl-impersonate ];
+
+    build-system = [
+      python3Packages.cffi
+      python3Packages.setuptools
+    ];
+
+    dependencies = [
+      python3Packages.cffi
+      python3Packages.certifi
+    ];
+
+    pythonImportsCheck = [ "curl_cffi" ];
+    doCheck = false;
+  });
+in
 python3Packages.buildPythonApplication rec {
   pname = "yt-dlp";
   # The websites yt-dlp deals with are a very moving target. That means that
@@ -78,7 +112,7 @@ python3Packages.buildPythonApplication rec {
       websockets
       yt-dlp-ejs # keep pinned version in sync!
     ];
-    curl-cffi = [ python3Packages.curl-cffi ];
+    curl-cffi = [ curl-cffi_14 ];
     secretstorage = with python3Packages; [
       cffi
       secretstorage
