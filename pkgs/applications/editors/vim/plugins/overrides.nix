@@ -1418,6 +1418,13 @@ assertNoAdditions {
     dependencies = [ self.nui-nvim ];
   };
 
+  faster-nvim = super.faster-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # attempt to index global 'FasterConfig' (a nil value)
+      "faster.commands"
+    ];
+  };
+
   fastfold = super.fastfold.overrideAttrs (old: {
     meta = old.meta // {
       # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
@@ -1978,6 +1985,10 @@ assertNoAdditions {
       );
     in
     {
+      patches = (old.patches or [ ]) ++ [
+        ./patches/kulala-nvim/use-packaged-tree-sitter-parser.patch
+      ];
+
       dependencies = [ kulala-http-grammar ];
 
       postPatch = ''
@@ -1988,6 +1999,10 @@ assertNoAdditions {
       nvimSkipModules = [
         # Requires some extra work to get CLI working in nixpkgs
         "cli.kulala_cli"
+        # Upstream test harnesses are not require-safe modules
+        "minit"
+        "minitest"
+        "test"
         # Legacy parser module; active parsing is handled by kulala-core
         "kulala.parser.treesitter"
       ];
@@ -2048,6 +2063,7 @@ assertNoAdditions {
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
       "lazyvim.plugins.extras.editor.fzf"
+      "lazyvim.plugins.extras.editor.refactoring"
       "lazyvim.plugins.extras.editor.snacks_picker"
       "lazyvim.plugins.extras.editor.telescope"
       "lazyvim.plugins.extras.formatting.prettier"
