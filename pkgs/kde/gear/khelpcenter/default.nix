@@ -10,6 +10,11 @@
 mkKdeDerivation {
   pname = "khelpcenter";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraBuildInputs = [
     qtwebengine
     xapian
