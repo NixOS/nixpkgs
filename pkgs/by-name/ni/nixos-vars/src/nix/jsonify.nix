@@ -10,6 +10,16 @@
 { config, pkgs }:
 let
   inherit (pkgs) lib;
+
+  # If the configuration has been evaluated already, simply keep it that way.
+  # Otherwise, evaluate it. The thing is, we need a target-host-compatible copy
+  # of nixpkgs, and I'm not sure where to get one... (the current code reading
+  # it from the nix path is a stub)
+  #
+  # We might additionally also want to support passing already-jsonified
+  # configs, so advanced flakes/npins users can do it at their own pace
+  # (nixos-rebuild supports this!). That's an easy change though, so it's not
+  # worth thinking about just yet.
   cfg =
     if config._type or null == "configuration" then
       config.config.vars
