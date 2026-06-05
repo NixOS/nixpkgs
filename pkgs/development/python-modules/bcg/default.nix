@@ -14,16 +14,18 @@
   schema,
   simplejson,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bcg";
   version = "1.17.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-gateway";
-    rev = "v${version}";
-    sha256 = "2Yh5MeIv+BIxjoO9GOPqq7xTAFhyBvnxPy7DeO2FrkI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2Yh5MeIv+BIxjoO9GOPqq7xTAFhyBvnxPy7DeO2FrkI=";
   };
 
   patches = [
@@ -35,7 +37,7 @@ buildPythonPackage rec {
     })
   ];
   postPatch = ''
-    sed -ri 's/@@VERSION@@/${version}/g' \
+    sed -ri 's/@@VERSION@@/${finalAttrs.version}/g' \
       bcg/__init__.py setup.py
   '';
 
@@ -63,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})
