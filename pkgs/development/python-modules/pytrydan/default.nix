@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pytrydan";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pytrydan";
     tag = "v${version}";
-    hash = "sha256-ivLNP5lconJ0G8MuY8xgcJ9MTx91yUjeY1NA4U7OwMo=";
+    hash = "sha256-oXnTDwCY2Z/K7YwWNTwbbB0W47bZD+W6uFxZQRF3KgQ=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
