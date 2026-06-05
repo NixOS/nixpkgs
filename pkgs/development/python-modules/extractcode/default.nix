@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "extractcode";
   version = "31.1.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "extractcode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KTLhTvTn5awIJD32lsztm6nh15eoFew1mGJvHIT8H2U=";
   };
 
@@ -83,9 +83,10 @@ buildPythonPackage rec {
   meta = {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/aboutcode-org/extractcode";
-    changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${finalAttrs.version}";
     mainProgram = "extractcode";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})
