@@ -1,0 +1,19 @@
+commit 34d1da31d87d90beae1dacd303ab166cecbd2baa
+Author: Lein Matsumaru <applePrincess@applePrincess.io>
+Date:   Tue May 21 12:22:12 2024 +0000
+
+    b
+
+diff --git a/tests/sherlock_interactives.py b/tests/sherlock_interactives.py
+index d0424af..59c7bd2 100644
+--- a/tests/sherlock_interactives.py
++++ b/tests/sherlock_interactives.py
+@@ -10,7 +10,7 @@ class Interactives:
+         if platform.system == "Windows":
+             command:str = f"py -m sherlock {args}"
+         else:
+-            command:str = f"sherlock {args}"
++            command:str = f"@sherlockBin@ {args}"
+ 
+         proc_out:str = ""
+         try:

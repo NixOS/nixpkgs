@@ -1,0 +1,22 @@
+diff --git a/py/pyproject.toml b/py/pyproject.toml
+index eca3222d38..69bd19773b 100644
+--- a/py/pyproject.toml
++++ b/py/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools", "setuptools-rust"]
++requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
+@@ -66,10 +66,6 @@ exclude = ["test*"]
+ namespaces = true
+ # include-package-data is `true` by default in pyproject.toml
+ 
+-[[tool.setuptools-rust.ext-modules]]
+-target = "selenium.webdriver.common.selenium-manager"
+-binding = "Exec"
+-
+ [tool.setuptools.package-data]
+ "*" = [
+     "*.py",

@@ -1,0 +1,25 @@
+From e56398bce025241fc8512ea594665a94dc81d539 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 19:55:35 -0400
+Subject: [PATCH] Fix-missing-writeChainEntry
+
+---
+ mach_o/ChainedFixups.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mach_o/ChainedFixups.h b/mach_o/ChainedFixups.h
+index 2400420..1316d90 100644
+--- a/mach_o/ChainedFixups.h
++++ b/mach_o/ChainedFixups.h
+@@ -78,7 +78,7 @@ public:
+                                                              std::span<const uint64_t> segOffsetTable, uint32_t pageIndex, uint32_t pageSize,
+                                                              void (^callback)(const Fixup& f, bool& stop)) const;
+         virtual Fixup            parseChainEntry(const void* loc, const MappedSegment* seg, uint64_t preferedLoadAddress=0, std::span<const uint64_t> segOffsetTable={}) const = 0;
+-        virtual Error            writeChainEntry(const Fixup& fixup, const void* nextLoc, uint64_t preferedLoadAddress, std::span<const MappedSegment*>) const;
++        virtual Error            writeChainEntry(const Fixup& fixup, const void* nextLoc, uint64_t preferedLoadAddress, std::span<const MappedSegment*>) const = 0;
+ 
+     protected:
+         constexpr                PointerFormat() { }
+-- 
+2.51.2
+

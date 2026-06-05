@@ -1,0 +1,113 @@
+Adapted from https://github.com/nodejs/node/pull/58293 for 22.x and 20.x lines.
+
+diff --git a/lib/internal/http2/core.js b/lib/internal/http2/core.js
+index cf7b06d987..369133dafb 100644
+--- a/lib/internal/http2/core.js
++++ b/lib/internal/http2/core.js
+@@ -30,2 +30,4 @@ const {
+   promisify,
++  deprecate,
++  deprecateProperty,
+   SymbolAsyncDispose,
+@@ -713,2 +715,7 @@ function onGoawayData(code, lastStreamID, buf) {
+ 
++// TODO(aduh95): remove this in future semver-major
++const deprecateWeight = deprecateProperty('weight',
++                                          'Priority signaling has been deprecated as of RFC 1993.',
++                                          'DEP0194');
++
+ // When a ClientHttp2Session is first created, the socket may not yet be
+@@ -741,2 +748,4 @@ function requestOnConnect(headers, options) {
+ 
++  deprecateWeight(options);
++
+   // `ret` will be either the reserved stream ID (if positive)
+@@ -746,3 +755,3 @@ function requestOnConnect(headers, options) {
+                                        options.parent | 0,
+-                                       options.weight | 0,
++                                       NGHTTP2_DEFAULT_WEIGHT,
+                                        !!options.exclusive);
+@@ -785,7 +794,3 @@ function requestOnConnect(headers, options) {
+ const setAndValidatePriorityOptions = hideStackFrames((options) => {
+-  if (options.weight === undefined) {
+-    options.weight = NGHTTP2_DEFAULT_WEIGHT;
+-  } else {
+-    validateNumber.withoutStackTrace(options.weight, 'options.weight');
+-  }
++  deprecateWeight(options);
+ 
+@@ -845,21 +850,2 @@ function submitSettings(settings, callback) {
+ 
+-// Submits a PRIORITY frame to be sent to the remote peer
+-// Note: If the silent option is true, the change will be made
+-// locally with no PRIORITY frame sent.
+-function submitPriority(options) {
+-  if (this.destroyed)
+-    return;
+-  this[kUpdateTimer]();
+-
+-  // If the parent is the id, do nothing because a
+-  // stream cannot be made to depend on itself.
+-  if (options.parent === this[kID])
+-    return;
+-
+-  this[kHandle].priority(options.parent | 0,
+-                         options.weight | 0,
+-                         !!options.exclusive,
+-                         !!options.silent);
+-}
+-
+ // Submit a GOAWAY frame to be sent to the remote peer.
+@@ -2255,21 +2241,2 @@ class Http2Stream extends Duplex {
+ 
+-  priority(options) {
+-    if (this.destroyed)
+-      throw new ERR_HTTP2_INVALID_STREAM();
+-
+-    assertIsObject(options, 'options');
+-    options = { ...options };
+-    setAndValidatePriorityOptions(options);
+-
+-    const priorityFn = submitPriority.bind(this, options);
+-
+-    // If the handle has not yet been assigned, queue up the priority
+-    // frame to be sent as soon as the ready event is emitted.
+-    if (this.pending) {
+-      this.once('ready', priorityFn);
+-      return;
+-    }
+-    priorityFn();
+-  }
+-
+   sendTrailers(headers) {
+@@ -2431,2 +2398,8 @@ class Http2Stream extends Duplex {
+ 
++// TODO(aduh95): remove this in future semver-major
++Http2Stream.prototype.priority = deprecate(function priority(options) {
++  if (this.destroyed)
++    throw new ERR_HTTP2_INVALID_STREAM();
++}, 'http2Stream.priority is longer supported after priority signalling was deprecated in RFC 1993', 'DEP0194');
++
+ function callTimeout(self, session) {
+diff --git a/lib/internal/util.js b/lib/internal/util.js
+index 254791eb48..2f12f5a3f1 100644
+--- a/lib/internal/util.js
++++ b/lib/internal/util.js
+@@ -135,2 +135,13 @@ function isPendingDeprecation() {
+ 
++function deprecateProperty(key, msg, code, isPendingDeprecation) {
++  const emitDeprecationWarning = getDeprecationWarningEmitter(
++    code, msg, undefined, false, isPendingDeprecation,
++  );
++  return (options) => {
++    if (key in options) {
++      emitDeprecationWarning();
++    }
++  };
++}
++
+ // Internal deprecator for pending --pending-deprecation. This can be invoked
+@@ -911,2 +922,3 @@ module.exports = {
+   deprecate,
++  deprecateProperty,
+   emitExperimentalWarning,

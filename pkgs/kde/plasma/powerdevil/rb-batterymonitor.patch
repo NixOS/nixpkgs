@@ -1,0 +1,10 @@
+diff --git a/applets/batterymonitor/CMakeLists.txt b/applets/batterymonitor/CMakeLists.txt
+index 28e52d26..3f2bf985 100644
+--- a/applets/batterymonitor/CMakeLists.txt
++++ b/applets/batterymonitor/CMakeLists.txt
+@@ -19,3 +19,5 @@ plasma_add_applet(org.kde.plasma.battery
+         main.xml
+     GENERATE_APPLET_CLASS
+ )
++
++add_dependencies(org.kde.plasma.battery batterymonitorplugin)

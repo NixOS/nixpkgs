@@ -1,0 +1,57 @@
+[
+  {
+    "pname": "Aspose.Zip",
+    "version": "24.11.0",
+    "hash": "sha256-wPxD7K7bc0K1BqJweWgEaXJOX4F/hgRjrFSXLs+UnMs="
+  },
+  {
+    "pname": "CommandLineParser",
+    "version": "2.9.1",
+    "hash": "sha256-ApU9y1yX60daSjPk3KYDBeJ7XZByKW8hse9NRZGcjeo="
+  },
+  {
+    "pname": "ConsoleMenu-simple",
+    "version": "2.6.1",
+    "hash": "sha256-1bMCCWLnJ7rCtaLyz+AF8YOZK9qktqy0HZhqyPQ5ce0="
+  },
+  {
+    "pname": "Crc32.NET",
+    "version": "1.2.0",
+    "hash": "sha256-sMQNIppJXHU2mULn5b//uRbbPMyguH9QlG6HKVIYUmE="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "2.0.0",
+    "hash": "sha256-IEvBk6wUXSdyCnkj6tHahOJv290tVVT8tyemYcR0Yro="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.0",
+    "hash": "sha256-Pp7fRylai8JrE1O+9TGfIEJrAOmnWTJRLWE+qJBahK0="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.5.1",
+    "hash": "sha256-wws90sfi9M7kuCPWkv1CEYMJtCqx9QB/kj0ymlsNaxI="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.0",
+    "hash": "sha256-g9jIdQtXSAhY+ezQtYNgHEUoQR3HzznHs3JMzD9bip4="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "4.5.0",
+    "hash": "sha256-Q+7R7EVSOtsXIzKjjfCnvfNul6AE1NxzJZirG0JCo6c="
+  }
+]

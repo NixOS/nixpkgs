@@ -1,0 +1,5 @@
+{
+  imports = [
+    ../declare-enable.nix
+  ];
+}

@@ -1,0 +1,730 @@
+From e3a1797dbab3eaa1c808d53215b32c8759d27ac7 Mon Sep 17 00:00:00 2001
+From: Collin Baker <collinbaker@chromium.org>
+Date: Fri, 4 Apr 2025 14:08:18 -0700
+Subject: [PATCH] Reland "Use #[global_allocator] to provide Rust allocator
+ implementation"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is a reland of commit cfa3beef52625e03ba6ce2b2ac98e1b89dde5cdb
+
+Original was reverted due to a cronet gn2bp failure. The script
+filtered out GN rules in //build/rust/std, but this caused an exception
+when //build/rust/std:allocator was referenced later.
+
+Moving the rules to //build/rust/allocator sidesteps the issue.
+
+Original change's description:
+> Use #[global_allocator] to provide Rust allocator implementation
+>
+> The allocator shim hack we have been using no longer works with
+> upstream Rust. Replace it with a less-unsupported method: provide a
+> https://github.com/rust-lang/rust/issues/123015, which still requires
+> us to provide a few symbol definitions.
+>
+> Bug: 408221149, 407024458
+> Change-Id: If1808ca24b12dc80ead35a25521313a3d2e148d5
+>
+> Cq-Include-Trybots: luci.chromium.try:android-rust-arm32-rel,android-rust-arm64-dbg,android-rust-arm64-rel,linux-rust-x64-dbg,linux-rust-x64-rel,mac-rust-x64-dbg,win-rust-x64-dbg,win-rust-x64-rel
+> Change-Id: If1808ca24b12dc80ead35a25521313a3d2e148d5
+> Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/6427855
+> Reviewed-by: Alan Zhao <ayzhao@google.com>
+> Reviewed-by: Lei Zhang <thestig@chromium.org>
+> Reviewed-by: Łukasz Anforowicz <lukasza@chromium.org>
+> Commit-Queue: Collin Baker <collinbaker@chromium.org>
+> Auto-Submit: Collin Baker <collinbaker@chromium.org>
+> Cr-Commit-Position: refs/heads/main@{#1442472}
+
+Bug: 408221149, 407024458
+Cq-Include-Trybots: luci.chromium.try:android-rust-arm32-rel,android-rust-arm64-dbg,android-rust-arm64-rel,linux-rust-x64-dbg,linux-rust-x64-rel,mac-rust-x64-dbg,win-rust-x64-dbg,win-rust-x64-rel
+Change-Id: I36fef217297bfe64ae81519be24b8c653f6fdfa1
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/6432410
+Reviewed-by: Mohannad Farrag <aymanm@google.com>
+Reviewed-by: Łukasz Anforowicz <lukasza@chromium.org>
+Auto-Submit: Collin Baker <collinbaker@chromium.org>
+Commit-Queue: Łukasz Anforowicz <lukasza@chromium.org>
+Cr-Commit-Position: refs/heads/main@{#1442922}
+---
+ build/rust/allocator/BUILD.gn                 |  90 ++++++++++++++++
+ build/rust/{std => allocator}/alias.cc        |   4 +-
+ build/rust/{std => allocator}/alias.h         |   6 +-
+ .../allocator_impls.cc}                       | 100 ++++++++----------
+ build/rust/allocator/allocator_impls.h        |  25 +++++
+ .../allocator/allocator_shim_definitions.cc   |  30 ++++++
+ .../{std => allocator}/compiler_specific.h    |   6 +-
+ .../rust/{std => allocator}/immediate_crash.h |   6 +-
+ build/rust/allocator/lib.rs                   |  48 +++++++++
+ build/rust/cargo_crate.gni                    |   9 ++
+ build/rust/rust_macro.gni                     |   3 +
+ build/rust/rust_target.gni                    |   4 +
+ build/rust/std/BUILD.gn                       |  41 -------
+ components/cronet/android/dependencies.txt    |   1 +
+ third_party/breakpad/BUILD.gn                 |  10 +-
+ 15 files changed, 272 insertions(+), 111 deletions(-)
+ create mode 100644 build/rust/allocator/BUILD.gn
+ rename build/rust/{std => allocator}/alias.cc (87%)
+ rename build/rust/{std => allocator}/alias.h (91%)
+ rename build/rust/{std/remap_alloc.cc => allocator/allocator_impls.cc} (67%)
+ create mode 100644 build/rust/allocator/allocator_impls.h
+ create mode 100644 build/rust/allocator/allocator_shim_definitions.cc
+ rename build/rust/{std => allocator}/compiler_specific.h (87%)
+ rename build/rust/{std => allocator}/immediate_crash.h (97%)
+ create mode 100644 build/rust/allocator/lib.rs
+
+diff --git a/build/rust/allocator/BUILD.gn b/build/rust/allocator/BUILD.gn
+new file mode 100644
+index 00000000000000..06aa47f097c9c4
+--- /dev/null
++++ b/build/rust/allocator/BUILD.gn
+@@ -0,0 +1,90 @@
++# Copyright 2025 The Chromium Authors
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++
++import("//build/buildflag_header.gni")
++import("//build/config/rust.gni")
++import("//build/rust/rust_static_library.gni")
++
++rust_allocator_uses_partition_alloc = false
++if (build_with_chromium) {
++  import("//base/allocator/partition_allocator/partition_alloc.gni")
++  rust_allocator_uses_partition_alloc = use_partition_alloc_as_malloc
++}
++
++buildflag_header("buildflags") {
++  header = "buildflags.h"
++  flags = [
++    "RUST_ALLOCATOR_USES_PARTITION_ALLOC=$rust_allocator_uses_partition_alloc",
++  ]
++  visibility = [ ":*" ]
++}
++
++if (toolchain_has_rust) {
++  # All targets which depend on Rust code but are not linked by rustc must
++  # depend on this. Usually, this dependency will come from the rust_target() GN
++  # template. However, cargo_crate() does *not* include this dependency so any
++  # C++ targets which directly depend on a cargo_crate() must depend on this.
++  rust_static_library("allocator") {
++    sources = [ "lib.rs" ]
++    crate_root = "lib.rs"
++    cxx_bindings = [ "lib.rs" ]
++
++    deps = [
++      ":allocator_impls",
++      ":allocator_shim_definitions",
++    ]
++
++    no_chromium_prelude = true
++    no_allocator_crate = true
++    allow_unsafe = true
++  }
++
++  static_library("allocator_impls") {
++    public_deps = []
++    if (rust_allocator_uses_partition_alloc) {
++      public_deps += [ "//base/allocator/partition_allocator:partition_alloc" ]
++    }
++
++    sources = [
++      "allocator_impls.cc",
++      "allocator_impls.h",
++    ]
++
++    deps = [
++      ":allocator_cpp_shared",
++      ":buildflags",
++
++      # TODO(crbug.com/408221149): remove the C++ -> Rust dependency for the
++      # default allocator.
++      "//build/rust/std",
++    ]
++
++    visibility = [ ":*" ]
++  }
++
++  source_set("allocator_shim_definitions") {
++    sources = [ "allocator_shim_definitions.cc" ]
++
++    deps = [ ":allocator_cpp_shared" ]
++
++    visibility = [ ":*" ]
++  }
++
++  source_set("allocator_cpp_shared") {
++    sources = [
++      # `alias.*`, `compiler_specific.h`, and `immediate_crash.*` have been
++      # copied from `//base`.
++      # TODO(crbug.com/40279749): Avoid duplication / reuse code.
++      "alias.cc",
++      "alias.h",
++      "compiler_specific.h",
++      "immediate_crash.h",
++    ]
++
++    visibility = [
++      ":allocator_impls",
++      ":allocator_shim_definitions",
++    ]
++  }
++}
+diff --git a/build/rust/std/alias.cc b/build/rust/allocator/alias.cc
+similarity index 87%
+rename from build/rust/std/alias.cc
+rename to build/rust/allocator/alias.cc
+index 42febac3ed1fc5..ca20986f8ed496 100644
+--- a/build/rust/std/alias.cc
++++ b/build/rust/allocator/alias.cc
+@@ -7,9 +7,9 @@
+ //
+ // TODO(crbug.com/40279749): Avoid code duplication / reuse code.
+ 
+-#include "build/rust/std/alias.h"
++#include "build/rust/allocator/alias.h"
+ 
+-#include "build/rust/std/compiler_specific.h"
++#include "build/rust/allocator/compiler_specific.h"
+ 
+ namespace build_rust_std {
+ namespace debug {
+diff --git a/build/rust/std/alias.h b/build/rust/allocator/alias.h
+similarity index 91%
+rename from build/rust/std/alias.h
+rename to build/rust/allocator/alias.h
+index 0eaba6766148fa..80995ecfb045e3 100644
+--- a/build/rust/std/alias.h
++++ b/build/rust/allocator/alias.h
+@@ -8,8 +8,8 @@
+ //
+ // TODO(crbug.com/40279749): Avoid code duplication / reuse code.
+ 
+-#ifndef BUILD_RUST_STD_ALIAS_H_
+-#define BUILD_RUST_STD_ALIAS_H_
++#ifndef BUILD_RUST_ALLOCATOR_ALIAS_H_
++#define BUILD_RUST_ALLOCATOR_ALIAS_H_
+ 
+ #include <stddef.h>
+ 
+@@ -34,4 +34,4 @@ void Alias(const void* var);
+   const int line_number = __LINE__; \
+   build_rust_std::debug::Alias(&line_number)
+ 
+-#endif  // BUILD_RUST_STD_ALIAS_H_
++#endif  // BUILD_RUST_ALLOCATOR_ALIAS_H_
+diff --git a/build/rust/std/remap_alloc.cc b/build/rust/allocator/allocator_impls.cc
+similarity index 67%
+rename from build/rust/std/remap_alloc.cc
+rename to build/rust/allocator/allocator_impls.cc
+index a443b11ec513df..1fde98f23cd124 100644
+--- a/build/rust/std/remap_alloc.cc
++++ b/build/rust/allocator/allocator_impls.cc
+@@ -2,6 +2,8 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
++#include "build/rust/allocator/allocator_impls.h"
++
+ #ifdef UNSAFE_BUFFERS_BUILD
+ // TODO(crbug.com/390223051): Remove C-library calls to fix the errors.
+ #pragma allow_unsafe_libc_calls
+@@ -11,9 +13,9 @@
+ #include <cstring>
+ 
+ #include "build/build_config.h"
+-#include "build/rust/std/alias.h"
+-#include "build/rust/std/buildflags.h"
+-#include "build/rust/std/immediate_crash.h"
++#include "build/rust/allocator/alias.h"
++#include "build/rust/allocator/buildflags.h"
++#include "build/rust/allocator/immediate_crash.h"
+ 
+ #if BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC)
+ #include "partition_alloc/partition_alloc_constants.h"  // nogncheck
+@@ -22,6 +24,11 @@
+ #include <cstdlib>
+ #endif
+ 
++// NOTE: this documentation is outdated.
++//
++// TODO(crbug.com/408221149): update this documentation, or replace it with docs
++// in the Rust allocator implementation.
++//
+ // When linking a final binary, rustc has to pick between either:
+ // * The default Rust allocator
+ // * Any #[global_allocator] defined in *any rlib in its dependency tree*
+@@ -87,19 +94,6 @@
+ // enabling it breaks Win32 APIs like CreateProcess:
+ // https://issues.chromium.org/u/1/issues/368070343#comment29
+ 
+-extern "C" {
+-
+-#ifdef COMPONENT_BUILD
+-#if BUILDFLAG(IS_WIN)
+-#define REMAP_ALLOC_ATTRIBUTES __declspec(dllexport) __attribute__((weak))
+-#else
+-#define REMAP_ALLOC_ATTRIBUTES \
+-  __attribute__((visibility("default"))) __attribute__((weak))
+-#endif
+-#else
+-#define REMAP_ALLOC_ATTRIBUTES __attribute__((weak))
+-#endif  // COMPONENT_BUILD
+-
+ #if !BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC) && BUILDFLAG(IS_WIN) && \
+     defined(ADDRESS_SANITIZER)
+ #define USE_WIN_ALIGNED_MALLOC 1
+@@ -107,17 +101,19 @@ extern "C" {
+ #define USE_WIN_ALIGNED_MALLOC 0
+ #endif
+ 
+-// This must exist as the stdlib depends on it to prove that we know the
+-// alloc shims below are unstable. In the future we may be required to replace
+-// them with a #[global_allocator] crate (see file comment above for more).
+-//
+-// Marked as weak as when Rust drives linking it includes this symbol itself,
+-// and we don't want a collision due to C++ being in the same link target, where
+-// C++ causes us to explicitly link in the stdlib and this symbol here.
+-[[maybe_unused]]
+-__attribute__((weak)) unsigned char __rust_no_alloc_shim_is_unstable;
++// The default allocator functions provided by the Rust standard library.
++extern "C" void* __rdl_alloc(size_t size, size_t align);
++extern "C" void __rdl_dealloc(void* p, size_t size, size_t align);
++extern "C" void* __rdl_realloc(void* p,
++                               size_t old_size,
++                               size_t align,
++                               size_t new_size);
++
++extern "C" void* __rdl_alloc_zeroed(size_t size, size_t align);
++
++namespace rust_allocator_internal {
+ 
+-REMAP_ALLOC_ATTRIBUTES void* __rust_alloc(size_t size, size_t align) {
++unsigned char* alloc(size_t size, size_t align) {
+ #if BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC)
+   // PartitionAlloc will crash if given an alignment larger than this.
+   if (align > partition_alloc::internal::kMaxSupportedAlignment) {
+@@ -125,19 +121,19 @@ REMAP_ALLOC_ATTRIBUTES void* __rust_alloc(size_t size, size_t align) {
+   }
+ 
+   if (align <= alignof(std::max_align_t)) {
+-    return allocator_shim::UncheckedAlloc(size);
++    return static_cast<unsigned char*>(allocator_shim::UncheckedAlloc(size));
+   } else {
+-    return allocator_shim::UncheckedAlignedAlloc(size, align);
++    return static_cast<unsigned char*>(
++        allocator_shim::UncheckedAlignedAlloc(size, align));
+   }
+ #elif USE_WIN_ALIGNED_MALLOC
+-  return _aligned_malloc(size, align);
++  return static_cast<unsigned char*>(_aligned_malloc(size, align));
+ #else
+-  extern void* __rdl_alloc(size_t size, size_t align);
+-  return __rdl_alloc(size, align);
++  return static_cast<unsigned char*>(__rdl_alloc(size, align));
+ #endif
+ }
+ 
+-REMAP_ALLOC_ATTRIBUTES void __rust_dealloc(void* p, size_t size, size_t align) {
++void dealloc(unsigned char* p, size_t size, size_t align) {
+ #if BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC)
+   if (align <= alignof(std::max_align_t)) {
+     allocator_shim::UncheckedFree(p);
+@@ -147,54 +143,44 @@ REMAP_ALLOC_ATTRIBUTES void __rust_dealloc(void* p, size_t size, size_t align) {
+ #elif USE_WIN_ALIGNED_MALLOC
+   return _aligned_free(p);
+ #else
+-  extern void __rdl_dealloc(void* p, size_t size, size_t align);
+   __rdl_dealloc(p, size, align);
+ #endif
+ }
+ 
+-REMAP_ALLOC_ATTRIBUTES void* __rust_realloc(void* p,
+-                                            size_t old_size,
+-                                            size_t align,
+-                                            size_t new_size) {
++unsigned char* realloc(unsigned char* p,
++                       size_t old_size,
++                       size_t align,
++                       size_t new_size) {
+ #if BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC)
+   if (align <= alignof(std::max_align_t)) {
+-    return allocator_shim::UncheckedRealloc(p, new_size);
++    return static_cast<unsigned char*>(
++        allocator_shim::UncheckedRealloc(p, new_size));
+   } else {
+-    return allocator_shim::UncheckedAlignedRealloc(p, new_size, align);
++    return static_cast<unsigned char*>(
++        allocator_shim::UncheckedAlignedRealloc(p, new_size, align));
+   }
+ #elif USE_WIN_ALIGNED_MALLOC
+-  return _aligned_realloc(p, new_size, align);
++  return static_cast<unsigned char*>(_aligned_realloc(p, new_size, align));
+ #else
+-  extern void* __rdl_realloc(void* p, size_t old_size, size_t align,
+-                             size_t new_size);
+-  return __rdl_realloc(p, old_size, align, new_size);
++  return static_cast<unsigned char*>(
++      __rdl_realloc(p, old_size, align, new_size));
+ #endif
+ }
+ 
+-REMAP_ALLOC_ATTRIBUTES void* __rust_alloc_zeroed(size_t size, size_t align) {
++unsigned char* alloc_zeroed(size_t size, size_t align) {
+ #if BUILDFLAG(RUST_ALLOCATOR_USES_PARTITION_ALLOC) || USE_WIN_ALIGNED_MALLOC
+   // TODO(danakj): When RUST_ALLOCATOR_USES_PARTITION_ALLOC is true, it's
+   // possible that a partition_alloc::UncheckedAllocZeroed() call would perform
+   // better than partition_alloc::UncheckedAlloc() + memset. But there is no
+   // such API today. See b/342251590.
+-  void* p = __rust_alloc(size, align);
++  unsigned char* p = alloc(size, align);
+   if (p) {
+     memset(p, 0, size);
+   }
+   return p;
+ #else
+-  extern void* __rdl_alloc_zeroed(size_t size, size_t align);
+-  return __rdl_alloc_zeroed(size, align);
++  return static_cast<unsigned char*>(__rdl_alloc_zeroed(size, align));
+ #endif
+ }
+ 
+-REMAP_ALLOC_ATTRIBUTES void __rust_alloc_error_handler(size_t size,
+-                                                       size_t align) {
+-  NO_CODE_FOLDING();
+-  IMMEDIATE_CRASH();
+-}
+-
+-REMAP_ALLOC_ATTRIBUTES extern const unsigned char
+-    __rust_alloc_error_handler_should_panic = 0;
+-
+-}  // extern "C"
++}  // namespace rust_allocator_internal
+diff --git a/build/rust/allocator/allocator_impls.h b/build/rust/allocator/allocator_impls.h
+new file mode 100644
+index 00000000000000..afb335412faf9c
+--- /dev/null
++++ b/build/rust/allocator/allocator_impls.h
+@@ -0,0 +1,25 @@
++// Copyright 2025 The Chromium Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef BUILD_RUST_ALLOCATOR_ALLOCATOR_IMPLS_H_
++#define BUILD_RUST_ALLOCATOR_ALLOCATOR_IMPLS_H_
++
++#include <cstddef>
++
++#include "build/build_config.h"
++#include "build/rust/allocator/buildflags.h"
++
++namespace rust_allocator_internal {
++
++unsigned char* alloc(size_t size, size_t align);
++void dealloc(unsigned char* p, size_t size, size_t align);
++unsigned char* realloc(unsigned char* p,
++                       size_t old_size,
++                       size_t align,
++                       size_t new_size);
++unsigned char* alloc_zeroed(size_t size, size_t align);
++
++}  // namespace rust_allocator_internal
++
++#endif  // BUILD_RUST_ALLOCATOR_ALLOCATOR_IMPLS_H_
+diff --git a/build/rust/allocator/allocator_shim_definitions.cc b/build/rust/allocator/allocator_shim_definitions.cc
+new file mode 100644
+index 00000000000000..a4d1bd77b7016e
+--- /dev/null
++++ b/build/rust/allocator/allocator_shim_definitions.cc
+@@ -0,0 +1,30 @@
++// Copyright 2025 The Chromium Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include <cstddef>
++
++#include "build/rust/allocator/alias.h"
++#include "build/rust/allocator/immediate_crash.h"
++
++extern "C" {
++
++// As part of rustc's contract for using `#[global_allocator]` without
++// rustc-generated shims we must define this symbol, since we are opting in to
++// unstable functionality. See https://github.com/rust-lang/rust/issues/123015
++//
++// Mark it weak since rustc will generate it when it drives linking.
++[[maybe_unused]]
++__attribute__((weak)) unsigned char __rust_no_alloc_shim_is_unstable;
++
++__attribute__((weak)) void __rust_alloc_error_handler(size_t size,
++                                                      size_t align) {
++  NO_CODE_FOLDING();
++  IMMEDIATE_CRASH();
++}
++
++__attribute__((
++    weak)) extern const unsigned char __rust_alloc_error_handler_should_panic =
++    0;
++
++}  // extern "C"
+diff --git a/build/rust/std/compiler_specific.h b/build/rust/allocator/compiler_specific.h
+similarity index 87%
+rename from build/rust/std/compiler_specific.h
+rename to build/rust/allocator/compiler_specific.h
+index ea79a7a8dc2842..f9079679a3e9af 100644
+--- a/build/rust/std/compiler_specific.h
++++ b/build/rust/allocator/compiler_specific.h
+@@ -7,8 +7,8 @@
+ //
+ // TODO(crbug.com/40279749): Avoid code duplication / reuse code.
+ 
+-#ifndef BUILD_RUST_STD_COMPILER_SPECIFIC_H_
+-#define BUILD_RUST_STD_COMPILER_SPECIFIC_H_
++#ifndef BUILD_RUST_ALLOCATOR_COMPILER_SPECIFIC_H_
++#define BUILD_RUST_ALLOCATOR_COMPILER_SPECIFIC_H_
+ 
+ #include "build/build_config.h"
+ 
+@@ -35,4 +35,4 @@
+ #define NOINLINE
+ #endif
+ 
+-#endif  // BUILD_RUST_STD_COMPILER_SPECIFIC_H_
++#endif  // BUILD_RUST_ALLOCATOR_COMPILER_SPECIFIC_H_
+diff --git a/build/rust/std/immediate_crash.h b/build/rust/allocator/immediate_crash.h
+similarity index 97%
+rename from build/rust/std/immediate_crash.h
+rename to build/rust/allocator/immediate_crash.h
+index e4fd5a09d9379f..9cbf9fd65f3e09 100644
+--- a/build/rust/std/immediate_crash.h
++++ b/build/rust/allocator/immediate_crash.h
+@@ -5,8 +5,8 @@
+ // This file has been copied from //base/immediate_crash.h.
+ // TODO(crbug.com/40279749): Avoid code duplication / reuse code.
+ 
+-#ifndef BUILD_RUST_STD_IMMEDIATE_CRASH_H_
+-#define BUILD_RUST_STD_IMMEDIATE_CRASH_H_
++#ifndef BUILD_RUST_ALLOCATOR_IMMEDIATE_CRASH_H_
++#define BUILD_RUST_ALLOCATOR_IMMEDIATE_CRASH_H_
+ 
+ #include "build/build_config.h"
+ 
+@@ -168,4 +168,4 @@
+ 
+ #endif  // defined(__clang__) || defined(COMPILER_GCC)
+ 
+-#endif  // BUILD_RUST_STD_IMMEDIATE_CRASH_H_
++#endif  // BUILD_RUST_ALLOCATOR_IMMEDIATE_CRASH_H_
+diff --git a/build/rust/allocator/lib.rs b/build/rust/allocator/lib.rs
+new file mode 100644
+index 00000000000000..7f4a0fc2456942
+--- /dev/null
++++ b/build/rust/allocator/lib.rs
+@@ -0,0 +1,48 @@
++// Copyright 2025 The Chromium Authors
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++//! Define the allocator that Rust code in Chrome should use.
++//!
++//! Any final artifact that depends on this crate, even transitively, will use
++//! the allocator defined here. Currently this is a thin wrapper around
++//! allocator_impls.cc's functions; see the documentation there.
++
++use std::alloc::{GlobalAlloc, Layout};
++
++struct Allocator;
++
++unsafe impl GlobalAlloc for Allocator {
++    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
++        unsafe { ffi::alloc(layout.size(), layout.align()) }
++    }
++
++    unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
++        unsafe {
++            ffi::dealloc(ptr, layout.size(), layout.align());
++        }
++    }
++
++    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
++        unsafe { ffi::alloc_zeroed(layout.size(), layout.align()) }
++    }
++
++    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
++        unsafe { ffi::realloc(ptr, layout.size(), layout.align(), new_size) }
++    }
++}
++
++#[global_allocator]
++static GLOBAL: Allocator = Allocator;
++
++#[cxx::bridge(namespace = "rust_allocator_internal")]
++mod ffi {
++    extern "C++" {
++        include!("build/rust/allocator/allocator_impls.h");
++
++        unsafe fn alloc(size: usize, align: usize) -> *mut u8;
++        unsafe fn dealloc(p: *mut u8, size: usize, align: usize);
++        unsafe fn realloc(p: *mut u8, old_size: usize, align: usize, new_size: usize) -> *mut u8;
++        unsafe fn alloc_zeroed(size: usize, align: usize) -> *mut u8;
++    }
++}
+diff --git a/build/rust/cargo_crate.gni b/build/rust/cargo_crate.gni
+index 6d11c538bf4d5a..d9912722b4ecdb 100644
+--- a/build/rust/cargo_crate.gni
++++ b/build/rust/cargo_crate.gni
+@@ -259,6 +259,12 @@ template("cargo_crate") {
+     # Don't import the `chromium` crate into third-party code.
+     no_chromium_prelude = true
+ 
++    # Don't depend on the chrome-specific #[global_allocator] crate from
++    # third-party code. This avoids some dependency cycle issues. The allocator
++    # crate will still be used if it exists anywhere in the dependency graph for
++    # a given linked artifact.
++    no_allocator_crate = true
++
+     rustc_metadata = _rustc_metadata
+ 
+     # TODO(crbug.com/40259764): don't default to true. This requires changes to
+@@ -483,6 +489,9 @@ template("cargo_crate") {
+         # Don't import the `chromium` crate into third-party code.
+         no_chromium_prelude = true
+ 
++        # Build scripts do not need to link to chrome's allocator.
++        no_allocator_crate = true
++
+         # The ${_build_script_name}_output target looks for the exe in this
+         # location. Due to how the Windows component build works, this has to
+         # be $root_out_dir for all EXEs. In component build, C++ links to the
+diff --git a/build/rust/rust_macro.gni b/build/rust/rust_macro.gni
+index bcbb30ed441115..41d857632ccdc9 100644
+--- a/build/rust/rust_macro.gni
++++ b/build/rust/rust_macro.gni
+@@ -16,6 +16,9 @@ template("rust_macro") {
+     forward_variables_from(invoker, TESTONLY_AND_VISIBILITY)
+     proc_macro_configs = invoker.configs
+     target_type = "rust_proc_macro"
++
++    # Macros are loaded by rustc and shouldn't use chrome's allocation routines.
++    no_allocator_crate = true
+   }
+ }
+ 
+diff --git a/build/rust/rust_target.gni b/build/rust/rust_target.gni
+index 1a2f96337d4361..1003a7b678352d 100644
+--- a/build/rust/rust_target.gni
++++ b/build/rust/rust_target.gni
+@@ -339,6 +339,10 @@ template("rust_target") {
+       _rust_deps += [ "//build/rust/std" ]
+     }
+ 
++    if (!defined(invoker.no_allocator_crate) || !invoker.no_allocator_crate) {
++      _rust_deps += [ "//build/rust/allocator" ]
++    }
++
+     if (_build_unit_tests) {
+       _unit_test_target = "${_target_name}_unittests"
+       if (defined(invoker.unit_test_target)) {
+diff --git a/build/rust/std/BUILD.gn b/build/rust/std/BUILD.gn
+index 6b996aa1fe3865..25db126076b2fa 100644
+--- a/build/rust/std/BUILD.gn
++++ b/build/rust/std/BUILD.gn
+@@ -15,51 +15,12 @@
+ # allocator functions to PartitionAlloc when `use_partition_alloc_as_malloc` is
+ # true, so that Rust and C++ use the same allocator backend.
+ 
+-import("//build/buildflag_header.gni")
+ import("//build/config/compiler/compiler.gni")
+ import("//build/config/coverage/coverage.gni")
+ import("//build/config/rust.gni")
+ import("//build/config/sanitizers/sanitizers.gni")
+ 
+-rust_allocator_uses_partition_alloc = false
+-if (build_with_chromium) {
+-  import("//base/allocator/partition_allocator/partition_alloc.gni")
+-  rust_allocator_uses_partition_alloc = use_partition_alloc_as_malloc
+-}
+-
+-buildflag_header("buildflags") {
+-  header = "buildflags.h"
+-  flags = [
+-    "RUST_ALLOCATOR_USES_PARTITION_ALLOC=$rust_allocator_uses_partition_alloc",
+-  ]
+-  visibility = [ ":*" ]
+-}
+-
+ if (toolchain_has_rust) {
+-  # If clang performs the link step, we need to provide the allocator symbols
+-  # that are normally injected by rustc during linking.
+-  #
+-  # We also "happen to" use this to redirect allocations to PartitionAlloc,
+-  # though that would be better done through a #[global_allocator] crate (see
+-  # above).
+-  source_set("remap_alloc") {
+-    public_deps = []
+-    if (rust_allocator_uses_partition_alloc) {
+-      public_deps += [ "//base/allocator/partition_allocator:partition_alloc" ]
+-    }
+-    deps = [ ":buildflags" ]
+-    sources = [
+-      # `alias.*`, `compiler_specific.h`, and `immediate_crash.*` have been
+-      # copied from `//base`.
+-      # TODO(crbug.com/40279749): Avoid duplication / reuse code.
+-      "alias.cc",
+-      "alias.h",
+-      "compiler_specific.h",
+-      "immediate_crash.h",
+-      "remap_alloc.cc",
+-    ]
+-  }
+-
+   # List of Rust stdlib rlibs which are present in the official Rust toolchain
+   # we are using from the Android team. This is usually a version or two behind
+   # nightly. Generally this matches the toolchain we build ourselves, but if
+@@ -269,8 +230,6 @@ if (toolchain_has_rust) {
+       foreach(libname, stdlib_files + skip_stdlib_files) {
+         deps += [ "rules:$libname" ]
+       }
+-
+-      public_deps = [ ":remap_alloc" ]
+     }
+   } else {
+     action("find_stdlib") {
+diff --git a/components/cronet/android/dependencies.txt b/components/cronet/android/dependencies.txt
+index bf56bc45ed41f7..c0e41ef7c6766a 100644
+--- a/components/cronet/android/dependencies.txt
++++ b/components/cronet/android/dependencies.txt
+@@ -14,6 +14,7 @@
+ //build/config
+ //build/config/compiler
+ //build/rust
++//build/rust/allocator
+ //build/rust/chromium_prelude
+ //build/rust/std
+ //build/rust/std/rules
+diff --git a/third_party/breakpad/BUILD.gn b/third_party/breakpad/BUILD.gn
+index 2f4e1ab0156609..e140ecbedcc9a0 100644
+--- a/third_party/breakpad/BUILD.gn
++++ b/third_party/breakpad/BUILD.gn
+@@ -495,7 +495,10 @@ if (is_mac) {
+       defines = [ "HAVE_MACH_O_NLIST_H" ]
+ 
+       # Rust demangle support.
+-      deps = [ "//third_party/rust/rustc_demangle_capi/v0_1:lib" ]
++      deps = [
++        "//build/rust/allocator",
++        "//third_party/rust/rustc_demangle_capi/v0_1:lib",
++      ]
+       defines += [ "HAVE_RUSTC_DEMANGLE" ]
+       include_dirs += [ "//third_party/rust/chromium_crates_io/vendor/rustc-demangle-capi-v0_1/include" ]
+       sources += [ "//third_party/rust/chromium_crates_io/vendor/rustc-demangle-capi-v0_1/include/rustc_demangle.h" ]
+@@ -743,7 +746,10 @@ if (is_linux || is_chromeos || is_android) {
+       include_dirs = [ "breakpad/src" ]
+ 
+       # Rust demangle support.
+-      deps = [ "//third_party/rust/rustc_demangle_capi/v0_1:lib" ]
++      deps = [
++        "//build/rust/allocator",
++        "//third_party/rust/rustc_demangle_capi/v0_1:lib",
++      ]
+       defines += [ "HAVE_RUSTC_DEMANGLE" ]
+       include_dirs += [ "//third_party/rust/chromium_crates_io/vendor/rustc-demangle-capi-v0_1/include" ]
+       sources += [ "//third_party/rust/chromium_crates_io/vendor/rustc-demangle-capi-v0_1/include/rustc_demangle.h" ]

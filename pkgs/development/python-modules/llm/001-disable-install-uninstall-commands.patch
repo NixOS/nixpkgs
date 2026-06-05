@@ -1,0 +1,64 @@
+diff --git a/llm/cli.py b/llm/cli.py
+index 5d53e74..c2b4707 100644
+--- a/llm/cli.py
++++ b/llm/cli.py
+@@ -2895,30 +2895,38 @@ def display_truncated(text):
+     help="Include pre-release and development versions",
+ )
+ def install(packages, upgrade, editable, force_reinstall, no_cache_dir, pre):
+-    """Install packages from PyPI into the same environment as LLM"""
+-    args = ["pip", "install"]
+-    if upgrade:
+-        args += ["--upgrade"]
+-    if editable:
+-        args += ["--editable", editable]
+-    if force_reinstall:
+-        args += ["--force-reinstall"]
+-    if no_cache_dir:
+-        args += ["--no-cache-dir"]
+-    if pre:
+-        args += ["--pre"]
+-    args += list(packages)
+-    sys.argv = args
+-    run_module("pip", run_name="__main__")
++    """Install packages from PyPI into the same environment as LLM. Disabled for nixpkgs."""
++    raise click.ClickException(
++"""Install command has been disabled for Nix. To install extra `llm` plugins, use the `llm.withPlugins` function.
++
++Example:
++
++```nix
++llm.withPlugins {
++  @listOfPackagedPlugins@
++}
++```
++"""
++    )
+
+
+ @cli.command()
+ @click.argument("packages", nargs=-1, required=True)
+ @click.option("-y", "--yes", is_flag=True, help="Don't ask for confirmation")
+ def uninstall(packages, yes):
+-    """Uninstall Python packages from the LLM environment"""
+-    sys.argv = ["pip", "uninstall"] + list(packages) + (["-y"] if yes else [])
+-    run_module("pip", run_name="__main__")
++    """Uninstall Python packages from the LLM environment. Disabled for nixpkgs."""
++    raise click.ClickException(
++"""Uninstall command has been disabled for Nix. To remove `llm` plugins, use the `llm.withPlugins` function with the desired set of plugins specified.
++
++Example:
++
++```nix
++llm.withPlugins {
++  @listOfPackagedPlugins@
++}
++```
++"""
++    )
+
+
+ @cli.command()
+--
+2.49.0
+

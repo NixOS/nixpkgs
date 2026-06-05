@@ -1,0 +1,35 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index e7befae..e7dc255 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -86,7 +86,6 @@ if (UNIX)
+     )
+   endif ()
+   if (APPLE)
+-    if (DMG)
+       set_target_properties(${EXECUTABLE_NAME} PROPERTIES 
+                             MACOSX_BUNDLE ON
+                             MACOSX_BUNDLE_EXECUTABLE_NAME "${EXECUTABLE_NAME}"
+@@ -94,21 +93,12 @@ if (UNIX)
+                             MACOSX_BUNDLE_ICON_FILE "${EXECUTABLE_NAME}.icns"
+                             MACOSX_BUNDLE_GUI_IDENTIFIER "${RDNS_NAME}"
+                             MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}"
+-                            MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
++                            MACOSX_BUNDLE_BUNDLE_NAME "Easy Audio Sync"
+                             MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+                             MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+                             MACOSX_BUNDLE_COPYRIGHT "Public Domain"
+ 
+       )
+-      install(CODE "include(BundleUtilities)\nfixup_bundle(\"${PROJECT_BINARY_DIR}/${EXECUTABLE_NAME}.app\" \"\" \"\")")
+-      add_custom_target(my_install COMMAND ${CMAKE_COMMAND} --build . --target install WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
+-      add_custom_target(dmg
+-        COMMAND mv "${EXECUTABLE_NAME}.app" "${PROJECT_NAME}.app" # fixup_bundle won't accept app names with spaces so need to manually rename
+-        COMMAND "${MACDEPLOYQT}" "${PROJECT_NAME}.app" -dmg
+-        COMMAND mv "${PROJECT_NAME}.dmg" "${EXECUTABLE_NAME}-${PROJECT_VERSION}-${CMAKE_OSX_ARCHITECTURES}.dmg"
+-        WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
+-      add_dependencies(dmg my_install)
+-    endif ()
+   else ()
+     install(TARGETS ${EXECUTABLE_NAME} DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+     set (DATA_DIR "${CMAKE_INSTALL_PREFIX}/share")

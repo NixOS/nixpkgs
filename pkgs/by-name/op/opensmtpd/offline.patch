@@ -1,0 +1,20 @@
+Commit ID: 0527fcb65d6af4271a33dbd425f30d457fc7ab4f
+Change ID: puqrnyuutmspqxqtkkqqrsmsxnyqvomm
+Author   : Ricardo Correia <someplaceguy@wizy.org> (2026-02-18 23:51:00)
+Committer: Ricardo Correia <someplaceguy@wizy.org> (2026-02-19 00:43:47)
+
+    (no description set)
+
+diff --git a/usr.sbin/smtpd/smtpd.c b/usr.sbin/smtpd/smtpd.c
+index 2365b1ee46..b9e40e1417 100644
+--- a/usr.sbin/smtpd/smtpd.c
++++ b/usr.sbin/smtpd/smtpd.c
+@@ -1806,7 +1806,7 @@
+ 		envp[1] = (char *)NULL;
+ 		environ = envp;
+ 
+-		execvp(PATH_SMTPCTL, args.list);
++		execvp(@@PATH_SENDMAIL@@, args.list);
+ 		_exit(1);
+ 	}
+ 

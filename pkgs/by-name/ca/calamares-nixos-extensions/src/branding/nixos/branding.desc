@@ -1,0 +1,233 @@
+# SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+#
+---
+componentName:  nixos
+
+
+### WELCOME / OVERALL WORDING
+#
+# These settings affect some overall phrasing and looks,
+# which are most visible in the welcome page.
+
+# This selects between different welcome texts. When false, uses
+# the traditional "Welcome to the %1 installer.", and when true,
+# uses "Welcome to the Calamares installer for %1." This allows
+# to distinguish this installer from other installers for the
+# same distribution.
+welcomeStyleCalamares:   false
+
+# Should the welcome image (productWelcome, below) be scaled
+# up beyond its natural size? If false, the image does not grow
+# with the window but remains the same size throughout (this
+# may have surprising effects on HiDPI monitors).
+welcomeExpandingLogo:   true
+
+### WINDOW CONFIGURATION
+#
+# The settings here affect the placement of the Calamares
+# window through hints to the window manager and initial
+# sizing of the Calamares window.
+
+# Size and expansion policy for Calamares.
+#  - "normal" or unset, expand as needed, use *windowSize*
+#  - "fullscreen", start as large as possible, ignore *windowSize*
+#  - "noexpand", don't expand automatically, use *windowSize*
+windowExpanding:    normal
+
+# Size of Calamares window, expressed as w,h. Both w and h
+# may be either pixels (suffix px) or font-units (suffix em).
+#   e.g.    "800px,600px"
+#           "60em,480px"
+# This setting is ignored if "fullscreen" is selected for
+# *windowExpanding*, above. If not set, use constants defined
+# in CalamaresUtilsGui, 800x520.
+windowSize: 800px,520px
+
+# Placement of Calamares window. Either "center" or "free".
+# Whether "center" actually works does depend on the window
+# manager in use (and only makes sense if you're not using
+# *windowExpanding* set to "fullscreen").
+windowPlacement: center
+
+### PANELS CONFIGURATION
+#
+# Calamares has a main content area, and two panels (navigation
+# and progress / sidebar). The panels can be controlled individually,
+# or switched off. If both panels are switched off, the layout of
+# the main content area loses its margins, on the assumption that
+# you're doing something special.
+
+# Kind of sidebar (panel on the left, showing progress).
+#  - "widget" or unset, use traditional sidebar (logo, items)
+#  - "none", hide it entirely
+#  - "qml", use calamares-sidebar.qml from branding folder
+# In addition, you **may** specify a side, separated by a comma,
+# from the kind. Valid sides are:
+#  - "left" (if not specified, uses this)
+#  - "right"
+#  - "top"
+#  - "bottom"
+# For instance, "widget,right" is valid; so is "qml", which defaults
+# to putting the sidebar on the left. Also valid is "qml,top".
+# While "widget,top" is valid, the widgets code is **not** flexible
+# and results will be terrible.
+sidebar: widget
+
+# Kind of navigation (button panel on the bottom).
+#  - "widget" or unset, use traditional navigation
+#  - "none", hide it entirely
+#  - "qml", use calamares-navigation.qml from branding folder
+# In addition, you **may** specify a side, separated by a comma,
+# from the kind. The same sides are valid as for *sidebar*,
+# except the default is *bottom*.
+navigation: widget
+
+
+### STRINGS, IMAGES AND COLORS
+#
+# This section contains the "branding proper" of names
+# and images, rather than global-look settings.
+
+# These are strings shown to the user in the user interface.
+# There is no provision for translating them -- since they
+# are names, the string is included as-is.
+#
+# The four Url strings are the Urls used by the buttons in
+# the welcome screen, and are not shown to the user. Clicking
+# on the "Support" button, for instance, opens the link supportUrl.
+# If a Url is empty, the corresponding button is not shown.
+#
+# bootloaderEntryName is how this installation / distro is named
+# in the boot loader (e.g. in the GRUB menu).
+#
+# These strings support substitution from /etc/os-release
+# if KDE Frameworks 5.58 are available at build-time. When
+# enabled, ${varname} is replaced by the equivalent value
+# from os-release. All the supported var-names are in all-caps,
+# and are listed on the FreeDesktop.org site,
+#       https://www.freedesktop.org/software/systemd/man/os-release.html
+# Note that ANSI_COLOR and CPE_NAME don't make sense here, and
+# are not supported (the rest are). Remember to quote the string
+# if it contains substitutions, or you'll get YAML exceptions.
+#
+# The *Url* entries are used on the welcome page, and they
+# are visible as buttons there if the corresponding *show* keys
+# are set to "true" (they can also be overridden).
+strings:
+    productName:         "${NAME}"
+    shortProductName:    NixOS
+    version:
+    shortVersion:
+    versionedName:       NixOS
+    shortVersionedName:  NixOS
+    bootloaderEntryName: NixOS
+    productUrl:          https://nixos.org/
+    supportUrl:          https://nixos.org/manual/nixos
+    knownIssuesUrl:      https://github.com/NixOS/nixpkgs/issues
+    releaseNotesUrl:     https://nixos.org/manual/nixos/stable/release-notes.html
+    donateUrl:           https://nixos.org/donate.html
+
+# These images are loaded from the branding module directory.
+#
+# productBanner is an optional image, which if present, will be shown
+#       on the welcome page of the application, above the welcome text.
+#       It is intended to have a width much greater than height.
+#       It is displayed at 64px height (also on HiDPI).
+#       Recommended size is 64px tall, and up to 460px wide.
+# productIcon is used as the window icon, and will (usually) be used
+#       by the window manager to represent the application. This image
+#       should be square, and may be displayed by the window manager
+#       as small as 16x16 (but possibly larger).
+# productLogo is used as the logo at the top of the left-hand column
+#       which shows the steps to be taken. The image should be square,
+#       and is displayed at 80x80 pixels (also on HiDPI).
+# productWallpaper is an optional image, which if present, will replace
+#       the normal solid background on every page of the application.
+#       It can be any size and proportion,
+#       and will be tiled to fit the entire window.
+#       For a non-tiled wallpaper, the size should be the same as
+#       the overall window, see *windowSize* above (800x520).
+# productWelcome is shown on the welcome page of the application in
+#       the middle of the window, below the welcome text. It can be
+#       any size and proportion, and will be scaled to fit inside
+#       the window. Use `welcomeExpandingLogo` to make it non-scaled.
+#       Recommended size is 320x150.
+#
+# These filenames can also use substitutions from os-release (see above).
+images:
+    # productBanner:       "banner.png"
+    productIcon:         "nix-snowflake.svg"
+    productLogo:         "white.png"
+    # productWallpaper:    "wallpaper.png"
+    productWelcome:      "nix-snowflake.svg"
+
+# Colors for text and background components.
+#
+#  - SidebarBackground is the background of the sidebar
+#  - SidebarText is the (foreground) text color
+#  - SidebarBackgroundCurrent sets the background of the current step.
+#    Optional, and defaults to the application palette.
+#  - SidebarTextCurrent is the text color of the current step.
+#
+# These colors can **also** be set through the stylesheet, if the
+# branding component also ships a stylesheet.qss. Then they are
+# the corresponding CSS attributes of #sidebarApp.
+style:
+   SidebarBackground:        "#5277C3"
+   SidebarText:              "#FFFFFF"
+   SidebarTextCurrent:       "#292F34"
+   SidebarBackgroundCurrent: "#7EBAE4"
+
+### SLIDESHOW
+#
+# The slideshow is displayed during execution steps (e.g. when the
+# installer is actually writing to disk and doing other slow things).
+
+# The slideshow can be a QML file (recommended) which can display
+# arbitrary things -- text, images, animations, or even play a game --
+# during the execution step. The QML **is** abruptly stopped when the
+# execution step is done, though, so maybe a game isn't a great idea.
+#
+# The slideshow can also be a sequence of images (not recommended unless
+# you don't want QML at all in your Calamares). The images are displayed
+# at a rate of 1 every 2 seconds during the execution step.
+#
+# To configure a QML file, list a single filename:
+#   slideshow:               "show.qml"
+# To configure images, like the filenames (here, as an inline list):
+#   slideshow: [ "/etc/calamares/slideshow/0.png", "/etc/logo.png" ]
+slideshow:               "show.qml"
+
+# There are two available APIs for a QML slideshow:
+#  - 1 (the default) loads the entire slideshow when the installation-
+#      slideshow page is shown and starts the QML then. The QML
+#      is never stopped (after installation is done, times etc.
+#      continue to fire).
+#  - 2 loads the slideshow on startup and calls onActivate() and
+#      onLeave() in the root object. After the installation is done,
+#      the show is stopped (first by calling onLeave(), then destroying
+#      the QML components).
+#
+# An image slideshow does not need to have the API defined.
+slideshowAPI: 2
+
+
+# These options are to customize online uploading of logs to pastebins:
+#  - type      : Defines the kind of pastebin service to be used. Currently
+#                it accepts two values:
+#                - none    :    disables the pastebin functionality
+#                - fiche   :    use fiche pastebin server
+#  - url       : Defines the address of pastebin service to be used.
+#                Takes string as input. Important bits are the host and port,
+#                the scheme is not used.
+#  - sizeLimit : Defines maximum size limit (in KiB) of log file to be pasted.
+#                The option must be set, to have the log option work.
+#                Takes integer as input. If < 0, no limit will be forced,
+#                else only last (approximately) 'n' KiB of log file will be pasted.
+#                Please note that upload size may be slightly over the limit (due
+#                to last minute logging), so provide a suitable value.
+uploadServer :
+    type :    "fiche"
+    url :     "http://termbin.com:9999"
+    sizeLimit : -1
