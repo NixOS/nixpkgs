@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   appdirs,
   click,
   click-log,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "bcg";
   version = "1.17.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -38,7 +39,9 @@ buildPythonPackage rec {
       bcg/__init__.py setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     click
     click-log
