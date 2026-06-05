@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC := gcc" "CC ?= $CC"
+      --replace-fail "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
