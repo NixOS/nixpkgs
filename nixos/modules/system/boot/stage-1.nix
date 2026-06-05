@@ -21,6 +21,7 @@ let
     concatStringsSep
     filter
     filterAttrs
+    forEach
     getBin
     hasPrefix
     hasSuffix
