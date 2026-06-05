@@ -101,9 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --cwd app/node_modules/desktop-notifications run install
 
     # use git from nixpkgs instead of an automatically downloaded one by dugite
-    makeWrapper ${lib.getExe git} app/node_modules/dugite/git/bin/git \
+    gitRoot=app/node_modules/dugite/git
+    makeWrapper ${lib.getExe git} "$gitRoot/bin/git" \
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
+    mkdir -p "$gitRoot/libexec/git-core"
+
+    for script in ${git}/libexec/git-core/*; do
+      ln -s "$script" "$gitRoot/libexec/git-core/$(basename "$script")"
+    done
 
     # exception: printenvz needs `node-gyp` configure first for some reason
     pushd node_modules/printenvz
