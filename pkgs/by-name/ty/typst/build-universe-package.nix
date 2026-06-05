@@ -45,6 +45,7 @@ lib.extendMkDerivation {
           RossSmyth
         ];
         license = lib.map (lib.flip lib.getAttr lib.licensesSpdx) license;
+        generated = true;
       }
       // lib.optionalAttrs (homepage != null) { inherit homepage; };
     };
