@@ -110,13 +110,13 @@ let
 
   # Since v0.30, llama.cpp is consumed via CMake FetchContent rather than
   # vendored in-tree. Pre-stage the pinned commit (read from upstream's
-  # `LLAMA_CPP_VERSION` file — currently `b9493`) so the FetchContent step
+  # `LLAMA_CPP_VERSION` file — currently `b9509`) so the FetchContent step
   # uses our copy instead of trying to clone over the network in the sandbox.
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    rev = "a731805cedc83c0514cbd808a2e38ec46c759cc2"; # tag b9493
-    hash = "sha256-DO9J1mx9Jlp6qtCiJp2ZEi6R7H2YX1/sD7DGgBCtt0U=";
+    rev = "6f3a9f3dee3c27545371044a3a38005721ac8a8e"; # tag b9509
+    hash = "sha256-bO1ucb/+vidj/EYzNCssotjte9NlVLdjC794jToNNeM=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.30.4";
+  version = "0.30.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IHX8o1Ty4Sdht5YeUYLnNPjOV7O95WeNng/coO+MHS8=";
+    hash = "sha256-jh/B/FkmAliCVzqc8DGCPYa5+XejE3cFZTzSuRxjPvw=";
   };
 
   vendorHash = "sha256-lZdGzGb9xRjTm1Rm7/wHjqM490gLznLEndmb4mNbCX0=";
@@ -230,12 +230,6 @@ goBuild (finalAttrs: {
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
         -P $NIX_BUILD_TOP/source/llama/compat/apply-patch.cmake )
-  ''
-  # disable tests that fail in sandbox due to Metal init failure
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rm ml/backend/ggml/ggml_test.go
-    rm ml/nn/pooling/pooling_test.go
-    rm model/models/nemotronh/model_omni_test.go
   '';
 
   overrideModAttrs = _: _: {
@@ -319,7 +313,9 @@ goBuild (finalAttrs: {
   # `.so` payloads end up with build-dir entries in RPATH. Drop them
   # before the forbidden-references check. $ORIGIN is preserved
   # unconditionally; only absolute /nix/store entries are kept.
-  preFixup = ''
+  # ELF-only (patchelf doesn't know Mach-O); darwin builds Mach-O dylibs
+  # that don't carry the build-dir RPATH problem in the first place.
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib/ollama -type f \( -name '*.so' -o -name '*.so.*' \) \
       -exec patchelf --shrink-rpath --allowed-rpath-prefixes /nix/store {} +
   '';

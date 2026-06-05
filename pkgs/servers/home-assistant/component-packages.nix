@@ -7188,7 +7188,8 @@
       ];
     "vistapool" =
       ps: with ps; [
-      ]; # missing inputs: aioaquarite
+        aioaquarite
+      ];
     "vivotek" =
       ps: with ps; [
         libpyvivotek
@@ -8756,6 +8757,7 @@
     "victron_gx"
     "victron_remote_monitoring"
     "vilfo"
+    "vistapool"
     "vivotek"
     "vizio"
     "vlc_telnet"
