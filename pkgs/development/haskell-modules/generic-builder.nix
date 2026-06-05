@@ -1094,6 +1094,7 @@ lib.fix (
 
       meta = {
         inherit homepage platforms;
+        generated = true;
       }
       // optionalAttrs (args ? broken) { inherit broken; }
       // optionalAttrs (args ? description) { inherit description; }
