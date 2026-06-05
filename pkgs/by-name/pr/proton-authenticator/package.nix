@@ -47,7 +47,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Two-factor authentication manager with optional sync";
     homepage = "https://proton.me/authenticator";
     license = lib.licenses.unfree; # source not yet published
-    maintainers = with lib.maintainers; [ felschr ];
+    maintainers = with lib.maintainers; [
+      felschr
+      pbek
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "proton-authenticator";
