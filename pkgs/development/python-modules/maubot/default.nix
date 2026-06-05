@@ -10,40 +10,6 @@
 }:
 
 let
-  # save for overriding it
-  python' = python;
-in
-let
-  python = python'.override {
-    self = python;
-    packageOverrides = final: prev: {
-      # SQLAlchemy>=1,<1.4
-      # SQLAlchemy 2.0's derivation is very different, so don't override, just write it from scratch
-      # (see https://github.com/NixOS/nixpkgs/blob/65dbed73949e4c0207e75dcc7271b29f9e457670/pkgs/development/python-modules/sqlalchemy/default.nix)
-      sqlalchemy = final.buildPythonPackage (finalAttrs: {
-        pname = "SQLAlchemy";
-        version = "1.3.24";
-        pyproject = true;
-
-        src = fetchPypi {
-          inherit (finalAttrs) pname version;
-          sha256 = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
-        };
-
-        build-system = with final; [
-          setuptools
-        ];
-
-        postInstall = ''
-          sed -e 's:--max-worker-restart=5::g' -i setup.cfg
-        '';
-
-        # tests are pretty annoying to set up for this version, and these dependency overrides are already long enough
-        doCheck = false;
-      });
-    };
-  };
-
   maubot = python.pkgs.buildPythonPackage (finalAttrs: {
     pname = "maubot";
     version = "0.6.0";
@@ -92,7 +58,7 @@ let
         unpaddedbase64
       ]
       ++ lib.optionals sqliteSupport [
-        sqlalchemy
+        sqlalchemy_1_3
       ];
 
     # used for plugin tests
