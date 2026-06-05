@@ -9514,6 +9514,8 @@ self: super: with self; {
 
   london-tube-status = callPackage ../development/python-modules/london-tube-status { };
 
+  lookup-license = callPackage ../development/python-modules/lookup-license { };
+
   lookyloo-models = callPackage ../development/python-modules/lookyloo-models { };
 
   loompy = callPackage ../development/python-modules/loompy { };
