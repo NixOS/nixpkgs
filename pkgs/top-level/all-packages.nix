@@ -9656,7 +9656,6 @@ with pkgs;
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
-      tuiSupport = true;
     }
   );
 
