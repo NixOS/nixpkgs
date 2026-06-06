@@ -15,7 +15,7 @@
 
   # web assets
   zip,
-  nodejs_24,
+  nodejs-slim,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -78,8 +78,7 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  nodejs = nodejs_24;
-  pnpm = pnpm_10.override { inherit nodejs; };
+  pnpm = pnpm_10;
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
@@ -110,7 +109,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     zip
-    nodejs
+    nodejs-slim
     pnpm
     pnpmConfigHook
     writableTmpDirAsHomeHook
