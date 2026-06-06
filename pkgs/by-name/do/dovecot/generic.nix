@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ autoreconfHook ];
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ autoreconfHook ]
+  ++ lib.optionals (withMySQL && lib.strings.versionOlder version "2.4") [ libmysqlclient ];
 
   buildInputs = [
     openssl
@@ -98,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLDAP openldap
   ++ lib.optional withPCRE2 pcre2
   ++ lib.optional withUnwind libunwind
-  ++ lib.optional withMySQL libmysqlclient
+  ++ lib.optional (withMySQL && lib.strings.versionAtLeast version "2.4") libmysqlclient
   ++ lib.optional withPgSQL libpq
   ++ lib.optional withSQLite sqlite
   ++ lib.optional withLua lua5_3;
