@@ -503,13 +503,6 @@
     "hash": "sha256-Oxrgvsm6K2msHxNUZ5S4FUz7BPucrxHpyLdGf5ucKkA=",
     "description": "Microsoft Azure Command-Line Tools Fileshare Extension"
   },
-  "fileshares": {
-    "pname": "fileshares",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fileshares-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-IrJwPQaMuX9VItIEkJzK3cmANHzU50fIaWn2s32nDVk=",
-    "description": "Commands for managing Azure file shares, snapshots, and private endpoint connections"
-  },
   "firmwareanalysis": {
     "pname": "firmwareanalysis",
     "version": "2.0.1",
