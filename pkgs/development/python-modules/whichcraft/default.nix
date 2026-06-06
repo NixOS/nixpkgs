@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
+    changelog = "https://github.com/cookiecutter/whichcraft/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.bsd3;
   };
 })
