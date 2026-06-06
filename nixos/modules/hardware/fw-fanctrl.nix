@@ -6,25 +6,17 @@
 }:
 let
   inherit (lib) types mkOption;
-
-  configFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
-
-  userConfig = settingsFormat.generate "user.json" cfg.settings;
-  finalConfig =
-    if cfg.keepDefaultStrategies then
-      pkgs.runCommand "config.json" { } ''
-        ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/share/fw-fanctrl/config.json ${userConfig} >$out
-      ''
-    else
-      userConfig;
-  fw-fanctrl =
-    if cfg.frameworkToolPackage == pkgs.framework-tool then
-      cfg.package
-    else
-      cfg.package.override { inherit (cfg) frameworkToolPackage; };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "hardware"
+      "fw-fanctrl"
+      "ectoolPackage"
+    ] "This option was removed. Use `hardware.fw-fanctrl.frameworkToolPackage` instead.")
+  ];
+
   options.hardware.fw-fanctrl = {
     enable = lib.mkEnableOption "the fw-fanctrl systemd service and install the needed packages";
 
@@ -54,7 +46,7 @@ in
         Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
       '';
       type = types.submodule {
-        freeformType = types.attrsOf configFormat.type;
+        freeformType = types.attrsOf settingsFormat.type;
         options = {
           defaultStrategy = mkOption {
             type = types.str;
@@ -118,47 +110,57 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      fw-fanctrl
-      cfg.frameworkToolPackage
-    ];
+  config =
+    let
 
-    systemd.services = {
-      fw-fanctrl = {
-        description = "Framework Fan Controller";
-        after = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          ExecStart = "${lib.getExe fw-fanctrl} --output-format JSON run --config ${finalConfig} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
+      userConfig = settingsFormat.generate "user.json" cfg.settings;
+      finalConfig =
+        if cfg.keepDefaultStrategies then
+          pkgs.runCommand "config.json" { } ''
+            ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/share/fw-fanctrl/config.json ${userConfig} >$out
+          ''
+        else
+          userConfig;
+
+      fw-fanctrl = cfg.package.override { framework-tool = cfg.frameworkToolPackage; };
+    in
+    lib.mkIf cfg.enable {
+      environment.systemPackages = [
+        fw-fanctrl
+        cfg.frameworkToolPackage
+      ];
+
+      systemd.services = {
+        fw-fanctrl = {
+          description = "Framework Fan Controller";
+          after = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            ExecStart = "${lib.getExe fw-fanctrl} --output-format JSON run --config ${finalConfig} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
+            ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
+          };
+          wantedBy = [ "multi-user.target" ];
         };
-        wantedBy = [ "multi-user.target" ];
+
+        fw-fanctrl-suspend = {
+          description = "Framework Fan Controller sleep hook";
+          before = [ "sleep.target" ];
+          unitConfig = {
+            StopWhenUnneeded = "yes";
+          };
+          requires = [ "fw-fanctrl.service" ];
+          after = [ "fw-fanctrl.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+            ExecStart = "${lib.getExe fw-fanctrl} pause";
+            ExecStop = "${lib.getExe fw-fanctrl} resume";
+          };
+          wantedBy = [ "sleep.target" ];
+        };
       };
-
-      fw-fanctrl-suspend = {
-        description = "Framework Fan Controller sleep hook";
-        before = [ "sleep.target" ];
-        unitConfig = {
-          StopWhenUnneeded = "yes";
-        };
-        requires = [ "fw-fanctrl.service" ];
-        after = [ "fw-fanctrl.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = "yes";
-          ExecStart = "${lib.getExe fw-fanctrl} pause";
-          ExecStop = "${lib.getExe fw-fanctrl} resume";
-        };
-        wantedBy = [ "sleep.target" ];
-      };
-
-      # Create suspend config
-      environment.etc."systemd/system-sleep/fw-fanctrl-suspend.sh".source =
-        "${cfg.package}/share/fw-fanctrl/fw-fanctrl-suspend";
     };
-  };
 
   meta = {
     maintainers = [ lib.maintainers.Svenum ];

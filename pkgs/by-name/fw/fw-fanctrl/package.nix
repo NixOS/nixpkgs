@@ -25,7 +25,7 @@ python3Packages.buildPythonPackage rec {
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath [ fw-ectool ])
+    (lib.makeBinPath [ framework-tool ])
   ];
 
   postInstall = ''
