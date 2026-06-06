@@ -55,8 +55,6 @@ makeScopeWithSplicing' {
 
       fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
 
-      fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
-
       kdsoap = callPackage ../development/libraries/kdsoap { };
 
       kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
@@ -154,6 +152,9 @@ makeScopeWithSplicing' {
       wayqt = callPackage ../development/libraries/wayqt { };
     }
     // lib.optionalAttrs config.allowAliases {
+      fcitx5-with-addons = throw ''
+        'qt6Packages.fcitx5-with-addons' has been replaced by top-level 'fcitx5-with-addons'.
+      ''; # Added 2026-06-06
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
       ''; # Added 2026-06-06
