@@ -44,12 +44,14 @@ let
   versionSuffix = "20250428154451.19f9cfeddb";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keybase-gui";
   version = "6.5.1"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
+    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${
+      finalAttrs.version + "-" + versionSuffix
+    }_amd64.deb";
     hash = "sha256-PCKi1lavGwLbCoMTMG4h6PJTIzwRAu542eYqDDKzU4Y=";
   };
 
@@ -159,4 +161,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
   };
-}
+})
