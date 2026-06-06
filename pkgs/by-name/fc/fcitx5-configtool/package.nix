@@ -3,25 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
   pkg-config,
   fcitx5,
-  fcitx5-qt,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  qtdeclarative,
-  kitemviews,
-  kwidgetsaddons,
-  kcmutils,
-  kcoreaddons,
-  kdeclarative,
-  kirigami ? null,
+  kdePackages,
   isocodes,
   xkeyboard-config,
   libxkbfile,
-  libplasma ? null,
-  wrapQtAppsHook,
   kcmSupport ? true,
 }:
 
@@ -43,30 +30,30 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     fcitx5
-    fcitx5-qt
-    qtbase
-    qtsvg
-    qtwayland
-    kitemviews
-    kwidgetsaddons
+    kdePackages.fcitx5-qt
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qtwayland
+    kdePackages.kitemviews
+    kdePackages.kwidgetsaddons
     isocodes
     xkeyboard-config
     libxkbfile
   ]
   ++ lib.optionals kcmSupport [
-    qtdeclarative
-    kcoreaddons
-    kdeclarative
-    kcmutils
-    libplasma
-    kirigami
+    kdePackages.qtdeclarative
+    kdePackages.kcoreaddons
+    kdePackages.kdeclarative
+    kdePackages.kcmutils
+    kdePackages.libplasma
+    kdePackages.kirigami
   ];
 
   meta = {
