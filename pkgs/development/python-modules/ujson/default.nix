@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ujson";
-  version = "5.11.0";
+  version = "5.12.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-4gSub5CfCZumtrlCExzuNZ3dorbk6jnBLri5kf4gEOA=";
+    hash = "sha256-W36WQGwwGhNmU0R5pzUuxA7Gi7MnwMEZCRY1rNWSXjU=";
   };
 
   build-system = [ setuptools-scm ];
