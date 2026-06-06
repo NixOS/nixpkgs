@@ -11084,7 +11084,7 @@
     name = "Hugo Tavares Reis";
   };
   httprafa = {
-    email = "rafael.kienitz@gmail.com";
+    email = "rafa.kienitz@proton.me";
     github = "HttpRafa";
     githubId = 60099368;
     name = "Rafael Kienitz";

@@ -9,16 +9,17 @@
   pyluwen,
   tt-tools-common,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tt-flash";
-  version = "3.6.0";
+  version = "3.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-flash";
-    tag = "v${version}";
-    hash = "sha256-io3+fNQWS1Gxb0L0HcQQocOT+ROjQUk4mw7xG3om7oU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p1NzR53n9f4nVQXHDxTlbtqYVTL/5/ZSqkM3ldozsME=";
   };
 
   build-system = [
@@ -33,7 +34,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "tt_flash" ];
-  pythonRelaxDeps = [ "pyyaml" ];
+  pythonRelaxDeps = [
+    "pyyaml"
+    "tabulate"
+  ];
 
   meta = {
     description = "Tenstorrent Firmware Update Utility";
@@ -41,4 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})

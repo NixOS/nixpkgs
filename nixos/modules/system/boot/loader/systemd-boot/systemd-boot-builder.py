@@ -532,6 +532,17 @@ def install_bootloader(args: argparse.Namespace) -> None:
     for profile in get_profiles():
         gens += get_generations(profile)
 
+    if not gens:
+        # With zero generations we would garbage-collect every kernel,
+        # initrd and loader entry off the ESP, leaving the system
+        # unbootable.
+        print(
+            "error: no system generations found in /nix/var/nix/profiles, "
+            "refusing to remove all boot loader entries",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     boot_files: BootFileList = []
     critical_paths: set[Path] = set()
 
