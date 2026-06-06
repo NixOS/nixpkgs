@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ cameronfyfe ];
+    maintainers = [ ];
     mainProgram = "dumbpipe";
   };
 })
