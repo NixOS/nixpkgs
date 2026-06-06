@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-core";
-  version = "0.13.0";
+  version = "0.14.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mistweaverco";
     repo = "kulala-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pUBG8tlybpd/YPArIssCEy5Op47MVPLJsOOolVItZpU=";
+    hash = "sha256-1EtYAKulMQbtYWHZ8MkUA1fMcL3V07/Sz1sjl5PnaI4=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-NjHm6KU6Cd0ZyL1c+bmNbEHb5E83/xjQ5UGRjY1hzgQ=";
+    outputHash = "sha256-XQlBawD3vt8pVc7Gy9XeiGie89HWbljNJt7kUEDaDKk=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
