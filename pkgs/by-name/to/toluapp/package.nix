@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  lua,
+  lua5_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ lua ];
+  buildInputs = [ lua5_1 ];
 
   patches = [
     ./environ-and-linux-is-kinda-posix.patch
