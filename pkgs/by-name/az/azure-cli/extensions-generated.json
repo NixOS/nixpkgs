@@ -155,9 +155,9 @@
   },
   "azure-changesafety": {
     "pname": "azure-changesafety",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_changesafety-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-ZR2Bm9U9C4rXrCfPVGRu65MBFjZ4iUtXS44l+ClJXsY=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_changesafety-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-HTnRKs0YDqHH1tNgrbHdMOFChY7+G6Q4duHTD3KWtPA=",
     "description": "Microsoft Azure Command-Line Tools ChangeSafety Extension"
   },
   "azure-firewall": {
