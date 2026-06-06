@@ -13,12 +13,13 @@
   fetchFromGitHub,
   flask,
   freezegun,
+  graphlib-backport,
   graphql-core,
   inline-snapshot,
   libcst,
   opentelemetry-api,
   opentelemetry-sdk,
-  poetry-core,
+  protobuf,
   pydantic,
   pygments,
   pyinstrument,
@@ -33,33 +34,35 @@
   python-dateutil,
   python-multipart,
   rich,
-  sanic,
   sanic-testing,
+  sanic,
   starlette,
-  typing-extensions,
-  uvicorn,
   typer,
-  graphlib-backport,
+  typing-extensions,
+  uv-build,
+  uvicorn,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "strawberry-graphql";
-  version = "0.289.2";
+  version = "0.316.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = finalAttrs.version;
-    hash = "sha256-eiIyAYId5MHKWmn87Cj/TCNN4YU5KkAWMEMhoMIR8xM=";
+    hash = "sha256-z9ZqIW0DD5/o2nuHqEjcjIaaHMMiT6jRoFddroSPP24=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+    substituteInPlace pyproject.toml \
       --replace-fail "--emoji" ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     cross-web
@@ -77,6 +80,7 @@ buildPythonPackage (finalAttrs: {
       starlette
       python-multipart
     ];
+    apollo-federation = [ protobuf ];
     debug = [
       rich
       libcst
