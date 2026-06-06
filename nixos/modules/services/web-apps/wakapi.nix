@@ -196,14 +196,12 @@ in
       }
     ];
 
-    warnings = [
-      (lib.optionalString (cfg.database.createLocally && cfg.settings.db.dialect != "postgres") ''
-        You have enabled automatic database configuration, but the database dialect is not set to "posgres".
+    warnings = lib.optional (cfg.database.createLocally && cfg.settings.db.dialect != "postgres") ''
+      You have enabled automatic database configuration, but the database dialect is not set to "postgres".
 
-        The Wakapi module only supports PostgreSQL. Please set `services.wakapi.database.createLocally`
-        to `false`, or switch to "postgres" as your database dialect.
-      '')
-    ];
+      The Wakapi module only supports PostgreSQL. Please set `services.wakapi.database.createLocally`
+      to `false`, or switch to "postgres" as your database dialect.
+    '';
 
     users = {
       users.wakapi = {
