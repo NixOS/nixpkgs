@@ -43,6 +43,16 @@ buildGo126Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
+  checkFlags = [
+    # This subtest hardcodes a go-humanize relative-time string ("35 years ago")
+    # for a fixed 1990 date instead of computing it, so it breaks once enough
+    # wall-clock time passes (now "36 years ago"). go-humanize truncates the
+    # elapsed time by a fixed 360-day year (Year = 12*Month, Month = 30*Day), so
+    # diff/Year rolled 35 -> 36 on 2026-05-12. Upstream keeps bumping the
+    # literal by hand rather than fixing it, so skip the time-dependent subtest.
+    "-skip=^TestMarshal/structWithMapsInSection$"
+  ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/scw autocomplete script basename=scw shell=bash >scw.bash
     $out/bin/scw autocomplete script basename=scw shell=fish >scw.fish
