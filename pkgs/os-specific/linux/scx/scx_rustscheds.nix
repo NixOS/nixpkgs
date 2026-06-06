@@ -114,7 +114,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/sched-ext/scx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
     maintainers = with lib.maintainers; [
       johnrtitor
       Gliczy
