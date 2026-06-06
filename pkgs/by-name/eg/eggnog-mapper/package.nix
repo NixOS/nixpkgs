@@ -2,6 +2,7 @@
   lib,
   autoPatchelfHook,
   fetchFromGitHub,
+  fetchpatch2,
   python3Packages,
   wget,
   zlib,
@@ -18,6 +19,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-rjQojz6JA7T03s4PojjXJuDZhdAx9VhPQrlRTGZaYZg=";
   };
+
+  patches = [
+    # From https://github.com/eggnogdb/eggnog-mapper/pull/599
+    (fetchpatch2 {
+      name = "replace-distutils.patch";
+      url = "https://github.com/eggnogdb/eggnog-mapper/commit/998129d3766e060ff450e8f950b5361c6318b0a2.patch?full_index=1";
+      hash = "sha256-xYNd9p5BhGpvFXCWXRSEkZf+Lt4hCRGYeV9Oe4mDz3I=";
+    })
+  ];
 
   postPatch = ''
     # Not a great solution...
