@@ -4,12 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cart";
   version = "1.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-oeWeay1Pr9T4oR3XSrwv9hRr/sLTel1Bt6BG6jHXxIA=";
   };
 
-  propagatedBuildInputs = [ pycryptodome ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pycryptodome ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
