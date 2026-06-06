@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pybluez,
 }:
 
 buildPythonPackage rec {
   pname = "bt-proximity";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "bt_proximity";
@@ -16,7 +17,9 @@ buildPythonPackage rec {
     sha256 = "0xlif91vblbz065531yjf8nmlcahrl4q5pz52bc1jmzz7iv9hpgq";
   };
 
-  propagatedBuildInputs = [ pybluez ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pybluez ];
 
   # there are no tests
   doCheck = false;
