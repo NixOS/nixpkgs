@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
-    hash = "sha256-3hz63DCoym2V4b6Wzi0eH+B8mvGu7pqRNj3Ltk04UTk=";
+    hash = "sha256-4U3dqsjQFMq9mS97enutBzaJa53V7XTNnHEkzxEgpkw=";
   };
 
   sourceRoot = "${src.name}/libs/experimental";
