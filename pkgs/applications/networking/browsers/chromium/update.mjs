@@ -32,15 +32,18 @@ const lockfile = new Proxy(structuredClone(lockfile_initial), flush_to_file_prox
 const ungoogled_rev = argv['ungoogled-chromium-rev']
 
 for (const attr_path of Object.keys(lockfile)) {
-  const ungoogled = attr_path === 'ungoogled-chromium'
+  const ungoogled = attr_path === 'ungoogled'
+  const is_helium = attr_path === 'helium'
 
   if (!argv[attr_path] && !(ungoogled && ungoogled_rev)) {
     console.log(`[${attr_path}] Skipping ${attr_path}. Pass --${attr_path} as argument to update.`)
     continue
   }
 
-  const version_nixpkgs = !ungoogled ? lockfile[attr_path].version : lockfile[attr_path].deps['ungoogled-patches'].rev
-  const version_upstream = !ungoogled ? await get_latest_chromium_release('linux') :
+  const version_nixpkgs = (is_helium || ungoogled) ? lockfile[attr_path].deps['ungoogled-patches'].rev :
+    lockfile[attr_path].version
+  const version_upstream = is_helium ? await get_latest_helium_release() :
+    !ungoogled ? await get_latest_chromium_release('linux') :
     ungoogled_rev ?? await get_latest_ungoogled_release()
 
   console.log(`[${attr_path}] ${chalk.red(version_nixpkgs)} (nixpkgs)`)
@@ -50,23 +53,24 @@ for (const attr_path of Object.keys(lockfile)) {
     console.log(`[${attr_path}] ${chalk.green(version_upstream)} from upstream is newer than our ${chalk.red(version_nixpkgs)}...`)
 
     let ungoogled_patches = ungoogled ? await fetch_ungoogled(version_upstream) : undefined
+    let helium_info = is_helium ? await fetch_helium(version_upstream) : undefined
 
-    // For ungoogled-chromium we need to remove the patch revision (e.g. 130.0.6723.116-1 -> 130.0.6723.116)
-    // by just using the chromium_version.txt content from the patches checkout (to also work with commit revs).
-    const version_chromium = ungoogled_patches?.chromium_version ?? version_upstream
+    // For ungoogled-chromium/helium we need the chromium version from chromium_version.txt.
+    // For pure chromium, we just use the version_upstream directly.
+    const version_chromium = ungoogled_patches?.chromium_version ?? helium_info?.chromium_version ?? version_upstream
 
     const chromium_rev = await chromium_resolve_tag_to_rev(version_chromium)
 
     lockfile[attr_path] = {
       version: version_chromium,
-      chromedriver: !ungoogled ? await fetch_chromedriver_binaries(await get_latest_chromium_release('mac')) : undefined,
+      chromedriver: (!ungoogled && !is_helium) ? await fetch_chromedriver_binaries(await get_latest_chromium_release('mac')) : undefined,
       deps: {
         depot_tools: {},
         gn: await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn),
-        'ungoogled-patches': !ungoogled ? undefined : {
-          rev: ungoogled_patches.rev,
-          hash: ungoogled_patches.hash,
-        },
+        'ungoogled-patches': (ungoogled || is_helium) ? {
+          rev: (ungoogled_patches ?? helium_info).rev,
+          hash: (ungoogled_patches ?? helium_info).hash,
+        } : undefined,
         npmHash: dummy_hash,
       },
       DEPS: {},
@@ -119,6 +123,35 @@ for (const attr_path of Object.keys(lockfile)) {
     }
 
     lockfile[attr_path].deps.npmHash = await prefetch_FOD('-A', `${attr_path}.browser.passthru.npmDeps`)
+
+    if (is_helium) {
+      lockfile[attr_path].deps['helium-linux'] = helium_info.helium_linux
+
+      const hi_deps = helium_info.deps
+
+      const ov = hi_deps?.onboarding?.version
+      if (ov) {
+        const ou = hi_deps.onboarding.url.replaceAll('%(version)s', ov)
+        const oh = await fetch_file_hash(ou, false)
+        lockfile[attr_path].DEPS['src/components/helium_onboarding'] = {
+          url: ou, hash: oh, stripRoot: false
+        }
+      }
+
+      const uv = hi_deps?.ublock_origin?.version
+      if (uv) {
+        const uu = hi_deps.ublock_origin.url.replaceAll('%(version)s', uv)
+        const uh = await fetch_file_hash(uu)
+        lockfile[attr_path].DEPS['src/third_party/ublock'] = { url: uu, hash: uh }
+      }
+
+      const sv = hi_deps?.search_engines_data?.url
+      if (sv) {
+        const sh = await fetch_file_hash(sv, false)
+        const key = 'src/third_party/search_engines_data/resources_internal'
+        lockfile[attr_path].DEPS[key] = { url: sv, hash: sh, stripRoot: false }
+      }
+    }
 
     console.log(chalk.green(`[${attr_path}] Done updating ${attr_path} from ${version_nixpkgs} to ${version_upstream}!`))
   }
@@ -276,4 +309,74 @@ async function prefetch_FOD(...args) {
   }
 
   return hash
+}
+
+
+// Helium release helpers
+async function get_latest_helium_release() {
+  const url = 'https://api.github.com/repos/imputnet/helium/releases/latest'
+  const response = await (await fetch(url)).json()
+  return response.tag_name
+}
+
+async function fetch_helium(version) {
+  const chromiumVersionPath = `https://raw.githubusercontent.com/imputnet/helium/${version}/chromium_version.txt`
+  const chromiumVersion = (await (await fetch(chromiumVersionPath)).text()).trim()
+
+  const depsIniPath = `https://raw.githubusercontent.com/imputnet/helium/${version}/deps.ini`
+  const depsIniText = await (await fetch(depsIniPath)).text()
+  const deps = parse_deps_ini(depsIniText)
+
+  const srcHash = await prefetch_github_source('imputnet', 'helium', version)
+
+  let heliumLinuxHash = null
+  let heliumLinuxCommit = null
+  for (const suffix of ['.1', '.2', '']) {
+    try {
+      const candidate = `${version}${suffix}`
+      heliumLinuxCommit = await resolve_github_commit('imputnet', 'helium-linux', candidate)
+      heliumLinuxHash = await prefetch_github_source('imputnet', 'helium-linux', heliumLinuxCommit)
+      break
+    } catch { /* tag doesn't exist, try next */ }
+  }
+
+  return {
+    rev: version,
+    hash: srcHash,
+    chromium_version: chromiumVersion,
+    deps,
+    helium_linux: { rev: heliumLinuxCommit, hash: heliumLinuxHash },
+  }
+}
+
+function parse_deps_ini(text) {
+  const result = {}
+  let current = null
+  for (const line of text.split('\n')) {
+    const section = line.match(/^\[(\w+)\]/)
+    if (section) { current = section[1]; result[current] = {}; continue }
+    if (!current) continue
+    const kv = line.match(/^(\w+)\s*=\s*(.+)$/)
+    if (kv) result[current][kv[1]] = kv[2].trim()
+  }
+  return result
+}
+
+async function resolve_github_commit(owner, repo, tag) {
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/ref/tags/${tag}`
+  const response = await (await fetch(url)).json()
+  return response.object.sha
+}
+
+async function prefetch_github_source(owner, repo, rev) {
+  const tarball = `https://github.com/${owner}/${repo}/archive/${rev}.tar.gz`
+  const expr = [`(import ./. {}).fetchzip { url = "${tarball}"; hash = ""; }`]
+  const derivation = await $nixpkgs`nix-instantiate --expr ${expr}`
+  return await prefetch_FOD(derivation)
+}
+
+async function fetch_file_hash(url, stripRoot = true) {
+  const expr = [`(import ./. {}).fetchzip { url = "${url}"; hash = ""; stripRoot = ${stripRoot}; }`]
+  const derivation = await $nixpkgs`nix-instantiate --expr ${expr}`
+  return await prefetch_FOD(derivation)
 }
