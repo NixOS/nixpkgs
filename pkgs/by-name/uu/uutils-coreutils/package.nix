@@ -21,13 +21,13 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-nH0WtsVP1uwPvimpGnmWx5v0VButIFJu9K5wXsiC4cA=";
+    hash = "sha256-g+RuVQr7CNtF9eqEJb3dlgfgPO3aRwWgXWPniNmhXeA=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-FMTzMgXcAg9dk7dfYG7lTOHYJxN3YHjf0R96LS7W3FI=";
+    hash = "sha256-WoPqxO1TBt4eCOR3tlzuoXqH9u/mTHR5Dr/WnKLxyYM=";
   };
 
   buildInputs =
