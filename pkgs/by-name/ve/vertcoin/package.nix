@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  CXXFLAGS = "-Wno-error -std=c++17";
+  env.CXXFLAGS = "-Wno-error -std=c++17";
 
   configureFlags = [
     "--with-boost=${boost.dev}"
