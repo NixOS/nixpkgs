@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pystemmer";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "pystemmer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c3ucbneUo5UBfdrd5Ktl4HriVusvWBEA1brrgahEQ9A=";
+    hash = "sha256-GPPl6ioB9sB2y8G2hYfu2ksR+D9xNJjK6glMADLnr7M=";
   };
 
   build-system = [
