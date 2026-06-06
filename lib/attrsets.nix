@@ -1615,7 +1615,7 @@ rec {
         if end - start >= 2 then
           # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
           # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
+          binaryMerge start ((start + end) / 2) // binaryMerge ((start + end) / 2) end
         else
           # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
           elemAt list start;
