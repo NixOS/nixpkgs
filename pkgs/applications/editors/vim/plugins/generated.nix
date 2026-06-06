@@ -7316,9 +7316,10 @@ final: prev: {
       owner = "Zeioth";
       repo = "heirline-components.nvim";
       rev = "5ea9a16286c01b7c36d58c91903d1f8ff0b7ddeb";
-      sha256 = "0gij9c9qgmqc99fnqnvp6icxp32q0wkz536ric2x5vpbqlzsdkik";
+      hash = "sha256-M86mP8Xr7tIFi9mM8icHWIzbWTR3W2xdSgzXhxNLMj4=";
     };
     meta.homepage = "https://github.com/Zeioth/heirline-components.nvim/";
+    meta.license = unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -25557,6 +25558,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/fgheng/winbar.nvim/";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  windline-nvim = buildVimPlugin {
+    pname = "windline.nvim";
+    version = "1.1.0";
+    src = fetchFromGitHub {
+      owner = "windwp";
+      repo = "windline.nvim";
+      tag = "1.1.0";
+      hash = "sha256-UM79sfWhNygTbAoLT+xy7U9veJzjQOu8F56u+j93eG0=";
+    };
+    meta.homepage = "https://github.com/windwp/windline.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
