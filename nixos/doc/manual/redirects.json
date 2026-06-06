@@ -65,6 +65,9 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-keycloak-vault": [
+    "index.html#module-services-keycloak-vault"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
