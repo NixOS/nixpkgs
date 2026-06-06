@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Snowball stemming algorithms, for information retrieval";
-    downloadPage = "https://github.com/snowballstem/pystemmer";
-    homepage = "http://snowball.tartarus.org/";
+    homepage = "https://github.com/snowballstem/pystemmer";
     license = with lib.licenses; [
       bsd3
       mit
