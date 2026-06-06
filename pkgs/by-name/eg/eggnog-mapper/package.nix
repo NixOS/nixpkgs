@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eggnog-mapper";
   version = "2.1.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
@@ -29,14 +29,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    # Not a great solution...
-    substituteInPlace setup.cfg \
-      --replace "==" ">="
-  '';
-
   nativeBuildInputs = [
     autoPatchelfHook
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   buildInputs = [
@@ -45,12 +43,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = [
     wget
-  ]
-  ++ (with python3Packages; [
+  ];
+
+  dependencies = with python3Packages; [
     biopython
     psutil
     xlsxwriter
-  ]);
+  ];
+
+  # Upstream already relaxed these dependencies, but that is not yet included in 2.1.14
+  pythonRelaxDeps = [
+    "biopython"
+    "psutil"
+    "xlsxwriter"
+  ];
 
   # Tests rely on some of the databases being available, which is not bundled
   # with this package as (1) in total, they represent >100GB of data, and (2)
