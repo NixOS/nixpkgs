@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  versioneer,
   numpy,
   pytestCheckHook,
   python,
@@ -10,14 +12,19 @@
 buildPythonPackage rec {
   pname = "bottleneck";
   version = "1.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Ao1G7ksCWtmrTXmSQROBb4JfYrF7h8nh0NjOFEpKDjE=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
