@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  glibcLocales,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -15,9 +14,6 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     sha256 = "11yfkzyplizdgndy34vyd5qlmr1n5mxis3a3svxmx8fnccdvknxc";
   };
-
-  env.LC_ALL = "en_US.utf-8";
-  buildInputs = [ glibcLocales ];
 
   nativeCheckInputs = [ pytest ];
 
