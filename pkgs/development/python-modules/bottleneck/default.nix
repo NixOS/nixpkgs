@@ -33,8 +33,6 @@ buildPythonPackage (finalAttrs: {
   preCheck = "pushd $out";
   postCheck = "popd";
 
-  disabledTests = [ "test_make_c_files" ];
-
   pythonImportsCheck = [ "bottleneck" ];
 
   meta = {
