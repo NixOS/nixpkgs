@@ -12,7 +12,7 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
+  crossOverlays,
 }:
 
 let
