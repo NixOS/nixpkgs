@@ -22,17 +22,17 @@ in
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "mvnd";
-  version = "1.0.5";
+  version = "1.0.6";
   src = fetchFromGitHub {
     owner = "apache";
     repo = "maven-mvnd";
     rev = finalAttrs.version;
-    sha256 = "sha256-/ODRS6xaxkn7okUh8phN1GUNG7tDAKjmAIQn8NrC+ag=";
+    sha256 = "sha256-0Po3LOsK3u984+g7ACtGa5KSgKfsAwLLORP6YEUHhKo=";
   };
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-flA72bE6on3KolJ/tQT1ad92GQnybyykPbWG4Yn88rU=";
+  mvnHash = "sha256-dgKQj6xa10MkFmxUckwW5FqKS3Tf95aP/RmKXSRqtCg=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce

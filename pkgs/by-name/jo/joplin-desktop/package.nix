@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "@joplin/app-desktop";
+      startupWMClass = "joplin-app-desktop";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];
