@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   metakernel,
   svgwrite,
   ipywidgets,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "calysto";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Calysto";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-lr/cHFshpFs/PGMCsa3FKMRPTP+eE9ziH5XCpV+KzO8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     metakernel
     svgwrite
     ipywidgets
