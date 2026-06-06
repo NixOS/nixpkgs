@@ -61,7 +61,7 @@ import ../make-test-python.nix (
           description = "connect to shadowsocks";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
-          path = with pkgs; [ shadowsocks-libev ];
+          path = with pkgs; [ shadowsocks-rust ];
           script = ''
             exec ss-local \
                 -s 192.168.0.1 \

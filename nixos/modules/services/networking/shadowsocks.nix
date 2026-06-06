@@ -29,14 +29,6 @@ let
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
-  executablesMap = {
-    "${getName pkgs.shadowsocks-libev}" = {
-      server = "ss-server";
-    };
-    "${getName pkgs.shadowsocks-rust}" = {
-      server = "ssserver";
-    };
-  };
 in
 {
 
@@ -50,12 +42,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to run shadowsocks-libev shadowsocks server.
+          Whether to run shadowsocks-rust shadowsocks server.
         '';
       };
 
       package = mkPackageOption pkgs "Shadowsocks" {
-        default = "shadowsocks-libev";
+        default = "shadowsocks-rust";
       };
 
       localAddress = mkOption {
@@ -157,8 +149,8 @@ in
           provided options. The provided attrset will be serialized to JSON and
           has to contain valid shadowsocks options. Unfortunately most
           additional options are undocumented but it's easy to find out what is
-          available by looking into the source code of
-          <https://github.com/shadowsocks/shadowsocks-libev/blob/master/src/jconf.c>
+          available by looking at the wiki
+          <https://github.com/shadowsocks/shadowsocks/wiki>
         '';
       };
     };
@@ -171,8 +163,6 @@ in
     assertions = [
       {
         # xor, make sure either password or passwordFile be set.
-        # shadowsocks-libev not support plain/none encryption method
-        # which indicated that password must set.
         assertion =
           let
             noPasswd = cfg.password == null;
@@ -202,7 +192,7 @@ in
         ${optionalString (cfg.passwordFile != null) ''
           cat ${configFile} | jq --arg password "$(cat "${cfg.passwordFile}")" '. + { password: $password }' > /tmp/shadowsocks.json
         ''}
-        exec ${(executablesMap.${getName cfg.package}).server} -c ${
+        exec ${lib.getExe' cfg.package "ssserver"} -c ${
           if cfg.passwordFile != null then "/tmp/shadowsocks.json" else configFile
         }
       '';
