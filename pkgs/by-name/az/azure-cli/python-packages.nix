@@ -148,8 +148,14 @@ let
 
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
-        overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
-          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+        (overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
+          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+            ];
+          });
 
       # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
       azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {

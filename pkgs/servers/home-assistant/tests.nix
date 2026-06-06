@@ -126,10 +126,22 @@ let
       # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
+    homeassistant_connect_zbt2 = [
+      # [2026.6.1] AssertionError: assert <ConfigEntryState.LOADED: 'loaded'> is <ConfigEntryState.SETUP_RETRY: 'setup_retry'>
+      "test_usb_device_reactivity"
+    ];
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
+    ];
     opendisplay = [
       # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
       # https://github.com/home-assistant/core/pull/172909
       "test_upload_image_device_not_in_range"
+    ];
+    yardian = [
+      # [2026.6.1] failing snapshot
+      "test_all_entities"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
