@@ -10,6 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libstemmer";
   version = "2.2.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "snowball";
