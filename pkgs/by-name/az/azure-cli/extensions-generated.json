@@ -1030,9 +1030,9 @@
   },
   "site": {
     "pname": "site",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/site-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-OZ2569Gt1U+UzNHe4jsO3nTMUjipqGaCKoKbN0PDXpA=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/site-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-soEnNlH5/Mvzgj++o6LvpIheUrV13ZSQfWS4hNJZaeI=",
     "description": "Microsoft Azure Command-Line Tools Site Extension"
   },
   "site-recovery": {
