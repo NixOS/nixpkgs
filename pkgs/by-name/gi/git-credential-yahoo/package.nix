@@ -3,7 +3,7 @@
   callPackage,
 }:
 
-callPackage ../package.nix {
+callPackage ../git-credential-email/package.nix {
   pname = "git-credential-yahoo";
   scripts = [ "git-credential-yahoo" ];
   description = "Git credential helper for Yahoo accounts";
