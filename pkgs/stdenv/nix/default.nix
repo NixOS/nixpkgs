@@ -1,11 +1,10 @@
 {
   lib,
-  crossSystem,
   localSystem,
+  crossSystem,
   config,
   overlays,
   bootStages,
-  ...
 }:
 
 assert crossSystem == localSystem;
