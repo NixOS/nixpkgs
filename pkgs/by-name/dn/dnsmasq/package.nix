@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.92rel2";
+  version = "2.93";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Q9crjBKb3zPRe6/tyYgj9j5GtQBRKAZr8NKkcqMs4Go=";
+    hash = "sha256-DADU5cl8gwbl+5MrNIs0JpycKaDn3w6OgpWLQHCSvBk=";
   };
 
   patches = [
@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       fpletz
+      yuannan
     ];
   };
 })
