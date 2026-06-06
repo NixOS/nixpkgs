@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # build-system
+  ninja,
   setuptools,
   torch,
 
@@ -92,6 +93,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   '';
 
   build-system = [
+    ninja
     setuptools
     torch
   ];
