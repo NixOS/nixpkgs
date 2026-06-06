@@ -1191,8 +1191,6 @@ with pkgs;
 
   github-cli = gh;
 
-  git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
-
   git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
 
   git-credential-gmail = callPackage ../by-name/gi/git-credential-email/git-credential-gmail { };
