@@ -1,6 +1,7 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 appimageTools.wrapType2 {
@@ -12,11 +13,14 @@ appimageTools.wrapType2 {
     hash = "sha256-OzGwDiFrC4vdX+b1BBg5RQXyNW9ejlPFpODnoYEkt0g=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Free open-source desktop trading journal by Tradicted";
     homepage = "https://www.tradicted.com";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
