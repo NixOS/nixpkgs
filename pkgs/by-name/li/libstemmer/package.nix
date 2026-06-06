@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Snowball Stemming Algorithms";
     homepage = "https://snowballstem.org/";
+    changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.all;
