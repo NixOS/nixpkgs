@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   aiohttp,
   aioresponses,
   orjson,
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   pname = "bond-async";
   version = "0.2.1";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bondhome";
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-YRJHUOYFLf4dtQGIFKHLdUQxWTnZzG1MPirMsGvDor8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     orjson
   ];
