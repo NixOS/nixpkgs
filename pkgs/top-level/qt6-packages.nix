@@ -49,8 +49,6 @@ makeScopeWithSplicing' {
 
       fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
-      fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
-
       fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
       fcitx5-skk-qt = pkgs.fcitx5-skk.override { enableQt = true; };
@@ -156,6 +154,9 @@ makeScopeWithSplicing' {
       wayqt = callPackage ../development/libraries/wayqt { };
     }
     // lib.optionalAttrs config.allowAliases {
+      fcitx5-configtool = throw ''
+        'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
+      ''; # Added 2026-06-06
       qwlroots = throw ''
         'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
         The upstream no longer provides it as a standalone development library.
