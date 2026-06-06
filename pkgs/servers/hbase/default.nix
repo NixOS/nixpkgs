@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  bash,
   makeWrapper,
-  jdk11_headless,
+  jdk21_headless,
   nixosTests,
 }:
 
@@ -12,12 +13,21 @@ let
     {
       version,
       hash,
-      jdk ? jdk11_headless,
+      # JDK 21 is the latest runtime supported by all currently packaged HBase
+      # releases (2.4 through 3.0). This is verified by nixosTests.hbase*, not by
+      # upstream docs (which still recommend JDK 17). JDK 23+ is unusable: HBase
+      # relies on Hadoop's UserGroupInformation, which calls the removed
+      # Subject.getSubject(), so the master fails to start with
+      # "UnsupportedOperationException: getSubject is not supported".
+      jdk ? jdk21_headless,
       tests,
     }:
     stdenv.mkDerivation rec {
       pname = "hbase";
       inherit version;
+
+      strictDeps = true;
+      __structuredAttrs = true;
 
       src = fetchurl {
         url = "mirror://apache/hbase/${version}/hbase-${version}-bin.tar.gz";
@@ -25,6 +35,7 @@ let
       };
 
       nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ bash ];
       installPhase = ''
         mkdir -p $out
         cp -R * $out
@@ -33,7 +44,7 @@ let
           --set-default HBASE_CONF_DIR "$out/conf/"
       '';
 
-      passthru = { inherit tests; };
+      passthru = { inherit tests jdk; };
 
       meta = {
         description = "Distributed, scalable, big data store";
@@ -51,13 +62,13 @@ in
     tests.standalone = nixosTests.hbase_2_4;
   };
   hbase_2_5 = common {
-    version = "2.5.11";
-    hash = "sha256-W3o8J+aY2bQoiu1Lr1n5EQWDVoS1OwWTNIUAU03a5Es=";
+    version = "2.5.14";
+    hash = "sha256-2ZwramW5welrYSGuGe7Z6lmpKdq43hld9X5k09THmjA=";
     tests.standalone = nixosTests.hbase_2_5;
   };
   hbase_2_6 = common {
-    version = "2.6.2";
-    hash = "sha256-X/mjmTAx9anh2U/Xlfuf+O4AO5BXDkdsY69tPddEpYM=";
+    version = "2.6.5";
+    hash = "sha256-+ap1ymg925QvM6UDKrc5dQn+Sou4UfUHgXamalgy/CE=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {
