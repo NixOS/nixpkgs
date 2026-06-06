@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eggnog-mapper";
-  version = "2.1.13";
+  version = "2.1.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
-    tag = finalAttrs.version;
-    hash = "sha256-Gu4D8DBvgCPlO+2MjeNZy6+lNqsIlksegWmmYvEZmUU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rjQojz6JA7T03s4PojjXJuDZhdAx9VhPQrlRTGZaYZg=";
   };
 
   postPatch = ''
