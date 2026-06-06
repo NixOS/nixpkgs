@@ -1,22 +1,37 @@
-use std::{fs, path::Path, process::Command};
+use std::{ffi::CString, fs, path::Path};
 
 use anyhow::{Context, Result, anyhow};
+use rustix::mount::MountFlags;
 
-/// Call `mount` with the provided `args`.
-pub fn mount(args: &[&str]) -> Result<()> {
-    let output = Command::new("mount")
-        .args(args)
-        .output()
-        .context("Failed to run mount. Most likely, the binary is not on PATH")?;
-
-    if !output.status.success() {
-        return Err(anyhow!(
-            "mount executed unsuccessfully: {}",
-            String::from_utf8_lossy(&output.stderr)
-        ));
+/// Split mount options into VFS flags and a filesystem data string for `mount(2)`.
+///
+/// # Panics
+///
+/// Panics if any option contains an interior NUL byte.
+pub fn split_mount_opts<S: AsRef<str>>(opts: &[S]) -> (MountFlags, CString) {
+    let mut flags = MountFlags::empty();
+    let mut data = Vec::new();
+    for opt in opts {
+        match opt.as_ref() {
+            "ro" => flags |= MountFlags::RDONLY,
+            "rw" => flags.remove(MountFlags::RDONLY),
+            "nosuid" => flags |= MountFlags::NOSUID,
+            "nodev" => flags |= MountFlags::NODEV,
+            "noexec" => flags |= MountFlags::NOEXEC,
+            "sync" => flags |= MountFlags::SYNCHRONOUS,
+            "dirsync" => flags |= MountFlags::DIRSYNC,
+            "noatime" => flags |= MountFlags::NOATIME,
+            "nodiratime" => flags |= MountFlags::NODIRATIME,
+            "relatime" => flags |= MountFlags::RELATIME,
+            "strictatime" => flags |= MountFlags::STRICTATIME,
+            "lazytime" => flags |= MountFlags::LAZYTIME,
+            other => data.push(other),
+        }
     }
-
-    Ok(())
+    (
+        flags,
+        CString::new(data.join(",")).expect("mount option contains NUL"),
+    )
 }
 
 /// Atomically symlink a file.
