@@ -1945,10 +1945,6 @@ with pkgs;
     libsbsms_2_3_0
     ;
 
-  m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
-
-  libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
-
   skkDictionaries = recurseIntoAttrs (callPackages ../tools/inputmethods/skk/skk-dicts { });
 
   ibus = callPackage ../tools/inputmethods/ibus { };
