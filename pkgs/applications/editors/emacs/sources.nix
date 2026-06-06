@@ -118,7 +118,7 @@ in
     version = "30.2";
     variant = "mainline";
     rev = "emacs-30.2";
-    hash = "sha256-W2eZ+cNQhi/fMeRkwOqSKU7Vzvp43WUOpiwaLLNEXtg=";
+    hash = "sha256-3Lfb3HqdlXqSnwJfxe7npa4GGR9djldy8bKRpkQCdSA=";
     patches = fetchpatch: [
       (fetchpatch {
         name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
