@@ -123,5 +123,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ kranzes ];
+  meta.maintainers = with lib.maintainers; [
+    kranzes
+    marie
+  ];
 }
