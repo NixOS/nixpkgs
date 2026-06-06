@@ -202,6 +202,7 @@ let
         in
         python;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      abiFlags = lib.optionalString (!enableGIL) "t" + lib.optionalString enableDebug "d";
       libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     in
     passthruFun {
@@ -213,7 +214,7 @@ let
         pythonVersion
         ;
       implementation = "cpython";
-      executable = libPrefix;
+      executable = "python${pythonVersion}${abiFlags}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)
@@ -227,7 +228,7 @@ let
       pythonABITags = [
         "abi3"
         "none"
-        "cp${sourceVersion.major}${sourceVersion.minor}${lib.optionalString (!enableGIL) "t"}"
+        "cp${sourceVersion.major}${sourceVersion.minor}${abiFlags}"
       ];
     };
 
