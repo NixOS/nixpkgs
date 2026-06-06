@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
-    homepage = "http://sigal.saimon.org/en/latest/index.html";
+    homepage = "https://snowballstem.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
