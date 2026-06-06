@@ -4,6 +4,7 @@
   clang,
   fetchFromGitHub,
   fetchNpmDeps,
+  glib-networking,
   lib,
   libappindicator,
   libappindicator-gtk3,
@@ -80,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           libayatana-appindicator
         ]
       }
+      --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
     )
   '';
 
