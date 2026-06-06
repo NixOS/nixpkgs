@@ -82,7 +82,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       [
         cuda_cudart # cuda_runtime_api.h
         libcusparse # cusparse.h
-        cuda_cccl # nv/target
+        cccl # nv/target
         libcublas # cublas_v2.h
         libcusolver # cusolverDn.h
         libcurand # curand_kernel.h

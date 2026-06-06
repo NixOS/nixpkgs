@@ -136,7 +136,7 @@ let
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
     (cuda_nvprune.__spliced.buildHost or cuda_nvprune)
-    cuda_cccl # block_load.cuh
+    cccl # block_load.cuh
     cuda_cudart # cuda.h
     cuda_cupti # cupti.h
     cuda_nvcc # See https://github.com/google/jax/issues/19811

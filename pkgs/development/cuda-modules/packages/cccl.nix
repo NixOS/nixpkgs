@@ -7,7 +7,7 @@
 }:
 buildRedist {
   redistName = "cuda";
-  pname = "cuda_cccl";
+  pname = if cudaAtLeast "13.3" then "cccl" else "cuda_cccl";
 
   # Restrict header-only packages to a single output.
   # Also, when using multiple outputs (i.e., `out`, `dev`, and `include`), something isn't being patched correctly,
