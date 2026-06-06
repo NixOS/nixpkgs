@@ -2397,6 +2397,7 @@ mapAliases {
   xloadimage = throw "'xloadimage' has been removed as it was unmaintained upstream"; # Added 2026-05-05
   xmlada = throw "'xmlada' has been renamed to/replaced by 'gnatPackages.xmlada'"; # Converted to throw 2025-10-27
   xmlroff = throw "'xmlroff' has been removed as it is unmaintained and broken"; # Added 2025-05-18
+  xneur = throw "'xneur' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-06
   xo = throw "Use 'dbtpl' instead of 'xo'"; # Added 2025-09-28
   xonsh-unwrapped = throw "'xonsh-unwrapped' has been renamed to/replaced by 'python3Packages.xonsh'"; # Converted to throw 2025-10-27
   xorg = # Added 2026-01-29
