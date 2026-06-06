@@ -472,14 +472,12 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ json2x ];
-              value = builtins.toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2x toml "$valuePath" "$out"
+              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
