@@ -13,6 +13,7 @@ buildPythonPackage (finalAttrs: {
   pname = "triton";
   version = "3.6.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   src =
     let
