@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "redisvl";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-vl-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x8HotooGv1u5uGls1Y9HiioVzpF+MT6oYspdmZUpgh0=";
+    hash = "sha256-qzGK/M2KXVR9FEutA8xQU9bMYWerOFS2BzNtuAW9n0Q=";
   };
 
   build-system = [ hatchling ];

@@ -212,6 +212,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ];
 
+  # This is required for building the rust build.rs script when cross compiling
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
+  ];
+
   env = {
     # required to support pthread_cancel()
     NIX_LDFLAGS =

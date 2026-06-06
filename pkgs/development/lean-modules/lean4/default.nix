@@ -4,6 +4,7 @@
   stdenv,
   symlinkJoin,
   cmake,
+  cctools,
   fetchFromGitHub,
   git,
   gmp,
@@ -75,7 +76,8 @@ let
       cmake
       leangz
       pkg-config
-    ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
     buildInputs = [
       gmp

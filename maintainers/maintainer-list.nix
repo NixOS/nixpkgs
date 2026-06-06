@@ -11084,7 +11084,7 @@
     name = "Hugo Tavares Reis";
   };
   httprafa = {
-    email = "rafael.kienitz@gmail.com";
+    email = "rafa.kienitz@proton.me";
     github = "HttpRafa";
     githubId = 60099368;
     name = "Rafael Kienitz";
@@ -25088,6 +25088,12 @@
     github = "sestrella";
     githubId = 2049686;
     name = "Sebastián Estrella";
+  };
+  seudonym = {
+    name = "Wahid Khan";
+    email = "wk170179+nixpkgs@gmail.com";
+    github = "seudonym";
+    githubId = 80459261;
   };
   seven_bear = {
     name = "Edmond Freeman";

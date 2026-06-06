@@ -3,18 +3,19 @@
   buildPythonPackage,
   fetchPypi,
   libusbsio,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libusbsio";
-  format = "setuptools";
-  version = "2.1.13";
   # If the versions come back into sync switch back to inheriting from c lib
   # inherit (libusbsio) version;
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3xudSyqfXq3wsFdOgBeGK1nSY0NZjx9UhmTqbQGXWyU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-zs4LXyTQzrUrepp4ZEI+0rEq5F1BAXFmGaE85KLIqwA=";
   };
 
   # The source includes both the python module directly and also prebuilt binaries
@@ -22,8 +23,14 @@ buildPythonPackage rec {
   postPatch = ''
     rm -rf libusbsio/bin
     substituteInPlace libusbsio/libusbsio.py \
-        --replace "dllpath = LIBUSBSIO._lookup_dll_path(dfltdir, dllname)" 'dllpath = "${libusbsio}/lib/" + dllname'
+        --replace-fail \
+          "dllpath = LIBUSBSIO._lookup_dll_path(dfltdir, dllname)" \
+          'dllpath = "${lib.getLib libusbsio}/lib/" + dllname'
   '';
+
+  build-system = [
+    setuptools
+  ];
 
   buildInputs = [ libusbsio ];
 
@@ -38,4 +45,4 @@ buildPythonPackage rec {
     maintainers = [
     ];
   };
-}
+})

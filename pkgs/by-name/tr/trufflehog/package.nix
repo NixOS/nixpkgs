@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "trufflehog";
-  version = "3.95.4";
+  version = "3.95.5";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
