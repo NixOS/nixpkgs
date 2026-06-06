@@ -168,6 +168,7 @@ with haskellLib;
           null;
     }
   );
+  extensions_0_1_1_0 = doJailbreak super.extensions_0_1_1_0;
 
   # First to upgrade to lsp >= 2.8 while HLS hasn't yet had a compatible release
   futhark = super.futhark.override {
@@ -203,7 +204,7 @@ with haskellLib;
           # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
           cabal-install-parsers = doJailbreak lsuper.cabal-install-parsers;
           # Need a newer version of extensions to be compatible with the newer Cabal
-          extensions = doJailbreak lself.extensions_0_1_1_0;
+          extensions = lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
           # because some packages, like ormolu, need a newer Cabal version.
           # ghc-paths is special because it depends on Cabal for building
