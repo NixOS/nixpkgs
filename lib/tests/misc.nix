@@ -196,12 +196,16 @@ runTests {
         empty = runTests { };
         testlist-unspecified-without-prefixed = runTests test-cases-without-prefixed;
         testlist-unspecified-with-prefixed = runTests test-cases;
+        testlist-empty-without-prefixed = runTests (test-cases-without-prefixed // { tests = [ ]; });
+        testlist-empty-with-prefixed = runTests (test-cases // { tests = [ ]; });
         testlist-nonempty = runTests (test-cases // { tests = lib.attrNames test-cases-without-prefixed; });
       };
       expected = {
         empty = [ ];
         testlist-unspecified-without-prefixed = [ ];
         testlist-unspecified-with-prefixed = toResult { inherit (test-cases) test-bar-false; };
+        testlist-empty-without-prefixed = [ ];
+        testlist-empty-with-prefixed = toResult { inherit (test-cases) test-bar-false; };
         testlist-nonempty = toResult { inherit (test-cases) foo-false; };
       };
     };
