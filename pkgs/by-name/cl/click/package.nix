@@ -5,16 +5,19 @@
   stdenv,
   pkg-config,
   openssl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "click";
   version = "0.6.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "click";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tYSbyDipZg6Qj/CWk1QVUT5AG8ncTt+5V1+ekpmsKXA=";
   };
 
@@ -24,15 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Command Line Interactive Controller for Kubernetes";
     homepage = "https://github.com/databricks/click";
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.mbode ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
     mainProgram = "click";
   };
 })
