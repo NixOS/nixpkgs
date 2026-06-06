@@ -277,6 +277,11 @@ with haskellLib;
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
 
+  stan = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/kowainik/stan/commit/32bceb9de10d166dd5c67ad1f4a7f1bb2afe3020.patch";
+    sha256 = "sha256-BwyVSm0A4/xUGk0C+ZAdZwf6UwT4+aLFU6R1byVwt+g=";
+  }) super.stan;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
