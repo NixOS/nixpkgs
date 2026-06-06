@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "boa-api";
   version = "0.1.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boalang";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     sha256 = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
   };
+
+  build-system = [ setuptools ];
 
   # upstream has no tests
   doCheck = false;
