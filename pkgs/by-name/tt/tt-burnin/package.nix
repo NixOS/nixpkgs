@@ -16,11 +16,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-NI32BerBCuMMulB2fsseeoWI50iklpNqMyTs4BArl2A=";
   };
 
-  # Remove when https://github.com/NixOS/nixpkgs/pull/444714 is merged
-  pythonRelaxDeps = [
-    "pyluwen"
-  ];
-
   build-system = with python3Packages; [
     setuptools
     setuptools-scm
