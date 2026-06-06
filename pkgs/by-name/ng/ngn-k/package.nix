@@ -4,9 +4,11 @@
   fetchFromCodeberg,
   makeWrapper,
   runtimeShell,
+  runCommand,
+  util-linux,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngn-k";
   version = "0-unstable-2025-11-17";
 
@@ -54,6 +56,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests.repl = runCommand "ngn-k-repl-test" { nativeBuildInputs = [ util-linux ]; } ''
+    printf '\\a\n 2!!7!4\n' \
+      | script -qec ${lib.getExe' finalAttrs.finalPackage "k-repl"} /dev/null \
+        > "$out" 2>&1 || true
+    grep -q 'GNU AFFERO GENERAL PUBLIC LICENSE' "$out"
+    grep -q '0 1 0 1' "$out"
+  '';
+
+  passthru.tests.eval = runCommand "ngn-k-eval-test" { } ''
+    echo '2!!7!4' > prog.k
+    ${lib.getExe' finalAttrs.finalPackage "k"} prog.k > "$out"
+    [ "$(cat "$out")" = "0 1 0 1" ]
+  '';
+
   meta = {
     description = "Simple fast vector programming language";
     homepage = "https://codeberg.org/ngn/k";
@@ -61,4 +77,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})
