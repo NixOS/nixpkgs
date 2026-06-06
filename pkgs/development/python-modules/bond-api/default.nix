@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   aiohttp,
   aioresponses,
   pytest-asyncio,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "bond-api";
   version = "0.1.18";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prystupa";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-+87/j94eHyW3EMMBK+aXaNTVoNxsixeLusyBsPWa9yM=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aioresponses
