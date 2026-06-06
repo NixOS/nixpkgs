@@ -54,6 +54,8 @@ buildHomeAssistantComponent rec {
   disabledTests = [
     # custom_components.homematicip_local.support.InvalidConfig: C
     "test_async_validate_config_and_get_system_information"
+    # Failed: Lingering timer after test <TimerHandle when=3043632.864116499 Store._async_schedule_callback_delayed_write() created at /nix/store/5rh57mhaihd9wff1rqnskvs8nxh9sv3z-homeassistant-2026.6.0/lib/python3.14/site-packages/homeassistant/helpers/storage.py:516>
+    "test_reauth_flow_success"
   ];
 
   meta = {

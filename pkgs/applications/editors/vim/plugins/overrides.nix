@@ -132,6 +132,8 @@
   # tv.nvim dependency
   television,
   tree-sitter,
+  # fugit2-nvim
+  gpgme,
 }:
 self: super:
 let
@@ -1502,11 +1504,17 @@ assertNoAdditions {
       plenary-nvim
     ];
     # Patch libgit2 library dependency
+    # Patch gpgme path
     postPatch = ''
       substituteInPlace lua/fugit2/core/libgit2.lua \
         --replace-fail \
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
+
+      substituteInPlace lua/fugit2/core/gpgme.lua \
+        --replace-fail \
+        'local gpgme_library_path = "gpgme"' \
+        'local gpgme_library_path = "${lib.getLib gpgme}/lib/libgpgme${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
   };
 

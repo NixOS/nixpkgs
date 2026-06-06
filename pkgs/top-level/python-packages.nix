@@ -18222,6 +18222,10 @@ self: super: with self; {
 
   smdebug-rulesconfig = callPackage ../development/python-modules/smdebug-rulesconfig { };
 
+  smg-grpc-proto = callPackage ../development/python-modules/smg-grpc-proto { };
+
+  smg-grpc-servicer = callPackage ../development/python-modules/smg-grpc-servicer { };
+
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
   smllib = callPackage ../development/python-modules/smllib { };
