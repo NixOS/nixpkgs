@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Ultra fast JSON encoder and decoder";
     homepage = "https://github.com/ultrajson/ultrajson";
+    changelog = "https://github.com/ultrajson/ultrajson/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
