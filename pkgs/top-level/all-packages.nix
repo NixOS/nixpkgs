@@ -9875,10 +9875,6 @@ with pkgs;
     })
   );
 
-  dropbox = callPackage ../applications/networking/dropbox { };
-
-  dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
-
   maestral = with python3Packages; toPythonApplication maestral;
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
