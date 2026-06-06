@@ -1953,8 +1953,6 @@ with pkgs;
 
   skkDictionaries = recurseIntoAttrs (callPackages ../tools/inputmethods/skk/skk-dicts { });
 
-  ibus = callPackage ../tools/inputmethods/ibus { };
-
   ibus-engines = recurseIntoAttrs {
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
@@ -1997,8 +1995,6 @@ with pkgs;
       typing-booster = ibus-engines.typing-booster-unwrapped;
     };
   };
-
-  ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix { };
 
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = recurseIntoAttrs {
