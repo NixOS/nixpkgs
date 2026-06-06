@@ -12257,6 +12257,8 @@ self: super: with self; {
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
+  pandas-flavor = callPackage ../development/python-modules/pandas-flavor { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   pandas-ta = callPackage ../development/python-modules/pandas-ta { };
