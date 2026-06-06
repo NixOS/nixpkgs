@@ -11,8 +11,7 @@
 buildPythonPackage rec {
   pname = "pystemmer";
   version = "3.0.0";
-  format = "setuptools";
-  pyproejct = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowballstem";
