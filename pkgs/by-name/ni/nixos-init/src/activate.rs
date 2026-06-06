@@ -6,9 +6,11 @@ use std::{
 
 use anyhow::{Context, Result, bail};
 
+use rustix::mount::{mount, mount_remount};
+
 use crate::{
     config::{Config, SpecialMount},
-    fs::{atomic_symlink, mount},
+    fs::{atomic_symlink, split_mount_opts},
     proc_mounts::Mounts,
 };
 
@@ -39,25 +41,24 @@ pub fn activate_main() -> Result<()> {
 fn setup_special_filesystems(mounts: &[SpecialMount]) -> Result<()> {
     let existing = Mounts::parse_from_proc_mounts()?;
     for m in mounts {
-        let opts = m.options.join(",");
+        let (flags, data) = split_mount_opts(&m.options);
         if existing.find_mountpoint(&m.mountpoint).is_some() {
-            mount(&[
-                "-t",
-                &m.fstype,
-                "-o",
-                &format!("remount,{opts}"),
-                &m.device,
-                &m.mountpoint,
-            ])
-            .with_context(|| format!("Failed to remount {}", m.mountpoint))?;
+            mount_remount(m.mountpoint.as_str(), flags, data.as_c_str())
+                .with_context(|| format!("Failed to remount {}", m.mountpoint))?;
         } else {
             fs::create_dir_all(&m.mountpoint)
                 .with_context(|| format!("Failed to create {}", m.mountpoint))?;
             let mut perms = fs::metadata(&m.mountpoint)?.permissions();
             perms.set_mode(0o755);
             fs::set_permissions(&m.mountpoint, perms)?;
-            mount(&["-t", &m.fstype, "-o", &opts, &m.device, &m.mountpoint])
-                .with_context(|| format!("Failed to mount {}", m.mountpoint))?;
+            mount(
+                m.device.as_str(),
+                m.mountpoint.as_str(),
+                m.fstype.as_str(),
+                flags,
+                data.as_c_str(),
+            )
+            .with_context(|| format!("Failed to mount {}", m.mountpoint))?;
         }
     }
     Ok(())
