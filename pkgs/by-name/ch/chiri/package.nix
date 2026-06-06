@@ -7,9 +7,9 @@
 
   # build tools
   cargo-tauri,
-  nodejs_22,
+  nodejs_26,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pkg-config,
   makeBinaryWrapper,
@@ -24,29 +24,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chiri";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "SapphoSys";
+    owner = "chiriapp";
     repo = "chiri";
     tag = "app-v${finalAttrs.version}";
-    hash = "sha256-45a1mmh8dxrWw+UQzJcbPAujFjCYC4ovsGhdAn39LkI=";
+    hash = "sha256-xlB7VqHXBljOjOOK96hK3HYENsuICMqRqfgJdtEnlUI=";
   };
 
-  cargoHash = "sha256-TLYiCdkF/uX3uIVwplI7L1b7Ta5LTRdKqFlmnvCxFFc=";
+  cargoHash = "sha256-MTPd8HqbU35wmYVCv8HtfAuooBPsZk+p5J2Y5HjHTsA=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    hash = "sha256-jDSljbGzEGDl0PsnjdmyhIGXX4fUPVeCndv5pUm/utE=";
+    pnpm = pnpm_11;
+    hash = "sha256-dxfoo5Ajjt7zUsdQojXhePHp0K2itpdjequvGqqnZ7k=";
     fetcherVersion = 3;
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    nodejs_22
+    nodejs_26
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -98,8 +98,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       ''
         mv $out/bin/Chiri $out/bin/chiri
-        substituteInPlace $out/share/applications/Chiri.desktop \
-          --replace-fail "Exec=Chiri" "Exec=chiri"
+        for desktopFile in \
+          $out/share/applications/Chiri.desktop \
+          $out/share/applications/garden.chiri.Chiri.desktop
+        do
+          if [ -f "$desktopFile" ]; then
+            substituteInPlace "$desktopFile" \
+              --replace-fail "Exec=Chiri" "Exec=chiri"
+          fi
+        done
       '';
 
   doCheck = false;
@@ -108,8 +115,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Cross-platform CalDAV task management app";
-    homepage = "https://github.com/SapphoSys/chiri";
-    changelog = "https://github.com/SapphoSys/chiri/releases/tag/app-v${finalAttrs.version}";
+    homepage = "https://github.com/chiriapp/chiri";
+    changelog = "https://github.com/chiriapp/chiri/releases/tag/app-v${finalAttrs.version}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ SapphoSys ];
     mainProgram = "chiri";
