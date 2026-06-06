@@ -20142,6 +20142,11 @@
     github = "0xnook";
     githubId = 88323754;
   };
+  nooneknowspeter = {
+    name = "peter";
+    github = "nooneknowspeter";
+    githubId = 157999171;
+  };
   norbertwnuk = {
     name = "Norbert Wnuk";
     email = "norbert.wnuk@gmail.com";
