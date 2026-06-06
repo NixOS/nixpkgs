@@ -3,10 +3,10 @@
   stdenvNoCC,
   fetchFromGitHub,
   installFonts,
-  git,
   nix-update-script,
   python3,
   ttfautohint,
+  replaceVarsWith,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -22,20 +22,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "playbeing";
     repo = "dinish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kJlE7qCLoCtSZo4s7WgxTnj+H08UbVetGlDzb8xrEw=";
-    leaveDotGit = true;
-    fetchTags = true;
+    hash = "sha256-IoEeSB22rJh2J3EDD4T6uX65PhhnlllKBBKtRHLQP8I=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  postPatch = ''
-    patchShebangs tools
-    substituteInPlace Makefile \
-      --replace-fail 'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs zips install_ofl' \
-      'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs'
-  '';
+  # use a vendored version of update-version.sh that is simplified, and doesn't require reading info from .git/
+  # comment is from upstream script for reference
+
+  postPatch =
+    let
+      update-version = replaceVarsWith {
+        src = ./update-version.sh;
+        replacements = {
+          major = lib.versions.major finalAttrs.version;
+          minor = lib.versions.minor finalAttrs.version;
+          # this isn't the hash upstream would use, but we don't want to use fetchDotGit so let's just use a different hash
+          hash = lib.replaceString "sha256-" "" finalAttrs.src.hash;
+        };
+        isExecutable = true;
+      };
+    in
+    ''
+      cp -f ${update-version} tools/update-version.sh
+      patchShebangs tools
+      substituteInPlace Makefile \
+        --replace-fail 'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs zips install_ofl' \
+        'build: sync_features $(OTFS) $(TTFS) $(WOFFS) $(WOFF2S) docs'
+    '';
 
   preInstall = ''
     rm -r ofl
@@ -47,7 +62,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installFonts
-    git
     (python3.withPackages (
       ps: with ps; [
         fontmake
