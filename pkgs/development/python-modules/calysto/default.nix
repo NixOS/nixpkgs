@@ -10,15 +10,17 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "calysto";
   version = "1.0.6";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lr/cHFshpFs/PGMCsa3FKMRPTP+eE9ziH5XCpV+KzO8=";
   };
 
@@ -43,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})
