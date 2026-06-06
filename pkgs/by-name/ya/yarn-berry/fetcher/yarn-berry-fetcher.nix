@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Qfhx1lwd050GabP2Xj0kRi4nIlOHUE4xbZO0kO0IJ8A=";
   };
 
+  patches = [
+    ./preserve-tar-owner-write-perms.patch
+  ];
+
   cargoHash = "sha256-tOu1x8kmVCXKvthV0xyzisTb7BwOtfWTyu/cv4HRbpc=";
 
   env.YARN_ZIP_SUPPORTED_CACHE_VERSION = berryCacheVersion;

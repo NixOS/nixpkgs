@@ -1,0 +1,18 @@
+Some upstream tarballs ship files with read-only modes (e.g. 0o555).
+Real yarn 4 normalises permissions so the owner always has write
+(0o755), and the cache zip integrity recorded in yarn.lock is computed
+against that normalised form. Without this fix, yarn-berry-fetcher
+reproduces the source mode verbatim and produces zips that fail
+integrity validation for any package that lacks owner-write in its tar
+headers (e.g. @formatjs/intl-utils@3.8.4).
+
+--- a/src/zip.rs
++++ b/src/zip.rs
+@@ -137,6 +137,7 @@
+                         },
+                         Some(
+                             mode as u16 & 0o755
++                                | 0o200
+                                 | (if (mode & 0o111) != 0 { 0o111 } else { 0 })
+                                 | (if (mode & 0o444) != 0 { 0o444 } else { 0 }),
+                         ),
