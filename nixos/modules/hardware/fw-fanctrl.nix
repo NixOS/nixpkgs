@@ -9,13 +9,19 @@ let
   cfg = config.hardware.fw-fanctrl;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "hardware"
+      "fw-fanctrl"
+      "ectoolPackage"
+    ] "This option was removed. Use `hardware.fw-fanctrl.frameworkToolPackage` instead.")
+  ];
+
   options.hardware.fw-fanctrl = {
     enable = lib.mkEnableOption "the fw-fanctrl systemd service and install the needed packages";
 
     package = lib.mkPackageOption pkgs "fw-fanctrl" { };
-
-    ectoolPackage = lib.mkPackageOption pkgs "fw-ectool" { };
-
+    frameworkToolPackage = lib.mkPackageOption pkgs "framework-tool" { };
     disableBatteryTempCheck = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -113,28 +119,49 @@ in
           { };
       finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.config;
       configFile = configFormat.generate "custom.json" finalConfig;
+
+      fw-fanctrl =
+        if cfg.frameworkToolPackage == pkgs.framework-tool then
+          cfg.package
+        else
+          cfg.package.override { inherit (cfg) frameworkToolPackage; };
     in
     lib.mkIf cfg.enable {
       environment.systemPackages = [
-        cfg.package
-        cfg.ectoolPackage
+        fw-fanctrl
+        cfg.frameworkToolPackage
       ];
 
-      systemd.services.fw-fanctrl = {
-        description = "Framework Fan Controller";
-        after = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
+      systemd.services = {
+        fw-fanctrl = {
+          description = "Framework Fan Controller";
+          after = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            ExecStart = "${lib.getExe fw-fanctrl} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
+            ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
+          };
+          wantedBy = [ "multi-user.target" ];
         };
-        wantedBy = [ "multi-user.target" ];
-      };
 
-      # Create suspend config
-      environment.etc."systemd/system-sleep/fw-fanctrl-suspend.sh".source =
-        "${cfg.package}/share/fw-fanctrl/fw-fanctrl-suspend";
+        fw-fanctrl-suspend = {
+          description = "Framework Fan Controller sleep hook";
+          before = [ "sleep.target" ];
+          unitConfig = {
+            StopWhenUnneeded = "yes";
+          };
+          requires = [ "fw-fanctrl.service" ];
+          after = [ "fw-fanctrl.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+            ExecStart = "${lib.getExe fw-fanctrl} pause";
+            ExecStop = "${lib.getExe fw-fanctrl} resume";
+          };
+          wantedBy = [ "sleep.target" ];
+        };
+      };
     };
 
   meta = {

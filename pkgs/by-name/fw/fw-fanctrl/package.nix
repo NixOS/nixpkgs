@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   framework-tool,
+  frameworkToolPackage ? framework-tool,
   fetchFromGitHub,
 }:
 
@@ -21,7 +22,7 @@ python3Packages.buildPythonPackage rec {
 
   dependencies = [ python3Packages.jsonschema ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ framework-tool ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ frameworkToolPackage ]}" ];
 
   postInstall = ''
     mkdir -p $out/share/fw-fanctrl
