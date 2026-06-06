@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.57.1";
+  version = "0.57.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eblot";
     repo = "pyftdi";
     tag = "v${version}";
-    hash = "sha256-RkZXcGvCZXmFrLvj7YqHc6FeZskEqMSQcYgizBSuwIk=";
+    hash = "sha256-v6WcDwKVnLB2SwWiKG0VYg1VTyaSDz0QvG3hAQs7YHI=";
   };
 
   build-system = [ setuptools ];
