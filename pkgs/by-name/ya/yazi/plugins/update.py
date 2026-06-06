@@ -20,13 +20,27 @@ from packaging.version import InvalidVersion
 
 @dataclass
 class UpdateCandidate:
-    """An upstream revision that might be used to update a plugin."""
+    """An upstream revision that might be used to update a plugin or flavor."""
 
     rev: str
     commit: str | None
     date: str
     version: str
     kind: str
+
+
+RESOURCE_CONFIG = {
+    "plugin": {
+        "attr": "yaziPlugins",
+        "dir": "plugins",
+        "mk_function": "mkYaziPlugin",
+    },
+    "flavor": {
+        "attr": "yaziFlavors",
+        "dir": "flavors",
+        "mk_function": "mkYaziFlavor",
+    },
+}
 
 
 def run_command(cmd: str, capture_output: bool = True) -> str:
@@ -41,10 +55,11 @@ def run_command(cmd: str, capture_output: bool = True) -> str:
     return result.stdout.strip() if capture_output else ""
 
 
-def get_plugin_info(nixpkgs_dir: str, plugin_name: str) -> dict[str, str]:
-    """Get plugin repository information from Nix"""
-    owner = run_command(f"nix eval --raw -f {nixpkgs_dir} yaziPlugins.\"{plugin_name}\".src.owner")
-    repo = run_command(f"nix eval --raw -f {nixpkgs_dir} yaziPlugins.\"{plugin_name}\".src.repo")
+def get_resource_info(nixpkgs_dir: str, resource_kind: str, resource_name: str) -> dict[str, str]:
+    """Get resource repository information from Nix"""
+    attr = RESOURCE_CONFIG[resource_kind]["attr"]
+    owner = run_command(f"nix eval --raw -f {nixpkgs_dir} {attr}.\"{resource_name}\".src.owner")
+    repo = run_command(f"nix eval --raw -f {nixpkgs_dir} {attr}.\"{resource_name}\".src.repo")
 
     return {
         "owner": owner,
@@ -176,20 +191,27 @@ def resolve_candidate(owner: str, repo: str, candidate: UpdateCandidate, headers
     )
 
 
-def get_commit_candidates(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> list[UpdateCandidate]:
-    """Get recent default branch commit candidates for a plugin."""
+def get_commit_candidates(
+    owner: str,
+    repo: str,
+    resource_kind: str,
+    resource_pname: str,
+    headers: dict[str, str],
+) -> list[UpdateCandidate]:
+    """Get recent default branch commit candidates for a plugin or flavor."""
     default_branch = get_default_branch(owner, repo, headers)
 
     if owner == "yazi-rs":
+        upstream_path = f"{resource_pname}/main.lua" if resource_kind == "plugin" else resource_pname
         commits_data = github_get(
             owner,
             repo,
             "commits",
             headers,
-            {"path": f"{plugin_pname}/main.lua", "per_page": 100},
+            {"path": upstream_path, "per_page": 100},
         )
         if not isinstance(commits_data, list) or not commits_data:
-            raise RuntimeError(f"Could not get recent commits for {plugin_pname}")
+            raise RuntimeError(f"Could not get recent commits for {resource_pname}")
     else:
         commits_data = github_get(
             owner,
@@ -255,7 +277,13 @@ def get_tag_candidates(owner: str, repo: str, headers: dict[str, str]) -> list[U
     return candidates
 
 
-def get_update_candidates(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> list[UpdateCandidate]:
+def get_update_candidates(
+    owner: str,
+    repo: str,
+    resource_kind: str,
+    resource_pname: str,
+    headers: dict[str, str],
+) -> list[UpdateCandidate]:
     """Get update candidates, preferring releases, then tags, then commits."""
     release_candidates = get_release_candidates(owner, repo, headers)
     if release_candidates:
@@ -265,7 +293,7 @@ def get_update_candidates(owner: str, repo: str, plugin_pname: str, headers: dic
     if tag_candidates:
         return tag_candidates
 
-    return get_commit_candidates(owner, repo, plugin_pname, headers)
+    return get_commit_candidates(owner, repo, resource_kind, resource_pname, headers)
 
 
 def compare_to_current(
@@ -297,6 +325,7 @@ def compare_to_current(
 def is_yazi_compatible(
     owner: str,
     repo: str,
+    resource_kind: str,
     plugin_name: str,
     plugin_pname: str,
     candidate: UpdateCandidate,
@@ -304,6 +333,9 @@ def is_yazi_compatible(
     headers: dict[str, str],
 ) -> bool:
     """Check if a candidate supports nixpkgs' Yazi version."""
+    if resource_kind == "flavor":
+        return True
+
     try:
         plugin_content = fetch_plugin_content(owner, repo, plugin_pname, candidate.rev, headers)
         check_version_compatibility(plugin_content, plugin_name, yazi_version)
@@ -316,8 +348,9 @@ def is_yazi_compatible(
 def select_compatible_candidate(
     owner: str,
     repo: str,
-    plugin_name: str,
-    plugin_pname: str,
+    resource_kind: str,
+    resource_name: str,
+    resource_pname: str,
     old_ref_attr: str,
     old_ref: str,
     old_commit: str,
@@ -326,7 +359,7 @@ def select_compatible_candidate(
     headers: dict[str, str],
 ) -> UpdateCandidate | None:
     """Select the newest compatible candidate that moves the package forward."""
-    candidates = get_update_candidates(owner, repo, plugin_pname, headers)
+    candidates = get_update_candidates(owner, repo, resource_kind, resource_pname, headers)
 
     for unresolved_candidate in candidates:
         try:
@@ -337,19 +370,19 @@ def select_compatible_candidate(
                 break
             continue
 
-        print(f"Checking {plugin_name} {candidate.kind} {candidate.rev} ({candidate.date})")
+        print(f"Checking {resource_name} {candidate.kind} {candidate.rev} ({candidate.date})")
 
         compare_status = compare_to_current(owner, repo, old_commit, candidate, headers)
         if compare_status == "identical":
             candidate_ref_attr = "rev" if candidate.kind == "commit" else "tag"
             source_ref_changed = old_ref_attr != candidate_ref_attr or old_ref != candidate.rev
             if old_version != candidate.version or source_ref_changed:
-                if not is_yazi_compatible(owner, repo, plugin_name, plugin_pname, candidate, yazi_version, headers):
+                if not is_yazi_compatible(owner, repo, resource_kind, resource_name, resource_pname, candidate, yazi_version, headers):
                     break
 
                 return candidate
 
-            print(f"{plugin_name} is already at {candidate.rev}; older candidates will not be used")
+            print(f"{resource_name} is already at {candidate.rev}; older candidates will not be used")
             break
 
         if compare_status != "ahead":
@@ -359,7 +392,7 @@ def select_compatible_candidate(
                 break
             continue
 
-        if not is_yazi_compatible(owner, repo, plugin_name, plugin_pname, candidate, yazi_version, headers):
+        if not is_yazi_compatible(owner, repo, resource_kind, resource_name, resource_pname, candidate, yazi_version, headers):
             continue
 
         return candidate
@@ -458,71 +491,87 @@ def update_nix_file(default_nix_path: str, candidate: UpdateCandidate, new_hash:
         raise RuntimeError(f"Failed to update hash in {default_nix_path}")
 
 
-def get_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
-    """Get all available Yazi plugins from the Nix expression"""
-    try:
-        plugin_names_json = run_command(f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).yaziPlugins"')
-        plugin_names = json.loads(plugin_names_json)
+def get_all_resources(nixpkgs_dir: str, resource_kind: str) -> list[dict[str, str]]:
+    """Get all available Yazi plugins or flavors from the Nix expression"""
+    config = RESOURCE_CONFIG[resource_kind]
+    attr = config["attr"]
+    resource_dir = config["dir"]
+    mk_function = config["mk_function"]
 
-        excluded_attrs = ["mkYaziPlugin", "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
-        plugin_names = [name for name in plugin_names if name not in excluded_attrs]
-        plugin_names = [
+    try:
+        resource_names_json = run_command(f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).{attr}"')
+        resource_names = json.loads(resource_names_json)
+
+        excluded_attrs = [mk_function, "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
+        resource_names = [name for name in resource_names if name not in excluded_attrs]
+        resource_names = [
             name
-            for name in plugin_names
-            if Path(nixpkgs_dir, "pkgs/by-name/ya/yazi/plugins", name, "default.nix").exists()
+            for name in resource_names
+            if Path(nixpkgs_dir, "pkgs/by-name/ya/yazi", resource_dir, name, "default.nix").exists()
         ]
 
-        plugins = []
-        for name in plugin_names:
+        resources = []
+        for name in resource_names:
             try:
-                pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{name}.pname"')
-                plugins.append({
-                    "name": name,  # Attribute name in yaziPlugins set
+                pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "{attr}.{name}.pname"')
+                resources.append({
+                    "name": name,  # Attribute name in yaziPlugins/yaziFlavors set
                     "pname": pname  # Package name (used in repo paths)
                 })
             except Exception as e:
-                print(f"Warning: Could not get pname for plugin {name}, skipping: {e}")
+                print(f"Warning: Could not get pname for {resource_kind} {name}, skipping: {e}")
                 continue
 
-        return plugins
+        return resources
     except Exception as e:
-        raise RuntimeError(f"Error getting plugin list: {e}")
+        raise RuntimeError(f"Error getting {resource_kind} list: {e}")
 
 
-def validate_environment(plugin_name: str | None = None, plugin_pname: str | None = None) -> tuple[str, str | None, str | None]:
+def validate_environment(resource_kind: str) -> tuple[str, str | None, str | None]:
     """Validate environment variables and paths"""
     nixpkgs_dir = os.getcwd()
+    resource_dir = RESOURCE_CONFIG[resource_kind]["dir"]
+    env_prefix = resource_kind.upper()
 
-    if plugin_name and not plugin_pname:
-        raise RuntimeError(f"pname not provided for plugin {plugin_name}")
+    resource_name = os.environ.get(f"{env_prefix}_NAME")
+    resource_pname = os.environ.get(f"{env_prefix}_PNAME")
 
-    if plugin_name:
-        plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
-        if not Path(f"{plugin_dir}/default.nix").exists():
-            raise RuntimeError(f"Could not find default.nix for plugin {plugin_name} at {plugin_dir}")
+    if resource_name and not resource_pname:
+        raise RuntimeError(f"pname not provided for {resource_kind} {resource_name}")
 
-    return nixpkgs_dir, plugin_name, plugin_pname
+    if resource_name:
+        package_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/{resource_dir}/{resource_name}"
+        if not Path(f"{package_dir}/default.nix").exists():
+            raise RuntimeError(f"Could not find default.nix for {resource_kind} {resource_name} at {package_dir}")
+
+    return nixpkgs_dir, resource_name, resource_pname
 
 
-def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) -> dict[str, str] | None:
-    """Update a single Yazi plugin
+def update_single_resource(
+    nixpkgs_dir: str,
+    resource_kind: str,
+    resource_name: str,
+    resource_pname: str,
+) -> dict[str, str] | None:
+    """Update a single Yazi plugin or flavor
 
     Returns:
         dict with update info including old_version, new_version, etc. or None if no change
     """
-    plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
-    default_nix_path = f"{plugin_dir}/default.nix"
+    resource_dir = RESOURCE_CONFIG[resource_kind]["dir"]
+    package_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/{resource_dir}/{resource_name}"
+    default_nix_path = f"{package_dir}/default.nix"
 
     nix_content = read_nix_file(default_nix_path)
     old_version_match = re.search(r'version = "([^"]*)"', nix_content)
     old_version = old_version_match.group(1) if old_version_match else "unknown"
     old_ref_attr, old_ref = get_source_ref(nix_content)
 
-    plugin_info = get_plugin_info(nixpkgs_dir, plugin_name)
-    owner = plugin_info["owner"]
-    repo = plugin_info["repo"]
+    resource_info = get_resource_info(nixpkgs_dir, resource_kind, resource_name)
+    owner = resource_info["owner"]
+    repo = resource_info["repo"]
 
-    yazi_version = get_yazi_version(nixpkgs_dir)
+    yazi_version = get_yazi_version(nixpkgs_dir) if resource_kind == "plugin" else "0"
 
     headers = get_github_headers()
     try:
@@ -534,8 +583,9 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     candidate = select_compatible_candidate(
         owner,
         repo,
-        plugin_name,
-        plugin_pname,
+        resource_kind,
+        resource_name,
+        resource_pname,
         old_ref_attr,
         old_ref,
         old_commit,
@@ -544,20 +594,21 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
         headers,
     )
     if candidate is None:
-        print(f"No forward compatible update found for {plugin_name}")
+        print(f"No forward update found for {resource_name}")
         return None
 
-    print(f"Updating {plugin_name} from {old_commit} to {candidate.rev}")
+    print(f"Updating {resource_name} from {old_commit} to {candidate.rev}")
 
     new_hash = calculate_sri_hash(owner, repo, candidate.rev)
     print(f"Generated SRI hash: {new_hash}")
 
     update_nix_file(default_nix_path, candidate, new_hash)
 
-    print(f"Successfully updated {plugin_name} from {old_version} to {candidate.version}")
+    print(f"Successfully updated {resource_name} from {old_version} to {candidate.version}")
 
     return {
-        "name": plugin_name,
+        "kind": resource_kind,
+        "name": resource_name,
         "old_version": old_version,
         "new_version": candidate.version,
         "old_commit": old_commit,
@@ -567,132 +618,136 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     }
 
 
-def update_all_plugins(nixpkgs_dir: str, commit: bool = False) -> list[dict[str, str]]:
-    """Update all available Yazi plugins
+def update_all_resources(nixpkgs_dir: str, resource_kind: str, commit: bool = False) -> list[dict[str, str]]:
+    """Update all available Yazi plugins or flavors
 
     Returns:
-        list[dict[str, str]]: List of successfully updated plugin info dicts
+        list[dict[str, str]]: List of successfully updated resource info dicts
     """
-    plugins = get_all_plugins(nixpkgs_dir)
-    updated_plugins = []
+    resources = get_all_resources(nixpkgs_dir, resource_kind)
+    updated_resources = []
 
-    if not plugins:
-        print("No plugins found to update")
-        return updated_plugins
+    if not resources:
+        print(f"No {resource_kind}s found to update")
+        return updated_resources
 
-    print(f"Found {len(plugins)} plugins to update")
+    print(f"Found {len(resources)} {resource_kind}s to update")
 
     checked_count = 0
     updated_count = 0
-    failed_plugins = []
+    failed_resources = []
 
-    for plugin in plugins:
-        plugin_name = plugin["name"]
-        plugin_pname = plugin["pname"]
+    for resource in resources:
+        resource_name = resource["name"]
+        resource_pname = resource["pname"]
 
         try:
             print(f"\n{'=' * 50}")
-            print(f"Checking plugin: {plugin_name}")
+            print(f"Checking {resource_kind}: {resource_name}")
             print(f"{'=' * 50}")
 
             try:
-                update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+                update_info = update_single_resource(nixpkgs_dir, resource_kind, resource_name, resource_pname)
                 checked_count += 1
 
                 if update_info:
                     updated_count += 1
-                    updated_plugins.append(update_info)
+                    updated_resources.append(update_info)
                     if commit:
-                        commit_plugin_change(nixpkgs_dir, update_info)
+                        commit_resource_change(nixpkgs_dir, update_info)
             except KeyboardInterrupt:
                 print("\nUpdate process interrupted by user")
                 sys.exit(1)
             except Exception as e:
-                print(f"Error updating plugin {plugin_name}: {e}")
-                failed_plugins.append({"name": plugin_name, "error": str(e)})
+                print(f"Error updating {resource_kind} {resource_name}: {e}")
+                failed_resources.append({"name": resource_name, "error": str(e)})
                 continue
         except Exception as e:
-            print(f"Unexpected error with plugin {plugin_name}: {e}")
-            failed_plugins.append({"name": plugin_name, "error": str(e)})
+            print(f"Unexpected error with {resource_kind} {resource_name}: {e}")
+            failed_resources.append({"name": resource_name, "error": str(e)})
             continue
 
     print(f"\n{'=' * 50}")
-    print(f"Update summary: {updated_count} plugins updated out of {checked_count} checked")
+    print(f"Update summary: {updated_count} {resource_kind}s updated out of {checked_count} checked")
 
     if updated_count > 0:
-        print("\nUpdated plugins:")
-        for plugin in updated_plugins:
-            print(f"  - {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}")
+        print(f"\nUpdated {resource_kind}s:")
+        for resource in updated_resources:
+            print(f"  - {resource['name']}: {resource['old_version']} → {resource['new_version']}")
 
-    if failed_plugins:
-        print(f"\nFailed to update {len(failed_plugins)} plugins:")
-        for plugin in failed_plugins:
-            print(f"  - {plugin['name']}: {plugin['error']}")
+    if failed_resources:
+        print(f"\nFailed to update {len(failed_resources)} {resource_kind}s:")
+        for resource in failed_resources:
+            print(f"  - {resource['name']}: {resource['error']}")
 
-    return updated_plugins
+    return updated_resources
 
 
-def get_compare_url(plugin: dict[str, str]) -> str | None:
-    if plugin["old_commit"] == "unknown" or plugin["new_commit"] is None:
+def get_compare_url(resource: dict[str, str]) -> str | None:
+    if resource["old_commit"] == "unknown" or resource["new_commit"] is None:
         return None
 
-    owner = plugin["owner"].strip()
-    repo = plugin["repo"].strip()
-    return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
+    owner = resource["owner"].strip()
+    repo = resource["repo"].strip()
+    return f"https://github.com/{owner}/{repo}/compare/{resource['old_commit']}...{resource['new_commit']}"
 
 
-def commit_plugin_change(nixpkgs_dir: str, plugin: dict[str, str]) -> None:
-    """Commit the updated file for one plugin."""
-    plugin_path = f"pkgs/by-name/ya/yazi/plugins/{plugin['name']}/default.nix"
+def commit_resource_change(nixpkgs_dir: str, resource: dict[str, str]) -> None:
+    """Commit the updated file for one plugin or flavor."""
+    config = RESOURCE_CONFIG[resource["kind"]]
+    resource_dir = config["dir"]
+    attr = config["attr"]
+    resource_path = f"pkgs/by-name/ya/yazi/{resource_dir}/{resource['name']}/default.nix"
 
     try:
-        subprocess.run(["git", "add", "--", plugin_path], cwd=nixpkgs_dir, check=True)
+        subprocess.run(["git", "add", "--", resource_path], cwd=nixpkgs_dir, check=True)
         diff_result = subprocess.run(
-            ["git", "diff", "--cached", "--quiet", "--", plugin_path],
+            ["git", "diff", "--cached", "--quiet", "--", resource_path],
             cwd=nixpkgs_dir,
             check=False,
         )
         if diff_result.returncode == 0:
-            print(f"No changes to commit for {plugin['name']}")
+            print(f"No changes to commit for {resource['name']}")
             return
         if diff_result.returncode != 1:
-            raise RuntimeError(f"Could not inspect staged changes for {plugin['name']}")
+            raise RuntimeError(f"Could not inspect staged changes for {resource['name']}")
 
-        subject = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} → {plugin['new_version']}"
+        subject = f"{attr}.{resource['name']}: {resource['old_version']} → {resource['new_version']}"
         commit_args = ["git", "commit", "--no-verify", "-m", subject]
 
-        compare_url = get_compare_url(plugin)
+        compare_url = get_compare_url(resource)
         if compare_url:
             commit_args.extend(["-m", f"Compare: {compare_url}"])
 
-        commit_args.extend(["--", plugin_path])
+        commit_args.extend(["--", resource_path])
 
         subprocess.run(commit_args, cwd=nixpkgs_dir, check=True)
-        print(f"\nCommitted {plugin['name']} with message:\n{subject}")
+        print(f"\nCommitted {resource['name']} with message:\n{subject}")
         if compare_url:
             print(f"\nCompare: {compare_url}")
     except Exception as e:
-        print(f"Error committing changes for {plugin['name']}: {e}")
+        print(f"Error committing changes for {resource['name']}: {e}")
         raise
 
 
-def commit_changes(nixpkgs_dir: str, updated_plugins: list[dict[str, str]]) -> None:
-    """Commit one change per updated plugin."""
-    if not updated_plugins:
-        print("No plugins were updated, skipping commit")
+def commit_changes(nixpkgs_dir: str, updated_resources: list[dict[str, str]]) -> None:
+    """Commit one change per updated plugin or flavor."""
+    if not updated_resources:
+        print("No resources were updated, skipping commit")
         return
 
-    for plugin in updated_plugins:
-        commit_plugin_change(nixpkgs_dir, plugin)
+    for resource in updated_resources:
+        commit_resource_change(nixpkgs_dir, resource)
 
 
 def main():
-    """Main function to update Yazi plugins"""
+    """Main function to update Yazi plugins and flavors"""
 
-    parser = argparse.ArgumentParser(description="Update Yazi plugins")
+    parser = argparse.ArgumentParser(description="Update Yazi plugins and flavors")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--all", action="store_true", help="Update all Yazi plugins")
+    group.add_argument("--all", action="store_true", help="Update all Yazi plugins and flavors")
     group.add_argument("--plugin", type=str, help="Update a specific plugin by name")
+    group.add_argument("--flavor", type=str, help="Update a specific flavor by name")
     parser.add_argument("--commit", action="store_true", help="Commit changes after updating")
     args = parser.parse_args()
 
@@ -700,31 +755,47 @@ def main():
     updated_plugins = []
 
     if args.all:
-        print("Updating all Yazi plugins...")
-        updated_plugins = update_all_plugins(nixpkgs_dir, args.commit)
+        print("Updating all Yazi plugins and flavors...")
+        updated_plugins = update_all_resources(nixpkgs_dir, "plugin", args.commit)
+        updated_plugins.extend(update_all_resources(nixpkgs_dir, "flavor", args.commit))
 
     elif args.plugin:
         plugin_name = args.plugin
         try:
             plugin_pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{plugin_name}.pname"')
             print(f"Updating Yazi plugin: {plugin_name}")
-            update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+            update_info = update_single_resource(nixpkgs_dir, "plugin", plugin_name, plugin_pname)
+            if update_info:
+                updated_plugins.append(update_info)
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+    elif args.flavor:
+        flavor_name = args.flavor
+        try:
+            flavor_pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziFlavors.{flavor_name}.pname"')
+            print(f"Updating Yazi flavor: {flavor_name}")
+            update_info = update_single_resource(nixpkgs_dir, "flavor", flavor_name, flavor_pname)
             if update_info:
                 updated_plugins.append(update_info)
         except Exception as e:
             print(f"Error: {e}")
             sys.exit(1)
     else:
-        nixpkgs_dir, plugin_name, plugin_pname = validate_environment()
-
-        if plugin_name and plugin_pname:
-            print(f"Updating Yazi plugin: {plugin_name}")
-            update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
-            if update_info:
-                updated_plugins.append(update_info)
+        if "PLUGIN_NAME" in os.environ:
+            nixpkgs_dir, resource_name, resource_pname = validate_environment("plugin")
+            resource_kind = "plugin"
+        elif "FLAVOR_NAME" in os.environ:
+            nixpkgs_dir, resource_name, resource_pname = validate_environment("flavor")
+            resource_kind = "flavor"
         else:
             parser.print_help()
             sys.exit(0)
+
+        print(f"Updating Yazi {resource_kind}: {resource_name}")
+        update_info = update_single_resource(nixpkgs_dir, resource_kind, resource_name, resource_pname)
+        if update_info:
+            updated_plugins.append(update_info)
 
     if args.commit and updated_plugins and not args.all:
         commit_changes(nixpkgs_dir, updated_plugins)
