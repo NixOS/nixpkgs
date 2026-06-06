@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
+  stdenv,
   nix-update-script,
 }:
 
@@ -19,18 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
   postInstall = ''
-    installShellCompletion --cmd pizauth \
-      --bash share/bash/completion.bash \
-      --fish share/fish/pizauth.fish
-
-    installManPage pizauth.1 pizauth.conf.5
-
-    substituteInPlace lib/systemd/user/pizauth.service \
-      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
-    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
+    make PREFIX=$out install ${lib.optionalString stdenv.hostPlatform.isLinux "install-systemd"}
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
@@ -43,7 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      doronbehar
+    ];
     mainProgram = "pizauth";
   };
 })

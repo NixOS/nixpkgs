@@ -13,7 +13,6 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
   bootstrapFiles ? (config.replaceBootstrapFiles or lib.id) (
     if localSystem.isAarch64 then

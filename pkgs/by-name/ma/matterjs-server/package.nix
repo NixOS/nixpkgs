@@ -72,7 +72,10 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/matter-js/matterjs-server";
     changelog = "https://github.com/matter-js/matterjs-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = with lib.maintainers; [
+      kranzes
+      marie
+    ];
     mainProgram = "matterjs-server";
     platforms = lib.platforms.linux;
   };
