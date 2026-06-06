@@ -184,6 +184,9 @@ lib.makeScope
           tinycc = tinycc-musl;
           gawk = gawk-mes;
           gnumakeBoot = gnumake;
+          # GNU Make's release tarball relies on preserved mtimes for
+          # pregenerated Autotools files.
+          gnutar = gnutar-musl;
         };
 
         gnumake-static = callPackage ./gnumake/static.nix {
