@@ -10191,6 +10191,11 @@
     githubId = 13297896;
     name = "David Isaksson";
   };
+  grandjeanlab = {
+    github = "grandjeanlab";
+    githubId = 22633767;
+    name = "grandjeanlab";
+  };
   gravndal = {
     email = "gaute.ravndal+nixos@gmail.com";
     github = "gravndal";
