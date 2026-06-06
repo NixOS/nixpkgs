@@ -3,12 +3,13 @@
   bluepy,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bluepy-devices";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "bluepy_devices";
@@ -16,7 +17,9 @@ buildPythonPackage rec {
     sha256 = "02zzzivxq2vifgs65m2rm8pqlsbzsbc419c032irzvfxjx539mr8";
   };
 
-  propagatedBuildInputs = [ bluepy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ bluepy ];
 
   # Project has no test
   doCheck = false;
