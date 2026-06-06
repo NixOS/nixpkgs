@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
     homepage = "https://snowballstem.org/";
+    changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
