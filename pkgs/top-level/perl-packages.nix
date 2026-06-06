@@ -16650,12 +16650,12 @@ with self;
     };
   };
 
-  HTTPDaemon = buildPerlPackage {
+  HTTPDaemon = buildPerlModule {
     pname = "HTTP-Daemon";
-    version = "6.16";
+    version = "6.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.16.tar.gz";
-      hash = "sha256-s40JJyXm+k4MTcKkfhVwcEkbr6Db4Wx4o1joBqp+Fz0=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.17.tar.gz";
+      hash = "sha256-FigVgMQOIxCNAoQ0aYtdfVNje/kEyd+CJIHiU8vskgw=";
     };
     buildInputs = [
       ModuleBuildTiny
