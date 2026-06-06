@@ -239,9 +239,9 @@
   },
   "computelimit": {
     "pname": "computelimit",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/computelimit-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-Om6Hp12RxcajwQDUL/APXQpNjZNsJin/ad93hPfTOCg=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/computelimit-1.0.0-py3-none-any.whl",
+    "hash": "sha256-/jvHC7wLD7BVVgFIu2souEQs/o6Uaw9qsqXnoWt632E=",
     "description": "Microsoft Azure Command-Line Tools Computelimit Extension"
   },
   "computeschedule": {
