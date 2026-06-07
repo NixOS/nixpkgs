@@ -353,6 +353,11 @@
     githubId = 65275785;
     name = "Alexander Kenji Berthold";
   };
+  a-maccormack = {
+    github = "a-maccormack";
+    githubId = 78695941;
+    name = "Alister MacCormack";
+  };
   a-peirogon = {
     email = "ainfanthe@gmail.com";
     github = "a-peirogon";
