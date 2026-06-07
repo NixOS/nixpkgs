@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

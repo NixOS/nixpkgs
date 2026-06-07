@@ -58,6 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       roastiek
       mvs
+      nick-linux
     ];
 
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
