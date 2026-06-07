@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "easydict";
   version = "1.13";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -15,6 +16,10 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-sRNd7bxByAEOK8H3fsl0TH+qQrzhoch0FnkUSdbId4A=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   doCheck = false; # No tests in archive
 
