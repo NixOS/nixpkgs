@@ -10,6 +10,7 @@
   jsoncpp,
   boost,
   nodejs,
+  cjson,
   bashNonInteractive,
   buildNpmPackage,
 }:
@@ -61,6 +62,7 @@ stdenv.mkDerivation {
     jsoncpp
     boost
     dbus
+    cjson
     (lib.getBin bashNonInteractive)
   ];
 
