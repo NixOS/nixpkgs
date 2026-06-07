@@ -991,7 +991,8 @@
       ];
     "centriconnect" =
       ps: with ps; [
-      ]; # missing inputs: aiocentriconnect
+        aiocentriconnect
+      ];
     "cert_expiry" =
       ps: with ps; [
       ];
@@ -7847,6 +7848,7 @@
     "casper_glow"
     "cast"
     "ccm15"
+    "centriconnect"
     "cert_expiry"
     "chacon_dio"
     "chess_com"
