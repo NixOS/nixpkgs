@@ -1492,6 +1492,7 @@ in
   sane = runTest ./sane.nix;
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
+  scanservjs = runTest ./scanservjs.nix;
   scaphandre = runTest ./scaphandre.nix;
   schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
