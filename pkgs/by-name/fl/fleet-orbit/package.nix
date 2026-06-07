@@ -63,7 +63,10 @@ buildGoModule (finalAttrs: {
       }
     ];
     mainProgram = "orbit";
-    maintainers = with lib.maintainers; [ adrielvelazquez ];
+    maintainers = with lib.maintainers; [
+      adrielvelazquez
+      faukah
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

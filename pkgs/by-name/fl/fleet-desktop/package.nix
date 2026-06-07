@@ -54,7 +54,10 @@ buildGoModule {
     changelog = "https://github.com/fleetdm/fleet/releases/tag/orbit-v${fleet-orbit.version}";
     license = lib.licenses.mit;
     mainProgram = "fleet-desktop";
-    maintainers = with lib.maintainers; [ adrielvelazquez ];
+    maintainers = with lib.maintainers; [
+      adrielvelazquez
+      faukah
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
