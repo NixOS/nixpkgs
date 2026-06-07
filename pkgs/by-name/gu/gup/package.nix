@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         --set type fetchFromGitHub \
         --set rev 'version-{version}' \
         --nix-literal rev 'version-''${version}'\
-        --modify-nix default.nix
+        --modify-nix package.nix
     ''
   ];
   meta = {
