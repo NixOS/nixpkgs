@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -24,6 +25,10 @@ buildNpmPackage (finalAttrs: {
       --set NODE_ENV production \
       --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
   '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";
