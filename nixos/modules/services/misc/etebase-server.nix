@@ -224,7 +224,7 @@ in
             if cfg.unixSocket != null then
               "--uds ${cfg.unixSocket}"
             else
-              "--host 0.0.0.0 --port ${toString cfg.port}";
+              "--host ${cfg.settings.allowed_hosts.allowed_host1} --port ${toString cfg.port}";
         in
         ''
           ${python.pkgs.uvicorn}/bin/uvicorn ${networking} \
