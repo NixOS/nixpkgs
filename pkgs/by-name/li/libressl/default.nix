@@ -29,6 +29,7 @@ let
       };
 
       strictDeps = true;
+      __structuredAttrs = true;
 
       nativeBuildInputs = [ cmake ];
 
