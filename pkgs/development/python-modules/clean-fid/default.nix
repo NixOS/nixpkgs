@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 
   # dependencies
   numpy,
@@ -16,7 +17,7 @@
 buildPythonPackage {
   pname = "clean-fid";
   version = "0.1.35";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GaParmar";
@@ -25,7 +26,9 @@ buildPythonPackage {
     hash = "sha256-fqBU/TmCXDTPU3KTP0+VYQoP+HsT2UMcZeLzQHKD9hw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     pillow
     requests
