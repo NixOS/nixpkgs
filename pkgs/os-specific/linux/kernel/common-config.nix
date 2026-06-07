@@ -798,7 +798,9 @@ let
       FORTIFY_SOURCE = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
-      DEBUG_LIST = yes;
+      DEBUG_LIST = whenOlder "6.6" yes;
+      # https://git.kernel.org/torvalds/c/aebc7b0d8d91bbc69e976909963046bc48bca4fd
+      LIST_HARDENED = whenAtLeast "6.6" yes;
 
       HARDENED_USERCOPY = yes;
       RANDOMIZE_BASE = option yes;
