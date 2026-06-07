@@ -1009,7 +1009,8 @@
       ];
     "cielo_home" =
       ps: with ps; [
-      ]; # missing inputs: cielo-connect-api
+        cielo-connect-api
+      ];
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -7850,6 +7851,7 @@
     "cert_expiry"
     "chacon_dio"
     "chess_com"
+    "cielo_home"
     "citybikes"
     "clicksend_tts"
     "climate"
