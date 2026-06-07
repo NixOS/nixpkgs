@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_15
   ];
 
-  enableParallelBuilding = true;
+  # Upstream Makefile races clean-build against linking under parallel make.
+  enableParallelBuilding = false;
 
   installPhase = ''
     runHook preInstall
