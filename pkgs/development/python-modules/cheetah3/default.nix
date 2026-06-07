@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Template engine and code generation tool";
-    homepage = "http://www.cheetahtemplate.org/";
+    homepage = "https://www.cheetahtemplate.org/";
     changelog = "https://github.com/CheetahTemplate3/cheetah3/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pjjw ];
