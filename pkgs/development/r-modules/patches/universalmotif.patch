@@ -1,0 +1,10 @@
+diff --git a/src/Makevars b/src/Makevars
+index 6e08950..e66fbbd 100644
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -1,5 +1 @@
+ CXX_STD=CXX11
+-PKG_LIBS=`"$(R_HOME)/bin/Rscript" -e "RcppThread::LdFlags()"`
+-strippedLib: $(SHLIB)
+-		if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; then /usr/bin/strip --strip-debug $(SHLIB); fi
+-.phony: strippedLib

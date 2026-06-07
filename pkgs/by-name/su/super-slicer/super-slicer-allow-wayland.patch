@@ -1,0 +1,47 @@
+From e60fc934dd48613d2fa2128e962fdc4955c91cad Mon Sep 17 00:00:00 2001
+From: Nathan Regner <nathanregner@gmail.com>
+Date: Wed, 21 May 2025 08:12:55 -0600
+Subject: [PATCH] Remove forced GDK_BACKEND to x11
+
+Fixes black platter preview with NVIDIA hardware on Wayland
+
+Original patch: https://gitlab.archlinux.org/schiele/prusa-slicer/-/blob/d839bb84345c0f3ab3eb151a5777f0ca85b5f318/allow_wayland.patch
+Discussion: https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/issues/3
+---
+ src/PrusaSlicer.cpp | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/src/PrusaSlicer.cpp b/src/PrusaSlicer.cpp
+index 2111308..ccb1a34 100644
+--- a/src/PrusaSlicer.cpp
++++ b/src/PrusaSlicer.cpp
+@@ -80,13 +80,6 @@ int CLI::run(int argc, char **argv)
+     //init random generator
+     std::srand((unsigned int)std::time(nullptr));
+ 
+-#ifdef __WXGTK__
+-    // On Linux, wxGTK has no support for Wayland, and the app crashes on
+-    // startup if gtk3 is used. This env var has to be set explicitly to
+-    // instruct the window manager to fall back to X server mode.
+-    ::setenv("GDK_BACKEND", "x11", /* replace */ true);
+-#endif
+-
+ 	// Switch boost::filesystem to utf8.
+     try {
+         boost::nowide::nowide_filesystem();
+@@ -710,9 +703,9 @@ int CLI::run(int argc, char **argv)
+     #if !defined(_WIN32) && !defined(__APPLE__)
+         // likely some linux / unix system
+         const char *display = boost::nowide::getenv("DISPLAY");
+-        // const char *wayland_display = boost::nowide::getenv("WAYLAND_DISPLAY");
+-        //if (! ((display && *display) || (wayland_display && *wayland_display))) {
+-        if (! (display && *display)) {
++        const char *wayland_display = boost::nowide::getenv("WAYLAND_DISPLAY");
++        if (! ((display && *display) || (wayland_display && *wayland_display))) {
++        // if (! (display && *display)) {
+             // DISPLAY not set.
+             boost::nowide::cerr << "DISPLAY not set, GUI mode not available." << std::endl << std::endl;
+             this->print_help(false);
+-- 
+2.49.0
+

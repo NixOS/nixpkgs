@@ -1,0 +1,20 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -12,5 +12,3 @@ npmPreapprovedPackages:
+ httpProxy: "${HTTP_PROXY:-}"
+ 
+ httpsProxy: "${HTTPS_PROXY:-}"
+-
+-yarnPath: .yarn/releases/yarn-4.12.0.cjs
+diff --git a/yarn.lock b/yarn.lock
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,6 +2,6 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10c0
+ 

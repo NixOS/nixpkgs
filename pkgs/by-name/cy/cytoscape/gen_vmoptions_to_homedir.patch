@@ -1,0 +1,19 @@
+diff -Nur a/gen_vmoptions.sh b/gen_vmoptions.sh
+--- a/gen_vmoptions.sh	2020-03-30 21:57:47.000000000 +0100
++++ b/gen_vmoptions.sh	2020-05-05 09:49:57.974989824 +0100
+@@ -1,13 +1,10 @@
+ #!/bin/sh
+ # Generates the Cytoscape.vmoptions file
+ 
+-script_path="$(dirname -- $0)"
+-
+-#vm_options_path="$HOME/.cytoscape"
+-vm_options_path=$script_path
++vm_options_path="$HOME/.cytoscape"
+ 
+ if [ ! -e $vm_options_path ]; then
+-    /bin/mkdir $vm_options_path
++    @coreutils@/bin/mkdir $vm_options_path
+ fi
+ 
+ # Determine amount of physical memory present:

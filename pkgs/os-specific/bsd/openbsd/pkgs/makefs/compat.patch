@@ -1,0 +1,343 @@
+diff --git a/usr.sbin/makefs/cd9660.c b/usr.sbin/makefs/cd9660.c
+index 9fbcc5d0dbc..6b68508585a 100644
+--- a/usr.sbin/makefs/cd9660.c
++++ b/usr.sbin/makefs/cd9660.c
+@@ -97,6 +97,7 @@
+   */
+ 
+ #include <sys/queue.h>
++#include <sys/param.h>
+ 
+ #include <string.h>
+ #include <ctype.h>
+diff --git a/usr.sbin/makefs/cd9660.h b/usr.sbin/makefs/cd9660.h
+index f3b8d2238be..178ab84bf04 100644
+--- a/usr.sbin/makefs/cd9660.h
++++ b/usr.sbin/makefs/cd9660.h
+@@ -37,7 +37,7 @@
+ #define _MAKEFS_CD9660_H
+ 
+ #include <sys/queue.h>
+-#include <sys/endian.h>
++#include <sys/param.h>
+ 
+ #include <assert.h>
+ #include <errno.h>
+diff --git a/usr.sbin/makefs/cd9660/cd9660_conversion.c b/usr.sbin/makefs/cd9660/cd9660_conversion.c
+index d010c4002cf..6722891d77d 100644
+--- a/usr.sbin/makefs/cd9660/cd9660_conversion.c
++++ b/usr.sbin/makefs/cd9660/cd9660_conversion.c
+@@ -34,9 +34,9 @@
+  */
+ #include "cd9660.h"
+ 
+-#define bswap16 swap16
+-#define bswap32 swap32
+-
++#include <arpa/inet.h>
++#define bswap16 htons
++#define bswap32 htonl
+ 
+ static char cd9660_compute_gm_offset(time_t);
+ 
+diff --git a/usr.sbin/makefs/cd9660/cd9660_strings.c b/usr.sbin/makefs/cd9660/cd9660_strings.c
+index dd0622e0f10..acc9006848b 100644
+--- a/usr.sbin/makefs/cd9660/cd9660_strings.c
++++ b/usr.sbin/makefs/cd9660/cd9660_strings.c
+@@ -34,6 +34,7 @@
+  */
+ 
+ #include <ctype.h>
++#include <stdint.h>
+ 
+ #include "makefs.h"
+ 
+diff --git a/usr.sbin/makefs/cd9660/iso.h b/usr.sbin/makefs/cd9660/iso.h
+index 3ed58d1dedc..96e7b96b35a 100644
+--- a/usr.sbin/makefs/cd9660/iso.h
++++ b/usr.sbin/makefs/cd9660/iso.h
+@@ -46,6 +46,8 @@
+ #ifndef _ISOFS_CD9660_ISO_H_
+ #define _ISOFS_CD9660_ISO_H_
+ 
++#include "compat.h"
++
+ #define ISODCL(from, to) (to - from + 1)
+ 
+ struct iso_volume_descriptor {
+diff --git a/usr.sbin/makefs/compat.h b/usr.sbin/makefs/compat.h
+new file mode 100644
+index 00000000000..8cc830662bd
+--- /dev/null
++++ b/usr.sbin/makefs/compat.h
+@@ -0,0 +1,71 @@
++#pragma once
++#include <stdint.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <errno.h>
++#include <stdlib.h>
++
++#define u_int8_t uint8_t
++#define u_int16_t uint16_t
++#define u_int32_t uint32_t
++#define u_int64_t uint64_t
++typedef unsigned char u_char;
++typedef unsigned short u_short;
++typedef unsigned int u_int;
++typedef unsigned long u_long;
++typedef uint64_t dev_t;
++typedef int64_t off_t;
++#define __unused
++#define __dead
++#define pledge(x, y) 0
++#define unveil(x, y) 0
++#define srandom_deterministic srandom
++#define     MAXBSIZE        (64 * 1024)
++
++static inline void errc(int status, int code, const char *fmt, ...) {
++	// TODO
++	printf("You're outta here!\n");
++	exit(status);
++}
++
++static inline void warnc(int code, const char *fmt, ...) {
++	// TODO
++	printf("You're outta here!\n");
++}
++
++static inline int scan_scaled(char* number_w_scale, long long *result) {
++	int number, fraction = 0;
++	char scale[3];
++	long long tresult;
++	if (sscanf(number_w_scale, "%d.%1d%2s", &number, &fraction, &scale[0]) == 3 ||
++	    sscanf(number_w_scale, "%d%2s", &number, &scale[0]) == 2) {
++		tresult = number * 10 + fraction;
++		switch (scale[0]) {
++			case 'E':
++				tresult *= 1024;
++			case 'P':
++				tresult *= 1024;
++			case 'T':
++				tresult *= 1024;
++			case 'G':
++				tresult *= 1024;
++			case 'M':
++				tresult *= 1024;
++			case 'K':
++				tresult *= 1024;
++			case 'B':
++			case ' ':
++			case '\0':
++				break;
++			default:
++				errno = EINVAL;
++				return -1;
++		}
++		tresult /= 10;
++		*result = tresult;
++		return 0;
++	} else {
++		errno = EINVAL;
++		return -1;
++	}
++}
+diff --git a/usr.sbin/makefs/ffs.c b/usr.sbin/makefs/ffs.c
+index b055c62a598..c99cbfef5a7 100644
+--- a/usr.sbin/makefs/ffs.c
++++ b/usr.sbin/makefs/ffs.c
+@@ -198,7 +198,7 @@ ffs_parse_opts(const char *option, fsinfo_t *fsopts)
+ 	if (strcmp(ffs_options[rv].name, "disklabel") == 0) {
+ 		struct disklabel *dp;
+ 
+-		dp = getdiskbyname(buf);
++		dp = NULL;
+ 		if (dp == NULL)
+ 			errx(1, "unknown disk type: %s", buf);
+ 
+@@ -603,8 +603,8 @@ ffs_build_dinode1(struct ufs1_dinode *dinp, dirbuf_t *dbufp, fsnode *cur,
+ 	dinp->di_mode = cur->inode->st.st_mode;
+ 	dinp->di_nlink = cur->inode->nlink;
+ 	dinp->di_size = cur->inode->st.st_size;
+-	dinp->di_flags = cur->inode->st.st_flags;
+-	dinp->di_gen = cur->inode->st.st_gen;
++	dinp->di_flags = 0;
++	dinp->di_gen = 0;
+ 	dinp->di_uid = cur->inode->st.st_uid;
+ 	dinp->di_gid = cur->inode->st.st_gid;
+ 
+@@ -645,8 +645,8 @@ ffs_build_dinode2(struct ufs2_dinode *dinp, dirbuf_t *dbufp, fsnode *cur,
+ 	dinp->di_mode = cur->inode->st.st_mode;
+ 	dinp->di_nlink = cur->inode->nlink;
+ 	dinp->di_size = cur->inode->st.st_size;
+-	dinp->di_flags = cur->inode->st.st_flags;
+-	dinp->di_gen = cur->inode->st.st_gen;
++	dinp->di_flags = 0;
++	dinp->di_gen = 0;
+ 	dinp->di_uid = cur->inode->st.st_uid;
+ 	dinp->di_gid = cur->inode->st.st_gid;
+ 
+diff --git a/usr.sbin/makefs/ffs/buf.c b/usr.sbin/makefs/ffs/buf.c
+index ce512c7d389..8130f7e9cbc 100644
+--- a/usr.sbin/makefs/ffs/buf.c
++++ b/usr.sbin/makefs/ffs/buf.c
+@@ -47,6 +47,7 @@
+ 
+ #include "makefs.h"
+ #include "buf.h"
++#include "compat.h"
+ 
+ TAILQ_HEAD(buftailhead,mkfsbuf) buftail;
+ 
+diff --git a/usr.sbin/makefs/include/machine/disklabel.h b/usr.sbin/makefs/include/machine/disklabel.h
+new file mode 100644
+index 00000000000..7c5aa45c998
+--- /dev/null
++++ b/usr.sbin/makefs/include/machine/disklabel.h
+@@ -0,0 +1,7 @@
++#define LABELSECTOR 1
++#define LABELOFFSET 0
++#define MAXPARTITIONS 16
++
++static inline struct disklabel *getdiskbyname(const char *name) {
++	return (void*)0;
++}
+diff --git a/usr.sbin/makefs/include/msdosfs/bootsect.h b/usr.sbin/makefs/include/msdosfs/bootsect.h
+new file mode 100644
+index 00000000000..02e88ac2b9c
+--- /dev/null
++++ b/usr.sbin/makefs/include/msdosfs/bootsect.h
+@@ -0,0 +1 @@
++#include <bsdroot/sys/msdosfs/bootsect.h>
+diff --git a/usr.sbin/makefs/include/msdosfs/bpb.h b/usr.sbin/makefs/include/msdosfs/bpb.h
+new file mode 100644
+index 00000000000..08598cc217b
+--- /dev/null
++++ b/usr.sbin/makefs/include/msdosfs/bpb.h
+@@ -0,0 +1 @@
++#include <bsdroot/sys/msdosfs/bpb.h>
+diff --git a/usr.sbin/makefs/include/sys/disklabel.h b/usr.sbin/makefs/include/sys/disklabel.h
+new file mode 100644
+index 00000000000..f382f87226c
+--- /dev/null
++++ b/usr.sbin/makefs/include/sys/disklabel.h
+@@ -0,0 +1 @@
++#include <bsdroot/sys/sys/disklabel.h>
+diff --git a/usr.sbin/makefs/include/sys/endian.h b/usr.sbin/makefs/include/sys/endian.h
+new file mode 100644
+index 00000000000..e69de29bb2d
+diff --git a/usr.sbin/makefs/include/sys/uuid.h b/usr.sbin/makefs/include/sys/uuid.h
+new file mode 100644
+index 00000000000..7c2abace377
+--- /dev/null
++++ b/usr.sbin/makefs/include/sys/uuid.h
+@@ -0,0 +1,2 @@
++#include "compat.h"
++#include <bsdroot/sys/sys/uuid.h>
+diff --git a/usr.sbin/makefs/include/ufs/ffs/fs.h b/usr.sbin/makefs/include/ufs/ffs/fs.h
+new file mode 100644
+index 00000000000..d7905d33c2a
+--- /dev/null
++++ b/usr.sbin/makefs/include/ufs/ffs/fs.h
+@@ -0,0 +1,2 @@
++#include "compat.h"
++#include <bsdroot/sys/ufs/ffs/fs.h>
+diff --git a/usr.sbin/makefs/include/ufs/ufs/dinode.h b/usr.sbin/makefs/include/ufs/ufs/dinode.h
+new file mode 100644
+index 00000000000..0d29007bdd1
+--- /dev/null
++++ b/usr.sbin/makefs/include/ufs/ufs/dinode.h
+@@ -0,0 +1,2 @@
++#include "compat.h"
++#include <bsdroot/sys/ufs/ufs/dinode.h>
+diff --git a/usr.sbin/makefs/include/ufs/ufs/dir.h b/usr.sbin/makefs/include/ufs/ufs/dir.h
+new file mode 100644
+index 00000000000..9ec3e81be3d
+--- /dev/null
++++ b/usr.sbin/makefs/include/ufs/ufs/dir.h
+@@ -0,0 +1 @@
++#include <bsdroot/sys/ufs/ufs/dir.h>
+diff --git a/usr.sbin/makefs/include/util.h b/usr.sbin/makefs/include/util.h
+new file mode 100644
+index 00000000000..e69de29bb2d
+diff --git a/usr.sbin/makefs/makefs.c b/usr.sbin/makefs/makefs.c
+index af39605d996..10d86fa10e2 100644
+--- a/usr.sbin/makefs/makefs.c
++++ b/usr.sbin/makefs/makefs.c
+@@ -44,8 +44,10 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <util.h>
++#include <time.h>
+ 
+ #include "makefs.h"
++#include "compat.h"
+ 
+ /*
+  * list of supported file systems and dispatch functions
+diff --git a/usr.sbin/makefs/makefs.h b/usr.sbin/makefs/makefs.h
+index 303ec7a2c46..6d72859532e 100644
+--- a/usr.sbin/makefs/makefs.h
++++ b/usr.sbin/makefs/makefs.h
+@@ -41,6 +41,8 @@
+ 
+ #include <sys/stat.h>
+ #include <err.h>
++#include <stdint.h>
++#include <stddef.h>
+ 
+ /*
+  * fsnode -
+diff --git a/usr.sbin/makefs/msdos/denode.h b/usr.sbin/makefs/msdos/denode.h
+index 48cdf968945..baf3dc3d807 100644
+--- a/usr.sbin/makefs/msdos/denode.h
++++ b/usr.sbin/makefs/msdos/denode.h
+@@ -50,6 +50,8 @@
+ #ifndef _MSDOSFS_DENODE_H_
+ #define _MSDOSFS_DENODE_H_
+ 
++#include "compat.h"
++
+ struct genfs_node {
+ };
+ struct mkfsvnode;
+diff --git a/usr.sbin/makefs/msdos/direntry.h b/usr.sbin/makefs/msdos/direntry.h
+index 77f8d7dd657..9c3a19bae8c 100644
+--- a/usr.sbin/makefs/msdos/direntry.h
++++ b/usr.sbin/makefs/msdos/direntry.h
+@@ -48,6 +48,8 @@
+  * October 1992
+  */
+ 
++#include "compat.h"
++
+ /*
+  * Structure of a dos directory entry.
+  */
+diff --git a/usr.sbin/makefs/msdos/mkfs_msdos.c b/usr.sbin/makefs/msdos/mkfs_msdos.c
+index c9aa0877b7a..e72f1680585 100644
+--- a/usr.sbin/makefs/msdos/mkfs_msdos.c
++++ b/usr.sbin/makefs/msdos/mkfs_msdos.c
+@@ -596,7 +596,6 @@ mkfs_msdos(const char *fname, const char *dtype, const struct msdos_options *op)
+     tm = localtime(&now);
+     img = emalloc(bpb.bps);
+     dir = bpb.res + (bpb.spf ? bpb.spf : bpb.bspf) * bpb.nft;
+-    signal(SIGINFO, infohandler);
+     for (lsn = 0; lsn < dir + (o.fat_type == 32 ? bpb.spc : rds); lsn++) {
+         if (got_siginfo) {
+             fprintf(stderr,"%s: writing sector %u of %u (%u%%)\n",
+diff --git a/usr.sbin/makefs/msdos/msdosfs_conv.c b/usr.sbin/makefs/msdos/msdosfs_conv.c
+index 7b73c19bd6e..d38f035a87c 100644
+--- a/usr.sbin/makefs/msdos/msdosfs_conv.c
++++ b/usr.sbin/makefs/msdos/msdosfs_conv.c
+@@ -52,8 +52,8 @@
+  * System include files.
+  */
+ #include <sys/time.h>
+-#include <sys/dirent.h>
+-#include <sys/lock.h>
++#include <sys/param.h>  // howmany
++#include "compat.h"
+ 
+ /*
+  * MSDOSFS include files.

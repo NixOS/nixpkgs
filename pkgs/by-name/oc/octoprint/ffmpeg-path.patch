@@ -1,0 +1,22 @@
+diff --git a/src/octoprint/server/api/settings.py b/src/octoprint/server/api/settings.py
+index c3e6cea10..ced2f8fa0 100644
+--- a/src/octoprint/server/api/settings.py
++++ b/src/octoprint/server/api/settings.py
+@@ -130,7 +130,7 @@ data["webcam"] = {
+             "webcamEnabled": s.getBoolean(["webcam", "webcamEnabled"]),
+             "snapshotTimeout": s.getInt(["webcam", "snapshotTimeout"]),
+             "timelapseEnabled": s.getBoolean(["webcam", "timelapseEnabled"]),
+-            "ffmpegPath": s.get(["webcam", "ffmpeg"]),
++            "ffmpegPath": "@ffmpeg@",
+             "ffmpegCommandline": s.get(["webcam", "ffmpegCommandline"]),
+             "bitrate": s.get(["webcam", "bitrate"]),
+             "ffmpegThreads": s.get(["webcam", "ffmpegThreads"]),
+@@ -548,8 +548,6 @@ def _saveSettings(data):
+                 ["webcam", "snapshotSslValidation"],
+                 data["webcam"]["snapshotSslValidation"],
+             )
+-        if "ffmpegPath" in data["webcam"]:
+-            s.set(["webcam", "ffmpeg"], data["webcam"]["ffmpegPath"])
+         if "ffmpegCommandline" in data["webcam"]:
+             commandline = data["webcam"]["ffmpegCommandline"]
+             if not all(

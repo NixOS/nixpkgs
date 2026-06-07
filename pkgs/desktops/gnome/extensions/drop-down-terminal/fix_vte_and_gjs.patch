@@ -1,0 +1,32 @@
+--- a/drop-down-terminal@gs-extensions.zzrough.org/extension.js
++++ b/drop-down-terminal@gs-extensions.zzrough.org/extension.js
+@@ -15,6 +15,8 @@
+ 
+ // Author: Stéphane Démurget <stephane.demurget@free.fr>
+ 
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@vte@/lib/girepository-1.0')
++
+ const Lang = imports.lang;
+ const Gettext = imports.gettext.domain("drop-down-terminal");
+ const Mainloop = imports.mainloop;
+@@ -653,7 +655,7 @@ const DropDownTerminalExtension = new Lang.Class({
+         this._killingChild = false;
+ 
+         // finds the forking arguments
+-        let args = ["gjs", GLib.build_filenamev([Me.path, "terminal.js"]), Me.path];
++        let args = ["@gjs@/bin/gjs", GLib.build_filenamev([Me.path, "terminal.js"]), Me.path];
+ 
+         // forks the process
+         debug("forking '" + args.join(" ") + "'");
+--- a/drop-down-terminal@gs-extensions.zzrough.org/terminal.js
++++ b/drop-down-terminal@gs-extensions.zzrough.org/terminal.js
+@@ -14,6 +14,9 @@
+ // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ // Author: Stéphane Démurget <stephane.demurget@free.fr>
++
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@vte@/lib/girepository-1.0')
++
+ const Lang = imports.lang;
+ 
+ const Pango = imports.gi.Pango;

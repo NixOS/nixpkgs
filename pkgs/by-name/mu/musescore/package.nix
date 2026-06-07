@@ -1,0 +1,234 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
+  alsa-lib,
+  alsa-plugins,
+  flac,
+  freetype,
+  kdePackages,
+  lame,
+  libjack2,
+  libogg,
+  libopus,
+  libopusenc,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  mnxdom,
+  portaudio,
+  portmidi,
+  pugixml,
+  utf8cpp,
+
+  # passthru tests
+  nixosTests,
+}:
+
+let
+  # TODO(@doronbehar): Contribute this one day to lib/? See:
+  # https://discourse.nixos.org/t/rfc-nix-function-that-overrides-a-scope-with-automatic-inheritance-propagation/78025
+  overrideScopeFully =
+    s: scopeOverrideFunc:
+    let
+      partiallyOverriddenScope = s.overrideScope scopeOverrideFunc;
+      directlyOverriddenAttrs = builtins.attrNames (scopeOverrideFunc partiallyOverriddenScope s);
+    in
+    builtins.mapAttrs (
+      attrName: pkg:
+      pkg.override (
+        lib.pipe directlyOverriddenAttrs [
+          (builtins.filter (
+            oAttr:
+            # Don't include in this filter the attribute `attrName` from the
+            # full scope, if it is already part of the _directly_ overridden
+            # attributes.
+            !(builtins.elem attrName directlyOverriddenAttrs)
+            && pkg ? override
+            # Continue with the creation of the `.override` arguments only for
+            # overridden attributes (`oAttr`) which are possible arguments to the
+            # `.override` function of the `pkg` at hand.
+            && pkg.override.__functionArgs ? ${oAttr}
+          ))
+          # Generate the `.override` argument using the attribute names `aNames`
+          (aNames: lib.genAttrs aNames (oAttr: partiallyOverriddenScope.${oAttr}))
+        ]
+      )
+    ) partiallyOverriddenScope;
+  kdePackages' = overrideScopeFully kdePackages (
+    self: super: {
+      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
+      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
+      qtdeclarative = super.qtdeclarative.overrideAttrs (
+        new: old: {
+          patches = old.patches ++ [
+            (fetchpatch {
+              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
+              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
+            })
+          ];
+        }
+      );
+    }
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "musescore";
+  version = "4.7.2";
+
+  src = fetchFromGitHub {
+    owner = "musescore";
+    repo = "MuseScore";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7oA+cC5/nOEM2zpFgM13zlBIoc3AB//Ovc+dU1c1r6M=";
+  };
+
+  cmakeFlags = [
+    (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
+    # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
+    # not useful on NixOS, see:
+    # https://github.com/musescore/MuseScore/issues/15571
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  # Use our versions of system libraries, see:
+  # https://github.com/musescore/MuseScore/issues/11572
+  ++ map (l: lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_${l}" true) [
+    "FREETYPE"
+    "HARFBUZZ"
+    "MNXDOM"
+    # Implies also OPUS
+    "OPUSENC"
+    "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/musescore/MuseScore/issues/33467
+    (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
+  ];
+
+  qtWrapperArgs = [
+    # MuseScore JACK backend loads libjack at runtime.
+    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [ libjack2 ]
+    }"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # There are some issues with using the wayland backend, see:
+    # https://musescore.org/en/node/321936
+    "--set-default QT_QPA_PLATFORM xcb"
+  ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  dontWrapGApps = true;
+
+  nativeBuildInputs = [
+    cmake
+    kdePackages'.qttools
+    kdePackages'.wrapQtAppsHook
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    flac
+    freetype
+    kdePackages'.qt5compat
+    kdePackages'.qtbase
+    kdePackages'.qtdeclarative
+    kdePackages'.qtnetworkauth
+    kdePackages'.qtscxml
+    kdePackages'.qtsvg
+    lame
+    libjack2
+    libogg
+    libopus
+    libopusenc
+    libpulseaudio
+    libsndfile
+    libvorbis
+    mnxdom
+    portaudio
+    portmidi
+    pugixml
+    utf8cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    kdePackages'.qtwayland
+  ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/mscore.app" "$out/Applications/mscore.app"
+    mkdir -p $out/bin
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
+
+  # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
+  # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".
+  # We need to ensure this in two cases:
+  #
+  # 1) when the user invokes MuseScore as "mscore" on the command line or from
+  #    the .desktop file, and the normal argv0 is "mscore" (no "/");
+  # 2) when MuseScore invokes itself via File -> New, and the normal argv0 is
+  #    the target of /proc/self/exe, which in Nixpkgs was "{...}/.mscore-wrapped"
+  #
+  # In order to achieve (2) we install the final binary as $out/libexec/mscore, and
+  # in order to achieve (1) we use makeWrapper without --inherit-argv0.
+  #
+  # wrapQtAppsHook uses wrapQtApp -> wrapProgram -> makeBinaryWrapper --inherit-argv0
+  # so we disable it and explicitly use makeQtWrapper.
+  #
+  # TODO: check if something like this is also needed for macOS.
+  dontWrapQtApps = stdenv.hostPlatform.isLinux;
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/libexec
+    mv $out/bin/mscore $out/libexec
+    makeQtWrapper $out/libexec/mscore $out/bin/mscore
+  '';
+
+  # Don't run bundled upstreams tests, as they require a running X window system.
+  doCheck = false;
+
+  passthru.tests.nixos = nixosTests.musescore;
+
+  meta = {
+    description = "Music notation and composition software";
+    homepage = "https://musescore.org/";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      vandenoever
+      doronbehar
+      sarunint
+    ];
+    mainProgram = "mscore";
+    platforms = lib.platforms.unix;
+  };
+})

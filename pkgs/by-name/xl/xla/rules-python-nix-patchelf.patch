@@ -1,0 +1,30 @@
+Patch rules_python to run patchelf on the downloaded hermetic Python binary.
+Pre-built binaries reference /lib64/ld-linux-x86-64.so.2 which doesn't exist
+in the nix sandbox. Use patchelf to set the correct dynamic linker.
+
+This patch is added to the rules_python download in python_init_rules.bzl
+and applied after rules_python is fetched.
+
+--- a/python/private/python_repository.bzl
++++ b/python/private/python_repository.bzl
+@@ -96,6 +96,20 @@
+     if patches:
+         for patch in patches:
+             rctx.patch(patch, strip = rctx.attr.patch_strip)
++
++    # Nix: patch downloaded Python binary to work in nix sandbox.
++    # Pre-built binaries reference /lib64/ld-linux-x86-64.so.2 which doesn't
++    # exist in nix. Use patchelf to set the correct dynamic linker.
++    nix_dynamic_linker = rctx.os.environ.get("NIX_DYNAMIC_LINKER", "")
++    if nix_dynamic_linker and "linux" in platform:
++        python_bin = "bin/python{}.{}".format(*python_version_info[:2])
++        res = rctx.execute(["patchelf", "--set-interpreter", nix_dynamic_linker, python_bin])
++        if res.return_code != 0:
++            # Also try the install-only layout
++            python_bin = "python/bin/python{}.{}".format(*python_version_info[:2])
++            rctx.execute(["patchelf", "--set-interpreter", nix_dynamic_linker, python_bin])
++        # Also patch shared libraries
++        rctx.execute(["find", ".", "-name", "*.so*", "-exec", "patchelf", "--set-interpreter", nix_dynamic_linker, "{}", ";"], quiet = True)
+
+     # Write distutils.cfg to the Python installation.
+     if "windows" in platform:
