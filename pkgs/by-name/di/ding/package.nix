@@ -1,7 +1,6 @@
 {
   aspell,
-  aspellDicts_de,
-  aspellDicts_en,
+  aspellDicts,
   buildEnv,
   fetchurl,
   fortune,
@@ -17,18 +16,18 @@ let
     name = "env-ding-aspell";
     paths = [
       aspell
-      aspellDicts_de
-      aspellDicts_en
+      aspellDicts.de
+      aspellDicts.en
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ding";
   version = "1.9";
 
   src = fetchurl {
-    url = "https://ftp.tu-chemnitz.de/pub/Local/urz/ding/ding-${version}.tar.gz";
-    sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
+    url = "https://ftp.tu-chemnitz.de/pub/Local/urz/ding/ding-${finalAttrs.version}.tar.gz";
+    hash = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -81,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # homepage says: unix-like except darwin
     maintainers = [ lib.maintainers.exi ];
   };
-}
+})

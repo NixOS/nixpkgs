@@ -1630,11 +1630,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
-  ding = callPackage ../applications/misc/ding {
-    aspellDicts_de = aspellDicts.de;
-    aspellDicts_en = aspellDicts.en;
-  };
-
   discourse = callPackage ../servers/web-apps/discourse { };
 
   discourseAllPlugins = discourse.override {
