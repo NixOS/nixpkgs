@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   prompt-toolkit,
 }:
 
 buildPythonPackage rec {
   pname = "clintermission";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebageek";
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-e7C9IDr+mhVSfU8lMywjX1BYwFo/qegPNzabak7UPcY=";
   };
 
-  propagatedBuildInputs = [ prompt-toolkit ];
+  build-system = [ setuptools ];
+
+  dependencies = [ prompt-toolkit ];
 
   # repo contains no tests
   doCheck = false;
