@@ -169,6 +169,9 @@ in
           krdp
           kconfig # required for xdg-terminal from xdg-utils
           qtbase # for qtpaths which is required for xdg-mime from xdg-utils
+          # touch keyboard
+          plasma-keyboard
+          qtvirtualkeyboard # used by plasma-keyboard KCM
         ]
         ++ lib.optional config.networking.networkmanager.enable qrca
         ++ lib.optionals config.hardware.sensor.iio.enable [

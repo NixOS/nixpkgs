@@ -21,11 +21,6 @@
     };
   };
 
-  environment.systemPackages = [
-    # provide onscreen keyboard
-    pkgs.kdePackages.plasma-keyboard
-  ];
-
   environment.plasma6.excludePackages = [
     # Optional wallpapers that add 126 MiB to the graphical installer
     # closure. They will still need to be downloaded when installing a
