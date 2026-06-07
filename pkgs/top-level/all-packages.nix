@@ -10236,7 +10236,6 @@ with pkgs;
 
   inherit (callPackages ../applications/blockchains/teos { })
     teos
-    teos-watchtower-plugin
     ;
 
   vertcoind = vertcoin.override {
