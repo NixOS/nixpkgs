@@ -12,7 +12,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "otterwiki";
-  version = "2.20.5";
+  version = "2.20.6";
   __structuredAttrs = true;
   pyproject = true;
 
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "redimp";
     repo = "otterwiki";
     tag = "v${version}";
-    hash = "sha256-Yov80c5LjofVMh45uz4gVUF7nTiy/tNB9wEyVM/ppro=";
+    hash = "sha256-eb5Ugq3dAqeJ34Twq1fuWjmfxFFeGTHAeZ/EGdpFX+o=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
