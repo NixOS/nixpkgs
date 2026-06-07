@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         "-isystem ${lib.getDev cups}/include"
         "-F$(SDKROOT)/System/Library/Frameworks"
         "-L$(SDKROOT)/usr/lib"
+        "-Wl,-no_uuid"
       ];
     in
     ''
