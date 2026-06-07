@@ -18454,6 +18454,11 @@
     githubId = 3579600;
     name = "Jacob Moody";
   };
+  mooses = {
+    name = "Remu Salminen";
+    github = "RemuSalminen";
+    githubId = 85031022;
+  };
   moosingin3space = {
     email = "moosingin3space@gmail.com";
     github = "moosingin3space";
