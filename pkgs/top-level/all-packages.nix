@@ -9575,8 +9575,6 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
-  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
-
   super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
