@@ -29,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-DVXb93W0TmOcyGyMN5GmIJNAdbLeeFnNm+3QfTw2j5s=";
   };
 
+  env = {
+    SCALIB_PORTABLE = "1";
+  };
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-scm-git-archive",' ""
