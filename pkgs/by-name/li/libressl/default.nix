@@ -144,4 +144,9 @@ in
       common-cmake-install-full-dirs-patch
     ];
   };
+
+  libressl_4_3 = generic {
+    version = "4.3.2";
+    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
+  };
 }
