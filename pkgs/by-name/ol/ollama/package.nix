@@ -301,6 +301,7 @@ goBuild (finalAttrs: {
         -DCMAKE_SKIP_BUILD_RPATH=ON \
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
+        -DOLLAMA_MLX_BACKENDS="" \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
