@@ -4761,10 +4761,6 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
-  toluapp = callPackage ../development/tools/toluapp {
-    lua = lua5_1; # doesn't work with any other :(
-  };
-
   ### END OF LUA
 
   ### CuboCore
