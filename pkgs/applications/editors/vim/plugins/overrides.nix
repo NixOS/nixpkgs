@@ -1866,7 +1866,7 @@ assertNoAdditions {
 
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
-    nvimSkipModules = "ibl.config.types";
+    nvimSkipModules = [ "ibl.config.types" ];
   };
 
   indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
@@ -2556,7 +2556,7 @@ assertNoAdditions {
 
   modicator-nvim = super.modicator-nvim.overrideAttrs {
     # Optional lualine integration
-    nvimSkipModules = "modicator.integration.lualine.init";
+    nvimSkipModules = [ "modicator.integration.lualine.init" ];
   };
 
   molokai = super.molokai.overrideAttrs (old: {
@@ -2662,7 +2662,7 @@ assertNoAdditions {
       plenary-nvim
       nui-nvim
     ];
-    nvimSkipModule = [
+    nvimSkipModules = [
       "neo-tree.types.fixes.compat-0.10"
     ];
   };
@@ -2869,7 +2869,7 @@ assertNoAdditions {
       nvim-nio
     ];
     # Unit test assert
-    nvimSkipModules = "neotest-jest-assertions";
+    nvimSkipModules = [ "neotest-jest-assertions" ];
   };
 
   neotest-minitest = super.neotest-minitest.overrideAttrs {
@@ -2918,7 +2918,7 @@ assertNoAdditions {
       plenary-nvim
     ];
     # Unit test assert
-    nvimSkipModules = "neotest-playwright-assertions";
+    nvimSkipModules = [ "neotest-playwright-assertions" ];
   };
 
   neotest-plenary = super.neotest-plenary.overrideAttrs {
@@ -2979,7 +2979,7 @@ assertNoAdditions {
       plenary-nvim
     ];
     # Unit test assert
-    nvimSkipModules = "neotest-vitest-assertions";
+    nvimSkipModules = [ "neotest-vitest-assertions" ];
   };
 
   neotest-zig = super.neotest-zig.overrideAttrs {
@@ -3220,7 +3220,7 @@ assertNoAdditions {
   nvim-fzf-commands = super.nvim-fzf-commands.overrideAttrs {
     dependencies = [ self.nvim-fzf ];
     # Requires global variable setup nvim_fzf_directory
-    nvimSkipModules = "fzf-commands.rg";
+    nvimSkipModules = [ "fzf-commands.rg" ];
   };
 
   nvim-genghis = super.nvim-genghis.overrideAttrs {
@@ -3294,7 +3294,7 @@ assertNoAdditions {
   };
 
   nvim-lilypond-suite = super.nvim-lilypond-suite.overrideAttrs {
-    nvimSkipModule = [
+    nvimSkipModules = [
       # Option not set immediately
       "nvls.errors.lilypond-book"
       "nvls.tex"
@@ -3605,7 +3605,7 @@ assertNoAdditions {
 
   omni-vim = super.omni-vim.overrideAttrs {
     # Optional lightline integration
-    nvimSkipModules = "omni-lightline";
+    nvimSkipModules = [ "omni-lightline" ];
   };
 
   omnisharp-extended-lsp-nvim = super.omnisharp-extended-lsp-nvim.overrideAttrs (old: {
@@ -3690,7 +3690,7 @@ assertNoAdditions {
 
   outline-nvim = super.outline-nvim.overrideAttrs {
     # Requires setup call
-    nvimSkipModules = "outline.providers.norg";
+    nvimSkipModules = [ "outline.providers.norg" ];
   };
 
   overseer-nvim = super.overseer-nvim.overrideAttrs {
@@ -3782,7 +3782,7 @@ assertNoAdditions {
 
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
     # Optional treesitter support
-    nvimSkipModules = "poimandres.highlights";
+    nvimSkipModules = [ "poimandres.highlights" ];
   };
 
   popup-nvim = super.popup-nvim.overrideAttrs {
@@ -3843,7 +3843,7 @@ assertNoAdditions {
 
   pywal-nvim = super.pywal-nvim.overrideAttrs {
     # Optional feline integration
-    nvimSkipModules = "pywal.feline";
+    nvimSkipModules = [ "pywal.feline" ];
   };
 
   QFEnter = super.QFEnter.overrideAttrs (old: {
@@ -4135,7 +4135,7 @@ assertNoAdditions {
 
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
-    nvimSkipModules = "spaceman.adapters.telescope";
+    nvimSkipModules = [ "spaceman.adapters.telescope" ];
   };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (
@@ -4341,7 +4341,7 @@ assertNoAdditions {
       plenary-nvim
     ];
     # Meta
-    nvimSkipModules = "frecency.types";
+    nvimSkipModules = [ "frecency.types" ];
   };
 
   telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs (old: {
@@ -4562,7 +4562,7 @@ assertNoAdditions {
 
   trouble-nvim = super.trouble-nvim.overrideAttrs {
     # Meta file
-    nvimSkipModules = "trouble.docs";
+    nvimSkipModules = [ "trouble.docs" ];
   };
 
   trust-vim = super.trust-vim.overrideAttrs (old: {
@@ -4581,7 +4581,7 @@ assertNoAdditions {
     '';
 
     # Unit test
-    nvimSkipModules = "tsc.better-messages-test";
+    nvimSkipModules = [ "tsc.better-messages-test" ];
   };
 
   tslime-vim = super.tslime-vim.overrideAttrs (old: {
@@ -5085,7 +5085,7 @@ assertNoAdditions {
 
   vim-flog = super.vim-flog.overrideAttrs (old: {
     # Not intended to be required, used by vim plugin
-    nvimSkipModules = "flog.graph_bin";
+    nvimSkipModules = [ "flog.graph_bin" ];
     meta = old.meta // {
       license = lib.licenses.vim;
     };
@@ -5670,7 +5670,7 @@ assertNoAdditions {
 
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
-    nvimSkipModules = "tpipeline.main";
+    nvimSkipModules = [ "tpipeline.main" ];
   };
 
   vim-twiggy = super.vim-twiggy.overrideAttrs (old: {
@@ -5878,7 +5878,7 @@ assertNoAdditions {
 
   virt-column-nvim = super.virt-column-nvim.overrideAttrs {
     # Meta file
-    nvimSkipModules = "virt-column.config.types";
+    nvimSkipModules = [ "virt-column.config.types" ];
   };
 
   vis = super.vis.overrideAttrs (old: {
@@ -5966,7 +5966,7 @@ assertNoAdditions {
   });
 
   xmake-nvim = super.xmake-nvim.overrideAttrs {
-    nvimSkipModule = [
+    nvimSkipModules = [
       # attempt to index upvalue 'options' (a nil value)
       "xmake.action"
       "xmake.command"
