@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "co2signal";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,7 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-8YdYbknLICRrZloGUZuscv5e1LIDZBcCPKZs6EMaNuo=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
   # Modules has no tests
   doCheck = false;
 
