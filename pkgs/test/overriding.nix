@@ -226,9 +226,11 @@ let
 
   tests-fetchurl =
     let
+      fakeSha256-1 = genNonzeroFakeHash lib.fakeSha256 "1";
+      fakeHash-2 = genNonzeroFakeHash lib.fakeHash "B";
       src-with-sha256 = pkgs.fetchurl {
         url = "https://example.com/source.tar.gz";
-        sha256 = lib.fakeSha256;
+        sha256 = fakeSha256-1;
       };
     in
     {
@@ -240,19 +242,19 @@ let
             ;
         };
         expected = {
-          outputHash = lib.fakeSha256;
+          outputHash = fakeSha256-1;
           outputHashAlgo = "sha256";
         };
       };
       test-fetchurl-overrideAttrs-hash = {
         expr = {
-          inherit (src-with-sha256.overrideAttrs { hash = pkgs.hello.src.hash; })
+          inherit (src-with-sha256.overrideAttrs { hash = fakeHash-2; })
             outputHash
             outputHashAlgo
             ;
         };
         expected = {
-          outputHash = pkgs.hello.src.hash;
+          outputHash = fakeHash-2;
           outputHashAlgo = null;
         };
       };
