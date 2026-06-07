@@ -39,6 +39,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.aarch64;
-    maintainers = with lib.maintainers; [ shreerammodi ];
+    maintainers = [ ];
   };
 }
