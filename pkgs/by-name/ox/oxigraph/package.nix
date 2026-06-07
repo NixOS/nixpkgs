@@ -1,19 +1,25 @@
 {
   lib,
-  rustPlatform,
+  apple-sdk_15,
+  enablePython ? false,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  python3Packages,
+  rustPlatform,
+  stdenv,
 }:
-
 let
   features = [
     "rustls-webpki"
     "geosparql"
     "rdf-12"
   ];
+  mkDerivation =
+    if enablePython then python3Packages.buildPythonPackage else rustPlatform.buildRustPackage;
 in
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "oxigraph";
+mkDerivation (finalAttrs: {
+  pname = if enablePython then "pyoxigraph" else "oxigraph";
   version = "0.5.9";
 
   src = fetchFromGitHub {
@@ -24,19 +30,52 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-QMbhtKoVa1fN6BQwAZfPelxCV5MCqodqpN7qHJs70KE=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) version src;
+    pname = "oxigraph";
+    hash = "sha256-QMbhtKoVa1fN6BQwAZfPelxCV5MCqodqpN7qHJs70KE=";
+  };
+
+  pyproject = true;
+
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && enablePython) [
+    apple-sdk_15
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     installShellFiles
+  ]
+  ++ lib.optionals enablePython [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
 
-  buildAndTestSubdir = "cli";
+  buildAndTestSubdir = if enablePython then "python" else "cli";
   buildNoDefaultFeatures = true;
   buildFeatures = features;
 
+  nativeCheckInputs = lib.optionals enablePython [
+    python3Packages.pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "pyoxigraph" ];
+
+  disabledTests = [
+    "test_update_load"
+  ];
+
+  disabledTestPaths = [
+    # These require network access
+    "lints/test_spec_links.py"
+    "lints/test_debian_compatibility.py"
+    "oxrocksdb-sys/rocksdb/tools/block_cache_analyzer/block_cache_pysim_test.py"
+    "oxrocksdb-sys/rocksdb/tools"
+  ];
+
   # Man pages and autocompletion
-  postInstall = ''
+  postInstall = lib.optionals (!enablePython) ''
     MAN_DIR="$(find target/*/release -name man)"
     installManPage "$MAN_DIR"/*.1
     COMPLETE_DIR="$(find target/*/release -name complete)"
@@ -58,6 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       astro
+      dadada
       tnias
       videl
     ];
