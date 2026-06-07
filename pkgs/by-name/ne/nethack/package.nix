@@ -16,6 +16,9 @@
   libxpm,
   bdftopcf,
   mkfontdir,
+  xset,
+  font-misc-misc,
+  font-adobe-75dpi,
   pkg-config,
   qt5,
   copyDesktopItems,
@@ -34,6 +37,16 @@ let
   binPath = lib.makeBinPath [
     coreutils
     less
+  ];
+
+  # The X11 interface loads core X bitmap fonts by XLFD: the "fixed" font for
+  # the map and menus (the iso10646-1 variant is used for ENHANCED_SYMBOLS) and
+  # adobe "times" for the tombstone. NixOS's X server doesn't have these on its
+  # font path by default, so we make the launcher add them at startup, the same
+  # way upstream's nethack.sh does for its own bundled font.
+  x11FontPath = lib.concatStringsSep "," [
+    "${font-misc-misc}/share/fonts/X11/misc"
+    "${font-adobe-75dpi}/share/fonts/X11/75dpi"
   ];
 in
 
@@ -135,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/macOS.500
     sed -e '/define CHDIR/d' \
-        -e '/define ENHANCED_SYMBOLS/d' \
         -i include/config.h
     sed \
       -e 's,AR=.*,AR := $(AR) rcu,' \
@@ -144,8 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed \
       -e 's,AR =.*,AR := $(AR),' \
       -i sys/unix/Makefile.src
-    ${lib.optionalString qtMode
-      ''
+    ${lib.optionalString qtMode ''
       sed \
         -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
         -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
@@ -155,8 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
               QTDIR=${qt5.qtbase.dev},' \
         -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
         -i sys/unix/hints/macOS.500
-      ''
-    }
+    ''}
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
       # If we're cross-compiling, replace the paths to the data generation tools
       # with the ones from the build platform's nethack package, since we can't
@@ -209,10 +219,15 @@ stdenv.mkDerivation (finalAttrs: {
     RUNDIR=\$(mktemp -d)
 
     cleanup() {
-      rm -rf \$RUNDIR
+      rm -rf \$RUNDIR${lib.optionalString x11Mode ''
+
+        ${xset}/bin/xset -fp ${x11FontPath} >/dev/null 2>&1 || true''}
     }
     trap cleanup EXIT
-
+    ${lib.optionalString x11Mode ''
+      ${xset}/bin/xset +fp ${x11FontPath} >/dev/null 2>&1 || true
+      ${xset}/bin/xset fp rehash >/dev/null 2>&1 || true
+    ''}
     cd \$RUNDIR
     for i in ${userDir}/*; do
       ln -s \$i \$(basename \$i)
@@ -228,12 +243,12 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     EOF
     chmod +x $out/bin/nethack
-    ${lib.optionalString (!x11Mode && !qtMode && (stdenv.buildPlatform == stdenv.hostPlatform))
-      ''
+    ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
+    ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+    ${lib.optionalString (!x11Mode && !qtMode && (stdenv.buildPlatform == stdenv.hostPlatform)) ''
       install -Dm 555 util/makedefs -t $out/libexec/nethack/
       install -Dm 555 util/dlb -t $out/libexec/nethack/
-      ''
-    }
+    ''}
   '';
 
   desktopItems = lib.optionals (x11Mode || qtMode) [
@@ -262,6 +277,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.ngpl;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ olduser101 ];
-    mainProgram = "nethack";
+    mainProgram =
+      if x11Mode then
+        "nethack-x11"
+      else if qtMode then
+        "nethack-qt"
+      else
+        "nethack";
   };
 })
