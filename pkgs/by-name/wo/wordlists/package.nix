@@ -38,7 +38,8 @@ let
 
 in
 symlinkJoin {
-  name = "wordlists";
+  pname = "wordlists";
+  version = "1.0.0";
 
   paths = [
     wordlistsCollection
