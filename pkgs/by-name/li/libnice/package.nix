@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = {
+    changelog = "https://gitlab.freedesktop.org/libnice/libnice/-/blob/${finalAttrs.version}/NEWS";
     description = "GLib ICE implementation";
     longDescription = ''
       Libnice is an implementation of the IETF's Interactice Connectivity
