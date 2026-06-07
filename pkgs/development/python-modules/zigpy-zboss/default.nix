@@ -13,7 +13,7 @@
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-zboss";
   version = "2.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kardia-as";
     repo = "zigpy-zboss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mVOuBy/uf4NsWqSfpL/ETLMnUDF5H8x1n8XoNjH5DNY=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/kardia-as/zigpy-zboss/releases/tag/v${version}";
+    changelog = "https://github.com/kardia-as/zigpy-zboss/releases/tag/${finalAttrs.src.tag}";
     description = "Library for zigpy which communicates with Nordic nRF52 radios";
     homepage = "https://github.com/kardia-as/zigpy-zboss";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
