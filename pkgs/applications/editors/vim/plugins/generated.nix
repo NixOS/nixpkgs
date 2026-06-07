@@ -4043,6 +4043,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  coop-nvim = buildVimPlugin {
+    pname = "coop.nvim";
+    version = "0-unstable-2026-04-20";
+    src = fetchFromGitHub {
+      owner = "gregorias";
+      repo = "coop.nvim";
+      rev = "b156e541316aee14be4ae64c93ed8bddb6d03bc1";
+      hash = "sha256-S6iGmdakI714Im0tetgfASbe0K4/olYsjj26+WP+rSU=";
+    };
+    meta.homepage = "https://github.com/gregorias/coop.nvim/";
+    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
+    meta.hydraPlatforms = [ ];
+  };
+
   copilot-cmp = buildVimPlugin {
     pname = "copilot-cmp";
     version = "0-unstable-2024-12-11";
@@ -7316,9 +7330,10 @@ final: prev: {
       owner = "Zeioth";
       repo = "heirline-components.nvim";
       rev = "5ea9a16286c01b7c36d58c91903d1f8ff0b7ddeb";
-      sha256 = "0gij9c9qgmqc99fnqnvp6icxp32q0wkz536ric2x5vpbqlzsdkik";
+      hash = "sha256-M86mP8Xr7tIFi9mM8icHWIzbWTR3W2xdSgzXhxNLMj4=";
     };
     meta.homepage = "https://github.com/Zeioth/heirline-components.nvim/";
+    meta.license = unfree;
     meta.hydraPlatforms = [ ];
   };
 
