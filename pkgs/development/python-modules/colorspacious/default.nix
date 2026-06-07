@@ -6,19 +6,23 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colorspacious";
   version = "1.1.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "065n24zbm9ymy2gvf03vx5cggk1258vcjdaw8jn9v26arpl7542y";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-XpBy6M3KiJ2sRFw1yTYqIsz3WOl7ALef8NWnuj4Rthg=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
+
+  pythonImportsCheck = [ "colorspacious" ];
 
   meta = {
     homepage = "https://github.com/njsmith/colorspacious";
@@ -26,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
