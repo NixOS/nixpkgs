@@ -200,21 +200,30 @@ in
       ]
       ''Use `services.dovecot2.settings.protocols = "lmtp"` for Dovecot 2.3, `services.dovecot2.settings.protocols.lmtp` for Dovecot 2.4.''
     )
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "sslServerCert"
-    ] "Use `settings.ssl_cert` for Dovecot 2.3, `settings.ssl_server_cert_file` for 2.4.")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "sslServerKey"
-    ] "Use `settings.ssl_key` for Dovecot 2.3, `settings.ssl_server_key_file` for 2.4.")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "sslCACert"
-    ] "Use `settings.ssl_ca` for Dovecot 2.3, `settings.ssl_server_ca_file` for 2.4.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "sslServerCert"
+      ]
+      ''Use `settings.ssl_cert = "</path"` for Dovecot 2.3, `settings.ssl_server_cert_file = "/path"` for 2.4.''
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "sslServerKey"
+      ]
+      ''Use `settings.ssl_key = "</path"` for Dovecot 2.3, `settings.ssl_server_key_file = "/path"` for 2.4.''
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "sslCACert"
+      ]
+      ''Use `settings.ssl_ca = "</path"` for Dovecot 2.3, `settings.ssl_server_ca_file = "/path"` for 2.4.''
+    )
     (mkRemovedOptionModule [
       "services"
       "dovecot2"
