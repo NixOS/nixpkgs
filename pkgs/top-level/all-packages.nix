@@ -9656,8 +9656,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  rednotebook = callPackage ../applications/editors/rednotebook { };
-
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
   ripcord =
