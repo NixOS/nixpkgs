@@ -1050,6 +1050,7 @@
   ./services/monitoring/nezha-agent.nix
   ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
+  ./services/monitoring/orbit.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
   ./services/monitoring/perses.nix
