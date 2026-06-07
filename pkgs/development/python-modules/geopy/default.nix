@@ -14,6 +14,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.4.1";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "geopy";
     repo = "geopy";
