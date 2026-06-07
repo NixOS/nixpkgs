@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.24.0";
+  version = "2.25.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_datastore";
     inherit version;
-    hash = "sha256-8IfAKmqkrGi78X8MBIrj7jVYVr8JxRQ5v7oZN0E4d5I=";
+    hash = "sha256-3WRqPY+ZwnULtfbg8Y7Oe+2V/XbgLayt2/o1orIjKP8=";
   };
 
   build-system = [ setuptools ];
