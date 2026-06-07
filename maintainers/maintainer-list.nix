@@ -18559,6 +18559,12 @@
     matrix = "@motiejus:jakstys.lt";
     name = "Motiejus Jakštys";
   };
+  mpatankar6 = {
+    email = "mihir@mihirpatankar.com";
+    github = "mpatankar6";
+    githubId = 31748962;
+    name = "Mihir Patankar";
+  };
   mpcsh = {
     email = "m@mpc.sh";
     github = "mpcsh";
