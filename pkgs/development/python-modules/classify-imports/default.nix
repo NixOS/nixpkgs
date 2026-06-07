@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "classify-imports";
   version = "4.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asottile";
@@ -16,6 +17,8 @@ buildPythonPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "classify_imports" ];
 
