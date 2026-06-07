@@ -144,7 +144,18 @@ in
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
-      after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
+      after =
+        # Order after NetworkManager-wait-online so an nm-online hang during a
+        # NetworkManager restart can't stall nixos-rebuild mid-activation.
+        # https://github.com/NixOS/nixpkgs/issues/180175
+        lib.optional config.networking.networkmanager.enable "NetworkManager-wait-online.service"
+        # Don't start until the network is online: otherwise tailscaled can claim
+        # MagicDNS (100.100.100.100) before it can reach the control plane and
+        # break DNS until it reconnects. Needs both `wants` and `after` — an
+        # `after` edge alone won't pull the target into the boot transaction.
+        # https://github.com/NixOS/nixpkgs/issues/527403
+        ++ [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         (dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
