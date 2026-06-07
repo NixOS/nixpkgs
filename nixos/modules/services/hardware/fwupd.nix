@@ -35,7 +35,7 @@ let
     lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
   extraTrustedKeys =
     let
-      mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
+      mkName = p: "pki/fwupd/${baseNameOf p}";
       mkEtcFile = p: lib.nameValuePair (mkName p) { source = p; };
     in
     lib.listToAttrs (map mkEtcFile cfg.extraTrustedKeys);

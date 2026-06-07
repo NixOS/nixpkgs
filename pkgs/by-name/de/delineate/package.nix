@@ -39,18 +39,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "delineate";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Delineate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rYA5TKHX3QJHcUhaTFDpcXQ6tdaG3MbX8buvzV0V5iY=";
+    hash = "sha256-6SYYDxzBzs6nSrPp9TPKnIYHdoZJklTr5K0DSFx7S0s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-6XBg9kbIr5k+TMQ/TE/qsAA5rKIevU9M1m+jsPrqfYw=";
+    hash = "sha256-G7K3aeSBnKcJHOlQQIHd3Kzoe/ienFVycTWOKOSRhZc=";
   };
 
   # rename $out/src -> $out/opt

@@ -93,6 +93,7 @@ let
           license = lib.licenses.bsd3;
           maintainers = with lib.maintainers; [
             felixsinger
+            hax404
             lilacious
           ];
           platforms = lib.platforms.linux ++ (overrides.platforms or [ ]);

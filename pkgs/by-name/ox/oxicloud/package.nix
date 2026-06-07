@@ -29,6 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--bin=oxicloud" ];
 
+  postPatch = ''
+    # Upstream pins `target-cpu=native`, making the binary non-portable
+    # (breaks the binary cache). Build for the generic baseline instead.
+    rm -f .cargo/config.toml
+  '';
+
   postInstall = ''
     mkdir -p $out/share/oxicloud
     cp -r static-dist $out/share/oxicloud/static
