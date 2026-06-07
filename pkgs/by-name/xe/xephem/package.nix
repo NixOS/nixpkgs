@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xephem";
     homepage = "https://xephem.github.io/XEphem/Site/xephem.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ EstebanMacanek ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
