@@ -87,6 +87,42 @@ in
 
                 This is the recommended way to specify the server location.
                 When running a local server, the default value is correct.
+                For a remote server set this to e.g. `"http://192.168.1.100:8266"`.
+              '';
+            };
+
+            serverIP = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              defaultText = lib.literalExpression ''"127.0.0.1"'';
+              description = ''
+                IP address of the Tdarr server.
+
+                Although deprecated in favour of
+                {option}`services.tdarr.nodes.<name>.serverURL`, the node
+                binary still reads this field for internal API calls such as
+                `/api/v2/update-node`.  Without it the node falls back to the
+                compiled-in default of `0.0.0.0` and cannot reach the server.
+
+                Set this to the same host as {option}`serverURL`.  For a remote
+                server this should be the server's IP address, e.g.
+                `"192.168.1.100"`.
+              '';
+              example = "192.168.1.100";
+            };
+
+            serverPort = lib.mkOption {
+              type = lib.types.port;
+              default = cfg.server.serverPort;
+              defaultText = lib.literalExpression "config.services.tdarr.server.serverPort";
+              description = ''
+                Port of the Tdarr server API.
+
+                Although deprecated in favour of
+                {option}`services.tdarr.nodes.<name>.serverURL`, the node
+                binary still reads this field for internal API calls.  Must
+                match the port in {option}`serverURL` and the server's
+                {option}`services.tdarr.server.serverPort`.
               '';
             };
 
