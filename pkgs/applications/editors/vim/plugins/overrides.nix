@@ -5318,7 +5318,7 @@ assertNoAdditions {
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
     passthru = old.passthru // {
-      python3Dependencies = [ python3.pkgs.mwclient ];
+      python3Dependencies = ps: [ ps.mwclient ];
     };
   });
 
