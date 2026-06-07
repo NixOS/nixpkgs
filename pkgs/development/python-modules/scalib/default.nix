@@ -17,6 +17,8 @@
   pytest-cov-stub,
   scikit-learn,
   scipy,
+
+  nix-update-script,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "scalib";
@@ -73,6 +75,8 @@ buildPythonPackage (finalAttrs: {
     scipy
     numpy
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Side-Channel Analysis Library";
