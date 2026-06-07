@@ -25337,7 +25337,7 @@
   shelvacu = {
     name = "Shelvacu";
     email = "nix-maint@shelvacu.com";
-    matrix = "@s:consortium.chat";
+    matrix = "@s:sv.mt";
     github = "shelvacu";
     githubId = 1731537;
   };

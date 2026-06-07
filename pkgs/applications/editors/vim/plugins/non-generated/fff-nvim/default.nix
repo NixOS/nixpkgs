@@ -92,7 +92,7 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];
