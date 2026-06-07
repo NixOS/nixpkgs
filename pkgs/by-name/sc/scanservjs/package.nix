@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -49,6 +50,10 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";
