@@ -7,19 +7,21 @@
   grpcio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chirpstack-api";
   version = "3.12.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "brocaar";
     repo = "chirpstack-api";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TDwvUNnGAbt10lLg6U7q+JMg7uu8TLySYqNyt/uk8UY=";
   };
 
-  sourceRoot = "${src.name}/python/src";
+  sourceRoot = "${finalAttrs.src.name}/python/src";
 
   build-system = [ setuptools ];
 
@@ -39,4 +41,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
