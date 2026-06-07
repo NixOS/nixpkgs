@@ -5,7 +5,7 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "update-copyright";
   version = "0.6.2";
   format = "setuptools";
@@ -16,7 +16,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) version;
+    pname = "update-copyright";
     sha256 = "17ybdgbdc62yqhda4kfy1vcs1yzp78d91qfhj5zbvz1afvmvdk7z";
   };
 
@@ -26,4 +27,4 @@ buildPythonPackage rec {
     homepage = "http://blog.tremily.us/posts/update-copyright";
     license = lib.licenses.gpl3;
   };
-}
+})
