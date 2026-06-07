@@ -841,9 +841,7 @@ optionalAttrs allowAliases aliases
         in
         attrsOf atomType;
       generate =
-        name: value:
         let
-
           # note that list type has been omitted here as the separator varies, see `nix.settings.*`
           mkValueString =
             v:
@@ -871,8 +869,8 @@ optionalAttrs allowAliases aliases
           mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
 
           isExtra = key: hasPrefix "extra-" key;
-
         in
+        name: value:
         pkgs.writeTextFile {
           inherit name;
           # workaround for https://github.com/NixOS/nix/issues/9487
