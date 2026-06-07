@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trusttunnel-endpoint";
-  version = "1.0.33";
+  version = "1.0.41";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TrustTunnel";
     repo = "TrustTunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uTAjZbPBCVucjjrl3cYCT6+6cSxiIe/Q3jm+Oa+Fl7E=";
+    hash = "sha256-ZFlHX17n0GQ+HVbJD9NQ5Jeg93G9A7dkjSkRD84ZNFQ=";
   };
 
-  cargoHash = "sha256-njQL6YtnRtfpyvsxoTmsSILvyKwYqg42DXsZ8zkhBWo=";
+  cargoHash = "sha256-2ivFP6JjFFlScO6jcaHOTzcmntKlmOmJQE0q/81NOxc=";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs $cargoDepsCopy/*/quiche-*/src/build.rs \
