@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     for f in repl.k m.c;do
       substituteInPlace "$f" --replace-fail "/bin/sh" "${runtimeShell}"
     done
+    substituteInPlace repl.k --replace-fail '"LICENSE"' '"../share/ngn-k/LICENSE"'
   '';
 
   makeFlags = [ "-e" ];
@@ -51,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
     substituteInPlace "$out/bin/repl.k" --replace-fail "#!k" "#!$out/bin/k"
-    ln -s ../share/ngn-k/LICENSE "$out/bin/LICENSE"
     makeWrapper "$out/bin/repl.k" "$out/bin/k-repl"
     runHook postInstall
   '';
