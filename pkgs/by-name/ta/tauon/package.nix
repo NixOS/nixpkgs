@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchPypi,
   kissfft,
   miniaudio,
   pkg-config,
@@ -27,35 +26,16 @@
   pulseaudio,
   withDiscordRPC ? true,
 }:
-
-let
-  # fork of pypresence, to be reverted if/when there's an upstream release
-  lynxpresence = python3Packages.buildPythonPackage rec {
-    pname = "lynxpresence";
-    version = "4.6.2";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
-    };
-
-    build-system = with python3Packages; [ setuptools ];
-
-    doCheck = false; # tests require internet connection
-    pythonImportsCheck = [ "lynxpresence" ];
-  };
-in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "9.1.3";
+  version = "10.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-Z/+8UCtwvY9000b1Y+HaTIehK8axzyR+eeeBPhllS4U=";
+    hash = "sha256-atLyNePy3pc3xJFliy5hITC5R0VU6jfHYqfq8RxqGoM=";
   };
 
   postUnpack = ''
@@ -74,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [
     "opencc"
     "tekore"
-    # Whether or not it is enabled (withDiscordRPC), it isn't present during build.
+    # Not present when withDiscordRPC is disabled.
     "pypresence"
   ];
 
@@ -131,7 +111,7 @@ python3Packages.buildPythonApplication rec {
       setproctitle
       tidalapi
     ]
-    ++ lib.optional withDiscordRPC lynxpresence
+    ++ lib.optional withDiscordRPC pypresence
     ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
@@ -164,7 +144,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      jansol
+      alfarel
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

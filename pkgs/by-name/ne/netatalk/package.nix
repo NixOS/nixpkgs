@@ -26,6 +26,15 @@
   iniparser,
   pandoc,
   sqlite,
+  talloc,
+  xapian,
+  flex,
+  bison,
+  dconf,
+  localsearch,
+  tinysparql,
+  xapianSupport ? false,
+  localsearchSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     file
+  ]
+  ++ lib.optionals localsearchSupport [
+    flex
+    bison
   ];
 
   buildInputs = [
@@ -64,6 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
     iniparser
     pandoc
     sqlite
+    talloc
+  ]
+  ++ lib.optionals xapianSupport [
+    xapian
+    file
+  ]
+  ++ lib.optionals localsearchSupport [
+    tinysparql
+    dconf
+    localsearch
   ];
 
   mesonFlags = [
@@ -77,7 +100,25 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
     "-Dwith-statedir-creation=false"
+    "-Dwith-spotlight-backends=${
+      lib.concatStringsSep "," (
+        [ "cnid" ] ++ lib.optional xapianSupport "xapian" ++ lib.optional localsearchSupport "localsearch"
+      )
+    }"
   ];
+
+  # TODO: drop once upstream makes this path configurable.
+  postPatch = lib.optionalString localsearchSupport ''
+    substituteInPlace meson.build \
+      --replace-fail "install_emptydir('/etc/dconf/db')" "install_emptydir('etc/dconf/db')"
+    substituteInPlace config/dconf/meson.build \
+      --replace-fail "install_dir: '/etc/dconf/profile'" "install_dir: 'etc/dconf/profile'"
+  '';
+
+  # netatalk probes for the LocalSearch schema at configure time.
+  preConfigure = lib.optionalString localsearchSupport ''
+    export XDG_DATA_DIRS="''${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}${localsearch}/share/gsettings-schemas/localsearch-${localsearch.version}"
+  '';
 
   enableParallelBuilding = true;
 

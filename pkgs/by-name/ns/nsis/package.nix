@@ -13,15 +13,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsis";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}-src.tar.bz2";
-    sha256 = "19e72062676ebdc67c11dc032ba80b979cdbffd3886c60b04bb442cdd401ff4b";
+    sha256 = "11miw8jbhqcn5wmndcjdjfs0r7jm08x5cfvxyj64xkx29a77mvgk";
   };
   srcWinDistributable = fetchzip {
     url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}.zip";
-    sha256 = "e574f335ab9d3ad73118f46615e5c9f2a52f3e4622ecbb7e5886badbc8601348";
+    sha256 = "0rp9bycykjgx2aq656sdba1h4v14nfyiic2lgp1xm93l2czx9k9q";
   };
 
   postUnpack = ''
