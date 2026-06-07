@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   click,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "click-command-tree";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "whwright";
@@ -18,7 +19,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-oshAHCGe8p5BQ0W21bXSxrTCEFgIxZ6BmUEiWB1xAoI=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ setuptools ];
+
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
