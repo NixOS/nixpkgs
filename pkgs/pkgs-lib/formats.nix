@@ -469,7 +469,7 @@ optionalAttrs allowAliases aliases
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, remarshal }:
+          { runCommand }:
           runCommand name
             {
               nativeBuildInputs = [ json2x ];
