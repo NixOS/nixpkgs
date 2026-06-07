@@ -5312,7 +5312,8 @@
       ];
     "pvpc_hourly_pricing" =
       ps: with ps; [
-      ]; # missing inputs: esios_api
+        esios-api
+      ];
     "pyload" =
       ps: with ps; [
         pyloadapi
@@ -8479,6 +8480,7 @@
     "pushbullet"
     "pushover"
     "pvoutput"
+    "pvpc_hourly_pricing"
     "pyload"
     "python_script"
     "qbittorrent"
