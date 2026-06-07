@@ -103,7 +103,8 @@
       ];
     "aidot" =
       ps: with ps; [
-      ]; # missing inputs: python-aidot
+        python-aidot
+      ];
     "air_quality" =
       ps: with ps; [
       ];
@@ -991,7 +992,8 @@
       ];
     "centriconnect" =
       ps: with ps; [
-      ]; # missing inputs: aiocentriconnect
+        aiocentriconnect
+      ];
     "cert_expiry" =
       ps: with ps; [
       ];
@@ -7734,6 +7736,7 @@
     "aftership"
     "agent_dvr"
     "ai_task"
+    "aidot"
     "air_quality"
     "airgradient"
     "airly"
@@ -7847,6 +7850,7 @@
     "casper_glow"
     "cast"
     "ccm15"
+    "centriconnect"
     "cert_expiry"
     "chacon_dio"
     "chess_com"
