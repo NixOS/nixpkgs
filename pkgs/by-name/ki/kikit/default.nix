@@ -14,7 +14,6 @@
   pytestCheckHook,
   commentjson,
   wxpython,
-  pcbnewtransition,
   pybars3,
   versioneer,
   shapely,
@@ -61,7 +60,6 @@ buildPythonApplication (finalAttrs: {
     commentjson
     # https://github.com/yaqwsx/KiKit/issues/575
     wxpython
-    pcbnewtransition
     pybars3
     shapely
     # https://github.com/yaqwsx/KiKit/issues/576

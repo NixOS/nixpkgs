@@ -476,6 +476,7 @@ mapAliases {
   patator = throw "'patator' has been removed as it was dependant on removed packages and broken"; # Added 2025-12-30
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29
+  pcbnewtransition = throw "'pcbnewtransition' has been removed as it is unmaintained and incompatible with KiCad 10+"; # Added 2026-08-30
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   peakrdl = throw "'peakrdl' has been renamed to/replaced by 'peakrdl-cli'"; # added 2026-07-14
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29

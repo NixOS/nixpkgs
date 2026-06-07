@@ -13227,8 +13227,6 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
-  pcbnewtransition = callPackage ../development/python-modules/pcbnewtransition { };
-
   pcffont = callPackage ../development/python-modules/pcffont { };
 
   pcodec = callPackage ../development/python-modules/pcodec { };
