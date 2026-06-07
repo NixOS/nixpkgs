@@ -37,37 +37,44 @@
 
 attrs:
 let
-  argsToOverride = args: {
-    name = "${args.name or "${args.pname}-${args.version}"}-source";
+  argsToOverride =
+    args:
+    {
+      name = "${args.name or "${args.pname}-${args.version}"}-source";
 
-    outputs = [ "out" ];
+      outputs = [ "out" ];
 
-    phases = [
-      "unpackPhase"
-      "patchPhase"
-      "installPhase"
-    ];
-    separateDebugInfo = false;
+      phases = [
+        "unpackPhase"
+        "patchPhase"
+        "installPhase"
+      ];
+      separateDebugInfo = false;
 
-    dontUnpack = lib.warnIf (args.dontUnpack or false
-    ) "srcOnly: derivation has dontUnpack set, overriding" false;
+      dontUnpack = lib.warnIf (args.dontUnpack or false
+      ) "srcOnly: derivation has dontUnpack set, overriding" false;
 
-    dontInstall = false;
-    installPhase = "cp -pr --reflink=auto -- . $out";
+      dontInstall = false;
+      installPhase = "cp -pr --reflink=auto -- . $out";
 
-    # the original derivation might've set something like outputDev = "lib", but "lib" isn't an output anymore
-    # some things get confused and error if one of these is set to an output that doesn't exist
-    # ex: pkgs/build-support/setup-hooks/multiple-outputs.sh
-    outputDev = "out";
-    outputBin = "out";
-    outputInclude = "out";
-    outputLib = "out";
-    outputDoc = "out";
-    outputDevdoc = "out";
-    outputMan = "out";
-    outputDevman = "out";
-    outputInfo = "out";
-  };
+      # the original derivation might've set something like outputDev = "lib", but "lib" isn't an output anymore
+      # some things get confused and error if one of these is set to an output that doesn't exist
+      # ex: pkgs/build-support/setup-hooks/multiple-outputs.sh
+      outputDev = "out";
+      outputBin = "out";
+      outputInclude = "out";
+      outputLib = "out";
+      outputDoc = "out";
+      outputDevdoc = "out";
+      outputMan = "out";
+      outputDevman = "out";
+      outputInfo = "out";
+
+    }
+    // lib.optionalAttrs (lib.isAttrs args.outputChecks or null) {
+      # If the original derivation includes outputChecks for output we are removing, we need to reset it to an empty check.
+      outputChecks = { };
+    };
 in
 
 # If we are passed a derivation (based on stdenv*), we can use overrideAttrs to
