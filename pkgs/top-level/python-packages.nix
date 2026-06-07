@@ -1084,6 +1084,8 @@ self: super: with self; {
 
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
+  audio-offset-finder = callPackage ../by-name/au/audio-offset-finder { };
+
   audioop-lts =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
 
