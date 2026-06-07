@@ -617,12 +617,14 @@ optionalAttrs allowAliases aliases
       tuple = values: "{${listContent values}}";
 
       toConf =
-        values:
         let
           keyConfig =
             rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
           keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
+        in
+        values:
+        let
           rootConfigs = flatten (mapAttrsToList keyConfigs values);
         in
         ''
