@@ -791,10 +791,10 @@
   };
 
   ghostty = {
-    version = "1.3.0-unstable-2026-04-24";
+    version = "1.3.1-unstable-2026-06-03";
     url = "github:bezhermoso/tree-sitter-ghostty";
-    rev = "753055073a26100e51bdf1a92f4234cd6789c1f9";
-    hash = "sha256-+zy5dqyHUOC6Li31U6/GOAfqPSLZRKfpnyjKgtFSFeM=";
+    rev = "7f41507014534e5f72d16e4639c0346d0adb8054";
+    hash = "sha256-81aTIWcdmHj+sNxB8geIoJwTZocMPTZXWvEKkARzhuU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
