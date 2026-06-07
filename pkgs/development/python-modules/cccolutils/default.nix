@@ -10,14 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cccolutils";
   version = "1.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "CCColUtils";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YzKjG43biRbTZKtzSUHHhtzOfcZfzISHDFolqzrBjL8=";
   };
 
@@ -40,4 +42,4 @@ buildPythonPackage rec {
     homepage = "https://pagure.io/cccolutils";
     license = lib.licenses.gpl2Plus;
   };
-}
+})
