@@ -11,7 +11,6 @@
   meson,
   ninja,
   pkg-config,
-  python3,
   vala,
   wrapGAppsHook4,
 }:
@@ -27,17 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BKpHAlhxd8Zy/ZpPkLhXqlgZsil9JEZmVmHis1gte4Q=";
   };
 
-  postPatch = ''
-    patchShebangs meson_post_install.py
-  '';
-
   strictDeps = true;
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
     desktop-file-utils # for update-desktop-database
