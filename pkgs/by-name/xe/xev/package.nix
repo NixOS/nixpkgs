@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xev";
     license = lib.licenses.x11;
     mainProgram = "xev";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
     platforms = lib.platforms.unix;
   };
 })
