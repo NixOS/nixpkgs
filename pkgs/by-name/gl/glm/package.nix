@@ -9,7 +9,7 @@ callPackage ./generic.nix rec {
   src = fetchFromGitHub {
     owner = "g-truc";
     repo = "glm";
-    rev = version;
-    sha256 = "sha256-2xKv1nO+OdwA0r+I9OZ+OCL9dJFg/LJsQfIvIF76vc0=";
+    tag = version;
+    hash = "sha256-6WnVvFiTe1/OYj/oTGpCjZKNFurR9MxJ4zf0nDg0Alk=";
   };
 }
