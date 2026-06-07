@@ -121,11 +121,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
-    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -133,9 +129,6 @@ buildPythonPackage rec {
   postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
-
-  # Override default arguments in pytest.ini
-  pytestFlags = [ "--timeout=0" ];
 
   disabledTests = [
     # hanging test (flaky)
