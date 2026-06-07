@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   path,
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "0.7.5";
-  format = "setuptools";
   pname = "pickleshare";
+  version = "0.7.5";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -17,7 +18,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-h2g9R5ZcHaZc2srzHIRB0SuARM3smspQDNePwsaDr8o=";
   };
 
-  propagatedBuildInputs = [ path ];
+  build-system = [ setuptools ];
+
+  dependencies = [ path ];
 
   # No proper test suite
   doCheck = false;
