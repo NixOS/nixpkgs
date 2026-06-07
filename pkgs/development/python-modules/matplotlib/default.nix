@@ -118,6 +118,7 @@ buildPythonPackage rec {
     ffmpeg-headless
     freetype
     qhull
+    pybind11
   ]
   ++ lib.optionals enableGtk3 [
     cairo
@@ -130,7 +131,6 @@ buildPythonPackage rec {
   build-system = [
     certifi
     numpy
-    pybind11
     meson-python
     setuptools-scm
   ];
