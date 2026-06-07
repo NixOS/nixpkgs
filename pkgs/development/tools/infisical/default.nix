@@ -13,7 +13,7 @@
 # from the root of the nixpkgs git repository, run:
 #
 #    nix-shell maintainers/scripts/update.nix \
-#      --argstr commit true \
+#      --arg commit true \
 #      --argstr package infisical
 
 let
