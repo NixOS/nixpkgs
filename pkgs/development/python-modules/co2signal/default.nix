@@ -6,13 +6,15 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "co2signal";
   version = "0.4.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "CO2Signal";
     hash = "sha256-8YdYbknLICRrZloGUZuscv5e1LIDZBcCPKZs6EMaNuo=";
   };
@@ -31,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ plabadens ];
   };
-}
+})
