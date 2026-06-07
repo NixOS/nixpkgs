@@ -246,6 +246,8 @@ self: super: with self; {
 
   aiocache = callPackage ../development/python-modules/aiocache { };
 
+  aiocentriconnect = callPackage ../development/python-modules/aiocentriconnect { };
+
   aiocmd = callPackage ../development/python-modules/aiocmd { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
