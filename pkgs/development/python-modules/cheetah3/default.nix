@@ -21,8 +21,6 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  doCheck = false; # Circular dependency
-
   pythonImportsCheck = [ "Cheetah" ];
 
   meta = {
