@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   enableWebui ? true,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -33,9 +33,9 @@ buildGoModule rec {
       ;
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-pggGMLQ08i8irCDQ1A0u41EXDleaRtSKusDWXuU7khA";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-UQT6uYusDw7Hd+1URrSQkyorajih6oF0LSMpPZy9K1w=";
   };
   preBuild = lib.optionals enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -49,7 +49,7 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   # ... or don't embed it in the server
