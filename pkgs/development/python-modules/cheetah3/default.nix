@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cheetah3";
   version = "3.4.0.post5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CheetahTemplate3";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-qWV6ncSe4JbGZD7sLc/kEXY1pUM1II24UgsS/zX872Y=";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = false; # Circular dependency
 
