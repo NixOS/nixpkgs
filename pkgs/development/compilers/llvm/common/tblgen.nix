@@ -14,6 +14,16 @@
   stdenv,
   version,
   clangPatches,
+  # List of tablegen targets.
+  targets ? [
+    "clang-tblgen"
+    "clang-tidy-confusable-chars-gen"
+    "llvm-tblgen"
+    "mlir-tblgen"
+  ]
+  ++ lib.optionals (lib.versionOlder release_version "20") [
+    "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+  ],
 }:
 
 let
@@ -34,32 +44,56 @@ let
   # don't need a native LLVM, only a native copy of the tools which run at
   # build time. This is only tablegen and related tooling, which are cheap
   # to build.
+  inherit (lib)
+    concatMap
+    concatStringsSep
+    naturalSort
+    subtractLists
+    unique
+    ;
+
   pname = "llvm-tblgen";
+
+  targetsSorted = naturalSort targets;
+
+  requiredProjectsPerTarget = {
+    "clang-tblgen" = [ "clang" ];
+    "lldb-tblgen" = [
+      "clang"
+      "lldb"
+    ];
+    "llvm-tblgen" = [ "llvm" ];
+    "mlir-tblgen" = [ "mlir" ];
+    "clang-pseudo-gen" = [
+      "clang"
+      "clang-tools-extra"
+    ];
+    "clang-tidy-confusable-chars-gen" = [
+      "clang"
+      "clang-tools-extra"
+    ];
+  };
+
+  projects = unique (naturalSort (concatMap (t: requiredProjectsPerTarget."${t}") targetsSorted));
 
   src' =
     if monorepoSrc != null then
+      let
+        requiredDirs = [
+          "cmake"
+          "third-party"
+          "llvm"
+        ];
+        sourcePaths = concatStringsSep " " (
+          map (p: "${monorepoSrc}/${p}") (requiredDirs ++ (subtractLists requiredDirs projects))
+        );
+      in
       runCommand "${pname}-src-${version}" { } ''
         mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/third-party "$out"
-        cp -r ${monorepoSrc}/llvm "$out"
-        cp -r ${monorepoSrc}/clang "$out"
-        cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        cp -r ${monorepoSrc}/mlir "$out"
+        cp -r -t "$out" ${sourcePaths}
       ''
     else
       src;
-
-  # List of tablegen targets.
-  targets = [
-    "clang-tblgen"
-    "llvm-tblgen"
-    "clang-tidy-confusable-chars-gen"
-    "mlir-tblgen"
-  ]
-  ++ lib.optionals (lib.versionOlder release_version "20") [
-    "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-  ];
 
   self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
@@ -70,14 +104,16 @@ let
     __structuredAttrs = true;
 
     postPatch = ''
-      (
-        cd ../clang
-        chmod u+rwX -R .
-        for p in ${toString clangPatches}
-        do
-          patch -p1 < $p
-        done
-      )
+      if [ -d ../clang ]; then
+        (
+          cd ../clang
+          chmod u+rwX -R .
+          for p in ${toString clangPatches}
+          do
+            patch -p1 < $p
+          done
+        )
+      fi
     '';
 
     nativeBuildInputs = [
@@ -92,20 +128,13 @@ let
 
     cmakeFlags = [
       # Projects with tablegen-like tools.
-      "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" [
-          "llvm"
-          "clang"
-          "clang-tools-extra"
-          "mlir"
-        ]
-      }"
+      "-DLLVM_ENABLE_PROJECTS=${concatStringsSep ";" projects}"
     ]
     ++ devExtraCmakeFlags;
 
-    ninjaFlags = targets;
+    ninjaFlags = finalAttrs.targets;
 
-    inherit targets;
+    targets = targetsSorted;
 
     installPhase = ''
       mkdir -p $out/bin
