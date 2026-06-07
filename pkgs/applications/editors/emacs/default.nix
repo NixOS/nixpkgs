@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+  stdenv,
+}:
 
 lib.makeScope pkgs.newScope (
   self:
@@ -10,7 +14,7 @@ lib.makeScope pkgs.newScope (
   in
   {
     sources = import ./sources.nix {
-      inherit lib;
+      inherit lib stdenv;
       inherit (pkgs)
         fetchFromGitHub
         fetchgit
