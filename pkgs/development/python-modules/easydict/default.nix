@@ -19,8 +19,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "easydict" ];
 
   meta = {
-    homepage = "https://github.com/makinacorpus/easydict";
-    license = lib.licenses.lgpl3;
     description = "Access dict values as attributes (works recursively)";
+    homepage = "https://github.com/makinacorpus/easydict";
+    changelog = "https://github.com/makinacorpus/easydict/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl3;
   };
 })
