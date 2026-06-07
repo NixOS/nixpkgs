@@ -1,4 +1,9 @@
-{ callPackage, runCommand }:
+{
+  callPackage,
+  runCommand,
+  lib,
+  stdenv,
+}:
 let
   src = callPackage ./src.nix { };
 in
@@ -14,6 +19,8 @@ rec {
     # Flags based on discussion in https://github.com/NixOS/nixpkgs/issues/482250
     "--disable-debug"
     "--disable-debug-symbols"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-lto=thin,cross"
   ];
 

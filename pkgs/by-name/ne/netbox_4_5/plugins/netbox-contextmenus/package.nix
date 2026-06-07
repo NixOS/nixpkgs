@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "netbox-contextmenus";
   version = "1.4.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PieterL75";

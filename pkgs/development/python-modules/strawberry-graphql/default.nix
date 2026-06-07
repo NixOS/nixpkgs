@@ -13,12 +13,13 @@
   fetchFromGitHub,
   flask,
   freezegun,
+  graphlib-backport,
   graphql-core,
   inline-snapshot,
   libcst,
   opentelemetry-api,
   opentelemetry-sdk,
-  poetry-core,
+  protobuf,
   pydantic,
   pygments,
   pyinstrument,
@@ -33,33 +34,35 @@
   python-dateutil,
   python-multipart,
   rich,
-  sanic,
   sanic-testing,
+  sanic,
   starlette,
-  typing-extensions,
-  uvicorn,
   typer,
-  graphlib-backport,
+  typing-extensions,
+  uv-build,
+  uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strawberry-graphql";
-  version = "0.289.2";
+  version = "0.316.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    tag = version;
-    hash = "sha256-eiIyAYId5MHKWmn87Cj/TCNN4YU5KkAWMEMhoMIR8xM=";
+    tag = finalAttrs.version;
+    hash = "sha256-z9ZqIW0DD5/o2nuHqEjcjIaaHMMiT6jRoFddroSPP24=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+    substituteInPlace pyproject.toml \
       --replace-fail "--emoji" ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     cross-web
@@ -77,6 +80,7 @@ buildPythonPackage rec {
       starlette
       python-multipart
     ];
+    apollo-federation = [ protobuf ];
     debug = [
       rich
       libcst
@@ -138,7 +142,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -163,9 +167,9 @@ buildPythonPackage rec {
   meta = {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "strawberry";
   };
-}
+})

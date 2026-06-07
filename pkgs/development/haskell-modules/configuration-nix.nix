@@ -134,6 +134,18 @@ builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  qhs = lib.pipe super.qhs [
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepends [ self.hspec-discover ])
+    # tests depend on executable
+    (overrideCabal (drv: {
+      preCheck = ''
+        ${drv.preCheck or ""}
+        export PATH="$PWD/dist/build/qhs:$PATH"
+      '';
+    }))
+  ];
+
   # Test suite needs executable
   agda2lagda = overrideCabal (drv: {
     preCheck = ''
@@ -1640,10 +1652,6 @@ builtins.intersectAttrs super {
 
   # there are three very heavy test suites that need external repos, one requires network access
   hevm = dontCheck super.hevm;
-
-  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
-  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
-  hadolint = disableCabalFlag "static" super.hadolint;
 
   # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
   doctest-driver-gen = dontCheck super.doctest-driver-gen;

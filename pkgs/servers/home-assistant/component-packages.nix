@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.6.0";
+  version = "2026.6.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -103,7 +103,8 @@
       ];
     "aidot" =
       ps: with ps; [
-      ]; # missing inputs: python-aidot
+        python-aidot
+      ];
     "air_quality" =
       ps: with ps; [
       ];
@@ -991,7 +992,8 @@
       ];
     "centriconnect" =
       ps: with ps; [
-      ]; # missing inputs: aiocentriconnect
+        aiocentriconnect
+      ];
     "cert_expiry" =
       ps: with ps; [
       ];
@@ -2461,7 +2463,8 @@
       ];
     "guntamatic" =
       ps: with ps; [
-      ]; # missing inputs: guntamatic
+        guntamatic
+      ];
     "habitica" =
       ps: with ps; [
         habiticalib
@@ -7733,6 +7736,7 @@
     "aftership"
     "agent_dvr"
     "ai_task"
+    "aidot"
     "air_quality"
     "airgradient"
     "airly"
@@ -7846,6 +7850,7 @@
     "casper_glow"
     "cast"
     "ccm15"
+    "centriconnect"
     "cert_expiry"
     "chacon_dio"
     "chess_com"
@@ -8074,6 +8079,7 @@
     "group"
     "growatt_server"
     "guardian"
+    "guntamatic"
     "habitica"
     "hanna"
     "hardkernel"

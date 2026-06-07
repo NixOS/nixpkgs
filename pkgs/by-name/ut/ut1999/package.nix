@@ -43,15 +43,21 @@ let
     # fat binary
     aarch64-darwin = x86_64-darwin;
   };
+  # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
+  # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99). The first ISO contains the base game.
+  iso1 = fetchurl {
+    url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
+    hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
+  };
+  # The second ISO contains bonus maps and game modes
+  iso2 = fetchurl {
+    url = "https://archive.org/download/ut-goty/UT_GOTY_CD2.iso";
+    hash = "sha256-2V2O4c+VVi7gI/1UA17IgT1CdfY9GEdCMiCYbtyNANg=";
+  };
   baseGame =
     runCommand "ut1999-iso1"
       {
-        # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
-        # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99). The first ISO contains the base game.
-        src = fetchurl {
-          url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
-          hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
-        };
+        src = iso1;
         nativeBuildInputs = [ libarchive ];
       }
       ''
@@ -62,11 +68,7 @@ let
   bonusPacks =
     runCommand "ut1999-iso2"
       {
-        # The second ISO contains bonus maps and game modes
-        src = fetchurl {
-          url = "https://archive.org/download/ut-goty/UT_GOTY_CD2.iso";
-          hash = "sha256-2V2O4c+VVi7gI/1UA17IgT1CdfY9GEdCMiCYbtyNANg=";
-        };
+        src = iso2;
         nativeBuildInputs = [ libarchive ];
       }
       ''
@@ -218,6 +220,14 @@ stdenv.mkDerivation (finalAttrs: {
       categories = [ "Game" ];
     })
   ];
+
+  passthru = {
+    # The ISOs can be appended to `system.extraDependencies` in order to prevent them from getting garbage collected and redownloaded during rebuilds.
+    isos = [
+      iso1
+      iso2
+    ];
+  };
 
   meta = {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";

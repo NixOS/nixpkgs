@@ -246,6 +246,8 @@ self: super: with self; {
 
   aiocache = callPackage ../development/python-modules/aiocache { };
 
+  aiocentriconnect = callPackage ../development/python-modules/aiocentriconnect { };
+
   aiocmd = callPackage ../development/python-modules/aiocmd { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
@@ -6924,6 +6926,8 @@ self: super: with self; {
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
 
+  guntamatic = callPackage ../development/python-modules/guntamatic { };
+
   guppy3 = callPackage ../development/python-modules/guppy3 { };
 
   gurobipy = callPackage ../development/python-modules/gurobipy { };
@@ -8592,8 +8596,6 @@ self: super: with self; {
   langchain-core = callPackage ../development/python-modules/langchain-core { };
 
   langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
-
-  langchain-experimental = callPackage ../development/python-modules/langchain-experimental { };
 
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
 
@@ -15816,6 +15818,8 @@ self: super: with self; {
 
   pythinkingcleaner = callPackage ../development/python-modules/pythinkingcleaner { };
 
+  python-aidot = callPackage ../development/python-modules/python-aidot { };
+
   python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
   python-apt = callPackage ../development/python-modules/python-apt { };
@@ -20136,6 +20140,8 @@ self: super: with self; {
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
+
+  trsfile = callPackage ../development/python-modules/trsfile { };
 
   trubar = callPackage ../development/python-modules/trubar { };
 

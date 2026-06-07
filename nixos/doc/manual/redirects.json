@@ -65,6 +65,42 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-mautrix-discord": [
+    "index.html#module-services-mautrix-discord"
+  ],
+  "module-services-mautrix-discord-advanced": [
+    "index.html#module-services-mautrix-discord-advanced"
+  ],
+  "module-services-mautrix-discord-authentication": [
+    "index.html#module-services-mautrix-discord-authentication"
+  ],
+  "module-services-mautrix-discord-backfill": [
+    "index.html#module-services-mautrix-discord-backfill"
+  ],
+  "module-services-mautrix-discord-basic-example": [
+    "index.html#module-services-mautrix-discord-basic-example"
+  ],
+  "module-services-mautrix-discord-basic-usage": [
+    "index.html#module-services-mautrix-discord-basic-usage"
+  ],
+  "module-services-mautrix-discord-double-puppet": [
+    "index.html#module-services-mautrix-discord-double-puppet"
+  ],
+  "module-services-mautrix-discord-encryption": [
+    "index.html#module-services-mautrix-discord-encryption"
+  ],
+  "module-services-mautrix-discord-server-defaults": [
+    "index.html#module-services-mautrix-discord-server-defaults"
+  ],
+  "module-services-mautrix-discord-setup": [
+    "index.html#module-services-mautrix-discord-setup"
+  ],
+  "module-services-mautrix-discord-synapse": [
+    "index.html#module-services-mautrix-discord-synapse"
+  ],
+  "module-services-mautrix-discord-troubleshooting": [
+    "index.html#module-services-mautrix-discord-troubleshooting"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"

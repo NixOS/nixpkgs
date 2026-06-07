@@ -5160,7 +5160,6 @@ broken-packages:
   - qc-oi-testgenerator # failure in job https://hydra.nixos.org/build/233197822 at 2023-09-02
   - qd # failure in job https://hydra.nixos.org/build/233213936 at 2023-09-02
   - qed # failure in job https://hydra.nixos.org/build/233249635 at 2023-09-02
-  - qhs # failure in job https://hydra.nixos.org/build/315099159 at 2025-11-29
   - qhull-simple # failure in job https://hydra.nixos.org/build/233248108 at 2023-09-02
   - qif # failure in job https://hydra.nixos.org/build/233227609 at 2023-09-02
   - QIO # failure in job https://hydra.nixos.org/build/233233009 at 2023-09-02

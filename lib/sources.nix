@@ -43,7 +43,7 @@ let
   cleanSourceFilter =
     name: type:
     let
-      baseName = baseNameOf (toString name);
+      baseName = baseNameOf name;
     in
     !(
       # Filter out version control software files/directories
@@ -270,7 +270,7 @@ let
       filter =
         name: type:
         let
-          base = baseNameOf (toString name);
+          base = baseNameOf name;
         in
         type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in

@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.5.12",
+  version ? "2026.6.1",
 }:
 let
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-URuoljISNcDLuWUwOpZoFjPNVOmbThC9r00uShPR4Co=";
+    hash = "sha256-FjxiI7YHkt6fTzJD7G5A3/wsbcWgpO44IHMOwymDxpg=";
   };
 
-  pnpmDepsHash = "sha256-pLQoA9eyHD84E0Rp8MMqfu95tGJtDEMbY+fh0nHjdWo=";
+  pnpmDepsHash = "sha256-7RQJAVWqhauG8JrF8AD1VU1IJRM+SH05aHAfmFaXraU=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -76,6 +76,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp --reflink=auto -r package.json dist node_modules $libdir/
     cp --reflink=auto -r docs skills patches extensions qa $libdir/
+    mkdir -p $libdir/src
+    cp --reflink=auto -r src/agents $libdir/src/
 
     rm -f $libdir/node_modules/.pnpm/node_modules/clawdbot \
       $libdir/node_modules/.pnpm/node_modules/moltbot \
