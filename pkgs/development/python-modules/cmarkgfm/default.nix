@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Minimal bindings to GitHub's fork of cmark";
-    homepage = "https://github.com/jonparrott/cmarkgfm";
+    homepage = "https://github.com/theacodes/cmarkgfm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
