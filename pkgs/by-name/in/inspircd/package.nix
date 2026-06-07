@@ -67,6 +67,7 @@ in
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nixosTests,
   perl,
   pkg-config,
@@ -156,6 +157,22 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-fMfsNbkp9M8KiuhwOEFmPjowZ4JLP4IpX6LRO9aLHzY=";
   };
+
+  patches = [
+    # Additions to LDAP code for the benefit of the next patch
+    (fetchpatch {
+      name = "inspircd-ldap-api.patch";
+      url = "https://github.com/inspircd/inspircd/commit/b7e5357b144c2e20c72431e22f0f2b13e5be82ce.patch";
+      hash = "sha256-nrgjmSBEIXdhlu/3WbMspIgSTHR29D4TfvKZ26JcYHs=";
+    })
+    # Resolves missing escaping in LDAP search filters which can be used to bypass auth
+    # https://docs.inspircd.org/security/2026-01/
+    (fetchpatch {
+      name = "inspircd-ldap-filter-escape.patch";
+      url = "https://github.com/inspircd/inspircd/commit/6319ae4fb8c10dabc9464ad49faec532096fbcb5.patch";
+      hash = "sha256-RtwNZA3PZDtQ5wW0TfCrvD+zfQHTFLg4mQRP5/qrAzg=";
+    })
+  ];
 
   outputs = [
     "bin"
