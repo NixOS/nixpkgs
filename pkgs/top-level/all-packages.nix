@@ -1209,10 +1209,6 @@ with pkgs;
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
 
-  svn2git = callPackage ../applications/version-management/svn2git {
-    git = gitSVN;
-  };
-
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
