@@ -892,6 +892,11 @@ in
     buildFlags = [ "--without-imlib2-config" ];
   };
 
+  prawn-gmagick = attrs: {
+    buildInputs = [ graphicsmagick ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   psych = attrs: {
     buildInputs = [ libyaml ];
   };

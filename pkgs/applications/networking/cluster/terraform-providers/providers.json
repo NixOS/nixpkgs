@@ -580,13 +580,13 @@
     "vendorHash": "sha256-sPQR+LDZRMXygLUd9xj6/bI+8DhAPKbkytlTzmrEOBU="
   },
   "hashicorp_google": {
-    "hash": "sha256-Aj6eAquHfntl2682UedJ4b6DNPuGr+4aeNo++L76mEA=",
+    "hash": "sha256-GTcMwL5lZ81KDtohog4cCvy9zxXU/jh5k+aLosZZfRM=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v7.33.0",
+    "rev": "v7.35.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-qSiOXUfoNaG2+Fu7QvP9uafZp0CMvJJBzaKluCf1g+4="
+    "vendorHash": "sha256-R3Bd+n/ySx4FyDQAP72P0hIjTSQjzNJE2QqUgRV+eQE="
   },
   "hashicorp_google-beta": {
     "hash": "sha256-MGiIQ+BPe5HUn60EnKwflhxfz1I6NaRxN/OyEh/tXKs=",
@@ -815,13 +815,13 @@
     "vendorHash": "sha256-UuLHaOEG6jmOAgfdNOtLyUimlAr3g6K8n3Ehu64sKqk="
   },
   "keycloak_keycloak": {
-    "hash": "sha256-55/a3lJCJEOIDsnFckx5BsUClphPZ9BSBvWxQBq1D9Y=",
+    "hash": "sha256-3KlfUM3qQwzRlUkuq+91z1VjRxIL3qcdCHfkVnfYJKQ=",
     "homepage": "https://registry.terraform.io/providers/keycloak/keycloak",
     "owner": "keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v5.7.0",
+    "rev": "v5.8.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-JgQqOm+cAMLACp/rVz3ek1C4uuTAs8vqDcwRkpFssYc="
+    "vendorHash": "sha256-JTcIyUKoeCRxAzUWJy9FkMCYy3+D70uyzuiSTW3nHlA="
   },
   "kislerdm_neon": {
     "hash": "sha256-1o5EnAI9X8Q+dXxh1/jZwimy1MmPDF3X2aRc+HO7HpQ=",

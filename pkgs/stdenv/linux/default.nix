@@ -59,8 +59,6 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
-
   bootstrapFiles ?
     let
       table = {

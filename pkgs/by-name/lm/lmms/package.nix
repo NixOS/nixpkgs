@@ -17,7 +17,6 @@
   libjack2,
   libogg,
   libpulseaudio,
-  libsForQt5,
   libsamplerate,
   libsoundio,
   libsndfile,
@@ -73,16 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qt5.qttools
+    qt5.qttools
     pkg-config
     qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     fftwFloat
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtx11extras
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtx11extras
     libsamplerate
     libsndfile
   ]
