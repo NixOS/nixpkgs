@@ -1494,7 +1494,8 @@
       ];
     "duco" =
       ps: with ps; [
-      ]; # missing inputs: python-duco-connectivity
+        python-duco-connectivity
+      ];
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -7923,6 +7924,7 @@
     "dsmr"
     "dsmr_reader"
     "duckdns"
+    "duco"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
