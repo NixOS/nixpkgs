@@ -46,26 +46,26 @@ let
     "mocha"
   ];
 
-  pname = "catppuccin-gtk";
   version = "1.0.3";
 in
 
-lib.checkListOfEnum "${pname}: theme accent" validAccents accents lib.checkListOfEnum
-  "${pname}: color variant"
+lib.checkListOfEnum "catppuccin-gtk: theme accent" validAccents accents lib.checkListOfEnum
+  "catppuccin-gtk: color variant"
   validVariants
   [ variant ]
   lib.checkListOfEnum
-  "${pname}: size variant"
+  "catppuccin-gtk: size variant"
   validSizes
   [ size ]
   lib.checkListOfEnum
-  "${pname}: tweaks"
+  "catppuccin-gtk: tweaks"
   validTweaks
   tweaks
 
   stdenvNoCC.mkDerivation
   {
-    inherit pname version;
+    pname = "catppuccin-gtk";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "catppuccin";

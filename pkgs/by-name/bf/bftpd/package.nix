@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/doc/${pname}
-    mv $out/etc/*.conf $out/share/doc/${pname}
+    mkdir -p $out/share/doc/bftpd
+    mv $out/etc/*.conf $out/share/doc/bftpd
     rm -rf $out/{etc,var}
   '';
 

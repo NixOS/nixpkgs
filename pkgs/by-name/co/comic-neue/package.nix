@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -pv $out/share/{doc/${pname}-${version},fonts/{opentype,truetype,WOFF,WOFF2}}
+    mkdir -pv $out/share/{doc/comic-neue-${version},fonts/{opentype,truetype,WOFF,WOFF2}}
     cp -v {FONTLOG,OFL-FAQ,OFL}.txt $out/share/doc/
     cp -v Booklet-ComicNeue.pdf $out/share/doc/
     cp -v Fonts/OTF/ComicNeue-Angular/*.otf $out/share/fonts/opentype

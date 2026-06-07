@@ -44,15 +44,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"/{bin,share/${pname}}
-    cp -r * "$out/share/${pname}"
+    mkdir -p "$out"/{bin,share/bazarr}
+    cp -r * "$out/share/bazarr"
 
     # Add missing shebang and execute perms so that patchShebangs can do its
     # thing.
-    sed -i "1i #!/usr/bin/env python3" "$out/share/${pname}/bazarr.py"
-    chmod +x "$out/share/${pname}/bazarr.py"
+    sed -i "1i #!/usr/bin/env python3" "$out/share/bazarr/bazarr.py"
+    chmod +x "$out/share/bazarr/bazarr.py"
 
-    makeWrapper "$out/share/${pname}/bazarr.py" \
+    makeWrapper "$out/share/bazarr/bazarr.py" \
         "$out/bin/bazarr" \
         --suffix PATH : ${lib.makeBinPath runtimeProgDeps}
 

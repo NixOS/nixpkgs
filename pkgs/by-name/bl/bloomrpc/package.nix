@@ -9,8 +9,8 @@ let
   version = "1.5.3";
 
   src = fetchurl {
-    url = "https://github.com/uw-labs/${pname}/releases/download/${version}/BloomRPC-${version}.AppImage";
-    name = "${pname}-${version}.AppImage";
+    url = "https://github.com/uw-labs/bloomrpc/releases/download/${version}/BloomRPC-${version}.AppImage";
+    name = "bloomrpc-${version}.AppImage";
     hash = "sha512-PebdYDpcplPN5y3mRu1mG6CXenYfYvBXNLgIGEr7ZgKnR5pIaOfJNORSNYSdagdGDb/B1sxuKfX4+4f2cqgb6Q==";
   };
 
@@ -26,11 +26,11 @@ appimageTools.wrapType2 {
   '';
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D ${appimageContents}/${pname}.png \
-      $out/share/icons/hicolor/512x512/apps/${pname}.png
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/bloomrpc.desktop $out/share/applications/bloomrpc.desktop
+    install -m 444 -D ${appimageContents}/bloomrpc.png \
+      $out/share/icons/hicolor/512x512/apps/bloomrpc.png
+    substituteInPlace $out/share/applications/bloomrpc.desktop \
+      --replace 'Exec=AppRun' 'Exec=bloomrpc'
   '';
 
   meta = {

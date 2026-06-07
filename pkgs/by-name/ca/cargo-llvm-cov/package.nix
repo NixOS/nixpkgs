@@ -28,7 +28,7 @@ let
   version = "0.8.5";
 
   owner = "taiki-e";
-  homepage = "https://github.com/${owner}/${pname}";
+  homepage = "https://github.com/${owner}/cargo-llvm-cov";
 
   inherit (llvmPackages_19) llvm;
 in

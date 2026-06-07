@@ -46,11 +46,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postBuild = ''
-    make ${pname}.1
+    make apksigcopier.1
   '';
 
   postInstall = ''
-    installManPage ${pname}.1
+    installManPage apksigcopier.1
   '';
 
   doInstallCheck = true;

@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
-      "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
-      "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
+      "https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-${version}/cyrus-sasl-${version}.tar.gz"
+      "http://www.cyrusimap.org/releases/cyrus-sasl-${version}.tar.gz"
+      "http://www.cyrusimap.org/releases/old/cyrus-sasl-${version}.tar.gz"
     ];
     sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };

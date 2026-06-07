@@ -21,12 +21,12 @@ appimageTools.wrapType2 rec {
       contents = appimageTools.extract { inherit pname version src; };
     in
     ''
-      wrapProgram $out/bin/${pname} \
+      wrapProgram $out/bin/cider \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-      install -m 444 -D ${contents}/${pname}.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace-warn 'Exec=AppRun' 'Exec=${pname}'
+      install -m 444 -D ${contents}/cider.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/cider.desktop \
+        --replace-warn 'Exec=AppRun' 'Exec=cider'
       cp -r ${contents}/usr/share/icons $out/share
     '';
 

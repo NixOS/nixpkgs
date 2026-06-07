@@ -29,20 +29,20 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp -a {locales,resources} $out/share/${pname}
-    install -Dm644 support/mime-types.xml $out/share/mime/packages/${pname}.xml
+    mkdir -p $out/bin $out/share/camunda-modeler
+    cp -a {locales,resources} $out/share/camunda-modeler
+    install -Dm644 support/mime-types.xml $out/share/mime/packages/camunda-modeler.xml
 
     for SIZE in 16 48 128; do
-      install -D -m0644 support/icon_''${SIZE}.png "$out/share/icons/hicolor/''${SIZE}x''${SIZE}/apps/${pname}.png"
+      install -D -m0644 support/icon_''${SIZE}.png "$out/share/icons/hicolor/''${SIZE}x''${SIZE}/apps/camunda-modeler.png"
     done
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar
+    makeWrapper ${electron}/bin/electron $out/bin/camunda-modeler \
+      --add-flags $out/share/camunda-modeler/resources/app.asar
   '';
 
   desktopItems = [

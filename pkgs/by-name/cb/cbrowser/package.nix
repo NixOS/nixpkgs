@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/cbrowser/cbrowser-${version}.tar.gz";
     sha256 = "1050mirjab23qsnq3lp3a9vwcbavmh9kznzjm7dr5vkx8b7ffcji";
   };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ tk ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${pname}-${version}
-    cp -R * $out/share/${pname}-${version}/
+    mkdir -p $out/bin $out/share/cbrowser-${version}
+    cp -R * $out/share/cbrowser-${version}/
 
-    makeWrapper $out/share/${pname}-${version}/cbrowser $out/bin/cbrowser \
+    makeWrapper $out/share/cbrowser-${version}/cbrowser $out/bin/cbrowser \
       --prefix PATH : ${tk}/bin
   '';
 

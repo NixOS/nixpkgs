@@ -32,7 +32,6 @@ let
     "macchiato"
     "mocha"
   ];
-  pname = "catppuccin-papirus-folders";
 
   # Fetch the papirus-folders script from upstream
   # Per instructions in the papirus-folders project.
@@ -43,13 +42,14 @@ let
     executable = true;
   };
 in
-lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkListOfEnum
-  "${pname}: flavors"
+lib.checkListOfEnum "catppuccin-papirus-folders: accent colors" validAccents [ accent ]
+  lib.checkListOfEnum
+  "catppuccin-papirus-folders: flavors"
   validFlavors
   [ flavor ]
   stdenvNoCC.mkDerivation
   {
-    inherit pname;
+    pname = "catppuccin-papirus-folders";
     version = "0-unstable-2024-08-06";
 
     src = fetchFromGitHub {

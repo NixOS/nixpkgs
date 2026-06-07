@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "checkra1n";
   version = "0.12.4";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -dm755 "$out/bin"
-    install -m755 $src $out/bin/${pname}
+    install -m755 $src $out/bin/checkra1n
   '';
 
   meta = {

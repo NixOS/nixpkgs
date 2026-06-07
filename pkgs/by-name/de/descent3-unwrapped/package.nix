@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru = {
     # The idea here is to make sure that we don’t forget to update meta.license
     # when reviewing a pull request from @r-ryantm.
-    tests.licenseInfoIsUpToDate = runCommand "${pname}-license-info-is-up-to-date" { } ''
+    tests.licenseInfoIsUpToDate = runCommand "descent3-unwrapped-license-info-is-up-to-date" { } ''
       function on_success {
         echo Test succeeded. > "$out"
       }
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
       # [4]: <https://steamdb.info/depot/273592>
       # [5]: <https://steamdb.info/depot/273593>
       # [6]: <https://github.com/DescentDevelopers/Descent3/issues/240>
-      tagConverter = writeShellScript "${pname}-tag-converter.sh" ''
+      tagConverter = writeShellScript "descent3-unwrapped-tag-converter.sh" ''
         read -r input_tag
         if [ "$input_tag" = 0 ]
         then

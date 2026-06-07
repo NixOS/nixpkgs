@@ -47,7 +47,7 @@ in
   extraNativeBuildInputs = lib.optionals hostPlatform.isDarwin [ undmg ];
 
   sourceRoot =
-    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
+    if hostPlatform.isLinux then "cursor-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
   tests = { };
 

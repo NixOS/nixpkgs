@@ -6,10 +6,7 @@
   accent ? "blue",
   variant ? "frappe",
 }:
-let
-  pname = "catppuccin-kvantum";
-in
-lib.checkListOfEnum "${pname}: theme accent"
+lib.checkListOfEnum "catppuccin-kvantum: theme accent"
   [
     "blue"
     "flamingo"
@@ -28,11 +25,11 @@ lib.checkListOfEnum "${pname}: theme accent"
   ]
   [ accent ]
   lib.checkListOfEnum
-  "${pname}: color variant" [ "latte" "frappe" "macchiato" "mocha" ] [ variant ]
+  "catppuccin-kvantum: color variant" [ "latte" "frappe" "macchiato" "mocha" ] [ variant ]
 
   stdenvNoCC.mkDerivation
   {
-    inherit pname;
+    pname = "catppuccin-kvantum";
     version = "0-unstable-2025-12-27";
 
     src = fetchFromGitHub {

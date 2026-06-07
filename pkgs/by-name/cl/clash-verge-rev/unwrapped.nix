@@ -27,7 +27,7 @@
 }:
 rustPlatform.buildRustPackage {
   inherit version src meta;
-  pname = "${pname}-unwrapped";
+  pname = "clash-verge-rev-unwrapped";
 
   cargoHash = vendor-hash;
 
