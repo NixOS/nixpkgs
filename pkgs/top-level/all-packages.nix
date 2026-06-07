@@ -10234,10 +10234,6 @@ with pkgs;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
-  inherit (callPackages ../applications/blockchains/teos { })
-    teos
-    ;
-
   vertcoind = vertcoin.override {
     withGui = false;
   };
