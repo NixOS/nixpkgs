@@ -4972,7 +4972,8 @@
       ];
     "paj_gps" =
       ps: with ps; [
-      ]; # missing inputs: pajgps-api
+        pajgps-api
+      ];
     "palazzetti" =
       ps: with ps; [
         pypalazzetti
@@ -8429,6 +8430,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "paj_gps"
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
