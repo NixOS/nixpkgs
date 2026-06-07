@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   docopt,
   requests,
   pygments,
@@ -10,18 +11,20 @@
 buildPythonPackage rec {
   pname = "clf";
   version = "0.5.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "abc919a1e99667f32fdde15dfb4bc527dbe22cf86a17acb78a449d7f2dfe937e";
   };
 
+  build-system = [ setuptools ];
+
   patchPhase = ''
     sed -i 's/==/>=/' requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     docopt
     requests
     pygments
