@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "ocenaudio.deb";
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian12.deb?version=v${finalAttrs.version}";
-    hash = "sha256-Nc4G+p6KLlID59kVYmlU+UE7vIPYeTqQeCEv9hrJnh0=";
+    hash = "sha256-oDOAPusm5Siiokcl8UkOy5FhhT1y5nd4qcFfmF9yTF4=";
   };
 
   nativeBuildInputs = [

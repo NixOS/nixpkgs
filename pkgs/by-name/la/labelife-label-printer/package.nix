@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
-    hash = "sha256-yUrEV3pdTqiATZ1V9Ze0zTjsyA3b9i+Bbh1v0FzGeas=";
+    hash = "sha256-qpsyOuTrOTcXEQeCNNRV0QeV0s0RD2eqy/tGTA7qMWA=";
   };
 
   nativeBuildInputs = [

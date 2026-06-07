@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       fetchzip {
         url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
         extension = "zip";
-        sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
+        sha256 = "sha256-9LxHisSWFtfMXayKQtlSi2D3a6rSZjflaAhc4/oTb+U=";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchzip {
