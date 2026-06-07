@@ -1,7 +1,7 @@
-diff --git a/server.go b/server.go
+diff --git a/core/server/server.go b/core/server/server.go
 index 4499a6d..4c14d1a 100644
---- a/server.go
-+++ b/server.go
+--- a/core/server/server.go
++++ b/core/server/server.go
 @@ -24,6 +24,7 @@ import (
  	"github.com/sagernet/sing-box/experimental/clashapi"
  	"github.com/sagernet/sing/common"
