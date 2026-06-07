@@ -256,6 +256,12 @@ optionalAttrs allowAliases aliases
             mapAttrs (key: val: if isList val then listToValue val else val)
           else
             id;
+        maybeCoerceAllLists =
+          listToValue:
+          if listToValue != null then
+            mapAttrs (_: mapAttrs (key: val: if isList val then listToValue val else val))
+          else
+            id;
 
         ignoredArgs = [
           "listToValue"
@@ -291,7 +297,7 @@ optionalAttrs allowAliases aliases
             generate =
               name: value:
               pipe value [
-                (mapAttrs (_: maybeCoerceList listToValue))
+                (maybeCoerceAllLists listToValue)
                 (toINI (removeAttrs args ignoredArgs))
                 (pkgs.writeText name)
               ];
@@ -343,7 +349,7 @@ optionalAttrs allowAliases aliases
               pkgs.writeText name (
                 toINIWithGlobalSection (removeAttrs args ignoredArgs) {
                   globalSection = maybeCoerceList listToValue globalSection;
-                  sections = mapAttrs (_: maybeCoerceList listToValue) sections;
+                  sections = maybeCoerceAllLists listToValue sections;
                 }
               );
           };
