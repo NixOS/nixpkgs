@@ -8760,10 +8760,6 @@ with pkgs;
 
   bitwig-studio = bitwig-studio6;
 
-  blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
-    inherit (haskellPackages) ghcWithPackages;
-  };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
