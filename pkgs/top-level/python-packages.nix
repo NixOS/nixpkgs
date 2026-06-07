@@ -10109,6 +10109,8 @@ self: super: with self; {
 
   mitogen = callPackage ../development/python-modules/mitogen { };
 
+  mitsubishi-comfort = callPackage ../development/python-modules/mitsubishi-comfort { };
+
   mixbox = callPackage ../development/python-modules/mixbox { };
 
   mixins = callPackage ../development/python-modules/mixins { };
