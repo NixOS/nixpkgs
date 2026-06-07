@@ -5,15 +5,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cheetah3";
   version = "3.4.0.post5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "CheetahTemplate3";
     repo = "cheetah3";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qWV6ncSe4JbGZD7sLc/kEXY1pUM1II24UgsS/zX872Y=";
   };
 
@@ -26,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Template engine and code generation tool";
     homepage = "http://www.cheetahtemplate.org/";
-    changelog = "https://github.com/CheetahTemplate3/cheetah3/releases/tag/${version}";
+    changelog = "https://github.com/CheetahTemplate3/cheetah3/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pjjw ];
   };
-}
+})
