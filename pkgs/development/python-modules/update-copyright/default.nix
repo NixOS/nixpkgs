@@ -10,6 +10,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.2";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   disabled = !isPy3k;
 
   # Has no tests
