@@ -103,7 +103,8 @@
       ];
     "aidot" =
       ps: with ps; [
-      ]; # missing inputs: python-aidot
+        python-aidot
+      ];
     "air_quality" =
       ps: with ps; [
       ];
@@ -7735,6 +7736,7 @@
     "aftership"
     "agent_dvr"
     "ai_task"
+    "aidot"
     "air_quality"
     "airgradient"
     "airly"
