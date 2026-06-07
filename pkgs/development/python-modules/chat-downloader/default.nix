@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
   isodate,
   docstring-parser,
@@ -13,14 +14,16 @@
 buildPythonPackage rec {
   pname = "chat-downloader";
   version = "0.2.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
     hash = "sha256-WBasBhefgRkOdMdz2K/agvS+cY6m3/33wiu+Jl4d1Cg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     isodate
     docstring-parser
