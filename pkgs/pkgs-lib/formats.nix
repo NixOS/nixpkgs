@@ -837,7 +837,7 @@ optionalAttrs allowAliases aliases
             float
             str
             path
-            package
+            types.package
           ]);
         in
         attrsOf atomType;
