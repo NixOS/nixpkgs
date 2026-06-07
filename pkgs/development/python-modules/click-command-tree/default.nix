@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "whwright";
     repo = "click-command-tree";
