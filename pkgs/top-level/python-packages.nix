@@ -246,6 +246,8 @@ self: super: with self; {
 
   aiocache = callPackage ../development/python-modules/aiocache { };
 
+  aiocentriconnect = callPackage ../development/python-modules/aiocentriconnect { };
+
   aiocmd = callPackage ../development/python-modules/aiocmd { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
@@ -15815,6 +15817,8 @@ self: super: with self; {
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pythinkingcleaner = callPackage ../development/python-modules/pythinkingcleaner { };
+
+  python-aidot = callPackage ../development/python-modules/python-aidot { };
 
   python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
