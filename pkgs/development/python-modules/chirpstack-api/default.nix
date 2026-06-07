@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   google-api-core,
   grpcio,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "chirpstack-api";
   version = "3.12.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brocaar";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python/src";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     grpcio
   ];
