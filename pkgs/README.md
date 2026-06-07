@@ -1019,7 +1019,7 @@ Furthermore each update script will be passed the following environment variable
 > An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
-While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
 If you need to customize commit message, you can have the update script implement the `commit` feature.
 
 ### Supported features
@@ -1046,7 +1046,7 @@ If you need to customize commit message, you can have the update script implemen
   ```
   :::
 
-  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
+  When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
   An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
 
   The commit object contains the following values:
