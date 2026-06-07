@@ -48,53 +48,59 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "26.1.0";
+  version = "27.0.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0bdomxjx+Qwvxu6NWUTYbLvoKwCvM0e5I3qwhKLEecM=";
+    hash = "sha256-ikTkp/r24xTJ+RDMlu5q8PmFvGUeLz/sejeIjOSmd5M=";
     fetchSubmodules = true;
   };
 
-  cargoDeps = symlinkJoin {
-    name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
-    paths = [
-      (rustPlatform.fetchCargoVendor {
-        inherit (finalAttrs) src;
-        hash = "sha256-sm8cn288vb4aYJXNOwkjDmPQ8Ug0mnur5YcXH5sS2Sg=";
-      })
-    ]
-    ++
-      map
-        (
-          protocol:
-          rustPlatform.fetchCargoVendor {
-            pname = "stellar-core-${protocol}";
-            inherit (finalAttrs) version src;
-            cargoRoot = "src/rust/soroban/${protocol}";
-            hash =
-              {
-                p21 = "sha256-cUhi2YennW+tukwf0woP69bqf1ZMsQ4JDeNqpk0jYjg=";
-                p22 = "sha256-5mNAblS3TYXu5a1ThmIdbKC9hUg/3F8vUPvFex3G58U=";
-                p23 = "sha256-l1nqc4qrqWV8aKOd9NFUaOLw1Mags2znjbQixU5H3+Y=";
-                p24 = "sha256-P+Q8SNcuFX6diBYqGpkOwHtplK4y4PZxB+gj6MnpYDs=";
-                p25 = "sha256-9NhnB3bDQI1FLmr0zTYTjEYl8V8KteWbMefWObLDB/A=";
-                p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
-              }
-              .${protocol};
-          }
-        )
-        [
-          "p21"
-          "p22"
-          "p23"
-          "p24"
-          "p25"
-          "p26"
-        ];
-  };
+  cargoDeps =
+    let
+      sorobanProtocolHashes = {
+        p21 = "sha256-cUhi2YennW+tukwf0woP69bqf1ZMsQ4JDeNqpk0jYjg=";
+        p22 = "sha256-5mNAblS3TYXu5a1ThmIdbKC9hUg/3F8vUPvFex3G58U=";
+        p23 = "sha256-l1nqc4qrqWV8aKOd9NFUaOLw1Mags2znjbQixU5H3+Y=";
+        p24 = "sha256-P+Q8SNcuFX6diBYqGpkOwHtplK4y4PZxB+gj6MnpYDs=";
+        p25 = "sha256-9NhnB3bDQI1FLmr0zTYTjEYl8V8KteWbMefWObLDB/A=";
+        p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
+        p27 = "sha256-KcsyPBJLUOwRAtp95IYFiZZNMi1xWmYW7XXG+bMucmY=";
+      };
+    in
+    symlinkJoin {
+      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
+      paths = [
+        (rustPlatform.fetchCargoVendor {
+          inherit (finalAttrs) src;
+          hash = "sha256-e7WGYm5RLmg9vjcMjy98RBW0QqjGTd8cPPeilhYbZ2I=";
+        })
+      ]
+      ++ lib.mapAttrsToList (
+        protocol: hash:
+        rustPlatform.fetchCargoVendor {
+          pname = "stellar-core-${protocol}";
+          inherit (finalAttrs) version src;
+          cargoRoot = "src/rust/soroban/${protocol}";
+          inherit hash;
+        }
+      ) sorobanProtocolHashes;
+      postBuild = ''
+        # `soroban-synth-wasm` resolves this path relative to the vendored git
+        # source root, but cargo vendors the workspace crates with versioned
+        # directory names.
+        for source in "$out"/source-git-*; do
+          for dir in "$source"/soroban-env-common-*; do
+            if [ -d "$dir" ] && [ ! -e "$source"/soroban-env-common ]; then
+              ln -s "$(basename "$dir")" "$source"/soroban-env-common
+            fi
+            break
+          done
+        done
+      '';
+    };
 
   strictDeps = true;
 
