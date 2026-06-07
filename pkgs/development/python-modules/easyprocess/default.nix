@@ -9,6 +9,8 @@ buildPythonPackage (finalAtrrs: {
   version = "1.1";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "EasyProcess";
     inherit (finalAtrrs) version;
