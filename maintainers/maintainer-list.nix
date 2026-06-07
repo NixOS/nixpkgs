@@ -16101,6 +16101,11 @@
     githubId = 83420438;
     name = "Lewis";
   };
+  lubsch = {
+    github = "lubsch";
+    githubId = 33580245;
+    name = "Benjamin Lohmar";
+  };
   luc65r = {
     email = "lucas@ransan.fr";
     github = "luc65r";
