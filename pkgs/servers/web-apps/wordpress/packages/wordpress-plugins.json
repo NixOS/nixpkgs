@@ -1,5 +1,6 @@
 {
-  "add-widget-after-content": "gpl3Plus"
+  "activitypub": "mit"
+, "add-widget-after-content": "gpl3Plus"
 , "akismet": "gpl2Plus"
 , "antispam-bee": "gpl2Plus"
 , "async-javascript": "gpl2Plus"
@@ -9,6 +10,8 @@
 , "co-authors-plus": "gpl2Plus"
 , "disable-xml-rpc": "gpl2Plus"
 , "embed-extended": "gpl2Plus"
+, "enable-mastodon-app": "gpl2Only"
+, "friends": "gpl2Only"
 , "gutenberg": "gpl2Plus"
 , "hcaptcha-for-forms-and-more": "gpl2Only"
 , "hello-dolly": "gpl2Plus"
