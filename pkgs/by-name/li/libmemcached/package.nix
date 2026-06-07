@@ -7,6 +7,8 @@
   flex,
   cyrus_sasl,
   libevent,
+  ctestCheckHook,
+  memcached,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,11 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
     "-DENABLE_SASL=ON"
   ];
 
   buildInputs = [ libevent ];
   propagatedBuildInputs = [ cyrus_sasl ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    memcached
+  ];
+
+  disabledTests = [
+    "bin/memcapable"
+    "memcached_regression_lp583031"
+  ];
 
   meta = {
     homepage = "https://github.com/awesomized/libmemcached";
