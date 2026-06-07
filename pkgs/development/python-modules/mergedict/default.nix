@@ -3,12 +3,13 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mergedict";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -16,6 +17,10 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-4ZkrNqVCKQFPvLx6nIwo0fSuEx6h2NNFyTlz+fDcb9w=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
