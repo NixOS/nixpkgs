@@ -10,10 +10,37 @@ let
   enabledNodes = lib.filterAttrs (_: nodeCfg: nodeCfg.enable) cfg.nodes;
   nodesEnabled = cfg.enable || (enabledNodes != { });
   serverEnabled = cfg.enable || cfg.server.enable;
+  nodeConfigSyncScript = pkgs.writeShellApplication {
+    name = "tdarr-apply-node-db-config";
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+      coreutils
+    ];
+    text = builtins.readFile ./apply-node-db-config.sh;
+  };
+  nodeCommonConfig = nodeCfg: {
+    serverURL = nodeCfg.serverURL;
+    serverIP = nodeCfg.serverIP;
+    serverPort = toString nodeCfg.serverPort;
+    nodeType = nodeCfg.type;
+    priority = nodeCfg.priority;
+    pollInterval = nodeCfg.pollInterval;
+    startPaused = nodeCfg.startPaused;
+    maxLogSizeMB = nodeCfg.maxLogSizeMB;
+    cronPluginUpdate = nodeCfg.cronPluginUpdate;
+    pathTranslators = nodeCfg.pathTranslators;
+  };
   nodeConfigFiles = lib.mapAttrs (
     nodeId: nodeCfg:
     pkgs.writeText "Tdarr_Node_Config_${nodeId}.json" (
-      builtins.toJSON { pathTranslators = nodeCfg.pathTranslators; }
+      builtins.toJSON (
+        nodeCommonConfig nodeCfg
+        // {
+          nodeName = nodeCfg.name;
+          ffprobePath = "";
+        }
+      )
     )
   ) enabledNodes;
 in
@@ -130,6 +157,9 @@ in
               description = ''
                 Path translations between server and node for cross-platform or
                 cross-mount-point file access.
+
+                These are written to the node config JSON file because tdarr does
+                not support setting `pathTranslators` via environment variables.
               '';
               example = lib.literalExpression ''
                 [
@@ -188,57 +218,118 @@ in
       "L+ ${cfg.dataDir}/nodes/${nodeId}/configs/Tdarr_Node_Config.json - - - - ${nodeConfigFiles.${nodeId}}"
     ]) (builtins.attrNames enabledNodes);
 
-    systemd.services = lib.mapAttrs' (
-      nodeId: nodeCfg:
-      lib.nameValuePair "tdarr-node-${nodeId}" {
-        description = "Tdarr Node - ${nodeCfg.name}";
-        after = [ "network.target" ] ++ lib.optionals serverEnabled [ "tdarr-server.service" ];
-        wants = lib.optionals serverEnabled [ "tdarr-server.service" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          nodeName = nodeCfg.name;
-          serverURL = nodeCfg.serverURL;
-          nodeType = nodeCfg.type;
-          priority = toString nodeCfg.priority;
-          cronPluginUpdate = nodeCfg.cronPluginUpdate;
-          maxLogSizeMB = toString nodeCfg.maxLogSizeMB;
-          pollInterval = toString nodeCfg.pollInterval;
-          startPaused = lib.boolToString nodeCfg.startPaused;
-          transcodegpuWorkers = toString nodeCfg.workers.transcodeGPU;
-          transcodecpuWorkers = toString nodeCfg.workers.transcodeCPU;
-          healthcheckgpuWorkers = toString nodeCfg.workers.healthcheckGPU;
-          healthcheckcpuWorkers = toString nodeCfg.workers.healthcheckCPU;
-          rootDataPath = toString nodeCfg.dataDir;
-        };
-        serviceConfig = {
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = lib.getExe nodeCfg.package;
-          Restart = "on-failure";
-          RestartSec = 5;
-          WorkingDirectory = toString nodeCfg.dataDir;
+    systemd.services =
+      lib.mapAttrs' (
+        nodeId: nodeCfg:
+        lib.nameValuePair "tdarr-node-${nodeId}" {
+          description = "Tdarr Node - ${nodeCfg.name}";
+          after = [ "network.target" ] ++ lib.optionals serverEnabled [ "tdarr-server.service" ];
+          wants = lib.optionals serverEnabled [ "tdarr-server.service" ];
+          wantedBy = [ "multi-user.target" ];
+          environment = {
+            nodeName = nodeCfg.name;
+            serverURL = nodeCfg.serverURL;
+            # Keep these in sync with the JSON config for the same reason they
+            # exist there: the node binary uses them for internal API calls.
+            serverIP = nodeCfg.serverIP;
+            serverPort = toString nodeCfg.serverPort;
+            nodeType = nodeCfg.type;
+            priority = toString nodeCfg.priority;
+            cronPluginUpdate = nodeCfg.cronPluginUpdate;
+            maxLogSizeMB = toString nodeCfg.maxLogSizeMB;
+            pollInterval = toString nodeCfg.pollInterval;
+            startPaused = lib.boolToString nodeCfg.startPaused;
+            transcodegpuWorkers = toString nodeCfg.workers.transcodeGPU;
+            transcodecpuWorkers = toString nodeCfg.workers.transcodeCPU;
+            healthcheckgpuWorkers = toString nodeCfg.workers.healthcheckGPU;
+            healthcheckcpuWorkers = toString nodeCfg.workers.healthcheckCPU;
+            rootDataPath = toString nodeCfg.dataDir;
+          };
+          serviceConfig = {
+            Type = "simple";
+            User = cfg.user;
+            Group = cfg.group;
+            ExecStart = lib.getExe nodeCfg.package;
+            Restart = "on-failure";
+            RestartSec = 5;
+            WorkingDirectory = toString nodeCfg.dataDir;
 
-          # Hardening
-          NoNewPrivileges = true;
-          PrivateTmp = true;
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) (
-            let
-              rel = lib.removePrefix "/var/lib/" (toString nodeCfg.dataDir);
-            in
-            "${rel} ${rel}/configs ${rel}/logs"
-          );
-          StateDirectoryMode = lib.mkIf (lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) "0750";
-          ReadWritePaths = lib.optionals (!lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) [
-            (toString nodeCfg.dataDir)
-          ];
+            # Hardening
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) (
+              let
+                rel = lib.removePrefix "/var/lib/" (toString nodeCfg.dataDir);
+              in
+              "${rel} ${rel}/configs ${rel}/logs"
+            );
+            StateDirectoryMode = lib.mkIf (lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) "0750";
+            ReadWritePaths =
+              lib.optionals (!lib.hasPrefix "/var/lib/" (toString nodeCfg.dataDir)) [
+                (toString nodeCfg.dataDir)
+              ]
+              ++ cfg.libraryDir;
+          }
+          // lib.optionalAttrs (nodeCfg.environmentFile != null) {
+            EnvironmentFile = nodeCfg.environmentFile;
+          };
         }
-        // lib.optionalAttrs (nodeCfg.environmentFile != null) {
-          EnvironmentFile = nodeCfg.environmentFile;
-        };
-      }
-    ) enabledNodes;
+      ) enabledNodes
+      // lib.mapAttrs' (
+        nodeId: nodeCfg:
+        lib.nameValuePair "tdarr-node-config-${nodeId}" {
+          description = "Apply Tdarr node config via API - ${nodeCfg.name}";
+
+          after = [
+            "network-online.target"
+            "tdarr-node-${nodeId}.service"
+          ]
+          ++ lib.optionals serverEnabled [
+            "tdarr-server.service"
+          ];
+
+          wants = [
+            "network-online.target"
+            "tdarr-node-${nodeId}.service"
+          ]
+          ++ lib.optionals serverEnabled [
+            "tdarr-server.service"
+          ];
+
+          partOf = [ "tdarr-node-${nodeId}.service" ];
+
+          serviceConfig = {
+            Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
+
+            Restart = "on-failure";
+            RestartSec = 5;
+            TimeoutStartSec = 180;
+
+            ExecStart =
+              let
+                nodeUpdatesFile = pkgs.writeText "tdarr-node-updates-${nodeId}.json" (
+                  builtins.toJSON (
+                    nodeCommonConfig nodeCfg
+                    // {
+                      nodeTags = nodeCfg.type;
+                      nodePaused = nodeCfg.startPaused;
+                    }
+                  )
+                );
+              in
+              lib.escapeShellArgs [
+                (lib.getExe nodeConfigSyncScript)
+                nodeCfg.serverURL
+                nodeCfg.name
+                nodeUpdatesFile
+                "${toString nodeCfg.dataDir}/configs/Tdarr_Node_Config.json"
+              ];
+          };
+        }
+      ) enabledNodes;
   };
 }

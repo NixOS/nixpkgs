@@ -167,6 +167,13 @@ Path translators enable cross-mount-point file access by mapping server paths to
 }
 ```
 
+::: {.note}
+`pathTranslators` cannot be set via environment variables (a tdarr upstream
+limitation), so they are written to the node's JSON config file.  The module
+writes all node settings to this file to prevent tdarr from resetting
+`pathTranslators` to its empty default on startup.
+:::
+
 ## Networking {#module-services-tdarr-networking}
 
 ### Firewall Configuration {#module-services-tdarr-networking-firewall}
