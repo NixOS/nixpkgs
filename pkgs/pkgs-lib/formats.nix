@@ -449,15 +449,15 @@ optionalAttrs allowAliases aliases
         attrsOf atom;
 
       generate =
-        name: value:
         let
-          transformedValue =
+          transformValue =
             if listToValue != null then
-              mapAttrs (key: val: if isList val then listToValue val else val) value
+              mapAttrs (key: val: if isList val then listToValue val else val)
             else
-              value;
+              id;
+          finalArgs = removeAttrs args [ "listToValue" ];
         in
-        pkgs.writeText name (toKeyValue (removeAttrs args [ "listToValue" ]) transformedValue);
+        name: value: pkgs.writeText name (toKeyValue finalArgs (transformValue value));
 
     };
 
