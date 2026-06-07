@@ -156,6 +156,12 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # QSignalSpy tests in QML suite always fail, pass when running interactively
     "qml"
+  ]
+  ++ lib.optionals withQt6 [
+    # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/work_items/13
+    "dbus"
+    "lomiri-thumbnailer-qt6"
+    "thumbnailer-admin"
   ];
 
   enableParallelChecking = false;
