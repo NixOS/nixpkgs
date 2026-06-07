@@ -176,21 +176,30 @@ in
       "dovecot2"
       "modules"
     ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "enablePop3"
-    ] "Set 'services.dovecot2.settings.protocols.pop3 = true/false;' instead.")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "enableImap"
-    ] "Set 'services.dovecot2.settings.protocols.imap = true/false;' instead.")
-    (mkRemovedOptionModule [
-      "services"
-      "dovecot2"
-      "enableLmtp"
-    ] "Set 'services.dovecot2.settings.protocols.lmtp = true/false;' instead.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "enablePop3"
+      ]
+      ''Use `services.dovecot2.settings.protocols = "pop3"` for Dovecot 2.3, `services.dovecot2.settings.protocols.pop3` for Dovecot 2.4.''
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "enableImap"
+      ]
+      ''Use `services.dovecot2.settings.protocols = "imap"` for Dovecot 2.3, `services.dovecot2.settings.protocols.imap` for Dovecot 2.4.''
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "dovecot2"
+        "enableLmtp"
+      ]
+      ''Use `services.dovecot2.settings.protocols = "lmtp"` for Dovecot 2.3, `services.dovecot2.settings.protocols.lmtp` for Dovecot 2.4.''
+    )
     (mkRemovedOptionModule [
       "services"
       "dovecot2"
