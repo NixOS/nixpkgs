@@ -10138,6 +10138,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mini-input = buildVimPlugin {
+    pname = "mini.input";
+    version = "0-unstable-2026-06-06";
+    src = fetchFromGitHub {
+      owner = "nvim-mini";
+      repo = "mini.input";
+      rev = "73a50edd8d0350feb8c018fe367121a241fd7c56";
+      hash = "sha256-6IC7krZ5pIKoR8t75h+z5yq3mKdyEaZ4iVl/dyc5Yis=";
+    };
+    meta.homepage = "https://github.com/nvim-mini/mini.input/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-jump = buildVimPlugin {
     pname = "mini.jump";
     version = "0.17.0-unstable-2026-05-19";
