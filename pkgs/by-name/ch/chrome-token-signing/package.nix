@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  wrapQtAppsHook,
-  qmake,
+  qt5,
   pcsclite,
   opensc,
 }:
@@ -22,10 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qmake
+    qt5.qmake
     pcsclite
   ];
   dontUseQmakeConfigure = true;
