@@ -2,7 +2,6 @@
   buildPythonPackage,
   cmsis-svd,
   fetchFromGitHub,
-  future,
   ipython,
   lib,
   prompt-toolkit,
@@ -16,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "greatfet";
-  version = "2025.0.0";
+  version = "2026.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
     tag = "v${version}";
-    hash = "sha256-tY1ZUtjCeb0+EmmbzKbIcPQrjHc3JzgA/6yDuFwwHu4=";
+    hash = "sha256-qXPNatakMVtvl26FG1bx+ngCeqRpg1So6qFamKK8WWk=";
   };
 
   sourceRoot = "${src.name}/host";
@@ -40,7 +39,6 @@ buildPythonPackage rec {
 
   dependencies = [
     cmsis-svd
-    future
     ipython
     prompt-toolkit
     pyfwup
