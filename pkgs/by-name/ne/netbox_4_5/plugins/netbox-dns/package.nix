@@ -9,6 +9,7 @@ buildPythonPackage rec {
   pname = "netbox-plugin-dns";
   version = "1.5.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "peteeckel";
