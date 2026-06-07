@@ -478,21 +478,23 @@ assertNoAdditions {
     nvimSkipModules = [ "ccc.kit.Thread.Server._bootstrap" ];
   };
 
-  chadtree = super.chadtree.overrideAttrs {
+  chadtree = super.chadtree.overrideAttrs (old: {
     # > E5108: Error executing lua ...implugin-chadtree-0-unstable-2026-01-18/lua/chadtree.lua:162: Vim:Failed to start server: address already in use
     doCheck = stdenv.hostPlatform.isLinux;
     buildInputs = [
       python3
     ];
-    passthru.python3Dependencies =
-      ps: with ps; [
-        pynvim-pp
-        pyyaml
-        std2
-      ];
+    passthru = old.passthru // {
+      python3Dependencies =
+        ps: with ps; [
+          pynvim-pp
+          pyyaml
+          std2
+        ];
+    };
     # We need some patches so it stops complaining about not being in a venv
     patches = [ ./patches/chadtree/emulate-venv.patch ];
-  };
+  });
 
   ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs {
     dependencies = with self; [
@@ -1053,13 +1055,15 @@ assertNoAdditions {
     };
   });
 
-  coq_nvim = super.coq_nvim.overrideAttrs {
-    passthru.python3Dependencies =
-      ps: with ps; [
-        pynvim-pp
-        pyyaml
-        std2
-      ];
+  coq_nvim = super.coq_nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
+      python3Dependencies =
+        ps: with ps; [
+          pynvim-pp
+          pyyaml
+          std2
+        ];
+    };
 
     # We need some patches so it stops complaining about not being in a venv
     patches = [ ./patches/coq_nvim/emulate-venv.patch ];
@@ -1068,7 +1072,7 @@ assertNoAdditions {
       # Other modules require global variables
       "coq"
     ];
-  };
+  });
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -1265,7 +1269,9 @@ assertNoAdditions {
 
   deoplete-khard = super.deoplete-khard.overrideAttrs (old: {
     dependencies = [ self.deoplete-nvim ];
-    passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    passthru = old.passthru // {
+      python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    };
     meta = old.meta // {
       description = "Address-completion for khard via deoplete";
       homepage = "https://github.com/nicoe/deoplete-khard";
@@ -1446,7 +1452,9 @@ assertNoAdditions {
   };
 
   fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ dbus-python ];
+    passthru = old.passthru // {
+      python3Dependencies = ps: with ps; [ dbus-python ];
+    };
     meta = old.meta // {
       description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
       license = lib.licenses.mit;
@@ -1969,9 +1977,11 @@ assertNoAdditions {
     };
   });
 
-  jupytext-nvim = super.jupytext-nvim.overrideAttrs {
-    passthru.python3Dependencies = ps: [ ps.jupytext ];
-  };
+  jupytext-nvim = super.jupytext-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
+      python3Dependencies = ps: [ ps.jupytext ];
+    };
+  });
 
   just-nvim = super.just-nvim.overrideAttrs {
     checkInputs = with self; [
@@ -2366,20 +2376,22 @@ assertNoAdditions {
     runtimeDeps = [ luau-lsp ];
   };
 
-  magma-nvim = super.magma-nvim.overrideAttrs {
-    passthru.python3Dependencies =
-      ps: with ps; [
-        pynvim
-        jupyter-client
-        ueberzug
-        pillow
-        cairosvg
-        plotly
-        ipykernel
-        pyperclip
-        pnglatex
-      ];
-  };
+  magma-nvim = super.magma-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
+      python3Dependencies =
+        ps: with ps; [
+          pynvim
+          jupyter-client
+          ueberzug
+          pillow
+          cairosvg
+          plotly
+          ipykernel
+          pyperclip
+          pnglatex
+        ];
+    };
+  });
 
   maple-nvim = super.maple-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -2597,13 +2609,15 @@ assertNoAdditions {
     };
   });
 
-  ncm2-jedi = super.ncm2-jedi.overrideAttrs {
+  ncm2-jedi = super.ncm2-jedi.overrideAttrs (old: {
     dependencies = with self; [
       nvim-yarp
       ncm2
     ];
-    passthru.python3Dependencies = ps: with ps; [ jedi ];
-  };
+    passthru = old.passthru // {
+      python3Dependencies = ps: with ps; [ jedi ];
+    };
+  });
 
   ncm2-neoinclude = super.ncm2-neoinclude.overrideAttrs {
     dependencies = [ self.neoinclude-vim ];
@@ -4817,7 +4831,9 @@ assertNoAdditions {
   });
 
   vim-beancount = super.vim-beancount.overrideAttrs (old: {
-    passthru.python3Dependencies = ps: with ps; [ beancount ];
+    passthru = old.passthru // {
+      python3Dependencies = ps: with ps; [ beancount ];
+    };
     meta = old.meta // {
       license = lib.licenses.vim;
     };
@@ -5300,9 +5316,11 @@ assertNoAdditions {
     };
   });
 
-  vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
-    passthru.python3Dependencies = [ python3.pkgs.mwclient ];
-  };
+  vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
+    passthru = old.passthru // {
+      python3Dependencies = [ python3.pkgs.mwclient ];
+    };
+  });
 
   vim-merginal = super.vim-merginal.overrideAttrs (old: {
     meta = old.meta // {
