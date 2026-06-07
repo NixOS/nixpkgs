@@ -5,15 +5,15 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeval";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "kubeval";
-    rev = "v${version}";
-    sha256 = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
   };
 
   patches = [
@@ -21,7 +21,7 @@ buildGoModule rec {
     (fetchpatch {
       name = "bump-golang.org/x/sys.patch";
       url = "https://github.com/instrumenta/kubeval/commit/d64502b04d9e1b85fd3d5509049adb50f3e39954.patch";
-      sha256 = "sha256-S/lgwdykFLU2QZRW927fgCPxaIAMK3vSqmH08pXBQxM=";
+      hash = "sha256-S/lgwdykFLU2QZRW927fgCPxaIAMK3vSqmH08pXBQxM=";
     })
   ];
 
@@ -39,4 +39,4 @@ buildGoModule rec {
       nicknovitski
     ];
   };
-}
+})
