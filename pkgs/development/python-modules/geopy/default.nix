@@ -9,7 +9,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopy";
   version = "2.4.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopy";
     repo = "geopy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
-    changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
+    changelog = "https://github.com/geopy/geopy/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})
