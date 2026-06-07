@@ -1192,11 +1192,8 @@ let
       # original singleton straight to the type merge.
       if
         length defs == 1
-        && (
-          let
-            d = head defs;
-          in
-          addErrorContext "while evaluating definitions from `${d.file}':" (!d.value ? _type)
+        && addErrorContext "while evaluating definitions from `${(head defs).file}':" (
+          !(head defs).value ? _type
         )
       then
         {
