@@ -39,6 +39,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
   version = "2.51.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 4;
     hash = "sha256-BSDeOkT75usLmXdAY8QNO+9YxxchrJH2gjFpTzErPXo=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     yq
