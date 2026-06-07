@@ -11,10 +11,12 @@ buildPythonPackage (finalAttrs: {
   version = "4.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "classify-imports";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
   };
 
