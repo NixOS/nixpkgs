@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.12.4";
+  version = "0.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P5Mw3Hi+zOQBdE2O2gk7VI0/y58v0ogmL3Fj1996Gdg=";
+    hash = "sha256-JL6S3Wc9PJbskOPhsr+0QFunZBkMcJCsvhLlz6ggAQ4=";
   };
 
   postPatch = ''
