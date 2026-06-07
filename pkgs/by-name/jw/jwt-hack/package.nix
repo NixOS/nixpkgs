@@ -4,6 +4,7 @@
   openssl,
   pkg-config,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,9 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   buildInputs = [ openssl ];
 
   env.OPENSSL_NO_VENDOR = 1;
+
+  doInstallCheck = true;
 
   meta = {
     description = "JSON Web Token Hack Toolkit";
