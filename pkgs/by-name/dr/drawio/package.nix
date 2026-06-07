@@ -14,25 +14,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "29.7.9";
+  version = "30.0.4";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-D3jrVGP0RHKssSjvA8pg1qXfTjYq+linbXCbZz2kTNw=";
+    hash = "sha256-kkKiGRxztEVFo/wlcdBYcDlxadNarcTyL1MqwonfVY4=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
   postPatch = ''
-    substituteInPlace ./build/fuses.cjs \
+    substituteInPlace ./build/fuses.mjs \
       --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
   '';
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-luOQn7S5hXdUa3VrJyQRt0IFLnzfrnTNHIIZSqHQhaI=";
+    hash = "sha256-hv1LQwsSOsBR5l/joUmXq6foQsVilH+jw3Wje24ISCg=";
   };
 
   nativeBuildInputs = [

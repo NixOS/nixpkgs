@@ -3178,10 +3178,10 @@
   };
 
   zig = {
-    version = "0-unstable-2024-10-13";
-    url = "github:maxxnino/tree-sitter-zig";
-    rev = "a80a6e9be81b33b182ce6305ae4ea28e29211bd5";
-    hash = "sha256-o3RAbW8kLSfKxuQ/z7WDb5BaDVxZUG5oFutovRkErjk=";
+    version = "1.1.2-unstable-2025-09-10";
+    url = "github:tree-sitter-grammars/tree-sitter-zig";
+    rev = "6479aa13f32f701c383083d8b28360ebd682fb7d";
+    hash = "sha256-T9Q6EhJ20tH5v1fUlnNA3UcdX52DMZE/PQjPWQtcHw0=";
     meta = {
       license = lib.licenses.mit;
     };

@@ -6,7 +6,7 @@
   maven,
 }:
 let
-  version = "8.51";
+  version = "8.57";
 in
 maven.buildMavenPackage {
   pname = "megabasterd";
@@ -16,7 +16,7 @@ maven.buildMavenPackage {
     owner = "tonikelope";
     repo = "megabasterd";
     tag = "v${version}";
-    hash = "sha256-FbExOSdJ4XiXKzetIlsSPrD9x2H4MxM2kKCMA4XkMLA=";
+    hash = "sha256-6PKBzQA3lBa9/7J8bymGmnW3OPsRV4GgZ7dc7H6fOuE=";
   };
 
   mvnHash = "sha256-DVfPmW0ep6y/GxnwNKXxo68W5idcTkoNqUEKm7ouTEY=";
