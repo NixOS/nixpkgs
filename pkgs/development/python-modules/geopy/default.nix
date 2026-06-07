@@ -3,6 +3,7 @@
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
+  setuptools,
   geographiclib,
   pytest7CheckHook,
   pythonAtLeast,
@@ -12,7 +13,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "geopy";
   version = "2.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -23,7 +24,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
-  propagatedBuildInputs = [ geographiclib ];
+  build-system = [ setuptools ];
+
+  dependencies = [ geographiclib ];
 
   nativeCheckInputs = [
     docutils
