@@ -11,7 +11,11 @@
   makeDesktopItem,
 
   electron_40,
-  commandLineArgs ? "",
+  # Electron renders incorrectly under Wayland: the window stays hidden and
+  # dragging, window positioning, the tray icon and the desktop lyrics window
+  # all break. Force the X11 backend by default, as recommended upstream.
+  # https://github.com/lyswhut/lx-music-desktop/pull/2846#issuecomment-4641318543
+  commandLineArgs ? "--ozone-platform=x11",
 }:
 
 let
