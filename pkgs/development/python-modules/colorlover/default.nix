@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "colorlover" ];
 
   meta = {
-    homepage = "https://github.com/jackparmer/colorlover";
+    homepage = "https://github.com/plotly/colorlover";
     description = "Color scales in Python for humans";
     license = lib.licenses.mit;
     maintainers = [ ];
