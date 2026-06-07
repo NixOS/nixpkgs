@@ -250,7 +250,7 @@ optionalAttrs allowAliases aliases
             description = "section of an INI file (attrs of " + atom.description + ")";
           };
 
-        maybeToList =
+        maybeCoerceList =
           listToValue:
           if listToValue != null then
             mapAttrs (key: val: if isList val then listToValue val else val)
@@ -291,7 +291,7 @@ optionalAttrs allowAliases aliases
             generate =
               name: value:
               pipe value [
-                (mapAttrs (_: maybeToList listToValue))
+                (mapAttrs (_: maybeCoerceList listToValue))
                 (toINI (removeAttrs args ignoredArgs))
                 (pkgs.writeText name)
               ];
@@ -342,8 +342,8 @@ optionalAttrs allowAliases aliases
               }:
               pkgs.writeText name (
                 toINIWithGlobalSection (removeAttrs args ignoredArgs) {
-                  globalSection = maybeToList listToValue globalSection;
-                  sections = mapAttrs (_: maybeToList listToValue) sections;
+                  globalSection = maybeCoerceList listToValue globalSection;
+                  sections = mapAttrs (_: maybeCoerceList listToValue) sections;
                 }
               );
           };
