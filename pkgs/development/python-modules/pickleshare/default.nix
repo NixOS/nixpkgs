@@ -10,6 +10,8 @@ buildPythonPackage (finalAttrs: {
   format = "setuptools";
   pname = "pickleshare";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-h2g9R5ZcHaZc2srzHIRB0SuARM3smspQDNePwsaDr8o=";
