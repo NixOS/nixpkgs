@@ -791,7 +791,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-credentials-tpm2
           systemd-escaping
           systemd-initrd-btrfs-raid
-          # systemd-initrd-luks-fido2 # broken on master
+          systemd-initrd-luks-fido2
           systemd-initrd-luks-keyfile
           systemd-initrd-luks-empty-passphrase
           systemd-initrd-luks-password
