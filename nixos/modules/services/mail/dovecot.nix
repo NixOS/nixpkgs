@@ -222,7 +222,7 @@ in
         "dovecot2"
         "sslCACert"
       ]
-      ''Use `settings.ssl_ca = "</path"` for Dovecot 2.3, `settings.ssl_server_ca_file = "/path"` for 2.4.''
+      ''Use `settings.ssl_ca = "</path"` for Dovecot 2.3, `settings.ssl_server_ca_file = "/path"` for incoming connections in 2.4, `settings.ssl_client_ca_file = "/path"` for outgoing connections in 2.4.''
     )
     (mkRemovedOptionModule [
       "services"
