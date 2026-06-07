@@ -11,11 +11,6 @@ let
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
-  StateDirectory =
-    if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
-
-  dataDir = "/var/lib/${StateDirectory}";
-
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
   nameToEnvVar =
     name:
@@ -53,7 +48,7 @@ let
       ) cfg.config;
     in
     {
-      DATA_FOLDER = dataDir;
+      DATA_FOLDER = cfg.dataDir;
     }
     // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
@@ -86,6 +81,21 @@ in
       description = ''
         Which database backend vaultwarden will be using.
       '';
+    };
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default =
+        if lib.versionOlder config.system.stateVersion "24.11" then
+          "/var/lib/bitwarden_rs"
+        else
+          "/var/lib/vaultwarden";
+      defaultText = lib.literalExpression ''
+        if lib.versionOlder config.system.stateVersion "24.11"
+        then "/var/lib/bitwarden_rs"
+        else "/var/lib/vaultwarden"
+      '';
+      description = "The directory where vaultwarden stores its persistent data.";
     };
 
     backupDir = lib.mkOption {
@@ -212,8 +222,8 @@ in
         message = "Backups for database backends other than sqlite will need customization";
       }
       {
-        assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
-        message = "Backup directory can not be in ${dataDir}";
+        assertion = cfg.backupDir != null -> !(lib.hasPrefix cfg.dataDir cfg.backupDir);
+        message = "Backup directory can not be in ${cfg.dataDir}";
       }
       {
         assertion = cfg.configureNginx -> cfg.domain != null;
@@ -305,8 +315,7 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          inherit StateDirectory;
-          StateDirectoryMode = "0700";
+          WorkingDirectory = cfg.dataDir;
           SystemCallArchitectures = "native";
           SystemCallFilter = [
             "@system-service"
@@ -323,7 +332,7 @@ in
       services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
         description = "Backup vaultwarden";
         environment = {
-          DATA_FOLDER = dataDir;
+          DATA_FOLDER = cfg.dataDir;
           BACKUP_FOLDER = cfg.backupDir;
         };
         path = [ pkgs.sqlite ];
@@ -349,12 +358,26 @@ in
         wantedBy = [ "multi-user.target" ];
       };
 
-      tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
-        "10-vaultwarden".${cfg.backupDir}.d = {
-          inherit user group;
-          mode = "0770";
-        };
-      };
+      tmpfiles.settings."10-vaultwarden" = lib.mkMerge [
+        {
+          ${cfg.dataDir} = {
+            d = {
+              inherit user group;
+              mode = "0700";
+            };
+            z = {
+              inherit user group;
+              mode = "0700";
+            };
+          };
+        }
+        (lib.mkIf (cfg.backupDir != null) {
+          ${cfg.backupDir}.d = {
+            inherit user group;
+            mode = "0770";
+          };
+        })
+      ];
     };
 
     users = {
