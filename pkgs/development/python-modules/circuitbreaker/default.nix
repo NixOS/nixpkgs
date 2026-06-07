@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "circuitbreaker";
   version = "2.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabfuel";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-7BpYGhha0PTYzsE9CsN4KxfJW/wm2i6V+uAeamBREBQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
