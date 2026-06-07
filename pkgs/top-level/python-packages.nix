@@ -3630,6 +3630,8 @@ self: super: with self; {
 
   dask-yarn = callPackage ../development/python-modules/dask-yarn { };
 
+  data-grand-lyon-ha = callPackage ../development/python-modules/data-grand-lyon-ha { };
+
   databackend = callPackage ../development/python-modules/databackend { };
 
   databases = callPackage ../development/python-modules/databases { };
