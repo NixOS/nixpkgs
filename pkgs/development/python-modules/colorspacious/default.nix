@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   numpy,
 }:
 
 buildPythonPackage rec {
   pname = "colorspacious";
   version = "1.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "065n24zbm9ymy2gvf03vx5cggk1258vcjdaw8jn9v26arpl7542y";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   meta = {
     homepage = "https://github.com/njsmith/colorspacious";
