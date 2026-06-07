@@ -19162,6 +19162,11 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
+  NanamiNakano = {
+    name = "Nanami Nakano";
+    github = "NanamiNakano";
+    githubId = 64841155;
+  };
   nanotwerp = {
     email = "nanotwerp@gmail.com";
     github = "nanotwerp";
