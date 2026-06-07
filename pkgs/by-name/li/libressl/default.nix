@@ -133,6 +133,8 @@ in
       } include/arch/loongarch64/opensslconf.h
     '';
     patches = [
+      # https://github.com/libressl/portable/issues/1295
+      ./tls_default_ca_file.patch
       common-cmake-install-full-dirs-patch
     ];
   };
@@ -141,6 +143,8 @@ in
     version = "4.2.1";
     hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
+      # https://github.com/libressl/portable/issues/1295
+      ./tls_default_ca_file.patch
       common-cmake-install-full-dirs-patch
     ];
   };
