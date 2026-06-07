@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://haguichi.net/";
     changelog = "https://haguichi.net/news/release${
       lib.strings.replaceStrings [ "." ] [ "" ] finalAttrs.version
-    }";
+    }/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ OPNA2608 ];
