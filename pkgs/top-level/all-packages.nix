@@ -9677,10 +9677,6 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  stag = callPackage ../applications/misc/stag {
-    curses = ncurses;
-  };
-
   sweethome3d = recurseIntoAttrs (
     (callPackage ../applications/misc/sweethome3d { })
     // (callPackage ../applications/misc/sweethome3d/editors.nix {
