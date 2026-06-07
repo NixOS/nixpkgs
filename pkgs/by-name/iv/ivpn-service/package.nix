@@ -14,12 +14,16 @@
   gawk,
   util-linux,
   nix-update-script,
+  liboqs,
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
   version = "3.15.6";
 
-  buildInputs = [ wirelesstools ];
+  buildInputs = [
+    wirelesstools
+    liboqs
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
@@ -63,6 +67,10 @@ buildGoModule (finalAttrs: {
       'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
       --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
       'v2rayBinaryPath = "${v2ray}/bin/v2ray"'
+
+    substituteInPlace daemon/service/wgkeys/manager.go \
+      --replace-fail 'kemKeys.KemLibraryVersion = kemHelper.GetPublicKeyLiboqsVersion()' \
+      'kemKeys.KemLibraryVersion = "0.10.0"'
   '';
 
   ldflags = [
@@ -72,8 +80,17 @@ buildGoModule (finalAttrs: {
     "-X github.com/ivpn/desktop-app/daemon/version._time=1970-01-01"
   ];
 
+  postBuild = ''
+    $CC -Wall -O2 -pthread \
+        References/common/kem-helper/main.c \
+        References/common/kem-helper/base64.c \
+        -loqs -Wl,-z,stack-size=5242880 \
+        -o kem-helper
+  '';
+
   postInstall = ''
     mv $out/bin/{daemon,ivpn-service}
+    install -Dm755 kem-helper $out/kem/kem-helper
   '';
 
   postFixup = ''
