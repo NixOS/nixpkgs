@@ -6,13 +6,13 @@
   keystone,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keystone-engine";
   version = "0.9.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1xahdr6bh3dw5swrc2r8kqa8ljhqlb7k2kxv5mrw5rhcmcnzcyig";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.gpl2Only;
   };
-}
+})
