@@ -5,26 +5,32 @@
   libevdev,
   paramiko,
   pynput,
-  setuptools,
   screeninfo,
   tkinter,
+  hatchling,
 }:
 
-buildPythonApplication {
+buildPythonApplication (finalAttrs: {
   pname = "remarkable-mouse";
-  version = "unstable-2024-02-23";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "Evidlo";
     repo = "remarkable_mouse";
-    rev = "05142ef37a8b3f9e350156a14c2dec6844ed0ea8";
-    hash = "sha256-0X/7SIfSnlEL98fxJBAYrHAkRmdtymqA7xBmVoa5VIw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/p+Vg5SzyIH2m0OWthKQ3xgV1KJlAlr1M0bdIi8O2Po=";
   };
 
-  pyproject = true;
-  build-system = [ setuptools ];
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  pyproject = true;
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
     screeninfo
     paramiko
     pynput
@@ -39,7 +45,8 @@ buildPythonApplication {
   meta = {
     description = "Program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
+    changelog = "https://github.com/Evidlo/remarkable_mouse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})
