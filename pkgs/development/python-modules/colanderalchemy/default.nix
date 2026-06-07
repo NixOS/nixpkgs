@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   colander,
   sqlalchemy,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "colanderalchemy";
   version = "0.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     sha256 = "006wcfch2skwvma9bq3l06dyjnz309pa75h1rviq7i4pd9g463bl";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colander
     sqlalchemy
   ];
