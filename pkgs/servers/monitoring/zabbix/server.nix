@@ -115,6 +115,9 @@ import ./versions.nix (
     + optionalString postgresqlSupport ''
       mkdir -p $out/share/zabbix/database/postgresql
       cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
+
+      mkdir -p $out/share/zabbix/database/postgresql/timescaledb
+      cp -prvd database/postgresql/timescaledb/schema.sql $out/share/zabbix/database/postgresql/timescaledb/schema.sql
     '';
 
     meta = {
