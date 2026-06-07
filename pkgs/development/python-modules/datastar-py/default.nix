@@ -1,21 +1,28 @@
 {
+  anyio,
   buildPythonPackage,
+  django,
+  fastapi,
   fetchFromGitHub,
   hatchling,
+  httpx,
   lib,
+  litestar,
   pytestCheckHook,
+  starlette,
+  uvicorn,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "datastar-py";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "starfederation";
     repo = "datastar-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-79pdSzHwkF8JX3rF5PIEvx//rKRvX3H1B2382Wfbm9U=";
+    hash = "sha256-epshwHwpRnrgOQ6/jiy6Iyv4y1fa5ZipgiFShKEOxtA=";
   };
 
   build-system = [ hatchling ];
@@ -23,12 +30,15 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "datastar_py" ];
 
   nativeCheckInputs = [
+    anyio
+    django
+    fastapi
+    httpx
+    litestar
     pytestCheckHook
+    starlette
+    uvicorn
   ];
-
-  # tests were only added after 1.0.0
-  # TODO enable after update
-  doCheck = false;
 
   meta = {
     changelog = "https://github.com/starfederation/datastar-python/releases/tag/${finalAttrs.src.tag}";
