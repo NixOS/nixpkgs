@@ -2461,7 +2461,8 @@
       ];
     "guntamatic" =
       ps: with ps; [
-      ]; # missing inputs: guntamatic
+        guntamatic
+      ];
     "habitica" =
       ps: with ps; [
         habiticalib
@@ -8074,6 +8075,7 @@
     "group"
     "growatt_server"
     "guardian"
+    "guntamatic"
     "habitica"
     "hanna"
     "hardkernel"

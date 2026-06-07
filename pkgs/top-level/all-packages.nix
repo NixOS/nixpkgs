@@ -1191,8 +1191,6 @@ with pkgs;
 
   github-cli = gh;
 
-  git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
-
   git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
 
   git-credential-gmail = callPackage ../by-name/gi/git-credential-email/git-credential-gmail { };
@@ -1480,8 +1478,6 @@ with pkgs;
   gams = callPackage ../tools/misc/gams (config.gams or { });
 
   gancioPlugins = recurseIntoAttrs (callPackage ../by-name/ga/gancio/plugins.nix { });
-
-  github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
@@ -1949,13 +1945,7 @@ with pkgs;
     libsbsms_2_3_0
     ;
 
-  m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
-
-  libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
-
   skkDictionaries = recurseIntoAttrs (callPackages ../tools/inputmethods/skk/skk-dicts { });
-
-  ibus = callPackage ../tools/inputmethods/ibus { };
 
   ibus-engines = recurseIntoAttrs {
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
@@ -2000,8 +1990,6 @@ with pkgs;
     };
   };
 
-  ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix { };
-
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = recurseIntoAttrs {
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
@@ -2021,8 +2009,6 @@ with pkgs;
   cmdpack = callPackages ../tools/misc/cmdpack { };
 
   comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
-
-  compass = callPackage ../development/tools/compass { };
 
   coreutils = callPackage ../tools/misc/coreutils { };
 
@@ -2181,9 +2167,6 @@ with pkgs;
   Fabric = with python3Packages; toPythonApplication fabric;
 
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
-
-  flannel = callPackage ../tools/networking/flannel { };
-  cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix { };
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
@@ -2370,8 +2353,6 @@ with pkgs;
   gruut = with python3.pkgs; toPythonApplication gruut;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
-
-  gup = callPackage ../development/tools/build-managers/gup { };
 
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
 
@@ -8993,9 +8974,6 @@ with pkgs;
 
   gauche = callPackage ../development/interpreters/gauche { };
 
-  geany = callPackage ../applications/editors/geany { };
-  geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
-
   gimagereader-qt = qt6Packages.callPackage ../by-name/gi/gimagereader/package.nix {
     withQt6 = true;
   };
@@ -9571,10 +9549,6 @@ with pkgs;
     enableGL = false;
   };
 
-  mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
-
-  mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
-
   ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
@@ -9778,10 +9752,6 @@ with pkgs;
       sweethome3dApp = sweethome3d.application;
     })
   );
-
-  dropbox = callPackage ../applications/networking/dropbox { };
-
-  dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
   maestral = with python3Packages; toPythonApplication maestral;
 

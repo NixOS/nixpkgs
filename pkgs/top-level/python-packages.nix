@@ -6924,6 +6924,8 @@ self: super: with self; {
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
 
+  guntamatic = callPackage ../development/python-modules/guntamatic { };
+
   guppy3 = callPackage ../development/python-modules/guppy3 { };
 
   gurobipy = callPackage ../development/python-modules/gurobipy { };
@@ -8592,8 +8594,6 @@ self: super: with self; {
   langchain-core = callPackage ../development/python-modules/langchain-core { };
 
   langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
-
-  langchain-experimental = callPackage ../development/python-modules/langchain-experimental { };
 
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
 

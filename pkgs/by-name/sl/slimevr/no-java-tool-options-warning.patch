@@ -1,13 +1,13 @@
-diff --git a/gui/src-tauri/src/main.rs b/gui/src-tauri/src/main.rs
-index 8191f0ed..01e764d8 100644
---- a/gui/src-tauri/src/main.rs
-+++ b/gui/src-tauri/src/main.rs
-@@ -188,7 +188,7 @@ fn setup_webview2() -> Result<()> {
+diff --git a/gui/electron/main/index.ts b/gui/electron/main/index.ts
+index 0210e5eb..a52bbb5b 100644
+--- a/gui/electron/main/index.ts
++++ b/gui/electron/main/index.ts
+@@ -361,7 +361,7 @@ function createWindow() {
+ }
  
- fn check_environment_variables() {
- 	use itertools::Itertools;
--	const ENVS_TO_CHECK: &[&str] = &["_JAVA_OPTIONS", "JAVA_TOOL_OPTIONS"];
-+	const ENVS_TO_CHECK: &[&str] = &["_JAVA_OPTIONS"];
- 	let checked_envs = ENVS_TO_CHECK
- 		.into_iter()
- 		.filter_map(|e| {
+ const checkEnvironmentVariables = () => {
+-  const to_check = ['_JAVA_OPTIONS', 'JAVA_TOOL_OPTIONS'];
++  const to_check = ['_JAVA_OPTIONS'];
+ 
+   const set = to_check.filter((env) => !!process.env[env]);
+   if (set.length > 0) {
