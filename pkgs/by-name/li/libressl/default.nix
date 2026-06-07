@@ -28,6 +28,8 @@ let
         inherit hash;
       };
 
+      strictDeps = true;
+
       nativeBuildInputs = [ cmake ];
 
       cmakeFlags = [
