@@ -2763,6 +2763,8 @@ self: super: with self; {
 
   ci-py = callPackage ../development/python-modules/ci-py { };
 
+  cielo-connect-api = callPackage ../development/python-modules/cielo-connect-api { };
+
   cinemagoer = callPackage ../development/python-modules/cinemagoer { };
 
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
