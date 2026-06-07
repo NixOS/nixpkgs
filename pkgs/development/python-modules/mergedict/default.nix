@@ -22,6 +22,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python dict with a merge() method";
     homepage = "https://github.com/schettino72/mergedict";
+    changelog = "https://github.com/schettino72/mergedict/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
