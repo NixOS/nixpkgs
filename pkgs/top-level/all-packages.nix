@@ -9441,10 +9441,6 @@ with pkgs;
 
   mumble_overlay = (callPackages ../applications/networking/mumble { }).overlay;
 
-  mwic = callPackage ../applications/misc/mwic {
-    pythonPackages = python3Packages;
-  };
-
   netmaker = callPackage ../applications/networking/netmaker { subPackages = [ "." ]; };
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
