@@ -210,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     platforms = lib.platforms.all;
     license = with lib.licenses; [
       mit
