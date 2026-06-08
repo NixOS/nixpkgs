@@ -30,6 +30,8 @@ let
 
 in
 {
+  meta.teams = [ lib.teams.redis ];
+
   imports = [
     (lib.mkRemovedOptionModule [
       "services"
