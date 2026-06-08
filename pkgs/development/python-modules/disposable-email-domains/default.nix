@@ -6,16 +6,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "disposable-email-domains";
-  version = "0.0.151";
+  version = "0.0.193";
   pyproject = true;
+  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {
     pname = "disposable_email_domains";
-    inherit version;
-    hash = "sha256-jXtOepZPvp2jlOWJ1Lp2ltnrWU3qL5jHunPRcPLZc8E=";
+    inherit (finalAttrs) version;
+    hash = "sha256-5XT3UtSwPM2xQM44QgezX0YitUXR4xS/2tICH/O6BB4=";
   };
 
   build-system = [
@@ -32,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

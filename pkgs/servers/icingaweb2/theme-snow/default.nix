@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cp -r * "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snow theme for Icingaweb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-snow";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

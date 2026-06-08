@@ -3,52 +3,66 @@
   lib,
   nixosTests,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   python3,
+  dart-sass,
   bash,
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
-  xcbuild,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2025.7.0";
+  version = "2026.5.4";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
+    hash = "sha256-ENq5V1lIFGKIr1xZccy1LFRYVqZVEhDzBhAbDNcG5sM=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./pnpm-lock.yaml.patch
-  ];
+  # Misskey converts its YAML config to JSON at runtime, which doesn't work
+  # because it tries to write it to the Nix store. As a workaround, hardcode
+  # this to a path which the service can write to until a better solution is
+  # supported, upstream.
+  # https://github.com/misskey-dev/misskey/issues/17075
+  postPatch = ''
+    substituteInPlace packages/backend/src/config.ts \
+      --replace-fail \
+        "resolve(projectBuiltDir, '.config.json')" \
+        "resolve('/run/misskey/default.json')"
+    substituteInPlace {.,packages/backend}/package.json \
+      --replace-fail "pnpm compile-config && " ""
+  '';
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm
     makeWrapper
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+    dart-sass
+  ];
 
-  # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      patches
       ;
-    fetcherVersion = 2;
-    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-wEbYkfp+zfytOPBjEcyTHCaoohGRNRjG5oTUefI5BVw=";
   };
 
   buildPhase = ''
@@ -64,12 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs}
     (
       cd node_modules/.pnpm/node_modules/re2
-      pnpm run rebuild
+      pnpm run rebuild --nodedir=${nodejs}
     )
     (
       cd node_modules/.pnpm/node_modules/sharp
       pnpm run install
     )
+
+    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries.
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     pnpm build
 
@@ -85,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
         fi
       '';
     in
+    # bash
     ''
       runHook preInstall
 
@@ -97,15 +116,16 @@ stdenv.mkDerivation (finalAttrs: {
       # Otherwise, maybe somehow bindmount a writable directory into <package>/data/files.
       ln -s /var/lib/misskey $out/data/files
 
-      makeWrapper ${pnpm_9}/bin/pnpm $out/bin/misskey \
+      makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
-        --add-flags run \
+        --add-flag "--config.verify-deps-before-run=false" \
+        --add-flag run \
         --set-default NODE_ENV production \
         --prefix PATH : ${
           lib.makeBinPath [
             nodejs
-            pnpm_9
+            pnpm
             bash
           ]
         } \
@@ -121,9 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {

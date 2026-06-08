@@ -9,8 +9,6 @@ buildDunePackage {
   pname = "atdgen-runtime";
   inherit (atdgen-codec-runtime) version src;
 
-  minimalOCamlVersion = "4.08";
-
   propagatedBuildInputs = [
     biniou
     yojson

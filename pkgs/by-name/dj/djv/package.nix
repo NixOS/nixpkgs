@@ -19,7 +19,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   opencolorio,
-  openexr,
+  openexr_2,
   openssl,
   opentimelineio,
   plutovg,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     nativefiledialog-extended
     nlohmann_json
     opencolorio
-    openexr
+    openexr_2
     openssl
     opentimelineio
     plutovg

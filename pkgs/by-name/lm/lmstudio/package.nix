@@ -7,10 +7,12 @@
 let
   pname = "lmstudio";
 
-  version_aarch64-darwin = "0.3.32-2";
-  hash_aarch64-darwin = "sha256-7GB0Ccfa7/EuWLlp8IM/1db0ThsaKRMmLiU25rZ2sWQ=";
-  version_x86_64-linux = "0.3.32-2";
-  hash_x86_64-linux = "sha256-JH9sH1zzBJkzQnu8MZhZ81xgQGgpzRduQEiap1lmURA=";
+  version_aarch64-linux = "0.4.15-2";
+  hash_aarch64-linux = "sha256-HnxdikjdUPoQkHMGLHC7TJylj5ad5UWnFMkyjj/8haU=";
+  version_aarch64-darwin = "0.4.15-2";
+  hash_aarch64-darwin = "sha256-Spe/d34X4V8LAheaLFQ68NvDo09FrshDrV0RLO+24sU=";
+  version_x86_64-linux = "0.4.15-2";
+  hash_x86_64-linux = "sha256-M7doFWVEyzcDJF4M+h4WKR+Q45yn3FZc2vZbzjYWBPE=";
 
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";
@@ -20,13 +22,13 @@ let
     maintainers = with lib.maintainers; [ crertel ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    broken = stdenv.hostPlatform.isDarwin; # Upstream issue: https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/347
   };
 in
-if stdenv.hostPlatform.isDarwin then
+if stdenv.hostPlatform.system == "aarch64-darwin" then
   callPackage ./darwin.nix {
     inherit pname meta;
     passthru.updateScript = ./update.sh;
@@ -35,6 +37,16 @@ if stdenv.hostPlatform.isDarwin then
       args.url
         or "https://installers.lmstudio.ai/darwin/arm64/${version_aarch64-darwin}/LM-Studio-${version_aarch64-darwin}-arm64.dmg";
     hash = args.hash or hash_aarch64-darwin;
+  }
+else if stdenv.hostPlatform.system == "aarch64-linux" then
+  callPackage ./linux.nix {
+    inherit pname meta;
+    passthru.updateScript = ./update.sh;
+    version = version_aarch64-linux;
+    url =
+      args.url
+        or "https://installers.lmstudio.ai/linux/arm64/${version_aarch64-linux}/LM-Studio-${version_aarch64-linux}-arm64.AppImage";
+    hash = args.hash or hash_aarch64-linux;
   }
 else
   callPackage ./linux.nix {

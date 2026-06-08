@@ -23,8 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-AOWHlvFvKj05f4/KE1F37qkRstW5gUlRH0HZVZrg7Dg=";
 
-  LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
-  LIBCAPNG_LINK_TYPE = if stdenv.hostPlatform.isStatic then "static" else "dylib";
+  env = {
+    LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
+    LIBCAPNG_LINK_TYPE = if stdenv.hostPlatform.isStatic then "static" else "dylib";
+  };
 
   buildInputs = [
     libcap_ng
@@ -44,17 +46,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
     changelog = "https://gitlab.com/virtio-fs/virtiofsd/-/releases/v${finalAttrs.version}";
     description = "vhost-user virtio-fs device backend written in Rust";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       qyliss
       astro
     ];
     mainProgram = "virtiofsd";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       asl20 # and
       bsd3
     ];

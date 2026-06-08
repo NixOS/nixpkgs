@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
@@ -78,8 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ../srb2.png $out/share/pixmaps/srb2kart.png
-    install -Dm644 ../srb2.png $out/share/icons/srb2kart.png
+    install -Dm644 ../srb2.png $out/share/icons/hicolor/256x256/apps/srb2kart.png
     install -Dm755 bin/srb2kart $out/bin/srb2kart
 
     wrapProgram $out/bin/srb2kart \
@@ -88,12 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic styled kart racer";
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ donovanglover ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "srb2kart";
   };
 })

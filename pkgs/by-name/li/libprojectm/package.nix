@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   libGL,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    xorg.libX11
+    libx11
   ];
 
   strictDeps = true;

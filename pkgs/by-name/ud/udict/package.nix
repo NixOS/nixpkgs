@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "udict";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "lsmb";
     repo = "udict";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Urban Dictionary CLI - written in Rust";
     homepage = "https://github.com/lsmb/udict";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "udict";
   };
-}
+})

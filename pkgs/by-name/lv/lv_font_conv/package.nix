@@ -29,6 +29,6 @@ buildNpmPackage rec {
     mainProgram = "lv_font_conv";
     homepage = "https://lvgl.io/tools/fontconverter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

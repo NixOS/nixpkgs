@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     substituteInPlace create.make --replace-fail "-lcurses" "-lncurses"
   '';
 
-  NIX_CFLAGS_COMPILE = "-DHAS_UNISTD=1 -DHAS_STDLIB=1 -DHAS_SYS_WAIT=1";
+  env.NIX_CFLAGS_COMPILE = "-DHAS_UNISTD=1 -DHAS_STDLIB=1 -DHAS_SYS_WAIT=1";
 
   installPhase = ''
     runHook preInstall

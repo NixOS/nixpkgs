@@ -10,14 +10,14 @@
   libadwaita,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lsfg-vk-ui";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "PancakeTAS";
     repo = "lsfg-vk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nIyVOil/gHC+5a+sH3vMlcqVhixjJaGWqXbyoh2Nqyw=";
   };
 
@@ -45,10 +45,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Graphical configuration interface for lsfg-vk";
     homepage = "https://github.com/PancakeTAS/lsfg-vk/";
-    changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${src.tag}";
+    changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pabloaul ];
     mainProgram = "lsfg-vk-ui";
   };
-}
+})

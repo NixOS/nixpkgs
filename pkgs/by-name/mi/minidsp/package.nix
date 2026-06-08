@@ -6,14 +6,14 @@
   libusb1,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minidsp";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "mrene";
     repo = "minidsp-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8bKP9/byVRKj1P1MP3ZVg8yw0WaNB0BcqarCti7B8CA=";
   };
 
@@ -25,14 +25,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Control interface for some MiniDSP products";
     homepage = "https://github.com/mrene/minidsp-rs";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "minidsp";
     maintainers = [
-      maintainers.adamcstephens
-      maintainers.mrene
+      lib.maintainers.adamcstephens
+      lib.maintainers.mrene
     ];
   };
-}
+})

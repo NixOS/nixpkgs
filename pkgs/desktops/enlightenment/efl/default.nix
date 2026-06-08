@@ -53,18 +53,36 @@
   wayland-protocols,
   wayland-scanner,
   writeText,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxcb,
   zlib,
   directoryListingUpdater,
 }:
-
-stdenv.mkDerivation rec {
+let
+  inherit (lib)
+    mesonBool
+    mesonOption
+    ;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "efl";
   version = "1.28.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
+    url = "https://download.enlightenment.org/rel/libs/efl/efl-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
   };
 
   nativeBuildInputs = [
@@ -97,9 +115,9 @@ stdenv.mkDerivation rec {
     systemd
     udev
     wayland-protocols
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
+    libx11
+    libxcursor
+    xorgproto
     zlib
     # still missing parent icon themes: RAVE-X, Faenza
   ];
@@ -133,34 +151,39 @@ stdenv.mkDerivation rec {
     poppler
     util-linux
     wayland
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
   ];
+
+  strictDeps = true;
 
   dontDropIconThemeCache = true;
 
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+
   mesonFlags = [
     "--buildtype=release"
-    "-D build-tests=false" # disable build tests, which are not working
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not available in nixpkgs
-    "-D embedded-lz4=false"
-    "-D fb=true"
-    "-D network-backend=connman"
-    "-D sdl=true"
-    "-D elua=true"
-    "-D bindings=lua,cxx"
+    (mesonBool "build-tests" false) # disable build tests, which are not working
+    (mesonOption "ecore-imf-loaders-disabler" "ibus,scim") # ibus is disabled by default, scim is not available in nixpkgs
+    (mesonBool "embedded-lz4" false)
+    (mesonBool "fb" true)
+    (mesonOption "network-backend" "connman")
+    (mesonBool "sdl" true)
+    (mesonBool "elua" true)
+    (mesonOption "bindings" "lua,cxx")
     # for wayland client support
-    "-D wl=true"
-    "-D drm=true"
+    (mesonBool "wl" true)
+    (mesonBool "drm" true)
   ];
 
   patches = [
@@ -171,8 +194,8 @@ stdenv.mkDerivation rec {
     patchShebangs src/lib/elementary/config_embed
 
     # fix destination of systemd unit and dbus service
-    substituteInPlace systemd-services/meson.build --replace "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
-    substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
+    substituteInPlace systemd-services/meson.build --replace-fail "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace dbus-services/meson.build --replace-fail "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 
   # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
@@ -189,14 +212,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # fix use of $out variable
-    substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    substituteInPlace "$out/share/elua/core/util.lua" --replace-fail '$out' "$out"
     rm "$out/share/elua/core/util.lua.orig"
 
     # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" \
-      --replace 'Cflags: -I''${includedir}/efl-1' \
-                'Cflags: -I''${includedir}/eina-1/eina'"$modules"
+      --replace-fail 'Cflags: -I''${includedir}/efl-1' \
+                     'Cflags: -I''${includedir}/eina-1/eina'"$modules"
 
     # build icon cache
     gtk-update-icon-cache "$out"/share/icons/Enlightenment-X
@@ -211,19 +234,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl2Only
-      licenses.zlib
+      lib.licenses.zlib
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       matejc
       ftrvxmtrx
     ];
-    teams = [ teams.enlightenment ];
+    teams = [ lib.teams.enlightenment ];
   };
-}
+})

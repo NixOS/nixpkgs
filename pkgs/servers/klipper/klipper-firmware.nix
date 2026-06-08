@@ -7,7 +7,7 @@ args@{
   bintools-unwrapped,
   libffi,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
   python3,
   gcc-arm-embedded,
   klipper,
@@ -26,8 +26,8 @@ let
     "lib/rp2040_flash/rp2040_flash"
   ];
 in
-stdenv.mkDerivation rec {
-  name = "klipper-firmware-${mcu}-${version}";
+stdenv.mkDerivation {
+  pname = "klipper-firmware-${mcu}";
   version = klipper.version;
   src = klipper.src;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     avrdude
     stm32flash
     pkg-config
-    wxGTK32 # Required for bossac
+    wxwidgets_3_2 # Required for bossac
   ];
 
   configurePhase = ''
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     cp ./.config $out/config
     cp out/klipper.bin $out/ || true
     cp out/klipper.elf $out/ || true
+    cp out/klipper.elf.hex $out/ || true
     cp out/klipper.uf2 $out/ || true
 
     mkdir -p $out/lib/
@@ -95,7 +96,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     makeFlasher =
-      { flashDevice }:
+      {
+        flashDevice ? null,
+        canbusNetwork ? null,
+        canbusDevice ? null,
+      }:
       klipper-flash.override {
         klipper-firmware = klipper-firmware.override args;
         inherit
@@ -103,17 +108,19 @@ stdenv.mkDerivation rec {
           firmwareConfig
           mcu
           flashDevice
+          canbusNetwork
+          canbusDevice
           ;
       };
   };
 
-  meta = with lib; {
+  meta = {
     inherit (klipper.meta) homepage license;
     description = "Firmware part of Klipper";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vtuan10
       cab404
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

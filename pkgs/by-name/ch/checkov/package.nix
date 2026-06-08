@@ -33,21 +33,20 @@ let
     };
   };
 in
-with py.pkgs;
-
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.2.495";
+  version = "3.2.533";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
-    tag = version;
-    hash = "sha256-jn1p9Rso0/OiV1mI3trC/ebJwzADrfs6wmqxtjsC1KE=";
+    tag = finalAttrs.version;
+    hash = "sha256-WuHmMqtDcivwsZpvZB5wQuKWm5BoDSX4LGJEW7oKJrA=";
   };
 
   pythonRelaxDeps = [
+    "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -66,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
     "rustworkx"
     "schema"
+    "tabulate"
     "termcolor"
     "urllib3"
   ];
@@ -96,6 +96,7 @@ python3.pkgs.buildPythonApplication rec {
     docker
     dockerfile-parse
     dpath
+    ecdsa
     flake8
     gitpython
     igraph
@@ -106,6 +107,7 @@ python3.pkgs.buildPythonApplication rec {
     networkx
     openai
     packaging
+    platformdirs
     policyuniverse
     prettytable
     pycep-parser
@@ -158,6 +160,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_sast_js_filtered_files_by_ts"
     # Timing sensitive
     "test_non_multiline_pair_time_limit_creating_report"
+    # Tests want to run bash script
+    "test_entrypoint"
   ];
 
   disabledTestPaths = [
@@ -194,16 +198,13 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
-    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
+    changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${finalAttrs.version}";
     longDescription = ''
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     mainProgram = "checkov";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhdle14
-      fab
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

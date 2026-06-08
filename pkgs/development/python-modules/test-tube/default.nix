@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   future,
   imageio,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "test-tube";
   version = "0.628";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "williamFalcon";
@@ -37,10 +34,10 @@ buildPythonPackage rec {
     tensorboard
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/williamFalcon/test-tube";
     description = "Framework-agnostic library to track and parallelize hyperparameter search in machine learning experiments";
-    license = licenses.mit;
-    maintainers = [ maintainers.tbenst ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

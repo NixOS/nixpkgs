@@ -33,29 +33,22 @@
   zenity,
   libnotify,
   wrapGAppsHook3,
-  fetchpatch,
   doxygen,
   nix-update-script,
+  openexr,
+  cfitsio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
-    rev = "v${version}";
-    hash = "sha256-k2FXj2ZKZzB5XpCcWzEv7Q1ozATfU3221XKcOFdWOGU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yCY9ltm21cD3NnC2hDZ3O+2UZYgop4TLHC0djPF3Lo0=";
   };
-
-  patches = [
-    # Remove changelog from menu
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/geeqie/-/raw/debian/master/debian/patches/Remove-changelog-from-menu-item.patch";
-      hash = "sha256-0awKKTLg/gUZhmwluVbHCOqssog9SneFOaUtG89q0go=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -91,6 +84,8 @@ stdenv.mkDerivation rec {
     gspell
     libtiff
     libwebp
+    openexr
+    cfitsio
   ];
 
   postInstall = ''
@@ -162,7 +157,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight GTK based image viewer";
     mainProgram = "geeqie";
 
@@ -176,14 +171,15 @@ stdenv.mkDerivation rec {
       initially based on GQview.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.geeqie.org/";
+    changelog = "https://github.com/BestImageViewer/geeqie/blob/${finalAttrs.src.tag}/NEWS";
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pSub
       markus1189
     ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
-}
+})

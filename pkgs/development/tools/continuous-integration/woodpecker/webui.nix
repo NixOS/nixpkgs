@@ -3,10 +3,14 @@
   stdenv,
   callPackage,
   nodejs,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
 }:
 let
   common = callPackage ./common.nix { };
+
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "woodpecker-webui";
@@ -14,16 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${common.src.name}/web";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     sourceRoot = "${common.src.name}/web";
-    fetcherVersion = 2;
+    fetcherVersion = 3;
     hash = common.nodeModulesHash;
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   buildPhase = ''

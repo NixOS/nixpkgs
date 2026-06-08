@@ -7,10 +7,8 @@
 
 let
   inherit (lib)
-    literalExpression
     mkIf
     mkOption
-    singleton
     types
     mkPackageOption
     ;

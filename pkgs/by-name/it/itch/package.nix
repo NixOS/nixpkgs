@@ -12,12 +12,12 @@
 }:
 
 let
-  version = "26.1.9";
+  version = "26.9.0";
 
   itch-setup = fetchzip {
-    url = "https://broth.itch.zone/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
+    url = "https://broth.itch.zone/itch-setup/linux-amd64/1.29.0/archive.zip";
     stripRoot = false;
-    hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
+    hash = "sha256-T4xvso3jJ9XsiG7QTpYdcvcClg2ejbGS4R/+goaHl18=";
   };
 
   sparseCheckout = "/release/images/itch-icons";
@@ -26,7 +26,7 @@ let
       owner = "itchio";
       repo = "itch";
       rev = "v${version}";
-      hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
+      hash = "sha256-zTUCHpyjfPiYDAatkavNlSHekBTHadiHUa3VyLChYKE=";
       sparseCheckout = [ sparseCheckout ];
     }
     + sparseCheckout;
@@ -36,9 +36,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchzip {
-    url = "https://broth.itch.zone/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    url = "https://github.com/itchio/itch/releases/download/v${finalAttrs.version}/itch-v${finalAttrs.version}-linux-amd64.tar.gz";
     stripRoot = false;
-    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
+    hash = "sha256-SRgaVweNqf/13C948eWncuCn9Cj82hYxDF3AzCaL5E0=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}/bin/:${itch-setup}
   '';
@@ -97,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/itchio/itch";
     changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "itch";

@@ -20,49 +20,25 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "9";
+          patch = "13";
           suffix = "";
         };
-        hash = "sha256-7V7zTNo2z6Lzo0DwfKx+eBT5HH88QR9tNWIyOoZsXGY=";
+        hash = "sha256-Krkf9AF4PMymT3XRDIgulXvf1g4r9acvhCF5Nym3inE=";
       };
     };
 
   in
   {
 
-    python27 = callPackage ./cpython/2.7 {
-      self = __splicedPackages.python27;
-      sourceVersion = {
-        major = "2";
-        minor = "7";
-        patch = "18";
-        suffix = ".12"; # ActiveState's Python 2 extended support
-      };
-      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
-      inherit passthruFun;
-    };
-
-    python310 = callPackage ./cpython {
-      self = __splicedPackages.python310;
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "19";
-        suffix = "";
-      };
-      hash = "sha256-yPSlllciAdgd19+R9w4XfhmnDx1ImWi1S1+78pqXwHY=";
-      inherit passthruFun;
-    };
-
     python311 = callPackage ./cpython {
       self = __splicedPackages.python311;
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "14";
+        patch = "15";
         suffix = "";
       };
-      hash = "sha256-jT7Y7FyIwclfXlWGEqclRQ0kUoE92tXlj9saU7Egm3g=";
+      hash = "sha256-JyF53dmi5BoPyOQuM9+9ygs3EapavzctPy1RVD0JtiU=";
       inherit passthruFun;
     };
 
@@ -71,10 +47,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "12";
+        patch = "13";
         suffix = "";
       };
-      hash = "sha256-+4WhNBSwKMSboYu9UjwtBVowtWsYuSzkVOosUe3GVsQ=";
+      hash = "sha256-wIvGWoGXHB3VeDGCgmUDNpRmx+ZzdNFkZRmt8FIHtoQ=";
       inherit passthruFun;
     };
 
@@ -91,10 +67,10 @@
       sourceVersion = {
         major = "3";
         minor = "14";
-        patch = "0";
+        patch = "4";
         suffix = "";
       };
-      hash = "sha256-Ipna5ULTlc44g6ygDTyRAwfNaOCy9zNgmMjnt+7p8+k=";
+      hash = "sha256-2SPFEwPjjiSRNvwb3zVo1W7LAyFO/e9IUWF209f6rvg=";
       inherit passthruFun;
     };
 
@@ -104,9 +80,9 @@
         major = "3";
         minor = "15";
         patch = "0";
-        suffix = "a2";
+        suffix = "b2";
       };
-      hash = "sha256-2KCi9Kfz1wkM8ZXoGBTv6V9wVUlVVX9A4UnYaUpmJ1E=";
+      hash = "sha256-0U9HSrZ56QvHNLAv9YRHtuyZqCGvYdb/DB2g+G40GnE=";
       inherit passthruFun;
     };
 

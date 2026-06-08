@@ -27,14 +27,14 @@ let
     ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyperhdr";
   version = "21.0.0.0";
 
   src = fetchFromGitHub {
     owner = "awawa-dev";
     repo = "HyperHDR";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CSggawgUPkpeADc8VXs5FA+ubZAtrtTu0qYgIWA0V/c=";
   };
 
@@ -85,16 +85,16 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly optimized open source ambient lighting implementation based on modern digital video and audio stream analysis for Windows, macOS and Linux (x86 and Raspberry Pi / ARM";
     homepage = "https://github.com/awawa-dev/HyperHDR";
-    changelog = "https://github.com/awawa-dev/HyperHDR/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/awawa-dev/HyperHDR/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hexa
       eymeric
     ];
     mainProgram = "hyperhdr";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

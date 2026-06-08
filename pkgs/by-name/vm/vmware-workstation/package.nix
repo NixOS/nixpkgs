@@ -19,7 +19,21 @@
   libxcrypt-legacy,
   libGL,
   numactl,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libxau,
+  libx11,
   kmod,
   python3,
   autoPatchelfHook,
@@ -35,12 +49,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  version = "17.6.4";
-  build = "24832109";
+  version = "25H2u1";
+  build = "25219725";
 
   src = fetchurl {
-    url = "https://archive.org/download/vmware-workstation-full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
-    hash = "sha256-ZPv7rqzEiGVGgRQ2Kiu6rekRDMnoe8O9k4OWun8Zqb0=";
+    url = "https://archive.org/download/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
+    hash = "sha256-chqpPE68qlGsbbde2Xx6TbEKqIEQRGiQ2x5Av6/HVmo=";
   };
 
   vmware-unpack-env = buildFHSEnv {
@@ -106,21 +120,21 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt-legacy
     libGL
     numactl
-    xorg.libX11
-    xorg.libXau
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
+    libx11
+    libxau
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
   ];
 
   installPhase = ''
@@ -209,7 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $unpacked/lib/modules $out/lib/vmware/
     cp -r $unpacked/lib/include $out/lib/vmware/
 
-    cp -r $unpacked/extra/checkvm $out/bin/
     cp -r $unpacked/extra/modules.xml $out/lib/vmware/modules/
 
     ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vmblock-fuse
@@ -229,8 +242,8 @@ stdenv.mkDerivation (finalAttrs: {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
-        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
+        --add-needed ${libx11}/lib/libX11.so.6 \
+        --add-needed ${libxi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done
@@ -363,6 +376,11 @@ stdenv.mkDerivation (finalAttrs: {
       if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
         rm -rf "$lib"
       fi
+    done
+
+    # VMware upgraded their shipped libxml2 without recompiling these libraries against it?
+    for lib in $out/lib/vmware/lib/{libcroco-0.6.so.3/libcroco-0.6.so.3,librsvg-2.so.2/librsvg-2.so.2} $out/lib/vmware/libconf/lib/gtk-3.0/3.0.0/loaders/libpixbufloader-svg.so; do
+      patchelf $lib --replace-needed libxml2.so.2 libxml2.so.16
     done
 
     runHook postInstall

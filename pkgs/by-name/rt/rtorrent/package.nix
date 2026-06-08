@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   autoreconfHook,
   cppunit,
   curl,
@@ -9,25 +10,28 @@
   libtorrent-rakshasa,
   lua5_4_compat,
   ncurses,
-  nixosTests,
   nix-update-script,
+  nixosTests,
   openssl,
   pkg-config,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withLua ? false,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtorrent";
-  version = "0.16.4";
+  version = "0.16.13";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ut1R73UfkpDk/Y5Fq8kSavxIB3Y2jbYEQ8J/559Ech0=";
+    hash = "sha256-QvABQKKH/4KUbG6mSkvfcqMpX552nAKp1vZerin2sLA=";
   };
 
   outputs = [
@@ -35,10 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     installShellFiles
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -68,11 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-h";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
     inherit libtorrent-rakshasa;
     tests = { inherit (nixosTests) rtorrent; };
-    updateScript = nix-update-script { };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { attrPath = "libtorrent-rakshasa"; })
+      (nix-update-script { })
+    ];
   };
 
   meta = {
@@ -81,8 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "rtorrent";
     maintainers = with lib.maintainers; [
-      ebzzry
-      codyopel
       thiagokokada
     ];
     platforms = lib.platforms.unix;

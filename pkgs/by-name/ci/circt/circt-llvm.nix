@@ -6,6 +6,7 @@
   circt,
   llvm,
   python3,
+  zstd,
 }:
 stdenv.mkDerivation {
   pname = circt.pname + "-llvm";
@@ -13,10 +14,17 @@ stdenv.mkDerivation {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     ninja
     python3
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # This is needed for darwin builds
+    zstd
   ];
 
   preConfigure = ''
@@ -24,16 +32,17 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DLLVM_ENABLE_BINDINGS=OFF"
-    "-DLLVM_ENABLE_OCAMLDOC=OFF"
-    "-DLLVM_BUILD_EXAMPLES=OFF"
-    "-DLLVM_OPTIMIZED_TABLEGEN=ON"
-    "-DLLVM_ENABLE_PROJECTS=mlir"
-    "-DLLVM_TARGETS_TO_BUILD=Native"
-
-    # This option is needed to install llvm-config
-    "-DLLVM_INSTALL_UTILS=ON"
+    # Based on utils/build-llvm.sh
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
+    (lib.cmakeBool "LLVM_ENABLE_ASSERTIONS" false) # Conflicts with nixpkgs hardening options
+    (lib.cmakeBool "LLVM_ENABLE_BINDINGS" false)
+    (lib.cmakeBool "LLVM_ENABLE_OCAMLDOC" false)
+    (lib.cmakeFeature "LLVM_ENABLE_PROJECTS" "mlir")
+    (lib.cmakeBool "LLVM_INSTALL_UTILS" true)
+    (lib.cmakeBool "LLVM_INSTALL_GTEST" true)
+    (lib.cmakeBool "LLVM_OPTIMIZED_TABLEGEN" true)
+    (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "host")
   ];
 
   outputs = [
@@ -87,6 +96,7 @@ stdenv.mkDerivation {
 
     for file in "$out"/bin/* "$lib"/lib/*.dylib; do
       if [ -L "$file" ]; then continue; fi
+      if [[ "$file" == *.py ]]; then continue; fi
       echo "$file: fixing dylib references"
       # note that -id does nothing on binaries
       install_name_tool -id "$file" "''${flags[@]}" "$file"

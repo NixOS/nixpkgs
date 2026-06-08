@@ -15,13 +15,13 @@
 
 mkDerivation {
   pname = "gr-lora_sdr";
-  version = "unstable-2025-01-09";
+  version = "0-unstable-2026-01-05";
 
   src = fetchFromGitHub {
     owner = "tapparelj";
     repo = "gr-lora_sdr";
-    rev = "9befbad3e6120529918acf1a742e25465f6b95e4";
-    hash = "sha256-9oBdzoS2aWWXmiUk5rI0gG3g+BJqUDgMu3/PmZSUkuU=";
+    rev = "862746dd1cf635c9c8a4bfbaa2c3a0ec3a5306c9";
+    hash = "sha256-12IqFNMLvqTN2R8+M9bXiteG4nQ8TwIMECSQPpgKCxM=";
   };
   disabled = gnuradioOlder "3.10";
 

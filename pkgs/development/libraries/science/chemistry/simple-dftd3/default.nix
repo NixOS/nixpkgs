@@ -24,13 +24,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = "simple-dftd3";
     tag = "v${version}";
-    hash = "sha256-c4xctcMcPQ70ippqbwtinygmnZ5en6ZGF5/v0ZWtzys=";
+    hash = "sha256-Bv+N9/dQVpSglt/54ay6mt4kRhu4klMTp7+sRP1bP80=";
   };
 
   patches = [
@@ -68,15 +68,15 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the DFT-D3 program";
     mainProgram = "s-dftd3";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
     homepage = "https://github.com/dftd3/simple-dftd3";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

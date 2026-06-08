@@ -49,5 +49,5 @@ in
     systemd.user.services.dsearch.wantedBy = mkIf cfg.systemd.enable [ cfg.systemd.target ];
   };
 
-  meta.maintainers = with lib.maintainers; [ luckshiba ];
+  meta.teams = [ lib.teams.danklinux ];
 }

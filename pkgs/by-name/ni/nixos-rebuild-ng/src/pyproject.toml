@@ -13,6 +13,7 @@ nixos-rebuild = "nixos_rebuild:main"
 nixos_rebuild = ["*.nix.template"]
 
 [tool.mypy]
+files = ["nixos_rebuild", "tests"]
 # `--strict` config, but explicit options to avoid breaking build when mypy is
 # updated
 warn_unused_configs = true

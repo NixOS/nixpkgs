@@ -7,18 +7,18 @@
   libgit2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocogitto";
-  version = "6.5.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
     repo = "cocogitto";
-    tag = version;
-    hash = "sha256-aAVoPPeuJN6QPcuc3oBF93dP6U+74bAoSDw93XR01Vo=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z+SXB6bDxyR+Bt3Pz6uF9+sZLjbiFNYeECVFZbx40h8=";
   };
 
-  cargoHash = "sha256-yDpZHkRKsWXXHuSKnzhGrjsFLUFZEpC23tcU3FeUZK8=";
+  cargoHash = "sha256-TGcgiXLgxeOO44eNfd9F0VonTTJhOn1iEJwrO65wcxk=";
 
   # Test depend on git configuration that would likely exist in a normal user environment
   # and might be failing to create the test repository it works in.
@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/cog generate-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of cli tools for the conventional commit and semver specifications";
     mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gs-101 ];
   };
-}
+})

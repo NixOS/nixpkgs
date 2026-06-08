@@ -9,13 +9,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcache-tools";
   version = "1.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/colyli/bcache-tools.git";
-    rev = "bcache-tools-${version}";
+    rev = "bcache-tools-${finalAttrs.version}";
     hash = "sha256-8BiHC8qxk4otFPyKnvGNk57JSZytEOy51AGertWo2O0=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     mainProgram = "bcache-tools";
     platforms = lib.platforms.linux;
   };
-}
+})

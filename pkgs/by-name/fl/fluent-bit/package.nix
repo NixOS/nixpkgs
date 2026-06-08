@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "4.2.0";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/38eKwKEmDGJfZxcsnqrcb7OZoNxWgc+R+t3SRqktZY=";
+    hash = "sha256-VXf1F0TZFi8d7gil8yc3WWA/0X3QyYPnbA3luE1DE98=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We fix this by setting the systemd package's `systemdsystemunitdir` pkg-config variable.
   #
   # https://man.openbsd.org/pkg-config.1#PKG_CONFIG_$PACKAGE_$VARIABLE
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   outputs = [
     "out"
@@ -112,8 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {

@@ -6,14 +6,14 @@
   opencl-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clinfo";
   version = "3.0.25.02.14";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
   };
 
@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Print all known information about all available OpenCL platforms and devices in the system";
     homepage = "https://github.com/Oblomov/clinfo";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       athas
       r-burns
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "clinfo";
   };
-}
+})

@@ -17,7 +17,7 @@
   usort,
 
   # optional-dependencies
-  pygls_2,
+  pygls,
   ruff-api,
 
   # tests
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "ufmt";
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "ufmt";
     tag = "v${version}";
-    hash = "sha256-/5sfawsBmsStCCdu4lIq2iL0zywrWAN+qW/t3h2UIu0=";
+    hash = "sha256-46H4oFuCC4BNONGWD4TU/HTNzc8+v8itUCXvDnsMxsk=";
   };
 
   build-system = [ flit-core ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    lsp = [ pygls_2 ];
+    lsp = [ pygls ];
     ruff = [ ruff-api ];
   };
 
@@ -60,7 +60,6 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];
 

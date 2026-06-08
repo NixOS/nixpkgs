@@ -16,6 +16,9 @@
   qtbase,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbustest";
   version = "0.4.0";
@@ -79,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   enableParallelChecking = false;
@@ -96,15 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for testing DBus interactions using Qt";
     homepage = "https://gitlab.com/ubports/development/core/libqtdbustest";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
-    teams = [ teams.lomiri ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "qdbus-simple-test-runner";
     pkgConfigModules = [
-      "libqtdbustest-1"
+      "libqtdbustest-${if withQt6 then "qt6" else "1"}"
     ];
   };
 })

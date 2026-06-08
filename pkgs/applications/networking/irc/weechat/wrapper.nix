@@ -110,7 +110,8 @@ let
         };
     in
     buildEnv {
-      name = "weechat-bin-env-${weechat.version}";
+      pname = "weechat-bin-env";
+      inherit (weechat) version;
       extraOutputsToInstall = lib.optionals installManPages [ "man" ];
       paths = [
         (mkWeechat "weechat")

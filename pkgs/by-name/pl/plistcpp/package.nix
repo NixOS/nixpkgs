@@ -36,10 +36,11 @@ stdenv.mkDerivation {
     pugixml
   ];
 
-  meta = with lib; {
+  meta = {
     maintainers = [ ];
     description = "CPP bindings for Plist";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    homepage = "https://github.com/matthewbauer/PlistCpp";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

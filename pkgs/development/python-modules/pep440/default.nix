@@ -4,15 +4,12 @@
   fetchPypi,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pep440";
   version = "0.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pep440" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to check whether versions number match PEP 440";
     mainProgram = "pep440";
     homepage = "https://github.com/Carreau/pep440";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -38,11 +38,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Benchmarking as CLI and library";
+    homepage = "https://github.com/contour-terminal/termbench-pro";
     mainProgram = "tb";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

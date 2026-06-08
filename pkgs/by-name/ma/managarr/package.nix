@@ -3,32 +3,40 @@
   fetchFromGitHub,
   rustPlatform,
   perl,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "managarr";
-  version = "0.6.1";
+  version = "0.7.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Dark-Alex-17";
     repo = "managarr";
-    tag = "v${version}";
-    hash = "sha256-qIT+kgum+2D8X3rw20B1b2YQCgV/3CEvOpYQeoi55Ew=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-10wM6OI3XqFQKyspJU6fqnE3GyzxNaquQlPjn3nS774=";
   };
 
-  cargoHash = "sha256-7zFTR0NnN0Yd36aqdgiDzXt/0IAZC7fKtAz/mE89ubA=";
+  cargoHash = "sha256-7myysFoBYTosHPZ3gzSzXhN8+wbHHF/73b6wQqdlKe8=";
 
   nativeBuildInputs = [ perl ];
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "TUI and CLI to manage your Servarrs";
     homepage = "https://github.com/Dark-Alex-17/managarr";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.IncredibleLaser
-      lib.maintainers.darkalex
-      lib.maintainers.nindouja
+    maintainers = with lib.maintainers; [
+      IncredibleLaser
+      darkalex
+      nindouja
+      kybe236
     ];
     mainProgram = "managarr";
   };
-}
+})

@@ -15,7 +15,7 @@
   libgpg-error,
   nettle,
   openssl,
-  xorg,
+  libxcb,
 
   nix-update-script,
 }:
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgpg-error
     nettle
     openssl
-    xorg.libxcb
+    libxcb
   ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

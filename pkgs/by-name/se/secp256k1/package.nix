@@ -5,16 +5,16 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "secp256k1";
 
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    tag = "v${version}";
-    sha256 = "sha256-pCSNUSrPyN/lLYZm7zK/b9LICkThXOr6JAyFvHZSPW0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DnBgetf+98n7B1JGtyTdxyc+yQ51A3+ueTIPPSWCm4E=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Optimized C library for EC operations on curve secp256k1";
     longDescription = ''
       Optimized C library for EC operations on curve secp256k1. Part of
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       to research best practices. Use at your own risk.
     '';
     homepage = "https://github.com/bitcoin-core/secp256k1";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
-    platforms = with platforms; all;
+    platforms = with lib.platforms; all;
   };
-}
+})

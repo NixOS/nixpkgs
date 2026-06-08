@@ -109,6 +109,7 @@ in
   # go is used to compile extensions when building container images
   allowGoReference = true;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   passthru = {
@@ -199,22 +200,17 @@ in
           lib.concatStringsSep " " [
             "--replace-fail"
             (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+            (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
   '';
 
   postConfigure = ''
-    # Code borrowed from pkgs/stdenv/generic/setup.sh configurePhase()
-
     # set to empty if unset
     : ''${configureFlags=}
 
-    # shellcheck disable=SC2086
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" $configureFlags "''${configureFlagsArray[@]}"
-
-    # End of the code from pkgs/stdenv/generic/setup.sh configurPhase()
+    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" "''${configureFlags[@]}"
   '';
 
   buildPhase = ''
@@ -277,7 +273,6 @@ in
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

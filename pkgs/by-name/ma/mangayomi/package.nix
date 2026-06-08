@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter335,
+  flutter341,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.70";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-XWa5jEIQWmApbXNu8AgKt6Af9S1ZrsyaFET07FVn7Rc=";
+    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
   };
 
   metaCommon = {
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-3q+fI0MHg+wSSkbEzqXxdoGkF0B/LhLMbB6VcX3xuwE=";
+    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter335.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -147,7 +147,7 @@ flutter335.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/app_icons/icon-red.png $out/share/pixmaps/mangayomi.png
+    install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
   '';
 
   extraWrapProgramArgs = ''

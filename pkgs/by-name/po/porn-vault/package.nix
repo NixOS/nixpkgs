@@ -2,9 +2,11 @@
   fetchFromGitLab,
   rustPlatform,
   lib,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
-  nodejs_22,
+  nodejs-slim_22,
   ffmpeg,
   imagemagick,
   makeWrapper,
@@ -35,8 +37,8 @@ let
       mainProgram = "izzy";
     };
   };
-  pnpm = pnpm_9;
-  nodejs = nodejs_22;
+  nodejs-slim = nodejs-slim_22;
+  pnpm' = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";
@@ -49,15 +51,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wQ3dqLc0l2BmLGDYrbWxX2mPwO/Tqz0fY/fOQTEUv24=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-Xr9tRiP1hW+aFs9FnPvPkeJ0/LtJI57cjWY5bZQaRTQ=";
+    pnpm = pnpm';
+    fetcherVersion = 4;
+    hash = "sha256-5ZMa7/3nbG1xsTfd09oh+NTU+FFhd0lV425pU3s9bZE=";
   };
 
   nativeBuildInputs = [
-    nodejs
-    pnpm.configHook
+    nodejs-slim
+    pnpmConfigHook
+    pnpm'
     makeWrapper
   ];
 
@@ -88,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/porn-vault" \
+    makeWrapper "${lib.getExe nodejs-slim}" "$out/bin/porn-vault" \
       --chdir "$out/share/porn-vault" \
       --add-flags "dist/index.js" \
       --set-default IZZY_PATH "${lib.getExe izzy}" \
@@ -106,7 +110,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/porn-vault/porn-vault";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luNeder ];
-    inherit (nodejs.meta) platforms;
+    inherit (nodejs-slim.meta) platforms;
     mainProgram = "porn-vault";
   };
 })

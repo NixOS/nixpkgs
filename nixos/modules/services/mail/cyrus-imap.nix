@@ -39,7 +39,7 @@ let
           p: q:
           if (q != null) then
             if builtins.isInt q then
-              "${p}=${builtins.toString q}"
+              "${p}=${toString q}"
             else
               "${p}=\"${if builtins.isList q then (concatStringsSep " " q) else q}\""
           else
@@ -336,12 +336,13 @@ in
       startLimitIntervalSec = 60;
       environment = {
         CYRUS_VERBOSE = mkIf cfg.debug "1";
-        LISTENQUEUE = builtins.toString cfg.listenQueue;
+        LISTENQUEUE = toString cfg.listenQueue;
       };
       serviceConfig = {
         User = if (cfg.user == null) then "cyrus" else cfg.user;
         Group = if (cfg.group == null) then "cyrus" else cfg.group;
         Type = "simple";
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p '${cfg.imapdSettings.configdirectory}/socket' '${cfg.tmpDBDir}' /run/cyrus/proc /run/cyrus/lock";
         ExecStart = "${cyrus-imapdPkg}/libexec/master -l $LISTENQUEUE -C /etc/imapd.conf -M /etc/cyrus.conf -p /run/cyrus/master.pid -D";
         Restart = "on-failure";
         RestartSec = "1s";
@@ -367,9 +368,6 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
       };
-      preStart = ''
-        mkdir -p '${cfg.imapdSettings.configdirectory}/socket' '${cfg.tmpDBDir}' /run/cyrus/proc /run/cyrus/lock
-      '';
     };
     environment.systemPackages = [ cyrus-imapdPkg ];
   };

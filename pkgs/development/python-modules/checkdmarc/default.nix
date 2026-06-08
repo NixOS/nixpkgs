@@ -12,22 +12,21 @@
   pyleri,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   timeout-decorator,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.10.12";
+  version = "5.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    tag = version;
-    hash = "sha256-XbBdBef3+kt26XP5GDH5rgHYGh8xIjHUUVOcdeVICLs=";
+    tag = finalAttrs.version;
+    hash = "sha256-MafEl+5uZS490ZZqi74alOnbLfDyMGb5RK5CtyHUS60=";
   };
 
   pythonRelaxDeps = [
@@ -66,14 +65,19 @@ buildPythonPackage rec {
     "testSplitSPFRecord"
     "testTooManySPFDNSLookups"
     "testTooManySPFVoidDNSLookups"
+    "testDNSSEC"
+    "testDnssecFalseWhenNoKey"
+    "testGetDnskeyCache"
+    "testIncludeMissingSPF"
+    "testKnownGood"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for SPF and DMARC DNS records";
     homepage = "https://github.com/domainaware/checkdmarc";
-    changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/domainaware/checkdmarc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "checkdmarc";
   };
-}
+})

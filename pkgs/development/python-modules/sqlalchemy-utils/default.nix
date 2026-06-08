@@ -31,10 +31,8 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.42.2";
+  version = "0.41.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kvesteri";
@@ -96,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Various utility functions and datatypes for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

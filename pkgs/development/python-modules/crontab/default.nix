@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   python-dateutil,
   pytz,
   setuptools,
@@ -14,12 +13,10 @@ buildPythonPackage rec {
   version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     owner = "doctormo";
     repo = "python-crontab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eJXtvTRwokbewWrTArHJ2FXGDLvlkGA/5ZZR01koMW8=";
   };
 
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crontab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse and use crontab schedules in Python";
     homepage = "https://gitlab.com/doctormo/python-crontab/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

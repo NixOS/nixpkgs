@@ -25,10 +25,10 @@ buildPythonPackage rec {
     "usb" # requires a physical yubikey to test
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python code to talk to YubiKeys";
     homepage = "https://github.com/Yubico/python-yubico";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

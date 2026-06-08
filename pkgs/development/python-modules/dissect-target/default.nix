@@ -34,6 +34,7 @@
   paho-mqtt,
   pycryptodome,
   pytestCheckHook,
+  pythonAtLeast,
   ruamel-yaml,
   setuptools,
   setuptools-scm,
@@ -54,6 +55,8 @@ buildPythonPackage rec {
     hash = "sha256-i1oA7UVo880dHJkf19YRcmPV3Lwp1a8RokfRNDZ9gG0=";
     fetchLFS = true;
   };
+
+  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -171,11 +174,11 @@ buildPythonPackage rec {
     "tests/loaders/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
     changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

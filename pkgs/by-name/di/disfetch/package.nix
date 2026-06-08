@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "disfetch";
   version = "3.7";
 
   src = fetchFromGitHub {
     owner = "q60";
     repo = "disfetch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-xzOE+Pnx0qb3B9vWWrF5Q0nhUo0QYBUO6j6al8N3deY=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another *nix distro fetching program, but less complex";
     homepage = "https://github.com/q60/disfetch";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vel ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ vel ];
     mainProgram = "disfetch";
   };
-}
+})

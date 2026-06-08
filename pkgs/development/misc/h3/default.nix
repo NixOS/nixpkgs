@@ -56,7 +56,7 @@ in
   };
 
   h3_4 = generic {
-    version = "4.3.0";
-    hash = "sha256-DUILKZ1QvML6qg+WdOxir6zRsgTvk+En6yjeFf6MQBg=";
+    version = "4.4.1";
+    hash = "sha256-tKonXauTJiOb5DV56tOmnvba7eNYcWTnOvCSokheVsY=";
   };
 }

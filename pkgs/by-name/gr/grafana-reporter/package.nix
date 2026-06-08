@@ -6,12 +6,12 @@
   tetex,
   makeWrapper,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reporter";
   version = "2.3.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "IzakMarais";
     repo = "reporter";
     hash = "sha256-lsraJwx56I2Gn8CePWUlQu1qdMp78P4xwPzLxetYUcw=";
@@ -39,6 +39,5 @@ buildGoModule rec {
     mainProgram = "grafana-reporter";
     homepage = "https://github.com/IzakMarais/reporter";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.disassembler ];
   };
-}
+})

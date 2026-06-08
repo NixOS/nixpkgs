@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     libjack2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple app to help with JACK apps that behave strangely";
     longDescription = ''
       Creates a JACK passthrough client with an arbitrary name and number of
@@ -39,9 +39,10 @@ stdenv.mkDerivation {
       more ports than they normally would or to prevent them from
       auto-connecting to certain things.
     '';
+    homepage = "https://github.com/guysherman/jack-passthrough";
     # license unknown: https://github.com/guysherman/jack-passthrough/issues/2
-    license = licenses.unfree;
-    maintainers = [ maintainers.PowerUser64 ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.PowerUser64 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "jack-passthru";
   };

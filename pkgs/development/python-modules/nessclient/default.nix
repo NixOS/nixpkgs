@@ -5,7 +5,6 @@
   fetchFromGitHub,
   justbackoff,
   pyserial-asyncio-fast,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "nessclient";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nickw444";
@@ -47,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nessclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation/abstraction of the Ness D8x/D16x Serial Interface ASCII protocol";
     homepage = "https://github.com/nickw444/nessclient";
     changelog = "https://github.com/nickw444/nessclient/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ness-cli";
   };
 }

@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "piday25";
-  version = "0-unstable-2025-03-13";
+  version = "0-unstable-2026-03-19";
 
   src = fetchFromGitHub {
     owner = "elkasztano";
     repo = "piday25";
-    rev = "68b417a3016c58a2948cb3b39c9bde985d82bdb8";
-    hash = "sha256-58ZBRmB990Tp+/nkuRZA+8cjCRFUBzdzu93Sk5uvKOE=";
+    rev = "c5220bba1b22468d4ce3b93343132731c4138115";
+    hash = "sha256-vmk2A3IW9lwRBg4xXTlNgF7b8S/+AciJY+FUhwdzgQ0=";
   };
 
   cargoHash = "sha256-3uztB5/VevFyEz3S+VlAUPgDrNDJcwaTnHuXXYAX+MY=";

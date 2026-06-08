@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regex-cli";
   version = "0.2.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ytI1C2QRUfInIChwtSaHze7VJnP9UIcO93e2wjz2/I0=";
   };
 
@@ -18,14 +18,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";
     mainProgram = "regex-cli";
     homepage = "https://github.com/rust-lang/regex/tree/master/regex-cli";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

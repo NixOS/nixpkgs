@@ -13,9 +13,11 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
-  GO111MODULE = "off";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+    GO111MODULE = "off";
+  };
 
   buildPhase = ''
     runHook preBuild

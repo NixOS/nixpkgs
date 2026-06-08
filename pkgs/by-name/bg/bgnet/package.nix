@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://beej.us/guide/bgnet/";
     license = lib.licenses.unfree;
 
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
   };
 }

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
   meta = {
-    description = "OCaml bindings to libcurl";
+    description = "OCaml bindings to libcurl (deprecated)";
     license = lib.licenses.mit;
     homepage = "http://ygrek.org.ua/p/ocurl/";
     maintainers = with lib.maintainers; [

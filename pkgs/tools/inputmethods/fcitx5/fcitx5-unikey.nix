@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   fcitx5,
   fcitx5-qt,
   gettext,
@@ -12,18 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-unikey";
-  version = "5.1.8";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-unikey";
     rev = version;
-    hash = "sha256-Yeyk6c4bjsxTi8DvRBGip/gayKaOvO6R5PGYkc0uUdk=";
+    hash = "sha256-g4RK1OCRQJoLv5fLR/O2GghgBIWOKzhRbkuijIgpr7U=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext # msgfmt
   ];
 
@@ -35,11 +37,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unikey engine support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-unikey";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ berberman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ berberman ];
+    platforms = lib.platforms.linux;
   };
 }

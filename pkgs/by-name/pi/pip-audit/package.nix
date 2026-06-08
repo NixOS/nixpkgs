@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pip-audit";
   version = "2.10.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fnIwtXFswKcfz/8VssL4UVukwkq6CC63NCyqqbqziO8=";
   };
 
@@ -61,12 +61,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_virtual_env"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
-    changelog = "https://github.com/pypa/pip-audit/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pypa/pip-audit/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pip-audit";
   };
-}
+})

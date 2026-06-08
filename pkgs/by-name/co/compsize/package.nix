@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find compression type/ratio on a file or set of files in the Btrfs filesystem";
     mainProgram = "compsize";
     homepage = "https://github.com/kilobyte/compsize";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

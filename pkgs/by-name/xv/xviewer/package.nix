@@ -27,15 +27,15 @@
   xapp-symbolic-icons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xviewer";
-  version = "3.4.13";
+  version = "3.4.16";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xviewer";
-    rev = version;
-    hash = "sha256-g7ifQ+2FeZzpWfKgtFrWj0YDOB0++s6KGffHhvqGNQE=";
+    rev = finalAttrs.version;
+    hash = "sha256-ayd91gVLuSUVlCxaPSBbx7hg4tthVTaBEnl5V9YYbQw=";
   };
 
   nativeBuildInputs = [
@@ -84,13 +84,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tu-maurice ];
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

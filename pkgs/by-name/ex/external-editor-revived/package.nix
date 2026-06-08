@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "external-editor-revived";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "external-editor-revived";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-K5agRpFJ8iqvPnx3IIMTvrkObT/GB962EtdvWf7Eq4w=";
   };
 
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "@OUT@" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host for the Thunderbird addon allowing to edit mails in external programs";
     homepage = "https://github.com/Frederick888/external-editor-revived";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ mofrim ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ mofrim ];
     mainProgram = "external-editor-revived";
   };
-}
+})

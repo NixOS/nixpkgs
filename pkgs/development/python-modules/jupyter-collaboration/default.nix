@@ -21,19 +21,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "4.1.2";
+  version = "4.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
-    tag = "v${version}";
-    hash = "sha256-/NFx76jqByPhzFKYFIcVctJv9+WQeuoUQaqNt+tUs8o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6FF4KtQSIrB0LeJDNMWWpRIAxRkFMzz566WB6H5ePXs=";
   };
 
-  sourceRoot = "${src.name}/projects/jupyter-collaboration";
+  sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";
 
   build-system = [ hatchling ];
 
@@ -74,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

@@ -10,8 +10,8 @@
   botan3,
   curl,
   darwinMinVersionHook,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libargon2,
   libusb1,
   minizip,
@@ -30,33 +30,46 @@
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
+  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.11";
+  version = "2.7.12";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-Hec3RBC/f0GV6ZBniy+BjMAkABlg111mShrQv0aYm6g=";
+    hash = "sha256-eg8jRaSJdRBpEOHQ8E3jXcdwRzsnyq6r4RLyltdpIB8=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-  ]);
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-old-style-cast"
+        "-Wno-error"
+        "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+      ];
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = toString [
+        "-rpath"
+        "${libargon2}/lib"
+      ];
+    };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
+  patches = [ ./darwin-remove-macdeployqt.patch ];
 
-  patches = [
-    ./darwin.patch
-  ];
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -140,8 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     botan3
     curl
-    libXi
-    libXtst
+    libxi
+    libxtst
     libargon2
     libsForQt5.qtbase
     libsForQt5.qtsvg

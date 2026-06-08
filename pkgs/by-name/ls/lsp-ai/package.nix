@@ -4,19 +4,20 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  oniguruma,
   openssl,
   zlib,
   perl,
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lsp-ai";
   version = "0.7.1";
   src = fetchFromGitHub {
     owner = "SilasMarvin";
     repo = "lsp-ai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mBbaJn4u+Wlu/Y4G4a6YUBWnmN143INAGm0opiAjnIk=";
   };
 
@@ -56,9 +57,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
     zlib
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   cargoBuildFlags = [ "-p lsp-ai" ];
 
@@ -70,8 +75,8 @@ rustPlatform.buildRustPackage rec {
     description = "Open-source language server that serves as a backend for AI-powered functionality";
     homepage = "https://github.com/SilasMarvin/lsp-ai";
     mainProgram = "lsp-ai";
-    changelog = "https://github.com/SilasMarvin/lsp-ai/releases/v${version}";
+    changelog = "https://github.com/SilasMarvin/lsp-ai/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ projectinitiative ];
   };
-}
+})

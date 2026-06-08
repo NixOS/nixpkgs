@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchPypi,
   kissfft,
   miniaudio,
   pkg-config,
@@ -17,7 +16,7 @@
   librsvg,
   libsamplerate,
   libvorbis,
-  xorg,
+  libxcursor,
   mpg123,
   opusfile,
   pango,
@@ -27,35 +26,16 @@
   pulseaudio,
   withDiscordRPC ? true,
 }:
-
-let
-  # fork of pypresence, to be reverted if/when there's an upstream release
-  lynxpresence = python3Packages.buildPythonPackage rec {
-    pname = "lynxpresence";
-    version = "4.6.2";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
-    };
-
-    build-system = with python3Packages; [ setuptools ];
-
-    doCheck = false; # tests require internet connection
-    pythonImportsCheck = [ "lynxpresence" ];
-  };
-in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "8.2.2";
+  version = "10.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-d7bEC68ZJthJE/AlcUqBSNM4L4YAjwHXTiWDCtKf598=";
+    hash = "sha256-atLyNePy3pc3xJFliy5hITC5R0VU6jfHYqfq8RxqGoM=";
   };
 
   postUnpack = ''
@@ -74,6 +54,8 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [
     "opencc"
     "tekore"
+    # Not present when withDiscordRPC is disabled.
+    "pypresence"
   ];
 
   nativeBuildInputs = [
@@ -101,6 +83,7 @@ python3Packages.buildPythonApplication rec {
     opusfile
     pango
     pipewire
+    python3Packages.pyopengl
     wavpack
   ];
 
@@ -121,13 +104,14 @@ python3Packages.buildPythonApplication rec {
       pychromecast
       pylast
       pygobject3
+      pyopengl
       pysdl3
       requests
       send2trash
       setproctitle
       tidalapi
     ]
-    ++ lib.optional withDiscordRPC lynxpresence
+    ++ lib.optional withDiscordRPC pypresence
     ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
@@ -139,7 +123,7 @@ python3Packages.buildPythonApplication rec {
           libopenmpt
           pulseaudio
         ]
-        ++ lib.optional stdenv.hostPlatform.isLinux xorg.libXcursor
+        ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
       )
     }"
     "--prefix PYTHONPATH : $out/share/tauon"
@@ -160,7 +144,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      jansol
+      alfarel
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

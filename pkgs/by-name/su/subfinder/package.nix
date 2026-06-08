@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.10.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
-    tag = "v${version}";
-    hash = "sha256-elv3FPJigd7xhJiTv+eutjBUqMzG50H8Agf5DenwvyU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VAOrX8oxTAMaVpRxSMtZF8xKlsQ6rx7gxv7vmChDDAM=";
   };
 
-  vendorHash = "sha256-ss1lcdqBni5SmHVLDQpFFVTQ3/nL8qPTl5zul1GQpBM=";
+  vendorHash = "sha256-JsJtykNv46EFAjA290rh13k8CrqHEVp3f/vqWhjOIlc=";
 
   patches = [
     # Disable automatic version check
@@ -31,7 +31,7 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Subdomain discovery tool";
     longDescription = ''
       SubFinder is a subdomain discovery tool that discovers valid
@@ -39,12 +39,12 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
-    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fpletz
       Misaka13514
     ];
     mainProgram = "subfinder";
   };
-}
+})

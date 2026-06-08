@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scooter";
-  version = "0.8.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
-    rev = "v${version}";
-    hash = "sha256-hOuhgPE24DBF/uFz/S51h+d7j5yDjPs8Mvfkcp2BQsc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4pekZhk8g4BzyhNqWLocP24bLKpr0kLepRzp+NYfX1I=";
   };
 
-  cargoHash = "sha256-S2oLItnyRURPyYDroa7PlHbKIhnE4HdXeo1y6cAKvss=";
+  cargoHash = "sha256-Ac+iCZ2WoRq7yP9YlT9hp0grsMPny/JdYBrdWiSj/L8=";
 
   # Ensure that only the `scooter` package is built (excluding `xtask`)
   cargoBuildFlags = [
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive find and replace in the terminal";
     homepage = "https://github.com/thomasschafer/scooter";
-    changelog = "https://github.com/thomasschafer/scooter/commits/v${version}";
+    changelog = "https://github.com/thomasschafer/scooter/commits/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "scooter";
   };
-}
+})

@@ -76,6 +76,9 @@ in
 
   cl-print = null; # builtin
 
+  # https://github.com/NixOS/nixpkgs/issues/483425
+  consult = addPackageRequires super.consult [ self.flymake ];
+
   # missing optional dependencies https://codeberg.org/rahguzar/consult-hoogle/issues/4
   consult-hoogle = addPackageRequiresIfOlder super.consult-hoogle [ self.consult ] "0.2.2";
 
@@ -154,7 +157,7 @@ in
 
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
 
-    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant2 ];
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant_2 ];
 
     postBuild =
       old.postBuild or ""

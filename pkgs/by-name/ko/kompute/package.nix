@@ -12,14 +12,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kompute";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "KomputeProject";
     repo = "kompute";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cf9Ef85R+VKao286+WHLgBWUqgwvuRocgeCzVJOGbdc=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General purpose GPU compute framework built on Vulkan";
     longDescription = ''
       General purpose GPU compute framework built on Vulkan to
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
       processing usecases. Backed by the Linux Foundation"
     '';
     homepage = "https://kompute.cc/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ atila ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

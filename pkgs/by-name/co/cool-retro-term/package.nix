@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.0";
   pname = "cool-retro-term";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";
     repo = "cool-retro-term";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PewHLVmo+RTBHIQ/y2FBkgXsIvujYd7u56JdFC10B4c=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "cool-retro-term";
   };
-}
+})

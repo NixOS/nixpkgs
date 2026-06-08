@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "example-robot-data";
-  version = "4.4.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnI1EaTSqk7mbihwFTgnMxgPZxMSYnAwaCLEXS3LUbE=";
+    hash = "sha256-oQk6mJ1lOTcWrTWLViVQWk+R6DdcnLSigxKuXgpLhs0=";
   };
 
   outputs = [
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of robot URDFs for benchmarking and developed examples";
     homepage = "https://github.com/Gepetto/example-robot-data";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

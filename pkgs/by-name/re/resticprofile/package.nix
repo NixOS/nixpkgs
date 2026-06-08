@@ -9,14 +9,14 @@
   resticprofile,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "resticprofile";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ezelvyroQG1EW3SU63OVHJ/T4qjN5DRllvPIXnei1Z4=";
   };
 
@@ -35,8 +35,8 @@ buildGoModule rec {
   vendorHash = "sha256-M9S6F/Csz7HnOq8PSWjpENKm1704kVx9zDts1ieraTE=";
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.date=unknown"
     "-X main.builtBy=nixpkgs"
   ];
@@ -77,7 +77,7 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/creativeprojects/resticprofile/releases/tag/v${version}";
+    changelog = "https://github.com/creativeprojects/resticprofile/releases/tag/v${finalAttrs.version}";
     description = "Configuration profiles manager for restic backup";
     homepage = "https://creativeprojects.github.io/resticprofile/";
     license = with lib.licenses; [
@@ -88,4 +88,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

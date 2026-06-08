@@ -13,13 +13,13 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "encfs";
   version = "1.9.5";
 
   src = fetchFromGitHub {
     sha256 = "099rjb02knr6yz7przlnyj62ic0ag5ncs7vvcc36ikyqrmpqsdch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "encfs";
     owner = "vgough";
   };
@@ -59,15 +59,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encrypted filesystem in user-space via FUSE";
     homepage = "https://vgough.github.io/encfs";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

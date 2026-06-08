@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp_202505,
+  abseil-cpp_202508,
   protobuf,
   pybind11,
   zlib,
@@ -29,14 +29,21 @@ buildPythonPackage {
   ];
 
   postPatch = ''
+    # Original fix for version pinning
     substituteInPlace cmake/dependencies/CMakeLists.txt \
       --replace-fail 'find_package(protobuf 5.29.2 REQUIRED)' 'find_package(protobuf REQUIRED)'
+
+    # Fix for Protobuf 34.0 (absl::string_view migration)
+    substituteInPlace pybind11_protobuf/proto_cast_util.cc \
+      --replace-fail "const std::string& filename" "absl::string_view filename" \
+      --replace-fail "const std::string& symbol_name" "absl::string_view symbol_name" \
+      --replace-fail "const std::string& containing_type" "absl::string_view containing_type"
   '';
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    abseil-cpp_202505
+    abseil-cpp_202508
     protobuf
     pybind11
     zlib

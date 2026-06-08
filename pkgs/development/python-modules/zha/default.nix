@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  looptime,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio_0,
@@ -20,9 +21,9 @@
   zigpy-znp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "0.0.80";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,14 +31,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    tag = version;
-    hash = "sha256-5zqF+EkpKcgmEkg4ZSjMsz3yZn/Y13ECbM/7fBhlnis=";
+    tag = finalAttrs.version;
+    hash = "sha256-Jf8k/4z7eERiV2jwDzhV990sLBebasEKe5/0WbX1hYc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<3"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -58,6 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    looptime
     pytest-asyncio_0
     pytest-timeout
     pytest-xdist
@@ -91,15 +93,14 @@ buildPythonPackage rec {
     "test_startup_concurrency_limit"
     "test_fan_ikea"
     "test_background"
+    "test_gateway_startup_failure" # Failed first attempt, passed second, flaky
   ];
 
-  disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
-
-  meta = with lib; {
+  meta = {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
-    changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zigpy/zha/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

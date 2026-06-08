@@ -3,12 +3,16 @@
   stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
+  inter,
   makeWrapper,
   nixosTests,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
   pnpm_10,
-  prisma,
-  prisma-engines,
+  prisma_7,
+  prisma-engines_7,
   openssl,
   rustPlatform,
   # build variables
@@ -17,8 +21,9 @@
   basePath ? "",
 }:
 let
-  sources = lib.importJSON ./sources.json;
   pnpm = pnpm_10;
+
+  sources = lib.importJSON ./sources.json;
 
   geocities = stdenvNoCC.mkDerivation {
     pname = "umami-geocities";
@@ -40,65 +45,75 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines.overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma-engines' = prisma-engines_7.overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
-      rev = version;
-      hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
+      tag = version;
+      hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
     };
-    cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
+    cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
       inherit src version;
+      patches = old.cargoDeps.vendorStaging.patches or [ ];
       hash = cargoHash;
     };
   });
-  prisma' = (prisma.override { prisma-engines = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
-      rev = version;
-      hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
+      tag = version;
+      hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
     };
     pnpmDeps = old.pnpmDeps.override {
       inherit src version;
-      hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
+      hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
     };
   });
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.2";
+  version = "3.1.0";
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
   ];
 
   src = fetchFromGitHub {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ega3ShfZlEnoFuFSh420hB8sp2qoJuAYnzeoOdpODs=";
+    hash = "sha256-EH3ebwTbajcNasn25ets2w068ZmCQRYUY2XON39J5HA=";
   };
 
-  # install dev dependencies as well, for rollup
-  pnpmInstallFlags = [ "--prod=false" ];
+  # Umami uses next/font/google, which tries to download from Google Fonts at build time.
+  # Replace that code with a copy of the required font(s) from nixpkgs instead.
+  postPatch = ''
+    substituteInPlace ./src/app/layout.tsx \
+      --replace-fail "import { Inter } from 'next/font/google';" "import localFont from 'next/font/local';" \
+      --replace-fail 'const inter = Inter({' "const inter = localFont({ src: './Inter.ttf',"
 
-  pnpmDeps = pnpm.fetchDeps {
+    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
-      pnpmInstallFlags
       version
       src
       ;
-    fetcherVersion = 2;
-    hash = "sha256-zHpIqhxfvJ/so7bKvrGMqVGGnquJNnSI/0q3PE+VQ1Y=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -111,22 +126,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # Needs to be non-empty during build
   env.DATABASE_URL = "postgresql://";
+  # No DB is available during build
+  env.SKIP_DB_CHECK = "1";
+
+  # Geocities is handled manually
+  env.SKIP_BUILD_GEO = "1";
 
   # Allow prisma-cli to find prisma-engines without having to download them
   # Only needed at build time for `prisma generate`.
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build-db-client # prisma generate
-
-    pnpm build-tracker
-    pnpm build-app
-
-    runHook postBuild
-  '';
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${finalAttrs.passthru.prisma-engines}/lib/libquery_engine.node";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${finalAttrs.passthru.prisma-engines}/bin/schema-engine";
 
   checkPhase = ''
     runHook preCheck
@@ -146,8 +155,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp -R public $out/public
     cp -R prisma $out/prisma
-
-    ln -s ${geocities} $out/geo
+    cp prisma.config.ts $out/prisma.config.ts
+    substituteInPlace $out/prisma.config.ts \
+      --replace-fail "import 'dotenv/config';" "" \
+      --replace-fail "from 'prisma/config';" "from '${finalAttrs.passthru.prisma}/lib/prisma/packages/config';"
 
     mkdir -p $out/bin
     # Run database migrations before starting umami.
@@ -156,6 +167,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
       --set NODE_ENV production \
       --set NEXT_TELEMETRY_DISABLED 1 \
+      --set GEOLITE_DB_PATH ${lib.escapeShellArg "${finalAttrs.passthru.geocities}/GeoLite2-City.mmdb"} \
       --prefix PATH : ${
         lib.makeBinPath [
           openssl
@@ -163,7 +175,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --chdir $out \
-      --run "${lib.getExe prisma'} migrate deploy" \
+      --run "${lib.getExe finalAttrs.passthru.prisma} migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall
@@ -182,7 +194,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/umami-software/umami/releases/tag/v${finalAttrs.version}";
     description = "Simple, easy to use, self-hosted web analytics solution";
     homepage = "https://umami.is/";
@@ -192,6 +204,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "umami-server";
-    maintainers = with maintainers; [ diogotcorreia ];
+    maintainers = with lib.maintainers; [ diogotcorreia ];
   };
 })

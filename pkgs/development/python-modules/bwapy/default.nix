@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   bwa,
   cffi,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # uses the removed imp module
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,11 +40,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "bwapy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ACEnglish/bwapy";
     description = "Python bindings to bwa mem aligner";
     mainProgram = "bwamempy";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

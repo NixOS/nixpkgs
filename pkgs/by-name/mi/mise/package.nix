@@ -20,18 +20,18 @@
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2025.12.0";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
-    rev = "v${version}";
-    hash = "sha256-QQE8Dt/juQTf1E+zigOpqlQmpaiTWr+MTlLduCkjxDU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UE+Mo6AtNiVgKOfLS7khAoVNJGyomL5Vb/pfcCke5fI=";
   };
 
-  cargoHash = "sha256-su7HbmVEEUDvqj7147ATln+7ra/dgFCs8q1h+aWqh4Q=";
+  cargoHash = "sha256-N1/lLQZbkqeQavNGhYBx4PDl0cid+DACzy9gpj5g1rs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
@@ -74,8 +76,8 @@ rustPlatform.buildRustPackage rec {
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # started failing mid-April 2025
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
@@ -83,6 +85,9 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -101,7 +106,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Ignore subcrate releases (fox, aqua-registry)
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+      ];
+    };
     tests = {
       version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
@@ -132,9 +142,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://mise.jdx.dev";
     description = "Front-end to your dev env";
-    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "mise";
   };
-}
+})

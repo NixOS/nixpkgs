@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crowdin-cli";
-  version = "4.12.0";
+  version = "4.14.2";
 
   src = fetchurl {
     url = "https://github.com/crowdin/crowdin-cli/releases/download/${finalAttrs.version}/crowdin-cli.zip";
-    hash = "sha256-y6JBlZ1h/1iWr8r+323sYpQNpzM3pHtC/CzQt4HL7MQ=";
+    hash = "sha256-XfOBmMkbi3XrjRBfDrJ86y1+BuJIcvhJ1tULQDsGCqE=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "crowdin";
     homepage = "https://github.com/crowdin/crowdin-cli/";
     description = "Command-line client for the Crowdin API";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ DamienCassou ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DamienCassou ];
   };
 })

@@ -12,16 +12,16 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "boxflat";
-  version = "1.35.2";
+  version = "1.35.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
-    tag = "v${version}";
-    hash = "sha256-7JIIFti8LHBIDBr+GywImlP2l3Ct/hq4pb5+2/q+F0k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R03mQIsa6T1ApV8SMWvilBfiCGcAWvyZ5hDDgAuGd6s=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -66,7 +66,7 @@ python3Packages.buildPythonPackage rec {
     setup(
       name='boxflat',
       packages=['boxflat', 'boxflat.panels', 'boxflat.widgets'],
-      version='${version}',
+      version='${finalAttrs.version}',
       install_requires=install_requires,
       entry_points={
         'console_scripts': ['boxflat=boxflat.entrypoint:main']
@@ -117,11 +117,11 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/Lawstorant/boxflat";
-    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${version}";
+    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${finalAttrs.version}";
     description = "Control your Moza gear settings";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ racci ];
     platforms = lib.platforms.linux;
     mainProgram = "boxflat";
   };
-}
+})

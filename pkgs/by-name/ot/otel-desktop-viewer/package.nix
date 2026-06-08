@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "otel-desktop-viewer";
-  version = "0.2.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4CFemHoMt5Fxaq66zxzWrGxq4AJuZkm45Gb4t8wseWg=";
+    hash = "sha256-oHnawHizBsyGSMORZz8qVQ6PZ/Ta/ftX+m799J1GhWM=";
   };
 
   # NOTE: This project uses Go workspaces, but 'buildGoModule' does not support
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   #
   # cf. https://github.com/NixOS/nixpkgs/issues/203039
   proxyVendor = true;
-  vendorHash = "sha256-2fPkSWPfEDMYH8E7dTq2AAFrsf3jimH315a8OJOIAII=";
+  vendorHash = "sha256-WTaPggKaQJY9t16jES9gbsFNHOn4ujxHsqezKOYMdCs=";
 
   ldflags = [
     "-s"
@@ -40,7 +40,6 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -50,7 +49,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      gaelreyrol
       jkachmar
       lf-
     ];

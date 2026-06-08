@@ -8,13 +8,13 @@
   leatherman,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-hocon";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     sha256 = "0b24anpwkmvbsn5klnr58vxksw00ci9pjhwzx7a61kplyhsaiydw";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "cpp-hocon";
     owner = "puppetlabs";
   };
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 3.2.2)" \
       "cmake_minimum_required(VERSION 3.10)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'list(APPEND BOOST_COMPONENTS thread date_time chrono filesystem system program_options)' \
+      'list(APPEND BOOST_COMPONENTS thread date_time chrono filesystem program_options)'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -39,12 +44,12 @@ stdenv.mkDerivation rec {
     leatherman
   ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "C++ port of the Typesafe Config library";
-    license = licenses.asl20;
-    maintainers = [ maintainers.womfoo ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.womfoo ];
+    platforms = lib.platforms.unix;
   };
 
-}
+})

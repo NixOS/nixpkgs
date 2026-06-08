@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "leo-editor";
-  version = "6.8.7";
+  version = "6.8.8";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GbbSPZQEPufRcF2aLjr9vEVLZlUIgAEP1QkaNILwJV4=";
+    hash = "sha256-A7eFYdmKd4E515xRI4fuLs8wuC9sZu1qd2qMZXs7Ko0=";
   };
 
   dontBuild = true;

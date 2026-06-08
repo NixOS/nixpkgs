@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Libretro's core info files";
     homepage = "https://libretro.com";
-    license = licenses.mit;
-    teams = [ teams.libretro ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.libretro ];
+    platforms = lib.platforms.all;
   };
 }

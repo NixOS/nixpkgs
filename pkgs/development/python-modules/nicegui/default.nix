@@ -12,6 +12,8 @@
   itsdangerous,
   jinja2,
   libsass,
+  lxml-html-clean,
+  lxml,
   markdown2,
   matplotlib,
   orjson,
@@ -26,12 +28,14 @@
   pytest-asyncio,
   pytest-selenium,
   pytestCheckHook,
+  python-dotenv,
   python-multipart,
   python-socketio,
   pywebview,
   redis,
   requests,
   setuptools,
+  tinycss2,
   typing-extensions,
   urllib3,
   uvicorn,
@@ -41,19 +45,25 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.1.0";
+  version = "3.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    tag = "v${version}";
-    hash = "sha256-otHPWOdTrlmf2VQUOhr3196MhN6ihk97y5sOEmnXuAw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pm8jUDdpRvPDVwHXHGwuqPogpE/HMS19uJ5beWch7TE=";
   };
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "idna"
+    "lxml"
+    "orjson"
+    "python-multipart"
+    "requests"
+  ];
 
   build-system = [
     poetry-core
@@ -71,12 +81,16 @@ buildPythonPackage rec {
     ifaddr
     itsdangerous
     jinja2
+    lxml
+    lxml-html-clean
     markdown2
     orjson
     pygments
+    python-dotenv
     python-multipart
     python-socketio
     requests
+    tinycss2
     typing-extensions
     urllib3
     uvicorn
@@ -105,7 +119,7 @@ buildPythonPackage rec {
     webdriver-manager
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -115,8 +129,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

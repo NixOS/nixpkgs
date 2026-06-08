@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  aiohttp,
   attrdict,
   beautifulsoup4,
   cython,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "paddleocr";
-  version = "3.3.2";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     tag = "v${version}";
-    hash = "sha256-uNgYR9Hop/wNIDG4KQaJxn5m4tBKu5R+pfhO1aSa3iQ=";
+    hash = "sha256-I6ZDQ+u8c/Txumq/rRwyulv3mGCi6hjAXvQohEpxpiE=";
   };
 
   patches = [
@@ -56,7 +57,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==72.1.0" ""
+      --replace-fail "setuptools==72.1.0" "setuptools"
   '';
 
   build-system = [
@@ -64,15 +65,8 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
-  ];
-
   dependencies = [
+    aiohttp
     attrdict
     beautifulsoup4
     cython

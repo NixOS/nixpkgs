@@ -15,12 +15,12 @@
 # constraint mention in the configure.ac
 assert lib.hasSuffix "/" mediaDir;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pmount";
   version = "0.9.23";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/p/pmount/pmount_${version}.orig.tar.bz2";
+    url = "mirror://debian/pool/main/p/pmount/pmount_${finalAttrs.version}.orig.tar.bz2";
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ratakor ];
   };
-}
+})

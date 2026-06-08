@@ -313,5 +313,5 @@ in
     ];
   };
 
-  meta.maintainers = [ lib.maintainers.majewsky ] ++ lib.teams.c3d2.members;
+  meta.maintainers = pkgs.portunus.meta.maintainers;
 }

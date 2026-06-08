@@ -9,7 +9,7 @@
 
   protobuf,
   protoc-gen-go,
-  protorpc,
+  protoc-gen-go-grpc,
 
   cmake,
   copyDesktopItems,
@@ -19,20 +19,20 @@
 
   # override if you want to have more up-to-date rulesets
   throne-srslist ? fetchurl {
-    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/60eb41122de3aa53c701ec948cd52d7a26adafea/srslist.h";
-    hash = "sha256-k9vPtcusML4GR81UVeJ7jhuDHGk5Qh0eKw/cSOxBd5g=";
+    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/c637d0bb8a3707eb5e122c81753600d3e18a5969/srslist.h";
+    hash = "sha256-Kf3TAGXi7Y0PhWjdTOZdPUMlimszWkcrQw9zv8pb76s=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.0.8-unstable-2025-10-29";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
-    rev = "54af50fc414ffaf98b3ff88e3dd8aa041c65e041";
-    hash = "sha256-kfvsGw0RUYHkOUSeSA4egLl+gQqN4KkZKXX3CQQzYks=";
+    tag = finalAttrs.version;
+    hash = "sha256-gtbGKyEOTq+1IP7v4ZhVVohGQFlDtP7NbbhyFD2rCnA=";
   };
 
   strictDeps = true;
@@ -49,22 +49,27 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qttools
   ];
 
-  cmakeFlags = [
-    # makes sure the app uses the user's config directory to store it's non-static content
-    # it's essentially the same as always setting the -appdata flag when running the program
-    (lib.cmakeBool "NKR_PACKAGE" true)
-  ];
+  env.INPUT_VERSION = finalAttrs.version;
+
+  # suppress errors in 3rdparty/simple-protobuf
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 
   patches = [
-    # disable suid request as it cannot be applied to throne-core in nix store
-    # and prompt users to use NixOS module instead. And use throne-core from PATH
+    # disable suid request as it cannot be applied to ThroneCore in nix store
+    # and prompt users to use NixOS module instead. And use ThroneCore from PATH
     # to make use of security wrappers
     ./nixos-disable-setuid-request.patch
+
+    # sets the Exec field of the auto-run .desktop file to use the Throne binary from PATH
+    ./fix-autorun-desktop-exec.patch
   ];
 
   preBuild = ''
     ln -s ${throne-srslist} ./srslist.h
   '';
+
+  # we'll wrap manually
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall
@@ -72,10 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 Throne -t "$out/share/throne/"
     install -Dm644 "$src/res/public/Throne.png" -t "$out/share/icons/hicolor/512x512/apps/"
 
-    mkdir -p "$out/bin"
-    ln -s "$out/share/throne/Throne" "$out/bin/"
+    makeQtWrapper "$out/share/throne/Throne" "$out/bin/Throne" \
+      --append-flag "-appdata" # use writable config dir
 
-    ln -s ${finalAttrs.passthru.core}/bin/Core "$out/share/throne/Core"
+    ln -s ${finalAttrs.passthru.core}/bin/ThroneCore "$out/share/throne/ThroneCore"
 
     runHook postInstall
   '';
@@ -103,26 +108,31 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     proxyVendor = true;
-    vendorHash = "sha256-thMRkbs5fS7KsUSRSeUaB2xkTjs7kJ9AKXW0+OXN3io=";
+    vendorHash = "sha256-G0ev2my+sHQFYdmfkR2Zq3ujSeqi5fZ4BdrnUS8mfDE=";
 
     nativeBuildInputs = [
       protobuf
       protoc-gen-go
-      protorpc
+      protoc-gen-go-grpc
     ];
 
     # taken from script/build_go.sh
     preBuild = ''
       pushd gen
-      protoc -I . --go_out=. --protorpc_out=. libcore.proto
+      protoc -I . --go_out=. --go-grpc_out=. libcore.proto
       popd
+
+      VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
+      ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
     '';
 
     # ldflags and tags are taken from script/build_go.sh
     ldflags = [
       "-w"
       "-s"
-      "-X github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
+      "-X"
+      "internal/godebug.defaultGODEBUG=multipathtcp=0"
+      "-checklinkname=0"
     ];
 
     tags = [
@@ -133,10 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
       "with_utls"
       "with_dhcp"
       "with_tailscale"
+      "badlinkname"
+      "tfogo_checklinkname"
+      "with_naive_outbound"
+      "with_purego" # prebuilt .a files inside cronet-go are annoying to fix
     ];
   };
 
-  # this tricks nix-update into also updating the vendorHash of throne-core
+  # this tricks nix-update into also updating the vendorHash of passthru.core
   passthru.goModules = finalAttrs.passthru.core.goModules;
 
   meta = {

@@ -16,7 +16,7 @@
   curl,
   libcpr,
   rapidjson,
-  libX11,
+  libx11,
   libGL,
   writeShellScriptBin,
   makeDesktopItem,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
-    libX11
+    libx11
     libGL
   ];
 
@@ -103,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Game based on K-Shoot MANIA and Sound Voltex";
+    homepage = "https://github.com/Drewol/unnamed-sdvx-clone";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 let
-  oldNetbox = "netbox_4_3";
-  newNetbox = "netbox_4_4";
+  oldNetbox = "netbox_4_4";
+  newNetbox = "netbox_4_5";
 
   apiVersion =
     version:
@@ -37,6 +37,9 @@ in
         package = pkgs.${oldNetbox};
         secretKeyFile = pkgs.writeText "secret" ''
           abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+        '';
+        apiTokenPeppersFile = pkgs.writeText "pepper" ''
+          kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
         '';
       };
 

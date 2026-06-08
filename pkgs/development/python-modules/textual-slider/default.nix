@@ -23,10 +23,10 @@ buildPythonPackage {
 
   dependencies = [ textual ];
 
-  meta = with lib; {
+  meta = {
     description = "Textual widget for a simple slider";
     homepage = "https://github.com/TomJGooding/textual-slider";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.lukegb ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.lukegb ];
   };
 }

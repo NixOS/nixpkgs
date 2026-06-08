@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   glib,
+  gperf,
   meson,
   ninja,
   pkg-config,
@@ -13,7 +14,7 @@
   libepoxy,
   libmegapixels,
   libpulseaudio,
-  xorg,
+  libxrandr,
   zbar,
   tiffSupport ? true,
   libraw,
@@ -41,17 +42,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "megapixels";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "megapixels-org";
     repo = "Megapixels";
     tag = finalAttrs.version;
-    hash = "sha256-tuAMp92166WZJfGIEzEWal9BExzQJoYodd2uZHhqEuQ=";
+    hash = "sha256-fnG8fei3x0UkWJWBm8rB2r9bcKOhtFxG0Zaq+qjd7dE=";
   };
 
   nativeBuildInputs = [
     glib
+    gperf
     meson
     ninja
     pkg-config
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libmegapixels
     libpulseaudio
-    xorg.libXrandr
+    libxrandr
     zbar
   ];
 

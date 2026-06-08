@@ -23,7 +23,6 @@ let
   */
   ipv6Bits = 128;
   ipv6Pieces = 8; # 'x:x:x:x:x:x:x:x'
-  ipv6PieceBits = 16; # One piece in range from 0 to 0xffff.
   ipv6PieceMaxValue = 65535; # 2^16 - 1
 in
 let
@@ -33,7 +32,7 @@ let
     the list of strings which then can be parsed using `_parseExpanded`.
     Throws an error when the address is malformed.
 
-    # Type: String -> [ String ]
+    # Type: String -> [String]
 
     # Example:
 
@@ -94,7 +93,7 @@ let
     functions.
     Throws an error some element is not an u16 integer.
 
-    # Type: [ String ] -> IPv6
+    # Type: [String] -> IPv6
 
     # Example:
 
@@ -168,7 +167,7 @@ in
       prefix length are validated and converted to an internal representation
       that can be used by other functions.
 
-      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+      # Type: String -> [{ address :: IPv6; prefixLength :: Int; }]
 
       # Example:
 

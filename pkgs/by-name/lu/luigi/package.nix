@@ -1,28 +1,33 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "luigi";
-  version = "3.6.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-QbFIUCI8YZ2QBrMKzacz51a4g/x+YIFCBVdmRxkMluM=";
+    pname = "luigi";
+    inherit (finalAttrs) version;
+    hash = "sha256-L6XrXTR05JXeCb2WT1ApNsCPix624PPKPIppEWw40MM=";
   };
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   pythonRelaxDeps = [ "tenacity" ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     python-dateutil
     tornado
     python-daemon
     tenacity
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "luigi" ];
@@ -40,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       handling failures, command line integration, and much more.
     '';
     homepage = "https://github.com/spotify/luigi";
-    changelog = "https://github.com/spotify/luigi/releases/tag/${version}";
+    changelog = "https://github.com/spotify/luigi/releases/tag/${finalAttrs.version}";
     license = [ lib.licenses.asl20 ];
   };
-}
+})

@@ -10,16 +10,16 @@
   pipewire,
   gtk4,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pulsemeeter";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theRealCarneiro";
     repo = "pulsemeeter";
-    tag = "v${version}";
-    hash = "sha256-hmQI+E6WmYOK7oN7zTmshFZgJ0UiN2KdZ6ZiXwxRpNs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m64frtEVqwJEc0rfKoPIbTJtASE+aPAdBBSrPNHIXRY=";
   };
 
   build-system = with python3Packages; [
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pulsemeeter" ];
 
-  passthru.tests.version = callPackage ./version-test.nix { inherit version; };
+  passthru.tests.version = callPackage ./version-test.nix { inherit (finalAttrs) version; };
 
   meta = {
     description = "Pulseaudio and pipewire audio mixer inspired by voicemeeter";
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pulsemeeter";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firecracker";
-  version = "1.13.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZrIvz5hmP0d8ADF723Z+lOP9hi5nYbi6WUtV4wTp73U=";
+    hash = "sha256-H3dj11Q0MgLST1TWJ5rmfPePxjXrXOYI2Xf/3uUdICU=";
   };
 
-  cargoHash = "sha256-BjaNUYZRPKJKjiQWMUyoBIdD2zsNqZX37CPzdwb+lCE=";
+  cargoHash = "sha256-N2WYnFTlz4NUAU/tjy18SPvxdDVDIIaqgu44e6unOHs=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
-  AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
+  env.AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
 
   # For aws-lc-sys@0.22.0: fix gcc error:
   # In function 'memcpy',
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   #
   # For seccompiler: fix hardcoded /usr/local/lib path to libseccomp.lib, this makes sure rustc can find seccomp across stdenv's(including pkgsStatic).
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
+    substituteInPlace $cargoDepsCopy/*/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
       --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
 
     substituteInPlace src/cpu-template-helper/build.rs \
@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=env::tests::test_mknod_and_own_dev"
     "--skip=env::tests::test_setup_jailed_folder"
     "--skip=env::tests::test_userfaultfd_dev"
+    "--skip=env::tests::test_copy_exec_to_chroot"
     "--skip=resource_limits::tests::test_set_resource_limits"
   ];
 

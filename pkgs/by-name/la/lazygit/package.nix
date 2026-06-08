@@ -6,22 +6,22 @@
   testers,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazygit";
-  version = "0.57.0";
+  version = "0.62.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazygit";
-    tag = "v${version}";
-    hash = "sha256-DC0wVkFI7Te3QSE8Y0WU/ysanfukTkGa3N43hmKHXW8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V/dW7zx3D+RuYLqvTvblc93qrpwHB/wnysGdKS5FhoA=";
   };
 
   vendorHash = null;
   subPackages = [ "." ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.buildSource=nix"
   ];
 
@@ -39,7 +39,7 @@ buildGoModule rec {
   meta = {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
-    changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
+    changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       equirosa
@@ -49,4 +49,4 @@ buildGoModule rec {
     ];
     mainProgram = "lazygit";
   };
-}
+})

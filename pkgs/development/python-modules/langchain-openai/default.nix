@@ -31,19 +31,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-openai==${version}";
-    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
+    tag = "langchain-openai==${finalAttrs.version}";
+    hash = "sha256-0EmL+Ptuvu8CWaqeV9DJnRwstCkxo+XJxzgmPdU/VmA=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/openai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
 
   build-system = [ hatchling ];
 
@@ -80,6 +80,14 @@ buildPythonPackage rec {
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
     "test_embeddings_respects_token_limit"
+
+    # Fail when langchain-core gets ahead of this package
+    "test_serdes"
+    "test_loads_openai_llm"
+    "test_load_openai_llm"
+    "test_loads_openai_chat"
+    "test_load_openai_chat"
+    "test_format_message_content"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
@@ -93,7 +101,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
@@ -102,4 +110,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

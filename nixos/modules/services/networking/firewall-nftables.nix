@@ -117,6 +117,10 @@ in
           ifaceSet != ""
         ) ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
 
+        # Multicast ICMPv6 echo replies get marked as invalid by conntrack.
+        # Accept them before conntrack to avoid dropped replies.
+        icmpv6 type echo-reply accept
+
         # Some ICMPv6 types like NDP is untracked
         ct state vmap {
           invalid : drop,

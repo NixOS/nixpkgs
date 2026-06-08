@@ -81,16 +81,16 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
-      maintainers = with maintainers; [ raskin ];
+      maintainers = with lib.maintainers; [ raskin ];
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"
         "icu-uc"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -143,6 +143,7 @@ let
 
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+          substituteInPlace "$out/lib/pkgconfig/icu-uc.pc" --replace-fail "$out/lib" "$dev/lib"
         ''
       );
 

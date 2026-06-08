@@ -1,20 +1,28 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
-  ocamlPackages,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # needed for pkgsStatic
+  inherit (buildPackages.buildPackages) ocamlPackages;
+in
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.3";
   pname = "opaline";
 
   src = fetchFromGitHub {
     owner = "jaapb";
     repo = "opaline";
-    rev = "v${version}";
-    sha256 = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = with ocamlPackages; [
     ocaml
@@ -32,7 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "opaline";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/jaapb/opaline";
     inherit (ocamlPackages.ocaml.meta) platforms;
   };
-}
+})

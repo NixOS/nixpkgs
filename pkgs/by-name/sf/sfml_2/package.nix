@@ -14,11 +14,11 @@
   libvorbis,
   openal,
   udev,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxrender,
+  libxcb-image,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
@@ -42,11 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXcursor
-    libXrandr
-    libXrender
-    xcbutilimage
+    libx11
+    libxcursor
+    libxrandr
+    libxrender
+    libxcb-image
   ];
 
   cmakeFlags = [

@@ -14,7 +14,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   plutovg,
-  xorg,
+  xvfb-run,
   zlib,
   python3Packages ? null,
   enableNFD ? true,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableNFD [
     nativefiledialog-extended
   ]
-  ++ lib.optionals (enableNFD && stdenv.isLinux) [
+  ++ lib.optionals (enableNFD && stdenv.hostPlatform.isLinux) [
     gtk3
   ]
   ++ lib.optionals enablePython [
@@ -75,15 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableTests;
 
-  nativeCheckInputs = lib.optionals (enableTests && stdenv.isLinux) [
-    xorg.xvfb-run
+  nativeCheckInputs = lib.optionals (enableTests && stdenv.hostPlatform.isLinux) [
+    xvfb-run
   ];
 
   checkPhase = lib.optionalString enableTests ''
     runHook preCheck
 
     cd feather-tk/src/feather-tk-build
-    ${if stdenv.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
+    ${if stdenv.hostPlatform.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
 
     runHook postCheck
   '';

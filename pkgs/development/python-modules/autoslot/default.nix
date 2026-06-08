@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoslot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic __slots__ for your Python classes";
     homepage = "https://github.com/cjrh/autoslot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

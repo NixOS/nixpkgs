@@ -4,15 +4,19 @@
   mlt,
   glaxnimate,
   ffmpeg-full,
+  ffmpegthumbs,
   pkg-config,
   shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
   libv4l,
+  kio-extras,
   opentimelineio,
   frei0r,
+  qtimageformats,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -37,10 +41,14 @@ mkKdeDerivation {
     qtsvg
     qtmultimedia
     qtnetworkauth
+    qtimageformats # UI uses webp images
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
     ffmpeg-full
+    ffmpegthumbs
     libv4l
     mlt
     opentimelineio

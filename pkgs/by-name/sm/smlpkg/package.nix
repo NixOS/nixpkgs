@@ -6,15 +6,15 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smlpkg";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlpkg";
-    rev = "v${version}";
-    sha256 = "sha256-g7w4/E+BHeiic5bT1RFF/CGQz5Mc1g2kzoNXsija3HU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-zdWObV/W6fmQ6bFznEVEtp95D8t2YZd45sIC15XQwYM=";
   };
 
   enableParallelBuilding = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ mlton ];
 
   # Set as an environment variable in all the phase scripts.
-  MLCOMP = "mlton";
+  env.MLCOMP = "mlton";
 
   buildFlags = [ "all" ];
   installFlags = [ "prefix=$(out)" ];
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = mlton.meta.platforms;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with lib.maintainers; [ athas ];
     mainProgram = "smlpkg";
   };
-}
+})

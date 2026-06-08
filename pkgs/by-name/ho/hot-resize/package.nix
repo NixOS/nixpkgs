@@ -3,12 +3,8 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
   makeWrapper,
-  udev,
-  systemd,
   btrfs-progs,
-  cloud-utils,
   cryptsetup,
   e2fsprogs,
   util-linux,
@@ -19,48 +15,39 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hot-resize";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "hot-resize";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sfiXy0PPIYSJub8dohzpUJMJ2ul/fglth7qd8paJKEo=";
+    hash = "sha256-TMLtU2c5jkZEc14rII/+I1GtUzBnnZgPyPUgghqs7sM=";
   };
 
-  cargoHash = "sha256-mVCL4tLY+JqJDn8+0PTtStd+rD2VzQoAEtlikIe1K9Q=";
+  cargoHash = "sha256-z9jWAGhSjYFQ8EhK0V4JsxToLYbEB4TJvhJJfUTGZS0=";
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
   ];
-
-  buildInputs = [
-    udev
-    systemd.dev
-  ];
-
-  PKG_CONFIG_PATH = "${systemd.dev}/lib/pkgconfig";
 
   postInstall = ''
     wrapProgram $out/bin/hot-resize \
       --prefix PATH : ${
         lib.makeBinPath [
           btrfs-progs
-          cloud-utils
           cryptsetup
           e2fsprogs
-          udev
           util-linux
           xfsprogs
         ]
       }
   '';
 
+  __structuredAttrs = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

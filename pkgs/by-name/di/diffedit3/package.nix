@@ -7,12 +7,12 @@
   diffedit3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diffedit3";
   version = "0.6.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tlrP97XMAAnk5H5wTHPsP1DMSmDqV9wJp1n+22jUtnM=";
   };
 
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ilyagr/diffedit3";
     description = "3-pane diff editor";
-    license = with licenses; [ asl20 ];
+    license = with lib.licenses; [ asl20 ];
     mainProgram = "diffedit3";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

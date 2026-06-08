@@ -28,13 +28,13 @@ appimageTools.wrapType2 {
     wrapProgram $out/bin/${pname} --set QT_QPA_PLATFORM xcb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OCR tool to convert pictures to LaTeX";
     homepage = "https://mathpix.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [
-      maintainers.hiro98
-      maintainers.axodentally
+      lib.maintainers.hiro98
+      lib.maintainers.axodentally
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mathpix-snipping-tool";

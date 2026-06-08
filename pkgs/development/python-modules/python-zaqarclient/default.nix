@@ -11,7 +11,6 @@
   oslo-log,
   oslo-utils,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "python-zaqarclient";
-  version = "4.2.0";
+  version = "4.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
     tag = version;
-    hash = "sha256-RjR1qriPp0zLzT+51y2KV/q+/zAF7/HRExuC81enF7A=";
+    hash = "sha256-bxB6f3HgTPeMkMYg+yEzkgHBkXPb6UMuKBo9XC74O/U=";
   };
 
   env.PBR_VERSION = version;

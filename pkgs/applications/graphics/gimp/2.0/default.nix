@@ -37,7 +37,7 @@
   gettext,
   makeWrapper,
   gtk-doc,
-  xorg,
+  libxpm,
   glib-networking,
   libmypaint,
   gexiv2,
@@ -50,13 +50,8 @@
   openexr,
   desktopToDarwinBundle,
   gtk-mac-integration-gtk2,
-  withPython ? false,
-  python2,
 }:
 
-let
-  python = python2.withPackages (pp: [ pp.pygtk ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
   version = "2.10.38";
@@ -68,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
+    url = "https://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
   };
 
@@ -154,6 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-10934.patch";
       hash = "sha256-MmYdh74cky/dF3UTHC0xpDW6+aa8Vzh+4ADHCDtIDzo=";
     })
+    (fetchurl {
+      name = "c23.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/85bdad2b2ca7ba36a01bef945b1c4b193a2fa9d0.patch";
+      hash = "sha256-6g2Zhbx+WxX7lOCYAFII0yDbwILecExwFD22tZDED50=";
+    })
   ];
 
   # error: possibly undefined macro: AM_NLS
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libheif
     libexif
-    xorg.libXpm
+    libxpm
     glib-networking
     libmypaint
     mypaint-brushes1
@@ -217,11 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libgudev
-  ]
-  ++ lib.optionals withPython [
-    python
-    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
@@ -236,8 +231,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
     "--libdir=\${exec_prefix}/lib"
-  ]
-  ++ lib.optionals (!withPython) [
     "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
   ];
 
@@ -271,24 +264,29 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major finalAttrs.version}.0";
-    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
-    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
+    apiVersion = "${
+      toString (
+        lib.toInt (lib.versions.major finalAttrs.version)
+        + (if lib.versions.minor finalAttrs.version == "99" then 1 else 0)
+      )
+    }.0";
+    appVersion = lib.versions.majorMinor finalAttrs.version;
+    majorVersion = lib.warn "gimp2.majorVersion is deprecated in favour of gimp2.apiVersion and gimp2.appVersion" finalAttrs.passthru.apiVersion;
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.apiVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.apiVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
-
-    python2Support = withPython;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "gimp";
   };
 })

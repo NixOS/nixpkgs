@@ -20,16 +20,14 @@ buildPythonPackage rec {
   # connected via USB
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for PEMicro debug probes";
     homepage = "https://github.com/NXPmicro/pypemicro";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       unfree
     ]; # it includes shared libraries for which no license is available (https://github.com/NXPmicro/pypemicro/issues/10)
-    maintainers = with maintainers; [
-      frogamic
-      sbruder
+    maintainers = [
     ];
   };
 }

@@ -7,14 +7,14 @@
   withTracing ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-icd-loader";
   version = "2025.07.22";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jwviNwX7C7b9lqIS4oZ4YLEFBfBdmQfXHxW3FPPYxYs=";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OCL_ICD_ENABLE_TRACE" withTracing)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Khronos OpenCL ICD Loader";
     mainProgram = "cllayerinfo";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -165,7 +165,7 @@ in
           path
         else
           let
-            name = builtins.baseNameOf path;
+            name = baseNameOf path;
           in
           builtins.unsafeDiscardStringContext ("/etc/ssh/" + substring 1 (stringLength name) name);
 

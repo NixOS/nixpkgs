@@ -16,14 +16,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tig";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = "tig";
-    rev = "tig-${version}";
+    rev = "tig-${finalAttrs.version}";
     sha256 = "sha256-LJVK4y4C/TyM7sD/AZeHyavZ66SoeSh1y+hXnAAKMws=";
   };
 
@@ -73,21 +73,28 @@ stdenv.mkDerivation rec {
     # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
     #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 
+    # Prefer the git in PATH, but add a fallback one in case there isn't one.
     wrapProgram $out/bin/tig \
-      --prefix PATH ':' "${git}/bin"
+      --suffix PATH ':' "${git}/bin"
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bjornfor
       qknight
       globin
       ma27
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "tig";
   };
-}
+})

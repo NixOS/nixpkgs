@@ -7,25 +7,29 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "talosctl";
-  version = "1.11.5";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
-    tag = "v${version}";
-    hash = "sha256-53WZ1w7+FUhFY9YzfKcVle5Kjng+hlHuNn4klev+pqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6WjjJXgsgLzE30VEpnl163nw4wjs8stRd7EGKFlSOoY=";
   };
 
-  vendorHash = "sha256-ocU7vpSdUdVzOFcqa+QWRdcP9SnC6WtV/ruheSGUfg4=";
+  vendorHash = "sha256-TyBitraiVyjgfQnx2Yehd+81IDeJtjpHPx7MhJ/4uBE=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  env.GOWORK = "off";
+  overrideModAttrs = _: {
+    buildPhase = ''
+      go work vendor
+    '';
+  };
 
   subPackages = [ "cmd/talosctl" ];
 
@@ -44,11 +48,13 @@ buildGoModule rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "CLI for out-of-band management of Kubernetes nodes created by Talos";
     mainProgram = "talosctl";
     homepage = "https://www.talos.dev/";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      johanot
+    ];
   };
-}
+})

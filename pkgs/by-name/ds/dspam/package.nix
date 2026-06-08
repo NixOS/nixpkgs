@@ -37,12 +37,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dspam";
   version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/dspam/dspam/dspam-${finalAttrs.version}/dspam-${finalAttrs.version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
   patches = [
@@ -144,11 +144,11 @@ stdenv.mkDerivation rec {
       $out/bin/dspam_maintenance
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

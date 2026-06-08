@@ -8,20 +8,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codebook";
-  version = "0.3.20";
+  version = "0.3.41";
 
   src = fetchFromGitHub {
     owner = "blopker";
     repo = "codebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lsjP230lgQDOLmU4fWR4oUyQ4P2hH5YB9ZvC8ZjeFf0=";
+    hash = "sha256-QmvkN0e4iwf3gwi/wMnGXlbr9CpG9JvWEuAjlFm50Sk=";
   };
 
   buildAndTestSubdir = "crates/codebook-lsp";
-  cargoHash = "sha256-ifs3C2nNDv3pXq4hfCtBS455Sj4FVz7VEoR5LQIUHFQ=";
+  cargoHash = "sha256-vh4ObFy3pq6e3+DQhYiWNTeaITm+ci/r4CwfAvO3JqU=";
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   # Integration tests require internet access for dictionaries
   doCheck = false;
@@ -32,7 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Unholy spellchecker for code";

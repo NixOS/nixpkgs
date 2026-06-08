@@ -4,13 +4,13 @@
   fetchPypi,
   pyparsing,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylibconfig2";
   version = "0.2.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1iwm11v0ghv2pq2cyvly7gdwrhxsx6iwi581fz46l0snhgcd4sqq";
   };
 
@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/heinzK1X/pylibconfig2";
     description = "Pure python library for libconfig syntax";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
-}
+})

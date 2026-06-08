@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   python,
   fetchPypi,
@@ -72,15 +71,13 @@
   tensorboardx,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.52.1";
-in
-buildPythonPackage rec {
-  inherit pname version;
+  version = "2.55.1";
   format = "wheel";
+  __structuredAttres = true;
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -94,32 +91,35 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-s/nmG3mfs8yP1wd6PS62dt3+99tkT2tqK2V8XDIUzxk=";
-          cp311 = "sha256-paPCaNRQYMUM0CmXnsxfHqrsBAsZ+ojdT+npJ9Gf8T4=";
-          cp312 = "sha256-hDwBCK1yu3/Gwjoi4p5gmVRqXqrTrWdceKFG2QgPbsY=";
-          cp313 = "sha256-u+SSx4CjmmS9PQdmytENVM8SIi34jSh+wtjy1S3jfHk=";
+          cp311 = "sha256-1TgtoYHAPuL1Au9Gzwrku8MBV7W9mmfXZR9qJyUoqFo=";
+          cp312 = "sha256-JjcF9rqynnYiqU+C2iX9f5zq12zfiaB6qyj3nN+PnZU=";
+          cp313 = "sha256-E4DgQ+tXzeabfpGZxvJVjO648PxByX0dXlDqBCEV8wI=";
+          cp314 = "sha256-FW7T5yrZW2RdIAbNcajd28yJtWv8AAJ/YiWt94vZy3Q=";
         };
         aarch64-linux = {
-          cp310 = "sha256-Zb9GH9/k/6ZnxG+UVfh0CyrWwfpHG0YdX1z2t7rxd7U=";
-          cp311 = "sha256-K1fvJyoqCg265tGNcKpUHqtiC0/jtE1QRm06UzwW+dk=";
-          cp312 = "sha256-COuPX9VSkrpr7jY6MkkRNqXlSvVOAH+B4GA5hvvqQaQ=";
-          cp313 = "sha256-44Jq605Dmd4MaIW9i+fOL2KfoAEPABPxGD4HJrPSXkA=";
+          cp311 = "sha256-DqL2cKdyWDOtIzOoxGq2mGWtBsjl3p9laV4PjzUzHOw=";
+          cp312 = "sha256-JlQfabtVYH74M1uqx1su0S/yzgLVYxMhmyntoAMDkiE=";
+          cp313 = "sha256-tBXVkOBi8kiQfg/kKZSUPxFya3F4/PSxz1VGch+xpfg=";
+          cp314 = "sha256-TmGNYeGxS2/emlhhUfP9nUNbC4UEi5l7yqf0pTN0eys=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-mTGUqL5wVA4PgZhiAxu/GaZEAfvmwxtCBl/TE7pGbTQ=";
-          cp311 = "sha256-9Z47LRoUZqwHePLG+snMtfMBB9d+Pd3R1gFnJI0mhHQ=";
-          cp312 = "sha256-aDFZL+3woSIBb12rS2fYX6PU2zsh9YjRiDS1wDE5bRw=";
-          cp313 = "sha256-tbwpVIq7Cgp66eb/OwzMooJO2vARpDNuFaMnk9V0+/0=";
+          cp311 = "sha256-AFP9W0APesViY6obvT1o+3k0Gwi43Gl8iHgtWsp7PtQ=";
+          cp312 = "sha256-E3+QBu7ijKq4JggDzKMU83u9o/yU/foxx3C10Bliatg=";
+          cp313 = "sha256-+YRKknLvLm61dxAlhmByz0I0z0x8waMeI1t95xEYZL4=";
+          cp314 = "sha256-sGIEXGTCvOOaUWYWJPcpLHu/MPKp2Hhieq4x1G2lcS0=";
         };
       };
     in
     fetchPypi {
-      inherit pname version format;
+      inherit (finalAttrs) pname version;
+      format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+      sha256 =
+        hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
+          or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -263,7 +263,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
-    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -273,4 +273,4 @@ buildPythonPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -2,67 +2,52 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_24,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
   srcOnly,
   removeReferencesTo,
-  fetchYarnDeps,
+  buildNpmPackage,
   stdenv,
   cctools,
   nixosTests,
-  yarnBuildHook,
-  yarnConfigHook,
   nix-update-script,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_24;
 in
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "draupnir";
-  version = "2.8.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I9DYiNxD95pzHVsgZ/hJwHfrsVqE/eBALNiePVNDpy0=";
+    hash = "sha256-e6d9z5dkJg4ZpkN+yJFr8J8RWl9tcAhEYTOM+9413Ok=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     sqlite
     python3
-    yarnConfigHook
-    yarnBuildHook
-    nodejs
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-kTdJ6zKNjH5CxcM9EvXzbz2Phrp5xI0+pvNwMLRmLgQ=";
-  };
+  npmDepsHash = "sha256-DvQM9Kr9Hc7/1OEZadZ1GvpAjfRmbdIcA6UDuFBQ+vo=";
 
   preBuild = ''
-    # install proper version info
-    echo "${finalAttrs.version}-nix" > version.txt
+    # install proper version and branch info
+    echo "${finalAttrs.version}-nix" > apps/draupnir/version.txt
+    echo "main" > apps/draupnir/branch.txt
 
-    # makes network requests
-    sed -i 's/corepack //g' package.json
-  '';
-
-  postBuild = ''
-    yarn --offline run copy-assets
+    # we already set the version and branch above
+    sed -i "/build:assets/d" apps/draupnir/package.json
   '';
 
   postInstall = ''
-    # Re-install only production dependencies
-    yarn install --frozen-lockfile --force --production --offline --non-interactive \
-      --ignore-engines --ignore-platform --ignore-scripts --no-progress
-
     # Replace matrix-sdk-crypto-nodejs with nixpkgs version
     nodeCryptoPath="node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
     rm -rf "$nodeCryptoPath"
@@ -83,12 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/draupnir
     mkdir $out/bin
     # Install outputs
-    mv ./lib ./version.txt ./node_modules ./package.json $out/lib/node_modules/draupnir
+    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
+    # Fix dangling symlink pointing to relative path ../apps/draupnir
+    rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
-      --add-flags "$out/lib/node_modules/draupnir/lib/index.js"
+      --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
 
   '';
 

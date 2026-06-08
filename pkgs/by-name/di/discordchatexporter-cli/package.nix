@@ -23,6 +23,12 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
+  dotnetBuildFlags = [
+    # workaround for https://github.com/belav/csharpier/pull/1696
+    # remove when csharpier is updated
+    "-p:FirstTargetFrameworks=workaround-for-csharpier-pr-1696"
+  ];
+
   postFixup = ''
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli
   '';
@@ -39,7 +45,7 @@ buildDotnetModule rec {
     description = "Tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
+    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/${version}";
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "discordchatexporter-cli";

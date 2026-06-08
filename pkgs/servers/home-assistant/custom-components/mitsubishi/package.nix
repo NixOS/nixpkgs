@@ -11,20 +11,20 @@
 buildHomeAssistantComponent rec {
   owner = "pymitsubishi";
   domain = "mitsubishi";
-  version = "0.4.2";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "homeassistant-mitsubishi";
     tag = "v${version}";
-    hash = "sha256-c1KnFpRK5dH7ZGsDuJD6Awa0xhxYYZxC4zCjoRdpOns=";
+    hash = "sha256-8/zB1jbMoabd+pkIOUgY7bJ5lu2nCLkjS28Ru6bsKOw=";
   };
 
   dependencies = [
     pymitsubishi
   ];
 
-  doCheck = false; # TODO: remove in the next release after 0.4.0
+  ignoreVersionRequirement = [ "pymitsubishi" ];
 
   nativeCheckInputs = [
     pytest-cov-stub
@@ -32,11 +32,18 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant-custom-component
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # tests try to open sockets
+    "test_form_success"
+    "test_form_already_configured"
+    "test_form_with_options"
+  ];
+
+  meta = {
     description = "Home Assistant Mitsubishi Air Conditioner Integration";
     changelog = "https://github.com/pymitsubishi/homeassistant-mitsubishi/releases/tag/v${version}";
     homepage = "https://github.com/pymitsubishi/homeassistant-mitsubishi";
-    maintainers = with maintainers; [ uvnikita ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
   };
 }

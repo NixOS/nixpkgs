@@ -13,22 +13,22 @@ rustPlatform.buildRustPackage rec {
   # in nixpkgs!
   # For that, check the `<dependencies>` section of `appinfo/info.xml`
   # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-yEls1s7tD/fcqul/BmEsRf2g5mqD74M8TKG+Na3jlcM=";
+    hash = "sha256-DMyqixeO1SfRvfuIpBHEaym6qH5X5Yw94tfWLCFkrBg=";
   };
 
-  cargoHash = "sha256-+z9XaAzToLZg6/PoRigkvPVpZ/bX/t0VBR5bg3dCUVw=";
+  cargoHash = "sha256-fdf7AvT511WRjsOyM4+3vieuQMh24C+mF49pWtfS41Y=";
 
   passthru = rec {
     app = fetchNextcloudApp {
       appName = "notify_push";
       appVersion = version;
-      hash = "sha256-Yad1+kc0uCHRV4q7IDbQT8Ea2423YWGy9k42DHB0R1Q=";
+      hash = "sha256-gHRegrl1VtJOiB6xLUHtG3sxkCDv7/zhrhQ9B+9i8YI=";
       license = "agpl3Plus";
       homepage = "https://github.com/nextcloud/notify_push";
       url = "https://github.com/nextcloud-releases/notify_push/releases/download/v${version}/notify_push-v${version}.tar.gz";
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-+z9XaAzToLZg6/PoRigkvPVpZ/bX/t0VBR5bg3dCUVw=";
+      cargoHash = "sha256-fdf7AvT511WRjsOyM4+3vieuQMh24C+mF49pWtfS41Y=";
 
       meta = meta // {
         mainProgram = "test_client";
@@ -56,13 +56,16 @@ rustPlatform.buildRustPackage rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
     mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

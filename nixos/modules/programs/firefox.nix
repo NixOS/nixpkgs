@@ -59,6 +59,13 @@ in
       ];
     };
 
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      visible = false;
+      readOnly = true;
+      description = "Resulting customized Firefox package.";
+    };
+
     wrapperConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -247,7 +254,7 @@ in
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
-        change user preferences or prevent the end user from modifiying specific
+        change user preferences or prevent the end user from modifying specific
         preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
       '';
     };
@@ -258,10 +265,10 @@ in
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
-        change user preferences or prevent the end user from modifiying specific
+        change user preferences or prevent the end user from modifying specific
         preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
 
-        Files are concated and autoConfig is appended.
+        Files are concatenated and autoConfig is appended.
       '';
     };
 
@@ -276,14 +283,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      (cfg.package.override (old: {
-        extraPrefsFiles =
-          (old.extraPrefsFiles or [ ])
-          ++ cfg.autoConfigFiles
-          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
-        cfg = (old.cfg or { }) // cfg.wrapperConfig;
-      }))
+      cfg.finalPackage
     ];
 
     environment.etc =
@@ -295,23 +295,34 @@ in
       };
 
     # Preferences are converted into a policy
-    programs.firefox.policies = {
-      DisableAppUpdate = true;
-      Preferences = (
-        builtins.mapAttrs (_: value: {
-          Value = value;
-          Status = cfg.preferencesStatus;
-        }) cfg.preferences
-      );
-      ExtensionSettings = builtins.listToAttrs (
-        builtins.map (
-          lang:
-          lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-            installation_mode = "normal_installed";
-            install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-          }
-        ) cfg.languagePacks
-      );
+    programs.firefox = {
+      policies = {
+        DisableAppUpdate = true;
+        Preferences = (
+          builtins.mapAttrs (_: value: {
+            Value = value;
+            Status = cfg.preferencesStatus;
+          }) cfg.preferences
+        );
+        ExtensionSettings = builtins.listToAttrs (
+          map (
+            lang:
+            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+              installation_mode = "normal_installed";
+              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+            }
+          ) cfg.languagePacks
+        );
+      };
+
+      finalPackage = cfg.package.override (old: {
+        extraPrefsFiles =
+          (old.extraPrefsFiles or [ ])
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = (old.nativeMessagingHosts or [ ]) ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      });
     };
   };
 

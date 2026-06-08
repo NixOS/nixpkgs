@@ -40,9 +40,9 @@
   cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpm-ostree";
-  version = "2024.8";
+  version = "2026.1";
 
   outputs = [
     "out"
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/coreos/rpm-ostree/releases/download/v${version}/rpm-ostree-${version}.tar.xz";
-    hash = "sha256-6aCGP3SJ0DegmhiQkiqBr733C5vuDGTjLMaxNtai3G0=";
+    url = "https://github.com/coreos/rpm-ostree/releases/download/v${finalAttrs.version}/rpm-ostree-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/dgF4jN4Sq7pRFmSMWXmG21y0PlkPPOMf8QhP8CB+yA=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-gtk-doc"
-    "--with-bubblewrap=${bubblewrap}/bin/bwrap"
   ];
 
   dontUseCmakeConfigure = true;
@@ -115,18 +114,22 @@ stdenv.mkDerivation rec {
     # Let's not hardcode the rpm-gpg path...
     substituteInPlace libdnf/libdnf/dnf-keyring.cpp \
       --replace '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
+
+    # Do not try to install in global /usr/lib
+    substituteInPlace Makefile-rpm-ostree.am \
+      --replace '/usr/lib/kernel/install.d' '$(libdir)/kernel/install.d'
   '';
 
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage = "https://coreos.github.io/rpm-ostree/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "rpm-ostree";
   };
-}
+})

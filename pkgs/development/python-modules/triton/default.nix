@@ -4,6 +4,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # patches
   replaceVars,
@@ -41,17 +42,21 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.5.1";
+  version = "3.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v${version}";
-    hash = "sha256-dyNRtS1qtU8C/iAf0Udt/1VgtKGSvng1+r2BtvT9RB4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
   };
 
   patches = [
@@ -62,6 +67,9 @@ buildPythonPackage rec {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
+
+    # Use our `cmakeFlags` instead and avoid downloading dependencies.
+    ./inject-nix-cmakeFlags.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
@@ -87,18 +95,28 @@ buildPythonPackage rec {
         --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
         --replace-fail "curr_version.group(1) != version" "False"
     ''
-    # Use our `cmakeFlags` instead and avoid downloading dependencies
-    + ''
-      substituteInPlace setup.py \
-        --replace-fail \
-          "cmake_args.extend(thirdparty_cmake_args)" \
-          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
-    ''
     # Don't fetch googletest
     + ''
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+    ''
+
+    # Hardcode the CC path so Triton's runtime JIT compilation doesn't break
+    # in environments without a compiler in PATH.
+    + ''
+      substituteInPlace python/triton/runtime/build.py \
+        --replace-fail \
+          'cc = os.environ.get("CC")' \
+          'cc = os.environ.get("CC", "${lib.getExe' effectiveStdenv.cc "cc"}")'
+    ''
+
+    # triton will try dlopening libcublas.so at runtime
+    + lib.optionalString cudaSupport ''
+      substituteInPlace third_party/nvidia/include/cublas_instance.h \
+        --replace-fail \
+          '"libcublas.so"' \
+          '"${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"'
     '';
 
   build-system = [ setuptools ];
@@ -124,7 +142,7 @@ buildPythonPackage rec {
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
-    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}/lib/cmake/lld")
   ];
 
   buildInputs = [
@@ -142,25 +160,30 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals cudaSupport [
-    # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
-    # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
-    "-Wno-stringop-overread"
-  ];
-
   preConfigure =
     # Ensure that the build process uses the requested number of cores
     ''
       export MAX_JOBS="$NIX_BUILD_CORES"
     '';
 
+  # `examples/plugins` (an MLIR example dialect plugin and a unit-test helper lib) is built
+  # unconditionally with the Python module and shipped into `triton/plugins/`.
+  # It is unused at runtime and keeps a forbidden RPATH reference to the build directory, which
+  # fails the fixup phase.
+  postInstall = ''
+    rm -rf "$out/${python.sitePackages}/triton/plugins"
+  '';
+
   env = {
     TRITON_BUILD_PROTON = "OFF";
     TRITON_OFFLINE_BUILD = true;
   }
   // lib.optionalAttrs cudaSupport {
-    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
-    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
+    NIX_CFLAGS_COMPILE = toString [
+      # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
+      # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
+      "-Wno-stringop-overread"
+    ];
 
     # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
     TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
@@ -195,7 +218,7 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    gpuCheck = stdenv.mkDerivation {
+    gpuCheck = effectiveStdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;
 
@@ -217,9 +240,70 @@ buildPythonPackage rec {
 
       doCheck = true;
 
-      preCheck = ''
-        cd python/test/unit
-      '';
+      disabledTests = [
+        # triton.runtime.errors.OutOfResources: out of resource: shared memory,
+        # Required: 131072, Hardware limit: 101376. Reducing block sizes or `num_stages` may help.
+        "test_gather"
+        "test_gather_warp_shuffle"
+        "test_tensor_descriptor_batched_gemm_2d_tma"
+        "test_tensor_descriptor_batched_gemm_3d_tma"
+
+        # AssertionError: assert all(delta == 0 for delta in diff.values())
+        # ----------------------------- Captured stdout call -----------------------------
+        # Expected line "pid (0, 0, 0) idx ( 0,   0) x: 1" 1 time(s), but saw 0 time(s)
+        # ...
+        "test_print"
+
+        # This test ensures that the ptxas binary is available under .../site-packages/triton/backends/nvidia/bin/ptxas
+        # Usually, this is where the install script downloads and copies ptxas to.
+        # However, this is not the case here, as triton is built with TRITON_OFFLINE_BUILD=1
+        # and TRITON_PTXAS_PATH=<path_to_nix_store_ptxas>
+        "test_nvidia_tool"
+      ]
+      ++ lib.optionals (pythonAtLeast "3.14") [
+        # triton.compiler.errors.CompilationError
+        # AttributeError("module 'ast' has no attribute 'Num'"
+        "test_aggregate_modification_in_for_loop"
+        "test_call"
+        "test_call_in_loop"
+        "test_compile_only_k_loop"
+        "test_dot_mulbroadcasted"
+        "test_globaltimer"
+        "test_host_tensor_descriptor_matmul"
+        "test_make_tensor_descriptor_matmul"
+        "test_nested_while"
+        "test_preshuffle_scale_mxfp_cdna4"
+        "test_temp_var_in_loop"
+        "test_tensor_descriptor_rank_reducing_matmul"
+        "test_tensor_descriptor_reshape_matmul"
+      ];
+
+      disabledTestPaths = [
+        # torch.AcceleratorError: CUDA error: device-side assert triggered
+        "python/test/unit/test_debug.py"
+
+        # ptxas fatal   : Unexpected non-ASCII character encountered on line 1
+        # ptxas fatal   : Ptx assembly aborted due to errors
+        "python/test/unit/language/test_line_info.py"
+
+        # Triton Error [CUDA]: \n
+        "python/test/unit/tools/test_aot.py"
+
+        # ptxas fatal   : Unknown option 'sass'
+        "python/test/unit/tools/test_disasm.py"
+
+        # assert 'mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32' in ptx
+        # AssertionError: assert 'mma.sync.aligned.m16n8k16.row.col.f32.f16.f16.f32' in ...
+        "python/test/unit/language/test_core.py::test_dot[1-1-2-32-1-False-False-None-ieee-float8e5-float32-1-None]"
+
+        # AssertionError: Tensor-likes are not close!
+        "python/test/unit/language/test_core.py::test_scaled_dot[64-128-128-True-False-True-e4m3-fp16-4-16-1]"
+      ];
+
+      enabledTestPaths = [
+        "python/test/unit"
+      ];
+
       checkPhase = "pytestCheckPhase";
 
       installPhase = "touch $out";
@@ -258,6 +342,11 @@ buildPythonPackage rec {
               ps.triton
               ps.torch-no-triton
             ];
+
+            gpuCheckArgs.nativeBuildInputs = [
+              # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
+              writableTmpDirAsHomeHook
+            ];
           }
           ''
             # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
@@ -293,7 +382,7 @@ buildPythonPackage rec {
               if os.environ.get("HOME", None) == "/homeless-shelter":
                 os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
               if "CC" not in os.environ:
-                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+                os.environ["CC"] = "${lib.getExe' effectiveStdenv.cc "cc"}"
               torch.manual_seed(0)
               size = 12345
               x = torch.rand(size, device='cuda')
@@ -309,11 +398,13 @@ buildPythonPackage rec {
   meta = {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
+    changelog = "https://github.com/triton-lang/triton/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       SomeoneSerge
       derdennisop
     ];
   };
-}
+})

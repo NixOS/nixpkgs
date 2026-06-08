@@ -25,7 +25,7 @@
   withHttpStream ? true,
   gst_all_1,
   withReplaygain ? true,
-  ffmpeg,
+  ffmpeg_6,
   speex,
   mpg123,
   withMtp ? true,
@@ -92,7 +92,7 @@ let
       ];
       enable = withReplaygain;
       pkgs = [
-        ffmpeg
+        ffmpeg_6
         speex
         mpg123
       ];

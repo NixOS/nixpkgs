@@ -1,5 +1,5 @@
 import ./common-hadrian.nix {
-  version = "9.15.20250811";
-  rev = "c8d76a2994b8620c54adc2069f4728135d6b5059";
-  sha256 = "001rf9z5a1v2xpm9qjzz2p966m5bxmqcnykq0xgb3qf40vi9rnh4";
+  version = "9.15.20260322";
+  rev = "44f118f09dcde49f64d03e427312df4732f2d4a4";
+  sha256 = "sha256-xby7HKyK5P1Y5DjKbVe62piDCY4Ujb4pbv8AJ7sQ0HI=";
 }

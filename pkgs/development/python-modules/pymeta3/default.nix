@@ -18,12 +18,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymeta" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pattern-matching language based on OMeta for Python 3 and 2";
     homepage = "https://github.com/wbond/pymeta3";
     changelog = "https://github.com/wbond/pymeta3/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jfly
       matusf
     ];

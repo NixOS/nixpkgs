@@ -3,7 +3,21 @@
   lib,
   stdenv,
   squashfsTools,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   alsa-lib,
   freetype,
   glib,
@@ -70,21 +84,21 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
+    libice
+    libsm
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
     zlib
   ];
 
@@ -136,20 +150,20 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://nordpass.com/";
       description = "Secure and simple password manager for a stress-free online experience";
-      license = licenses.unfree;
+      license = lib.licenses.unfree;
       mainProgram = "nordpass";
-      maintainers = with maintainers; [ coconnor ];
+      maintainers = with lib.maintainers; [ coconnor ];
       platforms = [ "x86_64-linux" ];
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   };
 in
 
 buildFHSEnv {
-  name = "nordpass";
+  inherit (thisPackage) pname version;
   targetPkgs = _: deps ++ [ thisPackage ];
   runScript = "nordpass";
 

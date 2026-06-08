@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mayim";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
     tag = "v${version}";
-    hash = "sha256-mXGbPPO19H6fsWkvRzYyIVykHRryQo46WtH/XfqSIgY=";
+    hash = "sha256-HEnzHpgTbEZOBzUG7DDIO9YRWIoLroLY+Spq/jkMib0=";
   };
 
   build-system = [
@@ -44,18 +44,22 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
   ]
-  ++ (with optional-dependencies; [
-    postgres
-    mysql
-    sqlite
-  ]);
+  ++ (
+    with optional-dependencies;
+    lib.concatLists [
+      postgres
+      mysql
+      sqlite
+    ]
+  );
 
   pythonImportsCheck = [ "mayim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous SQL hydrator";
     homepage = "https://github.com/ahopkins/mayim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ huyngo ];
+    changelog = "https://github.com/ahopkins/mayim/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

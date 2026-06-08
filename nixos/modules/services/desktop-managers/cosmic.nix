@@ -44,7 +44,7 @@ let
     ];
 in
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options = {
     services.desktopManager.cosmic = {
@@ -86,6 +86,7 @@ in
           cosmic-icons
           cosmic-player
           cosmic-randr
+          cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers

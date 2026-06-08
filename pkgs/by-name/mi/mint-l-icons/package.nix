@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.7.9";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
-    rev = "fa88b00e10b0978e0309acccfa95d80005422b1a";
-    hash = "sha256-XXy1eO0a/5bBnP/inaUa/c09D/6QDmnik1LH382NGIw=";
+    rev = "f9f679c9bed2f2462040fed9872988e705bf5630";
+    hash = "sha256-nfdG1AVF/bIgRZ+9dZ14qw5cajhO3Q6oY5ZqkgTnuCA=";
   };
 
   propagatedBuildInputs = [
@@ -47,11 +47,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-l-icons";
     description = "Mint-L icon theme";
-    license = licenses.gpl3Plus; # from debian/copyright
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus; # from debian/copyright
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

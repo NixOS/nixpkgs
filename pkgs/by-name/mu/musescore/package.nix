@@ -1,73 +1,122 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
+
+  # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
   alsa-lib,
   alsa-plugins,
+  flac,
   freetype,
-  libjack2,
+  kdePackages,
   lame,
+  libjack2,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  tinyxml-2,
-  kdePackages,
+  pugixml,
+  utf8cpp,
+
+  # passthru tests
   nixosTests,
 }:
 
+let
+  # TODO(@doronbehar): Contribute this one day to lib/? See:
+  # https://discourse.nixos.org/t/rfc-nix-function-that-overrides-a-scope-with-automatic-inheritance-propagation/78025
+  overrideScopeFully =
+    s: scopeOverrideFunc:
+    let
+      partiallyOverriddenScope = s.overrideScope scopeOverrideFunc;
+      directlyOverriddenAttrs = builtins.attrNames (scopeOverrideFunc partiallyOverriddenScope s);
+    in
+    builtins.mapAttrs (
+      attrName: pkg:
+      pkg.override (
+        lib.pipe directlyOverriddenAttrs [
+          (builtins.filter (
+            oAttr:
+            # Don't include in this filter the attribute `attrName` from the
+            # full scope, if it is already part of the _directly_ overridden
+            # attributes.
+            !(builtins.elem attrName directlyOverriddenAttrs)
+            && pkg ? override
+            # Continue with the creation of the `.override` arguments only for
+            # overridden attributes (`oAttr`) which are possible arguments to the
+            # `.override` function of the `pkg` at hand.
+            && pkg.override.__functionArgs ? ${oAttr}
+          ))
+          # Generate the `.override` argument using the attribute names `aNames`
+          (aNames: lib.genAttrs aNames (oAttr: partiallyOverriddenScope.${oAttr}))
+        ]
+      )
+    ) partiallyOverriddenScope;
+  kdePackages' = overrideScopeFully kdePackages (
+    self: super: {
+      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
+      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
+      qtdeclarative = super.qtdeclarative.overrideAttrs (
+        new: old: {
+          patches = old.patches ++ [
+            (fetchpatch {
+              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
+              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
+            })
+          ];
+        }
+      );
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.6.3";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WLzt/Ox6GrfWD0/l8/Ksc2ptg5LZSOXXnlsSnenfZtI=";
+    hash = "sha256-7oA+cC5/nOEM2zpFgM13zlBIoc3AB//Ovc+dU1c1r6M=";
   };
 
-  patches = [
-    # https://github.com/musescore/MuseScore/pull/30422
-    (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/bda5eac091bca1db15fbe9546b2d71b7e8a126c8.patch";
-      hash = "sha256-MTSFxmwBWaOXipeUqIFKP4Oek087oqW2MQvltV9vAgA=";
-    })
-    # https://github.com/musescore/MuseScore/pull/30691
-    (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/840f8b7ded19cdc5d2dc78d32e396494aaf8c4c0.patch";
-      hash = "sha256-MfHLFQbgvgNTd5G3mxCMlS7bF8LrNWMLZUQ+A21l/RM=";
-    })
-  ];
-
   cmakeFlags = [
-    "-DMUSE_APP_BUILD_MODE=release"
+    (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF"
-    # Use our versions of system libraries
-    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
-    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
-    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
-    # Don't bundle qt qml files, relevant really only for darwin, but we set
-    # this for all platforms anyway.
-    "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  # Use our versions of system libraries, see:
+  # https://github.com/musescore/MuseScore/issues/11572
+  ++ map (l: lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_${l}" true) [
+    "FREETYPE"
+    "HARFBUZZ"
+    "MNXDOM"
+    # Implies also OPUS
+    "OPUSENC"
+    "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/musescore/MuseScore/issues/33467
+    (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
   qtWrapperArgs = [
@@ -92,11 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
-    kdePackages.qttools
-    pkg-config
+    kdePackages'.qttools
+    kdePackages'.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -105,30 +154,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    kdePackages'.qt5compat
+    kdePackages'.qtbase
+    kdePackages'.qtdeclarative
+    kdePackages'.qtnetworkauth
+    kdePackages'.qtscxml
+    kdePackages'.qtsvg
     lame
+    libjack2
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    tinyxml-2
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    kdePackages.qtwayland
+    kdePackages'.qtwayland
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -163,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";
@@ -172,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       vandenoever
       doronbehar
+      sarunint
     ];
     mainProgram = "mscore";
     platforms = lib.platforms.unix;

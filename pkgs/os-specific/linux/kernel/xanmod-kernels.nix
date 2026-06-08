@@ -15,16 +15,18 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.61";
-      hash = "sha256-7m4Ehmy463rQK265fEvTMjndqZXs+PJ35HE+tZVKgGQ=";
+      version = "6.18.34";
+      hash = "sha256-lDHBPXY716pDs+Hr6qS7zPJPEN1shMSK/V32SBLv4/s=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.17.11";
-      hash = "sha256-NJQ67MOjFMScwECxQd00F3SZ+kITbuBp/3imNXdUqlQ=";
+      version = "7.0.11";
+      hash = "sha256-33/oVWqVRITtYeGfOATSe9Wckm/PeI1mioDrTPe8OmY=";
     };
   };
+
+  # nixpkgs-update: no auto update
 
   xanmodKernelFor =
     {
@@ -56,7 +58,6 @@ let
 
             # Preemption
             PREEMPT = lib.mkOverride 60 yes;
-            PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
 
             # Google's BBRv3 TCP congestion Control
             TCP_CONG_BBR = yes;
@@ -87,6 +88,9 @@ let
             # x86 features
             X86_FRED = yes;
             X86_POSTED_MSI = yes;
+          }
+          // lib.optionalAttrs (lib.versionOlder (lib.versions.majorMinor version) "7.0") {
+            PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
           }
           // lib.optionalAttrs (lib.versionAtLeast (lib.versions.majorMinor version) "6.13") {
             # Lazy preemption

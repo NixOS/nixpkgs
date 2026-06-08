@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.12.3";
+  version = "4.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     tag = "v${version}";
-    hash = "sha256-VcL8Od1EM/cbbeOVyXlsXYt8Bms636XbtunrTblkGDQ=";
+    hash = "sha256-j4PHBiKwkYq8x/UYtnCLbtQVsXWNy84SsKAd0urhoY8=";
   };
 
   build-system = [ setuptools ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

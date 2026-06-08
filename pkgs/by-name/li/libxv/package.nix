@@ -4,8 +4,8 @@
   fetchurl,
   pkg-config,
   xorgproto,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   writeScript,
   testers,
 }:
@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   configureFlags = lib.optional (

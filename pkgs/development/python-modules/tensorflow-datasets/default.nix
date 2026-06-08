@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build system
+  packaging,
   setuptools,
 
   # dependencies
@@ -13,6 +13,7 @@
   dm-tree,
   etils,
   immutabledict,
+  importlib-resources,
   numpy,
   promise,
   protobuf,
@@ -25,8 +26,6 @@
   toml,
   tqdm,
   wrapt,
-  pythonOlder,
-  importlib-resources,
 
   # tests
   apache-beam,
@@ -63,30 +62,23 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
-  version = "4.9.9";
+  version = "4.9.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
-    hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
-  patches = [
-    # TypeError: Cannot handle this data type: (1, 1, 4), <u2
-    # Issue: https://github.com/tensorflow/datasets/issues/11148
-    # PR: https://github.com/tensorflow/datasets/pull/11149
-    (fetchpatch2 {
-      name = "fix-pillow-12-compat";
-      url = "https://github.com/tensorflow/datasets/pull/11149/commits/21062d65b33978f2263443280c03413add5c0224.patch";
-      hash = "sha256-GWb+1E5lQNhFVp57sqjp+WqzZSva1AGpXe9fbvXXeIA=";
-    })
+  build-system = [
+    packaging
+    setuptools
   ];
-
-  build-system = [ setuptools ];
 
   dependencies = [
     absl-py
@@ -94,6 +86,7 @@ buildPythonPackage rec {
     dm-tree
     etils
     immutabledict
+    importlib-resources
     numpy
     promise
     protobuf
@@ -108,10 +101,7 @@ buildPythonPackage rec {
     wrapt
   ]
   ++ etils.optional-dependencies.epath
-  ++ etils.optional-dependencies.etree
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -205,9 +195,6 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/dataset_utils_test.py"
     "tensorflow_datasets/core/features/sequence_feature_test.py"
 
-    # Requires `tensorflow_docs` which is not packaged in `nixpkgs` and the test is for documentation anyway.
-    "tensorflow_datasets/scripts/documentation/build_api_docs_test.py"
-
     # Not a test, should not be executed.
     "tensorflow_datasets/testing/test_utils.py"
 
@@ -223,8 +210,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

@@ -13,16 +13,16 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "squashfuse";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "vasi";
     repo = "squashfuse";
-    rev = version;
-    sha256 = "sha256-HuDVCO+hKdUKz0TMfHquI0eqFNAoNhPfY2VBM2kXupk=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-hlWmHMqWl8rApogsR9uG7ZaM5dUDoTBSjSjXCKd+FIA=";
   };
 
   nativeBuildInputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
   };
-}
+})

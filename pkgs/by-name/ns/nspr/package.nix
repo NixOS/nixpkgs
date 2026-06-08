@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nspr";
-  version = "4.38.2";
+  version = "4.39";
 
   src = fetchurl {
-    url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    hash = "sha256-5Akvrqt3vcmzLbERPkIVlI7naOJsRmbbO1pgs18skQU=";
+    url = "mirror://mozilla/nspr/releases/v${finalAttrs.version}/src/nspr-${finalAttrs.version}.tar.gz";
+    hash = "sha256-u9Au6HpVZ2Bjpj5byBngIn3iZmtHMHsqATRBTN9CNo4=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
-  HOST_CC = "cc";
+  env.HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) firefox firefox-esr;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ajs124
       hexa
     ];
-    platforms = platforms.all;
-    license = licenses.mpl20;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mpl20;
   };
-}
+})

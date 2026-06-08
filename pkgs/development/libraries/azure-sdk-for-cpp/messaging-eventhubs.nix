@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-messaging-eventhubs_1.0.0-beta.10";
     hash = "sha256-qGYfvRFnesI+oIp3jCRo53v66aR2qrcummSNpc5sCOw=";
   };
-  sourceRoot = "source/sdk/eventhubs/azure-messaging-eventhubs";
+  sourceRoot = "${finalAttrs.src.name}/sdk/eventhubs/azure-messaging-eventhubs";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

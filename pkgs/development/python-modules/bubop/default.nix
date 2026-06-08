@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  poetry-dynamic-versioning,
   loguru,
   python-dateutil,
   pyyaml,
@@ -12,26 +13,26 @@
 
 buildPythonPackage rec {
   pname = "bubop";
-  version = "0.1.12";
-  format = "pyproject";
+  version = "0.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "bubop";
-    rev = "v${version}";
-    hash = "sha256-p4Mv73oX5bsYKby7l0nGon89KyAMIUhDAEKSTNB++Cw=";
+    tag = "v${version}";
+    hash = "sha256-NXA3UDOkCoj4dm3UO/X0w2Mpx4bw3yFO6oyOzsPgtrU=";
   };
 
   postPatch = ''
     # Those versions seems to work with `bubop`.
-    substituteInPlace pyproject.toml \
-    --replace-fail 'loguru = "^0.5.3"' 'loguru = "^0.7"' \
-    --replace-fail 'PyYAML = "~5.3.1"' 'PyYAML = "^6.0"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     loguru
     python-dateutil
     pyyaml
@@ -41,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bubop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bergercookie's Useful Bits Of Python; helper libraries for Bergercookie's programs";
     homepage = "https://github.com/bergercookie/bubop";
-    changelog = "https://github.com/bergercookie/bubop/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    changelog = "https://github.com/bergercookie/bubop/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

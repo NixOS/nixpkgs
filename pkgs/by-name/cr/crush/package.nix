@@ -1,28 +1,34 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.22.1";
+  version = "0.74.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WwakKR+JdlidfxXnKmAPVMxRs/TfNPOg43vQ9HrEqFY=";
+    hash = "sha256-JnELv8Q2GlOKhYbBRUDY8m8XuyyoD71Tw5qbnpbNxVY=";
   };
 
-  vendorHash = "sha256-9WROtIp4Tt+9w+L+frLawwoyMCjuk41VIGYEi5oSHDk=";
+  vendorHash = "sha256-D2GJ3ORyJy5Dn0MZJWgB3Wv1FyDoAWqLI3W0yU1q5Lw=";
 
   ldflags = [
     "-s"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   checkFlags =
@@ -33,6 +39,7 @@ buildGoModule (finalAttrs: {
         "TestOpenAIClientStreamChoices"
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
+        "TestDispatch_BinaryPassthroughExecutes"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -42,17 +49,27 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";
     homepage = "https://github.com/charmbracelet/crush";
     changelog = "https://github.com/charmbracelet/crush/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.fsl11Mit;
-    maintainers = with lib.maintainers; [ x123 ];
+    maintainers = with lib.maintainers; [
+      x123
+      malik
+      davinci42
+    ];
     mainProgram = "crush";
   };
 })

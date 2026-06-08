@@ -39,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maison" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read settings from config files";
     homepage = "https://github.com/dbatten5/maison";
     changelog = "https://github.com/dbatten5/maison/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "maison";
   };
 }

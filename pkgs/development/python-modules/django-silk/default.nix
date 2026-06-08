@@ -13,9 +13,11 @@
   pillow,
   pydot,
   pygments,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-django,
   python,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools-scm,
@@ -25,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.3.2";
+  version = "5.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     tag = version;
-    hash = "sha256-+JOUpjKR0rx+4+hU/5gSov5nW2aj7HR+HYr5FPbUkSA=";
+    hash = "sha256-F9IHxp2dx0hzu9iOaborJjLyzZjs86rccczhc5GPbtY=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
@@ -70,25 +70,24 @@ buildPythonPackage rec {
     networkx
     pydot
     factory-boy
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-django
   ];
 
   pythonImportsCheck = [ "silk" ];
 
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    export DB_ENGINE=sqlite3 DB_NAME=':memory:'
 
-    pushd project
-    DB_ENGINE=sqlite3 DB_NAME=':memory:' ${python.interpreter} manage.py test
-    popd # project
-
-    runHook postCheck
+    cd project
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
-    changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    changelog = "https://github.com/jazzband/django-silk/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/novaterm --replace "exec novacom" "exec $out/bin/novacom"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for communicating with WebOS devices";
-    license = licenses.asl20;
+    homepage = "https://github.com/openwebos/novacom";
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

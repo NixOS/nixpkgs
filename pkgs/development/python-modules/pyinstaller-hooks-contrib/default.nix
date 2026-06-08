@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller-hooks-contrib";
-  version = "2025.10";
+  version = "2026.1";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyinstaller_hooks_contrib";
     inherit version;
-    hash = "sha256-oac35cDczxz28Zol4u/RCbn+yd3WJfl/VT2sFu6ISIE=";
+    hash = "sha256-pfCJGh6B6SQGq5F9nnat/XoraEFe4uNclQp7ORC8Nhs=";
   };
 
   build-system = [ setuptools ];

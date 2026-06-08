@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   bison,
   flex,
   makeWrapper,
   getopt,
   readline,
   texinfo,
-  texlive,
   versionCheckHook,
 }:
 
@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./gs-allowpstransparency.patch
     # fix curly brace escaping in eukleides.texi for newer texinfo compatiblity
     ./texinfo-escape.patch
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/georgesk/eukleides/-/raw/debian/1.5.4-6/debian/patches/fixes-for-gcc15.patch";
+      hash = "sha256-MVC2bkMGkkDqF/kg8MPvOYacUOXshaG2RZ0a9UVXLSI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -86,21 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  passthru = {
-    tlType = "run";
-    # packages needed by euktoeps, euktopdf and eukleides.sty
-    tlDeps = with texlive; [
-      collection-pstricks
-      epstopdf
-      iftex
-      moreverb
-    ];
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
+  # packages needed by euktoeps, euktopdf and eukleides.sty
+  passthru.tlDeps = ps: [
+    ps.collection-pstricks
+    ps.epstopdf
+    ps.iftex
+    ps.moreverb
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Geometry Drawing Language";

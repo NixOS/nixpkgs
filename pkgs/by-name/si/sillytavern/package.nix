@@ -5,15 +5,15 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "sillytavern";
-  version = "1.14.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
     tag = finalAttrs.version;
-    hash = "sha256-5bml7PwmlfJag8DzbR5qdNJ6ddKmZsEUD155VwkJhjI=";
+    hash = "sha256-1FDqbV+t9JF93aTgy7Hnwe4lCJZHooHw0J3zOsCZWDA=";
   };
-  npmDepsHash = "sha256-cqS8UFyXNql/SE1nrWhZlIXhz0SO3JUSDThsfAOHP7E=";
+  npmDepsHash = "sha256-jDySPn354gh1gFI8I2apGmXDxOz4d4STfJX+iFVFhdg=";
 
   dontNpmBuild = true;
 
@@ -36,6 +36,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://docs.sillytavern.app/";
     mainProgram = "sillytavern";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.wrvsrx ];
+    maintainers = [ lib.maintainers.Notarin ];
   };
 })

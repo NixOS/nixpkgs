@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hr";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "LuRsT";
     repo = "hr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-05num4v8C3n+uieKQJVLOzu9OOMBsUMPqq08Ou6gmYQ=";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/LuRsT/hr";
     description = "Horizontal bar for your terminal";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.unix;
     mainProgram = "hr";
   };
-}
+})

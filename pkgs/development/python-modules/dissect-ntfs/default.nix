@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.15";
+  version = "3.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
     tag = version;
-    hash = "sha256-dd0AGkOXd+7VB6RIGiLoq1AFi4Uns1axW4V8MN8W7ao=";
+    hash = "sha256-5B27K6HPxSgdYLp0rJ1ld37xS3JXGqGlS/nlx4HBsVY=";
   };
 
   build-system = [
@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "test_fragmented_mft"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
     changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

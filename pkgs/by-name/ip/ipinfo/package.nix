@@ -9,9 +9,9 @@ buildGoModule rec {
   version = "3.3.1";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "ipinfo";
     repo = "cli";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "${pname}-${version}";
     hash = "sha256-sdQdCP2NotrdeqYrSd9c6sExFeuX54I4fxJfEyULPuk=";
   };
 

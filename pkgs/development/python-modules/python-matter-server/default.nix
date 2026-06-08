@@ -4,9 +4,9 @@
   fetchFromGitHub,
   pythonOlder,
   stdenvNoCC,
-  replaceVars,
   buildNpmPackage,
   python,
+  home-assistant-chip-wheels,
 
   # build
   setuptools,
@@ -36,34 +36,13 @@
 }:
 
 let
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     tag = version;
-    hash = "sha256-vTJGe6OGFM+q9+iovsQMPwkrHNg2l4pw9BFEtSA/vmA=";
-  };
-
-  paaCerts = stdenvNoCC.mkDerivation rec {
-    pname = "matter-server-paa-certificates";
-    version = "1.4.0.0";
-
-    src = fetchFromGitHub {
-      owner = "project-chip";
-      repo = "connectedhomeip";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
-    };
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp $src/credentials/development/paa-root-certs/* $out/
-
-      runHook postInstall
-    '';
+    hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
   };
 
   # Maintainer note: building the dashboard requires a python environment with a
@@ -121,12 +100,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.12";
-
-  patches = [
-    (replaceVars ./link-paa-root-certs.patch {
-      paacerts = paaCerts;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -24,7 +24,6 @@
   proj,
   sqlite,
   tiledb,
-  xercesc,
   zlib,
   zstd,
 }:
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     sqlite
     tiledb
-    xercesc
     zlib
     zstd
   ]
@@ -137,12 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pdal" ];
   };
 })

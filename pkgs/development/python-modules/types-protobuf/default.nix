@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-protobuf";
-  version = "6.32.1.20251105";
+  version = "6.32.1.20260221";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types_protobuf";
     inherit version;
-    hash = "sha256-ZBACYR/4fdn+3DijminKy5kHrlzmFIm1PpnKIHS+92Q=";
+    hash = "sha256-bV+wYKYWv7B2y7YbSzw5afX8i+xYEPmi9+ZI7ly8v24=";
   };
 
   propagatedBuildInputs = [ types-futures ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for protobuf";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
   };
 }

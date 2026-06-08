@@ -23,7 +23,7 @@
 }:
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
-  version = "0.10.6";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -38,7 +38,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [

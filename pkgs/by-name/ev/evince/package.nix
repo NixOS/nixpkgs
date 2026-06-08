@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "48.1";
+  version = "48.4";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fYuab6OgXT9bkEiFkCdojHOniP9ukjvDlFEmiElD+hA=";
+    hash = "sha256-8pbFxmKIZjXUzVl+isCvzeeYK+RIZTPCt/CVsmi+hmg=";
   };
 
   depsBuildBuild = [
@@ -138,10 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "evince";
+      # 49.alpha bumps API and breaks sushi.
+      freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
@@ -152,12 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "evince";
     teams = [
-      teams.gnome
-      teams.pantheon
+      lib.teams.gnome
+      lib.teams.pantheon
     ];
   };
 })

@@ -89,7 +89,6 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
           thoughtpolice
-          offline
           kamilchm
           illustris
         ];

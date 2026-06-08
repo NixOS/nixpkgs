@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "data/session/meson.build" \
       --replace-fail ": systemd_user_unit_dir" ": '$out/lib/systemd/user'"
+
+    substituteInPlace "data/system/org.libvirt.conf.in" \
+      --replace-fail 'group="libvirt"' 'group="libvirtd"'
   '';
 
   nativeBuildInputs = [

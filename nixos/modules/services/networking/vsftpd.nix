@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -321,7 +322,7 @@ in
       tmpfiles.rules =
         optional cfg.anonymousUser
           #Type Path                       Mode User   Gr    Age Arg
-          "d    '${builtins.toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
+          "d    '${toString cfg.anonymousUserHome}' 0555 'ftp'  'ftp' -   -";
       services.vsftpd = {
         description = "Vsftpd Server";
 
@@ -333,9 +334,23 @@ in
       };
     };
 
-    security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
-      auth required pam_userdb.so db=${cfg.userDbPath}
-      account required pam_userdb.so db=${cfg.userDbPath}
-    '';
+    security.pam.services.vsftpd = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) {
+      useDefaultRules = false;
+      rules =
+        let
+          rules = utils.pam.autoOrderRules [
+            {
+              name = "userdb";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_userdb.so";
+              settings.db = cfg.userDbPath;
+            }
+          ];
+        in
+        {
+          auth = rules;
+          account = rules;
+        };
+    };
   };
 }

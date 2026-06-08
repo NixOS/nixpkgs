@@ -11,7 +11,7 @@
 buildDunePackage {
   pname = "ffmpeg-avdevice";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.12";
 
   inherit (ffmpeg-base) version src;
 

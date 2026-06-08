@@ -4,10 +4,10 @@
   buildPythonPackage,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # native
-  beets,
+  beets-minimal,
 
   # dependencies
   markdownify,
@@ -20,22 +20,22 @@
 
 buildPythonPackage rec {
   pname = "beets-audible";
-  version = "1.1.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neurrone";
     repo = "beets-audible";
-    rev = "v${version}";
-    hash = "sha256-Hi/hI+zfAHwRLt8JhzL5RXEIHnSBX8oO/zuuq1HxT2s=";
+    tag = "v${version}";
+    hash = "sha256-eyyj1zwdf7pINeULhhPvUnnkE2skE69fpWArZls0nLU=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   nativeBuildInputs = [
-    beets
+    beets-minimal
   ];
 
   pythonRelaxDeps = true;

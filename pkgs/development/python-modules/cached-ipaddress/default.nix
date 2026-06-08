@@ -11,16 +11,16 @@
   propcache,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cached-ipaddress";
-  version = "1.0.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
-    tag = "v${version}";
-    hash = "sha256-/bq9RZcC6VDK5JxT1QcAJpWNmioNqOearYc34KsCvHs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+A1kMD1L2K+dAWrZJ96qJpx0udRGMWbWApyWtMrE7lk=";
   };
 
   build-system = [
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cached_ipaddress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cache construction of ipaddress objects";
     homepage = "https://github.com/bdraco/cached-ipaddress";
-    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -14,18 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y1z1MlwbKGpvtgt4OZtfvxvsOSE6RhnsWUeaRvu7etU=";
+    hash = "sha256-GVDh94pgdMlwHMyqtT8q2yM+rwioodBYQfA+AOZ/CsU=";
   };
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
-  );
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -61,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

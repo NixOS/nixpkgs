@@ -9,23 +9,20 @@
   makeWrapper,
   ivpn-service,
 }:
-let
-  version = "3.14.34";
-in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  inherit version;
+  version = "3.15.6";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
-    tag = "v${version}";
-    hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-y/VxvSZUvcIuckJF87639i5pcVJLg8SDAbWmg5bO3/s=";
+  npmDepsHash = "sha256-S/fB3MxEDLVEZ762EkBkyemYW2rgBGtCH5y/6p6nqgE=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -37,12 +34,13 @@ buildNpmPackage {
   };
 
   postBuild = ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
+      -c.electronDist="$electron_dist" \
       -c.electronVersion=${electron.version} \
       --config electron-builder.config.js
   '';
@@ -85,9 +83,9 @@ buildNpmPackage {
     mainProgram = "ivpn-ui";
     homepage = "https://www.ivpn.net";
     downloadPage = "https://github.com/ivpn/desktop-app";
-    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
+    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

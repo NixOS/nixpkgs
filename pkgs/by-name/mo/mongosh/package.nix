@@ -2,20 +2,21 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.10";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N1uAIgEX44RSFJTivOpASKiab+Jr0N0Mo+olt000uK4=";
+    hash = "sha256-CHHGQYJBv1sVo2LT9jxx+c15TU8ecG9R5DVQOA9yG+A=";
   };
 
-  npmDepsHash = "sha256-/8qw9dVPHAuyQZWdDq+jhP7NMBwTbvMqv/PtwXJEQuo=";
+  npmDepsHash = "sha256-FlVKJqXiDW3FdBrm2lN2vw+xFkvm7J1FgCEI6rFfR4o=";
 
   patches = [
     ./disable-telemetry.patch
@@ -43,6 +44,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     homepage = "https://www.mongodb.com/try/download/shell";
+    changelog = "https://github.com/mongodb-js/mongosh/releases/tag/v${finalAttrs.version}";
     description = "MongoDB Shell";
     maintainers = with lib.maintainers; [ aaronjheng ];
     license = lib.licenses.asl20;

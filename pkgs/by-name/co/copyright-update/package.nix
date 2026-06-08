@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jaalto/project--copyright-update";
     description = "Updates the copyright information in a set of files";
     mainProgram = "copyright-update";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
   };
 }

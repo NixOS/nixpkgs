@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.24.1";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yWG06l/Gu2/u4NNAyCYjxlmEKIsDAaxWGp6fmqXvNl8=";
+    hash = "sha256-eIiBKsk27h42Lr1ecXeyQXfBbB73vgQRpD99fOuPGlE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  cargoHash = "sha256-F7tzrMqF2xY8Ow+bAFbP0mQPomSe/oOHiQWHRHDmHio=";
+  cargoHash = "sha256-mHRlGMYSeLpPR50Gr/AJY/PN7hA4znL9URaz+sbBYAs=";
 
   nativeCheckInputs = [
     gitMinimal

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.3.5";
+  version = "3.4.10";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-J1SButHDPy0gGkVOZKfemaMF0MY/lifB5n39+3GRKR8=";
+    hash = "sha256-jXio+PvagKTR8NjcYIQ/j8LOMNc/0sQBuaixKk/0V3k=";
   };
 
   outputs = [
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     musl = pkgsCross.musl64.openexr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ paperdigits ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ paperdigits ];
+    platforms = lib.platforms.all;
   };
 }

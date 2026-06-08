@@ -26,14 +26,14 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to create, check, and extract content of CramFs images";
     homepage = "https://github.com/npitre/cramfs-tools";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pamplemousse
       blitz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

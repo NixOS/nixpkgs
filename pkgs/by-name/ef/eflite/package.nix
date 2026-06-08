@@ -30,21 +30,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-8/debian/patches/cvs-update";
-      sha256 = "0r631vzmky7b7qyhm152557y4fr0xqrpi3y4w66fcn6p4rj03j05";
+      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-14/debian/patches/cvs-update";
+      hash = "sha256-BcgBZCbXWOaM4cSPeDPuIDviTymihAo9Puv4Wf8Ow2Q=";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-8/debian/patches/buf-overflow";
-      sha256 = "071qk133kb7n7bq6kxgh3p9bba6hcl1ixsn4lx8vp8klijgrvkmx";
+      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-14/debian/patches/link";
+      hash = "sha256-zAEJl473sk1H6Ltbbeo9IhWE5/Z6QL7EUV63S24bA10=";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-8/debian/patches/link";
-      sha256 = "0p833dp4pdsya72bwh3syvkq85927pm6snxvx13lvcppisbhj0fc";
+      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-14/debian/patches/buf-overflow";
+      hash = "sha256-vc6dn4x0ortRp8TqHgNl0Ki10h3w9WnwOvasOUaYOBw=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-14/debian/patches/flags";
+      hash = "sha256-h7+OewOznlOrGNcn2zfE4kb/0rP+h9rTP3TLlyiPTJM=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/e/eflite/0.4.1-14/debian/patches/gcc-15";
+      hash = "sha256-hiQaEM9Rf0KV8rgkXdjj3KIF+4jMYS4J4CT4UIfydGQ=";
     })
     ./format.patch
   ];
 
-  CFLAGS = lib.optionalString debug " -DDEBUG=2";
+  env = lib.optionalAttrs debug {
+    CFLAGS = " -DDEBUG=2";
+  };
 
   meta = {
     homepage = "https://eflite.sourceforge.net";

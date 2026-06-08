@@ -1,13 +1,13 @@
 {
   lib,
-  flutter335,
+  flutter341,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
   orc,
   webkitgtk_4_1,
   autoPatchelfHook,
-  xorg,
+  libxmu,
   jdk,
   zlib,
   runCommand,
@@ -24,16 +24,16 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
-  version = "0.26.10";
+  version = "1.33.3";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-PmkhIyRbRWp+ZujP8R1/h7NpKwYsaKx4JtYIikZjVzc=";
+    hash = "sha256-6Cb5UTm0K8j8ERXWWQRvLtpr6ZcvnXZRsO5GLyun4VI=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "saber";
   inherit version src;
 
@@ -49,13 +49,14 @@ flutter335.buildFlutterApplication {
     libunwind
     orc
     webkitgtk_4_1
-    xorg.libXmu
+    libxmu
     jdk
   ];
 
   postPatch = ''
-    patchShebangs patches/remove_proprietary_dependencies.sh
-    patches/remove_proprietary_dependencies.sh
+    patchShebangs patches/pre/remove_proprietary_dependencies.sh patches/pre/remove_dev_dependencies.sh
+    patches/pre/remove_proprietary_dependencies.sh
+    patches/pre/remove_dev_dependencies.sh
   '';
 
   flutterBuildFlags = [ "--dart-define=DIRTY=false" ];

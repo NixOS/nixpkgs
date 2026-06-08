@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "changelogging";
   version = "0.7.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-orTUCBHacD0MQNfhOUWdh9RxT/9YNvgfCHFDr2eNQic=";
   };
 
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI tool for building changelogs from fragments";
     homepage = "https://github.com/nekitdev/changelogging";
-    changelog = "https://github.com/nekitdev/changelogging/releases/tag/v${version}";
+    changelog = "https://github.com/nekitdev/changelogging/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nekitdev ];
     mainProgram = "changelogging";
   };
-}
+})

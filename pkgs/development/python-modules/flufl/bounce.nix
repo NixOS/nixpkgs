@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "flufl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Email bounce detectors";
     homepage = "https://gitlab.com/warsaw/flufl.bounce";
     changelog = "https://gitlab.com/warsaw/flufl.bounce/-/blob/${version}/flufl/bounce/NEWS.rst";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

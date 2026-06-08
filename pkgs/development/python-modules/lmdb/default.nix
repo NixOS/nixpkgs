@@ -7,15 +7,12 @@
   pytestCheckHook,
   cffi,
   lmdb,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "lmdb";
   version = "1.7.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,8 +38,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dw/py-lmdb";
     changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${version}/ChangeLog";
     license = lib.licenses.openldap;
-    maintainers = with lib.maintainers; [
-      ivan
+    maintainers = [
     ];
   };
 }

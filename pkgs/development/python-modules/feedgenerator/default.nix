@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "feedgenerator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Standalone version of Django's feedgenerator module";
     homepage = "https://github.com/getpelican/feedgenerator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

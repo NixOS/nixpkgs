@@ -4,27 +4,30 @@
   fetchFromGitHub,
   virtualenv,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virtualenv-clone";
   version = "0.5.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "edwardgeorge";
     repo = "virtualenv-clone";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     substituteInPlace tests/__init__.py \
-      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
-      --replace-fail "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12', '3.13']" # if the Python version used isn't in this list, tests fail
+      --replace-fail "'virtualenv'" "'${lib.getExe virtualenv}'" \
+      --replace-fail "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12', '3.13', '3.14']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
-      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+      --replace-fail "'virtualenv'" "'${lib.getExe virtualenv}'"
 
     # PermissionError: [Errno 13] Permission denied: '/tmp/test_fixup_pth_file.pth'
     # Unable to reproduce.
@@ -35,15 +38,16 @@ buildPythonPackage rec {
         "pth = '$(mktemp -d)/test_fixup_pth_file.pth'"
   '';
 
-  propagatedBuildInputs = [ virtualenv ];
+  dependencies = [ virtualenv ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     mainProgram = "virtualenv-clone";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/edwardgeorge/virtualenv-clone/blob/${finalAttrs.src.tag}/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ skohtv ];
   };
-}
+})

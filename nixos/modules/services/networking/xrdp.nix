@@ -39,8 +39,12 @@ let
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
-    LANG=${config.i18n.defaultLocale}\
-    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+    LANG=${config.i18n.defaultLocale}${
+      lib.optionalString (config.i18n.glibcLocales != null) ''
+        \
+        LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+      ''
+    }
     ' $out/sesman.ini
 
     ${cfg.extraConfDirCommands}

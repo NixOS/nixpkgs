@@ -14,9 +14,9 @@ workflow.
 
 The workflow generally proceeds in three main steps:
 
-1. create the initial `haskell-updates` PR, and update Stackage and Hackage snapshots
-1. wait for contributors to fix newly broken Haskell packages
-1. merge `haskell-updates` into `staging`
+1. Create the initial `haskell-updates` PR, and update Stackage and Hackage snapshots
+1. Wait for contributors to fix newly broken Haskell packages
+1. Merge `haskell-updates` into `staging`
 
 Each of these steps is described in a separate section.
 
@@ -106,7 +106,7 @@ always keep these building.
 We should be proactive in working with maintainers to keep their packages
 building.
 
-Steps to fix Haskell packages that are failing to build is out of scope for
+Steps to fix Haskell packages that are failing to build are out of scope for
 this document, but it usually requires fixing up dependencies that are now
 out-of-bounds.
 
@@ -274,7 +274,7 @@ Here are some additional tips that didn't fit in above.
 
     You might want to do this if a user contributes a fix to `cabal2nix` that
     will immediately fix a Haskell package in Nixpkgs.  First, merge in
-    the PR to `cabal2nix`, then run `update-cabal2nix-upstable.sh`.  Finally, run
+    the PR to `cabal2nix`, then run `update-cabal2nix-unstable.sh`.  Finally, run
     [`regenerate-hackage-packages.sh`](../../../maintainers/scripts/haskell/regenerate-hackage-packages.sh)
     to regenerate the Hackage package set with the updated version of `hackage2nix`.
 

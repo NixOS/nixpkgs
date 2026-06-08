@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "metabase";
-  version = "0.56.10";
+  version = "0.59.2";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${finalAttrs.version}/metabase.jar";
-    hash = "sha256-otpNh9TJnUoHjAVVCkrsJO93nIeEfaNC8amZdTvreIE=";
+    hash = "sha256-k1UfpSHOBsFZF85q0LhuiC9L5R8fbSnZBRB5MjBUh+M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Business Intelligence and Embedded Analytics tool";
     homepage = "https://metabase.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.agpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       mmahut
     ];

@@ -26,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     description = "Structural diff for JSON files";
     homepage = "https://github.com/andreyvit/json-diff";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "json-diff";
   };
 })

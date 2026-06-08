@@ -6,14 +6,14 @@
   sphinx,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dex";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = "dex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     "VERSION=$(version)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to generate and execute DesktopEntry files of the Application type";
     homepage = "https://github.com/jceb/dex";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "dex";
   };
-}
+})

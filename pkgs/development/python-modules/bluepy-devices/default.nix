@@ -3,29 +3,34 @@
   bluepy,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bluepy-devices";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "bluepy_devices";
-    inherit version;
-    sha256 = "02zzzivxq2vifgs65m2rm8pqlsbzsbc419c032irzvfxjx539mr8";
+    inherit (finalAttrs) version;
+    hash = "sha256-KNc0Spfd7Z+jGIClQNjSf2mKL6pZ1GL0c3EL3Hf8/ws=";
   };
 
-  propagatedBuildInputs = [ bluepy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ bluepy ];
 
   # Project has no test
   doCheck = false;
   pythonImportsCheck = [ "bluepy_devices" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python BTLE Device Interface for bluepy";
     homepage = "https://github.com/bimbar/bluepy_devices";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

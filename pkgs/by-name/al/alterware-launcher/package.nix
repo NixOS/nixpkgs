@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alterware-launcher";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "alterware";
     repo = "alterware-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I2HlLi8f0+p1Gk7QzwNxOAOix0dxGKMmNkcXilQANzo=";
+    hash = "sha256-cJ5JRFXmy3/OKgEX/A5KOkNV3TiRXpZlgEdWJJTghhE=";
   };
 
-  cargoHash = "sha256-M0Y59+p0SiDiE0MM165l/5HAYc2A00S9TDcYfzdAuAw=";
+  cargoHash = "sha256-O1Amsc0DwKwe1rgElQSWME9b92WsOin3urvme7EqJYg=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

@@ -9,7 +9,7 @@
   curl,
   dlib,
   fetchFromGitHub,
-  fetchurl,
+  fetchzip,
   flex,
   freeipmi,
   go,
@@ -41,6 +41,7 @@
   rustPlatform,
   snappy,
   stdenv,
+  symlinkJoin,
   systemd,
   zlib,
 
@@ -66,13 +67,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.8.0";
+    version = "2.10.3";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-QV9h+TMAuRCkYFr8KMOPhWq5fEnKpmA/HxQ8fV/jKBI=";
+      hash = "sha256-ryX+C3zuY7vONPeB4ocXDPttU5aSYbj1ThTosCSxmys=";
       fetchSubmodules = true;
     };
 
@@ -140,16 +141,19 @@ stdenv.mkDerivation (
       #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
       ./ndsudo-fix-path.patch
 
+      ./disable-binary-permission-check.patch
+
       ./use-local-corrosion.patch
       ./use-local-libbacktrace.patch
     ]
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 04/01/2025 04:45:14
-        dashboardTarball = fetchurl {
-          url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
+        # last update 12/10/2025 21:25:17
+        dashboardPath = fetchzip {
+          # The `if_` suffix is intentional, with out it the hash will vary depending on the region
+          url = "https://web.archive.org/web/20251210212517if_/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-8ovYkvt324l6f0YT6wTG+Y2u7VaVqotAdssnNTtHIEk=";
         };
       }
     );
@@ -232,7 +236,7 @@ stdenv.mkDerivation (
         --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
         --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
         --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "${placeholder "out"}/sbin")' \
+        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
         --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
     '';
 
@@ -244,10 +248,12 @@ stdenv.mkDerivation (
       (lib.cmakeBool "ENABLE_JEMALLOC" true)
       (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
       (lib.cmakeBool "ENABLE_ML" withML)
+      (lib.cmakeBool "ENABLE_NETDATA_JOURNAL_FILE_READER" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
       (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
       (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
       (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+      (lib.cmakeBool "ENABLE_PLUGIN_OTEL_SIGNAL_VIEWER" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
@@ -266,7 +272,6 @@ stdenv.mkDerivation (
       ''}
 
       # Time to cleanup the output directory.
-      unlink $out/sbin
       cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
       mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
       rm -rf $out/{var,usr,etc}
@@ -306,7 +311,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-AVNUbKCvO+Z3eKE+bJ/VFDo1tS9DdlmMw6M3OSdHiIU=";
+          vendorHash = "sha256-HRe1bcVIQVzwPZnGlAK5A8AO1VTcjFajkPwBVdl4UIA=";
           proxyVendor = true;
           doCheck = false;
 
@@ -334,26 +339,41 @@ stdenv.mkDerivation (
       tests.netdata = nixosTests.netdata;
     };
 
-    meta = with lib; {
+    meta = {
       broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
       description = "Real-time performance monitoring tool";
       homepage = "https://www.netdata.cloud/";
-      changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-      license = [ licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ licenses.ncul1 ];
+      changelog = "https://github.com/netdata/netdata/releases/tag/v${finalAttrs.version}";
+      license = [ lib.licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ lib.licenses.ncul1 ];
       mainProgram = "netdata";
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         mkg20001
         rhoriguchi
       ];
     };
   }
   // lib.optionalAttrs (withOtel || withSystemdJournal) {
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "${finalAttrs.pname}-nd-jf";
-      inherit (finalAttrs) version src cargoRoot;
-      hash = "sha256-HY6OtKHP75mO9X+F2a6H6e+3M0pgZBOIIaxAI9OhgkQ=";
+    cargoDeps = symlinkJoin {
+      name = "cargo-vendor-dir";
+      paths = [
+        (rustPlatform.fetchCargoVendor {
+          inherit (finalAttrs)
+            pname
+            version
+            src
+            cargoRoot
+            ;
+          hash = "sha256-mxFpT95e+NMqjJOIRqM+yKHGQHfpWmIFHqFNiiiqXOY=";
+        })
+        (rustPlatform.fetchCargoVendor {
+          pname = "${finalAttrs.pname}-nd-jf";
+          inherit (finalAttrs) version src;
+          cargoRoot = "${finalAttrs.cargoRoot}/jf";
+          hash = "sha256-6spr8WRt2G6tzaUQACxIcVMoDNKOFTg6rSPEOihMgLE=";
+        })
+      ];
     };
-    cargoRoot = "src/crates/jf";
+    cargoRoot = "src/crates";
   }
 )

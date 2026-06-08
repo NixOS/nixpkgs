@@ -1,35 +1,49 @@
 {
   lib,
   stdenv,
-  fetchYarnDeps,
   fetchFromGitHub,
-  yarnBuildHook,
-  yarnConfigHook,
+  fetchPnpmDeps,
   nodejs,
+  pnpm_11,
+  pnpmConfigHook,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_11;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "atomic-calendar-revive";
-  version = "10.0.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "atomic-calendar-revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TaxvxAUcewQH0IMJ0/VjW4+T6squ1tuZIFGn3PE3jhU=";
+    hash = "sha256-VgXLQXxA7QIUvVXRUvVmdKIZbyMIAbIn9adZIjEf2Yk=";
   };
 
-  offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-d3lk3mwgaWMPFl/EDUWH/tUlAC7OfhNycOLbi1GzkfM=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-qJIFvn8/p2wEkH4r1XGKWfwHdHPtU0AYLjWcy40kFTw=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpm
     nodejs
   ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm run build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

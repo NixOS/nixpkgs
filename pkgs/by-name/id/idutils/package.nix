@@ -14,12 +14,12 @@
   rsync,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "idutils";
   version = "4.6";
 
   src = fetchurl {
-    url = "mirror://gnu/idutils/idutils-${version}.tar.xz";
+    url = "mirror://gnu/idutils/idutils-${finalAttrs.version}.tar.xz";
     sha256 = "1hmai3422iaqnp34kkzxdnywl7n7pvlxp11vrw66ybxn9wxg90c1";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nix-mapping.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Text searching utility";
 
     longDescription = ''
@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/idutils/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ gfrascadorio ];
+    maintainers = with lib.maintainers; [ gfrascadorio ];
     platforms = lib.platforms.all;
   };
-}
+})

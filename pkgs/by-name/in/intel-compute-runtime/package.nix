@@ -10,15 +10,15 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "25.44.36015.5";
+  version = "26.18.38308.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-4CXNSgMyXsoiHdXQwm8oxQZrcFs9suVdC+OxcD/69Xw=";
+    tag = finalAttrs.version;
+    hash = "sha256-539TqwzPhclEpyxrwRB0DBLCAgM8JojdshvhNp0jeKU=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

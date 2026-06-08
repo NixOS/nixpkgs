@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/curl/trurl/commit/f22a2c45956f35702e437fb83ac05376f1956ec5.patch";
       hash = "sha256-7CkUs5tMk77WKc7SlgE2NslHtU5cViKSGhHj3IBlpWo=";
     })
+    # https://github.com/curl/trurl/pull/441
+    ./tests-uppercase-hex.patch
   ];
 
   postPatch = ''
@@ -56,7 +58,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Command line tool for URL parsing and manipulation";

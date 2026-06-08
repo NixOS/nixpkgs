@@ -52,5 +52,6 @@ makeSetupHook {
   meta = {
     description = "Setup hook for the Hare compiler";
     inherit (hare.meta) badPlatforms platforms;
+    license = lib.licenses.mit;
   };
 } ./setup-hook.sh

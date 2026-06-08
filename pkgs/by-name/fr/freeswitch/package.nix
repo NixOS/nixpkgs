@@ -107,13 +107,13 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeswitch";
   version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "freeswitch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
 
@@ -159,17 +159,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error"
-    # https://github.com/signalwire/freeswitch/issues/2495
-    "-Wno-incompatible-pointer-types"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error"
+      # https://github.com/signalwire/freeswitch/issues/2495
+      "-Wno-incompatible-pointer-types"
+    ];
 
-  # Using c++14 because of build error
-  # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
-  CXXFLAGS = "-std=c++14";
+    # Using c++14 because of build error
+    # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
+    CXXFLAGS = "-std=c++14";
 
-  CFLAGS = "-D_ANSI_SOURCE";
+    CFLAGS = "-D_ANSI_SOURCE";
+  };
 
   hardeningDisable = [ "format" ];
 
@@ -195,4 +197,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

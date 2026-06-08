@@ -6,36 +6,44 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.2";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FFbRopIaAOpfb+Wbj+EUXRr89EQE108h8OMn+fpL+ew=";
+    hash = "sha256-ncMJxVNHAgeXWhqZgWt3nth4BXqrrBaAEWmOVF/KsPg=";
   };
 
-  cargoHash = "sha256-JYvITscH1K6xLE6XZpMrEFZWcbue7x7xuPxVQW/Vjb0=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
   patches = [
-    ./unbounded-shifts.patch
+    # Remove the `npm ci` call in build.rs as it fails.
+    ./skip-npm-ci.patch
   ];
 
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-WI+wg6cu0cBFrZYyN3GXlfHOmo/cVo2uMLn1D5YTOCQ=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-8fDeO7Yx+m2s0mzTO7MkQOQ0UYs8B2vFnNevHHZFghc=";
+  };
+
+  npmRoot = "clash-dashboard";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
@@ -44,10 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires nightly features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # if_let_guard is stable since Rust 1.95.0, but some deps still carry
+    # the stale #![feature(if_let_guard)] attribute.
+    RUSTFLAGS = "-A stable-features";
   };
 
   buildFeatures = [ "plus" ];
@@ -60,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   deprecated,
   mss,
   websockets,
@@ -11,15 +10,18 @@
 
 buildPythonPackage rec {
   pname = "nodriver";
-  version = "0.48.1";
+  version = "0.50.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SsjNiLavEzwm3BV/t49asXRipZtKDaMwTjrxK75LQ0M=";
+    hash = "sha256-JMpojYZG74/61cjOZYBOXnZxp3mtJqJNdvZGXVZmxjE=";
   };
 
-  disabled = pythonOlder "3.9";
+  patches = [
+    # https://github.com/ultrafunkamsterdam/nodriver/pull/36
+    ./python-3.14-network-py-encoding.patch
+  ];
 
   dependencies = [
     deprecated

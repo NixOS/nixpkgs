@@ -31,7 +31,7 @@ let
     cdrkit
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   # NOTICE: if you bump this, make sure to run
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
   # growpart is needed in initrd in nixos/system/boot/grow-partition.nix
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-utils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YqfkmYclPZu6Mc2bFYxtiuH7uvfa3V4YlD0aHuKn1hw=";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Useful set of utilities for interacting with a cloud";
     homepage = "https://github.com/canonical/cloud-utils";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
-}
+})

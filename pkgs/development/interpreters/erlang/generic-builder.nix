@@ -21,6 +21,7 @@
   parallelBuild ? true,
 
   fetchFromGitHub,
+  fetchpatch2,
   gawk,
   gnum4,
   gnused,
@@ -38,10 +39,10 @@
   runtimeShell,
   stdenv,
   systemd,
-  unixODBC,
+  unixodbc,
   wrapGAppsHook3,
-  wxGTK32,
-  xorg,
+  wxwidgets_3_2,
+  libx11,
   zlib,
 }:
 let
@@ -53,13 +54,13 @@ let
 
   wxPackages2 =
     if stdenv.hostPlatform.isDarwin then
-      [ wxGTK32 ]
+      [ wxwidgets_3_2 ]
     else
       [
         libGL
         libGLU
-        wxGTK32
-        xorg.libX11
+        wxwidgets_3_2
+        libx11
         wrapGAppsHook3
       ];
 
@@ -107,9 +108,18 @@ stdenv.mkDerivation {
     zlib
   ]
   ++ optionals wxSupport wxPackages2
-  ++ optionals odbcSupport [ unixODBC ]
+  ++ optionals odbcSupport [ unixodbc ]
   ++ optionals javacSupport [ openjdk11 ]
   ++ optionals enableSystemd [ systemd ];
+
+  patches = lib.optionals (!wxSupport && major == "27") [
+    # https://github.com/erlang/otp/pull/11162
+    (fetchpatch2 {
+      name = "otp-27-doc-target-fix.patch";
+      url = "https://github.com/erlang/otp/commit/7ce587b61a2557fca79f1c130794abf834f37ee1.patch?full_index=1";
+      hash = "sha256-Ce6tWUzeF6TQMxus7ultxG2piFllw/xa5IPLCxSd024=";
+    })
+  ];
 
   # disksup requires a shell
   postPatch = ''
@@ -130,7 +140,7 @@ stdenv.mkDerivation {
   ++ optional enableKernelPoll "--enable-kernel-poll"
   ++ optional enableHipe "--enable-hipe"
   ++ optional javacSupport "--with-javac"
-  ++ optional odbcSupport "--with-odbc=${unixODBC}"
+  ++ optional odbcSupport "--with-odbc=${unixodbc}"
   ++ optional wxSupport "--enable-wx"
   ++ optional enableSystemd "--enable-systemd"
   ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"

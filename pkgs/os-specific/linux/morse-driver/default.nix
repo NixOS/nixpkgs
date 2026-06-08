@@ -54,12 +54,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Morse Micro Wi-Fi driver";
     homepage = "https://github.com/MorseMicro/morse_driver";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ govindsi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ govindsi ];
     broken = kernel.kernelOlder "6.1" || kernel.kernelAtLeast "6.12.56";
   };
 }

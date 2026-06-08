@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tealdeer";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "tealdeer-rs";
     repo = "tealdeer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QxkFpcEFLn98LvGDQ/PEovzzHTfNiKFQfGaHl/w5aLQ=";
   };
 
@@ -32,20 +32,20 @@ rustPlatform.buildRustPackage rec {
   # tealdeer requires --test-threads=1
   dontUseCargoParallelTests = true;
 
-  meta = with lib; {
+  meta = {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/tealdeer-rs/tealdeer";
-    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       davidak
       newam
       mfrw
       ryan4yin
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     mainProgram = "tldr";
   };
-}
+})

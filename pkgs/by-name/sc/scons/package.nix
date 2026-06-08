@@ -6,13 +6,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
-  version = "4.10.0";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
     tag = version;
-    hash = "sha256-ZmJETrznHH3zsNBO5o8JCvf+6l7NICOAfIqASYzYBaM=";
+    hash = "sha256-Lq6sDd6Bs9lMfTptlxdeNhOc1acP7xuLdDhIi65uqFo=";
   };
 
   pyproject = true;

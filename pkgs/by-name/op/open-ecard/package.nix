@@ -64,14 +64,14 @@ stdenv.mkDerivation rec {
       --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client side implementation of the eCard-API-Framework (BSI
       TR-03112) and related international standards, such as ISO/IEC 24727";
     mainProgram = "open-ecard";
     homepage = "https://www.openecard.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ sephalon ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ sephalon ];
+    platforms = lib.platforms.linux;
   };
 }

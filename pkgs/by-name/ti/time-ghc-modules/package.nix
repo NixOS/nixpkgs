@@ -10,14 +10,14 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "time-ghc-modules";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "codedownio";
     repo = "time-ghc-modules";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyze GHC .dump-timings files";
     mainProgram = "time-ghc-modules";
     homepage = "https://github.com/codedownio/time-ghc-modules";
-    license = licenses.mit;
-    maintainers = [ maintainers.thomasjm ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.thomasjm ];
+    platforms = lib.platforms.all;
   };
-}
+})

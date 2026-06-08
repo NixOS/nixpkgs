@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pysmhi";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pysmhi";
     tag = "v${version}";
-    hash = "sha256-n2eDQ9fbELGvO/SYqdrwT+lZNIZs5GgihmrimvI3a1w=";
+    hash = "sha256-9t/mhmQfNwuX2QVS1OOeKZOARXK9otjGtwJEfVeizPU=";
   };
 
   build-system = [ poetry-core ];

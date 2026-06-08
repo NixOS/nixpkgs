@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshified";
-  version = "1.2.2";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "hoffie";
     repo = "sshified";
-    tag = "v${version}";
-    hash = "sha256-+YaqHkcsP6+J39w4WP5iA0LowmGwDHBoDNzT8fhv+Xg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YY9ZFIH4ST9xQRD7IkjC9rm+QTlfde5+2qR/reH9oHU=";
   };
 
   vendorHash = null;
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -28,9 +28,9 @@ buildGoModule rec {
   meta = {
     description = "Proxy HTTP requests through SSH";
     homepage = "https://github.com/hoffie/sshified";
-    changelog = "https://github.com/hoffie/sshified/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hoffie/sshified/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ joinemm ];
     mainProgram = "sshified";
   };
-}
+})

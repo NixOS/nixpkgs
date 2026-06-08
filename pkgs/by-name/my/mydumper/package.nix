@@ -20,15 +20,15 @@
   versionCheckHook,
   mydumper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mydumper";
-  version = "0.21.1-1";
+  version = "1.0.1-3";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
-    tag = "v${version}";
-    hash = "sha256-6x0d1Ywgy6kkfDs3KsS6pRK0/3z9Ur7klO8xMTsoDPI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hk+GdJH+hH8HUcKKfzP6G0L/jM2DAfZtm+cPqAJAPJ0=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -68,16 +68,6 @@ stdenv.mkDerivation rec {
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
   ];
 
-  env.NIX_CFLAGS_COMPILE = (
-    if stdenv.hostPlatform.isDarwin then
-      toString [
-        "-Wno-error=format"
-        "-Wno-error=sometimes-uninitialized"
-      ]
-    else
-      "-Wno-error=maybe-uninitialized"
-  );
-
   postPatch = ''
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
     substituteInPlace CMakeLists.txt\
@@ -105,13 +95,13 @@ stdenv.mkDerivation rec {
   passthru.tests = testers.testVersion {
     package = mydumper;
     command = "myloader --version";
-    version = "myloader v${version}";
+    version = "myloader v${finalAttrs.version}";
   };
 
   meta = {
     description = "High-performance MySQL backup tool";
     homepage = "https://github.com/mydumper/mydumper";
-    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
+    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -119,4 +109,4 @@ stdenv.mkDerivation rec {
       michaelglass
     ];
   };
-}
+})

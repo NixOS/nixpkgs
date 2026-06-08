@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numr";
-  version = "0.1.8";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "nasedkinpv";
     repo = "numr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FcvXhgao8l5vBggziAMmvmxKZ1uIr8UDyk64RTohYMg=";
+    hash = "sha256-dx5Ow+trL0/gVKj0IOAVwwgNMl4ZwF5K7MEi6fv/QYc=";
   };
 
-  cargoHash = "sha256-LHTAhGHc0hnq1lzYkQhAO3VhwbzVi0vN1D6VBgEV/Js=";
+  cargoHash = "sha256-8illKr1unCiZRlcpuzBSCJ/H7HJPW2cHDLq1vF76vss=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Text calculator inspired by Numi - natural language expressions, variables, unit conversions";
     homepage = "https://github.com/nasedkinpv/numr";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "numr";

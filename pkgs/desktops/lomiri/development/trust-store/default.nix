@@ -142,12 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common implementation of a trust store to be used by trusted helpers";
     homepage = "https://gitlab.com/ubports/development/core/trust-store";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "trust-store"
     ];

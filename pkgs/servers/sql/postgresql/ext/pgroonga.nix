@@ -6,25 +6,25 @@
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
-  xxHash,
+  xxhash,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-SXQH+L7FKhu+2+9QyQTNi+3nFYtkE7WXv2A5LdvjG2w=";
+    tag = finalAttrs.version;
+    hash = "sha256-PwUnjwqnmoWQ9kKZuKsAVzVBRyKvT+aexrm5eeRiRIQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     msgpack-c
     groonga
-    xxHash
+    xxhash
   ];
 
   makeFlags = [

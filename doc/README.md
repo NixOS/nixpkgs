@@ -111,7 +111,7 @@ This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/us
 #### HTML
 
 Inlining HTML is not allowed.
-Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
@@ -207,11 +207,48 @@ When needed, each convention explains why it exists, so you can make a decision 
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
+**For prose style, see the [documentation styleguide](./styleguide.md).**
+
 ### One sentence per line
 
 Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
+
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
+
+### Examples first
+
+Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
+
+Use this structure for each documented item:
+
+1. Title
+2. Abstract (optional, one sentence max)
+3. Example
+4. Explanation (details, edge cases, types, defaults)
+
+Rendered example:
+
+````markdown
+## `lib.toUpper`
+
+Converts all characters in a string to uppercase.
+
+:::{.example #ex-lib-toUpper}
+# Converting a string to uppercase
+```nix
+lib.toUpper "hello"
+=> "HELLO"
+```
+
+:::
+
+Only acts on ASCII characters.
+Unicode characters are passed through unchanged.
+````
 
 ### Writing Function Documentation
 
@@ -245,11 +282,9 @@ Returns the difference as a number.
 
 Use the [admonition syntax](#admonitions) for callouts and examples.
 
-### Provide self-contained examples
+### `callPackage`-compatible examples
 
-Provide at least one example per function, and make examples self-contained.
-This is easier to understand for beginners.
-It also helps with testing that it actually works – especially once we introduce automation.
+Provide at least one example per function.
 
 Example code should be such that it can be passed to `pkgs.callPackage`.
 Instead of something like:
@@ -403,7 +438,7 @@ To define a referenceable figure use the following fencing:
 :::
 ```
 
-Defining figures through the `figure` fencing class adds them to a `List  of Figures` after the `Table of Contents`.
+Defining figures through the `figure` fencing class adds them to a `List of Figures` after the `Table of Contents`.
 Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes

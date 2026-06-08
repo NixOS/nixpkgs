@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pushgateway";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Mc4yEd9CRfLZ4ZpcMnwQpoIXQpUerdxYD90FWRBzS20=";
+    sha256 = "sha256-qrXMKDV3BU5tZchWNj26l7Eh5Pxc+FZIV3AtLxV9TsM=";
   };
 
-  vendorHash = "sha256-O/Vgn3WC0ZzRy5L/m0qR970joGtqQWWlmethoHAypgY=";
+  vendorHash = "sha256-EjTjXNRsYSeu4Ze1D3ZAiuPcdIbtqYAzQRQxXMxj5ts=";
 
   ldflags = [
     "-s"
@@ -38,12 +38,12 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
     mainProgram = "pushgateway";
     homepage = "https://github.com/prometheus/pushgateway";
     changelog = "https://github.com/prometheus/pushgateway/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benley ];
   };
 })

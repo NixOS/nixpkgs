@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tt-rss";
   version = "0-unstable-2025-11-01";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "${version}" > $out/version_static.txt
+    echo "${finalAttrs.version}" > $out/version_static.txt
 
     runHook postInstall
   '';
@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gileri
       globin
       zohl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

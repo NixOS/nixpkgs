@@ -9,12 +9,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.5";
   pname = "sam-ba";
 
   src = fetchzip {
-    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_${version}-linux_x86_64.tar.gz";
+    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_${finalAttrs.version}-linux_x86_64.tar.gz";
     sha256 = "1k0nbgyc98z94nphm2q7s82b274clfnayf4a2kv93l5594rzdbp1";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming tools for Atmel SAM3/7/9 ARM-based microcontrollers";
     longDescription = ''
       Atmel SAM-BA software provides an open set of tools for programming the
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     '';
     # Alternatively: https://www.microchip.com/en-us/development-tool/SAM-BA-In-system-Programmer
     homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

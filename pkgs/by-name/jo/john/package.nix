@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   openssl,
   nss,
   nspr,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2404";
+  version = "1.9.0-Jumbo-1-unstable-2026-05-31";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-XMT5Sbp2XrAnfTHxXyJdw0kA/ZtfOiYrX/flCFLHJ6s=";
+    rev = "776889036312637dd97584da68af196e2a2c93ea";
+    hash = "sha256-JRQN5NJMCvRDjzXql06Pqy7xEwA8peMCeB4nCedhAvE=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -106,9 +107,7 @@ stdenv.mkDerivation {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
-  # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
-  # gcc: error: memdbg.o: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
@@ -130,6 +129,10 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9].*";
+  };
+
   meta = {
     description = "John the Ripper password cracker";
     license = [
@@ -138,8 +141,8 @@ stdenv.mkDerivation {
     ++ lib.optionals enableUnfree [ lib.licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
     maintainers = with lib.maintainers; [
-      offline
       cherrykitten
+      therealhammer
     ];
     platforms = lib.platforms.unix;
   };

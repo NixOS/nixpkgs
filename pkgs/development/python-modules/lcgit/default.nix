@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lcgit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Linear Congruential Generator iterator";
     homepage = "https://github.com/cisagov/lcgit";
     changelog = "https://github.com/cisagov/lcgit/releases/tag/${src.tag}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,13 +4,13 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  libXrandr,
-  libXcursor,
-  libXft,
-  libXt,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxrandr,
+  libxcursor,
+  libxft,
+  libxt,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
   writeShellScript,
   curl,
   jq,
@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXrandr
-    libXcursor
-    libXft
-    libXt
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxrandr
+    libxcursor
+    libxft
+    libxt
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
     libbsd
   ];
 

@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bcg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hardwario/bch-gateway";
     description = "HARDWARIO Gateway (Python Application «bcg»)";
     mainProgram = "bcg";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

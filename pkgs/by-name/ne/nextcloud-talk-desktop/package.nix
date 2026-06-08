@@ -8,7 +8,12 @@
   makeDesktopItem,
   nss,
   cairo,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
@@ -21,13 +26,18 @@
   libglvnd,
   systemd,
   patchelf,
-  nix-update-script,
   undmg,
   makeWrapper,
+  libpulseaudio,
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.0.4";
+  version = "2.1.1"; # Ensure both hashes (Linux and Darwin) are updated!
+
+  hashes = {
+    linux = "sha256-s6+p21KLoDvcQz0EgV7WYIwYc9JolZpqkxZ8iIol8Yg=";
+    darwin = "sha256-rp6+bYb3Y8yEXYUY+cuDo7Lw6cq/EUnPjLIqscKeULc=";
+  };
 
   # Only x86_64-linux is supported with Darwin support being universal
   sources = {
@@ -35,13 +45,18 @@ let
     # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
     linux = fetchzip {
       url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${version}/Nextcloud.Talk-linux-x64.zip";
-      hash = "sha256-Nky3ws1UV0F4qjbBog53BjXkZ/ttTER/32NlB2ONJaE=";
+      hash = hashes.linux;
       stripRoot = false;
     };
     darwin = fetchurl {
       url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${version}/Nextcloud.Talk-macos-universal.dmg";
-      hash = "sha256-FgiUb2MNEqmbK4BphHQ7M2IeN7Vg1NQ9FR9UO4AfvNs=";
+      hash = hashes.darwin;
     };
+  };
+
+  passthru = {
+    inherit hashes; # needed by updateScript
+    updateScript = ./update.py;
   };
 
   meta = {
@@ -55,7 +70,7 @@ let
   };
 
   linux = stdenv.mkDerivation (finalAttrs: {
-    inherit pname version;
+    inherit pname version passthru;
 
     src = sources.linux;
 
@@ -82,19 +97,23 @@ let
       libgbm
       libGL
       libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+      libx11
+      libxcomposite
+      libxdamage
+      libxrandr
+      libxfixes
+      libxcursor
+      libpulseaudio
+    ];
 
-    # Required to launch the application and proceed past the zygote_linux fork() process
-    # Fixes `Zygote could not fork`
-    runtimeDependencies = [ systemd ];
+    runtimeDependencies = [
+      # Required to launch the application and proceed past the zygote_linux fork() process
+      # Fixes `Zygote could not fork`
+      systemd
+
+      # Fixes input/output audio device selection
+      libpulseaudio
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -127,11 +146,9 @@ let
     '';
 
     postFixup = ''
-      patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 \
+      ${lib.getExe patchelf} --add-needed libGL.so.1 --add-needed libEGL.so.1 \
         "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk"
     '';
-
-    passthru.updateScript = nix-update-script { };
 
     meta = meta // {
       platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
@@ -139,7 +156,7 @@ let
   });
 
   darwin = stdenv.mkDerivation (finalAttrs: {
-    inherit pname version;
+    inherit pname version passthru;
 
     src = sources.darwin;
 

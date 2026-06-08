@@ -26,14 +26,14 @@
   gifski,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peek";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "phw";
     repo = "peek";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1xwlfizga6hvjqq127py8vabaphsny928ar7mwqj9cyqfl6fx41x";
   };
 
@@ -89,12 +89,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phw/peek";
     description = "Simple animated GIF screen recorder with an easy to use interface";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ puffnfresh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = lib.platforms.linux;
     mainProgram = "peek";
   };
-}
+})

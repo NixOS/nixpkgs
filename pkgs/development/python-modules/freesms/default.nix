@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   httmock,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "freesms";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bfontaine";

@@ -9,14 +9,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-plugins";
   version = "16.0.1";
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1P5oVXSx/hGK5MB2grxWtmqsKGtTEmT1XD5+NSsLFUw=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

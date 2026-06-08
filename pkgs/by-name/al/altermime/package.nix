@@ -9,7 +9,7 @@ gccStdenv.mkDerivation rec {
   version = "0.3.11";
 
   src = fetchurl {
-    url = "https://pldaniels.com/${pname}/${pname}-${version}.tar.gz";
+    url = "https://pldaniels.com/altermime/altermime-${version}.tar.gz";
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
@@ -28,11 +28,11 @@ gccStdenv.mkDerivation rec {
       --replace-fail "strip " "${gccStdenv.cc.targetPrefix}strip "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIME alteration tool";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
-    license.fullName = "alterMIME LICENSE";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.sendmail;
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };

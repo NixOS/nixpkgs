@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  build,
   blessed,
   fetchFromGitHub,
   invoke,
-  pythonOlder,
   releases,
   semantic-version,
   tabulate,
@@ -14,31 +14,33 @@
   pytest-relaxed,
   pytest-mock,
   icecream,
+  setuptools,
   pip,
 }:
 
 buildPythonPackage rec {
   pname = "invocations";
-  version = "3.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "4.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
     repo = "invocations";
     tag = version;
-    hash = "sha256-JnhdcxhBNsYgDMcljtGKjOT1agujlao/66QifGuh6I0=";
+    hash = "sha256-G6EKypqP2/coPChLwwEKZ2WIEay0qfyM8M5jKb0oS2c=";
   };
 
   patches = [ ./replace-blessings-with-blessed.patch ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "semantic_version>=2.4,<2.7" "semantic_version"
+    substituteInPlace pyproject.toml \
+      --replace-fail "semantic_version>=2.4,<2.7" "semantic_version"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    build
     blessed
     invoke
     releases
@@ -69,11 +71,11 @@ buildPythonPackage rec {
     "status_"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Common/best-practice Invoke tasks and collections";
     homepage = "https://invocations.readthedocs.io/";
-    changelog = "https://github.com/pyinvoke/invocations/blob/${version}/docs/changelog.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/pyinvoke/invocations/blob/${src.tag}/docs/changelog.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

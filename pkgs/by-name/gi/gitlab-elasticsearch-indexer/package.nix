@@ -9,19 +9,19 @@
 let
   codeParserBindings = callPackage ./code-parser.nix { };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.10.1";
+  version = "5.14.7";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
-    rev = "v${version}";
-    hash = "sha256-UB3rR6Fk/5M8rpixyg7R0Zd5JZYpG4gEEDHXOQ4b3vI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1fVBCem23X8u1NQ6ph37EiXRvMpzF/8Yac+VefAe9Yg=";
   };
 
-  vendorHash = "sha256-EM41vNyE4nkv5IcGyRXqn+d7EHGMju2e76KWfHuOTmY=";
+  vendorHash = "sha256-cUHXrUd+pSMiS6iSwKKA+o1B6ZHbaQYHYPeVk1Y6wYM=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
@@ -50,11 +50,15 @@ buildGoModule rec {
     inherit codeParserBindings;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Indexes Git repositories into Elasticsearch for GitLab";
+    homepage = "https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer";
     mainProgram = "gitlab-elasticsearch-indexer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yayayayaka ];
-    teams = [ teams.cyberus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+      yayayayaka
+    ];
   };
-}
+})

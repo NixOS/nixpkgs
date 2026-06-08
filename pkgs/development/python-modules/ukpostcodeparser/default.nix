@@ -17,11 +17,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "UK Postcode parser";
     homepage = "https://github.com/hamstah/ukpostcodeparser";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ siddharthist ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ siddharthist ];
+    platforms = lib.platforms.unix;
   };
 }

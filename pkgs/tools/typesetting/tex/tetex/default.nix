@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   version = "3.0";
 
   src = fetchurl {
-    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-src-${version}.tar.gz";
+    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-src-${version}.tar.gz";
     sha256 = "16v44465ipd9yyqri9rgxp6rbgs194k4sh1kckvccvdsnnp7w3ww";
   };
 
   texmf = fetchurl {
-    url = "http://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-texmf-${version}.tar.gz";
+    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-texmf-${version}.tar.gz";
     sha256 = "1hj06qvm02a2hx1a67igp45kxlbkczjlg20gr8lbp73l36k8yfvc";
   };
 
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     substituteInPlace ./tetex-src-3.0/configure --replace /usr/bin/install $(type -P install)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured (La)TeX distribution";
     homepage = "http://www.tug.org/tetex/";
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     hydraPlatforms = [ ];
   };
 }

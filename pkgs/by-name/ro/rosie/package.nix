@@ -5,7 +5,7 @@
   libbsd,
   readline,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rosie";
   version = "1.4.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     # The Makefile calls git to update submodules, unless this file exists
-    touch ${src.name}/submodules/~~present~~
+    touch ${finalAttrs.src.name}/submodules/~~present~~
   '';
 
   preConfigure = ''
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
     mainProgram = "rosie";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kovirobi ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kovirobi ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

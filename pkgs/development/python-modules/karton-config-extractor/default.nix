@@ -4,15 +4,12 @@
   fetchFromGitHub,
   karton-core,
   malduck,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
   version = "2.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -33,12 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.config_extractor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static configuration extractor for the Karton framework";
     mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
     changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

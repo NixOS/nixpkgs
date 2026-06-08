@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   regex,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "somajo";
   version = "2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tsproisl";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "somajo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tokenizer and sentence splitter for German and English web texts";
     homepage = "https://github.com/tsproisl/SoMaJo";
     changelog = "https://github.com/tsproisl/SoMaJo/blob/v${version}/CHANGES.txt";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "somajo-tokenizer";
   };

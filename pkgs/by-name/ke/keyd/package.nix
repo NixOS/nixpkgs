@@ -2,44 +2,45 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  systemd,
   runtimeShell,
-  python3,
+  python3Packages,
   nixosTests,
+  versionCheckHook,
 }:
-
 let
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
-    hash = "sha256-pylfQjTnXiSzKPRJh9Jli1hhin/MIGIkZxLKxqlReVo=";
+    hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
   };
 
-  pypkgs = python3.pkgs;
-
-  appMap = pypkgs.buildPythonApplication rec {
+  appMap = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "keyd-application-mapper";
     inherit version src;
-    format = "other";
+    pyproject = false;
 
     postPatch = ''
-      substituteInPlace scripts/${pname} \
+      substituteInPlace scripts/${finalAttrs.pname} \
         --replace-fail /bin/sh ${runtimeShell}
     '';
 
-    propagatedBuildInputs = with pypkgs; [ xlib ];
+    propagatedBuildInputs = with python3Packages; [
+      xlib
+      pygobject3.out
+      dbus-python.out
+    ];
 
     dontBuild = true;
 
     installPhase = ''
-      install -Dm555 -t $out/bin scripts/${pname}
+      install -Dm555 -t $out/bin scripts/${finalAttrs.pname}
     '';
 
     meta.mainProgram = "keyd-application-mapper";
-  };
+  });
 
 in
 stdenv.mkDerivation {
@@ -56,12 +57,10 @@ stdenv.mkDerivation {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  buildInputs = [ systemd ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   enableParallelBuilding = true;
-
-  # post-2.4.2 may need this to unbreak the test
-  # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
 
   postInstall = ''
     ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
@@ -70,10 +69,12 @@ stdenv.mkDerivation {
 
   passthru.tests.keyd = nixosTests.keyd;
 
-  meta = with lib; {
+  meta = {
     description = "Key remapping daemon for Linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alfarel ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/rvaiya/keyd";
+    license = lib.licenses.mit;
+    mainProgram = "keyd";
+    maintainers = with lib.maintainers; [ alfarel ];
+    platforms = lib.platforms.linux;
   };
 }

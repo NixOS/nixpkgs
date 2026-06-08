@@ -4,25 +4,30 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ioping";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "koct9i";
     repo = "ioping";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9lJEjns8ttjgI52ZXeWgL77GMd7o7IvefBJ5UH9y9ks=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "Disk I/O latency measuring tool";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/koct9i/ioping";
     mainProgram = "ioping";
   };
-}
+})

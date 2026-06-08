@@ -6,14 +6,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "autorestic";
   version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "cupcakearmy";
     repo = "autorestic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rladzcW6l5eR6ICj4kKd4e2R9vRIV/1enCzHLFdQDlk=";
   };
 
@@ -28,11 +28,11 @@ buildGoModule rec {
          --zsh <($out/bin/autorestic completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High level CLI utility for restic";
     homepage = "https://github.com/cupcakearmy/autorestic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ renesat ];
     mainProgram = "autorestic";
   };
-}
+})

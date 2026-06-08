@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -8,35 +9,24 @@
   openssl,
   pkg-config,
   sqlite,
-  fips ? false,
+  withPostQuantum ? true,
 }:
 
-rustPlatform.buildRustPackage (finalPackage: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kryoptic";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "kryoptic";
-    tag = "v${finalPackage.version}";
-    hash = "sha256-EzWZQLAtO7ZR28aOSfwXQOyHbL8Ss75dCxVnPkJIEbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WOihUHFNqjQGObd+pfiNnjBq5GL/9NDeBiC7VzF/ZwE=";
   };
-
-  postPatch =
-    let
-      # Creates an -I command line for overriding an include.
-      inc = name: ''format!("-I{}", env!("${name}_INCLUDE")).as_str()'';
-      fipsArgs = lib.optionalString fips ''"-D_KRYOPTIC_FIPS"'';
-    in
-    ''
-      substituteInPlace ossl/build.rs \
-        --replace-fail 'ossl_bindings(&["-std=c90"], out_file)' 'ossl_bindings(&["-std=c90", ${inc "OPENSSL"}, ${inc "LIBC"}, ${fipsArgs}], out_file)'
-    '';
 
   env = {
     # Pass these include paths for bindgen in via the environment.
-    OPENSSL_INCLUDE = "${lib.getInclude openssl}/include";
-    LIBC_INCLUDE = "${lib.getInclude glibc}/include";
+    ${if !stdenv.hostPlatform.isDarwin then "OSSL_BINDGEN_CLANG_ARGS" else null} =
+      "-I${lib.getInclude glibc}/include";
     LIBCLANG_PATH = "${lib.getLib clang.cc}/lib";
   };
 
@@ -47,23 +37,27 @@ rustPlatform.buildRustPackage (finalPackage: {
     sqlite
   ];
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoPatches = [
+    ./0001-Add-Cargo.lock.patch
+  ];
 
-  cargoHash = "sha256-NWtL1ZzxGqTn8SS4XitOYJvGRYA/j52f14oul4ZPoyw=";
+  cargoHash = "sha256-Kr2tvxPIcWS47ljH9l0qQTacX9BIV9vMmQyE8EG6qVE=";
 
   cargoBuildFlags = [
     "--no-default-features"
     "--features=${
       lib.concatStringsSep "," (
         [
-          (if fips then "fips" else "standard")
-          "dynamic" # dynamic linking
+          "standard"
           "sqlitedb"
           "nssdb"
           "log"
         ]
-        ++ lib.optionals (!fips) [
+        ++ lib.optionals withPostQuantum [
           "pqc" # post-quantum
+        ]
+        ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+          "dynamic"
         ]
       )
     }"

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   cmake,
   pkg-config,
@@ -14,16 +15,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.3.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gMT62Uy9rFdtt2LnU7A9bPwH6lRrHVhzXQ03qUoS0CM=";
+    hash = "sha256-alXqHtaGtv2zPt1OpNyEwHpQ+GKhS8xqOQFa5PvCsqc=";
   };
 
-  cargoHash = "sha256-2Pn8QwviSgznchw56ZpU8J0+aGJOsGlr0OG0Uu5kpZs=";
+  cargoHash = "sha256-PvSOjuK1cObDuZeAKYEEqwezCuv7RM1W/aimrc4QV28=";
+
+  cargoPatches = [
+    (fetchpatch {
+      # The lock file was updated after the release
+      url = "https://github.com/ricott1/rebels-in-the-sky/commit/4cd33144b7e2e6297c5e0d6a6a0e46bc976279d0.patch";
+      hash = "sha256-HUzABNtpBgts7rtuPB/OCtCTQk+XsLGEOyRRgy3uIdI=";
+    })
+  ];
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
@@ -47,7 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rebels";
-  versionCheckProgramArg = "--version";
   # Darwin: "Error: Operation not permitted (os error 1)"
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

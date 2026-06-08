@@ -5,6 +5,7 @@ let
   ];
   server = "ergochat";
   ircPort = 6667;
+  altIrcPort = 16667;
   channel = "nixos-cat";
   iiDir = "/tmp/irc";
 in
@@ -22,10 +23,14 @@ in
           This one does.
         '';
       };
+
+      specialisation.new.configuration = {
+        services.ergochat.settings.server.listeners.":${toString altIrcPort}" = null;
+      };
     };
   }
   // lib.listToAttrs (
-    builtins.map (
+    map (
       client:
       lib.nameValuePair client {
         imports = [
@@ -83,7 +88,7 @@ in
           ''
           # check that all greetings arrived on all clients
         ]
-        ++ builtins.map (other: ''
+        ++ map (other: ''
           ${client}.succeed(
               "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
           )
@@ -101,5 +106,10 @@ in
       # entry is executed by every client before advancing
       # to the next one.
     ''
-    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (builtins.map clientScript clients));
+    + lib.concatStrings (reduce (lib.zipListsWith (cs: c: cs + c)) (map clientScript clients))
+    # Test server config reloading
+    + ''
+      ${server}.succeed("/run/current-system/specialisation/new/bin/switch-to-configuration test")
+      ${server}.wait_for_open_port(${toString altIrcPort})
+    '';
 }

@@ -5,44 +5,42 @@
   autoreconfHook,
   pkg-config,
   libevent,
-  pcre,
   zlib,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "memtier-benchmark";
-  version = "2.2.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner = "redislabs";
+    owner = "redis";
     repo = "memtier_benchmark";
-    tag = version;
-    sha256 = "sha256-FzuURsGob9ZQC0C18wKLhamCyARirtvGLq5lF64JOX8=";
+    tag = finalAttrs.version;
+    hash = "sha256-pvi5p/0HZIiZYi5+eqcAu4MMrF0Hh42ByPEHuA9jcug=";
   };
-
-  patchPhase = ''
-    substituteInPlace ./configure.ac \
-      --replace '1.2.8' '${version}'
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     libevent
-    pcre
     zlib
     openssl
   ];
 
   meta = {
+    changelog = "https://github.com/redis/memtier_benchmark/releases/tag/${finalAttrs.version}";
     description = "Redis and Memcached traffic generation and benchmarking tool";
-    homepage = "https://github.com/redislabs/memtier_benchmark";
+    homepage = "https://github.com/redis/memtier_benchmark";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      hythera
+    ];
     mainProgram = "memtier_benchmark";
   };
-}
+})

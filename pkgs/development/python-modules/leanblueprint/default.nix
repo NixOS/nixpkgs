@@ -19,14 +19,14 @@
 }:
 buildPythonPackage {
   pname = "leanblueprint";
-  version = "0.0.19";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "leanblueprint";
     owner = "PatrickMassot";
-    rev = "v0.0.19";
-    hash = "sha256-WARjzalYMvbw5IlhehRX+Na5aEmgM3HKy+s0x3GJNCY=";
+    rev = "v0.0.20";
+    hash = "sha256-jCNIf0pTO/7M4aLrbFyjGcTPmaIQnw32itKJdyCMn+g=";
   };
 
   build-system = [ setuptools ];

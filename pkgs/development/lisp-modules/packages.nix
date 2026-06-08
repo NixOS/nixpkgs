@@ -122,6 +122,13 @@ let
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
+
       lessp = build-asdf-system {
         pname = "lessp";
         version = "0.2-f8a9e4664";
@@ -214,6 +221,9 @@ let
           "slynk/indentation"
           "slynk/retro"
         ];
+        meta = {
+          homepage = "https://github.com/joaotavora/sly";
+        };
       };
 
       cephes = build-with-compile-into-pwd {
@@ -239,7 +249,7 @@ let
         pname = "clx-truetype";
         version = "20160825-git";
         src = pkgs.fetchzip {
-          url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+          url = "https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
           sha256 = "079hyp92cjkdfn6bhkxsrwnibiqbz4y4af6nl31lzw6nm91j5j37";
         };
         lispLibs = with self; [
@@ -324,6 +334,9 @@ let
         nativeLibs = [
           pkgs.gtk4
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_adw = build-asdf-system {
@@ -340,6 +353,9 @@ let
         nativeLibs = [
           pkgs.libadwaita
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_webkit = build-asdf-system {
@@ -356,6 +372,9 @@ let
         nativeLibs = [
           pkgs.webkitgtk_6_0
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-avro = build-asdf-system {
@@ -382,13 +401,15 @@ let
           time-interval
           trivial-extensible-sequences
         ];
+        meta = {
+          homepage = "https://github.com/SahilKang/cl-avro";
+        };
       };
 
       frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
         systems = [
           "frugal-uuid"
           "frugal-uuid/non-frugal"
-          "frugal-uuid/benchmark"
           "frugal-uuid/test"
         ];
         lispLibs =
@@ -427,6 +448,9 @@ let
           mcclim
           mcclim-layouts
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
       kons-9 = build-asdf-system {
@@ -459,10 +483,13 @@ let
           shasht
           org_dot_melusina_dot_confidence
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
-      nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
-        lispLibs = oa.lispLibs ++ [ self.sb-cga ];
+      nsb-cga = super.nsb-cga.overrideLispAttrs (old: {
+        lispLibs = old.lispLibs ++ [ self.sb-cga ];
       });
 
       qlot-cli = build-asdf-system rec {
@@ -472,7 +499,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 
@@ -522,10 +549,13 @@ let
           runHook postInstall
         '';
 
-        meta.mainProgram = "qlot";
+        meta = {
+          mainProgram = "qlot";
+          homepage = "https://github.com/fukamachi/qlot";
+        };
       };
 
-      fset = super.fset.overrideLispAttrs (oa: {
+      fset = super.fset.overrideLispAttrs (old: {
         systems = [
           "fset"
           "fset/test"
@@ -539,7 +569,7 @@ let
 
       thih-coalton = self.coalton;
       quil-coalton = self.coalton;
-      coalton = super.coalton.overrideLispAttrs (oa: {
+      coalton = super.coalton.overrideLispAttrs (old: {
         systems = [
           "coalton"
           "thih-coalton"
@@ -548,7 +578,7 @@ let
           "quil-coalton/tests"
           "coalton/tests"
         ];
-        lispLibs = oa.lispLibs ++ [ self.fiasco ];
+        lispLibs = old.lispLibs ++ [ self.fiasco ];
         nativeLibs = [ pkgs.mpfr ];
         meta = {
           description = "Statically typed functional programming language that supercharges Common Lisp";

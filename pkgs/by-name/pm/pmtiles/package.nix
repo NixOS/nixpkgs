@@ -3,31 +3,24 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pmtiles";
-  version = "1.28.3";
+  version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
-    tag = "v${version}";
-    hash = "sha256-9deO1SXhQ3/oZg2BC/IWbHb5KKQ7qAklrR956lj8IFY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SFuW/TKKxBGOeyYdHLm7J2w3n8xPjLzSJTIi322WTk0=";
   };
 
-  vendorHash = "sha256-6zsX7rU+D+RUHwXfFZzLQftQ6nSYJhvKIDdsO2vow4A=";
-
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  vendorHash = "sha256-0u/04mpqhpRideIf8eOzgC7ZWNp4P2c2ssQvyWlcD4M=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=v${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -42,4 +35,4 @@ buildGoModule rec {
     teams = [ lib.teams.geospatial ];
     mainProgram = "pmtiles";
   };
-}
+})

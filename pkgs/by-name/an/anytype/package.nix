@@ -3,10 +3,13 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   pkg-config,
   anytype-heart,
   libsecret,
-  electron_37,
+  electron,
+  go,
+  lsof,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
@@ -14,23 +17,26 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.50.5";
+  version = "0.54.11";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HLYYuMtgvF0UHHnThEWSpLIZEvLxNrOtkoXEhSAT24A=";
+    hash = "sha256-HF7bP3Ry3djNQnFDl0v6x9hzMpSLMXyI6UBItgGT+DI=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "aaa83aae39a7dbf59c3c8580be4700edf7481893";
-    hash = "sha256-MOR7peovTYYQR96lOoxyETY0aOH6KcB9vXCqpXKxI/4=";
+    rev = "afa12aeb0cea6c77ce38c3e3bfd082d532948a1c";
+    hash = "sha256-YpOkmm7vW97t19twfLNExRHQvLVcrC+oDtHjwJL9dx8=";
   };
 
-  npmDepsHash = "sha256-ohlHY7zw+GyaNuwI2t7dQj1bQkXH//LiyiHyi2B+/9I=";
+  npmDepsHash = "sha256-/QWHJ2grw34LOEIDn93WDTEpQH001vVtuQgncR2SRYQ=";
+
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -38,18 +44,20 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    go
     copyDesktopItems
   ];
   buildInputs = [ libsecret ];
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
-    "--nodedir=${electron_37.headers}"
+    "--nodedir=${electron.headers}"
   ];
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
     ./0002-remove-grpc-devtools.patch
+    ./0003-remove-desktop-entry.patch
   ];
 
   buildPhase = ''
@@ -63,6 +71,7 @@ buildNpmPackage (finalAttrs: {
     done
 
     npm run build
+    npm run build:nmh
 
     runHook postBuild
   '';
@@ -87,11 +96,14 @@ buildNpmPackage (finalAttrs: {
 
     cp LICENSE.md $out/share
 
-    makeWrapper '${lib.getExe electron_37}' $out/bin/anytype \
+    makeWrapper '${lib.getExe electron}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    wrapProgram $out/lib/anytype/dist/nativeMessagingHost \
+       --prefix PATH : ${lib.makeBinPath [ lsof ]}
 
     runHook postInstall
   '';
@@ -119,15 +131,14 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
-    changelog = "https://community.anytype.io/t/anytype-desktop-${
-      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
-    }-0-released";
+    changelog = "https://github.com/anyproto/anytype-ts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
       autrimpo
       adda
       kira-bruneau
+      xmnlz
     ];
     platforms = [
       "x86_64-linux"

@@ -12,7 +12,7 @@
 
   # nativeBuildInputs for GUI
   gobject-introspection,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 
   # dependencies (required for most functionality)
   pyicu,
@@ -20,39 +20,30 @@
   enableGui ? false,
   # for GUI only
   pygobject3,
-  gtk3,
+  gtk4,
   enableCmd ? false,
   prompt-toolkit,
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyglossary";
-  version = "5.1.1";
+  version = "5.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ilius";
     repo = "pyglossary";
-    tag = version;
-    hash = "sha256-OrySbbStVSz+WF8D+ODK++lKfYJOm9KCfOxDP3snuKY=";
+    tag = finalAttrs.version;
+    hash = "sha256-R0+iPcEuiSWaPecyo1Qf2kFWWzmE7xnZg2ZgFOPWCTU=";
   };
-
-  patches = [
-    # Fixes a few install issues, can be removed in the next release. See:
-    # https://github.com/ilius/pyglossary/pull/684
-    (fetchpatch {
-      url = "https://github.com/ilius/pyglossary/commit/f86c91ed987579cd8a1c7f7f278452901ce725ac.patch";
-      hash = "sha256-ewYeNwD3/aSsNbMazgW/3tBpYAPBZdnVu9LCh7tQZjg=";
-    })
-  ];
 
   build-system = [
     setuptools
   ]
   ++ lib.optionals enableGui [
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   dependencies = [
@@ -68,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals enableGui [
-    gtk3
+    gtk4
   ];
 
   # Many issues with the tests: They require `cd tests` in `preCheck`; Some of
@@ -78,11 +69,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  env = {
-    # The default --help creates permission errors that may be confusing when
-    # observed in the build log.
-    versionCheckProgramArg = "--version";
-  };
 
   pythonImportsCheck = [
     "pyglossary"
@@ -95,4 +81,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pyglossary";
   };
-}
+})

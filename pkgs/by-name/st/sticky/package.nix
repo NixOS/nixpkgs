@@ -15,15 +15,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sticky";
-  version = "1.28";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
-    rev = version;
-    hash = "sha256-6CRkeJ2xuUs3viyYxnrgGFUIakK7ANyVpPZuwU486NM=";
+    rev = finalAttrs.version;
+    hash = "sha256-OPn3SNHeHQ3rw71R3oqV3DHxRPq4Ta+qxwkYeegVxbU=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
@@ -63,19 +63,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      ignoredVersions = ''master.*'';
+      ignoredVersions = "master.*";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sticky notes app for the Linux desktop";
     mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       linsui
       bobby285271
     ];
   };
-}
+})

@@ -10,22 +10,22 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "peering-manager";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
-    tag = "v${version}";
-    sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-CsRLMqUgv4av0owZ/pegERcyyHddxyZffbc8/iTOcVA=";
   };
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs =
     with python.pkgs;
@@ -79,19 +79,19 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     # PYTHONPATH of all dependencies used by the package
     inherit python;
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath finalAttrs.propagatedBuildInputs;
 
     tests = {
       inherit (nixosTests) peering-manager;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://peering-manager.net/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ yureka-wdz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

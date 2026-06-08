@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     tag = finalAttrs.version;
-    hash = "sha256-96NiBE0/sBnIdajKui3pZmR8IGlElbeoyqYEYFWtOuM=";
+    hash = "sha256-Ijm5OyQT5JceF9hDLX4z9BZfTY/XYtSdmpMfjgqzCe4=";
   };
 
   patches = [ ./nocontent.patch ];
@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

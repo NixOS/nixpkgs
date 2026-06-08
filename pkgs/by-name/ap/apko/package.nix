@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "0.30.27";
+  version = "1.2.16";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lter7nuNM62J1+unCgnkG7pU6lvNK3LjXS6FaW8NDjY=";
+    hash = "sha256-RsUoolJ2WOs3wpQilAs6RfpR3YzOhzTvDaxuweErIKs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,11 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-1VKvW34w88Xc5/2h3WrutZK1ziGaLLgwf9bTSSIDF/A=";
+  vendorHash = "sha256-cp29oB3YcqQljeLq4ySOMhV+CXYnQ+ZnDljHn0UzmWs=";
+
+  excludedPackages = [
+    "internal/gen-jsonschema"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,7 +55,7 @@ buildGoModule (finalAttrs: {
   # skip tests on darwin due to some local networking failures
   # `__darwinAllowLocalNetworking = true;` wasn't sufficient for
   # aarch64 or x86_64
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     # some test data include SOURCE_DATE_EPOCH (which is different from our default)
     # and the default version info which we get by unsetting our ldflags
@@ -60,8 +64,9 @@ buildGoModule (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking (apk.chainreg.biz)
-    "-skip=TestInitDB_ChainguardDiscovery"
+    # requires networking (apk.chainreg.biz and dl-cdn.alpinelinux.org)
+    # TestSpecialModeBits fails because of sandbox setuid/setgid restrictions
+    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage|TestLock/apko-discover|TestSpecialModeBits"
   ];
 
   postInstall =
@@ -92,7 +97,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       developer-guy
-      emilylange
     ];
   };
 })

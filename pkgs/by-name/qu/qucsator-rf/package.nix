@@ -11,14 +11,14 @@
   withAdms ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qucsator-rf";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucsator_rf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZH26+FOiBaf20Od9HVHMG8ey0z6XKBnmzUyCjAKB0eM=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thomaslepoix ];
     platforms = lib.platforms.unix;
   };
-}
+})

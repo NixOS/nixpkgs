@@ -6,18 +6,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-klipper-exporter";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
-    rev = "v${version}";
-    sha256 = "sha256-zNRjD2YO7OfcNXF5pukXChxhC5LB88C1EKfiMreMzTs=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-TcGD7WjExo1/rgwVUSPmKFJEQZhttSgBIY3gKyfcwtQ=";
   };
 
-  vendorHash = "sha256-0nbLHZ2WMLMK0zKZuUYz355K01Xspn9svmlFCtQjed0=";
+  vendorHash = "sha256-VebaCzdPGl0hOHRXvwZb4aDzXlDZ57v/QVYzuagvvOM=";
 
   doCheck = true;
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ wulfsta ];
     platforms = lib.platforms.linux;
   };
-}
+})

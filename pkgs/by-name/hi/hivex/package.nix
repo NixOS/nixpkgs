@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.3.24";
 
   src = fetchurl {
-    url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/hivex/hivex-${version}.tar.gz";
     hash = "sha256-pS+kXOzJp4rbLShgXWgmHk8f1FFKd4pUcwE9LMyKGTw=";
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
         --prefix "PATH" : "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Windows registry hive extraction library";
-    license = licenses.lgpl2Only;
+    license = lib.licenses.lgpl2Only;
     homepage = "https://github.com/libguestfs/hivex";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

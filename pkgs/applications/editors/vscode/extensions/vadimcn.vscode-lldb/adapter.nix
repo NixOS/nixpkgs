@@ -4,10 +4,14 @@
   makeWrapper,
   rustPlatform,
   stdenv,
+  codelldb-launch,
 
   pname,
   src,
   version,
+
+  cargoHash,
+  standalone ? false,
 }:
 let
   # debugservers on macOS require the 'com.apple.security.cs.debugger'
@@ -24,17 +28,19 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
-  cargoHash = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
+  inherit cargoHash;
 
   # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
   # The LLDB_* variables are used in adapter/lldb/build.rs.
   "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
   "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
+  LLDB_DYLIB = "${lib.getLib lldb}/lib/liblldb${stdenv.hostPlatform.extensions.sharedLibrary}";
   LLDB_INCLUDE = "${lib.getDev lldb}/include";
-  LLDB_LINK_LIB = "lldb";
-  LLDB_LINK_SEARCH = "${lib.getLib lldb}/lib";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optional standalone codelldb-launch;
 
   buildAndTestSubdir = "adapter";
 
@@ -54,6 +60,10 @@ rustPlatform.buildRustPackage {
     ln -s ${lib.getLib lldb} $out/share/lldb
     makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
+
+    ${lib.optionalString standalone ''
+      cp ${codelldb-launch}/bin/codelldb-launch $out/share/adapter/codelldb-launch
+    ''}
   '';
 
   # Tests fail to build (as of version 1.11.4).

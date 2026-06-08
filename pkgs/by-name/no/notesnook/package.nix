@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.2.4";
+  version = "3.3.21";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -27,19 +27,23 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-n4yDBaDq09idmjRZ+y2zT7rZcI4wsDhMidx9sNox5cM=";
-        aarch64-linux = "sha256-UQFySvvs+paCzt2XSrbYiChEQJIbef3rCOST1r+zZx8=";
-        x86_64-darwin = "sha256-42US8m6ZbGTUNkU0p4y0pgXKiSsjZZHlQhwv2/LDlO4=";
-        aarch64-darwin = "sha256-eJVyuL5nBGMr8WhOK4NOMNSMYBASQZbsbLPLgug7ZNs=";
+        x86_64-linux = "sha256-NmhV+x5HrKBO7BX1bJyjChKQF/j38kQqJ3x0amSXzGU=";
+        aarch64-linux = "sha256-IU4hF/ol4pyh+ABTri2aqwqaB+cfrHLtsF7wrqE+wEY=";
+        x86_64-darwin = "sha256-YhJvkKreWUReEgs4R9lWV0/cx3d0hrjKTHZn0hDsp3k=";
+        aarch64-darwin = "sha256-9CTGpCPJY6sq6JWDpoCTyOTt/vtCazDaoDzFFUzR9zg=";
       }
       .${system} or throwSystem;
+  };
+
+  passthru = {
+    updateScript = ./update.sh;
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
@@ -48,11 +52,8 @@ let
       XChaCha20-Poly1305 & Argon2.
     '';
     homepage = "https://notesnook.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      cig0
-      j0lol
-    ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -68,6 +69,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -92,6 +94,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ _7zz ];

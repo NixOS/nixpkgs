@@ -12,7 +12,19 @@
   atk,
   cairo,
   gdk-pixbuf,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   xorg_sys_opengl,
   util-linux,
   alsa-lib,
@@ -28,12 +40,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exodus";
-  version = "25.28.4";
+  version = "26.1.5";
 
   src = requireFile {
     name = "exodus-linux-x64-${finalAttrs.version}.zip";
     url = "https://downloads.exodus.com/releases/exodus-linux-x64-${finalAttrs.version}.zip";
-    hash = "sha256-AGeFsMHSywC32iaIGI9/VY2YC3gR5bHu33rOWJlyFFM=";
+    hash = "sha256-BClWuL4dTc1lESyEXuDtpGp1K/AxICbpQIaWYLrme1M=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -62,21 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
         atk
         cairo
         gdk-pixbuf
-        xorg.libX11
-        xorg.libxcb
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXi
-        xorg.libXrender
-        xorg.libxshmfence
-        xorg.libXtst
+        libx11
+        libxcb
+        libxcomposite
+        libxcursor
+        libxdamage
+        libxext
+        libxfixes
+        libxi
+        libxrender
+        libxshmfence
+        libxtst
         xorg_sys_opengl
         util-linux
-        xorg.libXrandr
-        xorg.libXScrnSaver
+        libxrandr
+        libxscrnsaver
         alsa-lib
         dbus.lib
         at-spi2-atk
@@ -96,13 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
         $out/Exodus
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mmahut
       rople380
       Crafter

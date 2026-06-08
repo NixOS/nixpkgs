@@ -3,35 +3,39 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
-  version = "0.2.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";
     tag = "v${version}";
-    hash = "sha256-pzoQb5cBzd7Gt2jbai4cr37i5n30y0lfaukhQETSsjA=";
+    hash = "sha256-lp0+mJYyP7Qz/gJCI7+tKh9fZArWs2u1ZusnVUax7A4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     mkdocs
   ];
 
-  # This package has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
   meta = {
     description = "Simple blog generator plugin for MkDocs";
     homepage = "https://fernandocelmer.github.io/mkdocs-simple-blog/";
-    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/v${version}";
+    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };

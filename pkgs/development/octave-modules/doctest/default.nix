@@ -6,17 +6,17 @@
 
 buildOctavePackage rec {
   pname = "doctest";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/oXJ7NnbbdsVfhNOYU/tkkYwKhYs5zKMEjybmbf0Cok=";
+    sha256 = "sha256-dmZpgnz2vNd1AmDKhpNTZW1UEvBNUUv+rRn3VsnSeuk=";
   };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/doctest/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Find and run example code within documentation";
     longDescription = ''
       Find and run example code within documentation. Formatted blocks

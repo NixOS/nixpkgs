@@ -23,12 +23,12 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.6.2";
+  version = "4.7.2";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
+    hash = "sha256-qzA/HLw+QPTdE6qsg8TNqr0DuOgfMrs8UcEnfp1uBpc=";
   };
 
   build-system = with python3.pkgs; [
@@ -155,7 +155,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = callPackage ./update.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
@@ -166,12 +166,12 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://electrum.org/";
     downloadPage = "https://electrum.org/#download";
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      joachifm
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       np
       prusnak
+      ryand56
     ];
     mainProgram = "electrum";
   };

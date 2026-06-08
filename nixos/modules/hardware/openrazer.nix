@@ -6,11 +6,10 @@
 }:
 let
   cfg = config.hardware.openrazer;
-  kernelPackages = config.boot.kernelPackages;
 
   toPyBoolStr = b: if b then "True" else "False";
 
-  daemonExe = "${pkgs.openrazer-daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
+  daemonExe = "${cfg.packages.daemon}/bin/openrazer-daemon --config ${daemonConfFile}";
 
   daemonConfFile = pkgs.writeTextFile {
     name = "razer.conf";
@@ -22,8 +21,8 @@ let
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
       battery_notifier = ${toPyBoolStr cfg.batteryNotifier.enable}
-      battery_notifier_freq = ${builtins.toString cfg.batteryNotifier.frequency}
-      battery_notifier_percent = ${builtins.toString cfg.batteryNotifier.percentage}
+      battery_notifier_freq = ${toString cfg.batteryNotifier.frequency}
+      battery_notifier_percent = ${toString cfg.batteryNotifier.percentage}
 
       [Statistics]
       key_statistics = ${toPyBoolStr cfg.keyStatistics}
@@ -44,10 +43,8 @@ let
   drivers = [
     "razerkbd"
     "razermouse"
-    "razerfirefly"
     "razerkraken"
-    "razermug"
-    "razercore"
+    "razeraccessory"
   ];
 in
 {
@@ -134,6 +131,14 @@ in
           can start and interact with the OpenRazer userspace daemon.
         '';
       };
+
+      packages = {
+        kernel = lib.mkPackageOption pkgs "openrazer kernel" { } // {
+          default = config.boot.kernelPackages.openrazer;
+          defaultText = lib.literalExpression "config.boot.kernelPackages.openrazer";
+        };
+        daemon = lib.mkPackageOption pkgs [ "python3Packages" "openrazer-daemon" ] { };
+      };
     };
   };
 
@@ -145,14 +150,16 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
-    boot.extraModulePackages = [ kernelPackages.openrazer ];
+    boot.extraModulePackages = [ cfg.packages.kernel ];
     boot.kernelModules = drivers;
 
     # Makes the man pages available so you can successfully run
     # > systemctl --user help openrazer-daemon
-    environment.systemPackages = [ pkgs.python3Packages.openrazer-daemon.man ];
+    environment.systemPackages = lib.mkIf (cfg.packages.daemon ? man) [
+      cfg.packages.daemon.man
+    ];
 
-    services.udev.packages = [ kernelPackages.openrazer ];
+    services.udev.packages = [ cfg.packages.kernel ];
     services.dbus.packages = [ dbusServiceFile ];
 
     # A user must be a member of the openrazer group in order to start
@@ -176,9 +183,5 @@ in
         Restart = "always";
       };
     };
-  };
-
-  meta = {
-    maintainers = with lib.maintainers; [ roelvandijk ];
   };
 }

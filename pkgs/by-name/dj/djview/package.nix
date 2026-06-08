@@ -8,11 +8,11 @@
   pkg-config,
   djvulibre,
   libsForQt5,
-  xorg,
+  libxt,
   libtiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "djview";
   version = "4.12.3";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/djvu/djview-${finalAttrs.version}.tar.gz";
     hash = "sha256-F7+5cxq4Bw4BI1OB8I5XsSMf+19J6wMYc+v6GJza9H0=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     djvulibre
     libsForQt5.qtbase
-    xorg.libXt
+    libxt
     libtiff
   ];
 
@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
       popd
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable DjVu viewer (Qt5)";
     mainProgram = "djview";
     homepage = "https://djvu.sourceforge.net/djview4.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       Anton-Latukha
       bryango
     ];
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
       Has CGI-style arguments to configure the view of document (see man).
     '';
   };
-}
+})

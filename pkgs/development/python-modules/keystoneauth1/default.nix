@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.12.0";
+  version = "5.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3RE8Lz3LQY2fdhxzuM1DqW3fqKYStRxXaCI4HznKSug=";
+    hash = "sha256-e5QghNPbJ90oXBMlPN/uELBb4ENtscAeFdx0SQIZen8=";
   };
 
   build-system = [ setuptools ];
@@ -80,10 +80,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneauth1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -20,20 +20,20 @@
   desktop-file-utils,
   versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
-  version = "0.21.0";
+  version = "26.6.1";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    tag = "v${version}";
-    hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fJT5o9GOQB5TIlbqTRcMCaf5OYYW+D19dNPbLFqViCg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
+    inherit (finalAttrs) src;
+    hash = "sha256-Rdne9EQ9QSZ2RlYWEFEy9/OZEdIucQ/nB1Z8MJ0gAsU=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -81,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
   };
-}
+})

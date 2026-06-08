@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.4.1";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
     tag = "v${version}";
-    hash = "sha256-9gGrrFh5xCuX4GjF6a6RRGkpF/rH07Zz0nyKvgwgEkU=";
+    hash = "sha256-KEjiMmD4mY1sG/vRo1QINQw31jk8MNV6m13fU2ENmJM=";
   };
 
   postPatch = ''
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyisy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
     changelog = "https://github.com/automicus/PyISY/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -6,15 +6,15 @@
   dmenu,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dmensamenu";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dotlambda";
     repo = "dmensamenu";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dtQpNDhw1HklEtltYl3yiz54UDLOJWJHNZEuQGaIYbI=";
   };
 
@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication rec {
       inherit dmenu;
     })
   ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     requests
@@ -38,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

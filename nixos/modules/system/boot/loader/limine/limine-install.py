@@ -291,6 +291,12 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     entry += f'comment: {bootspec.label}, built on {time}\n'
     entry += 'kernel_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
     entry += 'cmdline: ' + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip() + '\n'
+
+    # Set framebuffer resolution for Linux boot entries if configured
+    resolution = config('resolution')
+    if resolution is not None:
+        entry += f'resolution: {resolution}\n'
+
     if bootspec.initrd:
         entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
 
@@ -389,7 +395,7 @@ def option_from_config(name: str, config_path: List[str]) -> str:
         return ""
     if isinstance(value, bool):
         value = bool_to_yes_no(value)
-    return f"{name}: {config(*config_path)}\n"
+    return f"{name}: {value}\n"
 
 
 def install_bootloader() -> None:
@@ -424,7 +430,7 @@ def install_bootloader() -> None:
             partition formatted as FAT.
         '''))
 
-    if config('secureBoot', 'enable') and not config('secureBoot', 'createAndEnrollKeys') and not os.path.exists("/var/lib/sbctl"):
+    if config('secureBoot', 'enable') and not config('secureBoot', 'autoGenerateKeys') and not os.path.exists("/var/lib/sbctl"):
         print("There are no sbctl secure boot keys present. Please generate some.")
         sys.exit(1)
 
@@ -473,6 +479,8 @@ def install_bootloader() -> None:
     config_file += option_from_config('interface_resolution', ['style', 'interface', 'resolution'])
     config_file += option_from_config('interface_branding', ['style', 'interface', 'branding'])
     config_file += option_from_config('interface_branding_colour', ['style', 'interface', 'brandingColor'])
+    config_file += option_from_config('interface_help_colour', ['style', 'interface', 'helpColor'])
+    config_file += option_from_config('interface_help_colour_bright', ['style', 'interface', 'helpColorBright'])
     config_file += option_from_config('interface_help_hidden', ['style', 'interface', 'helpHidden'])
     config_file += option_from_config('term_font_scale', ['style', 'graphicalTerminal', 'font', 'scale'])
     config_file += option_from_config('term_font_spacing', ['style', 'graphicalTerminal', 'font', 'spacing'])
@@ -485,13 +493,13 @@ def install_bootloader() -> None:
     config_file += option_from_config('term_margin', ['style', 'graphicalTerminal', 'margin'])
     config_file += option_from_config('term_margin_gradient', ['style', 'graphicalTerminal', 'marginGradient'])
 
-    config_file += textwrap.dedent('''
-        # NixOS boot entries start here
+    config_file += textwrap.dedent(f'''
+        # {config('distroName')} boot entries start here
     ''')
 
     for (profile, gens) in profiles:
         group_name = 'default profile' if profile == 'system' else f"profile '{profile}'"
-        config_file += f'/+NixOS {group_name}\n'
+        config_file += f'/+{config('distroName')} {group_name}\n'
 
         isFirst = True
 
@@ -500,7 +508,7 @@ def install_bootloader() -> None:
             isFirst = False
 
     config_file_path = os.path.join(limine_install_dir, 'limine.conf')
-    config_file += '\n# NixOS boot entries end here\n\n'
+    config_file += f'\n# {config('distroName')} boot entries end here\n\n'
 
     config_file += str(config('extraEntries'))
 
@@ -551,18 +559,21 @@ def install_bootloader() -> None:
 
         if config('secureBoot', 'enable'):
             sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
-            if config('secureBoot', 'createAndEnrollKeys'):
-                print("TEST MODE: creating and enrolling keys")
+            if not os.path.exists("/var/lib/sbctl") and config('secureBoot', 'autoGenerateKeys'):
+                print('auto generating keys')
                 try:
                     subprocess.run([sbctl, 'create-keys'])
                 except:
                     print('error: failed to create keys', file=sys.stderr)
                     sys.exit(1)
-                try:
-                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
-                except:
-                    print('error: failed to enroll keys', file=sys.stderr)
-                    sys.exit(1)
+                if config('secureBoot', 'autoEnrollKeys', 'enable'):
+                    try:
+                        command = [sbctl, 'enroll-keys']
+                        command.extend(config('secureBoot', 'autoEnrollKeys', 'extraArgs'))
+                        subprocess.run(command)
+                    except:
+                        print('error: failed to enroll keys', file=sys.stderr)
+                        sys.exit(1)
 
             print('signing limine...')
             try:

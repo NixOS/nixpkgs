@@ -47,10 +47,10 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://people.redhat.com/~rjones/augeas/";
     description = "OCaml bindings for Augeas";
-    license = with licenses; lgpl21Plus;
-    platforms = with platforms; linux;
+    license = with lib.licenses; lgpl21Plus;
+    platforms = with lib.platforms; linux;
   };
 }

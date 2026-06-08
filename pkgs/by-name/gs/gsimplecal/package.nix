@@ -8,14 +8,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsimplecal";
   version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "dmedvinsky";
     repo = "gsimplecal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OaXZ/ch/Os6oi6V75Sy+QHeIGolwtieecFuLy4998yc=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gsimplecal";
   };
-}
+})

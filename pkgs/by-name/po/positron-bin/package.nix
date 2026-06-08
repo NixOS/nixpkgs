@@ -18,11 +18,14 @@
   patchelf,
   openssl,
   stdenv,
-  xorg,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
 }:
 let
   pname = "positron-bin";
-  version = "2025.12.0-167";
+  version = "2026.02.1-5";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,18 +33,18 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
-        hash = "sha256-GrABm5PJFZ1ugb4Lj3y/Ynnt/RTkY0DMk3GZKqVAlk0=";
+        url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
+        hash = "sha256-wQ/ctA9q8i5hyi86VKF8cC/mDHVU1DRt1vnFBKdAAJI=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-WP8ULCMY268av8W0Op0j6P6ry8MwTjNsjV1iJV50wTg=";
+        hash = "sha256-AW4jueFtdvrmIAm+d5/qjyViaSpue51dbyU4NYs3vaE=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-3Z4mRN5WOV0wj51TzoyC0wfU1Zu6wEAb1gTH5IFQRIg=";
+        hash = "sha256-aTVzJCsMARXciasGv7l/syFb3V81Ii6gVl6sBrEPFzM=";
       };
 
   buildInputs = [
@@ -57,10 +60,10 @@ stdenv.mkDerivation {
     nss
     stdenv.cc.cc
     openssl
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libxkbfile
+    libx11
+    libxcomposite
+    libxdamage
+    libxkbfile
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     blas
@@ -130,11 +133,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
     ];
@@ -142,7 +145,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ]
-    ++ platforms.darwin;
+      "aarch64-darwin"
+    ];
   };
 }

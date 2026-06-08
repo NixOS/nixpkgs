@@ -11,16 +11,16 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   libxkbcommon,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
   wayland-protocols,
   wayland,
-  xxHash,
+  xxhash,
   nerd-fonts,
   lcms2,
   librsync,
@@ -39,33 +39,32 @@
   zsh,
   fish,
   nixosTests,
-  go_1_24,
-  buildGo124Module,
+  go_1_26,
+  buildGo126Module,
   nix-update-script,
   makeBinaryWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.44.0";
-  format = "other";
+  version = "0.47.1";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-5MBYj1d/KhTFcijLMLXpmHPeuSAXuOjzjganUpWnVF4=";
+    hash = "sha256-/FOeJiC9SNE/k7SzXl5nmwdfKiFlKa0C0IuIph4cRxQ=";
   };
 
   goModules =
-    (buildGo124Module {
+    (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-Afk/I/+4KHcFJ4r3/RSs+G5V6aTa+muwERoMD0wi6Io=";
+      vendorHash = "sha256-SuLcY8M+F9HijinaNr6jmsGlJ00o5LJN+Y04cfjyQ/c=";
     }).goModules;
 
   buildInputs = [
@@ -76,7 +75,7 @@ buildPythonApplication rec {
     librsync
     matplotlib
     openssl.dev
-    xxHash
+    xxhash
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
@@ -87,13 +86,13 @@ buildPythonApplication rec {
     fontconfig
     libunistring
     libcanberra
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     libxkbcommon
-    libXi
-    libXext
+    libxi
+    libxext
     wayland-protocols
     wayland
     dbus
@@ -110,14 +109,14 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go_1_24
+    go_1_26
     fontconfig
     makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns # For the png2icns tool.
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -143,11 +142,6 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
-    # Fix timeout issue in Fish integration tests after recent Fish release
-    (fetchpatch {
-      url = "https://github.com/kovidgoyal/kitty/commit/456fa8691a94f99fae0cef7f19dd2c85c208445a.patch";
-      hash = "sha256-WLPodki5cA9Y3pcVwSV7EUmLEGGXkJDYX1MsHIzPk2s=";
-    })
   ];
 
   hardeningDisable = [
@@ -155,8 +149,10 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  env.CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+  };
 
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -218,29 +214,36 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
-      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
-      --replace test_ssh_copy no_test_ssh_copy \
-      --replace test_ssh_env_vars no_test_ssh_env_vars
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration \
-      --replace test_zsh_integration no_test_zsh_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+    '';
 
   checkPhase = ''
     runHook preCheck
@@ -316,17 +319,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

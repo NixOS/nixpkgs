@@ -42,7 +42,7 @@ let
     src = fetchFromGitHub {
       owner = "textlint";
       repo = "textlint-rule-helper";
-      rev = "refs/tags/v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-SVeL/3KC/yazSGsmn5We8fJAuVqfcspzN7i2a4+EOlI=";
     };
 

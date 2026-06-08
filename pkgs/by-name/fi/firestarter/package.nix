@@ -98,9 +98,9 @@ stdenv.mkDerivation rec {
       [ glibc.static ]
   );
 
-  NIX_LDFLAGS = lib.optionals withCuda [
-    "-L${cudatoolkit}/lib/stubs"
-  ];
+  env = lib.optionalAttrs withCuda {
+    NIX_LDFLAGS = "-L${cudatoolkit}/lib/stubs";
+  };
 
   cmakeFlags = [
     "-DFIRESTARTER_BUILD_HWLOC=OFF"
@@ -122,16 +122,16 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       astro
       marenz
     ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "FIRESTARTER";
   };
 }

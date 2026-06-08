@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   makePythonPath,
-  pythonOlder,
   python,
   click,
   dbus-python,
@@ -26,20 +25,19 @@
   watchdog,
   xattr,
   pytestCheckHook,
+  gitUpdater,
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maestral";
   version = "1.9.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
 
@@ -68,8 +66,14 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
-    "--prefix PYTHONPATH : $out/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath finalAttrs.finalPackage.dependencies)
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -114,18 +118,24 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maestral" ];
 
-  passthru.tests.maestral = nixosTests.maestral;
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+      rev-prefix = "v";
+    };
+    tests.maestral = nixosTests.maestral;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Dropbox client for macOS and Linux";
     mainProgram = "maestral";
     homepage = "https://maestral.app";
-    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       peterhoeg
       sfrijters
     ];
   };
-}
+})

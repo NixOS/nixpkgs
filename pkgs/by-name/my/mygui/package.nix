@@ -13,7 +13,7 @@
   ogre,
   libGL,
   libGLU,
-  libX11,
+  libx11,
 }:
 
 let
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   # Tools are disabled due to compilation failures.

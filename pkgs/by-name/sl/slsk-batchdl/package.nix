@@ -22,7 +22,7 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace \
         slsk-batchdl/slsk-batchdl.csproj \
         slsk-batchdl.Tests/slsk-batchdl.Tests.csproj \
-        --replace-fail "<TargetFramework>net6.0</TargetFramework>" "<TargetFramework>net8.0</TargetFramework>"
+        --replace-fail "<TargetFramework>net6.0</TargetFramework>" "<TargetFramework>net10.0</TargetFramework>"
   '';
 
   projectFile = "slsk-batchdl/slsk-batchdl.csproj";
@@ -31,7 +31,7 @@ buildDotnetModule (finalAttrs: {
   # See: https://github.com/fiso64/slsk-batchdl/issues/111
   # testProjectFile = "slsk-batchdl.Tests/slsk-batchdl.Tests.csproj";
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   nugetDeps = ./deps.json;
   executables = [ "sldl" ];
 

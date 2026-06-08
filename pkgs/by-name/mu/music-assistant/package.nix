@@ -1,6 +1,7 @@
 {
   lib,
-  python3,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
   ffmpeg_7-headless,
   nixosTests,
@@ -9,52 +10,42 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      music-assistant-frontend = self.callPackage ./frontend.nix { };
+  pythonPackages = python3Packages.overrideScope (
+    prev: final: {
+      music-assistant-frontend = prev.callPackage ./frontend.nix { };
 
-      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.47";
+      music-assistant-models = final.music-assistant-models.overridePythonAttrs (oldAttrs: {
+        version = "1.1.115";
 
-        src = fetchFromGitHub {
-          owner = "music-assistant";
-          repo = "models";
-          tag = version;
-          hash = "sha256-NNKF61CRBe+N9kY+JUa77ClHSJ9RhpsiheMg7Ytyq2M=";
+        src = oldAttrs.src.override {
+          hash = "sha256-oEXL0B8JNH4PcltpES375ov7QGs+gtYKlMGr1B7BlKY=";
         };
-
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail "0.0.0" "${version}"
-        '';
       });
-    };
-  };
+    }
+  );
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
   providerDependencies = lib.concatMap (
-    provider: (providerPackages.${provider} python.pkgs)
+    provider: (providerPackages.${provider} pythonPackages)
   ) providers;
 
-  pythonPath = python.pkgs.makePythonPath providerDependencies;
+  pythonPath = pythonPackages.makePythonPath providerDependencies;
 in
 
 assert
-  (lib.elem "airplay" providers)
-  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
+  (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
 
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.6.3";
+  version = "2.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-vvhynBor5tj5n53Dm3K4ZOkFZ5LM7bFevOCdZjJsbbM=";
+    hash = "sha256-m91q/8XYoZ5Azu79fKD0euRCuf29w3vj5cxdFheDsmI=";
   };
 
   patches = [
@@ -66,36 +57,58 @@ python.pkgs.buildPythonApplication rec {
     # Look up librespot from PATH at runtime
     ./librespot.patch
 
+    # Look up shairport-sync from PATH at runtime
+    ./shairport-sync.patch
+
+    # Look up cliraop/cliap2 from PATH at runtime
+    ./cliraop-cliap2.patch
+
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
 
     # Fix running the built-in snapcast server
     ./builtin-snapcast-server.patch
+
+    # Fix running the webserver pytests in our nix sandbox, which only has a loopback interface,
+    # by not skipping over its loopback IPv4 address:
+    #
+    #     """Return all Config Entries for this core module (if any)."""
+    #     ip_addresses = await get_ip_addresses()
+    # >   default_publish_ip = ip_addresses[0]
+    #                          ^^^^^^^^^^^^^^^
+    # E   IndexError: tuple index out of range
+    ./fix-webserver-tests-in-sandbox.patch
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "==" ">="
 
-    rm -rv music_assistant/providers/spotify/bin
+    rm -rv \
+      music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
+      music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
+      music_assistant/providers/ariacast_receiver/bin/ariacast_* \
+      music_assistant/providers/spotify/bin/librespot-*
+
+    found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
+    if [[ -n $found_bins ]]; then
+      echo "Found binaries that should be replaced with packages built from source: $found_bins"
+      exit 2
+    fi
   '';
 
-  build-system = with python.pkgs; [
+  build-system = with pythonPackages; [
     setuptools
   ];
 
   pythonRelaxDeps = [
     "aiohttp"
     "aiosqlite"
-    "certifi"
-    "colorlog"
     "cryptography"
     "mashumaro"
     "orjson"
-    "pillow"
-    "podcastparser"
     "xmltodict"
-    "zeroconf"
   ];
 
   pythonRemoveDeps = [
@@ -104,79 +117,95 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
-      aiohttp
-      chardet
-      mashumaro
-      orjson
-    ]
-    ++ optional-dependencies.server;
-
-  optional-dependencies = with python.pkgs; {
-    server = [
+      # Only packages required in pyproject.toml
       aiodns
       aiofiles
       aiohttp
-      aiorun
+      aiohttp-asyncmdnsresolver
+      aiohttp-fast-zlib
+      aiohttp-socks
+      aiortc
       aiosqlite
-      asyncio-throttle
+      awesomeversion
       brotli
       certifi
+      chardet
       colorlog
       cryptography
-      eyed3
-      faust-cchardet
+      getmac
+      gql
       ifaddr
+      librosa
       mashumaro
-      memory-tempfile
       music-assistant-frontend
       music-assistant-models
       mutagen
+      numpy
       orjson
       pillow
       podcastparser
+      propcache
+      pyjwt
       python-slugify
       shortuuid
       unidecode
       xmltodict
       zeroconf
+
+      # Used in music_assistant/controllers/webserver/helpers/auth_providers.py
+      # but somehow not part of pyproject.toml
+      hass-client
+    ]
+    ++ gql.optional-dependencies.all
+    ++ pyjwt.optional-dependencies.crypto;
+
+  optional-dependencies = with pythonPackages; {
+    # Required subset of optional-dependencies in pyproject.toml
+    test = [
+      pytest-aiohttp
+      pytest-cov-stub
+      syrupy
     ];
   };
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
-      pytest-aiohttp
-      pytest-cov-stub
-      pytest-timeout
       pytestCheckHook
-      syrupy
-      pytest-timeout
     ]
     ++ lib.concatAttrValues optional-dependencies
-    ++ (providerPackages.jellyfin python.pkgs)
-    ++ (providerPackages.opensubsonic python.pkgs);
+    ++ (lib.concatMap (provider: providerPackages.${provider} python.pkgs) [
+      "audible"
+      "dlna"
+      "jellyfin"
+      "opensubsonic"
+      "sendspin"
+      "snapcast"
+      "tidal"
+    ]);
 
   disabledTestPaths = [
-    # blocks in poll()
-    "tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "tests/core/test_server_base.py::test_start_and_stop_server"
-    "tests/core/test_server_base.py::test_events"
-    # not compatible with the required py-subsonic version
-    "tests/providers/opensubsonic/test_parsers.py"
+    # no multicast support in build sandbox:
+    # "OSError: [Errno 19] No such device"
+    "tests/core/test_genres.py"
+    # provider is missing dependencies
+    "tests/providers/apple_music"
+    "tests/providers/bandcamp"
+    "tests/providers/kion_music"
+    "tests/providers/nicovideo"
+    "tests/providers/yandex_music"
+    "tests/providers/zvuk_music"
+    # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
+    "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
 
-  postFixup = ''
-    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
-    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
-  '';
-
   passthru = {
     inherit
-      python
+      pythonPackages
       pythonPath
       providerPackages
       providerNames
@@ -185,6 +214,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''

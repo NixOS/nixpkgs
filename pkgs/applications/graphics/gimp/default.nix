@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   babl,
+  bash-completion,
   cfitsio,
   gegl,
   gtk3,
@@ -41,6 +42,7 @@
   python3,
   libexif,
   gettext,
+  glibcLocales,
   wrapGAppsHook3,
   libxslt,
   gobject-introspection,
@@ -49,14 +51,16 @@
   perl,
   appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
   llvmPackages,
   gexiv2,
   harfbuzz,
-  mypaint-brushes1,
+  makeFontsConf,
+  mypaint-brushes,
   libwebp,
   libheif,
   gjs,
@@ -67,7 +71,7 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  fetchpatch,
+  qoi,
 }:
 
 let
@@ -79,7 +83,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.6";
+  version = "3.2.4";
 
   outputs = [
     "out"
@@ -90,17 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
+    hash = "sha256-cxK8U+nG0tAFbKe5PxxrmHB5Rt2TT3FMIbh0bstgFYg=";
   };
 
   patches = [
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15257
-    (fetchpatch {
-      name = "fix-gegl-bevel-test.patch";
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/2fd12847496a9a242ca8edc448d400d3660b8009.patch";
-      hash = "sha256-pjOjyzZxxl+zRqThXBwCBfYHdGhgaMI/IMKaL3XGAMs=";
-    })
-
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
     (replaceVars ./remove-cc-reference.patch {
@@ -127,10 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
+    glibcLocales
     wrapGAppsHook3
     libxslt # for xsltproc
     gobject-introspection
     perl
+    python
     vala
 
     # for docs
@@ -150,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream # for library
     babl
+    bash-completion
     cfitsio
     gegl
     gtk3
@@ -187,11 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
     libheif
     python
     libexif
-    xorg.libXpm
-    xorg.libXmu
+    libxpm
+    libxmu
     glib-networking
     libmypaint
-    mypaint-brushes1
+    mypaint-brushes
+    qoi
 
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
     adwaita-icon-theme
@@ -222,6 +223,8 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
     "-Dicc-directory=/run/current-system/sw/share/color/icc"
@@ -247,6 +250,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+
+    # Silence fontconfig warnings about missing config during tests
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ ];
+    };
   };
 
   postPatch = ''
@@ -254,9 +262,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GIMP is executed at build time so we need to fix this.
     # TODO: Look into if we can fix the interp thing.
-    chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+    chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
-      plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+      plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
   '';
 
   preBuild =
@@ -313,9 +321,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major finalAttrs.version}.0";
-    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
-    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
+    apiVersion = "${
+      toString (
+        lib.toInt (lib.versions.major finalAttrs.version)
+        + (if lib.versions.minor finalAttrs.version == "99" then 1 else 0)
+      )
+    }.0";
+    appVersion = lib.versions.majorMinor finalAttrs.version;
+    majorVersion = lib.warn "gimp.majorVersion is deprecated in favour of gimp.apiVersion and gimp.appVersion" finalAttrs.passthru.apiVersion;
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.apiVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.apiVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 
@@ -323,12 +338,21 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ jtojnar ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    donationPage = "https://www.gimp.org/donating/";
+    maintainers = with lib.maintainers; [
+      jtojnar
+      bddvlpr
+    ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
+    broken = stdenv.hostPlatform.isBigEndian;
     mainProgram = "gimp";
   };
 })

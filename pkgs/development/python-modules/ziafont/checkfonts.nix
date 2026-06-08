@@ -85,4 +85,8 @@
     url = "https://github.com/google/fonts/raw/main/ofl/arizonia/Arizonia-Regular.ttf";
     hash = "sha256-jfHBC8FdCroUXUWZwlyvrYPbaG0s76QmGfBptvG7zmI=";
   }
+  {
+    url = "https://mirrors.ctan.org/fonts/cinzel/truetype/CinzelDecorative-Regular.ttf";
+    hash = "sha256-OKi38GSSsvwkC5pFs/uDyZWpydVIKZ7AIjma8nfJDEY=";
+  }
 ]

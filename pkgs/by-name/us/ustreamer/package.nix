@@ -21,15 +21,15 @@
   withJanus ? true,
   withPython ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ustreamer";
-  version = "6.40";
+  version = "6.56";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
-    tag = "v${version}";
-    hash = "sha256-jKltFQsx8Q9+TMTOg1p6nljII72CLEg6VYe60/KojUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-02mEZ14fwCrdmXUGhyKrkoo5IZ6/pDJZ/oREaZZe1RA=";
   };
 
   buildInputs = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ustreamer; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pikvm/ustreamer";
     description = "Lightweight and fast MJPG-HTTP streamer";
     longDescription = ''
@@ -95,12 +95,12 @@ stdenv.mkDerivation rec {
       µStreamer is a part of the Pi-KVM project designed to stream VGA and HDMI
       screencast hardware data with the highest resolution and FPS possible.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tfc
       matthewcroughan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ustreamer";
   };
-}
+})

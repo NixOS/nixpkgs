@@ -3,26 +3,19 @@
   betamax,
   blinker,
   buildPythonPackage,
-  coverage,
   fetchFromGitHub,
   flask,
   flask-caching,
   flask-login,
   flask-sqlalchemy,
-  flit,
+  flit-core,
   freezegun,
   oauthlib,
-  pallets-sphinx-themes,
-  pillow,
-  pytest,
   pytest-mock,
   pytestCheckHook,
   requests,
   requests-oauthlib,
   responses,
-  sphinx,
-  sphinxcontrib-seqdiag,
-  sphinxcontrib-spelling,
   sqlalchemy,
   urlobject,
   werkzeug,
@@ -40,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-rKHC0G5S7l52QSrbbweMii68AZuBAgf6tYsJdPKIeUk=";
   };
 
-  build-system = [ flit ];
+  build-system = [ flit-core ];
 
   dependencies = [
     flask
@@ -52,36 +45,21 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    docs = [
-      betamax
-      pallets-sphinx-themes
-      pillow
-      sphinx
-      sphinxcontrib-seqdiag
-      sphinxcontrib-spelling
-      sqlalchemy
-    ];
-
     signals = [ blinker ];
-
     sqla = [ sqlalchemy ];
-
-    test = [
-      betamax
-      coverage
-      flask-caching
-      flask-login
-      flask-sqlalchemy
-      freezegun
-      oauthlib
-      pytest
-      pytest-mock
-      responses
-      sqlalchemy
-    ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    betamax
+    flask-caching
+    flask-login
+    flask-sqlalchemy
+    freezegun
+    pytest-mock
+    pytestCheckHook
+    responses
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flask_dance" ];
 

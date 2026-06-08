@@ -31,7 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace "Makefile" \
-      --replace depmod \#
+      --replace-fail depmod \#
+  '';
+
+  postPatch = ''
+    substituteInPlace hpuefi.h \
+      --replace-fail '&((p)->flags)' '(unsigned long *)&((p)->flags)'
   '';
 
   meta = {

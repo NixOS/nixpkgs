@@ -37,6 +37,7 @@ let
     "Compiler/codegen"
     "precompile"
     "compileall"
+    "Profile"
   ]
   ++ lib.optionals (lib.versionOlder version "1.12") [
     "compiler/codegen" # older versions' test was in lowercase
@@ -48,6 +49,7 @@ let
     "InteractiveUtils"
     # Test requires network access
     "Sockets"
+    "Distributed"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702

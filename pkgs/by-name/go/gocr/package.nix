@@ -5,12 +5,12 @@
   tk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gocr";
   version = "0.52";
 
   src = fetchurl {
-    url = "https://www-e.uni-magdeburg.de/jschulen/ocr/gocr-${version}.tar.gz";
+    url = "https://www-e.uni-magdeburg.de/jschulen/ocr/gocr-${finalAttrs.version}.tar.gz";
     sha256 = "11l6gds1lrm8lwrrsxnm5fjlwz8q1xbh896cprrl4psz21in946z";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -22,7 +22,7 @@ let
       ./ircd.conf
     ];
     inherit (pkgs)
-      ircdHybrid
+      ircd-hybrid
       coreutils
       su
       iproute2

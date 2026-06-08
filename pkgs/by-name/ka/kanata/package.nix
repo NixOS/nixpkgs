@@ -16,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IicVuJZBHzBv9SNGQuWIIaLq2qpWfn/jMFh9KPvAThs=";
+    hash = "sha256-7rGV0nfI/ntvByz3NQs/2Sa2q/Ml8O3XRD14Mbt5fIU=";
   };
 
-  cargoHash = "sha256-2DTL1u17jUFiRoVe7973L5/352GtKte/vakk01SSRwY=";
+  cargoHash = "sha256-Qxa90fMZ3c1+jlyxbIkC94DtSQSKFNr2V8GiLII6PNc=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     (writeShellScriptBin "sw_vers" ''
@@ -67,15 +67,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         null;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       linj
       auscyber
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "kanata";
   };
 })

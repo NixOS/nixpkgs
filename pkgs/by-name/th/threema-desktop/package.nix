@@ -10,26 +10,26 @@
 }:
 
 let
-  version = "1.2.48";
+  version = "1.2.50";
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
-    rev = "refs/tags/${version}";
-    hash = "sha256-u1rzKFDrLxU/o7Oc2o/WBwbAncNWKJ9GAUBaNDPViZI=";
+    tag = version;
+    hash = "sha256-SVVzrgK4VdkMEVRQ9PUftB4ktchTq7JgawVz8AxMSZs=";
   };
 
   threema-web = buildNpmPackage rec {
     pname = "threema-web";
-    version = "2.6.2";
+    version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "threema-ch";
       repo = "threema-web";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-GmyWKJdDgiRS7XxNjCyvt92Bn48kpP3+ZsfRouyUCM0=";
+      tag = "v${version}";
+      hash = "sha256-yDJbTkeCsQ3ToEpLoPC9ow0fbJhrvyrkrtYqIFEuhBU=";
     };
 
-    npmDepsHash = "sha256-KDkJ2jdtHVK40b0ja/Nj6t5Bcl5frh7rzteWD74AKOM=";
+    npmDepsHash = "sha256-g6NqQYhGuMSwVq94CCDOUzC4e0GdWKqDBfQY2pfitsw=";
     npmBuildScript = "dist";
 
     nativeBuildInputs = [
@@ -54,7 +54,7 @@ let
     inherit version;
     src = electronSrc;
     sourceRoot = "${src.name}/app";
-    npmDepsHash = "sha256-mafB7lC1YpIZ71R6IT3TnSzFDieK4AsAzIqpWcy9480=";
+    npmDepsHash = "sha256-zSrW8/XBJejYWKuDMIkZLYnFd3M9JG8/mjxuvGWfQqw=";
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     dontNpmBuild = true;
     prePatch = ''
@@ -73,7 +73,7 @@ buildNpmPackage rec {
   inherit version;
   src = electronSrc;
 
-  npmDepsHash = "sha256-A7XvzURCCM0+ISlSLpnreFIxKku4FnVdWLsF2WxQfBY=";
+  npmDepsHash = "sha256-5HDYcJAZ06lI3ZCO2zHi3FCNUUe06vy/Vggo0K1P7q8=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -111,17 +111,16 @@ buildNpmPackage rec {
       ln -s $out/opt/threema/$dir $out/opt/threema/dist/src/$dir
     done
 
-    mkdir -p $out/share/pixmaps
-    cp $out/opt/threema/assets/icons/svg/consumer.svg $out/share/pixmaps/threema.svg
+    install -Dm644 $out/opt/threema/assets/icons/svg/consumer.svg $out/share/icons/hicolor/scalable/threema.svg
 
     makeWrapper ${electron}/bin/electron $out/bin/threema \
       --add-flags $out/opt/threema/dist/src/main.js
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Threema, a privacy-focused end-to-end encrypted mobile messenger";
     homepage = "https://threema.ch";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "threema";
     maintainers = [ lib.maintainers.jonhermansen ];
     platforms = [ "x86_64-linux" ];

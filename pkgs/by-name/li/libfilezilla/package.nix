@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchsvn,
+  fetchurl,
   autoreconfHook,
   gettext,
   gnutls,
@@ -11,14 +11,15 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfilezilla";
-  version = "0.51.1";
+  version = "0.55.5";
 
-  src = fetchsvn {
-    url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11305";
-    hash = "sha256-s+KeMlKJMz88lQ6d3dpcgZhCkcPW0cHNHALteMWLhpk=";
+  src = fetchurl {
+    # Upstream download link was made unstable on purpose
+    # See https://trac.filezilla-project.org/ticket/13186
+    url = "https://sources.archlinux.org/other/libfilezilla/libfilezilla-${finalAttrs.version}.tar.xz";
+    hash = "sha256-SQwDLvB8WOurdpe3xRAk3XceovgPxM3JKQjDSDV+BT4=";
   };
 
   nativeBuildInputs = [
@@ -38,12 +39,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

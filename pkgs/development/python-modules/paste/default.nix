@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "paste";
   version = "3.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pasteorg";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "paste" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
     changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

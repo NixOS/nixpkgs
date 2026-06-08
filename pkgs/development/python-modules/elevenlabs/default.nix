@@ -12,20 +12,16 @@
   websockets,
 }:
 
-let
-  version = "2.25.0";
-  tag = "v${version}";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "elevenlabs";
-  inherit version;
+  version = "2.50.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elevenlabs";
     repo = "elevenlabs-python";
-    inherit tag;
-    hash = "sha256-H0jq5Hmw433CMA0cWBk6H8I5GNs6eaW0v2cvJNUxxuY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OIkELIVPXjSqp9L7GqWwodLUrXpHa6GYKSeHF0fbhIk=";
   };
 
   build-system = [ poetry-core ];
@@ -49,10 +45,10 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/elevenlabs/elevenlabs-python/releases/tag/${tag}";
+    changelog = "https://github.com/elevenlabs/elevenlabs-python/releases/tag/${finalAttrs.src.tag}";
     description = "Official Python API for ElevenLabs Text to Speech";
     homepage = "https://github.com/elevenlabs/elevenlabs-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -353,7 +353,7 @@ let
                 pkgs.pkg-config
               ];
 
-              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+              buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant_2 ];
 
               postBuild = ''
                 NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
@@ -773,7 +773,7 @@ let
           mozc = super.mozc.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace src/unix/emacs/mozc.el \
-                --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+                --replace '"mozc_emacs_helper"' '"${pkgs.mozc}/bin/mozc_emacs_helper"'
             '';
           });
 
@@ -857,18 +857,6 @@ let
           auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
 
           auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
-
-          auto-virtualenv = super.auto-virtualenv.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "do-not-error-if-the-optional-projectile-is-not-available.patch";
-                  url = "https://github.com/marcwebbie/auto-virtualenv/pull/14/commits/9a068974a4e12958200c12c6a23372fa736523c1.patch";
-                  hash = "sha256-bqrroFf5AD5SHx6uzBFdVwTv3SbFiO39T+0x03Ves/k=";
-                })
-              ];
-            }
-          );
 
           aws-ec2 = ignoreCompilationError super.aws-ec2; # elisp error
 
@@ -1020,6 +1008,9 @@ let
           # missing optional dependencies
           conda = addPackageRequires super.conda [ self.projectile ];
 
+          # https://github.com/NixOS/nixpkgs/issues/483425
+          consult = addPackageRequires super.consult [ self.flymake ];
+
           # needs network during compilation, also native-ice
           consult-gh = ignoreCompilationError (
             super.consult-gh.overrideAttrs (old: {
@@ -1148,10 +1139,6 @@ let
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
 
-          # missing optional dependencies
-          # https://github.com/isamert/empv.el/pull/96
-          empv = addPackageRequires super.empv [ self.hydra ];
-
           enotify = ignoreCompilationError super.enotify; # elisp error
 
           # https://github.com/leathekd/ercn/issues/6
@@ -1206,6 +1193,13 @@ let
 
           # https://github.com/syl20bnr/flymake-elixir/issues/4
           flymake-elixir = addPackageRequires super.flymake-elixir [ self.flymake-easy ];
+
+          flymake-hadolint = super.flymake-hadolint.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace flymake-hadolint.el \
+                --replace-fail 'flymake-hadolint-program "hadolint"' 'flymake-hadolint-program "${lib.getExe pkgs.hadolint}"'
+            '';
+          });
 
           flyparens = ignoreCompilationError super.flyparens; # elisp error
 
@@ -1413,6 +1407,33 @@ let
           latex-table-wizard = mkHome super.latex-table-wizard;
 
           leaf-defaults = ignoreCompilationError super.leaf-defaults; # elisp error
+
+          liberime = super.liberime.overrideAttrs (
+            let
+              libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+            in
+            prevAttrs: {
+              buildInputs = prevAttrs.buildInputs ++ [
+                pkgs.librime
+              ];
+              nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [
+                pkgs.which
+              ];
+              postBuild =
+                prevAttrs.postBuild or ""
+                + "\n"
+                + ''
+                  make CC=$CC SUFFIX=${libExt}
+                '';
+              postInstall =
+                prevAttrs.postInstall or ""
+                + "\n"
+                + ''
+                  rm -rv $out/share/emacs/site-lisp/elpa/liberime-*/{src,emacs-module,Makefile}
+                  install src/liberime-core${libExt} $out/share/emacs/site-lisp/elpa/liberime-*
+                '';
+            }
+          );
 
           # https://github.com/abo-abo/lispy/pull/683
           # missing optional dependencies
@@ -1763,14 +1784,6 @@ let
           weibo = ignoreCompilationError super.weibo; # elisp error
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
-
-          ws-butler = super.ws-butler.overrideAttrs (old: {
-            # work around https://github.com/NixOS/nixpkgs/issues/436534
-            src = pkgs.fetchFromSavannah {
-              repo = "emacs/nongnu";
-              inherit (old.src) rev outputHash outputHashAlgo;
-            };
-          });
 
           # https://github.com/nicklanasa/xcode-mode/issues/28
           xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];

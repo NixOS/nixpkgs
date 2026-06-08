@@ -27,11 +27,11 @@ buildGoModule rec {
     "-X github.com/metal-stack/v.BuildDate=${gittime}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line client for FI-TS Finance Cloud Native services";
     homepage = "https://github.com/fi-ts/cloudctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0xaf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0xaf ];
     mainProgram = "cloudctl";
   };
 }

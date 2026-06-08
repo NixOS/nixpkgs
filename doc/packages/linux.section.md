@@ -119,11 +119,10 @@ $ pkgs/os-specific/linux/kernel/update.sh
 The change gets submitted like this:
 
 * File a PR against `staging-nixos`.
-  * Add a `backport release-XX.XX` label for an automated backport.
-    We don't expect many other changes on that branch to require a backport, hence there's no such branch for stable.
+  * Add a `backport staging-nixos-XX.XX` label for an automated backport.
     By using an additional PR, we get the automatic backport against stable without manual cherry-picks.
-* Merge into `staging-nixos`.
-* File as PR from `staging-nixos` against `master`.
+* Merge into `staging-nixos` or `staging-nixos-XX.XX`.
+* File as PR from `staging-nixos` against `master` or `staging-nixos-XX.XX` against `release-xx.xx`.
 * When all status checks are green, merge.
 
 ### Add a new (major) version of the Linux kernel {#sec-linux-add-new-kernel-version}
@@ -149,12 +148,9 @@ The change gets submitted like this:
     ```
   * Update `linux_latest` to the new attribute.
 * __SQUASH__ the changes into the `linux: init at …` commit.
-* If a new hardened is available:
-  * Instantiate a `linux_X_Y_hardened = hardenedKernelsFor kernels.linux_X_Y { };` in `kernels` and
-    `linux_X_Y_hardened = hardenedKernelFor kernels.linux_X_Y { };` in the `packages`-section.
-  * Make sure to remove the hardened variant of the previous kernel version unless it's LTS.
-    We only support the latest and latest LTS version of hardened.
-* If no new hardened kernel is available:
-  * Keep the previously latest kernel until its mainline counterpart gets removed.
-    After that `linux_hardened` points to the latest LTS supported by hardened.
-* __SQUASH__ the changes into the `linux_X_Y_hardened: init at …` commit.
+
+### Policy for accepting new kernel flavours {#sec-linux-new-kernels}
+
+No new downstream kernels are accepted into nixpkgs. That includes kernels that use the mainline
+sourcetree, but a different configuration. Kernels for extended hardware support should go
+to [nixos-hardware](github.com/NixOS/nixos-hardware) instead.

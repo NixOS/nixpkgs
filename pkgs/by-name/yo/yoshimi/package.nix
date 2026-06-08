@@ -11,28 +11,27 @@
   libGLU,
   libjack2,
   libsndfile,
-  libXdmcp,
+  libxdmcp,
   lv2,
   minixml,
-  pcre,
   pkg-config,
   readline,
-  xorg,
+  libpthread-stubs,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yoshimi";
-  version = "2.3.5.2";
+  version = "2.3.6.2";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = "yoshimi";
-    rev = version;
-    hash = "sha256-X4g4AhPHg2ezHnAm8fWunatZgr3/PZxibzACplWogo8=";
+    tag = finalAttrs.version;
+    hash = "sha256-jSCOsSJdG1dt/i5iTaQngagYnokPNsNExF2fJxxUWSY=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out
@@ -53,18 +52,17 @@ stdenv.mkDerivation rec {
     libGLU
     libjack2
     libsndfile
-    libXdmcp
+    libxdmcp
     lv2
     minixml
-    pcre
     readline
-    xorg.libpthreadstubs
+    libpthread-stubs
     zlib
   ];
 
   cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality software synthesizer based on ZynAddSubFX";
     longDescription = ''
       Yoshimi delivers the same synthesizer capabilities as
@@ -72,9 +70,9 @@ stdenv.mkDerivation rec {
       functionality on Linux
     '';
     homepage = "https://yoshimi.github.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "yoshimi";
   };
-}
+})

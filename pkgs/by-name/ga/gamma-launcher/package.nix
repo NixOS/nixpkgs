@@ -1,19 +1,30 @@
 {
   lib,
   python3Packages,
+  _7zz,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  runCommand,
 }:
+
+let
+  # gamma-launcher looks for the "7z", not "7zz"
+  _7z = runCommand "7z" { } ''
+    mkdir -p $out/bin
+    ln -s ${_7zz}/bin/7zz $out/bin/7z
+  '';
+in
 python3Packages.buildPythonApplication rec {
   pname = "gamma-launcher";
-  version = "2.5";
+  version = "3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mord3rca";
     repo = "gamma-launcher";
     tag = "v${version}";
-    hash = "sha256-qzjfgDFimEL6vtsJBubY6fHsokilDB248WwHJt3F7fI=";
+    hash = "sha256-bvlNmpl2L9MAhZMyHwosXrypH1CQrSI1RQwo+sXO7/w=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -30,8 +41,21 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/gamma-launcher \
+    --prefix PATH : "${
+      lib.makeBinPath [
+        _7z
+      ]
+    }"
+  '';
 
   meta = {
     description = "Python cli to download S.T.A.L.K.E.R. GAMMA";
@@ -39,7 +63,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Mord3rca/gamma-launcher";
     mainProgram = "gamma-launcher";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ DrymarchonShaun ];
+    maintainers = with lib.maintainers; [
+      DrymarchonShaun
+      bbigras
+    ];
     platforms = lib.platforms.linux;
   };
 }

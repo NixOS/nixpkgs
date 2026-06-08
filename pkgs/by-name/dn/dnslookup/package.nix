@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnslookup";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ameshkov";
     repo = "dnslookup";
-    tag = "v${version}";
-    hash = "sha256-zgEW4ANIlwF0f6YqTQicGhGgLc9RaL7Xy0wg/ICzOK4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RxplKQ21mskowAoMpgl4OVRyO7y89XS9CDcFd0RZVIg=";
   };
 
-  vendorHash = "sha256-pdnKYsXBw/IjakUyQym4thnO3gXgvwNm80Ha8AUVt54=";
+  vendorHash = "sha256-DSicC/NbLOku7kYw1Ketur5qGk3Nh66Kj3NZoP7X524=";
 
   meta = {
-    changelog = "https://github.com/ameshkov/dnslookup/releases/tag/v${version}";
+    changelog = "https://github.com/ameshkov/dnslookup/releases/tag/v${finalAttrs.version}";
     description = "Simple command line utility to make DNS lookups to the specified server";
     homepage = "https://github.com/ameshkov/dnslookup";
     license = lib.licenses.mit;
     mainProgram = "dnslookup";
     maintainers = [ lib.maintainers.philiptaron ];
   };
-}
+})

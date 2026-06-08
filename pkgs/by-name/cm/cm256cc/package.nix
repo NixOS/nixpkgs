@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cm256cc";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "cm256cc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sAbc8yieGolV8lowiwFBVsd1HNYl1oxJwIw1kc3iI3U=";
   };
 
@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast GF(256) Cauchy MDS Block Erasure Codec in C++";
     homepage = "https://github.com/f4exb/cm256cc";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       aciceri
       alkeryn
     ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
-}
+})

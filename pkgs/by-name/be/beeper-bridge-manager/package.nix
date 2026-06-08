@@ -6,14 +6,14 @@
   python3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bbctl";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "beeper";
     repo = "bridge-manager";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bNnansZNshWp70LQQsa6+bS+LJxpCzdTkL2pX+ksrP0=";
   };
 
@@ -34,6 +34,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.heywoodlh ];
     mainProgram = "bbctl";
-    changelog = "https://github.com/beeper/bridge-manager/releases/tag/v${version}";
+    changelog = "https://github.com/beeper/bridge-manager/releases/tag/v${finalAttrs.version}";
   };
-}
+})

@@ -195,6 +195,11 @@
     "hash": "sha256-EXvojddPu+9JKgOG9NSQgUTfWq1RpOYw7adxDPKDJ6o="
   },
   {
+    "pname": "JetBrains.Annotations.Sources",
+    "version": "2025.2.2",
+    "hash": "sha256-9Aui689O6j0E34FSwTLGEwar5etuswWg3FU7+mIzpdU="
+  },
+  {
     "pname": "libsodium",
     "version": "1.0.18.2",
     "hash": "sha256-gjaW2AYXQSb3LLjtQDjWSxkTmEiqIoIb7NFx0+AlrQs="

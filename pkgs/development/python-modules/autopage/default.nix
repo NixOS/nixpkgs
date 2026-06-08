@@ -1,29 +1,47 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  fixtures,
+  less,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autopage";
-  version = "0.5.2";
+  version = "0.6.0";
+  pyproject = true;
 
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gmmW10xaqfS2kWGVVHMSrGOEusOBC4UXBj8pMkgle3I=";
+  src = fetchFromGitHub {
+    owner = "zaneb";
+    repo = "autopage";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oBZoGVvgUhrfcEUvmhIN7Wnsv+SvkC553LAhHGCVIBQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    fixtures
+    less
+    pytestCheckHook
+  ]
+  ++ fixtures.optional-dependencies.streams;
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/zaneb/autopage/issues/7
+    "test_end_to_end"
+  ];
 
   pythonImportsCheck = [ "autopage" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/zaneb/autopage/releases/tag/${finalAttrs.src.tag}";
     description = "Library to provide automatic paging for console output";
     homepage = "https://github.com/zaneb/autopage";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

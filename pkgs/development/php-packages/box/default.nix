@@ -16,11 +16,10 @@ php82.buildComposerProject2 (finalAttrs: {
     hash = "sha256-giJAcH2R9hAlUTbwRi7rbmUP+WV8Nfb9XmoHHs4RcbI=";
   };
 
-  vendorHash = "sha256-A/hAw0J4Q3kun6soxI6h7kpyGef9q0EFg8HAQHHZUro=";
+  vendorHash = "sha256-K/mgYRp8vM+PC9AEJDZ9lW/XZkQ+YxHSnEY70VVX9FY=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";

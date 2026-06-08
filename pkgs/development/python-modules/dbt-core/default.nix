@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   agate,
@@ -35,19 +35,19 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-core";
-  version = "1.10.15";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    tag = "v${version}";
-    hash = "sha256-n/tU34XUf/s4m/SbPth/jlfo2xKhQk1hVjP3vLA/67s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
   };
 
-  sourceRoot = "${src.name}/core";
+  sourceRoot = "${finalAttrs.src.name}/core";
 
   pythonRelaxDeps = [
     "agate"
@@ -60,11 +60,12 @@ buildPythonPackage rec {
     "pathspec"
     "protobuf"
     "pydantic"
+    "sqlparse"
     "urllib3"
   ];
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -120,11 +121,11 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch
     ];
     mainProgram = "dbt";
   };
-}
+})

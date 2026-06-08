@@ -5,28 +5,31 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hiredis";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
-    rev = "v${version}";
-    sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1qOwuszjiAQLKc7byKw45wVKUSvkTw7HfvRcejbr4OA=";
   };
 
   buildInputs = [
     openssl
   ];
 
-  PREFIX = "\${out}";
-  USE_SSL = 1;
+  env = {
+    PREFIX = "\${out}";
+    USE_SSL = 1;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/redis/hiredis";
     description = "Minimalistic C client for Redis >= 1.2";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hythera ];
+    platforms = lib.platforms.all;
   };
-}
+})

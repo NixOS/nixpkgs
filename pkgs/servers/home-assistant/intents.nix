@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,20 +19,36 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "home-assistant-intents";
-  version = "2025.12.2";
-  pyproject = true;
+let
+  intents = fetchFromGitHub {
+    owner = "OHF-Voice";
+    repo = "intents";
+    rev = "4178d174018d408209879c44e98aa150335a1656";
+    hash = "sha256-xMH3lZaI4sSvicSMFaGCeYlcr5SrhA8nB/krrN0kyQo=";
+  };
+in
 
-  disabled = pythonOlder "3.9";
+buildPythonPackage (finalAttrs: {
+  pname = "home-assistant-intents";
+  version = "2026.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "intents-package";
-    tag = version;
+    # https://github.com/OHF-Voice/intents-package/issues/14
+    tag = "2026.5.5";
     fetchSubmodules = true;
-    hash = "sha256-7fav3h8/Eu4Q4I0deDWov5UP5aEyS/ypIGLvuQlGWCI=";
+    hash = "sha256-R6PPZSiDiFvB+lNxyuIHwMIgpQvVI0oqrucnw4jnYNU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '2026.5.5' '2026.6.1'
+
+    rm -rf intents
+    ln -sf ${intents} intents
+  '';
 
   build-system = [
     setuptools
@@ -62,11 +77,12 @@ buildPythonPackage rec {
     "intents/tests"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${finalAttrs.src.tag}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
-    license = licenses.cc-by-40;
-    teams = [ teams.home-assistant ];
+    # https://github.com/OHF-Voice/intents-package/issues/12
+    license = lib.licenses.cc-by-40;
+    teams = [ lib.teams.home-assistant ];
   };
-}
+})

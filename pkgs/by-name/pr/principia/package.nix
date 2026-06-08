@@ -8,7 +8,6 @@
 
   curl,
   freetype,
-  glew,
   gtk3,
   libGL,
   libjpeg,
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2025.04.05";
+  version = "2026.06.06";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
     rev = finalAttrs.version;
-    hash = "sha256-cXtc1E4iJf3//UyzZzhky/NV7zk4959xSwGLHdCeyk0=";
+    hash = "sha256-FLMEOpgESsGYvVejea59xbBcVWGUp7qgZLCDugolMXk=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     freetype
-    glew
     gtk3
     libGL
     libjpeg
@@ -57,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://principia-web.se/wiki/Changelog#${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
@@ -65,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

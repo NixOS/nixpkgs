@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   alsa-lib,
   bison,
   fcft,
@@ -21,10 +21,10 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilerrors,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-errors,
+  libxcb-wm,
   waylandSupport ? true,
   x11Support ? true,
 }:
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
   version = "1.11.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "yambar";
     rev = finalAttrs.version;
@@ -76,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals x11Support [
-    xcbutil
-    xcbutilcursor
-    xcbutilerrors
-    xcbutilwm
+    libxcb-util
+    libxcb-cursor
+    libxcb-errors
+    libxcb-wm
   ];
 
   strictDeps = true;

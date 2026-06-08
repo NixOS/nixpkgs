@@ -11,7 +11,7 @@
   nixosTests,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy";
   version = "3.4.2";
   pyproject = true;
@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2OFav2HaQq/RphmZxLyL1n3suwzt1Y/d4h33EdbStjk=";
   };
 
@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
       gst-plugins-good
       gst-plugins-ugly
       gst-plugins-rs
+      gst-libav
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pipewire ];
 
@@ -70,4 +71,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.fpletz ];
     hydraPlatforms = [ ];
   };
-}
+})

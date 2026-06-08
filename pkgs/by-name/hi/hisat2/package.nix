@@ -8,15 +8,15 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hisat2";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "DaehwanKimLab";
     repo = "hisat2";
-    rev = "v${version}";
-    sha256 = "0lmzdhzjkvxw7n5w40pbv5fgzd4cz0f9pxczswn3d4cr0k10k754";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Ub7Oe363bU+R1xGiWVDkbXGV0PWJ5x2D9de+jTJSwOA=";
   };
 
   nativeBuildInputs = [
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
        $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graph based aligner";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://daehwankimlab.github.io/hisat2/";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with lib.maintainers; [ jbedo ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
   };
 
-}
+})

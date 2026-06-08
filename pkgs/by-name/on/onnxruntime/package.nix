@@ -1,10 +1,10 @@
 {
+  lib,
   config,
   stdenv,
-  lib,
   fetchFromGitHub,
-  fetchpatch,
-  abseil-cpp_202407,
+  abseil-cpp_202508,
+  buildPackages,
   cmake,
   cpuinfo,
   eigen,
@@ -14,7 +14,6 @@
   howard-hinnant-date,
   libpng,
   nlohmann_json,
-  perl,
   pkg-config,
   python3Packages,
   removeReferencesTo,
@@ -23,98 +22,148 @@
   protobuf,
   microsoft-gsl,
   darwinMinVersionHook,
-  pythonSupport ? true,
+  pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
   rocmSupport ? config.rocmSupport,
+  coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
   cudaPackages ? { },
   rocmPackages,
 }@inputs:
 
 let
-  version = "1.22.2";
-
-  src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "onnxruntime";
-    tag = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-X8Pdtc0eR0iU+Xi2A1HrNo1xqCnoaxNjj4QFm/E3kSE=";
-  };
-
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
   inherit (cudaPackages) cuda_nvcc;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
-  mp11 = fetchFromGitHub {
+  # TODO: update the following dependencies according to:
+  # https://github.com/microsoft/onnxruntime/blob/v<VERSION>/cmake/deps.txt
+
+  mp11-src = fetchFromGitHub {
+    name = "mp11-src";
     owner = "boostorg";
     repo = "mp11";
     tag = "boost-1.82.0";
     hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
-  safeint = fetchFromGitHub {
+  safeint-src = fetchFromGitHub {
+    name = "safeint-src";
     owner = "dcleblanc";
     repo = "safeint";
     tag = "3.0.28";
     hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
-  onnx = fetchFromGitHub {
+  onnx-src = fetchFromGitHub {
+    name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.17.0";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
+    tag = "v1.21.0";
+    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
   };
 
-  cutlass = fetchFromGitHub {
+  cutlass-src = fetchFromGitHub {
+    name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.5.1";
-    hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
+    tag = "v4.4.2";
+    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
   };
 
-  dlpack = fetchFromGitHub {
+  dlpack-src = fetchFromGitHub {
+    name = "dlpack-src";
     owner = "dmlc";
     repo = "dlpack";
     rev = "5c210da409e7f1e51ddf445134a4376fdbd70d7d";
     hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
   };
 
+  coremltools-src = fetchFromGitHub {
+    name = "coremltools-src";
+    owner = "apple";
+    repo = "coremltools";
+    tag = "7.1";
+    hash = "sha256-kajQFHpl+4UK6fp+rM8TP0GiqIFYXPVFc2x1p19rBSw=";
+  };
+
+  fp16-src = fetchFromGitHub {
+    name = "fp16-src";
+    owner = "Maratyszcza";
+    repo = "FP16";
+    rev = "0a92994d729ff76a58f692d3028ca1b64b145d91";
+    hash = "sha256-m2d9bqZoGWzuUPGkd29MsrdscnJRtuIkLIMp3fMmtRY=";
+  };
+
+  psimd-src = fetchFromGitHub {
+    name = "psimd-src";
+    owner = "Maratyszcza";
+    repo = "psimd";
+    rev = "072586a71b55b7f8c584153d223e95687148a900";
+    hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
+  };
+
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
-effectiveStdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  inherit src version;
+  version = "1.26.0";
+
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "onnxruntime";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
+  };
 
   patches = [
-    # https://github.com/microsoft/onnxruntime/pull/24583
-    (fetchpatch {
-      name = "fix-compilation-with-gcc-15.patch";
-      url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
-      hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
-    })
-    # Handle missing default logger when cpuinfo initialization fails in the build sandbox
-    # TODO: Remove on next release
-    # https://github.com/microsoft/onnxruntime/issues/10038
-    # https://github.com/microsoft/onnxruntime/pull/15661
-    # https://github.com/microsoft/onnxruntime/pull/20509
-    ./cpuinfo-logging.patch
-  ]
-  ++ lib.optionals cudaSupport [
-    # We apply the referenced 1064.patch ourselves to our nix dependency.
-    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
-    ./nvcc-gsl.patch
+    # Skip execinfo include on musl
+    # https://github.com/microsoft/onnxruntime/pull/25726
+    ./musl-execinfo.patch
+    # Add missing include which is only needed on musl (is implied in other includes on glibc)
+    # https://github.com/microsoft/onnxruntime/pull/26969
+    ./musl-cstdint.patch
+
+    # Fix build of unit tests with musl libc
+    # https://github.com/microsoft/onnxruntime/issues/9155
+    # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
+    ./remove-MATH_NO_EXCEPT-macro.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+    echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
+  ''
+  + ''
+    substituteInPlace onnxruntime/core/platform/posix/env.cc --replace-fail \
+      "return PathString{};" \
+      "return PathString(\"$out/lib/\");"
+  ''
+  + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/onnxruntime.cmake \
+      --replace-fail "INSTALL_NAME_DIR @rpath" "INSTALL_NAME_DIR $out/lib"
+  ''
+  + lib.optionalString rocmSupport ''
+    patchShebangs tools/ci_build/hipify-perl
+  ''
+  # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
+  + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
+    rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
+  '';
+
+  postBuild = lib.optionalString pythonSupport ''
+    ${python3Packages.python.interpreter} ../setup.py bdist_wheel
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
-    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -132,9 +181,6 @@ effectiveStdenv.mkDerivation rec {
   ]
   ++ lib.optionals isCudaJetson [
     cudaPackages.autoAddCudaCompatRunpath
-  ]
-  ++ lib.optionals rocmSupport [
-    perl # for tools/ci_build/hipify-perl
   ];
 
   buildInputs = [
@@ -144,6 +190,7 @@ effectiveStdenv.mkDerivation rec {
     libpng
     nlohmann_json
     microsoft-gsl
+    protobuf
     zlib
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
@@ -174,6 +221,7 @@ effectiveStdenv.mkDerivation rec {
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.hipblas
+    rocmPackages.hipblaslt
     rocmPackages.hipcub
     rocmPackages.hipfft
     rocmPackages.hiprand
@@ -183,6 +231,7 @@ effectiveStdenv.mkDerivation rec {
     rocmPackages.rocrand
     rocmPackages.rocthrust
     rocmPackages.miopen
+    rocmPackages.migraphx
     rocmPackages.rccl
     rocmPackages.rocm-smi
     rocmPackages.roctracer
@@ -191,17 +240,18 @@ effectiveStdenv.mkDerivation rec {
     (darwinMinVersionHook "13.3")
   ];
 
-  nativeCheckInputs = [
-    gtest
-  ]
-  ++ lib.optionals pythonSupport (
+  nativeCheckInputs = lib.optionals pythonSupport (
     with python3Packages;
     [
+      onnx
       pytest
       sympy
-      onnx
     ]
   );
+
+  checkInputs = [
+    gtest
+  ];
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -211,43 +261,44 @@ effectiveStdenv.mkDerivation rec {
   ]
   ++ lib.optionals pythonSupport [ "dist" ];
 
+  separateDebugInfo = true;
+
   enableParallelBuilding = true;
 
   cmakeDir = "../cmake";
 
   cmakeFlags = [
+    # Library updates and similar often cause build failures with -Werror.
+    # There is utility in this for upstream, but for Nixpkgs it mostly causes
+    # churn to work around, so we make warnings non-fatal.
+    "--compile-no-warning-as-error"
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202407.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint-src}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
-    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
-    (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
+    (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
+    (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
-  ]
-  ++ lib.optionals (effectiveStdenv.cc.isClang || rocmSupport) [
-    # Disable -Werror from COMPILE_WARNING_AS_ERROR target property
-    "--compile-no-warning-as-error"
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
-    # Werror and cudnn_frontend deprecations make for a bad time.
-    "--compile-no-warning-as-error"
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass-src}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
@@ -260,28 +311,45 @@ effectiveStdenv.mkDerivation rec {
     # Incompatible with packaged version, far too slow to build vendored version
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL" false)
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
+  ]
+  ++ lib.optionals coremlSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_COREMLTOOLS" "${coremltools-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FP16" "${fp16-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PSIMD" "${psimd-src}")
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # needed for psimd
   ];
 
-  env = lib.optionalAttrs rocmSupport {
-    MIOPEN_PATH = rocmPackages.miopen;
-    # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
-    # fatal error: 'rocrand/rocrand.h' file not found
-    HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
-      rocmPackages.hipblas
-      rocmPackages.hipcub
-      rocmPackages.hiprand
-      rocmPackages.hipsparse
-      rocmPackages.rocblas
-      rocmPackages.rocprim
-      rocmPackages.rocrand
-      rocmPackages.rocthrust
-    ];
-  };
+  env =
+    lib.optionalAttrs effectiveStdenv.hostPlatform.isLinux {
+      NIX_LDFLAGS = "-z,noexecstack";
+    }
+    // lib.optionalAttrs rocmSupport {
+      MIOPEN_PATH = rocmPackages.miopen;
+      # HIP steps fail to find ROCm libs when not in HIPFLAGS, causing
+      # fatal error: 'rocrand/rocrand.h' file not found
+      HIPFLAGS = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+        rocmPackages.hipblas
+        rocmPackages.hipcub
+        rocmPackages.hiprand
+        rocmPackages.hipsparse
+        rocmPackages.rocblas
+        rocmPackages.rocprim
+        rocmPackages.rocrand
+        rocmPackages.rocthrust
+      ];
+    }
+    // lib.optionalAttrs effectiveStdenv.hostPlatform.isMusl {
+      NIX_CFLAGS_COMPILE = "-DFLATBUFFERS_LOCALE_INDEPENDENT=0";
+      GTEST_FILTER = "*:-ContribOpTest.StringNormalizer*";
+    };
 
   doCheck =
     !(
       cudaSupport
       || rocmSupport
+      || coremlSupport
+      # cross-compiled test binaries can't execute on the build platform
+      || (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform)
       || builtins.elem effectiveStdenv.buildPlatform.system [
         # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
         "aarch64-linux"
@@ -296,42 +364,26 @@ effectiveStdenv.mkDerivation rec {
   hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
     "nostrictaliasing"
   ];
+  hardeningDisable = lib.optional effectiveStdenv.hostPlatform.isMusl "fortify";
 
-  postPatch = ''
-    substituteInPlace cmake/libonnxruntime.pc.cmake.in \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
-    echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
-
-    # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
-    substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
-      "GetRuntimePath() const { return PathString(); }" \
-      "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
-  ''
-  + lib.optionalString rocmSupport ''
-    patchShebangs tools/ci_build/hipify-perl
-  ''
-  + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
-    # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
-    rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
-  '';
-
-  postBuild = lib.optionalString pythonSupport ''
-    ${python3Packages.python.interpreter} ../setup.py bdist_wheel
-  '';
-
+  # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
   postInstall = ''
-    # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
     install -m644 -Dt $out/include \
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
-      ../include/onnxruntime/core/session/onnxruntime_*.h
+      ../include/onnxruntime/core/session/onnxruntime_*.h \
+      ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
+
+  strictDeps = true;
 
   # See comments in `cudaPackages.nccl`
   postFixup = lib.optionalString cudaSupport ''
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
+
+  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module
@@ -353,7 +405,7 @@ effectiveStdenv.mkDerivation rec {
       compatibility.
     '';
     homepage = "https://github.com/microsoft/onnxruntime";
-    changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/onnxruntime/releases/tag/${finalAttrs.src.tag}";
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
@@ -361,5 +413,9 @@ effectiveStdenv.mkDerivation rec {
       puffnfresh
       ck3d
     ];
+    #  [libprotobuf ERROR /build/source/src/google/protobuf/descriptor_database.cc:642] File already
+    # exists in database: onnx/onnx-ml.proto
+    # https://github.com/onnx/onnx/issues/6094
+    broken = withFullProtobuf;
   };
-}
+})

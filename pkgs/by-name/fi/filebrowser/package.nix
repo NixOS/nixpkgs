@@ -2,41 +2,49 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  buildNpmPackage,
-  pnpm_9,
+  stdenvNoCC,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  nodejs-slim,
+  pnpm_10,
   nix-update-script,
   nixosTests,
 }:
-let
-  version = "2.44.1";
 
-  pnpm = pnpm_9;
+let
+  version = "2.63.5";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    rev = "v${version}";
-    hash = "sha256-ln7Dst+sN99c3snPU7DrIGpwKBz/e4Lz+uOknmm6sxg=";
+    tag = "v${version}";
+    hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
-  frontend = buildNpmPackage rec {
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "filebrowser-frontend";
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
-    npmDeps = pnpmDeps;
+    nativeBuildInputs = [
+      nodejs-slim
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_10
+    ];
 
-    pnpmDeps = pnpm.fetchDeps {
-      inherit
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
+      fetcherVersion = 3;
+      pnpm = pnpm_10;
+      hash = "sha256-UwTA7Eogp2GrvmXDbdfGBTJS3DuOTJ42e6fHlQxSHoA=";
     };
 
     installPhase = ''
@@ -47,13 +55,14 @@ let
 
       runHook postInstall
     '';
-  };
+  });
+
 in
 buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-aVtL64Cm+nqum/qHFvplpEawgMXM2S6l8QFrJBzLVtU=";
+  vendorHash = "sha256-ofeQkbvBfCpu2g1CLAwUZAZISyAOz+0smEZRx/koj/8=";
 
   excludedPackages = [ "tools" ];
 
@@ -66,18 +75,24 @@ buildGoModule {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
     inherit frontend;
     tests = {
       inherit (nixosTests) filebrowser;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oakenshield ];
+    changelog = "https://github.com/filebrowser/filebrowser/releases/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
   };
 }

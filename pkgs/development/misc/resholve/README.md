@@ -32,7 +32,7 @@ Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 >   solutions to resolve the scripts separately, but produce a single package.
 
 `resholve.writeScript` and `resholve.writeScriptBin` support a _single_
-`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution--but it _does_ still require the `scripts` attr.
+`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution, but it _does_ still require the `scripts` attr.
 
 ## Basic `resholve.mkDerivation` Example
 
@@ -210,7 +210,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
+> via `nixpkgs.resholve` (though protections against run-time use of Python 2 in Nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into `nix-shell`).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:

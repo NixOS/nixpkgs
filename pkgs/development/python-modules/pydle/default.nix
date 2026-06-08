@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   nix-update-script,
   poetry-core,
@@ -13,8 +13,7 @@ buildPythonPackage rec {
   pname = "pydle";
   version = "1.1.0";
   pyproject = true;
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "shiz";
     repo = "pydle";
     tag = "v${version}";

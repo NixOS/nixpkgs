@@ -3,9 +3,14 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  coreutils,
-  bash,
+  makeWrapper,
   gawk,
+  bc,
+  jq,
+  wireplumber,
+  pipewire,
+  coreutils,
+  gnugrep,
   libpulseaudio,
   alsa-lib,
   libnotify,
@@ -13,14 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "i3-volume";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
     rev = "v${version}";
-    hash = "sha256-vmyfEXJ/5TRWIJQCblYcy8owI03F+ARNAEd0ni5ublM=";
+    hash = "sha256-IuJK03qW/WIK1K2gWJu3V1mVJM1wJx4IAcNKUBxtXf0=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     libpulseaudio
@@ -35,8 +42,21 @@ stdenv.mkDerivation rec {
 
     install -Dm755 volume $out/bin/i3-volume
     mkdir -p $out/share/doc/i3-volume/
-    cp -a i3volume-alsa.conf $out/share/doc/i3-volume/i3volume-alsa.conf
-    cp -a i3volume-pulseaudio.conf $out/share/doc/i3-volume/i3volume-pulseaudio.conf
+    cp -a lib $out/bin/lib
+    cp -a example.conf $out/share/doc/i3-volume/example.conf
+
+    wrapProgram "$out/bin/i3-volume" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gawk
+          bc
+          jq
+          wireplumber
+          pipewire
+          coreutils
+          gnugrep
+        ]
+      }
 
     runHook postInstall
   '';

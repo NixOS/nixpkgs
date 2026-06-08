@@ -9,14 +9,15 @@
   nix-update-script,
   testers,
   ravedude,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ravedude";
   version = "0.2.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ar2oQx7dKKfzkM3FMcJXiPHxNa0KcMRht38q+NgowfU=";
   };
 
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [ udev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   postInstall = ''
     wrapProgram $out/bin/ravedude --suffix PATH : ${lib.makeBinPath [ avrdude ]}
@@ -37,22 +38,22 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = ravedude;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to easily flash code onto an AVR microcontroller with avrdude";
     homepage = "https://crates.io/crates/ravedude";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       rvarago
       liff
     ];
     mainProgram = "ravedude";
   };
-}
+})

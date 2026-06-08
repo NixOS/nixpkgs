@@ -20,7 +20,7 @@ let
   ntpIP = "192.0.2.1";
 in
 {
-  name = "systemd-timesyncd";
+  name = "systemd-timesyncd-nscd-dnssec";
   nodes.machine =
     {
       pkgs,
@@ -44,15 +44,13 @@ in
 
       # Enable systemd-resolved with DNSSEC and use the local DNS as a name server
       services.resolved.enable = true;
-      services.resolved.dnssec = "true";
+      services.resolved.settings.Resolve.DNSSEC = true;
       networking.nameservers = [ eth1IP ];
 
       # Configure systemd-timesyncd to use our NTP hostname
       services.timesyncd.enable = lib.mkForce true;
       services.timesyncd.servers = [ ntpHostname ];
-      services.timesyncd.extraConfig = ''
-        FallbackNTP=${ntpHostname}
-      '';
+      services.timesyncd.settings.Time.FallbackNTP = ntpHostname;
 
       # The debug output is necessary to determine whether systemd-timesyncd successfully resolves our NTP hostname or not
       systemd.services.systemd-timesyncd.environment.SYSTEMD_LOG_LEVEL = "debug";

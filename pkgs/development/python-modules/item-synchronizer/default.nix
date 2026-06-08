@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "item-synchronizer";
   version = "1.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
@@ -19,11 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-+mviKtCLlJhYV576Q07kcFJvtls5qohKSrqZtBqE/s4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'bidict = "^0.21.4"' 'bidict = "^0.23"'
-  '';
-
   nativeBuildInputs = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "bidict"
+    "bubop"
+  ];
 
   propagatedBuildInputs = [
     bidict
@@ -32,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "item_synchronizer" ];
 
-  meta = with lib; {
+  meta = {
     description = "";
     homepage = "https://github.com/bergercookie/item_synchronizer";
     changelog = "https://github.com/bergercookie/item_synchronizer/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

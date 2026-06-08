@@ -1,5 +1,7 @@
 {
-  xorg,
+  libxi,
+  libxext,
+  libx11,
   lib,
   stdenv,
   libev,
@@ -7,23 +9,23 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmousepasteblock";
   version = "1.4";
   src = fetchFromGitHub {
     owner = "milaq";
     repo = "XMousePasteBlock";
     hash = "sha256-uHlHGVnIro6X4kRp79ibtqMmiv2XQT+zgbQagUxdB0c=";
-    rev = version;
+    rev = finalAttrs.version;
   };
   makeFlags = [
     "PREFIX=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
-  buildInputs = with xorg; [
-    libX11
-    libXext
-    libXi
+  buildInputs = [
+    libx11
+    libxext
+    libxi
     libev
   ];
   nativeBuildInputs = [ pkg-config ];
@@ -34,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "xmousepasteblock";
   };
-}
+})

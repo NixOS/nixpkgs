@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   siobrultech-protocols,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "greeneye-monitor";
   version = "5.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jkeljo";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "greeneye.monitor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Receive data packets from GreenEye Monitor";
     homepage = "https://github.com/jkeljo/greeneye-monitor";
     changelog = "https://github.com/jkeljo/greeneye-monitor/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

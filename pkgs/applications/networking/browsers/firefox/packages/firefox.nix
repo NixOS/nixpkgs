@@ -9,14 +9,14 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "146.0";
+  version = "151.0.3";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "db6664310cdcdede832b29dea533b345a3ac86f9df7813118d44b1ec2c4a32e4de2b6e98044385ca6f6026eb3a9994c486a1ddb8b6f4ae7589ed46b122c05630";
+    sha512 = "511723e5cf042abb66cbeda89b78d42de8d1b53544565670173f3e69c2a7ceefc76468c90576221418bfc9b122151ec117978caa4823cfb9b80797f3064bd895";
   };
 
   meta = {
-    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+    changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Web browser built from Firefox source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [

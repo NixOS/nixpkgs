@@ -114,9 +114,9 @@ in
         enable = true;
         keyboards.arsenik.config = ''
           (defvar
-            tap_timeout ${builtins.toString cfg.tap_timeout}
-            hold_timeout ${builtins.toString cfg.hold_timeout}
-            long_hold_timeout ${builtins.toString cfg.long_hold_timeout}
+            tap_timeout ${toString cfg.tap_timeout}
+            hold_timeout ${toString cfg.hold_timeout}
+            long_hold_timeout ${toString cfg.long_hold_timeout}
           )
           (include ${src}/defsrc/${defsrc}.kbd)
           (include ${src}/deflayer/${base}.kbd)

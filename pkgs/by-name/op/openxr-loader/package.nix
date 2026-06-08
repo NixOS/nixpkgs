@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cmake,
   python3,
-  libX11,
-  libXxf86vm,
-  libXrandr,
+  libx11,
+  libxxf86vm,
+  libxrandr,
   vulkan-headers,
   libGL,
   vulkan-loader,
@@ -14,15 +14,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openxr-loader";
-  version = "1.1.51";
+  version = "1.1.54";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
-    tag = "release-${version}";
-    hash = "sha256-NEArzegPZNL0zRbnUHrNbNhBtj0IJP+uha1ehzwB7wA=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-7aip1ymZqQ7XQottD9jVb7SBPAlGaj6e27tH6aXYc2I=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXxf86vm
-    libXrandr
     vulkan-headers
     libGL
     vulkan-loader
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libx11
+    libxxf86vm
+    libxrandr
     wayland
   ];
 
@@ -45,8 +47,10 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-    "layers"
-  ];
+  ]
+  # layers don't currently build on darwin
+  # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/582
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "layers";
 
   # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
   postPatch = ''
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$layers/share"
     mv "$out/share/openxr" "$layers/share"
     # Use absolute paths in manifests so no LD_LIBRARY_PATH shenanigans are necessary
@@ -65,11 +69,11 @@ stdenv.mkDerivation rec {
     mv "$out/lib/libXrApiLayer"* "$layers/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenXR loader";
     homepage = "https://www.khronos.org/openxr";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

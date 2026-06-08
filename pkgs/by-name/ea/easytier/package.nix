@@ -7,26 +7,28 @@
   nixosTests,
   nix-update-script,
   installShellFiles,
+  mold,
   withQuic ? false, # with QUIC protocol support
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.4.5";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
-    tag = "v${version}";
-    hash = "sha256-vGQHrpImPMF44LXVnKRpj47Nr534wTlVZJiBDm4GkGs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lwqpOVKFm85AiBb7NWLAkjSrWSe5pzF0AuEmmDo+v0k=";
   };
 
-  cargoHash = "sha256-B9GkvSXyZXTBsnV7wbipjdZ0EkVrL/aw8Ff7uUvfKPo=";
+  cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
     installShellFiles
+    mold
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
@@ -52,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/EasyTier/EasyTier";
-    changelog = "https://github.com/EasyTier/EasyTier/releases/tag/v${version}";
+    changelog = "https://github.com/EasyTier/EasyTier/releases/tag/v${finalAttrs.version}";
     description = "Simple, decentralized mesh VPN with WireGuard support";
     longDescription = ''
       EasyTier is a simple, safe and decentralized VPN networking solution implemented
@@ -63,4 +65,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ ltrump ];
   };
-}
+})

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.0.4.7";
 
   src = fetchurl {
-    url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";
+    url = "https://rtega.be/chmn/CNstrokeorder-${version}.ttf";
     hash = "sha256-YYtOcUvt1V0DwAs/vf9KltcmYCFJNirvwjGyOK4JpIY=";
   };
 
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chinese font that shows stroke order for HSK 1-4";
     homepage = "http://rtega.be/chmn/index.php?subpage=68";
-    license = [ licenses.arphicpl ];
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = platforms.all;
+    license = [ lib.licenses.arphicpl ];
+    maintainers = with lib.maintainers; [ johnazoidberg ];
+    platforms = lib.platforms.all;
   };
 }

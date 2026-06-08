@@ -10,7 +10,7 @@
   withManpage ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alot";
   version = "0.11";
   pyproject = true;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
@@ -98,10 +98,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
-    changelog = "https://github.com/pazz/alot/releases/tag/${src.tag}";
+    changelog = "https://github.com/pazz/alot/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "alot";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ milibopp ];
   };
-}
+})

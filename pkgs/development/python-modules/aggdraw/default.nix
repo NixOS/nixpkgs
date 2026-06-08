@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aggdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality drawing interface for PIL";
     homepage = "https://github.com/pytroll/aggdraw";
     changelog = "https://github.com/pytroll/aggdraw/blob/${src.tag}CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

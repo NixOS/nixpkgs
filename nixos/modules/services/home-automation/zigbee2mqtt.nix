@@ -12,10 +12,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    sweber
-    hexa
-  ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
 
   imports = [
     (lib.mkRemovedOptionModule [
@@ -79,6 +76,7 @@ in
       after = [ "network.target" ];
       environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "cp"} --no-preserve=mode ${configFile} '${cfg.dataDir}/configuration.yaml'";
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
@@ -130,9 +128,6 @@ in
         ];
         UMask = "0077";
       };
-      preStart = ''
-        cp --no-preserve=mode ${configFile} "${cfg.dataDir}/configuration.yaml"
-      '';
     };
 
     users.users.zigbee2mqtt = {

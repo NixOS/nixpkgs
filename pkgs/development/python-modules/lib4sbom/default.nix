@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "lib4sbom";
-  version = "0.9.1";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4sbom";
     tag = "v${version}";
-    hash = "sha256-GYXkxnZU7QYczKbJUiU+8TmboZQG9nkg00S1IRXeK6c=";
+    hash = "sha256-HnRr8ij/NFFMgXIlLFKrX8dBdGN1VZnUsE5QcWx4AZc=";
   };
 
   build-system = [ setuptools ];
@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lib4sbom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to ingest and generate SBOMs";
     homepage = "https://github.com/anthonyharrison/lib4sbom";
     changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teatwig ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teatwig ];
   };
 }

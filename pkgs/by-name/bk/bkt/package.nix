@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "bkt";
   version = "0.8.0";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dimo414";
     repo = "bkt";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.mangoiv ];
     mainProgram = "bkt";
   };
-}
+})

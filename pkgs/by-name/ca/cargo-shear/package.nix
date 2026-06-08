@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-shear";
-  version = "1.7.1";
+  version = "1.12.4";
 
   src = fetchCrate {
     pname = "cargo-shear";
     version = finalAttrs.version;
-    hash = "sha256-GvkIXk0Ry3bm5A+PwdH4zrDtxzfJt4pd8gF/PPGsyDs=";
+    hash = "sha256-nYAZfUh0ZMU0H+Eb5DOHvENCtDWiCLhzuEB3MFAKWpc=";
   };
 
-  cargoHash = "sha256-3PIdxoLoe9cgjr53lu7X1cGNT9wHgIG0E4jld7TK3b4=";
+  cargoHash = "sha256-xJGITXhC02nOky5P5gzUHAmVyiolchcVofDiaHEX14o=";
 
   env = {
     # https://github.com/Boshen/cargo-shear/blob/v1.6.2/src/lib.rs#L51-L54
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Detect and remove unused dependencies from Cargo.toml";
+    description = "Detect and fix unused/misplaced dependencies from Cargo.toml";
     mainProgram = "cargo-shear";
     homepage = "https://github.com/Boshen/cargo-shear";
     changelog = "https://github.com/Boshen/cargo-shear/blob/v${finalAttrs.version}/CHANGELOG.md";

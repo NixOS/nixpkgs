@@ -8,13 +8,13 @@
 }:
 buildPythonPackage rec {
   pname = "autodocsumm";
-  version = "0.2.14";
+  version = "0.2.15";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "autodocsumm";
-    hash = "sha256-KDmp1PrMPE7M0wbAhpVUCREEK0bur83DID5tC6tAvHc=";
+    hash = "sha256-6vQx56WjnkGiFTERc8i5XoOFkFnfHM87ecZL89VYKzw=";
   };
 
   build-system = [ setuptools ];

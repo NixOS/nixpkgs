@@ -11,14 +11,14 @@
   netpbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yad";
   version = "14.1";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
   };
 
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
-  meta = with lib; {
-    homepage = "https://sourceforge.net/projects/yad-dialog/";
+  meta = {
+    homepage = "https://github.com/v1cont/yad";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "yad";
-    maintainers = with maintainers; [ smironov ];
-    platforms = with platforms; linux;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
   };
-}
+})

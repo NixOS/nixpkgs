@@ -2,25 +2,25 @@
   stdenv,
   lib,
   fetchurl,
-  dune_3,
   ocamlPackages,
+  dune,
   mpfr,
   ppl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasmin-compiler";
-  version = "2025.06.2";
+  version = "2026.03.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${finalAttrs.version}/jasmin-compiler-v${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qg0h9TLBVgoJOSRM/RyEFLorQsnRQDlg9FhQBEbLHrs=";
+    hash = "sha256-eOn5KWNAPx7Z+VMm8mclUyxDlW8Q/MR9EayUxmojb1I=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
     ocaml
     findlib
-    dune_3
+    dune
     menhir
     camlidl
     cmdliner

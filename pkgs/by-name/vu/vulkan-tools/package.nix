@@ -8,11 +8,11 @@
   python3,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   vulkan-headers,
   vulkan-loader,
   vulkan-volk,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.4.328.0";
+  version = "1.4.341.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-QoqlHrhgaV1SRLAxmYUXaKxH1IdbnxqkcJklDy20ORg=";
+    hash = "sha256-+5BL28h7+r+mLr1Tr7UT4UEB8jRrIc2JwoasJ7HzxI0=";
   };
 
   patches = [ ./wayland-scanner.patch ];
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     wayland
     wayland-protocols
   ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
+  env.PKG_CONFIG_PATH = "${lib.getDev buildPackages.wayland-scanner}/lib/pkgconfig";
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_CUBE=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

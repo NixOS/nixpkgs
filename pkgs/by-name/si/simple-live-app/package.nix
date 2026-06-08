@@ -44,7 +44,7 @@ flutter332.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm644 assets/logo.png $out/share/pixmaps/simple-live-app.png
+    install -Dm644 assets/logo.png $out/share/icons/simple-live-app.png
   '';
 
   extraWrapProgramArgs = ''

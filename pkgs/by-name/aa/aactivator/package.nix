@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aactivator";
   version = "2.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "aactivator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vnBDtLEvU1jHbb5/MXAulXaBaugdCZdLQSP2b8P6SiQ=";
   };
 
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "aactivator";
     maintainers = with lib.maintainers; [ keller00 ];
   };
-}
+})

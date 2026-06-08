@@ -31,9 +31,9 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Meta-package providing the oldest supported Numpy for a given Python version and platform";
     homepage = "https://github.com/scipy/oldest-supported-numpy";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

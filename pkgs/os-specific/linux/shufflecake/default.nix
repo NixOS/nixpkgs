@@ -3,20 +3,20 @@
   kernel,
   kernelModuleMakeFlags,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libgcrypt,
   lvm2,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "shufflecake";
-  version = "0.5.5";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "shufflecake";
+  version = "0.5.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "shufflecake";
     repo = "shufflecake-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xVuI7tRARPFuETCCKYt507WpvZVZLaj9dhBkhJ03zc8=";
+    hash = "sha256-eI5tWujUHj9S8d1aOFMuokjVWI2GGEml68cuQ6K0/C8=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

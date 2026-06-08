@@ -24,18 +24,18 @@
   libsoup_3,
   libspelling,
   sqlite,
-  webkitgtk_6_0,
+  icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.16.1";
+  version = "4.19.4";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    tag = "v${version}";
-    hash = "sha256-jQW82nnIfuKhTWPlJQD2Mcl+Yl+NqnTbRnMn5+sfuD4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TUtaz0dYy4j6WBcHCLJR5+Rh6PwcU51PfxvdgEUM+vU=";
   };
 
   nativeBuildInputs = [
@@ -66,15 +66,15 @@ stdenv.mkDerivation rec {
     libsoup_3
     libspelling
     sqlite
-    webkitgtk_6_0
+    icu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
-    license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };
-}
+})

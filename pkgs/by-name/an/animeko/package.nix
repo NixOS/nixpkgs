@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gradle,
   autoPatchelfHook,
-  jetbrains, # Requird by upstream due to JCEF dependency
+  jetbrains, # Required by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -35,8 +36,8 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
-  libsForQt5,
+  libxpm,
+  qt5,
   libupnp,
   aalib,
   libcaca,
@@ -50,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -75,27 +76,57 @@
   writeShellScript,
   nix-update,
   libxml2,
+  boost,
+  thrift,
+  libGL,
+  libx11,
+  libxdamage,
+  nss,
+  nspr,
 }:
+let
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
 
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+
+    patches = (old.patches or [ ]) ++ [
+      # Fix build with gcc15
+      # https://github.com/apache/thrift/pull/3078
+      (fetchpatch {
+        name = "thrift-add-missing-cstdint-include-gcc15.patch";
+        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+      })
+    ];
+  });
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "5.2.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eP1v/o9qUk8qG+n1cJRmlgu2l06hFZLeUN/X06qAVpY=";
+    hash = "sha256-mDUl1RpTIFBHdYst6R16iVljiUNOYh6mNUtOLBSuOE0=";
     fetchSubmodules = true;
   };
 
-  # CefLog.init(jcefConfig.cefSettings) is being comment out due to compile error
   postPatch = ''
     echo "kotlin.native.ignoreDisabledTargets=true" >> local.properties
     sed -i "s/^version.name=.*/version.name=${finalAttrs.version}/" gradle.properties
     sed -i "s/^package.version=.*/package.version=${finalAttrs.version}/" gradle.properties
-    substituteInPlace app/shared/app-platform/src/desktopMain/kotlin/platform/AniCefApp.kt \
-      --replace-fail 'CefLog.init(jcefConfig.cefSettings)' '//CefLog.init(jcefConfig.cefSettings)'
   '';
 
   gradleBuildTask = "createReleaseDistributable";
@@ -110,10 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk-21;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jetbrains.jdk}"
+    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
   ];
 
   nativeBuildInputs = [
@@ -123,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     shine
     libmpeg2
@@ -140,10 +174,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtx11extras
+    libxpm
+    qt5.qtsvg
+    qt5.qtbase
+    qt5.qtx11extras
     libupnp
     aalib
     libcaca
@@ -169,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib
@@ -191,6 +225,18 @@ stdenv.mkDerivation (finalAttrs: {
     libdvdnav
     flac
     libxml2
+    boost
+    thrift20
+    nss
+    nspr
+    libGL
+    libx11
+    libxdamage
+  ];
+
+  patches = [
+    # Builtin updater will never work on NixOS, so we made a patch to disable updater
+    ./0001-no-update-checker.patch
   ];
 
   dontWrapQtApps = true;
@@ -216,8 +262,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
 
-  ANDROID_SDK_HOME = "$(pwd)";
-
   passthru.updateScript = writeShellScript "update-animeko" ''
     ${lib.getExe nix-update} animeko
     $(nix-build -A animeko.mitmCache.updateScript)
@@ -238,5 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
     ];
+    # Mark broken due to a breaking change in JetBrains JCEF
+    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
+    broken = true;
   };
 })

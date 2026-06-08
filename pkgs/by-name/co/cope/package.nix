@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  perl,
   perlPackages,
   makeWrapper,
 }:
@@ -50,7 +49,7 @@ perlPackages.buildPerlPackage {
         if [[ -f "$script" && -x "$script" ]]; then
           wrapProgram "$script" \
             --set PERL5LIB "${perlPath}:$out/lib/perl5/site_perl"
-          sed -i "1s|^#!.*perl|#!${perl}/bin/perl|" "$out/libexec/.''${script##*/}-wrapped"
+          sed -i "1s|^#!.*perl|#!${perlPackages.perl}/bin/perl|" "$out/libexec/.''${script##*/}-wrapped"
         fi
       done
       rm -r $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto
@@ -68,5 +67,6 @@ perlPackages.buildPerlPackage {
       gpl1Plus
     ];
     maintainers = with lib.maintainers; [ deftdawg ];
+    broken = true; # requires old Perl we don't ship anymore
   };
 }

@@ -5,36 +5,75 @@
   nix-update-script,
   openssl,
   perl,
+  zig,
+  gitMinimal,
   pkg-config,
   stdenv,
   vimUtils,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "d88922e-unstable-2025-12-07";
+  version = "0.9.3";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "d88922e6c74b357cfd029128ce5ecd813b6eb747";
-    hash = "sha256-XdDSyRHAZxRjziFwnEjjIrKSf8S+CHZw74P/O9O7C88=";
+    tag = "v${version}";
+    hash = "sha256-9k1XWnHzBjy7dABCzZ0yxCHqgX1bsWkkxksLVLDqdmc=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-+se3u1ib3Ghy1tHIPpCY8sPgaQRaYCYGdJ8up+bubpM=";
+    cargoHash = "sha256-R/w3Km9LTqWQ2NFbwYbTCld72av26BdXtxC/K0sqdlQ=";
+
+    cargoBuildFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
+    cargoCheckFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
 
     nativeBuildInputs = [
       pkg-config
       perl
+      rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
+      zig
     ];
+
+    dontUseZigConfigure = true;
+    dontUseZigBuild = true;
+    dontUseZigCheck = true;
+    dontUseZigInstall = true;
+
+    # Some tests need git
+    nativeCheckInputs = [ gitMinimal ];
+
+    # Tests need these permissions in order to use the FSEvents API on macOS.
+    sandboxProfile = ''
+      (allow mach-lookup (global-name "com.apple.FSEvents"))
+    '';
 
     buildInputs = [
       openssl
     ];
 
-    env = {
-      RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+    checkFlags = [
+      # This test requires curl and GitHub access
+      "--skip=update_check::tests::test_update_check_end_to_end"
 
+      # This test depends on catching a race window and is not deterministic
+      "--skip=drop_during_post_scan_does_not_crash"
+    ];
+
+    env = {
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
@@ -49,13 +88,17 @@ vimUtils.buildVimPlugin {
   postPatch = ''
     substituteInPlace lua/fff/download.lua \
       --replace-fail \
-        "return plugin_dir .. '/../target'" \
+        "return plugin_dir .. '/../target/release'" \
         "return '${fff-nvim-lib}/lib'"
   '';
 
+  nvimSkipModules = [
+    # Skip single file dev config for testing fff.nvim locally
+    "empty_config"
+  ];
+
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.fff-nvim.fff-nvim-lib";
     };
 
@@ -69,6 +112,7 @@ vimUtils.buildVimPlugin {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      saadndm
     ];
   };
 }

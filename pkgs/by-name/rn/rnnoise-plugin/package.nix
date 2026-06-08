@@ -8,9 +8,10 @@
   pcre,
   pkg-config,
   webkitgtk_4_1,
-  xorg,
+  libxrandr,
+  libx11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnnoise-plugin";
   version = "1.10";
   outputs = [
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "werman";
     repo = "noise-suppression-for-voice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 
@@ -42,8 +43,8 @@ stdenv.mkDerivation rec {
     freetype
     gtk3-x11
     pcre
-    xorg.libX11
-    xorg.libXrandr
+    libx11
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
@@ -58,15 +59,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       panaeon
       henrikolsson
       sciencentistguy
     ];
   };
-}
+})

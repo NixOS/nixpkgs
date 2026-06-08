@@ -3,7 +3,6 @@
   buildPythonPackage,
   deepmerge,
   fetchPypi,
-  isPy27,
   setuptools-scm,
   jsonschema,
   picobox,
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.8.4";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,10 +35,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
-    license = licenses.bsd0;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.bsd0;
+    maintainers = [ lib.maintainers.flokli ];
   };
 }

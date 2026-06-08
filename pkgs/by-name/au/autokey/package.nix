@@ -4,27 +4,34 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gobject-introspection,
+  imagemagick,
   gtksourceview3,
   libappindicator-gtk3,
   libnotify,
+  xautomation,
+  xwd,
   zenity,
   wmctrl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autokey";
   version = "0.96.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
-  # Tests appear to be broken with import errors within the project structure
-  doCheck = false;
+  postPatch = ''
+    # pyrcc5 embeds resource mtimes; preserve normalized source mtimes for reproducible wheels.
+    substituteInPlace setup.py \
+      --replace-fail "shutil.copy(str(icon), str(target_directory))" \
+        "shutil.copy2(str(icon), str(target_directory))"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -41,23 +48,43 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
+  nativeCheckInputs = with python3Packages; [
+    pyqt5
+    pyhamcrest
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  disabledTestPaths = [
+    # Runs `git describe` during test collection.
+    "tests/test_common.py"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   dependencies = with python3Packages; [
     dbus-python
     pyinotify
     xlib
     pygobject3
     packaging
+    standard-imghdr
   ];
 
   runtimeDeps = [
+    imagemagick
     zenity
+    xautomation
+    xwd
     wmctrl
   ];
 
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
   '';
 
   postInstall = ''
@@ -66,10 +93,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "https://github.com/autokey/autokey";
     description = "Desktop automation utility for Linux and X11";
-    license = with lib.licenses; [ gpl3 ];
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    homepage = "https://github.com/autokey/autokey";
+    changelog = "https://github.com/autokey/autokey/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
   };
-}
+})

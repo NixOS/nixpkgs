@@ -7,12 +7,19 @@ let
     match
     split
     storeDir
+    escapeRegex
+    removePrefix
     ;
   inherit (lib)
     boolToString
     filter
     isString
     readFile
+    concatStrings
+    length
+    elemAt
+    isList
+    any
     ;
   inherit (lib.filesystem)
     pathIsRegularFile
@@ -36,7 +43,7 @@ let
   cleanSourceFilter =
     name: type:
     let
-      baseName = baseNameOf (toString name);
+      baseName = baseNameOf name;
     in
     !(
       # Filter out version control software files/directories
@@ -131,7 +138,7 @@ let
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
-      # Type: A function (path -> type -> bool)
+      # Type: A function (Path -> Type -> Bool)
       filter ? _path: _type: true,
       # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
@@ -158,7 +165,7 @@ let
     # Type
 
     ```
-    sources.trace :: sourceLike -> Source
+    sources.trace :: SourceLike -> Source
     ```
   */
   trace =
@@ -200,7 +207,7 @@ let
     ## `sourceByRegex` usage example
 
     ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    src = sourceByRegex ./my-subproject [".*\\.py$" "^database\\.sql$"]
     ```
 
     :::
@@ -241,7 +248,7 @@ let
     # Type
 
     ```
-    sourceLike -> [String] -> Source
+    sourceFilesBySuffices :: SourceLike -> [String] -> Source
     ```
 
     # Examples
@@ -263,7 +270,7 @@ let
       filter =
         name: type:
         let
-          base = baseNameOf (toString name);
+          base = baseNameOf name;
         in
         type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in
@@ -311,7 +318,13 @@ let
           fileName = path + "/${file}";
           packedRefsName = path + "/packed-refs";
           absolutePath =
-            base: path: if lib.hasPrefix "/" path then path else toString (/. + "${base}/${path}");
+            base: path:
+            if lib.hasPrefix "/" path then
+              path
+            else if lib.hasPrefix "/" base then
+              "${base}/${path}"
+            else
+              "/${base}/${path}";
         in
         if
           pathIsRegularFile path
@@ -507,6 +520,113 @@ let
     else
       throw "repoRevToName: invalid kind";
 
+  /**
+    Filter a source tree by a list of doublestar-style glob patterns,
+    returning a source that only contains paths matching at least one
+    pattern. `*` matches a single path component, and `**` matches any
+    number of components.
+
+    # Inputs
+
+    `src`
+
+    : The source tree to filter.
+
+    `patterns`
+
+    : List of glob patterns to include, e.g. `[ "*.py" "src/**" ]`.
+      A leading `**` (e.g. `**\/*.py` for all `.py` files at any depth)
+      is also supported; the `\` here is just a Nix string escape used
+      to avoid closing this comment.
+
+    # Examples
+    :::{.example}
+    ## `sourceByGlobs` usage example
+
+    - Include everything under a subdirectory
+    ```nix
+    src = sourceByGlobs ./. [ "src/**" "tests/**" ]
+    ```
+
+    - Include all .py files in root directory only
+    ```nix
+    src = sourceByGlobs ./. [ "*.py" ]
+    ```
+
+    :::
+  */
+  sourceByGlobs =
+    let
+      splitPath = path: filter isString (split "/" path);
+      # Make component regex
+      mkRe =
+        s:
+        if s == "**" then
+          ".*" # Has special handling below
+        else
+          concatStrings (map (tok: if isList tok then "[^/]*" else escapeRegex tok) (split "\\*+" s));
+
+      # Make a source filter function from pattern
+      mkMatcher =
+        pat:
+        let
+          globs = map mkRe (splitPath pat);
+          glen = length globs;
+        in
+        path: type:
+        let
+          path' = splitPath path;
+          plen = length path';
+
+          recurse =
+            gi: pi:
+            let
+              g = elemAt globs gi;
+              p = elemAt path' pi;
+              m = match g p != null;
+            in
+            if pi >= plen then # Reached end of path
+              gi >= glen || (type == "directory" || type == "symlink") # Only allow partial matches for directories
+            else if gi >= glen then # Reached end of globs
+              false
+            else if g == ".*" then # Special handling for **
+              (
+                # Lookahead for next glob match
+                if (gi + 1) == glen then
+                  true
+                else if (match (elemAt globs (gi + 1)) p != null) then
+                  recurse (gi + 1) pi
+                else if m then
+                  recurse gi (pi + 1)
+                else
+                  false
+              )
+            else if m then
+              recurse (gi + 1) (pi + 1)
+            else
+              false;
+
+        in
+        recurse 0 0;
+
+      mkSourceFilter =
+        root: patterns:
+        let
+          root' = "${toString root}/";
+          matchers = map mkMatcher patterns;
+        in
+        name: type:
+        let
+          name' = removePrefix root' name;
+        in
+        any (m: m name' type) matchers;
+
+    in
+    src: patterns:
+    lib.cleanSourceWith {
+      filter = mkSourceFilter src patterns;
+      inherit src;
+    };
 in
 {
   inherit
@@ -526,7 +646,10 @@ in
 
     sourceByRegex
     sourceFilesBySuffices
+    sourceByGlobs
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

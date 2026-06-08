@@ -14,7 +14,7 @@ in
 {
   meta.maintainers = with lib.maintainers; [ leonm1 ];
 
-  options.services.matter-server = with lib.types; {
+  options.services.matter-server = {
     enable = lib.mkEnableOption "Matter-server";
 
     package = lib.mkPackageOption pkgs "python-matter-server" { };
@@ -44,10 +44,10 @@ in
     };
 
     extraArgs = lib.mkOption {
-      type = listOf str;
-      default = [ ];
+      type = lib.types.attrs;
+      default = { };
       description = ''
-        Extra arguments to pass to the matter-server executable.
+        Attribute set of extra arguments to pass to the matter-server executable.
         See <https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server> for options.
       '';
     };
@@ -62,41 +62,52 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       description = "Matter Server";
-      environment.HOME = storagePath;
+      environment = {
+        HOME = storagePath;
+        SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
+      script = ''
+        # `python-matter-server` writes to /data even when a storage-path is
+        # specified. This symlinks /data at the systemd-managed
+        # /var/lib/matter-server, so all files get dropped into the state
+        # directory.
+        ln -s $STATE_DIRECTORY $RUNTIME_DIRECTORY/data
+
+        # Create directories to hold certificates and OTA updates.
+        CERT_DIR="$CACHE_DIRECTORY/certs"
+        mkdir -p "$CERT_DIR"
+        OTA_UPDATE_DIR="$CACHE_DIRECTORY/updates"
+        mkdir -p "$OTA_UPDATE_DIR"
+
+        "${lib.getExe cfg.package}" ${
+          lib.concatStringsSep " " (
+            lib.cli.toCommandLineGNU { } (
+              {
+                port = cfg.port;
+                vendorid = vendorId;
+                storage-path = storagePath;
+                log-level = cfg.logLevel;
+                paa-root-cert-dir = "$CERT_DIR";
+                ota-provider-dir = "$OTA_UPDATE_DIR";
+              }
+              // cfg.extraArgs
+            )
+          )
+        }
+      '';
       serviceConfig = {
-        ExecStart = (
-          lib.concatStringsSep " " [
-            # `python-matter-server` writes to /data even when a storage-path
-            # is specified. This symlinks /data at the systemd-managed
-            # /var/lib/matter-server, so all files get dropped into the state
-            # directory.
-            "${pkgs.bash}/bin/sh"
-            "-c"
-            "'"
-            "${pkgs.coreutils}/bin/ln -s %S/matter-server/ %t/matter-server/root/data"
-            "&&"
-            "${cfg.package}/bin/matter-server"
-            "--port"
-            (toString cfg.port)
-            "--vendorid"
-            vendorId
-            "--storage-path"
-            storagePath
-            "--log-level"
-            "${cfg.logLevel}"
-            "${lib.escapeShellArgs cfg.extraArgs}"
-            "'"
-          ]
-        );
         # Start with a clean root filesystem, and allowlist what the container
         # is permitted to access.
         # See https://discourse.nixos.org/t/hardening-systemd-services/17147/14.
         RuntimeDirectory = [ "matter-server/root" ];
         RootDirectory = "%t/matter-server/root";
+        CacheDirectory = [ "matter-server" ];
 
-        # Allowlist /nix/store (to allow the binary to find its dependencies)
-        # and dbus.
-        BindReadOnlyPaths = "/nix/store /run/dbus";
+        BindReadOnlyPaths = [
+          "/nix/store" # To allow the binary to find its dependencies.
+          "/run/dbus"
+          "/etc/resolv.conf" # For DNS resolution.
+        ];
         # Let systemd manage `/var/lib/matter-server` for us inside the
         # ephemeral TemporaryFileSystem.
         StateDirectory = storageDir;

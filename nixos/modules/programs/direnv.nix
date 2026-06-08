@@ -16,6 +16,11 @@ let
   format = pkgs.formats.toml { };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "programs" "direnv" "finalPackage" ]
+      "programs.direnv.finalPackage has been removed now, as its value is identical to programs.direnv.package."
+    )
+  ];
   options.programs.direnv = {
 
     enable = lib.mkEnableOption ''
@@ -25,12 +30,6 @@ in
     '';
 
     package = lib.mkPackageOption pkgs "direnv" { };
-
-    finalPackage = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      description = "The wrapped direnv package.";
-    };
 
     enableBashIntegration = enabledOption ''
       Bash integration
@@ -100,15 +99,6 @@ in
   config = lib.mkIf cfg.enable {
     programs = {
       direnv = {
-        finalPackage = pkgs.symlinkJoin {
-          inherit (cfg.package) name;
-          paths = [ cfg.package ];
-          # direnv has a fish library which automatically sources direnv for some reason
-          postBuild = ''
-            rm -rf "$out/share/fish"
-          '';
-          meta.mainProgram = "direnv";
-        };
         settings = lib.mkIf cfg.silent {
           global = {
             log_format = lib.mkDefault "-";
@@ -119,7 +109,7 @@ in
 
       zsh.interactiveShellInit = lib.mkIf cfg.enableZshIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || printenv PATH | grep -vqc '/nix/store'; then
-          eval "$(${lib.getExe cfg.finalPackage} hook zsh)"
+          eval "$(${lib.getExe cfg.package} hook zsh)"
         fi
       '';
 
@@ -127,13 +117,13 @@ in
       #$IN_NIX_SHELL for "nix-shell"
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || [ -z "$IN_NIX_SHELL$NIX_GCROOT$(printenv PATH | grep '/nix/store')" ] ; then
-          eval "$(${lib.getExe cfg.finalPackage} hook bash)"
+          eval "$(${lib.getExe cfg.package} hook bash)"
         fi
       '';
 
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration ''
         if ${lib.boolToString cfg.loadInNixShell}; or printenv PATH | grep -vqc '/nix/store';
-          ${lib.getExe cfg.finalPackage} hook fish | source
+          ${lib.getExe cfg.package} hook fish | source
         end
       '';
 
@@ -153,7 +143,7 @@ in
 
     environment = {
       systemPackages = [
-        cfg.finalPackage
+        cfg.package
       ];
 
       variables.DIRENV_CONFIG = "/etc/direnv";

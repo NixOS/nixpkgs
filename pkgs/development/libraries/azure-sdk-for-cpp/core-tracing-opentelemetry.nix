@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-core-tracing-opentelemetry_1.0.0-beta.4";
     hash = "sha256-3PqHpoi7zlTUYJ4A4APKp2yPg9nVwgGiyOZ+bng4Crk=";
   };
-  sourceRoot = "source/sdk/core/azure-core-tracing-opentelemetry";
+  sourceRoot = "${finalAttrs.src.name}/sdk/core/azure-core-tracing-opentelemetry";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

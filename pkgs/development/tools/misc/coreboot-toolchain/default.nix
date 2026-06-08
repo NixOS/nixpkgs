@@ -26,19 +26,18 @@ let
 
       stdenvNoCC.mkDerivation (finalAttrs: {
         pname = "coreboot-toolchain-${arch}";
-        version = "25.09";
+        version = "26.03";
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-GMLhGspaS+SsldYFwhMoxzpFgU6alm6WASv3lp/FRRY=";
+          hash = "sha256-9ollzu6vtU+uHibvV/B5N70ZVl701kuI/orWlFZLjIU=";
           fetchSubmodules = false;
           leaveDotGit = true;
           postFetch = ''
             PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
             rm -rf $out/.git
           '';
-          allowedRequisites = [ ];
         };
 
         archives = ./stable.nix;
@@ -76,21 +75,21 @@ let
           make crossgcc-${arch} CPUS=$NIX_BUILD_CORES DEST=$out
         '';
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.coreboot.org";
           description = "Coreboot toolchain for ${arch} targets";
-          license = with licenses; [
+          license = with lib.licenses; [
             bsd2
             bsd3
             gpl2
             lgpl2Plus
             gpl3Plus
           ];
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             felixsinger
             jmbaur
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         };
       })
     );

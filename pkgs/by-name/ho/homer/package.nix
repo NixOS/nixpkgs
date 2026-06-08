@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   dart-sass,
   nix-update-script,
@@ -11,29 +13,31 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.11.1";
+  version = "26.4.2";
+
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
+    hash = "sha256-XQjXRckrZ9LhAFp/v/OUJJ80odS5mXhQserPNx0mvwM=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
-
       ;
-    fetcherVersion = 2;
-    hash = "sha256-TtazfRhcniA1H//C95AMH8/Pw+Rbtinlfg7dDAmSk1w=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-rDKnaIE1ZQ2I83RdlHWtgoMcDoFe7tE102LP2+SPmFg=";
   };
 
   nativeBuildInputs = [
     nodejs
     dart-sass
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''
@@ -67,15 +71,15 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Very simple static homepage for your server";
     homepage = "https://github.com/bastienwirtz/homer";
     changelog = "https://github.com/bastienwirtz/homer/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       stunkymonkey
       christoph-heiss
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

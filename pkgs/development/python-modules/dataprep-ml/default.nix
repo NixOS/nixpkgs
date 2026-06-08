@@ -11,7 +11,6 @@
   pydantic,
   pydateinfer,
   python-dateutil,
-  pythonOlder,
   scipy,
   symlinkJoin,
   type-infer,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pname = "dataprep-ml";
   version = "25.2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {
@@ -77,10 +74,10 @@ buildPythonPackage rec {
     "dataprep_ml.splitters"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data utilities for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/dataprep_ml";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

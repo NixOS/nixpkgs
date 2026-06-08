@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  fetchpatch2,
   libjodycode,
 }:
 
@@ -9,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jdupes";
   version = "1.31.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jbruchon";
     repo = "jdupes";
     rev = "v${finalAttrs.version}";
@@ -20,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     # directories have such files and will be removed.
     postFetch = "rm -r $out/testdir";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "use-stat-time-macros-for-compatibility-reasons.patch";
+      url = "https://codeberg.org/jbruchon/jdupes/commit/464f72c82f2ce81dd33bfb5381f1bcf148da4091.patch";
+      hash = "sha256-/B6iNAG3Fsmot5MGSBMs99QnAc/bFZJjPtnbiq21QZg=";
+    })
+  ];
 
   buildInputs = [ libjodycode ];
 

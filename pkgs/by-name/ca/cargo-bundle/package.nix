@@ -8,7 +8,7 @@
   wayland,
   openssl,
   squashfsTools,
-  makeWrapper,
+  makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
@@ -28,7 +28,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -37,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  postFixup = ''
+  # squashfs tools are needed to build appimages for Linux
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/cargo-bundle \
       --prefix PATH : ${lib.makeBinPath [ squashfsTools ]}
   '';

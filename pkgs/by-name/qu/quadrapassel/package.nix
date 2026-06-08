@@ -5,12 +5,10 @@
   pkg-config,
   gtk4,
   libadwaita,
-  libgee,
   pango,
   gnome,
   gdk-pixbuf,
   librsvg,
-  gsound,
   libmanette,
   blueprint-compiler,
   wrapGAppsHook4,
@@ -18,15 +16,17 @@
   ninja,
   vala,
   desktop-file-utils,
+  libsndfile,
+  openal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quadrapassel";
-  version = "49.2.1";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/quadrapassel/${lib.versions.major finalAttrs.version}/quadrapassel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pTIKb47ghWKkNsq6TjT3rgQP7cjXL76iJ/cCXZPExrk=";
+    hash = "sha256-UeQ9BZ8GuJwQXVPXHe8L2XzpREcO4Tn8fnQ/zkpsOZQ=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libgee
     pango
     gdk-pixbuf
     librsvg
     libmanette
-    gsound
+    # for libgnome-games-support + sound feature
+    libsndfile
+    openal
   ];
 
   passthru = {

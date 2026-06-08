@@ -37,7 +37,7 @@ buildGoModule {
   checkFlags = [
     "-skip=^TestReturnDirElement/Sort_by_Date$"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Only failing on nix darwin. I suspect this is due to the way
     # darwin handles file permissions.
     "-skip=^TestCompressSelectedFiles"

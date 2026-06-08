@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -51,6 +50,9 @@
       ];
 
       boot.initrd.systemd = {
+        storePaths = lib.mkIf config.system.etc.overlay.mutable [
+          "${config.system.nixos-init.package}/bin/clear-etc-opaque"
+        ];
         mounts = [
           {
             where = "/run/nixos-etc-metadata";
@@ -131,13 +133,20 @@
               before = [ "initrd-fs.target" ];
               unitConfig = {
                 DefaultDependencies = false;
-                RequiresMountsFor = "/sysroot";
+                RequiresMountsFor = [
+                  "/sysroot"
+                  # Needed so we can clear stale opaque markers from the
+                  # upperdir based on the contents of the new metadata layer
+                  # before the overlay is mounted.
+                  "/run/nixos-etc-metadata"
+                ];
               };
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = ''
-                  /bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work
-                '';
+                ExecStart = [
+                  "/bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work"
+                  "${config.system.nixos-init.package}/bin/clear-etc-opaque /run/nixos-etc-metadata /sysroot/.rw-etc/upper"
+                ];
               };
             };
           })
@@ -162,6 +171,19 @@
         ];
       };
 
+    })
+
+    (lib.mkIf (config.system.etc.overlay.enable && !config.system.etc.overlay.mutable) {
+      # Systemd requires /etc/machine-id exists or can be initialized on first
+      # boot. This file should not be part of an image or system config because
+      # it is unique to the machine, so it is initialized at first boot and
+      # persisted in the system state directory, /var/lib/nixos.
+      environment.etc."machine-id".source = lib.mkDefault "/var/lib/nixos/machine-id";
+      boot.initrd.systemd.tmpfiles.settings.machine-id."/sysroot/var/lib/nixos/machine-id".f =
+        lib.mkDefault
+          {
+            argument = "uninitialized";
+          };
     })
 
   ];

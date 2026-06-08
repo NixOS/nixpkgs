@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pyserial,
   srp,
   lib,
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "digi-xbee";
   version = "1.5.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     pname = "digi_xbee";
@@ -45,10 +43,10 @@ buildPythonPackage rec {
     "digi.xbee.xsocket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
     homepage = "https://github.com/digidotcom/xbee-python";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ jefflabonte ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ jefflabonte ];
   };
 }

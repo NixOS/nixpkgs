@@ -35,15 +35,15 @@
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.0";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
-    rev = version;
-    hash = "sha256-cp/pZ42AS98AD78BVMeY3SHQHkYA2h4o0kddr/H+kUA=";
+    rev = finalAttrs.version;
+    hash = "sha256-wycQmScxuSlo6Ln6piSBF7kmzvi6FnTm/ES/Ds+/h8I=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    # FIXME: `MathJax.js` is only available in MathJax 2.7.x.
     "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
@@ -84,12 +85,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
     homepage = "https://github.com/linuxmint/xreader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

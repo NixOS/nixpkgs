@@ -2,45 +2,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchNpmDeps,
   makeDesktopItem,
   copyDesktopItems,
-  fixup-yarn-lock,
+  npm-lockfile-fix,
   makeWrapper,
   darwin,
   nodejs,
-  yarn,
   electron,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "29.0.3";
+  version = "30.0.4";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YVkGt096Vy1s/ZjvuWUWVE2eiaI7Wg/YdWSueTsKzEg=";
+    hash = "sha256-kkKiGRxztEVFo/wlcdBYcDlxadNarcTyL1MqwonfVY4=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
   postPatch = ''
-    substituteInPlace ./build/fuses.cjs \
+    substituteInPlace ./build/fuses.mjs \
       --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
   '';
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-/CzHvGUKhB2RBaz+LVXaHr5q6KLkQR0asFZRruOUmqU=";
+  offlineCache = fetchNpmDeps {
+    src = finalAttrs.src;
+    hash = "sha256-hv1LQwsSOsBR5l/joUmXq6foQsVilH+jw3Wje24ISCg=";
   };
 
   nativeBuildInputs = [
-    fixup-yarn-lock
+    npm-lockfile-fix
     makeWrapper
     nodejs
-    yarn
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
@@ -49,18 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.autoSignDarwinBinariesHook
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    # Ensure that the node_modules folder is created by yarn install.
-    # See https://github.com/yarnpkg/yarn/issues/5500#issuecomment-1221456246
-    echo "nodeLinker: node-modules" > .yarnrc.yml
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    npm config set cache "$offlineCache"
+    npm-lockfile-fix package-lock.json
+    npm ci --offline --ignore-scripts --no-audit --no-fund
     patchShebangs node_modules/
 
     runHook postConfigure
@@ -77,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   ''
   + ''
-    yarn --offline run electron-builder --dir \
+    npm exec electron-builder -- \
+      --dir \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json --config.mac.identity=null"} \
       -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
@@ -131,13 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = with lib.licenses; [
-      # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996
-      asl20
-      # But the README says:
-      # The minified code authored by us in this repo is licensed under an Apache v2 license, but the sources to build those files are not in this repo. This is not an open source project.
-      unfreeRedistributable
-    ];
+    license = lib.licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

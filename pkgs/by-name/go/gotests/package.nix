@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotests";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "cweill";
     repo = "gotests";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lx8gbVm4s4kmm252khoSukrlj5USQS+StGuJ+419QZw=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule rec {
   # tests are broken in nix environment
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate Go tests from your source code";
     mainProgram = "gotests";
     homepage = "https://github.com/cweill/gotests";
-    maintainers = with maintainers; [ vdemeester ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.asl20;
   };
-}
+})

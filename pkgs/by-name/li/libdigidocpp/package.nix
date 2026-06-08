@@ -15,15 +15,15 @@
   xxd,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.3.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.4.0";
   pname = "libdigidocpp";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "libdigidocpp";
-    tag = "v${version}";
-    hash = "sha256-f5wU3C6NC4op+9Wy+khwNJ6slFyPhq7hZl1Tj5hnYc8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Rf4ex9UT+Bspkf+WNNpYpdIt7y+QjAZ+eg786FZ0ZsA=";
   };
 
   nativeBuildInputs = [
@@ -66,14 +66,14 @@ stdenv.mkDerivation rec {
       -i "$dev"/lib/cmake/libdigidocpp/libdigidocpp-config.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating DigiDoc signature files";
     mainProgram = "digidoc-tool";
     homepage = "https://www.id.ee/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [
-      maintainers.flokli
+      lib.maintainers.flokli
     ];
   };
-}
+})

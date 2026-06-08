@@ -4,6 +4,7 @@
   fetchurl,
   rsync,
   ocamlPackages,
+  dune,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,10 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     rsync
+    dune
   ]
   ++ (with ocamlPackages; [
     ocaml
-    dune_3
     menhir
     findlib
   ]);
@@ -53,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://abella-prover.org";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      bcdarwin
-      ciil
-    ];
+    maintainers = [ lib.maintainers.bcdarwin ];
     platforms = lib.platforms.unix;
   };
 })

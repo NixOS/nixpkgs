@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny library for coding with large language models";
     homepage = "https://srush-minichain.hf.space";
     changelog = "https://github.com/srush/MiniChain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

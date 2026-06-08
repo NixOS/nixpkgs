@@ -8,16 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "tofu-ls";
-  version = "0.3.0";
+  version = "0.5.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "tofu-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1n4BLep3KPku/eqZYsQVu57jq4fcua6pGGWq9oYh2Hg=";
+    hash = "sha256-v6oqCRsiTAOGqhVZD6Zwhq0/bSl55PhH9+aEYxjlQcA=";
   };
 
-  vendorHash = "sha256-y7gyhek1urGVe1se8yd+EqgfeOGDde80AfwIwlk7Zso=";
+  vendorHash = "sha256-vugyEaOD7diOiymo9nDEfIez++mPYWq1qVj3a9wCqoc=";
 
   ldflags = [
     "-s"
@@ -42,13 +44,13 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenTofu Language Server";
     homepage = "https://github.com/opentofu/tofu-ls";
+    changelog = "https://github.com/opentofu/tofu-ls/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "tofu-ls";

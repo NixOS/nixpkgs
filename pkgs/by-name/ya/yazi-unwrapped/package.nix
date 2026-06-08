@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yazi";
-  version = "25.5.31";
+  version = "26.5.6";
 
   srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  cargoHash = "sha256-5oNhqiQYkzaNZ1vK3hV5vWQCNr6D9VPNoqkS8ZOLf/4=";
+  cargoHash = "sha256-gc0uEMNJ+eCIymXK10+Swi11xuyP5cj6MbLLB/ZDgXw=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2025-05-30";
+  env.VERGEN_BUILD_DATE = "2026-05-05";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "sxyazi";
       repo = "yazi";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-Er9d/5F34c2Uw+DN/9j+j7TdeWiSxMQlZSgsATC04cM=";
+      hash = "sha256-sdaqZwLb+fBTg5Pd6WWfOWKCavsXWSSZrBEXuYuc8iM=";
     };
 
     man_src = fetchFromGitHub {
@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
+    changelog = "https://github.com/sxyazi/yazi/blob/${finalAttrs.passthru.srcs.code_src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       eljamm

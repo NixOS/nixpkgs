@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cronsim";
   version = "2.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cuu508";
     repo = "cronsim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9TextQcZAX5Ri6cc+Qd4T+u8XjxriqoTsy/9/G8XDAM=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cronsim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cron expression parser and evaluator";
     homepage = "https://github.com/cuu508/cronsim";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phaer ];
   };
-}
+})

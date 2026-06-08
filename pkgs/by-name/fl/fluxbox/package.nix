@@ -5,13 +5,13 @@
   pkg-config,
   freetype,
   fribidi,
-  libXext,
-  libXft,
-  libXpm,
-  libXrandr,
-  libXrender,
+  libxext,
+  libxft,
+  libxpm,
+  libxrandr,
+  libxrender,
   xorgproto,
-  libXinerama,
+  libxinerama,
   imlib2,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "1.3.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fluxbox/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/fluxbox/fluxbox-${version}.tar.xz";
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     fribidi
-    libXext
-    libXft
-    libXpm
-    libXrandr
-    libXrender
+    libxext
+    libxft
+    libxpm
+    libxrandr
+    libxrender
     xorgproto
-    libXinerama
+    libxinerama
     imlib2
   ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       --subst-var-by PREFIX "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       under MIT license.
     '';
     homepage = "https://fluxbox.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
 # Many thanks Jack Ryan from Nix-dev mailing list!

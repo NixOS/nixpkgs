@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     "INSTALL=${coreutils}/bin/install"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Crack and decrypt BLE encryption";
     homepage = "https://github.com/mikeryan/crackle";
-    maintainers = with maintainers; [ moni ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.bsd2;
     mainProgram = "crackle";
   };
 }

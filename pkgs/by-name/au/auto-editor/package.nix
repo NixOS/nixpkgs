@@ -1,66 +1,51 @@
 {
   lib,
+  stdenv,
+  config,
   buildNimPackage,
   fetchFromGitHub,
 
-  withHEVC ? true,
-  withWhisper ? false,
-
-  ffmpeg,
+  ffmpeg-full,
   yt-dlp,
   lame,
   libopus,
   libvpx,
   x264,
-  x265,
   dav1d,
-  svt-av1,
-  whisper-cpp,
 
   python3,
   python3Packages,
-  nimble,
-  nim,
 }:
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.3.1";
+  version = "30.4.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-Nne6niGnhaEQNvvFURmF0N9oyuG1ZvJ4NzxddJdSQtY=";
+    hash = "sha256-AzUTDOWzyhZLrwqO9HfZ/Ke72LElJAMzVoDydBfYKwg=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-full
     lame
     libopus
-    libvpx
     x264
     dav1d
-    svt-av1
-  ]
-  ++ lib.optionals withHEVC [
-    x265
-  ]
-  ++ lib.optionals withWhisper [
-    whisper-cpp
   ];
 
-  nimFlags = [
-    "--passc:-Wno-incompatible-pointer-types"
-  ]
-  ++ lib.optionals withHEVC [
-    "-d:enable_hevc"
-  ]
-  ++ lib.optionals withWhisper [
-    "-d:enable_whisper"
-  ];
+  env = {
+    # Nothing should be dynamically linked, as ffmpeg should already link it.
+    DISABLE_HEVC = "1";
+    DISABLE_WHISPER = "1";
+    DISABLE_VPX = "1";
+    DISABLE_SVTAV1 = "1";
+    DISABLE_VPL = "1";
+  };
 
   postPatch = ''
     substituteInPlace src/log.nim \
@@ -71,26 +56,23 @@ buildNimPackage rec {
       --replace-fail '"main=auto-editor"' '"main"'
   '';
 
-  # TODO: Fix checks
-  /*
-    nativeCheckInputs = [
-      python3Packages.av
-      python3
-    ];
+  nativeCheckInputs = [
+    python3
+    python3Packages.av
+  ];
 
-    checkPhase = ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      nim c \
-      ${if withHEVC then "-d:enable_hevc" else ""} \
-      ${if withWhisper then "-d:enable_whisper" else ""} \
-      -r $src/src/rationals
+    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/unit.nim"
 
-      python3 $src/tests/test.py
+    substituteInPlace tests/test.py \
+      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
 
-      runHook postCheck
-    '';
-  */
+    python3 tests/test.py
+
+    runHook postCheck
+  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

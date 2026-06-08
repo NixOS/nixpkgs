@@ -16,7 +16,7 @@
   unstableGitUpdater,
   wayland,
   wayland-protocols,
-  wlroots,
+  wlroots_0_19,
   xwayland,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
     xwayland
   ];
 

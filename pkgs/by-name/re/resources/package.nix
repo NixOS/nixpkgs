@@ -23,18 +23,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.9.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ayptMBniaqVQwLThxTbMn5498kURjwRkC9lVPs7pryo=";
+    hash = "sha256-BkyWq3Cwt34lNQ/p1iQcfIlkCefE2YeiQMd1T6ODbxw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-b6zWjSTkqdLaWRtMIHTLT0rEHlIxEKejYuoJkr4C3nY=";
+    hash = "sha256-zzSqwc+MoYoieOT0qmgfxKG8/HLGTVsTgcru5wZgn2M=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lukas-heiligenbrunner
       ewuuwe
+      graysontinker
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;

@@ -3,30 +3,34 @@
   stdenv,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   callPackage,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.4.22";
+  version = "10.4.24";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
     rev = finalAttrs.version;
-    hash = "sha256-cIUotZ+RFmwD6mf31k69VwZtX7bSIUVvwoUutkyt3qU=";
+    hash = "sha256-9XZWkBDqkaBbIHq3wIbo4neToPM+NCxi9c1AyVqmnvc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-gqxspt7fX8+Ss/uUBq834fTfV5tVKZREC4e1WtE+7WM=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-PPYyEsc0o5ufBexUdiX9EJLEsQZ0wX7saBzxJGsnseU=";
   };
 
   installPhase = ''
@@ -59,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "autoprefixer";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

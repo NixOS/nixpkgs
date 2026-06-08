@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinysegmenter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Very compact Japanese tokenizer";
     homepage = "https://tinysegmenter.tuxfamily.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

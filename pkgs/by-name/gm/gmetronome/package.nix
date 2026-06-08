@@ -9,7 +9,7 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmetronome";
   version = "0.4.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "dqpb";
     repo = "gmetronome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/UWOvVeZILDR29VjBK+mFJt1hzWcOljOr7J7+cMrKtM=";
   };
 
@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free software metronome and tempo measurement tool";
     homepage = "https://gitlab.gnome.org/dqpb/gmetronome";
-    changelog = "https://gitlab.gnome.org/dqpb/gmetronome/-/blob/${src.rev}/NEWS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aleksana ];
+    changelog = "https://gitlab.gnome.org/dqpb/gmetronome/-/blob/${finalAttrs.src.rev}/NEWS";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "gmetronome";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -8,14 +8,14 @@
   libusb-compat-0_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fujprog";
   version = "4.8";
 
   src = fetchFromGitHub {
     owner = "kost";
     repo = "fujprog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "08kzkzd5a1wfd1aycywdynxh3qy6n7z9i8lihkahmb4xac3chmz5";
   };
 
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ trepetti ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/kost/fujprog/releases/tag/v${version}";
+    changelog = "https://github.com/kost/fujprog/releases/tag/v${finalAttrs.version}";
   };
-}
+})

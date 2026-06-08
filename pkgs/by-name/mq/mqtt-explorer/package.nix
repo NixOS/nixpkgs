@@ -13,7 +13,7 @@
   copyDesktopItems,
 }:
 # NOTE mqtt-explorer has 3 yarn subpackages and uses relative links
-# between them, which makes it hard to package them via 3 `mkYarnPackage`
+# between them, which makes it hard to package them via 3 `fetchYarnDeps`
 # since the resulting `node_modules` directories don't have the same structure
 # as if they were installed directly. Hence why we opted to use a
 # `stdenv.mkDerivation` instead.
@@ -86,8 +86,9 @@ stdenv.mkDerivation rec {
 
     patchShebangs {node_modules,app/node_modules,backend/node_modules}
 
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     runHook postConfigure
   '';
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
     tsc && cd app && yarn --offline run build && cd ..
 
     yarn --offline run electron-builder --dir \
-      -c.electronDist=electron-dist \
+      -c.electronDist="$electron_dist" \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -143,7 +144,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export ELECTRON_OVERRIDE_DIST_PATH=electron-dist/
+    export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
 
     yarn test:app --offline
     yarn test:backend --offline

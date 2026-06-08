@@ -14,7 +14,7 @@
   libarchive,
   libdmapsharing,
   libsoup_3,
-  librest_1_0,
+  librest,
   gnome,
   libxml2,
   lua5_4,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   version = "0.3.18";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/grilo-plugins/${lib.versions.majorMinor version}/grilo-plugins-${version}.tar.xz";
     sha256 = "jjznTucXw8Mi0MsPjfJrsJFAKKXQFuKAVf+0nMmkbF4=";
   };
 
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    # libgdata
     lua5_4
     liboauth
     sqlite
@@ -91,7 +90,7 @@ stdenv.mkDerivation rec {
     libarchive
     libdmapsharing
     libsoup_3
-    librest_1_0
+    librest
     gmime
     gom
     json-glib
@@ -109,11 +108,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/grilo-plugins";
     description = "Collection of plugins for the Grilo framework";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

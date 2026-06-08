@@ -8,7 +8,7 @@
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmtx-utils";
   version = "0.7.6-unstable-2023-09-21";
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Data matrix command-line utilities";
     homepage = "https://github.com/dmtx/dmtx-utils";
-    changelog = "https://github.com/dmtx/dmtx-utils/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/dmtx/dmtx-utils/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -24,11 +24,11 @@ buildDunePackage rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mmottl.github.io/sqlite3-ocaml/";
     description = "OCaml bindings to the SQLite 3 database access library";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vbgl
     ];
   };

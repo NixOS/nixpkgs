@@ -71,18 +71,18 @@ rec {
     # Type
 
     ```
-    isOption :: a -> Bool
+    isOption :: Any -> Bool
     ```
   */
   isOption = lib.isType "option";
 
   /**
-    Creates an Option attribute set. `mkOption` accepts an attribute set with the following keys:
+    Creates an Option declaration for use with the module system.
 
     # Inputs
 
-    Structured attribute set
-    : Attribute set containing none or some of the following attributes.
+    Attribute set
+    : containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -122,16 +122,16 @@ rec {
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
 
-      `...` (any other attribute)
-      : Any other attribute is passed through to the resulting option attribute set.
-
     # Examples
     :::{.example}
     ## `lib.options.mkOption` usage example
 
     ```nix
-    mkOption { }  // => { _type = "option"; }
-    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    mkOption { }
+    # => Empty option; type = types.anything
+
+    mkOption { default = "foo"; }
+    # => Same as above, with a default value
     ```
 
     :::
@@ -258,7 +258,7 @@ rec {
     # Type
 
     ```
-    mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
+    mkPackageOption :: Pkgs -> (String | [String]) -> { nullable? :: Bool; default? :: String | [String]; example? :: Null | String | [String]; extraDescription? :: String; pkgsText? :: String; } -> Option
     ```
 
     # Examples
@@ -433,7 +433,7 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
-      foldl' lib.or false list
+      foldl' lib."or" false list
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
@@ -468,7 +468,7 @@ rec {
     : 3\. Function argument
   */
   mergeUniqueOption =
-    args@{
+    {
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
       #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
@@ -525,7 +525,7 @@ rec {
     # Type
 
     ```
-    getValues :: [ { value :: a; } ] -> [a]
+    getValues :: [{ value :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -547,7 +547,7 @@ rec {
     # Type
 
     ```
-    getFiles :: [ { file :: a; } ] -> [a]
+    getFiles :: [{ file :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -589,11 +589,25 @@ rec {
             renderOptionValue opt.example
           );
         }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default = builtins.addErrorContext "while evaluating the ${
-            if opt ? defaultText then "defaultText" else "default value"
-          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-        }
+        //
+          optionalAttrs
+            (
+              opt ? defaultText
+              || opt ? default
+              # Render emptyValue-based defaults, but only for types without
+              # submodules (e.g. types.submodule). Submodules may evaluate to
+              # error without user defs, and their sub-options are documented
+              # individually, so best to skip those here.
+              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+            )
+            {
+              default =
+                builtins.addErrorContext
+                  "while evaluating the ${
+                    if opt ? defaultText then "defaultText" else "default value"
+                  } of option `${name}`"
+                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+            }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
           inherit (opt) relatedPackages;
         };
@@ -672,11 +686,30 @@ rec {
     is necessary for complex values, e.g. functions, or values that depend on
     other values or packages.
 
+    # Examples
+    :::{.example}
+    ## `literalExpression` usage example
+
+    ```nix
+    llvmPackages = mkOption {
+      type = types.str;
+      description = ''
+        Version of llvm packages to use for
+        this module
+      '';
+      example = literalExpression ''
+        llvmPackages = pkgs.llvmPackages_20;
+      '';
+    };
+    ```
+
+    :::
+
     # Inputs
 
     `text`
 
-    : 1\. Function argument
+    : The text to render as a Nix expression
   */
   literalExpression =
     text:
@@ -687,6 +720,49 @@ rec {
         _type = "literalExpression";
         inherit text;
       };
+
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as a code
+    block with the language bassed on the provided input tag.
+
+    If you wish to render Nix code, please see `literalExpression`.
+
+    # Examples
+    :::{.example}
+    ## `literalCode` usage example
+
+    ```nix
+    myPythonScript = mkOption {
+      type = types.str;
+      description = ''
+        Example python script used by a module
+      '';
+      example = literalCode "python" ''
+        print("Hello world!")
+      '';
+    };
+    ```
+
+    :::
+
+    # Inputs
+
+    `languageTag`
+
+    : The language tag to use when producing the code block (i.e. `js`, `rs`, etc).
+
+    `text`
+
+    : The text to render as a Nix expression
+  */
+  literalCode =
+    languageTag: text:
+    lib.literalMD ''
+      ```${languageTag}
+      ${text}
+      ```
+    '';
 
   /**
     For use in the `defaultText` and `example` option attributes. Causes the
@@ -823,7 +899,7 @@ rec {
     # Type
 
     ```
-    showDefsSep :: { files :: [ String ]; loc :: [ String ]; ... } -> string
+    showOptionWithDefLocs :: { files :: [String]; loc :: [String]; ... } -> String
     ```
   */
   showOptionWithDefLocs = opt: ''

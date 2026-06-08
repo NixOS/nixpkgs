@@ -5,8 +5,8 @@
   runCommand,
   buildNpmPackage,
   clang,
-  go_1_24,
-  libsForQt5,
+  go,
+  qt5,
   qt6,
   udevCheckHook,
 }:
@@ -16,19 +16,19 @@ let
   # it from Qt 5.
   rcc = runCommand "rcc" { } ''
     mkdir -p $out/bin
-    cp ${lib.getExe' libsForQt5.qt5.qtbase.dev "rcc"} $out/bin
+    cp ${lib.getExe' qt5.qtbase.dev "rcc"} $out/bin
   '';
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.49.0";
+  version = "4.50.1";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-pl7vtRQCxRwG58bBnT8iAi2qfsdeJrHbzDeHJsYwjnQ=";
+    hash = "sha256-ZK1US/RF67QPyV0xRVIw4mecNZM/82GhWvjhJ47rKHU=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-J3jT286MZGTHgmRXKiXj7lod9wgoEVQrCfOGCtSyG/s=";
+    npmDepsHash = "sha256-kIYyUeaTgj4dJXfAJ1+3WDIYSADFcs5ypRGTODlxwDI=";
     installPhase = "cp -r build $out";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     clang
-    go_1_24
+    go
     qt6.wrapQtAppsHook
     rcc
     udevCheckHook

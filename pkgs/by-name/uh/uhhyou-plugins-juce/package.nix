@@ -6,10 +6,10 @@
   freetype,
   lib,
   libGL,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libjack2,
   pkg-config,
   stdenv,
@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libjack2
   ];
 
   # Disable LTO to avoid optimization mismatch issues
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-fno-lto"
   ];
 

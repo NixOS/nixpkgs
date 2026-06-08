@@ -5,7 +5,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stderred";
   version = "unstable-2021-04-28";
 
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  meta = with lib; {
+  meta = {
     description = "Colorize all stderr output that goes to terminal, making it distinguishable from stdout";
     homepage = "https://github.com/sickill/stderred";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vojta001 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vojta001 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

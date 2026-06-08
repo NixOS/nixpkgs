@@ -7,11 +7,11 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gatk";
   version = "4.6.2.0";
   src = fetchzip {
-    url = "https://github.com/broadinstitute/gatk/releases/download/${version}/gatk-${version}.zip";
+    url = "https://github.com/broadinstitute/gatk/releases/download/${finalAttrs.version}/gatk-${finalAttrs.version}.zip";
     sha256 = "sha256-I2p7BLh4q0i8qn1fTbzsaKVnCkMrPIxEpBUjOxNxgxI=";
   };
 
@@ -22,20 +22,20 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
-    install -m755 -D $src/gatk-package-${version}-spark.jar $out/bin/
+    install -m755 -D $src/gatk-package-${finalAttrs.version}-local.jar $out/bin/
+    install -m755 -D $src/gatk-package-${finalAttrs.version}-spark.jar $out/bin/
     install -m755 -D $src/gatk $out/bin/
   '';
   postFixup = ''
     wrapProgram $out/bin/gatk --prefix PATH : ${lib.makeBinPath [ jre ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gatk.broadinstitute.org/hc/en-us";
     description = "Wide variety of tools with a primary focus on variant discovery and genotyping";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ apraga ];
+    maintainers = with lib.maintainers; [ apraga ];
     longDescription = ''
       The GATK is the industry standard for identifying SNPs and indels in germline
       DNA and RNAseq data. Its scope is now expanding to include somatic short variant
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
       genome data from any organism, with any level of ploidy.
     '';
   };
-}
+})

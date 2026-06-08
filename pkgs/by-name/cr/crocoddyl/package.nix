@@ -4,34 +4,28 @@
   doxygen,
   example-robot-data,
   fetchFromGitHub,
-  fetchpatch,
+  ffmpeg,
   ipopt,
   lapack,
+  llvmPackages,
   lib,
   pinocchio,
   pkg-config,
   stdenv,
+
+  withMultithread ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "crocoddyl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m7UiCa8ydjsAIhsFiShTi3/JaKgq2TCQ1XYAMyTNg1U=";
+    hash = "sha256-7L4S9DQ470pTXARBuerahO9LD1LQfYOZGrYAZalMPUs=";
   };
-
-  patches = [
-    # ref. https://github.com/loco-3d/crocoddyl/pull/1440 merged upstream
-    (fetchpatch {
-      name = "add-missing-include.patch";
-      url = "https://github.com/loco-3d/crocoddyl/commit/6994bea7bb3ae6027f5b611ef1635768538150fd.patch";
-      hash = "sha256-XbQKRWpWm5Rk4figoA2swId4Pz2xKDpU4NFP46p8WO0=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -54,11 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
+    llvmPackages.openmp
+  ];
+
+  checkInputs = [
+    ffmpeg
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_WITH_MULTITHREADS" withMultithread)
   ];
+
+  passthru = { inherit withMultithread; };
 
   prePatch = ''
     substituteInPlace \
@@ -69,14 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Crocoddyl optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/loco-3d/crocoddyl/blob/devel/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

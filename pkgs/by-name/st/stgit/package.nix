@@ -17,14 +17,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stgit";
   version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zl3xy4t15QwdHeo0cjtorOcmD6oerprUswoMubpVLGU=";
   };
 
@@ -93,12 +93,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completion/stgit.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jshholland ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "stg";
   };
-}
+})

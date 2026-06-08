@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -17,61 +18,33 @@
   ruamel-yaml,
   typing-extensions,
   ujson,
-  distutils,
+  gputil,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
   nix-update-script,
 }:
 
-let
-  gputil = buildPythonPackage rec {
-    pname = "gputil";
-    version = "1.4.0";
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "anderskm";
-      repo = "gputil";
-      tag = "v${version}";
-      hash = "sha256-iOyB653BMmDBtK1fM1ZyddjlnaypsuLMOV0sKaBt+yE=";
-    };
-
-    build-system = [ setuptools ];
-
-    dependencies = [ distutils ];
-
-    pythonImportsCheck = [ "GPUtil" ];
-
-    meta = {
-      homepage = "https://github.com/anderskm/gputil";
-      license = lib.licenses.mit;
-      description = "Getting GPU status from NVIDA GPUs using nvidia-smi";
-      changelog = "https://github.com/anderskm/gputil/releases/tag/${src.tag}";
-    };
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paddlex";
-  version = "3.3.10";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
-    tag = "v${version}";
-    hash = "sha256-zP9MogxeKbnWtbMM6Kz6ItmSdqTZN5U6d1GkskFJhsI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GKYymu7+rgD+cpWb7P+/dJlbONepsZJu4XyFYFH3olU=";
   };
 
-  build-system = [ setuptools ];
-
-  pythonRemoveDeps = [
-    # unpackaged
-    "aistudio-sdk"
-    "modelscope"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
+
   pythonRelaxDeps = [
-    "numpy"
-    "pandas"
     "pyyaml"
+    "numpy"
   ];
 
   dependencies = [
@@ -91,6 +64,8 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -99,7 +74,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
-    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
+    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     platforms = [
       "x86_64-linux"
@@ -108,4 +83,4 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

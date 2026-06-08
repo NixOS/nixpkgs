@@ -16,7 +16,7 @@
   libgit2,
   libpulseaudio,
   libsodium,
-  libXtst,
+  libxtst,
   libvpx,
   libyuv,
   libopus,
@@ -24,8 +24,10 @@
   libxkbcommon,
   libsciter,
   xdotool,
+  openssl,
   pam,
   pango,
+  perl,
   zlib,
   zstd,
   stdenv,
@@ -36,17 +38,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.3";
+  version = "1.4.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
+    hash = "sha256-k4hJjr6xN1EOPfxRoTZMAUXZCFrwod3c+jVtBbqqO0U=";
   };
 
-  cargoHash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
+  cargoHash = "sha256-vK0Z/BUlsmAIfbG8utHKNVDM3ZHPzHML+4l2tE6aU78=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -67,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+    perl
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook3
@@ -90,12 +94,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     libpulseaudio
     libsodium
-    libXtst
+    libxtst
     libvpx
     libyuv
     libopus
     libaom
     libxkbcommon
+    openssl
     pam
     pango
     zlib
@@ -106,6 +111,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     xdotool
   ];
+
+  postPatch = ''
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+  '';
 
   # Add static ui resources and libsciter to same folder as binary so that it
   # can find them.

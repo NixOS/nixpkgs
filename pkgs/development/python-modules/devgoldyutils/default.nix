@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "devgoldyutils";
   version = "3.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

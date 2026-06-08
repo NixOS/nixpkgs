@@ -14,15 +14,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvc";
-  version = "1.18.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
-    tag = "r${version}";
-    hash = "sha256-a1enY86rlLwlRSmY0R4ZfXUo6PddlIAeaKnvfJVcYCQ=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-aGRN12QL+ODcCpxRXK8RtjT7Zk+rd1ld1gjxlubPFgI=";
   };
 
   nativeBuildInputs = [
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "VHDL compiler and simulator";
     mainProgram = "nvc";
     homepage = "https://www.nickg.me.uk/nvc/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})

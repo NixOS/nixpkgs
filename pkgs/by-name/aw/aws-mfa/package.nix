@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aws-mfa";
   version = "0.0.12";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "broamski";
     repo = "aws-mfa";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XhnDri7QV8esKtx0SttWAvevE3SH2Yj2YMq/P4K6jK4=";
   };
 
@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
     "awsmfa"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage AWS MFA Security Credentials";
     mainProgram = "aws-mfa";
     homepage = "https://github.com/broamski/aws-mfa";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

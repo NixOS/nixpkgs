@@ -31,10 +31,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "vidstab" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdamSpannbauer/python_video_stab";
     description = "Video Stabilization using OpenCV";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

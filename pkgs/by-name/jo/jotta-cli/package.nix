@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.17.148769";
+  version = "0.17.159692";
 
   src = fetchzip {
     url = "https://repo.jotta.us/archives/linux/amd64/jotta-cli-${version}_linux_amd64.tar.gz";
-    hash = "sha256-uI5yYpyLa7gGg9eL1nG5MMwHZ2j2yH5/8n5sB/WgoQI=";
+    hash = "sha256-R+eHUZghvhD935vx9/tS0DGcDqtRKqy68JI/OH1X9LU=";
     stripRoot = false;
   };
 

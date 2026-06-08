@@ -25,9 +25,9 @@ buildPythonPackage {
     sha256 = "sha256-iB5ky4fPX8ZnvXlDpggqS/345k2x/mPC4cIgb9M0f/c=";
   };
 
-  meta = with lib; {
-    maintainers = [ maintainers.cab404 ];
-    license = licenses.gpl3Plus;
+  meta = {
+    maintainers = [ lib.maintainers.cab404 ];
+    license = lib.licenses.gpl3Plus;
     description = "Library for reading and writing files for the Anycubic Photon 3D-Printer";
     homepage = "https://github.com/cab404/pyphotonfile";
   };

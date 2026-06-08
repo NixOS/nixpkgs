@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.7";
+  version = "9.0";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-r9KHqmcsSLjhqT/bbGWIRT1SdRDZZoIraH8oNfDZhuk=";
+    hash = "sha256-nzhDdLSWEQoltzrVpf67OEeDxuMYizcGP2d6yQgBP94=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "doc"
     "info"
+    "man"
   ];
 
   configureFlags = [
@@ -99,15 +101,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nano-editor.org/";
     description = "Small, user-friendly console text editor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      joachifm
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       sigmasquadron
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "nano";
   };
 }

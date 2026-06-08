@@ -4,17 +4,13 @@
   python3,
 }:
 
-let
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xenon";
   version = "0.9.3";
-in
-python3.pkgs.buildPythonApplication {
-
-  inherit pname version;
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SnU42LoIql15BV+z4LI5PAvW19FqSrD83vAu8fEKQ/o=";
   };
 
@@ -30,11 +26,11 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "xenon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Monitoring tool based on radon";
     homepage = "https://github.com/rubik/xenon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "xenon";
   };
-}
+})

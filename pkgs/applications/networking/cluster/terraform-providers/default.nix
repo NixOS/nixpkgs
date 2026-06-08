@@ -108,6 +108,15 @@ let
       propagatedBuildInputs = [ cdrtools ];
     });
     aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
+    # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
+    # platform-specific files leading to vendorHash varying across platforms.
+    "1password_onepassword" =
+      (automated-providers."1password_onepassword".override { proxyVendor = true; }).overrideAttrs
+        (finalAttrs: {
+          env = finalAttrs.env // {
+            CGO_ENABLED = "1";
+          };
+        });
   };
 
   # Put all the providers we not longer support in this list.
@@ -127,6 +136,8 @@ let
       vra7 = archived "vra7" "2025/10";
       ccloud = removed "ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
       sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
     };
 
   # added 2025-10-12
@@ -242,7 +253,6 @@ let
     linuxbox = lib.warnOnInstantiate "terraform-providers.linuxbox has been renamed to terraform-providers.numtide_linuxbox" actualProviders.numtide_linuxbox;
     secret = lib.warnOnInstantiate "terraform-providers.secret has been renamed to terraform-providers.numtide_secret" actualProviders.numtide_secret;
     nutanix = lib.warnOnInstantiate "terraform-providers.nutanix has been renamed to terraform-providers.nutanix_nutanix" actualProviders.nutanix_nutanix;
-    argocd = lib.warnOnInstantiate "terraform-providers.argocd has been renamed to terraform-providers.oboukili_argocd" actualProviders.oboukili_argocd;
     okta = lib.warnOnInstantiate "terraform-providers.okta has been renamed to terraform-providers.okta_okta" actualProviders.okta_okta;
     oktaasa = lib.warnOnInstantiate "terraform-providers.oktaasa has been renamed to terraform-providers.oktadeveloper_oktaasa" actualProviders.oktadeveloper_oktaasa;
     opennebula = lib.warnOnInstantiate "terraform-providers.opennebula has been renamed to terraform-providers.opennebula_opennebula" actualProviders.opennebula_opennebula;

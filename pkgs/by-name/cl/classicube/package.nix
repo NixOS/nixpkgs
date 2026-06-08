@@ -6,23 +6,23 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libGL,
   curl,
   openal,
   liberation_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ClassiCube";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
-    rev = version;
-    sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
+    tag = finalAttrs.version;
+    hash = "sha256-AF4cr3ZXCixwiihS+2ayrzVH5eYShkjlfF0myb2PbHM=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      desktopName = pname;
+      name = finalAttrs.pname;
+      desktopName = finalAttrs.pname;
       genericName = "Sandbox Block Game";
       exec = "ClassiCube";
       icon = "CCicon";
@@ -52,9 +52,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix hardcoded font paths
     ./font-location.patch
-    # For some reason, the Makefile doesn't link
-    # with libcurl and openal when ClassiCube requires them.
-    ./fix-linking.patch
   ];
 
   font_path = "${liberation_ttf}/share/fonts/truetype";
@@ -66,16 +63,17 @@ stdenv.mkDerivation rec {
     # This changes the hardcoded location
     # to the path of liberation_ttf instead
     substituteInPlace src/Platform_Posix.c \
-      --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
-    # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
-    # even though it works perfectly well multi-threaded.
+      --replace-fail '%NIXPKGS_FONT_PATH%' "${finalAttrs.font_path}"
+    # For some reason, the Makefile doesn't link
+    # with libcurl and openal when ClassiCube requires them.
     substituteInPlace Makefile \
-      --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
+      --replace-fail '-lX11 -lXi -lpthread -lGL -ldl -lm' \
+                     '-lX11 -lXi -lpthread -lGL -ldl -lm -lcurl -lopenal'
   '';
 
   buildInputs = [
-    libX11
-    libXi
+    libx11
+    libxi
     libGL
     curl
     openal
@@ -103,12 +101,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.classicube.net/";
     description = "Lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _360ied ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _360ied ];
     mainProgram = "ClassiCube";
   };
-}
+})

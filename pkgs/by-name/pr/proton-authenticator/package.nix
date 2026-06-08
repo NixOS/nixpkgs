@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-authenticator";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "https://proton.me/download/authenticator/linux/ProtonAuthenticator_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-SoTeqnYDMgCoWLGaQZXaHiRKGreFn7FPSz5C0O88uWM=";
+    hash = "sha256-y6VXzytstYBXdmujDWASC8AShQPkr+tNtoynGk0l3hg=";
   };
 
   dontConfigure = true;
@@ -47,7 +47,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Two-factor authentication manager with optional sync";
     homepage = "https://proton.me/authenticator";
     license = lib.licenses.unfree; # source not yet published
-    maintainers = with lib.maintainers; [ felschr ];
+    maintainers = with lib.maintainers; [
+      felschr
+      pbek
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "proton-authenticator";

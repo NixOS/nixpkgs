@@ -1,7 +1,9 @@
 {
   buildRedist,
   cudaAtLeast,
+  cudaOlder,
   lib,
+  fetchpatch,
 }:
 buildRedist {
   redistName = "cuda";
@@ -21,6 +23,37 @@ buildRedist {
     mv -v "$PWD/include/cccl"/* "$PWD/include/"
     nixLog "removing empty $PWD/include/cccl directory"
     rmdir -v "$PWD/include/cccl"
+  '';
+
+  patches =
+    lib.optionals (cudaAtLeast "12.9" && cudaOlder "13.0") [
+      # Fix missing _CCCL_PP_SPLICE_WITH_IMPL20 in preprocessor.h
+      # https://github.com/NVIDIA/cccl/issues/4967
+      # https://github.com/NVIDIA/cccl/pull/4972
+      (fetchpatch {
+        name = "fix-missing-_CCCL_PP_SPLICE_WITH_IMPL20";
+        url = "https://github.com/NVIDIA/cccl/commit/2c2276d8b19d737cb16811ce2eb761030f472e60.patch";
+        stripLen = 1;
+        hash = "sha256-hYfMFsd7Y8CwuNGaPYG6uEB+lg1TmWSIIU5ToVMULKY=";
+      })
+    ]
+    ++ lib.optionals (cudaAtLeast "13.2") [
+      # Fix onnxruntime compilation error: https://github.com/microsoft/onnxruntime/issues/28023
+      # Backport: https://github.com/NVIDIA/cccl/pull/8771
+      (fetchpatch {
+        name = "fix-invalid-cpp-syntax";
+        url = "https://github.com/NVIDIA/cccl/commit/8e41eeabe54ab9ae48ad5640cfa7153b0a1071af.patch";
+        stripLen = 2;
+        extraPrefix = "include/";
+        hash = "sha256-eko1GSD2NPSLtbQ3diwgKMbuS6wU9lHDOajLJy5lBwM=";
+      })
+    ];
+
+  # NVIDIA, in their wisdom, expect CCCL to be a directory inside include.
+  # https://github.com/NVIDIA/cutlass/blob/087c84df83d254b5fb295a7a408f1a1d554085cf/CMakeLists.txt#L773
+  postInstall = lib.optionalString (cudaAtLeast "13.0") ''
+    nixLog "creating alias for ''${!outputInclude:?}/include/cccl"
+    ln -srv "''${!outputInclude:?}/include" "''${!outputInclude:?}/include/cccl"
   '';
 
   meta = {

@@ -13,20 +13,20 @@
 assert !blas.isILP64;
 assert !lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libMBD";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "libmbd";
     repo = "libMBD";
-    rev = version;
-    hash = "sha256-mSKD/pNluumKP3SCubD68uak2Vya/1tyIh42UxRgSXY=";
+    rev = finalAttrs.version;
+    hash = "sha256-ra5nPH7wTlATHWM1QiMZ43P9q9wDfV9CUhm7T0nj3kk=";
   };
 
   preConfigure = ''
     cat > cmake/libMBDVersionTag.cmake << EOF
-      set(VERSION_TAG "${version}")
+      set(VERSION_TAG "${finalAttrs.version}")
     EOF
   '';
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  meta = with lib; {
+  meta = {
     description = "Many-body dispersion library";
     homepage = "https://github.com/libmbd/libmbd";
-    license = licenses.mpl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

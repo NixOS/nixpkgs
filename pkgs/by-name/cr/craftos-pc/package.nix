@@ -13,7 +13,7 @@
   libpng,
   pngpp,
   libwebp,
-  libX11,
+  libx11,
 }:
 
 let
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libwebp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
   strictDeps = true;
 
@@ -117,15 +117,15 @@ stdenv.mkDerivation rec {
     eval-periphemu = callPackage ./test-eval-periphemu { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       free
     ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       siraben
       tomodachi94
       viluon

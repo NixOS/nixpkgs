@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "embedding_reader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficiently read embedding in streaming from any filesystem";
     homepage = "https://github.com/rom1504/embedding-reader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

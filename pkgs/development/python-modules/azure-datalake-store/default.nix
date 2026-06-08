@@ -5,24 +5,24 @@
   buildPythonPackage,
   fetchPypi,
   msal,
-  pythonOlder,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-datalake-store";
   version = "1.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "azure_datalake_store";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-U2TURFqrFUocfLECFWKcPORs5ceqrxYHGJDAP65ToDU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     adal
     azure-common
     msal
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This project is the Python filesystem library for Azure Data Lake Store";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

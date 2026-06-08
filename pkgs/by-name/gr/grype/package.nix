@@ -7,17 +7,21 @@
   installShellFiles,
   openssl,
   net-tools,
+  zstd,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.104.1";
+  version = "0.113.0";
+
+  # required for tests
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6oXpS3rJIQpUfMNRfIFT09HhOs7sTL1EqGouSZlr3z8=";
+    hash = "sha256-wNInrYI7cxn/WsPLZp01rEzQm4gUG0xUgvSLlv27WUM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -32,7 +36,13 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-Z5QrF/d1RDUsQniCfbk6729TXTAHmcrGT+8F9K68HAo=";
+  vendorHash = "sha256-VZutEOKZK0aYiS5e9WWXCBOw7epr3xfYJo0xrpSecdk=";
+
+  patches = [
+    # several test golden files have unstable paths based on the platform
+    # this patch adjusts the `Redact` helper to also work for builds by nix.
+    ./0001-test_helpers-redact-support-nix.patch
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,6 +50,7 @@ buildGoModule (finalAttrs: {
     git
     openssl
     net-tools
+    zstd
   ];
 
   subPackages = [ "cmd/grype" ];
@@ -70,49 +81,45 @@ buildGoModule (finalAttrs: {
     unset ldflags
 
     # patch utility script
-    patchShebangs grype/db/v5/distribution/test-fixtures/tls/generate-x509-cert-pair.sh
+    patchShebangs grype/db/v5/distribution/testdata/tls/generate-x509-cert-pair.sh
 
-    # FIXME: these tests fail when building with Nix
-    substituteInPlace test/cli/config_test.go \
-      --replace-fail "Test_configLoading" "Skip_configLoading"
-    substituteInPlace test/cli/db_providers_test.go \
-      --replace-fail "TestDBProviders" "SkipDBProviders"
-    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
-      --replace-fail "TestCycloneDxPresenterDir" "SkipCycloneDxPresenterDir" \
-      --replace-fail "Test_CycloneDX_Valid" "Skip_CycloneDX_Valid"
-
-    # remove tests that depend on docker
-    substituteInPlace test/cli/cmd_test.go \
-      --replace-fail "TestCmd" "SkipCmd"
-    substituteInPlace grype/pkg/provider_test.go \
-      --replace-fail "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
-    substituteInPlace test/cli/cmd_test.go \
-      --replace-fail "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
-    # remove tests that depend on git
-    substituteInPlace test/cli/db_validations_test.go \
-      --replace-fail "TestDBValidations" "SkipDBValidations"
-    substituteInPlace test/cli/registry_auth_test.go \
-      --replace-fail "TestRegistryAuth" "SkipRegistryAuth"
-    substituteInPlace test/cli/sbom_input_test.go \
-      --replace-fail "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
-      --replace-fail "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
-    substituteInPlace test/cli/subprocess_test.go \
-      --replace-fail "TestSubprocessStdin" "SkipSubprocessStdin"
-    substituteInPlace grype/internal/packagemetadata/names_test.go \
-      --replace-fail "TestAllNames" "SkipAllNames"
-    substituteInPlace test/cli/version_cmd_test.go \
-      --replace-fail "TestVersionCmdPrintsToStdout" "SkipVersionCmdPrintsToStdout"
-    substituteInPlace grype/presenter/sarif/presenter_test.go \
-      --replace-fail "Test_SarifIsValid" "SkipTest_SarifIsValid"
-
-    # May fail on NixOS, probably due bug in how syft handles tmpfs.
-    # See https://github.com/anchore/grype/issues/1822
-    substituteInPlace grype/distro/distro_test.go \
-      --replace-fail "Test_NewDistroFromRelease_Coverage" "SkipTest_NewDistroFromRelease_Coverage"
-
-    # segfault
-    rm grype/db/v5/namespace/cpe/namespace_test.go
+    # test build fingerprinting expects a git repository
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+    git add .
+    git commit -m "initial commit"
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # depend on docker
+        "TestCmd"
+        "TestSyftLocationExcludes"
+        "Test_descriptorNameAndVersionSet"
+        # depend on .git
+        "Test_configLoading"
+        "TestDBProviders"
+        "TestDBValidations"
+        "TestRegistryAuth"
+        "TestRegistryAuthRedactions"
+        "TestSBOMInput_FromStdin"
+        "TestSBOMInput_AsArgument"
+        "TestSubprocessStdin"
+        "TestAllNames"
+        "TestVersionCmdPrintsToStdout"
+        "Test_SarifIsValid"
+        "Test_dpkgUseCPEsForEOLEnvVar"
+        "Test_rpmUseCPEsForEOLEnvVar"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # fails to generate x509 certificate
+        # cat: /etc/ssl/openssl.cnf: Operation not permitted
+        "Test_defaultHTTPClientHasCert"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd grype \

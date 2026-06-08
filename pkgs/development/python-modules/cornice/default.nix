@@ -8,7 +8,6 @@
   pytestCheckHook,
   pytest-cache,
   webtest,
-  marshmallow,
   colander,
 }:
 
@@ -35,15 +34,14 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cache
     webtest
-    marshmallow
     colander
   ];
   pythonImportsCheck = [ "cornice" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

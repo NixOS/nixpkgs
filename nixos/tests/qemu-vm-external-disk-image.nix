@@ -23,6 +23,7 @@ let
 
       fileSystems = {
         "/".device = rootFsDevice;
+        "/".fsType = "ext4";
       };
 
       system.switch.enable = true;
@@ -32,7 +33,7 @@ let
         label = rootFslabel;
         partitionTableType = "efi";
         format = "qcow2";
-        bootSize = "32M";
+        bootSize = "128M";
         additionalSpace = "0M";
         copyChannel = false;
       };

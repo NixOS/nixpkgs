@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   # native deps.
   runCommand,
   pkg-config,
@@ -45,6 +46,15 @@ let
     outputs = [
       "out"
       "dev"
+    ];
+
+    patches = [
+      (fetchpatch {
+        # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1772
+        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4eaf8e69cc9839f68b613d0be10103e05c57fe9.patch";
+        hash = "sha256-u/YQ85Jb5OxV8G3HeVPQUw0cmA+TLIDPze9mreqJGL4=";
+        excludes = [ "daemon/ratelimiting.test/tests.inc.c" ];
+      })
     ];
 
     # Path fixups for the NixOS service.
@@ -143,13 +153,13 @@ let
       meson test --print-errorlogs --no-suite snowflake
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Caching validating DNS resolver, from .cz domain registry";
       homepage = "https://knot-resolver.cz";
-      license = licenses.gpl3Plus;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
       maintainers = [
-        maintainers.vcunat # upstream developer
+        lib.maintainers.vcunat # upstream developer
       ];
       mainProgram = "kresd";
     };
@@ -168,7 +178,7 @@ let
         ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        inherit (unwrapped) meta;
+        inherit (unwrapped) version meta;
       }
       (
         ''

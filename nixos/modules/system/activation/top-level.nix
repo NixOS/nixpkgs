@@ -33,11 +33,6 @@ let
 
     ln -s ${config.system.build.etc}/etc $out/etc
 
-    ${lib.optionalString config.system.etc.overlay.enable ''
-      ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
-      ln -s ${config.system.build.etcBasedir} $out/etc-basedir
-    ''}
-
     ln -s ${config.system.path} $out/sw
     ln -s "$systemd" $out/systemd
 
@@ -47,7 +42,7 @@ let
 
     ${config.system.systemBuilderCommands}
 
-    cp "$extraDependenciesPath" "$out/extra-dependencies"
+    printf "%s " "''${extraDependencies[@]}" > "$out/extra-dependencies"
 
     ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
       ${config.boot.bootspec.writer}
@@ -65,7 +60,6 @@ let
       name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
       preferLocalBuild = true;
       allowSubstitutes = false;
-      passAsFile = [ "extraDependencies" ];
       buildCommand = systemBuilder;
 
       systemd = config.systemd.package;
@@ -75,6 +69,9 @@ let
       inherit (config.system) extraDependencies;
     }
     // config.system.systemBuilderArgs
+    // {
+      __structuredAttrs = true;
+    }
   );
 
   # Handle assertions and warnings
@@ -356,7 +353,6 @@ in
       # Legacy environment variables. These were used by the activation script,
       # but some other script might still depend on them, although unlikely.
       installBootLoader = config.system.build.installBootLoader;
-      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
       distroId = config.system.nixos.distroId;
       perl = pkgs.perl.withPackages (
         p: with p; [
@@ -378,6 +374,9 @@ in
       # to the system closure, which defeats the purpose of the `system.checks`
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
+    }
+    // lib.optionalAttrs (config.i18n.glibcLocales != null) {
+      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != [ ]) {
       closureInfo = pkgs.closureInfo {

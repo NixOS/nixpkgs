@@ -17,12 +17,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-tetravex";
   version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/gnome-tetravex-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor finalAttrs.version}/gnome-tetravex-${finalAttrs.version}.tar.xz";
     hash = "sha256-g4SawGTUVuHdRrbiAcaGFSYkw9HsS5mTWYWkmqeRcss=";
   };
 
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-tetravex"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tetravex";
     description = "Complete the puzzle by matching numbered tiles";
     mainProgram = "gnome-tetravex";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

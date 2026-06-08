@@ -17,12 +17,12 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.system}";
   arch = arch_table.${stdenv.system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "essentia-extractor";
   version = "2.1_beta2";
 
   src = fetchurl {
-    url = "https://ftp.acousticbrainz.org/pub/acousticbrainz/essentia-extractor-v${version}-${arch}.tar.gz";
+    url = "https://ftp.acousticbrainz.org/pub/acousticbrainz/essentia-extractor-v${finalAttrs.version}-${arch}.tar.gz";
     sha256 = sha_table.${stdenv.system} or throwSystem;
   };
 
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     cp streaming_extractor_music $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://acousticbrainz.org/download";
     description = "AcousticBrainz audio feature extractor";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     mainProgram = "streaming_extractor_music";
   };
-}
+})

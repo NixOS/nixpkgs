@@ -2,14 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
   buildPackages,
   libiconv,
   perl,
-  texinfo,
   xz,
   binlore,
-  coreutils,
   gmpSupport ? true,
   gmp,
   aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
@@ -46,27 +43,14 @@ let
     ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.8";
+  version = "9.11";
 
   src = fetchurl {
-    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
+    url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
   };
-
-  patches = [
-    # Extremely bad bug where `tail` prints fewer lines than it should.
-    # https://github.com/coreutils/coreutils/commit/914972e80dbf82aac9ffe3ff1f67f1028e1a788b
-    ./tail.patch
-    # Fix performance regression in cp.
-    # https://github.com/coreutils/coreutils/commit/231cc20195294c9774ab68f523dd06059f4b0a5c
-    # https://github.com/coreutils/coreutils/commit/64b8fdb5b4767e0f833486507c3eae46ed1b40f8
-    # https://github.com/coreutils/coreutils/commit/2c5754649e08a664f3d43f7bc1df08f498bc1554
-    ./cp-1.patch
-    ./cp-2.patch
-    ./cp-3.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -115,6 +99,10 @@ stdenv.mkDerivation rec {
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
+    # flaky on some filesystems due to non-deterministic disk usage
+    sed '2i echo Skipping du deref test && exit 77' -i ./tests/du/deref.sh
+    sed '2i echo Skipping du inacc-dir test && exit 77' -i ./tests/du/inacc-dir.sh
+
     # fails when syscalls related to acl not being available, e.g. in sandboxed environment
     sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
   ''
@@ -148,11 +136,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    autoreconfHook
-    texinfo
   ];
 
   buildInputs =
@@ -172,6 +155,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-packager=https://nixos.org"
+    "--with-selinux"
+    "--enable-install-program=kill,uptime"
   ]
   ++ optional (singleBinary != false) (
     "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
@@ -208,22 +193,26 @@ stdenv.mkDerivation rec {
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
     && !stdenv.hostPlatform.isAarch32;
 
-  # Prevents attempts of running 'help2man' on cross-built binaries.
-  PERL = if isCross then "missing" else null;
-
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-  FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ ]
-    # Work around a bogus warning in conjunction with musl.
-    ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
-    # gnulib does not consider Clang-specific warnings to be bugs:
-    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
-    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
-  );
+  env = {
+    NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+    NIX_CFLAGS_COMPILE = toString (
+      [ ]
+      # Work around a bogus warning in conjunction with musl.
+      ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
+      ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+      # gnulib does not consider Clang-specific warnings to be bugs:
+      # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+      # TODO: find out why these are happening on cygwin, which is gcc
+      ++ optional (stdenv.cc.isClang || stdenv.hostPlatform.isCygwin) "-Wno-error=format-security"
+    );
+  }
+  // optionalAttrs isCross {
+    # Prevents attempts of running 'help2man' on cross-built binaries.
+    PERL = "missing";
+  };
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -249,9 +238,13 @@ stdenv.mkDerivation rec {
       #
       # binlore only spots exec in runcon on some platforms (i.e., not
       # darwin; see comment on inverse case below)
-      binlore.out = binlore.synthesize coreutils ''
-        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+        execer can bin/${
+          if withPrefix then "g" else ""
+        }{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
+        execer cannot bin/${
+          if withPrefix then "g" else ""
+        }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
       '';
     }
     // optionalAttrs (singleBinary == false) {
@@ -259,12 +252,12 @@ stdenv.mkDerivation rec {
       # darwin; I have a note that the behavior may need selinux?).
       # hard-set it so people working on macOS don't miss cases of
       # runcon until ofBorg fails.
-      binlore.out = binlore.synthesize coreutils ''
-        execer can bin/runcon
+      binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+        execer can bin/${if withPrefix then "g" else ""}runcon
       '';
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "GNU Core Utilities";
     longDescription = ''
@@ -272,9 +265,14 @@ stdenv.mkDerivation rec {
       utilities of the GNU operating system. These are the core utilities which
       are expected to exist on every operating system.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      das_j
+      mdaniels5757
+    ];
+    teams = [ lib.teams.security-review ];
+    platforms = with lib.platforms; unix ++ windows;
     priority = 10;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

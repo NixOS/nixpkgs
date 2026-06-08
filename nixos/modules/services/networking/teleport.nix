@@ -43,7 +43,7 @@ in
           }
         '';
         description = ''
-          Contents of the `teleport.yaml` config file.
+          Contents of the {file}`teleport.yaml` config file.
           The `--config` arguments will only be passed if this set is not empty.
 
           See <https://goteleport.com/docs/setup/reference/config/>.

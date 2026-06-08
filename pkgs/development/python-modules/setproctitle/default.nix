@@ -27,8 +27,13 @@ buildPythonPackage rec {
     procps
   ];
 
-  # Setting the process title fails on macOS in the Nix builder environment (regardless of sandboxing)
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_setproctitle_darwin" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Setting the process title fails on macOS in the Nix builder environment (regardless of sandboxing)
+    "test_setproctitle_darwin"
+    # *** multi-threaded process forked ***; crashed on child side of fork pre-exec. fork without exec is unsafe.
+    "test_fork_segfault"
+    "test_thread_fork_segfault"
+  ];
 
   pythonImportsCheck = [ "setproctitle" ];
 

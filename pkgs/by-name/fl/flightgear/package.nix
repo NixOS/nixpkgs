@@ -7,63 +7,45 @@
   freealut,
   libGLU,
   libGL,
-  libICE,
+  libice,
   libjpeg,
   openal,
   plib,
-  libSM,
+  libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
   simgear,
+  xz,
   zlib,
   boost,
   cmake,
   libpng,
   udev,
-  fltk13,
+  fltk_1_3,
   apr,
   qt5,
   glew,
   curl,
+  nix-update-script,
 }:
 
 let
-  version = "2024.1.1";
-  data = stdenv.mkDerivation rec {
-    pname = "flightgear-data";
-    inherit version;
-
-    src = fetchFromGitLab {
-      owner = "flightgear";
-      repo = "fgdata";
-      tag = "v${version}";
-      hash = "sha256-PdqsIZw9mSrvnqqB/fVFjWPW9njhXLWR/2LQCMoBLQI=";
-    };
-
-    dontUnpack = true;
-
-    installPhase = ''
-      mkdir -p "$out/share/FlightGear"
-      cp ${src}/* -a "$out/share/FlightGear/"
-    '';
-  };
   openscenegraph = callPackage ./openscenegraph-flightgear.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flightgear";
-  # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
-  inherit version data;
+  version = "2024.1.6-rc1";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
-    tag = "v${version}";
-    hash = "sha256-h4N18VAbJGQSBKA+eEQxej5e5MEwAcZpvH+dpTypM+k=";
+    tag = finalAttrs.version;
+    hash = "sha256-YYWDLCZ+2g4sWrSZJ+EvFCPH/IIYWD0wKzcslqw9VSs=";
   };
 
   nativeBuildInputs = [
@@ -71,45 +53,95 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    libglut
     freealut
-    libGLU
-    libGL
-    libICE
     libjpeg
     openal
-    openscenegraph
     plib
-    libSM
-    libunwind
-    libX11
-    xorgproto
-    libXext
-    libXi
-    libXmu
-    libXt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost
     libpng
-    udev
-    fltk13
+    fltk_1_3
     apr
     qt5.qtbase
     qt5.qtquickcontrols2
     glew
     qt5.qtdeclarative
     curl
+    openscenegraph
+    xz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libglut
+    libGLU
+    libGL
+    libice
+    libsm
+    libunwind
+    libx11
+    xorgproto
+    libxext
+    libxi
+    libxmu
+    libxt
+    udev
   ];
 
-  qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (
+    lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "11.0"
+  );
+
+  qtWrapperArgs = [ "--set FG_ROOT ${finalAttrs.passthru.data}/share/FlightGear" ];
+
+  postInstall = ''
+    # Remove redundant AppImage artifacts
+    rm -rf "$out/appdir"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The bundle copies OSG dylib dangling symlinks
+    rm -rf "$out/FlightGear.app/Contents/Frameworks"
+    # Place app bundle where macOS expects it
+    mkdir -p "$out/Applications"
+    mv "$out/FlightGear.app" "$out/Applications/"
+    # Provide fgfs in bin/ for CLI use, pointing into the bundle
+    ln -s "$out/Applications/FlightGear.app/Contents/MacOS/FlightGear" "$out/bin/fgfs"
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    data = stdenv.mkDerivation {
+      pname = "flightgear-data";
+      inherit (finalAttrs) version;
+
+      src = fetchFromGitLab {
+        owner = "flightgear";
+        repo = "fgdata";
+        tag = finalAttrs.version;
+        hash = "sha256-B7WCEMrHtSW4Yk2HM+ZjgKt5GeQrSmvxKITqAYXKSuw=";
+      };
+
+      dontUnpack = true;
+
+      installPhase = ''
+        mkdir -p "$out/share/FlightGear"
+        cp -a "$src"/* "$out/share/FlightGear/"
+      '';
+    };
+  };
 
   meta = {
-    description = "Flight simulator";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    description = "A free and highly sophisticated flight simulator";
+    homepage = "https://www.flightgear.org/";
+    changelog = "https://www.flightgear.org/download/releases/2024-1-5"; # TODO: Use finalattrs when back on stable tracking
+    maintainers = with lib.maintainers; [
+      raskin
+      kirillrdy
+      philocalyst
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = lib.licenses.gpl2Plus;
     mainProgram = "fgfs";
   };
-}
+})

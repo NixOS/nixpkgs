@@ -10,7 +10,7 @@ postgresqlBuildExtension (finalAttrs: {
   version = "2.2";
 
   src = fetchFromGitHub {
-    owner = "citusdata";
+    owner = "hapostgres";
     repo = "pg_auto_failover";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lsnVry+5n08kLOun8u0B7XFvI5ijTKJtFJ84fixMHe4=";
@@ -26,8 +26,8 @@ postgresqlBuildExtension (finalAttrs: {
         (lib.versionAtLeast postgresql.version "18");
     description = "PostgreSQL extension and service for automated failover and high-availability";
     mainProgram = "pg_autoctl";
-    homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/hapostgres/pg_auto_failover";
+    changelog = "https://github.com/hapostgres/pg_auto_failover/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;

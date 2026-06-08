@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyzx";
-  version = "0.9.0";
+  version = "0.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zxcalc";
     repo = "pyzx";
     tag = "v${version}";
-    hash = "sha256-MhsbJIDeSIeF0LaHhI6nNxPD3ZjBWh5yvLGuwBH41a4=";
+    hash = "sha256-pvwn1Kva2T9twrWieqWmB7DR+vTbRsARs1ltHQ3V2g4=";
   };
 
   build-system = [ setuptools ];

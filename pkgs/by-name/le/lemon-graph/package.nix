@@ -6,12 +6,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lemon-graph";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://lemon.cs.elte.hu/pub/sources/lemon-${version}.tar.gz";
+    url = "https://lemon.cs.elte.hu/pub/sources/lemon-${finalAttrs.version}.tar.gz";
     sha256 = "1j6kp9axhgna47cfnmk1m7vnqn01hwh7pf1fp76aid60yhjwgdvi";
   };
 
@@ -27,13 +27,16 @@ stdenv.mkDerivation rec {
 
     # fix cmake compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/pull/2
     ./cmake_version.patch
+
+    # fix C++20 compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/commit/f871b10396270cfd09ffddc4b6ead07722e9c232
+    ./update_cxx20.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
     description = "Efficient library for combinatorial optimization tasks on graphs and networks";
-    license = licenses.boost;
-    maintainers = with maintainers; [ trepetti ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ trepetti ];
+    platforms = lib.platforms.all;
   };
-}
+})

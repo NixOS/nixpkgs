@@ -37,12 +37,12 @@ stdenvNoCC.mkDerivation {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Baitinq/smart-wallpaper";
     description = "Simple bash script that automatically changes your wallpaper depending on if its daytime or nighttime";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ baitinq ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ baitinq ];
+    platforms = lib.platforms.linux;
     mainProgram = "smart-wallpaper";
   };
 }

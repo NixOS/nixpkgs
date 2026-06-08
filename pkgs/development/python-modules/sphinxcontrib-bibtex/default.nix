@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch2,
   setuptools,
   docutils,
-  importlib-metadata,
   oset,
   pybtex,
   pybtex-docutils,
@@ -19,14 +18,20 @@ buildPythonPackage rec {
   version = "2.6.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mcmtroffaes";
     repo = "sphinxcontrib-bibtex";
     tag = version;
     hash = "sha256-sT23DkIfJcb3cFBFdL31RRzlDoJRcCUYIdpUVuYjGuo=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-tests-docutils-0.22.diff";
+      url = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex/commit/20781600dad48fdfee91353c821597690bfe5f54.diff?full_index=1";
+      hash = "sha256-Ia/ng3yUfhLueEB/n+CW51w/UWfzRhrv/5//Mq2OJ0M=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,9 +41,6 @@ buildPythonPackage rec {
     pybtex
     pybtex-docutils
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -50,10 +52,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for BibTeX style citations";
     homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

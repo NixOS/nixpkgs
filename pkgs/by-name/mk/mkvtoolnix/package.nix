@@ -1,15 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   rake,
   boost,
   cmark,
   docbook_xsl,
-  expat,
-  file,
   flac,
   fmt,
   gettext,
@@ -26,7 +24,6 @@
   pugixml,
   qt6,
   utf8cpp,
-  xdg-utils,
   zlib,
   nix-update-script,
   withGUI ? true,
@@ -52,14 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "96.0";
+  version = "99.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-0jypoZK6lTWAQwcuOVH3EWtA9B01bVIay4HNgEDJIRI=";
+    hash = "sha256-re4z0ZseuOP/P1HW3qdWLIo+YhLlSRBuqefewRm6KEI=";
   };
 
   passthru = {
@@ -67,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [ "--version-regex=release-(.*)" ];
     };
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -82,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   # qtbase and qtmultimedia are needed without the GUI
   buildInputs = [
     boost
-    expat
-    file
     flac
     fmt
     gmp
@@ -97,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     utf8cpp
-    xdg-utils
     zlib
   ]
   ++ optionals withGUI [ cmark ]
@@ -143,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with lib.maintainers; [
-      codyopel
       rnhmjoj
     ];
     platforms = lib.platforms.unix;

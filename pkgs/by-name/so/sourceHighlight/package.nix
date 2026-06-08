@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/src-highlite/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/src-highlite/source-highlight-${version}.tar.gz";
     sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
   };
 
@@ -80,16 +80,16 @@ stdenv.mkDerivation rec {
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Source code renderer with syntax highlighting";
     longDescription = ''
       GNU Source-highlight, given a source file, produces a document
       with syntax highlighting.
     '';
     homepage = "https://www.gnu.org/software/src-highlite/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }
 // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {

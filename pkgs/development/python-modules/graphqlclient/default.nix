@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphqlclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple GraphQL client for Python";
     homepage = "https://github.com/prisma-labs/python-graphql-client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lde ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lde ];
   };
 }

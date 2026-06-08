@@ -23,7 +23,7 @@
   json-glib,
   gcr,
   libgee,
-  gexiv2,
+  gexiv2_0_16,
   gettext,
   desktop-file-utils,
   gdk-pixbuf,
@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.14";
+  version = "0.32.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-QbEi9V0kWkto1ocIX9kjmNJfC7ylSDqYsreTK+Tyido=";
+    sha256 = "sha256-tzpL4XQIGq8nR12+wIjPoeHzJ5AtwVgI12qk7e+dL4M=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libgee
     libgudev
-    gexiv2
+    gexiv2_0_16
     gsettings-desktop-schemas
     libraw
     json-glib
@@ -105,12 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Popular photo organizer for the GNOME desktop";
     mainProgram = "shotwell";
     homepage = "https://gitlab.gnome.org/GNOME/shotwell";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.linux;
   };
 })

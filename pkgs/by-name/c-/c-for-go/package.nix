@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "c-for-go";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "xlab";
     repo = "c-for-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XU+gmQBhQjoiKINfgPQ6bVvslPEFOvF3ZbRaWZE/ZzA=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.msanft ];
     mainProgram = "c-for-go";
   };
-}
+})

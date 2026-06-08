@@ -24,16 +24,20 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.30";
+  version = "4.0.34";
 
-  format = "other";
+  pyproject = false;
 
   src =
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-SJnDTW6oQUd+UjWgJz74Po+ibk3JfotFU7CIt4J/nDA=";
+        hash = "sha256-9YhhsLqAcevjJmENWVWfA1ursPz3mgFz8mzLLSNlXVM=";
         url = "https://www.davisr.me/projects/rcu/";
+        meta = {
+          # `requireFile` sets `lib.licenses.unfree` by default
+          inherit (meta) license;
+        };
       };
     in
     runCommand "${src-tarball.name}-unpacked" { } ''
@@ -175,13 +179,6 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version =
-        let
-          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-        in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
-          lib.strings.substring versionSuffixPos 1 rcu.version
-        })";
     };
 
     # Python stuff automatically adds an updateScript that just fails
@@ -194,7 +191,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      OPNA2608
       m0streng0
     ];
     hydraPlatforms = [ ]; # requireFile used as src

@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyclonedds";
   version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-MQVUZ7PkxauoPpfxlhhAtsKztMe9tcZOpOzshuz/eb8=";
   };
 
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Eclipse Cyclone DDS project";
     homepage = "https://cyclonedds.io/";
-    license = with licenses; [ epl20 ];
-    maintainers = with maintainers; [ bachp ];
+    license = with lib.licenses; [ epl20 ];
+    maintainers = with lib.maintainers; [ bachp ];
   };
-}
+})

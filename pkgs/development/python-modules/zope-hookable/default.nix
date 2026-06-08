@@ -8,20 +8,15 @@
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "7.0";
+  version = "8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.hookable";
     tag = version;
-    hash = "sha256-qJJc646VSdNKors6Au4UAGvm7seFbvjEfpdqf//vJNE=";
+    hash = "sha256-pryx55dzvg+6jSUj4avskTnGKe6w1HkEh6v6OOlHIXY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 
@@ -33,10 +28,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "zope" ];
 
-  meta = with lib; {
+  meta = {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
     changelog = "https://github.com/zopefoundation/zope.hookable/blob/${src.tag}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
   };
 }

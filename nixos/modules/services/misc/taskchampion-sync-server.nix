@@ -7,6 +7,9 @@
 let
   inherit (lib) types;
   cfg = config.services.taskchampion-sync-server;
+  defaultUser = "taskchampion";
+  defaultGroup = "taskchampion";
+  defaultDir = "/var/lib/taskchampion-sync-server";
 in
 {
   options.services.taskchampion-sync-server = {
@@ -15,12 +18,12 @@ in
     user = lib.mkOption {
       description = "Unix User to run the server under";
       type = types.str;
-      default = "taskchampion";
+      default = defaultUser;
     };
     group = lib.mkOption {
       description = "Unix Group to run the server under";
       type = types.str;
-      default = "taskchampion";
+      default = defaultGroup;
     };
     host = lib.mkOption {
       description = "Host address on which to serve";
@@ -37,7 +40,7 @@ in
     dataDir = lib.mkOption {
       description = "Directory in which to store data";
       type = types.path;
-      default = "/var/lib/taskchampion-sync-server";
+      default = defaultDir;
     };
     snapshot = {
       versions = lib.mkOption {
@@ -56,25 +59,21 @@ in
       type = types.listOf types.str;
       default = [ ];
     };
+    dynamicUser = lib.mkOption {
+      description = "Whether to use dynamic user";
+      type = types.bool;
+      default = lib.versionAtLeast config.system.stateVersion "26.05";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    users.users.${cfg.user} = {
+    users.users.${cfg.user} = lib.mkIf (!cfg.dynamicUser && cfg.user == defaultUser) {
       isSystemUser = true;
       inherit (cfg) group;
     };
-    users.groups.${cfg.group} = { };
+    users.groups.${cfg.group} = lib.mkIf (!cfg.dynamicUser && cfg.group == defaultGroup) { };
+
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
-    systemd.tmpfiles.settings = {
-      "10-taskchampion-sync-server" = {
-        "${cfg.dataDir}" = {
-          d = {
-            inherit (cfg) group user;
-            mode = "0750";
-          };
-        };
-      };
-    };
 
     systemd.services.taskchampion-sync-server = {
       wantedBy = [ "multi-user.target" ];
@@ -82,13 +81,14 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        DynamicUser = false;
+        DynamicUser = cfg.dynamicUser;
+        StateDirectory = lib.mkIf (cfg.dataDir == defaultDir) "taskchampion-sync-server";
         ExecStart = ''
           ${lib.getExe cfg.package} \
-            --listen "${cfg.host}:${builtins.toString cfg.port}" \
+            --listen "${cfg.host}:${toString cfg.port}" \
             --data-dir ${cfg.dataDir} \
-            --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
-            --snapshot-days ${builtins.toString cfg.snapshot.days} \
+            --snapshot-versions ${toString cfg.snapshot.versions} \
+            --snapshot-days ${toString cfg.snapshot.days} \
             ${lib.concatMapStringsSep " " (id: "--allow-client-id ${id}") cfg.allowClientIds}
         '';
       };

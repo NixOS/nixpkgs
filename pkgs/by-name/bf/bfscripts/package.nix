@@ -60,12 +60,12 @@ stdenv.mkDerivation {
     ${lib.concatStringsSep "\n" (map (b: "install -D ${b} $out/bin/${b}") binaries)}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of scripts used for BlueField SoC system management";
     homepage = "https://github.com/Mellanox/bfscripts";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       nikstur
       thillux
     ];

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   pytest-asyncio,
   setuptools,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "screenlogicpy";
   version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dieselrabbit";
@@ -52,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "screenlogicpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Pentair Screenlogic devices";
     mainProgram = "screenlogicpy";
     homepage = "https://github.com/dieselrabbit/screenlogicpy";
     changelog = "https://github.com/dieselrabbit/screenlogicpy/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

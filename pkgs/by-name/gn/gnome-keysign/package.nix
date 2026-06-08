@@ -10,7 +10,7 @@
   gst_all_1,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gnome-keysign";
   version = "1.3.0";
   format = "setuptools";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-keysign";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
@@ -64,11 +64,11 @@ python3.pkgs.buildPythonApplication rec {
   # bunch of linting
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

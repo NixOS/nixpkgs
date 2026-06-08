@@ -20,9 +20,9 @@
   boost,
   libGLU,
   libGL,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -32,9 +32,8 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "openscenegraph";
-    # release/2024-build as of 2025-08-08
-    rev = "a4ea8ec535cc969e31e2026b13be147dcb978689";
-    sha256 = "sha256-wnxm4G40j2e6Paqx0vfAR4s4L7esfCHcgxUJWNxk1SM=";
+    rev = "b5895abe0d94a57839929d38b5681dc8e796a8a0";
+    hash = "sha256-FaTn+QZa1qAU9DNhBjQvBLu/Z9q2liatBbsxY8a0hUI=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +44,9 @@ stdenv.mkDerivation {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]
@@ -78,16 +77,25 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [ "-DBUILD_OSG_APPLICATIONS=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_OSG_APPLICATIONS" false)
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeFeature "OSG_WINDOWING_SYSTEM" "Cocoa");
 
-  meta = with lib; {
-    description = "3D graphics toolkit";
-    homepage = "http://www.openscenegraph.org/";
-    maintainers = with maintainers; [
+  meta = {
+    description = "3D graphics toolkit (FlightGear fork)";
+    homepage = "https://gitlab.com/flightgear/openscenegraph";
+    changelog = "https://gitlab.com/flightgear/openscenegraph/-/commits/release/2024-build";
+    maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
-    platforms = with platforms; linux ++ darwin;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    platforms = with lib.platforms; linux ++ darwin;
+
+    # This is a fork of openscenegraph, mirrored licenses
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException31
+    ];
   };
 }

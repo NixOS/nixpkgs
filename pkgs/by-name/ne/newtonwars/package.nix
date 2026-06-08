@@ -43,11 +43,12 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Space battle game with gravity as the main theme";
+    homepage = "https://github.com/Draradech/NewtonWars";
     mainProgram = "nw";
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

@@ -383,6 +383,18 @@ in
         '';
       };
 
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [
+          "--var=RBL_API_KEY=\${RBL_API_KEY}"
+        ];
+        description = ''
+          A list of extra command line arguments to pass to rspamd.
+          Check `rspamd --help` for possible arguments.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "rspamd";
@@ -478,7 +490,7 @@ in
       restartTriggers = [ rspamdDir ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/rspamd ${optionalString cfg.debug "-d"} -c /etc/rspamd/rspamd.conf -f";
+        ExecStart = "${cfg.package}/bin/rspamd ${optionalString cfg.debug "-d"} ${escapeShellArgs cfg.extraArgs} -c /etc/rspamd/rspamd.conf -f";
         Restart = "always";
 
         User = "${cfg.user}";

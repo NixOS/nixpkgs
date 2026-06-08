@@ -2,34 +2,39 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   vscode-utils,
   nix-update-script,
 }:
 
 let
+  pnpm = pnpm_10;
+
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "roo-code-${finalAttrs.version}.zip";
+    name = "roo-code-${finalAttrs.version}.vsix";
     pname = "roo-code-vsix";
-    version = "3.36.2";
+    version = "3.52.0";
 
     src = fetchFromGitHub {
       owner = "RooCodeInc";
       repo = "Roo-Code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-YO3TxKcCDoIJeBoMGFFrHUp6lne1e84Tf1I2vHF6w1c=";
+      hash = "sha256-DvuL1WByEJER+v73pCvwNdRNfM8j+c1VQGGjAyV79p8=";
     };
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-k6Bw6MlFDNPNPdaKJ7tW8wje2j9LJvREtlAWyySnOC0=";
+      inherit pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-t2sPuhn8xdk6hGfmViPGG+5TAhtBBOMYNoOb6DlPzws=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
       pnpm
     ];
 

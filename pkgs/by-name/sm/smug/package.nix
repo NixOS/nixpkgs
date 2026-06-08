@@ -5,27 +5,27 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smug";
-  version = "0.3.12";
+  version = "0.3.18";
 
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "ivaaaan";
     repo = "smug";
-    rev = "v${version}";
-    sha256 = "sha256-LiVeLvJrWDAMXawF5leiv3wEbUp5f+YFg4lpqkyf9pI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+A+FKHmJcStoumw/aDeSHG8nZ8hJbiizViC1MpbzT7g=";
   };
 
-  vendorHash = "sha256-N6btfKjhJ0MkXAL4enyNfnJk8vUeUDCRus5Fb7hNtug=";
+  vendorHash = "sha256-0PWAY2CeBtaRqkN93ZWeVSynaMW8E9zJwUxI5CzC1mE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -33,11 +33,11 @@ buildGoModule rec {
     installShellCompletion completion/smug.{bash,fish}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ivaaaan/smug";
     description = "tmux session manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ juboba ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ juboba ];
     mainProgram = "smug";
   };
-}
+})

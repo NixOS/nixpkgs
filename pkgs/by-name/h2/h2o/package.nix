@@ -7,6 +7,7 @@
   makeWrapper,
   ninja,
   perl,
+  perlPackages,
   brotli,
   openssl,
   libcap,
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2025-12-05";
+  version = "2.3.0-rolling-2026-05-15";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "df3d192f701e48864459fff80bc81135c339b7b0";
-    hash = "sha256-XArZFBkV0nnsh+QXmoZUttvB9vlz8+CrFWaQt8dR7n4=";
+    rev = "9e7f283e5801bd0707cc5d48d0188c4c162fe7b3";
+    hash = "sha256-8FdUQLX67E+7f4HyoH6atLDxYzniVEFqc+jbjzTytFM=";
   };
 
   outputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     ninja
+    perlPackages.JSON
   ]
   ++ lib.optionals withMruby [
     bison
@@ -72,21 +74,24 @@ stdenv.mkDerivation (finalAttrs: {
         --set "H2O_PERL" "${lib.getExe perl}" \
         --prefix "PATH" : "${lib.getBin openssl}/bin"
     done
+
+    wrapProgram "$out/bin/h2olog" \
+        --set "PERL5LIB" "$PERL5LIB"
   '';
 
   passthru = {
     tests = { inherit (nixosTests) h2o; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       toastal
       thoughtpolice
     ];
     mainProgram = "h2o";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

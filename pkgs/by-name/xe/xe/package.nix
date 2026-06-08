@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xe";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "xe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-yek6flBhgjSeN3M695BglUfcbnUGp3skzWT2W/BxW8Y=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.pbsds ];
     mainProgram = "xe";
   };
-}
+})

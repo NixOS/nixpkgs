@@ -6,12 +6,12 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "giflib";
   version = "5.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/giflib/giflib-${version}.tar.gz";
+    url = "mirror://sourceforge/giflib/giflib-${finalAttrs.version}.tar.gz";
     hash = "sha256-vn/70FfK3r4qoURUL9kMaDjGoIO16KkEi47jtmsp1fs=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     branch = "5.2";
   };
-}
+})

@@ -1,17 +1,17 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  xorg,
+  fetchFromCodeberg,
+  libxcursor,
+  libx11,
   installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "sxcs";
+  pname = "sxcs";
   version = "1.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "NRK";
     repo = "sxcs";
     tag = "v${finalAttrs.version}";
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
+    libx11
+    libxcursor
   ];
   nativeBuildInputs = [ installShellFiles ];
 

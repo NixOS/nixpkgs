@@ -16,16 +16,16 @@
 # Although we copy in the udev rules here, you probably just want to use
 # `logitech-udev-rules`, which is an alias to `udev` output of this derivation,
 # instead of adding this to `services.udev.packages` on NixOS,
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
-  version = "1.1.16";
+  version = "1.1.19";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    tag = version;
-    hash = "sha256-PhZoDRsckJXk2t2qR8O3ZGGeMUhmliqSpibfQDO7BeA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z3rWGmFQmfJvsWiPgxQmfXMPHXAAiFneBaoSVIXnAV8=";
   };
 
   outputs = [
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace lib/solaar/listener.py \
-      --replace-fail /usr/bin/getfacl "${lib.getExe' acl "getfacl"}"
+      --replace-fail getfacl "${lib.getExe' acl "getfacl"}"
   '';
 
   # the -cli symlink is just to maintain compabilility with older versions where
@@ -89,7 +89,7 @@ python3Packages.buildPythonApplication rec {
     "solaar.gtk"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux devices manager for the Logitech Unifying Receiver";
     longDescription = ''
       Solaar is a Linux manager for many Logitech keyboards, mice, and trackpads that
@@ -102,13 +102,13 @@ python3Packages.buildPythonApplication rec {
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "solaar";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       spinus
       ysndr
       oxalica
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -16,7 +16,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/stk/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "STK is a (not so) Small Toolbox for Kriging";
     longDescription = ''
       The STK is a (not so) Small Toolbox for Kriging. Its primary focus is on

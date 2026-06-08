@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "hydrawiser";
   version = "0.2";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ptcryan";
@@ -35,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hydrawiser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Hydrawise API";
     homepage = "https://github.com/ptcryan/hydrawiser";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

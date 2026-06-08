@@ -5,7 +5,7 @@
   setuptools,
   libGLU,
   libGL,
-  xorg,
+  libx11,
   numpy,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   propagatedBuildInputs = [ numpy ];
@@ -38,12 +38,12 @@ buildPythonPackage rec {
     ./static-libs.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source software for robot simulation, integrated with OpenAI Gym";
     downloadPage = "https://github.com/bulletphysics/bullet3";
     homepage = "https://pybullet.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ timokau ];
+    platforms = lib.platforms.linux;
   };
 }

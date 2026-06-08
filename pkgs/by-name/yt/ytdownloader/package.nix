@@ -45,7 +45,7 @@ buildNpmPackage rec {
     })
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
 
@@ -70,14 +70,14 @@ buildNpmPackage rec {
         --add-flags $out/lib/node_modules/ytdownloader/main.js \
         --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
 
-    install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
+    install -Dm444 assets/images/icon.png $out/share/icons/hicolor/512x512/apps/ytdownloader.png
   '';
 
   meta = {
     description = "Modern GUI video and audio downloader";
     homepage = "https://github.com/aandrew-me/ytDownloader";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "ytdownloader";
   };

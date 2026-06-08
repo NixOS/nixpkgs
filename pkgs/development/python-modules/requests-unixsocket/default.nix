@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_unixsocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use requests to talk HTTP via a UNIX domain socket";
     homepage = "https://github.com/msabramo/requests-unixsocket";
     changelog = "https://github.com/msabramo/requests-unixsocket/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

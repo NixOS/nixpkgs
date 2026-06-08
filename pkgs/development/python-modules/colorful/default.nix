@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "colorful";
   version = "0.5.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timofurrer";
@@ -24,12 +21,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorful" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for terminal string styling";
     homepage = "https://github.com/timofurrer/colorful";
     changelog = "https://github.com/timofurrer/colorful/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       l33tname
     ];

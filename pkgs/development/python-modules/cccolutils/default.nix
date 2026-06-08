@@ -2,30 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   git,
   gitpython,
   krb5-c, # C krb5 library, not PyPI krb5
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cccolutils";
   version = "1.5";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "CCColUtils";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YzKjG43biRbTZKtzSUHHhtzOfcZfzISHDFolqzrBjL8=";
   };
 
+  build-system = [ setuptools ];
+
   buildInputs = [ krb5-c ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     git
     gitpython
     mock
@@ -35,10 +37,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cccolutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Kerberos 5 Credential Cache Collection Utilities";
     homepage = "https://pagure.io/cccolutils";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ disassembler ];
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

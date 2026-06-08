@@ -6,9 +6,11 @@
 
   # build-system
   cython,
-  gdal,
   numpy,
   setuptools,
+
+  # non-Python dependencies
+  gdal-cpp,
 
   # dependencies
   affine,
@@ -36,26 +38,37 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.4.3";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     tag = version;
-    hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
+    hash = "sha256-Jg9GNw93uA+Lg7/kiQb+tfXXuoggQI0Nkz7cwRqq8FQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "cython~=3.0.2" cython
+      --replace-fail "cython>=3.1,<=3.2" cython
   '';
 
   build-system = [
     cython
-    gdal
     numpy
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    gdal-cpp # for gdal-config
+  ];
+
+  buildInputs = [
+    gdal-cpp
+  ];
+
+  pythonRelaxDeps = [
+    "click"
   ];
 
   dependencies = [
@@ -85,7 +98,6 @@ buildPythonPackage rec {
     shapely
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio
@@ -122,7 +134,7 @@ buildPythonPackage rec {
     description = "Python package to read and write geospatial raster data";
     mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
-    changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/rasterio/rasterio/blob/${src.tag}/CHANGES.txt";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };

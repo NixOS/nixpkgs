@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -11,52 +11,60 @@
   numpy,
   pyside6,
   pyyaml,
-  sentencepiece,
+  requests,
   tqdm,
 
-  # check inputs
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "0.17.1";
+  version = "9538";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "gguf-v${version}";
-    hash = "sha256-XjDMDca4pyc72WQee4h3R6Iq9M0LzO+6ukV6CBWQO1M=";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-7cE5l+fnVsw72UyqAqKP2UmKg2seMCcqsZSKhHBSKLM=";
   };
 
-  sourceRoot = "${src.name}/gguf-py";
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
 
   dependencies = [
     numpy
-    pyside6
     pyyaml
+    requests
     tqdm
-  ]
-  # Sentencepiece is optional and its inclusion crashes darwin
-  # See https://github.com/NixOS/nixpkgs/issues/466092
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    sentencepiece
   ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gguf" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
+
   meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
+    downloadPage = "https://github.com/ggml-org/llama.cpp/releases";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mitchmindtree
       sarahec
     ];
   };
-}
+})

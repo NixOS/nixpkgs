@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,19 +15,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-M3STue+RPHi8JgZZupV0dVLZYKBiFutbBOlanuKkD08=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 Fonts/STIX-Word/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "http://www.stixfonts.org/";
     description = "Fonts for Scientific and Technical Information eXchange";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
   };
 }

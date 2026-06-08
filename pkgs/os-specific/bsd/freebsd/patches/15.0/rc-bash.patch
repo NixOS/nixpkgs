@@ -1,0 +1,13 @@
+diff --git a/libexec/rc/rc.subr b/libexec/rc/rc.subr
+index 101c69e93cde..b95fc1b93285 100644
+--- a/libexec/rc/rc.subr
++++ b/libexec/rc/rc.subr
+@@ -2493,7 +2493,7 @@ ltr()
+ 		fi
+ 	done
+ 	if [ -n "${_var}" ]; then
+-		setvar "${_var}" "${_out}"
++		printf -v "${_var}" "%s" "${_out}"
+ 	else
+ 		echo "${_out}"
+ 	fi

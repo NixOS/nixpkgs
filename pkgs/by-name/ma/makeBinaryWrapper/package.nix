@@ -30,4 +30,6 @@ makeSetupHook {
 
     tests = tests.makeBinaryWrapper;
   };
+
+  meta.license = lib.licenses.mit;
 } ./make-binary-wrapper.sh

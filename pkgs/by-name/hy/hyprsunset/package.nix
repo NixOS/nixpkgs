@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -13,7 +13,7 @@
   wayland-scanner,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
   version = "0.3.3";
 
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprsunset";
+    changelog = "https://github.com/hyprwm/hyprsunset/releases/tag/${finalAttrs.src.tag}";
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

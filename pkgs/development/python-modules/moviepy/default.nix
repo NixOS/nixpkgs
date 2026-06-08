@@ -17,13 +17,6 @@
   requests,
   tqdm,
 
-  # optional-dependencies
-  matplotlib,
-  scikit-image,
-  scikit-learn,
-  scipy,
-  yt-dlp,
-
   # tests
   pytest-timeout,
   pytestCheckHook,
@@ -56,21 +49,10 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  optional-dependencies = {
-    optionals = [
-      matplotlib
-      scikit-image
-      scikit-learn
-      scipy
-      yt-dlp
-    ];
-  };
-
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
   pytestFlags = [ "--timeout=600" ];

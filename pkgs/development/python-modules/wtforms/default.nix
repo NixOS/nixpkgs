@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   babel,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "wtforms";
   version = "3.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wtforms";
@@ -52,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wtforms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

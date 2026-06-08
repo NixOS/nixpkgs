@@ -25,7 +25,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 
   imports = [
@@ -42,6 +42,8 @@ in
       contractor = {
         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
+
+      parental-controls.enable = mkEnableOption "Pantheon parental controls daemon";
 
       apps.enable = mkEnableOption "Pantheon default applications";
 
@@ -162,6 +164,7 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
+      services.pantheon.parental-controls.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -204,6 +207,13 @@ in
       systemd.user.targets."gnome-session-x11-services-ready".wants = [
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
+
+      systemd.user.services."io.elementary.settings-daemon" = {
+        # https://github.com/NixOS/nixpkgs/issues/81138
+        wantedBy = [ "gnome-session-initialized.target" ];
+        # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+      };
 
       # Global environment
       environment.systemPackages =
@@ -266,8 +276,7 @@ in
         ++ (with pkgs.pantheon; [
           elementary-files
           elementary-settings-daemon
-          # https://github.com/elementary/portals/issues/157
-          # xdg-desktop-portal-pantheon
+          xdg-desktop-portal-pantheon
         ])
       ) config.environment.pantheon.excludePackages;
 
@@ -360,5 +369,14 @@ in
       ];
     })
 
+    (mkIf serviceCfg.parental-controls.enable {
+      services.malcontent.enable = mkDefault true;
+
+      environment.systemPackages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      services.dbus.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+
+      systemd.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
+    })
   ];
 }

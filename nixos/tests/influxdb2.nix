@@ -1,9 +1,6 @@
 { pkgs, ... }:
 {
   name = "influxdb2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
-  };
 
   nodes.machine =
     { lib, ... }:

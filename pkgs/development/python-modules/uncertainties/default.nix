@@ -12,18 +12,19 @@
 
   # tests
   pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     tag = version;
-    hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
+    hash = "sha256-XfEiE27azEBNCZ6sIBncJI1cYocoXwgxEkclVgR5O34=";
   };
 
   build-system = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ]
   ++ optional-dependencies.arrays;
 

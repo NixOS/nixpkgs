@@ -1,38 +1,49 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  uv-dynamic-versioning,
+
+  # dependencies
   click,
   distro,
-  fetchFromGitHub,
   gevent,
-  importlib-metadata,
   jinja2,
   packaging,
   paramiko,
-  pytestCheckHook,
+  pydantic,
   python-dateutil,
-  pythonOlder,
-  pywinrm,
-  setuptools,
   typeguard,
-  typing-extensions,
+  types-paramiko,
+
+  # tests
+  freezegun,
+  pyinfra-testgen,
+  pytest-testinfra,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinfra";
-  version = "3.4.1";
+  version = "3.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
-    tag = "v${version}";
-    hash = "sha256-7bNkDm5SyIgVkrGQ95/q7AiY/JnxtWx+jkDO/rJQ2WQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0DIG1Msttg7tqLbCZKi07uWTg3KYgH9rVlWPeJs4wwA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     click
@@ -41,15 +52,19 @@ buildPythonPackage rec {
     jinja2
     packaging
     paramiko
+    pydantic
     python-dateutil
-    pywinrm
-    setuptools
     typeguard
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+    types-paramiko
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pyinfra-testgen
+    pytest-testinfra
+    pytestCheckHook
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "pyinfra" ];
 
@@ -58,7 +73,7 @@ buildPythonPackage rec {
     "test_load_ssh_config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based infrastructure automation";
     longDescription = ''
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
@@ -66,9 +81,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
-    changelog = "https://github.com/Fizzadar/pyinfra/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "pyinfra";
   };
-}
+})

@@ -6,14 +6,14 @@
   jre,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "kotlin-interactive-shell";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Kotlin";
     repo = "kotlin-interactive-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 
@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kotlin Language Interactive Shell";
     longDescription = ''
       The shell is an extensible implementation of Kotlin REPL with a rich set of features including:
@@ -45,9 +45,9 @@ maven.buildMavenPackage rec {
       - List declared symbols
     '';
     homepage = "https://github.com/Kotlin/kotlin-interactive-shell";
-    license = licenses.asl20;
-    maintainers = [ maintainers.starsep ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.starsep ];
     platforms = jre.meta.platforms;
     mainProgram = "ki";
   };
-}
+})

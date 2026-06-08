@@ -173,7 +173,7 @@ These instructions are also applicable to other versions.
 
 Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
 each major version has some internal changes in the databases' state. Because of that,
-NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
+NixOS places the state into {file}`/var/lib/postgresql/$psqlSchema` where `$psqlSchema`
 can be obtained like this:
 ```
 $ nix-instantiate --eval -A postgresql_15.psqlSchema
@@ -237,7 +237,7 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 
 - Each major version is supported for 5 years.
 - Every three months there will be a new minor release, containing bug and security fixes.
-- For criticial/security fixes there could be more minor releases inbetween. This happens *very* infrequently.
+- For critical/security fixes there could be more minor releases in between. This happens *very* infrequently.
 - After five years, a final minor version is released. This usually happens in early November.
 - After that a version is considered end-of-life (EOL).
 - Around February each year is the first time an EOL-release will not have received regular updates anymore.
@@ -285,7 +285,7 @@ A complete list of options for the PostgreSQL module may be found [here](#opt-se
 
 The collection of plugins for each PostgreSQL version can be accessed with `.pkgs`. For example, for the `pkgs.postgresql_15` package, its plugin collection is accessed by `pkgs.postgresql_15.pkgs`:
 ```ShellSession
-$ nix repl '<nixpkgs>'
+$ nix repl -f '<nixpkgs>'
 
 Loading '<nixpkgs>'...
 Added 10574 variables.
@@ -484,6 +484,35 @@ with hardening, it's considered a bug.
 
 When using extensions that are not packaged in `nixpkgs`, hardening adjustments may
 become necessary.
+
+## `postgresql.service` vs `postgresql.target` {#module-services-postgresql-target-vs-service}
+
+In order to delay a service's startup until the local PostgreSQL instance is up, one usually uses a combination of `wants`/`after`, i.e.
+
+```nix
+{
+  systemd.services.myservice = {
+    wants = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
+  };
+}
+```
+
+::: {.note}
+`wants` makes sure that `postgresql.target` is being started when `myservice.service` is started.
+If it's necessary to restart `myservice` when `postgresql.target` gets restarted and `myservice.service` fails to start if `postgresql.service` fails to start, use `requires` instead.
+
+See also {manpage}`systemd.unit(5)`.
+:::
+
+It's also possible to wait for `postgresql.service` instead, however that has a slightly different meaning:
+
+* `postgresql.service` is `active` if the database is __at least__ in read-only mode.
+* `postgresql.target` is `active` if the database is either in __read-write__ mode or a standby server.
+
+This is implemented by making `postgresql.target` wait for `postgresql-setup.service` which waits for the database to be fully up and applies the changes necessary for `ensureUsers`.
+
+Restarting `postgresql.service` by hand also triggers a restart of `postgresql.target`.
 
 ## Notable differences to upstream {#module-services-postgres-upstream-deviation}
 

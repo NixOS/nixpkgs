@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kdigger";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "kdigger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hpLhtTENtOBQjm+CZRAcx1BG9831JUFIsLL57wZIrso=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -34,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/quarkslab/kdigger/commands.VERSION=v${version}"
+    "-X github.com/quarkslab/kdigger/commands.VERSION=v${finalAttrs.version}"
     "-X github.com/quarkslab/kdigger/commands.BUILDERARCH=${stdenv.hostPlatform.linuxArch}"
   ];
 
@@ -60,7 +60,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/quarkslab/kdigger";
-    changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
+    changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${finalAttrs.version}";
     description = "In-pod context discovery tool for Kubernetes penetration testing";
     mainProgram = "kdigger";
     longDescription = ''
@@ -77,4 +77,4 @@ buildGoModule rec {
       "x86_64-darwin"
     ];
   };
-}
+})

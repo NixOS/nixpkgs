@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,7 +9,6 @@
   # dependencies
   jsonschema,
   numpy,
-  opencv-python-headless,
   pillow,
   pydantic,
   pydantic-extra-types,
@@ -18,38 +16,45 @@
   tiktoken,
   typing-extensions,
 
-  # tests
+  # optional-dependencies
   click,
   fastapi,
   huggingface-hub,
-  openai,
-  pycountry,
+  jinja2,
+  llguidance,
+  opencv-python-headless,
   pydantic-settings,
   pytestCheckHook,
   sentencepiece,
   soundfile,
   soxr,
+  uvloop,
+
+  # tests
+  openai,
+  pycountry,
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.8.5";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
-    tag = "v${version}";
-    hash = "sha256-k0En4QHQGzuUm6kdAyPQhbCrmwX3ay/xJ/ktCxiZIBk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EXdZcBR61GNye8LqwIqRO8lP1lK6fqPJufWFO9XkkYQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     jsonschema
     numpy
-    opencv-python-headless
     pillow
     pydantic
     pydantic-extra-types
@@ -58,81 +63,69 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  optional-dependencies = lib.fix (self: {
-    opencv = [
-      opencv-python-headless
-    ];
-    # Broken on Darwin. See https://github.com/NixOS/nixpkgs/issues/466092
-    sentencepiece = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      sentencepiece
-    ];
-    soundfile = [
-      soundfile
-    ];
-    soxr = [
-      soxr
-    ];
-    audio = self.soundfile ++ self.soxr;
-    image = self.opencv;
-    hf-hub = [
-      huggingface-hub
-    ];
-    server = [
-      click
-      fastapi
-      pydantic-settings
-    ]
-    ++ fastapi.optional-dependencies.standard;
-  });
+  optional-dependencies =
+    let
+      self = finalAttrs.finalPackage.optional-dependencies;
+    in
+    {
+      opencv = [
+        opencv-python-headless
+      ];
+      sentencepiece = [
+        sentencepiece
+      ];
+      soundfile = [
+        soundfile
+      ];
+      soxr = [
+        soxr
+      ];
+      audio = self.soundfile ++ self.soxr;
+      image = self.opencv;
+      guidance = [
+        jinja2
+        llguidance
+      ];
+      hf-hub = [
+        huggingface-hub
+      ];
+      server = [
+        click
+        fastapi
+        pydantic-settings
+        uvloop
+      ]
+      ++ fastapi.optional-dependencies.standard;
+      all =
+        self.opencv
+        ++ self.sentencepiece
+        ++ self.audio
+        ++ self.image
+        ++ self.guidance
+        ++ self.hf-hub
+        ++ self.server;
+    };
 
   pythonImportsCheck = [ "mistral_common" ];
 
   nativeCheckInputs = [
-    click
-    fastapi
-    huggingface-hub
     openai
     pycountry
-    pydantic-settings
     pytestCheckHook
-    soundfile
-    soxr
     uvicorn
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ finalAttrs.finalPackage.optional-dependencies.all;
 
   disabledTests = [
-    # Require internet
-    "test_download_gated_image"
-    "test_image_encoder_formats"
-    "test_image_processing"
-
-    # AssertionError: Regex pattern did not match.
-    "test_from_url"
-
     # AssertionError, Extra items in the right set
     "test_openai_chat_fields"
-  ];
-
-  # Requires sentencepiece which segfaults when initialized on Darwin
-  # See https://github.com/NixOS/nixpkgs/issues/466092
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/experimental/test_app.py"
-    "tests/experimental/test_tools.py"
-    "tests/test_fim_tokenizer.py"
-    "tests/test_integration_samples.py"
-    "tests/test_mistral_tokenizer.py"
-    "tests/test_tokenize_v1.py"
-    "tests/test_tokenize_v2.py"
-    "tests/test_tokenize_v3.py"
-    "tests/test_tokenizer_v7.py"
   ];
 
   meta = {
     description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
-    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${version}";
+    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bgamari ];
   };
-}
+})

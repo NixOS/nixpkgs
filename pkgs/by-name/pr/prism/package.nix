@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prism";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "prism";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IRR7Gu+wGUUYyFfhc003QVlEaWCJPmi6XYVUN6Q6+GA=";
   };
 
@@ -23,9 +23,9 @@ buildGoModule rec {
   meta = {
     description = "RTMP stream recaster/splitter";
     homepage = "https://github.com/muesli/prism";
-    changelog = "https://github.com/muesli/prism/releases/tag/v${version}";
+    changelog = "https://github.com/muesli/prism/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "prism";
   };
-}
+})

@@ -9,7 +9,7 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
@@ -20,16 +20,16 @@
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    tag = version;
-    hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
+    tag = finalAttrs.version;
+    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
   };
 
   postPatch = ''
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]
@@ -70,11 +70,15 @@ python.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
@@ -152,15 +156,15 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
+  meta = {
+    changelog = "https://github.com/borgbackup/borg/blob/${finalAttrs.src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix; # Darwin and FreeBSD mentioned on homepage
     mainProgram = "borg";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
   };
-}
+})

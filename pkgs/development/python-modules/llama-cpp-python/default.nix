@@ -4,7 +4,6 @@
   gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -39,30 +38,18 @@
 let
   stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
 in
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = stdenvTarget; } rec {
   pname = "llama-cpp-python";
-  version = "0.3.16";
+  version = "0.3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-EUDtCv86J4bznsTqNsdgj1IYkAu83cf+RydFTUb2NEE=";
+    hash = "sha256-LqSgohfTv02RNZGMjKG0Pq2vHuIX+446uI2Q3KRmnzI=";
     fetchSubmodules = true;
   };
-  # src = /home/gaetan/llama-cpp-python;
-
-  patches = [
-    # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
-    # https://github.com/ggml-org/llama.cpp/pull/15531
-    (fetchpatch {
-      url = "https://github.com/ggml-org/llama.cpp/pull/15531/commits/63a83ffefe4d478ebadff89300a0a3c5d660f56a.patch";
-      stripLen = 1;
-      extraPrefix = "vendor/llama.cpp/";
-      hash = "sha256-9LGnzviBgYYOOww8lhiLXf7xgd/EtxRXGQMredOO4qM=";
-    })
-  ];
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [
@@ -75,7 +62,6 @@ buildPythonPackage rec {
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
     (lib.cmakeBool "GGML_NATIVE" false)
-    (lib.cmakeFeature "GGML_BUILD_NUMBER" "1")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "GGML_CUDA" true)
@@ -107,8 +93,6 @@ buildPythonPackage rec {
       libcublas # cublas_v2.h
     ]
   );
-
-  stdenv = stdenvTarget;
 
   dependencies = [
     diskcache

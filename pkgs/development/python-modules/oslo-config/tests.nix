@@ -13,7 +13,7 @@
 buildPythonPackage {
   pname = "oslo-config-tests";
   inherit (oslo-config) version src;
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

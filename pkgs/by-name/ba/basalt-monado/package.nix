@@ -6,7 +6,7 @@
   cereal,
   cmake,
   eigen,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitLab,
   fmt,
   freeglut,
@@ -21,10 +21,14 @@
   pkg-config,
   stdenv,
   onetbb,
-  xorg,
+  libx11,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
+
+let
+  opencv' = opencv.override { enableGtk3 = true; };
+in
 stdenv.mkDerivation {
   pname = "basalt-monado";
   version = "0-unstable-2025-09-25";
@@ -41,7 +45,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 
@@ -57,9 +61,9 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv.cxxdev
+    opencv'.cxxdev
     onetbb
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc

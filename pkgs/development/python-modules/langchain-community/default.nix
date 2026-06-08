@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -107,11 +108,23 @@ buildPythonPackage rec {
     # flaky
     "test_llm_caching"
     "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
+    "test_table_info"
+    "test_sql_database_run"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_no_dynamic__all__"
   ];
 
   disabledTestPaths = [
     # depends on Pydantic v1 notations, will not load
     "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
   ];
 
   passthru.updateScript = gitUpdater {

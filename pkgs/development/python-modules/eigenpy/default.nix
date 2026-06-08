@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "eigenpy";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
     tag = "v${version}";
-    hash = "sha256-U4uL0knGJFpD14Gc32lgTZlw7QlXHMEqTnp0bmHJRU8=";
+    hash = "sha256-05G0U1RjVwggfnABxZH+9kxDIo7M9rgxHCcTvNgTZCQ=";
   };
 
   outputs = [
@@ -74,15 +74,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eigenpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
     changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

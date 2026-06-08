@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "selectolax";
-  version = "0.4.4";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rushter";
     repo = "selectolax";
-    tag = "v${version}";
-    hash = "sha256-Et4v105XW06uvzzwic2tBft8ljDurTWIiuKPjCXJbx8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W2Icz600qu7XWLQuaevWFOji270wAmG3VmCxaAODLGw=";
   };
 
   patches = [
@@ -36,24 +36,15 @@ buildPythonPackage rec {
 
   buildInputs = [
     modest
-    (lexbor.overrideAttrs (finalAttrs: {
-      version = "0-unstable-2025-11-24";
-      src = fetchFromGitHub {
-        owner = "lexbor";
-        repo = "lexbor";
-        rev = "7d726f1bed2f489e79751496c584304e6859ee1b";
-        hash = "sha256-vLP/YJWu1Z2kiT0sFLcMPjzMJHJe457oyPTIsxafTfc=";
-      };
-      meta.changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    }))
+    lexbor
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  # shadows name and breaks imports in tests
   preCheck = ''
-    # shadows name and breaks imports in tests
     rm -rf selectolax
   '';
 
@@ -64,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python binding to Modest and Lexbor engines. Fast HTML5 parser with CSS selectors for Python";
     homepage = "https://github.com/rushter/selectolax";
-    changelog = "https://github.com/rushter/selectolax/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/rushter/selectolax/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcel ];
   };
-}
+})

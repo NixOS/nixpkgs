@@ -5,33 +5,25 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  wheel,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busypie";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rockem";
     repo = "busypie";
-    tag = "v${version}";
-    hash = "sha256-dw0Sc/a27/EYY7LVMQqDkYuxrUFYK+N6XLk6A7A/eS8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MIwME5QM0BDpYP9frraJP/1v0lTZpPzgbqAawpGAcU0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
@@ -42,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "busypie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Expressive busy wait for Python";
     homepage = "https://github.com/rockem/busypie";
-    changelog = "https://github.com/rockem/busypie/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/rockem/busypie/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

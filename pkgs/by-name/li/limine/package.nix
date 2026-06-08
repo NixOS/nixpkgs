@@ -47,14 +47,14 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "10.4.0";
+  version = "12.3.2";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
-    url = "https://codeberg.org/Limine/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yCNYjGG5B+G+8liJVZc+VW2ZqSbucC55YfExQkeMv6Q=";
+    url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-xQUoMQbq3fpbvFbYwbHPMz0SZU3LN/gOaF01duhwKGU=";
   };
 
   enableParallelBuilding = true;
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://limine-bootloader.org/";
-    changelog = "https://codeberg.org/Limine/Limine/raw/tag/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/Limine-Bootloader/Limine/raw/refs/tags/v${finalAttrs.version}/ChangeLog";
     description = "Limine Bootloader";
     mainProgram = "limine";
     # The platforms on that the Limine binary and helper tools can run, not
@@ -103,20 +103,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Caution. Some submodules have different licenses.
     license = with lib.licenses; [
       asl20 # cc-runtime
-      bsd0 # freestanding-headers, freestanding-toolchain
+      bsd0 # freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
       bsd2 # limine, flanterm, libfdt, PicoEFI
       bsd2Patent # PicoEFI
       bsd3 # PicoEFI
       bsdAxisNoDisclaimerUnmodified # PicoEFI
       mit # PicoEFI, stb_image
-      zlib # tinf
     ];
     maintainers = with lib.maintainers; [
       johnrtitor
       lzcunt
       prince213
       programmerlexi
-      surfaceflinger
       ryand56
     ];
   };

@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "crc32c";
-  version = "2.7.1";
+  version = "2.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = "crc32c";
     tag = "v${version}";
-    hash = "sha256-WBFiAbdzV719vPdZkRGei2+Y33RroMZ7FeQmWo/OfE0=";
+    hash = "sha256-LPiKms0fVHmgIiwUNWGTAdGByV+Pmh9dRaF/tro2rKo=";
   };
 
   build-system = [ setuptools ];

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # nativeBuildInputs
   setuptools,
   # nativeCheckInputs
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "lastversion";
-  version = "3.5.8";
+  version = "3.6.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dvershinin";
     repo = "lastversion";
     tag = "v${version}";
-    hash = "sha256-J1rx014cuZ2vLDnMg3SRT+ojEsF1KJyGvdDXNBs3Q7g=";
+    hash = "sha256-5losSZnAW16KznXKtH+hy8Ii6j/B5tMOSQFx6Sv3DT0=";
   };
 
   build-system = [ setuptools ];

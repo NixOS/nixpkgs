@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "django-celery-beat";
     tag = "v${version}";
-    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
+    hash = "sha256-UGKMSXB+Hg865sAk5ePc/noO3eNTr7b3pp7tvNvn1T8=";
   };
 
   postPatch = ''
@@ -55,11 +55,11 @@ buildPythonPackage rec {
   # Tests require additional work
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Database-backed Periodic Tasks";
     homepage = "https://github.com/celery/django-celery-beat";
     changelog = "https://github.com/celery/django-celery-beat/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

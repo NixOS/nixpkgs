@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "patcher9x";
   version = "0.8.50";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttr: {
     (fetchFromGitHub {
       owner = "JHRobotics";
       repo = "patcher9x";
-      rev = "v${finalAttr.version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-TZw2+R7Dzojzxzal1Wp8jhe5gwU4CfZDROITi5Z+auo=";
       name = "src";
     })
@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttr: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patch for Windows 95/98/98 SE/Me to fix CPU issues";
     mainProgram = "patcher9x";
     homepage = "https://github.com/JHRobotics/patcher9x";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hughobrien ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hughobrien ];
+    platforms = lib.platforms.linux;
   };
 })

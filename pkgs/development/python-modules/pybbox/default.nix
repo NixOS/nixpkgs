@@ -4,15 +4,12 @@
   fetchFromGitHub,
   netaddr,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pybbox";
   version = "0.0.5-alpha";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "HydrelioxGitHub";

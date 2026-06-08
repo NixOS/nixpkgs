@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
     description = "Tool that helps to detect errors and potential problems in your JavaScript code";
     homepage = "https://jshint.com";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "jshint";
   };
 })

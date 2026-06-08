@@ -8,14 +8,14 @@
   nlohmann_json,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-jwt";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "arun11299";
     repo = "cpp-jwt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TyLYTk7vlpNmYJxaH9zhGwFvv1BEcShTDr7JYfgu6f0=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

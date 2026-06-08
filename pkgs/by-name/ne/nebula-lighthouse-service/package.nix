@@ -7,16 +7,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nebula-lighthouse-service";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "manuels";
     repo = "nebula-lighthouse-service";
-    tag = "v${version}";
-    hash = "sha256-I2eoofEAY1Bbk17opx5cHWK4R+n2RE8JOUVGX1409Xk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cYVFRGYhzsyIZiakLKOYaFxvHP+QXjbT2B4O/oHl6i8=";
   };
 
   postPatch = ''
@@ -68,4 +68,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nebula-lighthouse-service";
   };
-}
+})

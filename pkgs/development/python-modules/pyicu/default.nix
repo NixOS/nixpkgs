@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.15.2";
+  version = "2.15.3";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "main";
     repo = "pyicu";
     tag = "v${version}";
-    hash = "sha256-Div3c4Lk9VTV1HrmvYKDn1a7moDNjG4OHA9Kv3+niKs=";
+    hash = "sha256-vbrl6n7X85sQIdgj+Z0Xr6x/L8roK5Z/mNj53zyWQGs=";
   };
 
   postPatch = ''
@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.pyicu.org/main/pyicu";
     description = "Python extension wrapping the ICU C++ API";
     changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

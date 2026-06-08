@@ -4,8 +4,7 @@
   bashNonInteractive,
   coreutils,
   fetchFromGitHub,
-  fetchpatch2,
-  fuse,
+  fuse3,
   gawk,
   gnugrep,
   gnused,
@@ -13,6 +12,7 @@
   libusb1,
   makeBinaryWrapper,
   pciutils,
+  perl,
   pkg-config,
   procps,
   pv,
@@ -23,25 +23,16 @@
   withBfbInstall ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rshim-user-space";
-  version = "2.5.7";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
-    rev = "rshim-${version}";
-    hash = "sha256-dXrReU6Wx8t6ObrrF3MeUWdFBSfn6tyQqQdGBAZsvDg=";
+    rev = "rshim-${finalAttrs.version}";
+    hash = "sha256-2Hu5ysjh38dBaGeZirke+qMb6jw+6sTh8qd4LPei5ms=";
   };
-
-  # came up shortly after 2.5.7 release, remove with next update
-  patches = [
-    (fetchpatch2 {
-      name = "rshim-fix-bfb-install.patch";
-      url = "https://github.com/Mellanox/rshim-user-space/commit/0b2b17eeb04d80b7efb20aa2a9dc24759680aaea.patch";
-      hash = "sha256-JqnCGWM6Wjg+WFQhqHv6h4VbawyCf75L4wfd7L+n7po=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -51,14 +42,27 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withBfbInstall [ makeBinaryWrapper ];
 
   buildInputs = [
-    fuse
+    fuse3
     libusb1
     pciutils
     systemd
   ];
 
+  patches = [
+    # https://github.com/Mellanox/rshim-user-space/pull/391
+    # Avoid nested PKG_CHECK_MODULES which leaks help text into ./configure
+    # as bare shell, producing "fuse_CFLAGS: command not found" noise.
+    ./fix-fuse-3-support.patch
+    # https://github.com/Mellanox/rshim-user-space/pull/363
+    # Fix console handling under glibc >= 2.42 where struct termio was removed.
+    ./fix-console-handling.patch
+  ];
+
   prePatch = ''
     patchShebangs scripts/bfb-install
+    patchShebangs scripts/bf-reg
+    substituteInPlace scripts/bfb-install \
+      --replace-fail 'bf-reg' "${placeholder "out"}/bin/bf-reg"
   '';
 
   strictDeps = true;
@@ -71,6 +75,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString withBfbInstall ''
     cp -a scripts/bfb-install "$out"/bin/
+    cp -a scripts/bf-reg "$out"/bin/
   '';
 
   postFixup = lib.optionalString withBfbInstall ''
@@ -83,6 +88,7 @@ stdenv.mkDerivation rec {
           gnugrep
           gnused
           pciutils
+          perl
           procps
           pv
           systemd
@@ -92,7 +98,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space rshim driver for the BlueField SoC";
     longDescription = ''
       The rshim driver provides a way to access the rshim resources on the
@@ -102,10 +108,10 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thillux
     ];
   };
-}
+})

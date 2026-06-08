@@ -1,32 +1,37 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  numpy,
-  jaxlib,
-  jax,
-  torch,
-  dask,
-  sparse,
+
+  # tests
   array-api-strict,
-  config,
-  cudaSupport ? config.cudaSupport,
+  dask,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  sparse,
+  torch,
   cupy,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.12";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-Hb0bFjVMl4CBI3gN3abTO2QUPAOvUaFE0GdPjdops5E=";
+    hash = "sha256-4ZoYtqkY/xPRyBP1xeMR80zMfwiaKtXX/3XzqiweCtc=";
   };
 
   build-system = [
@@ -35,14 +40,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    jaxlib
-    jax
-    torch
-    dask
-    sparse
     array-api-strict
+    dask
+    jax
+    jaxlib
+    numpy
+    pytestCheckHook
+    sparse
+    torch
   ]
   ++ lib.optionals cudaSupport [ cupy ];
 

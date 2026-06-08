@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "enc";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "life4";
     repo = "enc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VBtjULav6ks2BYMVnUmOn/bAvonGDPia0eO7pJ1P5+Q=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/life4/enc/version.GitCommit=${version}"
+    "-X github.com/life4/enc/version.GitCommit=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [ git ];
@@ -41,7 +41,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/life4/enc";
-    changelog = "https://github.com/life4/enc/releases/tag/v${version}";
+    changelog = "https://github.com/life4/enc/releases/tag/v${finalAttrs.version}";
     description = "Modern and friendly alternative to GnuPG";
     mainProgram = "enc";
     longDescription = ''
@@ -54,4 +54,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvnstn ];
   };
-}
+})

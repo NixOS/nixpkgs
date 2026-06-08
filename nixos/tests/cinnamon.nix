@@ -68,7 +68,7 @@
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
 
       with subtest("Check if sessionPath option actually works"):
-          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.dup_default\\(\\).get_search_path\\(\\)"} | grep gpaste")
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"
@@ -100,7 +100,7 @@
 
       with subtest("Open virtual keyboard"):
           machine.succeed("${su "dbus-send --print-reply --dest=org.Cinnamon /org/Cinnamon org.Cinnamon.ToggleKeyboard"}")
-          machine.wait_for_text('(Ctrl|Alt)')
+          machine.wait_for_text('(Esc|123)')
           machine.sleep(2)
           machine.screenshot("cinnamon_virtual_keyboard")
 

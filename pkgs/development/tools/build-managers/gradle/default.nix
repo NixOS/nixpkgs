@@ -28,17 +28,23 @@ let
       inherit (gradle) version;
 
       paths = [
-        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
-          name = "setup-hook.sh";
-          files = [
-            (mitm-cache.setupHook)
-            (replaceVars ./setup-hook.sh {
-              # jdk used for keytool
-              inherit (gradle) jdk;
-              init_script = "${./init-build.gradle}";
-            })
-          ];
-        }))
+        (makeSetupHook
+          {
+            name = "gradle-setup-hook";
+            meta.license = lib.licenses.mit;
+          }
+          (concatTextFile {
+            name = "setup-hook.sh";
+            files = [
+              (mitm-cache.setupHook)
+              (replaceVars ./setup-hook.sh {
+                # jdk used for keytool
+                inherit (gradle) jdk;
+                init_script = "${./init-build.gradle}";
+              })
+            ];
+          })
+        )
         gradle
         mitm-cache
       ];
@@ -119,7 +125,7 @@ let
 
       # Put the update script in passthru. Should only be on a single attrpath
       # so that nixpkgs-update doesn't create duplicate PRs.
-      enableUpdateScript ? false,
+      updateScriptMajorVersion ? null,
     }@genArgs:
 
     {
@@ -305,21 +311,22 @@ let
         gradle-unwrapped = mkGradle genArgs;
       };
       passthru.updateScript =
-        if enableUpdateScript then
+        if updateScriptMajorVersion != null then
           nix-update-script {
             extraArgs = [
               "--url=https://github.com/gradle/gradle"
+              "--use-github-releases"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
               # release version omits the `.0`, so we’ll wanto to only capture
               # the version up but not including the the trailing `.0`.
-              "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
+              "--version-regex=^v(${updateScriptMajorVersion}\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
             ];
           }
         else
           null;
 
       meta =
-        with lib;
+
         {
           inherit platforms;
           description = "Enterprise-grade build system";
@@ -334,12 +341,12 @@ let
           homepage = "https://www.gradle.org/";
           changelog = "https://docs.gradle.org/${version}/release-notes.html";
           downloadPage = "https://gradle.org/next-steps/?version=${version}";
-          sourceProvenance = with sourceTypes; [
+          sourceProvenance = with lib.sourceTypes; [
             binaryBytecode
             binaryNativeCode
           ];
-          license = licenses.asl20;
-          maintainers = with maintainers; [
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             britter
             liff
             lorenzleutgeb
@@ -364,16 +371,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.1.0";
-    hash = "sha256-oX3dhaJran9d23H/iwX8UQTAICxuZHgkKXkMkzaGyAY=";
+    version = "9.4.1";
+    hash = "sha256-KrKVjyoeURIMMmytbzhRU7sR7pOzwhbF/M6/37t+xss=";
     defaultJava = jdk21;
+    updateScriptMajorVersion = "9";
   };
   gradle_8 = mkGradle {
-    version = "8.14.3";
-    hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
+    version = "8.14.4";
+    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
     defaultJava = jdk21;
-    # Only enable this on *one* version to avoid duplicate PRs.
-    enableUpdateScript = true;
+    updateScriptMajorVersion = "8";
   };
   gradle_7 = mkGradle {
     version = "7.6.6";

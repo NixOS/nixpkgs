@@ -6,14 +6,14 @@
   kubedog,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubedog";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "kubedog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xBTz1Ux2W0A0leOPNu0yONiz55LiYcYiviKEi8xsUTU=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/kubedog.Version=${src.rev}"
+    "-X github.com/werf/kubedog.Version=${finalAttrs.src.rev}"
   ];
 
   # There are no tests.
@@ -33,18 +33,18 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kubedog;
     command = "kubedog version";
-    version = src.rev;
+    version = finalAttrs.src.rev;
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       A tool to watch and follow Kubernetes resources in CI/CD deployment
       pipelines
     '';
     mainProgram = "kubedog";
     homepage = "https://github.com/werf/kubedog";
-    changelog = "https://github.com/werf/kubedog/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    changelog = "https://github.com/werf/kubedog/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

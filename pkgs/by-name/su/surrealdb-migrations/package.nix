@@ -7,17 +7,14 @@
   nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb-migrations";
   version = "2.4.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Odonno";
     repo = "surrealdb-migrations";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eeIXbpfXZ91XcQ+4T76BGZU0Ron5dAf2pUAvLj9nEok=";
   };
 
@@ -52,11 +49,11 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project";
     homepage = "https://crates.io/crates/surrealdb-migrations";
     mainProgram = "surrealdb-migrations";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

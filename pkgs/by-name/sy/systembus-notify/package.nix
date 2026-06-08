@@ -28,14 +28,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "systembus-notify";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "systembus-notify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WzuBw7LXW54CCMgFE9BSJ2skxaz4IA2BcBny63Ihtt0=";
   };
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   # requires a running dbus instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "System bus notification daemon";
     homepage = "https://github.com/rfjakob/systembus-notify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "systembus-notify";
   };
-}
+})

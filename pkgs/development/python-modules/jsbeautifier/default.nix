@@ -4,23 +4,22 @@
   buildPythonPackage,
   editorconfig,
   pytestCheckHook,
-  pythonOlder,
   six,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsbeautifier";
   version = "1.15.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-W7GNnvuTMdglc1+8U2DujxqsXlJ4AEKAOUOqf4VPdZI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+  dependencies = [
     editorconfig
     six
   ];
@@ -31,12 +30,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "jsbeautifier/tests/testindentation.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript unobfuscator and beautifier";
     mainProgram = "js-beautify";
     homepage = "http://jsbeautifier.org";
-    changelog = "https://github.com/beautify-web/js-beautify/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux ];
+    changelog = "https://github.com/beautify-web/js-beautify/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ apeyroux ];
   };
-}
+})

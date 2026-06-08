@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm_10,
   python3,
   nodejs,
@@ -31,7 +33,7 @@
   pango,
   perl,
   pixman,
-  vips,
+  vips_8_17, # thumbnail generation fails with vips 8.18
   buildPackages,
 }:
 let
@@ -75,14 +77,14 @@ let
   # The geodata website is not versioned, so we use the internet archive
   geodata =
     let
-      timestamp = "20250818205425";
+      timestamp = "20260408011516";
       date =
         "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
         + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-zZHAomW1C4qReFbhme5dkVnTiLw+jmhZhzuYvoBVBCY=";
+        outputHash = "sha256-WSKaTn54+8ckXPsk3jsOJ4yCsO0jLKf3y+apqwNlHc4=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -107,40 +109,38 @@ let
 
   # Without this thumbnail generation for raw photos fails with
   #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
-  vips' = vips.overrideAttrs (prev: {
+  vips' = vips_8_17.overrideAttrs (prev: {
     mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.3.1";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K/E5bQraTlvNx1Cd0bKyY6ZhesafGccqVZ9Mu6Q0pZ0=";
+    hash = "sha256-EC1IXM7KObAWfwG5KEao5VDp79d8WGNEI7E89lLOJ44=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    pname = "immich";
-    inherit (finalAttrs) version src;
-    fetcherVersion = 2;
-    hash = "sha256-i0JHKjsQcdDUrDLK0hJGOvVRh/aOyvms/k+6WEPbyh8=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-FEesjbhxP7ydFfNshF3iFIk9N3Z53jrEZ9DRBjgEfs0=";
   };
 
   postPatch = ''
-    # pg_dumpall fails without database root access
-    # see https://github.com/immich-app/immich/issues/13971
-    substituteInPlace server/src/services/backup.service.ts \
-      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+    substituteInPlace server/src/services/database-backup.service.ts \
+      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/''${bin}`' '`''${bin}`'
   '';
 
   nativeBuildInputs = [
     nodejs
     pkg-config
-    pnpm_10
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
     python3
     makeWrapper
     node-gyp # for building node_modules/sharp from source
@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
+      inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning.override {
@@ -239,8 +239,8 @@ stdenv.mkDerivation (finalAttrs: {
         binaryen
         extism-js
         nodejs
+        pnpmConfigHook
         pnpm
-        pnpm.configHook
       ];
 
       buildPhase = ''
@@ -268,8 +268,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         nodejs
+        pnpmConfigHook
         pnpm
-        pnpm.configHook
       ];
 
       buildPhase = ''

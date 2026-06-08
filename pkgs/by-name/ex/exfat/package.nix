@@ -4,31 +4,36 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  fuse,
+  fuse3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exfat";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "relan";
     repo = "exfat";
-    rev = "v${version}";
-    sha256 = "sha256-5m8fiItEOO6piR132Gxq6SHOPN1rAFTuTVE+UI0V00k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5m8fiItEOO6piR132Gxq6SHOPN1rAFTuTVE+UI0V00k=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
-  buildInputs = [ fuse ];
+  buildInputs = [ fuse3 ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "Free exFAT file system implementation";
-    inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/relan/exfat";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dywedir ];
+    platforms = lib.platforms.unix;
   };
-}
+})

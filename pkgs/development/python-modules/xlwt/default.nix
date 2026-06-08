@@ -36,6 +36,6 @@ buildPythonPackage {
       bsd3
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

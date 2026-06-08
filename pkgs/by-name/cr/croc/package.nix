@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "croc";
-  version = "10.3.1";
+  version = "10.4.4";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oNk4ReqteTeWKjsmVPC2yVRv1A9WN9jUbiT40flfM+o=";
+    hash = "sha256-Kwli0wgicebRlJE+c4McH6a7I2udRppJtKBopJ/eiFc=";
   };
 
-  vendorHash = "sha256-xEF1vjYQaeDYxcC3FTgR0zCFqvziNIrJVpJJT4o1cVU=";
+  vendorHash = "sha256-jXv8M4MnaTVitLmQ4X+pyIihxcVGlEP4IEwZT1LPKIA=";
 
   subPackages = [ "." ];
 
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Easily and securely send things from one computer to another";
     longDescription = ''
       Croc is a command line tool written in Go that allows any two computers to
@@ -67,8 +67,8 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/schollz/croc";
     changelog = "https://github.com/schollz/croc/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       equirosa
       SuperSandro2000
       ryan4yin

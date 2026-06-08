@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "zenoh";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.9.0"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
     rev = version;
-    hash = "sha256-X9AUjuJYA8j41JVS+ZLRYcQUzSRoGwmkNIH0UK5+QoU=";
+    hash = "sha256-rKWbJti5bgwAfc8LpQFsU6KhhcWyWAwOX+SF1UAGRbk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname version;
-    hash = "sha256-Z6Wtor/aAdO1JUUafFEo9RdI7OXmsAD5MMtMUF6CZEg=";
+    hash = "sha256-g7Om2QvlbwVmB0wGcbuafUELh53IJ2uM+miHyzBKQQI=";
   };
 
   build-system = [

@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tilt_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Tilt BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/tilt-ble";
     changelog = "https://github.com/Bluetooth-Devices/tilt-ble/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

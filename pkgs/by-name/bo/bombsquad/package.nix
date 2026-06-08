@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchurl,
-  python312,
+  python313,
   SDL2,
+  cairo,
+  pango,
   libvorbis,
   openal,
   curl,
   gnugrep,
+  gnused,
   libgcc,
   makeBinaryWrapper,
   makeDesktopItem,
@@ -22,11 +25,11 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-ICjaNZSCUbslB5pELbI4e+1zXWrZzkCkv69jLRx4dr0=";
+        hash = "sha256-Su7xEVzgFBl+Q2iFWdIRbyO8lRs8Xd4KabFhycZUVjs=";
       };
-      aarch-64-linux = {
+      aarch64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-/m0SOQbHssk0CqZJPRLK9YKphup3dtMqkbWGzqcF0+g=";
+        hash = "sha256-Q87KbQqwEOaMiJ4uSgZ3eD8AYKQCoJWPzq7rt9Nu9Co=";
       };
     }
     .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
@@ -39,10 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bombsquad";
-  version = "1.7.37";
+  # Note: This version trails behind the latest version by one since the latest
+  # version sometimes gets replaced for minor updates. The builds in /old/ are
+  # stable.
+  version = "1.7.62";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240825230506if_/https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";
+    url = "https://files.ballistica.net/bombsquad/builds/old/${archive.name}_${finalAttrs.version}.tar.gz";
     inherit (archive) hash;
   };
 
@@ -50,10 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    cairo
     libgcc
     libvorbis
     openal
-    python312
+    pango
+    python313
   ];
 
   nativeBuildInputs = [
@@ -81,13 +89,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/libexec $out/share/bombsquad/ba_data
 
     install -Dm555 -t $out/libexec ${finalAttrs.meta.mainProgram}
+    # x86_64 bundles Discord partner SDK; aarch64 currently does not.
+    if [ -e libdiscord_partner_sdk.so ]; then
+      install -Dm555 -t $out/libexec libdiscord_partner_sdk.so
+    fi
     cp -r ba_data $out/share/bombsquad
 
     makeWrapper "$out/libexec/${finalAttrs.meta.mainProgram}" "$out/bin/${finalAttrs.meta.mainProgram}" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       --add-flags "-d $out/share/bombsquad"
 
-    install -Dm755 ${bombsquadIcon} $out/share/icons/hicolor/1024x1024/apps/bombsquad.png
+    install -Dm444 ${bombsquadIcon} $out/share/icons/bombsquad.png
 
     runHook postInstall
   '';
@@ -98,11 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
       runtimeInputs = [
         curl
         gnugrep
+        gnused
       ];
       text = ''
         curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
             | grep -oP '^### \K\d+\.\d+\.\d+' \
-            | head -n 1
+            | sed -n 2p
       '';
     });
   };
@@ -117,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       syedahkam
-      coffeeispower
+      mrmaxmeier
     ];
     mainProgram = "bombsquad";
     platforms = lib.platforms.linux;

@@ -1,0 +1,13 @@
+diff --git a/tests/test_now.py b/tests/test_now.py
+index 93470e5..8ea9ee6 100644
+--- a/tests/test_now.py
++++ b/tests/test_now.py
+@@ -28,7 +28,7 @@ def fx_connection(fx_engine):
+ 
+ def test_utcnow_timezone(fx_connection):
+     fx_connection.execute(TABLE.insert(), [{}])
+-    rows = fx_connection.execute(select([TABLE])).fetchall()
++    rows = fx_connection.execute(select(TABLE)).fetchall()
+     server_now = rows[0].time
+     local_now = datetime.datetime.now(utc)
+     assert server_now.tzinfo is not None

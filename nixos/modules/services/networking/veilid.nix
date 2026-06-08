@@ -10,7 +10,12 @@ let
   dataDir = "/var/db/veilid-server";
 
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "veilid-server.conf" cfg.settings;
+
+  configFile = settingsFormat.generate "veilid-server.conf" (
+    lib.converge (lib.filterAttrsRecursive (
+      _: v: v != null && v != { } && v != "" && v != [ ]
+    )) cfg.settings
+  );
 in
 {
   config = mkIf cfg.enable {
@@ -157,13 +162,13 @@ in
             };
             protected_store = {
               allow_insecure_fallback = mkOption {
-                type = types.bool;
-                default = true;
+                type = lib.types.nullOr types.bool;
+                default = null;
                 description = "If we can't use system-provided secure storage, should we proceed anyway?";
               };
               always_use_insecure_storage = mkOption {
-                type = types.bool;
-                default = true;
+                type = lib.types.nullOr types.bool;
+                default = null;
                 description = "Should we bypass any attempt to use system-provided secure storage?";
               };
               directory = mkOption {
@@ -189,11 +194,11 @@ in
             network = {
               routing_table = {
                 bootstrap = mkOption {
-                  type = types.listOf types.str;
-                  default = [ "bootstrap.veilid.net" ];
+                  type = lib.types.nullOr (types.listOf types.str);
+                  default = null;
                   description = "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
                 };
-                node_id = lib.mkOption {
+                public_keys = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
                   description = "Base64-encoded public key for the node, used as the node's ID.";
@@ -201,8 +206,8 @@ in
               };
               dht = {
                 min_peer_count = mkOption {
-                  type = types.number;
-                  default = 20;
+                  type = lib.types.nullOr types.number;
+                  default = null;
                   description = "Minimum number of nodes to keep in the peer table.";
                 };
               };

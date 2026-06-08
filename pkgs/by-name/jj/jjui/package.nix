@@ -1,24 +1,29 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  stdenv,
 }:
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "jjui";
-  version = "0.9.7";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WkJofvalxjcehlVZiPB51jw7exQ2rU8CiRq3gxMKzEQ=";
+    hash = "sha256-kz1GDk+M98yWVu69nTRVxjC/Kk9qbGFfXXJ5ZwDLEiU=";
   };
 
-  vendorHash = "sha256-dSODeMvlPWrOS97sw1qbf3vrmv8Bs+Z3rmN0ZRV/KjU=";
+  vendorHash = "sha256-I39Tcb28voPSuZhYkEPdvhsViZD7QZZtZjDtRKkZ5LE=";
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestServerAskpass"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -32,6 +37,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      adamcstephens
       adda
     ];
     mainProgram = "jjui";

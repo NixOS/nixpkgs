@@ -11,7 +11,6 @@
   poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   tzdata,
   tzlocal,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "melnor-bluetooth";
   version = "0.0.25";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vanstinator";

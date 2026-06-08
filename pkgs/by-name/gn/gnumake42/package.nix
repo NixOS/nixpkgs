@@ -9,12 +9,12 @@
 
 assert guileSupport -> (pkg-config != null && guile != null);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.bz2";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.bz2";
     sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "info"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/make/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

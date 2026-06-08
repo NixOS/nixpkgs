@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pybind11,
@@ -31,7 +32,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "compressai";
   version = "1.2.8";
   pyproject = true;
@@ -39,9 +40,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "InterDigitalInc";
     repo = "CompressAI";
-    tag = "v${version}";
-    hash = "sha256-Fgobh7Q1rKomcqAT4kJl2RsM1W13ErO8sFB2urCqrCk=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-Fgobh7Q1rKomcqAT4kJl2RsM1W13ErO8sFB2urCqrCk=";
   };
 
   build-system = [
@@ -100,6 +101,12 @@ buildPythonPackage rec {
     # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
     "test_compiling"
     "test_find_close"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: '...' object has no attribute '__annotations__'
+    "test_gdn"
+    "test_gdn1"
+    "test_lower_bound_script"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -117,4 +124,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3Clear;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

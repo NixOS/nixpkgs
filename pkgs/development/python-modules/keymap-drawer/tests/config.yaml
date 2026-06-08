@@ -1,0 +1,9 @@
+draw_config:
+  key_w: 50
+  key_h: 50
+  split_gap: 20
+  glyphs: {}
+
+parse_config:
+  preprocess: true
+

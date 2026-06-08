@@ -100,11 +100,11 @@ stdenv.mkDerivation {
     install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client library that can be used to connect to MySQL or MariaDB";
     homepage = "https://github.com/mariadb-corporation/mariadb-connector-c";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

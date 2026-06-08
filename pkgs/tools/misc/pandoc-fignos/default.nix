@@ -9,7 +9,7 @@
 buildPythonApplication rec {
   pname = "pandoc-fignos";
   version = "2.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";
@@ -27,11 +27,11 @@ buildPythonApplication rec {
   # Different pandoc executables are not available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone pandoc filter from the pandoc-xnos suite for numbering figures and figure references";
     homepage = "https://github.com/tomduck/pandoc-fignos";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ppenguin ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-fignos";
   };
 }

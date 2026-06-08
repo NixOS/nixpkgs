@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotestdox";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "bitfield";
     repo = "gotestdox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AZDXMwADOjcaMiofMWoHp+eSnD3a8iFtwpWDKl9Ess8=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "gotestdox";
   };
-}
+})

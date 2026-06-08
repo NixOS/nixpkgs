@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "3mux";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "aaronjanse";
     repo = "3mux";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
@@ -64,4 +64,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitLab,
   meson,
   pkg-config,
@@ -27,21 +28,24 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-    v4l-utils
     hwdata
     python3
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.emulatorAvailable buildPackages) [
+    # Only used for tests, which we cannot run without an emulator
+    v4l-utils
   ];
 
   postPatch = ''
     patchShebangs tool/gen-search-table.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EDID and DisplayID library";
     mainProgram = "di-edid-decode";
     homepage = "https://gitlab.freedesktop.org/emersion/libdisplay-info";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pedrohlc ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ pedrohlc ];
   };
 })

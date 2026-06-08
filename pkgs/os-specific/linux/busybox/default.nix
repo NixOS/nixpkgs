@@ -13,6 +13,13 @@
   useMusl ? stdenv.hostPlatform.libc == "musl",
   musl,
   extraConfig ? "",
+
+  # For tests
+  hostname,
+  coreutils,
+  zip,
+  which,
+  simple-http-server,
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -20,10 +27,7 @@ assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 let
   configParser = ''
     function parseconfig {
-        while read LINE; do
-            NAME=`echo "$LINE" | cut -d \  -f 1`
-            OPTION=`echo "$LINE" | cut -d \  -f 2`
-
+        while IFS=" " read NAME OPTION; do
             if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
@@ -53,18 +57,20 @@ let
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
+
+  pname = "busybox";
+  version = "1.37.0";
 in
 
-stdenv.mkDerivation rec {
-  pname = "busybox";
-  version = "1.36.1";
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
+    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
   };
 
   hardeningDisable = [
@@ -77,53 +83,34 @@ stdenv.mkDerivation rec {
     # necessary when it's run from the Nix store as <hash>-busybox during
     # stdenv bootstrap.
     ./busybox-in-store.patch
-    # libbb: sockaddr2str: ensure only printable characters are returned for the hostname part
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-yviw1GV+t9tbHbY7YNxEqPi7xEreiXVqbeRyf8c6Awo=";
-    })
-    # nslookup: sanitize all printed strings with printable_string
-    (fetchurl {
-      name = "CVE-2022-28391.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
-      sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
-    })
-    # shell: avoid segfault on ${0::0/0~09J}
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15216
+    # Fix aarch64 build failure: sha1_process_block64_shaNI is x86-specific
+    # https://lists.busybox.net/pipermail/busybox/2024-September/090943.html
+    ./fix-aarch64-sha1.patch
+    # archival: disallow path traversals (CVE-2023-39810)
     (fetchpatch {
-      name = "CVE-2022-48174.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=d417193cf37ca1005830d7e16f5fa7e1d8a44209";
-      hash = "sha256-mpDEwYncpU6X6tmtj9xM2KCrB/v2ys5bYxmPPrhm6es=";
+      name = "CVE-2023-39810.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
     })
-    # Make sure we don't read past the end of the string in next_token()
-    # when backslash is the last character in an (invalid) regexp.
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15874
-    # This patch is also used by Alpine, see https://git.alpinelinux.org/aports/tree/main/busybox/0037-awk.c-fix-CVE-2023-42366-bug-15874.patch
+    # tar: strip unsafe hardlink components - GNU tar does the same
     (fetchpatch {
-      name = "CVE-2023-42366.patch";
-      url = "https://bugs.busybox.net/attachment.cgi?id=9697";
-      hash = "sha256-2eYfLZLjStea9apKXogff6sCAdG9yHx0ZsgUBaGfQIA=";
+      name = "CVE-2026-26157_CVE-2026-26158.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
+      hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
-    # awk: fix use after free (CVE-2023-42363)
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15865
+    # syslogd: fix writing to local log file
+    # https://lists.busybox.net/pipermail/busybox/2024-October/090969.html
     (fetchpatch {
-      name = "CVE-2023-42363.patch";
-      url = "https://git.launchpad.net/ubuntu/+source/busybox/plain/debian/patches/CVE-2023-42363.patch?id=c9d8a323b337d58e302717d41796aa0242963d5a";
-      hash = "sha256-1W9Q8+yFkYQKzNTrvndie8QuaEbyAFL1ZASG2fPF+Z4=";
+      url = "https://hg.slitaz.org/wok/raw-file/1cba565dc2a9/busybox/stuff/busybox-1.37-fix-syslogd.patch";
+      hash = "sha256-NZRctLv1CpTfnR6+CA890YY8ljBQLGkkselyP5/TnsQ=";
     })
-    # awk: fix ternary operator and precedence of =
-    # See also: https://bugs.busybox.net/show_bug.cgi?id=15871 https://bugs.busybox.net/show_bug.cgi?id=15868
-    (fetchpatch {
-      name = "CVE-2023-42364_CVE-2023-42365.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2023-42364-CVE-2023-42365.patch?id=8a4bf5971168bf48201c05afda7bee0fbb188e13";
-      hash = "sha256-nQPgT9eA1asCo38Z9X7LR9My0+Vz5YBPba3ARV3fWcc=";
-    })
-    # tar: fix TOCTOU symlink race condition
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-tar-fix-TOCTOU-symlink-race-condition.patch?id=9e42dea5fba84a8afad1f1910b7d3884128a567e";
-      hash = "sha256-GmXQhwB1/IPVjXXpGi5RjRvuGJgIMIb7lQKB63m306g=";
-    })
+    # https://lists.busybox.net/pipermail/busybox/2026-March/092010.html
+    ./build-system-buffer-overflow.patch
+
+    # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
+    # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
+    ./CVE-2025-60876.patch
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
@@ -199,6 +186,7 @@ stdenv.mkDerivation rec {
     1 a busybox() { '$out'/bin/busybox "$@"; }\
     logger() { '$out'/bin/logger "$@"; }\
     ' ${debianDispatcherScript} > ${outDispatchPath}
+    sed -i 's|/sbin/resolvconf|"$(busybox which resolvconf)"|g' ${outDispatchPath}
     chmod 555 ${outDispatchPath}
     HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
   '';
@@ -214,20 +202,90 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # tries to access the net
+  doCheck = false; # Takes a while, requires extra dependencies
+  passthru = {
+    shellPath = "/bin/ash";
 
-  passthru.shellPath = "/bin/ash";
+    tests.withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+      doCheck = true;
 
-  meta = with lib; {
+      nativeCheckInputs = [
+        hostname
+        zip
+        which
+        simple-http-server
+      ];
+
+      preCheck = ''
+        # Replace hard-coded dependencies on /bin
+        sed -i 's|/bin/date|${lib.getExe' coreutils "date"}|' testsuite/date/date-works-1
+
+        # wget tests rely on network access, use simple-http-server instead
+        simple-http-server --index &
+        sed -i 's|http://www.google.com|http://127.0.0.1:8000|' testsuite/wget/*
+
+        skip-files() {
+          for file in "$@"; do
+            echo "echo SKIPPED $file; exit 0" > $file
+          done
+        }
+
+        skip-testcase() {
+          sed -i "s@testing \"$2\"@echo SKIPPED $2 || testing \"$2\"@" "$1"
+        }
+
+        # Skip known-broken tests
+        export SKIP_KNOWN_BUGS=y
+
+        # There are some semi-expected locale-related issues, disable tests that rely on it
+        export CONFIG_UNICODE_USING_LOCALE=y
+
+        # DISABLE SOME TESTS
+        # TODO(balsoft): fix the tests instead of skipping
+
+        pushd testsuite
+
+        # Weird failures, may or may not be related to locales
+        skip-files du/du-{h,k,l}-works
+
+        # Relies on a default PATH (/bin/ls in particular)
+        skip-files which/which-uses-default-path
+
+        # Hangs indefinitely if run from sandbox
+        skip-files md5sum.tests
+
+        # Doesn't work with coreutils's "false"
+        skip-testcase start-stop-daemon.tests "start-stop-daemon with both -x and -a"
+
+        # Relies on /usr/bin
+        skip-testcase cpio.tests "cpio -p with absolute paths"
+
+        # Relies on suid/guid bits
+        skip-testcase cpio.tests "cpio restores suid/sgid bits"
+
+        # Weird failures, looks related to our sandbox
+        skip-testcase tar.tests "tar does not extract into symlinks"
+        skip-testcase tar.tests "tar -k does not extract into symlinks"
+        skip-testcase tar.tests "tar Symlink attack: create symlink and then write through it"
+        skip-testcase tar.tests "tar Symlinks and hardlinks coexist"
+
+        popd
+      '';
+    });
+  };
+
+  meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "busybox";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       TethysSvensson
       qyliss
     ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
   };
-}
+})

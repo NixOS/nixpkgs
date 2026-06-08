@@ -9,14 +9,17 @@
 
 stdenv.mkDerivation {
   pname = "cosmic-protocols";
-  version = "0-unstable-2025-09-26";
+  version = "0-unstable-2026-05-08";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-protocols";
-    rev = "d0e95be25e423cfe523b11111a3666ed7aaf0dc4";
-    hash = "sha256-KvXQJ/EIRyrlmi80WKl2T9Bn+j7GCfQlcjgcEVUxPkc=";
+    rev = "c253ec1d6804afbcdf250f5cc37ae1194bba7bd2";
+    hash = "sha256-KO7VTxomhrnwzFlkkXSoP0eh3NRShBD4srW5W6temxo=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   nativeBuildInputs = [ wayland-scanner ];

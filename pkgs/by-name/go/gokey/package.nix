@@ -3,24 +3,24 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokey";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "gokey";
-    tag = "v${version}";
-    hash = "sha256-tJ9nCHhKPrw7SRGsqAlo/tf3tBLF63+CevEXggZADlE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G8cZ5x2XiXdwR0qNCR3KZVGQvu/tOw4vQV26XOZXmKs=";
   };
 
-  vendorHash = "sha256-Btac9Oi8efqRy+OH49Na3Y6RGehHEmGfvDo2/7EWPL4=";
+  vendorHash = "sha256-ntDQi2+7TGVdfgyOhKgaNCfCBK1o5sRC9gVVxonNU6c=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloudflare/gokey";
     description = "Vault-less password store";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.confus ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.confus ];
     mainProgram = "gokey";
   };
-}
+})

@@ -8,10 +8,8 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
-  tomli,
   tomli-w,
   typing-extensions,
 }:
@@ -36,7 +34,7 @@ buildPythonPackage rec {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
-    toml = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    toml = [ tomli-w ];
   };
 
   nativeCheckInputs = [

@@ -2,38 +2,40 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nexttrace";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
-    rev = "v${version}";
-    sha256 = "sha256-Ui3Vm9Q6VJXW9hGDFCuOCUmoSO8SE5ufRYq0niY6ojo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-5J0P+HlfSt6wd/q7L/+6h7auQQBJkaA1NO053w32S8Y=";
   };
-  vendorHash = "sha256-8KxY3KYcaaZZjk+IIKdu8tzGhgGUlJ5nyMMSKhe41kg=";
+  vendorHash = "sha256-9g0OZczhIhM96eYFyAMxajpIkRgNUkn6QUZtl3O/xSM=";
+
+  buildInputs = [ libpcap ];
 
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/nxtrace/NTrace-core/config.Version=v${version}"
-    "-checklinkname=0" # refers to https://github.com/nxtrace/NTrace-core/issues/247
+    "-X github.com/nxtrace/NTrace-core/config.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
     mv $out/bin/NTrace-core $out/bin/nexttrace
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source visual route tracking CLI tool";
-    homepage = "https://mtr.moe";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sharzy ];
+    homepage = "https://www.nxtrace.org/";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "nexttrace";
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   jdk_headless,
+  jre_minimal,
   gradle_8,
   makeWrapper,
   bashNonInteractive,
@@ -10,8 +11,19 @@
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
   gradle = gradle_8;
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.logging"
+      "java.naming"
+      "java.security.jgss"
+      "java.sql"
+      "jdk.unsupported"
+    ];
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apksigner";
   # Major version is derived from the API version of the corresponding Android release.
   # Patch version is derived from the release number.
@@ -20,14 +32,14 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     # use pname here because the final jar uses this as the filename
-    name = pname;
+    name = "apksigner";
     url = "https://android.googlesource.com/platform/tools/apksig";
-    rev = "refs/tags/android-15.0.0_r30";
+    tag = "android-15.0.0_r30";
     hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
   };
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -53,7 +65,7 @@ stdenv.mkDerivation rec {
     mv apksigner $out/opt
     mkdir -p $out/bin
     makeWrapper $out/opt/apksigner/bin/apksigner $out/bin/apksigner \
-      --set JAVA_HOME ${jdk_headless.home}
+      --set JAVA_HOME ${jre.home}
 
     runHook postInstall
   '';
@@ -71,4 +83,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.android ];
     platforms = lib.platforms.unix;
   };
-}
+})

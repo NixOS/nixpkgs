@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeWrapper,
   pkg-config,
   glib,
@@ -13,15 +13,14 @@
   faircamp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "faircamp";
   version = "1.7.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "simonrepp";
     repo = "faircamp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-r5r7vfTbMPjAqMg5f7L/YfSzlxZgrSFjO6WHO64wfIo=";
   };
 
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = faircamp; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hostable, statically generated bandcamp alternative";
     mainProgram = "faircamp";
     longDescription = ''
@@ -66,8 +65,8 @@ rustPlatform.buildRustPackage rec {
       means you prefer to do that manually.
     '';
     homepage = "https://simonrepp.com/faircamp/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
-}
+})

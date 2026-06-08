@@ -8,6 +8,7 @@
   zlib-ng,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
+  fetchpatch,
 }:
 
 let
@@ -27,8 +28,8 @@ let
           # Known good version: 1.3.1
           zlib = zlib;
         }).overrideAttrs
-          (oA: {
-            patches = (oA.patches or [ ]) ++ [
+          (old: {
+            patches = (old.patches or [ ]) ++ [
               (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
             ];
           });
@@ -46,13 +47,26 @@ let
       libzip =
         (libzip.override {
           # Known good version: 2.2.4
-          zlib = zlib-ng.override {
-            withZlibCompat = true;
-          };
+          zlib =
+            (zlib-ng.overrideAttrs (old: {
+              patches = old.patches or [ ] ++ [
+                # Yarn hashes the output of libzip(untar(tarball)), so the output of libzip
+                # needs to be an exact match across versions, and this commit changes the
+                # exact output. This is ridiculous, but such is life.
+                (fetchpatch {
+                  url = "https://github.com/zlib-ng/zlib-ng/commit/be819413be8a284b1827437006c0859644d0c367.patch";
+                  revert = true;
+                  hash = "sha256-rwRcNKpA2dMWkC6WRATDOCYCDDqqPvFJkQ6DLDohQd8=";
+                })
+              ];
+            })).override
+              {
+                withZlibCompat = true;
+              };
         }).overrideAttrs
-          (oA: {
-            patches = (oA.patches or [ ]) ++ [
-              (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
+          (old: {
+            patches = (old.patches or [ ]) ++ [
+              ./libzip-revert-to-old-versionneeded-behavior.patch
             ];
           });
     };

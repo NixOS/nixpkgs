@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ares-rs";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "bee-san";
     repo = "ares";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IsIastLIrPknaJcH8sb0plPme+VGvo9DeDIisTD4sRM=";
   };
 
@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated decoding of encrypted text without knowing the key or ciphers used";
     homepage = "https://github.com/bee-san/ares";
-    changelog = "https://github.com/bee-san/Ares/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bee-san/Ares/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ares";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

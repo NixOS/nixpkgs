@@ -6,22 +6,22 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "infracost";
-  version = "0.10.43";
+  version = "0.10.44";
 
   src = fetchFromGitHub {
     owner = "infracost";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "infracost";
-    sha256 = "sha256-02HQp11MfUKK0tXcBRmGqatG5C7462VEWtHHCjLv32I=";
+    sha256 = "sha256-7TH7ZWANQMlhfpCP5OdiQCL6OsFP1RK5YGV8hGuouBY=";
   };
-  vendorHash = "sha256-cNL68orv14HhzwsuaqzfDbVnBsMNE3Lu4EiCvKQhgpM=";
+  vendorHash = "sha256-ZG6DjYcHvEii55ayx6x168L2v04n/pAZRqqQ7DKvugA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/infracost/infracost/internal/version.Version=v${version}"
+    "-X github.com/infracost/infracost/internal/version.Version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/infracost" ];
@@ -58,14 +58,14 @@ buildGoModule rec {
 
     export INFRACOST_SKIP_UPDATE_CHECK=true
     $out/bin/infracost --help
-    $out/bin/infracost --version | grep "v${version}"
+    $out/bin/infracost --version | grep "v${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://infracost.io";
-    changelog = "https://github.com/infracost/infracost/releases/tag/v${version}";
+    changelog = "https://github.com/infracost/infracost/releases/tag/v${finalAttrs.version}";
     description = "Cloud cost estimates for Terraform in your CLI and pull requests";
     longDescription = ''
       Infracost shows hourly and monthly cost estimates for a Terraform project.
@@ -80,4 +80,4 @@ buildGoModule rec {
     ];
     mainProgram = "infracost";
   };
-}
+})

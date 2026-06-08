@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "5.1.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rb0/T7I6yLGJBXikOHuXwDdW20nFXpssXfgViHSIIOU=";
+    hash = "sha256-SG9PhQOu3QB0LA9dNLnNzwwtfaib7MCfvOcBMkWMRPw=";
   };
 
-  vendorHash = "sha256-bFUWjaaFHB2pnGHBsvUBS2icQkMrB/CfXFa+3vGFFvU=";
+  vendorHash = "sha256-0KrjaExgT9tN4M99CfyQpqpGYnXOpzsPRk/Ih4qXsuE=";
 
   nativeBuildInputs = [
     stuffbin
@@ -43,11 +43,13 @@ buildGoModule (finalAttrs: {
       vfsMappings = [
         "config.toml.sample"
         "schema.sql"
-        "queries.sql"
+        "queries"
         "permissions.json"
         "static/public:/public"
+        "${finalAttrs.passthru.frontend}/altcha.umd.js:/public/static/altcha.umd.js"
         "static/email-templates"
-        "${finalAttrs.passthru.frontend}:/admin"
+        "${finalAttrs.passthru.frontend}/admin:/admin"
+        "${finalAttrs.passthru.email-builder}:/admin/static/email-builder"
         "i18n:/i18n"
       ];
     in
@@ -58,11 +60,14 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
+    email-builder = callPackage ./email-builder.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
     updateScript = nix-update-script {
       extraArgs = [
         "-s"
         "frontend"
+        "-s"
+        "email-builder"
       ];
     };
   };

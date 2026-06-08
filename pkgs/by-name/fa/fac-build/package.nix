@@ -6,12 +6,12 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fac-build";
   version = "0.5.4";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "fac";
     hash = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
         'std::process::Command::new("${git}/bin/git")'
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
@@ -49,9 +49,9 @@ rustPlatform.buildRustPackage rec {
       easy to use!
     '';
     homepage = "https://physics.oregonstate.edu/~roundyd/fac";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dpercy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dpercy ];
     mainProgram = "fac";
   };
-}
+})

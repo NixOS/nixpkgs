@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2025-11-23";
+  version = "2026-02-19";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "beadd56dd75e8a40fe0a7d4a5d63ed5bf9efcd48";
-    sha256 = "sha256-e3zTM3rj4z6RwDai9i7KKrz6imTGmZiSAqcS9Mw2LZU=";
+    rev = "52d93f18d61f11db69b4591d7fc7bd5578954d30";
+    sha256 = "sha256-fGFPVHbJFtXvuiR0yOc9Qt1TUuIfNAYezGQtESt9REA=";
   };
 
   strictDeps = true;
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
         $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     '';
     homepage = "https://ohmyz.sh/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

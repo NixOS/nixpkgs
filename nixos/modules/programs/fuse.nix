@@ -58,7 +58,7 @@ in
 
     environment.etc."fuse.conf".text = ''
       ${lib.optionalString (!cfg.userAllowOther) "#"}user_allow_other
-      mount_max = ${builtins.toString cfg.mountMax}
+      mount_max = ${toString cfg.mountMax}
     '';
 
   };

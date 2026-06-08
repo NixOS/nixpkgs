@@ -4,8 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_37,
-  vulkan-loader,
+  electron_40,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -18,20 +17,20 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_40;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.25.1";
+  version = "1.27.3";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CRPZmycYaKtqjjiISKVGLf2jUvM6Xk6cUryKZcFX3tc=";
+    hash = "sha256-25Iu/bKUCotJdQESxPPOiYehwn+D3RYnZiJfMWJ4cn0=";
   };
 
-  npmDepsHash = "sha256-8v6r3DAUzNeMQqLl99mp5rUytbUe7wFj3jkHb6lbwFI=";
+  npmDepsHash = "sha256-gWI21dPha7yX367r50U3C9wpX5/6oBzHGJNtFmG/GQ8=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -39,11 +38,12 @@ buildNpmPackage (finalAttrs: {
       --replace-fail 'npm run install:electron && ' ""
 
     substituteInPlace .electron-builder.config.mjs \
-      --replace-fail 'AppImage' 'dir'
+      --replace-fail 'AppImage' 'dir' \
+      --replace-fail 'await signMacApp' '// await signMacApp'
   ''
   # Workaround for https://github.com/electron/electron/issues/31121
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/background/window/path.ts \
+    substituteInPlace src/background/proc/env.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
@@ -66,16 +66,11 @@ buildNpmPackage (finalAttrs: {
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-  ''
-  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
-  # See: https://github.com/electron-userland/electron-builder/pull/9007
-  + ''
+
     npm run electron:pack
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
 
     ./node_modules/.bin/electron-builder \
         --dir \
@@ -157,10 +152,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Shogi frontend supporting USI engines";
     homepage = "https://sunfish-shogi.github.io/shogihome/";
-    license = with lib.licenses; [
-      mit
-      asl20 # for icons
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        asl20 # for icons
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

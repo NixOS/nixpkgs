@@ -25,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -90,6 +90,8 @@
   libsecret,
   # Edge Specific
   libuuid,
+  # Create a symlink at $out/bin/microsoft-edge-stable
+  withSymlink ? true,
 }:
 let
   opusWithCustomModes = libopus.override { withCustomModes = true; };
@@ -122,20 +124,20 @@ let
     libglvnd
     libkrb5
     libpng
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     libxkbcommon
-    libXrandr
-    libXrender
-    libXScrnSaver
+    libxrandr
+    libxrender
+    libxscrnsaver
     libxshmfence
-    libXtst
+    libxtst
     libgbm
     nspr
     nss
@@ -162,11 +164,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "143.0.3650.66";
+  version = "149.0.4022.52";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-Oak7r7ykODJsqzdb+cEmzkUrcezTUe+Xl9oo1lUrq6w=";
+    hash = "sha256-3lFhfxkS80P59dk00lpBp+8IIFUvSEJVGGTfAghxw4g=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -256,6 +258,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
+    ${lib.optionalString withSymlink ''
+      ln -s $out/bin/microsoft-edge $out/bin/microsoft-edge-stable
+    ''}
+
     runHook postInstall
   '';
 
@@ -272,8 +278,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
-      bricklou
       jonhermansen
+      iedame
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

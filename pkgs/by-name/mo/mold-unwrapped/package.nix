@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mold-unwrapped";
-  version = "2.40.4";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BiPeZJvMlLIC0TbsqBD1JSt/RE4xZ5wSRYujPXKb+RY=";
+    hash = "sha256-N+dFJk4KJY8E0UBrAlKXpMSuiseF4KAtpFMUA/nbleQ=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

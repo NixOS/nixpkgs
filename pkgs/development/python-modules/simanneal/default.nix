@@ -20,10 +20,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
   checkPhase = "pytest tests";
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the simulated annealing optimization technique";
     homepage = "https://github.com/perrygeo/simanneal";
-    license = licenses.isc;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

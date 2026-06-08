@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.0.20060226";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/f/fonts-lao/fonts-lao_${version}.orig.tar.xz";
     hash = "sha256-DlgdyfhxxzVkNIL+NGsQ+PRlNkCuG3v2OahkIEYx60o=";
   };
 
@@ -22,10 +22,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TrueType font for Lao language";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

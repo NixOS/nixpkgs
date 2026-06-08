@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   aiohttp,
   async-timeout,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "foobot-async";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "foobot_async";
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "foobot_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "API Client for Foobot Air Quality Monitoring devices";
     homepage = "https://github.com/reefab/foobot_async";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

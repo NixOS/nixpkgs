@@ -3,28 +3,31 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
   extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
   writeShellScript,
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2025-11-17";
+  version = "0.13.0-unstable-2026-05-09";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "b4c7cf4a3365a7bdc05b1ac146f8f48b5666ce8d";
-    sha256 = "sha256-R4WHzRGz+0Tv/bGlTplARuIOlajrIlJjP6wmPMonDEY=";
+    rev = "4767a8ed97c57e4bb2ecf60fd72e345f58dfa3fc";
+    sha256 = "sha256-ZwPy1Et0ftCX8haogRSOUm1et2pvYZxvdsuM74acu6Q=";
   };
 
   sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages (p: with p; [ cffi ]))
+    python3Packages.cffi
     makeWrapper
   ];
 
@@ -45,21 +48,41 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  # we need to run this to prebuild the chelper.
-  postBuild = ''
-    python ./chelper/__init__.py
+  # we need to run this to prebuild the chelper .so. However when cross
+  # compiling, a patch is temporarily required during the build process to
+  # prevent the build process from using dlopen() on this .so which has been
+  # built for a foreign architecture. We then place the unpatched __init__.py
+  # back, as this dlopen() call is required at runtime
+  postBuild =
+    if isCross then
+      ''
+        python ./chelper/__init__.py
+        mv ./chelper/__init__unpatched.py ./chelper/__init__.py
+      ''
+    else
+      ''
+        python ./chelper/__init__.py
+      '';
+
+  prePatch = lib.optionalString isCross ''
+    cp ./chelper/__init__.py ./chelper/__init__unpatched.py
   '';
+
+  patches = lib.optionals isCross [
+    # https://github.com/Klipper3d/klipper/pull/7254
+    ./cross-ffi.patch
+  ];
 
   # Python 3 is already supported but shebangs aren't updated yet
   postPatch = ''
     for file in klippy.py console.py parsedump.py; do
       substituteInPlace $file \
-        --replace '/usr/bin/env python2' '/usr/bin/env python'
+        --replace-warn '/usr/bin/env python2' '/usr/bin/env python'
     done
 
     # needed for cross compilation
-    substituteInPlace ./chelper/__init__.py \
-      --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
+    substituteInPlace ./chelper/__init__*.py \
+      --replace-warn 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
 
   pythonInterpreter =
@@ -67,6 +90,7 @@ stdenv.mkDerivation rec {
       p: with p; [
         numpy
         matplotlib
+        python-can
       ]
     )).interpreter;
 
@@ -86,8 +110,10 @@ stdenv.mkDerivation rec {
     # under `klipper_path`
     cp -r $src/docs $out/lib/docs
     cp -r $src/config $out/lib/config
-    cp -r $src/scripts $out/lib/scripts
     cp -r $src/klippy $out/lib/klippy
+    mkdir -p $out/lib/scripts
+    cp -r $src/scripts/* $out/lib/scripts
+    cp $src/lib/katapult/flashtool.py $out/lib/scripts/flash_can.py
 
     # Add version information. For the normal procedure see https://www.klipper3d.org/Packaging.html#versioning
     # This is done like this because scripts/make_version.py is not available when sourceRoot is set to "${src.name}/klippy"
@@ -102,6 +128,11 @@ stdenv.mkDerivation rec {
       --subst-var-by "script" "calibrate_shaper.py"
     chmod 755 "$out/bin/klipper-calibrate-shaper"
 
+    substitute "$pythonScriptWrapper" "$out/bin/klipper-canbus-query" \
+      --subst-var "out" \
+      --subst-var-by "script" "canbus_query.py"
+    chmod 755 "$out/bin/klipper-canbus-query"
+
     runHook postInstall
   '';
 
@@ -110,16 +141,16 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Klipper 3D printer firmware";
     mainProgram = "klippy";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       zhaofengli
       cab404
     ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
   };
 }

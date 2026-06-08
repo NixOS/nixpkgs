@@ -6,15 +6,15 @@
   zenoh-c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-cpp";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.9.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-cpp";
-    tag = version;
-    hash = "sha256-rznvif87UZbYzZB4yHG4R850qm6Z3beJ1NSG4wrf58M=";
+    tag = finalAttrs.version;
+    hash = "sha256-MwQKTxrQqfoASCRk+vBeS9EHvmh6sqrpqygQVrdGkWw=";
   };
 
   cmakeFlags = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

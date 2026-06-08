@@ -393,7 +393,7 @@ in
                 [
                   (lib.getExe' cfg.package "kea-dhcp4")
                   "-c"
-                  "etc/kea/dhcp4-server.conf"
+                  "/etc/kea/dhcp4-server.conf"
                 ]
                 ++ cfg.dhcp4.extraArgs
               );

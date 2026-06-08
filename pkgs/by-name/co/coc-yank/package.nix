@@ -1,6 +1,7 @@
 {
   lib,
   buildNpmPackage,
+  nodejs_22,
   fetchFromGitHub,
   nix-update-script,
   esbuild,
@@ -43,6 +44,9 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-ISHILT/FBy2Y0UWaQkjMm5ZsYacNt3M54IJ8ckYjq3A=";
 
+  # https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
+
   nativeBuildInputs = [ esbuild' ];
 
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
@@ -53,6 +57,6 @@ buildNpmPackage (finalAttrs: {
     description = "Yank highlight and persist yank history support for vim";
     homepage = "https://github.com/neoclide/coc-yank";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

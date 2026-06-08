@@ -1,6 +1,7 @@
 {
   lib,
   appstream,
+  blueprint-compiler,
   desktop-file-utils,
   fetchFromGitHub,
   glib,
@@ -16,22 +17,23 @@
   ffmpeg-headless,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "drum-machine";
-  version = "1.5.0";
+  version = "2.2.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Revisto";
     repo = "drum-machine";
-    tag = "v${version}";
-    hash = "sha256-F3h3BxLNkJq0jpfNOGcTbckpc8CksyA3Bc8GNKviB+I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CBDRoUD4kvbqkyUzxmPEcbW4UJLycRAYC4s40fZ0xYY=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     desktop-file-utils
     glib
     gobject-introspection
@@ -72,9 +74,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Modern and intuitive application for creating, playing, and managing drum patterns";
     homepage = "https://apps.gnome.org/DrumMachine";
-    changelog = "https://github.com/Revisto/drum-machine/releases/tag/${src.tag}";
+    changelog = "https://github.com/Revisto/drum-machine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

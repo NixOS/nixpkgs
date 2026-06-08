@@ -4,12 +4,15 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  bento4,
   protobuf,
   ffmpeg,
+  gpac,
   libxslt,
   shaka-packager,
   nix-update-script,
   runCommand,
+  versionCheckHook,
 }:
 
 let
@@ -22,20 +25,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.28";
+  version = "0.2.33";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q8+HTDdeaqDroBZ1AS+jDxf0yq20jZ+raRCh7gEJYn8=";
+    hash = "sha256-IPWbS3kIn3rC1s7nJe3Q94scuW87LaQn5KAhXTYvWGg=";
   };
 
-  patches = [
-    ./use-shaka-by-default.patch
-  ];
+  cargoHash = "sha256-MmZwiH1Qzb5MiwhEYsCVo4xD5YmJ+mObpkgc6J0sfuw=";
 
-  cargoHash = "sha256-YnA/LTw9xCLSnNuFDXlsGzAiTdsst2uIDewuohkkgDU=";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -49,12 +50,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/dash-mpd-cli \
       --prefix PATH : ${
         lib.makeBinPath [
-          (lib.getBin ffmpeg)
-          (lib.getBin libxslt)
+          bento4
+          ffmpeg
+          gpac
+          libxslt
           shaka-packager-wrapped
         ]
       }
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

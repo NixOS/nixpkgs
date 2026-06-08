@@ -1,6 +1,6 @@
 {
   bash,
-  buildHex,
+  fetchHex,
   buildRebar3,
   config,
   coreutils,
@@ -26,11 +26,15 @@ let
   mainVersion = versions.major (getVersion erlang);
   maxAssert = versionAtLeast maximumOTPVersion mainVersion;
 
-  proper = buildHex {
+  proper = buildRebar3 rec {
     name = "proper";
     version = "1.4.0";
 
-    sha256 = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
+    src = fetchHex {
+      pkg = name;
+      inherit version;
+      sha256 = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
+    };
   };
 
 in
@@ -64,17 +68,22 @@ else
 
     beamDeps = [ proper ];
 
-    makeFlags = [
-      "-e"
-      "MANDB=''"
-      "PREFIX=$$out"
-    ];
-
     # override buildRebar3's install to let the builder use make install
-    installPhase = "";
+    installPhase = ''
+      runHook preInstall
+      make -e MANDB= PREFIX=$out install
+      runHook postInstall
+    '';
 
     doCheck = true;
     checkTarget = "travis";
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      test -e $out/bin/lfe
+      runHook postInstallCheck
+    '';
 
     postFixup = ''
       # LFE binaries are shell scripts which run erl and lfe.
@@ -92,7 +101,7 @@ else
       done
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Best of Erlang and of Lisp; at the same time";
       longDescription = ''
         LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
@@ -104,8 +113,8 @@ else
       downloadPage = "https://github.com/lfe/lfe/releases";
       changelog = "https://github.com/lfe/lfe/releases/tag/v${version}";
 
-      license = licenses.asl20;
-      teams = [ teams.beam ];
-      platforms = platforms.unix;
+      license = lib.licenses.asl20;
+      teams = [ lib.teams.beam ];
+      platforms = lib.platforms.unix;
     };
   }

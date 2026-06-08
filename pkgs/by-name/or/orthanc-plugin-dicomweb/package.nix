@@ -59,8 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  SourceRoot = "${finalAttrs.src.name}/Build";
-
   nativeBuildInputs = [
     cmake
     python3
@@ -80,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  NIX_LDFLAGS = lib.strings.concatStringsSep " " [
+  env.NIX_LDFLAGS = toString [
     "-L${lib.getLib gtest}"
     "-lgtest"
   ];

@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiowaqi";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--snapshot-update" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the WAQI API";
     homepage = "https://github.com/joostlek/python-waqi";
     changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

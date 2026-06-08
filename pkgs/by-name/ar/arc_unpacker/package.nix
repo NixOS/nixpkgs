@@ -41,6 +41,11 @@ stdenv.mkDerivation {
     substituteInPlace CMakeLists.txt --replace-fail \
       'cmake_minimum_required(VERSION 2.8.8)' \
       'cmake_minimum_required(VERSION 3.10)'
+
+    # boost 1.89 no longer provides boost_system as a separate CMake component
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'find_package(Boost COMPONENTS filesystem system REQUIRED)' \
+      'find_package(Boost COMPONENTS filesystem REQUIRED)'
   '';
 
   nativeBuildInputs = [
@@ -99,12 +104,12 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to extract files from visual novel archives";
     homepage = "https://github.com/vn-tools/arc_unpacker";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ midchildan ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ midchildan ];
+    platforms = lib.platforms.all;
     mainProgram = "arc_unpacker";
   };
 }

@@ -54,17 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" \
       "cmake_minimum_required(VERSION 4.0)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail ' system' ""
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS IoT Secure Tunneling Local Proxy Reference Implementation C++";
     homepage = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ spalf ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ spalf ];
+    platforms = lib.platforms.unix;
     mainProgram = "localproxy";
   };
 })

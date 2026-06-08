@@ -1,8 +1,6 @@
 {
   lib,
   clangStdenv,
-  buildPackages,
-  runCommand,
   fetchurl,
   perl,
   python3,
@@ -23,14 +21,15 @@
   wayland-protocols,
   wayland-scanner,
   libwebp,
-  enchant2,
-  xorg,
+  enchant,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -39,7 +38,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -52,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -61,11 +61,10 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
-  systemd,
+  systemdLibs,
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -74,7 +73,7 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
-  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
   fetchpatch,
 }:
@@ -86,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.3";
+  version = "2.52.4";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,10 +100,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cKAGtGlbtrLhV+gB9aDQKfQRDwUMbwiC3s2KO/WU1U8=";
+    hash = "sha256-z0B2ocoqZHiO3KjEUtjrto1eKWXliP5Go4igFlE+3OQ=";
   };
 
-  patches = lib.optionals clangStdenv.hostPlatform.isLinux [
+  patches = [
+    # Fix build with system malloc
+    # See: https://bugs.webkit.org/show_bug.cgi?id=316083
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/a6bc685a685c8f16c919dc6310a62a26971d396e.patch";
+      hash = "sha256-X3E9SYykYomoBeAL4vS1Iuw2fPdO8fI7MvAW/kEhTMc=";
+      name = "fix-build-with-system-malloc.patch";
+    })
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
@@ -143,8 +151,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     cairo # required even when using skia
-    enchant2
+    enchant
+    expat
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -162,7 +172,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp
@@ -173,12 +183,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -188,10 +196,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2
@@ -199,6 +207,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
@@ -221,7 +230,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
@@ -260,11 +268,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [
@@ -278,8 +286,8 @@ clangStdenv.mkDerivation (finalAttrs: {
           "webkit2gtk-${abiVersion}"
           "webkit2gtk-web-extension-${abiVersion}"
         ];
-    platforms = platforms.linux ++ platforms.darwin;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

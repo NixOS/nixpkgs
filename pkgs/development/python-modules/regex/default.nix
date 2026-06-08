@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "2025.9.18";
+  version = "2026.4.4";
 in
 buildPythonPackage {
   pname = "regex";
@@ -18,13 +18,21 @@ buildPythonPackage {
     owner = "mrabarnett";
     repo = "mrab-regex";
     tag = version;
-    hash = "sha256-s/jaRbQffd1DmGribk8gwTraKEhWfvFZboWXUduhM8A=";
+    hash = "sha256-vLhukoQc50XOgv74hBQS36w+T+27y5GTTDetZ2JV8r4=";
   };
 
   build-system = [ setuptools ];
 
+  preCheck = ''
+    rm regex/__init__.py
+  '';
+
   checkPhase = ''
-    ${python.interpreter} -m unittest
+    runHook preCheck
+
+    ${python.interpreter} -m unittest ./regex/tests/test_regex.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "regex" ];

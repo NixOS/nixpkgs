@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "trustymail";
   version = "1.2.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "trustymail";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NF89Am/sG3Ruaws2SUofrbLoEiKdYpgPuXIAKjst9hk=";
   };
 
@@ -37,12 +37,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "trustymail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan domains and return data based on trustworthy email best practices";
     homepage = "https://github.com/cisagov/trustymail";
-    changelog = "https://github.com/cisagov/trustymail/releases/tag/${src.tag}";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cisagov/trustymail/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ cc0 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "trustymail";
   };
-}
+})

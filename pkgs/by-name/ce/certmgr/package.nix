@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certmgr";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "certmgr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MgNPU06bv31tdfUnigcmct8UTVztNLXcmTg3H/J7mic=";
   };
 
@@ -25,15 +25,15 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) certmgr; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's automated certificate management using a CFSSL CA";
     mainProgram = "certmgr";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       johanot
       srhb
     ];
   };
-}
+})

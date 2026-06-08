@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terminal-parrot";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jmhobbs";
     repo = "terminal-parrot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VOV1KKaZrKyz+Fj//RbPrBE3ImC60FNauayVAMmoxFc=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Shows colorful, animated party parrot in your terminial";
     homepage = "https://github.com/jmhobbs/terminal-parrot";
-    license = licenses.mit;
-    maintainers = [ maintainers.heel ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.heel ];
     mainProgram = "terminal-parrot";
   };
-}
+})

@@ -8,30 +8,30 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.56";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-nEn2iR2/ROboalMAXJV4y8qZiN36QkaWin+sMLZSKMQ=";
+    hash = "sha256-2mFCujePThwqOnXNF9x1Hyv9KRme44gtTcy8frziNXo=";
   };
 
-  cargoHash = "sha256-fi16wLc/ZQV2bJHiIo7HVP+IS8zuoJeQQ7kV0cJ9GZ8=";
+  cargoHash = "sha256-8l7cTW8riEa1nFjftc5lnEQcY9gz4dYli9FQBZ5SFT8=";
 
   cargoBuildFlags = [
     "--package=iwe"
+    "--package=iwec"
     "--package=iwes"
   ];
 
-  postPatch = ''
-    substituteInPlace crates/iwe/tests/common/mod.rs --replace-fail \
+  preCheck = ''
+    substituteInPlace crates/iwe/tests/common.rs --replace-fail \
       'binary_path.push("target");' \
       'binary_path.push("target/${stdenv.hostPlatform.rust.rustcTarget}");'
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {

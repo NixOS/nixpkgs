@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dsearch";
-  version = "0.0.7";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "danksearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rtfymtzsxEuto1mOm8A5ubREJzXKCai6dw9Na1Fa21Q=";
+    hash = "sha256-pEJgw0so89I/dELzYK58kwFASA+x+TH2D6moXdaFY4E=";
   };
 
-  vendorHash = "sha256-65NFlAtix5ehyaRok3/0Z6+j6U7ccc0Kdye0KFepLLM=";
+  vendorHash = "sha256-scvZWbMHAhpYWCU0xZK1E6h6sAkoXegqI1iYS44fcCg=";
 
   ldflags = [
     "-w"
@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/AvengeMedia/danksearch";
     changelog = "https://github.com/AvengeMedia/danksearch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luckshiba ];
+    teams = [ lib.teams.danklinux ];
     mainProgram = "dsearch";
     platforms = lib.platforms.unix;
   };

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   astropy,
   dill,
   echo,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "glueviz";
   version = "1.24.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
@@ -81,10 +78,10 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://glueviz.org";
     description = "Linked Data Visualizations Across Multiple Files";
-    license = licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

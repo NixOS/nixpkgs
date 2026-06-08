@@ -1,9 +1,7 @@
 {
-  applyPatches,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  k3s,
   lib,
   nixosTests,
   stdenv,
@@ -11,19 +9,17 @@
 }:
 
 let
-  version = "3.6.6";
-  etcdSrcHash = "sha256-MFkO2Rv38TQeREJ3zHgRdj3thnMK0ci3laEjn4CaXHs=";
-  etcdCtlVendorHash = "sha256-VxR/pPS/HR4EBPJJmQin7XqS5MvWreJe2dlOpQn3pqY=";
-  etcdUtlVendorHash = "sha256-xxq9t47985fA9fDvaanq2sPgUDZJDT2w46zp3pggryo=";
-  etcdServerVendorHash = "sha256-0uPIw2T9ZrR92MBB1xBBfbqXQUVg6sNDu8F5m1C+lEQ=";
+  version = "3.6.12";
+  etcdSrcHash = "sha256-oUq/yRwSgJ2xZ6yoiEBYSSRH5NvHITXjMFuR7QZc4HU=";
+  etcdCtlVendorHash = "sha256-0ZlJiXFS7QxJ+dfstJf+ogLPL0kxrE/4ZTsKb0OOCqA=";
+  etcdUtlVendorHash = "sha256-o7TWg7RgeWZa92beumSGCpxvLcFMzqC1vgcKfi5K4dI=";
+  etcdServerVendorHash = "sha256-UzToh6FaAVyxzZdDoukrHez1W9+tifFGEM16UCcmm5U=";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "etcd-io";
-      repo = "etcd";
-      tag = "v${version}";
-      hash = etcdSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "etcd-io";
+    repo = "etcd";
+    tag = "v${version}";
+    hash = etcdSrcHash;
   };
 
   env = {
@@ -35,11 +31,14 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [ dtomvan ];
+    maintainers = with lib.maintainers; [
+      dtomvan
+      superherointj
+    ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -66,7 +65,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -92,7 +91,7 @@ let
     '';
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit
@@ -117,7 +116,7 @@ let
   };
 in
 symlinkJoin {
-  name = "etcd-${version}";
+  pname = "etcd";
 
   inherit meta version;
 

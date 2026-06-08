@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    moveToOutput lib/libhdf4.settings "$dev"
     moveToOutput bin "$bin"
   '';
 
@@ -93,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Data model, library, and file format for storing and managing data";
     homepage = "https://support.hdfgroup.org/products/hdf4/";
     maintainers = [ ];
-    platforms = platforms.unix;
-    license = licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsdOriginal;
   };
 })

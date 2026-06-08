@@ -8,15 +8,15 @@
   azure-mgmt-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-automation";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-pJ0tQT/vVwEMs2Fh5bwFZgG418bQW9PLBaE1Eu8pHh4=";
+    pname = "azure_mgmt_automation";
+    inherit (finalAttrs) version;
+    hash = "sha256-A/NYbg/gllws7cp5plM4CHKuYnwm6lNlpVuqTq1aeO8=";
   };
 
   build-system = [ setuptools ];
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.automation" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Automation Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/automation/azure-mgmt-automation";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-automation_${version}/sdk/automation/azure-mgmt-automation/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wfdewith ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-automation_${finalAttrs.version}/sdk/automation/azure-mgmt-automation/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wfdewith ];
   };
-}
+})

@@ -2,34 +2,62 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   snakemake-interface-common,
+
+  # tests
+  pytestCheckHook,
+  snakemake-logger-plugin-rich,
+
+  # passthru
+  snakemake-interface-logger-plugins,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-logger-plugins";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-logger-plugins";
-    tag = "v${version}";
-    hash = "sha256-GPf8FdoBHpyQADWvJ7jOF4PpLk6/Ui+nXIE/rUSIAg8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UBdzJtKukR4Y9KPpu8qJv4HmN9ghncvEqGsTQnHk36k=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     snakemake-interface-common
   ];
 
   pythonImportsCheck = [ "snakemake_interface_logger_plugins" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    snakemake-logger-plugin-rich
+  ];
+
+  enabledTestPaths = [ "tests/tests.py" ];
+
+  # Circular dependency with snakemake
+  doCheck = false;
+  passthru.tests.pytest = snakemake-interface-logger-plugins.overridePythonAttrs {
+    doCheck = true;
+  };
+
+  meta = {
     description = "Stable interface for interactions between Snakemake and its logger plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-logger-plugins";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/snakemake/snakemake-interface-logger-plugins/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

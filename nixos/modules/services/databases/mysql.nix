@@ -9,9 +9,6 @@ let
   cfg = config.services.mysql;
 
   isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
-  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql80;
-  # Oracle MySQL has supported "notify" service type since 8.0
-  hasNotify = isMariaDB || (isOracle && lib.versionAtLeast cfg.package.version "8.0");
 
   mysqldOptions = "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${cfg.package}";
 
@@ -576,15 +573,6 @@ in
           superUser = if isMariaDB then cfg.user else "root";
         in
         ''
-          ${lib.optionalString (!hasNotify) ''
-            # Wait until the MySQL server is available for use
-            while [ ! -e /run/mysqld/mysqld.sock ]
-            do
-                echo "MySQL daemon not yet started. Waiting for 1 second..."
-                sleep 1
-            done
-          ''}
-
           ${lib.optionalString isMariaDB ''
             # If MariaDB is used in an Galera cluster, we have to check if the sync is done,
             # or it will fail to init the database while joining, so we get in an broken non recoverable state
@@ -689,7 +677,7 @@ in
 
       serviceConfig = lib.mkMerge [
         {
-          Type = if hasNotify then "notify" else "simple";
+          Type = "notify";
           Restart = "on-abnormal";
           RestartSec = "5s";
 

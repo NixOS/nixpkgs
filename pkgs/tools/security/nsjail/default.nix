@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nsjail";
-  version = "3.4";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "nsjail";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-/K+qJV5Dq+my45Cpw6czdsWLtO9lnJwZTsOIRt4Iijk=";
+    hash = "sha256-4fFXPwfPErve5CkVBtjPd1In8eEDby/RhuyW952YW7Y=";
   };
 
   nativeBuildInputs = [
@@ -56,17 +56,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
     homepage = "https://nsjail.dev/";
     changelog = "https://github.com/google/nsjail/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       arturcygan
       bosu
-      c0bw3b
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "nsjail";
   };
 }

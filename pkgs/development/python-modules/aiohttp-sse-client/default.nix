@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Server-Sent Event python client base on aiohttp";
     homepage = "https://pypi.org/project/aiohttp-sse-client/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

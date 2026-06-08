@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "queuelib";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WCvGVRRIEQCwU5vWcdprNVuHiGnPx32Sxjt1/MnPjic=";
+    hash = "sha256-sS/qef2MHdI+ISsfPbWAA7dzlJgB1PTm802IJGfUoZI=";
   };
 
   build-system = [ hatchling ];
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "queuelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
     changelog = "https://github.com/scrapy/queuelib/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

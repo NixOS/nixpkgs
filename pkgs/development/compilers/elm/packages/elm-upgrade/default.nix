@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
     description = "Upgrade your Elm 0.18 projects to Elm 0.19";
     homepage = "https://github.com/avh4/elm-upgrade";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-upgrade";
   };
 })

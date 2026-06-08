@@ -9,15 +9,15 @@
   makeWrapper,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyprshade";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "loqusion";
     repo = "hyprshade";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zK8i2TePJ4cEtGXe/dssHWg+ioCTo1NyqzInQhMaB8w=";
   };
 
@@ -37,12 +37,12 @@ buildPythonPackage rec {
       --prefix PATH : ${lib.makeBinPath [ hyprland ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/loqusion/hyprshade";
     description = "Hyprland shade configuration tool";
     mainProgram = "hyprshade";
-    license = licenses.mit;
-    maintainers = with maintainers; [ willswats ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ willswats ];
+    platforms = lib.platforms.linux;
   };
-}
+})

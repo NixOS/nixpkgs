@@ -38,10 +38,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.36.2";
-    rev = "dc2d3098ae5641555f15c71d5bb5ce0060a8015c";
-    hash = "sha256-ll7gn3y2dUW3kMtbUTjfi7ZTviE87S30ptiRlCPec9Q=";
+    version = "1.36.5";
+    rev = "41749943780b54b70b510b1b1a4805ae529e174a";
+    hash = "sha256-dT6ehfmW/huuyitqIlYAlEzUE6WrVA39sDKxatkZGaY=";
   };
+
+  # When GO_VERSION changes upstream, update the four sha256 hex strings in the
+  # _GO_SDKS dict in 0005-nixpkgs-pin-go-sdk-downloads.patch using output from
+  # this command (set the version literal in `select` to match GO_VERSION):
+  #   curl -s 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | select(.version == "go1.24.6") | .files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin") and (.arch == "amd64" or .arch == "arm64")) | "\(.os)_\(.arch): \(.sha256)"'
 
   # these need to be updated for any changes to fetchAttrs
   depsHash' =
@@ -49,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-cUpCkmJmFyd2mTImMKt5Cgi+A4bAWAXLYjJjMnV6haQ=";
-        aarch64-linux = "sha256-f1FbdFDunlF7uhCpkb5AqmKN5uimuKnFYBzXjIcRabk=";
+        x86_64-linux = "sha256-+oEQV3VfZu+p/f6Sif9pj2AkaA9+u0M8k+czdlcDLXI=";
+        aarch64-linux = "sha256-FcZfRinOd5KO6VnO9cx6ZQxJJ+KCFfB3Nk2k7zMuVU4";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -80,6 +85,9 @@ buildBazelPackage rec {
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # pin Go SDK downloads so the deps hash doesn't drift on every Go release
+      ./0005-nixpkgs-pin-go-sdk-downloads.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -144,14 +152,14 @@ buildBazelPackage rec {
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      # Envoy uses --noenable_bzlmod so BCR modules are not needed.
+      # Populate the repository cache with entries the build needs from the empty
+      # workspace.  Use `bazel sync` (which fetches WORKSPACE repos) rather than
+      # `bazel fetch` (which requires bzlmod for its --all mode).
       mkdir $NIX_BUILD_TOP/empty
       pushd $NIX_BUILD_TOP/empty
-      touch MODULE.bazel
-      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
-      # This really bloats the size of the FOD.
-      # TODO: lukegb - figure out how to make this suck less.
-      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
-      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      touch MODULE.bazel WORKSPACE
+      bazel sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
       popd
 
       # Strip out the path to the build location (by deleting the comment line).

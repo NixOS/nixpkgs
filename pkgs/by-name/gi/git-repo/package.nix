@@ -11,14 +11,14 @@
   openssh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-repo";
   version = "2.59";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5ffk5B4ZA/Wy2bQNahFaXPFRSZdKz5t6TaGbN00mfxo=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
       to make it easier to work with Git.
     '';
     homepage = "https://android.googlesource.com/tools/repo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
+    platforms = lib.platforms.unix;
     mainProgram = "repo";
   };
-}
+})

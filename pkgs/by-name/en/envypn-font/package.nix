@@ -3,22 +3,25 @@
   stdenv,
   fetchurl,
   libfaketime,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
+  installFonts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "envypn-font";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-${version}.tar.gz";
+    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-${finalAttrs.version}.tar.gz";
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
   nativeBuildInputs = [
+    installFonts
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   unpackPhase = ''
@@ -37,22 +40,17 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
+  postInstall = ''
     mkfontdir "$out/share/fonts/misc"
-
-    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
-    license = licenses.miros;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ erdnaxe ];
+    license = lib.licenses.miros;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ erdnaxe ];
   };
-}
+})

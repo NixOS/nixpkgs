@@ -21,15 +21,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "ledger-web";
 
-  meta = with lib; {
+  meta = {
     description = "Web frontend to the Ledger CLI tool";
     homepage = "https://github.com/peterkeen/ledger-web";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      manveru
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ledger_web";
   };
 }

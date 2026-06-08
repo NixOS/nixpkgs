@@ -10,28 +10,24 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.55.4";
+  version = "2.69.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bfz9mjvvqT6jA9CGLNGox8IaE0QzVGWRc5I/vaB6e5M=";
+    hash = "sha256-w3H+SwCNkAg8MfA1FbSOTrG6pHDBMhkoaBlsuwERBNM=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-V7mNRUrKQ2BdjbhCe+aAF5LAeRaAiaRyGaEZs+MaS+k=";
+  vendorHash = "sha256-iMoR38Qb2utzdkhKUrCQ0Ohm8f6jdYTuLkeMhCLqvN4=";
 
-  subPackages = [ "cmd/werf" ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
-
+  nativeBuildInputs = [ installShellFiles ];
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
     ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
+
+  subPackages = [ "cmd/werf" ];
 
   env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
@@ -62,7 +58,6 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-
   preCheck = ''
     # Test all packages.
     unset subPackages
@@ -70,9 +65,11 @@ buildGoModule (finalAttrs: {
     # Remove tests that fail or require external services.
     rm -rf \
       integration/suites \
+      pkg/container_backend/buildah_backend_data_archives_test.go \
       pkg/true_git/*_test.go \
       pkg/werf/exec/*_test.go \
-      test/e2e
+      test/e2e \
+      test/legacy_e2e
   ''
   + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
     # A workaround for osusergo.
@@ -80,7 +77,7 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

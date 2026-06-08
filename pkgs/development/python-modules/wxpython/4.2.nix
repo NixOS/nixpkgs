@@ -25,10 +25,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libglvnd,
   libgbm,
   pango,
@@ -51,7 +51,7 @@
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchPypi {
     inherit pname version;
@@ -102,10 +102,10 @@ buildPythonPackage rec {
     gst_all_1.gstreamer
     libGL
     libGLU
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     libglvnd
     libgbm
     webkitgtk_4_1
@@ -177,14 +177,13 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with maintainers; [ hexa ];
   };
 }

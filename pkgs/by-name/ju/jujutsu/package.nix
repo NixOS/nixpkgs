@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.36.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HGMzNXm6vWKf/RHPwB/soDqxAvCOW1J6BPs0tsrEuTI=";
+    hash = "sha256-wAefhpNP4ErCTTjZADpvTDk2of/XKP/MoXl6fpG7/fA=";
   };
 
-  cargoHash = "sha256-jai0FNuCUcgN+ZmmYgbFrMK1Z1vcv21wALkEb74h7H0=";
+  cargoHash = "sha256-b7/5vkO6GNX8qzJr4NcxtLZVLDc6NOMrOU4dE6LOFoE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/jj";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -83,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/jj-vcs/jj";
+    homepage = "https://jj-vcs.dev/";
     changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

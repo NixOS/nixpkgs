@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thermobeacon_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Thermobeacon BLE devices";
     homepage = "https://github.com/bluetooth-devices/thermobeacon-ble";
     changelog = "https://github.com/Bluetooth-Devices/thermobeacon-ble/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

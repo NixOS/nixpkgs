@@ -8,11 +8,10 @@
   gcr,
   glib-networking,
   gsettings-desktop-schemas,
-  gtk2,
-  libsoup_2_4,
-  # webkitgtk_4_0,
+  gtk3,
+  libsoup_3,
   webkitgtk_4_1,
-  xorg,
+  xprop,
   dmenu,
   findutils,
   gnused,
@@ -20,16 +19,15 @@
   gst_all_1,
   patches ? null,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "surf";
-  version = "2.1";
+  version = "2.1-unstable-2025-04-19";
 
   # tarball is missing file common.h
   src = fetchgit {
     url = "git://git.suckless.org/surf";
-    rev = version;
-    sha256 = "1v926hiayddylq79n8l7dy51bm0dsa9n18nx9bkhg666cx973x4z";
+    rev = "48517e586cdc98bc1af7115674b554cc70c8bc2e";
+    hash = "sha256-+qg1mF5X/hYxCy7N3CxIEM2yHi1jmUGiK/vaQBjKy1I=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +39,9 @@ stdenv.mkDerivation rec {
     gcr
     glib-networking
     gsettings-desktop-schemas
-    gtk2
-    libsoup_2_4
-    # webkitgtk_4_0
+    libsoup_3
+    gtk3
+    webkitgtk_4_1
   ]
   ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
@@ -62,7 +60,7 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       depsPath = lib.makeBinPath [
-        xorg.xprop
+        xprop
         dmenu
         findutils
         gnused
@@ -72,13 +70,11 @@ stdenv.mkDerivation rec {
     ''
       gappsWrapperArgs+=(
         --suffix PATH : ${depsPath}
+        --set GDK_BACKEND x11
       )
     '';
 
-  meta = with lib; {
-    # webkitgtk_4_0 was removed. master is supposed to support 4.1
-    # but it crashes with BadWindow X Error
-    broken = true;
+  meta = {
     description = "Simple web browser based on WebKitGTK";
     mainProgram = "surf";
     longDescription = ''
@@ -88,8 +84,8 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = webkitgtk_4_1.meta.platforms;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = [ ];
   };
 }

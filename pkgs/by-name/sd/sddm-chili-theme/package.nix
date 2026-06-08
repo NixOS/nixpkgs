@@ -30,7 +30,9 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [
-    libsForQt5.qtgraphicaleffects
+    # avoid .dev outputs propagation
+    libsForQt5.qtgraphicaleffects.out
+    libsForQt5.qtquickcontrols.out
   ];
 
   dontWrapQtApps = true;
@@ -43,13 +45,8 @@ stdenv.mkDerivation {
     mv * $out/share/sddm/themes/chili/
   '';
 
-  postFixup = ''
-    mkdir -p $out/nix-support
-
-    echo ${libsForQt5.qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
-  '';
-  meta = with lib; {
-    license = licenses.gpl3;
+  meta = {
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ sents ];
     homepage = "https://github.com/MarianArlt/sddm-chili";
     description = "Chili login theme for SDDM";

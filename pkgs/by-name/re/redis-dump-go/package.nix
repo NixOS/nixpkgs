@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "redis-dump-go";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "yannh";
     repo = "redis-dump-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+5iYigtMQvd6D90mpKyMa7ZKm2UDtCG91uFZ7dURBT4=";
   };
 
@@ -25,6 +25,6 @@ buildGoModule rec {
     description = "Dump Redis keys to a file in RESP format using multiple connections";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.richiejp ];
-    changelog = "https://github.com/yannh/redis-dump-go/releases/tag/v${version}";
+    changelog = "https://github.com/yannh/redis-dump-go/releases/tag/v${finalAttrs.version}";
   };
-}
+})

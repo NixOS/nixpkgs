@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collada-dom";
-  version = "2.5.2";
+  version = "2.5.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gepetto";
     repo = "collada-dom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-53Gf6OLwrflZcrWKPuNPS0k+jlj5yTzCkI/QYQFta48=";
+    hash = "sha256-vkbQvgY1ISOhbDeEmLuOWRfwQsOZRffUi3tpT/G33KY=";
   };
 
   postInstall = ''

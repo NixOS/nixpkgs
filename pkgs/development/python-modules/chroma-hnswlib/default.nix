@@ -6,7 +6,6 @@
   pybind11,
   setuptools,
   wheel,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "chroma-hnswlib";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chroma-core";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hnswlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/chroma-core/hnswlib";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -20,16 +19,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.2";
+  version = "0.13.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    tag = "v${version}";
-    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JiIZKWuSkvrF09GdmegUeTyidaM5IRp4uqjJRsn86E4=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -57,27 +57,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
-    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
-    "-Wignore::DeprecationWarning"
-  ];
+  pythonImportsCheck = [ "equinox" ];
 
   disabledTests = [
-    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
-    "test_jax_transform_warn"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_filter"
+    # Flaky under heavy load:
+    #   AssertionError: Non-linear scaling detected: ratio=1.56
+    "test_speed_buffer_while"
   ];
-
-  pythonImportsCheck = [ "equinox" ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
-    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

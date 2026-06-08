@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   siosocks,
   trustme,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aioftp";
   version = "0.27.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioftp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
     changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

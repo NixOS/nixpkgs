@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "galaxis";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "galaxis";
     rev = finalAttrs.version;
-    hash = "sha256-fSzifGoSdWyFGt99slzAsqCMDoeLbBqQGXujX8QAfGc=";
+    hash = "sha256-ZdCddbyWtF8dDAbU4M7snnegiFSEx1E0gKdDb5Xsre0=";
   };
 
   outputs = [

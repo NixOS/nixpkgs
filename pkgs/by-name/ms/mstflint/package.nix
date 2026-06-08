@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   rdma-core,
   openssl,
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -24,15 +25,15 @@
   enableDPA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
+  version = "4.36.0-1";
 
-  # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.34.0-1";
-
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-MOFfbrjwnWXVskFCF2pgjf1Z8nkZV0l+CLfGWzxmmIg=";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat
@@ -120,14 +122,14 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
-  meta = with lib; {
+  meta = {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd2
     ];
-    maintainers = with maintainers; [ thillux ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thillux ];
+    platforms = lib.platforms.linux;
   };
-}
+})

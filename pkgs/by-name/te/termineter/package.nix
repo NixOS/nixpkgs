@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "termineter";
   version = "1.0.6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rsmusllp";
     repo = "termineter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sJN1FNUCpQUMJNM6F2+v0NmGqu4LVYcsffwzl3Hr1CU=";
   };
 
@@ -33,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Smart Meter Security Testing Framework";
     homepage = "https://github.com/rsmusllp/termineter";
-    changelog = "https://github.com/rsmusllp/termineter/releases/tag/v${version}";
+    changelog = "https://github.com/rsmusllp/termineter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "termineter";
   };
-}
+})

@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # no upstream test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Terrible plugin to set up and tear down fixtures within the test function itself";
     homepage = "https://github.com/untitaker/pytest-subtesthack";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
   };
 }

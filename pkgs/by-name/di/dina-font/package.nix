@@ -4,7 +4,8 @@
   fetchzip,
   fontforge,
   bdftopcf,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
@@ -26,8 +27,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     fontforge
     bdftopcf
-    xorg.mkfontscale
-    xorg.fonttosfnt
+    mkfontscale
+    fonttosfnt
   ];
 
   buildPhase = ''
@@ -76,7 +77,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospace bitmap font aimed at programmers";
     longDescription = ''
       Dina is a monospace bitmap font, primarily aimed at programmers. It is
@@ -84,8 +85,8 @@ stdenv.mkDerivation {
       clear enough to remain readable even at high resolutions.
     '';
     homepage = "https://www.dcmembers.com/jibsen/download/61/";
-    license = licenses.free;
-    maintainers = with maintainers; [
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [
       prikhi
       ncfavier
     ];

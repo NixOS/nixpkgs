@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -17,14 +16,15 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools = false; }
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
     else
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "22.21.1";
-  sha256 = "487d73fd4db00dc2420d659a8221b181a7937fbc5bc73f31c30b1680ad6ded6a";
+  version = "22.22.3";
+  sha256 = "f3e6a578db1ab335a4a72785c1e87ad18a2cf6d2fc25747a1d741fb34af0bd0f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -57,5 +57,33 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      # Fix builds with shared llhttp
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+        hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+      })
+      # update tests for nghttp2 1.65
+      ./deprecate-http2-priority-signaling.patch
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
+        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
+        includes = [ "test/*" ];
+      })
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ecbc22dc3709290dcaadf634a28d8307a75952ee.diff?full_index=1";
+        hash = "sha256-LwniqgKlG1IiqSzdP7UgBw3/9cn1jyz/jtx45yb6RWM=";
+        includes = [
+          "test/parallel/test-http2-misbehaving-flow-control-paused.js"
+          "test/parallel/test-http2-misbehaving-flow-control.js"
+        ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
     ];
 }

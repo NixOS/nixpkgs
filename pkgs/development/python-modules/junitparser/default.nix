@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   glibcLocales,
   lxml,
   pytestCheckHook,
@@ -9,15 +10,17 @@
 
 buildPythonPackage rec {
   pname = "junitparser";
-  version = "3.2.0";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "weiwei";
     repo = "junitparser";
-    rev = version;
-    hash = "sha256-efP9t5eto6bcjk33wpJmunLlPH7wUwAa6/OjjYG/fgM=";
+    tag = version;
+    hash = "sha256-+81n5xW9SEE+NZbYKxXu6xupoq4/haUZokVardh43iM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -25,11 +28,11 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulates JUnit/xUnit Result XML files";
     mainProgram = "junitparser";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/weiwei/junitparser";
-    maintainers = with maintainers; [ multun ];
+    maintainers = with lib.maintainers; [ multun ];
   };
 }

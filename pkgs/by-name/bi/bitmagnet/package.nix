@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bitmagnet";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KgpKpnOVtS3VoIqKhIzDvbdR54M014tQj2/ufhWMZDo=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}"
+    "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${finalAttrs.version}"
   ];
 
   passthru = {
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
   };
-}
+})

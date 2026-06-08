@@ -5,7 +5,6 @@
   pandoc,
   pandocfilters,
   poetry-core,
-  pythonOlder,
   replaceVars,
   texliveSmall,
 }:
@@ -13,9 +12,7 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.16.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypandoc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/JessicaTegner/pypandoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       sternenseemann
       bennofs
     ];

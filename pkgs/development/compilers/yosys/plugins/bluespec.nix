@@ -36,10 +36,11 @@ stdenv.mkDerivation {
     "STATIC_BSC_LIBDIR=${bluespec}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bluespec plugin for Yosys";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "https://github.com/thoughtpolice/yosys-bluespec";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

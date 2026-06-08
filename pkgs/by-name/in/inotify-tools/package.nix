@@ -28,14 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inotify-tools/inotify-tools/wiki";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      marcweber
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
-      shamilton
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -2,58 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  anyio,
   backoff,
   httpx,
-  idna,
-  langchain,
-  llama-index,
-  openai,
   opentelemetry-api,
   opentelemetry-sdk,
   opentelemetry-exporter-otlp,
   packaging,
   poetry-core,
   pydantic,
-  requests,
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langfuse";
-  version = "3.10.5";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
-    tag = "v${version}";
-    hash = "sha256-OEbocc1yZjTUryqxHr4wCtd18u/L6fKdJBvUMAwx1oo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BTwCAyqZMic5sOVAXOhhS6H1SBoEePo1fGOt5vLiLUo=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "packaging" ];
-
   dependencies = [
-    anyio
     backoff
     httpx
-    idna
     opentelemetry-api
     opentelemetry-sdk
     opentelemetry-exporter-otlp
     packaging
     pydantic
-    requests
     wrapt
   ];
-
-  optional-dependencies = {
-    langchain = [ langchain ];
-    llama-index = [ llama-index ];
-    openai = [ openai ];
-  };
 
   pythonImportsCheck = [ "langfuse" ];
 
@@ -63,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

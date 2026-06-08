@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corepins";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corepins";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-noMdI2qk3cYc1FfRWd4rwpZBbeHiD557Z1T0ZxIhaTw=";
+    hash = "sha256-+cWhlqIK2Oqx4Zt1sRd7xvGwmbYOZbMMU+k5uNnkogk=";
   };
 
   nativeBuildInputs = [

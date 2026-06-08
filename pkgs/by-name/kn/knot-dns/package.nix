@@ -27,17 +27,18 @@
   autoreconfHook,
   nixosTests,
   knot-resolver_5,
+  knot-resolver-manager_6,
   knot-dns,
   runCommandLocal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.5.2";
+  version = "3.5.4";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "6f577c247ef870a55fe3377246bc1c2d643c673cd32de6c26231ff51d3fc7093";
+    url = "https://secure.nic.cz/files/knot-dns/knot-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-SgvIkt+qWhUP8oVfCojyJnEkvCcYGOrporH22kh8NOQ=";
   };
 
   outputs = [
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-O2"
     "-DNDEBUG"
   ];
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
     inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit knot-resolver-manager_6; # not very reliable on non-Linux yet
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
@@ -134,10 +136,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
-    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
+    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";
   };
-}
+})

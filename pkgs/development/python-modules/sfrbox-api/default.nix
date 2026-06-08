@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
     tag = "v${version}";
-    hash = "sha256-B29wpOr8yClAuA0KfWTCs4nRLOm2gMU8ayyr5VbF+qQ=";
+    hash = "sha256-hK4d9wy2+wUp8elEHW0suu9frYPNnwFUlIRvjTXfRkc=";
   };
 
   build-system = [ poetry-core ];

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-powermanagement";
     rev = version;
-    hash = "sha256-1TA9v2zrPoHiKUy6P4enmzvxWTD+/rGjrChE5WGMt3c=";
+    hash = "sha256-pHQp/bXeI+yGQJ2rgsP8H7ISpCqcGG+/F74Otz+vJpg=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-powermanagement";
     description = "Power management module for LXQt";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

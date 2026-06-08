@@ -23,11 +23,11 @@ buildKodiBinaryAddon rec {
     libhdhomerun
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-pvr/pvr.hdhomerun";
     description = "Kodi's HDHomeRun PVR client addon";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

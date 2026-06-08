@@ -1,25 +1,24 @@
 {
   lib,
   fetchFromGitHub,
-  php83,
+  php,
   versionCheckHook,
 }:
 
-php83.buildComposerProject2 (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
-  version = "9.1.0";
+  version = "9.5.1";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun2";
     tag = finalAttrs.version;
-    hash = "sha256-kjT72pLKuN166Edm8+8vUIfhFdMnZkeTagl0ECL20b8=";
+    hash = "sha256-OLB3/G3Yn6CIzawtHpzS+RYXpioPv0oReyRYMKx5AiI=";
   };
 
-  vendorHash = "sha256-0Bk01aU3vicwk9swkv+8VZxcPdaEMOOtp9niNfPfQyA=";
+  vendorHash = "sha256-pbxcpDhi/1pmeZFqAFn8GNokfDoYzxzDt3RmE8pGW68=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

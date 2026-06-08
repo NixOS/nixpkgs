@@ -20,7 +20,7 @@
   gsettings-desktop-schemas,
   librsvg,
   libwebp,
-  libX11,
+  libx11,
   lcms2,
   bison,
   flex,
@@ -33,15 +33,15 @@
   xapp-symbolic-icons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pix";
-  version = "3.4.8";
+  version = "3.4.10";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "pix";
-    rev = version;
-    hash = "sha256-zK02qhTGuYgZWHkJ6c3EVinUcojNEWwecvPjblECLkw=";
+    rev = finalAttrs.version;
+    hash = "sha256-IrRE2Bv2+DZMLI48at7npcAd3TSJRuZNzU/YbNK8x3k=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     libsecret
     libtiff
     libwebp
-    libX11
+    libx11
     xapp
   ];
 
@@ -103,12 +103,12 @@ stdenv.mkDerivation rec {
     }")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

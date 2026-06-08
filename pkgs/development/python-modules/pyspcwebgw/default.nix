@@ -8,7 +8,7 @@
   fetchpatch,
   poetry-core,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -42,16 +42,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
     changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

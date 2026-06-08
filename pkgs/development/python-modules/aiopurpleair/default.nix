@@ -10,15 +10,12 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
   version = "2025.08.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopurpleair" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the PurpleAir API";
     homepage = "https://github.com/bachya/aiopurpleair";
     changelog = "https://github.com/bachya/aiopurpleair/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

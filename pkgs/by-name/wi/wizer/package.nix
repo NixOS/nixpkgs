@@ -41,14 +41,13 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = wizer; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "WebAssembly pre-initializer";
     mainProgram = "wizer";
     homepage = "https://github.com/bytecodealliance/wizer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lucperkins
-      amesgen
     ];
   };
 }

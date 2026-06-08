@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchzip,
   flit-core,
   mistune,
@@ -11,8 +10,7 @@
 buildPythonPackage rec {
   pname = "formbox";
   version = "1.0.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchzip {
     url = "https://trong.loang.net/~cnx/formbox/snapshot/formbox-${version}.tar.gz";
@@ -27,11 +25,11 @@ buildPythonPackage rec {
   doCheck = false; # there's no test
   pythonImportsCheck = [ "formbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Script to format mbox as HTML/XML";
     mainProgram = "formbox";
     homepage = "https://trong.loang.net/~cnx/formbox";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

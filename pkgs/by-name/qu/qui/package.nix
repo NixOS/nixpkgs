@@ -1,22 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "qui";
-  version = "1.9.0";
+  version = "1.19.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M2ufnazZ2/1RLDbsFWs5pikw5Os+flMS6swAjDmGoFE=";
+    hash = "sha256-h6GmxwOxqh88Zy7tFD/GFQ8NrpBcanFPBXGUmfoIe3I=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -25,21 +28,23 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_11
       typescript
     ];
 
     sourceRoot = "${finalAttrs.src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs')
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-bDaMax5RS+ot6vaJmNJm6p4gFaCD9aslJXI/58ua9DI=";
+      pnpm = pnpm_11;
+      fetcherVersion = 3;
+      hash = "sha256-OEr5uyMnwP1TkSxRFNaopB9AAx2OVE7lNEzGyQwF6kc=";
     };
 
     postBuild = ''
@@ -51,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-UF6V737MF2la24oW8oPp+0N8nv0uEykMrTbzvx/gtec=";
+  vendorHash = "sha256-pkktl+0dBSbUuxZ1ycTV0HZl/wO79LtmNaamyZ+Z9lY=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -62,17 +67,31 @@ buildGoModule (finalAttrs: {
     "-X main.PolarOrgID="
   ];
 
+  # some season-pack tests use non-existent source paths (e.g. /media/...) and
+  # assert on a same-filesystem check that resolves them up to /. go's
+  # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
+  # something sane
+  preCheck = ''
+    export TMPDIR=/tmp
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "qui-web"
-    ];
+  # Required for tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "qui-web"
+      ];
+    };
+    tests.testService = nixosTests.qui;
   };
 
   meta = {
@@ -80,7 +99,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/autobrr/qui";
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ pta2002 ];
+    maintainers = with lib.maintainers; [
+      pta2002
+      tmarkus
+    ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;
   };

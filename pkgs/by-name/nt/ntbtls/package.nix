@@ -9,12 +9,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntbtls";
   version = "0.3.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/ntbtls/ntbtls-${version}.tar.bz2";
+    url = "mirror://gnupg/ntbtls/ntbtls-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-vfy5kCSs7JxsS5mK1juzkh30z+5KdyrWwMoyTbvysHw=";
   };
 
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ntbtls-config" $dev
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny TLS 1.2 only implementation";
     mainProgram = "ntbtls-config";
     homepage = "https://www.gnupg.org/software/ntbtls/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
   pytestCheckHook,
 }:
@@ -10,9 +9,7 @@
 buildPythonPackage rec {
   pname = "ordered-set";
   version = "4.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ordered_set" ];
 
-  meta = with lib; {
+  meta = {
     description = "MutableSet that remembers its order, so that every entry has an index";
     homepage = "https://github.com/rspeer/ordered-set";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MostAwesomeDude ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };
 }

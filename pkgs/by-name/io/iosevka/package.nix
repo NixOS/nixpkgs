@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   cctools,
-  remarshal,
+  go-toml,
   ttfautohint-nox,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
@@ -58,25 +58,27 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.3.6";
+  version = "34.4.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
-    rev = "v${version}";
-    hash = "sha256-/Bex4N+3xnYwteO85UaqrIKL5qGnYgSJYO9ET/WEUjM=";
+    tag = "v${version}";
+    hash = "sha256-eOh1jdrgaMYhqxP+QSCBxqhkJUGYrWLTkYwGmKSNrRA=";
   };
 
-  npmDepsHash = "sha256-6TTcXFf9z3ebL4l+++0DS26BJVnwzIi7hU2R1H0DF44=";
+  npmDepsHash = "sha256-9v4PKlS8FNuhnhdJmu3J1Bl+uSPS4KqE3PBrOhf9jQw=";
 
   nativeBuildInputs = [
-    remarshal
+    go-toml
     ttfautohint-nox
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
     cctools
   ];
+
+  strictDeps = true;
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -85,22 +87,16 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [
-    "extraParameters"
-  ]
-  ++ lib.optionals (
-    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-  ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+      printf "%s" "$buildPlan" | jsontoml -use-json-number > private-build-plans.toml
     ''}
     ${lib.optionalString
       (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
       ''
-        cp "$buildPlanPath" private-build-plans.toml
+        printf "%s" "$buildPlan" > private-build-plans.toml
       ''
     }
     ${lib.optionalString
@@ -111,7 +107,7 @@ buildNpmPackage rec {
     }
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
-      cat "$extraParametersPath" >> params/parameters.toml
+      printf "%s" "$extraParameters" >> params/parameters.toml
     ''}
     runHook postConfigure
   '';
@@ -137,7 +133,9 @@ buildNpmPackage rec {
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = "Versatile typeface for code, from code";
@@ -146,10 +144,9 @@ buildNpmPackage rec {
       quasi‑proportional typeface family, designed for writing code, using in
       terminals, and preparing technical documents.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      ttuegel
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       lunik1
     ];
   };

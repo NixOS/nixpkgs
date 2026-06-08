@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "assertpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple assertion library for unit testing with a fluent API";
     homepage = "https://github.com/assertpy/assertpy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

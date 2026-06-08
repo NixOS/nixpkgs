@@ -11,12 +11,12 @@
   gtk3,
   lib,
   libGL,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libdatrie,
   libjack2,
   libpsl,
@@ -27,8 +27,6 @@
   libuuid,
   libxkbcommon,
   lv2,
-  pcre,
-  pcre2,
   pkg-config,
   python3,
   sqlite,
@@ -66,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gtk3
     libGL
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     libdatrie
     libjack2
     libpsl
@@ -82,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libxkbcommon
     lv2
-    pcre
-    pcre2
     python3
     sqlite
   ];
@@ -116,22 +112,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
     description = "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     # error: 'vvtanh' was not declared in this scope; did you mean 'tanh'?
     # error: no matching function for call to 'juce::dsp::SIMDRegister<double>::SIMDRegister(xsimd::simd_batch_traits<xsimd::batch<double, 2> >::batch_bool_type)'
     broken = stdenv.hostPlatform.isAarch64; # since 2021-12-27 on hydra (update to 2.10): https://hydra.nixos.org/build/162558991

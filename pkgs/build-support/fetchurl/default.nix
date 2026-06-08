@@ -35,6 +35,40 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  /**
+    Resolve a URL against the available mirrors.
+
+    If the input is a `"mirror://"` URL, it is normalized.
+    Otherwise, the URL is returned unmodified in a singleton list.
+
+    Mirror URLs should be formatted as:
+    ```
+    mirror://{mirror_name}/{path}
+    ```
+
+    The specified `mirror_name` must correspond to an entry in `pkgs/build-support/fetchurl/mirrors.nix`, otherwise an error is thrown.
+
+    # Inputs
+
+    `url` (String)
+    : A (possibly `"mirror://"`) URL to resolve.
+
+    # Output
+
+    A list of resolved URLs.
+  */
+  resolveUrl =
+    url:
+    let
+      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = lib.head mirrorSplit;
+      mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
+    in
+    if mirrorSplit == null || mirrorName == null then
+      [ url ]
+    else
+      map (mirror: mirror + lib.elemAt mirrorSplit 1) mirrorList;
+
   impureEnvVars =
     lib.fetchers.proxyImpureEnvVars
     ++ [
@@ -135,6 +169,7 @@ lib.extendMkDerivation {
 
       # Passthru information, if any.
       passthru ? { },
+
       # Doing the download on a remote machine just duplicates network
       # traffic, so don't do that by default
       preferLocalBuild ? true,
@@ -166,7 +201,13 @@ lib.extendMkDerivation {
 
       urls_ =
         let
-          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+          u = lib.lists.concatMap (
+            url:
+            let
+              rewritten = rewriteURL url;
+            in
+            if lib.isString rewritten then [ rewritten ] else [ ]
+          ) preRewriteUrls;
         in
         if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
@@ -222,24 +263,13 @@ lib.extendMkDerivation {
       finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
       finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
 
-      resolvedUrl =
-        let
-          mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
-          mirrorName = lib.head mirrorSplit;
-          mirrorList =
-            if lib.hasAttr mirrorName mirrors then
-              mirrors."${mirrorName}"
-            else
-              throw "unknown mirror:// site ${mirrorName}";
-        in
-        if mirrorSplit == null || mirrorName == null then
-          url
-        else
-          "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
+      resolvedUrl = lib.head (resolveUrl url);
     in
 
     derivationArgs
     // {
+      __structuredAttrs = true;
+
       name =
         if finalAttrs.pname or null != null && finalAttrs.version or null != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
@@ -281,7 +311,7 @@ lib.extendMkDerivation {
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
-      SSL_CERT_FILE =
+      env.SSL_CERT_FILE =
         if
           (
             hash_.outputHash == ""
@@ -297,32 +327,35 @@ lib.extendMkDerivation {
 
       outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-      curlOpts = lib.warnIf (lib.isList curlOpts) (
-        let
-          url = toString (builtins.head urls_);
-          curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
-          curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
-          curlOptsListElementsRepresentation =
-            lib.concatMapStringsSep " " lib.strings.escapeNixString
-              curlOpts;
-        in
-        ''
-          fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
-          - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-            curlOpts = ${curlOptsAsStringRepresentation};
-          - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-            curlOptsList = [ ${curlOptsListElementsRepresentation} ];
-        ''
-      ) curlOpts;
-
-      curlOptsList = lib.escapeShellArgs curlOptsList;
+      curlOpts =
+        if lib.isList curlOpts then
+          lib.warn (
+            let
+              url = toString (builtins.head urls_);
+              curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
+              curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
+              curlOptsListElementsRepresentation =
+                lib.concatMapStringsSep " " lib.strings.escapeNixString
+                  curlOpts;
+            in
+            ''
+              fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
+              - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+                curlOpts = ${curlOptsAsStringRepresentation};
+              - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+                curlOptsList = [ ${curlOptsListElementsRepresentation} ];
+            ''
+          ) curlOpts
+        else
+          curlOpts;
 
       inherit
-        showURLs
-        mirrorsFile
-        postFetch
+        curlOptsList
         downloadToTemp
         executable
+        mirrorsFile
+        postFetch
+        showURLs
         ;
 
       impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
@@ -330,15 +363,6 @@ lib.extendMkDerivation {
       nixpkgsVersion = lib.trivial.release;
 
       inherit preferLocalBuild;
-
-      postHook =
-        if netrcPhase == null then
-          null
-        else
-          ''
-            ${netrcPhase}
-            curlOpts="$curlOpts --netrc-file $PWD/netrc"
-          '';
 
       inherit meta;
       passthru = {
@@ -349,4 +373,7 @@ lib.extendMkDerivation {
 
   # No ellipsis
   inheritFunctionArgs = false;
+}
+// {
+  inherit resolveUrl;
 }

@@ -14,7 +14,7 @@ let
   # Coerces a string to an int.
   coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
 
-  coerceIntVersion = v: coerceInt (lib.versions.major v);
+  coerceIntVersion = v: coerceInt (lib.versions.major (toString v));
 
   # Parses a single version, substituting "latest" with the latest version.
   parseVersion =
@@ -24,7 +24,9 @@ let
   # Parses a list of versions, substituting "latest" with the latest version.
   parseVersions =
     repo: key: versions:
-    lib.unique (map (parseVersion repo key) versions);
+    lib.sort (a: b: lib.strings.compareVersions (toString a) (toString b) > 0) (
+      lib.unique (map (parseVersion repo key) versions)
+    );
 in
 {
   repoJson ? ./repo.json,
@@ -98,14 +100,27 @@ in
   numLatestPlatformVersions ? 1,
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
+      # Range between min and max, inclusive.
       let
-        minPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" minPlatformVersion);
-        maxPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" maxPlatformVersion);
+        minPlatformVersion' = parseVersion repo "platforms" minPlatformVersion;
+        maxPlatformVersion' = parseVersion repo "platforms" maxPlatformVersion;
+        minPlatformVersionInt = coerceIntVersion minPlatformVersion';
+        maxPlatformVersionInt = coerceIntVersion maxPlatformVersion';
+        range = lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
+          lib.max minPlatformVersionInt maxPlatformVersionInt
+        );
       in
-      lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
-        lib.max minPlatformVersionInt maxPlatformVersionInt
-      )
+      # Don't use the actual latest version in lieu of the rounded version here,
+      # since when Google upgrades it would have the nasty side effect of being
+      # unstable and picking 35 -> 36 -> 37 instead of 35 -> 36.1 -> 37.
+      # Best to stay consistent.
+      #
+      # However, if only one platform is requested and it's the latest (which is the default),
+      # we should use it.
+      if lib.length range == 1 then lib.singleton maxPlatformVersion' else range
     else
+      # Use numLatestPlatformVersions with a lower cutoff of minPlatformVersion (defaulting to 1)
+      # to determine how many of the latest *major* versions we should pick.
       let
         minPlatformVersionInt =
           if minPlatformVersion == null then
@@ -116,8 +131,10 @@ in
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
+        range = lib.range firstPlatformVersionInt latestPlatformVersionInt;
       in
-      lib.range firstPlatformVersionInt latestPlatformVersionInt,
+      # Ditto, see above.
+      if lib.length range == 1 then lib.singleton repo.latest.platforms else range,
   includeSources ? false,
   includeSystemImages ? false,
   systemImageTypes ? [
@@ -144,7 +161,7 @@ in
 
 let
   # Resolve all the platform versions.
-  platformVersions' = map coerceInt (parseVersions repo "platforms" platformVersions);
+  platformVersions' = parseVersions repo "platforms" platformVersions;
 
   # Determine the Android os identifier from Nix's system identifier
   os =
@@ -281,20 +298,32 @@ let
   # Returns true if the given version exists.
   hasVersion =
     packages: package: version:
-    lib.hasAttrByPath [ package (toString version) ] packages;
+    lib.hasAttrByPath [ package (toString version) ] packages
+    || lib.hasAttrByPath [ package "${(toString version)}.0" ] packages;
 
   # Displays a nice error message that includes the available options if a version doesn't exist.
+  # Note that allPackages can be a list of package sets, or a single package set. Pass a list if
+  # you want to prioritize elements to the left (e.g. for passing a platform major version).
   checkVersion =
-    packages: package: version:
-    if hasVersion packages package version then
-      packages.${package}.${toString version}
-    else
+    allPackages: package: version:
+    let
+      # Convert the package sets to a list.
+      allPackages' = if lib.isList allPackages then allPackages else lib.singleton allPackages;
+
+      # Pick the first package set where we have the version.
+      packageSet = lib.findFirst (packages: hasVersion packages package version) null allPackages';
+    in
+    if packageSet == null then
       throw ''
         The version ${toString version} is missing in package ${package}.
         The only available versions are ${
-          builtins.concatStringsSep ", " (builtins.attrNames packages.${package})
+          lib.concatStringsSep ", " (
+            lib.attrNames (lib.foldl (s: x: s // (x.${package} or { })) { } allPackages')
+          )
         }.
-      '';
+      ''
+    else
+      packageSet.${package}.${toString version} or packageSet.${package}."${toString version}.0";
 
   # Returns true if we should link the specified plugins.
   shouldLink =
@@ -508,6 +537,7 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
+  # This is a list of the chosen API levels, as integers.
   platformVersions = platformVersions';
 
   platforms = map (
@@ -517,12 +547,25 @@ lib.recurseIntoAttrs rec {
     }
   ) platformVersions';
 
-  sources = map (
-    version:
-    deployAndroidPackage {
-      package = checkVersion allArchives.packages "sources" version;
-    }
-  ) platformVersions';
+  # Google is not including sources for API 37+. If the user requests them, don't fail.
+  sources = lib.filter (source: source != null) (
+    map (
+      version:
+      let
+        package =
+          let
+            version' = builtins.tryEval (checkVersion allArchives.packages "sources" version);
+          in
+          if version'.success then version'.value else null;
+      in
+      if package == null then
+        null
+      else
+        deployAndroidPackage {
+          inherit package;
+        }
+    ) platformVersions'
+  );
 
   system-images = lib.flatten (
     map (
@@ -546,7 +589,7 @@ lib.recurseIntoAttrs rec {
                 ) abiVersions
               );
 
-          instructions = builtins.listToAttrs (
+          instructions = lib.listToAttrs (
             map (package: {
               name = package.name;
               value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
@@ -755,7 +798,7 @@ lib.recurseIntoAttrs rec {
             done
           ''}
 
-          find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
+          find "$ANDROID_HOME/${cmdline-tools-package.path}/bin" -type f -executable | while read i; do
               ln -s $i $out/bin
           done
 

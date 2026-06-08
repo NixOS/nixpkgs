@@ -23,6 +23,7 @@
   cmake,
   nix,
   samba,
+  testers,
 
   # for passthru.lore
   binlore,
@@ -31,13 +32,13 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.2";
+  version = "3.8.7";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
+    hash = "sha256-LpD+lE+0PZi/3nYDVPXhBQL9A7mvqelOzRLskVtg9Y0=";
   };
 
   outputs = [
@@ -64,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
         #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # Locales are broken while building FreeBSD stdenv
+        # Optimally they would be fixed, but it is challenging to debug.
+        "libarchive/test/test_archive_string_conversion.c"
       ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
@@ -102,13 +108,21 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
-  hardeningDisable = [ "strictflexarrays3" ];
+  hardeningDisable = [
+    "strictflexarrays3"
+  ]
+  # some tests won't compile because this makes memcpy a macro:
+  # libarchive/test/test_write_format_mtree_preset_digests.c:2020:29: error: macro "memcpy" passed 66 arguments, but takes just 3
+  ++ lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    echo "#include <windows.h>" >> config.h
-  '';
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
+  };
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
@@ -126,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
     longDescription = ''
@@ -136,14 +150,19 @@ stdenv.mkDerivation (finalAttrs: {
       tools that use the libarchive library.
     '';
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jcumming ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jcumming ];
+    platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
+    pkgConfigModules = [ "libarchive" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libarchive" finalAttrs.version;
   };
 
   passthru.tests = {
     inherit cmake nix samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to

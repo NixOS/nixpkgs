@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   aiohttp,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pyfreedompro";
   version = "1.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Freedompro API";
     homepage = "https://github.com/stefano055415/pyfreedompro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

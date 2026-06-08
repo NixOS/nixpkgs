@@ -1,68 +1,80 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  azure-ai-documentintelligence,
+  azure-identity,
   beautifulsoup4,
+  charset-normalizer,
   defusedxml,
-  ffmpeg-headless,
+  lxml,
   magika,
   mammoth,
   markdownify,
-  numpy,
-  openai,
+  olefile,
   openpyxl,
   pandas,
-  pathvalidate,
   pdfminer-six,
-  puremagic,
+  pdfplumber,
   pydub,
   python-pptx,
   requests,
   speechrecognition,
-  youtube-transcript-api,
-  olefile,
   xlrd,
-  lxml,
+  youtube-transcript-api,
+
+  # tests
   pytestCheckHook,
+
+  # passthru
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "markitdown";
-  version = "0.1.4";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
-    tag = "v${version}";
-    hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pLL44w2jVj5X5/TmPqSveQe/9WLj0ddDUYPoSQlz+9E=";
   };
 
-  sourceRoot = "${src.name}/packages/markitdown";
+  sourceRoot = "${finalAttrs.src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "magika"
+    "mammoth"
+    "youtube-transcript-api"
   ];
   dependencies = [
+    azure-ai-documentintelligence
+    azure-identity
     beautifulsoup4
+    charset-normalizer
     defusedxml
-    ffmpeg-headless
     lxml
     magika
     mammoth
     markdownify
-    numpy
     olefile
-    openai
     openpyxl
     pandas
-    pathvalidate
     pdfminer-six
-    puremagic
+    pdfplumber
     pydub
     python-pptx
     requests
@@ -71,7 +83,12 @@ buildPythonPackage rec {
     youtube-transcript-api
   ];
 
-  pythonImportsCheck = [ "markitdown" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing markitdown
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "markitdown" ];
+  doCheck = isNotAarch64Linux;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -81,15 +98,25 @@ buildPythonPackage rec {
     "test_module_vectors"
     "test_cli_vectors"
     "test_module_misc"
+
+    # Require optional azure-ai-contentunderstanding, unavailable in nixpkgs.
+    # The fallback stubs hit `UserAgentPolicy() takes no arguments`.
+    "test_nonexistent_analyzer_raises_value_error"
+    "test_cu_registered_before_docintel"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    # Drop the "v" tag prefix before version comparison.
+    rev-prefix = "v";
+    # Skip PEP 440 pre-release tags.
+    ignoredVersions = "(a|b|rc)[0-9]+$";
+  };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
-    changelog = "https://github.com/microsoft/markitdown/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ malik ];
   };
-}
+})

@@ -18,7 +18,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "morphosis";
   version = "48.2";
   pyproject = false;
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "morphosis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
   };
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "morphosis";
     platforms = lib.platforms.linux;
   };
-}
+})

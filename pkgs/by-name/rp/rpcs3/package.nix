@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -13,30 +12,27 @@
   vulkan-headers,
   vulkan-loader,
   libpng,
-  libSM,
-  ffmpeg_7,
+  libsm,
+  ffmpeg,
   libevdev,
   libusb1,
   zlib,
   curl,
-  wolfssl,
   python3,
   pugixml,
-  flatbuffers,
-  llvm_18,
+  protobuf_33,
+  llvm,
   cubeb,
   opencv,
   enableDiscordRpc ? false,
   faudioSupport ? true,
   faudio,
-  SDL2,
   sdl3,
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
   miniupnpc,
   rtmidi,
-  asmjit,
   glslang,
   zstd,
   hidapi,
@@ -53,21 +49,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.38";
+  version = "0.0.40-unstable-2026-04-25";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
-    fetchSubmodules = true;
+    rev = "96f73f4497fd6fdafd40dc50f24c95c90cd4acc9";
+    postCheckout = ''
+      cd $out/3rdparty
+      git submodule update --init \
+        fusion/fusion asmjit/asmjit yaml-cpp/yaml-cpp SoundTouch/soundtouch stblib/stb \
+        feralinteractive/feralinteractive wolfssl/wolfssl
+    '';
+    hash = "sha256-KTF2Oj1p+EplRgWQ/We8mqu60h161/1gniKWjVAvAso=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "nixpkgs"
+    #define RPCS3_GIT_VERSION "nixpkgs-${lib.sources.shortRev finalAttrs.src.rev}"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -75,16 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)
     (lib.cmakeBool "USE_SYSTEM_FFMPEG" true)
     (lib.cmakeBool "USE_SYSTEM_CURL" true)
-    (lib.cmakeBool "USE_SYSTEM_WOLFSSL" true)
     (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
     (lib.cmakeBool "USE_SYSTEM_OPENAL" true)
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
-    (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
+    (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
@@ -120,24 +121,21 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-loader
     libpng
-    ffmpeg_7
+    ffmpeg
     libevdev
     zlib
     libusb1
     curl
-    wolfssl
     python3
     pugixml
-    SDL2 # Still needed by FAudio's CMake
     sdl3
-    flatbuffers
-    llvm_18
-    libSM
+    protobuf_33
+    llvm
+    libsm
     opencv.cxxdev
     cubeb
     miniupnpc
     rtmidi
-    asmjit
     glslang
     zstd
     hidapi
@@ -147,14 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals waylandSupport [
     wayland
     qtwayland
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-build-qt-6.10.patch";
-      url = "https://github.com/RPCS3/rpcs3/commit/038ee090b731bf63917371a3586c2f7d7cf4e585.patch";
-      hash = "sha256-jTIxsheG9b9zp0JEeWQ73BunAXmEIg5tj4SrWBfdHy8=";
-    })
   ];
 
   doInstallCheck = true;
@@ -170,13 +160,31 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ${./99-dualsense-controllers.rules} $out/etc/udev/rules.d/99-dualsense-controllers.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ilian
     ];
-    license = licenses.gpl2Only;
+    license = [
+      lib.licenses.gpl2Only
+      # Vendors wolfSSL, which changed its licence from
+      # `GPL-2.0-or-later` to `GPL-3.0-or-later`, which is incompatible
+      # with RPCS3’s `GPL-2.0-only`. They have a “GPLv2 exception list”
+      # (<https://github.com/wolfSSL/wolfssl/blob/v5.9.1-stable/LICENSING>),
+      # but this is dubious; either the exception likely negates the
+      # licence change by letting you take wolfSSL out of a
+      # `GPL-2.0-only` combination and redistribute it under those
+      # terms, negating the licence change entirely, or else it doesn’t
+      # allow distribution of the combination under the `GPL-2.0-only`
+      # at all and therefore would still constitute a licence
+      # violation to redistribute.
+      #
+      # We use `lib.licenses.unfree` to represent this awkward
+      # situation and keep Hydra from building the package.
+      lib.licenses.gpl3Plus
+      lib.licenses.unfree
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

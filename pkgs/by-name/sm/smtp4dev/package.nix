@@ -3,7 +3,7 @@
   stdenv,
   buildDotnetModule,
   fetchFromGitHub,
-  nodejs,
+  nodejs-slim,
   npmHooks,
   fetchNpmDeps,
   dotnetCorePackages,
@@ -11,20 +11,21 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "smtp4dev";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     tag = finalAttrs.version;
-    hash = "sha256-+6UIfttIjBbsxptc1uI7K8golGwl+Fw6f5kCl89NPDA=";
+    hash = "sha256-1dzK0IHdjEppV62tE4Ywqs8WihLJUY4bhzJPQ1A/Eog=";
   };
 
   patches = [ ./smtp4dev-npm-packages.patch ];
 
   nativeBuildInputs = [
-    nodejs
-    nodejs.python
+    nodejs-slim
+    nodejs-slim.npm
+    nodejs-slim.python
     npmHooks.npmConfigHook
     stdenv.cc # c compiler is needed for compiling npm-deps
   ];
@@ -33,7 +34,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-+rKqiGiIQAYCY/3z1m9cQI0WgtdX8UTr70v7nTtgkt0=";
+    hash = "sha256-lJyjoTTgum67j1qPtkLFGYO2sTpvN7ug0Q1jJw/Se/c=";
     postPatch = "cd ${finalAttrs.npmRoot}";
   };
 

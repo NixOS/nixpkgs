@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghorg";
-  version = "1.11.7";
+  version = "1.11.10";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
-    rev = "v${version}";
-    sha256 = "sha256-3aFEpSyKICJ6jWZAMprE4nV6OxMFVvM82bmKSV87Sng=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-LgbvCXmyiNBGTY+IYBWNGThtc00AC2rXelYG8PAFdOg=";
   };
 
   doCheck = false;
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -36,7 +36,7 @@ buildGoModule rec {
       --zsh <($out/bin/ghorg completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Quickly clone an entire org/users repositories into one directory";
     longDescription = ''
       ghorg allows you to quickly clone all of an orgs, or users repos into a
@@ -48,7 +48,7 @@ buildGoModule rec {
       - Performing Audits
     '';
     homepage = "https://github.com/gabrie30/ghorg";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ghorg";
   };
-}
+})

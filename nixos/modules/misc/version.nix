@@ -28,7 +28,7 @@ let
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "$" "\"" "\\" "`" ] s}"'';
   attrsToText =
     attrs:
-    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+    concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${escapeIfNecessary (toString v)}") attrs)
     + "\n";
 
   osReleaseContents =

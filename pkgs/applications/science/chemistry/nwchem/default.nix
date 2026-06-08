@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Required for build with gcc-14
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -std=gnu17";
 
   enableParallelBuilding = true;
 
@@ -222,18 +222,18 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
     homepage = "https://nwchemgit.github.io";
-    license = licenses.ecl20;
+    license = lib.licenses.ecl20;
   };
 }

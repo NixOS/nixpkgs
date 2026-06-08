@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wimpysworld";
     repo = "obs-dvd-screensaver";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-eUfy3m0r/sLrGLbp3en1ofcVVWZ+t2rZ4knjwfrorhw=";
   };
   strictDeps = true;

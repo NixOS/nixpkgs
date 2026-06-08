@@ -11,16 +11,16 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reconplogger";
-  version = "4.18.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "reconplogger";
-    tag = "v${version}";
-    hash = "sha256-kYNidF1sTC6WulX3HXMUm+TFJWvHgZj86Asmi6uIKRs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/+nPLji8iGTBpWTCR83JRfxMltMYjP62KrB+HRTQQE8=";
   };
 
   build-system = [ setuptools ];
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "reconplogger_tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to ease the standardization of logging within omni:us";
     homepage = "https://github.com/omni-us/reconplogger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,32 +1,16 @@
 {
   lib,
   callPackage,
-  python27,
-  fetchFromGitHub,
   installShellFiles,
   rSrc,
   version,
-  oildev,
-  configargparse,
   gawk,
   binlore,
   resholve,
   resholve-utils,
 }:
-
 let
-  sedparse = python27.pkgs.buildPythonPackage {
-    pname = "sedparse";
-    version = "0.1.2";
-    format = "setuptools";
-    src = fetchFromGitHub {
-      owner = "aureliojargas";
-      repo = "sedparse";
-      rev = "0.1.2";
-      hash = "sha256-Q17A/oJ3GZbdSK55hPaMdw85g43WhTW9tuAuJtDfHHU=";
-    };
-  };
-
+  python27 = callPackage ./python27.nix { };
 in
 python27.pkgs.buildPythonApplication {
   pname = "resholve";
@@ -35,14 +19,17 @@ python27.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python27.pkgs; [
     oildev
     configargparse
     sedparse
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ gawk ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gawk ])
   ];
 
   postPatch = ''
@@ -72,19 +59,20 @@ python27.pkgs.buildPythonApplication {
       inherit
         rSrc
         binlore
-        python27
         resholve
         ;
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Resolve external shell-script dependencies";
     homepage = "https://github.com/abathur/resholve";
     changelog = "https://github.com/abathur/resholve/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ abathur ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ abathur ];
+    platforms = lib.platforms.all;
     knownVulnerabilities = [
       ''
         resholve depends on python27 (EOL). While it's safe to

@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "weltenwort";
   domain = "rct_power";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "weltenwort";
     repo = "home-assistant-rct-power-integration";
     tag = "v${version}";
-    hash = "sha256-wM66MyRhBsMfUr+KlqV4jSuXcnKfW0fkbDAyuU2crsc=";
+    hash = "sha256-AsDMHPKCpbne2ZcRelcIgxm1i/RZcFU8fLOvkwEodOE=";
   };
 
   dependencies = [
@@ -28,11 +28,11 @@ buildHomeAssistantComponent rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/weltenwort/home-assistant-rct-power-integration/releases/tag/${src.tag}";
     description = "Custom integration for RCT Power Inverters";
     homepage = "https://github.com/weltenwort/home-assistant-rct-power-integration";
-    maintainers = with maintainers; [ _9R ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9R ];
+    license = lib.licenses.mit;
   };
 }

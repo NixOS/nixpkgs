@@ -14,14 +14,14 @@
   withDocs ? stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "playerctl";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk-doc" withDocs)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
     homepage = "https://github.com/acrisci/playerctl";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ puffnfresh ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ puffnfresh ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "playerctl";
   };
-}
+})

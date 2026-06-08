@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "docker-sbom";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "sbom-cli-plugin";
     rev = "tags/v${version}";
-    hash = "sha256-i3gIogHb0oW/VDuZUo6LGBmvqs/XfMXjpvTTYeGCK7Q=";
+    hash = "sha256-aKEew/5T4cIc3KiWaBxqFqTki/QSnfSAroZ9iO+orUA=";
   };
 
   patches = [
@@ -35,11 +35,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for Docker CLI to support SBOM creation using Syft";
     mainProgram = "docker-sbom";
     homepage = "https://github.com/docker/sbom-cli-plugin";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

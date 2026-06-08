@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -24,15 +25,25 @@
   dbus,
   iniparser,
   pandoc,
+  sqlite,
+  talloc,
+  xapian,
+  flex,
+  bison,
+  dconf,
+  localsearch,
+  tinysparql,
+  xapianSupport ? false,
+  localsearchSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.4";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Twe74RipUd10DT9RqHtcr7oklr0LIucEQ49CGqZnD5k=";
+    hash = "sha256-Ytd/WkkeaQhsFwb/fZ4BaRLg5ItD0MOnrmDDhLbWJbM=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     file
+  ]
+  ++ lib.optionals localsearchSupport [
+    flex
+    bison
   ];
 
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
@@ -60,6 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     iniparser
     pandoc
+    sqlite
+    talloc
+  ]
+  ++ lib.optionals xapianSupport [
+    xapian
+    file
+  ]
+  ++ lib.optionals localsearchSupport [
+    tinysparql
+    dconf
+    localsearch
   ];
 
   mesonFlags = [
@@ -69,11 +96,29 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"
     "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
+    "-Dwith-lockfile-path=/run/lock"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
     "-Dwith-statedir-creation=false"
+    "-Dwith-spotlight-backends=${
+      lib.concatStringsSep "," (
+        [ "cnid" ] ++ lib.optional xapianSupport "xapian" ++ lib.optional localsearchSupport "localsearch"
+      )
+    }"
   ];
+
+  # TODO: drop once upstream makes this path configurable.
+  postPatch = lib.optionalString localsearchSupport ''
+    substituteInPlace meson.build \
+      --replace-fail "install_emptydir('/etc/dconf/db')" "install_emptydir('etc/dconf/db')"
+    substituteInPlace config/dconf/meson.build \
+      --replace-fail "install_dir: '/etc/dconf/profile'" "install_dir: 'etc/dconf/profile'"
+  '';
+
+  # netatalk probes for the LocalSearch schema at configure time.
+  preConfigure = lib.optionalString localsearchSupport ''
+    export XDG_DATA_DIRS="''${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}${localsearch}/share/gsettings-schemas/localsearch-${localsearch.version}"
+  '';
 
   enableParallelBuilding = true;
 
@@ -82,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://netatalk.io/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jcumming ];
+    maintainers = with lib.maintainers; [
+      jcumming
+      nulleric
+    ];
   };
 })

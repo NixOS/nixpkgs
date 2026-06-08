@@ -2,26 +2,36 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "okolors";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "Ivordir";
+    owner = "IanManske";
     repo = "Okolors";
-    rev = "v${version}";
-    hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RSkZUkwCn9uvvT2dIqM2Q4+mRqjUegVuXCms5DBugbk=";
   };
 
-  cargoHash = "sha256-3wZeRPG2VrpPlqRVmkrMskqzM6NGZoSGbgGBTJzKCgQ=";
+  cargoHash = "sha256-ceFyFbNmC7PoleTejymQw9Ii9rxx2qJmFifNAQjLVUM=";
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  __structuredAttrs = true;
+
+  meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
-    homepage = "https://github.com/Ivordir/Okolors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    homepage = "https://github.com/IanManske/Okolors";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sandarukasa
+    ];
+    changelog = "https://github.com/IanManske/Okolors/releases/tag/v${finalAttrs.version}";
     mainProgram = "okolors";
   };
-}
+})

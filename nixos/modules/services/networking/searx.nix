@@ -14,7 +14,7 @@ let
   cfg = config.services.searx;
 
   settingsFile = pkgs.writeText "settings.yml" (
-    builtins.toJSON (builtins.removeAttrs cfg.settings [ "redis" ])
+    builtins.toJSON (removeAttrs cfg.settings [ "redis" ])
   );
 
   faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
@@ -52,6 +52,19 @@ in
         default = false;
         relatedPackages = [ "searx" ];
         description = "Whether to enable Searx, the meta search engine.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the port in the firewall.
+          Enabling this option adds the port specified in {option}`services.settings.server.port` to {option}`networking.firewall.allowedTCPPorts`.
+
+          ::: {.note}
+          When this option is set to true, {option}`services.settings.server.port` must be set as well or an error will be thrown.
+          :::
+        '';
       };
 
       domain = mkOption {
@@ -244,6 +257,13 @@ in
   ];
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.openFirewall -> cfg.settings ? server.port;
+        message = "services.searx.settings.server.port must be set when openFirewall is enabled.";
+      }
+    ];
+
     environment = {
       etc = {
         "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
@@ -392,6 +412,8 @@ in
         isSystemUser = true;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.server.port ]; };
   };
 
   meta.maintainers = with maintainers; [

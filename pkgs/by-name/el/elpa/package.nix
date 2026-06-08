@@ -26,15 +26,15 @@
 assert blas.isILP64 == lapack.isILP64;
 assert blas.isILP64 == scalapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elpa";
-  version = "2025.06.001";
+  version = "2026.02.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
-    url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-/usf6hq0qGcLjTJAdl7wragoBi737JtzXuy6KEhRXJQ=";
+    url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${finalAttrs.version}/elpa-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-o3nyf029J7LuRQF6/sZW0GQwHpcVDIdGSb39ZJV7de0=";
   };
 
   patches = [
@@ -123,11 +123,11 @@ stdenv.mkDerivation rec {
     export TEST_FLAGS="1500 50 16"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Eigenvalue Solvers for Petaflop-Applications";
     homepage = "https://elpa.mpcdf.mpg.de/";
-    license = licenses.lgpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

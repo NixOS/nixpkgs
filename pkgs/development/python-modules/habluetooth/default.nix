@@ -15,22 +15,19 @@
   pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "habluetooth";
-  version = "5.8.0";
+  version = "6.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
-    tag = "v${version}";
-    hash = "sha256-VbD4fAOZtDtPIGGYb3ISP7c9YLBXAXeOIICqf9Pm5ho=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a6qYBCN4nlJ0KRqGSbE6D5YySrvhi2kqAArMKa5A6sM=";
   };
 
   build-system = [
@@ -58,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "habluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
-    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

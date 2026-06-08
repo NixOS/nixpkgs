@@ -13,11 +13,11 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectmorph";
   version = "0.6.1";
   src = fetchurl {
-    url = "https://github.com/swesterfeld/spectmorph/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/swesterfeld/spectmorph/releases/download/${finalAttrs.version}/spectmorph-${finalAttrs.version}.tar.bz2";
     hash = "sha256-H/PaczAkjxeu2Q6S/jazZ0PU9oCmhBzsLgbGLusxXm8=";
   };
 
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
     homepage = "https://spectmorph.org";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

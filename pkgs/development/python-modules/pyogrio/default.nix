@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   certifi,
   cython,
@@ -17,15 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.11.1";
+  version = "0.12.1";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
     tag = "v${version}";
-    hash = "sha256-F6XfkihN3k2xquYS8jJMlqtLXzaTORaduJ2Q9LhSQGM=";
+    hash = "sha256-c3bd8gxsHCzLKmy8baiIUbTXzZWms/NlDg7Az6TWrfM=";
   };
 
   postPatch = ''
@@ -39,8 +37,7 @@ buildPythonPackage rec {
     setuptools
     versioneer
     wheel
-  ]
-  ++ versioneer.optional-dependencies.toml;
+  ];
 
   buildInputs = [ gdal ];
 

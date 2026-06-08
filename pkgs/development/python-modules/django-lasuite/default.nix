@@ -15,20 +15,21 @@
   pytest-django,
   responses,
   celery,
+  freezegun,
   pytestCheckHook,
   nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "django-lasuite";
-  version = "0.0.18";
+  version = "0.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
-    hash = "sha256-kXRaoVOyabGPCnO8uyWHbpE0zOIYZkHcqmWNSz0BHZY=";
+    hash = "sha256-wTxM4dVCqfDjMouk/bdLjD/Yv0WuTSOJYFhYMsD4JjQ=";
   };
 
   build-system = [ hatchling ];
@@ -44,15 +45,22 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+  optional-dependencies = lib.fix (self: {
+    all = with self; configuration ++ malware_detection;
+    configuration = [ django-configurations ];
+    malware_detection = [ celery ];
+  });
+
   pythonRelaxDeps = true;
 
   nativeCheckInputs = [
-    celery
+    factory-boy
+    freezegun
     pytestCheckHook
     pytest-django
-    factory-boy
     responses
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PYTHONPATH=tests:$PYTHONPATH
@@ -74,5 +82,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
+    platforms = lib.platforms.linux;
   };
 }

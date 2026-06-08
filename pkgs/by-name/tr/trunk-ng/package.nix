@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trunk-ng";
   version = "0.17.16";
 
   src = fetchFromGitHub {
     owner = "ctron";
     repo = "trunk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SnE0z9Wa4gtX/ts0vG9pYnnxumILHTSV9/tVYkCHFck=";
   };
 
@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jDewjDm7Nh09CkRdPG0/ELn4odz/aaRNg8GegDxK6f8=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ctron/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk-ng";
-    maintainers = with maintainers; [ ctron ];
-    license = with licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ ctron ];
+    license = with lib.licenses; [ asl20 ];
   };
-}
+})

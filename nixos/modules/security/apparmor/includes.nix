@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (builtins) attrNames hasAttr isAttrs;
+  inherit (builtins) hasAttr isAttrs;
   inherit (lib) getLib;
   inherit (config.environment) etc;
   # Utility to generate an AppArmor rule
@@ -95,7 +95,9 @@ in
       include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
       ${pkgs.stdenv.cc.libc}/share/locale/** r,
       ${pkgs.stdenv.cc.libc}/share/locale.alias r,
-      ${config.i18n.glibcLocales}/lib/locale/locale-archive r,
+      ${lib.optionalString (
+        config.i18n.glibcLocales != null
+      ) "${config.i18n.glibcLocales}/lib/locale/locale-archive r,"}
       ${etcRule "localtime"}
       ${pkgs.tzdata}/share/zoneinfo/** r,
       ${pkgs.stdenv.cc.libc}/share/i18n/** r,

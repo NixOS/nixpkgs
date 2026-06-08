@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "controku";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benthetechguy";
@@ -45,12 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "controku" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/benthetechguy/controku/releases/tag/${version}";
     description = "Control Roku devices from the comfort of your own desktop";
     mainProgram = "controku";
     homepage = "https://github.com/benthetechguy/controku";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mjm ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mjm ];
   };
 }

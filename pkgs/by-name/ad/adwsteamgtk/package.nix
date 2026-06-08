@@ -11,16 +11,16 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adwsteamgtk";
   version = "0.8.0";
   # built with meson, not a python format
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "AdwSteamGtk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n+BNqa+SHB1V1INHooc0VpeqZ2Dy1Byt7mrbJc2MXts=";
   };
 
@@ -50,4 +50,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "adwaita-steam-gtk";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,9 +7,10 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-evidence";
   version = "3.12";
   pyproject = true;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.evidence";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kSM2fXaK3H6os/RexwOGg2d8UptoAlHnYK7FlMTg2bI=";
   };
 
@@ -33,13 +34,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/fox-it/dissect.evidence/issues/46
+    "test_ewf"
+  ];
+
   pythonImportsCheck = [ "dissect.evidence" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parsers for various forensic evidence file containers";
     homepage = "https://github.com/fox-it/dissect.evidence";
-    changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

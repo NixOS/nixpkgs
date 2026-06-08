@@ -1,43 +1,49 @@
 {
   lib,
-  callPackage,
+  buildPythonPackage,
   fetchFromGitHub,
   semgrep-core,
-  buildPythonPackage,
 
-  pytestCheckHook,
+  # check tools
   git,
+  pytestCheckHook,
 
-  # python packages
+  # python runtime dependencies
   attrs,
   boltons,
   click,
   click-option-group,
   colorama,
   defusedxml,
-  flaky,
   glom,
   jsonschema,
+  mcp,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
+  opentelemetry-instrumentation-threading,
   opentelemetry-sdk,
-  mcp,
   packaging,
   peewee,
-  pytest-freezegun,
-  pytest-mock,
-  pytest-snapshot,
   python-lsp-jsonrpc,
   requests,
   rich,
   ruamel-yaml,
+  semantic-version,
   tomli,
   tqdm,
-  types-freezegun,
   typing-extensions,
   urllib3,
   wcmatch,
+
+  # python check dependencies
+  flaky,
+  pytest-asyncio,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-snapshot,
+  requests-mock,
+  types-freezegun,
 }:
 
 # testing locally post build:
@@ -77,7 +83,7 @@ buildPythonPackage rec {
   # tell cli/setup.py to not copy semgrep-core into the result
   # this means we can share a copy of semgrep-core and avoid an issue where it
   # copies the binary but doesn't retain the executable bit
-  SEMGREP_SKIP_BIN = true;
+  env.SEMGREP_SKIP_BIN = true;
 
   pythonRelaxDeps = [
     "boltons"
@@ -87,28 +93,30 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     boltons
-    colorama
     click
     click-option-group
+    colorama
+    defusedxml
     glom
+    jsonschema
+    mcp
+    opentelemetry-api
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-threading
+    opentelemetry-sdk
+    packaging
+    peewee
+    python-lsp-jsonrpc
     requests
     rich
     ruamel-yaml
-    tqdm
-    packaging
-    jsonschema
-    wcmatch
-    mcp
-    peewee
-    defusedxml
-    urllib3
-    typing-extensions
-    python-lsp-jsonrpc
+    semantic-version
     tomli
-    opentelemetry-api
-    opentelemetry-sdk
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-instrumentation-requests
+    tqdm
+    typing-extensions
+    urllib3
+    wcmatch
   ];
 
   doCheck = true;
@@ -116,31 +124,34 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     pytestCheckHook
+
     flaky
-    pytest-snapshot
-    pytest-mock
+    pytest-asyncio
     pytest-freezegun
+    pytest-mock
+    pytest-snapshot
+    requests-mock
     types-freezegun
   ];
 
   disabledTestPaths = [
     "tests/default/e2e"
-    "tests/default/e2e-pysemgrep"
     "tests/default/e2e-other"
+    "tests/default/e2e-pysemgrep"
     "tests/default/mcp"
   ];
 
   disabledTests = [
-    # requires networking
-    "test_send"
-    # requires networking
-    "test_parse_exclude_rules_auto"
-    # many child tests require networking to download files
-    "TestConfigLoaderForProducts"
-    # doesn't start flaky plugin correctly
-    "test_debug_performance"
     # requires .git directory
     "clean_project_url"
+    # doesn't start flaky plugin correctly
+    "test_debug_performance"
+    # requires networking
+    "test_parse_exclude_rules_auto"
+    # requires networking
+    "test_send"
+    # many child tests require networking to download files
+    "TestConfigLoaderForProducts"
   ];
 
   preCheck = ''

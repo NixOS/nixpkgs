@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Vc";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "VcDevel";
     repo = "Vc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-A2qUzjXv50unFcoZp2nRVinkph+CoHyiU7AgOphDphM=";
   };
 
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     sed -i '/AutodetectHostArchitecture()/d' print_target_architecture.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
     homepage = "https://github.com/VcDevel/Vc";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

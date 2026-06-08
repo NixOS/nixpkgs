@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 stdenv.mkDerivation rec {
   pname = "it-tools";
@@ -18,13 +20,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm_8
   ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-m1eXBE5rakcq8NGnPC9clAAvNJQrN5RuSQ94zfgGZxw=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_8;
+    fetcherVersion = 3;
+    hash = "sha256-dsjf2TyLAqPzR8OXJgNcoOdDZj2t+H+tLfRhfPsu1G8=";
   };
 
   buildPhase = ''

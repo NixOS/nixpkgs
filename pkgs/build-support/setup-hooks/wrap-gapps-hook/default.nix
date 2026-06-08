@@ -30,7 +30,7 @@ makeSetupHook {
   # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook3 is placed into nativeBuildInputs
   # the librsvg and gtk3 above should be removed but kept to not break anything that implicitly depended on its binaries
   depsTargetTargetPropagated =
-    assert (lib.assertMsg (!targetPackages ? raw) "wrapGAppsHook3 must be in nativeBuildInputs");
+    assert (!targetPackages ? raw || throw "wrapGAppsHook3 must be in nativeBuildInputs");
     lib.optionals isGraphical [
       # librsvg provides a module for gdk-pixbuf to allow rendering
       # SVG icons. Most icon themes are SVG-based and so are some
@@ -51,6 +51,7 @@ makeSetupHook {
       # D-Bus service enabled globally (e.g. through a NixOS module).
       dconf.lib
     ];
+  meta.license = lib.licenses.mit;
   passthru = {
     tests =
       let

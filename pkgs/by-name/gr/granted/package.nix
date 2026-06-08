@@ -9,14 +9,14 @@
   xdg-utils,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "granted";
   version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = "granted";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
   };
 
@@ -27,8 +27,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/common-fate/granted/internal/build.Version=v${version}"
-    "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
+    "-X github.com/common-fate/granted/internal/build.Version=v${finalAttrs.version}"
+    "-X github.com/common-fate/granted/internal/build.Commit=${finalAttrs.src.rev}"
     "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
     "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
     "-X github.com/common-fate/granted/internal/build.ConfigFolderName=.granted"
@@ -88,10 +88,10 @@ buildGoModule rec {
   meta = {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
-    changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
+    changelog = "https://github.com/common-fate/granted/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jlbribeiro
     ];
   };
-}
+})

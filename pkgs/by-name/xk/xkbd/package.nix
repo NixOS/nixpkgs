@@ -3,15 +3,15 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libXrender,
-  libXft,
+  libxrender,
+  libxft,
   xorgproto,
   xinput,
-  libXi,
-  libXext,
-  libXtst,
-  libXpm,
-  libX11,
+  libxi,
+  libxext,
+  libxtst,
+  libxpm,
+  libx11,
   autoreconfHook,
 }:
 
@@ -28,25 +28,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
-    libXrender
-    libXft
-    libXext
-    libXtst
-    libXpm
-    libX11
-    libXi
+    libxrender
+    libxft
+    libxext
+    libxtst
+    libxpm
+    libx11
+    libxi
     xorgproto
     xinput
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mahatma-kaganovich/xkbd";
     description = "On-screen soft keyboard for X11";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xkbd";
   };
 }

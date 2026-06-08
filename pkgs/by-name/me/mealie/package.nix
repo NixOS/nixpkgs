@@ -1,28 +1,29 @@
 {
   lib,
+  pkgs,
   callPackage,
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python3,
   nltk-data,
   writeShellScript,
   nix-update-script,
 }:
 
 let
-  version = "3.5.0";
+  version = "3.16.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-rZOmu2xplIyMgX0uk5XCKf79qWfftHVELYNXdlzYkrY=";
+    hash = "sha256-DUwLCe221MQb6AEYNxNDWXoaEdf9q/dNklOXJncnnJ4=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages;
-  python = pythonpkgs.python;
+  python = python3;
+  pythonpkgs = python.pkgs;
 in
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
@@ -50,8 +51,10 @@ pythonpkgs.buildPythonApplication rec {
       beautifulsoup4
       extruct
       fastapi
+      freezegun
       html2text
       httpx
+      httpx-curl-cffi
       ingredient-parser-nlp
       isodate
       itsdangerous
@@ -81,11 +84,15 @@ pythonpkgs.buildPythonApplication rec {
       typing-extensions
       tzdata
       uvicorn
+      yt-dlp
     ]
     ++ uvicorn.optional-dependencies.standard;
 
   postPatch = ''
     rm -rf dev # Do not need dev scripts & code
+
+    substituteInPlace pyproject.toml \
+     --replace-fail '"setuptools==82.0.1"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
@@ -135,7 +142,7 @@ pythonpkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
@@ -144,11 +151,12 @@ pythonpkgs.buildPythonApplication rec {
       the UI editor.
     '';
     homepage = "https://mealie.io";
-    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       litchipi
       anoa
+      esch
     ];
     mainProgram = "mealie";
   };

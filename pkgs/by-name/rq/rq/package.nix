@@ -30,12 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm build.rs
   '';
 
-  VERGEN_SEMVER = finalAttrs.version;
+  env.VERGEN_SEMVER = finalAttrs.version;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

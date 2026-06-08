@@ -47,7 +47,8 @@ let
   mainProgram = if enableDFHack then "dfhack" else "dwarf-fortress";
 in
 buildEnv {
-  name = "dwarf-fortress-full";
+  pname = "dwarf-fortress-full";
+  version = dfVersion;
   paths = [
     (dwarf-fortress.override {
       inherit

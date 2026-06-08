@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   apr,
   expat,
@@ -22,23 +23,32 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apr-util";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/apr/apr-util-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
   };
 
   patches = [
     ./fix-libxcrypt-build.patch
     # Fix incorrect Berkeley DB detection with newer versions of clang due to implicit `int` on main errors.
-    ./clang-bdb.patch
+    (fetchpatch {
+      url = "https://github.com/apache/apr-util/commit/2d838ff7319bd384a0b177f40ac19c4b6c81436d.patch?full_index=1";
+      hash = "sha256-/N6V5D1d9R6AVjHUwy3Ne839D3ZSsF3Hpn8W9sx1sXM=";
+      excludes = [ "CHANGES" ];
+    })
+    # Fix error with missing function prototype
+    (fetchpatch {
+      url = "https://github.com/apache/apr-util/commit/e67caa006c75181b45b761cd50294cb3c8e18f1a.patch?full_index=1";
+      hash = "sha256-fwKT7mGPHIgJ5uG/KAOOE/38FSNfow+GJgHCxcp9mgI=";
+    })
   ]
   ++ lib.optional stdenv.hostPlatform.isFreeBSD ./include-static-dependencies.patch;
 
-  NIX_CFLAGS_LINK = [ "-lcrypt" ];
+  env.NIX_CFLAGS_LINK = toString [ "-lcrypt" ];
 
   outputs = [
     "out"
@@ -111,12 +121,12 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apr.apache.org/";
     description = "Companion library to APR, the Apache Portable Runtime";
     mainProgram = "apu-1-config";
     maintainers = [ ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
-}
+})

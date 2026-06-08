@@ -5,7 +5,7 @@
   pkg-config,
   intltool,
   gtk2,
-  libX11,
+  libx11,
   xrandr,
   withGtk3 ? false,
   gtk3,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./respect-xml-catalog-files-var.patch ];
 
   buildInputs = [
-    libX11
+    libx11
     xrandr
     (if withGtk3 then gtk3 else gtk2)
   ];

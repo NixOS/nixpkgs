@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.54.1";
+  version = "1.56.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-APPwvhKsTUhY6/FSQwuS3vFXSAP/YQf378dkoFbUxMc=";
+    hash = "sha256-WaMtOFzB564m5DeYxvEtB/9hmKvQQewGILOgjPwCHMw=";
   };
 
   outputs = [
@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     # almost cross-compiles, however fails with
     # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
     "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dman=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dtests=no"
     "-Dcrypto=gnutls"
     "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
@@ -235,19 +236,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       obadz
     ];
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnome" finalAttrs.version;
   };
 })

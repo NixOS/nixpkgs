@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "24.5.10";
+  version = "26.5.5";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
+    hash = "sha256-oBpbzajFtz5Z3aNJT9E+X+xdtqodrXgsPMO7V/FjNDU=";
   };
 
   nativeBuildInputs = [
@@ -50,17 +50,7 @@ stdenv.mkDerivation rec {
     boehmgc
   ];
 
-  patches = [
-    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
-      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
-    })
-  ];
-
   configureFlags = [
-    # Fix build with gcc15
-    "CFLAGS=-std=gnu17"
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-incdir=${lib.getDev gmp}/include"
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
@@ -90,13 +80,13 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ecl";
     teams = [ lib.teams.lisp ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

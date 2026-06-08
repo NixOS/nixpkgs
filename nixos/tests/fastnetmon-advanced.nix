@@ -2,7 +2,7 @@
 
 {
   name = "fastnetmon-advanced";
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ yureka-wdz ];
 
   nodes = {
     bird =
@@ -62,7 +62,7 @@
       bird.wait_for_unit("bird.service")
 
       fnm.wait_until_succeeds('journalctl -eu fastnetmon.service | grep "BGP daemon restarted correctly"')
-      fnm.wait_until_succeeds("journalctl -eu gobgp.service | grep BGP_FSM_OPENCONFIRM")
+      fnm.wait_until_succeeds('journalctl -eu gobgp.service | grep "Peer Up"')
       bird.wait_until_succeeds("birdc show protocol fnm | grep Estab")
       fnm.wait_until_succeeds('journalctl -eu fastnetmon.service | grep "API server listening"')
       fnm.succeed("fcli set blackhole 172.23.42.123")

@@ -15,7 +15,8 @@ let
 in
 
 symlinkJoin {
-  name = "inkscape-with-extensions-${lib.getVersion inkscape}";
+  inherit (inkscape) version;
+  pname = "inkscape-with-extensions";
 
   outputs = [
     "out"

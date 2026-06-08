@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   callPackage,
   versionCheckHook,
@@ -10,20 +11,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wild-unwrapped";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "davidlattimore";
+    owner = "wild-linker";
     repo = "wild";
     tag = finalAttrs.version;
-    hash = "sha256-x0IZuWjj0LRMj4pu2FVaD8SENm/UVtE1e4rl0EOZZZM=";
+    hash = "sha256-v4lPgZDPvRTAekkU9Vku9llgpOsaVtKt91VFUGrEeKw=";
   };
 
-  cargoHash = "sha256-5s0qS8y0+EH+R1tgN2W5/+t+GdjbQdRVLlcA2KjpHsE=";
+  __structuredAttrs = true;
 
-  cargoBuildFlags = [ "-p wild-linker" ];
+  cargoHash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
 
-  strictDeps = true;
+  cargoBuildFlags = [
+    "-p"
+    "wild-linker"
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -37,7 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -47,14 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Very fast linker for Linux";
-    homepage = "https://github.com/davidlattimore/wild";
-    changelog = "https://github.com/davidlattimore/wild/blob/${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/wild-linker/wild";
+    changelog = "https://github.com/wild-linker/wild/blob/${finalAttrs.version}/CHANGELOG.md";
     license = [
       lib.licenses.asl20 # or
       lib.licenses.mit
     ];
     mainProgram = "wild";
     maintainers = with lib.maintainers; [ RossSmyth ];
-    platforms = lib.platforms.linux;
+    # Wild can run on Linux and Darwin, but can only target ELF platforms.
+    # On linux this is native, on Darwin this is cross (or emulated)
+    platforms = with lib.platforms; lib.optionals (stdenv.targetPlatform.isElf) (linux ++ darwin);
   };
 })

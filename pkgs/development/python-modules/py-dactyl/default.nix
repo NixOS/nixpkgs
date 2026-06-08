@@ -1,28 +1,32 @@
 {
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
   pytestCheckHook,
   requests,
   setuptools,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "py-dactyl";
-  version = "2.0.7";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iamkubi";
     repo = "pydactyl";
     tag = "v${version}";
-    hash = "sha256-4WzQQs4WP5AwO8idZsP6J71CwnoD1ilC5Tpcepnf26c=";
+    hash = "sha256-/bmk4RIS8pEi+RbJ+6tOchwFj246hdoTXv6WBNisKuc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     requests
+    websocket-client
   ];
 
   pythonImportsCheck = [ "pydactyl" ];

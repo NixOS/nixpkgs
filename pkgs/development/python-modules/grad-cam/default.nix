@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   matplotlib,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "grad-cam";
   version = "1.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

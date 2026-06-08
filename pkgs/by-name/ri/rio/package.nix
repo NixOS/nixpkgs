@@ -11,6 +11,7 @@
   cmake,
   ncurses,
   scdoc,
+  shaderc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -18,10 +19,10 @@
   vulkan-loader,
   libxkbcommon,
   withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   libxcb,
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
@@ -38,10 +39,10 @@ let
       vulkan-loader
     ]
     ++ lib.optionals withX11 [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [
@@ -50,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.36";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c/+agFoGRB+kvVSUo5+yc1LlSvLsgD5J1yk2ufDRgc4=";
+    hash = "sha256-ON7CJ1NDwLfjvLZ0ugN45LUjBGiwRNASiQwuDa6F1vM=";
   };
 
-  cargoHash = "sha256-KITGepJC6luNwA7ypGDjajLtmBx5faV2ruJ0aXyrFVo=";
+  cargoHash = "sha256-vSQ5heZZ8tYKeMABhZ8AziEAniavnAasH04BVlqYF4g=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     autoPatchelfHook
+    shaderc
   ];
 
   runtimeDependencies = rlinkLibs;

@@ -62,10 +62,12 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --disable-nls \
       --prefix=$out
 
     # Build
+    # NOTE: parallel build (-j) breaks gawk autoconf'd Makefile under tcc-mes; keep serial.
     make gawk
 
     # Install

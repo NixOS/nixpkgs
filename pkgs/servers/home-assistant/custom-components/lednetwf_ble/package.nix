@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "1.0.0";
+  version = "2.0.0";
 in
 buildHomeAssistantComponent {
   owner = "8none1";
@@ -19,7 +19,7 @@ buildHomeAssistantComponent {
     owner = "8none1";
     repo = "lednetwf_ble";
     tag = "v${version}";
-    hash = "sha256-YASoOuB2LvceE/DphmXb9nEGTd+pVP52/HOpV+6dCjM=";
+    hash = "sha256-Keb2Eph2DvS0zsg7wa30LrfqkmmccLl9okfdd0OTpqc=";
   };
 
   dependencies = [
@@ -38,6 +38,6 @@ buildHomeAssistantComponent {
     homepage = "https://github.com/8none1/lednetwf_ble";
     changelog = "https://github.com/8none1/lednetwf_ble/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
   };
 }

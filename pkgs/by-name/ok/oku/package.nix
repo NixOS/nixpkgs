@@ -4,11 +4,12 @@
   fetchFromGitHub,
   wrapGAppsHook4,
   pkg-config,
-  fuse,
+  fuse3,
   glib,
   gtk4,
   hicolor-icon-theme,
   libadwaita,
+  oniguruma,
   pango,
   webkitgtk_6_0,
   nix-update-script,
@@ -40,14 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     glib
     gtk4
     hicolor-icon-theme
     libadwaita
+    oniguruma
     pango
     webkitgtk_6_0
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   # the program expects icons to be installed but the
   # program does not install them itself

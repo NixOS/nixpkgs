@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workset";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "fossable";
     repo = "workset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLSpgxTnyloMbCAIf2Uk9w0niJcJ2XZvcIl+T8Dq40U=";
+    hash = "sha256-Ryi5zLlOVNVtHhMZ5PglNFKVrrSlrcj3TOoeHKjGAic=";
   };
 
-  cargoHash = "sha256-5bOWtKpC4ZtU5gMvwErd7Xqy+awjp7QlnQIFQ+eHGoA=";
+  cargoHash = "sha256-VJ1vXEZkOYUGba8hfgdlNpT0QAvHDPdR+TNhDNprKNk=";
 
   nativeBuildInputs = [ pkg-config ];
 

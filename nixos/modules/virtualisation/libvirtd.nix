@@ -421,7 +421,7 @@ in
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [
-        libressl.nc
+        netcat
         config.networking.firewall.package
         cfg.package
         cfg.qemu.package
@@ -530,7 +530,10 @@ in
           "nix-helpers"
           "nix-ovmf"
         ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+        StateDirectory = subDirs [
+          "dnsmasq"
+          "secrets"
+        ];
       };
     };
 
@@ -573,7 +576,6 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
       after = [ "libvirtd.service" ];
       path = with pkgs; [
         coreutils
@@ -641,7 +643,7 @@ in
       '';
     };
 
-    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssModules = optional (cfg.nss.enable || cfg.nss.enableGuest) cfg.package;
     system.nssDatabases.hosts = mkMerge [
       # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))

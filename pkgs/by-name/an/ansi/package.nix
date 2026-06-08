@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ansi-escape-sequences-cli";
   version = "0.2.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-55CdEw1bVgabWRbZIRe9jytwDf70Y92nITwDRQaTXaQ=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phip1611 ];
     mainProgram = "ansi";
   };
-}
+})

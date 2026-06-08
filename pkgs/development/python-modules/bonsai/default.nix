@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bonsai";
-  version = "1.5.4";
+  version = "1.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "bonsai";
     tag = "v${version}";
-    hash = "sha256-1AKdayvkRIY8F9UhuEvGg3uboYh7A/4BkmJ11RkYI9w=";
+    hash = "sha256-q0BE1TuxiS01Z83dqDH54XzRgdF3ZszRBJsMIfsvTeU=";
   };
 
   build-system = [ setuptools ];

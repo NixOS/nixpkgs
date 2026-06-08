@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytz,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "1.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "bluecurrent";
     repo = "HomeAssistantAPI";
@@ -31,6 +28,8 @@ buildPythonPackage rec {
     pytz
     websockets
   ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   pythonImportsCheck = [ "bluecurrent_api" ];
 

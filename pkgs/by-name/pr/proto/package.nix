@@ -6,27 +6,30 @@
   libiconv,
   makeBinaryWrapper,
   pkg-config,
+  perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
-  version = "0.50.4";
+  version = "0.56.4";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
-    rev = "v${version}";
-    hash = "sha256-X448S7eGx60CgpZkV81bVuxAc6HuIRNeHJgKW4min/E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fX9kPkhJ2AgmTR/7fINBpHnZfdB+W7QNx3CGX7O9Lh4=";
   };
 
-  cargoHash = "sha256-PUNBq4VWufCeFdhI7zThEyDMA4UHpL95uVdv4uouxBQ=";
+  cargoHash = "sha256-b0inmhRT5lm9zQHl9jFYFWVI80sWHtr7OggMntUNK/o=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
+
   ];
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
+    perl
   ];
 
   # Tests requires network access
@@ -48,10 +51,10 @@ rustPlatform.buildRustPackage rec {
       proto is a pluggable next-generation version manager for multiple programming languages. A unified toolchain.
     '';
     homepage = "https://moonrepo.dev/proto";
-    changelog = "https://github.com/moonrepo/proto/releases/tag/v${version}";
+    changelog = "https://github.com/moonrepo/proto/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nokazn ];
     mainProgram = "proto";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

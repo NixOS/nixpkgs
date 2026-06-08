@@ -13,7 +13,7 @@
   buildc2xml ? false,
 }:
 let
-  version = "1.73";
+  version = "1.74";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smatch";
@@ -23,11 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "error27";
     repo = "smatch";
     tag = finalAttrs.version;
-    hash = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
+    hash = "sha256-LZdTwoTbNj/YE8o5xQ7MclkULJI3NTeeR38BsAtsI/4=";
   };
 
   patches = [
-    ./remove_const.patch
     (
       let
         clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);

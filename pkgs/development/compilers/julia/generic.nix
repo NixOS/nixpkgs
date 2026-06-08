@@ -19,6 +19,10 @@
   libxml2,
   zlib,
   buildPackages,
+  darwin,
+  unzip,
+  ncurses,
+  curl,
 }:
 
 let
@@ -68,6 +72,13 @@ stdenv.mkDerivation rec {
     perl
     gnum4
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+    darwin.DarwinTools
+    darwin.sigtool
+    darwin.autoSignDarwinBinariesHook
+    unzip
   ];
 
   buildInputs = [
@@ -85,8 +96,8 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString (lib.versionAtLeast version "1.11") ''
     substituteInPlace deps/curl.mk \
-      --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
-                     'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
+      --replace-fail 'jxf $(notdir $<)' \
+                     'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
   ''
   + lib.optionalString (lib.versionOlder version "1.12") ''
     substituteInPlace deps/tools/common.mk \
@@ -96,6 +107,11 @@ stdenv.mkDerivation rec {
     substituteInPlace deps/openssl.mk \
       --replace-fail 'cd $(dir $<) && $(TAR) -zxf $<' \
                      'cd $(dir $<) && $(TAR) -zxf $< && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" openssl-$(OPENSSL_VER)/Configure'
+  '';
+
+  preBuild = lib.optionalString (lib.versionAtLeast version "1.11") ''
+    # terminfo dirs normally inaccessible in build sandbox
+    export TERMINFO="${ncurses.out}/share/terminfo/";
   '';
 
   makeFlags = [
@@ -111,14 +127,23 @@ stdenv.mkDerivation rec {
   ];
 
   # remove forbidden reference to $TMPDIR
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isElf ''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
   '';
 
+  # Code signing is done as part of the build process, but that
+  # doesn't quite work so we re-sign it here.
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    codesign -s - --force --entitlements ./contrib/mac/app/Entitlements.plist $out/bin/julia
+  '';
+
   # tests are flaky for aarch64-linux on hydra
-  doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
+  # some tests not working on aarch64-darwin for unrelated reasons
+  doInstallCheck =
+    stdenv.hostPlatform.isLinux
+    && (lib.versionAtLeast version "1.10" || !stdenv.hostPlatform.isAarch64);
 
   preInstallCheck = ''
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
@@ -150,12 +175,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     mainProgram = "julia";
     homepage = "https://julialang.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nickcao
       joshniemela
       thomasjm
@@ -164,6 +189,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
   };
 }

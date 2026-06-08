@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PDF reader and note-taker for macOS";
     homepage = "https://skim-app.sourceforge.io/";
-    license = licenses.bsd0;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd0;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "Skim.app";
-    maintainers = with maintainers; [ YvesStraten ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ YvesStraten ];
+    platforms = lib.platforms.darwin;
   };
 }

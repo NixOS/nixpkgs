@@ -1,29 +1,109 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  bun,
   fetchFromGitHub,
+  kulala-core,
+  makeBinaryWrapper,
+  nodejs,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-fmt";
-  version = "1.4.0";
+  version = "3.1.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
-    rev = "v${version}";
-    hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4rVsw3dyoKrC6lj8m2R42iZmBk5G2LIVtV6Ro9pHSBo=";
   };
 
-  vendorHash = "sha256-GazDEm/qv0nh8vYT+Tf0n4QDGHlcYtbMIj5rlZBvpKo=";
+  node_modules = stdenv.mkDerivation {
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
-  env.CGO_ENABLED = 0;
+    strictDeps = true;
+    __structuredAttrs = true;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${version}"
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -R node_modules $out/
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+
+    outputHash = "sha256-z+jQC2RCav3VG/agWizcWFat8KgkGdBzaGQriviEbyo=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
+  nativeBuildInputs = [
+    bun
+    makeBinaryWrapper
+    nodejs
   ];
+
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    cp -R ${finalAttrs.node_modules}/node_modules .
+    patchShebangs node_modules
+    bun run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 dist/cli.cjs $out/lib/kulala-fmt/cli.cjs
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/kulala-fmt \
+      --add-flags $out/lib/kulala-fmt/cli.cjs \
+      --set KULALA_CORE_PATH ${lib.getExe kulala-core}
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/kulala-fmt --version | grep -x ${lib.escapeShellArg finalAttrs.version}
+    printf '%s\n' 'GET https://example.com' | $out/bin/kulala-fmt format --stdin | grep 'GET https://example.com'
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "Opinionated .http and .rest files linter and formatter";
@@ -31,6 +111,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CnTeng ];
     mainProgram = "kulala-fmt";
-    platforms = lib.platforms.all;
+    platforms = nodejs.meta.platforms;
   };
-}
+})

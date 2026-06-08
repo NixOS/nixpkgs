@@ -3,33 +3,56 @@
   stdenv,
   fetchurl,
   unzip,
-  bintools,
   versionCheckHook,
   runCommand,
   cctools,
   darwin,
-  sources ? import ./sources.nix { inherit fetchurl; },
-  version ? sources.versionUsed,
 }:
 
-assert sources != null && (builtins.isAttrs sources);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  inherit version;
-
-  nativeBuildInputs = [ unzip ];
+  version = "3.12.1";
 
   src =
-    sources."${version}-${stdenv.hostPlatform.system}"
-      or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
+        x86_64-linux = "linux-x64";
+        aarch64-linux = "linux-arm64";
+        x86_64-darwin = "macos-x64";
+        aarch64-darwin = "macos-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-aiu/ZKEzychqYqUy29PgtNtKw2Wr1Fbp+dHF32H82/g=";
+        aarch64-linux = "sha256-tECHkwEI9tf1a/WAoC1dKpf/lFGcWiiDOZgiAuG0xIE=";
+        x86_64-darwin = "sha256-xWsyLNvBXg18NzlwwuK+U7+0OEWL1nwYKHA+dErLeRY=";
+        aarch64-darwin = "sha256-6v84I9Wgxc3LZbOK3yBOXzUpD81WDUjLR8L6x+FUe5c=";
+      };
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/dart-archive/channels/${
+        if lib.strings.hasSuffix ".beta" finalAttrs.version then "beta" else "stable"
+      }/release/${finalAttrs.version}/sdk/dartsdk-${system}-release.zip";
+      inherit hash;
+    };
+
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
 
+    rm LICENSE README revision
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
+    find $out/bin -type f -executable | while read f; do
+      if patchelf --print-interpreter "$f" >/dev/null 2>&1; then
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+                 --set-rpath "${lib.makeLibraryPath [ (lib.getLib stdenv.cc.cc) ]}" "$f"
+      fi
+    done
   ''
   + ''
     runHook postInstall
@@ -40,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   passthru = {
     fetchGitHashesScript = ./fetch-git-hashes.py;
@@ -81,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dart.dev";
-    maintainers = with lib.maintainers; [ grburst ];
+    maintainers = [ ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
@@ -97,5 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    teams = [ lib.teams.flutter ];
   };
 })

@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Only need to wrap the Python tool (powerprofilectl)
   dontWrapGApps = true;
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   postPatch = ''
     patchShebangs --build \
@@ -130,14 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/releases/${finalAttrs.version}";
     homepage = "https://gitlab.freedesktop.org/upower/power-profiles-daemon";
     description = "Makes user-selected power profiles handling available over D-Bus";
     mainProgram = "powerprofilesctl";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mvnetbiz
       picnoir
       lyndeno

@@ -36,10 +36,10 @@ buildPythonPackage rec {
   # There's no tests in repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest external process plugin";
     homepage = "https://github.com/pytest-dev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

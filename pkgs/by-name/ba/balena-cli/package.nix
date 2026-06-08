@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_latest,
+  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
@@ -13,24 +13,24 @@
 
 let
   buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
   node-gyp' = node-gyp.override {
-    nodejs = nodejs_latest;
+    nodejs = nodejs_24;
   };
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "23.2.8";
+  version = "25.1.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-qczkG1+6sn/n+Ew/HD5Ki8epZW3UEpREc3fjS2VS1go=";
+    hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
   };
 
-  npmDepsHash = "sha256-b5LNCOai6DyJx5VDaNHWFq9rvj5g9kwXqnUoS7fb8z4=";
+  npmDepsHash = "sha256-HAOZlCRcPjX0u9GBLaYR03Jb+bvg679MqcGGHkQ2FPM=";
 
   makeCacheWritable = true;
 
@@ -71,7 +71,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

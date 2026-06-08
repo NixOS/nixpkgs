@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.5.1";
+  version = "1.6.1";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2q34twATQ4jH6TPgtiNYaqp/L76LOmJZOHUTMDuYduY=";
+    hash = "sha256-s2qtNFAHkXhfVGaE0PLtZE5IGf9Oha5noiRfFZ7MstQ=";
   };
 
   depsBuildBuild = [
@@ -89,18 +89,20 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/doc/libshumate-1.0 "$devdoc"
   '';
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libshumate";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GTK toolkit providing widgets for embedded maps";
     mainProgram = "shumate-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

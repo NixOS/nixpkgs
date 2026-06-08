@@ -12,7 +12,7 @@
   pytestCheckHook,
   qtile,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-bonsai";
   version = "0.6.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aravinda0";
     repo = "qtile-bonsai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JCElI4Ymr99p9dj++N9lyTFNmikntBwwImYREXFsUo0=";
   };
 
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qtile_bonsai" ];
 
   meta = {
-    changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${version}";
+    changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/aravinda0/qtile-bonsai";
     description = "Flexible layout for the qtile tiling window manager";
     license = lib.licenses.mit;
@@ -69,4 +69,4 @@ buildPythonPackage rec {
       sigmanificient
     ];
   };
-}
+})

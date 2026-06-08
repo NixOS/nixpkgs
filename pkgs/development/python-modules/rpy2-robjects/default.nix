@@ -16,8 +16,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.3";
-  format = "pyproject";
+  version = "3.6.5";
+  pyproject = true;
   pname = "rpy2-robjects";
 
   disabled = isPyPy;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-cxqhpJBcSyXAVk1yy/2F+SMBAvmJ56IlFYhekdTfPUA=";
+    hash = "sha256-A9CZ9DagGotR+4+L9gJCCpnHzdqMP84OOg9TLja0r+Q=";
   };
 
   patches = [
@@ -52,6 +52,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    # https://github.com/rpy2/rpy2/issues/1218
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
 
   meta = {
     homepage = "https://rpy2.github.io/";

@@ -5,28 +5,48 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't support latest marshmallow
+      marshmallow = super.marshmallow.overridePythonAttrs (oldAttrs: rec {
+        version = "3.26.2";
+        src = fetchFromGitHub {
+          owner = "marshmallow-code";
+          repo = "marshmallow";
+          tag = version;
+          hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+        };
+      });
+    };
+  };
+in
+
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.45.0";
+  version = "1.50.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
-    tag = "v${version}";
-    hash = "sha256-9UjdAnDcUxs/2pdhnJYncw2NBPiLpxUL5T74qbX5AcY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wwGj7i1GoxNzdfUhcL7mulgQAPtz5WhbT67hgbcMxpo=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ pdm-backend ];
+  build-system = with py.pkgs; [ hatchling ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     charset-normalizer
     click
     cryptography
+    keyring
     marshmallow
     marshmallow-dataclass
+    notify-py
     oauthlib
     platformdirs
     pygitguardian
@@ -35,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     rich
+    sigstore
     truststore
     typing-extensions
     urllib3
@@ -43,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [
     git
   ]
-  ++ (with python3.pkgs; [
+  ++ (with py.pkgs; [
     jsonschema
     pyfakefs
     pytest-factoryboy
@@ -84,9 +105,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
     homepage = "https://github.com/GitGuardian/ggshield";
-    changelog = "https://github.com/GitGuardian/ggshield/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/ggshield/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ggshield";
   };
-}
+})

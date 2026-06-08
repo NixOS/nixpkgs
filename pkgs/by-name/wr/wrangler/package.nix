@@ -4,12 +4,14 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
   musl,
-  xorg,
+  libx11,
   jq,
   moreutils,
   nix-update-script,
@@ -17,24 +19,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.53.0";
+  version = "4.93.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-YVIjmqPPgzf++eSwniR82QMun5/c1O+EerFqamZSyNY=";
+    hash = "sha256-o/kD67hkj+/pr1grCmTsrWUggcusRWoHegbL4hIEdAw=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
-    fetcherVersion = 2;
-    hash = "sha256-ChOQXP9eW82f6Sxna3mZ5YJMlalPZGaBvsA1C6a5kds=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-bc/L3bQl2BlcoqpTGBrFbGNl8IeRPoV65EVykAa8euA=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -53,13 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
+    libx11 # for the clipboardy package
   ];
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     jq
     moreutils
   ]
@@ -69,15 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
-  postBuild = ''
-    mv packages/vitest-pool-workers packages/~vitest-pool-workers
+  postBuild =
+    let
+      extraDeps = [
+        "unenv-preset"
+        "workers-utils"
+        "local-explorer-ui"
+        "codemod"
+        "cli-shared-helpers"
+        "miniflare"
+        "wrangler"
+      ];
+    in
+    ''
+      mv packages/vitest-pool-workers packages/~vitest-pool-workers
 
-    NODE_ENV="production" pnpm --filter unenv-preset run build
-    NODE_ENV="production" pnpm --filter workers-utils run build
-    NODE_ENV="production" pnpm --filter workers-shared run build
-    NODE_ENV="production" pnpm --filter miniflare run build
-    NODE_ENV="production" pnpm --filter wrangler run build
-  '';
+      for pkg in ${toString extraDeps}; do
+        NODE_ENV="production" pnpm --filter "$pkg" run build
+      done
+    '';
 
   # I'm sure this is suboptimal but it seems to work. Points:
   # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start

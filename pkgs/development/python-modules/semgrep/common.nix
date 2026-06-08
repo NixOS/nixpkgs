@@ -1,9 +1,13 @@
 { lib }:
 
 rec {
-  version = "1.145.0";
+  version = "1.164.0";
 
-  srcHash = "sha256-yeTToWfCchGHGsSx/Ly3FQmj7K8iW66qItYs0MVtJvo=";
+  srcHash = "sha256-ced287/jH+as/1rGBOfoZ06UuQ1sf1YI4AMHbHrtnHU=";
+
+  # This tag is used to select the correct wheel from PyPI.
+  # It is updated by the update.sh script.
+  pythonWheelTag = "cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314";
 
   # submodule dependencies
   # these are fetched so we:
@@ -13,8 +17,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "e5da9678488bc24e0d5c27a4de71ad67d375cc58";
-      hash = "sha256-9ilDZQmKYD2JN+CQ8VVyNyrjKYXttF+3KspRPHhuPF8=";
+      rev = "f4a74a03e8ec3dd368b96101648a3210e03fa61e";
+      hash = "sha256-dy+oOB0QmZjMpTYINSPIjzhpN6d/45DaajqumKIYxC4=";
     };
   };
 
@@ -24,24 +28,24 @@ rec {
   # on github releases
   core = {
     x86_64-linux = {
-      platform = "musllinux_1_0_x86_64.manylinux2014_x86_64";
-      hash = "sha256-W6qWqGiuqOJcBAvTIbTCj4aMLMiAhabJ22lldu3cAR4=";
+      platform = "manylinux_2_34_x86_64";
+      hash = "sha256-dFrlzhvvfJsDyStDHRdMpu54AaXioEfGSsIQTH5pUvs=";
     };
     aarch64-linux = {
-      platform = "musllinux_1_0_aarch64.manylinux2014_aarch64";
-      hash = "sha256-WM2aq4PpYSNqB8PONJAqrYAzQNhIoK1MQvqoJri4S/Q=";
+      platform = "manylinux_2_34_aarch64";
+      hash = "sha256-N24E9xOyRO7pXopRs+gSQM2nwHE214GfcntcoH7H7Kk=";
     };
     x86_64-darwin = {
       platform = "macosx_10_14_x86_64";
-      hash = "sha256-cpE+GBOZnWsNKRTFzpAQCl+JaqPl0bgLvW4GFdwnMQc=";
+      hash = "sha256-O0kSaWou5GeoVo1UMP4J2m4RAQOQUqA+YG3PaOvjfAo=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-FAjHtlrGLOGxE7c0/Qd+SpX6NTIh09zDbVAbxQHCDKc=";
+      hash = "sha256-AsKxA5Wmy3NEQJ0kS6ylE33d0W86e9F494aiIkwyrcA=";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://semgrep.dev/";
     downloadPage = "https://github.com/semgrep/semgrep/";
     changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
@@ -53,10 +57,11 @@ rec {
       uploaded. Its rules look like the code you already write; no abstract
       syntax trees, regex wrestling, or painful DSLs.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       jk
       ambroisie
+      caverav
     ];
   };
 }

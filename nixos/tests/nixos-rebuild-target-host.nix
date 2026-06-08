@@ -1,9 +1,4 @@
-{
-  hostPkgs,
-  lib,
-  withNg,
-  ...
-}:
+{ hostPkgs, ... }:
 {
   name = "nixos-rebuild-target-host";
 
@@ -26,21 +21,20 @@
           connect-timeout = 1;
         };
 
-        environment.systemPackages = [ pkgs.passh ];
-
         system.includeBuildDependencies = true;
+        # Needed so the offline build of the target config succeeds.
+        system.extraDependencies = [ pkgs.polkit-stdin-agent ];
 
         virtualisation = {
           cores = 2;
-          memorySize = 2048;
+          memorySize = 3072;
         };
 
         system.build.privateKey = snakeOilPrivateKey;
         system.build.publicKey = snakeOilPublicKey;
-        # We don't switch on `deployer`, but we need it to have the dependencies
-        # available, to be picked up by system.includeBuildDependencies above.
-        system.rebuild.enableNg = withNg;
         system.switch.enable = true;
+
+        services.getty.autologinUser = lib.mkForce "root";
       };
 
     target =
@@ -56,6 +50,11 @@
 
           users.users.alice.extraGroups = [ "wheel" ];
           users.users.bob.extraGroups = [ "wheel" ];
+
+          # Needed for --elevate=run0. NixOS's default polkit admin rule is
+          # `unix-group:wheel`, so bob (in wheel) can authenticate with his
+          # own password via polkit-stdin-agent.
+          system.tools.nixos-rebuild.enableRun0Elevation = true;
 
           # Disable sudo for root to ensure sudo isn't called without `--sudo`
           security.sudo.extraRules = lib.mkForce [
@@ -130,20 +129,6 @@
                 forceInstall = true;
               };
 
-              system.rebuild.enableNg = ${lib.boolToString withNg};
-
-              ${lib.optionalString withNg # nix
-                ''
-                  nixpkgs.overlays = [
-                    (final: prev: {
-                      # Set tmpdir inside nixos-rebuild-ng to test
-                      # "Deploy works with very long TMPDIR"
-                      nixos-rebuild-ng = prev.nixos-rebuild-ng.override { withTmpdir = "/tmp"; };
-                    })
-                  ];
-                ''
-              }
-
               # this will be asserted
               networking.hostName = "${hostname}";
             }
@@ -164,6 +149,7 @@
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")
       deployer.copy_from_host("${configFile "config-3-deployed"}", "/root/configuration-3.nix")
+      deployer.copy_from_host("${configFile "config-4-deployed"}", "/root/configuration-4.nix")
       deployer.copy_from_host("${targetNetworkJSON}", "/root/target-network.json")
       deployer.copy_from_host("${targetConfigJSON}", "/root/target-configuration.json")
 
@@ -181,11 +167,28 @@
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
 
-      with subtest("Deploy to bob@target with password based sudo"):
-        # TODO: investigate why --ask-sudo-password from nixos-rebuild-ng is not working here
-        deployer.succeed(r'${lib.optionalString withNg "NIX_SSHOPTS=-t "}passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P "\[sudo\] password" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --sudo &>/dev/console')
+      with subtest("Deploy to bob@target with password-based sudo"):
+        deployer.wait_for_unit("multi-user.target")
+        deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --ask-sudo-password\n")
+        deployer.wait_until_tty_matches("1", "password for bob")
+        deployer.send_chars("${nodes.target.users.users.bob.password}\n")
+        deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-3-deployed")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
+
+      with subtest("Deploy to bob@target with run0 and password"):
+        # polkit-stdin-agent registers an agent for systemd-run on the
+        # target and answers the PAM conversation with the password we
+        # supply locally. The agent is resolved on the target from
+        # <toplevel>/sw/bin (see Run0Elevator._remote_agent_argv).
+        deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-4.nix --target-host bob@target --elevate=run0 --ask-elevate-password\n")
+        deployer.wait_until_tty_matches("1", "\\[run0\\] password for bob@target")
+        deployer.send_chars("${nodes.target.users.users.bob.password}\n")
+        deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-4-deployed")
+        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
+        assert target_hostname == "config-4-deployed", f"{target_hostname=}"
+        # The target-arch agent is reachable at the stable sw/bin path.
+        target.succeed("test -x /run/current-system/sw/bin/polkit-stdin-agent")
 
       with subtest("Deploy works with very long TMPDIR"):
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"

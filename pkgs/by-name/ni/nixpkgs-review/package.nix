@@ -11,6 +11,7 @@
   cacert,
   git,
   nix,
+  nix-eval-jobs,
   versionCheckHook,
 
   withAutocomplete ? true,
@@ -20,16 +21,18 @@
   withGlow ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixpkgs-review";
-  version = "3.5.1";
+  version = "3.8.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    tag = version;
-    hash = "sha256-43+H68OPABAqg9GQZJ+XehyWmUWk+EWiHzSxyc55luY=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z8pOct9DtuRo4LERqhVpDxX9uoLNQGgqPFUh0Fn3MrI=";
   };
 
   build-system = [
@@ -50,12 +53,12 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   makeWrapperArgs =
     let
       binPath = [
         nix
+        nix-eval-jobs
         git
       ]
       ++ lib.optional withSandboxSupport bubblewrap
@@ -64,10 +67,16 @@ python3Packages.buildPythonApplication rec {
       ++ lib.optional withGlow glow;
     in
     [
-      "--prefix PATH : ${lib.makeBinPath binPath}"
-      "--set-default NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath binPath)
+      "--set-default"
+      "NIX_SSL_CERT_FILE"
+      "${cacert}/etc/ssl/certs/ca-bundle.crt"
       # we don't have any runtime deps but nixpkgs-review shells might inject unwanted dependencies
-      "--unset PYTHONPATH"
+      "--unset"
+      "PYTHONPATH"
     ];
 
   postInstall = lib.optionalString withAutocomplete ''
@@ -80,14 +89,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${finalAttrs.version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
     maintainers = with lib.maintainers; [
+      figsoda
       mdaniels5757
       mic92
     ];
   };
-}
+})

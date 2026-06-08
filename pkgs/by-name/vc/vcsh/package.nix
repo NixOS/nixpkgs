@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoconf,
-  automake,
+  automake116x,
   makeWrapper,
   pkg-config,
   unzip,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoconf
-    automake
+    automake116x
     makeWrapper
     pkg-config
     unzip
@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/RichiH/vcsh/blob/v${finalAttrs.version}/changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ttuegel
       alerque
     ];
     platforms = lib.platforms.unix;

@@ -12,22 +12,19 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugwise";
-  version = "1.11.0";
+  version = "1.11.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "plugwise";
     repo = "python-plugwise";
-    tag = "v${version}";
-    hash = "sha256-fgUIyI9akQbVhcff413gIPzviGNZlQJztFTnW5+n9wU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V1oPSRO+Adacszy8Wh5u4sHzVvfwiKvdKMzFi58pC2E=";
   };
 
   postPatch = ''
@@ -57,11 +54,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
     homepage = "https://github.com/plugwise/python-plugwise";
-    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

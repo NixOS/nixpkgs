@@ -13,14 +13,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libofx";
   version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
     repo = "libofx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -2,7 +2,6 @@
   buildPythonPackage,
   colorama,
   fetchPypi,
-  isPy27,
   lib,
   log-symbols,
   six,
@@ -10,14 +9,13 @@
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "halo";
   version = "0.0.31";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "1mn97h370ggbc9vi6x8r6akd5q8i512y6kid2nvm67g93r9a6rvv";
   };
 
@@ -33,10 +31,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "halo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful Spinners for Terminal, IPython and Jupyter";
     homepage = "https://github.com/manrajgrover/halo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})

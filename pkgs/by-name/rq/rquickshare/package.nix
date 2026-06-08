@@ -10,6 +10,8 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   protobuf,
   rustPlatform,
   stdenv,
@@ -34,21 +36,22 @@ rustPlatform.buildRustPackage rec {
 
   # from https://github.com/NixOS/nixpkgs/blob/04e40bca2a68d7ca85f1c47f00598abb062a8b12/pkgs/by-name/ca/cargo-tauri/test-app.nix#L23-L26
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   pnpmRoot = "app/main";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_9;
     postPatch = "cd ${pnpmRoot}";
-    fetcherVersion = 1;
-    hash = "sha256-VbdMaIEL1e+0U+ny4qbk1Mmkuc3cahKakKKYowCBK5Q=";
+    fetcherVersion = 3;
+    hash = "sha256-ESm7YVVbsfjpgYeNf3aVhJawpWhbeNdo0u7cBzLmEMw=";
   };
 
   cargoRoot = "app/main/src-tauri";
@@ -64,7 +67,8 @@ rustPlatform.buildRustPackage rec {
 
     # Setup pnpm
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
 
     protobuf
   ]
@@ -83,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  passthru.updateScript = nix-update-script;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust implementation of NearbyShare/QuickShare from Android for Linux and macOS";

@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.16.6";
+  version = "1.16.10";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-D9mRmg1iwSlyYWCuYmMDzCkhUwgzDA/1DEgj49B59Lc=";
+    hash = "sha256-4cprlrp/vCaoUN4HwZFa+H1DW1S5q/byQcd+g/g427g=";
   };
 
   nativeBuildInputs = [
@@ -78,15 +78,15 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       romildo
       yayayayaka
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
 
     longDescription = ''
       Liferea (Linux Feed Reader) is an RSS/RDF feed reader.

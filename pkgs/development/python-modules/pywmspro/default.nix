@@ -7,16 +7,16 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywmspro";
-  version = "0.3.2";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mback2k";
     repo = "pywmspro";
-    tag = version;
-    hash = "sha256-o/+WjdU9+Vh1CnZYF2IsNpK5cubAFvsqANZ4GxrKFHI=";
+    tag = finalAttrs.version;
+    hash = "sha256-01jXkSZfmBIzrz0B/4/KLcAU4jUQGDfle4sE4saraJo=";
   };
 
   build-system = [
@@ -32,9 +32,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wmspro" ];
 
   meta = {
+    changelog = "https://github.com/mback2k/pywmspro/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for WMS WebControl pro API";
     homepage = "https://github.com/mback2k/pywmspro";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

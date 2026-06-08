@@ -441,5 +441,5 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.c3d2.members;
+  meta.maintainers = pkgs.librespeed-rust.meta.maintainers;
 }

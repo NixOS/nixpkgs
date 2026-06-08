@@ -1,21 +1,24 @@
 {
   lib,
-  stdenv,
   perlPackages,
   fetchFromGitHub,
-  shortenPerlShebang,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.6";
+  version = "5.10";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
-    rev = "v${version}";
-    hash = "sha256-EJLAP1uBmWxWEsdLJYTuViMv4o0iEi2fqy79ixyRijU=";
+    tag = "v${version}";
+    hash = "sha256-OWw47okAs8x4Ri8+IJHPhy6YSkSN2sBlJ0v8h6GlhfU=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [ "out" ];
 
@@ -25,30 +28,41 @@ perlPackages.buildPerlPackage rec {
   installTargets = [ "pure_install" ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pg_format \
-      --replace "#!/usr/bin/env perl" "#!/usr/bin/perl"
+      --replace-fail "#!/usr/bin/env perl" "#!/usr/bin/perl"
+
     substituteInPlace Makefile.PL \
-      --replace "'DESTDIR'      => \$DESTDIR," "'DESTDIR'      => '$out/'," \
-      --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+      --replace-fail \
+        "'DESTDIR'      => \$DESTDIR," \
+        "'DESTDIR'      => '$out/'," \
+      --replace-fail \
+        "'INSTALLDIRS'  => \$INSTALLDIRS," \
+        "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+
+    patchShebangs .
   '';
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/pg_format
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  doCheck = false;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
-    changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = [ ];
-    license = [
-      lib.licenses.postgresql
-      lib.licenses.artistic2
+    changelog = "https://github.com/darold/pgFormatter/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [
+      thunze
+      mfairley
     ];
+    license =
+      with lib.licenses;
+      AND [
+        postgresql
+        artistic2
+      ];
     mainProgram = "pg_format";
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   flit-core,
   packaging,
@@ -16,19 +15,22 @@
   defusedxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-jupyterbook-latex";
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-jupyterbook-latex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
+
+  patches = [
+    # sphinx.testing.path.path was removed in Sphinx 8; use pathlib.Path.
+    ./sphinx-8-testing-path.patch
+  ];
 
   nativeBuildInputs = [ flit-core ];
 
@@ -36,8 +38,6 @@ buildPythonPackage rec {
     packaging
     sphinx
   ];
-
-  pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
 
   nativeCheckInputs = [
     click
@@ -50,11 +50,19 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_jblatex_show_tocs"
+    "test_build_no_ext"
+    "test_build_with_ext"
+  ];
+
+  pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
+
+  meta = {
     description = "Latex specific features for jupyter book";
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
-    changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

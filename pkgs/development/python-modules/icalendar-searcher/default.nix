@@ -1,10 +1,10 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   icalendar,
   lib,
-  poetry-core,
-  poetry-dynamic-versioning,
   pyicu,
   pytestCheckHook,
   recurring-ical-events,
@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "icalendar-searcher";
-  version = "1.0.3";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "icalendar-searcher";
     tag = "v${version}";
-    hash = "sha256-RwWm41+7AyoqwVGBaa+50ljUILJG5kCD4LMsULWjVEM=";
+    hash = "sha256-HkiKy38B5+i6Lb+0Teu/YqvrE1gqy/x3u1GRUWAHNes=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [

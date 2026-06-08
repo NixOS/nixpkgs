@@ -12,11 +12,11 @@
 buildPythonPackage rec {
   pname = "corallium";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
-    repo = pname;
+    repo = "corallium";
     tag = version;
     hash = "sha256-0P8qmX+1zigL4jaA4TTuqAzFkyhQUfdGmPLxkFnT0qE=";
   };
@@ -29,15 +29,12 @@ buildPythonPackage rec {
     beartype
     pydantic
     rich
-  ]
-  ++ lib.optionals (python.pythonOlder "3.11") [
-    tomli
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared functionality for calcipy-ecosystem";
     homepage = "https://corallium.kyleking.me";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

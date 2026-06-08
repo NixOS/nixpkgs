@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-71MYOlCVkYOFB9byYaNmy31NfnssmGwB0lusjOpE2Ts=";
+    hash = "sha256-1mHZ+ihGeslOnLATf6PjaemkJBXSbqe4ULvwAluH6JM=";
   };
 
   nativeBuildInputs = [

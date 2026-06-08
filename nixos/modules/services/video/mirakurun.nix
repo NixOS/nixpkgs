@@ -160,7 +160,7 @@ in
       group = "video";
       isSystemUser = true;
 
-      # NPM insists on creating ~/.npm
+      # npm insists on creating ~/.npm
       home = "/var/cache/mirakurun";
     };
 

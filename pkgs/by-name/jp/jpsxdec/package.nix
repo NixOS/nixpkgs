@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jpsxdec";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "m35";
     repo = "jpsxdec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PZOc5mpnUiUyydWyfZjWuPG4w+tRd6WLJ6YQMqu/95I=";
+    hash = "sha256-X55/FKfPLSwl7veB0LOmXeFEh5zJ10zKdTbCUnnyB5g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/jpsxdec";
@@ -43,7 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/jpsxdec
     mv _ant/release/{doc,*.jar} $out/share/jpsxdec
-    install -Dm644 src/jpsxdec/gui/icon48.png $out/share/pixmaps/jpsxdec.png
+    install -Dm644 src/jpsxdec/gui/icon16.png $out/share/icons/hicolor/16x16/apps/jpsxdec.png
+    install -Dm644 src/jpsxdec/gui/icon32.png $out/share/icons/hicolor/32x32/apps/jpsxdec.png
+    install -Dm644 src/jpsxdec/gui/icon48.png $out/share/icons/hicolor/48x48/apps/jpsxdec.png
 
     makeWrapper ${jre}/bin/java $out/bin/jpsxdec \
         --add-flags "-jar $out/share/jpsxdec/jpsxdec.jar"
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/m35/jpsxdec/blob/${finalAttrs.src.rev}/jpsxdec/doc/CHANGES.txt";
     description = "Cross-platform PlayStation 1 audio and video converter";
     homepage = "https://jpsxdec.blogspot.com/";
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       free = true;
     };
     mainProgram = "jpsxdec";
-    maintainers = with maintainers; [ zane ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ zane ];
+    platforms = lib.platforms.all;
   };
 })

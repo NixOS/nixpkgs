@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "libscanbuild";
   inherit (clang-unwrapped) version;
 
-  format = "other";
+  pyproject = false;
 
   src = clang-unwrapped.lib + "/lib/libscanbuild";
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
   };
 }

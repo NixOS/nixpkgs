@@ -35,8 +35,8 @@ K3S_REPO_SHA256=${PREFETCH_META%$'\n'*}
 
 cd "$K3S_STORE_PATH"
 # Set the DRONE variables as they are expected to be set in version.sh
-DRONE_TAG="$LATEST_TAG_NAME"
-DRONE_COMMIT="$K3S_COMMIT"
+TAG="$LATEST_TAG_NAME"
+GITHUB_SHA="$K3S_COMMIT"
 NO_DAPPER="" # Source git_version.sh in scripts/version.sh#L8
 source "${K3S_STORE_PATH}/scripts/version.sh"
 
@@ -119,7 +119,13 @@ cat >versions.nix <<EOF
   k3sCNISha256 = "${CNIPLUGINS_SHA256}";
   containerdVersion = "${VERSION_CONTAINERD:1}";
   containerdSha256 = "${CONTAINERD_SHA256}";
+  containerdPackage = "${PKG_CONTAINERD_K3S}";
   criCtlVersion = "${VERSION_CRICTL:1}";
+  flannelVersion = "${VERSION_FLANNEL}";
+  flannelPluginVersion = "${VERSION_FLANNEL_PLUGIN}";
+  kubeRouterVersion = "${VERSION_KUBE_ROUTER}";
+  criDockerdVersion = "${VERSION_CRI_DOCKERD}";
+  helmJobVersion = "${VERSION_HELM_JOB}";
 }
 EOF
 

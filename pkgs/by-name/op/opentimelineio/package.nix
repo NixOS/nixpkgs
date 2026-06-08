@@ -7,14 +7,14 @@
   rapidjson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opentimelineio";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenTimelineIO";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PEqQraLx6wiJecytp37q15VayOn2fvaSlOeLs3qrRqo=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

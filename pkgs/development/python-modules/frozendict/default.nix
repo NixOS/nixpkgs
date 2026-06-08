@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
   version = "2.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozendict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for immutable dictionary";
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
     changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

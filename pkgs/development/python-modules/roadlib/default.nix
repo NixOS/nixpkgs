@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   setuptools,
   requests,
   sqlalchemy,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "roadlib";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools common components library";
     homepage = "https://pypi.org/project/roadlib/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   rustPlatform,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   version = "0.3.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zxcvbn_rs_py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for zxcvbn-rs, the Rust implementation of zxcvbn";
     homepage = "https://github.com/fief-dev/zxcvbn-rs-py/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

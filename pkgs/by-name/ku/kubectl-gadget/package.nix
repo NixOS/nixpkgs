@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-gadget";
-  version = "0.47.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
-    rev = "v${version}";
-    hash = "sha256-ZGi7zsIphiXNLfVc6u+ZSGsgWWcMaBpyt1BpwS2WRCU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WcIPubDzj3LPf1KUWfmxdlBGnG2x68hax/ZQKwSNifc=";
   };
 
-  vendorHash = "sha256-0vpPBQ1ty4FZMj3bgB56Gu5pNdo7SyhxvGQOHos6m9s=";
+  vendorHash = "sha256-aEzzXcsM3D+Sp6LBms5+RzWirdC5iFvN2IiwbOXCrEw=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${version}"
-    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
+    "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${finalAttrs.version}"
+    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${finalAttrs.version}"
     "-extldflags=-static"
   ];
 
@@ -33,14 +33,15 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-gadget" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/inspektor-gadget/inspektor-gadget/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kranurag7
       devusb
     ];
   };
-}
+})

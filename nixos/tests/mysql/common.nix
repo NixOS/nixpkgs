@@ -4,10 +4,10 @@
     import ../../../pkgs/servers/sql/mariadb pkgs
   );
   mysqlPackages = {
-    inherit (pkgs) mysql80;
+    inherit (pkgs) mysql84;
   };
   perconaPackages = {
-    inherit (pkgs) percona-server_8_0 percona-server_8_4;
+    inherit (pkgs) percona-server_8_4;
   };
   mkTestName =
     pkg: "mariadb_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor pkg.version)}";

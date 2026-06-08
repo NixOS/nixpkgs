@@ -9,18 +9,17 @@
   python3,
   boost,
   sqlite,
-  pcre,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
   version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
-    rev = "vectorscan/${version}";
+    rev = "vectorscan/${finalAttrs.version}";
     hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
 
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     sqlite
-    pcre
   ];
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable fork of the high-performance regular expression matching library";
     longDescription = ''
       A fork of Intel's Hyperscan, modified to run on more platforms. Currently
@@ -116,16 +114,16 @@ stdenv.mkDerivation rec {
       code will be abstracted away.
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
-    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
-    platforms = platforms.unix;
-    license = with licenses; [
+    changelog = "https://github.com/VectorCamp/vectorscan/blob/${finalAttrs.src.rev}/CHANGELOG-vectorscan.md";
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       bsd3 # and
       bsd2 # and
-      licenses.boost
+      lib.licenses.boost
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];
   };
-}
+})

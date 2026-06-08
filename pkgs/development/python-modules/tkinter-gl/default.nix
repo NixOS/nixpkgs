@@ -1,23 +1,25 @@
 {
   lib,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  setuptools,
   setuptools-scm,
-  tkinter,
   tkgl,
+  tkinter,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "tkinter-gl";
-  version = "1.0";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "tkinter_gl";
     tag = "v${version}_as_released";
-    hash = "sha256-ObI8EEQ7mAOAuV6f+Ld4HH0xkFzqiAZqHDvzjwPA/wM";
+    hash = "sha256-PNxxjyVGoMw4J/SXWvVITuGMq/HypxUwDkSxeFy2Vag=";
   };
 
   postPatch = ''
@@ -25,11 +27,14 @@ buildPythonPackage rec {
     rm -r src/tkinter_gl/tk
     # Platform-specific directories are only necessary when using compiled TkGL
     substituteInPlace src/tkinter_gl/__init__.py \
-      --replace-fail "pkg_dir = os.path.join(__path__[0], 'tk', sys.platform,)" \
+      --replace-fail "pkg_dir = os.path.join(__path__[0], 'tk', target)" \
                      "pkg_dir = os.path.join(__path__[0], 'tk')"
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ tkinter ];
 
@@ -43,6 +48,13 @@ buildPythonPackage rec {
     '';
 
   pythonImportsCheck = [ "tkinter_gl" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Base class for GL rendering surfaces in tkinter";

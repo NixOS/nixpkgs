@@ -2,6 +2,7 @@
   cmake,
   doctest,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   replaceVars,
   stdenv,
@@ -9,19 +10,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskflow";
-  version = "3.11.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "taskflow";
     repo = "taskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GIP/69JlygdmryRA4uiyXM3FZZ0wkvP3DceYGkn4+QY=";
+    hash = "sha256-cWnKA6tCsKRfkleBJ38NRP2ciJu4sHtyTS8y5bBTfcA=";
   };
 
   patches = [
     (replaceVars ./unvendor-doctest.patch {
       inherit doctest;
     })
+
+    # https://github.com/taskflow/taskflow/pull/785
+    # TODO: remove when updating to the next release
+    (fetchpatch {
+      name = "fix-brace-init-with-explicit-constructor-for-GCC-15";
+      url = "https://github.com/taskflow/taskflow/commit/de7dfe30594cd1f98398095b970a8320734a2382.patch";
+      hash = "sha256-Ecl7dFvf2HDslv/5IHR5J2PYcRCN3EA4GahxOzcUS4g=";
+    })
+
+    # Vendored from #786 as it does not apply cleanly on top of v0.4.0
+    # https://github.com/taskflow/taskflow/pull/786
+    # TODO: remove when updating to the next release
+    ./add-pkg-config-support.patch
   ];
 
   postPatch = ''

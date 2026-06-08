@@ -45,9 +45,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dot-accessible dictionary (a la JavaScript objects)";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };
 }

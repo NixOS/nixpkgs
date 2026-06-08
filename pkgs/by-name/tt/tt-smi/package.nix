@@ -4,17 +4,19 @@
   fetchFromGitHub,
   pre-commit,
   versionCheckHook,
+  tt-umd,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
-  version = "3.0.30";
+  version = "5.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-smi";
-    tag = "v${version}";
-    hash = "sha256-C6CfcS0H3rFew/Y1uhmzICdFp1UYU7H9h3YPeAKlcbE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-meDqvDvGBXx/zbHbtgLUb+Kv8LSmsu9OvYCFhmEPAdQ=";
   };
 
   build-system = with python3Packages; [
@@ -33,7 +35,10 @@ python3Packages.buildPythonApplication rec {
     tt-tools-common
     setuptools
     tomli
+    tt-umd
   ];
+
+  pythonRelaxDeps = [ "tt-umd" ];
 
   nativeCheckInputs = [
     versionCheckHook
@@ -42,13 +47,12 @@ python3Packages.buildPythonApplication rec {
   # Fails due to having no tests
   dontUsePytestCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     mainProgram = "tt-smi";
     description = "Tenstorrent console based hardware information program";
     homepage = "https://github.com/tenstorrent/tt-smi";
+    changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})

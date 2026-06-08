@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromSourcehut {
     owner = "~xerool";
     repo = "fennel-ls";
     rev = finalAttrs.version;
-    hash = "sha256-N1530u8Kq7ljdEdTFk0CJJyMLMVX5huQWXjyoMBJN5E=";
+    hash = "sha256-BU0SkdBjq8kicvACIo3N2gf1UvTmzA3FKSt39Lxp3rs=";
   };
   buildInputs = [
     lua

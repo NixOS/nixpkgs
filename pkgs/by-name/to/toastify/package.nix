@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toastify";
   version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "hoodie";
     repo = "toastify";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
   };
 
@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool that shows desktop notifications using notify-rust";
     homepage = "https://github.com/hoodie/toastify";
-    changelog = "https://github.com/hoodie/toastify/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    changelog = "https://github.com/hoodie/toastify/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "toastify";
   };
-}
+})

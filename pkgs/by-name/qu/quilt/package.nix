@@ -16,13 +16,13 @@
   unixtools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "quilt";
   version = "0.69";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/quilt/quilt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-VV3f/eIto8htHK9anB+4oVKsK4RzBDe9OcwIhJyfSFI=";
   };
 
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://savannah.nongnu.org/projects/quilt";
     description = "Easily manage large numbers of patches";
 
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       and more.
     '';
 
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smancill ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ smancill ];
+    platforms = lib.platforms.all;
   };
 
-}
+})

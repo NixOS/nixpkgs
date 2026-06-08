@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "colorz";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0ghd90lgplf051fs5n5bb42zffd3fqpgzkbv6bhjw7r8jqwgcky0";
   };
 
@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
     $out/bin/colorz --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Color scheme generator";
     homepage = "https://github.com/metakirby5/colorz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ skykanin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ skykanin ];
     mainProgram = "colorz";
   };
-}
+})

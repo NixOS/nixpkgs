@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wiki-tui";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = "wiki-tui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hUAe2mzz/4xdpyPE2rbTq5WKk0bNa4dSFocFiCXyO4Q=";
   };
 
@@ -30,13 +30,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
-    changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
+    changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      lom
       builditluc
       matthiasbeyer
     ];
     mainProgram = "wiki-tui";
   };
-}
+})

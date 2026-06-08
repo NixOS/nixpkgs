@@ -6,19 +6,19 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
-  libX11,
+  libx11,
   SDL2,
 }:
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
-    owner = "SourMesen";
-    repo = "Mesen2";
+    owner = "nesdev-org";
+    repo = "MesenCE";
     tag = version;
-    hash = "sha256-vBwAPAnp6HIgI49vAZIqnzw8xHQ7ZMuALjf7G+acCXg=";
+    hash = "sha256-IH8Or+UVapQW0PXPanMVaOIQVT85TEYU2utKBbvuW6c=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ buildDotnetModule rec {
 
     nativeBuildInputs = [ SDL2 ];
 
-    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libX11 ];
+    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libx11 ];
 
     makeFlags = [ "core" ];
 

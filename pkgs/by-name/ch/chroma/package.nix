@@ -4,42 +4,33 @@
   fetchFromGitHub,
 }:
 
-let
-  srcInfo = lib.importJSON ./src.json;
-in
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chroma";
-  version = "2.20.0";
+  version = "2.26.1";
 
-  # To update:
-  # nix-prefetch-git --rev v${version} https://github.com/alecthomas/chroma.git > src.json
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = "chroma";
-    rev = "v${version}";
-    inherit (srcInfo) sha256;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOhPaiqtFU3H43jz+GjfOOIVEy5acpP9SwQ1/2xsMQc=";
   };
 
-  vendorHash = "sha256-GiaVgqhhrexSnBWVtQ+/cwdykHVDxR95BFMkrH1s+8Q=";
+  vendorHash = "sha256-mPB7qPPMIQLjmyN2T7qX/X1Ip0E4X0jNv5h+UfVEHrY=";
 
   modRoot = "./cmd/chroma";
 
   # substitute version info as done in goreleaser builds
   ldflags = [
-    "-X"
-    "main.version=${version}"
-    "-X"
-    "main.commit=${srcInfo.rev}"
-    "-X"
-    "main.date=${srcInfo.date}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.tag}"
+    "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alecthomas/chroma";
     description = "General purpose syntax highlighter in pure Go";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ miniharinn ];
     mainProgram = "chroma";
   };
-}
+})

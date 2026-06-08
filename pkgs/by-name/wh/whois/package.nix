@@ -10,15 +10,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
-  version = "5.6.5";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.6.6";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
-    rev = "v${version}";
-    hash = "sha256-zCaM3fMittoEzuMRELqc1ES8QPgZRXVjyHUfMsS5tJA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RKiXQJoyy3wd/KXphhgjikdmIHl8nmjEzibjk5FKpBQ=";
   };
 
   patches = [
@@ -50,12 +50,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = [ "HAVE_ICONV=1" ];
+  makeFlags = [
+    "HAVE_ICONV=1"
+    "CONFIG_FILE=/etc/whois.conf"
+  ];
   buildFlags = [ "whois" ];
 
   installTargets = [ "install-whois" ];
 
-  meta = with lib; {
+  meta = {
     description = "Intelligent WHOIS client from Debian";
     longDescription = ''
       This package provides a commandline client for the WHOIS (RFC 3912)
@@ -65,9 +68,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://packages.qa.debian.org/w/whois.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
     mainProgram = "whois";
   };
-}
+})

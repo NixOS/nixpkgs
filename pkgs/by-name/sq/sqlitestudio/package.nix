@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libsForQt5,
+  qt5,
   readline,
   tcl,
   python3,
@@ -12,37 +12,33 @@
   sqlitestudio-plugins,
   includeOfficialPlugins ? lib.meta.availableOn stdenv.hostPlatform sqlitestudio-plugins,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitestudio";
-  version = "3.4.18";
+  version = "3.4.21";
 
   src = fetchFromGitHub {
     owner = "pawelsalawa";
     repo = "sqlitestudio";
-    rev = version;
-    hash = "sha256-UYu1ViLzzeZfJhoYoKOMCTbytGeK+2TKhwMR3yGpGrI=";
+    rev = finalAttrs.version;
+    hash = "sha256-xs0+bB0gPoDkIldaTA/nFofx9KPvIcyxe6kzcHuboxA=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
-  ]
-  ++ (with libsForQt5.qt5; [
-    qmake
-    qttools
-    wrapQtAppsHook
-  ]);
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     readline
     tcl
     python3
-  ]
-  ++ (with libsForQt5.qt5; [
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtscript
-  ]);
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtdeclarative
+    qt5.qtscript
+  ];
 
   qmakeFlags = [
     "./SQLiteStudio3"
@@ -81,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ asterismono ];
   };
-}
+})

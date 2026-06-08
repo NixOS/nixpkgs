@@ -1,30 +1,38 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   stdenv,
   autoreconfHook,
   pkg-config,
   ncurses,
   libcap,
   libnl,
-  sensorsSupport ? stdenv.hostPlatform.isLinux,
+  sensorsSupport ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic),
   lm_sensors,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
+  withVimKeys ? false,
 }:
 
 assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
-stdenv.mkDerivation rec {
-  pname = "htop";
-  version = "3.4.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "htop" + lib.optionalString withVimKeys "-vim";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = "htop";
-    tag = version;
-    hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
+    tag = finalAttrs.version;
+    hash = "sha256-mw7pixNk+AF2Hz8YUkkUleQpR8yNF0pb1NjYgID076A=";
   };
+
+  patches = lib.optional withVimKeys (fetchpatch2 {
+    name = "vim-keybindings.patch";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/vim-keybindings.patch?h=htop-vim&id=d10f022b3ca1207200187a55f5b116a5bd8224f7";
+    hash = "sha256-fZDTA2dCOmXxUYD6Wm41q7TxL7fgQOj8a/8yJC7Zags=";
+  });
 
   # upstream removed pkg-config support and uses dlopen now
   postPatch =
@@ -62,6 +70,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional sensorsSupport "--enable-sensors";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postFixup =
     let
       optionalPatch = pred: so: lib.optionalString pred "patchelf --add-needed ${so} $out/bin/htop";
@@ -72,16 +85,19 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "Interactive process viewer";
-    homepage = "https://htop.dev";
+    description =
+      "Interactive process viewer" + lib.optionalString withVimKeys ", with vim-style keybindings";
+    homepage =
+      if withVimKeys then "https://aur.archlinux.org/packages/htop-vim" else "https://htop.dev";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rob
       relrod
       SuperSandro2000
+      thiagokokada
     ];
-    changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+    changelog = "https://github.com/htop-dev/htop/blob/${finalAttrs.version}/ChangeLog";
     mainProgram = "htop";
   };
-}
+})

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   base58,
   coincurve,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bip32";
   version = "5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # the PyPi source distribution ships a broken setup.py, so use github instead
   src = fetchFromGitHub {
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bip32" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic implementation of the BIP32 key derivation scheme";
     homepage = "https://github.com/darosior/python-bip32";
     changelog = "https://github.com/darosior/python-bip32/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ arcnmx ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ arcnmx ];
   };
 }

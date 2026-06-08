@@ -9,7 +9,7 @@
   bashInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bash-completion";
   version = "2.17.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # test fixtures that are part of the repository.
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
-    url = "https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz";
+    url = "https://github.com/scop/bash-completion/releases/download/${finalAttrs.version}/bash-completion-${finalAttrs.version}.tar.xz";
     hash = "sha256-3Z2CXklkNfs766Oue+qfd+gh6JRmfQdDHR1MjFcLnlg=";
   };
 
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scop/bash-completion";
     description = "Programmable completion for the bash shell";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ philiptaron ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

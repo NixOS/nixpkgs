@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cbmc-viewer";
   version = "3.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JFL06z7lJWZxTALovDBVwNJWenWPUQV9J0qZz3Ek6gI=";
   };
 
@@ -27,4 +27,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jacg ];
     mainProgram = "cbmc-viewer";
   };
-}
+})

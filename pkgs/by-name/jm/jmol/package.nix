@@ -30,17 +30,17 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
-  version = "16.3.37";
+stdenv.mkDerivation (finalAttrs: {
+  version = "16.4.1";
   pname = "jmol";
 
   src =
     let
-      baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
+      baseVersion = "${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version}";
     in
     fetchurl {
-      url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-      hash = "sha256-T/55q7+P2rVGlH1s9sD99u/WV8TSP5K4sZYu7MOxRWQ=";
+      url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${finalAttrs.version}/Jmol-${finalAttrs.version}-binary.tar.gz";
+      hash = "sha256-n7Ql/pK/N6maG2EjrgdRz+HUvn+JwkZpvRQyuElKrHI=";
     };
 
   patchPhase = ''
@@ -59,13 +59,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Java 3D viewer for chemical structures";
     mainProgram = "jmol";
     homepage = "https://sourceforge.net/projects/jmol";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl2;
-    platforms = platforms.all;
-    teams = [ teams.sage ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.sage ];
   };
-}
+})

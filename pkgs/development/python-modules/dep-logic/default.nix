@@ -1,25 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   packaging,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dep-logic";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "dep-logic";
-    tag = version;
-    hash = "sha256-BjqPtfYsHSDQoaYs+hB0r/mRuONqBHOb6goi1dxkFWo=";
+    tag = finalAttrs.version;
+    hash = "sha256-FfnRpWKsObt38b/2e3t4wgxCtEs6OiEAQfJqhD+hI7c=";
   };
 
   nativeBuildInputs = [ pdm-backend ];
@@ -31,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dep_logic" ];
 
   meta = {
-    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${src.tag}";
+    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${finalAttrs.src.tag}";
     description = "Python dependency specifications supporting logical operations";
     homepage = "https://github.com/pdm-project/dep-logic";
     license = lib.licenses.asl20;
@@ -40,4 +37,4 @@ buildPythonPackage rec {
       misilelab
     ];
   };
-}
+})

@@ -15,19 +15,20 @@
   pyflakes,
   configclass,
   mergedict,
+  setuptools,
 }:
 
 let
   doit = buildPythonPackage rec {
     pname = "doit";
-    version = "0.36.0";
-    format = "setuptools";
+    version = "0.37.0";
+    pyproject = true;
 
     disabled = !isPy3k;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
+      hash = "sha256-08cuDkao+h3avqj4MHYkAt7gkMrzPDDCKVrHAQ248Jw=";
     };
 
     propagatedBuildInputs = [
@@ -37,6 +38,10 @@ let
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux pyinotify
     ++ lib.optional stdenv.hostPlatform.isDarwin macfsevents;
+
+    build-system = [
+      setuptools
+    ];
 
     nativeCheckInputs = [
       configclass
@@ -59,11 +64,11 @@ let
 
     pythonImportsCheck = [ "doit" ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://pydoit.org/";
       description = "Task management & automation tool";
       mainProgram = "doit";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       longDescription = ''
         doit is a modern open-source build-tool written in python
         designed to be simple to use and flexible to deal with complex
@@ -71,7 +76,7 @@ let
         custom work-flows where there is no out-of-the-box solution
         available.
       '';
-      maintainers = with maintainers; [ pSub ];
+      maintainers = with lib.maintainers; [ pSub ];
     };
   };
 in

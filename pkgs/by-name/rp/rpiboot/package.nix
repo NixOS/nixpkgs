@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpiboot";
   version = "20250908-162618-bookworm";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BJOm8VBEbrUasYwuV8NqwmsolJzmaqIaxYqj9EkU5hc=";
     fetchSubmodules = true;
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/raspberrypi/usbboot";
-    changelog = "https://github.com/raspberrypi/usbboot/blob/${version}/debian/changelog";
+    changelog = "https://github.com/raspberrypi/usbboot/blob/${finalAttrs.version}/debian/changelog";
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     mainProgram = "rpiboot";
     license = lib.licenses.asl20;
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
     ];
   };
-}
+})

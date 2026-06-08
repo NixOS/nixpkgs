@@ -1,9 +1,8 @@
 {
   beam,
-  elixir_1_17,
   lib,
   fetchFromGitHub,
-  fetchFromGitLab,
+  fetchFromForgejo,
   fetchHex,
   file,
   cmake,
@@ -16,18 +15,18 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
+  beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.9.1";
+  version = "2.10.2";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
+    sha256 = "sha256-5BFzV2alNDjO/bS08+V4idzFaXQLr+4pNlLLXayBqIE=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -73,12 +72,12 @@ beamPackages.mixRelease rec {
         name = "captcha";
         version = "0.1.0";
 
-        src = fetchFromGitLab {
+        src = fetchFromForgejo {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "elixir-captcha";
-          rev = "90f6ce7672f70f56708792a98d98bd05176c9176";
-          sha256 = "sha256-s7EuAhmCsQA/4p2NJHJSWB/DZ5hA+7EelPsUOvKr2Po=";
+          rev = "e7b7cc34cc16b383461b966484c297e4ec9aeef6";
+          sha256 = "sha256-gcsZ8BzmKfSeX2QsWDxQd34nKxIM0eJKBAaxxYyFSlg=";
         };
         beamDeps = [ ];
       };
@@ -94,11 +93,23 @@ beamPackages.mixRelease rec {
         };
         beamDeps = with final; [ prometheus ];
       };
+      oban_plugins_lazarus = beamPackages.buildMix {
+        name = "oban_plugins_lazarus";
+        version = "0.1.0";
+        src = fetchFromForgejo {
+          domain = "git.pleroma.social";
+          owner = "pleroma/elixir-libraries";
+          repo = "oban_plugins_lazarus";
+          rev = "e49fc355baaf0e435208bf5f534d31e26e897711";
+          hash = "sha256-zSzPniRN7jQLAEGGOuwserDSLy2lSZ74NFMD/IOBsC8=";
+        };
+        beamDeps = with final; [ oban ];
+      };
       remote_ip = beamPackages.buildMix {
         name = "remote_ip";
         version = "0.1.5";
 
-        src = fetchFromGitLab {
+        src = fetchFromForgejo {
           domain = "git.pleroma.social";
           owner = "pleroma/elixir-libraries";
           repo = "remote_ip";
@@ -124,6 +135,22 @@ beamPackages.mixRelease rec {
       };
 
       syslog = prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
+
+      phoenix_live_view = prev.phoenix_live_view.override {
+        # This listener breaks with elixir 1.18.
+        # It's only using for dev, let's remove it.
+        postPatch = ''
+          sed -i '/listeners: \[Phoenix.CodeReloader\]/d' mix.exs
+        '';
+      };
+
+      oban_web = prev.oban_web.override {
+        # This listener breaks with elixir 1.18.
+        # It's only using for dev, let's remove it.
+        postPatch = ''
+          sed -i '/listeners: \[Phoenix.CodeReloader\]/d' mix.exs
+        '';
+      };
 
       vix = prev.vix.override {
         nativeBuildInputs = [ pkg-config ];
@@ -186,6 +213,18 @@ beamPackages.mixRelease rec {
             cp ${cfgFile} config/config.exs
           '';
       };
+
+      # mochiweb is unused by still in mix.lock
+      # work around OTP 27+ incompat by forcing our build to use a newer version
+      mochiweb = prev.mochiweb.override rec {
+        version = "3.3.0";
+
+        src = fetchHex {
+          pkg = "mochiweb";
+          version = "${version}";
+          sha256 = "sha256-qoW3d/sj6ZcuvEJOQLXTUQbxm8mYhz4Cbe3Ydt+O5Qw=";
+        };
+      };
     };
   };
 
@@ -194,15 +233,14 @@ beamPackages.mixRelease rec {
     inherit mixNixDeps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       picnoir
       kloenk
-      yayayayaka
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

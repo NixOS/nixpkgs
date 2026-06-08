@@ -2,38 +2,74 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  pythonOlder,
+  pythonAtLeast,
+
+  # Dependencies
   httpx,
-  poetry-core,
   pydantic,
+  anyio,
+  distro,
+  sniffio,
+
+  # Test dependencies
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-xdist,
+  dirty-equals,
+  respx,
+  llama-index-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-cloud";
-  version = "0.1.45";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_cloud";
-    inherit version;
-    hash = "sha256-FAJEAIzFcQ4xrpfGBDlzo6mWmlGw84FV+jOoQ0B46Ko=";
+    inherit (finalAttrs) version;
+    hash = "sha256-7hPs2yySQ2PrECOkNhnb0HLhgsWW7VwpK4pclbAaDOU=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.26.3" "hatchling>=1.26.3"
+  '';
+
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   dependencies = [
     httpx
     pydantic
+    distro
+    sniffio
+    anyio
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-xdist
+    dirty-equals
+    respx
+  ]
+  ++ lib.optional (pythonOlder "3.14") llama-index-core;
+
+  # Transitively requires google-pasta (broken on 3.14) through llama-index-core
+  disabledTestPaths = lib.optional (pythonAtLeast "3.14") "tests/test_index.py";
 
   pythonImportsCheck = [ "llama_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Python Client";
     homepage = "https://pypi.org/project/llama-cloud/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

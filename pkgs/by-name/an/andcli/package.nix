@@ -4,11 +4,12 @@
   buildGoModule,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "andcli";
-  version = "2.4.2";
+  version = "2.7.0";
 
   subPackages = [ "cmd/andcli" ];
 
@@ -16,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "tjblackheart";
     repo = "andcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gABpQFD0F08rSVf/6X2i15aulx9ABGPGtq5CaN5ovbw=";
+    hash = "sha256-l+ZpAm+yHCKPalGib4OlIaGFsDHc3IFFlOvB1kXWZG0=";
   };
 
-  vendorHash = "sha256-FpXTKjTThrRejBiB4QKr7GfDsnWmDWDgxn5tHfgU+Dk=";
+  vendorHash = "sha256-S2JRkVy1iLGBqoOWukTQm80fVJ2YMNHTLfUUA2530GE=";
 
   ldflags = [
     "-s"
@@ -32,9 +33,10 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/tjblackheart/andcli";

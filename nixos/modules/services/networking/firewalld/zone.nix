@@ -249,7 +249,7 @@ in
         source = format.generate "firewalld-zone-${name}.xml" {
           zone =
             let
-              mkXmlAttrList = name: builtins.map (mkXmlAttr name);
+              mkXmlAttrList = name: map (mkXmlAttr name);
               mkXmlTag = value: if value then "" else null;
             in
             filterNullAttrs (
@@ -259,17 +259,17 @@ in
                 (mkXmlAttr "egress-priority" value.egressPriority)
                 {
                   interface = mkXmlAttrList "name" value.interfaces;
-                  source = builtins.map toXmlAttrs value.sources;
+                  source = map toXmlAttrs value.sources;
                   icmp-block-inversion = mkXmlTag value.icmpBlockInversion;
                   forward = mkXmlTag value.forward;
                   inherit (value) short description;
                   service = mkXmlAttrList "name" value.services;
-                  port = builtins.map toXmlAttrs value.ports;
+                  port = map toXmlAttrs value.ports;
                   protocol = mkXmlAttrList "value" value.protocols;
                   icmp-block = mkXmlAttrList "name" value.icmpBlocks;
                   masquerade = mkXmlTag value.masquerade;
-                  forward-port = builtins.map toXmlAttrs (builtins.map filterNullAttrs value.forwardPorts);
-                  source-port = builtins.map toXmlAttrs value.sourcePorts;
+                  forward-port = map toXmlAttrs (map filterNullAttrs value.forwardPorts);
+                  source-port = map toXmlAttrs value.sourcePorts;
                   rule = value.rules;
                 }
               ]

@@ -5,7 +5,6 @@
   sphinx,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
   beautifulsoup4,
   flit-core,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sphinxext-opengraph";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension to generate unique OpenGraph metadata";
     homepage = "https://github.com/wpilibsuite/sphinxext-opengraph";
     changelog = "https://github.com/wpilibsuite/sphinxext-opengraph/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

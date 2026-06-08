@@ -7,12 +7,12 @@
   zlib,
   libgcc,
   fontconfig,
-  libX11,
+  libx11,
   lttng-ust,
   icu,
-  libICE,
-  libSM,
-  libXcursor,
+  libice,
+  libsm,
+  libxcursor,
   openssl,
   imagemagick,
   makeWrapper,
@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunacy";
-  version = "11.6";
+  version = "12.3";
 
   src = fetchurl {
     url = "https://lcdn.icons8.com/setup/Lunacy_${finalAttrs.version}.deb";
-    hash = "sha256-VDd2qBNjCyfOy3vZFaVc3BI8zhQmzEIxYDNws7DIYCc=";
+    hash = "sha256-Sa6LnB+YGkHpNpETjGHYUChCFu6Ginz+VQO8dPKVRBE=";
   };
 
   buildInputs = [
@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig.lib
 
     # Runtime deps
-    libICE
-    libSM
-    libX11
-    libXcursor
+    libice
+    libsm
+    libx11
+    libxcursor
   ];
 
   nativeBuildInputs = [
@@ -63,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # will add to the RPATH of executable only
   runtimeDependencies = [
-    libICE
-    libSM
-    libX11
-    libXcursor
+    libice
+    libsm
+    libx11
+    libxcursor
   ];
 
   dontBuild = true;

@@ -1,29 +1,22 @@
 {
   lib,
-  fetchzip,
+  fetchurl,
 }:
 
 let
   dartVersion = "@dart_version@";
-  platform = "@platform@";
-  channel = if lib.strings.hasSuffix ".beta" dartVersion then "beta" else "stable";
+  system =
+    {
+      x86_64-linux = "linux-x64";
+      aarch64-linux = "linux-arm64";
+      x86_64-darwin = "macos-x64";
+      aarch64-darwin = "macos-arm64";
+    }
+    ."@platform@";
 in
-{
-  x86_64-linux = fetchzip {
-    url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-  aarch64-linux = fetchzip {
-    url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-  x86_64-darwin = fetchzip {
-    url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-  aarch64-darwin = fetchzip {
-    url = "https://storage.googleapis.com/dart-archive/channels/${channel}/release/${dartVersion}/sdk/dartsdk-macos-arm64-release.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
+fetchurl {
+  url = "https://storage.googleapis.com/dart-archive/channels/${
+    if lib.strings.hasSuffix ".beta" dartVersion then "beta" else "stable"
+  }/release/${dartVersion}/sdk/dartsdk-${system}-release.zip";
+  hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 }
-.${platform}

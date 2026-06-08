@@ -10,7 +10,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   requests-oauthlib,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "33.1.0";
+  version = "35.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes-client";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-+jL0XS7Y8qOqzZ5DcG/hZFUpj7krJAaA4fgPNSEgIAE=";
+    hash = "sha256-q52LqOz8aQkzWPwEy1c2jUQJ3hQ2sDVrYGkOgOc7Mm0=";
   };
 
   build-system = [
@@ -68,10 +65,10 @@ buildPythonPackage rec {
     "test_rest_proxycare"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
     changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

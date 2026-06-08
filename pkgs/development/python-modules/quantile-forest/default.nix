@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   setuptools,
   wheel,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "quantile-forest";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zillow";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantile_forest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Quantile Regression Forests compatible with scikit-learn";
     homepage = "https://github.com/zillow/quantile-forest";
     changelog = "https://github.com/zillow/quantile-forest/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

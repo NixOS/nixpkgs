@@ -8,10 +8,10 @@ Subject: [PATCH] Install fwupdplugin to out
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index b711ab04b..7b065f278 100644
+index 0d756bc0e748ba1c7be64bb9357f28fe8c5342e6..0cfca8e45b7ed6cc63be470ac0df916639ef52c4 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -734,7 +734,7 @@ if build_standalone
+@@ -719,7 +719,7 @@ if build_standalone
    if host_machine.system() == 'windows'
      libdir_pkg = bindir
    else

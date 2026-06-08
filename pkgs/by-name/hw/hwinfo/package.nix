@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
-  version = "25.0";
+  version = "25.4";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = finalAttrs.version;
-    hash = "sha256-8C+FM4UAn219ZQzPxk2IfK6ZKmTZNweo4oCoSYeZJ6A=";
+    hash = "sha256-XFb87IuFXYmFnlrjinz7Q+FhoRtpdToW9tos3pFzQYE=";
   };
 
   nativeBuildInputs = [
@@ -129,12 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hardware detection tool from openSUSE";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/openSUSE/hwinfo";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
     mainProgram = "hwinfo";
     pkgConfigModules = [ "hwinfo" ];
   };

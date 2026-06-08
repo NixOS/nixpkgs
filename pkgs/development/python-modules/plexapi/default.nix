@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "plexapi";
-  version = "4.17.2";
+  version = "4.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
     tag = version;
-    hash = "sha256-GLuTNfK8FmTx6PuvhBheYgK7ZurxvmaY1Sqxo0QKRXM=";
+    hash = "sha256-iRUrIb3pknT92Pk6jdkQzE1pWx85i+T31Yy+Wt8Q7bQ=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plexapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
     changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

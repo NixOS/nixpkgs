@@ -12,14 +12,14 @@
 buildPythonPackage {
   pname = "xcaplib";
   # latest commit is needed for python 3.13 compat.
-  version = "2.0.1-unstable-2025-03-20";
+  version = "2.0.2-unstable-2026-01-23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-xcaplib";
-    rev = "925846f2520d823f0b83279ceca6202808a4ca4f";
-    hash = "sha256-8EtXwHMQcPzPfP8JpB6gTV7PADHz+bJIJMhvR3DkPkk=";
+    rev = "2bdce48bcec6c80618da1b04cd9a437297993e56";
+    hash = "sha256-/htvXj9rLlJxcgJoUh4OG8PcCVIJ46ghzzqLZicONVc=";
   };
 
   build-system = [

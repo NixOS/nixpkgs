@@ -9,7 +9,7 @@
   gdk-pixbuf,
   glib,
   gtk2,
-  libX11,
+  libx11,
   pango,
 }:
 
@@ -34,11 +34,15 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk2
-    libX11
+    libx11
     pango
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = toString [
+    "--as-needed"
+    "-rpath"
+    (lib.makeLibraryPath buildInputs)
+  ];
 
   buildPhase = ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi
@@ -51,11 +55,11 @@ stdenv.mkDerivation rec {
     cp -ar applications icons man $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to graphically examine ddrescue mapfiles";
     homepage = "https://sourceforge.net/projects/ddrescueview/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "ddrescueview";
   };

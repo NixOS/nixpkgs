@@ -40,6 +40,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Highlight extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-highlight";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

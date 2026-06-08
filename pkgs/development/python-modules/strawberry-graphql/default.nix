@@ -5,6 +5,7 @@
   buildPythonPackage,
   chalice,
   channels,
+  cross-web,
   daphne,
   django,
   email-validator,
@@ -12,12 +13,13 @@
   fetchFromGitHub,
   flask,
   freezegun,
+  graphlib-backport,
   graphql-core,
   inline-snapshot,
   libcst,
   opentelemetry-api,
   opentelemetry-sdk,
-  poetry-core,
+  protobuf,
   pydantic,
   pygments,
   pyinstrument,
@@ -31,39 +33,39 @@
   pytestCheckHook,
   python-dateutil,
   python-multipart,
-  pythonOlder,
   rich,
-  sanic,
   sanic-testing,
+  sanic,
   starlette,
-  typing-extensions,
-  uvicorn,
   typer,
-  graphlib-backport,
+  typing-extensions,
+  uv-build,
+  uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strawberry-graphql";
-  version = "0.278.0";
+  version = "0.316.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    tag = version;
-    hash = "sha256-GNjjSD40fhbMqfvuYSuP3tU8lfOqBGJIsoGWZCfj6C4=";
+    tag = finalAttrs.version;
+    hash = "sha256-z9ZqIW0DD5/o2nuHqEjcjIaaHMMiT6jRoFddroSPP24=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--emoji" "" \
+      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+    substituteInPlace pyproject.toml \
+      --replace-fail "--emoji" ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
+    cross-web
     graphql-core
     python-dateutil
     typing-extensions
@@ -78,6 +80,7 @@ buildPythonPackage rec {
       starlette
       python-multipart
     ];
+    apollo-federation = [ protobuf ];
     debug = [
       rich
       libcst
@@ -139,7 +142,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -155,19 +158,18 @@ buildPythonPackage rec {
     "tests/schema/test_lazy/"
     "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
-    "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
     "tests/litestar/"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ izorkin ];
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "strawberry";
   };
-}
+})

@@ -5,20 +5,20 @@
   alsa-lib,
   libclthreads,
   libclxclient,
-  libX11,
-  libXft,
-  libXrender,
+  libx11,
+  libxft,
+  libxrender,
   fftwFloat,
   libjack2,
   zita-alsa-pcmi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jaaa";
   version = "0.9.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/jaaa-${finalAttrs.version}.tar.bz2";
     sha256 = "1czksxx2g8na07k7g57qlz0vvkkgi5bzajcx7vc7jhb94hwmmxbc";
   };
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     alsa-lib
     libclthreads
     libclxclient
-    libX11
-    libXft
-    libXrender
+    libx11
+    libxft
+    libxrender
     fftwFloat
     libjack2
     zita-alsa-pcmi
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     cd ./source/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     description = "JACK and ALSA Audio Analyser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "jaaa";
   };
-}
+})

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danthedeckie";
     repo = "simpleeval";
     tag = version;
-    hash = "sha256-CwCuQ/wd8nLKKXji2dzz9mvZrQEm2/kEm93Pan/8+90=";
+    hash = "sha256-+YSPRaX4kulUgPeKspCvJn29iFTfrPTbmWi6pSe7LSw=";
   };
 
   build-system = [ hatchling ];
@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simpleeval" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, safe single expression evaluator library";
     homepage = "https://github.com/danthedeckie/simpleeval";
     changelog = "https://github.com/danthedeckie/simpleeval/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

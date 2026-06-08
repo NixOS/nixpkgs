@@ -16,7 +16,10 @@
   vulkan-headers,
   speex,
   libopus,
-  xorg,
+  libxscrnsaver,
+  libxcb,
+  libxrandr,
+  libxcursor,
   libGL,
 }@attrs:
 {
@@ -44,9 +47,10 @@
         vulkan-loader
         speex
         libopus
-        xorg.libXrandr
-        xorg.libXcursor
-        xorg.libXScrnSaver
+        libxcb
+        libxrandr
+        libxcursor
+        libxscrnsaver
       ];
 
       postFixup = ''
@@ -77,7 +81,7 @@
 
       postFixup = ''
         patchelf $out/bin/${pname} \
-          --add-needed ${gnutls}/lib/libgnutls.so \
+          --add-needed ${gnutls}/lib/libgnutls.so
       '';
 
       description = "Dedicated server for FTEQW";

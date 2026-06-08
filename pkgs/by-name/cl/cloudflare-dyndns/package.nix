@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloudflare-dyndns";
   version = "5.4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kissgyorgy";
     repo = "cloudflare-dyndns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tCZX9CKDwGAZ8/rwI764uuE9SQ1A5WhVoqgUegJ19g4=";
   };
 
@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_ipv4"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CloudFlare Dynamic DNS client";
     homepage = "https://github.com/kissgyorgy/cloudflare-dyndns";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
     mainProgram = "cloudflare-dyndns";
   };
-}
+})

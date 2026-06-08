@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   libpysal,
   mapclassify,
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   pname = "inequality";
   version = "1.1.2";
   pyproject = true;
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pysal";

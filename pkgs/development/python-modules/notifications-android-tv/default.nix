@@ -7,14 +7,12 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "notifications-android-tv";
   version = "1.2.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "engrbm87";
@@ -38,11 +36,11 @@ buildPythonPackage rec {
     pytest-httpx
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for sending notifications to Android/Fire TVs";
     homepage = "https://github.com/engrbm87/notifications_android_tv";
     changelog = "https://github.com/engrbm87/notifications_android_tv/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dominikh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dominikh ];
   };
 }

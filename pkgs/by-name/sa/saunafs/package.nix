@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   cmake,
-  asciidoc,
+  asciidoctor,
   pkg-config,
   db,
   curl,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "5.3.0";
+  version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pT12m50q6unqx9IzRHRs8WE7ygVJW8bi0IKUHu8bGCs=";
+    hash = "sha256-5FeuzL7JiCuR2l7PjYTtsesXS0RaJmAMrTUKtCwKZxE=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    asciidoc
+    asciidoctor
     pkg-config
   ];
   buildInputs = [
@@ -80,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.saunafs;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed POSIX file system";
     homepage = "https://saunafs.com";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 })

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zope-event";
-  version = "5.0";
+  version = "6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.event";
     tag = version;
-    hash = "sha256-85jXSrploTcskdOBI84KGGf9Bno41ZTtT/TrbgmTxiA=";
+    hash = "sha256-ugyHPqqFcObgldThkkUQgZnl1fVEcXYFnXyAxNwUFIE=";
   };
 
   build-system = [ setuptools ];

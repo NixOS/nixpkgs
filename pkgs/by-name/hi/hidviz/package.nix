@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     asio_1_32_0
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hidviz/hidviz";
     description = "GUI application for in-depth analysis of USB HID class devices";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })

@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_modbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Modbus communication";
     homepage = "https://github.com/tiagocoutinho/async_modbus";
     changelog = "https://github.com/tiagocoutinho/async_modbus/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

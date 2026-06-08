@@ -11,21 +11,26 @@
 
 buildNpmPackage rec {
   pname = "zap-chip";
-  version = "2025.07.24";
+  version = "2026.02.26";
 
   src = fetchFromGitHub {
     owner = "project-chip";
     repo = "zap";
     rev = "v${version}";
-    hash = "sha256-MGu4qr+iXqI+GTpThI8yCcjt0KAcEwgJJa7wSnbryco=";
+    hash = "sha256-iAubYY/gFVjqNGnI8PIv3twc5j/8a46ycAiaZ7nw1VY=";
   };
 
-  npmDepsHash = "sha256-2AWqqMm91Ql9JA5oqon7H1YUuzJG+Z9c3LpsbQ9HE90=";
+  npmDepsHash = "sha256-SIworjSX2SLiNA2Oshvem0mOW795WkbHWP8WFD9yp8g=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.CYPRESS_INSTALL_BINARY = "0";
 
   patches = [
+    # The release's package-lock.json file is not universal. It misses
+    # architecture-related packages, caused by an NPM bug. Add these to the
+    # lock otherwise `npm ci` complains.
+    # https://github.com/npm/cli/issues/8805
+    ./universal-npm-lock.patch
     # the build system creates a file `.version.json` from a git command
     # as we don't build from a git repo, we create the file manually in postPatch
     # and this patch disables the logic running git

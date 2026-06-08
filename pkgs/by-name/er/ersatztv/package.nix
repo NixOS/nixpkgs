@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "ersatztv";
-  version = "25.9.0";
+  version = "26.5.1";
 
   src = fetchFromGitHub {
     owner = "ErsatzTV";
-    repo = "ErsatzTV";
+    repo = "legacy";
     rev = "v${version}";
-    sha256 = "sha256-+ZMDMKrJN+nX9FeSZ8RTFGRf161Mhpqd7jY9FLZWNqM=";
+    sha256 = "sha256-2w+4xppj3E8H6WXea/iuNfloUmBsFQKDBpTnUn3RWvE=";
   };
   postPatch = ''
     # Remove config of development tools that don't end up in
@@ -32,6 +32,8 @@ buildDotnetModule rec {
     "ErsatzTV.Scanner"
   ];
   nugetDeps = ./nuget-deps.json;
+
+  dotnetFlags = [ "-p:TreatWarningsAsErrors=false" ];
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
@@ -48,11 +50,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Stream custom live channels using your own media";
     homepage = "https://ersatztv.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ allout58 ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ allout58 ];
     mainProgram = "ErsatzTV";
     platforms = dotnet-runtime.meta.platforms;
   };

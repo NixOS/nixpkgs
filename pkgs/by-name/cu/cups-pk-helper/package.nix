@@ -10,12 +10,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.6";
   pname = "cups-pk-helper";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${finalAttrs.version}.tar.xz";
     sha256 = "0a52jw6rm7lr5nbyksiia0rn7sasyb5cjqcb95z1wxm2yprgi6lm";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PolicyKit helper to configure cups with fine-grained privileges";
     homepage = "https://www.freedesktop.org/wiki/Software/cups-pk-helper/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

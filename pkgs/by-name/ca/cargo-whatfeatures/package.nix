@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-whatfeatures";
   version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "museun";
     repo = "cargo-whatfeatures";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-YJ08oBTn9OwovnTOuuc1OuVsQp+/TPO3vcY4ybJ26Ms=";
   };
 
@@ -23,17 +23,17 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple cargo plugin to get a list of features for a specific crate";
     mainProgram = "cargo-whatfeatures";
     homepage = "https://github.com/museun/cargo-whatfeatures";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ivan-babrou
       matthiasbeyer
     ];
   };
-}
+})

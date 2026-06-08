@@ -8,17 +8,17 @@
   libpng,
   mkLibretroCore,
   nasm,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "0-unstable-2025-11-14";
+  version = "0-unstable-2026-05-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mupen64plus-libretro-nx";
-    rev = "680e033fc8ed1a49df7b156d97164e0050ee13bc";
-    hash = "sha256-oBsOC1YtHx+mTgi9rwucU7rVeFt6RbxKrxHyPDx0eXg=";
+    rev = "98c1b0d877542b01314b3b04272282ba223b65b3";
+    hash = "sha256-ardO7zuuG4rqm2d88IduMs3CVYNHiHyaxQ5ZDtbMVHU=";
   };
 
   # Fix for GCC 14
@@ -48,7 +48,7 @@ mkLibretroCore {
     libGLU
     libGL
     libpng
-    xorg.libX11
+    libx11
   ];
   makefile = "Makefile";
   makeFlags = [

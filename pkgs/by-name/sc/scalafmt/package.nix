@@ -9,7 +9,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.9.8";
+  version = "3.11.1";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -19,7 +19,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-mZrRb2n+ZE0DmQaH9iSMzPcpdZPtflekkP8bHv6Qw4k=";
+    outputHash = "sha256-EgkXDCbgn7OmH1e/us6lyNiei/qZMzFn/1Qh4LiraBo=";
   };
 in
 stdenv.mkDerivation {
@@ -46,6 +46,8 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Opinionated code formatter for Scala";

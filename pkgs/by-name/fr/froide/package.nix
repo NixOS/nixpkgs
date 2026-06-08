@@ -6,13 +6,16 @@
   makeWrapper,
   gdal,
   geos,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
+  pnpm = pnpm_10;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {
@@ -62,7 +65,8 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   dependencies = with python.pkgs; [
@@ -116,10 +120,15 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-NbfCVD+gmtoxuYUCumTKj9P72utK787VdlnuU4lMMGc=";
   };
 
   postBuild = ''

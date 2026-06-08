@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "salt-lint";
   version = "0.9.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "warpnet";
     repo = "salt-lint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q/blaqDqs9gPrMfN+e1hkCi9IPMM0osPYTDsT6UODB4=";
   };
 
@@ -31,8 +31,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Command-line utility that checks for best practices in SaltStack";
     homepage = "https://salt-lint.readthedocs.io/en/latest/";
@@ -40,4 +38,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "salt-lint";
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

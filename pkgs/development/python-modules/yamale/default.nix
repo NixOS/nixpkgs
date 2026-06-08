@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yamale" ];
 
-  meta = with lib; {
+  meta = {
     description = "Schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
     changelog = "https://github.com/23andMe/Yamale/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rtburns-jpl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rtburns-jpl ];
     mainProgram = "yamale";
   };
 }

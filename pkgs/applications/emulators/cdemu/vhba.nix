@@ -6,13 +6,13 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vhba";
-  version = "20250329";
+  version = "20260313";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
-    hash = "sha256-piog1yDd8M/lpTIo9FE9SY2JwurZ6a8LG2lZ/4EmB14=";
+    url = "mirror://sourceforge/cdemu/vhba-module-${finalAttrs.version}.tar.xz";
+    hash = "sha256-KTADv12dwrOG2w0F9ZXFVINVpTXW38Bv03n9mLsZAXQ=";
   };
 
   makeFlags = kernelModuleMakeFlags ++ [
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Provides a Virtual (SCSI) HBA";
     homepage = "https://cdemu.sourceforge.io/about/vhba/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})

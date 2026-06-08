@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hypothesis,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "priority";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python implementation of the HTTP/2 priority tree";
     homepage = "https://github.com/python-hyper/priority/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

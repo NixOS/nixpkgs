@@ -47,6 +47,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
+      "TARGET_TRIPLE:=${stdenvNoLibc.system}"
       ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
     )
   '';
@@ -58,22 +59,26 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
 
   preFixup = ''
     ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
+    ln -s $out/lib $out/lib/${stdenvNoLibc.system}
+  ''
+  + lib.optionalString (stdenvNoLibc.system != stdenvNoLibc.targetPlatform.rust.rustcTargetSpec) ''
+    ln -s $out/lib $out/lib/${stdenvNoLibc.targetPlatform.rust.rustcTargetSpec}
   '';
 
   passthru.tests = {
     inherit firefox-unwrapped firefox-esr-unwrapped;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
-    platforms = platforms.wasi;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.wasi;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       wucke13
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
       mit

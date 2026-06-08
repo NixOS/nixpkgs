@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "httpbin";
   version = "0.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -71,10 +71,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpbin" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

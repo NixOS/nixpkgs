@@ -12,14 +12,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qosmic";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bitsed";
     repo = "qosmic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "13nw1mkdib14430r21mj352v62vi546vf184vyhxm7yjjygyra1w";
   };
 
@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     mv qosmic.app $out/Applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cosmic recursive flame fractal editor";
     mainProgram = "qosmic";
     homepage = "https://github.com/bitsed/qosmic";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.raboof ];
+    platforms = lib.platforms.unix;
   };
-}
+})

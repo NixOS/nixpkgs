@@ -19,13 +19,15 @@
   **     };
   **   };
   ** }
+  **
+  ** For an example adding a builtin plugin, see
+  ** passthru.tests.with-new-builtin-plugin below
 */
 {
   lib,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  beets,
 
   # build-system
   poetry-core,
@@ -38,19 +40,17 @@
   mediafile,
   munkres,
   musicbrainzngs,
+  packaging,
   platformdirs,
   pyyaml,
   unidecode,
   reflink,
+  requests-ratelimiter,
   typing-extensions,
   lap,
 
   # native
   gobject-introspection,
-  sphinxHook,
-  sphinx-design,
-  sphinx-copybutton,
-  pydata-sphinx-theme,
 
   # buildInputs
   gst_all_1,
@@ -77,6 +77,7 @@
   requests,
   requests-oauthlib,
   resampy,
+  titlecase,
   soco,
 
   # configurations
@@ -89,11 +90,14 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
+  pytest-factoryboy,
+  pytest-flask,
   mock,
   rarfile,
   responses,
   requests-mock,
   pillow,
+  tomli,
   writableTmpDirAsHomeHook,
 
   # preCheck
@@ -104,24 +108,21 @@
 
   # passthru.tests
   runCommand,
+  beets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.5.1";
+  version = "2.11.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    tag = "v${version}";
-    hash = "sha256-H3jcEHyK13+RHVlV4zp+8M3LZ0Jc2FdmAbLpekGozLA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fi6D0P2GtEO41VL6UKAArRedZVxw97yqDUAoilktUho=";
   };
   pyproject = true;
 
-  patches = [
-    # Bash completion fix for Nix
-    ./bash-completion-always-print.patch
-  ]
-  ++ extraPatches;
+  patches = extraPatches;
 
   build-system = [
     poetry-core
@@ -135,6 +136,7 @@ buildPythonPackage rec {
     mediafile
     munkres
     musicbrainzngs
+    packaging
     platformdirs
     pyyaml
     unidecode
@@ -142,17 +144,16 @@ buildPythonPackage rec {
     # add too much to the closure. See:
     # https://github.com/NixOS/nixpkgs/issues/437308
     reflink
+    requests-ratelimiter
     typing-extensions
     lap
   ]
-  ++ (lib.concatMap (p: p.propagatedBuildInputs) (lib.attrValues passthru.plugins.enabled));
+  ++ (lib.concatMap (p: p.propagatedBuildInputs) (
+    lib.attrValues finalAttrs.finalPackage.passthru.plugins.enabled
+  ));
 
   nativeBuildInputs = [
     gobject-introspection
-    sphinxHook
-    sphinx-design
-    sphinx-copybutton
-    pydata-sphinx-theme
   ]
   ++ extraNativeBuildInputs;
 
@@ -164,19 +165,7 @@ buildPythonPackage rec {
 
   outputs = [
     "out"
-    "doc"
-    "man"
   ];
-  sphinxBuilders = [
-    "html"
-    "man"
-  ];
-  # Causes an installManPage error. Not clear why this directory gets generated
-  # with the manpages. The same directory is observed correctly in
-  # $doc/share/doc/beets-${version}/html
-  preInstallSphinx = ''
-    rm -r .sphinx/man/man/_sphinx_design_static
-  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -186,49 +175,35 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
     "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
-    "--prefix PATH : ${lib.makeBinPath passthru.plugins.wrapperBins}"
+    "--prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.plugins.wrapperBins}"
   ];
 
   nativeCheckInputs = [
+    ffmpeg
     pytestCheckHook
     pytest-cov-stub
+    pytest-factoryboy
+    pytest-flask
     mock
     rarfile
     responses
     requests-mock
     pillow
+    tomli
     writableTmpDirAsHomeHook
   ]
-  ++ passthru.plugins.wrapperBins;
+  ++ finalAttrs.finalPackage.passthru.plugins.wrapperBins;
 
   __darwinAllowLocalNetworking = true;
 
   disabledTestPaths =
-    passthru.plugins.disabledTestPaths
-    ++ [
-      # touches network
-      "test/plugins/test_aura.py"
-    ]
+    finalAttrs.finalPackage.passthru.plugins.disabledTestPaths
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Flaky: several tests fail randomly with:
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
       "test/plugins/test_bpd.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # fail on Hydra with `RuntimeError: image cannot be obtained without artresizer backend`
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_percent_margin"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_px_margin"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_minwidth"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced_and_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_not_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_and_scaled"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_but_not_scaled"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = extraDisabledTests ++ [
     # touches network
@@ -246,14 +221,14 @@ buildPythonPackage rec {
       \( -name '*.py' -o -path 'beetsplug/*/__init__.py' \) -print \
       | sed -n -re 's|^beetsplug/([^/.]+).*|\1|p' \
       | sort -u > plugins_available
-    ${diffPlugins (lib.attrNames passthru.plugins.builtins) "plugins_available"}
+    ${diffPlugins (lib.attrNames finalAttrs.finalPackage.passthru.plugins.builtins) "plugins_available"}
 
     export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}
       cat > "$1" <<CFG
-      plugins: ${lib.concatStringsSep " " (lib.attrNames passthru.plugins.enabled)}
+      plugins: ${lib.concatStringsSep " " (lib.attrNames finalAttrs.finalPackage.passthru.plugins.enabled)}
       CFG
     ''}" "$out/bin/beet" config -e
     env EDITOR=true "$out/bin/beet" config -e
@@ -298,13 +273,12 @@ buildPythonPackage rec {
         bareasc = { };
         beatport.propagatedBuildInputs = [ requests-oauthlib ];
         bench.testPaths = [ ];
-        bpd.testPaths = [ ];
+        bpd = { };
         bpm.testPaths = [ ];
         bpsync.testPaths = [ ];
         bucket = { };
         chroma = {
           propagatedBuildInputs = [ pyacoustid ];
-          testPaths = [ ];
           wrapperBins = [
             chromaprint
           ];
@@ -341,11 +315,11 @@ buildPythonPackage rec {
         fromfilename.testPaths = [ ];
         ftintitle = { };
         fuzzy.testPaths = [ ];
-        gmusic.testPaths = [ ];
         hook = { };
         ihate = { };
         importadded = { };
         importfeeds = { };
+        importsource = { };
         info = { };
         inline.testPaths = [ ];
         ipfs = { };
@@ -360,9 +334,7 @@ buildPythonPackage rec {
           testPaths = [ ];
         };
         limit = { };
-        listenbrainz = {
-          testPaths = [ ];
-        };
+        listenbrainz = { };
         loadext = {
           propagatedBuildInputs = [ requests ];
           testPaths = [ ];
@@ -375,6 +347,7 @@ buildPythonPackage rec {
         mbcollection.testPaths = [ ];
         mbsubmit = { };
         mbsync = { };
+        mbpseudo = { };
         metasync.testPaths = [ ];
         missing.testPaths = [ ];
         mpdstats.propagatedBuildInputs = [ mpd2 ];
@@ -411,7 +384,9 @@ buildPythonPackage rec {
         substitute = {
           testPaths = [ ];
         };
+        tidal = { };
         the = { };
+        titlecase.propagatedBuildInputs = [ titlecase ];
         thumbnails = {
           propagatedBuildInputs = [
             pillow
@@ -433,30 +408,39 @@ buildPythonPackage rec {
           testPaths = [ ];
         };
       };
-      base = lib.mapAttrs (_: a: { builtin = true; } // a) passthru.plugins.builtins;
+      base = lib.mapAttrs (
+        _: a: { builtin = true; } // a
+      ) finalAttrs.finalPackage.passthru.plugins.builtins;
       overrides = lib.mapAttrs (
         plugName:
-        lib.throwIf (passthru.plugins.builtins.${plugName}.deprecated or false)
+        lib.throwIf (finalAttrs.finalPackage.passthru.plugins.builtins.${plugName}.deprecated or false)
           "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
       ) pluginOverrides;
-      all = lib.mapAttrs (
-        n: a:
-        {
-          name = n;
-          enable = !disableAllPlugins;
-          builtin = false;
-          propagatedBuildInputs = [ ];
-          testPaths = [ "test/plugins/test_${n}.py" ];
-          wrapperBins = [ ];
-        }
-        // a
-      ) (lib.recursiveUpdate passthru.plugins.base passthru.plugins.overrides);
-      enabled = lib.filterAttrs (_: p: p.enable) passthru.plugins.all;
-      disabled = lib.filterAttrs (_: p: !p.enable) passthru.plugins.all;
+      all =
+        lib.mapAttrs
+          (
+            n: a:
+            {
+              name = n;
+              enable = !disableAllPlugins;
+              builtin = false;
+              propagatedBuildInputs = [ ];
+              testPaths = [ "test/plugins/test_${n}.py" ];
+              wrapperBins = [ ];
+            }
+            // a
+          )
+          (
+            lib.recursiveUpdate finalAttrs.finalPackage.passthru.plugins.base finalAttrs.finalPackage.passthru.plugins.overrides
+          );
+      enabled = lib.filterAttrs (_: p: p.enable) finalAttrs.finalPackage.passthru.plugins.all;
+      disabled = lib.filterAttrs (_: p: !p.enable) finalAttrs.finalPackage.passthru.plugins.all;
       disabledTestPaths = lib.flatten (
-        lib.attrValues (lib.mapAttrs (_: v: v.testPaths) passthru.plugins.disabled)
+        lib.attrValues (lib.mapAttrs (_: v: v.testPaths) finalAttrs.finalPackage.passthru.plugins.disabled)
       );
-      wrapperBins = lib.concatMap (p: p.wrapperBins) (lib.attrValues passthru.plugins.enabled);
+      wrapperBins = lib.concatMap (p: p.wrapperBins) (
+        lib.attrValues finalAttrs.finalPackage.passthru.plugins.enabled
+      );
     };
     tests = {
       gstreamer =
@@ -474,8 +458,45 @@ buildPythonPackage rec {
               backend: gstreamer
             EOF
 
-            ${beets}/bin/beet -c $out/config.yaml > /dev/null
+            ${finalAttrs.finalPackage}/bin/beet -c $out/config.yaml > /dev/null
           '';
+      with-new-builtin-plugin = finalAttrs.finalPackage.overrideAttrs (
+        newAttrs: oldAttrs: {
+          postPatch = (oldAttrs.postPatch or "") + ''
+            mkdir -p beetsplug/my_special_plugin
+            touch beetsplug/my_special_plugin/__init__.py
+          '';
+          passthru = lib.recursiveUpdate oldAttrs.passthru {
+            plugins.builtins.my_special_plugin = { };
+          };
+        }
+      );
+      # Test that disabling
+      with-mpd-plugins-disabled = beets.override {
+        pluginOverrides = {
+          # These two plugins require mpd2 Python dependency. If they are
+          # disabled, this dependency shouldn't be pulled, and the `runCommand`
+          # test below should fail with a `ModuleNotFoundError`
+          mpdstats.enable = false;
+          mpdupdate.enable = false;
+        };
+      };
+      mpd-plugins-really-disabled = runCommand "beets-mpd-plugins-disabled-test" { } ''
+        set -euo pipefail
+        export HOME=$(mktemp -d)
+        mkdir $out
+
+        cat << EOF > $out/config.yaml
+        plugins:
+          - mpdstats
+        EOF
+        ${finalAttrs.finalPackage.passthru.tests.with-mpd-plugins-disabled}/bin/beet \
+          -c $out/config.yaml \
+          --help 2> $out/help-stderr || true
+        ${finalAttrs.finalPackage.passthru.tests.with-mpd-plugins-disabled}/bin/beet \
+          -c $out/config.yaml \
+          mpdstats --help 2> $out/mpdstats-help-stderr || true
+      '';
     };
   };
 
@@ -492,4 +513,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";
   };
-}
+})

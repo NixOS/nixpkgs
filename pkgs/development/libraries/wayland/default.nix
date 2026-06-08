@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   meson,
+  mdbook,
   pkg-config,
   ninja,
   wayland-scanner,
@@ -23,18 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
+    hash = "sha256-wGXwQK/f8xd2gGAPJJcn5Boa/CL8zyciLxX1MG+qHwM=";
   };
-
-  patches = [
-    ./darwin.patch
-  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
@@ -72,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     xmlto
     python3
+    mdbook
     docbook_xml_dtd_45
     docbook_xsl
   ];
@@ -94,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
@@ -105,12 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
       rendering).
     '';
     homepage = "https://wayland.freedesktop.org/";
-    license = licenses.mit; # Expat version
-    platforms = platforms.unix;
-    # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.unix;
+    # Builds with a large downstream patch, but breaks at least the
+    # `qt6Packages.qtbase` build. Please audit Wayland availability
+    # checks throughout the tree before enabling (and work with
+    # upstream if you want sustainable Wayland support on macOS).
     badPlatforms = lib.platforms.darwin;
-    maintainers = with maintainers; [
-      codyopel
+    maintainers = with lib.maintainers; [
       qyliss
     ];
     pkgConfigModules = [

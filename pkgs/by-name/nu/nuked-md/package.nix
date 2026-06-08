@@ -71,16 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cycle accurate Mega Drive emulator";
     longDescription = ''
       Cycle accurate Mega Drive core. The goal of this project is to emulate Sega Mega Drive chipset as accurately as
       possible using decapped chips photos.
     '';
     homepage = "https://github.com/nukeykt/Nuked-MD";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "Nuked-MD";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

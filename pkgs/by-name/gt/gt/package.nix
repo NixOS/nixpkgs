@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/source";
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   preConfigure = ''
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")
   '';
@@ -40,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Linux command line tool for setting up USB gadgets using configfs";
+    homepage = "https://github.com/linux-usb-gadgets/gt";
     mainProgram = "gt";
     license = with lib.licenses; [ asl20 ];
     maintainers = [ ];

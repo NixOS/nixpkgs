@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchgit,
-  libsForQt5,
+  qt5,
 }:
 
 let
@@ -37,19 +37,19 @@ stdenv.mkDerivation {
     cp -r ${qtil_src.name}/* $sourceRoot/lib/qtil/
   '';
 
-  buildInputs = with libsForQt5.qt5; [
-    qtbase
-    qtsvg
-    qtquickcontrols
-    qmake
-    wrapQtAppsHook
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtquickcontrols
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Collaboration System for use with DE store websites";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SohamG ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SohamG ];
+    platforms = lib.platforms.linux;
     mainProgram = "ocs-url";
   };
 }

@@ -30,7 +30,7 @@
 
   useDune = true;
 
-  meta = with lib; {
+  meta = {
     description = "Exploration of some properties of Kirby and Paris' hydra battles, with the help of Coq";
     longDescription = ''
       An exploration of some properties of Kirby and Paris' hydra
@@ -39,12 +39,12 @@
       ordinal numbers, and a part of the so-called Ketonen and Solovay
       machinery (combinatorial properties of epsilon0).
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       siraben
       Zimmi48
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }).overrideAttrs
   (

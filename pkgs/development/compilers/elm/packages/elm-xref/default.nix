@@ -42,7 +42,7 @@ buildNpmPackage (finalAttrs: {
     description = "Cross referencing tool for Elm";
     homepage = "https://github.com/zwilias/elm-xref";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-xref";
   };
 })

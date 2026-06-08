@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "DevTools proxy (Chrome Remote Debugging Protocol) for iOS devices (Safari Remote Web Inspector)";
     longDescription = ''
       The ios_webkit_debug_proxy (aka iwdp) proxies requests from usbmuxd
@@ -72,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/google/ios-webkit-debug-proxy";
     changelog = "https://github.com/google/ios-webkit-debug-proxy/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "ios_webkit_debug_proxy";
-    maintainers = with maintainers; [ abustany ];
+    maintainers = with lib.maintainers; [ abustany ];
   };
 })

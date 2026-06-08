@@ -1,23 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  marshmallow,
+  fetchFromGitHub,
+  flit-core,
   packaging,
   pytestCheckHook,
   setuptools,
   validators,
 }:
+let
+  marshmallow' = buildPythonPackage {
+    pname = "marshmallow";
+    version = "3.26.2";
+    pyproject = true;
 
-buildPythonPackage rec {
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+
+    build-system = [ flit-core ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "marshmallow" ];
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
-  version = "1.8.1";
+  version = "1.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "faraday_agent_parameters_types";
-    inherit version;
-    hash = "sha256-o4N1op+beeoM0GGtcQGWNfFt6SMDohiNnOyD8lWzuk0=";
+  src = fetchFromGitHub {
+    owner = "infobyte";
+    repo = "faraday_agent_parameters_types";
+    tag = finalAttrs.version;
+    hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
   };
 
   pythonRelaxDeps = [ "validators" ];
@@ -30,7 +50,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    marshmallow
+    marshmallow'
     packaging
     validators
   ];
@@ -47,11 +67,11 @@ buildPythonPackage rec {
     "test_incorrect_version_requested"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
-    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

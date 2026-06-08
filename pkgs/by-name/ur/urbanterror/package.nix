@@ -10,7 +10,7 @@
   libGL,
   libGLU,
   openal,
-  libXxf86vm,
+  libxxf86vm,
   SDL,
   makeDesktopItem,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     openal
-    libXxf86vm
+    libxxf86vm
     SDL
   ];
 

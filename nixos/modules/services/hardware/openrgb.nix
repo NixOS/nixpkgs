@@ -59,16 +59,28 @@ in
     ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
-      description = "OpenRGB server daemon";
-      after = [ "network.target" ];
+      description = "OpenRGB SDK Server";
+      after = [
+        "network.target"
+        "lm_sensors.service"
+      ];
       wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";
         WorkingDirectory = "/var/lib/OpenRGB";
-        ExecStart =
-          "${cfg.package}/bin/openrgb --server --server-port ${toString cfg.server.port}"
-          + lib.optionalString (builtins.isString cfg.startupProfile) " --profile ${lib.escapeShellArg cfg.startupProfile}";
+        ExecStart = lib.escapeShellArgs (
+          [
+            (lib.getExe cfg.package)
+            "--server"
+            "--server-port"
+            cfg.server.port
+          ]
+          ++ lib.optionals (lib.isString cfg.startupProfile) [
+            "--profile"
+            cfg.startupProfile
+          ]
+        );
         Restart = "always";
       };
     };

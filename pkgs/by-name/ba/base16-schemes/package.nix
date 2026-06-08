@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "0-unstable-2025-11-08";
+  version = "0-unstable-2026-01-15";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "schemes";
-    rev = "4ac26dc99141c1b2a26eb7fefe46e22e07eec77c";
-    hash = "sha256-pr+RtDs+3qo0v7ZXfcSdtP0PoDDPU9EHw2Oe5EUwWtQ=";
+    rev = "43dd14f6466a782bd57419fdfb5f398c74d6ac53";
+    hash = "sha256-AWTIYZ1tZab0YwAQwgt5yO4ucqZoc4iXX002Byy7pRY=";
   };
 
   installPhase = ''

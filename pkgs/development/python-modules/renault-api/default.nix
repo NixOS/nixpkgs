@@ -17,16 +17,16 @@
   typeguard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.5.1";
+  version = "0.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
-    tag = "v${version}";
-    hash = "sha256-FH6x+hknNGgrSHaOt7RTYeuVLqb/DNy7X3065VvcFwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rIUG+HuHf5MXxPtOPjMRtRfurm1yUoNuqG494im2dQw=";
   };
 
   build-system = [ poetry-core ];
@@ -53,16 +53,16 @@ buildPythonPackage rec {
     syrupy
     typeguard
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "renault_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the Renault API";
     homepage = "https://github.com/hacf-fr/renault-api";
-    changelog = "https://github.com/hacf-fr/renault-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/renault-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "renault-api";
   };
-}
+})

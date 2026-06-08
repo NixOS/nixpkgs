@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "babeldoc";
   version = "0.5.22";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "funstory-ai";
     repo = "BabelDOC";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ArLTv5AjpUdbsN8bQs03ATwg5ugXetld2FmHhicU8OE=";
   };
 
@@ -82,9 +82,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "PDF scientific paper translation and bilingual comparison library";
     homepage = "https://github.com/funstory-ai/BabelDOC";
-    changelog = "https://github.com/funstory-ai/BabelDOC/releases/tag/${src.tag}";
+    changelog = "https://github.com/funstory-ai/BabelDOC/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ryota2357 ];
     mainProgram = "babeldoc";
   };
-}
+})

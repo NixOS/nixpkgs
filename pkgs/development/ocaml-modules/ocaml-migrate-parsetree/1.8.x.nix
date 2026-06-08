@@ -7,14 +7,14 @@
   ppx_derivers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-migrate-parsetree";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ocaml-migrate-parsetree";
+    rev = "v${finalAttrs.version}";
     sha256 = "16x8sxc4ygxrr1868qpzfqyrvjf3hfxvjzmxmf6ibgglq7ixa2nq";
   };
 
@@ -27,7 +27,7 @@ buildDunePackage rec {
     description = "Convert OCaml parsetrees between different major versions";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     broken = lib.versionOlder "4.13" ocaml.version;
   };
-}
+})

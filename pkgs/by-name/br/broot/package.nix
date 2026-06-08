@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.54.0";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c7q6VTXoToUSx8gsOLcsLUvriZYYyYwGAjO8VTF3JFk=";
+    hash = "sha256-uRMa8zaXXM8KWUplYMyOLic/WITLU0eAbZ2VDgM/PBw=";
   };
 
-  cargoHash = "sha256-jErnCexuu8PPUugsI+fRqWpqtpspDiVjnfn3it5jeK4=";
+  cargoHash = "sha256-p4R8+PcRmjy/2q7lpfUevuYROPrCQEffmXx5vRrjwKs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -79,7 +79,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
+  util-linux,
 
   # build-system
   setuptools,
@@ -28,26 +31,35 @@
 
   # tests
   hypothesis,
+  psutil,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2025.11.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
-    tag = version;
-    hash = "sha256-cU4w4dqJQ3ew+fRyD7Lc4URNfW738kKqls6k6j65pIo=";
+    tag = finalAttrs.version;
+    hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace dask/tests/test_system.py \
+      --replace-fail \
+        '"taskset",' \
+        '"${lib.getExe' util-linux "taskset"}",'
+  '';
 
   build-system = [
     setuptools
@@ -89,27 +101,45 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pyarrow
     pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     versionCheckHook
   ]
-  ++ optional-dependencies.array
-  ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = "--version";
+  ++ finalAttrs.passthru.optional-dependencies.array
+  ++ finalAttrs.passthru.optional-dependencies.dataframe;
 
   pytestFlags = [
     # Rerun failed tests up to three times
     "--reruns=3"
+
+    # FutureWarning: The previous implementation of stack is deprecated and will be removed in a
+    # future version of pandas.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTestMarks = [
     # Don't run tests that require network access
     "network"
+  ];
+
+  disabledTests = [
+    # https://github.com/dask/dask/issues/10931
+    "test_combine_first_all_nans"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeWarning: divide by zero encountered in det
+    "test_array_notimpl_function_dask"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/dask/dask/issues/12042
+    "test_multiple_repartition_partition_size"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -136,4 +166,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

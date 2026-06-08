@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyleri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse SiriDB";
     homepage = "https://github.com/cesbit/pyleri";
     changelog = "https://github.com/cesbit/pyleri/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

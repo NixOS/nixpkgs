@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch,
   setuptools,
@@ -11,8 +10,6 @@
 buildPythonPackage rec {
   pname = "starline";
   version = "0.1.5";
-
-  disabled = pythonOlder "3.5";
 
   pyproject = true;
 
@@ -41,10 +38,10 @@ buildPythonPackage rec {
   # https://github.com/Anonym-tsk/starline/issues/4
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial python library for StarLine API";
     homepage = "https://github.com/Anonym-tsk/starline";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

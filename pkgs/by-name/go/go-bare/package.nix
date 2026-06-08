@@ -19,11 +19,11 @@ buildGoModule {
 
   subPackages = [ "cmd/gen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the BARE message format for Go";
     mainProgram = "gen";
     homepage = "https://git.sr.ht/~sircmpwn/go-bare";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ poptart ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ poptart ];
   };
 }

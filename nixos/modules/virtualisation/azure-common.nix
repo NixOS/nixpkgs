@@ -60,7 +60,7 @@ in
       linkConfig.Unmanaged = "yes";
     };
     networking.networkmanager.unmanaged = lib.mkIf cfg.acceleratedNetworking (
-      builtins.map (drv: "driver:${drv}") mlxDrivers
+      map (drv: "driver:${drv}") mlxDrivers
     );
 
     # Allow root logins only using the SSH key that the user specified

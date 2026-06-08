@@ -4,6 +4,8 @@
 # - revision specified and remote without HEAD
 #
 
+source "$NIX_ATTRS_SH_FILE"
+
 echo "exporting $url (rev $rev) into $out"
 
 runHook preFetch

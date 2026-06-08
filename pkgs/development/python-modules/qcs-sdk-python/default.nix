@@ -7,7 +7,6 @@
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   qcs-api-client-common,
   quil,
   rustPlatform,
@@ -16,22 +15,22 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.21";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
-    tag = "python/v${version}";
-    hash = "sha256-xSIkMz+wZvYtgjyW/6Nr4vn6oJZ3X38GNdXJfYchI8A=";
+    tag = "lib/v${version}";
+    hash = "sha256-XqsxtFwQnAJHYMaR+uO8wzlxA+GtqfllJUCIt0l1i9o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-U13R/U6/ugC7m0X2gTpjfOjgzRzTIk95mcMu2GtcNLM=";
+    hash = "sha256-ENWGL8N7shXYI31GDLu7SHqPhZUuIWWnYk/ziRoG9Gg=";
   };
 
-  buildAndTestSubdir = "crates/python";
+  buildAndTestSubdir = "crates/lib";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     "test_conjugate_pauli_by_clifford"
     "test_execute_qvm"
     "test_generate_randomized_benchmark_sequence"
-    "test_get_instruction_set_actitecture_public"
+    "test_get_instruction_set_architecture_public"
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"
@@ -68,11 +67,11 @@ buildPythonPackage rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    rev-prefix = "python/v";
+    rev-prefix = "lib/v";
   };
 
   meta = {
-    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/${buildAndTestSubdir}/CHANGELOG.md";
     description = "Python interface for the QCS Rust SDK";
     homepage = "https://github.com/rigetti/qcs-sdk-rust/tree/main/crates/python";
     license = lib.licenses.asl20;

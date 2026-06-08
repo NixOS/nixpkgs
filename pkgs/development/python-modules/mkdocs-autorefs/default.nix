@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
     tag = version;
-    hash = "sha256-/UPhoJL026jpdvC22uRFiAGN4pU/uqcDrROZmkTFWv0=";
+    hash = "sha256-kEDnCAqn9musqbY4efUrAHcKc/LAhH1zkLAI9fP/7eg=";
   };
 
   postPatch = ''

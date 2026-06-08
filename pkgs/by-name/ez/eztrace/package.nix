@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "eztrace";
     repo = "eztrace";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-ccW4YjEf++tkdIJLze2x8B/SWbBBXnYt8UV9OH8+KGU=";
   };
 

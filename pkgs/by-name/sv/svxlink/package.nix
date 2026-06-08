@@ -36,9 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "DO_INSTALL_CHOWN" false)
-    (lib.cmakeFeature "RTLSDR_LIBRARIES" "${rtl-sdr}/lib/librtlsdr.so")
-    (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${rtl-sdr}/include")
+    (lib.cmakeFeature "RTLSDR_LIBRARIES" "${lib.getLib rtl-sdr}/lib/librtlsdr.so")
+    (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${lib.getInclude rtl-sdr}/include")
   ];
+
+  postPatch = ''
+    # match jsoncpp's c++17 ABI (string_view overloads); upstream pins c++11
+    substituteInPlace cmake/Modules/FindSIGC2.cmake \
+      --replace-fail '"--std=c++11"' '"--std=c++17"'
+  '';
 
   dontWrapQtApps = true;
 

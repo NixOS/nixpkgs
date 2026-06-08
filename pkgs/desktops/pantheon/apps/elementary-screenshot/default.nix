@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "8.0.3";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    hash = "sha256-nEJCyQs77zcUb9mc2dUBbZP3zWdPFHTOORROe3u6sSA=";
+    hash = "sha256-hVYzriIRvBDBdRRZRiXZwEazu9ZPhPaVY/pOfw95ZkU=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.screenshot";
   };
 }

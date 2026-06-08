@@ -52,7 +52,7 @@ buildNpmPackage (finalAttrs: {
     description = "Analyse your Elm code, identify deficiencies and apply best practices";
     homepage = "https://stil4m.github.io/elm-analyse/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-analyse";
   };
 })

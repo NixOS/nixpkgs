@@ -16,19 +16,19 @@
   pipewire,
   scdoc,
   slurp,
-  systemd,
+  systemdLibs,
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "xdg-desktop-portal-wlr";
-    rev = "v${version}";
-    sha256 = "sha256-TAWrDH6kud4eXFJvfihImuEFm2uTOaqAOatG+7JmaEM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-HITf/hgiASWvn/z49mzS8IS1vuyXwdk1JiAOOHRSQMo=";
   };
 
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libdrm
     libgbm
     pipewire
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
     description = "xdg-desktop-portal backend for wlroots";
-    maintainers = with maintainers; [ minijackson ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ minijackson ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
-}
+})

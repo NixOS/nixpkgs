@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libXrandr,
+  libxrandr,
   libxcb,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libXrandr
+    libxrandr
     libxcb
   ];
 

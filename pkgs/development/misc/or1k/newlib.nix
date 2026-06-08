@@ -6,7 +6,9 @@
 }:
 
 stdenvNoLibc.mkDerivation {
-  name = "newlib";
+  pname = "or1k-newlib";
+  version = "0-unstable-2018-11-05";
+
   src = fetchFromGitHub {
     owner = "openrisc";
     repo = "newlib";
@@ -40,5 +42,9 @@ stdenvNoLibc.mkDerivation {
   passthru = {
     incdir = "/${stdenv.targetPlatform.config}/include";
     libdir = "/${stdenv.targetPlatform.config}/lib";
+  };
+
+  meta = {
+    homepage = "https://github.com/openrisc/newlib";
   };
 }

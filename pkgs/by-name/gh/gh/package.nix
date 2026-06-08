@@ -4,36 +4,43 @@
   buildGoModule,
   installShellFiles,
   stdenv,
-  testers,
-  gh,
+  versionCheckHook,
+  makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.83.1";
+  version = "2.93.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-LBrWxlHPb9qG+IszymvqFqHFvvzveG4jZAkxivpbL5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r/+JFdMOUIb32St+VkUw+Q7Lb2L6IiPczmONFE4hwDw=";
   };
 
-  vendorHash = "sha256-sLCqUqo/0qsLpHjH81tJ/M2LD0X/kr8hToDFgZ8/wP8=";
+  vendorHash = "sha256-eMPcla1XKfq+zBb633Zz4cn820FWuEaRrXQJ1TQ8Lkg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # N.B.: using the Makefile is intentional.
   # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
   buildPhase = ''
     runHook preBuild
-    make GO_LDFLAGS="-s -w -X github.com/cli/cli/v${lib.versions.major version}/internal/build.Date=nixpkgs" GH_VERSION=${version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
+    make GO_LDFLAGS="-s -w -X github.com/cli/cli/v${lib.versions.major finalAttrs.version}/internal/build.Date=nixpkgs" GH_VERSION=${finalAttrs.version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 bin/gh -t $out/bin
+    installBin bin/gh
+    wrapProgram $out/bin/gh \
+      --set-default GH_TELEMETRY false
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]
@@ -50,19 +57,19 @@ buildGoModule rec {
   # most tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = gh;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
-    changelog = "https://github.com/cli/cli/releases/tag/v${version}";
+    changelog = "https://github.com/cli/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "gh";
     maintainers = with lib.maintainers; [
       mdaniels5757
       zowoq
+      savtrip
     ];
   };
-}
+})

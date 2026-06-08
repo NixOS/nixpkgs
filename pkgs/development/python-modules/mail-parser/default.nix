@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-wwLUD/k26utugK/Yx9eXYEdSOvrk0Cy6RkXGDnzZ+fE=";
   };
 
-  LC_ALL = "en_US.utf-8";
+  env.LC_ALL = "en_US.utf-8";
 
   nativeBuildInputs = [ glibcLocales ];
 

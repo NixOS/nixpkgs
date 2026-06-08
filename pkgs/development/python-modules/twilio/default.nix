@@ -2,7 +2,6 @@
   lib,
   aiohttp-retry,
   aiohttp,
-  aiounittest,
   buildPythonPackage,
   cryptography,
   django,
@@ -17,17 +16,20 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twilio";
-  version = "9.8.8";
+  version = "9.10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    tag = version;
-    hash = "sha256-q3NjNe7SiqL2HgRkuoChesD333q3vw+aVkSASc6gDQk=";
+    tag = finalAttrs.version;
+    hash = "sha256-CQWP8QujDvV5+Z5JDUcWhQ4mJZqaXnxpScS9sBxIX4Q=";
   };
+
+  # https://github.com/twilio/twilio-python/pull/919
+  patches = [ ./remove-aiounittest.patch ];
 
   build-system = [ setuptools ];
 
@@ -41,7 +43,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiounittest
     cryptography
     django
     mock
@@ -63,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twilio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/twilio/twilio-python/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

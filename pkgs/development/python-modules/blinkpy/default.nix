@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-dateutil,
   python-slugify,
-  pythonOlder,
   requests,
   setuptools,
   sortedcontainers,
@@ -16,27 +15,25 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.24.1";
+  version = "0.25.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     tag = "v${version}";
-    hash = "sha256-UjkVpXqGOOwtpBslQB61osaQvkuvD4A+xeUrMpyWetg=";
+    hash = "sha256-wtuegaYB7/lh9d5kKgSEwCztLpaKcwHi9+ryMvGXVg8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "wheel~=0.40.0" wheel \
+      --replace-fail "wheel>=0.40,<0.47" wheel \
       --replace-fail "setuptools>=68,<81" setuptools
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     python-dateutil

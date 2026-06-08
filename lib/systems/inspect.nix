@@ -229,6 +229,16 @@ rec {
         family = "m68k";
       };
     };
+    isArc = {
+      cpu = {
+        family = "arc";
+      };
+    };
+    isSh4 = {
+      cpu = {
+        family = "sh";
+      };
+    };
     isS390 = {
       cpu = {
         family = "s390";
@@ -431,6 +441,10 @@ rec {
       }
     ];
 
+    isUefi = [
+      { kernel = kernels.uefi; }
+    ];
+
     isElf = {
       kernel.execFormat = execFormats.elf;
     };
@@ -440,6 +454,11 @@ rec {
     isPE = {
       kernel.execFormat = execFormats.pe;
     };
+
+    isEabi = {
+      abi.eabi = true;
+    };
+
   };
 
   # given two patterns, return a pattern which is their logical AND.

@@ -1,35 +1,49 @@
 {
   lib,
-  babel,
   buildPythonPackage,
-  fetchPypi,
-  langcodes,
-  pytestCheckHook,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system,
   setuptools,
+
+  # dependencies
+  babel,
+  langcodes,
   tld,
   urllib3,
+
+  # tests
+  pytest-httpserver,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "courlan";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-C2b02zqcOabiLdJHxyz6pX1o6mYOlLsshOx9uHEq8ZA=";
+  src = fetchFromGitHub {
+    owner = "adbar";
+    repo = "courlan";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hDbeAd/gil6S8zggBjmrDmnW3DMMdRvG1vULuhYA1zc=";
   };
 
   # Tests try to write to /tmp directly. use $TMPDIR instead.
-  postPatch = ''
-    substituteInPlace tests/unit_tests.py \
-      --replace-fail "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
-      --replace-fail "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\"" \
-      --replace-fail "/tmp" "$TMPDIR"
-  '';
+  postPatch =
+    let
+      courlanBinPath = "${placeholder "out"}/bin/courlan";
+    in
+    ''
+      substituteInPlace tests/unit_tests.py \
+        --replace-fail \
+          'assert os.system("courlan --help") == 0' \
+          'assert os.system("${courlanBinPath} --help") == 0' \
+        --replace-fail \
+          'courlan_bin = "courlan"' \
+          'courlan_bin = "${courlanBinPath}"'
+    '';
 
   build-system = [ setuptools ];
 
@@ -40,19 +54,24 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-httpserver
+    pytestCheckHook
+  ];
 
   # disable tests that require an internet connection
   disabledTests = [ "test_urlcheck" ];
 
   pythonImportsCheck = [ "courlan" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Clean, filter and sample URLs to optimize data collection";
     homepage = "https://github.com/adbar/courlan";
-    changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jokatzke ];
+    changelog = "https://github.com/adbar/courlan/blob/${finalAttrs.src.tag}/HISTORY.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "courlan";
   };
-}
+})

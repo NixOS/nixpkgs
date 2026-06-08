@@ -1,42 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
-  flask,
   flask-sqlalchemy,
+  flask,
   httpx,
+  joserfc,
   mock,
   pytest-asyncio,
   pytestCheckHook,
   python-multipart,
-  pythonOlder,
   requests,
   setuptools,
   starlette,
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.6.5";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    tag = "v${version}";
-    hash = "sha256-lz2cPqag6lZ9PXb3O/SV4buIPDDzhI71/teqWHLG+vE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FLSe9piZoFlOAutzoMcgygbsJsR8uSlZWqdNBU6D+aE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     cryptography
+    joserfc
   ];
 
   nativeCheckInputs = [
@@ -63,11 +61,11 @@ buildPythonPackage rec {
     "tests/jose/test_chacha20.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/blob/${src.tag}/docs/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flokli ];
+    changelog = "https://github.com/lepture/authlib/blob/${finalAttrs.src.tag}/docs/upgrades/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

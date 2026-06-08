@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
   version = "0.17.2";
   pyproject = true;
@@ -26,11 +26,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y+2WvqD96eYkDEJn5qCGfGFNiJFAcF4KWWNgAIZUqJo=";
   };
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "textual"
+  ];
 
   dependencies = [
     pyperclip
@@ -58,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Text area (multi-line input) with syntax highlighting for Textual";
     homepage = "https://github.com/tconbeer/textual-textarea";
-    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
-}
+})

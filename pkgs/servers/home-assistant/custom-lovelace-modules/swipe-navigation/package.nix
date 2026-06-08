@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "swipe-navigation";
-  version = "1.15.8";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "zanna-37";
     repo = "hass-swipe-navigation";
     tag = "v${version}";
-    hash = "sha256-jc/dTs1CdrjTSHSnBn2RPESgj3YFjFSg+nPJClKRPj4=";
+    hash = "sha256-a2ZbMQgFi4bJPnZeSB60THFd46O/K4QERCmZQMjC0ZI=";
   };
 
-  npmDepsHash = "sha256-uuNX2xizoS3eowN/edUuT3EvzzLq7GzGw0uIDxAT0pY=";
+  npmDepsHash = "sha256-vQnYQ7iKSotbdresqXMNUJALMVPYxk0FtZxAhJTQ8pc=";
 
   buildPhase = ''
     runHook preBuild
@@ -34,11 +34,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/zanna-37/hass-swipe-navigation/releases/tag/v${version}";
     description = "Swipe through Home Assistant Dashboard views on mobile";
     homepage = "https://github.com/zanna-37/hass-swipe-navigation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpinz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpinz ];
   };
 }

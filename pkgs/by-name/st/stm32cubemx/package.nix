@@ -14,13 +14,13 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.15.0";
+    version = "6.17.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }-lin.zip";
-      hash = "sha256-50P+/uvNH3NN1UN+T3RxGgR8QYBIgBDA56mAEU4BipI=";
+      hash = "sha256-OroIcdvNzCm7lyL62zNm4sbDgUb+GgJW50mqE1M1KT4=";
       stripRoot = false;
     };
 
@@ -84,7 +84,7 @@ let
       fi
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Graphical tool for configuring STM32 microcontrollers and microprocessors";
       longDescription = ''
         A graphical tool that allows a very easy configuration of STM32
@@ -94,9 +94,9 @@ let
         step-by-step process.
       '';
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.unfree;
-      maintainers = with maintainers; [
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [
         angaz
         wucke13
       ];
@@ -130,13 +130,13 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
       libgcrypt
       openssl
       udev

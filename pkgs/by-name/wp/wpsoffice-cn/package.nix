@@ -13,16 +13,17 @@
   libjpeg,
   libtool,
   libxkbcommon,
-  nss,
   nspr,
   udev,
   gtk3,
   libgbm,
   libusb1,
-  unixODBC,
+  unixodbc,
   libmysqlclient,
   libsForQt5,
-  xorg,
+  libxv,
+  libxtst,
+  libxdamage,
   # wpsoffice runtime dependencies
   cups,
   dbus,
@@ -138,17 +139,16 @@ else
       libjpeg
       libtool
       libxkbcommon
-      nss
       nspr
       udev
       gtk3
       libgbm
       libusb1
-      unixODBC
+      unixodbc
       libsForQt5.qtbase
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libXv
+      libxdamage
+      libxtst
+      libxv
     ];
 
     dontWrapQtApps = true;
@@ -167,10 +167,10 @@ else
       tar -xf data.tar.xz
 
       # Remove unneeded files
-      rm -rf usr/share/{fonts,locale}
+      rm -rf usr/share/{fonts,locale,templates}
       rm -f usr/bin/misc
-      rm -rf opt/kingsoft/wps-office/{desktops,INSTALL}
-      rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,nss*,dbus-1}.so*
+      rm -rf opt/kingsoft/wps-office/{desktops,INSTALL,templates}
+      rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,dbus-1}.so*
     '';
 
     installPhase = ''
@@ -188,7 +188,7 @@ else
 
       for i in $out/share/applications/*; do
         substituteInPlace $i \
-          --replace-fail /usr/bin $out/bin
+          --replace-fail /usr/bin/ ""
       done
 
       runHook postInstall

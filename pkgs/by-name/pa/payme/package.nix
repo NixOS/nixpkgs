@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "payme";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "payme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GXJjjCruDjL5+ag3aUJAHPLOvbwux9FBnyqXJ52WifE=";
     leaveDotGit = true;
     postFetch = ''
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.gitRefName=${src.rev}"
+    "-X main.gitRefName=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cimm ];
   };
-}
+})

@@ -31,14 +31,17 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ qmake ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
-  NIX_LDFLAGS = "-lqca-qt5";
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
+    NIX_LDFLAGS = "-lqca-qt5";
+  };
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Qt library for OAuth authentication";
+    homepage = "https://github.com/ayoy/qoauth";
     inherit (qtbase.meta) platforms;
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

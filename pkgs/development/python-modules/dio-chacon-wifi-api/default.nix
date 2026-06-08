@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "dio-chacon-wifi-api";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "dio-chacon-wifi-api";
     tag = "v${version}";
-    hash = "sha256-YlomB3/EBX2tFifjcF38q+sr2z1bHwUjmqyNE2wTp90=";
+    hash = "sha256-c91xCrlNpCutZZYO6y0pOaqPCF4exbr7xVxfsf5LI0Q=";
   };
 
   build-system = [ poetry-core ];
@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dio_chacon_wifi_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API via wifi for DIO devices from Chacon. Useful for homeassistant or other automations";
     homepage = "https://github.com/cnico/dio-chacon-wifi-api";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

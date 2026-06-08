@@ -40,6 +40,7 @@ let
     ;
 
   inherit (lib.types)
+    serializableValueWith
     attrsOf
     atom
     bool
@@ -57,38 +58,6 @@ let
     str
     submodule
     ;
-
-  /*
-    Creates a structured value type suitable for serialization formats.
-
-    Parameters:
-    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
-    - nullable: Whether the structured value type allows `null` values.
-
-    Returns a type suitable for structured data formats that supports:
-    - Basic types: boolean, integer, float, string, path
-    - Complex types: attribute sets and lists
-  */
-  mkStructuredType =
-    {
-      typeName,
-      nullable ? true,
-    }:
-    let
-      baseType = oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ];
-      valueType = (if nullable then nullOr baseType else baseType) // {
-        description = "${typeName} value";
-      };
-    in
-    valueType;
 
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
@@ -112,6 +81,8 @@ let
       str
       ;
   };
+
+  json2x = pkgs.buildPackages.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
@@ -162,7 +133,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type = mkStructuredType { typeName = "JSON"; };
+      type = types.json;
 
       generate =
         name: value:
@@ -172,10 +143,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ jq ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               jq . "$valuePath" > $out
             ''
         ) { };
@@ -195,15 +168,17 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal_0_17 ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
 
-      type = mkStructuredType { typeName = "YAML 1.1"; };
+      type = serializableValueWith { typeName = "YAML 1.1"; };
 
     };
 
@@ -218,15 +193,17 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
 
-      type = mkStructuredType { typeName = "YAML 1.2"; };
+      type = serializableValueWith { typeName = "YAML 1.2"; };
 
     };
 
@@ -485,9 +462,8 @@ optionalAttrs allowAliases aliases
 
   toml =
     { }:
-    json { }
-    // {
-      type = mkStructuredType { typeName = "TOML"; };
+    {
+      type = types.toml;
 
       generate =
         name: value:
@@ -495,13 +471,13 @@ optionalAttrs allowAliases aliases
           { runCommand, remarshal }:
           runCommand name
             {
-              nativeBuildInputs = [ remarshal ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              nativeBuildInputs = [ json2x ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2toml "$valuePath" "$out"
+              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -520,7 +496,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type = mkStructuredType { typeName = "CDN"; };
+      type = serializableValueWith { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -530,10 +506,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ json2cdn ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -765,12 +743,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -814,14 +792,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -935,7 +913,7 @@ optionalAttrs allowAliases aliases
   pythonVars =
     { }:
     {
-      type = attrsOf (mkStructuredType {
+      type = attrsOf (serializableValueWith {
         typeName = "Python";
       });
 
@@ -962,7 +940,7 @@ optionalAttrs allowAliases aliases
               ];
               imports = builtins.toJSON (value._imports or [ ]);
               value = builtins.toJSON (removeAttrs value [ "_imports" ]);
-              pythonGen = ''
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
@@ -995,16 +973,16 @@ optionalAttrs allowAliases aliases
                     for key, value in json.load(f).items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "imports"
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              export importsPath="$TMPDIR/imports"
+              printf "%s" "$imports" > "$importsPath"
+              export valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -1017,7 +995,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = mkStructuredType { typeName = "XML"; };
+        type = serializableValueWith { typeName = "XML"; };
 
         generate =
           name: value:
@@ -1034,7 +1012,7 @@ optionalAttrs allowAliases aliases
                   libxml2Python
                 ];
                 value = builtins.toJSON value;
-                pythonGen = ''
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
@@ -1044,14 +1022,13 @@ optionalAttrs allowAliases aliases
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                export valuePath="$TMPDIR/value"
+                printf "%s" "$value" > "$valuePath"
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };
@@ -1084,4 +1061,27 @@ optionalAttrs allowAliases aliases
 
       generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
     };
+
+  hcl1 =
+    args:
+    let
+      # Helper function to recursively transform values for HCL1 canonicalization
+      # Rule: If an attribute value is an attribute set, wrap it in a list
+      transform =
+        value:
+        if isAttrs value && !isDerivation value then
+          # If it's an attribute set, transform it recursively and wrap in a list
+          [ (mapAttrs (name: transform) value) ]
+        else if isList value then
+          # If it's already a list, transform each element
+          map transform value
+        else
+          value;
+      jsonFormat = json { };
+    in
+    jsonFormat
+    // {
+      generate = name: value: jsonFormat.generate name (mapAttrs (_: transform) value);
+    };
+
 }

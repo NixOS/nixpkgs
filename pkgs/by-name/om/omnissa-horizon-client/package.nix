@@ -12,7 +12,7 @@
   configText ? "",
 }:
 let
-  version = "2506";
+  version = "2605";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -39,8 +39,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART26FQ2_LIN_2506_TARBALL/Omnissa-Horizon-Client-Linux-2506-8.16.0-16536624989.tar.gz";
-      sha256 = "5515e79188e2605ced5a95c3a3829865b567be5d7a8de00a57455f7b5b2ae392";
+      url = "https://download3.omnissa.com/software/CART27FQ1_LIN_2603_TARBALL/Omnissa-Horizon-Client-Linux-2603-8.18.0-24120621798.tar.gz";
+      hash = "sha256:acd30479cec91ee693bbd685880fa3834f3678f8dd336511bb9d732f134f71d7";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -102,17 +102,17 @@ let
           pixman
           udev
           omnissaHorizonClientFiles
-          xorg.libX11
-          xorg.libXau
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libxkbfile
-          xorg.libXrandr
-          xorg.libXrender
-          xorg.libXScrnSaver
-          xorg.libXtst
+          libx11
+          libxau
+          libxcursor
+          libxext
+          libxi
+          libxinerama
+          libxkbfile
+          libxrandr
+          libxrender
+          libxscrnsaver
+          libxtst
           zlib
           libxml2_13
 
@@ -154,12 +154,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "Allows you to connect to your Omnissa Horizon virtual desktop";
     homepage = "https://www.omnissa.com/products/horizon-8/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mhutter ];
+    maintainers = with lib.maintainers; [ mhutter ];
   };
 }

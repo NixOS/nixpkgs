@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "proto-contrib";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "emicklei";
     repo = "proto-contrib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0ksxic7cypv9gg8q5lkl5bla1n9i65z7b03cx9lwq6252glmf2jk";
   };
 
@@ -19,10 +19,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Contributed tools and other packages on top of the Go proto package";
     homepage = "https://github.com/emicklei/proto-contrib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

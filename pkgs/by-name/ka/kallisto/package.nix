@@ -10,16 +10,21 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kallisto";
   version = "0.51.1";
 
   src = fetchFromGitHub {
     repo = "kallisto";
     owner = "pachterlab";
-    rev = "v${version}";
-    sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
+
+  patches = [
+    # https://github.com/pmelsted/bifrost/pull/18
+    ./bifrost-fix-datastorage-sz_link-typo.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt ext/bifrost/CMakeLists.txt \
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Near-optimal quantification of transcripts from RNA-seq data";
     longDescription = ''
       kallisto is a program for quantifying abundances of transcripts
@@ -58,8 +63,8 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.arcadio ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.arcadio ];
   };
-}
+})

@@ -209,12 +209,12 @@ let
             };
           }) mountable;
         };
-        passAsFile = [ "filesystems" ];
+        __structuredAttrs = true;
       }
       ''
         (
           echo "builtins.fromJSON '''"
-          jq . < "$filesystemsPath"
+          printf "%s" "$filesystems" | jq .
           echo "'''"
         ) > $out
 
@@ -330,7 +330,7 @@ let
               --no-root-passwd \
               --system ${config.system.build.toplevel} \
               --substituters "" \
-              ${lib.optionalString includeChannel ''--channel ${channelSources}''}
+              ${lib.optionalString includeChannel "--channel ${channelSources}"}
 
             df -h
 

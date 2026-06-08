@@ -4,11 +4,10 @@
   fetchFromGitHub,
   testers,
   snyk,
-  nodejs_20,
 }:
 
 let
-  version = "1.1299.1";
+  version = "1.1301.2";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -18,10 +17,10 @@ buildNpmPackage {
     owner = "snyk";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-DANNao3xNcoYWgyi5Dn5UTdeUNPMtkSC5f9VMIShqpQ=";
+    hash = "sha256-dyP9KywtwXYHkKDrCeNwJbZbhhIQdwYzk2GAY2+CEWM=";
   };
 
-  npmDepsHash = "sha256-WKVFg4rtm9UCWRbj1QCrDdQFpk0QZm3KKRUfOQfEJtg=";
+  npmDepsHash = "sha256-HBMOqFi3lvvVdPA+sx54Vj3cUQCV802SiWWR3+cq9Qo=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -32,8 +31,6 @@ buildNpmPackage {
     # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
     find -L $out -type l -print -delete
   '';
-
-  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 

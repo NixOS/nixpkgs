@@ -1,42 +1,45 @@
 {
   lib,
+  stdenv,
+  nodejs_24,
+  electron_40,
+  makeWrapper,
   fetchFromGitHub,
+  buildNpmPackage,
+  makeDesktopItem,
+  copyDesktopItems,
   buildDotnetModule,
   dotnetCorePackages,
-  buildNpmPackage,
-  electron_39,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
 }:
 let
-  electron = electron_39;
+  node = nodejs_24;
+  electron = electron_40;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.12.06";
+  version = "2026.05.03";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eyw8zFtKVR85ao1/gO8qJOF5VcBkZd7L5AB1JB8qAv0=";
+    hash = "sha256-TIRX1DllUaq73Aue5/2mg98luBnDoptiiMDQcZ9aBTM=";
   };
 
+  nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-WHxrIzZLktU6Jd6wm5VeGnZAbNT3pkNfqcxE6tdBoq8=";
+  npmDepsHash = "sha256-hOfbDvBJgoPQ6QxnZ77kpeSHDXH9dSnidmrx9Mp9q08=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
-  preBuild = ''
-    # Build fails at executing dart from sass-embedded
-    rm -r node_modules/sass-embedded*
+  postPatch = ''
+    # V2026.05.03 seems to have an out of date lockfile
+    cp ${./package-lock.json} package-lock.json
   '';
 
   buildPhase = ''
@@ -75,11 +78,11 @@ buildNpmPackage (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "vrcx";
+      icon = "vrcx";
+      exec = "vrcx %u";
+      terminal = false;
       desktopName = "VRCX";
       comment = "Friendship management tool for VRChat";
-      icon = "vrcx";
-      exec = "vrcx";
-      terminal = false;
       categories = [
         "Utility"
         "Application"
@@ -90,8 +93,8 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     backend = buildDotnetModule {
-      pname = "${finalAttrs.pname}-backend";
       inherit (finalAttrs) version src;
+      pname = "${finalAttrs.pname}-backend";
 
       dotnet-sdk = dotnet.sdk;
       dotnet-runtime = dotnet.runtime;

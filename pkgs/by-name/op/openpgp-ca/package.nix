@@ -11,14 +11,14 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openpgp-ca";
   version = "0.14.0";
 
   src = fetchFromGitLab {
     owner = "openpgp-ca";
     repo = "openpgp-ca";
-    rev = "openpgp-ca/v${version}";
+    rev = "openpgp-ca/v${finalAttrs.version}";
     hash = "sha256-71SApct2yQV3ueWDlZv7ScK1s0nWWS57cPCvoMutlLA=";
   };
 
@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing OpenPGP keys within organizations";
     homepage = "https://openpgp-ca.org/";
     changelog = "https://openpgp-ca.org/doc/changelog/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "oca";
   };
-}
+})

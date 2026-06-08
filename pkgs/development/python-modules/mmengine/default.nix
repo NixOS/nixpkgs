@@ -27,11 +27,12 @@
   mlflow,
   parameterized,
   pytestCheckHook,
+  torchvision,
   transformers,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mmengine";
   version = "0.10.7";
   pyproject = true;
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
 
@@ -63,7 +64,7 @@ buildPythonPackage rec {
       substituteInPlace setup.py \
         --replace-fail \
           "return locals()['__version__']" \
-          "return '${version}'"
+          "return '${finalAttrs.version}'"
     ''
     + ''
       substituteInPlace tests/test_config/test_lazy.py \
@@ -94,6 +95,7 @@ buildPythonPackage rec {
     mlflow
     parameterized
     pytestCheckHook
+    torchvision
     transformers
     writableTmpDirAsHomeHook
   ];
@@ -158,6 +160,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError: No valid profiler activities found
+    "test_with_runner"
+
     # Require network access
     "test_fileclient"
     "test_http_backend"
@@ -172,6 +177,23 @@ buildPythonPackage rec {
     # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_to_device_and_dtype_00_cpu"
+    "test_to_device_and_dtype_01_cpu"
+    "test_to_device_and_dtype_02_cpu"
+    "test_to_device_and_dtype_09_cpu"
+    "test_to_device_and_dtype_10_cpu"
+    "test_to_device_and_dtype_11_cpu"
+    "test_to_device_and_dtype_12"
+    "test_to_device_and_dtype_13"
+    "test_to_device_and_dtype_14"
+    "test_to_device_and_dtype_21"
+    "test_to_device_and_dtype_22"
+    "test_to_device_and_dtype_23"
+    "test_to_dtype_0"
+    "test_to_dtype_3"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails when max-jobs is set to use fewer processes than cores
     # for example `AssertionError: assert 14 == 4`
@@ -184,8 +206,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
-    changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
+    changelog = "https://github.com/open-mmlab/mmengine/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

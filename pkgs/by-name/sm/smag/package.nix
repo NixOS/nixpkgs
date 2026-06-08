@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smag";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "aantn";
     repo = "smag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Vyd35wYDNI4T7DdqihwpmJOAZGxjnCeWS609o3L+gHM=";
   };
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/aantn/smag";
     license = lib.licenses.mit;
-    changelog = "https://github.com/aantn/smag/releases/tag/v${version}";
+    changelog = "https://github.com/aantn/smag/releases/tag/v${finalAttrs.version}";
     mainProgram = "smag";
     maintainers = with lib.maintainers; [ zebreus ];
   };
-}
+})

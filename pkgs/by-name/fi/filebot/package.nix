@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-OcXXKaZcBuP584SJWeQB+aaxO0kih6Oiud0Vm8e9kPo=";
+    hash = "sha256-1LYFc76wQOnmlkdGjE7ZuRh4FeM2o8ZM4sfDwx8hyBc=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV
@@ -100,16 +100,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://filebot.net";
     changelog = "https://www.filebot.net/forums/viewforum.php?f=7";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
       gleber
       felschr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "filebot";
   };
 })

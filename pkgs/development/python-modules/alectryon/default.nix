@@ -6,34 +6,41 @@
   dominate,
   beautifulsoup4,
   docutils,
+  myst-parser,
+  setuptools,
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alectryon";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "00cxzfifvgcf3d3s8lsj1yxcwyf3a1964p86fj7b42q8pa0b4r3i";
+    inherit (finalAttrs) pname version;
+    sha256 = "sha256-ouuCwipCQKSlH8NpF5QZd4jx4mEYooyIcnRhtDRWOnU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pygments
     dominate
     beautifulsoup4
     docutils
+    myst-parser
     sphinx
   ];
 
+  pythonImportsCheck = [ "alectryon" ];
+
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cpitclaudel/alectryon";
     description = "Collection of tools for writing technical documents that mix Coq code and prose";
     mainProgram = "alectryon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
-}
+})

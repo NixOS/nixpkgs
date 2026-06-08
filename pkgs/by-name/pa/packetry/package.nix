@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "packetry";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "packetry";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eDVom0kAL1QwO8BtrJS76VTvxtKs7CP6Ob5BWlE6wOM=";
   };
 
@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # packetry-cli is only necessary on windows https://github.com/greatscottgadgets/packetry/pull/154
@@ -54,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "packetry";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

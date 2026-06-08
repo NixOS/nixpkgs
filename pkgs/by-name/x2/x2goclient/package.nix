@@ -6,7 +6,7 @@
   pkg-config,
   bash,
   cups,
-  libXpm,
+  libxpm,
   libssh,
   nx-libs,
   openldap,
@@ -24,9 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cups
-    libXpm
+    libxpm
     libssh
-    libsForQt5.phonon
     libsForQt5.qtbase
     libsForQt5.qtsvg
     libsForQt5.qttools

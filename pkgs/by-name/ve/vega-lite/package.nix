@@ -11,16 +11,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vega-lite";
-  version = "6.4.1";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vega-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X6O7ZehY3tS7dFBaKnBuDokCfG+zWmSDHl1d+ifyc/o=";
+    hash = "sha256-bsPnvUleHrihsoOL98O8KTbiONx3FNuQjH9vrZ/bLTw=";
   };
 
-  npmDepsHash = "sha256-YjZdh5R7hawgf8EAGlKEAkqchcFuN1j2yMJo9Ptnjyk=";
+  npmDepsHash = "sha256-dni2tEYzE/AzgGldCAtBpmQK24kIRck0KQXvD2e5xfw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,6 +39,6 @@ buildNpmPackage (finalAttrs: {
     description = "Concise grammar of interactive graphics, built on Vega";
     homepage = "https://vega.github.io/vega-lite/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

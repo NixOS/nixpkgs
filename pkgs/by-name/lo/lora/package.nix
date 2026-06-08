@@ -3,11 +3,17 @@
   stdenvNoCC,
   fetchFromGitHub,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
   version = "3.021";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
@@ -21,13 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  nativeBuildInputs = [ installFonts ];
+
+  # installFonts adds a hook to `postInstall` that installs fonts
+  # into the correct directories
   installPhase = ''
     runHook preInstall
-
-    install -Dm444 -t $out/share/fonts/truetype $src/fonts/ttf/*.ttf
-    install -Dm444 -t $out/share/fonts/opentype $src/fonts/otf/*.otf
-    install -Dm444 -t $out/share/fonts/variable $src/fonts/variable/*.ttf
-
     runHook postInstall
   '';
 

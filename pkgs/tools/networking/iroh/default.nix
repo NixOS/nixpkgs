@@ -1,5 +1,6 @@
 {
   lib,
+  lld,
   fetchFromGitHub,
   rustPlatform,
 }:
@@ -11,16 +12,16 @@ let
     }:
     rustPlatform.buildRustPackage rec {
       pname = name;
-      version = "0.93.2";
+      version = "0.98.2";
 
       src = fetchFromGitHub {
         owner = "n0-computer";
         repo = "iroh";
         rev = "v${version}";
-        hash = "sha256-IYuOo4dfTC7IfMkwFyjqFmOYjx87i84+ydyNxnSAfk4=";
+        hash = "sha256-oYKl0dJLJtn2HDxu0ajlhzEWL741h4yN8ZVEQq2dwRk=";
       };
 
-      cargoHash = "sha256-aR78AKfXRAePnOVO/Krx1WGcQgOIz3d+GDwfAoM10UQ=";
+      cargoHash = "sha256-hO7bJt4RnqE8PLvemISqN7fqIjDbVPHZrW5AQlGJeqw=";
 
       buildFeatures = cargoFeatures;
       cargoBuildFlags = [
@@ -28,17 +29,21 @@ let
         name
       ];
 
+      nativeBuildInputs = [
+        lld
+      ];
+
       # Some tests require network access which is not available in nix build sandbox.
       doCheck = false;
 
-      meta = with lib; {
+      meta = {
         description = "Efficient IPFS for the whole world right now";
         homepage = "https://iroh.computer";
-        license = with licenses; [
+        license = with lib.licenses; [
           asl20
           mit
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           andreashgk
           cameronfyfe
         ];

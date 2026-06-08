@@ -72,7 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/amazon-q";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Amazon Q Developer AI coding agent CLI";

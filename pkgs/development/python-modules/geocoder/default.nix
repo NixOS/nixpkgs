@@ -2,43 +2,51 @@
   lib,
   buildPythonPackage,
   click,
+  fetchpatch2,
   fetchPypi,
-  future,
-  pythonOlder,
   ratelim,
   requests,
   setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geocoder";
   version = "1.38.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yZJTdMlhV30K7kA7Ceb46hlx2RPwEfAMpwx2vq96d+c=";
   };
+
+  patches = [
+    # Remove future package to address CVE-2025-50817, https://github.com/DenisCarriere/geocoder/pull/488
+    (fetchpatch2 {
+      name = "remove-future.patch";
+      url = "https://github.com/DenisCarriere/geocoder/commit/b15f3bb227414e90020a560176eb06fd39660df5.patch";
+      hash = "sha256-v1sFe8xMzJjaPkRVdzW8MK3eYgFORxl+iug/qHvc26U=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    future
     ratelim
     requests
     six
   ];
 
+  # Tests are outdated
+  doCheck = false;
+
   pythonImportsCheck = [ "geocoder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for geocoding";
     homepage = "https://pypi.org/project/geocoder/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

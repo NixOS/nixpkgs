@@ -10,14 +10,18 @@
 python3.pkgs.buildPythonApplication {
   pname = "git-relevant-history";
   version = "1.0.0-unstable-2022-09-15";
-  format = "setuptools";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "rainlabs-eu";
     repo = "git-relevant-history";
     rev = "84552324d7cb4790db86282fc61bf98a05b7a4fd";
     hash = "sha256-46a6TR1Hi3Lg2DTmOp1aV5Uhd4IukTojZkA3TVbTnRY=";
   };
-  propagatedBuildInputs = [
+
+  build-system = [ python3.pkgs.setuptools ];
+
+  dependencies = [
     git
     git-filter-repo
     python3.pkgs.docopt
@@ -25,12 +29,12 @@ python3.pkgs.buildPythonApplication {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Extract only relevant history from git repo";
     homepage = "https://github.com/rainlabs-eu/git-relevant-history";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bendlas ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bendlas ];
     mainProgram = "git-relevant-history";
   };
 }

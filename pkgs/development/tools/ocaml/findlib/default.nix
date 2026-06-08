@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "1.9.8";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
+    url = "https://download.camlcity.org/download/findlib-${version}.tar.gz";
     hash = "sha256-ZiyRD3dOn+46GcTgV/OAWBqy/E7lLaR2EwSsnDG4hp0=";
   };
 

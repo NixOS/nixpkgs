@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "smtpdfix";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -41,11 +41,10 @@ buildPythonPackage rec {
     "test_missing_certs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SMTP server for use as a pytest fixture for testing";
     homepage = "https://github.com/bebleo/smtpdfix";
     changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
-    license = licenses.mit;
-    teams = [ teams.wdz ];
+    license = lib.licenses.mit;
   };
 }
