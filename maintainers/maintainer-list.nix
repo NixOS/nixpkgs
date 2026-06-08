@@ -25572,6 +25572,12 @@
     github = "sinanmohd";
     githubId = 69694713;
   };
+  singhc7 = {
+    name = "Chahatpreet Singh";
+    email = "c@chahat.dev";
+    github = "singhc7";
+    githubId = 113715161;
+  };
   sinics = {
     name = "Zhifan";
     email = "nonno.felice69uwu@gmail.com";
