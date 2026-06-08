@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "netbox-inventory";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ArnesSI";
     repo = "netbox-inventory";
     tag = "v${version}";
-    hash = "sha256-6MIYwz11YZhu3ksM7iAfKACKIKpuq283DTzaRR3lcXA=";
+    hash = "sha256-NTo9WYkjY4BdE3gSkzNKxjHiWVnLQGVZQ5s8e9u3VY0=";
   };
 
   build-system = [ setuptools ];
