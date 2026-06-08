@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-socket";
-  version = "0.9.1";
+  version = "0.12.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "BlueManCZ";
     repo = "hyprland-socket";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yyNgNupKtQdW045GWcLgmZWr06BRSdF4HouN0rf++iI=";
+    hash = "sha256-xZh0re/bfWM0Nwv9bx/EsyE3coJjxhSpRiau/6Bg1Nc=";
   };
 
   build-system = [ hatchling ];
