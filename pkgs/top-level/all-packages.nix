@@ -9029,9 +9029,7 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  monotone = callPackage ../applications/version-management/monotone {
-    lua = lua5;
-  };
+  monotone = callPackage ../applications/version-management/monotone { };
 
   mopidyPackages = recurseIntoAttrs (
     callPackages ../applications/audio/mopidy {
