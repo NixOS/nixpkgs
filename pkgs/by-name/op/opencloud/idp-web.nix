@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   opencloud,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -17,17 +17,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_11;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    fetcherVersion = 3;
-    hash = "sha256-E0bP15T2Ekj992Y1xFXL/4rko34AY+I5Lbn+blJhXYg=";
+    fetcherVersion = 4;
+    hash = "sha256-NN5MmWYQgaG4s8+mnLWo8EzOobACOnYhdwt4+/4kz9o=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
     pnpmBuildHook
-    pnpm_9
+    pnpm_11
   ];
 
   postBuild = ''

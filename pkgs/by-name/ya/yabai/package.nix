@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_15
   ];
 
-  enableParallelBuilding = true;
+  # Upstream Makefile races clean-build against linking under parallel make.
+  enableParallelBuilding = false;
 
   installPhase = ''
     runHook preInstall
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         "-isystem ${lib.getDev cups}/include"
         "-F$(SDKROOT)/System/Library/Frameworks"
         "-L$(SDKROOT)/usr/lib"
+        "-Wl,-no_uuid"
       ];
     in
     ''
