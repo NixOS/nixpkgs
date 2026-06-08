@@ -21252,6 +21252,8 @@ self: super: with self; {
 
   vprof = callPackage ../development/python-modules/vprof { };
 
+  vpype = callPackage ../development/python-modules/vpype { };
+
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
   vsts = callPackage ../development/python-modules/vsts { };
