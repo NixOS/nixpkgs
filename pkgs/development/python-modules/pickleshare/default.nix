@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Tiny 'shelve'-like database with concurrency support";
-    homepage = "https://github.com/vivainio/pickleshare";
+    homepage = "https://github.com/ipython/pickleshare";
     license = lib.licenses.mit;
   };
 })
