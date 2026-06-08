@@ -6,7 +6,7 @@
   pnpmDeps,
   apiEndpoint ? "http://localhost:3000",
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_11,
   nodejs,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     nodejs
   ];
 
