@@ -39,6 +39,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # This next line prevents the python3Packages.libvirt package from
+  # automatically having an update script. If you would like to update the
+  # python3Packages.libvirt package, then please run the libvirt package’s
+  # update script. The libvirt package’s update script will update the libvirt
+  # package, the python3Packages.libvirt package and the perlPackages.SysVirt
+  # package.
+  enableDefaultUpdateScript = false;
+
   meta = {
     homepage = "https://libvirt.org/python.html";
     description = "Libvirt Python bindings";
