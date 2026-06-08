@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.8.1";
+  version = "7.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
     tag = "v${version}";
-    hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
+    hash = "sha256-mAXRLo8xBTigtXYRbc6qxjjoRJ0+v0DZeLEwLISh2PE=";
   };
 
   patches = [
