@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-xy5jyjAhy8gLqG7DAQJ3P0xWMfvEkrUudzs5WPgqU9M=";
+    hash = "sha256-vYjPgvplPaMjFPsikTZAfFyQ+A0XWNj0sJF2eHfY+pY=";
   };
 
   preBuild = ''
