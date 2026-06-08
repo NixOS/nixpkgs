@@ -82,7 +82,7 @@ buildGoModule {
     description = "Selfhosted TCP/HTTP tunnel, ngrok alternative, written in Go";
     homepage = "https://github.com/pgrok/pgrok";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = [ ];
     mainProgram = "pgrok";
   };
 }
