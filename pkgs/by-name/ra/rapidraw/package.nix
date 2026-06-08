@@ -42,13 +42,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.6";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pfOdq2Q7GLGbzcgFkrRiczMWnS5TImbayYE1VWenYuo=";
+    hash = "sha256-kZOaqRroEuZ257h3fAGnFDJeAIFuFbu8nc/VSTdt9Dk=";
   };
 
   cargoHash = "sha256-liWOY+Jq8Yqo0QsntKjq2ntMAacfFyHCm6yhQM+KwRA=";
