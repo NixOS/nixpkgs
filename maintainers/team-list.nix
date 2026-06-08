@@ -689,6 +689,10 @@ with lib.maintainers;
     github = "radicle";
   };
 
+  redis = {
+    github = "redis";
+  };
+
   rocm = {
     github = "rocm";
   };
