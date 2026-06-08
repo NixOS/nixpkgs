@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "catppuccin-hyprland";
-  version = "1.3";
+  version = "2.0.0";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "catppuccin";
     repo = "hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkk021LLjCLpWOaInzO4Klg6UOR4Sh5IcKdUxIn7Dis=";
+    hash = "sha256-jGqBpSQa793phan9PeU2yXMX1nxzYClthQSeTwdqgEQ=";
   };
 
   installPhase = ''

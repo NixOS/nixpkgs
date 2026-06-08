@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atheme";
-  version = "7.2.12-unstable-2026-05-12";
+  version = "7.2.12-unstable-2026-06-06";
 
   src = fetchFromGitHub {
     owner = "atheme";
     repo = "atheme";
-    rev = "23071cdf2c7b20210799218b485f97f06311b41f";
-    hash = "sha256-e7pD4ZXQ3irrpJJSDRuJu2pVMjxVe8AUzzVL5yCb9PA=";
+    rev = "b8b23c51cda120f2cfc5af9ac639cd257575f2ce";
+    hash = "sha256-+hOJH9tK78fNrxKyergHqMWaY0yBiFEWssS/r9IOQT0=";
     # for modules and pinned libmowgli
     fetchSubmodules = true;
     # configure checks for git tree

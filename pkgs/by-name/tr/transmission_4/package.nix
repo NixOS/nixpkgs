@@ -27,6 +27,7 @@
   enableGTK3 ? false,
   gtkmm3,
   libpthread-stubs,
+  libayatana-appindicator,
   wrapGAppsHook3,
   enableQt5 ? false,
   enableQt6 ? false,
@@ -188,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableGTK3 [
     gtkmm3
     libpthread-stubs
+    libayatana-appindicator
   ]
   ++ optionals enableSystemd [ systemd ]
   ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];

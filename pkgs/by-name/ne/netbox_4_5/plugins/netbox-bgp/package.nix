@@ -12,6 +12,7 @@ buildPythonPackage rec {
   pname = "netbox-bgp";
   version = "0.18.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";

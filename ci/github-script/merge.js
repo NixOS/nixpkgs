@@ -97,7 +97,7 @@ function hasMergeCommand(body) {
   return (body ?? '')
     .replace(/<!--.*?-->/gms, '')
     .replace(/(^`{3,})[^`].*?\1/gms, '')
-    .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/m)
+    .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/im)
 }
 
 async function handleMergeComment({ github, body, node_id, reaction }) {

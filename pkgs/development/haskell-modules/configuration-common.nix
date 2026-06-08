@@ -803,6 +803,15 @@ with haskellLib;
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
+  # https://github.com/itchyny/qhs/issues/8
+  qhs = overrideSrc {
+    version = "0.4.3";
+    src = pkgs.fetchzip {
+      url = "mirror://hackage/qhs-0.4.3/qhs-0.4.3.tar.gz";
+      sha256 = "191015m47qdxzi8w5pvadgv95g8vk7v2gr76jzfgglyjy6zhb5wb";
+    };
+  } (warnAfterVersion "0.4.2" super.qhs);
+
   # Fix build with time >= 1.10 while retaining compat with time < 1.9
   mbox = appendPatch ./patches/mbox-time-1.10.patch (
     overrideCabal {

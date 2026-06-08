@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild = ''
     npm run build-css
+    npm run build-js
   '';
 
   meta = {

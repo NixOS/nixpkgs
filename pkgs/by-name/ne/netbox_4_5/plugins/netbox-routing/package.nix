@@ -13,6 +13,7 @@ buildPythonPackage rec {
   pname = "netbox-routing";
   version = "0.4.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";

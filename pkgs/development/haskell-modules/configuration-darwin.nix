@@ -418,6 +418,13 @@ self: super:
         ${old.postInstall or ""}
       '';
     }) super.happy;
+    hadolint = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.ShellCheck} "$out/bin/hadolint"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.hadolint;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;

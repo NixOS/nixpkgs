@@ -2,25 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   filelock,
   lxml,
   pycryptodomex,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blobfile";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "christopher-hesse";
     repo = "blobfile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aTHEJ1P+v9IWXPg9LN+KG1TlEVJh0qTl8J41iWpoPWk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodomex
     filelock
     urllib3
@@ -35,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";
     homepage = "https://github.com/christopher-hesse/blobfile";
-    changelog = "https://github.com/christopher-hesse/blobfile/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/christopher-hesse/blobfile/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})
