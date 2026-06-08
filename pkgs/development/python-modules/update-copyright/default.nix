@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   __structuredAttrs = true;
-
-  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
