@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-monitors";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "BlueManCZ";
     repo = "hyprland-monitors";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xT+ihpH31RIUInywv437Oji5LDk+vjIkLBJogJMN/J8=";
+    hash = "sha256-83h9rcavYie9QYjRMmN3akmALS+4orvMldIUt7vf/Qc=";
   };
 
   build-system = [ hatchling ];
