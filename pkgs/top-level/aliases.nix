@@ -435,6 +435,7 @@ mapAliases {
   cargo-espflash = throw "'cargo-espflash' has been renamed to/replaced by 'espflash'"; # Converted to throw 2025-10-27
   cargo-raze = throw "'cargo-raze' has been removed, as it is unmaintained"; # Added 2026-05-04
   cargo-sync-readme = throw "'cargo-sync-readme' has been removed because upstream 404s"; # Converted to throw 2025-12-18
+  cargo-tauri_1 = throw "'cargo-tauri_1' has been removed as it required webkitgtk 4.0 and libsoup 2.4"; # Added 2026-06-07
   cargonode = throw "'cargonode' has been removed due to lack of upstream maintenance"; # Added 2025-06-18
   carp = throw "'carp' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   cask = throw "'cask' has been renamed to/replaced by 'emacs.pkgs.cask'"; # Converted to throw 2025-10-27
