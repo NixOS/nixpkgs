@@ -10,7 +10,7 @@
 }:
 
 let
-ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mldonkey";

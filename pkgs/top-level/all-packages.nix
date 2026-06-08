@@ -9375,8 +9375,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
