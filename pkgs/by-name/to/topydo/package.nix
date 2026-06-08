@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "topydo";
-  version = "0.16";
+  version = "debian/0.16+dfsg1-1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "topydo";
     repo = "topydo";
     tag = finalAttrs.version;
-    hash = "sha256-f31tp4VBMv1usViYN50IaGeyQpo3oRSf/WDz99UEpss=";
+    hash = "sha256-+i0Bql+4cZ8K6aE4CkIBrf37QkBZHeh87cJZiWHeMi0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
