@@ -1082,6 +1082,7 @@ mapAliases {
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   jing = jing-trang; # Added 2025-09-18
   joplin = joplin-cli; # Added 2025-11-03
+  jp-zip-codes = throw "'jp-zip-codes' has been removed as there are no more packages that depend on it"; # Added 2026-06-14
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and and unmaintained upstream."; # Added 2025-12-02
   julia_19 = throw "Julia 1.9 has reached its end of life and 'julia_19' has been removed. Please use a supported version."; # Added 2025-10-29
