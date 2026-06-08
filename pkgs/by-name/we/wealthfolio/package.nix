@@ -9,7 +9,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -30,9 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-LXPQpQFXwPEHxktLoRiWTi8NbtzrS5ItUmoKJki3zcs";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-ErUFMYnMKdeO78iG0wBx5k8SiXKszdCaER/T6x6bdh0=";
   };
 
   cargoRoot = ".";
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];
