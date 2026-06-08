@@ -88,8 +88,7 @@
   # bundle name) produced by the matching .deb / .zip artifact.
   channel ? "stable",
   # Upstream product flavor: "browser" (the regular Brave) or "origin" (the
-  # stripped-down Brave Origin). Origin has no stable channel upstream, so
-  # flavor = "origin" implies channel != "stable".
+  # stripped-down Brave Origin).
   flavor ? "browser",
 }:
 
@@ -114,8 +113,6 @@ let
       appIdStem = "com.brave.Browser";
       darwinStem = "Brave Browser";
       changelogFile = "CHANGELOG_DESKTOP.md";
-      # browser ships its icons with a channel suffix in the filename.
-      iconsCarryChannelSuffix = true;
       homepages = {
         stable = "https://brave.com/";
         beta = "https://brave.com/download-beta/";
@@ -128,9 +125,8 @@ let
       appIdStem = "com.brave.Origin";
       darwinStem = "Brave Origin";
       changelogFile = "CHANGELOG_DESKTOP_ORIGIN.md";
-      # origin ships its icons with a channel suffix in the filename.
-      iconsCarryChannelSuffix = true;
       homepages = {
+        stable = "https://brave.com/origin/";
         beta = "https://brave.com/origin/download-beta/";
         nightly = "https://brave.com/origin/download-nightly/";
       };
@@ -164,7 +160,7 @@ let
   upstreamBin =
     if flavor == "browser" && channel == "stable" then "brave-browser-stable" else fileBase;
   # Upstream icon filename suffix ("_beta", "_nightly", or empty).
-  iconSuffix = if fd.iconsCarryChannelSuffix && channel != "stable" then "_${channel}" else "";
+  iconSuffix = if channel == "stable" then "" else "_${channel}";
 
   deps = [
     alsa-lib

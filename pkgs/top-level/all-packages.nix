@@ -8809,6 +8809,7 @@ with pkgs;
     brave
     brave-beta
     brave-nightly
+    brave-origin
     brave-origin-beta
     brave-origin-nightly
     ;
