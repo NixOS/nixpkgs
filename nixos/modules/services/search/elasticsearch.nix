@@ -11,12 +11,13 @@ let
   cfg = config.services.elasticsearch;
 
   es7 = builtins.compareVersions cfg.package.version "7" >= 0;
+  es8 = builtins.compareVersions cfg.package.version "8" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
     ${lib.optionalString cfg.single_node "discovery.type: single-node"}
-    ${lib.optionalString (cfg.single_node && es7) "gateway.auto_import_dangling_indices: true"}
+    ${lib.optionalString (cfg.single_node && es7 && !es8) "gateway.auto_import_dangling_indices: true"}
 
     http.port: ${toString cfg.port}
     transport.port: ${toString cfg.tcp_port}
@@ -217,8 +218,22 @@ in
       '';
       postStart = ''
         # Make sure elasticsearch is up and running before dependents
-        # are started
-        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} 2>/dev/null; do
+        # are started.
+        #
+        # The probe is security-agnostic: the module does not know whether the
+        # user enabled xpack security/TLS via extraConf, so we accept any HTTP
+        # response (over http or https) as proof the server is up. With security
+        # on, an unauthenticated request returns 401, which still means
+        # elasticsearch is serving; we treat that as "up" without the module
+        # needing to handle credentials.
+        while true; do
+          for scheme in http https; do
+            code=$(${pkgs.curl}/bin/curl -ksS -o /dev/null -w '%{http_code}' \
+              "$scheme://${cfg.listenAddress}:${toString cfg.port}" 2>/dev/null || true)
+            if [ -n "$code" ] && [ "$code" != "000" ]; then
+              exit 0
+            fi
+          done
           sleep 1
         done
       '';

@@ -1,6 +1,4 @@
-# To run the test on the unfree ELK use the following command:
-# cd path/to/nixpkgs
-# NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-7
+# nix-build -A nixosTests.elk.ELK-8
 
 {
   system ? builtins.currentSystem,
@@ -11,7 +9,25 @@
 let
   inherit (pkgs) lib;
 
-  esUrl = "http://localhost:9200";
+  esUrl = "https://localhost:9200";
+  hosts = [ esUrl ];
+  username = "elastic";
+  password = "changeme";
+  esCerts =
+    pkgs.runCommand "elk-test-certs" { nativeBuildInputs = [ pkgs.minica pkgs.openssl ]; }
+      ''
+        minica --ca-cert ca.pem --ca-key ca-key.pem \
+          --domains localhost --ip-addresses 127.0.0.1
+
+        mkdir -p $out
+        cp ca.pem $out/ca.pem
+        openssl pkcs12 -export -out $out/http.p12 \
+          -inkey localhost/key.pem -in localhost/cert.pem \
+          -passout pass:
+      '';
+  caPath = "${esCerts}/ca.pem";
+  curlAuth = "--cacert ${caPath} -u elastic:${password}";
+  ssl.certificate_authorities = [ caPath ];
 
   mkElkTest =
     name: elk:
@@ -24,7 +40,7 @@ let
       };
       nodes = {
         one =
-          { pkgs, lib, ... }:
+          { pkgs, ... }:
           {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
@@ -45,22 +61,6 @@ let
 
             services = {
 
-              journalbeat = {
-                enable = elk ? journalbeat;
-                package = elk.journalbeat;
-                extraConfig = pkgs.lib.mkOptionDefault ''
-                  logging:
-                    to_syslog: true
-                    level: warning
-                    metrics.enabled: false
-                  output.elasticsearch:
-                    hosts: [ "127.0.0.1:9200" ]
-                  journalbeat.inputs:
-                  - paths: []
-                    seek: cursor
-                '';
-              };
-
               filebeat = {
                 enable = elk ? filebeat;
                 package = elk.filebeat;
@@ -75,6 +75,9 @@ let
 
                 settings = {
                   logging.level = "info";
+                  output.elasticsearch = {
+                    inherit hosts password ssl username;
+                  };
                 };
               };
 
@@ -103,7 +106,7 @@ let
                 };
                 settings = {
                   output.elasticsearch = {
-                    hosts = [ "127.0.0.1:9200" ];
+                    inherit hosts password ssl username;
                   };
                 };
               };
@@ -111,6 +114,11 @@ let
               logstash = {
                 enable = true;
                 package = elk.logstash;
+                # The NixOS module runs logstash as root, which logstash 8+
+                # refuses by default.
+                extraSettings = ''
+                  allow_superuser: true
+                '';
                 inputConfig = ''
                   exec { command => "echo -n flowers" interval => 1 type => "test" }
                   exec { command => "echo -n dragons" interval => 1 type => "test" }
@@ -127,6 +135,10 @@ let
                   }
                   elasticsearch {
                     hosts => [ "${esUrl}" ]
+                    user => "${username}"
+                    password => "${password}"
+                    ssl_enabled => true
+                    ssl_certificate_authorities => [ "${caPath}" ]
                   }
                 '';
               };
@@ -134,6 +146,14 @@ let
               elasticsearch = {
                 enable = true;
                 package = elk.elasticsearch;
+                # HTTPS without transport TLS (use loopback)
+                extraConf = ''
+                  xpack.security.enabled: true
+                  xpack.security.enrollment.enabled: false
+                  xpack.security.http.ssl.enabled: true
+                  xpack.security.http.ssl.keystore.path: http.p12
+                  xpack.security.transport.ssl.enabled: false
+                '';
               };
 
               elasticsearch-curator = {
@@ -164,135 +184,118 @@ let
                 '';
               };
             };
+
+            # Provision keystore + password
+            systemd.services.elasticsearch.preStart = lib.mkAfter ''
+              cp ${esCerts}/http.p12 /var/lib/elasticsearch/config/http.p12
+              echo -n '${password}' \
+                | ${elk.elasticsearch}/bin/elasticsearch-keystore add -x -f bootstrap.password
+              chown -R elasticsearch:elasticsearch /var/lib/elasticsearch/config
+            '';
           };
       };
 
       passthru.elkPackages = elk;
-      testScript =
-        let
-          valueObject = lib.optionalString (lib.versionAtLeast elk.elasticsearch.version "7") ".value";
-        in
-        ''
-          import json
+      testScript = ''
+        import json
 
 
-          def expect_hits(message):
-              dictionary = {"query": {"match": {"message": message}}}
-              return (
-                  "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
-                  + "-H 'Content-Type: application/json' "
-                  + "-d '{}' ".format(json.dumps(dictionary))
-                  + " | tee /dev/console"
-                  + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
-              )
+        def expect_hits(message):
+            dictionary = {"query": {"match": {"message": message}}}
+            return (
+                "curl --silent --show-error --fail-with-body ${curlAuth} '${esUrl}/_search' "
+                + "-H 'Content-Type: application/json' "
+                + "-d '{}' ".format(json.dumps(dictionary))
+                + " | tee /dev/console"
+                + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
+            )
 
 
-          def expect_no_hits(message):
-              dictionary = {"query": {"match": {"message": message}}}
-              return (
-                  "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
-                  + "-H 'Content-Type: application/json' "
-                  + "-d '{}' ".format(json.dumps(dictionary))
-                  + " | tee /dev/console"
-                  + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} == 0 end'"
-              )
+        def expect_no_hits(message):
+            dictionary = {"query": {"match": {"message": message}}}
+            return (
+                "curl --silent --show-error --fail-with-body ${curlAuth} '${esUrl}/_search' "
+                + "-H 'Content-Type: application/json' "
+                + "-d '{}' ".format(json.dumps(dictionary))
+                + " | tee /dev/console"
+                + " | jq -es 'if . == [] then null else .[] | .hits.total.value == 0 end'"
+            )
 
 
-          def has_metricbeat():
-              dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
-              return (
-                  "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
-                  + "-H 'Content-Type: application/json' "
-                  + "-d '{}' ".format(json.dumps(dictionary))
-                  + " | tee /dev/console"
-                  + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
-              )
+        def has_metricbeat():
+            dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
+            return (
+                "curl --silent --show-error --fail-with-body ${curlAuth} '${esUrl}/_search' "
+                + "-H 'Content-Type: application/json' "
+                + "-d '{}' ".format(json.dumps(dictionary))
+                + " | tee /dev/console"
+                + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
+            )
 
 
-          start_all()
+        start_all()
 
-          one.wait_for_unit("elasticsearch.service")
-          one.wait_for_open_port(9200)
+        one.wait_for_unit("elasticsearch.service")
+        one.wait_for_open_port(9200)
 
-          # Continue as long as the status is not "red". The status is probably
-          # "yellow" instead of "green" because we are using a single elasticsearch
-          # node which elasticsearch considers risky.
-          #
-          # TODO: extend this test with multiple elasticsearch nodes
-          #       and see if the status turns "green".
-          one.wait_until_succeeds(
-              "curl --silent --show-error --fail-with-body '${esUrl}/_cluster/health'"
-              + " | jq -es 'if . == [] then null else .[] | .status != \"red\" end'"
-          )
+        # Continue as long as the status is not "red". The status is probably
+        # "yellow" instead of "green" because we are using a single elasticsearch
+        # node which elasticsearch considers risky.
+        #
+        # TODO: extend this test with multiple elasticsearch nodes
+        #       and see if the status turns "green".
+        one.wait_until_succeeds(
+            "curl --silent --show-error --fail-with-body ${curlAuth} '${esUrl}/_cluster/health'"
+            + " | jq -es 'if . == [] then null else .[] | .status != \"red\" end'"
+        )
 
-          with subtest("Perform some simple logstash tests"):
-              one.wait_for_unit("logstash.service")
-              one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
-              one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
+        with subtest("Perform some simple logstash tests"):
+            one.wait_for_unit("logstash.service")
+            one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
+            one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
 
-          with subtest("Metricbeat is running"):
-              one.wait_for_unit("metricbeat.service")
+        with subtest("Metricbeat is running"):
+            one.wait_for_unit("metricbeat.service")
 
-          with subtest("Metricbeat metrics arrive in elasticsearch"):
-              one.wait_until_succeeds(has_metricbeat())
+        with subtest("Metricbeat metrics arrive in elasticsearch"):
+            one.wait_until_succeeds(has_metricbeat())
 
-          with subtest("Logstash messages arive in elasticsearch"):
-              one.wait_until_succeeds(expect_hits("flowers"))
-              one.wait_until_succeeds(expect_no_hits("dragons"))
+        with subtest("Logstash messages arive in elasticsearch"):
+            one.wait_until_succeeds(expect_hits("flowers"))
+            one.wait_until_succeeds(expect_no_hits("dragons"))
 
-        ''
-        + lib.optionalString (elk ? journalbeat) ''
-          with subtest(
-              "A message logged to the journal is ingested by elasticsearch via journalbeat"
-          ):
-              one.wait_for_unit("journalbeat.service")
-              one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
-              one.wait_until_succeeds(
-                  expect_hits("Supercalifragilisticexpialidocious")
-              )
-        ''
-        + lib.optionalString (elk ? filebeat) ''
-          with subtest(
-              "A message logged to the journal is ingested by elasticsearch via filebeat"
-          ):
-              one.wait_for_unit("filebeat.service")
-              one.execute("echo 'Superdupercalifragilisticexpialidocious' | systemd-cat")
-              one.wait_until_succeeds(
-                  expect_hits("Superdupercalifragilisticexpialidocious")
-              )
-              one.execute(
-                  "echo 'SuperdupercalifragilisticexpialidociousIndeed' >> /var/lib/filebeat/test"
-              )
-              one.wait_until_succeeds(
-                  expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
-              )
-        ''
-        + lib.optionalString (elk ? elasticsearch-curator) ''
-          with subtest("Elasticsearch-curator works"):
-              one.systemctl("stop logstash")
-              one.systemctl("start elasticsearch-curator")
-              one.wait_until_succeeds(
-                  '! curl --silent --show-error --fail-with-body "${esUrl}/_cat/indices" | grep logstash | grep ^'
-              )
-        '';
+      ''
+      + lib.optionalString (elk ? filebeat) ''
+        with subtest(
+            "A message logged to the journal is ingested by elasticsearch via filebeat"
+        ):
+            one.wait_for_unit("filebeat.service")
+            one.execute("echo 'Superdupercalifragilisticexpialidocious' | systemd-cat")
+            one.wait_until_succeeds(
+                expect_hits("Superdupercalifragilisticexpialidocious")
+            )
+            one.execute(
+                "echo 'SuperdupercalifragilisticexpialidociousIndeed' >> /var/lib/filebeat/test"
+            )
+            one.wait_until_succeeds(
+                expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
+            )
+      ''
+      + lib.optionalString (elk ? elasticsearch-curator) ''
+        with subtest("Elasticsearch-curator works"):
+            one.systemctl("stop logstash")
+            one.systemctl("start elasticsearch-curator")
+            one.wait_until_succeeds(
+                '! curl --silent --show-error --fail-with-body ${curlAuth} "${esUrl}/_cat/indices" | grep logstash | grep ^'
+            )
+      '';
     } { inherit pkgs system; };
 in
 {
-  # We currently only package upstream binaries.
-  # Feel free to package an SSPL licensed source-based package!
-  # ELK-7 = mkElkTest "elk-7-oss" {
-  #   name = "elk-7";
-  #   elasticsearch = pkgs.elasticsearch7-oss;
-  #   logstash      = pkgs.logstash7-oss;
-  #   filebeat      = pkgs.filebeat7;
-  #   metricbeat    = pkgs.metricbeat7;
-  # };
-  unfree = lib.dontRecurseIntoAttrs {
-    ELK-7 = mkElkTest "elk-7" {
-      elasticsearch = pkgs.elasticsearch7;
-      logstash = pkgs.logstash7;
-      filebeat = pkgs.filebeat7;
-      metricbeat = pkgs.metricbeat7;
-    };
+  ELK-8 = mkElkTest "elk-8" {
+    elasticsearch = pkgs.elasticsearch8;
+    logstash = pkgs.logstash8;
+    filebeat = pkgs.filebeat8;
+    metricbeat = pkgs.metricbeat8;
   };
 }
