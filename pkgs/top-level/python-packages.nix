@@ -5535,13 +5535,6 @@ self: super: with self; {
 
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
-  fatrop = toPythonModule (
-    pkgs.fatrop.override {
-      pythonSupport = true;
-      python3Packages = self;
-    }
-  );
-
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
 
   fava = callPackage ../development/python-modules/fava { };
@@ -7259,6 +7252,8 @@ self: super: with self; {
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
 
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
+
+  hoptorch = callPackage ../development/python-modules/hoptorch { };
 
   horimote = callPackage ../development/python-modules/horimote { };
 
@@ -20153,6 +20148,8 @@ self: super: with self; {
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
+
+  trsfile = callPackage ../development/python-modules/trsfile { };
 
   trubar = callPackage ../development/python-modules/trubar { };
 

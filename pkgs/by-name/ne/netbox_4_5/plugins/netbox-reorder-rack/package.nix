@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "netbox-reorder-rack";
   version = "1.1.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";

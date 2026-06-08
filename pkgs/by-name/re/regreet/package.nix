@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regreet";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
     rev = finalAttrs.version;
-    hash = "sha256-2yA+LJmF99PJZbOVib3XCjsU95ZwKlXC2PofODFxbf8=";
+    hash = "sha256-WLngdmv5qrHaJ5P2mN/KO3YijwWOs1wKSliaAf3okvs=";
   };
 
-  cargoHash = "sha256-BlN63s09uSqYtQdV10VVTngqybfUEdgvsPlplM9PlD0=";
+  cargoHash = "sha256-Jt8vGJzCYtpIPWxHHIc4x8zwjTF9tiM4YbBy9o9pxX4=";
 
   buildFeatures = [ "gtk4_8" ];
 

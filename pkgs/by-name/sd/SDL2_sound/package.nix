@@ -11,13 +11,13 @@
 # considered for deletion.
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_sound";
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "SDL_sound";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5t2ELm8d8IX+cIJqGl/8sffwXGj5Cm0kZI6+bmjvvPg=";
+    hash = "sha256-Q2q6gp6nOCtAxRb0keX5hikyPGYhUcqBhEosEZiWlWg=";
   };
 
   outputs = [

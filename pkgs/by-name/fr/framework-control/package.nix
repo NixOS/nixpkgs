@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  FRAMEWORK_CONTROL_PORT = controlPort;
+  env.FRAMEWORK_CONTROL_PORT = controlPort;
 
   preBuild = ''
     pushd web

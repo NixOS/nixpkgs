@@ -12,6 +12,7 @@ buildPythonPackage rec {
   pname = "netbox-topology-views";
   version = "4.5.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 

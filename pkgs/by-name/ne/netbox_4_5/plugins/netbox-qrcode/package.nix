@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-qrcode";
   version = "0.0.21";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";

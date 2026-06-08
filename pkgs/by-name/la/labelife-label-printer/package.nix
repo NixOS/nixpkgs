@@ -18,15 +18,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "2.2.0.002";
+  version = "2.3.1.001";
 
   arch =
     archAttrset.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
-    hash = "sha256-yUrEV3pdTqiATZ1V9Ze0zTjsyA3b9i+Bbh1v0FzGeas=";
+    url = "https://web.archive.org/web/20260607010653/https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-qpsyOuTrOTcXEQeCNNRV0QeV0s0RD2eqy/tGTA7qMWA=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     unzip -q ${finalAttrs.src}
 
     # Extract inner tar.gz with --strip-components=1 to remove the `LabelPrinter-${finalAttrs.version}/` prefix
-    tar -xzf Label_Printer_Driver_Linux.tar.gz --strip-components=1
+    tar -xzf LabelPrinter-${finalAttrs.version}.tar.gz --strip-components=1
 
     runHook postUnpack
   '';
@@ -66,9 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://labelife.net";
     license = lib.licenses.unfree;
     longDescription = ''
-      Supported printer models include:
-      - D520 & D520BT
-      - PM-241 & PM-241-BT
+      CUPS driver for Labelife-compatible thermal label printers.
+      Supported printer families include D-series (D420D, D520, D530,
+      D550), PM-series (PM-241, PM-246S, PM-249, PM-344), T-series
+      (T200, T300, T410, T460, T800), CT-series (CT200, CT310, CT510),
+      AM-series (AM-242, AM-243), and others (A646, PL70, DS-50P, 6XL).
+
+      Many models are available in multiple connectivity variants
+      (BT, WF, WIFI).
 
       Brands using Labelife drivers include:
       - Phomemo
