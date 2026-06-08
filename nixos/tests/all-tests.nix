@@ -858,6 +858,7 @@ in
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
+  koito = runTest ./web-apps/koito.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
   krb5 = discoverTests (import ./krb5);
