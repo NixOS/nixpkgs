@@ -9029,8 +9029,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  monotone = callPackage ../applications/version-management/monotone { };
-
   mopidyPackages = recurseIntoAttrs (
     callPackages ../applications/audio/mopidy {
       python = python3;
