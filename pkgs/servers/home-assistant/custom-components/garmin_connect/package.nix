@@ -21,6 +21,10 @@ buildHomeAssistantComponent rec {
     ha-garmin
   ];
 
+  # home-assistant-garmin_connect pins an exact version of ha-garmin, but we
+  # want to allow newer, compatible versions to be used.
+  ignoreVersionRequirement = [ "ha-garmin" ];
+
   meta = {
     changelog = "https://github.com/cyberjunky/home-assistant-garmin_connect/releases/tag/${src.tag}";
     description = "Garmin Connect integration allows you to expose data from Garmin Connect to Home Assistant";
