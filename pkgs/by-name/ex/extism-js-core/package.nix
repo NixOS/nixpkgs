@@ -79,6 +79,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    # Fails to build on darwin due to libiconv linking failure (ld: library not found for -liconv)
+    # See https://github.com/NixOS/nixpkgs/pull/523442 for a (failed) attempt at fixing the issue
+    broken = stdenv.buildPlatform.isDarwin;
     changelog = "https://github.com/extism/js-pdk/releases/tag/${finalAttrs.src.tag}";
     description = "Write Extism plugins in JavaScript & TypeScript (WASM core)";
     homepage = "https://github.com/extism/js-pdk";
