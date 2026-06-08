@@ -1208,7 +1208,8 @@
       ];
     "data_grand_lyon" =
       ps: with ps; [
-      ]; # missing inputs: data-grand-lyon-ha
+        data-grand-lyon-ha
+      ];
     "datadog" =
       ps: with ps; [
         datadog
@@ -7883,6 +7884,7 @@
     "crownstone"
     "cync"
     "daikin"
+    "data_grand_lyon"
     "datadog"
     "date"
     "datetime"
