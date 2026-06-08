@@ -97,6 +97,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "requests"
     "pygobject"
     "certifi"
+    "hiredis"
   ];
 
   dependencies =

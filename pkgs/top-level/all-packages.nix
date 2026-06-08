@@ -2198,8 +2198,6 @@ with pkgs;
     buildProduct = "daemon";
   };
 
-  fluentd = callPackage ../tools/misc/fluentd { };
-
   fpm = callPackage ../tools/package-management/fpm { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
