@@ -1,135 +1,241 @@
 {
   lib,
-  buildBazelPackage,
   fetchFromGitHub,
   qt6,
   pkg-config,
-  protobuf_27,
-  bazel_7,
+  bazel_8,
   ibus,
-  withIbus ? false,
   unzip,
   xdg-utils,
-  jp-zip-codes,
+  python3,
+  libglvnd,
+  libxcrypt-legacy,
+  glib,
+  stdenv,
+  writableTmpDirAsHomeHook,
+  lndir,
+  makeDesktopItem,
+  copyDesktopItems,
+
+  withIbus ? false,
+
   dictionaries ? [ ],
   merge-ut-dictionaries,
 }:
-
 let
+  bazel = bazel_8;
+
   ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
-in
-buildBazelPackage rec {
+
   pname = "mozc";
-  version = "2.30.5544.102"; # make sure to update protobuf if needed
+  version = "3.33.6133";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
     tag = version;
-    hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
+    hash = "sha256-4ZrCIWoqYjoBwaoXq2QGajIQgWP0m2V3ozWQhZIq138=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    qt6.wrapQtAppsHook
+    bazel
+    copyDesktopItems
+    lndir
     pkg-config
+    python3
+    qt6.wrapQtAppsHook
     unzip
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
+    glib
+    ibus
+    libglvnd
+    libxcrypt-legacy
     qt6.qtbase
-  ]
-  ++ lib.optional withIbus ibus;
-
-  dontAddBazelOpts = true;
-  removeRulesCC = false;
-
-  bazel = bazel_7;
-
-  fetchAttrs = {
-    hash = "sha256-G05vlHiOJp4rvQBUj2ffRBuWBA/lpJju8CLiopYJckE=";
-
-    preInstall = ''
-      # Remove zip code data. It will be replaced with jp-zip-codes from nixpkgs
-      rm -rv "$bazelOut"/external/zip_code_{jigyosyo,ken_all}
-      # Remove references to buildInputs
-      rm -rv "$bazelOut"/external/{ibus,qt_linux}
-      # Remove reference to the host platform
-      rm -rv "$bazelOut"/external/host_platform
-    '';
-  };
-
-  bazelFlags = [
-    "--config"
-    "oss_linux"
-    "--compilation_mode"
-    "opt"
   ];
 
-  bazelTargets = [
-    "unix/icons"
-    "gui/tool:mozc_tool"
-    "server:mozc_server"
-    "unix/emacs:mozc_emacs_helper"
-    "unix/emacs:mozc.el"
-    "renderer/qt:mozc_renderer"
-  ]
-  ++ lib.optionals withIbus [
-    "unix/ibus:gen_mozc_xml"
-    "unix/ibus:ibus_mozc"
-  ];
+  includePath = lib.makeIncludePath buildInputs;
+  libraryPath = lib.makeLibraryPath buildInputs;
 
-  postPatch = ''
-    # replace protobuf with our own
-    rm -r src/third_party/protobuf
-    cp -r ${protobuf_27.src} src/third_party/protobuf
-    substituteInPlace src/config.bzl \
-      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open" \
-      --replace-fail "/usr" "$out"
-    substituteInPlace src/WORKSPACE.bazel \
-      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip" "file://${jp-zip-codes}/ken_all.zip" \
-      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip" "file://${jp-zip-codes}/jigyosyo.zip"
+  bazelArgs =
+    vendor:
+    [
+      "--config=oss_linux"
+      "--config=stable_channel"
+      "--config=release_build"
+      "--action_env=C_INCLUDE_PATH=${includePath}"
+      "--action_env=CPLUS_INCLUDE_PATH=${includePath}"
+      "--action_env=LIBRARY_PATH=${libraryPath}"
+      "gui/tool:mozc_tool"
+      "server:mozc_server"
+      "unix/emacs:mozc_emacs_helper"
+    ]
+    ++ lib.optionals (vendor || withIbus) [
+      "renderer/qt:mozc_renderer"
+      "unix/ibus:ibus_mozc"
+    ];
+
+  bazelPythonPatch = ''
+    local_runtime_repo = use_repo_rule(
+        "@rules_python//python/local_toolchains:repos.bzl",
+        "local_runtime_repo",
+    )
+    local_runtime_toolchains_repo = use_repo_rule(
+        "@rules_python//python/local_toolchains:repos.bzl",
+        "local_runtime_toolchains_repo",
+    )
+
+    local_runtime_repo(
+        name = "local_python3",
+        interpreter_path = "python3",
+        on_failure = "fail",
+    )
+
+    local_runtime_toolchains_repo(
+        name = "local_toolchains",
+        runtimes = ["local_python3"],
+    )
+
+    register_toolchains("@local_toolchains//:all")
   '';
 
-  preConfigure = ''
+  # vendoring: run "bazel vendor" to download all external dependencies,
+  # then clean up sandbox-specific symlinks and markers so the output
+  # is reproducible (fixed-output derivation).
+  vendorDeps = stdenv.mkDerivation (
+    lib.fetchers.normalizeHash { } {
+      pname = "${pname}-vendor";
+      inherit
+        src
+        version
+        nativeBuildInputs
+        buildInputs
+        ;
+
+      hash = "sha256-N0Ohx6rojZsHbK+aLfwsZ5PRhBF/T4NqbVc/keQ/ZH4=";
+      outputHashMode = "recursive";
+
+      strictDeps = true;
+      __structuredAttrs = true;
+
+      env.USE_BAZEL_VERSION = bazel.version;
+
+      buildPhase = ''
+        runHook preBuild
+
+        cd src
+
+        cat >> MODULE.bazel << EOF
+        ${bazelPythonPatch}
+        EOF
+
+        bazel vendor --lockfile_mode=update --vendor_dir="$out/vendor_dir" ${lib.escapeShellArgs (bazelArgs true)}
+        cp MODULE.bazel.lock "$out"
+
+        echo "removing broken symlinks and markers..."
+        find "$out" -type l -lname '/*' -print -delete
+        find "$out" -xtype l -print -delete
+        rm -vrf "$out"/vendor_dir/*local_python3*
+
+        runHook postBuild
+      '';
+      dontInstall = true;
+      dontFixup = true;
+      dontWrapQtApps = true;
+    }
+  );
+in
+stdenv.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    nativeBuildInputs
+    buildInputs
+    ;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  env.USE_BAZEL_VERSION = bazel.version;
+
+  postPatch = ''
     cd src
+
+    cat >> MODULE.bazel << EOF
+    ${bazelPythonPatch}
+    EOF
+
+    substituteInPlace config.bzl \
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open" \
+      --replace-fail "/usr" "$out"
+
+    cp -r --no-preserve=mode "${vendorDeps}"/* .
+    substituteInPlace \
+      vendor_dir/rules_python*/python/private/py_runtime_info.bzl \
+      vendor_dir/rules_python*/python/private/py_executable.bzl \
+      vendor_dir/rules_python*/python/private/runtime_env_toolchain.bzl \
+      --replace-fail "/usr/bin/env python3" "${lib.getExe python3}"
+    patchShebangs --build vendor_dir
+    for dir in vendor_dir/*/; do
+      echo "pin(\"@@$(basename "$dir")\")"
+    done > vendor_dir/VENDOR.bazel
   ''
   + lib.optionalString (dictionaries != [ ]) ''
     cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
   '';
 
-  buildAttrs.installPhase = ''
+  buildPhase = ''
+    runHook preBuild
+
+    bazel build --lockfile_mode=error --vendor_dir=vendor_dir ${lib.escapeShellArgs (bazelArgs false)}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
     runHook preInstall
 
     install -Dm555 "bazel-bin/server/mozc_server"           "$out/lib/mozc/mozc_server"
-    install -Dm555 "bazel-bin/renderer/qt/mozc_renderer"    "$out/lib/mozc/mozc_renderer"
     install -Dm555 "bazel-bin/gui/tool/mozc_tool"           "$out/lib/mozc/mozc_tool"
     install -Dm555 "bazel-bin/unix/emacs/mozc_emacs_helper" "$out/bin/mozc_emacs_helper"
     install -Dm444 "unix/emacs/mozc.el"                     "$out/share/emacs/site-lisp/emacs-mozc/mozc.el"
-    install -d "$out/share/icons/mozc/"
-    unzip bazel-bin/unix/icons.zip -d "$out/share/icons/mozc/"
   ''
   + (lib.optionalString withIbus ''
+    install -Dm555 "bazel-bin/renderer/qt/mozc_renderer"    "$out/lib/mozc/mozc_renderer"
     install -Dm555 "bazel-bin/unix/ibus/ibus_mozc"          "$out/lib/ibus-mozc/ibus-engine-mozc"
     install -Dm555 "bazel-bin/unix/ibus/mozc.xml"           "$out/share/ibus/component/mozc.xml"
-    install -d "$out/share/ibus-mozc/"
-    for icon in $out/share/icons/mozc/*.png
-    do
-      cp $icon $out/share/ibus-mozc/
-    done
-    mv $out/share/ibus-mozc/{mozc,product_icon}.png
+
+    unzip bazel-bin/unix/icons.zip -d "$out/share/ibus-mozc/"
   '')
   + ''
-    # create a desktop file for gnome-control-center
-    # copied from ubuntu
-    mkdir -p $out/share/applications
-    cp ${./ibus-setup-mozc-jp.desktop} $out/share/applications/ibus-setup-mozc-jp.desktop
-    substituteInPlace $out/share/applications/ibus-setup-mozc-jp.desktop \
-      --replace-fail "@mozc@" "$out"
-
     runHook postInstall
   '';
 
+  # create a desktop file for gnome-control-center
+  # contents copied from ubuntu
+  desktopItems = lib.optionals withIbus [
+    (makeDesktopItem {
+      name = "ibus-setup-mozc-jp";
+      desktopName = "Mozc Setup";
+      exec = "@out@/lib/mozc/mozc_tool --mode=config_dialog";
+      type = "Application";
+      startupNotify = true;
+      noDisplay = true;
+    })
+  ];
+
+  postFixup = lib.optionalString withIbus ''
+    substituteInPlace "$out/share/applications/ibus-setup-mozc-jp.desktop" \
+      --subst-var out
+  '';
+
+  passthru = {
+    inherit vendorDeps bazel bazelPythonPatch;
+  };
   meta = {
     isIbusEngine = withIbus;
     description = "Japanese input method from Google";
