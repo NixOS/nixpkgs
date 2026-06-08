@@ -183,7 +183,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
 
       makeWrapper ${start_script} $out/bin/mealie \
         --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
-        --set STATIC_FILES "${frontend}"
+        --set STATIC_FILES "${finalAttrs.passthru.frontend}"
 
       makeWrapper ${init_db} $out/libexec/init_db \
         --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
@@ -206,7 +206,13 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
     tests = {
       inherit (nixosTests) mealie;
     };
