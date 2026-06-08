@@ -71,6 +71,6 @@ buildGoModule (finalAttrs: {
       asl20
       bsl11
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
