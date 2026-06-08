@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight implementation of dnf in C";
     homepage = "https://github.com/rpm-software-management/microdnf";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ rb2k ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "microdnf";
   };
