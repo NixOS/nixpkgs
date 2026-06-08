@@ -9,7 +9,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   protobuf,
@@ -48,10 +48,10 @@ rustPlatform.buildRustPackage rec {
       src
       patches
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     postPatch = "cd ${pnpmRoot}";
-    fetcherVersion = 3;
-    hash = "sha256-ESm7YVVbsfjpgYeNf3aVhJawpWhbeNdo0u7cBzLmEMw=";
+    fetcherVersion = 4;
+    hash = "sha256-uugI9ztwHPYn7WdXfo3XlBxjhVczGnpWvTb3IEMJUqg=";
   };
 
   cargoRoot = "app/main/src-tauri";
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     # Setup pnpm
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
 
     protobuf
   ]
