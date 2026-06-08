@@ -623,8 +623,6 @@ in
 
         # Resolving sysroot symlinks without code exec
         "${config.system.nixos-init.package}/bin/resolve-in-root"
-        # Find the etc paths
-        "${config.system.nixos-init.package}/bin/find-etc"
       ]
       ++ lib.optionals config.system.nixos-init.enable [
         "${config.system.nixos-init.package}/bin/initrd-init"
