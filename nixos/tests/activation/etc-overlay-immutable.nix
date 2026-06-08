@@ -28,6 +28,11 @@
       boot.initrd.systemd.enable = true;
       time.timeZone = "Utc";
 
+      # The default writable store (overlayfs) does not support file-backed
+      # erofs. nix.enable=false because nix-daemon-init chowns the 9p store.
+      virtualisation.writableStore = false;
+      nix.enable = false;
+
       # The standard resolvconf service tries to write to /etc and crashes,
       # which makes nixos-rebuild exit uncleanly when switching into the new generation
       services.resolved.enable = true;
@@ -49,15 +54,12 @@
     ''
       newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
 
-      with subtest("/run/nixos-etc-metadata/ is mounted"):
-        print(machine.succeed("mountpoint /run/nixos-etc-metadata"))
-
-      with subtest("No temporary files leaked into stage 2"):
-        machine.succeed("[ ! -e /etc-metadata-image ]")
-        machine.succeed("[ ! -e /etc-basedir ]")
-
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
+
+      with subtest("file-backed erofs fast path was used"):
+        machine.fail("journalctl -b -o cat | grep -F 'falling back to a loop device'")
+        machine.fail("losetup --noheadings | grep etc-metadata")
 
       with subtest("modes work correctly"):
         machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -q 'regular file'")
@@ -105,14 +107,7 @@
 
         machine.succeed(f"{newergen} switch")
 
-        tmpMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc\\..*'").rstrip()
-        print(tmpMounts)
-        metaMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc-metadata.*'").rstrip()
-        print(metaMounts)
-
-        numOfTmpMounts = len(tmpMounts.splitlines())
-        numOfMetaMounts = len(metaMounts.splitlines())
-        assert numOfTmpMounts == 0, f"Found {numOfTmpMounts} remaining tmpmounts"
-        assert numOfMetaMounts == 1, f"Found {numOfMetaMounts} remaining metamounts"
+        leftovers = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc.*'").rstrip()
+        assert leftovers == "", f"Found leftover mounts under /run: {leftovers}"
     '';
 }
