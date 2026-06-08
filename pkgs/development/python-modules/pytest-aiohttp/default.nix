@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "pytest-aiohttp";
     tag = "v${version}";
-    hash = "sha256-5xUY3SVaoZzCZE/qfAP4R49HbtBMYj5jMN5viLEzEkM=";
+    hash = "sha256-SYMwVmcgPLOasW6TQGqqNO+sbp8zQQtDHb3IyAVO6KI=";
   };
 
   build-system = [
