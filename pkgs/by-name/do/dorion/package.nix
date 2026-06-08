@@ -16,7 +16,7 @@
   openssl,
   pkg-config,
   yq-go,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   webkitgtk_4_1,
@@ -60,9 +60,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-E45X3JEns1TE+SVbtbBEl+RzwRgTiGN7/N4OgJ5o63o=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-otcOYoPXjEbTMGAUH6fEKmBKlR07dAFpeXaL8TRB25s=";
   };
 
   # CMake (webkit extension, Linux only)
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     cargo-tauri.hook
     nodejs
     pkg-config
