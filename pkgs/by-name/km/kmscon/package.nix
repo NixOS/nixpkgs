@@ -21,10 +21,10 @@
   libxslt,
   libgbm,
   seatd,
+  dbus,
   ninja,
   check,
   bash,
-  gawk,
   inotify-tools,
   buildPackages,
   nix-update-script,
@@ -32,13 +32,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "10.0.0";
+  version = "10.0.0-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-M3830e1GzzLT2fhheWwNRkURzYkHv4k8uEMoCqKkjJY=";
+    # tag = "v${finalAttrs.version}";
+    rev = "d8a284653680147a9f924f470fc7661c1a5f04a4";
+    hash = "sha256-+0l/I4dalx/twLsYwhY55VphvDym06mphvsdB7KLAQM=";
   };
 
   strictDeps = true;
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
     libgbm
     seatd
+    dbus
     check
     # Needed for autoPatchShebangs when strictDeps = true
     bash
@@ -75,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
     python3
     ncurses
+    zlib
   ];
 
   outputs = [
@@ -92,8 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kmscon \
-      --replace-fail "awk" "${lib.getExe gawk}"
     substituteInPlace $out/bin/kmscon-launch-gui \
       --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';
