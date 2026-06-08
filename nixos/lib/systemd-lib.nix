@@ -62,7 +62,7 @@ let
 in
 rec {
 
-  shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
+  shellEscape = replaceStrings [ "\\" ] [ "\\\\" ];
 
   mkPathSafeName = replaceStrings [ "@" ":" "\\" "[" "]" ] [ "-" "-" "-" "" "" ];
 
