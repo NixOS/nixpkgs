@@ -110,5 +110,11 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.all;
+    # gprbuild-boot builds on darwin, but `gprconfig` stack overflows whenever
+    # it runs during the enumeration of available toolchains
+    # This doesn't seem to be a problem with our compiler definition `./nixpkgs-gnat.xml`
+    # as a gprbuild system without that configuration also stack faults.
+    # Maybe a linker issue?
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
