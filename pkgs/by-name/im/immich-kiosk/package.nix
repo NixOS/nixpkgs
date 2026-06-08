@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
@@ -31,10 +31,10 @@ buildGoModule rec {
       version
       src
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-8iKug4zsX3u0vS68osKRW6iOP+A3OdjI3yxNPIJaQqM=";
-    fetcherVersion = 3;
+    fetcherVersion = 4;
+    hash = "sha256-51mjYuRNAnyxFAeO2+S+r54XuK5AfG4bpYs4WBkpvrk=";
   };
 
   # Frontend is in a subdirectory
@@ -43,7 +43,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   # Generate templ templates during vendor hash calculation
