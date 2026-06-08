@@ -2,6 +2,7 @@
   buildPackages,
   callPackage,
   makeRustPlatform,
+  nix-update-script,
 }:
 let
   # Need to use the build platform rustc and Cargo so that
@@ -32,4 +33,5 @@ in
 auditableBuilder {
   inherit version hash cargoHash;
   auditable = true;
+  passthru.updateScript = nix-update-script { };
 }
