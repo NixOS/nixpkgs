@@ -2,11 +2,11 @@
   lib,
   swiftPackages,
   fetchFromGitHub,
-  darwin,
   leveldb,
   perl,
   actool,
   makeWrapper,
+  rcodesign,
   nix-update-script,
 }:
 
@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     swift
     perl
     actool
-    darwin.autoSignDarwinBinariesHook
     makeWrapper
+    rcodesign
   ];
 
   buildInputs = [ leveldb ];
@@ -331,6 +331,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$app/Contents/MacOS/Stats" "$out/bin/stats"
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # Stats is an app bundle with nested frameworks, so sign the bundle to
+    # generate sealed resources instead of signing only the Mach-O files
+    ${lib.getExe rcodesign} sign "$out/Applications/Stats.app"
   '';
 
   passthru.updateScript = nix-update-script { };
