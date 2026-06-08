@@ -249,7 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
   buildInputs = [
-    gettext
     gnutls
     (lib.getDev harfbuzz)
   ]
