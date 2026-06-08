@@ -1,0 +1,12 @@
+diff --git a/src/base/random.hh b/src/base/random.hh
+index 0b287f95052..b3550a0f3df 100644
+--- a/src/base/random.hh
++++ b/src/base/random.hh
+@@ -45,6 +45,7 @@
+ #ifndef __BASE_RANDOM_HH__
+ #define __BASE_RANDOM_HH__
+ 
++#include <algorithm>
+ #include <random>
+ #include <string>
+ #include <type_traits>
