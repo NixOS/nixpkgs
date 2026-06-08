@@ -8,7 +8,7 @@
   moreutils,
   nodejs,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 
@@ -35,9 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-KJZuucXB7BEMnqPmgytveG/IBEzq4mgMo9ZJHPe/gVs=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-DkVV5Dz5UV/xMuteSXWgSko3e8t8u1Saq1X1UxaaZFA=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [
