@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-eqnos";
   version = "2.5.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tomduck";
     repo = "pandoc-eqnos";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7GQdfGHhtQs6LZK+ZyMmcPSkoFfBWmATTMejMiFcS7Y=";
   };
 
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-eqnos";
   };
-}
+})
