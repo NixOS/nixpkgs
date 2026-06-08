@@ -283,6 +283,7 @@ mapAliases {
   akkoma-emoji = throw "'akkoma-emoji' has been renamed to/replaced by 'blobs_gg'"; # Converted to throw 2025-10-27
   akkoma-frontends.admin-fe = throw "'akkoma-frontends.admin-fe' has been renamed to/replaced by 'akkoma-admin-fe'"; # Converted to throw 2025-10-27
   akkoma-frontends.akkoma-fe = throw "'akkoma-frontends.akkoma-fe' has been renamed to/replaced by 'akkoma-fe'"; # Converted to throw 2025-10-27
+  alexandria = throw "'alexandria' has been removed as it was unmaintained upstream and depended on webkitgtk 4.0 and libsoup 2.4 via Tauri v1"; # Added 2026-06-07
   amazon-ecs-cli = throw "'amazon-ecs-cli' has been removed due to being unmaintained upstream"; # Added 2026-01-19
   amazon-qldb-shell = throw "'amazon-qldb-shell' has been removed due to being unmaintained upstream"; # Added 2025-07-30
   AMB-plugins = amb-plugins; # Added 2026-02-08
