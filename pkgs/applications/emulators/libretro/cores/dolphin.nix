@@ -3,19 +3,20 @@
   fetchFromGitHub,
   cmake,
   curl,
+  glslang,
+  libevdev,
   libGL,
   libGLU,
-  libevdev,
+  libx11,
+  libxcb,
+  libxcb-util,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
   mkLibretroCore,
   pkg-config,
   udev,
-  libxcb-util,
-  libxrandr,
-  libxi,
-  libxinerama,
-  libxext,
-  libx11,
-  libxcb,
 }:
 mkLibretroCore {
   core = "dolphin";
@@ -36,17 +37,18 @@ mkLibretroCore {
   ];
 
   extraBuildInputs = [
+    glslang
     libGL
     libGLU
     libevdev
-    udev
     libx11
+    libxcb
+    libxcb-util
     libxext
     libxi
     libxinerama
     libxrandr
-    libxcb
-    libxcb-util
+    udev
   ];
 
   makefile = "Makefile";
