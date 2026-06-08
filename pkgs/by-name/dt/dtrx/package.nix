@@ -1,14 +1,18 @@
 {
+  arj,
   binutils,
+  brotli,
   bzip2,
   cabextract,
   cpio,
+  dtrx,
   fetchFromGitHub,
   gitUpdater,
   gnutar,
   gzip,
   lhasa,
   lib,
+  lrzip,
   lzip,
   p7zip,
   python3Packages,
@@ -17,24 +21,30 @@
   unshield,
   unzip,
   xz,
+  zstd,
+  arjSupport ? false,
   unrarSupport ? false,
   unzipSupport ? false,
 }:
 let
   archivers = [
     binutils
+    brotli
     bzip2
     cabextract
     cpio
     gnutar
     gzip
     lhasa
+    lrzip
     lzip
     p7zip
     rpm
     unshield
     xz
+    zstd
   ]
+  ++ lib.optional arjSupport arj
   ++ lib.optional unrarSupport unrar
   ++ lib.optional unzipSupport unzip;
 in
@@ -58,7 +68,28 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  nativeCheckInputs = archivers ++ [
+    python3Packages.pyaml
+  ];
+
+  postPatch = ''
+    patchShebangs --build tests/compare.py
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    tests/compare.py '^(?!download and extract$)(?!password zip noninteractive$).*'
+    runHook postCheck
+  '';
+
+  doCheck = arjSupport && unrarSupport && unzipSupport;
+
   passthru.updateScript = gitUpdater { };
+  passthru.tests.dtrx-full = dtrx.override {
+    arjSupport = true;
+    unrarSupport = true;
+    unzipSupport = true;
+  };
 
   meta = {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
