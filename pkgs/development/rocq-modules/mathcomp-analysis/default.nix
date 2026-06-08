@@ -38,8 +38,8 @@ let
   packages = {
     "classical" = [ ];
     "reals" = [ "classical" ];
-    "experimental-reals" = [ "reals" ];
     "analysis" = [ "reals" ];
+    "experimental-reals" = [ "analysis" ];
     "reals-stdlib" = [ "reals" ];
     "analysis-stdlib" = [
       "analysis"

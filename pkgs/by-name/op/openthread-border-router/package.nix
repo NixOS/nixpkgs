@@ -8,8 +8,8 @@
   dbus,
   protobuf,
   jsoncpp,
-  boost,
   nodejs,
+  cjson,
   bashNonInteractive,
   buildNpmPackage,
 }:
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
     systemdLibs
     protobuf
     jsoncpp
-    boost
     dbus
+    cjson
     (lib.getBin bashNonInteractive)
   ];
 
