@@ -4,17 +4,16 @@
   python3Packages,
   testers,
   nix-update-script,
-  qbit-manage,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ime1l/j1DGxtsW6BxEEWnes7hwjfsLd5VU2iIsE1eoU=";
+    hash = "sha256-53G0iXFJHTHRo+cNLpJAXdAYJTyceDpZCpyeZLGyY88=";
   };
 
   pyproject = true;
@@ -52,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
-        package = qbit-manage;
+        package = finalAttrs.finalPackage;
         command = "env HOME=$TMPDIR qbit-manage --version";
       };
     };
