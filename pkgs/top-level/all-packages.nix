@@ -9353,10 +9353,6 @@ with pkgs;
 
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
-  shogun = callPackage ../applications/science/machine-learning/shogun {
-    protobuf = protobuf_21;
-  };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };

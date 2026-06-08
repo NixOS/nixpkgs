@@ -15,7 +15,7 @@
   lapack,
   glpk,
   # data
-  protobuf,
+  protobuf_21,
   json_c,
   libxml2,
   hdf5,
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     blas
     lapack
     glpk
-    protobuf
+    protobuf_21
     json_c
     libxml2
     hdf5
