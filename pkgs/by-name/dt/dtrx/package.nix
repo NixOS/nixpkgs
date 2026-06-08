@@ -1,6 +1,6 @@
 {
   arj,
-  binutils,
+  binutils-unwrapped,
   brotli,
   bzip2,
   cabextract,
@@ -28,7 +28,7 @@
 }:
 let
   archivers = [
-    binutils
+    binutils-unwrapped
     brotli
     bzip2
     cabextract
