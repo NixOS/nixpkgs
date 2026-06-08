@@ -2776,8 +2776,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pandoc-imagine = callPackage ../tools/misc/pandoc-imagine { };
-
   pandoc-include = callPackage ../tools/misc/pandoc-include { };
 
   pandoc-drawio-filter = callPackage ../tools/misc/pandoc-drawio-filter { };
