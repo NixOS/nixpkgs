@@ -1,0 +1,44 @@
+diff --git a/clingwrapper/setup.py b/clingwrapper/setup.py
+index f94d93a..8135b26 100755
+--- a/clingwrapper/setup.py
++++ b/clingwrapper/setup.py
+@@ -53,17 +53,10 @@ def _get_config_exec():
+     return [sys.executable, '-m', 'cppyy_backend._cling_config']
+ 
+ def get_include_path():
+-    config_exec_args = _get_config_exec()
+-    config_exec_args.append('--incdir')
+-    cli_arg = subprocess.check_output(config_exec_args)
+-    return cli_arg.decode("utf-8").strip()
++    %includes_placeholder%
+ 
+ def get_cflags():
+-    config_exec_args = _get_config_exec()
+-    config_exec_args.append('--auxcflags')
+-    cli_arg = subprocess.check_output(config_exec_args)
+-    return cli_arg.decode("utf-8").strip()
+-
++    %cflags_placeholder%
+ 
+ #
+ # customized commands
+@@ -140,19 +133,6 @@ cmdclass = {
+         #'clean': my_clean,
+         'install': my_install }
+ 
+-if has_wheel:
+-    class my_bdist_wheel(_bdist_wheel):
+-        def finalize_options(self):
+-         # this is a universal, but platform-specific package; a combination
+-         # that wheel does not recognize, thus simply fool it
+-            from distutils.util import get_platform
+-            self.plat_name = get_platform()
+-            self.universal = True
+-            _bdist_wheel.finalize_options(self)
+-            self.root_is_pure = True
+-    cmdclass['bdist_wheel'] = my_bdist_wheel
+-
+-
+ setup(
+     name='cppyy-backend',
+     description='C/C++ wrapper for Cling',
