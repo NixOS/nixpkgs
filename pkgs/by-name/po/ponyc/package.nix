@@ -13,6 +13,7 @@
   pcre2,
   pony-corral,
   python3,
+  zlib,
   # Not really used for anything real, just at build time.
   git,
   replaceVars,
@@ -22,31 +23,31 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ponyc";
-  version = "0.60.6";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
-    tag = version;
-    hash = "sha256-mBtSoFOX0dHtb0ojdT+uB1Lmu7Cak/3A8808dv3o1ik=";
+    tag = finalAttrs.version;
+    hash = "sha256-CdsfJO+7y7nvlDdCXdWRB4vmP9pB1Jz5CVwJuha+yds=";
     fetchSubmodules = true;
   };
 
-  benchmarkRev = "1.9.1";
+  benchmarkRev = "1.9.5";
   benchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v${benchmarkRev}";
-    hash = "sha256-5xDg1duixLoWIuy59WT0r5ZBAvTR6RPP7YrhBYkMxc8=";
+    rev = "v${finalAttrs.benchmarkRev}";
+    hash = "sha256-Mm4pG7zMB00iof32CxreoNBFnduPZTMp3reHMCIAFPQ=";
   };
 
   googletestRev = "1.17.0";
   googletest = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${googletestRev}";
+    rev = "v${finalAttrs.googletestRev}";
     hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
@@ -64,12 +65,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     z3
+    zlib
   ];
 
   patches = [
     # Sandbox disallows network access, so disabling problematic networking tests
     ./disable-networking-tests.patch
     ./disable-process-tests.patch
+
+    # Take PONY_LINKER into account
+    ./genexe-pony-linker.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-darwin-build.patch {
@@ -116,6 +121,12 @@ stdenv.mkDerivation rec {
   preBuild = ''
     extraFlags=(build_flags=-j$NIX_BUILD_CORES)
   ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    export PONY_LINKER="$CC"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PONY_LINKER=ld
+  ''
   + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # See this relnote about building on Raspbian:
     # https://github.com/ponylang/ponyc/blob/0.46.0/.release-notes/0.45.2.md
@@ -129,7 +140,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "PONYC_VERSION=${version}"
+    "PONYC_VERSION=${finalAttrs.version}"
     "prefix=${placeholder "out"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
@@ -159,6 +170,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
+      --set-default PONY_LINKER "$PONY_LINKER" \
       --prefix PONYPATH : "${
         lib.makeLibraryPath [
           pcre2
@@ -192,4 +204,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})
