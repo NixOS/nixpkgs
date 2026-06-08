@@ -55,8 +55,7 @@ let
         nixpkgs.system = lib.mkDefault system;
       })
       ++ (optional (pkgs != null) {
-        # This should be default priority, so it conflicts with any user-defined pkgs.
-        nixpkgs.pkgs = pkgs;
+        nixpkgs.pkgs = lib.mkDefault pkgs;
       })
     );
   };
