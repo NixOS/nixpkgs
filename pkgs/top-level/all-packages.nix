@@ -10747,10 +10747,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  statverif = callPackage ../applications/science/logic/statverif {
-    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
-  };
-
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
