@@ -51,14 +51,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
-  version = "3.14.0";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RRXdDDkQlL7erfYgs4+gSy6GMlVUG7PrDLTQBYJJ1To=";
+    hash = "sha256-OJSLv/NfVrKESZqNr51FJUzLRz7wLMRdGoNjKC5EhlI=";
   };
 
   postPatch = ''
