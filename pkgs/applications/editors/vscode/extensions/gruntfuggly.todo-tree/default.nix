@@ -1,5 +1,8 @@
 {
+  jq,
   lib,
+  moreutils,
+  ripgrep,
   vscode-utils,
   vscode-extension-update-script,
 }:
@@ -14,6 +17,20 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  nativeBuildInputs = [
+    jq
+    moreutils
+  ];
+
+  buildInputs = [ ripgrep ];
+
+  postInstall = ''
+    cd "$out/$installPrefix"
+    jq '(.contributes.configuration[] | select(.title == "%todo-tree.configuration.regex%") | .properties."todo-tree.ripgrep.ripgrep".default) = $s' \
+      --arg s "${lib.getExe ripgrep}" \
+      package.json | sponge package.json
+  '';
 
   passthru.updateScript = vscode-extension-update-script { };
 
