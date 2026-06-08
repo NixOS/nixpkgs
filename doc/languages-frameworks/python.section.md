@@ -166,6 +166,15 @@ following are specific to `buildPythonPackage`:
 * `disabled ? false`: If `true`, package is not built for the particular Python
   interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
+* `enableDefaultUpdateScript ? true`: If `true`, the package will automatically
+  be given a `passthru.updateScript` attribute (see [the “Automatic package
+  updates” section of
+  `pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#automatic-package-updates)).
+  You can explicitly set `passthru.updateScript` in order to replace the
+  default update script with a custom one. If `false`, the package will not
+  automatically be given any sort of update script. Set
+  `enableDefaultUpdateScript` to `false` if you want the package to have no
+  update script at all.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
 * `pyproject`: Whether the pyproject format should be used. As all other formats
