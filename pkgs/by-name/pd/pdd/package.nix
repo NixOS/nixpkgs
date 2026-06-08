@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  python-dateutil,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdd";
   version = "1.7";
   pyproject = false;
@@ -13,7 +12,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jQCjqQxvJU2oYLSWpFriJIfD0EbqBx59AvRX77pX0Cg=";
   };
 
@@ -27,7 +26,9 @@ buildPythonApplication rec {
     mkdir -p $out/share/fish/vendor_completions.d
   '';
 
-  dependencies = [ python-dateutil ];
+  dependencies = [
+    python3Packages.python-dateutil
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -46,4 +47,4 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "pdd";
   };
-}
+})

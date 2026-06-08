@@ -17,9 +17,9 @@ python3Packages.buildPythonPackage {
     hash = "sha256-d0i6DL/qgDELet4ew2lyVqzd9TApivRxL3zA3dcsQXY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    evdev
-    pyudev
+  dependencies = [
+    python3Packages.evdev
+    python3Packages.pyudev
   ];
 
   nativeBuildInputs = [
