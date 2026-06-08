@@ -2,10 +2,10 @@
   lib,
   stdenv,
   rustPlatform,
+
   fetchFromGitHub,
   git,
   pkg-config,
-  openssl,
   erlang,
   nodejs,
   bun,
@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     erlang
   ];
 
-  buildInputs = [ openssl ];
-
   nativeCheckInputs = [
     # used by several tests
     git
@@ -48,8 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # Makes a network request
+    # These tests make network requests
     "--skip=tests::echo::echo_dict"
+    "--skip=tests::escript_success_with_dependency"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Snapshot tests fail because a warning is shown on stdout

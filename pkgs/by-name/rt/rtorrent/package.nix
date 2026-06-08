@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtorrent";
-  version = "0.16.11";
+  version = "0.16.13";
 
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rakshasa";
     repo = "rtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OEIJMBj1UfIOpR1w8c8ztKWJVD5hKxiJaxweF7mBRNM=";
+    hash = "sha256-QvABQKKH/4KUbG6mSkvfcqMpX552nAKp1vZerin2sLA=";
   };
 
   outputs = [

@@ -23085,12 +23085,6 @@
     githubId = 7775707;
     name = "RB";
   };
-  rb2k = {
-    email = "nix@marc-seeger.com";
-    github = "rb2k";
-    githubId = 9519;
-    name = "Marc Seeger";
-  };
   rbasso = {
     email = "rbasso@sharpgeeks.net";
     github = "rbasso";
