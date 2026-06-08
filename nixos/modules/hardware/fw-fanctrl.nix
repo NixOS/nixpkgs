@@ -55,7 +55,7 @@ in
     };
 
     keepDefaultStrategies = mkOption {
-      type = lib.types.bool;
+      type = types.bool;
       default = true;
       description = ''
         Keep the default strategies of the fw-fanctrl package.
