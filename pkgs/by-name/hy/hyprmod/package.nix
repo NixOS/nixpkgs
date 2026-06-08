@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hyprmod";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "BlueManCZ";
     repo = "hyprmod";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BMgvjai8qHhDySKfwJMJeBtJjyMZBkXpdQgsvsFPOfI=";
+    hash = "sha256-oO7tibfdaM6IgpZQEUItahtpSgFjlIffDyhcTBJiSRQ=";
   };
 
   build-system = with python3Packages; [ hatchling ];
