@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   installShellFiles,
@@ -31,14 +31,14 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-HypDGYb0MRCIDBHY8pVgwFoZQWC8us44cunORZRk3RM=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-RSz/bx8/BAqLZH3/yQ6/H/nnwGvcCg8EzIEJ4/xkQgQ=";
     };
 
     buildPhase = ''
