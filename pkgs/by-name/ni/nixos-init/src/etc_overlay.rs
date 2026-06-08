@@ -2,14 +2,14 @@ use std::{
     env, fs,
     os::{
         fd::{AsFd, AsRawFd, BorrowedFd, OwnedFd},
-        unix::fs::FileTypeExt,
+        unix::fs::{FileTypeExt, MetadataExt, PermissionsExt, chown},
     },
     path::{Path, PathBuf},
 };
 
 use anyhow::{Context, Result, bail};
 use rustix::{
-    fs::{CWD, Mode, OFlags, mkdirat, openat},
+    fs::{CWD, Mode, OFlags, RenameFlags, mkdirat, openat, renameat_with},
     io::Errno,
     mount::{
         FsMountFlags, FsOpenFlags, MountAttrFlags, MoveMountFlags, OpenTreeFlags, UnmountFlags,
@@ -39,6 +39,7 @@ pub struct EtcLayout {
 }
 
 /// Mutable overlay state directory containing `upper/` and `work/`.
+#[derive(Clone)]
 pub struct RwLayout {
     pub base: PathBuf,
 }
@@ -50,6 +51,18 @@ impl RwLayout {
 
     fn work(&self) -> PathBuf {
         self.base.join("work")
+    }
+
+    /// Sibling `.next` state dir used while the canonical one is still in
+    /// use by the live `/etc` overlay.
+    fn next(&self) -> RwLayout {
+        let mut base = self.base.clone().into_os_string();
+        base.push(".next");
+        RwLayout { base: base.into() }
+    }
+
+    fn remove(&self) -> std::io::Result<()> {
+        fs::remove_dir_all(&self.base)
     }
 }
 
@@ -137,36 +150,47 @@ fn in_sysroot(path: &str) -> Result<String> {
 pub fn setup_etc(layout: &EtcLayout) -> Result<()> {
     log::info!("Setting up {} overlay...", layout.etc);
 
+    let mounts = Mounts::parse_from_proc_mounts()?;
+    // /etc already mounted: live switch, must not touch its upperdir.
+    let live = mounts.find_mountpoint(&layout.etc).is_some();
+
     if let Some(rw) = &layout.rw {
         for d in [rw.upper(), rw.work()] {
             fs::create_dir_all(&d).with_context(|| format!("Failed to create {}", d.display()))?;
         }
+        // Stale .next from a previous crashed switch; normally absent.
+        let next = rw.next();
+        if let Err(e) = next.remove()
+            && e.kind() != std::io::ErrorKind::NotFound
+        {
+            log::warn!("Failed to remove stale {}: {e}.", next.base.display());
+        }
     }
 
     let meta = build_metadata(&layout.metadata_image)?;
+    let meta_path = PathBuf::from(format!("/proc/self/fd/{}", meta.as_raw_fd()));
 
-    if let Some(rw) = &layout.rw {
-        let meta_path = PathBuf::from(format!("/proc/self/fd/{}", meta.as_raw_fd()));
-        reconcile_upperdir(&meta_path, &rw.upper())?;
-    }
+    let mount_rw = match &layout.rw {
+        // Live switch: reconcile and mount against a snapshot, promoted
+        // with RENAME_EXCHANGE after the new overlay is revealed.
+        Some(rw) if live => {
+            let next = snapshot_upperdir(rw)?;
+            reconcile_upperdir(&meta_path, &next.upper())?;
+            Some(next)
+        }
+        // initrd / nixos-enter: the upperdir may persist from a previous
+        // boot but no overlay has it open, so reconcile in place.
+        Some(rw) => {
+            reconcile_upperdir(&meta_path, &rw.upper())?;
+            Some(rw.clone())
+        }
+        None => None,
+    };
 
-    let ovl = build_overlay(meta.as_fd(), layout)?;
+    let ovl = build_overlay(meta.as_fd(), layout, mount_rw.as_ref())?;
     drop(meta);
 
-    let mounts = Mounts::parse_from_proc_mounts()?;
-    if mounts.find_mountpoint(&layout.etc).is_none() {
-        // No previous /etc (initrd, nixos-enter): attach directly.
-        fs::create_dir_all(&layout.etc)
-            .with_context(|| format!("Failed to create {}", layout.etc))?;
-        move_mount(
-            ovl.as_fd(),
-            "",
-            CWD,
-            layout.etc.as_str(),
-            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
-        )
-        .with_context(|| format!("Failed to attach overlay at {}", layout.etc))?;
-    } else {
+    if live {
         transfer_submounts(&mounts, &layout.etc, ovl.as_fd(), layout.rw.is_some())?;
 
         let etc_fd = open_tree(CWD, layout.etc.as_str(), OpenTreeFlags::empty())
@@ -185,12 +209,88 @@ pub fn setup_etc(layout: &EtcLayout) -> Result<()> {
         // Reveal the new mount.
         unmount(layout.etc.as_str(), UnmountFlags::DETACH)
             .with_context(|| format!("Failed to detach old {}", layout.etc))?;
+
+        if let Some(rw) = &layout.rw {
+            commit_upperdir(rw)?;
+        }
+    } else {
+        // /etc not mounted yet (initrd, nixos-enter): attach directly.
+        fs::create_dir_all(&layout.etc)
+            .with_context(|| format!("Failed to create {}", layout.etc))?;
+        move_mount(
+            ovl.as_fd(),
+            "",
+            CWD,
+            layout.etc.as_str(),
+            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
+        )
+        .with_context(|| format!("Failed to attach overlay at {}", layout.etc))?;
     }
 
     // Drop /run/nixos-etc-metadata* left by older generations or the
     // legacy-lowerdir fallback.
     cleanup_legacy_metadata_mounts(&mounts);
 
+    Ok(())
+}
+
+/// Create `base.next/` with a hardlink-copy of `upper/` and a fresh `work/`.
+fn snapshot_upperdir(rw: &RwLayout) -> Result<RwLayout> {
+    let next = rw.next();
+    fs::create_dir(&next.base)
+        .with_context(|| format!("Failed to create {}", next.base.display()))?;
+    link_tree(&rw.upper(), &next.upper())
+        .with_context(|| format!("Failed to snapshot {}", rw.upper().display()))?;
+    fs::create_dir(next.work())
+        .with_context(|| format!("Failed to create {}", next.work().display()))?;
+    Ok(next)
+}
+
+/// Recreate the directory structure of `src` at `dst`, hardlinking all
+/// non-directory entries. xattrs (`trusted.overlay.opaque` etc.) are
+/// copied per directory; file inodes are shared so theirs come for free.
+fn link_tree(src: &Path, dst: &Path) -> Result<()> {
+    let meta = fs::symlink_metadata(src)?;
+    fs::create_dir(dst)?;
+    fs::set_permissions(dst, fs::Permissions::from_mode(meta.mode() & 0o7777))?;
+    chown(dst, Some(meta.uid()), Some(meta.gid()))?;
+    for name in xattr::list(src)? {
+        if let Some(val) = xattr::get(src, &name)? {
+            xattr::set(dst, &name, &val)?;
+        }
+    }
+
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let d = dst.join(entry.file_name());
+        if entry.file_type()?.is_dir() {
+            link_tree(&entry.path(), &d)?;
+        } else {
+            fs::hard_link(entry.path(), &d)?;
+        }
+    }
+    Ok(())
+}
+
+/// Atomically swap the rw state dir with its `.next` sibling.
+///
+/// Both overlays hold their upper/work dirs by dentry, so renaming an
+/// ancestor is transparent to them.
+fn commit_upperdir(rw: &RwLayout) -> Result<()> {
+    let next = rw.next();
+    renameat_with(CWD, &rw.base, CWD, &next.base, RenameFlags::EXCHANGE).with_context(|| {
+        format!(
+            "Failed to exchange {} and {}",
+            rw.base.display(),
+            next.base.display()
+        )
+    })?;
+    if let Err(e) = next.remove() {
+        log::warn!(
+            "Failed to remove old state dir which was moved to {}: {e}.",
+            next.base.display()
+        );
+    }
     Ok(())
 }
 
@@ -227,7 +327,11 @@ fn build_erofs(source: &str, attrs: MountAttrFlags) -> rustix::io::Result<OwnedF
 ///
 /// Passes the metadata layer by fd on modern kernels. On older kernels
 /// we attach it under `/run` and use the legacy `lowerdir` string.
-fn build_overlay(meta: BorrowedFd<'_>, layout: &EtcLayout) -> Result<OwnedFd> {
+fn build_overlay(
+    meta: BorrowedFd<'_>,
+    layout: &EtcLayout,
+    rw: Option<&RwLayout>,
+) -> Result<OwnedFd> {
     let fs = fsopen("overlay", FsOpenFlags::FSOPEN_CLOEXEC).context("fsopen overlay")?;
 
     match fsconfig_set_fd(fs.as_fd(), "lowerdir+", meta) {
@@ -252,7 +356,7 @@ fn build_overlay(meta: BorrowedFd<'_>, layout: &EtcLayout) -> Result<OwnedFd> {
 
     fsconfig_set_string(fs.as_fd(), "redirect_dir", "on").context("fsconfig redirect_dir")?;
     fsconfig_set_string(fs.as_fd(), "metacopy", "on").context("fsconfig metacopy")?;
-    if let Some(rw) = &layout.rw {
+    if let Some(rw) = rw {
         fsconfig_set_string(fs.as_fd(), "upperdir", rw.upper()).context("fsconfig upperdir")?;
         fsconfig_set_string(fs.as_fd(), "workdir", rw.work()).context("fsconfig workdir")?;
     }
@@ -261,7 +365,7 @@ fn build_overlay(meta: BorrowedFd<'_>, layout: &EtcLayout) -> Result<OwnedFd> {
     let mut attrs = MountAttrFlags::MOUNT_ATTR_NODEV
         | MountAttrFlags::MOUNT_ATTR_NOSUID
         | MountAttrFlags::MOUNT_ATTR_RELATIME;
-    if layout.rw.is_none() {
+    if rw.is_none() {
         attrs |= MountAttrFlags::MOUNT_ATTR_RDONLY;
     }
     fsmount(fs.as_fd(), FsMountFlags::FSMOUNT_CLOEXEC, attrs).context("fsmount overlay")

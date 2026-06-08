@@ -88,6 +88,10 @@
         # #507963: whiteout must be removed on switch.
         machine.succeed("rm /etc/managed-subdir/managed-link")
         machine.succeed("test -c /.rw-etc/upper/managed-subdir/managed-link")
+        # The reconciler must operate on a snapshot, not the live upperdir.
+        machine.succeed("rm /etc/managed-subdir/replaced-link")
+        machine.succeed("echo -n live > /etc/managed-subdir/replaced-link")
+        upper_ino = machine.succeed("stat -c %i /.rw-etc/upper").strip()
 
         # Directory submount, target only in upperdir.
         machine.succeed("mkdir /etc/mountpoint")
@@ -118,6 +122,12 @@
         assert machine.succeed("cat /etc/mutable") == "mutable"
         machine.succeed("test -L /etc/managed-subdir/managed-link")
         machine.fail("test -e /.rw-etc/upper/managed-subdir/managed-link")
+        machine.succeed("test -L /etc/managed-subdir/replaced-link")
+
+        # /.rw-etc/upper was promoted from the snapshot, not edited in place.
+        assert machine.succeed("stat -c %i /.rw-etc/upper").strip() != upper_ino
+        machine.fail("test -e /.rw-etc.next")
+        machine.fail("dmesg | grep -F 'overlayfs: upperdir is in-use'")
 
         # #505475: opaque marker must be cleared on switch.
         print(machine.succeed("ls -la /etc/nixos/"))
