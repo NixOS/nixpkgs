@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-aidot";
-  version = "0.3.53";
+  version = "0.3.54b4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AiDot-Development-Team";
     repo = "python-AiDot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wo3eadMg1HxMjoGpiDSUImw36qN3zC5QrIAaEwdvbS8=";
+    hash = "sha256-BZB3zEZCPG52BiOj3b/i4ckCR8IZjxoob+M2ESrhAhI=";
   };
 
   build-system = [ setuptools ];
