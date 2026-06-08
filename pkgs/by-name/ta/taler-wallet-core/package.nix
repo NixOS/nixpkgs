@@ -8,7 +8,7 @@
   srcOnly,
   removeReferencesTo,
   nodejs-slim_24,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -20,7 +20,7 @@ let
   nodeSources = (srcOnly nodejs-slim_24).overrideAttrs {
     outputChecks = { };
   };
-  pnpm' = pnpm_9.override { nodejs-slim = nodejs-slim_24; };
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs-slim_24; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -57,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 3;
-    hash = "sha256-W5C2JVFbEccf4b+ppeEJ68au/2Tqfsry7ri6Qi1M50k=";
+    fetcherVersion = 4;
+    hash = "sha256-ba83jxVdwNLvFZXZ0VokvgHVctcvcqquOxQHKrsWN0M=";
   };
 
   nativeBuildInputs = [
