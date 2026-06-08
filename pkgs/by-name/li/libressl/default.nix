@@ -61,6 +61,10 @@ let
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
       preCheck = ''
+        export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
+        export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
+      ''
+      + lib.optionalString stdenv.hostPlatform.isElf ''
         # Bail if any shared object has executable stack enabled. This can
         # happen when an object produced from an assmbly file in libcrypto is
         # missing a .note.GNU-stack section. An executable stack is dangerous
@@ -76,9 +80,6 @@ let
           }
           END { exit res }
         '
-
-        export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
-        export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
       '';
       postCheck = ''
         export ${ldLibPathEnvName}=$PREVIOUS_${ldLibPathEnvName}
