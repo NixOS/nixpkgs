@@ -21,6 +21,10 @@ let
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxARMPreview.tar.gz";
       hash = "sha256-blmsuD5t6jZx4uKVNl/DfED90oDNvd1QrPJIkQ4UoOM=";
     };
+    "riscv64-linux" = {
+      url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxRISCVPreview.tar.gz";
+      hash = "sha256-TByNeLqqHrnrLcX/meXNy6Evvebf0/xWnUohd/TwiAk=";
+    };
   };
   geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
 in
