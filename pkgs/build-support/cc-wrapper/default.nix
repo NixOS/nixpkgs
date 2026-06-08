@@ -316,6 +316,17 @@ let
   tune =
     if targetPlatform ? gcc.tune then findBestTuneApproximation targetPlatform.gcc.tune else null;
 
+  tlsDialect =
+    if
+      # Support status on non-Linux systems is a bit unclear.
+      targetPlatform.isLinux
+      # Support added in https://github.com/llvm/llvm-project/commit/36b4a9ccd9f7e04010476e6b2a311f2052a4ac20 (19.1.0)
+      && (isClang -> versionAtLeast ccVersion "19.1")
+    then
+      (if targetPlatform.isx86 then "gnu2" else null)
+    else
+      null;
+
   # Machine flags. These are necessary to support
 
   # TODO: We should make a way to support miscellaneous machine
@@ -353,7 +364,13 @@ let
         # TODO: clang on powerpcspe also needs a condition: https://github.com/llvm/llvm-project/issues/71356
         # https://releases.llvm.org/18.1.6/tools/clang/docs/ReleaseNotes.html#loongarch-support
         ((targetPlatform.isLoongArch64 && isClang) -> versionAtLeast ccVersion "18.1")
-    ) "-mcmodel=${targetPlatform.gcc.cmodel}";
+    ) "-mcmodel=${targetPlatform.gcc.cmodel}"
+    # Enable TLSDESC. This needs to be supported by the libc and bintools.
+    # See: https://maskray.me/blog/2021-02-14-all-about-thread-local-storage
+    # Aarch64 uses TLSDESC by default and the option is completely ignored (at least on LLVM).
+    # TODO: Enable by default in GCC via --with-tls since https://gcc.gnu.org/cgit/gcc/commit/?id=96a291c4bb0b8a00b0a125e6a60f60072ffe53a7 (GCC 16).
+    # No equivalent build-time option for LLVM yet.
+    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 

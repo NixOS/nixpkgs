@@ -824,7 +824,7 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang ]
+    ++ optionals withCudaLLVM [ clang.cc ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =

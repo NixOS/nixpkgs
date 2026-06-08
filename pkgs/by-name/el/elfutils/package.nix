@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+    (fetchpatch {
+      name = "fix-i386_tlsdesc_relocation.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=bfd519cc58e190544a6785d3f0a27fcfaf7d8da3";
+      hash = "sha256-N7DL2FG1AWLc+hcnxGMbUl5TuieoAc9OD6gc0sbsiGI=";
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
