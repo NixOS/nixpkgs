@@ -77,12 +77,12 @@
 }:
 
 let
-  version = "0.27.1";
+  version = "0.27.2";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-gaZUp4yOnajEyJ5pXXOMCPk7uQ5GEGPrrKMgC6NxIAY=";
+    hash = "sha256-guNepG8h8Pl8SaJqImS5UsWNFmPyrWidsXh+q9Es73I=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -445,7 +445,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/raw/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     broken = wandb-xpu.meta.broken || wandb-core.meta.broken;

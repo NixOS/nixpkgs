@@ -16537,6 +16537,11 @@
     github = "Macbucheron1";
     githubId = 95475157;
   };
+  mach = {
+    name = "Mach";
+    github = "MachXNU";
+    githubId = 42501418;
+  };
   macronova = {
     name = "Sicheng Pan";
     email = "trivial@invariantspace.com";
@@ -19156,6 +19161,11 @@
     github = "namore";
     githubId = 1222539;
     name = "Roman Naumann";
+  };
+  NanamiNakano = {
+    name = "Nanami Nakano";
+    github = "NanamiNakano";
+    githubId = 64841155;
   };
   nanotwerp = {
     email = "nanotwerp@gmail.com";
