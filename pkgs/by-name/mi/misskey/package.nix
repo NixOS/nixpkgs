@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       mkdir -p $out/data
+      sed -i '/"packageManager":/d' package.json
       cp -r . $out/data
 
       # Set up symlink for use at runtime
@@ -119,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
+        --add-flag "--config.store-dir=/tmp/pnpm-store" \
         --add-flag "--config.verify-deps-before-run=false" \
         --add-flag run \
         --set-default NODE_ENV production \
