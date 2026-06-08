@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
@@ -31,7 +31,7 @@ buildGoModule {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   env.pnpmDeps = fetchPnpmDeps {
@@ -40,9 +40,9 @@ buildGoModule {
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-D8UZoN0ZnjB8CXQiHmBZwBEt57XGb5SDLg61xxSqNus=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-dH8IKC9NXrdizW4MZfPix7g2JCmMNUk41nccmloHEXk=";
   };
 
   vendorHash = "sha256-ob8s1jYL2+JGaqjCsM10jgirPiEyTY4U3IVVlHVdoGQ=";
