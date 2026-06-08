@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildGoModule,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
@@ -27,14 +27,14 @@ buildGoModule (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname version src;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-z/Y9q/SE2c/KYzIOAfATlprjr6NjmmUHQB+ZbO39OK4=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-GgqvoxdRdQv41G/T/7CmYM+Yp4ZVR1HmR+adNxgQCxc=";
     };
 
     buildPhase = ''
