@@ -942,11 +942,17 @@ in
           map createImportService' dataPools
           ++ map createSyncService allPools
           ++ map createZfsService [
-            "zfs-mount"
             "zfs-share"
             "zfs-zed"
           ]
-        );
+        )
+        // {
+          zfs-mount = {
+            after = [ "systemd-modules-load.service" ];
+            wantedBy = [ "zfs.target" ];
+            serviceConfig.ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
+          };
+        };
 
       systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
 
