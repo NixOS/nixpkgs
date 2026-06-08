@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "netbox-community";
     repo = "netbox-floorplan-plugin";
     tag = version;
-    hash = "sha256-0EeE5NrImbCs6xqrSTGupXOuv455EfNXgcLVix2HTPs=";
+    hash = "sha256-I7cz0IONU+RESCA8C57Yxg5ieheryZ31ed9N9OxSeLA=";
   };
 
   build-system = [ setuptools ];
