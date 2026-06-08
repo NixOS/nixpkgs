@@ -64,8 +64,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ''--prefix PATH : "${lib.makeBinPath archivers}"''
   ];
 
-  build-system = with python3Packages; [
-    setuptools
+  build-system = [
+    python3Packages.setuptools
   ];
 
   nativeCheckInputs = archivers ++ [
