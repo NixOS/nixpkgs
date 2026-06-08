@@ -1,24 +1,24 @@
 {
-  lib,
+  binutils,
+  bzip2,
+  cabextract,
+  cpio,
   fetchFromGitHub,
   gitUpdater,
-  python3Packages,
   gnutar,
-  unzip,
-  lhasa,
-  rpm,
-  binutils,
-  cpio,
   gzip,
+  lhasa,
+  lib,
+  lzip,
   p7zip,
-  cabextract,
+  python3Packages,
+  rpm,
   unrar,
   unshield,
-  bzip2,
+  unzip,
   xz,
-  lzip,
-  unzipSupport ? false,
   unrarSupport ? false,
+  unzipSupport ? false,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -37,21 +37,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     let
       archivers = lib.makeBinPath (
         [
-          gnutar
-          lhasa
-          rpm
           binutils
-          cpio
-          gzip
-          p7zip
-          cabextract
-          unshield
           bzip2
-          xz
+          cabextract
+          cpio
+          gnutar
+          gzip
+          lhasa
           lzip
+          p7zip
+          rpm
+          unshield
+          xz
         ]
-        ++ lib.optional unzipSupport unzip
         ++ lib.optional unrarSupport unrar
+        ++ lib.optional unzipSupport unzip
       );
     in
     [
