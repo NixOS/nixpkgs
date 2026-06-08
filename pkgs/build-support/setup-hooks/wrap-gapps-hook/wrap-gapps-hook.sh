@@ -51,6 +51,8 @@ wrapGAppsHook() {
     wrapGAppsHookHasRunForOutput["$output"]=1
 
     if [[ -z "${dontWrapGApps:-}" ]]; then
+        local targetDirsThatExist targetDirsRealPath targetDirs targetDir
+
         targetDirsThatExist=()
         targetDirsRealPath=()
 
@@ -71,6 +73,7 @@ wrapGAppsHook() {
         # wrap links to binaries that point outside targetDirs
         # Note: links to binaries within targetDirs do not need
         #       to be wrapped as the binaries have already been wrapped
+        local linkPathReal targetPath
         if [[ ${#targetDirsThatExist[@]} -ne 0 ]]; then
             find "${targetDirsThatExist[@]}" -type l -xtype f -executable -print0 |
                 while IFS= read -r -d '' linkPath; do
