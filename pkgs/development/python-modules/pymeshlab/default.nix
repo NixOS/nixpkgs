@@ -17,6 +17,7 @@
 
   # buildInputs
   libsForQt5,
+  libsm,
   llvmPackages,
   glew,
   vcg,
@@ -60,6 +61,7 @@ buildPythonPackage {
   buildInputs = [
     glew
     libsForQt5.qtbase
+    libsm
     vcg
   ]
   ++ lib.optionals stdenv.cc.isClang [
@@ -95,6 +97,9 @@ buildPythonPackage {
   '';
 
   pythonImportsCheck = [ "pymeshlab" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Open source mesh processing python library";
