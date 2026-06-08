@@ -3216,10 +3216,6 @@ with pkgs;
 
   vimwiki-markdown = python3Packages.callPackage ../tools/misc/vimwiki-markdown { };
 
-  vkbasalt = callPackage ../tools/graphics/vkbasalt {
-    vkbasalt32 = pkgsi686Linux.vkbasalt;
-  };
-
   voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
   voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
 
@@ -4764,10 +4760,6 @@ with pkgs;
 
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
-
-  toluapp = callPackage ../development/tools/toluapp {
-    lua = lua5_1; # doesn't work with any other :(
-  };
 
   ### END OF LUA
 
@@ -11414,9 +11406,9 @@ with pkgs;
 
   inherit (callPackage ../servers/web-apps/wordpress { })
     wordpress
-    wordpress_6_7
     wordpress_6_8
     wordpress_6_9
+    wordpress_7_0
     ;
 
   wordpressPackages = recurseIntoAttrs (

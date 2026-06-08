@@ -400,11 +400,11 @@
     "vendorHash": null
   },
   "f5networks_bigip": {
-    "hash": "sha256-+/YCeCJKeETCewktWc749/GILooNsxyGz3bXOeIDga8=",
+    "hash": "sha256-tGERBmsYeoUPlTBknUOARQCs38cnAinJzFaRQDE2hHM=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.26.0",
+    "rev": "v1.27.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1499,13 +1499,13 @@
     "vendorHash": "sha256-OASLdReS245N4y0SQ4WY7kPNPpGTHptQgXlNqPlb3nM="
   },
   "wgebis_mailgun": {
-    "hash": "sha256-Li4eyqZ6huO5Q+XTcQ+HQCg8IOjhxGU9Z4Uw3TbMdAc=",
+    "hash": "sha256-cz+KSvlm1mFe+NXn4IhiWYWT0/U+UAAA8SCNJgXvIKc=",
     "homepage": "https://registry.terraform.io/providers/wgebis/mailgun",
     "owner": "wgebis",
     "repo": "terraform-provider-mailgun",
-    "rev": "v0.9.0",
+    "rev": "v0.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Z4DfoG4ApXbPNXZs9YvBWQj1bH7moLNI6P+nKDHt/Jc="
+    "vendorHash": "sha256-8p6dJwGyTK+qtgplSLtIRKxnNAQAgHfs4z/EsBcg/iY="
   },
   "yandex-cloud_yandex": {
     "hash": "sha256-JSF1Q0wNRg2oavZ1+67QfCxNz+JOHrG+rfKn/1T9cgc=",

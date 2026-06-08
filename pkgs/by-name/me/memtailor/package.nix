@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtailor";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "memtailor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x6z/BzU78od21l72ZAnX37UHHdyMHfJ6cjwJwNYOIcY=";
+    hash = "sha256-cpM/oa4GAKDxs6yrxHngpvam18cGA2u9Ftvd2WW4vdI=";
   };
 
   nativeBuildInputs = [

@@ -3,22 +3,24 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  lua,
+  lua5_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.93";
   pname = "toluapp";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LuaDist";
     repo = "toluapp";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ lua ];
+  buildInputs = [ lua5_1 ];
 
   patches = [
     ./environ-and-linux-is-kinda-posix.patch
@@ -41,4 +43,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tolua++";
     platforms = with lib.platforms; unix;
   };
-}
+})
