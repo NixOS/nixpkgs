@@ -2112,17 +2112,7 @@ let
         };
       };
 
-      gruntfuggly.todo-tree = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "todo-tree";
-          publisher = "Gruntfuggly";
-          version = "0.0.226";
-          hash = "sha256-Fj9cw+VJ2jkTGUclB1TLvURhzQsaryFQs/+f2RZOLHs=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      gruntfuggly.todo-tree = callPackage ./gruntfuggly.todo-tree { };
 
       hars.cppsnippets = buildVscodeMarketplaceExtension {
         mktplcRef = {
