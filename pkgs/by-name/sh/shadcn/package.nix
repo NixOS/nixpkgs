@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
@@ -29,16 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-OESxer0YIbWql3NgdhvUhgMW4wc0nIyUYRESjmM1A1s=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-Xdeld6Dhu3gL/Un5gRWXSC9XQH4R1W4OnWxibDaxZGs=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildPhase = ''
