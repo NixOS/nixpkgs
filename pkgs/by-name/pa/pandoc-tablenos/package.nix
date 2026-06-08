@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-tablenos";
   version = "2.3.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tomduck";
     repo = "pandoc-tablenos";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FwzsRziY3PoySo9hIFuLw6tOO9oQij6oQEyoY8HgnII=";
   };
 
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-tablenos";
   };
-}
+})
