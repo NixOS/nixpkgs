@@ -9878,8 +9878,6 @@ self: super: with self; {
 
   meinheld = callPackage ../development/python-modules/meinheld { };
 
-  meld3 = callPackage ../development/python-modules/meld3 { };
-
   melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
 
   memestra = callPackage ../development/python-modules/memestra { };
