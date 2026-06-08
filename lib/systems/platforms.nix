@@ -152,11 +152,6 @@ rec {
       DTB = true;
       autoModules = true;
       preferBuiltin = true;
-      extraConfig = ''
-        # The default (=y) forces us to have the XHCI firmware available in initrd,
-        # which our initrd builder can't currently do easily.
-        USB_XHCI_TEGRA m
-      '';
       target = "Image";
     };
     gcc = {
