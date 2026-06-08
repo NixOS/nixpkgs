@@ -146,18 +146,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/pkgconfig
 
-    cat > $out/lib/pkgconfig/angle.pc <<EOF
-    prefix=${placeholder "out"}
-    exec_prefix=''${prefix}
-    libdir=''${prefix}/lib
-    includedir=''${prefix}/include
+    cat <<EOF > $out/lib/pkgconfig/angle.pc
+    prefix=$out
+    exec_prefix=$out
+    libdir=$out/lib
+    includedir=$out/include
 
     Name: angle
     Description: ${finalAttrs.meta.description}
 
     URL: ${finalAttrs.meta.homepage}
     Version: ${lib.versions.major finalAttrs.version}
-    Libs: -L''${libdir} -l${
+    Libs: -L$out/lib -l${
       lib.concatStringsSep " -l" [
         "EGL"
         "EGL_vulkan_secondaries"
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
         "feature_support"
       ]
     }
-    Cflags: -I''${includedir}
+    Cflags: -I$out/include
     EOF
 
     runHook postInstall
