@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacemaker";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
     tag = "Pacemaker-${finalAttrs.version}";
-    hash = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
+    hash = "sha256-Vpc4xr3Dq73jJdW0bG17pDt4d8LxQLJp14zpIamIIME=";
   };
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
