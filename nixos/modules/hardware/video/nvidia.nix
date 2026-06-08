@@ -208,14 +208,19 @@ in
         configuring X to allow external NVIDIA GPUs when using Prime [Reverse] sync optimus
       '';
 
-      prime.offload.enable = lib.mkEnableOption ''
-        render offload support using the NVIDIA proprietary driver via PRIME.
+      prime.offload.enable =
+        lib.mkEnableOption ''
+          render offload support using the NVIDIA proprietary driver via PRIME.
 
-        If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
-        be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
-        {option}`hardware.nvidia.prime.intelBusId` or
-        {option}`hardware.nvidia.prime.amdgpuBusId`)
-      '';
+          If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
+          be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+          {option}`hardware.nvidia.prime.intelBusId` or
+          {option}`hardware.nvidia.prime.amdgpuBusId`)
+        ''
+        // {
+          default = reverseSyncCfg.enable;
+          defaultText = lib.literalExpression "config.hardware.nvidia.prime.reverseSync.enable";
+        };
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption ''
         adding a `nvidia-offload` convenience script to {option}`environment.systemPackages`
@@ -595,9 +600,6 @@ in
           #   device.
           # - Configure the display manager to run specific `xrandr` commands which will
           #   configure/enable displays connected to the Intel iGPU / AMD APU.
-
-          # reverse sync implies offloading
-          hardware.nvidia.prime.offload.enable = lib.mkDefault reverseSyncCfg.enable;
 
           services.xserver.drivers =
             lib.optional primeEnabled {
