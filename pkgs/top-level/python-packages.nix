@@ -8897,6 +8897,8 @@ self: super: with self; {
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
 
+  libmobility = callPackage ../development/python-modules/libmobility { };
+
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (
