@@ -9,19 +9,19 @@
   testers,
   moonfire-nvr,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.20";
+  version = "0.7.31";
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${version}";
-    hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
+    hash = "sha256-QgsaiWcXeU4y7z9mcqUAl4mQ/M4p38yRjOB/4MKlpVA=";
   };
   ui = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
@@ -30,14 +30,14 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_9;
+      pnpm = pnpm_10;
       sourceRoot = "${finalAttrs.src.name}/ui";
-      fetcherVersion = 3;
-      hash = "sha256-1bkuou8jfWqdev4ZlpqvC4BRrFj//LK6ImVvSeMUEuM=";
+      fetcherVersion = 4;
+      hash = "sha256-U/SHOVlx0kj1hfl09KcPg3CQZX9HZE5SghVEThWL1RA=";
     };
     installPhase = ''
       runHook preInstall
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/server";
 
-  cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
+  cargoHash = "sha256-TDFe5pD+8eSwvw0h9GLM+JfODlSBU1CO8fw4FVjy8xk=";
 
   env.VERSION = "v${version}";
 
