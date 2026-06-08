@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ugee-s640-tablet-driver";
   version = "4.3.4";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchzip {
     url = "https://download.ugee.com.cn/upload/download/20241217/ugeeTablet-4.3.4-241031.tar.gz";
     name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
