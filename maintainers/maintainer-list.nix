@@ -157,6 +157,11 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
+  _0xSA7 = {
+    name = "Saleh Diaa Ahmed";
+    github = "0xSA7";
+    githubId = 153073356;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
