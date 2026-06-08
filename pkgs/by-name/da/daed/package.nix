@@ -1,5 +1,5 @@
 {
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -33,15 +33,15 @@ let
         version
         src
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-FBZk7qeYNi7JX99Sk1qe52YUE8GUYINJKid0mEBXMjU=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-sGDHsXlzOcXSYNARzMMpQT8AyKAOG/q2bq1qgDBXlsM=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     buildPhase = ''
