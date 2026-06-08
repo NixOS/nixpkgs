@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-dVabMpXrdNV6hvUVk80mWuIpg8Vb0ZaJnrezO+FtbKg=";
   };
 
@@ -33,9 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  env = {
-    PYO3_PYTHON = "${python3}/bin/python3";
-  };
+  env.PYO3_PYTHON = "${python3}/bin/python3";
 
   # we are only interested in the prqlc binary
   postInstall = ''
@@ -45,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
-    changelog = "https://github.com/prql/prql/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/prql/prql/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
