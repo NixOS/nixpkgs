@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.44.0";
 
   src = fetchFromGitHub {
-    owner = "lovasoa";
+    owner = "sqlpage";
     repo = "SQLpage";
     tag = "v${finalAttrs.version}";
     hash = "sha256-qhfJHzPUBQZ6GKGet/6IZfU5zjKXqDxftJX3ylVwOQE=";
@@ -92,8 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
-    homepage = "https://github.com/lovasoa/SQLpage";
-    changelog = "https://github.com/lovasoa/SQLpage/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/sqlpage/SQLpage";
+    changelog = "https://github.com/sqlpage/SQLpage/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "sqlpage";
