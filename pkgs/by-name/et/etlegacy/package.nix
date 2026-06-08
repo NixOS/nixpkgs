@@ -14,7 +14,7 @@ let
     else if stdenv.hostPlatform.isAarch64 then
       "aarch64"
     else if stdenv.hostPlatform.isi686 then
-      "386"
+      "i386"
     else
       throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 in
