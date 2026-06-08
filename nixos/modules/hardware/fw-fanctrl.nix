@@ -71,7 +71,7 @@ in
                       lib.types.submodule {
                         options = {
                           temp = lib.mkOption {
-                            type = lib.types.int;
+                            type = lib.types.either lib.types.float lib.types.int;
                             default = 0;
                             description = "Temperature in °C at which the fan speed should be changed";
                           };
