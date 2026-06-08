@@ -32,6 +32,8 @@ let
     inherit version;
     src = "${src}/frontend";
 
+    __structuredAttrs = true;
+
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/frontend/yarn.lock";
       hash = "sha256-F1dhdBHfT9N1Ejk7WLyz2BbKlTPfqqEDNi7ZTL3phWY=";
@@ -44,6 +46,10 @@ let
       writableTmpDirAsHomeHook
       dart-sass
     ];
+
+    env = {
+      NUXT_TELEMETRY_DISABLED = 1;
+    };
 
     configurePhase = ''
       runHook preConfigure
@@ -64,7 +70,6 @@ let
     buildPhase = ''
       runHook preBuild
 
-      export NUXT_TELEMETRY_DISABLED=1
       yarn --offline generate
       runHook postBuild
     '';
@@ -88,10 +93,12 @@ let
   python = python3;
   pythonpkgs = python.pkgs;
 in
-pythonpkgs.buildPythonApplication rec {
+pythonpkgs.buildPythonApplication (finalAttrs: {
   pname = "mealie";
   inherit version src;
   pyproject = true;
+
+  __structuredAttrs = true;
 
   build-system = with pythonpkgs; [ setuptools ];
 
@@ -175,11 +182,11 @@ pythonpkgs.buildPythonApplication rec {
       rm -f $out/bin/*
 
       makeWrapper ${start_script} $out/bin/mealie \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
         --set STATIC_FILES "${frontend}"
 
       makeWrapper ${init_db} $out/libexec/init_db \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
         --set OUT "$out"
     '';
 
@@ -223,4 +230,4 @@ pythonpkgs.buildPythonApplication rec {
     ];
     mainProgram = "mealie";
   };
-}
+})
