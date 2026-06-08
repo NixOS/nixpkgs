@@ -53,7 +53,7 @@ let
 
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "4.40c";
+    version = "5.00c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
@@ -61,9 +61,9 @@ let
       tag = "v${version}";
       hash =
         if withNyx then
-          "sha256-901rJfuMZvgUpQ6zzboa7lu9yhSyX+0u+HUk8oGsqgo="
+          "sha256-a11ff9cxaQd7I06xHDahrysuce92M5zSGsamTaFNLYU="
         else
-          "sha256-QtGazGShjybvjOONoWjqSg/c+l5sPpaFuuTI2S85YQM=";
+          "sha256-lox5UYCSjp4Vu6oBc5+wZDBAufGaCiVxJqp74LDrw8k=";
       fetchSubmodules = withNyx;
     };
 
@@ -251,7 +251,10 @@ let
       '';
       homepage = "https://aflplus.plus";
       changelog = "https://aflplus.plus/docs/changelog";
-      license = lib.licenses.asl20;
+      license = [
+        lib.licenses.asl20
+        lib.licenses.agpl3Plus
+      ];
       platforms = [
         "x86_64-linux"
         "i686-linux"
