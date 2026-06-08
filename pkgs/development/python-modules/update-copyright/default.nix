@@ -32,6 +32,6 @@ buildPythonPackage (finalAttrs: {
     description = "Automatic copyright update tool";
     mainProgram = "update-copyright.py";
     homepage = "http://blog.tremily.us/posts/update-copyright";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
   };
 })
