@@ -722,7 +722,7 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
-  cmp-latex-symbols = super.cmp-look.overrideAttrs {
+  cmp-latex-symbols = super.cmp-latex-symbols.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
 
