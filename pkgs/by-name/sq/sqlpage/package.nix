@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/sqlpage/SQLpage";
     changelog = "https://github.com/sqlpage/SQLpage/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "sqlpage";
   };
 })
