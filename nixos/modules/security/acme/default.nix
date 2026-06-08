@@ -256,7 +256,7 @@ let
               "--dns"
               data.dnsProvider
             ]
-            ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation-disable-ans" ]
+            ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation.disable-ans" ]
             ++ lib.optionals (data.dnsResolver != null) [
               "--dns.resolvers"
               data.dnsResolver
@@ -271,7 +271,7 @@ let
         else if data.listenHTTP != null then
           [
             "--http"
-            "--http.port"
+            "--http.address"
             data.listenHTTP
           ]
         else
@@ -314,18 +314,18 @@ let
       # Although --must-staple is common to both modes, it is not declared as a
       # mode-agnostic argument in lego and thus must come after the mode.
       runOpts = lib.escapeShellArgs (
-        commonOpts
-        ++ [ "run" ]
+        [ "run" ]
+        ++ commonOpts
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRunFlags
       );
       renewOpts = lib.escapeShellArgs (
-        commonOpts
-        ++ [
+        [
           "renew"
           "--no-random-sleep"
         ]
+        ++ commonOpts
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRenewFlags
@@ -592,7 +592,8 @@ let
             # Try to renew, and silently fail if the cert is not expired.
             # Avoids #85794 and resolves #129838
             if ! lego ${renewOpts} ${
-              if data.validMinDays != null then "--days ${toString data.validMinDays}" else "--dynamic"
+              # --dynamic is now default
+              if data.validMinDays != null then "--renew-days ${toString data.validMinDays}" else ""
             }; then
               if is_expiration_skippable out/full.pem; then
                 echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't due yet"
