@@ -676,6 +676,10 @@ let
       USB_DWC3_DUAL_ROLE = yes;
 
       USB_XHCI_SIDEBAND = whenAtLeast "6.16" yes; # needed for audio offload
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA = lib.mkIf stdenv.hostPlatform.isAarch64 module;
     };
 
     usb-serial = {
