@@ -197,7 +197,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Standard set of low-level interfaces, providing access to the CUDA host APIs from Python";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_bindings";
-    changelog = "https://nvidia.github.io/cuda-python/${finalAttrs.version}/release/${finalAttrs.version}-notes.html";
+    changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary Software
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

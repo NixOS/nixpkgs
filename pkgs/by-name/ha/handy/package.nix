@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace "$cargoDepsCopy"/source-registry-0/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail 'libayatana-appindicator3.so.1' '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1'
   '';
 
