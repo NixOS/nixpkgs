@@ -280,7 +280,6 @@ dont-distribute-packages:
  - Bitly
  - bitly-cli
  - bitmaps
- - bits-extra
  - bittorrent
  - bla
  - blakesum-demo
@@ -1189,6 +1188,7 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
+ - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
@@ -1708,11 +1708,8 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-balancedparens
- - hw-bits
  - hw-eliasfano
  - hw-excess
- - hw-int
- - hw-ip
  - hw-json
  - hw-json-demo
  - hw-json-lens
@@ -1721,7 +1718,6 @@ dont-distribute-packages:
  - hw-kafka-avro
  - hw-rankselect
  - hw-simd
- - hw-streams
  - hw-succinct
  - hw-uri
  - hworker-ses
@@ -1763,20 +1759,6 @@ dont-distribute-packages:
  - ihaskell-inline-r
  - ihaskell-rlangqq
  - ihaskell-symtegration
- - ihp
- - ihp-datasync
- - ihp-datasync-typescript
- - ihp-graphql
- - ihp-hspec
- - ihp-ide
- - ihp-job-dashboard
- - ihp-mail
- - ihp-schema-compiler
- - ihp-sitemap
- - ihp-ssc
- - ihp-typed-sql
- - ihp-welcome
- - ihp-zip
  - ihttp
  - imap
  - imbib
