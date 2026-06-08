@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # The libappindicator_sys crate loads these libraries at runtime
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/source-registry-0/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail \
         "libayatana-appindicator3.so.1" \
         "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1" \

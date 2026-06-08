@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-JhsoIQZrU4GVcs/TCIug6y/84gODyEWl0Bl2jRNxL5Y=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/source-registry-0/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail libayatana-appindicator3.so.1 '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1'
   '';
 
