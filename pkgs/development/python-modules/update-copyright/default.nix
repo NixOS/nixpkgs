@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonImportsCheck = [ "update_copyright" ];
+
   # Has no tests
   doCheck = false;
 
