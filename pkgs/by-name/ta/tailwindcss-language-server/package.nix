@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
@@ -26,14 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-3pHEmYMgQuHFFMyGeFzo9BWRFt6yvWzFFMJEdRhwS2w=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-x/Cd4aTdqbOVfptJXa2PHT7W1dgRijA/zODi5n9r2G0=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [
