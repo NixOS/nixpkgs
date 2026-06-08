@@ -2776,8 +2776,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pandoc-drawio-filter = callPackage ../tools/misc/pandoc-drawio-filter { };
-
   pandoc-plantuml-filter = callPackage ../tools/misc/pandoc-plantuml-filter { };
 
   pandoc-eqnos = callPackage ../tools/misc/pandoc-eqnos { };
