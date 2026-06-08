@@ -19,7 +19,7 @@
   libayatana-appindicator,
   webkitgtk_4_1,
   wrapGAppsHook3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -41,10 +41,10 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit pname version;
-      pnpm = pnpm_9;
+      pnpm = pnpm_10;
       src = "${src}/rust/gui-client";
-      fetcherVersion = 3;
-      hash = "sha256-akanXiWehhQRx6WHN75PjYvFxFiSsJ5dJaguJBTM9J0=";
+      fetcherVersion = 4;
+      hash = "sha256-K17MbAoA+nC2pscW+YuJMQHAP5Tcumuec1sIbT/CF7E=";
     };
     pnpmRoot = "rust/gui-client";
 
@@ -52,7 +52,7 @@ let
 
     nativeBuildInputs = [
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
       nodejs
     ];
 
