@@ -46,7 +46,7 @@
   libredirect,
   libseccomp,
   libsecret,
-  # libsoup_2_4,
+  libsoup_3,
   libvorbis,
   libxml2_13,
   libxslt,
@@ -55,10 +55,8 @@
   nspr,
   nss,
   opencv4,
-  openssl,
   pango,
   pcsclite,
-  perl,
   sane-backends,
   speex,
   symlinkJoin,
@@ -66,6 +64,7 @@
   tzdata,
   which,
   woff2,
+  webkitgtk_4_1,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -105,27 +104,15 @@ let
     name = "fuse3-backwards-compat";
     paths = [ (lib.getLib fuse3) ];
     postBuild = ''
-      ln -sf $out/lib/libfuse3.so.3.17.4 $out/lib/libfuse3.so.3
-    '';
-  };
-
-  openssl' = symlinkJoin {
-    name = "openssl-backwards-compat";
-    nativeBuildInputs = [ makeWrapper ];
-    paths = [ (lib.getLib openssl) ];
-    postBuild = ''
-      ln -sf $out/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
-      ln -sf $out/lib/libssl.so $out/lib/libssl.so.1.0.0
+      ln -sf $out/lib/libfuse3.so.3.* $out/lib/libfuse3.so.3
     '';
   };
 
   opencv4' = symlinkJoin {
     name = "opencv4-compat";
-    nativeBuildInputs = [ makeWrapper ];
     paths = [ opencv4 ];
     postBuild = ''
       for so in ${opencv4}/lib/*.so; do
-        ln -s "$so" $out/lib/$(basename "$so").407 || true
         ln -s "$so" $out/lib/$(basename "$so").410 || true
       done
     '';
@@ -210,7 +197,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libseccomp
     libsecret
-    # libsoup_2_4
+    libsoup_3
     libvorbis
     libxml2_13
     libxslt
@@ -218,7 +205,6 @@ stdenv.mkDerivation rec {
     nspr
     nss
     opencv4'
-    openssl'
     pango
     pcsclite
     sane-backends
@@ -226,6 +212,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     (lib.getLib systemd)
     woff2
+    webkitgtk_4_1
     libxscrnsaver
     libxaw
     libxmu
@@ -275,8 +262,7 @@ stdenv.mkDerivation rec {
           lib.optional (isWfica program) "$ICAInstDir"
           ++ [
             "$ICAInstDir/lib"
-            "$ICAInstDir/usr/lib/x86_64-linux-gnu"
-            "$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+            "${lib.getLib webkitgtk_4_1}/lib/webkit2gtk-4.1/injected-bundle"
             # HdxRtcEngine loads libpulse.so.0 with dlopen, so autoPatchelf
             # cannot discover it from ELF dependencies.
             "${lib.getLib libpulseaudio}/lib"
@@ -297,7 +283,7 @@ stdenv.mkDerivation rec {
             ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
             ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
-            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"''
+            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
           ]
         );
 
@@ -328,6 +314,7 @@ stdenv.mkDerivation rec {
         "util/configmgr"
         "util/conncenter"
         "util/ctx_rehash"
+        "util/ctxwebhelper"
       ];
     in
     ''
@@ -349,11 +336,9 @@ stdenv.mkDerivation rec {
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
       faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
 
-      mkdir -p "$ICAInstDir/usr"
-      tar -xzf ./linuxx64/linuxx64.cor/Webkit2gtk4.0/webkit2gtk-4.0.tar.gz \
-        --strip-components=2 \
-        -C "$ICAInstDir/usr" \
-        webkit2gtk-4.0-package/usr/lib
+      # The GCC 11 package line links against libsoup 3 and WebKitGTK 4.1, but
+      # the tarball still contains the legacy WebKitGTK 4.0 bundle.
+      rm -rf "$ICAInstDir/Webkit2gtk4.0"
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
@@ -365,7 +350,6 @@ stdenv.mkDerivation rec {
         "PrimaryAuthManager"
         "ServiceRecord"
         "AuthManagerDaemon"
-        "util/ctxwebhelper"
       ]}
 
       ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
@@ -390,38 +374,42 @@ stdenv.mkDerivation rec {
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
 
-      echo "Copy .desktop files."
-      cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
-      for desktop in $out/share/applications/*.desktop; do
+      echo "Patch .desktop files."
+      for desktop in "$ICAInstDir"/desktop/*.desktop; do
         sed -i \
           -e "s#/opt/Citrix/ICAClient#$ICAInstDir#g" \
-          -e "s#$ICAInstDir/util/ctxwebhelper#ctxwebhelper#g" \
           "$desktop"
 
         case "$(basename "$desktop")" in
           citrixapp.desktop)
             sed -i \
-              -e 's#^TryExec=.*#TryExec=selfservice#' \
-              -e 's#^Exec=.*#Exec=selfservice %u#' \
+              -e "s#^TryExec=.*#TryExec=$out/bin/selfservice#" \
+              -e "s#^Exec=.*#Exec=$out/bin/selfservice %u#" \
+              "$desktop"
+            ;;
+          citrixweb.desktop | ctxaadsso.desktop | fido2_llt.desktop | receiver.desktop | receiver_fido2.desktop)
+            sed -i \
+              -e "s#^TryExec=.*#TryExec=$out/bin/ctxwebhelper#" \
+              -e "s#^Exec=.*#Exec=$out/bin/ctxwebhelper %u#" \
               "$desktop"
             ;;
           selfservice.desktop)
             sed -i \
-              -e 's#^TryExec=.*#TryExec=selfservice#' \
-              -e 's#^Exec=.*#Exec=selfservice#' \
+              -e "s#^TryExec=.*#TryExec=$out/bin/selfservice#" \
+              -e "s#^Exec=.*#Exec=$out/bin/selfservice#" \
               "$desktop"
             ;;
           wfica.desktop)
             sed -i \
-              -e 's#^TryExec=.*#TryExec=adapter#' \
-              -e 's#^Exec=.*#Exec=adapter %f#' \
+              -e "s#^TryExec=.*#TryExec=$out/bin/adapter#" \
+              -e "s#^Exec=.*#Exec=$out/bin/adapter %f#" \
               "$desktop"
             ;;
         esac
       done
 
-      # We introduce a dependency on the source file so that it need not be redownloaded everytime
-      echo $src >> "$out/share/workspace_dependencies.pin"
+      echo "Copy .desktop files."
+      cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
 
       runHook postInstall
     '';
@@ -429,13 +417,7 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
-  # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
-    ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
-      $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
-
-    addAutoPatchelfSearchPath --no-recurse "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu"
-    addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
     addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/lib"
     autoPatchelf -- "$out"
 
@@ -443,11 +425,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    # citrix_workspace has a hard dependency on libsoup 2.4 (autoPatchelf
-    # fails if it is not present), which was removed for being insecure.
-    #
-    # Versions older than 25.08 also required webkitgtk_4_0, which was removed.
-    broken = true;
     license = lib.licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
