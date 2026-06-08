@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  versionCheckHook,
   buildGoModule,
   nixosTests,
 }:
@@ -8,6 +9,8 @@
 buildGoModule (finalAttrs: {
   pname = "lego";
   version = "5.2.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "go-acme";
@@ -19,6 +22,9 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-PtE/3oADcNo/Vv1zZoPkzsWu8+ea2jRtt9avqjdGATs=";
 
   doCheck = false;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
