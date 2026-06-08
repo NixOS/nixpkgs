@@ -6,6 +6,7 @@
   pkg-config,
   vips,
   makeWrapper,
+  nixosTests,
 }:
 buildGoModule (finalAttrs: {
   pname = "koito";
@@ -44,10 +45,15 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
     client = callPackage ./client.nix {
       inherit (finalAttrs) src version;
     };
+
+    tests = {
+      inherit (nixosTests) koito;
+    };
+
+    updateScript = ./update.sh;
   };
 
   meta = {
