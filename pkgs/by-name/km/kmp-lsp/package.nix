@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
   pname = "kmp-lsp";
   version = "0.20.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Hessesian";
     repo = "kmp-lsp";
@@ -29,10 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/kmp-lsp \
-      --prefix PATH : ${lib.makeBinPath [
-        fd
-        ripgrep
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          fd
+          ripgrep
+        ]
+      }
   '';
 
   meta = {
