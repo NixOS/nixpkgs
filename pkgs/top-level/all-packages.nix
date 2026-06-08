@@ -2776,7 +2776,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pandoc-fignos = callPackage ../tools/misc/pandoc-fignos { };
   pandoc-secnos = callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = callPackage ../tools/misc/pandoc-tablenos { };
 
