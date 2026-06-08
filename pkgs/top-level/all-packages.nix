@@ -10734,10 +10734,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
   };
 
-  satallax = callPackage ../applications/science/logic/satallax {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
-
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
 
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
