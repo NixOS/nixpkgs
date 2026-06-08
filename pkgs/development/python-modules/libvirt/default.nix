@@ -15,6 +15,11 @@ buildPythonPackage rec {
   version = "12.4.0";
   pyproject = true;
 
+  # @r-ryantm should not try to automatically update this package. Instead,
+  # @r-ryantm should run the update script for the libvirt package. (See the
+  # below comment that’s about enableDefaultUpdateScript).
+  #
+  # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
