@@ -11,16 +11,16 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.23.4";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4XvIzeZFLh9uge3oj7l4MXtEZDVprVxHfUpWuXqHeNY=";
+    hash = "sha256-w/MRK3NUqBXQig9VgtbbDvVkgYXDUH6ZhmiJqPKJgQk=";
   };
 
-  cargoHash = "sha256-Mcpen2SSPcV9Ltb9TFM9QgVMruimCDEiYlRDaaaNgGU=";
+  cargoHash = "sha256-aH2Uivowht2AN3Tx6PTwp0+8yoVaZn8Yn8QMmUr43k8=";
 
   inherit postgresql;
 
