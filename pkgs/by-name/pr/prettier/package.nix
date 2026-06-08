@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   nodejs,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_10,
   stdenv,
   versionCheckHook,
   yarn-berry,
@@ -87,7 +87,7 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     patches = [
@@ -102,9 +102,9 @@ let
         patches
         ;
 
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-WPsVL05rVku2YSbfjHX4/BoFM+qvIm4sZip7pISg0vA=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-JXKzYoZhO6dtYLXBG20BGdxZSGhJRROM7r3ILmoZ0Rc=";
     };
 
     buildPhase = ''
