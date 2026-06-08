@@ -20,7 +20,24 @@
   unrarSupport ? false,
   unzipSupport ? false,
 }:
-
+let
+  archivers = [
+    binutils
+    bzip2
+    cabextract
+    cpio
+    gnutar
+    gzip
+    lhasa
+    lzip
+    p7zip
+    rpm
+    unshield
+    xz
+  ]
+  ++ lib.optional unrarSupport unrar
+  ++ lib.optional unzipSupport unzip;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dtrx";
   version = "8.7.1";
@@ -33,30 +50,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-FNSFEGIK0vDNlvqc8BKDCB/0hoxrITfeh59JcyzX3jY=";
   };
 
-  makeWrapperArgs =
-    let
-      archivers = lib.makeBinPath (
-        [
-          binutils
-          bzip2
-          cabextract
-          cpio
-          gnutar
-          gzip
-          lhasa
-          lzip
-          p7zip
-          rpm
-          unshield
-          xz
-        ]
-        ++ lib.optional unrarSupport unrar
-        ++ lib.optional unzipSupport unzip
-      );
-    in
-    [
-      ''--prefix PATH : "${archivers}"''
-    ];
+  makeWrapperArgs = [
+    ''--prefix PATH : "${lib.makeBinPath archivers}"''
+  ];
 
   build-system = with python3Packages; [
     setuptools
