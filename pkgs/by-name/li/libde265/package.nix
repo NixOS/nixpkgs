@@ -15,14 +15,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.1.0";
+  version = "1.1.1";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QhBi23HttVdIJCueSeKj3ZKwqX1iFcuAX7GmnMRCyN8=";
+    hash = "sha256-ZHfPC86oylqt2bwWMJRWVjdMEEmX6UOKR7XkR0HPyok=";
   };
 
   nativeBuildInputs = [
