@@ -20,8 +20,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YL6L3WqazzdpXQiLGnuQ7ZRKzmx2Z8C9raFXkN1D1Zk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YL6L3WqazzdpXQiLGnuQ7ZRKzmx2Z8C9raFXkN1D1Zk=";
   };
 
   postPatch = ''
@@ -64,9 +64,13 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/codenotary/immudb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
     homepage = "https://github.com/codenotary/immudb";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      bsl11
+    ];
     maintainers = [ ];
   };
 })
