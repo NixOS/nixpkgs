@@ -5,11 +5,11 @@
 }:
 
 let
-  version = "3.1.1";
+  version = "3.4.6";
   pname = "sunsama";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-build-250512vfxlcgvds-x86_64.AppImage";
-    hash = "sha512-VOzD/kWfsP2GR1uYkVUdjAuw9tlKjHRNxYuDSYYH7fn43Bk+wfgom/ofu3it/vQjjtuezkTN6gi96U87ypQrSA==";
+    url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-build-260521zej1bgvs1-x86_64.AppImage";
+    hash = "sha512-Stb0Mcap4KmRkj/s5jf1uZLm8sR5KNKGpZKXa2VtBIFxKofS1CxQJDWiJiPSNGsqtezLxmvsC4VSI45isYQSpQ==";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
