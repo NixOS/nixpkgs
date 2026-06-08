@@ -238,10 +238,10 @@ in
         default = null;
         example = "770";
         description = ''
-          If not `null`, is used as the permissions
-          set by `system.activationScripts.transmission-daemon`
-          on the directories [](#opt-services.transmission.settings.download-dir),
-          [](#opt-services.transmission.settings.incomplete-dir).
+          If not `null`, is used as the permissions set by
+          `transmission-setup.service` on the directories
+          [](#opt-services.transmission.settings.download-dir),
+          [](#opt-services.transmission.settings.incomplete-dir)
           and [](#opt-services.transmission.settings.watch-dir).
           Note that you may also want to change
           [](#opt-services.transmission.settings.umask).

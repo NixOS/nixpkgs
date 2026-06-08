@@ -13,12 +13,12 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "0.20260508.0";
+  version = "0.20260526.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-7fW0OmOj+Hduq5YCc5xpcfICpC8qAc/05/UMgZ70jhM=";
+    hash = "sha256-SmyImyzGn7v2b5qGJbMmQZX5bODA9i6+8jy3uGwOawA=";
   };
 
   patches = [

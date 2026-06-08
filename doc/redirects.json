@@ -113,6 +113,9 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
+  "ex-pnpm-build-hook": [
+    "index.html#ex-pnpm-build-hook"
+  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -345,6 +348,33 @@
   ],
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
+  ],
+  "pnpm-build-hook": [
+    "index.html#pnpm-build-hook"
+  ],
+  "pnpm-build-hook-build-flags": [
+    "index.html#pnpm-build-hook-build-flags"
+  ],
+  "pnpm-build-hook-code-snippet": [
+    "index.html#pnpm-build-hook-code-snippet"
+  ],
+  "pnpm-build-hook-dont": [
+    "index.html#pnpm-build-hook-dont"
+  ],
+  "pnpm-build-hook-exclusive-variables": [
+    "index.html#pnpm-build-hook-exclusive-variables"
+  ],
+  "pnpm-build-hook-flags": [
+    "index.html#pnpm-build-hook-flags"
+  ],
+  "pnpm-build-hook-script": [
+    "index.html#pnpm-build-hook-script"
+  ],
+  "pnpm-build-hook-variables": [
+    "index.html#pnpm-build-hook-variables"
+  ],
+  "pnpm-build-hook-honored-variables": [
+    "index.html#pnpm-build-hook-honored-variables"
   ],
   "preface": [
     "index.html#preface"
@@ -3091,19 +3121,28 @@
   "available-versions-and-deprecations-schedule": [
     "index.html#available-versions-and-deprecations-schedule"
   ],
+  "erlang": [
+    "index.html#erlang"
+  ],
   "elixir": [
     "index.html#elixir"
   ],
   "beam-structure": [
     "index.html#beam-structure"
   ],
-  "build-tools": [
+  "beam-build-tools": [
+    "index.html#beam-build-tools",
     "index.html#build-tools"
   ],
-  "build-tools-rebar3": [
+  "beam-build-tools-rebar3": [
+    "index.html#beam-build-tools-rebar3",
     "index.html#build-tools-rebar3"
   ],
-  "build-tools-other": [
+  "beam-build-tools-erlangmk": [
+    "index.html#beam-build-tools-erlangmk"
+  ],
+  "beam-build-tools-mix": [
+    "index.html#beam-build-tools-mix",
     "index.html#build-tools-other"
   ],
   "how-to-install-beam-packages": [
@@ -3120,6 +3159,9 @@
   ],
   "packaging-erlang-applications": [
     "index.html#packaging-erlang-applications"
+  ],
+  "packaging-elixir-applications": [
+    "index.html#packaging-elixir-applications"
   ],
   "rebar3-packages": [
     "index.html#rebar3-packages"

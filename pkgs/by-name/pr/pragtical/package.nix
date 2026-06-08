@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   freetype,
+  harfbuzz,
   libgit2,
   libkqueue,
   libuchardet,
@@ -17,14 +18,15 @@
   pcre2,
   sdl3,
   sdl3-image,
+  sdl3-net,
   xz,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.8.3";
-  pluginManagerVersion = "1.4.7.1";
+  version = "3.11.2";
+  pluginManagerRev = "v1.5.1";
   linenoiseRev = "e78e236c8d85c078fdd9fc4e1f08716058aa1a42";
 
   src = fetchFromGitHub {
@@ -40,17 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       substituteInPlace subprojects/ppm.wrap \
-        --replace-fail 'revision = head' 'revision = v${finalAttrs.pluginManagerVersion}'
+        --replace-fail 'revision = head' 'revision = ${finalAttrs.pluginManagerRev}'
       substituteInPlace subprojects/linenoise.wrap \
         --replace-fail 'revision = master' 'revision = ${finalAttrs.linenoiseRev}'
 
       ${lib.getExe meson} subprojects download \
-          colors linenoise plugins ppm widget
+        colors linenoise plugins ppm widget mbedtls
+      # TODO: remove mbedtls from list once ppm supports mbedtls_4
+      # See https://github.com/pragtical/plugin-manager/issues/11
 
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-/rCDtUSBQaNsmzcIwWy+VBuMJHEbVXpn+a1Gz3bC6DU=";
+    hash = "sha256-6S4hnmSsejLr7IiZ4mtHT5ImBsVlyKFtLx9PBgv6b90=";
   };
 
   strictDeps = true;
@@ -64,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     freetype
+    harfbuzz
     libgit2
     libkqueue # optional
     libuchardet
@@ -74,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     sdl3
     sdl3-image
+    sdl3-net
     xz
     zlib
   ];

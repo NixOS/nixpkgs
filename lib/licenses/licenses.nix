@@ -575,6 +575,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    enpl = {
+      fullName = "Emmi AI Non-Production License";
+      url = "https://github.com/Emmi-AI/noether/blob/main/LICENSE.txt";
+      free = false;
+      redistributable = true;
+    };
+
     epl10 = {
       spdxId = "EPL-1.0";
       fullName = "Eclipse Public License 1.0";
@@ -1148,6 +1155,12 @@ lib.mapAttrs mkLicense (
       fullName = "Netdata Cloud UI License v1.0";
       free = false;
       redistributable = true; # Only if used in Netdata products.
+    };
+
+    netboxLimitedUse = {
+      fullName = "NetBox Limited Use License 1.0";
+      free = false;
+      url = "https://github.com/netboxlabs/netbox-branching/blob/8465b9aee69ded23930cfe1a522695bfb8955a5a/LICENSE.md";
     };
 
     ngpl = {

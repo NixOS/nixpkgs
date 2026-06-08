@@ -5,7 +5,6 @@
   gitUpdater,
   cmake,
   pkg-config,
-  fetchpatch,
   libx11,
   libxrandr,
   libxinerama,
@@ -29,12 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-min-macos-version";
-      # https://github.com/asb2m10/dexed/pull/523
-      url = "https://github.com/asb2m10/dexed/commit/e41f1b8147bb6a5b7e9330a7ec6a598a1e74a524.patch";
-      sha256 = "sha256-8ZrAirXUACk8BJUPfA/LQORCUOqjSTsKoS9HFyrkvV8=";
-    })
+    # Remove when https://github.com/asb2m10/dexed/pull/523 merged & in release
+    ./dexed-fix-min-macos-version.patch
   ];
 
   postPatch = ''

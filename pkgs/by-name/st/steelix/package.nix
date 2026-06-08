@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steelix";
-  version = "0-unstable-2026-05-09";
+  version = "0-unstable-2026-05-21";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "helix";
-    rev = "47b4664ac868b334c9cb914d6b6bfa2045249d13";
-    hash = "sha256-+090DLPNNsDoYpAEgH9r5+8n0jQSbL7/5ThUJIT2yGg=";
+    rev = "4d86612df48447088ef4190bf503fd54a7562aa9";
+    hash = "sha256-qAUODNxHM9K6CrRCFgfBcbqzRd+YHiWn9fEfmIzrohA=";
   };
 
   cargoHash = "sha256-6bu8sIM4So3AbnHHYbh8uu+rEB4IjMQjDgh7/AkLQs0=";

@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     mainProgram = "hash_extender";
     homepage = "https://github.com/iagox86/hash_extender";
     license = lib.licenses.bsd3;
+    badPlatforms = lib.platforms.darwin;
     maintainers = [ ];
   };
 }

@@ -337,7 +337,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
     platforms = lib.attrNames configs;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     pkgConfigModules = [
       "openblas"
       "blas"

@@ -12,13 +12,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "charludo";
   domain = "closest_intent";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "hass-closest-intent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8ST+xYqmDwovDqNLnDsoIvIoPIDussAswGOOvMhRQWk=";
+    hash = "sha256-AvI9vX2RnN3ALQY4Q2mF3E9mkEV9VBOvk9HOH6i7RbQ=";
   };
 
   dependencies = [

@@ -285,6 +285,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.dnspython
     python3Packages.markdown
     tdb
+  ]
+  ++ lib.optionals enableDomainController [
+    python3Packages.cryptography
   ];
 
   strictDeps = true;
@@ -347,6 +350,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
+    };
+  }
+  // lib.optionalAttrs enableDomainController {
+    versionSambaTool = testers.testVersion {
+      command = "${lib.getExe' finalAttrs.finalPackage "samba-tool"} --version";
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
   };
 

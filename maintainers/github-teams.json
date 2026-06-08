@@ -309,8 +309,7 @@
     "members": {
       "AndersonTorres": 5954806,
       "adisbladis": 63286,
-      "panchoh": 471059,
-      "ttuegel": 563054
+      "panchoh": 471059
     },
     "name": "emacs"
   },
@@ -407,12 +406,13 @@
   "gnome": {
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
-    "maintainers": {},
+    "maintainers": {
+      "jtojnar": 705123
+    },
     "members": {
       "bobby285271": 20080233,
       "dasj19": 7589338,
-      "hedning": 71978,
-      "jtojnar": 705123
+      "hedning": 71978
     },
     "name": "GNOME"
   },
@@ -702,6 +702,7 @@
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
       "xokdvium": 145775305
     },
@@ -819,14 +820,13 @@
     "description": "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects",
     "id": 4341481,
     "maintainers": {
-      "ttuegel": 563054
+      "K900": 386765,
+      "NickCao": 15247171,
+      "SuperSandro2000": 7258858
     },
     "members": {
       "FRidh": 2129135,
-      "K900": 386765,
       "LunNova": 782440,
-      "NickCao": 15247171,
-      "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
       "mjm": 1181,
@@ -896,8 +896,7 @@
     "id": 7304571,
     "maintainers": {
       "Mic92": 96200,
-      "winterqt": 78392041,
-      "zowoq": 59103226
+      "winterqt": 78392041
     },
     "members": {},
     "name": "rust"
@@ -936,6 +935,7 @@
       "infinisil": 20525370
     },
     "members": {
+      "andir": 638836,
       "pyrox0": 35778371
     },
     "name": "Security review"

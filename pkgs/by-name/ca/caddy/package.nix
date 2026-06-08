@@ -11,12 +11,12 @@
   versionCheckHook,
 }:
 let
-  version = "2.11.3";
+  version = "2.11.4";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
+    hash = "sha256-oRQfQH1GKjAjVMj+dZo1f1+HOaOdJIyEfod0iGLYcc8=";
   };
 in
 buildGoModule (finalAttrs: {
@@ -27,10 +27,10 @@ buildGoModule (finalAttrs: {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Hgmo7ldDtbwl/acEY/4RNhSGnK/NNcXn+eIm1I8HKg=";
+    hash = "sha256-wzk8KRZfDCbbjRlBwkoKAoMjOhV4xF3yuXUueqtl1xM=";
   };
 
-  vendorHash = "sha256-QiZZxYsYFUneZ52TfFKQWJ42lmBofvUTZrHmDBuN2O4=";
+  vendorHash = "sha256-2GwSM7EKN9GwN6kte7CekpXIJ0vzHhhsnrs3TC6vTW4=";
 
   ldflags = [
     "-s"

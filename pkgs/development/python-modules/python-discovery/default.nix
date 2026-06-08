@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-discovery";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tox-dev";
     repo = "python-discovery";
     tag = finalAttrs.version;
-    hash = "sha256-n1clHxiQIEhtT4Zwn+sziFqyc828kf5Box3lIAqbddU=";
+    hash = "sha256-S6C4/4+mK8xj4TIAphI9jlpdQlE90q2brxeEPU4H85g=";
   };
 
   build-system = [

@@ -45,7 +45,7 @@ buildDotnetModule rec {
     description = "Tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
+    changelog = "https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/${version}";
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "discordchatexporter-cli";

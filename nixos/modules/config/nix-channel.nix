@@ -6,12 +6,16 @@
   - ./nix.nix
   - ./nix-flakes.nix
 */
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
     mkIf
     mkOption
-    stringAfter
     types
     ;
 
@@ -98,8 +102,10 @@ in
       ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
 
-    system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
-      stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh)
+    system.preSwitchChecks.no-nix-channel = mkIf (!cfg.channel.enable) (
+      lib.replaceStrings [ "@getent@" ] [ (lib.getExe pkgs.getent) ] (
+        builtins.readFile ./nix-channel/pre-switch-check.sh
+      )
     );
   };
 }

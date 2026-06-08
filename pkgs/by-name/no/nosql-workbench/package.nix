@@ -8,22 +8,22 @@
 }:
 let
   pname = "nosql-workbench";
-  version = "3.13.0";
+  version = "3.20.2";
 
   src =
     fetchurl
       {
         x86_64-darwin = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-x64-${version}.dmg";
-          hash = "sha256-Dof1F1LTD478wh7jTR5zwFmbrvyCOWVO/C1QXTebi3c=";
+          hash = "sha256-ewlaaaWxPHxaOdAMbkHChzbxAB5MNdZS/p8ROD/SvcQ=";
         };
         aarch64-darwin = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-arm64-${version}.dmg";
-          hash = "sha256-QD0F6onP3GhMRIzNifx/RZkxPIS/GMtnF4zro5ygucg=";
+          hash = "sha256-U6Gea89/cXY9Fd6JAWrUtf7Q4VfEXDPzbjCQcHMRjiE=";
         };
         x86_64-linux = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-${version}.AppImage";
-          hash = "sha256-ewlaaaWxPHxaOdAMbkHChzbxAB5MNdZS/p8ROD/SvcQ=";
+          hash = "sha256-O62JsVHJ5OE6HLt3Pg9XVrd3j1eoY3O+bjqroowGEOE=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");

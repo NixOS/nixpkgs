@@ -29,7 +29,6 @@
   libcap,
   libgbm,
   curl,
-  pcre,
   pcre2,
   python3,
   libuuid,
@@ -166,7 +165,6 @@ stdenv'.mkDerivation (finalAttrs: {
     libevdev
     libcap
     libdrm
-    pcre
     pcre2
     libuuid
     libselinux

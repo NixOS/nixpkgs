@@ -76,6 +76,7 @@ LICENSE_NORMALIZATION = {
     "BSD-3-Clause": "lib.licenses.bsd3",
     "GPL-2+": "lib.licenses.gpl2Plus",
     "GPL-2.0": "lib.licenses.gpl2Only",
+    "GPL-2.0+": "lib.licenses.gpl2Plus",
     "GPL-2.0-only": "lib.licenses.gpl2Only",
     "GPL-2.0-or-later": "lib.licenses.gpl2Plus",
     "GPL-3.0": "lib.licenses.gpl3Only",

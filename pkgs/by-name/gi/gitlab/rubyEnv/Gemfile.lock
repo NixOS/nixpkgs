@@ -2174,6 +2174,7 @@ GEM
     yard-solargraph (0.1.0)
       yard (~> 0.9)
     zeitwerk (2.6.18)
+    zlib (3.2.3)
 
 PLATFORMS
   ruby
@@ -2553,6 +2554,7 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.3)
   yard (~> 0.9)
   zeitwerk (= 2.6.18)
+  zlib (~> 3.2, >= 3.2.3)
 
 BUNDLED WITH
    2.7.1

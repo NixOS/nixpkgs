@@ -2,43 +2,94 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
 
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  flac,
   freetype,
+  kdePackages,
+  lame,
   libjack2,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  mnxdom,
-  kdePackages,
+  pugixml,
+  utf8cpp,
 
   # passthru tests
   nixosTests,
 }:
 
+let
+  # TODO(@doronbehar): Contribute this one day to lib/? See:
+  # https://discourse.nixos.org/t/rfc-nix-function-that-overrides-a-scope-with-automatic-inheritance-propagation/78025
+  overrideScopeFully =
+    s: scopeOverrideFunc:
+    let
+      partiallyOverriddenScope = s.overrideScope scopeOverrideFunc;
+      directlyOverriddenAttrs = builtins.attrNames (scopeOverrideFunc partiallyOverriddenScope s);
+    in
+    builtins.mapAttrs (
+      attrName: pkg:
+      pkg.override (
+        lib.pipe directlyOverriddenAttrs [
+          (builtins.filter (
+            oAttr:
+            # Don't include in this filter the attribute `attrName` from the
+            # full scope, if it is already part of the _directly_ overridden
+            # attributes.
+            !(builtins.elem attrName directlyOverriddenAttrs)
+            && pkg ? override
+            # Continue with the creation of the `.override` arguments only for
+            # overridden attributes (`oAttr`) which are possible arguments to the
+            # `.override` function of the `pkg` at hand.
+            && pkg.override.__functionArgs ? ${oAttr}
+          ))
+          # Generate the `.override` argument using the attribute names `aNames`
+          (aNames: lib.genAttrs aNames (oAttr: partiallyOverriddenScope.${oAttr}))
+        ]
+      )
+    ) partiallyOverriddenScope;
+  kdePackages' = overrideScopeFully kdePackages (
+    self: super: {
+      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
+      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
+      qtdeclarative = super.qtdeclarative.overrideAttrs (
+        new: old: {
+          patches = old.patches ++ [
+            (fetchpatch {
+              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
+              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
+            })
+          ];
+        }
+      );
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.0";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEYZWkcjqB2pW+oBow2oMX1HQn4kRaTBBxhyxIbG0a4=";
+    hash = "sha256-7oA+cC5/nOEM2zpFgM13zlBIoc3AB//Ovc+dU1c1r6M=";
   };
 
   cmakeFlags = [
@@ -59,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Implies also OPUS
     "OPUSENC"
     "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/musescore/MuseScore/issues/33467
@@ -87,11 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
-    kdePackages.qttools
-    pkg-config
+    kdePackages'.qttools
+    kdePackages'.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -100,29 +154,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    kdePackages'.qt5compat
+    kdePackages'.qtbase
+    kdePackages'.qtdeclarative
+    kdePackages'.qtnetworkauth
+    kdePackages'.qtscxml
+    kdePackages'.qtsvg
+    lame
+    libjack2
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    mnxdom
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    kdePackages.qtwayland
+    kdePackages'.qtwayland
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -157,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";

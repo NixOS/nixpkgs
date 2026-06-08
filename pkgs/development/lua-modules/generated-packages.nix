@@ -1008,15 +1008,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2654-1";
+      version = "0.0.2657-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2654-1.rockspec";
-          sha256 = "19msswvglynba5xy0f14xlcidjln6mphnrnydx9x7k03770qmbj9";
+          url = "mirror://luarocks/fzf-lua-0.0.2657-1.rockspec";
+          sha256 = "0c7q9gjx9p0gqgsf89b510g729hz8301qffd936m86pwqgzxmvqi";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/fea9eedc6894c44d44cbb772a5cd11c93b82d7a1.zip";
-        sha256 = "09ayadlmdkljhcm5ncby8w6w8b1kfyhmw0bf3zhl6r8cfansixc2";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/988416cc782dfe28bff3f0da9b8c943b236cd86a.zip";
+        sha256 = "0hh2dkgpf1002b9ik2r1iakszs60qk9yb84db1jnkj2ks5mah98g";
       };
 
       disabled = luaOlder "5.1";
@@ -3314,17 +3314,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lualine.nvim";
-      version = "scm-4";
+      version = "scm-5";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lualine.nvim-scm-4.rockspec";
-          sha256 = "03yxpng1jmkas8qndq2fygi4jh31y8asibj9c9nsjn5pzbyfxm1f";
+          url = "mirror://luarocks/lualine.nvim-scm-5.rockspec";
+          sha256 = "02sll9l2j03h5wv5mlm1wwqijhs9a8sgn5k4mi21f58si1s7ycda";
         }).outPath;
       src = fetchFromGitHub {
         owner = "nvim-lualine";
         repo = "lualine.nvim";
-        rev = "131a558e13f9f28b15cd235557150ccb23f89286";
-        hash = "sha256-5+JKZD4w80QZxnFv+1OxkFVety8fgmcGVOuxfYouxhI=";
+        rev = "221ce6b2d999187044529f49da6554a92f740a96";
+        hash = "sha256-6PjGu30Ed4/e/HQ3mIFQuUOxcCiti/71jjlMsjN7EoA=";
       };
 
       disabled = luaOlder "5.1";
@@ -4685,8 +4685,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "moonscript";
-        rev = "7b7899741c6c1e971e436d36c9aabb56f51dc3d5";
-        hash = "sha256-iFPbO5h5EU4KDW0BN6JhRCT9vqEzv4ozsZETbbXaqUM=";
+        rev = "402be8a6df8ff57c4183db44e0c130d14d69bf87";
+        hash = "sha256-rIkq6rk5A9yYbRcFLJ9wE+PQKGvpOB+7iTDbq9T/1OM=";
       };
 
       disabled = luaOlder "5.1";
@@ -6353,6 +6353,36 @@ final: prev: {
         longDescription = ''
           This module adds UTF-8 support to Lua. It's compatible with Lua "string" module.
         '';
+      };
+    }
+  ) { };
+
+  vicious = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "vicious";
+      version = "2.7.1-4";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/vicious-2.7.1-4.rockspec";
+          sha256 = "1yvc9mbalsyrqysxkc1lf92ki5gzizn79y2azyavmgjwljif6lfi";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/vicious-widgets/vicious/archive/refs/tags/v2.7.1.zip";
+        sha256 = "0bfj3bc1gmbwwvpwkmqp658iwrwdifc78hzwwy1qpn7rbmarg2qv";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://vicious.rtfd.io";
+        license = lib.licenses.gpl2Plus;
+        description = "Modular widget library for the \"awesome\" window manager";
       };
     }
   ) { };

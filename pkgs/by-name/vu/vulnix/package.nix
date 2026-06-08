@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vulnix";
   version = "1.12.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -33,6 +33,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-cov-stub
   ];
 
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     nix
   ]
@@ -41,7 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     colorama
     pyyaml
     requests
-    setuptools
     toml
     zodb
   ]);

@@ -1,0 +1,216 @@
+diff --git a/custom_components/frigate/camera.py b/custom_components/frigate/camera.py
+index 581de81..802d38b 100644
+--- a/custom_components/frigate/camera.py
++++ b/custom_components/frigate/camera.py
+@@ -401,6 +401,7 @@ class FrigateCamera(
+                 "ON",
+                 0,
+                 False,
++                message_expiry_interval=None
+             )
+ 
+     async def async_turn_off(self) -> None:
+@@ -412,6 +413,7 @@ class FrigateCamera(
+                 "OFF",
+                 0,
+                 False,
++                 message_expiry_interval=None
+             )
+ 
+     async def async_enable_motion_detection(self) -> None:
+@@ -422,6 +424,7 @@ class FrigateCamera(
+             "ON",
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     async def async_disable_motion_detection(self) -> None:
+@@ -432,6 +435,7 @@ class FrigateCamera(
+             "OFF",
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     async def export_recording(
+@@ -468,6 +472,7 @@ class FrigateCamera(
+             f"{action}{f'_{argument}' if argument else ''}",
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     async def create_event(
+diff --git a/custom_components/frigate/number.py b/custom_components/frigate/number.py
+index 5866438..7f53ddd 100644
+--- a/custom_components/frigate/number.py
++++ b/custom_components/frigate/number.py
+@@ -143,6 +143,7 @@ class FrigateMotionContourArea(FrigateMQTTEntity, NumberEntity):
+             int(value),
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     @property
+@@ -236,6 +237,7 @@ class FrigateMotionThreshold(FrigateMQTTEntity, NumberEntity):
+             int(value),
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     @property
+diff --git a/custom_components/frigate/select.py b/custom_components/frigate/select.py
+index 4b82d0e..e460b16 100644
+--- a/custom_components/frigate/select.py
++++ b/custom_components/frigate/select.py
+@@ -121,4 +121,5 @@ class FrigateProfileSelect(FrigateMQTTEntity, SelectEntity):
+             option,
+             0,
+             False,
++            message_expiry_interval=None
+         )
+diff --git a/custom_components/frigate/switch.py b/custom_components/frigate/switch.py
+index 4d4c809..6b7e362 100644
+--- a/custom_components/frigate/switch.py
++++ b/custom_components/frigate/switch.py
+@@ -211,6 +211,7 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
+             "ON",
+             0,
+             False,
++            message_expiry_interval=None
+         )
+ 
+     async def async_turn_off(self, **kwargs: Any) -> None:
+@@ -221,4 +222,5 @@ class FrigateSwitch(FrigateMQTTEntity, SwitchEntity):
+             "OFF",
+             0,
+             False,
++            message_expiry_interval=None
+         )
+diff --git a/tests/test_camera.py b/tests/test_camera.py
+index 00aa0a8..5a813df 100644
+--- a/tests/test_camera.py
++++ b/tests/test_camera.py
+@@ -544,7 +544,7 @@ async def test_camera_enable_camera(hass: HomeAssistant, mqtt_mock: Any) -> None
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/enabled/set", "ON", 0, False
++        "frigate/front_door/enabled/set", "ON", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -571,7 +571,7 @@ async def test_camera_disable_camera(hass: HomeAssistant, mqtt_mock: Any) -> Non
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/enabled/set", "OFF", 0, False
++        "frigate/front_door/enabled/set", "OFF", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -600,7 +600,7 @@ async def test_camera_enable_motion_detection(
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/motion/set", "ON", 0, False
++        "frigate/front_door/motion/set", "ON", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -629,7 +629,7 @@ async def test_camera_disable_motion_detection(
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/motion/set", "OFF", 0, False
++        "frigate/front_door/motion/set", "OFF", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -872,7 +872,7 @@ async def test_ptz_move_service_call(
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/ptz", "move_up", 0, False
++        "frigate/front_door/ptz", "move_up", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -895,7 +895,7 @@ async def test_ptz_preset_service_call(
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/ptz", "preset_main", 0, False
++        "frigate/front_door/ptz", "preset_main", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -917,7 +917,7 @@ async def test_ptz_stop_service_call(
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/ptz", "stop", 0, False
++        "frigate/front_door/ptz", "stop", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+diff --git a/tests/test_number.py b/tests/test_number.py
+index 13d0e69..e2a09e6 100644
+--- a/tests/test_number.py
++++ b/tests/test_number.py
+@@ -117,7 +117,7 @@ async def test_contour_area_set(hass: HomeAssistant, mqtt_mock: Any) -> None:
+     )
+ 
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/motion_contour_area/set", "35", 0, False
++        "frigate/front_door/motion_contour_area/set", "35", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -140,7 +140,7 @@ async def test_threshold_set(hass: HomeAssistant, mqtt_mock: Any) -> None:
+     )
+ 
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/motion_threshold/set", "35", 0, False
++        "frigate/front_door/motion_threshold/set", "35", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+diff --git a/tests/test_select.py b/tests/test_select.py
+index e9fc02a..ea1241c 100644
+--- a/tests/test_select.py
++++ b/tests/test_select.py
+@@ -89,7 +89,7 @@ async def test_profile_select_option(hass: HomeAssistant, mqtt_mock: Any) -> Non
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/profile/set", "away", 0, False
++        "frigate/profile/set", "away", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+diff --git a/tests/test_switch.py b/tests/test_switch.py
+index 01b9dae..f3288a1 100644
+--- a/tests/test_switch.py
++++ b/tests/test_switch.py
+@@ -126,7 +126,7 @@ async def test_switch_turn_on(hass: HomeAssistant, mqtt_mock: Any) -> None:
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/detect/set", "ON", 0, False
++        "frigate/front_door/detect/set", "ON", 0, False, message_expiry_interval=None
+     )
+ 
+ 
+@@ -144,7 +144,7 @@ async def test_switch_turn_off(hass: HomeAssistant, mqtt_mock: Any) -> None:
+         blocking=True,
+     )
+     mqtt_mock.async_publish.assert_called_once_with(
+-        "frigate/front_door/detect/set", "OFF", 0, False
++        "frigate/front_door/detect/set", "OFF", 0, False, message_expiry_interval=None
+     )
+ 
+ 

@@ -185,7 +185,6 @@ let
       X86_INTEL_LPSS = yes;
       X86_INTEL_PSTATE = yes;
       X86_AMD_PSTATE = whenAtLeast "5.17" yes;
-      X86_AMD_PSTATE_DYNAMIC_EPP = whenAtLeast "7.1" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF = yes;
 
@@ -772,6 +771,9 @@ let
       SQUASHFS_XZ = yes;
       SQUASHFS_LZ4 = yes;
       SQUASHFS_ZSTD = yes;
+
+      EROFS_FS_ZIP_DEFLATE = whenAtLeast "6.6" yes;
+      EROFS_FS_ZIP_ZSTD = whenAtLeast "6.10" yes;
 
       # Native Language Support modules, needed by some filesystems
       NLS = yes;

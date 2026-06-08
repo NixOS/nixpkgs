@@ -31,18 +31,18 @@ let
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
 
-  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uLGa6ZIMJE2IWz5wF9H6yOICTeFvZerrpecLEja+PU4=";
+    hash = "sha256-U4Rl1WiOg9DVFEnghKOy/WabeXf3l3zpaxqAmjneil0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head

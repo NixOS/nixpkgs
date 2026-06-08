@@ -92,7 +92,6 @@ vimUtils.buildVimPlugin {
     "avante.providers.azure"
     "avante.providers.copilot"
     "avante.providers.gemini"
-    "avante.providers.ollama"
     "avante.providers.vertex"
     "avante.providers.vertex_claude"
   ];

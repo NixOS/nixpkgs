@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.56.4";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JqD4CSTVbrqg7nAkSRp4SaGpFKt1U3CYLxM31AJfcPA=";
+    hash = "sha256-uRMa8zaXXM8KWUplYMyOLic/WITLU0eAbZ2VDgM/PBw=";
   };
 
-  cargoHash = "sha256-5VGgbrd+iDD+L6JFy4H6HFuRW6xtQDawSGGSQARjRU0=";
+  cargoHash = "sha256-p4R8+PcRmjy/2q7lpfUevuYROPrCQEffmXx5vRrjwKs=";
 
   nativeBuildInputs = [
     installShellFiles

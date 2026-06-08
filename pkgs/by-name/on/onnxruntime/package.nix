@@ -132,10 +132,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # https://github.com/microsoft/onnxruntime/issues/9155
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
-
-    # Fix build of ignored outputs after Protobuf 34 added `[[nodiscard]]` to
-    # many functions.
-    ./protobuf34-nodiscard.patch
   ];
 
   postPatch = ''
@@ -147,6 +143,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     substituteInPlace onnxruntime/core/platform/posix/env.cc --replace-fail \
       "return PathString{};" \
       "return PathString(\"$out/lib/\");"
+  ''
+  + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/onnxruntime.cmake \
+      --replace-fail "INSTALL_NAME_DIR @rpath" "INSTALL_NAME_DIR $out/lib"
   ''
   + lib.optionalString rocmSupport ''
     patchShebangs tools/ci_build/hipify-perl
@@ -268,9 +268,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
+    # Library updates and similar often cause build failures with -Werror.
+    # There is utility in this for upstream, but for Nixpkgs it mostly causes
+    # churn to work around, so we make warnings non-fatal.
+    "--compile-no-warning-as-error"
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
-    # leads to failing builds, which isn't particularly useful for Nixpkgs
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=unused-variable -Wno-error=deprecated")
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
@@ -296,8 +298,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)
   ]
   ++ lib.optionals cudaSupport [
-    # Werror and cudnn_frontend deprecations make for a bad time.
-    "--compile-no-warning-as-error"
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass-src}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)

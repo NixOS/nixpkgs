@@ -12,6 +12,7 @@ buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
   version = "0.9.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 

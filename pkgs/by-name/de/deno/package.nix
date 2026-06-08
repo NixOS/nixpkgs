@@ -22,6 +22,7 @@
   git,
   python3,
   esbuild,
+  runCommand,
 
   # self for passthru
   deno,
@@ -242,7 +243,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = (callPackage ./tests { }) // {
+    tests = (import ./tests { inherit deno runCommand lib; }) // {
       build-with-unit-tests = deno.overrideAttrs (fa: {
         # The tools test suite requires building the test server
         dontBuild = false;

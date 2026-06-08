@@ -1,23 +1,19 @@
 {
   lib,
-  callPackage,
+  zellij-unwrapped,
   makeBinaryWrapper,
   stdenvNoCC,
-  nix-update-script,
 
   extraPackages ? [ ],
 }:
-let
-  unwrapped = callPackage ./unwrapped.nix { };
-in
 stdenvNoCC.mkDerivation {
-  inherit (unwrapped) version meta;
+  inherit (zellij-unwrapped) version meta;
   pname = "zellij";
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = unwrapped;
+  src = zellij-unwrapped;
   dontUnpack = true;
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -27,9 +23,4 @@ stdenvNoCC.mkDerivation {
     wrapProgram "$out/bin/zellij" \
       --prefix PATH : '${lib.makeBinPath extraPackages}'
   '';
-
-  passthru = unwrapped.passthru or { } // {
-    inherit unwrapped;
-    updateScript = nix-update-script { attrPath = "zellij.unwrapped"; };
-  };
 }

@@ -59,8 +59,6 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
-
   bootstrapFiles ?
     let
       table = {
@@ -121,6 +119,8 @@
 assert crossSystem == localSystem;
 
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
 
   isFromNixpkgs = pkg: !(isFromBootstrapFiles pkg);
@@ -174,12 +174,12 @@ let
     }:
 
     let
-      thisStdenv = import ../generic {
+      thisStdenv = genericStdenv {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config extraNativeBuildInputs;
+        inherit extraNativeBuildInputs;
         inherit (stage0) initialPath;
         preHook = ''
           # Don't patch #!/interpreter because it leads to retained
@@ -696,13 +696,12 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
       inherit config overlays;
-      stdenv = import ../generic rec {
+      stdenv = genericStdenv rec {
         name = "stdenv-linux";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config;
 
         preHook = commonPreHook;
 

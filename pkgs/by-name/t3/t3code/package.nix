@@ -1,5 +1,4 @@
 {
-  bun,
   cctools,
   copyDesktopItems,
   electron_40,
@@ -14,10 +13,30 @@
   nodejs,
   python3,
   stdenv,
-  stdenvNoCC,
-  writableTmpDirAsHomeHook,
   writeDarwinBundle,
   xcbuild,
+  fetchPnpmDeps,
+  pnpm_10,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  cacert,
+  enableAzureDevOps ? false,
+  azure-cli,
+  azure-cli-extensions,
+  enableBitbucket ? false,
+  bitbucket-cli,
+  enableClaude ? false,
+  claude-code,
+  enableCodex ? true,
+  codex,
+  enableGitHub ? true,
+  gh,
+  enableGit ? true,
+  git,
+  enableGitLab ? false,
+  glab,
+  enableJujutsu ? false,
+  jujutsu,
 }:
 
 stdenv.mkDerivation (
@@ -25,58 +44,32 @@ stdenv.mkDerivation (
   let
     appName = "T3 Code (Alpha)";
     electron = electron_40;
+    pnpm = pnpm_10;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
       else
         "assets/prod/black-universal-1024.png";
-    nodeModules = stdenvNoCC.mkDerivation {
-      pname = "${finalAttrs.pname}-node_modules";
-      inherit (finalAttrs) src version strictDeps;
-
-      nativeBuildInputs = [
-        bun
-        nodejs
-        writableTmpDirAsHomeHook
-      ];
-
-      dontConfigure = true;
-      dontFixup = true;
-
-      buildPhase = ''
-        runHook preBuild
-
-        # Use hoisted linker: Bun's default/isolated layout can race and omit
-        # cyclic peer dependency bin links (e.g. update-browserslist-db →
-        # browserslist). A manual .bin/browserslist symlink under .bun did not
-        # reliably fix builds; see https://github.com/oven-sh/bun/pull/29014.
-        bun install \
-          --linker=hoisted \
-          --cpu="*" \
-          --ignore-scripts \
-          --no-progress \
-          --frozen-lockfile \
-          --os="*"
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir --parents $out
-        cp --recursive node_modules $out
-
-        runHook postInstall
-      '';
-
-      outputHash = "sha256-0wA39cSxybKPbZ1xXf+mcI4QSXJhLcNQ6x+o2xvLuq8=";
-      outputHashMode = "recursive";
-    };
+    runtimePackages =
+      lib.optionals enableAzureDevOps [
+        azure-cli.withExtensions
+        [ azure-cli-extensions.azure-devops ]
+      ]
+      ++ lib.optionals enableBitbucket [ bitbucket-cli ]
+      ++ lib.optionals enableClaude [ claude-code ]
+      ++ lib.optionals enableCodex [ codex ]
+      ++ lib.optionals enableGitHub [ gh ]
+      ++ lib.optionals enableGit [ git ]
+      ++ lib.optionals enableGitLab [ glab ]
+      ++ lib.optionals enableJujutsu [ jujutsu ];
+    runtimePathWrapperArgs = lib.optionalString (runtimePackages != [ ]) ''
+      \
+        --prefix PATH : ${lib.makeBinPath runtimePackages}
+    '';
   in
   {
     pname = "t3code";
-    version = "0.0.24";
+    version = "0.0.25";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -84,7 +77,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-7mqRuWft9h9MAEVzuwC6K1aj2UUAcjheWrwncXhpbro=";
+      hash = "sha256-R9FTqKT67POU9dED/EdPJVsu/rSEQ2C4WoNUwgkL0e8=";
     };
 
     postPatch = ''
@@ -94,13 +87,15 @@ stdenv.mkDerivation (
     '';
 
     nativeBuildInputs = [
-      bun
       installShellFiles
       makeBinaryWrapper
       node-gyp
       nodejs
       python3
-      writableTmpDirAsHomeHook
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm
+      cacert
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -110,45 +105,63 @@ stdenv.mkDerivation (
       xcbuild
     ];
 
-    configurePhase = ''
-      runHook preConfigure
+    pnpmWorkspaces = [
+      # `...` suffix is used to also include other workspace packages that are
+      # directly or indirectly depended on by the listed packages, such as
+      # `@t3tools/contracts` and `@t3tools/shared`.
+      "@t3tools/monorepo"
+      "t3..."
+      "@t3tools/desktop..."
+      "@t3tools/scripts..."
+    ];
 
-      cp --recursive ${nodeModules}/. .
+    pnpmDeps = fetchPnpmDeps {
+      inherit pnpm;
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        pnpmWorkspaces
+        ;
 
-      chmod --recursive u+rwX node_modules
-      patchShebangs node_modules
+      fetcherVersion = 4;
+      hash = "sha256-gctAlOtQMAbw4xWH9QyyVae6f0fk+o+EkLW+4rpmF9c=";
+    };
 
-      # Upstream bumps package.json versions after tagging releases, then applies
-      # the same bump in the release workflow before building artifacts.
-      bun scripts/update-release-package-versions.ts ${finalAttrs.version}
+    # This workaround turns the `pnpmWorkspaces` array into a space-separated
+    # string. This format is supported by both `pnpmConfigHook` and `pnpmBuildHook`.
+    # TODO: remove this when`pnpmConfigHook` supports `___structuredAttrs = true;`
+    # https://github.com/NixOS/nixpkgs/issues/528547
+    preConfigure = ''
+      __pnpmWorkspaces="''${pnpmWorkspaces[@]}"
+      unset pnpmWorkspaces
+      declare -g pnpmWorkspaces="$__pnpmWorkspaces"
+    '';
 
-      # Compile node-pty's native addon (hoisted into node_modules).
+    preBuild = ''
+      node scripts/update-release-package-versions.ts ${finalAttrs.version}
+
       export npm_config_nodedir=${nodejs}
-      cd node_modules/node-pty
-      node-gyp rebuild
-      node scripts/post-install.js
-      cd -
-
-      runHook postConfigure
+      export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+      # Exclude the `@t3tools/monorepo` workspace from the pending rebuild since
+      # `vp config` needs git
+      pnpm rebuild --pending "''${pnpmInstallFlags[@]}" --filter '!@t3tools/monorepo'
     '';
 
-    buildPhase = ''
-      runHook preBuild
+    pnpmBuildScript = "build:desktop";
 
-      for app in web server desktop; do
-        bun run --cwd apps/"$app" build
-      done
-
-      runHook postBuild
+    postBuild = ''
+      pnpm vp cache clean
     '';
 
-    # Bun vendors many prebuilt native artifacts for non-host platforms, and
-    # some of those binaries are statically linked. Let fixup handle wrappers,
-    # shebangs, and stripping, but skip patchelf on the vendored tree.
+    # Many dependencies vendors many prebuilt native artifacts for non-host
+    # platforms, and some of those binaries are statically linked. Let fixup
+    # handle wrappers, shebangs, and stripping, but skip patchelf on the
+    # vendored tree.
     dontPatchELF = true;
     # The tmpdir audit hook also shells out to patchelf while scanning every
     # vendored ELF for leaked build paths. That produces spurious warnings on
-    # Bun's static foreign-platform binaries.
+    # some dependencies' static foreign-platform binaries.
     noAuditTmpdir = true;
 
     installPhase = ''
@@ -156,8 +169,8 @@ stdenv.mkDerivation (
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
-      cp --recursive --no-preserve=mode apps/server/dist "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode apps/desktop/dist-electron "$out"/libexec/t3code/apps/desktop
+      cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
+      cp --recursive --no-preserve=mode apps/desktop/{node_modules,dist-electron} "$out"/libexec/t3code/apps/desktop
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \
@@ -166,11 +179,11 @@ stdenv.mkDerivation (
       find "$out"/libexec/t3code -xtype l -delete
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3code \
-        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs
+        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs ${runtimePathWrapperArgs}
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop/dist-electron/main.cjs \
-        --inherit-argv0
+        --inherit-argv0 ${runtimePathWrapperArgs}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
@@ -214,13 +227,7 @@ stdenv.mkDerivation (
     ];
 
     passthru = {
-      inherit nodeModules;
-      updateScript = nix-update-script {
-        extraArgs = [
-          "--subpackage"
-          "nodeModules"
-        ];
-      };
+      updateScript = nix-update-script { };
     };
 
     meta = {

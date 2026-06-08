@@ -182,9 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_LINK = "-lz";
 
-  passthru.tests = {
-    nixos-rsyslogd = nixosTests.rsyslogd;
-  };
+  passthru.tests = nixosTests.rsyslogd;
 
   meta = {
     homepage = "https://www.rsyslog.com/";

@@ -37,6 +37,7 @@ npm-install-hook.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
 pkg-config.section.md
+pnpm.section.md
 postgresql-test-hook.section.md
 premake.section.md
 python.section.md

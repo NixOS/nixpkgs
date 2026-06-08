@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "systemd-initrd-btrfs-raid";
 
@@ -33,21 +33,27 @@
       };
     };
 
-  testScript = ''
-    # Create RAID
-    machine.succeed("mkfs.btrfs -d raid0 /dev/vdb /dev/vdc")
-    machine.succeed("mkdir -p /mnt && mount /dev/vdb /mnt && echo hello > /mnt/test && umount /mnt")
+  testScript =
+    { nodes, ... }:
+    let
+      boot-btrfs-raid = nodes.machine.specialisation.boot-btrfs-raid.configuration.system.build.toplevel;
+    in
+    # python
+    ''
+      # Create RAID
+      machine.succeed("mkfs.btrfs -d raid0 /dev/vdb /dev/vdc")
+      machine.succeed("mkdir -p /mnt && mount /dev/vdb /mnt && echo hello > /mnt/test && umount /mnt")
 
-    # Boot from the RAID
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-btrfs-raid.conf")
-    machine.succeed("sync")
-    machine.crash()
-    machine.wait_for_unit("multi-user.target")
+      # Boot from the RAID
+      machine.succeed("${boot-btrfs-raid}/bin/switch-to-configuration boot")
+      machine.succeed("sync")
+      machine.crash()
+      machine.wait_for_unit("multi-user.target")
 
-    # Ensure we have successfully booted from the RAID
-    assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
-    assert "/dev/vdb on / type btrfs" in machine.succeed("mount")
-    assert "hello" in machine.succeed("cat /test")
-    assert "Total devices 2" in machine.succeed("btrfs filesystem show")
-  '';
+      # Ensure we have successfully booted from the RAID
+      assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
+      assert "/dev/vdb on / type btrfs" in machine.succeed("mount")
+      assert "hello" in machine.succeed("cat /test")
+      assert "Total devices 2" in machine.succeed("btrfs filesystem show")
+    '';
 }

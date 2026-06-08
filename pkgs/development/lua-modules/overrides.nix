@@ -1089,10 +1089,6 @@ in
     # TODO: figure out darwin failure
     doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
-    nvimSkipModules = [
-      "bootstrap" # tries to install luarocks from network
-    ];
-
     bustedFlags = [
       "--run=offline"
     ];
@@ -1299,6 +1295,19 @@ in
       ' lutf8lib.c
     '';
   };
+
+  vicious = prev.vicious.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [
+        makefu
+        mic92
+        mrcjkb
+        McSinyx
+      ];
+      platforms = lib.platforms.linux;
+    };
+  });
 
   vstruct = prev.vstruct.overrideAttrs (old: {
     meta = (old.meta or { }) // {

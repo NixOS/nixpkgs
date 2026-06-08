@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.5.4";
+  version = "2026.6.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -100,6 +100,10 @@
         hassil
         home-assistant-intents
         pyturbojpeg
+      ];
+    "aidot" =
+      ps: with ps; [
+        python-aidot
       ];
     "air_quality" =
       ps: with ps; [
@@ -464,11 +468,20 @@
     "august" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -476,6 +489,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         yalexs
         yalexs-ble
       ];
@@ -512,7 +526,30 @@
       ];
     "avea" =
       ps: with ps; [
+        aioesphomeapi
+        aiohasupervisor
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
         avea
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pyspeex-noise
+        serialx
+        zeroconf
       ];
     "avion" =
       ps: with ps; [
@@ -775,6 +812,8 @@
       ];
     "braviatv" =
       ps: with ps; [
+        async-upnp-client
+        ifaddr
         pybravia
       ];
     "brel_home" =
@@ -918,12 +957,21 @@
     "cast" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
         ifaddr
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -935,11 +983,16 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         zeroconf
       ];
     "ccm15" =
       ps: with ps; [
         py-ccm15
+      ];
+    "centriconnect" =
+      ps: with ps; [
+        aiocentriconnect
       ];
     "cert_expiry" =
       ps: with ps; [
@@ -956,6 +1009,9 @@
       ps: with ps; [
         chess-com-api
       ];
+    "cielo_home" =
+      ps: with ps; [
+      ]; # missing inputs: cielo-connect-api
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -991,11 +1047,20 @@
     "cloud" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -1003,6 +1068,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "cloudflare" =
       ps: with ps; [
@@ -1139,6 +1205,9 @@
       ps: with ps; [
         pydanfossair
       ];
+    "data_grand_lyon" =
+      ps: with ps; [
+      ]; # missing inputs: data-grand-lyon-ha
     "datadog" =
       ps: with ps; [
         datadog
@@ -1199,6 +1268,7 @@
         home-assistant-frontend
         home-assistant-intents
         ifaddr
+        matter-ble-proxy
         matter-python-client
         mutagen
         numpy
@@ -2239,8 +2309,18 @@
     "google_assistant" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        habluetooth
+        matter-ble-proxy
         matter-python-client
         pyturbojpeg
+        serialx
       ];
     "google_assistant_sdk" =
       ps: with ps; [
@@ -2380,6 +2460,10 @@
     "guardian" =
       ps: with ps; [
         aioguardian
+      ];
+    "guntamatic" =
+      ps: with ps; [
+        guntamatic
       ];
     "habitica" =
       ps: with ps; [
@@ -3292,7 +3376,6 @@
       ];
     "konnected" =
       ps: with ps; [
-        konnected
       ];
     "konnected_esphome" =
       ps: with ps; [
@@ -3524,6 +3607,11 @@
       ps: with ps; [
         thinqconnect
       ];
+    "lg_tv_rs232" =
+      ps: with ps; [
+        aiousbwatcher
+        serialx
+      ]; # missing inputs: lg-rs232-tv
     "libre_hardware_monitor" =
       ps: with ps; [
         librehardwaremonitor-api
@@ -3655,12 +3743,21 @@
     "loqed" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
         loqedapi
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -3668,6 +3765,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "lovelace" =
       ps: with ps; [
@@ -3729,6 +3827,10 @@
     "marantz" =
       ps: with ps; [
       ];
+    "marantz_infrared" =
+      ps: with ps; [
+        infrared-protocols
+      ];
     "martec" =
       ps: with ps; [
       ];
@@ -3749,7 +3851,17 @@
     "matter" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        habluetooth
+        matter-ble-proxy
         matter-python-client
+        serialx
       ];
     "maxcube" =
       ps: with ps; [
@@ -3949,6 +4061,9 @@
       ps: with ps; [
         minio
       ];
+    "mitsubishi_comfort" =
+      ps: with ps; [
+      ]; # missing inputs: mitsubishi-comfort
     "mjpeg" =
       ps: with ps; [
       ];
@@ -3982,11 +4097,20 @@
     "mobile_app" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -3996,6 +4120,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "mochad" =
       ps: with ps; [
@@ -4214,9 +4339,6 @@
       ps: with ps; [
         webio-api
       ];
-    "national_grid_us" =
-      ps: with ps; [
-      ];
     "neato" =
       ps: with ps; [
         pybotvac
@@ -4243,11 +4365,20 @@
     "netatmo" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -4256,6 +4387,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "netdata" =
       ps: with ps; [
@@ -4504,11 +4636,20 @@
     "onedrive" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         onedrive-personal-sdk
@@ -4517,15 +4658,25 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "onedrive_for_business" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         onedrive-personal-sdk
@@ -4534,6 +4685,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "onewire" =
       ps: with ps; [
@@ -4734,6 +4886,9 @@
       ps: with ps; [
         pyotp
       ];
+    "ouman_eh_800" =
+      ps: with ps; [
+      ]; # missing inputs: ouman-eh-800-api
     "ourgroceries" =
       ps: with ps; [
         ourgroceries
@@ -4745,11 +4900,20 @@
     "overseerr" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -4758,6 +4922,17 @@
         python-overseerr
         pyturbojpeg
         securetar
+        serialx
+      ];
+    "ovhcloud_ai_endpoints" =
+      ps: with ps; [
+        ha-ffmpeg
+        hassil
+        home-assistant-intents
+        mutagen
+        openai
+        pymicro-vad
+        pyspeex-noise
       ];
     "ovo_energy" =
       ps: with ps; [
@@ -4766,11 +4941,20 @@
     "owntracks" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -4780,11 +4964,15 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "p1_monitor" =
       ps: with ps; [
         p1monitor
       ];
+    "paj_gps" =
+      ps: with ps; [
+      ]; # missing inputs: pajgps-api
     "palazzetti" =
       ps: with ps; [
         pypalazzetti
@@ -4888,11 +5076,20 @@
     "plaato" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -4901,6 +5098,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "plant" =
       ps: with ps; [
@@ -5075,6 +5273,9 @@
     "psoklahoma" =
       ps: with ps; [
       ];
+    "ptdevices" =
+      ps: with ps; [
+      ]; # missing inputs: aioptdevices
     "pterodactyl" =
       ps: with ps; [
         py-dactyl
@@ -5111,8 +5312,7 @@
       ];
     "pvpc_hourly_pricing" =
       ps: with ps; [
-        aiopvpc
-      ];
+      ]; # missing inputs: esios_api
     "pyload" =
       ps: with ps; [
         pyloadapi
@@ -5199,11 +5399,20 @@
     "rachio" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -5212,6 +5421,7 @@
         pyturbojpeg
         rachiopy
         securetar
+        serialx
       ];
     "radarr" =
       ps: with ps; [
@@ -5538,6 +5748,10 @@
       ];
     "samsam" =
       ps: with ps; [
+      ];
+    "samsung_infrared" =
+      ps: with ps; [
+        infrared-protocols
       ];
     "samsungtv" =
       ps:
@@ -6585,11 +6799,20 @@
     "toon" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -6597,6 +6820,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         toonapi
       ];
     "torque" =
@@ -6692,7 +6916,10 @@
       ];
     "trend" =
       ps: with ps; [
+        fnv-hash-fast
         numpy
+        psutil-home-assistant
+        sqlalchemy
       ];
     "triggercmd" =
       ps: with ps; [
@@ -6962,6 +7189,10 @@
       ps: with ps; [
         vilfo-api-client
       ];
+    "vistapool" =
+      ps: with ps; [
+        aioaquarite
+      ];
     "vivotek" =
       ps: with ps; [
         libpyvivotek
@@ -7047,11 +7278,20 @@
     "watts" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -7059,6 +7299,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         visionpluspython
       ];
     "watttime" =
@@ -7146,12 +7387,21 @@
     "withings" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
         aiowithings
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -7159,6 +7409,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
       ];
     "wiz" =
       ps: with ps; [
@@ -7273,14 +7524,26 @@
       ps: with ps; [
         xs1-api-client
       ];
+    "xthings_cloud" =
+      ps: with ps; [
+      ]; # missing inputs: ha-xthings-cloud
     "yale" =
       ps: with ps; [
         aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
         cronsim
+        dbus-fast
         ha-ffmpeg
+        habluetooth
         hass-nabucasa
         hassil
         home-assistant-intents
+        matter-ble-proxy
         matter-python-client
         mutagen
         openai
@@ -7288,6 +7551,7 @@
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         yalexs
         yalexs-ble
       ];
@@ -7361,6 +7625,10 @@
     "yolink" =
       ps: with ps; [
         yolink-api
+      ];
+    "yoto" =
+      ps: with ps; [
+        yoto-api
       ];
     "youless" =
       ps: with ps; [
@@ -7468,6 +7736,7 @@
     "aftership"
     "agent_dvr"
     "ai_task"
+    "aidot"
     "air_quality"
     "airgradient"
     "airly"
@@ -7530,6 +7799,7 @@
     "auth"
     "automation"
     "autoskope"
+    "avea"
     "awair"
     "aws"
     "aws_s3"
@@ -7580,6 +7850,7 @@
     "casper_glow"
     "cast"
     "ccm15"
+    "centriconnect"
     "cert_expiry"
     "chacon_dio"
     "chess_com"
@@ -7808,6 +8079,7 @@
     "group"
     "growatt_server"
     "guardian"
+    "guntamatic"
     "habitica"
     "hanna"
     "hardkernel"
@@ -7992,6 +8264,7 @@
     "mailgun"
     "manual"
     "manual_mqtt"
+    "marantz_infrared"
     "marytts"
     "mastodon"
     "matrix"
@@ -8137,6 +8410,7 @@
     "openhardwaremonitor"
     "openhome"
     "openrgb"
+    "opensensemap"
     "opensky"
     "opentherm_gw"
     "openuv"
@@ -8151,6 +8425,7 @@
     "ourgroceries"
     "overkiz"
     "overseerr"
+    "ovhcloud_ai_endpoints"
     "ovo_energy"
     "owntracks"
     "p1_monitor"
@@ -8204,7 +8479,6 @@
     "pushbullet"
     "pushover"
     "pvoutput"
-    "pvpc_hourly_pricing"
     "pyload"
     "python_script"
     "qbittorrent"
@@ -8268,6 +8542,7 @@
     "ruuvitag_ble"
     "rympro"
     "sabnzbd"
+    "samsung_infrared"
     "samsungtv"
     "sanix"
     "satel_integra"
@@ -8488,6 +8763,7 @@
     "victron_gx"
     "victron_remote_monitoring"
     "vilfo"
+    "vistapool"
     "vivotek"
     "vizio"
     "vlc_telnet"
@@ -8550,6 +8826,7 @@
     "yardian"
     "yeelight"
     "yolink"
+    "yoto"
     "youless"
     "youtube"
     "zamg"

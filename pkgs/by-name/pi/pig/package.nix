@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pig";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchurl {
     url = "mirror://apache/pig/pig-${finalAttrs.version}/pig-${finalAttrs.version}.tar.gz";
-    sha256 = "1wwpg0w47f49rnivn2d26vrxgyfl9gpqx3vmzbl5lhx6x5l3fqbd";
+    sha256 = "sha256-aEWtuTajw7zHFFF2WVPK5BA+QQui9sWkfMm+yt4KQ0o=";
 
   };
 

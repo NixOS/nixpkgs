@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation {
       cc-by-sa-40
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ ];
   };
 }

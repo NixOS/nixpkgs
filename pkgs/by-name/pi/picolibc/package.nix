@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
         licenses.bsd2
         licenses.bsd3
       ];
-      maintainers = [ maintainers.RossSmyth ];
+      maintainers = [ ];
       # https://github.com/picolibc/picolibc/tree/db4d0fe5952d5ecd714781e3212d4086d970735a?tab=readme-ov-file#supported-architectures
       platforms = lib.platforms.all;
     };

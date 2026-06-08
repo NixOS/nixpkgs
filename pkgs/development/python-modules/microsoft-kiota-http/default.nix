@@ -14,19 +14,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-http";
-  version = "1.10.1";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-http-v${version}";
-    hash = "sha256-KBCjVNZDPMh0wxWm8UVLsrfl2AYp3rKMjAT5c8F7+64=";
+    tag = "microsoft-kiota-http-v${finalAttrs.version}";
+    hash = "sha256-rj0NpuXvqS5rB6TrD3FyuMWb7Dl8/SIBcW/Lzj4cY6I=";
   };
 
-  sourceRoot = "${src.name}/packages/http/httpx/";
+  sourceRoot = "${finalAttrs.src.name}/packages/http/httpx/";
 
   build-system = [ poetry-core ];
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP request adapter implementation for Kiota clients for Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
