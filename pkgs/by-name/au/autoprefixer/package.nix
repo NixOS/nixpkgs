@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -23,14 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-PPYyEsc0o5ufBexUdiX9EJLEsQZ0wX7saBzxJGsnseU=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-fnharTNtW16Il/O+RFZZdy1S6PZsi3tctcLfaH1oJ2o=";
   };
 
   installPhase = ''
