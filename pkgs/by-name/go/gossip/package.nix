@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/source-registry-0/sdl2-sys-0.37.0/SDL/CMakeLists.txt \
+    substituteInPlace $cargoDepsCopy/*/sdl2-sys-0.37.0/SDL/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.0.0...3.5)" \
       --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.4...3.5)"
   '';
