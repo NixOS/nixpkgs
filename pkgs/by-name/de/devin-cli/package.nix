@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cognition's Devin Agent CLI";
-    homepage = "https://devin.ai/";
+    homepage = "https://devin.ai/cli";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with lib.maintainers; [
