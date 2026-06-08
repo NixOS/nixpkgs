@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -24,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-9s2kdvd7svK4hofnD66HkDc86WTQeayfF5y7L2dmjNg=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-fF0nhxvNHSJB++NNGRFp44c10IdK2EaGaOGH8qg0Lsc=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     makeWrapper
     installShellFiles
   ];
