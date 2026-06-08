@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyprland-config";
-  version = "0.4.5";
+  version = "0.9.6";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "BlueManCZ";
     repo = "hyprland-config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C0EvNNSg91vC7/LPt4WkgJA2y54K3XQppWVe4JNL6Go=";
+    hash = "sha256-c+2eZyDdFTmcqqiESjjo6PPN2G4uGpp66UtGBlDiV2M=";
   };
 
   build-system = [ hatchling ];
