@@ -27156,12 +27156,6 @@
     githubId = 101565936;
     name = "Tautvydas Cerniauskas";
   };
-  tcbravo = {
-    email = "tomas.bravo@protonmail.ch";
-    github = "tcbravo";
-    githubId = 66133083;
-    name = "Tomas Bravo";
-  };
   tchab = {
     email = "dev@chabs.name";
     github = "t-chab";
