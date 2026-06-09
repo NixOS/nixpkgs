@@ -11,7 +11,7 @@ in
 {
   options = {
     services.radarr = {
-      enable = lib.mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
+      enable = lib.mkEnableOption "Radarr, a Usenet/BitTorrent movie downloader";
 
       package = lib.mkPackageOption pkgs "radarr" { };
 
