@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "out"
     "man"
+    "doc"
   ]; # $out contains all the config
 
   # GitLab repositrory does not include pre-generated man pages.
