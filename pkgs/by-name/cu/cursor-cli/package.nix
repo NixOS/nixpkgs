@@ -45,9 +45,9 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/cursor-agent
-    cp -r * $out/share/cursor-agent/
-    ln -s $out/share/cursor-agent/cursor-agent $out/bin/cursor-agent
+    mkdir -p $out/bin $out/share/cursor-cli
+    cp -r * $out/share/cursor-cli/
+    ln -s $out/share/cursor-cli/agent $out/bin/agent
 
     runHook postInstall
   '';
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
       andrewbastin
     ];
     platforms = builtins.attrNames sources;
-    mainProgram = "cursor-agent";
+    mainProgram = "agent";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
