@@ -6973,6 +6973,8 @@ self: super: with self; {
 
   ha-silabs-firmware-client = callPackage ../development/python-modules/ha-silabs-firmware-client { };
 
+  ha-xthings-cloud = callPackage ../development/python-modules/ha-xthings-cloud { };
+
   habanero = callPackage ../development/python-modules/habanero { };
 
   habiticalib = callPackage ../development/python-modules/habiticalib { };

@@ -7534,7 +7534,8 @@
       ];
     "xthings_cloud" =
       ps: with ps; [
-      ]; # missing inputs: ha-xthings-cloud
+        ha-xthings-cloud
+      ];
     "yale" =
       ps: with ps; [
         aiohasupervisor
@@ -8832,6 +8833,7 @@
     "xiaomi_aqara"
     "xiaomi_ble"
     "xiaomi_miio"
+    "xthings_cloud"
     "yale"
     "yale_smart_alarm"
     "yalexs_ble"
