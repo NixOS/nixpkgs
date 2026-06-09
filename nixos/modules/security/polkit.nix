@@ -26,6 +26,7 @@ in
   options.security.polkit = {
     enable = mkEnableOption "polkit";
 
+    enablePkexecWrapper = mkEnableOption "the setuid pkexec wrapper";
 
     package = mkPackageOption pkgs "polkit" { };
 
@@ -157,6 +158,7 @@ in
     security.pam.services.polkit-1 = { };
 
     security.wrappers.pkexec = {
+      enable = cfg.enablePkexecWrapper;
       setuid = true;
       owner = "root";
       group = "root";
