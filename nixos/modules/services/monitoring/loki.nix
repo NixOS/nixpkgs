@@ -101,7 +101,7 @@ in
       }
     ];
 
-    environment.systemPackages = [ cfg.package ]; # logcli
+    environment.systemPackages = [ cfg.package.logcli ];
 
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {
