@@ -96,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
   };
 
+  patches = [
+    # Fix busy-wait in event-based multi-socket processing
+    # https://github.com/curl/curl/pull/21549
+    ./curl-wakeup-fix.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
