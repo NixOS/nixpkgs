@@ -27,6 +27,7 @@ in
       else
         lib.getAttr finalAttrs.version {
           "10.14.1" = sample-data_10_14_1;
+          "10.16.1" = sample-data_10_14_1; # Release 10.16 is missing sample data
         }
     );
 
