@@ -12558,6 +12558,8 @@ self: super: with self; {
 
   permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
+  perplexityai = callPackage ../development/python-modules/perplexityai { };
+
   persim = callPackage ../development/python-modules/persim { };
 
   persist-queue = callPackage ../development/python-modules/persist-queue { };
