@@ -6,6 +6,7 @@
   python3,
   python3Packages,
   gettext,
+  gitMinimal,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -13,12 +14,16 @@
 }:
 let
 
-  version = "1.2.6";
+  version = "1.3.0";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-JJtjW0PAsGiDnM8vwqrSdDtO6QuzdVoyY4MeEyaSH4w=";
+    hash = "sha256-nsGqfm7XTwHblvqHmsMo8yQgl7ZtbtPdjOfrpXSQbn0=";
+    postCheckout = ''
+      git -C $out rev-parse HEAD > $out/commit_hash.txt
+      git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
+    '';
   };
 
   frontend =
@@ -34,7 +39,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-tZHrl6NC4MGpmH7+Ge2V/y9FRNd9NdbQ/NreHE10b10=";
+        hash = "sha256-PIhmMIFHW+6jVZcS394yU9L5Zn+wkfrWmJH7lAbevbU=";
       };
 
       nativeBuildInputs = [
@@ -119,6 +124,7 @@ python3Packages.buildPythonApplication rec {
       feedparser
       gunicorn
       jinja2
+      nh3
       pdf2image
       pillow
       pint
@@ -161,7 +167,10 @@ python3Packages.buildPythonApplication rec {
     ++ django-allauth.optional-dependencies.mfa;
 
   build-system = [ python3Packages.setuptools ];
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+    gitMinimal
+  ];
 
   prePatch =
     let
@@ -188,7 +197,7 @@ python3Packages.buildPythonApplication rec {
         # TODO figure out why this fails
         "test_setting_object"
       ];
-      skippedFuncScripts = builtins.map (funcName: ''
+      skippedFuncScripts = map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
           substituteInPlace "$file" --replace-fail "${funcName}" "skip_${funcName}"
         done
@@ -208,24 +217,27 @@ python3Packages.buildPythonApplication rec {
       # Don't need to bother with a non-maintained library from ages ago
       substituteInPlace src/backend/InvenTree/InvenTree/settings.py --replace-fail "django_slowtests.testrunner.DiscoverSlowestTestsRunner" "django.test.runner.DiscoverRunner"
 
-      mkdir -p $out/lib/${pname}/src/backend/InvenTree/web/
-      cp -r src $out/lib/${pname}
-      ln -s ${frontend}/static $out/lib/${pname}/src/backend/InvenTree/web
+      mkdir -p $out/lib/inventree/src/backend/InvenTree/web/
+      cp -r src $out/lib/inventree
+      ln -s ${frontend}/static $out/lib/inventree/src/backend/InvenTree/web
 
-      chmod +x $out/lib/${pname}/src/backend/InvenTree/manage.py
+      chmod +x $out/lib/inventree/src/backend/InvenTree/manage.py
 
-      makeWrapper $out/lib/${pname}/src/backend/InvenTree/manage.py $out/bin/${pname} \
-        --prefix PYTHONPATH : "${pythonPath}:$out/lib/${pname}/src/backend/InvenTree" \
-        --set INVENTREE_COMMIT_HASH abcdef \
-        --set INVENTREE_COMMIT_DATE 1970-01-01
+      INVENTREE_COMMIT_HASH=$(cat $src/commit_hash.txt)
+      INVENTREE_COMMIT_DATE=$(cat $src/commit_date.txt)
+
+      makeWrapper $out/lib/inventree/src/backend/InvenTree/manage.py $out/bin/inventree \
+        --prefix PYTHONPATH : "${pythonPath}:$out/lib/inventree/src/backend/InvenTree" \
+        --set INVENTREE_COMMIT_HASH $INVENTREE_COMMIT_HASH \
+        --set INVENTREE_COMMIT_DATE $INVENTREE_COMMIT_DATE
 
       makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/${pname}/src/backend/InvenTree" \
-        --set INVENTREE_COMMIT_HASH abcdef \
-        --set INVENTREE_COMMIT_DATE 1970-01-01
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/inventree/src/backend/InvenTree" \
+        --set INVENTREE_COMMIT_HASH $INVENTREE_COMMIT_HASH \
+        --set INVENTREE_COMMIT_DATE $INVENTREE_COMMIT_DATE
 
       # Generate static assets
-      pushd $out/lib/${pname}/src/backend/InvenTree &>/dev/null
+      pushd $out/lib/inventree/src/backend/InvenTree &>/dev/null
       export INVENTREE_STATIC_ROOT=$out/lib/inventree/static
       export INVENTREE_MEDIA_ROOT=$(mktemp -d)
       export INVENTREE_BACKUP_DIR=$(mktemp -d)
