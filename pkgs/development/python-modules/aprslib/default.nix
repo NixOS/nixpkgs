@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  doCheck = false; # mox3 is disabled on python311
+  doCheck = false; # mox3 is not packaged
 
   nativeCheckInputs = [ pytestCheckHook ];
 
