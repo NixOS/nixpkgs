@@ -18,6 +18,7 @@
   util-linux,
   wrapGAppsHook3,
   withGui ? false,
+  nix-update-script,
 }:
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;
@@ -93,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
