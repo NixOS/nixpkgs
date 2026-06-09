@@ -7964,6 +7964,11 @@
     githubId = 18375468;
     name = "Elliot Xu";
   };
+  elliotberman = {
+    name = "Elliot Berman";
+    github = "elliotberman";
+    githubId = 210410075;
+  };
   elliottslaughter = {
     name = "Elliott Slaughter";
     email = "elliottslaughter@gmail.com";
