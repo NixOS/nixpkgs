@@ -173,7 +173,7 @@ buildRedist (
         size of CPUs and GPUs, from large servers to our smallest systems-on-a-chip (SoCs).
       '';
       homepage = "https://developer.nvidia.com/nsight-systems";
-      changelog = "https://docs.nvidia.com/nsight-systems/ReleaseNotes";
+      changelog = "https://docs.nvidia.com/nsight-systems/ReleaseNotes/";
     };
   }
 )

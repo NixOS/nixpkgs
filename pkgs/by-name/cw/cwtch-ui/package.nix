@@ -80,7 +80,7 @@ flutter329.buildFlutterApplication {
   meta = {
     description = "Messaging app built on the cwtch decentralized, privacy-preserving, multi-party messaging protocol";
     homepage = "https://cwtch.im/";
-    changelog = "https://docs.cwtch.im/changelog";
+    changelog = "https://docs.cwtch.im/changelog/";
     license = lib.licenses.mit;
     mainProgram = "cwtch";
     platforms = [ "x86_64-linux" ];

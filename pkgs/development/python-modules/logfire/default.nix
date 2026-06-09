@@ -187,7 +187,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://logfire.pydantic.dev/docs/release-notes";
+    changelog = "https://pydantic.dev/docs/logfire/resources/release-notes/";
     description = "Uncomplicated Observability for Python and beyond";
     downloadPage = "https://github.com/pydantic/logfire/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://logfire.pydantic.dev";

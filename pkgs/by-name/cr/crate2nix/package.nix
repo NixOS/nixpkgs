@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       so that you can build every crate individually in a Nix sandbox.
     '';
     homepage = "https://github.com/nix-community/crate2nix";
-    changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog";
+    changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kolloch
