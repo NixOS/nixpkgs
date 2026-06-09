@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     python3.pkgs.sphinx
