@@ -9,6 +9,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.28";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
