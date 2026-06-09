@@ -304,7 +304,6 @@ in
   meta = {
     maintainers = with lib.maintainers; [
       happysalada
-      euxane
       onny
       norpol
     ];
