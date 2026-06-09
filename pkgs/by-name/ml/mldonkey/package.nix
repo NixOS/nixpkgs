@@ -4,19 +4,22 @@
   fetchFromGitHub,
   autoreconfHook,
   autoconf-archive,
-  ocamlPackages,
+  ocaml-ng,
   pkg-config,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mldonkey";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "ygrek";
     repo = "mldonkey";
-    tag = "release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "release-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-Dbb7163CdqHY7/FJY2yWBFRudT+hTFT6fO4sFgt6C/A=";
   };
 
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -70,4 +74,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

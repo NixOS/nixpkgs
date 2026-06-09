@@ -2,22 +2,22 @@
   lib,
   fetchFromGitHub,
   ocamlPackages,
-  menhir,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "obelisk";
   version = "0.8.1";
+
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JJ8k9/6awKZH87T9Ut8x/hlshiUI6sy2fZtY6x2dIIk=";
+    repo = "obelisk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JJ8k9/6awKZH87T9Ut8x/hlshiUI6sy2fZtY6x2dIIk=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = with ocamlPackages; [ menhir ];
   buildInputs = with ocamlPackages; [ re ];
 
   meta = {
@@ -27,4 +27,4 @@ ocamlPackages.buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Lelio-Brun/Obelisk";
   };
-}
+})

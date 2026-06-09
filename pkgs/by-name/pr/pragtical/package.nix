@@ -14,7 +14,7 @@
   libzip,
   lua5_4,
   luajit,
-  mbedtls,
+  mbedtls_4,
   pcre2,
   sdl3,
   sdl3-image,
@@ -26,7 +26,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
   version = "3.11.2";
-  pluginManagerRev = "v1.5.1";
+  pluginManagerRev = "v1.5.2";
   linenoiseRev = "e78e236c8d85c078fdd9fc4e1f08716058aa1a42";
 
   src = fetchFromGitHub {
@@ -47,14 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'revision = master' 'revision = ${finalAttrs.linenoiseRev}'
 
       ${lib.getExe meson} subprojects download \
-        colors linenoise plugins ppm widget mbedtls
-      # TODO: remove mbedtls from list once ppm supports mbedtls_4
-      # See https://github.com/pragtical/plugin-manager/issues/11
+        colors linenoise plugins ppm widget
 
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-6S4hnmSsejLr7IiZ4mtHT5ImBsVlyKFtLx9PBgv6b90=";
+    hash = "sha256-OkvtPH8XiF3nkZ66PnKm+++NWWDK1ypGmjiZYGOiIe8=";
   };
 
   strictDeps = true;
@@ -75,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     lua5_4
     luajit
-    mbedtls
+    mbedtls_4
     pcre2
     sdl3
     sdl3-image

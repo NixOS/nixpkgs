@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgx";
-  version = "0.12.6";
+  version = "0.14.1";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "brevity1swos";
     repo = "rgx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YdbuyVhqu1LUaHecF1iFS62/qcW9IgXPlsEoWpNdrEQ=";
+    hash = "sha256-4ubPvcxRjwIbPsnxEu6QXPflPUJRnij8WIKeFT+Jxkg=";
   };
 
-  cargoHash = "sha256-ILq0oB+Xq4agQMWqGLV0LC4NlMkUMVFppLJ+FJpsTRM=";
+  cargoHash = "sha256-u0qCt/XwCayAOKDwD+nQiy41F/x6HORZmqzgpTsBdzM=";
 
   buildInputs = [ pcre2 ];
 
