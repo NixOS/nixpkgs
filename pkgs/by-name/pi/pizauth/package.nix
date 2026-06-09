@@ -19,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
 
+  preConfigure = ''
+    substituteInPlace lib/systemd/user/pizauth.service \
+      --replace-fail /usr/bin/ ''${!outputBin}/bin/
+  '';
+
   postInstall = ''
     make PREFIX=$out install ${lib.optionalString stdenv.hostPlatform.isLinux "install-systemd"}
   '';
