@@ -2,7 +2,7 @@ name: Teams
 
 on:
   schedule:
-    # Every Tuesday at 19:42 (randomly chosen)
+    # Every Monday at 19:42 (randomly chosen)
     - cron: '42 19 * * 1'
   workflow_dispatch:
 
