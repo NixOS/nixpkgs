@@ -30499,6 +30499,11 @@
     githubId = 26011724;
     name = "Burim Augustin Berisa";
   };
+  ymarkus = {
+    name = "Yannick Schneider";
+    github = "ymarkus";
+    githubId = 62380378;
+  };
   ymatsiuk = {
     name = "Yurii Matsiuk";
     github = "ymatsiuk";
