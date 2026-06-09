@@ -49,6 +49,8 @@ buildPythonPackage {
     "frida._frida"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
