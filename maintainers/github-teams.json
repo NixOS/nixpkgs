@@ -2,10 +2,11 @@
   "acme": {
     "description": "Maintain ACME-related packages and modules.",
     "id": 3806126,
-    "maintainers": {},
+    "maintainers": {
+      "emilazy": 18535642
+    },
     "members": {
       "arianvp": 628387,
-      "emilazy": 18535642,
       "m1cr0man": 3044438
     },
     "name": "ACME"
@@ -71,11 +72,10 @@
     "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
     "id": 9141350,
     "maintainers": {
+      "philiptaron": 43863,
       "zeuner": 2545850
     },
-    "members": {
-      "philiptaron": 43863
-    },
+    "members": {},
     "name": "bootstrapping"
   },
   "categorization": {
@@ -176,6 +176,7 @@
     "description": "Improve Darwin-support across Nixpkgs and help maintainers without access to Darwin hardware. Apply to join through https://github.com/NixOS/nixpkgs/issues/323144 to keep the process transparent.",
     "id": 2385202,
     "maintainers": {
+      "emilazy": 18535642,
       "toonn": 1486805
     },
     "members": {
@@ -205,7 +206,6 @@
       "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
-      "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
       "fulsomenko": 14945057,
@@ -410,9 +410,7 @@
       "jtojnar": 705123
     },
     "members": {
-      "bobby285271": 20080233,
-      "dasj19": 7589338,
-      "hedning": 71978
+      "bobby285271": 20080233
     },
     "name": "GNOME"
   },
@@ -556,11 +554,12 @@
     "id": 9955829,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "alyssais": 2768870
+      "alyssais": 2768870,
+      "emilazy": 18535642
     },
     "members": {
       "Ericson2314": 1055245,
-      "emilazy": 18535642,
+      "peterwaller-arm": 52030119,
       "rrbutani": 7833358,
       "sternenseemann": 3154475
     },
@@ -695,8 +694,7 @@
     "description": "",
     "id": 174820,
     "maintainers": {
-      "Ericson2314": 1055245,
-      "tomberek": 178444
+      "Ericson2314": 1055245
     },
     "members": {
       "Mic92": 96200,
@@ -704,6 +702,7 @@
       "edolstra": 1148549,
       "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
+      "tomberek": 178444,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -852,15 +851,15 @@
     "description": "Team that is interested in reproducible builds",
     "id": 7625643,
     "maintainers": {
-      "raboof": 131856,
-      "zimbatm": 3248
+      "raboof": 131856
     },
     "members": {
       "Artturin": 56650223,
       "Atemu": 18599032,
       "RaitoBezarius": 314564,
       "davidak": 91113,
-      "mschwaig": 3856390
+      "mschwaig": 3856390,
+      "zimbatm": 3248
     },
     "name": "reproducible"
   },
@@ -964,13 +963,13 @@
     "description": "Maintain the standard environment and its surrounding logic.",
     "id": 11265412,
     "maintainers": {
-      "RossComputerGuy": 19699320
+      "RossComputerGuy": 19699320,
+      "emilazy": 18535642,
+      "philiptaron": 43863
     },
     "members": {
       "Artturin": 56650223,
       "Ericson2314": 1055245,
-      "emilazy": 18535642,
-      "philiptaron": 43863,
       "reckenrode": 7413633
     },
     "name": "stdenv"
