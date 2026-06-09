@@ -4154,6 +4154,8 @@ assertNoAdditions {
       };
 
       nvimSkipModules = [
+        # Example seeds and edits a database during require.
+        "sqlite.examples.bookmarks"
         # Require "sql.utils" ?
         "sqlite.tbl.cache"
       ];

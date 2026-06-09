@@ -7071,6 +7071,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  guh-nvim = buildVimPlugin {
+    pname = "guh.nvim";
+    version = "2026-06-09";
+    src = fetchFromGitHub {
+      owner = "justinmk";
+      repo = "guh.nvim";
+      rev = "e8d8df780eb13da78a992fdc387bbc5f1401dd6f";
+      hash = "sha256-vkBP9TvNbUsChtntdgFkHaT01R84HfUAjGXk+SbZUng=";
+    };
+    meta.homepage = "https://github.com/justinmk/guh.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   guihua-lua = buildVimPlugin {
     pname = "guihua.lua";
     version = "0.1-unstable-2026-05-26";

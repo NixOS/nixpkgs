@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "netr0m";
     repo = "az-pim-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2WhinTxFCNLgw2TejoulhGXJwnUHP/CyC/Gwedv/8Xw=";
+    hash = "sha256-Pqc8pWicVORcoTXg7oT8SX1BwDRSjLHuqyyBZ6q7eio=";
   };
 
   patches = [

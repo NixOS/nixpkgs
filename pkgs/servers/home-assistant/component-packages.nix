@@ -3613,8 +3613,9 @@
     "lg_tv_rs232" =
       ps: with ps; [
         aiousbwatcher
+        lg-rs232-tv
         serialx
-      ]; # missing inputs: lg-rs232-tv
+      ];
     "libre_hardware_monitor" =
       ps: with ps; [
         librehardwaremonitor-api
@@ -4066,7 +4067,8 @@
       ];
     "mitsubishi_comfort" =
       ps: with ps; [
-      ]; # missing inputs: mitsubishi-comfort
+        mitsubishi-comfort
+      ];
     "mjpeg" =
       ps: with ps; [
       ];
@@ -4891,7 +4893,8 @@
       ];
     "ouman_eh_800" =
       ps: with ps; [
-      ]; # missing inputs: ouman-eh-800-api
+        ouman-eh-800-api
+      ];
     "ourgroceries" =
       ps: with ps; [
         ourgroceries
@@ -4975,7 +4978,8 @@
       ];
     "paj_gps" =
       ps: with ps; [
-      ]; # missing inputs: pajgps-api
+        pajgps-api
+      ];
     "palazzetti" =
       ps: with ps; [
         pypalazzetti
@@ -5315,7 +5319,8 @@
       ];
     "pvpc_hourly_pricing" =
       ps: with ps; [
-      ]; # missing inputs: esios_api
+        esios-api
+      ];
     "pyload" =
       ps: with ps; [
         pyloadapi
@@ -7529,7 +7534,8 @@
       ];
     "xthings_cloud" =
       ps: with ps; [
-      ]; # missing inputs: ha-xthings-cloud
+        ha-xthings-cloud
+      ];
     "yale" =
       ps: with ps; [
         aiohasupervisor
@@ -8234,6 +8240,7 @@
     "lg_netcast"
     "lg_soundbar"
     "lg_thinq"
+    "lg_tv_rs232"
     "libre_hardware_monitor"
     "lichess"
     "lidarr"
@@ -8307,6 +8314,7 @@
     "min_max"
     "minecraft_server"
     "minio"
+    "mitsubishi_comfort"
     "mjpeg"
     "moat"
     "mobile_app"
@@ -8428,6 +8436,7 @@
     "osoenergy"
     "otbr"
     "otp"
+    "ouman_eh_800"
     "ourgroceries"
     "overkiz"
     "overseerr"
@@ -8435,6 +8444,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "paj_gps"
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
@@ -8485,6 +8495,7 @@
     "pushbullet"
     "pushover"
     "pvoutput"
+    "pvpc_hourly_pricing"
     "pyload"
     "python_script"
     "qbittorrent"
@@ -8822,6 +8833,7 @@
     "xiaomi_aqara"
     "xiaomi_ble"
     "xiaomi_miio"
+    "xthings_cloud"
     "yale"
     "yale_smart_alarm"
     "yalexs_ble"
