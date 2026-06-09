@@ -2,34 +2,19 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "csvs-to-sqlite";
-  version = "1.3";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "csvs-to-sqlite";
     rev = finalAttrs.version;
-    hash = "sha256-wV6htULG3lg2IhG2bXmc/9vjcK8/+WA7jm3iJu4ZoOE=";
+    hash = "sha256-hjimoIoHJdDyKzoJfWdRONUh7yLsR/d8n8zYbb6BKhk=";
   };
-
-  patches = [
-    # https://github.com/simonw/csvs-to-sqlite/pull/92
-    (fetchpatch {
-      name = "pandas2-compatibility-1.patch";
-      url = "https://github.com/simonw/csvs-to-sqlite/commit/fcd5b9c7485bc7b95bf2ed9507f18a60728e0bcb.patch";
-      hash = "sha256-ZmaNWxsqeNw5H5gAih66DLMmzmePD4no1B5mTf8aFvI=";
-    })
-    (fetchpatch {
-      name = "pandas2-compatibility-2.patch";
-      url = "https://github.com/simonw/csvs-to-sqlite/commit/3d190aa44e8d3a66a9a3ca5dc11c6fe46da024df.patch";
-      hash = "sha256-uYUH0Mhn6LIf+AHcn6WuCo5zFuSNWOZBM+AoqkmMnSI=";
-    })
-  ];
 
   build-system = with python3.pkgs; [
     setuptools

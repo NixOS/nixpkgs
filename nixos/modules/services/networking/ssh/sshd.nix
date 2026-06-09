@@ -225,6 +225,11 @@ in
       [ "services" "openssh" "forwardX11" ]
       [ "services" "openssh" "settings" "X11Forwarding" ]
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "openssh"
+      "banner"
+    ] "Use services.openssh.settings.Banner instead.")
   ];
 
   ###### interface
@@ -404,11 +409,13 @@ in
         example = true;
       };
 
-      banner = lib.mkOption {
-        type = lib.types.nullOr lib.types.lines;
-        default = null;
+      enableRecommendedAlgorithms = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
         description = ''
-          Message to display to the remote user before authentication is allowed.
+          Use algorithms curated and recommended by NixOS.
+
+          Set to false to use upstream's default algorithms.
         '';
       };
 
@@ -571,37 +578,64 @@ in
               };
               KexAlgorithms = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
-                default = [
-                  "mlkem768x25519-sha256"
-                  "sntrup761x25519-sha512"
-                  "sntrup761x25519-sha512@openssh.com"
-                  "curve25519-sha256"
-                  "curve25519-sha256@libssh.org"
-                  "diffie-hellman-group-exchange-sha256"
-                ];
+                default =
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "mlkem768x25519-sha256"
+                      "sntrup761x25519-sha512"
+                      "sntrup761x25519-sha512@openssh.com"
+                      "curve25519-sha256"
+                      "curve25519-sha256@libssh.org"
+                      "diffie-hellman-group-exchange-sha256"
+                    ]
+                  else
+                    null;
+                defaultText = ''
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "mlkem768x25519-sha256"
+                      "sntrup761x25519-sha512"
+                      "sntrup761x25519-sha512@openssh.com"
+                      "curve25519-sha256"
+                      "curve25519-sha256@libssh.org"
+                      "diffie-hellman-group-exchange-sha256"
+                    ]
+                  else
+                    null;
+                '';
                 description = ''
                   Allowed key exchange algorithms
 
-                  Uses the lower bound recommended in both
-                  <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                  and
-                  <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+                  Defaults to a curated set of algorithms.
+                  Set enableRecommendedAlgorithms to false to use upstream's defaults.
                 '';
               };
               Macs = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
-                default = [
-                  "hmac-sha2-512-etm@openssh.com"
-                  "hmac-sha2-256-etm@openssh.com"
-                  "umac-128-etm@openssh.com"
-                ];
+                default =
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "hmac-sha2-512-etm@openssh.com"
+                      "hmac-sha2-256-etm@openssh.com"
+                      "umac-128-etm@openssh.com"
+                    ]
+                  else
+                    null;
+                defaultText = ''
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "hmac-sha2-512-etm@openssh.com"
+                      "hmac-sha2-256-etm@openssh.com"
+                      "umac-128-etm@openssh.com"
+                    ]
+                  else
+                    null;
+                '';
                 description = ''
                   Allowed MACs
 
-                  Defaults to recommended settings from both
-                  <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                  and
-                  <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+                  Defaults to a curated set of algorithms.
+                  Set enableRecommendedAlgorithms to false to use upstream's defaults.
                 '';
               };
               StrictModes = lib.mkOption {
@@ -613,21 +647,36 @@ in
               };
               Ciphers = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
-                default = [
-                  "chacha20-poly1305@openssh.com"
-                  "aes256-gcm@openssh.com"
-                  "aes128-gcm@openssh.com"
-                  "aes256-ctr"
-                  "aes192-ctr"
-                  "aes128-ctr"
-                ];
+                default =
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "chacha20-poly1305@openssh.com"
+                      "aes256-gcm@openssh.com"
+                      "aes128-gcm@openssh.com"
+                      "aes256-ctr"
+                      "aes192-ctr"
+                      "aes128-ctr"
+                    ]
+                  else
+                    null;
+                defaultText = ''
+                  if config.services.openssh.enableRecommendedAlgorithms then
+                    [
+                      "chacha20-poly1305@openssh.com"
+                      "aes256-gcm@openssh.com"
+                      "aes128-gcm@openssh.com"
+                      "aes256-ctr"
+                      "aes192-ctr"
+                      "aes128-ctr"
+                    ]
+                  else
+                    null;
+                '';
                 description = ''
                   Allowed ciphers
 
-                  Defaults to recommended settings from both
-                  <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                  and
-                  <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+                  Defaults to a curated set of algorithms.
+                  Set enableRecommendedAlgorithms to false to use upstream's defaults.
                 '';
               };
               AllowUsers = lib.mkOption {
@@ -669,6 +718,14 @@ in
               # Disabled by default, since pam_motd handles this.
               PrintMotd = lib.mkEnableOption "printing /etc/motd when a user logs in interactively" // {
                 type = lib.types.nullOr lib.types.bool;
+              };
+              Banner = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
+                default = null;
+                description = ''
+                  The file whose contents are sent to the remote user before authentication.
+                '';
+                example = "/etc/ssh/banner";
               };
             };
           }
@@ -834,7 +891,6 @@ in
       services.openssh.extraConfig = lib.mkOrder 0 (
         lib.concatStringsSep "\n" (
           [
-            "Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}"
             "AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}"
           ]
           ++ lib.map (port: "Port ${toString port}") cfg.ports

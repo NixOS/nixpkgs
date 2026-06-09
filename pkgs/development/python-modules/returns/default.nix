@@ -8,6 +8,7 @@
   mypy,
   poetry-core,
   pytest-aio,
+  pytest-cov-stub,
   pytest-mypy,
   pytest-mypy-plugins,
   pytestCheckHook,
@@ -28,11 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-VQzsa/uNTQVND0kc20d25to/6LELEiS3cqvG7a1kDw4=";
   };
 
-  postPatch = ''
-    sed -i setup.cfg \
-      -e '/--cov.*/d'
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ typing-extensions ];
@@ -45,6 +41,7 @@ buildPythonPackage rec {
     mypy
     pytestCheckHook
     pytest-aio
+    pytest-cov-stub
     pytest-mypy
     pytest-mypy-plugins
     setuptools

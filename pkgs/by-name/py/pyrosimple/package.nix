@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "parsimonious"
     "prometheus-client"
     "python-daemon"
   ];

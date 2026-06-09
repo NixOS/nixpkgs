@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
 }:
-assert version == "2.11.0";
+assert version == "2.12.0";
 rec {
   src_aiter = fetchFromGitHub {
     owner = "ROCm";
@@ -45,6 +45,12 @@ rec {
   src_composable_kernel = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
+    rev = "f1746955fdaf80a3414de814bf32437686dac347";
+    hash = "sha256-B/xNuBPUdjL1b+0IzRnaSXT2FKUo5cYwYcKqfKqJ8Eg=";
+  };
+  src_composable_kernel_aiter = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "composable_kernel";
     rev = "fcc9372c009c8e0a23fece77b582da83b04a654f";
     hash = "sha256-Xwj48Ftwqlea5ZIP7q7cRh2U2tlHTd1cdW4TYf5J0Dg=";
   };
@@ -63,8 +69,8 @@ rec {
   src_cpp-httplib = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
-    rev = "bd95e67c234930cd6d6bb11309588c5462c63cec";
-    hash = "sha256-5q77ersAJnPPpVChvntnqEly1/ek2KfX2iukTPUbKHc=";
+    rev = "4d7c9a788de136071ccf0dd4e96239151e2adadb";
+    hash = "sha256-VXEhoxoQjGEuA2g/y6fDTA4LrPd4SggrS3aOjznDSvc=";
   };
   src_cpr = fetchFromGitHub {
     owner = "libcpr";
@@ -87,14 +93,14 @@ rec {
   src_cudnn-frontend = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
-    rev = "b8c0656e6f6c84fc194f4d57329b55d609eff596";
-    hash = "sha256-G1WYxRCsg67umzOZ9W+JwXV6hfl5n2wtsH9KxVUccTU=";
+    rev = "a91f0e04dcea10515f0f776fc5a89535e316a9c8";
+    hash = "sha256-OOKdkjsVnWgrtcI7IMPSRi2YxtqF2YNV4Fd2rD9I1K8=";
   };
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "0d2b201e8c1c4a03efa6e9c468161916e2334725";
-    hash = "sha256-2xgdS2P2tEI/4qcZv9qjCYHFbAcVayMdCDeJfIiQN4U=";
+    rev = "da5e086dab31d63815acafdac9a9c5893b1c69e2";
+    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
   };
   src_cutlass_fbgemm = fetchFromGitHub {
     owner = "jwfromm";
@@ -141,8 +147,8 @@ rec {
   src_flash-attention = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "flash-attention";
-    rev = "e2743ab5b3803bb672b16437ba98a3b1d4576c50";
-    hash = "sha256-ft3jPiKZDHzZvkGPI34l8/Hq9Rf2f6UjDPKGU2IYz+E=";
+    rev = "fec3a6a18460c1b40f097208d4c16fe8964a679d";
+    hash = "sha256-7yEFNM2lslkBA/9slblAbiK1PHKqKmo1MCFJYz2BOLk=";
   };
   src_flatbuffers = fetchFromGitHub {
     owner = "google";
@@ -243,7 +249,7 @@ rec {
   src_ideep = fetchFromGitHub {
     owner = "intel";
     repo = "ideep";
-    rev = "8e7ddd65df95f13e41f0a40c820c5f35ae4a0ea3";
+    rev = "e539e0f9774e2018f0d56fe865da66581f692e3d";
     hash = "sha256-AVSsugGYiQ4QOWMVaHj1hzlPTZmg65yrGMmrWytvUuM=";
   };
   src_ittapi = fetchFromGitHub {
@@ -273,8 +279,8 @@ rec {
   src_kineto = fetchFromGitHub {
     owner = "pytorch";
     repo = "kineto";
-    rev = "7a731b6ae01cfc2b1fc75d83a91f84e682e43fd7";
-    hash = "sha256-kKASzILEvFhXDWDqBiNh21VxhtdT506NYoEDVrtVcGU=";
+    rev = "b2103f78d13fde4937af010c0ef8e24313568bc5";
+    hash = "sha256-Ix5zulGaUPbLeVrrTm/EzcVWT4TkDYcBsQADAl4N7TA=";
   };
   src_kleidiai = fetchFromGitHub {
     owner = "ARM-software";
@@ -303,8 +309,8 @@ rec {
   src_mkl-dnn = fetchFromGitHub {
     owner = "intel";
     repo = "mkl-dnn";
-    rev = "f1d471933dc852f956fd05389f9313c7148783d5";
-    hash = "sha256-/e57voLBNun/2koTF3sEb0Z/nDjCwq9NJVk7TaTSvMY=";
+    rev = "03c022d3ffdcee958cfacbe720048e725fdf644c";
+    hash = "sha256-xJTllrKs6mPNM85ZqyHTHWKpVOtOghmg4ZRFAvQZ4WU=";
   };
   src_MSLK = fetchFromGitHub {
     owner = "meta-pytorch";
@@ -393,8 +399,8 @@ rec {
   src_pytorch = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
-    rev = "v2.11.0";
-    hash = "sha256-eA/pRQiibLJCKDUkMvmGq4suhrz37i0x0Lc/sH3Ag8E=";
+    rev = "v2.12.0";
+    hash = "sha256-IyQs9CQbbpZYpd+8YhIj/ULjsIWu6gjkGrGSeMWqKvw=";
   };
   src_sleef = fetchFromGitHub {
     owner = "shibatch";
@@ -423,7 +429,7 @@ rec {
   src_aiter_recursive = runCommand "aiter" { } ''
     cp -r ${src_aiter} $out
     chmod u+w $out/3rdparty/composable_kernel
-    cp -r ${src_composable_kernel_recursive}/* $out/3rdparty/composable_kernel
+    cp -r ${src_composable_kernel_aiter_recursive}/* $out/3rdparty/composable_kernel
   '';
   src_asmjit_recursive = src_asmjit;
   src_benchmark_recursive = src_benchmark;
@@ -431,6 +437,7 @@ rec {
   src_civetweb_recursive = src_civetweb;
   src_clang-cindex-python3_recursive = src_clang-cindex-python3;
   src_composable_kernel_recursive = src_composable_kernel;
+  src_composable_kernel_aiter_recursive = src_composable_kernel_aiter;
   src_composable_kernel_fbgemm_MSLK_recursive = src_composable_kernel_fbgemm_MSLK;
   src_composable_kernel_flash-attention_recursive = src_composable_kernel_flash-attention;
   src_cpp-httplib_recursive = src_cpp-httplib;

@@ -441,18 +441,6 @@ let
               chown -R ${user}:${data.group} "$fixpath"
             fi
           done
-
-          ${lib.optionalString (data.webroot != null) ''
-            # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
-            # Lego will fail if the webroot does not exist at all.
-            (
-              mkdir -p '${data.webroot}/.well-known/acme-challenge' \
-              && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
-            ) || (
-              echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
-              && exit 1
-            )
-          ''}
         '';
       };
 
@@ -677,10 +665,6 @@ let
       };
     in
     {
-      imports = [
-        (lib.mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
-      ];
-
       options = {
         validMinDays = lib.mkOption {
           type = lib.types.nullOr lib.types.int;
@@ -1281,6 +1265,21 @@ in
           ) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
         in
         accountTargets;
+
+      systemd.tmpfiles.settings."10-acme" =
+        lib.genAttrs
+          (lib.concatMap (dir: [
+            dir
+            (dir + "/.well-known")
+            (dir + "/.well-known/acme-challenge")
+          ]) webroots)
+          (dir: {
+            "d" = {
+              inherit user;
+              group = "acme";
+              mode = "0755";
+            };
+          });
     })
   ];
 

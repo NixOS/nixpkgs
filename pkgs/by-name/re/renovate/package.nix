@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "43.91.1";
+  version = "43.150.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-HW0rI9qN/eUgEnPJPJk0m5x4S/69RgaoA/+I7GoGUyc=";
+    hash = "sha256-yCkwlPf6jLM906U7BdY1h5IcaOSe6aureYIKXQk+re0=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     cctools # contains libtool, required by better-sqlite3
   ];
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-R+4TswBHCv/z5MMiLgT3M5E4b9oeIWb/wWs9PXFk3s4=";
+    fetcherVersion = 3;
+    hash = "sha256-ldxhP+I455PEfBrkJIlHudNvAsI4EN34ZkQXMBciOo4=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "easyeda2kicad";
-  version = "0.8.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p4G+bRB29uBohqQpI3PrkwyZId5McJ1t2Ru26hBPSks=";
+    hash = "sha256-EipI+vo7kY5zAYXJc900IYOSi4oNviRDbRPVi5ApDoQ=";
   };
 
   build-system = with python3Packages; [

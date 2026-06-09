@@ -1,6 +1,15 @@
+diff -ruN a/bridge/bridge.go b/bridge/bridge.go
 --- a/bridge/bridge.go
 +++ b/bridge/bridge.go
-@@ -93,7 +93,10 @@
+@@ -50,6 +50,7 @@
+ 
+ 	Env.BasePath = filepath.ToSlash(filepath.Dir(exePath))
+ 	Env.AppName = filepath.Base(exePath)
++	Env.ConfigPath = filepath.ToSlash(GetConfigPath())
+ 
+ 	if slices.Contains(os.Args, "tasksch") {
+ 		Env.FromTaskSch = true
+@@ -93,7 +94,10 @@
  
  func (a *App) RestartApp() FlagResult {
  	log.Printf("RestartApp")
@@ -12,3 +21,64 @@
  
  	cmd := exec.Command(exePath)
  	SetCmdWindowHidden(cmd)
+@@ -116,6 +120,7 @@
+ 		AppName:      Env.AppName,
+ 		AppVersion:   Env.AppVersion,
+ 		BasePath:     Env.BasePath,
++		ConfigPath:   Env.ConfigPath,
+ 		OS:           Env.OS,
+ 		ARCH:         Env.ARCH,
+ 		IsPrivileged: Env.IsPrivileged,
+@@ -258,7 +263,7 @@
+ }
+ 
+ func loadConfig() {
+-	b, err := os.ReadFile(Env.BasePath + "/data/user.yaml")
++	b, err := os.ReadFile(GetPath("data/user.yaml"))
+ 	if err == nil {
+ 		yaml.Unmarshal(b, &Config)
+ 	}
+diff -ruN a/bridge/types.go b/bridge/types.go
+--- a/bridge/types.go
++++ b/bridge/types.go
+@@ -21,6 +21,7 @@
+ 	AppName      string `json:"appName"`
+ 	AppVersion   string `json:"appVersion"`
+ 	BasePath     string `json:"basePath"`
++	ConfigPath   string `json:"configPath"`
+ 	OS           string `json:"os"`
+ 	ARCH         string `json:"arch"`
+ 	IsPrivileged bool   `json:"isPrivileged"`
+diff -ruN a/bridge/utils.go b/bridge/utils.go
+--- a/bridge/utils.go
++++ b/bridge/utils.go
+@@ -13,7 +13,29 @@
+ 	"golang.org/x/text/encoding/simplifiedchinese"
+ )
+ 
++func GetConfigPath() string {
++	if Env.OS == "linux" {
++		if xdgConfigHome := os.Getenv("XDG_CONFIG_HOME"); xdgConfigHome != "" {
++			return filepath.Join(xdgConfigHome, "GUI.for.SingBox")
++		}
++		if userConfigDir, err := os.UserConfigDir(); err == nil {
++			return filepath.Join(userConfigDir, "GUI.for.SingBox")
++		}
++	}
++
++	return Env.BasePath
++}
++
+ func GetPath(path string) string {
++	if Env.OS == "linux" && !filepath.IsAbs(path) {
++		cleanPath := filepath.ToSlash(filepath.Clean(path))
++		if cleanPath == "data" {
++			path = filepath.Join(GetConfigPath(), "data")
++		} else if strings.HasPrefix(cleanPath, "data/") {
++			path = filepath.Join(GetConfigPath(), cleanPath)
++		}
++	}
++
+ 	if !filepath.IsAbs(path) {
+ 		path = filepath.Join(Env.BasePath, path)
+ 	}

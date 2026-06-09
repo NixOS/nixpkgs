@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper";
-  version = "3.9.5";
+  version = "3.9.5"; # Don't forget to update zookeeper_mt's hash!
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/zookeeper-${finalAttrs.version}/apache-zookeeper-${finalAttrs.version}-bin.tar.gz";

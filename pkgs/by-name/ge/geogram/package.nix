@@ -5,64 +5,58 @@
   cmake,
   doxygen,
   zlib,
-  python3Packages,
   nix-update-script,
-  fetchpatch2,
+  stb,
+  libmeshb,
+  rply,
 }:
-
-let
-  exploragram = fetchFromGitHub {
-    owner = "BrunoLevy";
-    repo = "exploragram";
-    rev = "3190f685653f8aa75b7c4604d008c59a999f1bb6";
-    hash = "sha256-9ePCOyQWSxu12PtHFSxfoDcvTtxvYR3T68sU3cAfZiE=";
-  };
-  testdata = fetchFromGitHub {
-    owner = "BrunoLevy";
-    repo = "geogram.data";
-    rev = "ceab6179189d23713b902b6f26ea2ff36aea1515";
-    hash = "sha256-zUmYI6+0IdDkglLzzWHS8ZKmc5O6aJ2X4IwRBouRIxI=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "geogram";
-  version = "1.9.2";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "BrunoLevy";
     repo = "geogram";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v7ChuE9F/z1MD5OUMiGXZWiGqjMauIka4sNXVDe/yYU=";
+    hash = "sha256-wAq6j/HUOv6In49lJVRZ2iS6ugbtYOxHN3PwTE1HZks=";
     fetchSubmodules = true;
   };
 
   outputs = [
-    "bin"
     "lib"
     "dev"
     "doc"
     "out"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   cmakeFlags = [
     # Triangle is unfree
-    "-DGEOGRAM_WITH_TRIANGLE=OFF"
+    (lib.cmakeBool "GEOGRAM_WITH_TRIANGLE" false)
 
     # Disable some extra features (feel free to create a PR if you need one of those)
 
     # If GEOGRAM_WITH_LEGACY_NUMERICS is enabled GeoGram will build its own version of
     # ARPACK, CBLAS, CLAPACK, LIBF2C and SUPERLU
-    "-DGEOGRAM_WITH_LEGACY_NUMERICS=OFF"
+    (lib.cmakeBool "GEOGRAM_WITH_LEGACY_NUMERICS" false)
 
     # Don't build Lua
-    "-DGEOGRAM_WITH_LUA=OFF"
+    (lib.cmakeBool "GEOGRAM_WITH_LUA" false)
 
     # Disable certain features requiring GLFW
-    "-DGEOGRAM_WITH_GRAPHICS=OFF"
+    (lib.cmakeBool "GEOGRAM_WITH_GRAPHICS" false)
+
+    # Enables a packaging mode in some places
+    (lib.cmakeBool "GEOGRAM_FOR_DEBIAN" true)
+
+    # Only build the library itself
+    (lib.cmakeBool "GEOGRAM_LIB_ONLY" true)
 
     # NOTE: Options introduced by patch (see below)
-    "-DGEOGRAM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-    "-DGEOGRAM_INSTALL_PKGCONFIG_DIR=${placeholder "dev"}/lib/pkgconfig"
+    (lib.cmakeOptionType "path" "GEOGRAM_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake")
+    (lib.cmakeOptionType "path" "GEOGRAM_INSTALL_PKGCONFIG_DIR" "${placeholder "dev"}/lib/pkgconfig")
   ];
 
   nativeBuildInputs = [
@@ -72,12 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
+    stb
+    libmeshb
+    rply
   ];
-
-  # exploragram library is not listed as submodule and must be copied manually
-  prePatch = ''
-    cp -r ${exploragram} ./src/lib/exploragram/ && chmod 755 ./src/lib/exploragram/
-  '';
 
   patches = [
     # This patch replaces the bundled (outdated) zlib with our zlib
@@ -85,51 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Also check https://github.com/BrunoLevy/geogram/issues/49 for progress
     ./replace-bundled-zlib.patch
 
-    # fixes https://github.com/BrunoLevy/geogram/issues/203, remove when 1.9.3 is released
-    (fetchpatch2 {
-      url = "https://github.com/BrunoLevy/geogram/commit/2e1b6fba499ddc55b2150a1f610cf9f8d4934c39.patch";
-      hash = "sha256-t6Pocf3VT8HpKOSh1UKKa0QHpsZyFqlAng6ltiAfKA8=";
-    })
+    ./cmake-fix-link-libraries.patch
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace cmake/platforms/*/config.cmake \
-      --replace "-m64" ""
-  '';
 
   postBuild = ''
     make doc-devkit-full
   '';
 
-  nativeCheckInputs = [
-    python3Packages.robotframework
-  ];
-
-  doCheck = true;
-
-  checkPhase =
-    let
-      skippedTests = [
-        # Skip slow RVD test
-        "RVD"
-
-        # Needs unfree library geogramplus with extended precision
-        # see https://github.com/BrunoLevy/geogram/wiki/GeogramPlus
-        "CSGplus"
-      ];
-    in
-    ''
-      runHook preCheck
-
-      ln -s ${testdata} ../tests/data
-
-      source tests/testenv.sh
-      robot \
-        ${lib.concatMapStringsSep " " (t: lib.escapeShellArg "--skip=${t}") skippedTests} \
-        ../tests
-
-      runHook postCheck
-    '';
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 

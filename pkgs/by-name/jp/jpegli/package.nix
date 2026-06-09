@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation {
   pname = "jpegli";
-  version = "0-unstable-2026-03-20";
+  version = "0-unstable-2026-04-30";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jpegli";
-    rev = "a069db9215c9aab9f3a685d012b55f1c3a85c164";
-    hash = "sha256-YTp69ycZLdZPMZlCsqbmBcao+SX4RW+mY5lOvbogPHA=";
+    rev = "7a57896e68a8ab861ded9857b2d3a402868d3d9e";
+    hash = "sha256-lnmLS4ueQhPLUfIY0G+FhqsHpn9aFDDtHVQg6+TIkbQ=";
     fetchSubmodules = true;
   };
 

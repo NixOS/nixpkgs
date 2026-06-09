@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yapsy";
   version = "1.12.2-unstable-2023-03-28";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-QKZlUAhYMCCsT/jbEHb39ESZ2+2FZYnhJnc1PgsozBA=";
   };
 
-  sourceRoot = "${src.name}/package";
+  sourceRoot = "${finalAttrs.src.name}/package";
 
   build-system = [ setuptools ];
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     description = "Yet another plugin system";
     license = lib.licenses.bsd2;
   };
-}
+})

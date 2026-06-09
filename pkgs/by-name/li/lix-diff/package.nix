@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lix-diff";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "tgirlcloud";
     repo = "lix-diff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLmCS+Q6B/DU6DZ0U/FfCOovwZTSTAG5vrCGHZ1Xsrk=";
+    hash = "sha256-mURA7fZ9RAhVtOx+gnEeJI48tyvi+zbKE+xUs5UMPY4=";
   };
 
-  cargoHash = "sha256-g50St9tX2IYaPmnjSE8AeSKqUF5Ou87Y5F0zVBK3Xxo=";
+  cargoHash = "sha256-yOVJjn/DaHDsBeSMKJ0bmav+I5JLa9HqII5RKFpc5Hw=";
 
   passthru.updateScript = nix-update-script { };
 

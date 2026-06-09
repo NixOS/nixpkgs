@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cloudprober";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "cloudprober";
     repo = "cloudprober";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XFMjUwsRfWAnrNsegUPqWz8Bcc/naEBhytqq/o21ras=";
+    hash = "sha256-dMogW0NQAMiSBC7//7gGmadvK5vS2H+170aW0RK58fU=";
   };
 
-  vendorHash = "sha256-+EVcYFnWPSNfxUzxuL3tAHjCCDad/7K11y3dk2CUtrU=";
+  vendorHash = "sha256-YEueI/Ms350bNkKPmLNzLljr9FDL0R7zACF4HQwHLdk=";
 
   checkFlags =
     let

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports";
-    homepage = "https://pypi.python.org/pypi/ptest";
+    homepage = "https://pypi.org/project/ptest/";
     license = lib.licenses.asl20;
     mainProgram = "ptest";
   };

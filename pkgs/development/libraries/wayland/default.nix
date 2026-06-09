@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   meson,
+  mdbook,
   pkg-config,
   ninja,
   wayland-scanner,
@@ -23,19 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
+    hash = "sha256-wGXwQK/f8xd2gGAPJJcn5Boa/CL8zyciLxX1MG+qHwM=";
   };
-
-  patches = [
-    # patch from: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
-    ./darwin.patch
-  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
@@ -73,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     xmlto
     python3
+    mdbook
     docbook_xml_dtd_45
     docbook_xsl
   ];

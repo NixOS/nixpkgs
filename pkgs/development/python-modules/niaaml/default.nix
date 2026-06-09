@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
     tag = version;
-    hash = "sha256-AUQhdJc2nSuggV6zNOMihVJIbHAQX6EXsnhn97Tp35A=";
+    hash = "sha256-j3vnslVvktfhtRsR1hw+WfLGbhmjdUzhY+HLR9EWD7o=";
   };
 
   pythonRelaxDeps = [

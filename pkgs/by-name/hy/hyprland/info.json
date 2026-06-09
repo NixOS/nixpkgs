@@ -1,7 +1,7 @@
 {
-  "branch": "v0.54.3-b",
-  "commit_hash": "521ece463c4a9d3d128670688a34756805a4328f",
-  "commit_message": "version: bump to 0.54.3",
-  "date": "2026-03-27",
-  "tag": "v0.54.3"
+  "branch": "v0.55.3-b",
+  "commit_hash": "fe5fe79a29ac3adaf3e75560b2f4b7a6d58b31c9",
+  "commit_message": "[gha] Nix: update inputs",
+  "date": "2026-06-07",
+  "tag": "v0.55.3"
 }

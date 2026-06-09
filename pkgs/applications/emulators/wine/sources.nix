@@ -92,6 +92,14 @@ let
     })
   ];
 
+  patches-add-dll-accept-device-paths-wine-older-than-11_1 = [
+    (pkgs.fetchpatch {
+      name = "add-dll-accept-device-paths";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/401910ae25a11032f2da7baa1666d71e8bca2496.patch";
+      hash = "sha256-2726u9/vhhx39Tq7vOw24hslmeyZZEbxRRqe7JMFvCU";
+    })
+  ];
+
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -123,7 +131,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ];
+    ]
+    ++ patches-add-dll-accept-device-paths-wine-older-than-11_1;
 
     updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
@@ -142,9 +151,9 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "11.5";
+    version = "11.9";
     url = "https://dl.winehq.org/wine/source/11.x/wine-${version}.tar.xz";
-    hash = "sha256-ETcLV+pdVIpU2Syc1l0LpjX08cPq2s4J7RxBn3BeGdE=";
+    hash = "sha256-45zBjbKHNYokNvivSYvtx+RE1V65nvVFtg53i7TqD28=";
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -154,7 +163,7 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-tkx1LB/iZoFvarMvc9QofuQLrZwZyaoL0FUh3nsvYjs=";
+      hash = "sha256-IQSu/Nr3JynVv95/jaZCZrCQWKE8/pp9JGEwfmDdI9s=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -177,9 +186,9 @@ rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "11.0.0";
+      version = "11.1.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-1+/t4Lm9z1ITT4zWztWdn+zpdvcLEaQAvbR7hkVpzSc=";
+      hash = "sha256-3rA0FDH4Jgsgn/9rx53cxUFLl/jpI2q5+9ykzlngqbk=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-alimt";
   version = "3.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Upstream doesn't tag releases on Github
   # https://github.com/aliyun/aliyun-openapi-python-sdk/issues/551

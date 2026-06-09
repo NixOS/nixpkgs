@@ -1,7 +1,6 @@
 {
   lib,
   rustPlatform,
-  fetchurl,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
@@ -19,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
-  version = "0.2.15";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YhCJkyzWVZ1BEux85qyTHlyLS/LaotMoe+tGwwd9EOI=";
+    hash = "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=";
   };
 
-  cargoHash = "sha256-B04Jf3G7UVwhzVY1mO6IUqb1AXpvJQs+aWggMhYPHRw=";
+  cargoHash = "sha256-8J1tZukp/Cchxj0QireOhu/eZd0N7uZa86XDLTBmHQk=";
 
   nativeBuildInputs = [
     pkg-config

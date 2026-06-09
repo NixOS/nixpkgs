@@ -357,8 +357,7 @@ in
         entry in the list is an attribute set with the following fields:
         `mountPoint`, `device`,
         `fsType` (a file system type recognised by
-        {command}`mount`; defaults to
-        `"auto"`), and `options`
+        {command}`mount`), and `options`
         (the mount options passed to {command}`mount` using the
         {option}`-o` flag; defaults to `[ "defaults" ]`).
 

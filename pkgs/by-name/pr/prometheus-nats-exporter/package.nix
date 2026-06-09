@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = pname;
+    repo = "prometheus-nats-exporter";
     rev = "v${version}";
     sha256 = "sha256-siucc55qi1SS2R07xgxh25CWYjxncUqvzxo0XoIPyOo=";
   };

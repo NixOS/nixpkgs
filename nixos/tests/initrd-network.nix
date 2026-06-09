@@ -1,3 +1,5 @@
+# Tests networking in scripted stage 1. Remove in 26.11.
+
 { pkgs, lib, ... }:
 {
   name = "initrd-network";
@@ -8,6 +10,7 @@
     { ... }:
     {
       imports = [ ../modules/profiles/minimal.nix ];
+      boot.initrd.systemd.enable = false;
       boot.initrd.network.enable = true;
       boot.initrd.network.postCommands = ''
         ip addr show

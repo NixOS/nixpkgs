@@ -15,7 +15,7 @@
   lomiri-ui-toolkit,
   mesa,
   pkg-config,
-  qqc2-suru-style ? null,
+  qqc2-suru-style,
   qt5compat ? null,
   qtbase,
   qtdeclarative,
@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.3";
+  version = "1.99.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-zSpgcOiudt1UIsW5tRGA5AmguJn2q4+XR/G8UCqxePk=";
+    hash = "sha256-gVRaM4pnQlfwRKYVsXk4wO79FgNJ60QBn0X2QZE+8a4=";
   };
 
   outputs = [
@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDocumentation [
     "doc"
+  ];
+
+  patches = [
+    # https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/626
+    ./1501-Re-enable-Suru-style-in-Qt6.patch
   ];
 
   postPatch = ''
@@ -90,12 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
+    qqc2-suru-style
   ]
   ++ lib.optionals (!withQt6) [
-    # Not ported to Qt6 yet, explicitly disabled in the Qt6 build
-    # https://gitlab.com/ubports/development/core/morph-browser/-/blob/4f20c943e78694818d1b80b5563bd89901230e75/src/app/browserapplication.cpp#L196
-    qqc2-suru-style
-
     # Folded into qtdeclarative in Qt6
     qtquickcontrols2
 

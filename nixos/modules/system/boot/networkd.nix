@@ -180,6 +180,12 @@ let
           "StatisticsBlockCoalesceSec"
           "MDI"
           "SR-IOVVirtualFunctions"
+          "ScatterGather"
+          "ScatterGatherFragmentList"
+          "TCPECNSegmentationOffload"
+          "TCPMangleIdSegmentationOffload"
+          "GenericReceiveOffloadList"
+          "GenericReceiveOffloadUDPForwarding"
         ])
         (assertValueOneOf "MACAddressPolicy" [
           "persistent"
@@ -271,6 +277,12 @@ let
           "auto"
         ])
         (assertRange "SR-IOVVirtualFunctions" 0 2147483647)
+        (assertValueOneOf "ScatterGather" boolValues)
+        (assertValueOneOf "ScatterGatherFragmentList" boolValues)
+        (assertValueOneOf "TCPECNSegmentationOffload" boolValues)
+        (assertValueOneOf "TCPMangleIdSegmentationOffload" boolValues)
+        (assertValueOneOf "GenericReceiveOffloadList" boolValues)
+        (assertValueOneOf "GenericReceiveOffloadUDPForwarding" boolValues)
       ];
 
       sectionSR-IOV = checkUnitConfig "SR-IOV" [
@@ -1744,8 +1756,7 @@ let
         (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
-        (assertInt "RouteMetric")
-        (assertRange "RouteMetric" 0 4294967295)
+        (assertRouteMetricOrTriple "RouteMetric")
         (assertValueOneOf "QuickAck" boolValues)
         (assertValueOneOf "UseMTU" boolValues)
         (assertValueOneOf "UseHopLimit" boolValues)
@@ -2412,6 +2423,38 @@ let
         ])
         (assertInt "PVID")
         (assertRange "PVID" 0 4094)
+      ];
+
+      sectionMobileNetwork = checkUnitConfig "MobileNetwork" [
+        (assertOnlyFields [
+          "APN"
+          "AllowedAuthenticationMechanisms"
+          "User"
+          "Password"
+          "IPFamily"
+          "AllowRoaming"
+          "PIN"
+          "OperatorId"
+          "RouteMetric"
+          "UseGateway"
+        ])
+        (assertValuesSomeOfOr "AllowedAuthenticationMechanisms" [
+          "none"
+          "pap"
+          "chap"
+          "mschap"
+          "mschapv2"
+          "eap"
+        ] "")
+        (assertValueOneOf "IPFamily" [
+          "ipv4"
+          "ipv6"
+          "both"
+          "any"
+        ])
+        (assertValueOneOf "AllowRoaming" boolValues)
+        (assertRange "RouteMetric" 0 4294967295)
+        (assertValueOneOf "UseGateway" boolValues)
       ];
     };
   };
@@ -3747,6 +3790,20 @@ let
       '';
     };
 
+    mobileNetworkConfig = mkOption {
+      default = { };
+      example = {
+        APN = "access-point-name";
+        AllowRoaming = false;
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionMobileNetwork;
+      description = ''
+        Each attribute in this set specifies an option in the
+        `[MobileNetwork]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -4175,7 +4232,10 @@ let
           "systemd-networkd.service"
           "systemd-networkd.socket"
           "systemd-networkd-persistent-storage.service"
+          "systemd-networkd-varlink-metrics.socket"
         ];
+
+        systemd.sockets.systemd-networkd-varlink-metrics.wantedBy = [ "sockets.target" ];
 
         environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 

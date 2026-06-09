@@ -4,9 +4,9 @@
   fetchurl,
   autoreconfHook,
   pkg-config,
-  fuse,
+  fuse3,
   util-linux,
-  xxHash,
+  xxhash,
   lz4,
   xz,
   zlib,
@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     util-linux
-    xxHash
+    xxhash
     lz4
     zlib
     xz
     zstd
     libdeflate
   ]
-  ++ lib.optionals fuseSupport [ fuse ]
+  ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals selinuxSupport [ libselinux ];
 
   configureFlags = [

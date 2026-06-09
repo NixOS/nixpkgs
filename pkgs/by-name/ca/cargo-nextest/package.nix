@@ -8,21 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-nextest";
-  version = "0.9.132";
+  version = "0.9.137";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     tag = "cargo-nextest-${finalAttrs.version}";
-    hash = "sha256-UikUhfVfBhP2HZxUFovY5Il9lqzFTITBWMSeRxRXWtk=";
+    hash = "sha256-Ad5QXVkPwJk2wMHbCbYVwgua0DfmUwBLmfG9bSt1dbA=";
   };
 
   # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-dtrace-macos.patch
   ];
 
-  cargoHash = "sha256-mz6Gykzztf2OV/yifk0X0luSzv6BCVHqUCk0gWsxi2U=";
+  cargoHash = "sha256-7ISzQ9jt/ekrO7Z4B09YbNLZkNDwS13ljl2tpEQdthU=";
 
   cargoBuildFlags = [
     "-p"

@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lenspect";
-  version = "1.0.4";
+  version = "1.0.5";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "vmkspv";
     repo = "lenspect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zYIDTFjT9izc4WFjs9fYDPDrQ8z16i2Bko5JW0tgCBk=";
+    hash = "sha256-aGL6o9gv+z7Ey2XR8IZ/4gBXdDqGlaWaQXf0eVDEHlI=";
   };
 
   nativeBuildInputs = [

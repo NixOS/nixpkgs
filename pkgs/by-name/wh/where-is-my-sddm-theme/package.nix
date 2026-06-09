@@ -43,10 +43,11 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
       hash = "sha256-+R0PX84SL2qH8rZMfk3tqkhGWPR6DpY1LgX9bifNYCg=";
     };
 
+    dontWrapQtApps = true;
+
     propagatedBuildInputs =
-      [ ]
-      ++ lib.optionals (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
       # avoid .dev outputs propagation
+      lib.optionals (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects.out ]
       ++ lib.optionals (lib.elem "qt6" variants) [
         qt6.qt5compat.out
         qt6.qtsvg.out

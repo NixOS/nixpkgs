@@ -21,10 +21,10 @@
 }:
 let
   pname = "qtcreator";
-  version = "19.0.0";
+  version = "19.0.1";
   src = fetchurl {
     url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-9/ab0AdGKkYGeHwTDoNYPbRBbfYnv3d9M5RPI8rqz20=";
+    hash = "sha256-IAVmOmlQOyQETf7QdwajTETKvBn0dqwcEUTe8cSr+r4=";
   };
   goModules =
     (buildGoModule {

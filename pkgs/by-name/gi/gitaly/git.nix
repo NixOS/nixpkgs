@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   # required to support pthread_cancel()
   NIX_LDFLAGS =
     lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
-    + lib.optionalString stdenv.isFreeBSD "-lthr";
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD "-lthr";
 
   # The build phase already installs it all
   GIT_PREFIX = placeholder "out";

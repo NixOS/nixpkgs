@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyjvcprojector";
-  version = "2.0.4";
+  version = "2.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pyjvcprojector";
     tag = "v${version}";
-    hash = "sha256-nmoPOZv5/nIypfFqjgkcQYYffUcjsCMgL6TXqGyBxcQ=";
+    hash = "sha256-HFnaMIlF+C2fi8NlMtQKEMY35lAS15ij4QyFMFYhiU8=";
   };
 
   build-system = [ setuptools ];

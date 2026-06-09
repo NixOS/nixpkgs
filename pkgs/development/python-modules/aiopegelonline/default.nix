@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library to retrieve data from PEGELONLINE";
     homepage = "https://github.com/mib1185/aiopegelonline";
-    changelog = "https://github.com/mib1185/aiopegelonline/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/mib1185/aiopegelonline/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

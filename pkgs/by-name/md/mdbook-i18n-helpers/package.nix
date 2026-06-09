@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Helpers for a mdbook i18n workflow based on Gettext";
     homepage = "https://github.com/google/mdbook-i18n-helpers";
-    changelog = "https://github.com/google/mdbook-i18n-helpers/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/google/mdbook-i18n-helpers/releases/tag/mdbook-i18n-helpers-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       teutat3s

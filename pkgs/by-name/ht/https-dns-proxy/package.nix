@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "DNS to DNS over HTTPS (DoH) proxy";
+    homepage = "https://github.com/aarond10/https_dns_proxy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.linux;

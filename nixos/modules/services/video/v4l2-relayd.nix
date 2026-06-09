@@ -221,6 +221,11 @@ in
       boot = mkIf ((length enabledInstances) > 0) {
         extraModulePackages = [ kernelPackages.v4l2loopback ];
         kernelModules = [ "v4l2loopback" ];
+        # Prevent v4l2loopback from auto-creating a device at load time. An
+        # unconfigured device has a degenerate framerate range that breaks
+        # GStreamer caps negotiation. All devices are created at runtime via
+        # v4l2loopback-ctl add in each instance's preStart instead.
+        extraModprobeConfig = "options v4l2loopback devices=0";
       };
 
       systemd.services = mkInstanceServices enabledInstances;

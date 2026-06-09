@@ -8,8 +8,6 @@
   boost,
   cmark,
   docbook_xsl,
-  expat,
-  file,
   flac,
   fmt,
   gettext,
@@ -26,7 +24,6 @@
   pugixml,
   qt6,
   utf8cpp,
-  xdg-utils,
   zlib,
   nix-update-script,
   withGUI ? true,
@@ -52,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "97.0";
+  version = "99.0";
 
   src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-M8A3d6BOed1A/Bvw25bNGphXNDXJvHdg26OjOdwsNf4=";
+    hash = "sha256-re4z0ZseuOP/P1HW3qdWLIo+YhLlSRBuqefewRm6KEI=";
   };
 
   passthru = {
@@ -66,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [ "--version-regex=release-(.*)" ];
     };
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -81,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   # qtbase and qtmultimedia are needed without the GUI
   buildInputs = [
     boost
-    expat
-    file
     flac
     fmt
     gmp
@@ -96,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     utf8cpp
-    xdg-utils
     zlib
   ]
   ++ optionals withGUI [ cmark ]

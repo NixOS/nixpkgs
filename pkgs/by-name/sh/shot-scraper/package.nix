@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "shot-scraper";
-  version = "1.9";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "shot-scraper";
     tag = finalAttrs.version;
-    hash = "sha256-HIiUZZz2/EqTdaCtiaqVaJfbRwkoYL8H6XHaIYP0R6M=";
+    hash = "sha256-l1SPhdcQ2lH2Glw4BJSlJxUSBE28b5/ny+66hUJtOQU=";
   };
 
   postPatch = ''

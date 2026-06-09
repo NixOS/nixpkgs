@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "open-hypergraphs";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "statusfailed";
     repo = "open-hypergraphs";
     tag = "pypi-${version}";
-    hash = "sha256-ifcQXZDnOvo2XL7WYVFLv2iHWhImUSp3jqAPPYySNjU=";
+    hash = "sha256-sBF/+VENDajLN72UJ6iHekmk11pOqfxeKs8Kqszy6mQ=";
   };
 
   build-system = [

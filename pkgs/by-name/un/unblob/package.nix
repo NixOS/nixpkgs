@@ -130,6 +130,9 @@ python3.pkgs.buildPythonApplication rec {
     "test_all_handlers[filesystem.extfs]"
     # regression in erofs-utils 1.9 https://github.com/onekey-sec/unblob/commit/c7c9f20dd871a5694d41a95ca3041eb0c98e257a
     "test_all_handlers[filesystem.android.erofs]"
+    # unblob's landlock sandbox denies hardlinks within the extract dir (EXDEV). https://github.com/onekey-sec/unblob/issues/1210
+    "test_all_handlers[filesystem.romfs]"
+    "test_all_handlers[filesystem.yaffs]"
   ];
 
   passthru = {

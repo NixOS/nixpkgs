@@ -16,14 +16,14 @@ in
 
 buildPythonPackage rec {
   pname = "icdiff";
-  version = "2.0.9";
+  version = "2.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeffkaufman";
     repo = "icdiff";
     tag = "release-${version}";
-    hash = "sha256-SbgUBWaNT8akYKXYef/94vqZqJannZv+TxfbCnHKQtw=";
+    hash = "sha256-7/EvuHNWE9kdb35TFuqT8ShjyciodsRNkBMG0WvTy1c=";
   };
 
   patches = [ ./0001-Don-t-test-black-or-flake8.patch ];

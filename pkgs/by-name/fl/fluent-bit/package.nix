@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "4.2.2";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BYaJ76iX969SLxCUMyIRbHnVt5/N+wjMMvsqxFmLqUI=";
+    hash = "sha256-VXf1F0TZFi8d7gil8yc3WWA/0X3QyYPnbA3luE1DE98=";
   };
 
   # The source build documentation covers some dependencies and CMake options.

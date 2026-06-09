@@ -16,9 +16,12 @@
   pip,
   pyte,
   pytest-mock,
+  pytest-rerunfailures,
   pytest-subprocess,
+  pytest-timeout,
   pytestCheckHook,
   requests,
+  virtualenv,
 
   man,
   util-linux,
@@ -32,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.22.8";
+  version = "0.23.7";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -40,7 +43,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-NOQs21Ahp2oMx1Lw1ekvb2aqUWwIXw1WyC9ZE5V9wJI=";
+    hash = "sha256-KKkHqaAHnj1WMeJPrvpNXwXZ6c/V6SIIfoLYytY4kPY";
   };
 
   build-system = [
@@ -61,11 +64,16 @@ buildPythonPackage rec {
     pip
     pyte
     pytest-mock
+    pytest-rerunfailures
     pytest-subprocess
+    pytest-timeout
     pytestCheckHook
     requests
+
+    # required by test_xonsh_activator
+    virtualenv
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # required by test_man_completion
     man
     util-linux
@@ -74,16 +82,14 @@ buildPythonPackage rec {
   disabledTests = [
     # fails on sandbox
     "test_colorize_file"
-    "test_xonsh_activator"
+    "test_complete_path_tilde_subdir_trailing_sep"
 
     # flaky tests in test_integrations.py
     "test_script"
     "test_catching_system_exit"
     "test_catching_exit_signal"
-    "test_alias_stability"
     "test_captured_subproc_is_not_affected_next_command"
     "test_spec_decorator_alias"
-    "test_alias_stability_exception"
 
     # flaky tests in test_python.py
     "test_complete_import"
@@ -104,7 +110,7 @@ buildPythonPackage rec {
     "test_vc_get_branch"
     "test_dirty_working_directory"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on Darwin
     "test_bash_and_is_alias_is_only_functional_alias"
     "test_complete_command"
@@ -112,18 +118,29 @@ buildPythonPackage rec {
     "test_on_command_not_found_replacement"
     "test_skipper_command"
     "test_xonsh_lexer_no_win"
+    "test_on_command_not_found_dict_without_env"
+    "test_alias_shadowing_real_binary_is_not_only_functional"
+    "test_complete_inner_command_plain"
+    "test_complete_inner_command_after_double_dash"
+    "test_complete_inner_command_after_double_dash_empty"
+    "test_complete_inner_command_after_flag_with_value"
+    "test_complete_inner_command_after_long_flag_with_value"
+    "test_complete_inner_command_after_env_assign"
+  ];
+
+  disabledTestPaths = [
+    # don't run stress tests when building package
+    "tests/xintegration/test_stress.py"
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/248978
   dontWrapPythonPrograms = true;
 
-  env.LC_ALL = "en_US.UTF-8";
-
   postPatch = ''
     sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
-    sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
+    sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/xintegration/test_integrations.py
 
-    for script in tests/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
+    for script in conftest.py tests/xintegration/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
       sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
     done
     patchShebangs .
@@ -139,7 +156,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://xon.sh/";
-    description = "Python-ish, BASHwards-compatible shell";
+    description = "Python-powered shell";
     changelog = "https://github.com/xonsh/xonsh/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "xonsh";

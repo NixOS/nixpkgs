@@ -5,6 +5,7 @@
   unzip,
   mono,
   makeWrapper,
+  writeText,
   icoutils,
   replaceVars,
   xsel,
@@ -17,7 +18,38 @@
   makeDesktopItem,
   plugins ? [ ],
 }:
+let
+  # KeePass looks for plugins in under directory in which KeePass.exe is
+  # located. It follows symlinks where looking for that directory, so
+  # buildEnv is not enough to bring KeePass and plugins together.
+  #
+  # This derivation patches KeePass to search for plugins in specified
+  # plugin derivations in the Nix store and nowhere else.
+  pluginLoadPathsPatch =
+    let
+      inherit (builtins) toString;
+      inherit (lib.strings)
+        readFile
+        concatStrings
+        replaceStrings
+        unsafeDiscardStringContext
+        ;
+      inherit (lib.lists) map length;
+      inherit (lib) add;
 
+      outputLc = toString (add 7 (length plugins));
+      patchTemplate = readFile ./keepass-plugins.patch;
+      loadTemplate = readFile ./keepass-plugins-load.patch;
+      loads = concatStrings (
+        map (
+          p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
+        ) plugins
+      );
+    in
+    writeText "load-paths.patch" (
+      replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate
+    );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
   version = "2.60";
@@ -47,39 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # KeePass looks for plugins in under directory in which KeePass.exe is
-  # located. It follows symlinks where looking for that directory, so
-  # buildEnv is not enough to bring KeePass and plugins together.
-  #
-  # This derivation patches KeePass to search for plugins in specified
-  # plugin derivations in the Nix store and nowhere else.
-  pluginLoadPathsPatch =
-    let
-      inherit (builtins) toString;
-      inherit (lib.strings)
-        readFile
-        concatStrings
-        replaceStrings
-        unsafeDiscardStringContext
-        ;
-      inherit (lib.lists) map length;
-      inherit (lib) add;
-
-      outputLc = toString (add 7 (length plugins));
-      patchTemplate = readFile ./keepass-plugins.patch;
-      loadTemplate = readFile ./keepass-plugins-load.patch;
-      loads = concatStrings (
-        map (
-          p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
-        ) plugins
-      );
-    in
-    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
-
-  passAsFile = [ "pluginLoadPathsPatch" ];
   postPatch = ''
     sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
-    patch -p1 <$pluginLoadPathsPatchPath
+    patch -p1 <${pluginLoadPathsPatch}
   '';
 
   configurePhase = ''

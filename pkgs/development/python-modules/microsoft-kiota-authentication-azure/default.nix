@@ -14,19 +14,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.9.10";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-authentication-azure-v${version}";
-    hash = "sha256-J9OLxZ3vQpChhfwjXzrGF691zco/bKv51FG20VFieN0=";
+    tag = "microsoft-kiota-authentication-azure-v${finalAttrs.version}";
+    hash = "sha256-rj0NpuXvqS5rB6TrD3FyuMWb7Dl8/SIBcW/Lzj4cY6I=";
   };
 
-  sourceRoot = "${src.name}/packages/authentication/azure/";
+  sourceRoot = "${finalAttrs.src.name}/packages/authentication/azure/";
 
   build-system = [ poetry-core ];
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Kiota Azure authentication provider";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/authentication/azure";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

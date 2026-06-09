@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "eve";
-  version = "2.2.5";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "eve";
     tag = "v${version}";
-    hash = "sha256-l5dAHgau6LVROkNgFQcCJl2uiSh/2Jg/GtZgSHbUBug=";
+    hash = "sha256-y0QfxLDoTKNZuAKcPqrLjwkZ0mRseBVq7OyflwUd+Lk=";
   };
 
   pythonRelaxDeps = [ "events" ];

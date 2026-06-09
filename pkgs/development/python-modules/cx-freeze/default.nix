@@ -17,10 +17,7 @@
   patchelf,
   dmgbuild,
 
-  # tests
-  anyio,
-  bcrypt,
-
+  darwin,
   python,
   pytest-mock,
   pytestCheckHook,
@@ -82,6 +79,9 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
     versionCheckHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";

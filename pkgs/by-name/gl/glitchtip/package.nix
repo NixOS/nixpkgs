@@ -76,14 +76,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.1.4";
+  version = "6.1.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wju/QbIwdtNYQmRppCfjoaqb++spFZbqAsvBwwZyeUM=";
+    hash = "sha256-BUWLN3+ob934MgIoDLirY0O8fn6G3zmGA5wuVGPPp7w=";
   };
 
   postPatch = ''

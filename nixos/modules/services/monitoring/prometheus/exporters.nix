@@ -62,6 +62,8 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
+        "fail2ban"
         "fastly"
         "flow"
         "fritz"
@@ -118,6 +120,7 @@ let
         "smartctl"
         "smokeping"
         "snmp"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
@@ -130,6 +133,7 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "zfs-siebenmann"
         "zfs"
       ]
       (
@@ -337,6 +341,31 @@ let
       services.udev.extraRules = mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
+      systemd.services.prometheus-fail2ban-exporter-setup =
+        mkIf (config.services.fail2ban.enable && name == "fail2ban")
+          {
+            description = "Set fail2ban socket ACLs";
+            after = [ "fail2ban.service" ];
+            requires = [ "fail2ban.service" ];
+            before = [ "prometheus-fail2ban-exporter.service" ];
+            wantedBy = [ "prometheus-fail2ban-exporter.service" ];
+            path = [
+              pkgs.acl
+              pkgs.coreutils
+            ];
+            script = ''
+              while [ ! -S ${conf.fail2banSocket} ]; do
+                sleep 0.1
+              done
+
+              setfacl -m u:${conf.user}:x $(dirname ${conf.fail2banSocket})
+              setfacl -m u:${conf.user}:rwx ${conf.fail2banSocket}
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+              User = "root";
+            };
+          };
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
@@ -348,7 +377,7 @@ let
           after = [ "network.target" ];
           serviceConfig.Restart = mkDefault "always";
           serviceConfig.PrivateTmp = mkDefault true;
-          serviceConfig.WorkingDirectory = mkDefault /tmp;
+          serviceConfig.WorkingDirectory = mkDefault "/tmp";
           serviceConfig.DynamicUser = mkDefault enableDynamicUser;
           serviceConfig.User = mkDefault conf.user;
           serviceConfig.Group = conf.group;

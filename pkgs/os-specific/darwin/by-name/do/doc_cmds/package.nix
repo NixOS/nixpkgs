@@ -1,15 +1,15 @@
 {
   lib,
-  apple-sdk,
   mkAppleDerivation,
   pkg-config,
   shell_cmds,
+  sourceRelease,
   stdenvNoCC,
   zlib,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "doc_cmds-deps-private-headers";

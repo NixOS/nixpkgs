@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wofi-power-menu";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "szaffarano";
     repo = "wofi-power-menu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iz+iiJv5MEQ/Yh6h28uPgRrmnw7xM/X4nUW+VHCarpE=";
+    hash = "sha256-5dhwDfWL0pP28rgbS5eoOARrXDZVTF6EDNimcfcjH3Y=";
   };
 
-  cargoHash = "sha256-6CNoHxC1AMTbbx3s4eqYPfqJ3pePdN2DJw6INUQFbek=";
+  cargoHash = "sha256-Avful4JlhYrdHpzWfseCmmx5jxuOJxEA2Yl6dfkJpXs=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

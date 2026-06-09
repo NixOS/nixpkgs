@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   makeWrapper,
@@ -15,16 +15,15 @@
   writers,
   python3Packages,
   nix-update,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
   version = "1.4.2";
 
-  src = fetchFromBitbucket {
-    owner = "ecwolf";
-    repo = "ecwolf";
+  src = fetchFromGitHub {
+    owner = "ECWolfEngine";
+    repo = "ECWolf";
     tag = finalAttrs.version;
     hash = "sha256-T5K6B2fWMKMLB/662p/YLEv0Od9n0vUakznyoOnr0kI=";
   };
@@ -98,12 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
+    description = "Advanced source port for Wolfenstein 3D, Spear of Destiny, and Super 3D Noah's Ark";
     mainProgram = "ecwolf";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       jayman2000
+      keenanweaver
     ];
     platforms = lib.platforms.all;
   };

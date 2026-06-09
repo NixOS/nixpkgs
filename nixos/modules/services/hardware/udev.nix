@@ -455,7 +455,6 @@ in
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
-      "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
     ];
     boot.initrd.systemd.storePaths = [

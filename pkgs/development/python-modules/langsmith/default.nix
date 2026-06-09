@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -31,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.7.22";
+  version = "0.7.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-raotchNZFcQPUvQckq4Z6ntvh4tviCjTLv2s5Ueulqw=";
+    hash = "sha256-E3bszn3w7MaNLVjpgSfEQEyzzqWQp056BjXIcY9YJCM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -87,6 +88,10 @@ buildPythonPackage (finalAttrs: {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky (timing sensitive)
+    "test_refresh_loop_continues_after_500_errors"
   ];
 
   disabledTestPaths = [

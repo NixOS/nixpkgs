@@ -11,6 +11,7 @@
   freezegun,
   hatchling,
   paho-mqtt,
+  protobuf,
   pycryptodome,
   pycryptodomex,
   pyrate-limiter,
@@ -23,17 +24,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.0.0";
+  version = "5.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lzr+OBbOjsLpkUsFYNJ37teegWjicUAoW9Jvw3hOvGE=";
+    hash = "sha256-SqFU7hhcykP/VSSiPLQPi62iAkgcSw6vwmXq+FpIt9w=";
   };
 
-  pythonRelaxDeps = [ "pycryptodome" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "pycryptodome"
+  ];
 
   build-system = [ hatchling ];
 
@@ -43,6 +47,7 @@ buildPythonPackage (finalAttrs: {
     click
     construct
     paho-mqtt
+    protobuf
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock

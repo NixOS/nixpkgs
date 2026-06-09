@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation {
   pname = "darkplaces";
-  version = "unstable-2022-05-10";
+  version = "20140513-unstable-2026-01-22";
 
   src = fetchFromGitHub {
     owner = "DarkPlacesEngine";
     repo = "darkplaces";
-    rev = "f16954a9d40168253ac5d9890dabcf7dbd266cd9";
-    hash = "sha256-5KsUcgHbuzFUE6LcclqI8VPSFbXZzBnxzOBB9Kf8krI=";
+    rev = "d93f9c4292039354a2b8d40d11bc386891e55fe5";
+    hash = "sha256-/xbQhQZveRCSnotZz3Wbw+9VwNC+kqoEJ7GuNZTpkLA=";
   };
 
   buildInputs = [

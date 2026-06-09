@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "peimanja";
-    repo = pname;
+    repo = "artifactory_exporter";
     rev = rev;
     hash = "sha256-ffICacOaYD3/wB38qQ/qYOfDwQxe1tndRdR2BHxolcA=";
   };

@@ -9,6 +9,8 @@ buildDunePackage {
   pname = "atdml";
   inherit (atd) version src;
 
+  minimalOCamlVersion = "4.10";
+
   buildInputs = [ cmdliner ];
 
   propagatedBuildInputs = [ atd ];

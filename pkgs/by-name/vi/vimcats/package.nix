@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vimcats";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BW1pU7NnW8yWePV0IQOUmcNa13NvV9lOZhfnEdQFBQQ=";
+    hash = "sha256-Pg6vIp/2H4YyqaGKF/pvuhsD/j3hBms/+4cAbH89oKs=";
   };
 
   buildFeatures = [ "cli" ];
 
-  cargoHash = "sha256-OGU7jwXOUf+tVECsyKwJQ9vRqTDoV8m/WOlAqTFdfUM=";
+  cargoHash = "sha256-EeCp1VFNFrlPmJnqthZoFBEzi4VV+U53lmXT0NmJWI8=";
 
   passthru.tests.version = testers.testVersion { package = vimcats; };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It is a fork of lemmy-help that aims to support more recent LuaCATS features.
     '';
     homepage = "https://github.com/mrcjkb/vimcats";
-    changelog = "https://github.com/mrcjkb/vimcats/CHANGELOG.md";
+    changelog = "https://github.com/mrcjkb/vimcats/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ mrcjkb ];
     mainProgram = "vimcats";

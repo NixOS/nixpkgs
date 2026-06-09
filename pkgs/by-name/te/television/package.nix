@@ -20,18 +20,19 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.15.4";
+    version = "0.15.7";
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-0tZx6UgXlB6rVAtf10gEFcHGzGpI6vfWBAYxvfOa5MM=";
+      hash = "sha256-VfCD3qXgueXqJbImOQbnY5JtAFVmzazBQ5Tgh4YIw4s=";
     };
 
-    cargoHash = "sha256-hnFE+s1btCzMEUvdIENsNwnTq3U1hLxjHlD9UAsT/es=";
+    cargoHash = "sha256-tChehWQhCwmM3JPfJrtE3J5zQ1gPSqlQJn85DPqHKTI=";
 
-    strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
       writableTmpDirAsHomeHook
@@ -106,7 +107,6 @@ let
       maintainers = with lib.maintainers; [
         louis-thevenet
         getchoo
-        RossSmyth
       ];
     };
   });

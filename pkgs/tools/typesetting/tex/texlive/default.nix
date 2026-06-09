@@ -47,6 +47,8 @@
   luajit,
   texinfo,
   # for bin.nix
+  gnum4,
+  jdk_headless,
   perlPackages,
   python3Packages,
   pkg-config,
@@ -67,8 +69,8 @@
   clisp,
   biber,
   woff2,
-  xxHash,
-  fetchzip,
+  xxhash,
+  unzip,
   fetchFromGitHub,
   buildPackages,
   texlive,
@@ -134,12 +136,12 @@ let
   version = {
     # day of the snapshot being taken
     year = "2026";
-    month = "02";
-    day = "02";
+    month = "03";
+    day = "01";
     # TeX Live version
     texliveYear = 2025;
     # final (historic) release or snapshot
-    final = false;
+    final = true;
   };
 
   # The tarballs on CTAN mirrors for the current release are constantly
@@ -177,7 +179,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-GxJXqY6plT3wngKiuqiZUst4eTZIylUdhN2ojUApIpU=";
+    hash = "sha256-Vt8DjpBwo9WH7s613vPxVLLKzM7zbUKVu0ngYYl3w0o=";
   };
 
   tlpdbNix =
@@ -225,13 +227,13 @@ let
         inherit mirrors pname;
         fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
       }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); }
+      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n} or bin.${n}) (args.deps or [ ]); }
     )
   ) overriddenTlpdb;
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
-    inherit bin tl;
+    inherit tl;
     inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
@@ -241,10 +243,7 @@ let
       makeFontsConf
       makeWrapper
       runCommand
-      writeShellScript
-      writeText
       toTLPkgSets
-      bash
       perl
       coreutils
       gawk
@@ -258,19 +257,31 @@ let
   # respecting specified outputs
   toTLPkgList =
     drv:
+    let
+      drvWithoutDeps = removeAttrs drv [ "tlDeps" ];
+      drvWithDeps =
+        if (drv ? tlDeps) then
+          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps tl else drv.tlDeps; }
+        else
+          drv;
+    in
     if drv.outputSpecified or false then
       let
         tlType = drv.tlType or tlOutToType.${drv.tlOutputName or drv.outputName} or null;
       in
-      lib.optional (tlType != null) (drv // { inherit tlType; })
+      lib.optional (tlType != null) (drvWithDeps // { inherit tlType; })
     else
-      [ (drv.tex // { tlType = "run"; }) ]
+      lib.optional (drv ? tex) (drvWithDeps.tex // { tlType = "run"; })
       ++ lib.optional (drv ? texdoc) (
-        drv.texdoc // { tlType = "doc"; } // lib.optionalAttrs (drv ? man) { hasManpages = true; }
+        drvWithoutDeps.texdoc
+        // {
+          tlType = "doc";
+        }
+        // lib.optionalAttrs (drv ? man) { hasManpages = true; }
       )
-      ++ lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
-      ++ lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; })
-      ++ lib.optional (drv ? out) (drv.out // { tlType = "bin"; });
+      ++ lib.optional (drv ? texsource) (drvWithoutDeps.texsource // { tlType = "source"; })
+      ++ lib.optional (drv ? tlpkg) (drvWithDeps.tlpkg // { tlType = "tlpkg"; })
+      ++ lib.optional (drv ? out) (drvWithDeps.out // { tlType = "bin"; });
   tlOutToType = {
     out = "bin";
     tex = "run";
@@ -313,8 +324,8 @@ let
     inherit
       buildTeXEnv
       lib
+      tl
       toTLPkgList
-      toTLPkgSets
       ;
   };
 
@@ -579,7 +590,10 @@ let
   meta = {
     description = "TeX Live environment";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [
+      veprbl
+      xworld21
+    ];
     license = licenses.scheme-infraonly;
   };
 

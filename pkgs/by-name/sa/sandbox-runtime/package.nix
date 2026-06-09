@@ -17,13 +17,15 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sandbox-runtime";
-  version = "0.0.49";
+  version = "0.0.54";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "anthropic-experimental";
     repo = "sandbox-runtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1QwUOtgOYcVm61nLCeQL46O/+G/LyXSv+ZnC3la2Ajc=";
+    hash = "sha256-mk+dd/vMuQPklbFhse35n+m/0Y90WxrLPqjXCFBLE78=";
   };
 
   postPatch =
@@ -35,7 +37,7 @@ buildNpmPackage (finalAttrs: {
 
   strictDeps = true;
 
-  npmDepsHash = "sha256-YAzekNE9lOEMRaaGqLdpXMXgqh4kfGp4CF54ShS3xwA=";
+  npmDepsHash = "sha256-H4azrpaCxKZNQZPEC/xaKxpPzwK19/ZhQlzYKsrDHWY=";
 
   postFixup =
     let
@@ -50,7 +52,7 @@ buildNpmPackage (finalAttrs: {
     in
     ''
       wrapProgram $out/bin/srt \
-        --prefix PATH ${lib.makeBinPath runtimeDeps}
+        --prefix PATH : ${lib.makeBinPath runtimeDeps}
     '';
 
   nativeInstallCheckInputs = [

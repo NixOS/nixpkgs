@@ -66,6 +66,9 @@ stdenv.mkDerivation {
     patchShebangs lang/compile_mo.sh
   '';
 
+  # remove once on O.I/ahead of upstream commit 15b3cb0
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
+
   makeFlags = [
     "PREFIX=$(out)"
     "LANGUAGES=all"

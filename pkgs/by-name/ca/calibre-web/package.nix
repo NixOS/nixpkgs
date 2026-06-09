@@ -133,6 +133,7 @@ python3Packages.buildPythonApplication rec {
     "lxml"
     "pypdf"
     "regex"
+    "requests"
     "tornado"
     "unidecode"
     "wand"

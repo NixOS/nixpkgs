@@ -22,12 +22,22 @@ let
       hash = "sha256-hAL2daH0zJ1PJ7v6s1wtSi4dfrATHfA9rQlhnoZnTQw=";
     };
     "10" = {
-      version = "10.33.0";
-      hash = "sha256-v8wby60nmxOlFsRGp1s8WLaQS0XVehlRQRAV5Qt1GoA=";
+      version = "10.34.0";
+      hash = "sha256-WOFDJYhx31FYm2UcBiBdq+xIdmpdu6PCWZm2m1C+WY4=";
+    };
+    "11" = {
+      version = "11.5.2";
+      hash = "sha256-dJ3FT709zenkFLquMsF3yoR3DT/NaciBbVea3D5qLJk=";
     };
   };
 
-  callPnpm = variant: callPackage ./generic.nix { inherit (variant) version hash; };
+  callPnpm =
+    variant:
+    callPackage ./generic.nix {
+      inherit (variant) version hash;
+      #FIXME: remove this hack in a future version.
+      nodejs = null; # Passing null to detect out-of-tree overrides
+    };
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in

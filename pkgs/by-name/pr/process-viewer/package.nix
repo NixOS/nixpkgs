@@ -8,14 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "process-viewer";
-  version = "0.5.8";
+  version = "0.5.11";
+
+  __structuredAttrs = true;
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
+    inherit (finalAttrs) version;
+    pname = "process_viewer";
+    hash = "sha256-d2qEcb9iPnhNnRFbzbktk36hyL16opcDgE9xOnmlJGg=";
   };
 
-  cargoHash = "sha256-vmNqay/tYGASSez+VqyCQVMW+JGqfBvjwSKx0AG/LeY=";
+  cargoHash = "sha256-UD0eTRfHimp6ZGStvrP1upUe3yO3Mw96Sq3OG4Y7zn0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Process viewer GUI in rust";
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      kybe236
+    ];
     mainProgram = "process_viewer";
   };
 })

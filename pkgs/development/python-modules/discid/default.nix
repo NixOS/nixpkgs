@@ -5,16 +5,25 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  sphinxHook,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "discid";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cWChIRrD1qbYIT+4jdPXPjKr5eATNqWkyYWwgql9QzU=";
+    sha256 = "sha256-UP09tEXK60S593Y3d+1JaIw89GM9qZ00DCW5GUlrqLU=";
   };
 
   build-system = [
@@ -30,6 +39,16 @@ buildPythonPackage rec {
         --replace "_open_library(_LIB_NAME)" \
                   "_open_library('${libdiscid}/lib/libdiscid${extension}')"
     '';
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Python binding of libdiscid";

@@ -30,19 +30,19 @@
   cacert,
   darwin,
   desktopToDarwinBundle,
-  xxHash,
+  xxhash,
   tomlplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.134";
+  version = "0.8.136";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BWOLKa7B1GURG4Zfo65ZQrr54nRaRHYibKv71j6gtiY=";
+    hash = "sha256-eZRv3GImEkT/zM0m8gnLF8hhPSbbUA5yPR7lr+fzHOI=";
 
     nativeBuildInputs = [
       git
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     vulkan-headers
     vulkan-loader
-    xxHash
+    xxhash
     tomlplusplus
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

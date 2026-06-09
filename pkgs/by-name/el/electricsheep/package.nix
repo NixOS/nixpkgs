@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   wxwidgets_3_2,
-  ffmpeg,
+  ffmpeg_7,
   lua5_1,
   curl,
   libpng,
@@ -34,6 +35,11 @@ stdenv.mkDerivation {
   patches = [
     # <https://github.com/scottdraves/electricsheep/pull/126>
     ./boost-1.85.patch
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/proj/guru.git/plain/app-misc/electricsheep/files/electricsheep-boost-system-r1.patch?id=b9f2c3c92d29ed57491a88e45dc8a99bbc73fc15";
+      hash = "sha256-wCRT0pSC9w+XXAbeCTukvPMu5mVeGdfwnkBieMmBIwA=";
+      extraPrefix = "";
+    })
   ];
 
   nativeBuildInputs = [
@@ -43,7 +49,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     wxwidgets_3_2
-    ffmpeg
+    ffmpeg_7
     lua5_1
     curl
     libpng

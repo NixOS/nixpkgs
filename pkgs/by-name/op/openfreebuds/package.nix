@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "openfreebuds/driver/huawei/test/"
     "openfreebuds/test/test_event_bus.py"
   ];

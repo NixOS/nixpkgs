@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "openfga-sdk";
-  version = "0.10.0";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-yopZJMGv2cVJZsTXqU7vaQN31QOwCW/kg0gghqt6rus=";
+    hash = "sha256-OKldYozT/rWa1uU8yXO9UyHaOGsVVCLr62lN9TESY0g=";
   };
 
   build-system = [ hatchling ];
@@ -41,15 +41,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # These fail due to a race condition in the test mocks
-    "test_client_batch_check_multiple_request"
-    "test_client_batch_check_multiple_request_fail"
   ];
 
   meta = {

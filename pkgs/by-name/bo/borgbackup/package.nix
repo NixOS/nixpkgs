@@ -9,7 +9,7 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]
@@ -70,11 +70,15 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''

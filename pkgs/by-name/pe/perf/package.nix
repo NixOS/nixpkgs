@@ -34,6 +34,7 @@
   zstd,
   withLibcap ? true,
   libcap,
+  withPython ? true,
   buildPackages,
 }:
 let
@@ -88,7 +89,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (!withGtk) "NO_GTK2=1"
   ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
-  ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
+  ++ lib.optional (!withLibcap) "NO_LIBCAP=1"
+  ++ lib.optional (!withPython) "NO_LIBPYTHON=1";
 
   hardeningDisable = [ "format" ];
 
@@ -117,16 +119,18 @@ stdenv.mkDerivation {
     zlib
     openssl
     numactl
-    python3
     babeltrace
     libopcodes
     libpfm
-    python3.pkgs.setuptools
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap-unwrapped) systemtap-unwrapped
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
-  ++ lib.optional withLibcap libcap;
+  ++ lib.optional withLibcap libcap
+  ++ lib.optionals withPython [
+    python3
+    python3.pkgs.setuptools
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -156,10 +160,12 @@ stdenv.mkDerivation {
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
       --prefix PATH : ${
-        lib.makeBinPath [
-          binutils-unwrapped
-          python3
-        ]
+        lib.makeBinPath (
+          [
+            binutils-unwrapped
+          ]
+          ++ lib.optional withPython python3
+        )
       }
   '';
 

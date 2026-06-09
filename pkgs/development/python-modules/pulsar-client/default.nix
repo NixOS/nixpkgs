@@ -3,8 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build
+  # build-system
   setuptools,
+
+  # nativeBuildInputs
   cmake,
   pkg-config,
 
@@ -13,28 +15,33 @@
   pybind11,
   certifi,
 
-  # optional dependencies
+  # optional-dependencies
   fastavro,
   grpcio,
   prometheus-client,
   protobuf,
   ratelimit,
 
-  # test
+  # tests
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pulsar-client";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
-    tag = "v${version}";
-    hash = "sha256-TxX+om+uKjZlgG10qcLAddiUisBWLxBfBSHEHGix1d4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZmuZskkviHantE5vOJd0Di8aqu086G36TQJoEFW2VaY=";
   };
+
+  patches = [
+    # Remove TLS bindings removed in libpulsar 4.x
+    ./fix-libpulsar-4.patch
+  ];
 
   build-system = [
     setuptools
@@ -67,13 +74,12 @@ buildPythonPackage rec {
       ratelimit
     ];
     avro = [ fastavro ];
-    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
     unittestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   unittestFlagsArray = [
     "-s"
@@ -87,8 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "Apache Pulsar Python client library";
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-python/";
-    changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

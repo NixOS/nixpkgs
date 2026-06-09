@@ -5,6 +5,7 @@
   makeWrapper,
   gitUpdater,
   cdrtools,
+  coreutils,
   curl,
   gawk,
   mesa-demos,
@@ -32,6 +33,7 @@
 let
   runtimePaths = [
     cdrtools
+    coreutils
     curl
     gawk
     gnugrep

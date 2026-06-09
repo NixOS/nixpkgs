@@ -12,6 +12,7 @@
   bash,
   brotli,
   buildGoModule,
+  fetchpatch,
   forgejo,
   git,
   gzip,
@@ -83,7 +84,6 @@ buildGoModule rec {
   patches = [
     ./static-root-path.patch
   ];
-
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
   '';
@@ -109,7 +109,7 @@ buildGoModule rec {
   # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
   # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests: | compute-go-test-packages\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }
@@ -126,6 +126,7 @@ buildGoModule rec {
         "TestDNSUpdate" # requires network: release.forgejo.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
+        "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

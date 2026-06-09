@@ -10,12 +10,12 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
-    repo = pname;
+    repo = "gitlab-ci-pipelines-exporter";
     rev = "v${version}";
     sha256 = "sha256-r/6tRecbLN9bX2+HYyk4tT0uNiAqtZwMoMMQUJ7niJI=";
   };
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/gitlab-ci-pipelines-exporter" ];
 
   ldflags = [
     "-X main.version=v${version}"

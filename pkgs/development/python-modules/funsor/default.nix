@@ -49,6 +49,13 @@ buildPythonPackage rec {
     })
   ];
 
+  # TypeError: clip() got an unexpected keyword argument 'a_max'
+  postPatch = ''
+    substituteInPlace funsor/jax/ops.py \
+      --replace-fail "a_max=" "max=" \
+      --replace-fail "a_min=" "min="
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

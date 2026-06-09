@@ -8,7 +8,7 @@
   makeWrapper,
   fetchpatch,
   replaceVars,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -27,6 +27,8 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
@@ -109,7 +111,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.17.17";
+  version = "1.18.0";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -123,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-YqDkL91PbgNlaDnfCpZn6oL2r4z0zClRb4OGys4o2Yw=";
+      hash = "sha256-xulsnbC3C7n+4hFeuzRS8XzzYTO6T2vR3jBxTkxHFHE=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050

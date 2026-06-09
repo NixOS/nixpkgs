@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
+  accountsservice,
+  dbus,
   glib,
   gtk4,
   pango,
@@ -13,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regreet";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
     rev = finalAttrs.version;
-    hash = "sha256-f8Xvno5QqmWz4SUiFYDvs8lFU1ZaqQ8gpTaVzWxW4T8=";
+    hash = "sha256-WLngdmv5qrHaJ5P2mN/KO3YijwWOs1wKSliaAf3okvs=";
   };
 
-  cargoHash = "sha256-abCQ3RsnZ/a1DbjQFOiA7Xs7bbqSJxwNps8yV6Q4FIw=";
+  cargoHash = "sha256-Jt8vGJzCYtpIPWxHHIc4x8zwjTF9tiM4YbBy9o9pxX4=";
 
   buildFeatures = [ "gtk4_8" ];
 
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook4
   ];
   buildInputs = [
+    accountsservice
+    dbus
     glib
     gtk4
     pango

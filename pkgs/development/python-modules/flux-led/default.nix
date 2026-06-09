@@ -33,6 +33,8 @@ buildPythonPackage rec {
     webcolors
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
@@ -46,7 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
     mainProgram = "flux_led";
   };
 }

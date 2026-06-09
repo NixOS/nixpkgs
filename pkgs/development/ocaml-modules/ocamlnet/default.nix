@@ -64,7 +64,13 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://projects.camlcity.org/projects/ocamlnet.html";
     description = "Library implementing Internet protocols (http, cgi, email, etc.) for OCaml";
-    license = "Most Ocamlnet modules are released under the zlib/png license. The HTTP server module Nethttpd is, however, under the GPL.";
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        bsd3
+        gpl2Only
+      ];
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";
   };

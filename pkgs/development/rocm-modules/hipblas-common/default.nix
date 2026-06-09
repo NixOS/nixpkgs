@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas-common";
-  version = "7.2.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";

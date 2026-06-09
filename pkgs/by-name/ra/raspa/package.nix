@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     openblas
   ];
 
+  # K&R `T func()` declarations whose definitions take real args
+  env.CFLAGS = "-std=gnu17";
+
   # Prepare for the Python binding packaging.
   strictDeps = true;
 

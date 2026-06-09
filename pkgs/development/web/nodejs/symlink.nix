@@ -3,12 +3,51 @@
   nodejs-slim,
   symlinkJoin,
 }:
-symlinkJoin {
+(symlinkJoin {
   pname = "nodejs";
-  inherit (nodejs-slim) version passthru meta;
+  inherit (nodejs-slim) version meta;
+  passthru = nodejs-slim.passthru // {
+    inherit (nodejs-slim) src;
+  };
   paths = [
     nodejs-slim
     nodejs-slim.npm
   ]
   ++ lib.optional (builtins.hasAttr "corepack" nodejs-slim) nodejs-slim.corepack;
-}
+}).overrideAttrs
+  (nodejs: {
+    passthru =
+      (builtins.listToAttrs (
+        map
+          (name: {
+            inherit name;
+            value = lib.warn "Use nodejs-slim.${name} instead of nodejs.${name}" nodejs-slim.${name};
+          })
+          (
+            builtins.filter (
+              name:
+              !lib.strings.hasPrefix "__" name
+              && !(builtins.elem name [
+                "override"
+                "overrideAttrs"
+                "overrideDerivation"
+                "outputs"
+                "outputName"
+                "system"
+                "type"
+
+                # Filter out arguments of `getOutput`
+                "bin"
+                "dev"
+                "include"
+                "lib"
+                "man"
+                "out"
+                "static"
+              ])
+              && !(builtins.hasAttr name nodejs)
+            ) (builtins.attrNames nodejs-slim)
+          )
+      ))
+      // nodejs.passthru;
+  })

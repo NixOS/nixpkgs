@@ -15,31 +15,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-d3fJiYGAYF5e6XPuZ26Lrjj8tUiquunMLDLs9PdAYcA=";
+    hash = "sha256-rGs+MTt/Z+Gk3jSxU7tfNAUdypG/HJ4pDqvC+U722Eg=";
   };
 
   patches = [
-    # Remove when version > 1.3.1
+    # Remove when version > 1.3.2
     (fetchpatch {
-      name = "0001-lomiri-notifications-Properly-include-lomiri-shell-api-includedirs.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/b68e51db6df1ed2637692dbff704374ab4c53fa7.patch";
-      hash = "sha256-GWGlKQgOEy7HgzgA6H2Dmp0tB5amVcb3lj4LDT9dJCE=";
+      name = "0001-lomiri-notifications-support-qt6-and-newer-lomiri-api.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/55e9b61d2214edb31613d67fa66284acfa171dc5.patch";
+      excludes = [
+        "debian/*"
+      ];
+      hash = "sha256-BURficKpFd15RyNFWyZ+hqxFHnIbv4krFpTARQ86Ykw=";
     })
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # Need to replace prefix to not try to install into lomiri-api prefix
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # Need to replace prefix to not try to install into lomiri-api prefix
+  + ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail '--variable=plugindir' '--define-variable=prefix=''${CMAKE_INSTALL_PREFIX} --variable=plugindir'
+      --replace-fail \
+        '--variable=plugindir lomiri-shell-api' \
+        '--define-variable=libdir=''${CMAKE_INSTALL_LIBDIR} --variable=plugindir lomiri-shell-api'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \

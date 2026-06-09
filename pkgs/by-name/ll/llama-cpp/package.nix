@@ -15,6 +15,8 @@
   rocmPackages ? { },
   rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
+  cpuArchDynamicDispatch ? true,
+
   openclSupport ? false,
   clblast,
 
@@ -28,7 +30,7 @@
   blas,
 
   fetchNpmDeps,
-  nodejs,
+  nodejs_latest,
   npmHooks,
 
   pkg-config,
@@ -40,6 +42,7 @@
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  spirv-headers,
   ninja,
 }:
 
@@ -78,7 +81,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "8733";
+  version = "9503";
 
   outputs = [
     "out"
@@ -89,7 +92,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-hHySLday/Kz0jNPLxbDxZXL/1O2VOBPG7fNaBLkD6tc=";
+    hash = "sha256-SnPK7hCfA7svxXhPji7Cuf7H8eHFjdTJSpNR1otPO4c=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -103,9 +106,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     installShellFiles
     ninja
-    nodejs
+    nodejs_latest
     npmHooks.npmConfigHook
     pkg-config
+    spirv-headers
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -120,8 +124,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ openssl ];
 
-  npmRoot = "tools/server/webui";
-  npmDepsHash = "sha256-eeftjKt0FuS0Dybez+Iz9VTVMA4/oQVh+3VoIqvhVMw=";
+  npmRoot = "tools/ui";
+  npmDepsHash = "sha256-1iM0LGeI9e+gZEHk46lkBe51DxIhiimfAm9o3Z3m9Ik=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -139,8 +143,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    # -march=native is non-deterministic; override with platform-specific flags if needed
-    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "GGML_NATIVE" false) # -march=native would make builds non-deterministic
     (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
     (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
@@ -154,6 +157,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_RPC" rpcSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" finalAttrs.version)
+  ]
+  ++ optionals cpuArchDynamicDispatch [
+    # Build all CPU backend variants for runtime dynamic dispatch.
+    # This avoids illegal instructions on older CPUs and gives optimal performance
+    # on newer ones without needing separate builds.
+    # Enabling AVX2 can make CPU inference 13x faster compared to NixOS's x86_64 defaults.
+    # Note it is not a bug that the CPU variant .so files are placed in `bin/`
+    # (as opposed to `lib/`) alongside the executables by upstream's `CMakeLists.txt` design:
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/CMakeLists.txt#L249-L252
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/ggml-backend-reg.cpp#L480-L486
+    (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeBool "GGML_BACKEND_DL" true)
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
@@ -210,7 +225,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "llama";
     maintainers = with lib.maintainers; [
       booxter
-      dit7ya
       philiptaron
       xddxdd
       yuannan

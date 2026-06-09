@@ -135,7 +135,7 @@ in
       };
       description = ''
         Configuration of radicle-ci-broker.
-        See <https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
+        See <https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
       '';
       default = { };
       example = lib.literalExpression ''
@@ -208,7 +208,7 @@ in
           LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
 
           BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths ++ [
-            "/run/credentials/radicle-ci-broker.service/xyz.radicle.node.secret:/var/lib/radicle/keys/radicle"
+            "/run/credentials/radicle-ci-broker.service/dev.radicle.node.secret:/var/lib/radicle/keys/radicle"
           ];
           ReadWritePaths = [ RAD_HOME ];
 

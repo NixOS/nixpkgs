@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.4.tar.gz";
-      hash = "sha256-i96xMtC10f1V55WvF5iovk0JtixILe5r2snX0iCWH8A=";
+      url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.3.tar.gz";
+      hash = "sha256-0KF/IEVRT8kgHpULEmqMy9gOf06IIDA4vEV3RujjQoE=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.4-aarch64.tar.gz";
-      hash = "sha256-lApU0A1aFqAU7+mT1etk7P+2IsSOBhrJgYUx9SYEpms=";
+      url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-kiuRp9JhdS0aUFPX1brI1T9ik/iWhglIckHvv4bdPWk=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.4.dmg";
-      hash = "sha256-1Yf50KibE5b83wiuNmEwe+YknSRCZ9ANAoi4jU/vyDk=";
+      url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.3.dmg";
+      hash = "sha256-UjpwMCXhI+bMOvyyEbRBoNW3GGCDpi7aF6hUxffW/h0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2025.3.4-aarch64.dmg";
-      hash = "sha256-mI3b1xu/fWbWBbb9/2TIhFSuSXvzYGCmQEgSQp8BaHg=";
+      url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.3-aarch64.dmg";
+      hash = "sha256-lqa3L+rBiEH/hPmFcevWBumvvyBBzoUR3ttvA8s0uT0=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ mkJetBrainsProduct {
   product = "RubyMine";
 
   # update-script-start: version
-  version = "2025.3.4";
-  buildNumber = "253.32098.44";
+  version = "2026.1.3";
+  buildNumber = "261.25134.97";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

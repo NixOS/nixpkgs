@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "jelmer";
-    repo = pname;
+    repo = "prometheus-xmpp-alerts";
     rev = "v${version}";
     sha256 = "sha256-kXcadJnPPhMKF/1CHMLdGCqWouAKDBFTdvPpn80yK4A=";
   };

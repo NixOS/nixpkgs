@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   version = "0.1.2";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "bootc-dev";
     repo = "podman-bootc";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Hxg2QSedPAWYZpuesUEFol9bpTppjB0/MpCcB+txMDc=";
@@ -62,8 +62,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Streamlining podman+bootc interactions";
-    homepage = "https://github.com/containers/podman-bootc";
-    changelog = "https://github.com/containers/podman-bootc/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/bootc-dev/podman-bootc";
+    changelog = "https://github.com/bootc-dev/podman-bootc/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ evan-goode ];
     license = lib.licenses.asl20;
     # x86_64-darwin does not seem to be supported at this time:

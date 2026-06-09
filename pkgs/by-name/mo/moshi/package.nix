@@ -12,6 +12,7 @@
 
   # buildInputs
   libopus,
+  oniguruma,
   openssl,
   sentencepiece,
   alsa-lib,
@@ -74,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libopus
+    oniguruma
     openssl
     sentencepiece
   ]
@@ -92,7 +94,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isDarwin [ "metal" ]
     ++ lib.optionals config.cudaSupport [ "cuda" ];
 
-  env = lib.optionalAttrs config.cudaSupport {
+  env = {
+    # use system oniguruma
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  }
+  // lib.optionalAttrs config.cudaSupport {
     CUDA_COMPUTE_CAP = cudaCapability';
 
     # We already list CUDA dependencies in buildInputs

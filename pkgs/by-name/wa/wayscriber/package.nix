@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayscriber";
-  version = "0.9.13";
+  version = "0.9.19";
 
   src = fetchFromGitHub {
     owner = "devmobasa";
     repo = "wayscriber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5e+Qqy8SwRz3qOqcgwZtoVQ7j+nYski0Q8yj1PtDn14=";
+    hash = "sha256-QvIE4A6i5tz1Emsd1p3vHkQAsm+msSEUsTIM5hEKUi4=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pango
     libxkbcommon
   ];
-  cargoHash = "sha256-YRNUZ82U8MTx1GFRT4mLvWcFatrbSsIkHp2NKtw6RbA=";
+  cargoHash = "sha256-ysInAJhjO9nC4O/Q2mffby33faOO0ooJXdrjWmka2kg=";
   passthru.updateScript = nix-update-script { };
 
   meta = {

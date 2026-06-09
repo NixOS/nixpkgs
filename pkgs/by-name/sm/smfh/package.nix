@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smfh";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "feel-co";
     repo = "smfh";
     tag = finalAttrs.version;
-    hash = "sha256-6zMgOPzBbTSm8jzPqmGcotjvkN3HzxcnMM8pW64JpZQ=";
+    hash = "sha256-RgszLC/p9uov6aXnPGbFRkPzT5xleX17wBCdoMT1wcA=";
   };
 
-  cargoHash = "sha256-FVTpH+scBCjgm3sf9sowRCI/X2jCS1wHtLLiOyKAD8U=";
+  cargoHash = "sha256-7IcoDgRvpye2lm+bdPlVKj0GO6QBABiQKVwSxL4Mh5k=";
 
   meta = {
     description = "Sleek Manifest File Handler";

@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fix compile error in configure.ac
     ./fix-big-endian-config-check.diff
+    # Fix GCC 15 build: path::operator+ calls a nonexistent append() member.
+    ./fix-path-operator-plus.diff
   ];
 
   nativeBuildInputs = [

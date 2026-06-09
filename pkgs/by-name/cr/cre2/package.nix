@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
   };
 
+  patches = [
+    ./missing-header-include-pr-34.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     libtool

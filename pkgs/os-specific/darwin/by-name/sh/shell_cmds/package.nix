@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk,
   bison,
   clang,
   libedit,
@@ -8,13 +7,14 @@
   libsbuf,
   libutil,
   libxo,
-  pkg-config,
   mkAppleDerivation,
+  pkg-config,
+  sourceRelease,
 }:
 
 let
   # nohup requires vproc_priv.h from launchd
-  launchd = apple-sdk.sourceRelease "launchd";
+  launchd = sourceRelease "launchd";
 in
 mkAppleDerivation {
   releaseName = "shell_cmds";

@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-md-report";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_md_report";
     inherit version;
-    hash = "sha256-O4Mur2YLRwtXQuWNnJpeMSsHEqcBLSUcwE6QioHOPJY=";
+    hash = "sha256-yOO38fkaDo59G5RuGyJPTzkYfaDfL4EnMTYaQ2oX9HI=";
   };
 
   build-system = [

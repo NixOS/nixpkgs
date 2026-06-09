@@ -1,31 +1,27 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
-  lib,
-  testers,
-
-  # passthru
-  goshs,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "2.0.0-beta.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "patrickhener";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ELYeabx0hb4oy2RH0yUIt6xTb2rm1eqxZIH+VhEZlvU=";
+    hash = "sha256-pS/Dx3C2c8Rpr2ugcxrElFice6Eildt28zdIfrL/5yk=";
   };
 
-  vendorHash = "sha256-EXu1VQWxbKa0EkfqgOL8MDnOCGd8yynP1Bko5wqRCBg=";
+  vendorHash = "sha256-nVg+ALvvZYG+9JFiNGaT/EQO8IdZK3EO8UQoAp29KNQ=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
@@ -42,12 +38,7 @@ buildGoModule (finalAttrs: {
     "-skip=^TestGetIPv4Addr$"
   ];
 
-  # Disabled until https://github.com/patrickhener/goshs/issues/137 is resolved
-  # passthru.tests.version = testers.testVersion {
-  #   package = goshs;
-  #   command = "goshs -v";
-  #   version = "goshs ${finalAttrs.version}";
-  # };
+  versionCheckProgramArg = [ "-v" ];
 
   meta = {
     description = "Simple, yet feature-rich web server written in Go";

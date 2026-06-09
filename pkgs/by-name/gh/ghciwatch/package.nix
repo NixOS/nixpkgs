@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghciwatch";
-  version = "1.2.0";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JN2FnYHORvlqhsQF5Widm7G7Jyk8/iLCnQ+lLsklX1k=";
+    hash = "sha256-ivSn1q/E0akz2JEkGcfB8i46Vom8/Pp/DlFBI+Zmo5Q=";
   };
 
-  cargoHash = "sha256-RdoGS5VTesLaPiNeSEDrwP7ZuYWiz9uewlCntn7CqYc=";
+  cargoHash = "sha256-LZIBQ5dKtqTsMjLrhBucsgSAdmsGKkhOFtMCGh3clPk=";
 
   # integration tests are not run but the macros need this variable to be set
   env.GHC_VERSIONS = "";

@@ -5,13 +5,14 @@
   installShellFiles,
   lib,
   libredirect,
+  glibc,
   nix-update-script,
   stdenv,
   versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.18";
+  version = "4.24";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
@@ -24,7 +25,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-X0/BCdLpM7Cs2Q7goW9JHw8tA+ztlm+qxusn+OIQ/qg=";
+    hash = "sha256-PYVCoeO+EYZ87gNwd9r+wgkpoeLhKKmV8fOimKkqR6w";
   };
 
   postPatch = ''
@@ -32,7 +33,11 @@ buildGoModule (finalAttrs: {
     rm -rf unmaintained
   '';
 
-  vendorHash = "sha256-W5fRmE89IBP5h11+Op3mkCQw9WkUgAtXduEHBdHiQVI=";
+  vendorHash = "sha256-lTCfs/4FrICgb+uESM3XZBdinQw9Z0GrHkCIwmKSRh8";
+
+  buildInputs = [
+    glibc.static
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +69,7 @@ buildGoModule (finalAttrs: {
   };
 
   preBuild = ''
+    export NIX_CFLAGS_LINK="-L${glibc.static}/lib"
     ldflags+=" -X \"github.com/seaweedfs/seaweedfs/weed/util/version.COMMIT=$(<COMMIT)\""
   '';
 
@@ -71,9 +77,10 @@ buildGoModule (finalAttrs: {
     # Test all targets.
     unset subPackages
 
+    export NIX_CFLAGS_LINK="-L${glibc.static}/lib"
     # Remove tests that require specialized environment or additional setup
     # that's not possible to achieve inside a sandbox.
-    for i in test/{fuse_integration,kafka,s3,sftp,volume_server}; do
+    for i in test/{fuse_dlm,fuse_integration,fuse_p2p,kafka,nfs,s3,sftp,volume_server}; do
       find "$i" -name '*_test.go' -delete
     done
 

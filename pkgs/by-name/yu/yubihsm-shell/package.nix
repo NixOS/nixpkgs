@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubihsm-shell";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = finalAttrs.version;
-    hash = "sha256-qWz9fWhwNObvHERvJTWSN3DQsaPNnPEp4SEdYQvFAlY=";
+    hash = "sha256-0Y2Dj/MAg5Nb6etxF164/7gvytjKYROVIkhqE6Lr2p8=";
   };
 
   postPatch = ''

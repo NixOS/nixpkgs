@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.4.2";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
     tag = "v${version}";
-    hash = "sha256-3mhtpXhia2w9VtdFctN+cGrvOmhRE3656fEciseY2u4=";
+    hash = "sha256-HhEtWYWdxJZOMS3dqB2VdQS7aSdpkRhq7EZCJ55n2OE=";
   };
 
   build-system = [

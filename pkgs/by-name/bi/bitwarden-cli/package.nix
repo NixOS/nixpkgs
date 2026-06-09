@@ -14,20 +14,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2026.3.0";
+  version = "2026.5.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-ecaCHk04N9h0RP8gK0o+MLgYS6Linsqi7AaC86hwQ3U=";
+    hash = "sha256-R00wt5W4kKmFIODEaGoUqDwfGyHH/2PpiRaC8Gq3d88=";
   };
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
 
-    # Upstream cli-v2026.3.0 bumps @napi-rs/cli to 3.5.1 in the desktop workspace,
+    # Upstream cli-v2026.4.1 bumps @napi-rs/cli to 3.5.1 in the desktop workspace,
     # but the root lockfile still points that entry at 3.2.0.
     substituteInPlace package-lock.json \
       --replace-fail \
@@ -38,7 +38,7 @@ buildNpmPackage (finalAttrs: {
   nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-JVRwU5MUQ8YzhCW7ODiyVqbgq7/PxgMV9dlw7i32MfI=";
+  npmDepsHash = "sha256-SU4HjfNshjRwa8mXPnmG2xVIwYkbQ7g8j3NZ43Ap76k=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -97,6 +97,7 @@ buildNpmPackage (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
+    inherit (finalAttrs) npmDeps;
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };

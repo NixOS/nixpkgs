@@ -60,7 +60,7 @@ let
       '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.11.1";
+  version = "3.12.0";
   pname = "botan";
 
   __structuredAttrs = true;
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "randombit";
     repo = "botan";
     tag = finalAttrs.version;
-    hash = "sha256-AzQ/IblJF2atUXBTwI+84gmcceVQ6aMMElS3wOsfUDM=";
+    hash = "sha256-2ODTjqsWSmlornOKh5m6pOX7cNOBHS3+ALblRyC8lPw=";
   };
 
   nativeBuildInputs = [

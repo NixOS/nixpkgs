@@ -247,7 +247,7 @@ cfgmisc = """  # Enable CUPS to print documents.
 
 """
 cfgusers = """  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.@@username@@ = {
+  users.users."@@username@@" = {
     isNormalUser = true;
     description = "@@fullname@@";
     extraGroups = [ @@groups@@ ];

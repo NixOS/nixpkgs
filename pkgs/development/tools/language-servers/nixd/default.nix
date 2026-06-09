@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   gtest,
@@ -22,15 +21,15 @@
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.9.0";
+    version = "2.9.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-/IU5yJQzUwv/d4mXr+m/AKrw7ufY8r+JAysUhhaHUZY=";
+      hash = "sha256-S/E16Yf3Qh098qXxl0pimSy/5gkkd1n/Os6B9REWleg=";
     };
 
     nativeBuildInputs = [
@@ -133,17 +132,6 @@ in
     common
     // {
       pname = "nixd";
-
-      patches = [
-        # Pull upstream fix for boost-1.89 & boost 1.87 support:
-        #   https://github.com/nix-community/nixd/pull/783
-        (fetchpatch {
-          name = "boost-1.89.patch";
-          url = "https://github.com/nix-community/nixd/commit/11dfdf5f2db2e0fc1fea0349fb68739a9c747a41.patch";
-          hash = "sha256-aCb9wRKqZSuUXmamzjpYe0vRqEQh4tenwoScv+juYK8=";
-          stripLen = 1;
-        })
-      ];
 
       sourceRoot = "${common.src.name}/nixd";
 

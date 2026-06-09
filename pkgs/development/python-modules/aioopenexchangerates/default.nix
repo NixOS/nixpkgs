@@ -5,27 +5,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
-  poetry-core,
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioopenexchangerates";
-  version = "0.6.21";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
-    tag = "v${version}";
-    hash = "sha256-yPi2k1ajW+X78dF3OJTdGR3h8mzNfYCsW0P8baKUjoA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pNjpeoXBlz2bdUeEsOlW7RJmbKTZGuBVTLHymGHwAiY=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Openexchangerates API";
     homepage = "https://github.com/MartinHjelmare/aioopenexchangerates";
-    changelog = "https://github.com/MartinHjelmare/aioopenexchangerates/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/MartinHjelmare/aioopenexchangerates/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

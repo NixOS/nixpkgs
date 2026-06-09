@@ -83,6 +83,16 @@ stdenv.mkDerivation (finalAttrs: {
   internalDeps = [ php.extensions.session ];
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Temporary patch as relay isn't compatible with the latest version of hiredis out of
+    # the box.
+    patchelf \
+      --replace-needed libhiredis.so.1.1.0 libhiredis.so.1 \
+      --replace-needed libhiredis_ssl.so.1.1.0 libhiredis_ssl.so.1 \
+        relay.so
+  ''
+  + ''
     install -Dm755 relay.so -t $out/lib/php/extensions
   ''
   + (

@@ -85,7 +85,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ];
+    maintainers = with lib.maintainers; [
+      tricktron
+      britter
+    ];
     teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };

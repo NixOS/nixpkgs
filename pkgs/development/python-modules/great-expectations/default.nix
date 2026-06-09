@@ -38,7 +38,7 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "great-expectations";
   version = "1.11.1";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "great-expectations";
     repo = "great_expectations";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8yKuEVupqbwlBGeUDu25pvGltybljkmpbkcbC+G+/VI=";
   };
 
@@ -138,8 +138,8 @@ buildPythonPackage rec {
     broken = true; # 408 tests fail
     description = "Library for writing unit tests for data validation";
     homepage = "https://docs.greatexpectations.io";
-    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${src.tag}";
+    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

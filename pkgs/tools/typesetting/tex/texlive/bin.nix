@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  fetchzip,
   fetchFromGitHub,
   fetchpatch,
+  unzip,
   buildPackages,
   texlive,
+  gnum4,
+  jdk_headless,
   zlib,
   libiconv,
   libpng,
@@ -42,7 +44,7 @@
   clisp,
   biber,
   woff2,
-  xxHash,
+  xxhash,
   makeWrapper,
   useFixedHashes ? true,
   asymptote,
@@ -139,12 +141,19 @@ let
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
+    # initial TeX Live 2025 release
+    # src = fetchurl {
+    #   urls = [
+    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #   ];
+    #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+    # };
+
+    # 2025.2 update
     src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-      ];
-      hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+      url = "https://github.com/TeX-Live/texlive-source/archive/refs/tags/svn74917.tar.gz";
+      hash = "sha256-QgUN5LOFeD6Jt0ENF6Uwi516D8PH+TXZ+MCO8bCTHqE=";
     };
 
     prePatch = ''
@@ -360,6 +369,7 @@ rec {
         veprbl
         raskin
         jwiegley
+        xworld21
       ];
       platforms = lib.platforms.all;
     };
@@ -537,25 +547,21 @@ rec {
   # https://github.com/gucci-on-fleek/context-packaging
   context =
     let
-      # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
-      # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2026-01-08-23-30-A";
+      version = "2.11.08";
+      level = "20260217";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.08";
+      version = "${version}-${level}";
 
-      src = fetchzip {
-        name = "luametatex.src.zip";
-        url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
-        stripRoot = false;
-      };
+      src = texlive.pkgs.context.texsource + "/source/context/base/luametatex-${level}.src.zip";
+      sourceRoot = ".";
 
       enableParallelBuilding = true;
       nativeBuildInputs = [
         cmake
         ninja
+        unzip
       ];
 
       meta = {
@@ -602,7 +608,7 @@ rec {
       ttfautohint
       woff2
       potrace
-      xxHash
+      xxhash
       mupdf-headless
     ];
 
@@ -685,24 +691,32 @@ rec {
     };
   };
 
-  asymptote = args.asymptote.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = texlive.pkgs.asymptote.version;
+  asymptote =
+    let
+      version = "3.09";
+    in
+    args.asymptote.overrideAttrs (
+      finalAttrs: prevAttrs: {
+        version =
+          assert lib.assertMsg (version == texlive.pkgs.asymptote.version)
+            "asymptote: TeX Live version (${texlive.pkgs.asymptote.version}) different from source in bin.nix (${version}), please update it";
+          version;
 
-      # keep local src and patches even if duplicated in the top level asymptote
-      # so that top level updates do not break texlive
-      src = fetchurl {
-        url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
-      };
+        # keep local src and patches even if duplicated in the top level asymptote
+        # so that top level updates do not break texlive
+        src = fetchurl {
+          url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+          hash = "sha256-unM6mfyq8MCajo8wtG/ksr4E6mQNK/A03gGIa9Fxeuc=";
+        };
 
-      texContainer = texlive.pkgs.asymptote.tex;
-      texdocContainer = texlive.pkgs.asymptote.texdoc;
+        texContainer = texlive.pkgs.asymptote.tex;
+        texdocContainer = texlive.pkgs.asymptote.texdoc;
 
-      # build issue with asymptote 2.95 has been fixed
-      postConfigure = "";
-    }
-  );
+        preConfigure = prevAttrs.preConfigure + ''
+          substituteInPlace Makefile.in --replace-fail '/bin/ls' 'ls'
+        '';
+      }
+    );
 
   inherit biber;
   inherit biber-ms;
@@ -777,6 +791,60 @@ rec {
     preConfigure = "cd utils/xpdfopen";
 
     enableParallelBuilding = true;
+  };
+
+  # tex4ht.jar
+  # we build this as a TeX package, but under texlive.bin to avoid exposing it in texlivePackages
+  tex4htJar = stdenv.mkDerivation {
+    pname = "tex4ht-jar";
+    inherit (texlive.pkgs.tex4ht) meta version;
+
+    outputs = [ "tex" ];
+
+    src = texlive.pkgs.tex4ht.texsource + "/source/generic/tex4ht";
+
+    nativeBuildInputs = [
+      gnum4
+      jdk_headless
+      (texlive.schemes.texliveBasic.withPackages (ps: [
+        # override tex4ht-jar with an empty package to avoid a self dependency
+        { pname = "tex4ht-jar"; }
+        ps.protex
+        ps.tex4ht
+      ]))
+    ];
+
+    preHook = ''
+      export out="$tex"
+    '';
+
+    # the current Makefile is broken, so we build the artifact by hand
+    # we also use latex instead of htlatex as the latter is orders of magnitude slower
+    buildPhase = ''
+      make tex4ht-dir.tex
+
+      mkdir -p work.dir/src/tex4ht
+      for f in *-xtpipes.tex ; do
+        latex -output-directory=work.dir/src/tex4ht "\\RequirePackage{tex4ht}\\input $f"
+      done
+
+      mkdir -p work.dir/src/xtpipes
+      latex -output-directory=work.dir/src/xtpipes "\\RequirePackage{tex4ht}\\input xtpipes.tex"
+
+      mkdir -p work.dir/src/xtpipes/util
+      mv work.dir/src/xtpipes/xtpipes.java.java work.dir/src/xtpipes.java
+      mv work.dir/src/xtpipes/ScriptsManager*.java work.dir/src/xtpipes/util
+
+      mkdir -p xtpipes.dir/xtpipes/lib
+      cp work.dir/src/xtpipes/xtpipes*.{4xt,dtd} xtpipes.dir/xtpipes/lib
+
+      javac -d xtpipes.dir work.dir/src/{*,*/*,*/*/*}.java
+      jar cf tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar -C xtpipes.dir .
+    '';
+
+    installPhase = ''
+      install -D -t "$tex"/tex4ht/bin tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar
+    '';
   };
 
 } # un-indented

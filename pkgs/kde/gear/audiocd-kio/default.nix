@@ -1,7 +1,6 @@
 {
   lib,
   mkKdeDerivation,
-  libkcompactdisc,
   cdparanoia,
   flac,
   libogg,
@@ -21,8 +20,6 @@ mkKdeDerivation {
   ];
 
   extraBuildInputs = [
-    libkcompactdisc
-
     cdparanoia
     flac
     libogg

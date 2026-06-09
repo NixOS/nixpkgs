@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.6.0";
+  version = "12.1.2";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-MU/WB4RsNViEulvE6fB7S4QTjjMI/50enlyCIX+xar4=";
+      hash = "sha256-uYEPOZ1OZwisiitByOWIjymzCayLCdN+cDzW/etktgM=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-Ty+eRZJ6bnBsrs1VtGem1+m9WDZZf/PgiOvFIazQF6I=";
+      hash = "sha256-BIeK1ICLmxciNbauWa23IITEUlbum/39e77D4ovNHCc=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-mpJNhvKIBYt3Yd+RjxSgzRP6AfnfHPRbQ0dzd5kQQIQ=";
+      hash = "sha256-1KTdxnpqNYpLKxX5G5QwY6mYP7j9GtDQoTeXwGfhv08=";
     };
   };
 
@@ -88,6 +88,7 @@ let
     maintainers = with lib.maintainers; [
       nicolas-goudry
       Rishik-Y
+      TurnrDev
     ];
     mainProgram = "gitkraken";
   };
@@ -207,9 +208,9 @@ let
 
       # SSL and permissions fix for bundled nodegit
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
-      mv nodegit-ubuntu-20.node nodegit-ubuntu-20-ssl-1.1.1.node
-      mv nodegit-ubuntu-20-ssl-static.node nodegit-ubuntu-20.node
-      chmod 755 nodegit-ubuntu-20.node
+      mv nodegit-x64-ubuntu-20.node nodegit-x64-ubuntu-20-ssl-1.1.1.node
+      mv nodegit-x64-ubuntu-20-ssl-static.node nodegit-x64-ubuntu-20.node
+      chmod 755 nodegit-x64-ubuntu-20.node
       popd
 
       # Devendor bundled git

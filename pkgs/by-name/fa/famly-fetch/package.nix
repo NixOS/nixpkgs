@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "famly-fetch";
-  version = "0.4.0";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jacobbunk";
     repo = "famly-fetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uyLGBNV+GiYNqy4wWxPNx/xQL0lnMsIHfPIlaIu85HA=";
+    hash = "sha256-KsdypUXHU9drghAcDcur8FUUJvm8nIzq00QFdMqPnpc=";
   };
 
   build-system = with python3Packages; [

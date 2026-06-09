@@ -3,7 +3,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -17,9 +16,6 @@
   pkg-config,
   pkgsBuildBuild,
 
-  # propagatedBuildInputs
-  json-glib,
-
   # nativeBuildInputs
   ensureNewerSourcesForZipFilesHook,
   gettext,
@@ -27,8 +23,6 @@
   gobject-introspection,
   meson,
   ninja,
-  protobuf,
-  protobufc,
   shared-mime-info,
   vala,
   wrapGAppsNoGuiHook,
@@ -42,8 +36,6 @@
   fwupd-efi,
   gnutls,
   gusb,
-  libarchive,
-  libcbor,
   libdrm,
   libgudev,
   libjcat,
@@ -61,7 +53,6 @@
   tpm2-tss,
   valgrind,
   xz, # for liblzma
-  flashrom,
 
   # mesonFlags
   hwdata,
@@ -82,15 +73,11 @@
   nixosTests,
   nix-update-script,
 
-  enableFlashrom ? false,
   enablePassim ? false,
 }:
 
 let
   isx86 = stdenv.hostPlatform.isx86;
-
-  # Experimental
-  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand =
     name: buildCommandPython:
@@ -135,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.19";
+  version = "2.1.4";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -153,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-DjO+7CEOef5KMbYEPtDr3GrnXTDUO/jwwZ4P17o4oDg=";
+    hash = "sha256-bKBEZR7Wzi9nZYH+KAzh1q+sh2t2Gl3puQmeogNdIsE=";
   };
 
   patches = [
@@ -197,21 +184,17 @@ stdenv.mkDerivation (finalAttrs: {
     (pkgsBuildBuild.callPackage ./build-time-python.nix { })
   ];
 
-  propagatedBuildInputs = [
-    json-glib
-  ];
-
   nativeBuildInputs = [
     ensureNewerSourcesForZipFilesHook # required for firmware zipping
     gettext
     gi-docgen
+    gnutls.bin
     gobject-introspection
+    libjcat.bin
     libxml2
     meson
     ninja
     pkg-config
-    protobuf # for protoc
-    protobufc # for protoc-gen-c
     shared-mime-info
     vala
     wrapGAppsNoGuiHook
@@ -230,8 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     fwupd-efi
     gnutls
     gusb
-    libarchive
-    libcbor
     libdrm
     libgudev
     libjcat
@@ -243,19 +224,14 @@ stdenv.mkDerivation (finalAttrs: {
     modemmanager
     pango
     polkit
-    protobufc
     readline
     sqlite
     tpm2-tss
     valgrind
     xz # for liblzma
-  ]
-  ++ lib.optionals haveFlashrom [
-    flashrom
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "docs" true)
     # We are building the official releases.
     (lib.mesonEnable "supported_build" true)
     (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
@@ -264,7 +240,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
-    (lib.mesonEnable "plugin_modem_manager" true)
+    # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
+    # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
+    (lib.mesonEnable "hsi" isx86)
     (lib.mesonBool "vendor_metadata" true)
     (lib.mesonBool "plugin_uefi_capsule_splash" false)
     # TODO: what should this be?
@@ -275,9 +253,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!enablePassim) [
     (lib.mesonEnable "passim" false)
-  ]
-  ++ lib.optionals (!haveFlashrom) [
-    (lib.mesonEnable "plugin_flashrom" false)
   ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
@@ -310,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
     echo "12345678901234567890123456789012" > machine-id
-    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id)
   '';
 
   postInstall = ''
@@ -355,16 +330,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/fwupd.conf"
+      "fwupd/remotes.d/lvfs-embargo.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
-      "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
-      "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"

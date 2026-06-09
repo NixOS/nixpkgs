@@ -13,13 +13,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vision";
-  version = "3.13.0";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit (finalAttrs) version;
-    hash = "sha256-aA9mjTMYWKM0DqxBtzKQPTDcae0IAg/9HVyjJYC99UY=";
+    hash = "sha256-Ga9pIYkjNYdmrP1lWtY/RQ0WaxSe6O7KrrOg05DEZ0k=";
   };
 
   build-system = [ setuptools ];

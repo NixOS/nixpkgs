@@ -28,9 +28,8 @@ makeOverridable (
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromSourcehut requires one of either `rev` or `tag` to be provided (not both)."
+    lib.xor (tag == null) (rev == null)
+    || throw "fetchFromSourcehut requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   assert (

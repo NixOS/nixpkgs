@@ -12,19 +12,20 @@
 
 stdenv.mkDerivation {
   pname = "x2x";
-  version = "unstable-2023-04-30";
+  version = "1.30-unstable-2025-02-17";
 
   src = fetchFromGitHub {
     owner = "dottedmag";
     repo = "x2x";
-    rev = "53692798fa0e991e0dd67cdf8e8126158d543d08";
-    hash = "sha256-FUl2z/Yz9uZlUu79LHdsXZ6hAwSlqwFV35N+GYDNvlQ=";
+    rev = "08842516fa443a2cf799c6372f83466062f612c9";
+    hash = "sha256-0ZVpG4ZrygrFZ0mVmNLWWdyqM43LtQPGwvZZPC92zuY=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     libx11
     libxtst

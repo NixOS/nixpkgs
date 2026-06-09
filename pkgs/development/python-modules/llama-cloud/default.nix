@@ -25,13 +25,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-cloud";
-  version = "2.2.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_cloud";
     inherit (finalAttrs) version;
-    hash = "sha256-Z9f4q6S75SLLr7jigE3jheQWOJ9eL6mN3Tce17c4lEk=";
+    hash = "sha256-7hPs2yySQ2PrECOkNhnb0HLhgsWW7VwpK4pclbAaDOU=";
   };
 
   postPatch = ''

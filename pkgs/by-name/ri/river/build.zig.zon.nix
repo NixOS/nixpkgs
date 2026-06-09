@@ -8,6 +8,14 @@
 
 linkFarm "zig-packages" [
   {
+    name = "aro-0.0.0-JSD1Qi7QNgDnfcrdEJf82v3o6MhZySjYVrtdfEf3E4Se";
+    path = fetchgit {
+      url = "https://github.com/Vexu/arocc";
+      rev = "5f5a050569a95ecc40a426f0c3666ae7ef987ede";
+      hash = "sha256-f8Z0SXWx5Uia2TCMB5SUpcO8+xUnaWk32Oknva7xcxw=";
+    };
+  }
+  {
     name = "pixman-0.3.0-LClMnz2VAAAs7QSCGwLimV5VUYx0JFnX5xWU6HwtMuDX";
     path = fetchzip {
       url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.3.0.tar.gz";
@@ -15,24 +23,25 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "wayland-0.4.0-lQa1khbMAQAsLS2eBR7M5lofyEGPIbu2iFDmoz8lPC27";
-    path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.4.0.tar.gz";
-      hash = "sha256-ulIII5iJpM/W/VJB0HcdktEO2eb9T9J0ln2A1Z94dU4=";
+    name = "translate_c-0.0.0-Q_BUWlX1BgCD1wo6uo97prlp9VJ4gxAjwN_vZ7nsSjGN";
+    path = fetchgit {
+      url = "https://codeberg.org/ziglang/translate-c/";
+      rev = "57c559cf581b1fcad90494eda219f98abeb155ce";
+      hash = "sha256-7OlW2f5tRc1UZySDcEQERsLGChSxIcJAiVWdvuFUvvY=";
     };
   }
   {
-    name = "wayland-0.5.0-lQa1knz8AQCh08NA8BeQrwJB9U3CfqcVAdHZYGRKIGuu";
+    name = "wayland-0.6.0-lQa1kqz8AQADQmdNJsNhLoNHcnEGEUjrOaPV-dtEnEmX";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.5.0.tar.gz";
-      hash = "sha256-mhqOtC26iACIvQUq74AbLSXSPsnWMi3AvDV7G2uElpo=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.6.0.tar.gz";
+      hash = "sha256-3m/ITNhZUJ/5uD/Tqm+0uZSktGoYgWF5oldOqOCUkIE=";
     };
   }
   {
-    name = "wlroots-0.20.0-jmOlcmtCBADS6eoJ6mkeiSNZkibrhD-c5Qwn-LiM86r1";
+    name = "wlroots-0.20.1-jmOlcqNVBAB3uB5oqBTzpRlwu-FmMyyZMVAWCe5kmcSt";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.20.0.tar.gz";
-      hash = "sha256-QblQBVsDV2kSj31jqmVVi4hQUXuv8bsRgRMaCqlNxNM=";
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.20.1.tar.gz";
+      hash = "sha256-cfzHJ2ziiCkMyNlIo6I9o/NjaZGrsv22hq41WYwCnpk=";
     };
   }
   {

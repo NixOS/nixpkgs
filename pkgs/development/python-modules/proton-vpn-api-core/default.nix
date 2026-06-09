@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "4.18.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-dyMSyGkeyYXVKAhkmQpq2w4zCFk3fz1qEVECOVl8jEI=";
+    hash = "sha256-XdQLgHKNqBNwY51niSiE1HHxLJ3efipS03IUiyHQCiY=";
   };
 
   postPatch = ''
@@ -119,7 +119,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       anthonyroussel
-      sebtm
       rapiteanu
     ];
   };

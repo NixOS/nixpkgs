@@ -1,5 +1,4 @@
 {
-  SDL,
   addDriverRunpath,
   alembic,
   apple-sdk_15,
@@ -9,14 +8,13 @@
   callPackage,
   ceres-solver,
   cmake,
-  colladaSupport ? true,
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchzip,
   fetchFromGitHub,
+  fetchzip,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -27,16 +25,11 @@
   jackaudioSupport ? false,
   jemalloc,
   lib,
-  libGL,
-  libGLU,
-  libx11,
-  libxext,
-  libxi,
-  libxrender,
-  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
+  libGL,
+  libGLU,
   libharu,
   libjack2,
   libjpeg,
@@ -46,15 +39,19 @@
   libspnav,
   libtiff,
   libwebp,
+  libx11,
+  libxext,
+  libxi,
   libxkbcommon,
+  libxrender,
+  libxxf86vm,
   llvmPackages,
   makeWrapper,
   manifold,
   mesa,
   nix-update-script,
-  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
+  onetbb,
   openal,
-  opencollada-blender,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -62,6 +59,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
+  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openvdb,
   openxr-loader,
   pkg-config,
@@ -72,11 +70,11 @@
   rocmSupport ? config.rocmSupport,
   rubberband,
   runCommand,
+  SDL,
   shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  onetbb,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -118,12 +116,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-knXAK3mW0tDz5ukuYkAZMv/zF9NLR8pofc3ujabcsys=";
+    hash = "sha256-iJolR8iS2go0doO96ibyseCeMunFL+XPoQ25NbX6oOA=";
   };
 
   patches = [
@@ -131,10 +129,16 @@ stdenv'.mkDerivation (finalAttrs: {
     # ceres-solver dependency propagates eigen 3 and appears to be incompatible
     # with more recent versions.
     ./eigen-3-compat.patch
+    # Required due to `-Werror=format-security` in nixpkgs
+    # https://projects.blender.org/blender/blender/commit/470127ede2448de50a6936b8484b3c382c76d596
+    ./fix-quite-clog-warning.patch
   ]
   # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
   ++ lib.optionals rocmSupport [
     ./hiprt-3-compat.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin.patch
   ];
 
   postPatch =
@@ -177,12 +181,11 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
-    (lib.cmakeBool "WITH_SYSTEM_GLOG" true)
+    (lib.cmakeBool "WITH_CYCLES_PARALLEL_DEVICE_KERNEL_BUILD" true)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
     (lib.cmakeBool "WITH_LIBS_PRECOMPILED" false)
-    (lib.cmakeBool "WITH_OPENCOLLADA" colladaSupport)
     (lib.cmakeBool "WITH_OPENIMAGEDENOISE" openImageDenoiseSupport)
     (lib.cmakeBool "WITH_PIPEWIRE" false)
     (lib.cmakeBool "WITH_PULSEAUDIO" false)
@@ -190,6 +193,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_PYTHON_INSTALL_NUMPY" false)
     (lib.cmakeBool "WITH_PYTHON_INSTALL_REQUESTS" false)
     (lib.cmakeBool "WITH_STRICT_BUILD_OPTIONS" true)
+    (lib.cmakeBool "WITH_SYSTEM_GLOG" true)
     (lib.cmakeBool "WITH_USD" openUsdSupport)
 
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
@@ -207,15 +211,15 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals waylandSupport [
     (lib.cmakeBool "WITH_GHOST_WAYLAND" true)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_DBUS" true)
     (lib.cmakeBool "WITH_GHOST_WAYLAND_DYNLOAD" false)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_LIBDECOR" true)
   ]
   ++ lib.optionals stdenv.cc.isClang [
     (lib.cmakeFeature "PYTHON_LINKFLAGS" "") # Clang doesn't support "-export-dynamic"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "LIBDIR" "/does-not-exist")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     (lib.cmakeFeature "SSE2NEON_INCLUDE_DIR" "${sse2neon}/include")
   ];
 
@@ -272,8 +276,9 @@ stdenv'.mkDerivation (finalAttrs: {
     openjpeg
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
-    openvdb
     onetbb
+    openvdb
+    openxr-loader
     potrace
     pugixml
     python3
@@ -297,7 +302,6 @@ stdenv'.mkDerivation (finalAttrs: {
         libxrender
         libxxf86vm
         openal
-        openxr-loader
       ]
     else
       [
@@ -307,9 +311,9 @@ stdenv'.mkDerivation (finalAttrs: {
         apple-sdk_15
         brotli
         llvmPackages.openmp
-        sse2neon
       ]
   )
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ sse2neon ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
   ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
   ++ lib.optionals waylandSupport [
@@ -320,7 +324,6 @@ stdenv'.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ]
-  ++ lib.optional colladaSupport opencollada-blender
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optional spaceNavSupport libspnav
   ++ lib.optionals vulkanSupport [
@@ -441,19 +444,17 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
-    # They comment two licenses: GPLv2 and Blender License, but they
-    # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
+    donationPage = "https://fund.blender.org/";
 
     platforms = [
+      "aarch64-darwin"
       "aarch64-linux"
       "x86_64-darwin"
       "x86_64-linux"
-      "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
       amarshall

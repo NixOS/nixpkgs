@@ -87,7 +87,9 @@ stdenv.mkDerivation {
       --replace-fail "6.5.10" "${qt6.qtbase.version}"
 
     substituteInPlace src/simulation/ngspice_simulator.cpp \
-      --replace-fail 'path + "/" + libName' '"${libngspice}/lib/libngspice.so"'
+      --replace-fail 'path + "/" + libName' '"${
+        libngspice + "/lib/libngspice" + stdenv.hostPlatform.extensions.sharedLibrary
+      }"'
 
     mkdir parts
     cp -a ${parts}/* parts/

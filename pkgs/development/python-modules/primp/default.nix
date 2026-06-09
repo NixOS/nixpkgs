@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "primp";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AOMlf7Qo9CJFyEUXdtQuwnFQVBzejHTc6UHie/OlHOo=";
+    hash = "sha256-U97m1oiLFuFRJLjScaFOARiFLqr4KzEgvlYTfRomsbw=";
   };
 
   # The Cargo.lock is not pushed upstream
@@ -43,6 +43,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-asyncio
   ];
+  # pytest runs from the source root but asyncio_mode=auto is configured in
+  # crates/primp-python/pyproject.toml, which pytest doesn't pick up from there
+  pytestFlags = [
+    "--override-ini=asyncio_mode=auto"
+  ];
+
   disabledTestPaths = [
     "crates/primp-python/tests/test_impersonate.py"
     "crates/primp-python/tests/test_header_order.py"
@@ -50,7 +56,7 @@ buildPythonPackage (finalAttrs: {
 
   # Tests crash with Abort trap: 6 on Darwin due to tokio runtime
   # initialization in PyInit_pyo3_async_runtimes being blocked by the sandbox.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "primp" ];
 

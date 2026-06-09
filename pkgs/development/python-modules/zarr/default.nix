@@ -33,7 +33,6 @@
   pytest-asyncio,
   pytestCheckHook,
   tomlkit,
-  uv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -87,7 +86,6 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
     tomlkit
-    uv
   ]
   ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli;
 

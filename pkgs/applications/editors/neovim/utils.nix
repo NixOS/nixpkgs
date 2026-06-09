@@ -6,12 +6,8 @@
   config,
   vimUtils,
   vimPlugins,
-  nodejs,
   neovim-unwrapped,
-  bundlerEnv,
-  ruby,
   lua,
-  python3Packages,
   wrapNeovimUnstable,
 }:
 let
@@ -109,11 +105,12 @@ let
 
       # viml config set by the user along with the plugin
       inherit (checked_cfg)
-        userPluginViml
+        userPluginViml # redefine via userPluginConfigs
         runtimeDeps
         pluginAdvisedLua
         pluginPython3Packages
         luaDependencies
+        userPluginConfigs
         ;
 
       # A Vim "package", see ':h packages'
@@ -291,6 +288,7 @@ let
 
         toNvimTreesitterGrammar = makeSetupHook {
           name = "to-nvim-treesitter-grammar";
+          meta.license = lib.licenses.mit;
         } ./to-nvim-treesitter-grammar.sh;
       in
 

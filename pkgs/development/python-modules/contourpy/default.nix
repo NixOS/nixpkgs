@@ -10,6 +10,7 @@
   ninja,
   nukeReferences,
   pybind11,
+  pkg-config,
 
   # propagates
   numpy,
@@ -50,6 +51,10 @@ let
       meson
       ninja
       nukeReferences
+      pkg-config
+    ];
+
+    buildInputs = [
       pybind11
     ];
 

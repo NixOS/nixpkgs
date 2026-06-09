@@ -11,4 +11,15 @@ vimUtils.buildVimPlugin {
   postInstall = ''
     ln -s ${fzf}/bin/fzf $target/bin/fzf
   '';
+
+  meta = {
+    inherit (fzf.meta)
+      changelog
+      description
+      homepage
+      license
+      platforms
+      ;
+    maintainers = [ ];
+  };
 }

@@ -35,15 +35,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
-  version = "2.1.4";
+  version = "2.1.4d";
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20251208174416/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20260501043715/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-FY5DxdQN1ClFp/dS5fXgFhoU7uk/gUoPrYtsZK5q9O4=";
+    hash = "sha256-HQwA9FyK1xdcTsWWfX7ZJ0KcnuwRz25ztjlrNIDhFQY=";
   };
 
   nativeBuildInputs =

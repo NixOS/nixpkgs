@@ -11,16 +11,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "clive";
-  version = "0.12.16";
+  version = "0.12.17";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "clive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bZzK7RLAStRb9R3V/TK6tZV6yv1C7MGslAhhpWDzdWk=";
+    hash = "sha256-omHxs2hTzjddelPkJWj2sVmK9nI5bCELUS8EmEH7JXM=";
   };
 
-  vendorHash = "sha256-BDspmaATLIfwyqxwJNJ24vpEETUWGVbobHWD2NRaOi4=";
+  vendorHash = "sha256-M3cU2051lOzm9hXuVwC1eFI8Ftpmk32h/98dHUkRfts=";
   subPackages = [ "." ];
   buildInputs = [ ttyd ];
   nativeBuildInputs = [

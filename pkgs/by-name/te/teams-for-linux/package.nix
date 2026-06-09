@@ -5,27 +5,29 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_39,
+  electron_41,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  vulkan-loader,
   which,
 }:
 
+let
+  electron = electron_41;
+in
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.7.13";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-5JgmV4VeeM3mMlI3AI4BuF9wFzjsrLnmOCESnKbqY9c=";
+    hash = "sha256-XEu0x9g2mEsmY+vZtazTOzW6KNMRbrxlPck/kPNehmo=";
   };
 
-  npmDepsHash = "sha256-ChtRC+NtjZdl5mFirSSz6Jo4CvebH1UqtJ4ywfjWEOI=";
+  npmDepsHash = "sha256-urLRj7668NX7CaDWAVxAoOg+c1TmMyvf23Je+RmFwHE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,22 +48,16 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_39.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_39.version} \
+        -c.electronDist="$electron_dist" \
+        -c.electronVersion=${electron.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -83,7 +79,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_39}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
@@ -125,6 +121,7 @@ buildNpmPackage rec {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       muscaln

@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "hubble";
-  version = "1.18.6";
+  version = "1.19.4";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "hubble";
     tag = "v${version}";
-    hash = "sha256-I/+QE+HY+dU4ZIj/8vP7Ij/eInSn1pxuTNDghIsVXt0=";
+    hash = "sha256-/O2w8AMEt5kKCpUKjknRIY2i/Do+i3gCCPOa384xgp8=";
   };
 
   nativeBuildInputs = [

@@ -1,12 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitLab,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "sigsum";
   version = "0.14.0";
 

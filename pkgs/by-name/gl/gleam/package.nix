@@ -2,37 +2,36 @@
   lib,
   stdenv,
   rustPlatform,
+
   fetchFromGitHub,
   git,
   pkg-config,
-  openssl,
   erlang,
   nodejs,
   bun,
   deno,
   versionCheckHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.15.2";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A5rss4+hTLiE0mylzTT1sw18MmDdYBIyu6xLTvMJ1YY=";
+    hash = "sha256-lW57+JvinIHWhXuKagDcrfNDOUurIC53TjAxqrHN11I=";
   };
 
-  cargoHash = "sha256-VyVcBAqwrgwiyUXkKPbfP4qTKtFOMCUD0Tho79xJxC8=";
+  cargoHash = "sha256-Wbmi/GyoflpDEnFC+1FicxqFJgOa8O2iUHwB7JcDuyU=";
 
   nativeBuildInputs = [
     pkg-config
     erlang
   ];
-
-  buildInputs = [ openssl ];
 
   nativeCheckInputs = [
     # used by several tests
@@ -42,11 +41,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     bun
     deno
+
+    writableTmpDirAsHomeHook
   ];
 
   checkFlags = [
-    # Makes a network request
+    # These tests make network requests
     "--skip=tests::echo::echo_dict"
+    "--skip=tests::escript_success_with_dependency"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Snapshot tests fail because a warning is shown on stdout
@@ -78,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Statically typed language for the Erlang VM";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
-    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/changelog/v${lib.versions.majorMinor finalAttrs.version}.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       philtaken

@@ -318,7 +318,6 @@ let
       IPV6_MROUTE = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2 = yes;
-      IPV6_FOU_TUNNEL = module;
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
@@ -403,8 +402,8 @@ let
       MAC80211_DEBUGFS = yes;
 
       # HAM radio
-      HAMRADIO = yes;
-      AX25 = module;
+      HAMRADIO = whenOlder "7.1" yes;
+      AX25 = whenOlder "7.1" module;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
@@ -565,6 +564,9 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
+
+        # Enable RAS reporting via netlink
+        DRM_RAS = whenAtLeast "7.1" yes;
       }
       //
         lib.optionalAttrs
@@ -685,7 +687,8 @@ let
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
 
-      FS_DAX = yes;
+      # DAX requires 64BIT via ZONE_DEVICE and MEMORY_HOTPLUG.
+      FS_DAX = lib.mkIf stdenv.hostPlatform.is64bit yes;
 
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
@@ -704,6 +707,7 @@ let
       EXT4_FS_SECURITY = yes;
 
       NTFS_FS = whenBetween "5.15" "6.9" no;
+      NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -768,6 +772,9 @@ let
       SQUASHFS_LZ4 = yes;
       SQUASHFS_ZSTD = yes;
 
+      EROFS_FS_ZIP_DEFLATE = whenAtLeast "6.6" yes;
+      EROFS_FS_ZIP_ZSTD = whenAtLeast "6.10" yes;
+
       # Native Language Support modules, needed by some filesystems
       NLS = yes;
       NLS_DEFAULT = freeform "utf8";
@@ -825,6 +832,8 @@ let
         whenOlder "6.2" yes
       ); # allow RDRAND to seed the RNG
       RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
+      # only when compiled as yes, TPM 2.0 will automatically seed the kernel RNG
+      HW_RANDOM = yes;
 
       MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
@@ -856,6 +865,14 @@ let
       SHUFFLE_PAGE_ALLOCATOR = yes;
 
       INIT_ON_ALLOC_DEFAULT_ON = yes;
+
+      # Randomize kernel stack offset on syscall entry to make stack address dependent
+      # attacks harder, supported since 5.13.
+      # Only default enabled on AArch64 from 7.1 due to perf issues prior to that release
+      # that were resolved in "randomize_kstack: Maintain kstack_offset per task"
+      RANDOMIZE_KSTACK_OFFSET_DEFAULT = whenAtLeast (
+        if stdenv.hostPlatform.isAarch64 then "7.1" else "5.13"
+      ) yes;
 
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
@@ -1228,6 +1245,8 @@ let
         EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" yes; # initrd kernel parameter for EFI
+        PSTORE = yes;
+        EFI_VARS_PSTORE = lib.mkIf (!stdenv.hostPlatform.isLoongArch64) yes;
 
         # Generic compression support for EFI payloads
         # Add new platforms only after they have been verified to build and boot.
@@ -1354,6 +1373,10 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        PCIEAER = yes;
+        ACPI_APEI_PCIEAER = yes;
+
         # Enable all available thermal governors
         THERMAL_GOV_BANG_BANG = yes;
         THERMAL_GOV_FAIR_SHARE = yes;
@@ -1375,7 +1398,7 @@ let
         ) yes;
 
         # required for P2P DMABUF
-        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenBetween "6.6" "7.1" yes);
         # required for P2P transfers between accelerators
         HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
 

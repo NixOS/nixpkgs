@@ -1,20 +1,22 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stylance-cli";
-  version = "0.7.4";
+  version = "0.8.3";
 
-  src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-lGgKmNqZ0nflVAM3GMDwGgxnXyLCqVz1bTUsvabXmj8=";
+  src = fetchFromGitHub {
+    owner = "basro";
+    repo = "stylance-rs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UVRUPjDxfwnajkY3KUa/615pIo/uAyGu1ngQBSAnEBE=";
   };
 
-  cargoHash = "sha256-HWZQNEKTyNnmA1twN5cfo5RY2tOeCnL6zEp+M4F+Tqg=";
+  cargoHash = "sha256-bNOOp/6myQX7z/O0gmW/2s9eEog5ZMlL5hD0GFgj7OY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

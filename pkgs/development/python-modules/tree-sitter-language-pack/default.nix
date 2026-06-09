@@ -127,7 +127,7 @@ buildPythonPackage (finalAttrs: {
     EOF
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "e2e/python/tests"
     "tests/test_apps/python/smoke_test.py"
   ];

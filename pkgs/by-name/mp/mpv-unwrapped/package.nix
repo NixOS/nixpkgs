@@ -287,6 +287,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
+  # On macOS, mpv --version initializes the full Cocoa app framework and
+  # connects to the window server, which hangs in a headless build environment
+  dontVersionCheck = stdenv.hostPlatform.isDarwin;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version

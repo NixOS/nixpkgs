@@ -3,10 +3,26 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
 let
+  inherit (lib)
+    attrNames
+    catAttrs
+    concatLines
+    concatMap
+    filter
+    unique
+    flip
+    elem
+    attrValues
+    concatMapStrings
+    hasPrefix
+    concatStringsSep
+    sort
+    ;
 
   moduleSettingsType =
     with lib.types;
@@ -135,6 +151,8 @@ let
 
       imports = [
         (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+        (lib.mkRenamedOptionModule [ "u2fAuth" ] [ "u2f" "enable" ])
+        (lib.mkRenamedOptionModule [ "updateWtmp" ] [ "lastlog" "enable" ])
       ];
 
       options = {
@@ -172,6 +190,28 @@ let
           };
         };
 
+        useDefaultRules = lib.mkOption {
+          # This option is experimental and subject to breaking changes without notice.
+          visible = false;
+          default = true;
+          type = lib.types.bool;
+          description = ''
+            Whether to set up the default NixOS rule stack for this service.
+
+            Set this to `false` if you want to define the entire rule stack for this service.
+
+            ::: {.warning}
+            This option is experimental and subject to breaking changes without notice.
+
+            If you use this option in your system configuration, you will need to manually monitor this module for any changes. Otherwise, failure to adjust your configuration properly could lead to you being locked out of your system, or worse, your system could be left wide open to attackers.
+
+            If you share configuration examples that use this option, you MUST include this warning so that users are informed.
+
+            You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
+            :::
+          '';
+        };
+
         unixAuth = lib.mkOption {
           default = true;
           type = lib.types.bool;
@@ -202,17 +242,39 @@ let
           '';
         };
 
-        u2fAuth = lib.mkOption {
-          default = config.security.pam.u2f.enable;
-          defaultText = lib.literalExpression "config.security.pam.u2f.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-            {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-            not set) are able to log in with the associated U2F key. Path can be
-            changed using {option}`security.pam.u2f.authFile` option.
-          '';
+        u2f = {
+          enable = lib.mkOption {
+            default = config.security.pam.u2f.enable;
+            defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+            type = lib.types.bool;
+            description = ''
+              If set, users listed in
+              {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+              {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+              not set) are able to log in with the associated U2F key. Path can be
+              changed using {option}`security.pam.u2f.authFile` option.
+            '';
+          };
+
+          control = lib.mkOption {
+            default = config.security.pam.u2f.control;
+            defaultText = lib.literalExpression "config.security.pam.u2f.control";
+            type = lib.types.enum [
+              "required"
+              "requisite"
+              "sufficient"
+              "optional"
+            ];
+            description = ''
+              This option sets pam "control".
+              If you want to have multi factor authentication, use "required".
+              If you want to use U2F device instead of regular password, use "sufficient".
+
+              Read
+              {manpage}`pam.conf(5)`
+              for better understanding of this option.
+            '';
+          };
         };
 
         usshAuth = lib.mkOption {
@@ -537,10 +599,21 @@ let
           '';
         };
 
-        updateWtmp = lib.mkOption {
-          default = false;
-          type = lib.types.bool;
-          description = "Whether to update {file}`/var/log/wtmp`.";
+        lastlog = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = "Whether to update {file}`/var/log/wtmp`.";
+          };
+
+          silent = lib.mkOption {
+            default = true;
+            example = false;
+            type = lib.types.bool;
+            description = ''
+              Whether to suppress the message showing the last login date.
+            '';
+          };
         };
 
         logFailures = lib.mkOption {
@@ -823,41 +896,30 @@ let
 
         text =
           let
-            ensureUniqueOrder =
-              type: rules:
-              let
-                checkPair =
-                  a: b:
-                  assert lib.assertMsg (a.order != b.order)
-                    "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})";
-                  b;
-                checked = lib.zipListsWith checkPair rules (lib.drop 1 rules);
-              in
-              lib.take 1 rules ++ checked;
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
               token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+
             formatRules =
               type:
-              lib.pipe cfg.rules.${type} [
-                lib.attrValues
-                (lib.filter (rule: rule.enable))
-                (lib.sort (a: b: a.order < b.order))
-                (ensureUniqueOrder type)
-                (map (
-                  rule:
-                  lib.concatStringsSep " " (
-                    [
-                      type
-                      rule.control
-                      rule.modulePath
-                    ]
-                    ++ map formatModuleArgument rule.args
-                    ++ [ "# ${rule.name} (order ${toString rule.order})" ]
+              concatStringsSep "\n" (
+                map
+                  (
+                    rule:
+                    "${type} ${rule.control} ${rule.modulePath}${
+                      if rule.args == [ ] then "" else " " + concatStringsSep " " (map formatModuleArgument rule.args)
+                    } # ${rule.name} (order ${toString rule.order})"
                   )
-                ))
-                (lib.concatStringsSep "\n")
-              ];
+                  (
+                    sort (
+                      a: b:
+                      if a.order != b.order then
+                        a.order < b.order
+                      else
+                        throw "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"
+                    ) (filter (rule: rule.enable) (attrValues cfg.rules.${type}))
+                  )
+              );
           in
           lib.mkDefault ''
             # Account management.
@@ -876,16 +938,9 @@ let
         # !!! TODO: move the LDAP stuff to the LDAP module, and the
         # Samba stuff to the Samba module.  This requires that the PAM
         # module provides the right hooks.
-        rules =
-          let
-            autoOrderRules = lib.flip lib.pipe [
-              (lib.imap1 (index: rule: rule // { order = lib.mkDefault (10000 + index * 100); }))
-              (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
-              lib.listToAttrs
-            ];
-          in
-          {
-            account = autoOrderRules [
+        rules = (
+          lib.optionalAttrs cfg.useDefaultRules {
+            account = utils.pam.autoOrderRules [
               {
                 name = "ldap";
                 enable = use_ldap;
@@ -966,7 +1021,7 @@ let
 
             ];
 
-            auth = autoOrderRules (
+            auth = utils.pam.autoOrderRules (
               [
                 {
                   name = "oslogin_login";
@@ -1045,8 +1100,8 @@ let
                   in
                   {
                     name = "u2f";
-                    enable = cfg.u2fAuth;
-                    control = u2f.control;
+                    enable = cfg.u2f.enable;
+                    control = cfg.u2f.control;
                     modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so";
                     inherit (u2f) settings;
                   }
@@ -1339,7 +1394,7 @@ let
               ]
             );
 
-            password = autoOrderRules [
+            password = utils.pam.autoOrderRules [
               {
                 name = "systemd_home";
                 enable = config.services.homed.enable;
@@ -1424,7 +1479,7 @@ let
               }
             ];
 
-            session = autoOrderRules [
+            session = utils.pam.autoOrderRules [
               {
                 name = "env";
                 enable = cfg.setEnvironment;
@@ -1482,11 +1537,11 @@ let
               }
               {
                 name = "lastlog";
-                enable = cfg.updateWtmp;
+                enable = cfg.lastlog.enable;
                 control = "required";
                 modulePath = "${pkgs.util-linux.lastlog}/lib/security/pam_lastlog2.so";
                 settings = {
-                  silent = true;
+                  inherit (cfg.lastlog) silent;
                 };
               }
               # Work around https://github.com/systemd/systemd/issues/8598
@@ -1656,7 +1711,8 @@ let
                 modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
               }
             ];
-          };
+          }
+        );
       };
 
     };
@@ -2509,7 +2565,7 @@ in
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
     systemd =
-      lib.mkIf (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
+      lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
         {
           tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
           services.lastlog2-import = {
@@ -2531,16 +2587,30 @@ in
         };
 
     security.pam.services = {
-      other.text = ''
-        auth     required pam_warn.so
-        auth     required pam_deny.so
-        account  required pam_warn.so
-        account  required pam_deny.so
-        password required pam_warn.so
-        password required pam_deny.so
-        session  required pam_warn.so
-        session  required pam_deny.so
-      '';
+      other = {
+        useDefaultRules = false;
+        rules =
+          let
+            rules = utils.pam.autoOrderRules [
+              {
+                name = "warn";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_warn.so";
+              }
+              {
+                name = "deny";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_deny.so";
+              }
+            ];
+          in
+          {
+            auth = rules;
+            account = rules;
+            password = rules;
+            session = rules;
+          };
+      };
 
       # Most of these should be moved to specific modules.
       i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
@@ -2571,28 +2641,29 @@ in
     };
 
     security.apparmor.includes."abstractions/pam" =
-      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        lib.attrNames enabledServices
+      concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
+        attrNames enabledServices
       )
       + (
-        with lib;
-        pipe enabledServices [
-          lib.attrValues
-          (catAttrs "rules")
-          (lib.concatMap lib.attrValues)
-          (lib.concatMap lib.attrValues)
-          (lib.filter (rule: rule.enable))
-          (lib.catAttrs "modulePath")
-          (map (
-            modulePath:
-            lib.throwIfNot (lib.hasPrefix "/" modulePath)
-              ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
-              modulePath
-          ))
-          lib.unique
-          (map (module: "mr ${module},"))
-          concatLines
-        ]
+        let
+          types = concatMap attrValues (catAttrs "rules" (attrValues enabledServices));
+          rules = concatMap attrValues types;
+
+          isDirect = flip elem [
+            "include"
+            "substack"
+          ];
+          activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
+
+          modulePaths = concatMap (
+            rule:
+            if (!hasPrefix "/" rule.modulePath) then
+              throw ''non-absolute PAM modulePath "${rule.modulePath}" is unsupported by apparmor''
+            else
+              [ rule.modulePath ]
+          ) activeRules;
+        in
+        concatLines (map (module: "mr ${module},") (unique modulePaths))
       );
 
     security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;

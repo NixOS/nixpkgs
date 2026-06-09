@@ -28,8 +28,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Generalist Python node editor";
     homepage = "https://nodezator.com";
-    downloadPage = "https://github.com/IndiePython/nodezator";
-    changelog = "https://github.com/IndiePython/nodezator/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/IndieSmiths/nodezator";
+    changelog = "https://github.com/IndieSmiths/nodezator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "nodezator";

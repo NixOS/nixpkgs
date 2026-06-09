@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup-toolchain-install-master";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "kennytm";
     repo = "rustup-toolchain-install-master";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F2lMUNl+ZQTTaSpzzeIl6ijXou7J6tbPz6eQY9703qU=";
+    hash = "sha256-rcA+kZ53FdrImgQe9vIuSPXyU2i+akyYny+/kgRG6Zk=";
   };
 
-  cargoHash = "sha256-yEIkiOn8FTyfoTBFdbdJAfolgai8VFnnwSl/a8vDqbY=";
+  cargoHash = "sha256-rK+SSZ/EoaQflxkzhnxAab/AnJvpnEYb5RbwcR4VUow=";
 
   patches = lib.optional stdenv.hostPlatform.isLinux (
     replaceVars ./0001-dynamically-patchelf-binaries.patch {
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ quio ];
   };
 })

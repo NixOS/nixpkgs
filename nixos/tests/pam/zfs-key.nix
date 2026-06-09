@@ -11,6 +11,7 @@ in
     { ... }:
     {
       boot.supportedFilesystems = [ "zfs" ];
+      boot.zfs.forceImportRoot = false;
 
       networking.hostId = "12345678";
 
@@ -42,10 +43,10 @@ in
         machine.succeed("truncate -s 64M /testpool.img")
         machine.succeed("zpool create -O canmount=off '${pool}' /testpool.img")
         machine.succeed("zfs create -o canmount=off -p '${homes}'")
-        machine.succeed("echo ${userPassword} | zfs create -o canmount=noauto -o encryption=on -o keyformat=passphrase '${homes}/alice'")
-        machine.succeed("zfs unload-key '${homes}/alice'")
-        machine.succeed("echo ${mismatchPass} | zfs create -o canmount=noauto -o encryption=on -o keyformat=passphrase '${homes}/bob'")
-        machine.succeed("zfs unload-key '${homes}/bob'")
+        machine.succeed("echo ${userPassword} | zfs create -o encryption=on -o keyformat=passphrase '${homes}/alice'")
+        machine.succeed("zfs unmount '${homes}/alice' && zfs unload-key '${homes}/alice'")
+        machine.succeed("echo ${mismatchPass} | zfs create -o encryption=on -o keyformat=passphrase '${homes}/bob'")
+        machine.succeed("zfs unmount '${homes}/bob' && zfs unload-key '${homes}/bob'")
 
       with subtest("Switch to tty2"):
         machine.fail("pgrep -f 'agetty.*tty2'")

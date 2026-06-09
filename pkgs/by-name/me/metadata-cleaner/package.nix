@@ -12,7 +12,6 @@
   librsvg,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   poppler_gi,
   wrapGAppsHook4,
@@ -20,14 +19,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "metadata-cleaner";
-  version = "2.5.6";
+  version = "4.0.0";
   pyproject = false;
 
   src = fetchFromGitLab {
-    owner = "rmnvgr";
-    repo = "metadata-cleaner";
+    owner = "metadatacleaner";
+    repo = "metadatacleaner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+nwgLbAFoh1gq3J4cqQEShZJCSZesyCjT9DfkCWIHs=";
+    hash = "sha256-9e8uH//FtufYUsvule3JirkeHTjDMebruZ3bAYyDVWY=";
   };
 
   nativeBuildInputs = [
@@ -56,15 +55,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pygobject3
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = {
     description = "Python GTK application to view and clean metadata in files, using mat2";
     mainProgram = "metadata-cleaner";
-    homepage = "https://gitlab.com/rmnvgr/metadata-cleaner";
-    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://gitlab.com/metadatacleaner/metadatacleaner";
+    changelog = "https://gitlab.com/metadatacleaner/metadatacleaner/-/releases/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-40

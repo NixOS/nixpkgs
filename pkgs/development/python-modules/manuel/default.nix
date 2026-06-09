@@ -4,7 +4,6 @@
   fetchPypi,
   fetchpatch,
   python,
-  isPy27,
   six,
   zope-testing,
 }:
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "manuel";
   version = "1.13.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -35,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Documentation builder";
-    homepage = "https://pypi.python.org/pypi/manuel";
+    homepage = "https://pypi.org/project/manuel/";
     license = lib.licenses.zpl20;
   };
 }

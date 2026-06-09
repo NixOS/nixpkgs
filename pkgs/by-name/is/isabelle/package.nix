@@ -14,6 +14,7 @@
   eprover-ho,
   cvc5,
   libpoly,
+  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -107,6 +108,10 @@ let
     (cvc5.override {
       libpoly = libpoly.overrideAttrs {
         version = "0.2.0";
+        __intentionallyOverridingVersion = true;
+      };
+      symfpu = symfpu.overrideAttrs {
+        version = "0-unstable-2019-05-17";
         __intentionallyOverridingVersion = true;
       };
     }).overrideAttrs
@@ -330,7 +335,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Generic proof assistant";
-
     longDescription = ''
       Isabelle is a generic proof assistant.  It allows mathematical formulas
       to be expressed in a formal language and provides tools for proving those
@@ -346,6 +350,9 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.jvanbruegge
       lib.maintainers.sempiternal-aurora
     ];
+    # need to compile the heaps for host on build
+    # which requires us to use the host polyml toolchain
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

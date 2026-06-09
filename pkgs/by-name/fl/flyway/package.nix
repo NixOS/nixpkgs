@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
       --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*'" \
-      --add-flags "org.flywaydb.commandline.Main" \
+      --add-flags "org.flywaydb.commandline.Main"
   '';
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };

@@ -17,7 +17,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "199";
+  version = "216";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tAWXhfOWPLBuEgd+32CbuIkn1hN+4VI4xkyx7E2a81I=";
+    hash = "sha256-PHSY4z2h406xL+EcIYyrzr4s28txO7SCsWm8hrXf+2U=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-XiDYlw/byu8CWvg4KSPC7m8PGCZXtp08Y1velx4BR8U=";
+  vendorHash = "sha256-QysQ7YdwJcLTziwL25j73n3tQVvzVQIFxN4GkTU8JZg=";
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
@@ -81,7 +81,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = lib.optionals (stdenv.isDarwin) [
+      skippedTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
         # Fail only on *-darwin intermittently
         # https://github.com/mostlygeek/llama-swap/issues/320
         "TestProcess_AutomaticallyStartsUpstream"

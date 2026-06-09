@@ -6,7 +6,7 @@
   fetchurl,
   autoreconfHook,
   zlib,
-  pcre,
+  pcre2,
   w3m,
   man,
   openssl,
@@ -16,11 +16,11 @@
 stdenv.mkDerivation rec {
 
   pname = "privoxy";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-wI4roASTBwF7+dimPdKg37lqoM3rNK4Ad3bmPrpiom8=";
+    sha256 = "sha256-I+RoblhIx0y2gMCcKBHwNXc57P5kH5xAcu5COZCSyXs=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     zlib
-    pcre
+    pcre2
     openssl
     brotli
   ];

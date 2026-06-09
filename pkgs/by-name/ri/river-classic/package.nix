@@ -20,23 +20,22 @@
   wlroots_0_20,
   xwayland,
   xwaylandSupport ? true,
-  zig_0_15,
+  zig_0_16,
 }:
-
 let
   wlroots = wlroots_0_20;
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.15";
+  version = "0.3.17";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
   src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-zVUbLojSyCOOz3+DR9J9nQpNNuboG5/moCGjQx2ZI8w=";
+    hash = "sha256-+Geq3AetoiHB8xkMGf9nsYq8Mse2fZ5Edg1iOZ30f1A=";
     tag = "v${finalAttrs.version}";
   };
 

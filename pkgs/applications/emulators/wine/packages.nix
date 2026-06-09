@@ -28,6 +28,8 @@ let
     mono
     ;
 
+  llvm-mingw = callPackage ./llvm-mingw.nix { };
+
   # Args to pass through to base.nix (support flags, etc.)
   baseArgs = removeAttrs args [
     "stdenv_32bit"
@@ -71,13 +73,19 @@ in
       pname = "wine64";
       inherit version patches;
       pkgArches = [ pkgs ];
-      mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
+      mingwGccs =
+        if pkgs.stdenv.hostPlatform.isAarch64 then
+          [ llvm-mingw ]
+        else
+          with pkgsCross; [ mingwW64.buildPackages.gcc ];
       geckos = [ gecko64 ];
       monos = [ mono ];
-      configureFlags = [ "--enable-win64" ];
+      configureFlags =
+        if pkgs.stdenv.hostPlatform.isAarch64 then [ "--enable-archs=aarch64" ] else [ "--enable-win64" ];
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
+        "aarch64-linux"
       ];
       mainProgram = "wine";
     }
@@ -119,16 +127,26 @@ in
       inherit version patches;
       mingwSupport = true; # Required because we request "--enable-archs=x86_64"
       pkgArches = [ pkgs ];
-      mingwGccs = with pkgsCross; [
-        mingw32.buildPackages.gcc
-        mingwW64.buildPackages.gcc
-      ];
+      mingwGccs =
+        if pkgs.stdenv.hostPlatform.isAarch64 then
+          [ llvm-mingw ]
+        else
+          with pkgsCross;
+          [
+            mingw32.buildPackages.gcc
+            mingwW64.buildPackages.gcc
+          ];
       geckos = [ gecko64 ];
       monos = [ mono ];
-      configureFlags = [ "--enable-archs=x86_64,i386" ];
+      configureFlags =
+        if pkgs.stdenv.hostPlatform.isAarch64 then
+          [ "--enable-archs=aarch64,x86_64,i386" ]
+        else
+          [ "--enable-archs=x86_64,i386" ];
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
+        "aarch64-linux"
       ];
       mainProgram = "wine";
     }

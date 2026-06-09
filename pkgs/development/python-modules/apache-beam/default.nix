@@ -29,6 +29,7 @@
   numpy,
   objsize,
   orjson,
+  pillow,
   proto-plus,
   protobuf,
   pyarrow,
@@ -65,14 +66,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.71.0";
+  version = "2.73.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pIuRaBN1lmC3EMuUnBovl/pBmNwsDZ/vh/OM/sD9SrI=";
+    hash = "sha256-0xdz4pxyiXYgIe3+Rb+prgVMjWHQnTSFn504mdMD3Xg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
@@ -86,6 +88,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "cryptography"
     "envoy-data-plane"
     "httplib2"
     "jsonpickle"
@@ -120,6 +123,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     objsize
     orjson
+    pillow
     proto-plus
     protobuf
     pyarrow
@@ -241,6 +245,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # ConnectionResetError: [Errno 104] Connection reset by peer
+    "test_process_exits_on_unsafe_hard_delete_with_manager"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pip
+    "test_populate_requirements_cache_uses_find_links"
+
     # AssertionError: Lists differ:
     # ['pickled_main_session', 'submission_environment_dependencies.txt'] != ['pickled_main_session']
     "test_main_session_staged_when_using_cloudpickle"

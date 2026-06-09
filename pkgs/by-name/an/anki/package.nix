@@ -37,12 +37,12 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.09.2";
-  rev = "3890e12c9e48c028c3f12aa58cb64bd9f8895e30";
+  version = "25.09.4";
+  rev = "d52ca669f6deac5966b1c5035bc2dc77c78d3260";
 
-  srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
+  srcHash = "sha256-brwJjsqjiCd+QDZoB9Pv3TJxTTAfDm8KtYFvJhJpELk=";
   cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
-  yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
+  yarnHash = "sha256-wi8e9B0EtRMoyH6KhRBNDHM/ffJ+/0Y4f4AZ7eUcXmA=";
   pythonDeps =
     with python3Packages;
     [
@@ -58,7 +58,6 @@ let
       # aqt runtime deps
       beautifulsoup4
       flask
-      flask-cors
       jsonschema
       pip-system-certs
       pyqt6
@@ -155,14 +154,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ./patches/skip-formatting-python-code.patch
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ankitects/anki/blob/main/package.json#L99
+    ./patches/yarn-4.14-support.patch
   ];
 
   inherit cargoDeps;
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) missingHashes;
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+    inherit (finalAttrs) src missingHashes patches;
     hash = yarnHash;
   };
 

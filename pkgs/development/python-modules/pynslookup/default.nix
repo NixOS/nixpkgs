@@ -6,16 +6,16 @@
   dnspython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynslookup";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wesinator";
     repo = "pynslookup";
-    tag = "v${version}";
-    hash = "sha256-cb8oyI8D8SzBP+tm1jGPPshJYhPegYOH0RwIH03/K/A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GdI5Jg/+HjdtbzpLa28z/ZUGPJL9vEbJ+Jd4HP4pQCY=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

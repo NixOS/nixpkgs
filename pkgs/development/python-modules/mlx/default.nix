@@ -20,6 +20,7 @@
 
   # tests
   numpy,
+  psutil,
   pytestCheckHook,
   python,
   runCommand,
@@ -41,14 +42,15 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.31.1";
+  version = "0.31.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PiNk/MdMw9Vpat2KuslBTyaFuK+mJ4UvwJqBnysvvUU=";
+    hash = "sha256-0Oxacz61WGWZrpWw+fMQjEQfwOx1l1L2d0kWl54/LrQ=";
   };
 
   patches = [
@@ -120,6 +122,7 @@ buildPythonPackage (finalAttrs: {
   # Run the mlx Python test suite.
   nativeCheckInputs = [
     numpy
+    psutil
     pytestCheckHook
   ];
 
@@ -183,7 +186,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Gabriella439
       booxter
       cameronyule
       viraptor

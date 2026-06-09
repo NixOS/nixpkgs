@@ -8,7 +8,7 @@
   makeWrapper,
   nodejs,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -21,38 +21,41 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "2.48.0";
+    version = "2.51.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-9qrxzAoBdCzDaMWZnCPxKy9bISd19aI4U1kRcK85Mzg=";
+      hash = "sha256-OXazjp3w4NxbcTUNsyeU46erbdj27n1I7dvt+Io/AZ0=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-UcQoY2NvnvWmGjHn1xwi0deyPZjtnbfQJJo32K7TX38=";
+      hash = "sha256-gt//65v9PF2nnX/zkZGU9hm73lfzOTmw36rbkWu9VX0=";
     };
   };
   electron = electron_41;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.48.0";
+  version = "2.51.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7LCaZOI9fBzVMyT0RqgGykDvN0eSTz2h6fRXK2kyRDk=";
+    hash = "sha256-ORp8lZcHzswrSCe30cGKpZdyqZCcvqLgu2hwvadMHN0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-1R8vCGQlT3pvybrcPc2SKbmezprgvrIt0J+BsZHPJ7c=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-BSDeOkT75usLmXdAY8QNO+9YxxchrJH2gjFpTzErPXo=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     yq
@@ -60,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

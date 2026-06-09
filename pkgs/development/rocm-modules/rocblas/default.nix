@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.2.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";

@@ -892,6 +892,11 @@ in
     buildFlags = [ "--without-imlib2-config" ];
   };
 
+  prawn-gmagick = attrs: {
+    buildInputs = [ graphicsmagick ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   psych = attrs: {
     buildInputs = [ libyaml ];
   };
@@ -1130,10 +1135,7 @@ in
   };
 
   trilogy = attrs: {
-    postInstall = ''
-      installPath=$(cat "$out/nix-support/gem-meta/install-path")
-      ln -s contrib/ruby/trilogy.gemspec "$installPath/trilogy.gemspec"
-    '';
+    buildInputs = [ openssl ];
   };
 
   typhoeus = attrs: {

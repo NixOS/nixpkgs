@@ -19,6 +19,7 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
+  hidapi,
   libpng,
   mpfr,
   nanosvg,
@@ -61,14 +62,14 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.4";
+  version = "2.9.5";
   # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
   # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
   # with --cores 32 on clang).
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
+    hash = "sha256-tVC/hIykg0flc9HgB4ddJqUEVolZ4Lu/Cx5I10Z2eCI=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -95,6 +96,18 @@ clangStdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
     ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
+    ''
   );
 
   nativeBuildInputs = [
@@ -120,6 +133,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
+    hidapi
     libpng
     mpfr
     nanosvg-fltk

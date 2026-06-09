@@ -4,6 +4,7 @@ import io
 import os
 import select
 import subprocess
+import threading
 import typing
 from pathlib import Path
 
@@ -57,6 +58,11 @@ class VLan:
     def __repr__(self) -> str:
         return f"<Vlan Nr. {self.nr}>"
 
+    def _log_stream(self, stream: typing.IO[str], prefix: str) -> None:
+        """Read lines from a stream and log via debug()."""
+        for line in stream:
+            self.logger.debug(f"{prefix}: {line.rstrip()}")
+
     def __init__(self, nr: int, tmp_dir: Path, logger: AbstractLogger):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
@@ -66,7 +72,7 @@ class VLan:
         # TODO: don't side-effect environment here
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
-        self.logger.info("start vlan")
+        self.logger.debug("start vlan")
 
         self.process = subprocess.Popen(
             [
@@ -84,7 +90,7 @@ class VLan:
             bufsize=1,  # Line buffered.
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=None,  # Do not swallow stderr.
+            stderr=subprocess.STDOUT,
             text=True,
         )
         self.pid = self.process.pid
@@ -117,19 +123,37 @@ class VLan:
             if "1000 Success" in line:
                 break
 
+        self._stdout_thread = threading.Thread(
+            target=self._log_stream,
+            args=(self.process.stdout, f"vde_switch[{self.nr}]"),
+            daemon=True,
+        )
+        self._stdout_thread.start()
+
         # This is needed to allow systemd-nspawn containers to communicate
         # with VMs connected to the VLAN.
-        self.logger.info(f"creating tap interface {self.tap_name}")
+        self.logger.debug(f"creating tap interface {self.tap_name}")
         self.plug_process = subprocess.Popen(
             ["vde_plug2tap", "-s", self.socket_dir, self.tap_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
         )
+
+        assert self.plug_process.stdout is not None
+        self._plug_stdout_thread = threading.Thread(
+            target=self._log_stream,
+            args=(self.plug_process.stdout, f"vde_plug2tap[{self.nr}]"),
+            daemon=True,
+        )
+        self._plug_stdout_thread.start()
 
         assert (self.socket_dir / "ctl").exists(), "cannot start vde_switch"
 
-        self.logger.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
+        self.logger.debug(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
 
     def stop(self) -> None:
-        self.logger.info(f"kill vlan (pid {self.pid})")
+        self.logger.debug(f"kill vlan (pid {self.pid})")
         assert self.process.stdin is not None
         self.process.stdin.close()
         if self.plug_process:

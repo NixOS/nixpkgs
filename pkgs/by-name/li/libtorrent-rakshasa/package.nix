@@ -14,23 +14,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rakshasa";
-  version = "0.16.8";
+  version = "0.16.13";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-catUO7dlJUu8td/+EtBsEs128y/c+teT5xk5H+vkipE=";
+    hash = "sha256-PRVSH2kOzQhmUSdueDSB9stLwCtbITisuvpysrw4M+I=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
-    curl
     pkg-config
   ];
 
   buildInputs = [
     cppunit
+    curl
     openssl
     zlib
   ];

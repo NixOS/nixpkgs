@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   aiodns,
   aiohttp,
   aiosqlite,
@@ -57,6 +58,10 @@ buildPythonPackage rec {
     "test_issue_690_oauth_v2_access"
     "test_error_response"
     "test_issue_1441_mixing_user_and_bot_installations"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    # ConnectionResetError in webhook test server
+    "test_send_dict"
   ];
 
   disabledTestPaths = [

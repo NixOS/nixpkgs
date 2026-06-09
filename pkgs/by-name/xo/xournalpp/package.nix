@@ -11,7 +11,6 @@
 
   adwaita-icon-theme,
   alsa-lib,
-  binutils,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -20,7 +19,6 @@
   libsndfile,
   libxml2,
   libzip,
-  pcre,
   poppler,
   portaudio,
   qpdf,
@@ -59,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxml2
     libzip
-    pcre
     poppler
     portaudio
     qpdf

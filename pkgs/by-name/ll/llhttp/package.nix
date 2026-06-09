@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.3.1";
+  version = "9.4.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     tag = "release/v${finalAttrs.version}";
-    hash = "sha256-eHy8sjmfLA+q1WWuo4bkZ0wRI4q9fkNaW8c2OgKv/MM=";
+    hash = "sha256-eQoOsJ3lIIGSIfC4atkbUqCAYzCzs5kzTihYaI4jqz0=";
   };
 
   outputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "LLHTTP_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "LLHTTP_BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
   ];
 
   passthru.updateScript = nix-update-script {

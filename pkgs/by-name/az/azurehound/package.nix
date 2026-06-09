@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "azurehound";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+3h9/R909/Bkxq0Y7oN0xpE6OH8+0Xvs/8X1NBQFrMg=";
+    hash = "sha256-qJ7mzG1G9ck4xM9dB9rcpojGCAbUoZ8bKZwuZV5bhjA=";
   };
 
-  vendorHash = "sha256-QCZFIDUL/RbSMrDfQ8L0A6xJPcWJorBXvHhdIA1WK4Q=";
+  vendorHash = "sha256-WF46wXaNU/Em0KpF6hkuuJ+7K1IKLGqpNS/HxpxX5WY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -26,6 +26,9 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X=github.com/bloodhoundad/azurehound/v2/constants.Version=${finalAttrs.version}"
   ];
+
+  # flaky: races a 5ms sleep against a 5ms batch timeout
+  checkFlags = [ "-skip=^TestBatch$" ];
 
   doInstallCheck = true;
 

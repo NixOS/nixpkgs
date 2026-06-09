@@ -1,7 +1,6 @@
 {
   lib,
   buildNpmPackage,
-  nodejs_22,
   fetchFromGitHub,
   nixosTests,
   python3,
@@ -11,19 +10,25 @@
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2026.1.1+0";
-
-  # doesn't build with newer versions
-  nodejs = nodejs_22;
+  version = "2026.4.1+0";
 
   src = fetchFromGitHub {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-ehL3DDjCav20XJgUR+ED2x0lax4fm1jMZ0rRiqR78a4=";
+    hash = "sha256-CIKhdCQwx1zS8rkOtZoG9WDxtweSmrCNL6HfZXi+mM8=";
   };
 
-  npmDepsHash = "sha256-/S0itw2m2k7GiiwBEzeqFQ8oUYD4yIO4knTTn37qkfA=";
+  # Upstream lockfile is out of sync for @napi-rs/cli (spec 3.5.1, resolved
+  # 3.2.0), which makes offline `npm ci` hit the registry. The desktop
+  # workspace is unused here. https://github.com/bitwarden/clients/pull/20480
+  postPatch = ''
+    substituteInPlace package-lock.json \
+      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
+  '';
+
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-NBhII5HySIkv0bCeWjH6MknX5NMp11Gwno7RnfCKgjc=";
 
   nativeBuildInputs = [
     python3
@@ -68,8 +73,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Integrates the web vault into vaultwarden";
-    homepage = "https://github.com/dani-garcia/bw_web_builds";
-    changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${lib.concatStringsSep "." (lib.take 3 (lib.versions.splitVersion version))}";
+    homepage = "https://github.com/vaultwarden/vw_web_builds";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     inherit (vaultwarden.meta) maintainers;

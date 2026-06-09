@@ -42,7 +42,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
   '';
 
   postInstall = ''
-    install -m 444 -D assets/icon/tts_mod_vault_icon.png $out/share/icons/hicolor/1024x1024/apps/tts_mod_vault.png
+    install -m 444 -D assets/icon/tts_mod_vault_icon.png $out/share/icons/tts_mod_vault.png
   '';
 
   passthru = {

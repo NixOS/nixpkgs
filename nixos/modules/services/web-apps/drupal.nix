@@ -23,15 +23,16 @@ let
     mkPackageOption
     nameValuePair
     optionalAttrs
+    optionalString
     types
     ;
   inherit (lib.strings)
     removePrefix
+    removeSuffix
     ;
   inherit (pkgs)
     mariadb
     stdenv
-    writeShellScript
     ;
   cfg = config.services.drupal;
   eachSite = cfg.sites;
@@ -51,15 +52,21 @@ let
         runHook preInstall
 
         mkdir -p $out
-        rsync -aq * $out/ --exclude=${removePrefix "/" cfg.webRoot}/sites --exclude=sites
+        EXCLUDES="--exclude=${removePrefix "/" cfg.webRoot}/sites --exclude=sites"
+
+        if [ ! -z "${cfg.configRoot}" ]; then
+          EXCLUDES="$EXCLUDES --exclude=${removePrefix "/" cfg.configRoot}"
+        fi
+
+        rsync -aq * $out/ $EXCLUDES
 
         runHook postInstall
       '';
 
       postInstall = ''
         ln -s ${cfg.stateDir}/sites $out/share/php/${cfg.package.pname}${cfg.webRoot}
-        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}/modules
-        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}/themes
+        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/modules/nixos-modules
+        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/themes/nixos-themes
       '';
     });
 
@@ -80,6 +87,26 @@ let
         runHook postInstall
       '';
     });
+
+  configSync =
+    hostName: cfg:
+    optionalString (cfg.configRoot != "") (
+      stdenv.mkDerivation (finalAttrs: {
+        pname = "drupal-config-${hostName}";
+        name = "drupal-config-${hostName}";
+        src = cfg.package;
+        buildInputs = with pkgs; [ rsync ];
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/config
+          rsync -a ./share/php/${cfg.package.pname}${cfg.configRoot}/* $out/config/
+
+          runHook postInstall
+        '';
+      })
+    );
 
   drupalSettings =
     hostName: cfg:
@@ -136,13 +163,22 @@ let
     hostName: cfg:
     pkgs.writeShellApplication {
       name = "drupal-state-init-${hostName}";
-      excludeShellChecks = [ "SC2194" ];
+      excludeShellChecks = [
+        "SC2194"
+        "SC2157"
+      ];
       runtimeInputs = with pkgs; [ rsync ];
       text = ''
         echo "Updating the sites directory for ${hostName}..."
         rsync -auq "${sites hostName cfg}/sites/" "${cfg.stateDir}/sites/" \
           --exclude "*/files" \
           --delete-before
+
+        if [ ! -z "${cfg.configRoot}" ]; then
+          echo "Updating config sync directory for ${hostName}..."
+          rsync -auq "${configSync hostName cfg}/config/" "${removeSuffix "/sync" cfg.configSyncDir}" \
+            --delete-before
+        fi
 
         if [ ! -d "${cfg.filesDir}" ]; then
           echo "Preparing files directory..."
@@ -221,6 +257,10 @@ let
             The location of the user-managed Drupal config sync directory.
             Drupal will both read from and write to this directory when executing
             configuration management operations.
+
+            This option differs from the `configRoot` option,
+            which this service uses to discover
+            the location of the config sync directory in the package's source code.
           '';
         };
 
@@ -229,10 +269,30 @@ let
           default = "";
           description = ''
             An optional path string with a leading slash
-            indicating the location of the Drupal webroot relative to the
-            project root directory, if one exists.
+            indicating the location of the Drupal webroot
+            in your package's source code.
+
+            The path relative to the project root directory.
           '';
           example = "/web";
+        };
+
+        configRoot = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            An optional path string with a leading slash
+            indicating the location of the config sync directory on
+            the Drupal package. Your package will probably have a config sync
+            directory if it has been significantly customized.
+
+            The path must be relative to the project root directory.
+
+            This option differs from the `configSyncDir` option, which
+            tells this service where to create a user-writeable config directory
+            on NixOS.
+          '';
+          example = "/config";
         };
 
         extraConfig = mkOption {

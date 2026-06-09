@@ -5,7 +5,7 @@
   which,
   squawk,
   protobufc,
-  xxHash,
+  xxhash,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpg_query";
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r protobuf $out/include/protobuf
     ln -s ${protobufc.dev}/include/protobuf-c $out/include/protobuf-c
     cp -r ${protobufc.dev}/include/protobuf-c/* $out/include
-    ln -s ${xxHash}/include $out/include/xxhash
+    ln -s ${xxhash}/include $out/include/xxhash
     install -Dm644 pg_query.h -t $out/include
 
     runHook postInstall

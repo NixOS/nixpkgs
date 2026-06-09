@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wac-cli";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X3v6MiIqtuQxVjkAG0kXzKL/Mekb32ydEeRvXsdG04I=";
+    hash = "sha256-HWN0CQuijV7f/WHoI7/+u+wL7Mm8sBefb5Ee7nsct6s=";
   };
 
-  cargoHash = "sha256-MC5rP+mTo2CQHi70h3l1bXDWToN6o8NAkjzsuydWzGI=";
+  cargoHash = "sha256-clvC10mMM91jVtEKhGfk2yhU9G4iXAJ+ngcVGieZS3g=";
 
   passthru.updateScript = nix-update-script { };
 

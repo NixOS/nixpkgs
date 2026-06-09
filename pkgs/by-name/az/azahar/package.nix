@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2125.0.1";
+  version = "2125.1.2";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-KzM2FWJPxZtkpwvK4DSdfNuxE8yy1OVaioVegQbBSWk=";
+    hash = "sha256-B3mReLoVqFCqUeunst95AX0veGlZJNyeBBdDIFbf4HI=";
   };
 
   strictDeps = true;
@@ -138,14 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     (darwinMinVersionHook "13.4")
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "cmake-Add-option-to-use-system-oaknut.patch";
-      url = "https://github.com/azahar-emu/azahar/commit/6201256e15ee4d4fc053933545abf50fc46be178.patch";
-      hash = "sha256-03eIubAJ65W9clI9iaLcLNAAMbkX4E507nYNV8DVwZc=";
-    })
-  ];
-
   postPatch = ''
     # We already know the submodules are present
     substituteInPlace CMakeLists.txt \
@@ -169,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
-  installPhase = optionalString stdenv.isDarwin ''
+  installPhase = optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/Applications $out/bin
@@ -184,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
-      ${optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+      ${optionalString stdenv.hostPlatform.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
         lib.makeLibraryPath [ moltenvk ]
       }"}
     )

@@ -18,7 +18,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pillow-jpls";
   version = "1.3.2";
   pyproject = true;
@@ -26,11 +26,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "planetmarshall";
     repo = "pillow-jpls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dontUseCmakeConfigure = true;
 
@@ -76,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "JPEG-LS plugin for the Python Pillow library";
     homepage = "https://github.com/planetmarshall/pillow-jpls";
-    changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/v${version}";
+    changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -7,23 +7,25 @@
   libhangul,
   autoconf,
   automake,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nabi";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "libhangul";
     repo = "nabi";
     tag = "nabi-${finalAttrs.version}";
-    hash = "sha256-C6K8sXVCGf45VZtGSCB5emFzZPV21kG9JxAwBHRiFsY=";
+    hash = "sha256-U3W8G7cJ+lIqso6gSixmenX1cWnKuJO6dumUz4SUWi0=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoconf
     automake
+    gettext
   ];
 
   buildInputs = [
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs ./autogen.sh
+    substituteInPlace ./autogen.sh --replace-fail "autopoint" "autopoint --force"
+    substituteInPlace ./autogen.sh --replace-fail "aclocal" "aclocal -I m4"
   '';
 
   preConfigure = ''

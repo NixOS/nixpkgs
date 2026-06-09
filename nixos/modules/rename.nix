@@ -82,6 +82,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pqos-wrapper"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-05-13
     (mkRemovedOptionModule
       [
         "services"
@@ -121,6 +125,9 @@ in
     (mkRemovedOptionModule [ "programs" "yabar" ]
       "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
     )
+    (mkRemovedOptionModule [ "security" "dhparams" ] ''
+      The security.dhparams module has been removed as RFC 7919 has shown that generating your own params is problematic.
+    '')
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
@@ -214,6 +221,13 @@ in
     ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "globalprotect"
+      ]
+      "The corresponding package was removed from nixpkgs, as it depended on qt5 webengine. A replacements based on tauri exist upstream, but requires non-trivial maintainance in nixpkgs to update."
+    )
     (mkRemovedOptionModule
       [
         "services"
@@ -379,6 +393,10 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
+      The services.xserver.windowManager.ragnarwm module has been removed
+      because the corresponding package was removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "xmr-stak"
@@ -499,6 +517,12 @@ in
     '')
     (mkRemovedOptionModule [ "services" "pyload" ] ''
       services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xtreemfs" ] ''
+      services.xtreemfs has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
+      services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
     # Do NOT add any option renames here, see top of the file
   ];

@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.3.3";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-+8zVe2JeQbbqmKOydQw1tZM2PYa5H/5ImBcVpoxYC5w=";
+    hash = "sha256-Mb1etVmBm542q7FrcMU6pzXdMUDQSpI8DFg/gbOiG4U=";
   };
 
   build-system = [
@@ -82,11 +82,13 @@ buildPythonPackage rec {
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
 
+  pythonRelaxDeps = [ "installer" ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
-      --zsh <($out/bin/poetry completions zsh) \
+      --zsh <($out/bin/poetry completions zsh)
   '';
 
   nativeCheckInputs = [

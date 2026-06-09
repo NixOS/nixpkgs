@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-update";
-  version = "1.14.0";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l6EvOXUZcbx712WYN3L4y8Qdim9sEISH06CWxgav6cQ=";
+    hash = "sha256-z7xXzpwsXY1x/xKeM7l2mN8dHFTp8qfgs/5xVsKjHr8=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Swiss-knife for updating nix packages";
     homepage = "https://github.com/Mic92/nix-update/";
-    changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda

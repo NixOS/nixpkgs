@@ -27,9 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  env = lib.optionalAttrs (!stdenv.cc.isClang) {
-    NIX_CFLAGS_COMPILE = "-std=gnu17";
-  };
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
 
   postPatch = ''
     for a in tests/kakasi-* ; do

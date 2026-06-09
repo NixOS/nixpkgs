@@ -14,25 +14,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "29.6.6";
+  version = "30.0.4";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-g2p6PEKWynS/+yvy6TUNrJJi4fQjBMq4koihSeVfxU4=";
+    hash = "sha256-kkKiGRxztEVFo/wlcdBYcDlxadNarcTyL1MqwonfVY4=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
   postPatch = ''
-    substituteInPlace ./build/fuses.cjs \
+    substituteInPlace ./build/fuses.mjs \
       --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
   '';
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-53QqN5FBn7K13BjLoM4B6EgMsxPRNNXpQ0ecXjxpGpE=";
+    hash = "sha256-hv1LQwsSOsBR5l/joUmXq6foQsVilH+jw3Wje24ISCg=";
   };
 
   nativeBuildInputs = [
@@ -127,13 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = with lib.licenses; [
-      # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996
-      asl20
-      # But the README says:
-      # The minified code authored by us in this repo is licensed under an Apache v2 license, but the sources to build those files are not in this repo. This is not an open source project.
-      unfreeRedistributable
-    ];
+    license = lib.licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

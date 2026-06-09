@@ -8,6 +8,7 @@
 let
   inherit (lib)
     getExe
+    hasAttr
     mapAttrs
     match
     mkEnableOption
@@ -17,6 +18,7 @@ let
     types
     optional
     optionalString
+    escapeShellArg
     ;
 
   cfg = config.services.lasuite-docs;
@@ -76,6 +78,20 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  # Convert environment variables to be used as systemd-run arguments
+  envArgs = lib.concatStringsSep " " (
+    lib.mapAttrsToList (name: value: "-E ${escapeShellArg "${name}=${value}"}") pythonEnvironment
+  );
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScriptBin "lasuite-docs-manage" ''
+    exec ${lib.getExe' config.systemd.package "systemd-run"} \
+      -p User=${commonServiceConfig.User} -p DynamicUser=yes \
+      -p StateDirectory=${commonServiceConfig.StateDirectory} --working-directory=${commonServiceConfig.WorkingDirectory} \
+      --quiet --collect --pipe --pty \
+      ${envArgs} ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -346,6 +362,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ manage ];
+
+    # Some settings options in LaSuite has been renamed in 5.0.0
+    # Show warnings if those settings are not renamed
+    # TODO: remove it when the retrocompatibility options will be gone
+    warnings =
+      (optional (hasAttr "AI_API_KEY" cfg.settings) "AI_API_KEY has been renamed as OPENAI_SDK_API_KEY in LaSuite Docs")
+      ++ (optional (hasAttr "AI_API_KEY_FILE" cfg.settings) "AI_API_KEY_FILE has been renamed as OPENAI_SDK_API_KEY_FILE in LaSuite Docs")
+      ++ (optional (hasAttr "AI_BASE_URL" cfg.settings) "AI_BASE_URL has been renamed as OPENAI_SDK_BASE_URL in LaSuite Docs");
+
     systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
       wantedBy = [ "lasuite-docs.target" ];
       requiredBy = [ "lasuite-docs.service" ];
@@ -532,6 +558,10 @@ in
         locations."/admin" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
+        };
+
+        locations."/static/" = {
+          alias = "${cfg.backendPackage}/share/static/";
         };
 
         locations."/collaboration/ws/" = {

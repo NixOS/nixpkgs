@@ -7,16 +7,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "uncover";
-  version = "1.1.0";
+  version = "1.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "uncover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BRh25lvk3Zut5M6dedLuSET4514R9j0fUHmamw4rp5U=";
+    hash = "sha256-LFKCUBBgG7dTQhJF9iciyU7GTnQsO+ZdVCtaOnl+Et0=";
   };
 
-  vendorHash = "sha256-6TvPKp/P0v/ZJRGRICp77C/8FHupyr9Hy2+zlYc2HIU=";
+  vendorHash = "sha256-Pkpp2D3b3A5TQ8eXaOf6qKUY/bamdytmuqOVAozK9k0=";
 
   subPackages = [ "cmd/uncover" ];
 
@@ -29,8 +31,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "-version";
-
   meta = {
     description = "API wrapper to search for exposed hosts";
     longDescription = ''
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
       Currently, it supports shodan,shodan-internetdb, censys, and fofa search API.
     '';
     homepage = "https://github.com/projectdiscovery/uncover";
-    changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/uncover/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "uncover";

@@ -11,18 +11,31 @@
   vips,
   pkg-config,
   python3,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.2.2";
+  version = "26.4.0";
+
   src = fetchFromGitHub {
     owner = "papra-hq";
     repo = "papra";
     tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-0MIar+fBwXRE8LlVLZDx/C0GOYVpobDTqFwkMs2k06Y=";
+    hash = "sha256-wQdDBS+QRarZhEIRmLQ4VRtq73I5YFIN2P3ZtAZWvxw=";
+  };
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
+    pnpmWorkspaces = [
+      "@papra/app-client..."
+      "@papra/app-server..."
+    ];
   };
 
   nativeBuildInputs = [
@@ -80,22 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-NQakyRlL6deG13yt+FlmVcVvEkNWHW0Lhf/3NecfwaE=";
-    pnpmWorkspaces = [
-      "@papra/app-client..."
-      "@papra/app-server..."
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source document management platform designed to help you organize, secure, and archive your files effortlessly.";
     homepage = "https://papra.app/";
     changelog = "https://github.com/papra-hq/papra/releases";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ wariuccio ];
+    maintainers = with lib.maintainers; [
+      wariuccio
+      miniharinn
+    ];
   };
 })

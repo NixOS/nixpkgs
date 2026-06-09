@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tuxbox";
-  version = "3.1.0";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AndyCappDev";
     repo = "tuxbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jPPjGumArcnsRKQm3HKhoTGh913WEB5MUs7Y7eCHXNY=";
+    hash = "sha256-p5nQLp+O0VKA3dr4Eeq7UnMwf7Xl/7zLHce4ZeoiMNU=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/AndyCappDev/tuxbox/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/AndyCappDev/tuxbox/releases/tag/v${finalAttrs.version}";
     description = "Linux driver for all TourBox models - Native feel with USB, Bluetooth, haptics and graphical configuration GUI";
     homepage = "https://github.com/AndyCappDev/tuxbox";
     license = lib.licenses.mit;

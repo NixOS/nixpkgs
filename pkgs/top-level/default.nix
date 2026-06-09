@@ -44,7 +44,7 @@ in
   localSystem,
 
   # The system packages will ultimately be run on.
-  crossSystem ? localSystem,
+  crossSystem ? null,
 
   # Allow a configuration attribute set to be passed in as an argument.
   config ? { },

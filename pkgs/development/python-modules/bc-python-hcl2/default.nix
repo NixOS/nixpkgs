@@ -35,7 +35,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bridgecrewio/python-hcl2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anhdle14 ];
+    maintainers = [ ];
     mainProgram = "hcl2tojson";
   };
 }

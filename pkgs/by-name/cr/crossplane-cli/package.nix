@@ -9,32 +9,28 @@
 
 buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "crossplane";
-    repo = "crossplane";
+    repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SRqZKr/MTdfDwN5/mqWT5AcQAjNiCcbLyuTJCOcruzE=";
+    hash = "sha256-E1Dp0ovC2FWwsrSvhVWudHXxke2z2nCg0q8CVDg58/Y=";
   };
 
-  vendorHash = "sha256-vilm41nN7Qhyu9LfVk6Me9hA3YAipLYGjhSU/JZhfEM=";
+  vendorHash = "sha256-uGQ1lrj+V0ndnTJTKtN6GLGLv89RPDb/Vuo58XYqV8M=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crossplane/crossplane/v2/internal/version.version=v${finalAttrs.version}"
+    "-X github.com/crossplane/crossplane-runtime/v2/pkg/version.version=v${finalAttrs.version}"
   ];
 
-  subPackages = [ "cmd/crank" ];
-
-  postInstall = ''
-    mv $out/bin/crank $out/bin/crossplane
-  '';
+  subPackages = [ "cmd/crossplane" ];
 
   passthru.tests.version = testers.testVersion {
     package = crossplane-cli;
-    command = "crossplane version --client || true";
+    command = "crossplane version --client";
     version = "v${finalAttrs.version}";
   };
 
@@ -46,6 +42,9 @@ buildGoModule (finalAttrs: {
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ selfuryon ];
+    maintainers = with lib.maintainers; [
+      selfuryon
+      LorenzBischof
+    ];
   };
 })

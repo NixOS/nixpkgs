@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xL+fqWzaIP01gnJLQ+DRY7ak6DwsOnLqLM3DUGAqsVY=";
+    hash = "sha256-BwFcknSXC3uZfSlS0a420/WpUn/ji2m9x65zKi3bumE=";
   };
 
-  vendorHash = "sha256-DdZg2UHta/ivGmIPO0jK9Gz758kEK7nm4FOv1qx/AUk=";
+  vendorHash = "sha256-1D04GhXhGrOcRn8G+xY+3XEdgUBSWHis4DiKQ4gGNDw=";
 
   passthru.tests = nixosTests.lk-jwt-service;
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytest,
 }:
 
@@ -10,7 +9,6 @@ buildPythonPackage {
   pname = "pypubsub";
   version = "4.0.3";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "schollii";

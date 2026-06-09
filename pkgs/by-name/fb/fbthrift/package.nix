@@ -16,7 +16,7 @@
   wangle,
   zlib,
   zstd,
-  xxHash,
+  xxhash,
 
   mvfst,
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     mvfst
-    xxHash
+    xxhash
   ];
 
   cmakeFlags = [

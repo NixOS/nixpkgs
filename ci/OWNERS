@@ -21,7 +21,7 @@
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
-/.editorconfig @Mic92 @zowoq
+/.editorconfig @Mic92
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
@@ -56,6 +56,12 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
+/pkgs/top-level/config.nix                       @jopejoe1
+/pkgs/top-level/make-tarball.nix                 @jopejoe1
+/pkgs/top-level/packages-config.nix              @jopejoe1
+/pkgs/top-level/packages-info.nix                @jopejoe1
+/pkgs/top-level/release-lib.nix                  @jopejoe1
+/pkgs/top-level/release.nix                      @jopejoe1
 /pkgs/stdenv                                     @philiptaron @NixOS/stdenv
 /pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
 /pkgs/stdenv/generic/problems.nix                @infinisil
@@ -73,6 +79,7 @@
 
 ## Format generators/serializers
 /pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
+/pkgs/pkgs-lib/formats/json2x                    @Stunkymonkey @h7x4 @figsoda
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
@@ -124,6 +131,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
+/nixos/lib/testing      @tfc
 
 # NixOS QEMU virtualisation
 /nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
@@ -188,8 +196,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /maintainers/scripts/update-python-libraries  @mweinelt @natsukium
 /pkgs/by-name/up/update-python-libraries      @mweinelt @natsukium
 /pkgs/development/interpreters/python         @mweinelt @natsukium
-/pkgs/top-level/python-packages.nix                     @natsukium
-/pkgs/top-level/release-python.nix                      @natsukium
 
 # CUDA
 /pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
@@ -219,10 +225,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt
-/pkgs/build-support/rust @zowoq @winterqt
+/pkgs/development/compilers/rust @alyssais @Mic92 @winterqt
+/pkgs/build-support/rust @winterqt
 /pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
-/doc/languages-frameworks/rust.section.md @zowoq @winterqt
+/doc/languages-frameworks/rust.section.md @winterqt
 
 # Tcl
 /pkgs/development/interpreters/tcl  @fgaz
@@ -268,18 +274,18 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy @jopejoe1
+/lib/licenses @alyssais @emilazy @jopejoe1
 
 # Qt
-/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
-/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000
+/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000
 
 # KDE Frameworks 5
-/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000
 
 # KDE / Plasma 6
-/pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
-/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/kde @K900 @NickCao @SuperSandro2000
+/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000
 
 # PostgreSQL and related stuff
 /pkgs/by-name/po/postgresqlTestHook @NixOS/postgres
@@ -303,8 +309,14 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
 
 # Linux kernel
-/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/doc/packages/linux.section.md @NixOS/linux-kernel
+/lib/kernel.nix @NixOS/linux-kernel
+/nixos/doc/manual/configuration/linux-kernel.chapter.md @NixOS/linux-kernel
+/nixos/modules/system/boot/kernel.nix @NixOS/linux-kernel
+/nixos/tests/kernel-generic/ @NixOS/linux-kernel
+/pkgs/build-support/kernel/ @NixOS/linux-kernel
 /pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -370,6 +382,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # VimPlugins
 /pkgs/applications/editors/vim/plugins         @NixOS/neovim
+## nvim-treesitter
+/pkgs/applications/editors/vim/plugins/nvim-treesitter/overrides.nix @NixOS/neovim @figsoda
+/pkgs/applications/editors/vim/plugins/utils/nvim-treesitter         @NixOS/neovim @figsoda
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions
@@ -430,6 +445,7 @@ nixos/tests/forgejo.nix               @adamcstephens @bendlas @christoph-heiss @
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
+/pkgs/test/pnpm                                 @Scrumplex @gepbird
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
@@ -466,11 +482,12 @@ nixos/tests/incus/                      @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 
-# Flutter
+# ExpidusOS, Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
 
 # GNU Tar & Zip
-/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/by-name/gn/gnutar        @RossComputerGuy
 /pkgs/by-name/zi/zip           @RossComputerGuy
 
 # SELinux
@@ -495,7 +512,7 @@ pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
 
 # Authelia
-pkgs/by-name/au/authelia/ @06kellyjac @dit7ya @nicomem
+pkgs/by-name/au/authelia/ @06kellyjac @nicomem
 
 # OctoDNS
 pkgs/by-name/oc/octodns/ @anthonyroussel
@@ -516,3 +533,6 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 # Radicle
 /pkgs/build-support/fetchradicle/      @NixOS/radicle
 /pkgs/build-support/fetchradiclepatch/ @NixOS/radicle
+
+# Zellij plugins
+/pkgs/by-name/ze/zellij/plugins/   @PerchunPak

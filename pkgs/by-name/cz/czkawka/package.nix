@@ -75,10 +75,16 @@ let
 
     # Desktop items, icons and metainfo are not installed automatically
     postInstall = ''
+      # Czkawka
       install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+      # Krokiet
+      install -Dm444 -t $out/share/applications data/io.github.qarmin.krokiet.desktop
+      install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/io.github.qarmin.krokiet.svg
+      install -Dm444 -t $out/share/metainfo data/io.github.qarmin.krokiet.metainfo.xml
     '';
     dontWrapGApps = true;
 

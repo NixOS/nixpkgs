@@ -3,14 +3,16 @@
   stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
+  inter,
   makeWrapper,
   nixosTests,
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
-  prisma_6,
-  prisma-engines_6,
+  pnpmBuildHook,
+  pnpm_10,
+  prisma_7,
+  prisma-engines_7,
   openssl,
   rustPlatform,
   # build variables
@@ -19,6 +21,8 @@
   basePath ? "",
 }:
 let
+  pnpm = pnpm_10;
+
   sources = lib.importJSON ./sources.json;
 
   geocities = stdenvNoCC.mkDerivation {
@@ -41,15 +45,15 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines_6.overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma-engines' = prisma-engines_7.overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
       tag = version;
-      hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
+      hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
     };
-    cargoHash = "sha256-8sAjYLSmNneQVrNh9iOmk5lVajtiFPWYSC8jfo5CK5U=";
+    cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
@@ -58,28 +62,29 @@ let
       hash = cargoHash;
     };
   });
-  prisma' = (prisma_6.override { prisma-engines_6 = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
       tag = version;
-      hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
+      hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
     };
     pnpmDeps = old.pnpmDeps.override {
       inherit src version;
-      hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
+      hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
     };
   });
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.3";
+  version = "3.1.0";
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
   ];
 
@@ -87,8 +92,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rkOD52suE6bihJqKvMdIvqHRIcWhSxXzUkCfmdNbC40=";
+    hash = "sha256-EH3ebwTbajcNasn25ets2w068ZmCQRYUY2XON39J5HA=";
   };
+
+  # Umami uses next/font/google, which tries to download from Google Fonts at build time.
+  # Replace that code with a copy of the required font(s) from nixpkgs instead.
+  postPatch = ''
+    substituteInPlace ./src/app/layout.tsx \
+      --replace-fail "import { Inter } from 'next/font/google';" "import localFont from 'next/font/local';" \
+      --replace-fail 'const inter = Inter({' "const inter = localFont({ src: './Inter.ttf',"
+
+    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -96,8 +111,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-GFN94oySPCZA5K13XR8f/tByuHS571ohlYTFqaVw/Ns=";
+    hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -110,22 +126,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # Needs to be non-empty during build
   env.DATABASE_URL = "postgresql://";
+  # No DB is available during build
+  env.SKIP_DB_CHECK = "1";
+
+  # Geocities is handled manually
+  env.SKIP_BUILD_GEO = "1";
 
   # Allow prisma-cli to find prisma-engines without having to download them
   # Only needed at build time for `prisma generate`.
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build-db-client # prisma generate
-
-    pnpm build-tracker
-    pnpm build-app
-
-    runHook postBuild
-  '';
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${finalAttrs.passthru.prisma-engines}/lib/libquery_engine.node";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${finalAttrs.passthru.prisma-engines}/bin/schema-engine";
 
   checkPhase = ''
     runHook preCheck
@@ -145,8 +155,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp -R public $out/public
     cp -R prisma $out/prisma
-
-    ln -s ${geocities} $out/geo
+    cp prisma.config.ts $out/prisma.config.ts
+    substituteInPlace $out/prisma.config.ts \
+      --replace-fail "import 'dotenv/config';" "" \
+      --replace-fail "from 'prisma/config';" "from '${finalAttrs.passthru.prisma}/lib/prisma/packages/config';"
 
     mkdir -p $out/bin
     # Run database migrations before starting umami.
@@ -155,6 +167,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
       --set NODE_ENV production \
       --set NEXT_TELEMETRY_DISABLED 1 \
+      --set GEOLITE_DB_PATH ${lib.escapeShellArg "${finalAttrs.passthru.geocities}/GeoLite2-City.mmdb"} \
       --prefix PATH : ${
         lib.makeBinPath [
           openssl
@@ -162,7 +175,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --chdir $out \
-      --run "${lib.getExe prisma'} migrate deploy" \
+      --run "${lib.getExe finalAttrs.passthru.prisma} migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall

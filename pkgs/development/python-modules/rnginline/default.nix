@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  pythonAtLeast,
   poetry-core,
   lxml,
   docopt-ng,
@@ -41,6 +42,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # pathname2url now emits RFC 1738 authority-prefixed file URLs for absolute paths
+    "test_file_url_roundtrip"
   ];
 
   pythonImportsCheck = [ "rnginline" ];

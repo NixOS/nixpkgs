@@ -123,7 +123,6 @@ let
     pathExists
     seq
     typeOf
-    nixVersion
     ;
 
   inherit (lib.lists)
@@ -138,7 +137,6 @@ let
 
   inherit (lib.strings)
     isStringLike
-    versionOlder
     ;
 
   inherit (lib.filesystem)

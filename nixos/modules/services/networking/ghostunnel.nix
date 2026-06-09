@@ -7,17 +7,13 @@
 let
   inherit (lib)
     attrValues
-    concatMap
     concatStringsSep
     escapeShellArg
-    literalExpression
-    mapAttrs'
     mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
     mkOption
-    nameValuePair
     optional
     types
     ;

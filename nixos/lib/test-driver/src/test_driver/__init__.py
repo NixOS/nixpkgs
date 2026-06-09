@@ -6,12 +6,14 @@ import warnings
 from pathlib import Path
 
 import ptpython.ipython
+from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver
+from test_driver.driver import Driver, load_driver_configuration
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
+    LogLevel,
     TerminalLogger,
     XMLLogger,
 )
@@ -22,7 +24,7 @@ class EnvDefault(argparse.Action):
     environment variable as the flags default value.
     """
 
-    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):
         if not default and envvar:
             if envvar in os.environ:
                 if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
@@ -36,7 +38,7 @@ class EnvDefault(argparse.Action):
             required = False
         super().__init__(default=default, required=required, nargs=nargs, **kwargs)
 
-    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+    def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
 
 
@@ -54,8 +56,38 @@ def writeable_dir(arg: str) -> Path:
     return path
 
 
+def formatwarning(
+    message: Warning | str,
+    category: type[Warning],
+    filename: str,
+    lineno: int,
+    line: str | None = None,
+) -> str:
+    return (
+        Style.BRIGHT
+        + Fore.YELLOW
+        + f"??? Warning ({category.__name__}): "  # ty: ignore[unsupported-operator]
+        + Style.NORMAL
+        + str(message)
+        + "\n"
+        + f'    File "{filename}", line {lineno}\n'
+        + (f"      {line}\n" if line is not None else "")
+        + Style.RESET_ALL
+    )
+
+
+warnings.formatwarning = formatwarning  # ty:ignore[invalid-assignment]
+
+
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
+    arg_parser.add_argument(
+        "-c",
+        "--config",
+        help="the test driver configuration file",
+        type=Path,
+        required=True,
+    )
     arg_parser.add_argument(
         "--keep-vm-state",
         help=argparse.SUPPRESS,
@@ -79,54 +111,6 @@ def main() -> None:
         help="Enable interactive debugging breakpoints for sandboxed runs",
     )
     arg_parser.add_argument(
-        "--vm-names",
-        metavar="VM-NAME",
-        action=EnvDefault,
-        envvar="vmNames",
-        nargs="*",
-        help="names of participating virtual machines",
-    )
-    arg_parser.add_argument(
-        "--vm-start-scripts",
-        metavar="VM-START-SCRIPT",
-        action=EnvDefault,
-        envvar="vmStartScripts",
-        nargs="*",
-        help="start scripts for participating virtual machines",
-    )
-    arg_parser.add_argument(
-        "--container-names",
-        metavar="CONTAINER-NAME",
-        action=EnvDefault,
-        envvar="containerNames",
-        nargs="*",
-        help="names of participating containers",
-    )
-    arg_parser.add_argument(
-        "--container-start-scripts",
-        metavar="CONTAINER-START-SCRIPT",
-        action=EnvDefault,
-        envvar="containerStartScripts",
-        nargs="*",
-        help="start scripts for participating containers",
-    )
-    arg_parser.add_argument(
-        "--vlans",
-        metavar="VLAN",
-        action=EnvDefault,
-        envvar="vlans",
-        nargs="*",
-        help="vlans to span by the driver",
-    )
-    arg_parser.add_argument(
-        "--global-timeout",
-        type=int,
-        metavar="GLOBAL_TIMEOUT",
-        action=EnvDefault,
-        envvar="globalTimeout",
-        help="Timeout in seconds for the whole test",
-    )
-    arg_parser.add_argument(
         "-o",
         "--output_directory",
         help="""The path to the directory where outputs copied from the machine will be placed.
@@ -139,17 +123,14 @@ def main() -> None:
         help="Enable JunitXML report generation to the given path",
         type=Path,
     )
+    log_level_map = {level.name.lower(): level for level in LogLevel}
     arg_parser.add_argument(
-        "testscript",
+        "--log-level",
+        metavar="LOG_LEVEL",
         action=EnvDefault,
-        envvar="testScript",
-        help="the test script to run",
-        type=Path,
-    )
-    arg_parser.add_argument(
-        "--dump-vsocks",
-        help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        type=int,
+        envvar="logLevel",
+        choices=log_level_map,
+        help="Set the log level",
     )
 
     args = arg_parser.parse_args()
@@ -169,6 +150,9 @@ def main() -> None:
     if args.junit_xml:
         logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
 
+    if args.log_level:
+        logger.set_log_level(log_level_map[args.log_level])
+
     if not args.keep_machine_state:
         logger.info(
             "Machine state will be reset. To keep it, pass --keep-machine-state"
@@ -178,58 +162,24 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
-    assert len(args.vm_names) == len(args.vm_start_scripts), (
-        f"the number of vm names and vm start scripts must be the same: {args.vm_names} vs. {args.vm_start_scripts}"
-    )
-    assert len(args.container_names) == len(args.container_start_scripts), (
-        f"the number of container names and container start scripts must be the same: {args.container_names} vs. {args.container_start_scripts}"
-    )
-
     with Driver(
-        vm_names=args.vm_names,
-        vm_start_scripts=args.vm_start_scripts,
-        container_names=args.container_names,
-        container_start_scripts=args.container_start_scripts,
-        vlans=args.vlans,
-        tests=args.testscript.read_text(),
+        config=load_driver_configuration(args.config),
         out_dir=output_directory,
         logger=logger,
         keep_machine_state=args.keep_machine_state,
-        global_timeout=args.global_timeout,
         debug=debugger,
     ) as driver:
-        if offset := args.dump_vsocks:
-            driver.dump_machine_ssh(offset)
+        if driver.config.enable_ssh_backdoor:
+            driver.dump_machine_ssh()
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,
-            )  # type:ignore
+            )
         else:
             tic = time.time()
             driver.run_tests()
             toc = time.time()
             logger.info(f"test script finished in {(toc - tic):.2f}s")
-
-
-def generate_driver_symbols() -> None:
-    """
-    This generates a file with symbols of the test-driver code that can be used
-    in user's test scripts. That list is then used by pyflakes to lint those
-    scripts.
-    """
-    d = Driver(
-        vm_names=[],
-        vm_start_scripts=[],
-        container_names=[],
-        container_start_scripts=[],
-        vlans=[],
-        tests="",
-        out_dir=Path(),
-        logger=CompositeLogger([]),
-    )
-    test_symbols = d.test_symbols()
-    with open("driver-symbols", "w") as fp:
-        fp.write(",".join(test_symbols.keys()))

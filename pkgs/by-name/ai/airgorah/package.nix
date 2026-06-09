@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 icons/app_icon.png $out/share/icons/hicolor/1024x1024/apps/airgorah.png
+    install -Dm644 icons/app_icon.png $out/share/icons/airgorah.png
   '';
 
   desktopItems = [

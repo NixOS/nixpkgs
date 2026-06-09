@@ -151,6 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
 
+    mkdir -p $out/etc/tpm2-tss
+
     # write fapi-config suitable for testing
     cat > $out/etc/tpm2-tss/fapi-config-test.json <<EOF
     {

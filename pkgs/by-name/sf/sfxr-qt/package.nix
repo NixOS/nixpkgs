@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  kdePackages,
   libsForQt5,
   cmake,
   SDL,
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.extra-cmake-modules
+    kdePackages.extra-cmake-modules
     (python3.withPackages (
       pp: with pp; [
         pyyaml

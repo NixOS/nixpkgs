@@ -12,23 +12,32 @@
   # dependencies
   anthropic,
   authlib,
+  azure-identity,
   cyclopts,
   exceptiongroup,
   httpx,
   jsonref,
   jsonschema-path,
   mcp,
+  fakeredis,
+  google-genai,
   openai,
   openapi-pydantic,
+  opentelemetry-api,
   packaging,
   platformdirs,
   py-key-value-aio,
   pydantic,
+  pydantic-monty,
   pydocket,
+  pyjwt,
   pyperclip,
   python-dotenv,
+  pyyaml,
   rich,
+  uncalled-for,
   uvicorn,
+  watchfiles,
   websockets,
 
   # tests
@@ -37,6 +46,7 @@
   fastapi,
   inline-snapshot,
   lupa,
+  opentelemetry-sdk,
   psutil,
   pytest-asyncio,
   pytest-httpx,
@@ -45,14 +55,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.5";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3aUvAKm0rW5X/l1VXoSBc5fCjSLxnyznwzj1D3E7Ck=";
+    hash = "sha256-YfFAJvfKLOgfGFWyQmR4FGHrRc066Y0mAYhXJqJ9vyw=";
   };
 
   build-system = [
@@ -61,6 +71,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "py-key-value-aio"
     "pydocket"
   ];
   dependencies = [
@@ -72,25 +83,39 @@ buildPythonPackage (finalAttrs: {
     jsonschema-path
     mcp
     openapi-pydantic
+    opentelemetry-api
     packaging
     platformdirs
     py-key-value-aio
     pydantic
-    pydocket
     pyperclip
     python-dotenv
+    pyyaml
     rich
+    uncalled-for
     uvicorn
+    watchfiles
     websockets
   ]
-  ++ py-key-value-aio.optional-dependencies.disk
+  ++ py-key-value-aio.optional-dependencies.filetree
   ++ py-key-value-aio.optional-dependencies.keyring
   ++ py-key-value-aio.optional-dependencies.memory
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
     anthropic = [ anthropic ];
+    azure = [
+      azure-identity
+      pyjwt
+    ];
+    code-mode = [ pydantic-monty ];
+    gemini = [ google-genai ];
     openai = [ openai ];
+    tasks = [
+      pydocket
+      fakeredis
+    ]
+    ++ fakeredis.optional-dependencies.lua;
   };
 
   pythonImportsCheck = [ "fastmcp" ];
@@ -101,31 +126,21 @@ buildPythonPackage (finalAttrs: {
     fastapi
     inline-snapshot
     lupa
+    opentelemetry-sdk
     psutil
     pytest-asyncio
     pytest-httpx
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
+  ++ finalAttrs.passthru.optional-dependencies.anthropic
+  ++ finalAttrs.passthru.optional-dependencies.azure
+  ++ finalAttrs.passthru.optional-dependencies.code-mode
+  ++ finalAttrs.passthru.optional-dependencies.gemini
+  ++ finalAttrs.passthru.optional-dependencies.openai
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [
-    # redis.exceptions.ResponseError: unknown command `evalsha`, with args beginning with:
-    "test_get_prompt_as_task_returns_prompt_task"
-    "test_prompt_task_server_generated_id"
-
-    "test_logging_middleware_with_payloads"
-    "test_structured_logging_middleware_produces_json"
-
-    # AssertionError: assert 'INFO' == 'DEBUG'
-    "test_temporary_settings"
-
-    # mcp.shared.exceptions.McpError: Connection closed
-    "test_log_file_captures_stderr_output_with_path"
-    "test_log_file_captures_stderr_output_with_textio"
-    "test_log_file_none_uses_default_behavior"
-
     # RuntimeError: Client failed to connect: Connection closed
     "test_keep_alive_maintains_session_across_multiple_calls"
     "test_keep_alive_false_starts_new_session_across_multiple_calls"
@@ -148,32 +163,55 @@ buildPythonPackage (finalAttrs: {
     "test_timeout"
     "test_timeout_tool_call_overrides_client_timeout_even_if_lower"
 
-    # assert 0 == 2
+    # Requires prefab-ui (optional dependency)
+    "test_auto_registers_renderer_resource"
+    "test_equivalent_to_app_true"
+
+    # Requires pydocket (tasks optional dependency, not in test inputs)
+    "test_mounted_server_does_not_have_docket"
+    "test_get_tasks_returns_task_eligible_tools"
+    "test_task_teardown_does_not_hang"
+    "test_background_task_can_read_snapshotted_request_headers"
+    "test_background_task_current_http_dependencies_restore_headers"
+    "test_task_execution_auto_populated_for_task_enabled_tool"
+    "test_function_tool_task_config_still_works"
+    "test_async_partial_with_task_true_does_not_raise"
+    "test_sync_partial_with_task_true_raises"
+    "test_is_docket_available"
+    "test_require_docket_passes_when_installed"
+
+    # Shared dependency caching differs in sandbox
+    "TestSharedDependencies"
+
+    # AssertionError: assert 'INFO' == 'DEBUG'
+    "test_temporary_settings"
+
+    # Subprocess-based multi-client tests fail in sandbox
     "test_multi_client"
+    "test_multi_server"
+    "test_single_server_config_include_tags_filtering"
+    "test_server_starts_without_auth"
     "test_canonical_multi_client_with_transforms"
-
-    # AssertionError: assert {'annotations...object'}, ...} == {'annotations...sers']}}, ...}
-    "test_list_tools"
-
-    # AssertionError: assert len(caplog.records) == 1
-    "test_log"
-
-    #  assert [TextContent(...e, meta=None)] == [TextContent(...e, meta=None)]
-    "test_read_resource_tool_works"
-
-    # fastmcp.exceptions.ToolError: Unknown tool
-    "test_multi_client_with_logging"
-    "test_multi_client_with_elicitation"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "test_unauthorized_access"
-
-    # Failed: DID NOT RAISE <class 'fastmcp.exceptions.ToolError'>
     "test_stateless_proxy"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # Requires prefab-ui (optional dependency)
+    "tests/apps"
+    "tests/test_apps_prefab.py"
+    "tests/test_fastmcp_app.py"
+    # Subprocess crash recovery tests are flaky in sandbox
+    "tests/client/test_stdio.py"
+    # Requires pydocket/fakeredis (tasks optional dependency, not in test inputs)
+    "tests/server/tasks"
+    "tests/server/test_server_docket.py"
+    "tests/client/tasks"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "tests/client/auth/test_oauth_client.py"
     "tests/client/test_sse.py"

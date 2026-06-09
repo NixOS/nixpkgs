@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.62";
+  version = "6.4.65";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat.github.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyjCbTKPj3OemJCr3aTAtQhwnXFTA/EGcbBwARMIiWU=";
+    hash = "sha256-v4cAFLSJllrNgTm6ewR40HYvdi8a1bZcEBz/BTdFsxA=";
   };
 
   strictDeps = true;
@@ -44,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp makefiles/makefile.defs.linux.pulse-gcc.${
-      if stdenv.hostPlatform.isLittleEndian then "LE" else "BE"
-    } makefile.defs
+    cp makefiles/makefile.defs.linux.pulse-gcc makefile.defs
 
     runHook postConfigure
   '';

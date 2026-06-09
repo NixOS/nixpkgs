@@ -57,7 +57,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorg-server";
-  version = "21.1.21";
+  # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
+  # necessary, these can be moved out of lockstep in order to merge updates
+  # quickly.
+  version = "21.1.23";
 
   outputs = [
     "out"
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+    hash = "sha256-45gy5WF9ra8HL9+fDhnl0uHCoTYHrCgLrBq6n4/hRjQ=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [

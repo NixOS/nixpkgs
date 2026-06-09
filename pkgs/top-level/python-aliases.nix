@@ -75,6 +75,7 @@ mapAliases {
   fetchPypi = super.pkgs.fetchPypi; # added 2023-05-25, too many usages
 
   # keep-sorted start case=no numeric=yes
+  abjad = throw "'abjad' was removed due to lack of maintenance"; # Added 2026-03-24
   abodepy = throw "'abodepy' has been renamed to/replaced by 'jaraco-abode'"; # Converted to throw 2025-10-29
   aioinflux = throw "'aioinflux' was removed because it is abandonned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
@@ -87,6 +88,8 @@ mapAliases {
   apkit = throw "apkit was removed because it is unmaintained upstream and different from apkit on PyPI"; # added 2025-09-13
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
+  aspy-refactor-imports = throw "'aspy-refactor-imports' has been renamed to/replaced by 'classify-imports'"; # Added 2026-05-22
+  aspy-yaml = throw "'aspy-yaml' has been removed because the upstream repository was archived in 2020"; # Added 2026-06-04
   astropy-extension-helpers = extension-helpers; # Added 2025-10-15
   asyauth-bad = throw "'asyauth-bad' has been renamed to/replaced by 'badauth'"; # added 2025-11-06
   async-dns = throw "'async-dns' has been removed as it was unmaintained upstream"; # Added 2026-03-23
@@ -94,6 +97,7 @@ mapAliases {
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
   atsim_potentials = throw "'atsim_potentials' has been renamed to/replaced by 'atsim-potentials'"; # Converted to throw 2025-10-29
+  aubio = throw "'aubio' only direct user LedFX switched to a fork named 'aubio-ledfx', hence the aubio package has been replaced."; # Added 2026-04-20
   audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
@@ -128,6 +132,7 @@ mapAliases {
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
   chart-studio = throw "'chart-studio' has been removed as it is no longer maintained upstream"; # Added 2026-03-12
+  chromeprint = throw "'chromaprint' was removed as it depended on m2r which was removed."; # Added 2026-05-27
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
@@ -154,6 +159,7 @@ mapAliases {
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
   django-cryptography = throw "'django-cryptography' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  django-mdeditor = throw "'django-mdeditor' has been removed as it was unmaintained upstream and the latest release was vulnerable"; # Added 2026-05-02
   django-modelsearch = modelsearch; # added 2026-03-02
   django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_4 = throw "Django 4 has reached it's EOL in 2026-04 and has therefore been removed."; # added 2026-03-30
@@ -191,9 +197,10 @@ mapAliases {
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
   elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   email_validator = throw "'email_validator' has been renamed to/replaced by 'email-validator'"; # Converted to throw 2025-10-29
-  embreex = throw "embreex has been removed, as it required embree2"; # added 2025-09-14
+  emailthreads = throw "'emailthreads' has been removed because the upstream repository was archived in 2024"; # Added 2026-04-09
   enocean = throw "'enocean' was removed because Home Assistant switched to 'enocean-async'"; # added 2026-03-31
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+  esig = throw "'esig' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-27
   et_xmlfile = throw "'et_xmlfile' has been renamed to/replaced by 'et-xmlfile'"; # Converted to throw 2025-10-29
   ev3dev2 = throw "'ev3dev2' has been renamed to/replaced by 'python-ev3dev2'"; # Converted to throw 2025-10-29
   eyeD3 = throw "'eyeD3' has been renamed to/replaced by 'eyed3'"; # Converted to throw 2025-10-29
@@ -229,6 +236,7 @@ mapAliases {
   flufl_i18n = throw "'flufl_i18n' has been renamed to/replaced by 'flufl-i18n'"; # Converted to throw 2025-10-29
   flufl_lock = throw "'flufl_lock' has been renamed to/replaced by 'flufl-lock'"; # Converted to throw 2025-10-29
   FormEncode = throw "'FormEncode' has been renamed to/replaced by 'formencode'"; # Converted to throw 2025-10-29
+  fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
@@ -250,13 +258,17 @@ mapAliases {
   HAP-python = throw "'HAP-python' has been renamed to/replaced by 'hap-python'"; # Converted to throw 2025-10-29
   hcs_utils = throw "'hcs_utils' has been renamed to/replaced by 'hcs-utils'"; # Converted to throw 2025-10-29
   heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
+  hg-commitsigs = throw "'hg-commitsigs' was removed because it was broken"; # Added 2026-04-25
   hglib = throw "'hglib' has been renamed to/replaced by 'python-hglib'"; # Converted to throw 2025-10-29
   hijri-converter = hijridate; # added 2025-08-07
   holistic-trace-analysis = throw "'holistic-trace-analysis' was removed because there is no such package on PyPI"; # added 2026-02-28
   hologram = throw "'hologram' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   homeassistant-bring-api = throw "'homeassistant-bring-api' has been renamed to/replaced by 'bring-api'"; # Converted to throw 2025-10-29
   homepluscontrol = throw "'homepluscontrol' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  howdoi = throw "'howdoi' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
+  ibmiotf = throw "'ibmiotf' has been removed as it was unmaintained upstream and the corresponding home-assistant integration was removed"; # Added 2026-05-04
+  idna-ssl = throw "'idna-ssl' has been removed as it was archived upstream"; # Added 2026-04-23
   IMAPClient = throw "'IMAPClient' has been renamed to/replaced by 'imapclient'"; # Converted to throw 2025-10-29
   inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
   ionhash = throw "ionhash has been removed due to being unmaintained upstream"; # added 2025-07-30
@@ -276,6 +288,7 @@ mapAliases {
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
   jsonfield = throw "'jsonfield' has been removed as it was broken and deprecated upstream. Consider using Django's native `JSONField` instead."; # Added 2025-11-08
   jsonpath_rw = throw "'jsonpath_rw' has been renamed to/replaced by 'jsonpath-rw'"; # Converted to throw 2025-10-29
+  jsonschema-spec = jsonschema-path;
   jupyter-server-ydoc = throw "'jupyter-server-ydoc' has been renamed to/replaced by 'jupyter-collaboration'"; # Converted to throw 2025-10-29
   jupyter_client = throw "'jupyter_client' has been renamed to/replaced by 'jupyter-client'"; # Converted to throw 2025-10-29
   jupyter_console = throw "'jupyter_console' has been renamed to/replaced by 'jupyter-console'"; # Converted to throw 2025-10-29
@@ -284,10 +297,13 @@ mapAliases {
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
   kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
-  keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-29
+  keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
+  keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   Keras = throw "'Keras' has been renamed to/replaced by 'keras'"; # Converted to throw 2025-10-29
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25
+  konnected = throw "konnected has been removed, because the home-assistant integration that required it has been deprecated and removed. See https://support.konnected.io/migrating-from-konnected-legacy-home-assistant-integration-to-esphome."; # Added 2026-06-04
+  langchain-experimental = throw "'langchain-experimental' has been removed because the upstream repository was archived in 2026-05-26"; # Added 2026-05-27
   langchain-standard-tests = throw "'langchain-standard-tests' has been renamed to/replaced by 'langchain-tests'"; # Converted to throw 2025-10-29
   langchainplus-sdk = throw "'langchainplus-sdk' has been renamed to/replaced by 'langsmith'"; # Converted to throw 2025-10-29
   lazr_config = throw "'lazr_config' has been renamed to/replaced by 'lazr-config'"; # Converted to throw 2025-10-29
@@ -296,7 +312,9 @@ mapAliases {
   lazy_imports = throw "'lazy_imports' has been renamed to/replaced by 'lazy-imports'"; # Converted to throw 2025-10-29
   lcov_cobertura = throw "'lcov_cobertura' has been renamed to/replaced by 'lcov-cobertura'"; # Converted to throw 2025-10-29
   ldap = throw "'ldap' has been renamed to/replaced by 'python-ldap'"; # Converted to throw 2025-10-29
-  ledger_agent = throw "'ledger_agent' has been renamed to/replaced by 'ledger-agent'"; # Converted to throw 2025-10-29
+  ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
+  ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
+  libarcus = throw "'libarcus' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   libgpiod = gpiod; # added 2026-03-30
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
@@ -310,12 +328,14 @@ mapAliases {
   llama-index-readers-llama-parse = throw "'llama-index-readers-llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
   llama-parse = throw "'llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
   llamaindex-py-client = throw "'llamaindex-pyclient' has been removed as it was removed from upstream"; # Added 2026-04-03
+  llfuse = throw "'llfuse' hase been removed, as it depends on fuse2, and is no longer developed. Please use 'mfusepy' instead"; # Added 2026-05-20
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
   lsprotocol_2025 = lsprotocol; # added 2026-01-05
   lxml-stubs = throw "'lxml-stubs' has been removed as it was broken and unmaintained upstream. Consider using 'types-lxml' instead."; # Converted to throw 2025-11-07
   lzstring = throw "'lzstring' has been removed as it was unmaintained upstream"; # Added 2025-11-22
+  m2r = throw "'m2r' has been removed because it was marked broken for a long time."; # Added 2026-05-27
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
@@ -338,8 +358,8 @@ mapAliases {
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
   modeled = "'modeled' has been removed because it is unmaintained"; # Added 2026-01-19
   monarchmoney = throw "'monarchmoney' has been renamed to/replaced by 'monarchmoneycommunity'"; # Added 2026-03-05
+  monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   moretools = "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
-  mpris-server = throw "mpris-server was removed because it is unused"; # added 2025-10-31
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
@@ -348,6 +368,7 @@ mapAliases {
   ninja-python = throw "'ninja-python' has been renamed to/replaced by 'ninja'"; # Converted to throw 2025-10-29
   nitpick = throw "'nitpick' has been removed because it was unmaintained upstream since 2017 and using python2"; # added 2025-08-25
   nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
+  nonbloat-db = throw "nonbloat-db has been removed because the upstream project was archived."; # added 2025-05-16
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
@@ -358,6 +379,9 @@ mapAliases {
   openai-triton-no-cuda = throw "'openai-triton-no-cuda' has been renamed to/replaced by 'triton-no-cuda'"; # Converted to throw 2025-10-29
   openbabel-bindings = openbabel; # added 2025-09-17
   opsdroid_get_image_size = throw "'opsdroid_get_image_size' has been renamed to/replaced by 'opsdroid-get-image-size'"; # Converted to throw 2025-10-29
+  orange3 = throw "'orange3' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
+  orange-canvas-core = throw "'orange-canvas-core' has been removed as it was unmaintained and unused outside orange3"; # Added 2026-02-10
+  orange-widgets-base = throw "'orange-widgets-base' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
@@ -370,6 +394,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
+  pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
   pizzapi = throw "pizzapi was removed because it no longer works"; # added 2025-12-03
   pkuseg = throw "'pkuseg' has been removed because it was not supported on newer versions of Python"; # added 2026-01-20
@@ -419,13 +444,17 @@ mapAliases {
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
+  pymystem3 = throw "'pymystem3' has been removed because it is broken and unmaintained"; # Added 2026-04-19
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
+  pyqt5-stubs = throw "'pyqt5-stubs' has been removed as it was unused and depended on vulnerable qt5 webengine"; # Added 2026-01-15
+  pyqt5-webkit = throw "'pyqt5-webkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
   pyqt5_with_qtmultimedia = throw "'pyqt5_with_qtmultimedia' has been renamed to/replaced by 'pyqt5-multimedia'"; # Converted to throw 2025-10-29
-  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been renamed to/replaced by 'pyqt5-webkit'"; # Converted to throw 2025-10-29
+  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
+  pyqtwebengine = "'pyqtwebengine' has been removed as it depended on the removed qt5 webengine"; # Added 2026-02-10
   pyramid_beaker = throw "'pyramid_beaker' has been renamed to/replaced by 'pyramid-beaker'"; # Converted to throw 2025-10-29
   pyramid_chameleon = throw "'pyramid_chameleon' has been renamed to/replaced by 'pyramid-chameleon'"; # Converted to throw 2025-10-29
   pyramid_exclog = throw "'pyramid_exclog' has been renamed to/replaced by 'pyramid-exclog'"; # Converted to throw 2025-10-29
@@ -464,6 +493,8 @@ mapAliases {
   python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
   python-Levenshtein = throw "'python-Levenshtein' has been renamed to/replaced by 'levenshtein'"; # Converted to throw 2025-10-29
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
+  python-mbedtls = throw "'python-mbedtls' has been removed as it is unmaintained";
+  python-openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Added 2026-05-14
   python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
@@ -473,7 +504,7 @@ mapAliases {
   python_fedora = throw "'python_fedora' has been renamed to/replaced by 'python-fedora'"; # Converted to throw 2025-10-29
   python_magic = throw "'python_magic' has been renamed to/replaced by 'python-magic'"; # Converted to throw 2025-10-29
   python_mimeparse = throw "'python_mimeparse' has been renamed to/replaced by 'python-mimeparse'"; # Converted to throw 2025-10-29
-  python_openzwave = throw "'python_openzwave' has been renamed to/replaced by 'python-openzwave'"; # Converted to throw 2025-10-29
+  python_openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Converted to throw 2025-10-29
   python_simple_hipchat = throw "'python_simple_hipchat' has been renamed to/replaced by 'python-simple-hipchat'"; # Converted to throw 2025-10-29
   pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytorch = throw "'pytorch' has been renamed to/replaced by 'torch'"; # Converted to throw 2025-10-29
@@ -557,6 +588,7 @@ mapAliases {
   sqlalchemy-utc = throw "'sqlalchemy-utc' has been removed as it was unmaintained upstream"; # Added 2026-03-19
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
+  steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   supafunc = throw "'supafunc' has been replaced by 'supabase-functions'"; # Added 2026-03-08
   supervise_api = throw "'supervise_api' has been renamed to/replaced by 'supervise-api'"; # Converted to throw 2025-10-29
@@ -565,6 +597,7 @@ mapAliases {
   systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
+  tbats = throw "'tbats' has been removed due to lack of upstream maintenance"; # Added 2026-05-11
   tbm-utils = throw "'tbm-utils' has been removed as it is unmaintained since 2020"; # Added 2026-03-12
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
   tensorflow-build_2 = throw "'tensorflow-build_2' has been renamed to/replaced by 'tensorflow-build'"; # Converted to throw 2025-10-29
@@ -597,7 +630,9 @@ mapAliases {
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
+  unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
+  uranium = throw "'uranium' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   vcver = throw "vcver has been removed, since it was an unused leaf package"; # added 2025-08-25
   vega_datasets = throw "'vega_datasets' has been renamed to/replaced by 'vega-datasets'"; # Converted to throw 2025-10-29
   ViennaRNA = throw "'ViennaRNA' has been renamed to/replaced by 'viennarna'"; # Converted to throw 2025-10-29
@@ -621,6 +656,7 @@ mapAliases {
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
   zc-buildout221 = throw "'zc-buildout221' has been renamed to/replaced by 'zc-buildout'"; # Converted to throw 2025-10-29
   zc_lockfile = throw "'zc_lockfile' has been renamed to/replaced by 'zc-lockfile'"; # Converted to throw 2025-10-29
+  zebrafy = throw "'zebrafy' has been removed due to lack of upstream maintenance"; # Added 2026-05-11
   zetup = "'zetup' has been removed because it is unmaintained"; # Added 2026-01-19
   zeversolarlocal = throw "'zeversolarlocal' has been removed because it is unmaintained"; # Added 2026-01-28
   zope_component = throw "'zope_component' has been renamed to/replaced by 'zope-component'"; # Converted to throw 2025-10-29

@@ -1,8 +1,8 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index 377c7221..aaf6460d 100644
+index e91cd933..088e76b7 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -305,7 +305,7 @@ async def get_ip_addresses(include_ipv6: bool = False) -> tuple[str, ...]:
+@@ -365,7 +365,7 @@ def call() -> tuple[str, ...]:
                      continue
                  # ifaddr returns IPv6 addresses as (address, flowinfo, scope_id) tuples
                  ip_str = ip.ip[0] if isinstance(ip.ip, tuple) else ip.ip

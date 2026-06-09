@@ -22,6 +22,7 @@
   dask,
   duckdb,
   fastapi,
+  frictionless,
   geopandas,
   hypothesis,
   ibis-framework,
@@ -41,16 +42,16 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandera";
-  version = "0.28.1";
+  version = "0.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
-    tag = "v${version}";
-    hash = "sha256-PXcLJwebJ6BQ4nUtXUZFGb0vQp/g6jj+afewTTMt84s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JmD8p0Syt/Tgf9LiMWeug1dSPp4cyd7BtBfo6yi08xg=";
   };
 
   build-system = [
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dependencies = [
     packaging
@@ -77,7 +78,7 @@ buildPythonPackage rec {
         io = [
           pyyaml
           black
-          #frictionless # not in nixpkgs
+          frictionless
         ];
         # pyspark expression does not define optional-dependencies.connect:
         #pyspark = [ pyspark ] ++ pyspark.optional-dependencies.connect;
@@ -121,7 +122,7 @@ buildPythonPackage rec {
     pytestCheckHook
     rich
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
@@ -167,8 +168,8 @@ buildPythonPackage rec {
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

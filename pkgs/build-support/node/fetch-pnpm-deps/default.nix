@@ -7,6 +7,8 @@
   cacert,
   makeSetupHook,
   pnpm,
+  pnpm-fixup-state-db,
+  sqlite,
   writableTmpDirAsHomeHook,
   yq,
   zstd,
@@ -15,9 +17,8 @@ let
   pnpmLatest = pnpm;
 
   supportedFetcherVersions = [
-    1 # First version. Here to preserve backwards compatibility
-    2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
+    4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
   ];
 in
 {
@@ -47,19 +48,38 @@ in
           };
 
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
+
+      pnpm-fixup-state-db' =
+        if pnpm.nodejs-slim or null != null then
+          pnpm-fixup-state-db.override {
+            # FIXME: make npm-config-hook accept nodejs-slim
+            nodejs =
+              let
+                inherit (pnpm) nodejs-slim;
+              in
+              if nodejs-slim ? paths && builtins.isList nodejs-slim.paths then
+                # If nodejs-slim has a list `paths` attribute, it's likely a simlinkJoin
+                nodejs-slim
+              else
+                # Otherwise we need to recreate one by overriding the default one
+                pnpm-fixup-state-db.nodejs.override {
+                  inherit nodejs-slim;
+                };
+          }
+        else
+          pnpm-fixup-state-db;
     in
-    # pnpmWorkspace was deprecated, so throw if it's used.
-    assert (lib.throwIf (args ? pnpmWorkspace)
-      "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
-    ) true;
+    assert
+      fetcherVersion != null
+      || throw "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
-    assert (lib.throwIf (fetcherVersion == null)
-      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      !(fetcherVersion == 1 || fetcherVersion == 2)
+      || throw "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` was removed in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
-    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      builtins.elem fetcherVersion supportedFetcherVersions
+      || throw "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     stdenvNoCC.mkDerivation (
       finalAttrs:
@@ -73,6 +93,9 @@ in
             jq
             moreutils
             pnpm # from args
+            pnpm-fixup-state-db'
+            sqlite
+            writableTmpDirAsHomeHook
             yq
             zstd
           ]
@@ -84,37 +107,49 @@ in
           installPhase = ''
             runHook preInstall
 
+            versionAtLeast () {
+                local cur_version=$1 min_version=$2
+                printf "%s\0%s" "$min_version" "$cur_version" | sort -zVC
+            }
+
             lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
             if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
               echo "ERROR: lockfileVersion $lockfileVersion in pnpm-lock.yaml is too new for the provided pnpm version ${lib.versions.major pnpm.version}!"
               exit 1
             fi
 
-            export HOME=$(mktemp -d)
-
-            # For fetcherVersion < 3, the pnpm store files are placed directly into $out.
-            # For fetcherVersion >= 3, it is bundled into a compressed tarball within $out,
+            # The pnpm store is bundled into a compressed tarball within $out,
             # without distributing the uncompressed store files.
-            if [[ ${toString fetcherVersion} -ge 3 ]]; then
-              mkdir $out
-              storePath=$(mktemp -d)
-            else
-              storePath=$out
-            fi
+            mkdir $out
+            storePath=$(mktemp -d)
 
-            # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
-            # any pnpm command would fail in that directory, the following disables this
-            pushd ..
-            pnpm config set manage-package-manager-versions false
+            pushd "$HOME"
+            pnpmVersion=$(pnpm --version)
+
+            if versionAtLeast "$pnpmVersion" "11"; then
+              # pnpm 11 uses a different mechanism to manage package manager versions
+              export pnpm_config_pm_on_fail=ignore
+
+              # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+              export pnpm_config_side_effects_cache=false
+
+              export pnpm_config_update_notifier=false
+            else
+              pnpm config set manage-package-manager-versions false
+              pnpm config set side-effects-cache false
+              pnpm config set update-notifier false
+            fi
             popd
 
             pnpm config set store-dir $storePath
-            # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-            pnpm config set side-effects-cache false
-            # As we pin pnpm versions, we don't really care about updates
-            pnpm config set update-notifier false
+
             # Run any additional pnpm configuration commands that users provide.
             ${prePnpmInstall}
+
+            echo "Final pnpm config:"
+            pnpm config list
+            echo
+
             # pnpm is going to warn us about using --force
             # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
             pnpm install \
@@ -125,10 +160,8 @@ in
                 --registry="$NIX_NPM_REGISTRY" \
                 --frozen-lockfile
 
-            # Store newer fetcherVersion in case pnpmConfigHook also needs it
-            if [[ ${toString fetcherVersion} -gt 1 ]]; then
-              echo ${toString fetcherVersion} > $out/.fetcher-version
-            fi
+            # Record the fetcherVersion in the output for introspection.
+            echo ${toString fetcherVersion} > $out/.fetcher-version
 
             runHook postInstall
           '';
@@ -137,14 +170,25 @@ in
             runHook preFixup
 
             # Remove timestamp and sort the json files
-            rm -rf $storePath/{v3,v10}/tmp
+            rm -rf $storePath/{v3,v10,v11}/tmp
             for f in $(find $storePath -name "*.json"); do
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
+            if [ -f "$storePath/v11/index.db" ]; then
+              pnpm-fixup-state-db "$storePath/v11";
+              # Dump the SQLite database to a SQL text file for reproducibility.
+              # SQLite's binary format is non-deterministic (version-valid-for number, etc),
+              # so we store the logical contents as SQL statements and reconstruct during build.
+              if [[ ${toString fetcherVersion} -ge 4 ]]; then
+                sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
+                rm "$storePath/v11/index.db"
+              fi
+            fi
+
             # This folder contains symlinks to /build/source which we don't need
             # since https://github.com/pnpm/pnpm/releases/tag/v10.27.0
-            rm -rf $storePath/{v3,v10}/projects
+            rm -rf $storePath/{v3,v10,v11}/projects
 
             # Ensure consistent permissions
             # NOTE: For reasons not yet fully understood, pnpm might create files with
@@ -157,24 +201,20 @@ in
             # * All folders have 555.
             # See https://github.com/NixOS/nixpkgs/pull/350063
             # See https://github.com/NixOS/nixpkgs/issues/422889
-            if [[ ${toString fetcherVersion} -ge 2 ]]; then
-              find $storePath -type f -name "*-exec" -print0 | xargs -0 chmod 555
-              find $storePath -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
-              find $storePath -type d -print0 | xargs -0 chmod 555
-            fi
+            find $storePath -type f -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 555
+            find $storePath -type f -not -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 444
+            find $storePath -type d -print0 | xargs --no-run-if-empty -0 chmod 555
 
-            if [[ ${toString fetcherVersion} -ge 3 ]]; then
-              (
-                cd $storePath
+            (
+              cd $storePath
 
-                # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
-                tar --sort=name \
-                  --mtime="@$SOURCE_DATE_EPOCH" \
-                  --owner=0 --group=0 --numeric-owner \
-                  --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-                  --zstd -cf $out/pnpm-store.tar.zst .
-              )
-            fi
+              # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
+              tar --sort=name \
+                --mtime="@$SOURCE_DATE_EPOCH" \
+                --owner=0 --group=0 --numeric-owner \
+                --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+                --zstd -cf $out/pnpm-store.tar.zst .
+            )
 
             runHook postFixup
           '';
@@ -199,6 +239,7 @@ in
   pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
+      sqlite
       writableTmpDirAsHomeHook
       zstd
     ];
@@ -206,5 +247,6 @@ in
       npmArch = stdenvNoCC.targetPlatform.node.arch;
       npmPlatform = stdenvNoCC.targetPlatform.node.platform;
     };
+    meta.license = lib.licenses.mit;
   } ./pnpm-config-hook.sh;
 }

@@ -9,16 +9,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coverage";
-  version = "7.13.5";
+  version = "7.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coveragepy";
     repo = "coveragepy";
-    tag = version;
-    hash = "sha256-XsgOBdehJi2fIZdwE60a32+unYLSMK5MGe1nJOfPBEY=";
+    tag = finalAttrs.version;
+    hash = "sha256-3/Q6TQfoZNM7bHjviw/C70i2ZgjobHnynmqX9qvreYQ=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/coveragepy/coveragepy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/coveragepy/coveragepy/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Code coverage measurement for Python";
     homepage = "https://github.com/coveragepy/coveragepy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

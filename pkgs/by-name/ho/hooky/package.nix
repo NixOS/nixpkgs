@@ -20,6 +20,11 @@ haskellPackages.mkDerivation {
     hash = "sha256-w4sWD5dZTNKwrYhrJw9RcwGoeNxpJnm/6RRqYjiIiBg=";
   };
 
+  postPatch = ''
+    substituteInPlace src/Hooky/Config.hs \
+      --replace-fail 'KDL.text' 'KDL.string'
+  '';
+
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = with haskellPackages; [

@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-oiklC4GcQNVRc6+nIC7x7yprco+Fx1Bol6Hxymq1cUk=";
+    hash = "sha256-I8Z9usIeVWTflbZ4merP7sfXwZQRiqv5jODnY8zVx64=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) cargoRoot src;
-    hash = "sha256-OU24ahqFc4DivCpO451rsHV8rofyHv+LnLgkVsFPMG4=";
+    hash = "sha256-0CfOkjMe3p7xg62jlS3ASZRlr+/nqIJLRyRT+jcDiHQ=";
   };
 
   cargoRoot = "dnsdist-rust-lib/rust";

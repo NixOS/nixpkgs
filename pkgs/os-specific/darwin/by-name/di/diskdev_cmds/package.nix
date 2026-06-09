@@ -1,20 +1,22 @@
 {
-  lib,
   apple-sdk,
   libutil,
   mkAppleDerivation,
   removefile,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  Libc = apple-sdk.sourceRelease "Libc";
-  xnu = apple-sdk.sourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "diskdev_cmds-deps-private-headers";
 
     buildCommand = ''
+      install -D -t "$out/include" \
+        '${Libc}/include/_bounds.h'
       for dir in arm i386 machine sys; do
         install -D -t "$out/include/$dir" '${xnu}'"/bsd/$dir/disklabel.h"
       done
@@ -46,7 +48,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-P2dg3B5pU2ayasMHIM5nI0iG+YDdYQNcEpnJzZxm1kw=";
+  xcodeHash = "sha256-qyQM+48PKKWUmdoBprpDf4DXIVAtd3EKCU+ZD/EhNXQ=";
 
   postPatch =
     # Fix incompatible pointer to integer conversion. The last parameter is size_t not a pointer.

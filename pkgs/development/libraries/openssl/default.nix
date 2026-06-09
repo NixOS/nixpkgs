@@ -103,6 +103,13 @@ let
           ''
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
+      ''
+      # this test has inconsistent behavior in the freebsd sandbox
+      # (binds to only ipv6 and connects on only ipv4)
+      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+        substituteInPlace test/recipes/82-test_ocsp_cert_chain.t \
+          --replace-fail '"-accept",' '"-4", "-accept",' \
+          --replace-fail '"-connect",' '"-4", "-connect",'
       '';
 
       outputs = [
@@ -378,9 +385,13 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+      strictDeps = lib.versionAtLeast version "4.0";
+      __structuredAttrs = lib.versionAtLeast version "4.0";
+
       meta = {
         homepage = "https://www.openssl.org/";
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
+        donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
@@ -434,8 +445,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.19";
-    hash = "sha256-+lpBQ7iq4YvlPvLzyvKaLgdHQwuLx00y2IM1uUq2MHI=";
+    version = "3.0.20";
+    hash = "sha256-yAoB38cOzk3CEWiTLDdzkELUBNRszIGlmG3XUxTs2m8=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -464,8 +475,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.5";
-    hash = "sha256-soyRUyqLZaH5g7TCi3SIF05KAQCOKc6Oab14nyi8Kok=";
+    version = "3.5.6";
+    hash = "sha256-3q58gMupnEtPlA7K2zwzOLE8t3QYQJI45X1/MfKjtzY=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -486,11 +497,7 @@ in
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
-    ]
-    ++
-      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
-      # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+    ];
 
     withDocs = true;
 
@@ -500,8 +507,8 @@ in
   };
 
   openssl_3_6 = common {
-    version = "3.6.1";
-    hash = "sha256-sb/tzVson/Iq7ofJ1gD1FXZ+v0X3cWjLbWTyMfUYqC4=";
+    version = "3.6.2";
+    hash = "sha256-qvUaH+BkOE+BHa6utOxNznNA7IvYkwJ+7mdq8x6DoE8=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -519,16 +526,36 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      # Fix from https://github.com/openssl/openssl/pull/29826
-      # Merged, will be in 3.6.2
-      ./3.6/mingw-define-netreset.patch
-    ]
-    ++
-      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
-      # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+    ];
+
+    withDocs = true;
+
+    extraMeta = {
+      license = lib.licenses.asl20;
+    };
+  };
+
+  openssl_4_0 = common {
+    version = "4.0.0";
+    hash = "sha256-wyz0mpWcTzRflgaYLdNufSj3xYsZwuJddWJNKz0veaw=";
+
+    patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      # Look up SSL certificates in /etc rather than the immutable installation directory
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
+    ];
 
     withDocs = true;
 

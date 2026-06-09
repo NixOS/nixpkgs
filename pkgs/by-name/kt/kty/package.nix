@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,10 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    RUSTONIG_SYSTEM_LIBONIG = 1;
   };
 
   buildInputs = [
     openssl
+    oniguruma
   ];
 
   cargoHash = "sha256-nJ+nof2YhyLrNuLVy69kYj5tw+aG4IJm6nVxHkczbko=";

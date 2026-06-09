@@ -18,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/c";
 
-  patches = [ ./remove-inexisting-rsumtest.patch ];
+  patches = [
+    ./remove-inexisting-rsumtest.patch
+    ./c23.patch
+  ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 

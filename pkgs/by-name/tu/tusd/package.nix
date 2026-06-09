@@ -34,6 +34,7 @@ buildGoModule (finalAttrs: {
     description = "Reference server implementation in Go of tus: the open protocol for resumable file uploads";
     license = lib.licenses.mit;
     homepage = "https://tus.io/";
+    mainProgram = "tusd";
     maintainers = with lib.maintainers; [
       nh2
       kalbasit

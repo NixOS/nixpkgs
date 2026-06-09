@@ -8,30 +8,30 @@
   pnpmConfigHook,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood";
-  version = "4.13.0";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
-    rev = "v${version}";
-    hash = "sha256-3q9a3WwTHzKbZTptSBTevReu2q4XIkSmFzX0MJQAbc4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gSjkpAGkvgRRh8WDpL/F7fS8KDxHRJUuWVqHGcFEGAc=";
   };
 
   nativeBuildInputs = [ pnpm_9 ];
   npmConfigHook = pnpmConfigHook;
-  npmDeps = pnpmDeps;
+  npmDeps = finalAttrs.pnpmDeps;
   dontNpmPrune = true;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-ukhZ1SCejwi0n3PubBo5qIRE/8snjHSZaGVIbHKvwdI=";
+    fetcherVersion = 3;
+    hash = "sha256-Los6faQJ4it0fVqtRvPvYmyANK4qBcwHxmZBacR7Q6E=";
   };
 
   passthru = {
@@ -44,6 +44,7 @@ buildNpmPackage rec {
   meta = {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
+    changelog = "https://github.com/jesec/flood/releases/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       azahi
@@ -53,4 +54,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "flood";
   };
-}
+})

@@ -56,6 +56,7 @@
   gnome-settings-daemon,
   xorg-server,
   python3,
+  python3Packages,
   wayland-scanner,
   wrapGAppsHook4,
   gi-docgen,
@@ -71,7 +72,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "49.4";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wWZuxQVhUwviXLiNk5wrzCrzTwHGO4sWuCuJLuM9eFU=";
+    hash = "sha256-k0RQLORz94h5Xya0X4uP9TwKNrhnRw1wWhGj7gkRAh4=";
   };
 
   mesonFlags = [
@@ -117,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    python3.pkgs.argcomplete # for register-python-argcomplete
+    python3Packages.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
@@ -206,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "17"; # bumped each dev cycle
+    libmutter_api_version = "18"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {

@@ -8,29 +8,30 @@
   copyDesktopItems,
   cctools,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   yarnConfigHook,
   yarnBuildHook,
   wrapGAppsHook3,
   xcbuild,
 
-  electron_39,
+  electron_41,
 
   nix-update-script,
 }:
 
 let
-  electron = electron_39; # don't use latest electron to avoid going over the supported abi numbers
+  # don't use latest electron to avoid going over the supported abi numbers
+  electron = electron_41;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.2.4";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
-    owner = "troyeguo";
+    owner = "koodo-reader";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KUcI+0+ICMdwAF30CLM3QdS+X8UnYiHhcYkvEQ6WgS8=";
+    hash = "sha256-GWhofLT5p8Li0aErJlUQ6E5xSkK4CnnM7UwGDJQBq9I=";
   };
 
   patches = [
@@ -39,13 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-XyFcY0XeNdNzLuqfv9Z2/41875Nl5OrAT/QVyI/+OQc=";
+    hash = "sha256-HRWp/lXXPSw2OdvBaEX0W3hnxL9NvIjIk62Dj+rKm1g=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    nodejs-slim
+    nodejs-slim.npm
+    (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
     yarnConfigHook
     yarnBuildHook
   ]
@@ -65,12 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # we need to build cpu-features with the non-electron headers first
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     npm rebuild --verbose cpu-features
 
     export npm_config_nodedir=${electron.headers}
-    npm run postinstall
-
     # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \
       -c.mac.identity=null \
@@ -124,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
         "image/vnd.djvu"
         "application/x-mobipocket-ebook"
         "application/vnd.amazon.ebook"
-        "application/vnd.amazon.ebook"
         "application/x-cbz"
         "application/x-cbr"
         "application/x-cbt"
@@ -139,13 +138,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/koodo-reader/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities
       for Windows, macOS, Linux and Web
     '';
-    homepage = "https://github.com/troyeguo/koodo-reader";
+    homepage = "https://github.com/koodo-reader/koodo-reader";
     license = lib.licenses.agpl3Only;
     mainProgram = "koodo-reader";
     maintainers = with lib.maintainers; [ tomasajt ];

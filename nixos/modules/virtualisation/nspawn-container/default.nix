@@ -21,8 +21,6 @@ let
   cfg = config.virtualisation;
 in
 {
-  imports = [ ../guest-networking-options.nix ];
-
   options = {
 
     virtualisation.cmdline = lib.mkOption {

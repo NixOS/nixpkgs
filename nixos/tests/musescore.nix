@@ -95,6 +95,6 @@ in
 
       ## Check that it contains the title of the score
       machine.succeed('pdfgrep "Untitled score" "/root/Untitled score.pdf"')
-      machine.copy_from_vm("/root/Untitled score.pdf")
+      machine.copy_from_machine("/root/Untitled score.pdf")
     '';
 }

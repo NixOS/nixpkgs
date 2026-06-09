@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # To avoid compiler error in LoadDataBase.c:366:27
-  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu99 -Wno-incompatible-pointer-types";
 
   postPatch = ''
     # texlive for docs seems extreme
@@ -77,6 +77,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
-    broken = true;
   };
 })

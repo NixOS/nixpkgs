@@ -40,7 +40,7 @@
   wayland-scanner,
   zenity,
   # for passthru.tests
-  SDL_compat,
+  sdl12-compat,
   sdl2-compat,
   sdl3-image,
   sdl3-ttf,
@@ -70,7 +70,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.2";
+  version = "3.4.8";
 
   outputs = [
     "lib"
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-ev0QiKyj0O6gtk7cK/V0X5Noft0Zo/fMS+oM6emwynE=";
+    hash = "sha256-uBGyGxrUVx642Ku8qhR2sTy2JagcSioIhh/5RsXVAIM=";
   };
 
   postPatch =
@@ -238,11 +238,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      SDL_compat.tests
+      sdl12-compat.tests
       // sdl2-compat.tests
       // {
         inherit
-          SDL_compat
+          sdl12-compat
           sdl2-compat
           sdl3-image
           sdl3-ttf

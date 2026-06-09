@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unofficial-homestuck-collection";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "GiovanH";
     repo = "unofficial-homestuck-collection";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JHVyg0QIjxPGXf9HsrquV6z6iRCSnw4nHxd+zhNS8H4=";
+    hash = "sha256-xG7pFJnQLsJDsC8e7PJ2lDWsN4p1NtqIgfwnpHBA0Yk=";
   };
 
   patches = [

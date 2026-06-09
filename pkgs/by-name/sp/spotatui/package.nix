@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotatui";
-  version = "0.38.0";
+  version = "0.38.6";
 
   src = fetchFromGitHub {
     owner = "LargeModGames";
     repo = "spotatui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6XsKlM4KLwRZk+uJY60a0rKHIEv1ieZPZoBZpRG1sQ0=";
+    hash = "sha256-2H/HvyGc2xxP1S0eiP2eSiBOjkzKdqyOOD+8mLVLvE0=";
   };
 
-  cargoHash = "sha256-5aj35NGRFb1DiEPU1RGKkvz/wMOIjO1HzkX45GEFbPs=";
+  cargoHash = "sha256-3Ht4LjwFmmf07XizPrH66V2yPkOzrY4dVvvA4GRAcTs=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withPipewireVisualizer rustPlatform.bindgenHook;
 
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "cover-art"
     "discord-rpc"
     "mpris"
     "streaming"

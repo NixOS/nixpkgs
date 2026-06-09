@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i4Pw1jvkRYCQg1+9eZVi30Qblpttz9V+k//zehBZGDM=";
+    hash = "sha256-nai8lcimEts/E3bwUyQufLYIHhUK83IH431PUQFtQJI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
-    hash = "sha256-MgUOOr188t+t/4sTXVpbr+xYT/1qf7/B0ZG0w+QkVxc=";
+    hash = "sha256-ME74yxVwH4W9gE0XbtwDhR8g9QulN2eeOB1eekaHmG8=";
   };
 
   buildPhase = ''

@@ -5,6 +5,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   fetchFromGitHub,
 }:
 stdenvNoCC.mkDerivation rec {
@@ -21,14 +22,9 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm_9
   ];
-
-  buildPhase = ''
-    runHook preBuild
-    pnpm build
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -44,8 +40,8 @@ stdenvNoCC.mkDerivation rec {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-3Erva6srdkX1YQ727trx34Ufx524nz19MUyaDQToz6M=";
+    fetcherVersion = 3;
+    hash = "sha256-EsoGio2D8HZmbe+uuzsOhhwaLMSbJcfV4iUJUaqtA0M=";
   };
 
   meta = {

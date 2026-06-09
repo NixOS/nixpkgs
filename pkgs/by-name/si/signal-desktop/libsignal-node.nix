@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   rustPlatform,
   fetchNpmDeps,
@@ -14,23 +15,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.89.1";
+  version = "0.94.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eYeRlyKtTxPT1tpmuEsFrXNnp1F+l/PJcxpUDblCL60=";
+    hash = "sha256-re9IAC0R2QOIjyOLUjdaJw/TgDA4JT1nhtOskE5A0FQ=";
   };
 
-  cargoHash = "sha256-7kLqrU/yD0aeeULpuh8EgZvmKo1c3Wuwe+9vEm8sFT8=";
+  cargoHash = "sha256-EVwIRUJ8SmajjocZj3dAHkTiR7Q78m/lf+4qls/oZAM=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-SZJIj5uBB6EZEACC44IpGvDTQuQIDgqmLGkgRbtUwOc=";
+    hash = "sha256-bEQb+36IB+kXSbIkAFDpeIXWeHoQoIIiHo9q5AbaTio=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "'prebuilds'" "'$out/lib'" \
       --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
                      "objcopy = os.getenv('OBJCOPY', 'objcopy')"
+  ''
+  + lib.optionalString boringssl.passthru.isShared ''
+    substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs \
+      --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+      --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
   '';
 
   buildPhase = ''

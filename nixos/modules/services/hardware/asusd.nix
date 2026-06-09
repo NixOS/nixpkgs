@@ -141,7 +141,6 @@ in
     systemd.packages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
-    services.supergfxd.enable = lib.mkDefault true;
   };
 
   meta.maintainers = pkgs.asusctl.meta.maintainers;

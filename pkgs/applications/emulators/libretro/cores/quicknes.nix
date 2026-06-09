@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "quicknes";
-  version = "0-unstable-2026-03-31";
+  version = "0-unstable-2026-05-11";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "QuickNES_Core";
-    rev = "71782569078f29214017a966b0f992b9e512bf19";
-    hash = "sha256-Bx1iZcrUG5B/wjeWf2hZEAIocM7dKgRwRPqpGzS2Cgc=";
+    rev = "a0ec494c417f365c578f3dacadb04383e4a99ade";
+    hash = "sha256-q1AS4mASF2gaiGyuM6a/Z57bp0DPRQADlM+snb3iNSg=";
   };
 
   makefile = "Makefile";

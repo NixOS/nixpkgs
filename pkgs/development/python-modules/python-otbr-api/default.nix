@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-otbr-api";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-otbr-api";
     tag = finalAttrs.version;
-    hash = "sha256-UhDcWw7QsKQ9t1SzdFoSf7ZrkUkKUaPwuMbrqEGA48o=";
+    hash = "sha256-WBL6R4yw/4yuF/T94NtaapGspn4L2H0glVatW6+hoRk=";
   };
 
   build-system = [ setuptools ];

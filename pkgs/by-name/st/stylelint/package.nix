@@ -2,21 +2,24 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 buildNpmPackage rec {
   pname = "stylelint";
-  version = "17.0.0";
+  version = "17.11.0";
 
   src = fetchFromGitHub {
     owner = "stylelint";
     repo = "stylelint";
     tag = version;
-    hash = "sha256-LQqKAKVdFJkIZQDwv2X6dxGDFPZ3xdTQIx+8kAlijDU=";
+    hash = "sha256-mJGZ7zZ9Fi1VEVHWKu9CmKJsCLdmiHe3mqoGM0OGTRw=";
   };
 
-  npmDepsHash = "sha256-FdFM1Mo/P7jw+0nY8kR4ThTLJDxG8fp/tZiYSFzRSac=";
+  npmDepsHash = "sha256-RgXZgNEfx76XLrB4E8r/+a0Pi+82PVb/TOeUa0gFhTY=";
 
   dontNpmBuild = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";

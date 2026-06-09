@@ -31,16 +31,16 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.3.3";
+  version = "2026.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
-    tag = version;
-    hash = "sha256-yMPHz6IZIGM4oJw1wspEL3lIIiPv4WZALUJ7J1UWukY=";
+    tag = finalAttrs.version;
+    hash = "sha256-laz+XNszkayfmEyrtFr3BHUWVV9eFhj130o4l99XElY=";
   };
 
   patches = [
@@ -49,6 +49,10 @@ python.pkgs.buildPythonApplication rec {
     # own python environment through `python -m esptool` and then fails to find
     # the esptool library.
     ./esp32-post-build-esptool-reference.patch
+    # Call the platformio binary directly instead of `python -m
+    # esphome.platformio_runner`, which tries to import platformio as a Python
+    # module.
+    ./platformio-binary-reference.patch
   ];
 
   build-system = with python.pkgs; [
@@ -69,7 +73,7 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.47" "wheel"
+      --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -117,7 +121,9 @@ python.pkgs.buildPythonApplication rec {
         git
       ]
     }"
-    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
+    # The dashboard requires esphome to be importable
+    # dependencies are added to show better error messages
+    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
     # https://github.com/NixOS/nixpkgs/issues/362193
@@ -171,14 +177,19 @@ python.pkgs.buildPythonApplication rec {
     "test_clean_all"
     "test_clean_all_partial_exists"
     # tries to use esptool, which is wrapped in an fhsenv
-    "test_upload_using_esptool_path_conversion"
-    "test_upload_using_esptool_with_file_path"
     "test_upload_using_esptool_passes_crystal_callback"
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_skips_missing_extra_flash_images"
+    "test_upload_using_esptool_with_file_path"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
     # Expects a full git clone
     "test_clang_tidy_mode_full_scan"
     "test_clang_tidy_mode_targeted_scan"
+    # Patched to run platformio without the esphome wrapper
+    "test_run_platformio_cli_strips_win_long_path_prefix"
+    "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
+    "test_patch_file_downloader_recovers_against_real_server"
   ];
 
   passthru = {
@@ -188,7 +199,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
+    changelog = "https://github.com/esphome/esphome/releases/tag/${finalAttrs.src.tag}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with lib.licenses; [
@@ -199,7 +210,8 @@ python.pkgs.buildPythonApplication rec {
       hexa
       picnoir
       thanegill
+      karlbeecken
     ];
     mainProgram = "esphome";
   };
-}
+})

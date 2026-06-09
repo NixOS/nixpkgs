@@ -23,7 +23,7 @@
 let
   env =
     let
-      paths = requiredPythonModules (extraLibs ++ [ python ]) ++ [
+      paths = requiredPythonModules extraLibs ++ [
         (runCommand "bin" { } ''
           mkdir -p $out/bin
         '')

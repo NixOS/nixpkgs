@@ -22,7 +22,7 @@ buildNpmPackage {
     python3
     pkg-config
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

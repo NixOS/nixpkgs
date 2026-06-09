@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p git jaq prefetch-npm-deps nix-update npm-lockfile-fix
+#! nix-shell -I nixpkgs=./. -i bash -p git jaq prefetch-npm-deps nix-update npm-lockfile-fix nodejs_22
 set -euo pipefail
 
 # Get new Gitlab Duo release
@@ -45,7 +45,7 @@ npm install --package-lock-only --ignore-scripts
 npm-lockfile-fix package-lock.json
 npmDepsHash="$(prefetch-npm-deps package-lock.json)"
 git add -A
-patch="$(git diff --cached)"
+patch="$(git diff --cached --no-ext-diff)"
 popd
 
 # Update nix expression with new hashes

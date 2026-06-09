@@ -7,12 +7,12 @@
   junit_alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "oidc";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/ulrikstrid/ocaml-oidc/releases/download/v${version}/${pname}-v${version}.tbz";
+    url = "https://github.com/ulrikstrid/ocaml-oidc/releases/download/v${finalAttrs.version}/oidc-v${finalAttrs.version}.tbz";
     hash = "sha256-NE/OW5BesVWhYfTmh3jP+A0TGML7m/Nw+tnafjMCIFo=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
       marijanp
     ];
   };
-}
+})

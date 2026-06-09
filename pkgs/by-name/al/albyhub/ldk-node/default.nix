@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldk-node";
-  version = "0-unstable-2026-02-10";
+  version = "0-unstable-2026-04-24";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node";
-    rev = "3996cf18b10545f54c377212e155bb6bd664888e";
-    hash = "sha256-mjIs7CeTRQ7Xuk9V/6LeXMDRZsd/wljeFHZ2vgEe1hg=";
+    rev = "6d5546ec5fff10d4e560188cfcff6f294944c16e";
+    hash = "sha256-k3AZ1k/hV4Bh+RfOqmpo22wRQ5sdDaFR4bcnw58iwNI=";
   };
 
   buildFeatures = [ "uniffi" ];

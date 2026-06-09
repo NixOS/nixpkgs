@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitoxide";
-  version = "0.52.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nOpe+w0ILxS2f7EdDo1gg31eaESobKHdQ1F4pzpxsfE=";
+    hash = "sha256-MkOmxvACroJAB1nQZT1pcJ/Fn9gWNFwKiwVNb9iUlgY=";
   };
 
-  cargoHash = "sha256-z/aytFu8b23cVsZuIBcjbNUhsvoWi5saQKVgrCEq5+s=";
+  cargoHash = "sha256-bYgGQa8Gym4dzkuTrOSu3NwUhYdZNtq7ACwVwhdKQRI=";
 
   nativeBuildInputs = [
     cmake

@@ -686,6 +686,8 @@ checkConfigOutput "\[\]" config.unique ./defaults.nix
 checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
 # These types don't have empty values
 checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+## submodule emptyValue must evaluate sub-option defaults
+checkConfigOutput "ok" config.result ./defaults.nix
 
 # types.unique
 #   requires a single definition
@@ -734,6 +736,8 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # Test that specifying both functor.wrapped and functor.payload isn't allowed
 checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.' config.result ./default-type-merge-both.nix
 
+# Test that not including functor.wrapped is allowed
+checkConfigOutput 'ok' config.result ./default-type-merge-payload.nix
 
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
@@ -894,6 +898,19 @@ checkConfigError 'Did you mean .bar., .baz. or .foo.\?' config ./error-typo-mult
 checkConfigError 'Did you mean .enable., .ebe. or .enabled.\?' config ./error-typo-large-attrset.nix
 checkConfigError 'Did you mean .services\.myservice\.port. or .services\.myservice\.enable.\?' config.services.myservice ./error-typo-submodule.nix
 checkConfigError 'Did you mean .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificate. or .services\.nginx\.virtualHosts\."example\.com"\.ssl\.certificateKey.\?' config.services.nginx.virtualHosts.\"example.com\" ./error-typo-deeply-nested.nix
+
+# types.attrListOf
+checkConfigOutput '"ok"' config.assertions ./declare-attrList.nix
+checkConfigError 'A definition for option .attrListInt.badValue.a. is not of type .signed integer.. Definition values:' config.attrListIntStrict.badValue ./declare-attrList.nix
+checkConfigError 'A definition for option .attrList.badListElem. is not of type .attribute list of string.. Each list element must be a single-key attribute set, but got 2 keys' config.attrListStrict.badListElem ./declare-attrList.nix
+checkConfigError 'A definition for option .attrList.badString. is not of type .attribute list of string.. TypeError: Definition values:' config.attrListStrict.badString ./declare-attrList.nix
+checkConfigError 'A definition for option .attrList.badListString. is not of type .attribute list of string.. Each list element must be an attribute set, but got string' config.attrListStrict.badListString ./declare-attrList.nix
+
+# attrListWith valueMeta.definitions: file propagation
+checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitions-file-diagnostic-forwarding.nix
+
+# attrListOf does not support type merging
+checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
 
 cat <<EOF
 ====== module tests ======

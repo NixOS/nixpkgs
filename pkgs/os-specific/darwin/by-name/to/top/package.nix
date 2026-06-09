@@ -1,13 +1,13 @@
 {
-  apple-sdk,
   libutil,
   mkAppleDerivation,
   ncurses,
   pkg-config,
+  sourceRelease,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = sourceRelease "xnu";
 in
 mkAppleDerivation {
   releaseName = "top";

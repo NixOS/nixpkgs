@@ -37,21 +37,24 @@ let
       remap ? { },
       lychee ? deps.lychee,
       extraConfig ? { },
+      extraArgs ? [ ],
     }:
     stdenv.mkDerivation (finalAttrs: {
       name = "lychee-link-check";
+      __structuredAttrs = true;
       inherit site;
       nativeBuildInputs = [
         finalAttrs.passthru.lychee
         cacert
       ];
       configFile = (formats.toml { }).generate "lychee.toml" finalAttrs.passthru.config;
+      inherit extraArgs;
 
       # These can be overridden with overrideAttrs if needed.
       passthru = {
         inherit lychee remap;
         config = {
-          include_fragments = true;
+          include_fragments = "full";
         }
         // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
           remap = mapAttrsToList (
@@ -68,13 +71,13 @@ let
             site=${finalAttrs.site}
             configFile=${finalAttrs.configFile}
             echo Checking links on $site
-            exec lychee --config $configFile $site "$@"
+            exec lychee --config $configFile ${lib.escapeShellArgs extraArgs} $site "$@"
           '';
         };
       };
       buildCommand = ''
         echo Checking internal links on $site
-        lychee --offline --config $configFile $site
+        lychee --offline --config $configFile "''${extraArgs[@]}" $site
         touch $out
       '';
     });

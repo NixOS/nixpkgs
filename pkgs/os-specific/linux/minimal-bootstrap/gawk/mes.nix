@@ -67,6 +67,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out
 
     # Build
+    # NOTE: parallel build (-j) breaks gawk autoconf'd Makefile under tcc-mes; keep serial.
     make gawk
 
     # Install

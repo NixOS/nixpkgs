@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # LLVM Apple assembler rejects `:lo12:` combined with `@PAGEOFF`.
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    substituteInPlace "$cargoDepsCopy"/sha1-asm-*/src/aarch64_apple.S \
+    substituteInPlace "$cargoDepsCopy"/*/sha1-asm-*/src/aarch64_apple.S \
       --replace-fail "#:lo12:.K0@PAGEOFF" ".K0@PAGEOFF" \
       --replace-fail "#:lo12:.K1@PAGEOFF" ".K1@PAGEOFF" \
       --replace-fail "#:lo12:.K2@PAGEOFF" ".K2@PAGEOFF" \

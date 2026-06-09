@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "2.2.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
     tag = "v${version}";
-    hash = "sha256-UdMcY7Va8LAW3x4CR6hIrIdwrXiHh1Hs3tK+SWBrJFE=";
+    hash = "sha256-qCODRfE+fM3Cwgz8sOUTJ8AXQSlr3I4Q0I+gJmMaDjM=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

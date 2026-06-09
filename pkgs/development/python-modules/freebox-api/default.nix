@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python module to interact with the Freebox OS API";
     homepage = "https://github.com/hacf-fr/freebox-api";
-    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "freebox_api";

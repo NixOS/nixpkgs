@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mediafile";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "mediafile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GKEm2LKR3F9uy3FdhvpLPE9Auca8+40Zp53yaLk45XE=";
+    hash = "sha256-FujuFkZH0wjZcd3wIpJw8mDvE/2/mew5tfxAyxA2RkI=";
   };
 
   build-system = [ poetry-core ];

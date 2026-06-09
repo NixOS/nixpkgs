@@ -9,12 +9,12 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
-  version = "2.4";
+  version = "2.4.5";
 
   src = fetchPypi {
     pname = "pyspread";
     inherit (finalAttrs) version;
-    hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
+    hash = "sha256-7Nurn9OmK6LEz5TT543JUYKc/LjpkwfN/7r0ebS1PfY=";
   };
 
   pyproject = true;

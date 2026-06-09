@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.36.2";
+  version = "1.36.4";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    hash = "sha256-EZSf+n6QUEZW2Bjl2ac/6e+Jo+PlxWd1Z1PKHvgC/Ko=";
+    hash = "sha256-d0gILN/PLbtfUCJhsYr8hQAxk4lMYEJ9BLCseo3+994=";
   };
 
   icon = fetchurl {
@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Baughn
-      ymarkus
       nullcube
     ];
     platforms = lib.platforms.all;

@@ -151,13 +151,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "inspircd";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VmMfGpX6TcCuXuJmTptE51TL8cwavceDcOBeW0ipC4o=";
+    sha256 = "sha256-YrPKjc5fWR4VyA+ahWwjSQvZXNfWP0++XujOsUQwTB0=";
   };
 
   outputs = [

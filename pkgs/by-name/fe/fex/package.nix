@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   nix-update-script,
-  xxHash,
+  xxhash,
   fmt,
   libxml2,
   openssl,
@@ -99,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2603";
+  version = "2604";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-rQOqziJ7IizJV3VmAWGo5s2xn2/xnp0sx3VfBtH1JK4=";
+    hash = "sha256-VPlw15vM3wowgba9Z95F/vRYJLaevtt8lJEgw4hYS8w=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -192,7 +192,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
-    xxHash
+    xxhash
     fmt
     libxml2
     openssl

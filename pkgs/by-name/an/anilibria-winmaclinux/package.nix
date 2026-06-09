@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "anilibria-winmaclinux";
-  version = "2.2.34";
+  version = "2.2.35";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     tag = finalAttrs.version;
-    hash = "sha256-58NFlB6viWXG13J+RBzMj6LlYFClpWpGQ/aCNxJ5wKQ=";
+    hash = "sha256-3tiCfL6j2yhhL16mG1LYD41G6nbomwmqZOwgm4bEHTs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

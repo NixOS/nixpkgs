@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "25.11.0";
+  version = "25.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
     tag = "v${version}";
-    hash = "sha256-t6otxWBxu4mxTZpIS+lhlcXf4bOaxNgeDmW6BCNTclc=";
+    hash = "sha256-hPAX2udntxpjibUK//Ec06EKNgUFU5AiBN15IZvgo3Q=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cargo subcommand to show crates info from crates.io";
     mainProgram = "cargo-info";
     homepage = "https://gitlab.com/imp/cargo-info";
-    changelog = "https://gitlab.com/imp/cargo-info/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/imp/cargo-info/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20

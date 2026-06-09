@@ -59,6 +59,13 @@ stdenv.mkDerivation {
     ./opencl.patch
   ];
 
+  postPatch = ''
+    # Darwin only installs `swrast_dri.so`. It is symlinked to `libdril_dri.dylib`, but the script never terminates
+    # checking for `swrast_dri.dylib`, which isn’t what will be created.
+    substituteInPlace bin/install_megadrivers.py \
+      --replace-fail "            while ext != '.' + args.libname_suffix" "            while ext != '.so'"
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -126,6 +133,10 @@ stdenv.mkDerivation {
   ];
 
   mesonBuildType = "release";
+
+  postFixup = ''
+    install_name_tool -add_rpath "$out/lib" "$out/lib/libGL.dylib"
+  '';
 
   passthru = {
     # needed to pass evaluation of bad platforms

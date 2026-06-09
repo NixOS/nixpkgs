@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsv";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "liquidaty";
     repo = "zsv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ht6sg93bHrNTw1tEEkd9vRl5aIsc1q7nASakvECdyzI=";
+    hash = "sha256-CrZgf9ayAbkIFz7MC4WUwXba0heWDxxJpePg71CCw2A=";
   };
 
   buildInputs = [ jq ];

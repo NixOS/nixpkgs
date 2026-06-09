@@ -7,7 +7,7 @@
   colorama,
   cryptoparser,
   dnspython,
-  fetchPypi,
+  fetchFromGitLab,
   pathlib2,
   pyfakefs,
   python-dateutil,
@@ -17,14 +17,16 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c/cBOrvqyvdGfDKPRUhIu9FqtQUERb/fJBGmncZpbSM=";
+  src = fetchFromGitLab {
+    owner = "coroner";
+    repo = "cryptolyzer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z9RuboCWHEqw4aFfQTjWly/UP9Yed0R+VdMLVXxdBmc=";
   };
 
   patches = [
@@ -69,10 +71,9 @@ buildPythonPackage rec {
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
-    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})

@@ -23,7 +23,7 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apksigner";
   # Major version is derived from the API version of the corresponding Android release.
   # Patch version is derived from the release number.
@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     # use pname here because the final jar uses this as the filename
-    name = pname;
+    name = "apksigner";
     url = "https://android.googlesource.com/platform/tools/apksig";
     tag = "android-15.0.0_r30";
     hash = "sha256-f/PggxvBv8nYUyL9Ukd4YVpunpRWbLL5UYsYhsiDWRE=";
   };
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.android ];
     platforms = lib.platforms.unix;
   };
-}
+})

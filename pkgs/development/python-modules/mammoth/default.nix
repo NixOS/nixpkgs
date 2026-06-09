@@ -45,7 +45,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Convert Word documents (.docx files) to HTML";

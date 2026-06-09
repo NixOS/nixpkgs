@@ -26,6 +26,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version ssreflect.version ]
       [
+        (case (range "8.17" "9.1") (range "2.0.0" "2.5.0") "0.2.3")
         (case (range "8.17" "9.1") (range "2.0.0" "2.5.0") "0.2.2")
         (case (range "8.17" "9.0") (range "2.0.0" "2.3.0") "0.2.1")
         (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "0.2.0")
@@ -35,6 +36,7 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+  release."0.2.3".sha256 = "sha256-LqrSlML5pA84FGY4C/xm1EKSgjDe+NaQCSFg2ggdPHE=";
   release."0.2.2".sha256 = "sha256-qsbyQ4spg5vVLZkechb2LoBazGjMh7pR9sSS0s7tXxs=";
   release."0.2.1".sha256 = "sha256-053bNa3rcy0fCs9CQoKPxDLXnKRHzteyClLDURpaZJo=";
   release."0.2.0".sha256 = "sha256-xPsuEayHstjF0PGFJZJ+5cm0oMUrpoGLXN23op97vjM=";

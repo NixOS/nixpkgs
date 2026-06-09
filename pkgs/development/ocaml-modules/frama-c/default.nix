@@ -3,20 +3,22 @@
   pkgs,
   ocaml,
   findlib,
-  framac,
+  frama-c,
   camlzip,
   dune-site,
   ocamlgraph,
   menhirLib,
   ppx_deriving,
+  ppx_inline_test,
   yaml,
   yojson,
   zarith,
+  zmq,
 }:
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-frama-c";
-  inherit (framac) version meta;
+  inherit (frama-c) version meta;
 
   dontUnpack = true;
 
@@ -28,15 +30,17 @@ stdenv.mkDerivation {
     menhirLib
     ocamlgraph
     ppx_deriving
+    ppx_inline_test
     yaml
     yojson
     zarith
+    zmq
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $OCAMLFIND_DESTDIR
-    for p in ${framac}/lib/*
+    for p in ${frama-c}/lib/*
     do
       ln -s $p $OCAMLFIND_DESTDIR/
     done

@@ -4,6 +4,7 @@ let
       lib,
       stdenv,
       fetchFromGitHub,
+      fetchpatch2,
       autoreconfHook269,
       util-linux,
       nukeReferences,
@@ -76,20 +77,8 @@ let
       ];
       kernelIsCompatible =
         kernel:
-        let
-          nextMajorMinor =
-            ver:
-            "${lib.versions.major ver}.${
-              lib.pipe ver [
-                lib.versions.minor
-                lib.toInt
-                (x: x + 1)
-                toString
-              ]
-            }";
-        in
         (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
-        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxSupportedMajorMinor));
+        && (lib.versionAtLeast kernelMaxSupportedMajorMinor (lib.versions.majorMinor kernel.version));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -111,7 +100,12 @@ let
         inherit rev hash;
       };
 
-      patches = extraPatches;
+      patches =
+        extraPatches
+        ++ lib.optional (kernel != null && lib.versionOlder kernel.version "5.14") (fetchpatch2 {
+          url = "https://github.com/openzfs/zfs/commit/58c8dc5f6926eb96903a3f38b141e8998ef9261b.patch?full_index=1";
+          hash = "sha256-eYkMhHsHBA9MKXnB/GuHpuv44g1SCGV5Or0InPBeNkU=";
+        });
 
       postPatch =
         optionalString buildKernel ''

@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "waves";
-  version = "0.1.44";
+  version = "0.1.45";
 
   src = fetchFromGitHub {
     owner = "llehouerou";
     repo = "waves";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uyTstoF3rhqMmhG5hwyyq1fGBa6mJjw3/NEjTIMYxi4=";
+    hash = "sha256-dIewVRPw4ZR9bG+z0v1Vim1Mhi+Buoy0pMzF5THNccU=";
   };
 
   vendorHash = "sha256-lps0OdY8KoILJh/roY78iC+bYHPeENioQoIsL6v/N0A=";

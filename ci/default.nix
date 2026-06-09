@@ -184,9 +184,10 @@ rec {
     nix = pkgs.nixVersions.latest;
   };
   parse = pkgs.lib.recurseIntoAttrs {
-    latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
-    lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
+    nix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
+    lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
+    lix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.lixPackageSets.latest.lix; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
   tarball = import ../pkgs/top-level/make-tarball.nix {

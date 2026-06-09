@@ -22,7 +22,6 @@ buildDunePackage (finalAttrs: {
     curl
   ];
 
-  checkInputs = [ ];
   doCheck = true;
 
   meta = {

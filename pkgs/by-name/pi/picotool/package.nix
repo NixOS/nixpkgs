@@ -22,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kIB/ODAvwWWoAQDq2cMiFuNWjzzLgPuRQv0NluWYU+Y=";
   };
 
+  postPatch = ''
+    # necessary for signing/hashing support. our pico-sdk does not come with
+    # it by default, and it shouldn't due to submodule size. pico-sdk uses
+    # an upstream version of mbedtls 3.x so we patch ours in directly.
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail "''$"'{PICO_SDK_PATH}/lib/mbedtls' '${mbedtls.src}'
+  '';
+
   buildInputs = [
     libusb1
     pico-sdk

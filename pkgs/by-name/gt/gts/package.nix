@@ -32,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];
 
+  env = {
+    # Doesn't build on Darwin with -std=gnu23. Apply uniformly as C standard target is something unlikely to vary across platforms.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   doCheck = false; # fails with "permission denied"
 
   preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wpgtk";
-  version = "6.7.0";
+  version = "6.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     tag = finalAttrs.version;
-    hash = "sha256-X7KKXPNKqs0pVRrR04ZrJgCTDZUj3lcFKnwSaX4/RAM=";
+    hash = "sha256-TbykgmS/F/6N7ZmcKlX79RhMvOMBsfFNl8TZKLji80w=";
   };
 
   build-system = with python3Packages; [ setuptools ];

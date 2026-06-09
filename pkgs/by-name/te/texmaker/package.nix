@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       cfouche
-      markuskowa
     ];
     mainProgram = "texmaker";
   };

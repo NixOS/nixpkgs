@@ -4,6 +4,7 @@
   fetchFromGitHub,
   wrapGAppsHook4,
   appstream-glib,
+  blueprint-compiler,
   desktop-file-utils,
   gettext,
   gtk4,
@@ -22,19 +23,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "curtail";
-  version = "1.15.1";
+  version = "1.16.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     tag = finalAttrs.version;
-    hash = "sha256-NPLixVrlM8i+AWcQ/poYGfBn0t8HOTUTryJf3VXy3lM=";
+    hash = "sha256-vegtuuGyjfr0vJgaGLTkws/BysxHeVod/C9bz8lnJpo=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook4
     appstream-glib
+    blueprint-compiler
     desktop-file-utils
     gettext
     gtk4

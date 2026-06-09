@@ -113,17 +113,38 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
         }
     }
 
+
 @memory.cache
-def get_electron_yarn_hash(electron_tag: str) -> str:
+def get_electron_yarn_data(electron_tag: str) -> dict:
     print(f"yarn-berry-fetcher prefetch", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
+        print(f"Patching yarn.lock for yarn 4.14 support", file=sys.stderr)
+        yarn_lock_file=get_electron_file(electron_tag, "yarn.lock")
+        patched_yarn_lock_file=yarn_lock_file.replace('version: 8', 'version: 9', count=1)
         with open(tmp_dir + "/yarn.lock", "w") as f:
-            f.write(get_electron_file(electron_tag, "yarn.lock"))
-        return (
-            subprocess.check_output(["yarn-berry-fetcher", "prefetch", tmp_dir + "/yarn.lock"])
+            f.write(patched_yarn_lock_file)
+        missing_hashes_str = (
+            subprocess.check_output(
+                ["yarn-berry-fetcher", "missing-hashes", tmp_dir + "/yarn.lock"]
+            )
             .decode("utf-8")
-            .strip()
         )
+        missing_hashes = json.loads(missing_hashes_str)
+        cmd = ["yarn-berry-fetcher", "prefetch", tmp_dir + "/yarn.lock"]
+        if missing_hashes:
+            with open(tmp_dir + "/missing-hashes.json", "w") as f:
+                f.write(missing_hashes_str)
+            cmd.append(tmp_dir + "/missing-hashes.json")
+        hash = subprocess.check_output(cmd).decode("utf-8").strip()
+
+        data = {
+            "hash": hash,
+        }
+        if missing_hashes:
+            data["missing_hashes"] = missing_hashes
+
+        return data
+
 
 @memory.cache
 def get_chromium_npm_hash(chromium_tag: str) -> str:
@@ -143,7 +164,12 @@ def get_chromium_npm_hash(chromium_tag: str) -> str:
 def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict]:
 
     tasks = []
-    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"])))
+    a = lambda: (
+        (
+            "electron_yarn_data",
+            get_electron_yarn_data(gclient_data["src/electron"]["args"]["tag"]),
+        )
+    )
     tasks.append(delayed(a)())
     a = lambda: (
         (

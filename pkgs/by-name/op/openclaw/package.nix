@@ -5,14 +5,17 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
-  nodejs_22,
+  pnpm_11,
+  nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.4.2",
+  version ? "2026.6.1",
 }:
+let
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
   version = version;
@@ -21,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wVS2OuBNrF1yWjmINxde0kC5mvY2QUUtwYpYrZcARkI=";
+    hash = "sha256-FjxiI7YHkt6fTzJD7G5A3/wsbcWgpO44IHMOwymDxpg=";
   };
 
-  pnpmDepsHash = "sha256-aHepSWiQ4+UyjPHBF+4+M9/nFrgfCw422q671saJM+U=";
+  pnpmDepsHash = "sha256-7RQJAVWqhauG8JrF8AD1VU1IJRM+SH05aHAfmFaXraU=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
+    inherit pnpm;
+    fetcherVersion = 4;
     hash = finalAttrs.pnpmDepsHash;
   };
 
@@ -37,8 +40,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
-    nodejs_22
+    pnpm
+    nodejs-slim_22
     makeWrapper
     installShellFiles
   ];
@@ -58,10 +61,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     chmod -R u+w node_modules/rolldown node_modules/@rolldown/pluginutils \
       node_modules/.pnpm/node_modules/rolldown node_modules/.pnpm/node_modules/@rolldown/pluginutils
 
-    # In Nix sandbox, npm install has no network access. Patch the staging
-    # script to accept version-mismatched deps from root node_modules
-    # instead of falling back to npm install.
-    sed -i 's/if (installedVersion === null || !dependencyVersionSatisfied(spec, installedVersion)) {/if (installedVersion === null) {/' scripts/stage-bundled-plugin-runtime-deps.mjs
     pnpm build
     pnpm ui:build
 
@@ -76,7 +75,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
 
     cp --reflink=auto -r package.json dist node_modules $libdir/
-    cp --reflink=auto -r assets docs skills patches extensions $libdir/
+    cp --reflink=auto -r docs skills patches extensions qa $libdir/
+    mkdir -p $libdir/src
+    cp --reflink=auto -r src/agents $libdir/src/
 
     rm -f $libdir/node_modules/.pnpm/node_modules/clawdbot \
       $libdir/node_modules/.pnpm/node_modules/moltbot \
@@ -84,8 +85,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Remove broken symlinks created by pnpm workspace linking in extensions
     find $libdir/extensions -xtype l -delete
+    # Remove symlinks pointing back to the build sandbox
+    find $libdir/dist/extensions -type l -lname "$NIX_BUILD_TOP/*" -delete
 
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
+    makeWrapper ${lib.getExe nodejs-slim_22} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
       --set NODE_PATH "$libdir/node_modules"
     ln -s $out/bin/openclaw $out/bin/moltbot
@@ -102,7 +105,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       installShellCompletion --cmd openclaw \
         --bash <(${emulator} $out/bin/openclaw completion --shell bash) \
         --fish <(${emulator} $out/bin/openclaw completion --shell fish) \
-        --zsh <(${emulator} $out/bin/openclaw completion --shell zsh)
+        --zsh  <(${emulator} $out/bin/openclaw completion --shell zsh)
     ''
   );
 

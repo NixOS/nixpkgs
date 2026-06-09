@@ -36,66 +36,70 @@ with pkgs.lib;
     '';
   };
 
-  btrfs = makeTest {
-    name = "non-default-filesystems-btrfs";
+  btrfs =
+    let
+      disk = "/dev/vda";
+      partition = "/dev/disk/by-label/storage";
+    in
+    makeTest {
+      name = "non-default-filesystems-btrfs";
 
-    nodes.machine =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
-      }:
-      let
-        disk = config.virtualisation.rootDevice;
-      in
-      {
-        virtualisation.rootDevice = "/dev/vda";
-        virtualisation.useDefaultFilesystems = false;
+      nodes.machine =
+        { ... }:
+        {
+          virtualisation.rootDevice = disk;
+          virtualisation.useDefaultFilesystems = false;
 
-        boot.initrd.availableKernelModules = [ "btrfs" ];
-        boot.supportedFilesystems = [ "btrfs" ];
-
-        boot.initrd.postDeviceCommands = ''
-          FSTYPE=$(blkid -o value -s TYPE ${disk} || true)
-          if test -z "$FSTYPE"; then
-            modprobe btrfs
-            ${pkgs.btrfs-progs}/bin/mkfs.btrfs ${disk}
-
-            mkdir /nixos
-            mount -t btrfs ${disk} /nixos
-
-            ${pkgs.btrfs-progs}/bin/btrfs subvolume create /nixos/root
-            ${pkgs.btrfs-progs}/bin/btrfs subvolume create /nixos/home
-
-            umount /nixos
-          fi
-        '';
-
-        virtualisation.fileSystems = {
-          "/" = {
-            device = disk;
-            fsType = "btrfs";
-            options = [ "subvol=/root" ];
+          systemd.repart.partitions."00-root" = {
+            Type = "linux-generic";
+            Format = "btrfs";
+            Label = "storage";
+            Subvolumes = [
+              "/root"
+              "/home"
+            ];
+            MakeDirectories = [
+              "/root"
+              "/home"
+            ];
           };
 
-          "/home" = {
-            device = disk;
-            fsType = "btrfs";
-            options = [ "subvol=/home" ];
+          boot.initrd.supportedFilesystems = [ "btrfs" ];
+
+          boot.initrd.systemd = {
+            enable = true;
+            repart = {
+              enable = true;
+              device = disk;
+              empty = "allow";
+            };
+          };
+
+          virtualisation.fileSystems = {
+            "/" = {
+              device = partition;
+              fsType = "btrfs";
+              options = [ "subvol=/root" ];
+            };
+
+            "/home" = {
+              device = partition;
+              fsType = "btrfs";
+              options = [ "subvol=/home" ];
+            };
           };
         };
-      };
 
-    testScript = ''
-      machine.wait_for_unit("multi-user.target")
+      testScript = ''
+        machine.wait_for_unit("multi-user.target")
 
-      with subtest("BTRFS filesystems are mounted correctly"):
-        print("output of \"grep -E '/dev/vda' /proc/mounts\":\n" + machine.execute("grep -E '/dev/vda' /proc/mounts")[1])
-        machine.succeed("grep -E '/dev/vda / btrfs rw,.*subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
-        machine.succeed("grep -E '/dev/vda /home btrfs rw,.*subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
-    '';
-  };
+        with subtest("BTRFS filesystems are mounted correctly"):
+          realdev = machine.succeed("realpath '${partition}'")
+          print(f"output of \"grep -E '{realdev}' /proc/mounts\":\n" + machine.execute(f"grep -E '{realdev}' /proc/mounts")[1])
+          machine.succeed(f"grep -E '{realdev} / btrfs rw,.*subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
+          machine.succeed(f"grep -E '{realdev} /home btrfs rw,.*subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
+      '';
+    };
 
   erofs =
     let

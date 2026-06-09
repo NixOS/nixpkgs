@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "prospector-dev";
     repo = "prospector";
     tag = "v${version}";
     hash = "sha256-94JGKX91d2kul+KMYohga9KCOj6RN/YKpD8e4nWSOOM=";
@@ -70,8 +70,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
-    homepage = "https://github.com/PyCQA/prospector";
-    changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/prospector-dev/prospector";
+    changelog = "https://github.com/prospector-dev/prospector/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };

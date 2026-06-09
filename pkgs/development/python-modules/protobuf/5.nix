@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://developers.google.com/protocol-buffers/";
     changelog = "https://github.com/protocolbuffers/protobuf/releases/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

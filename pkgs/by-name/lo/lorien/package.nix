@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = [ ];
     mainProgram = "lorien";
   };
 }

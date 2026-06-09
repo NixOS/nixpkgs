@@ -26,14 +26,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "skops";
-  version = "0.13.0";
+  version = "0.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1550LIVyChqP5q4VZmflCXPyXXg4eHJU5AlVQJD2M8c=";
+    hash = "sha256-AyrsXomc3vpfdqsBL51UmGXsjPsAJ+dx3uf3T8nPk/Y=";
   };
 
   build-system = [ hatchling ];
@@ -62,35 +63,24 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "skops" ];
 
   disabledTests = [
-    # flaky
-    "test_base_case_works_as_expected"
-
     # fairlearn is not available in nixpkgs
     "TestAddFairlearnMetricFrame"
-
-    # numpy.linalg.LinAlgError: The covariance matrix of class 0 is not full rank.
-    # Increase the value of `reg_param` to reduce the collinearity.
-    "test_can_persist_fitted"
-
-  ];
-
-  disabledTestPaths = [
-    # minor output formatting issue
-    "skops/card/_model_card.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Segfaults on darwin
-    "skops/io/tests/test_persist.py"
-  ];
-
-  pytestFlags = [
-    # Warning from scipy.optimize in skops/io/tests/test_persist.py::test_dump_and_load_with_file_wrapper
-    # https://github.com/skops-dev/skops/issues/479
-    "-Wignore::DeprecationWarning"
-
-    # FutureWarning: Class PassiveAggressiveClassifier is deprecated; this is deprecated in version
-    # 1.8 and will be removed in 1.10. Use `SGDClassifier(...)` instead.
-    "-Wignore::FutureWarning"
+    # Fail in the sandbox with:
+    #   UNEXPECTED EXCEPTION: RuntimeError('*** -[__NSPlaceholderArray initWithObjects:count:]:
+    #   attempt to insert nil object from objects[1]')
+    "skops.card._model_card.Card"
+    "test_add_plot"
+    "test_add_plot_to_existing_section"
+    "test_add_plot_with_alt_text"
+    "test_add_plot_with_description"
+    "test_copy_plots"
+    "test_duplicate_permutation_importances"
+    "test_duplicate_permutation_importances_overwrite"
+    "test_multiple_permutation_importances"
+    "test_permutation_importances"
+    "test_permutation_importances_with_description"
   ];
 
   pythonImportsCheck = [ "skops" ];

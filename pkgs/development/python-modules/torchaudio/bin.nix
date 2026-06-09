@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchaudio";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "wheel";
 
   src =

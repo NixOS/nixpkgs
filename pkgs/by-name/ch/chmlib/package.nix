@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-examples"
     "--enable-devel"
+    "CFLAGS=-std=gnu17"
   ];
 
   meta = {

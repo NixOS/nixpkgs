@@ -2,22 +2,18 @@
   lib,
   stdenv,
   fetchurl,
-  boost,
   pkg-config,
-  cppunit,
-  zlib,
-  libwpg,
-  libwpd,
   librevenge,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libodfgen";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${finalAttrs.version}/libodfgen-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
+    hash = "sha256-VSAAJ/1GYjub3d040nXnRS0bD/iu3crW+a5twl9hBiU=";
   };
 
   patches = [
@@ -26,15 +22,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./libodfgen-add-include-cstdint-gcc15.patch
   ];
 
+  enableParallelBuilding = true;
+
+  configureFlags = lib.optional finalAttrs.finalPackage.doCheck "--enable-test";
+
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    boost
-    cppunit
-    zlib
-    libwpg
-    libwpd
     librevenge
+    libxml2
   ];
+
+  doCheck = true;
+
+  checkFlags = [
+    "-C"
+    "test"
+  ];
+
+  checkTarget = "launch_all";
 
   meta = {
     description = "Base library for generating ODF documents";

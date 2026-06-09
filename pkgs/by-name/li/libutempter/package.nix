@@ -1,22 +1,35 @@
 {
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
   lib,
   glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libutempter";
-  version = "1.2.1";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ln/vNy85HeUBhDrYdXDGz12r2WUfAPF4MJD7wSsqNMs=";
+  src = fetchFromGitHub {
+    owner = "altlinux";
+    repo = "libutempter";
+    tag = "${finalAttrs.version}-alt1";
+    hash = "sha256-CiRZiEXzfOrtx1XXdMG2QZqzRtvY5mdA4SwTHRxkLUI=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/libutempter";
 
   buildInputs = [ glib ];
 
-  patches = [ ./exec_path.patch ];
+  patches = [
+    ./exec_path.patch
+    (fetchpatch {
+      name = "build-overwrite-already-existing-symlinks-during-ins.patch";
+      url = "https://github.com/altlinux/libutempter/commit/717116b93d496a19f7f8abf8702517de0053f66e.patch";
+      hash = "sha256-4YaxgbORNm+rlp0YzYKj5a7/zJl1dxo72i/Rei9qulg=";
+    })
+    ./Makefile-add-STATIC-and-DYNAMIC-build-variables.patch # https://github.com/altlinux/libutempter/pull/9
+  ];
 
   patchFlags = [ "-p2" ];
 
@@ -24,12 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace 2711 0711
   '';
 
-  makeFlags = [
-    "libdir=\${out}/lib"
-    "libexecdir=\${out}/lib"
-    "includedir=\${out}/include"
-    "mandir=\${out}/share/man"
-  ];
+  makeFlags =
+    lib.optionals stdenv.hostPlatform.isStatic [
+      "DYNAMIC=0"
+      "STATIC=1"
+    ]
+    ++ [
+      "libdir=\${out}/lib"
+      "libexecdir=\${out}/lib"
+      "includedir=\${out}/include"
+      "mandir=\${out}/share/man"
+    ];
 
   meta = {
     homepage = "https://github.com/altlinux/libutempter";

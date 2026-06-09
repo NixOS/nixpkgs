@@ -2,7 +2,6 @@
   lib,
   stdenv,
   capnproto,
-  extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
@@ -18,20 +17,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.8.15";
+  version = "2.9.16";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yUNUo+CAtUzeu4k4NLwz5xmZJsP4siwXKcN4xLa6nfI=";
+    hash = "sha256-FIKwipmuCGdonnfEvmcPnXlsD7k70qrVRP5xAWbPP7U=";
   };
 
-  cargoHash = "sha256-9SjOB7G59oN2HCYohc1+IMINjy19aXSe+TdfNLo77Tk=";
+  cargoHash = "sha256-GXOIeQI7BWLgxpOMaNR1FH0Hhf9iFcdLfdCxAOZPZKQ=";
 
   nativeBuildInputs = [
     capnproto
-    extra-cmake-modules
     installShellFiles
     pkg-config
     protobuf
@@ -69,8 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regex"
-        "v(\\d+\\.\\d+\\.\\d+)$"
+        "--use-github-releases"
       ];
     };
   };

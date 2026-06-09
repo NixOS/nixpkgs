@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libraw";
-  version = "0.21.5b";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
     tag = finalAttrs.version;
-    hash = "sha256-CE7XB61bnjRhy0Ww2Q3pvvSJMobHHta5jn4F/i/oOEE=";
+    hash = "sha256-1Q2u9v1yOzXchUGvZvbLKk506xATjMb421H2sBZURZs=";
   };
 
   outputs = [

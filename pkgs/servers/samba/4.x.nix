@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.22.7";
+  version = "4.23.8";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-EhlYEdRUL2YVNukFW0TVjFMCBBK+r6riBeInv3L2pJc=";
+    hash = "sha256-l2EphHRW3Ft4wA+P+3ncYFxJ1qrKiyqncv0i27afrgE=";
   };
 
   outputs = [
@@ -97,8 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-no-persistent-install-dynconfig.patch
-    ./4.x-fix-makeflags-parsing.patch
-    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    ./4.x-fix-systemd-detection.patch
+    (fetchpatch {
+      # workaround for https://bugzilla.samba.org/show_bug.cgi?id=14164
+      name = "build-find-pre-built-heimdal-build-tools-in-case-of-.patch";
+      url = "https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/fe5538114371b98c7350e6fffbfc0d1ac063719c/packages/network/samba/patches/samba-200-4.11-fix-ASN1-bso14164.patch";
+      hash = "sha256-0/c9TH5FZ4S1OoM04gwDBJoIN+10unjLSv7Hlwt9FEQ=";
+    })
     (fetchpatch {
       # workaround for https://github.com/NixOS/nixpkgs/issues/303436
       name = "samba-reproducible-builds.patch";
@@ -199,6 +204,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./buildtools/bin
   ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The discard_const macro casts through uintptr_t, which newer clang
+    # rejects as non-constant in static initializers. Use a direct cast.
+    substituteInPlace lib/replace/replace.h --replace-fail \
+      '#define discard_const(ptr) ((void *)((uintptr_t)(ptr)))' \
+      '#define discard_const(ptr) ((void *)(ptr))'
+  ''
   + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';
@@ -273,6 +285,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.dnspython
     python3Packages.markdown
     tdb
+  ]
+  ++ lib.optionals enableDomainController [
+    python3Packages.cryptography
   ];
 
   strictDeps = true;
@@ -335,6 +350,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
+    };
+  }
+  // lib.optionalAttrs enableDomainController {
+    versionSambaTool = testers.testVersion {
+      command = "${lib.getExe' finalAttrs.finalPackage "samba-tool"} --version";
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
   };
 

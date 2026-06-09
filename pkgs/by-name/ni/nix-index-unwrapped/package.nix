@@ -6,20 +6,23 @@
   openssl,
   curl,
   sqlite,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-index";
-  version = "0.1.9-unstable-2026-02-05";
+  version = "0.1.10";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-index";
-    rev = "8c84f67a33c4c26ec12f166cb5f63a77fafebe21";
-    hash = "sha256-8ZMKtBbsBPbccEWH1XHCYsxXX4hckHXwQNr5OzGrU0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IBVI/4hwq84/vZx7Kr/Ci/P/CzPTsn1/oiCIF2vPHXg=";
   };
 
-  cargoHash = "sha256-0yrTPrxN/4TOALqpQ5GW7LXKisc8msx3DvEpg8uO+IQ=";
+  cargoHash = "sha256-9xzC5PE2nyEtbhWGagCX2yZ0/tfo2v3fatnNU+GdVH8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -36,6 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --subst-var out
     install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Files database for nixpkgs";

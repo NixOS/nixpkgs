@@ -62,6 +62,7 @@
   xjadeo,
   libxrandr,
   libxinerama,
+  libjpeg,
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
@@ -72,14 +73,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "ardour";
-    version = "9.2";
+    version = "9.7";
 
     # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
     # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
     src = fetchgit {
       url = "git://git.ardour.org/ardour/ardour.git";
-      rev = finalAttrs.version;
-      hash = "sha256-zbEfEuWdhlKtYE0gVB/N0dFrcmNoJqgEMuvQ0wdmRpM=";
+      tag = finalAttrs.version;
+      hash = "sha256-6gtlnk/oPXWJcN5tcb1r7dXyLpHPTSJwd8VfOjjFnWQ=";
     };
 
     bundledContent = fetchzip {
@@ -168,6 +169,7 @@ stdenv.mkDerivation (
       taglib
       vamp-plugin-sdk
       libxinerama
+      libjpeg
       libxrandr
     ]
     ++ lib.optionals videoSupport [

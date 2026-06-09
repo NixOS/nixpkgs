@@ -4,7 +4,6 @@
   fetchurl,
   ed,
   autoreconfHook,
-  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_func_strnlen_working=yes"
   ];
 
-  doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
+  doCheck = stdenv.hostPlatform.libc != "musl";
   nativeCheckInputs = [ ed ];
 
   meta = {

@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.37.3";
+  version = "1.37.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ffmpeg_normalize";
-    hash = "sha256-mN4vmiST+LV5Bv/QZ9Pvo3qzhTaeD3MpDa8sLNqjeW0=";
+    hash = "sha256-9pSVrYTTaxjGCty2pHPtaaSSwCkGDLoNK2wltTwOL3c=";
   };
 
   build-system = with python3Packages; [ uv-build ];
@@ -29,9 +29,6 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = with python3Packages; ''
     substituteInPlace pyproject.toml \
-      --replace-fail \
-      'requires = ["uv_build>=0.8.14,<0.9.0"]' \
-      'requires = ["uv_build==${uv-build.version}"]' \
       --replace-fail \
       'colorlog==6.7.0' \
       'colorlog==${colorlog.version}'

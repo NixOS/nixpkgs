@@ -6,19 +6,21 @@
   makeWrapper,
   net-tools,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   stdenvNoCC,
 }:
 
 let
-  version = "0.63.7";
+  pnpm = pnpm_10;
+
+  version = "0.63.15";
 
   src = fetchFromGitHub {
     owner = "pommee";
     repo = "goaway";
     tag = "v${version}";
-    hash = "sha256-XNjp9fSMu5AdLnFNsh7Lrf1J06sPZPjvlNFkDa1QDJQ=";
+    hash = "sha256-jtUAMCGdFmt89kchHdy9AnSMKu1rZeTLPcFIzqipOyw=";
   };
 
   goaway-web = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -27,9 +29,10 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/client";
       fetcherVersion = 3;
-      hash = "sha256-1YZf32lDwX3e9EC0Uixyo+yDczfU4/ZSlG+jFZwf+38=";
+      hash = "sha256-GM86Os1OQaagD61BEIIsqhWJNVPFA9Z5RiYWyHlQlwY=";
     };
 
     pnpmRoot = "client";
@@ -66,7 +69,7 @@ buildGo126Module (finalAttrs: {
     goaway-web
     ;
 
-  vendorHash = "sha256-QgacBw+kpGdv8fAPQyndrHTxY1JrxFRf2qCS7etjNfw=";
+  vendorHash = "sha256-tSTvySLBo9cM9+Ul45TrGDruTllE/HWLdYmzqMDIYEQ=";
 
   ldflags = [
     "-s"

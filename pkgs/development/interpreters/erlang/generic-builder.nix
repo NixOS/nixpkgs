@@ -21,6 +21,7 @@
   parallelBuild ? true,
 
   fetchFromGitHub,
+  fetchpatch2,
   gawk,
   gnum4,
   gnused,
@@ -110,6 +111,15 @@ stdenv.mkDerivation {
   ++ optionals odbcSupport [ unixodbc ]
   ++ optionals javacSupport [ openjdk11 ]
   ++ optionals enableSystemd [ systemd ];
+
+  patches = lib.optionals (!wxSupport && major == "27") [
+    # https://github.com/erlang/otp/pull/11162
+    (fetchpatch2 {
+      name = "otp-27-doc-target-fix.patch";
+      url = "https://github.com/erlang/otp/commit/7ce587b61a2557fca79f1c130794abf834f37ee1.patch?full_index=1";
+      hash = "sha256-Ce6tWUzeF6TQMxus7ultxG2piFllw/xa5IPLCxSd024=";
+    })
+  ];
 
   # disksup requires a shell
   postPatch = ''

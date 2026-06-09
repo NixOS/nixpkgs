@@ -7,12 +7,12 @@
 let
   pname = "lmstudio";
 
-  version_aarch64-linux = "0.4.10-1";
-  hash_aarch64-linux = "sha256-fo9jUmEtqu8bkfL1/v84IAp3RG0ua5g4hgieszhWOuM=";
-  version_aarch64-darwin = "0.4.10-1";
-  hash_aarch64-darwin = "sha256-LgaxbTXmiKyI/T8D+K+SLVzUgiQzOq/6JKEDwktrrDU=";
-  version_x86_64-linux = "0.4.10-1";
-  hash_x86_64-linux = "sha256-FC7rPA1CxTaYakpSSpjxYiPETW8+N5QmsmUib3RHD0o=";
+  version_aarch64-linux = "0.4.15-2";
+  hash_aarch64-linux = "sha256-HnxdikjdUPoQkHMGLHC7TJylj5ad5UWnFMkyjj/8haU=";
+  version_aarch64-darwin = "0.4.15-2";
+  hash_aarch64-darwin = "sha256-Spe/d34X4V8LAheaLFQ68NvDo09FrshDrV0RLO+24sU=";
+  version_x86_64-linux = "0.4.15-2";
+  hash_x86_64-linux = "sha256-M7doFWVEyzcDJF4M+h4WKR+Q45yn3FZc2vZbzjYWBPE=";
 
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";

@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.99.2-beta";
+  version = "0.99.4-beta";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AlS3bxoF64AsYwFkMSFR5/LXjTMXww+DNmx9KXJr3FE=";
+    hash = "sha256-TDW3at2NXbdfUvHAZg7KK0HEqF8xDm0cIYfGuTSlYCQ=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-f/9C0RDrRLI0E/1ffajT9YxAyh0ZMCqjWni1cQFNxBc=";
+    hash = "sha256-cXlfJ3MrW8n34KxE5uD+6dTqzaazmwgNQC3hHNPqzcE=";
   };
 
   mesonBuildType = "release";
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       paperdigits
       aaravrav
+      doronbehar
     ];
     mainProgram = "euphonica";
     platforms = with lib.platforms; linux;

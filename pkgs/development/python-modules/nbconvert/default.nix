@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   buildPythonPackage,
   fetchPypi,
   hatchling,
@@ -23,21 +22,14 @@
   pytestCheckHook,
 }:
 
-let
-  # see https://github.com/jupyter/nbconvert/issues/1896
-  style-css = fetchurl {
-    url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
-    hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
-  };
-in
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.16.6";
+  version = "7.17.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V2p+N8ZIDae4Rl7vpmwXhEJDgWzhzMNyYzxrccPA9YI=";
+    hash = "sha256-NNDQp+c848urbFquj09Gh5coCwH9i9LKdG2oVp7d19I=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -46,9 +38,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
-
-    mkdir -p share/templates/classic/static
-    cp ${style-css} share/templates/classic/static/style.css
   '';
 
   build-system = [ hatchling ];

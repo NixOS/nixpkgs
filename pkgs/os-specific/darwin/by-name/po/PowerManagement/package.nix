@@ -1,12 +1,11 @@
 {
-  lib,
-  apple-sdk,
   mkAppleDerivation,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  iokitUser = apple-sdk.sourceRelease "IOKitUser";
+  iokitUser = sourceRelease "IOKitUser";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "file_cmds-deps-private-headers";

@@ -89,12 +89,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
     */
     ./01-localfont.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/linkwarden/linkwarden/blob/main/package.json#L3
+    ./02-yarn-4.14-support.patch
   ];
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-4Qo87kZ0eKHDL4K4yd7rfJwQ5rO1ho2JOvup4nIDMoQ=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
   };
 
   nativeBuildInputs = [

@@ -1,13 +1,9 @@
-let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in
-
 {
   lib,
   bootstrapStdenv,
-  fetchFromGitHub,
   meson,
   ninja,
+  sourceRelease,
   xcodeProjectCheckHook,
 }:
 
@@ -31,7 +27,7 @@ lib.extendMkDerivation {
     assert args ? releaseName;
     let
       inherit (args) releaseName;
-      info = versions.${releaseName};
+      releaseSrc = sourceRelease releaseName;
       files = lib.filesystem.listFilesRecursive (prependShardPath releaseName);
       mesonFiles = lib.filter (hasBasenamePrefix "meson") files;
     in
@@ -40,14 +36,9 @@ lib.extendMkDerivation {
     assert args ? xcodeHash -> lib.length mesonFiles > 0;
     {
       pname = args.pname or releaseName;
-      inherit (info) version;
+      inherit (releaseSrc) version;
 
-      src = args.src or fetchFromGitHub {
-        owner = "apple-oss-distributions";
-        repo = releaseName;
-        rev = info.rev or "${releaseName}-${info.version}";
-        inherit (info) hash;
-      };
+      src = args.src or releaseSrc;
 
       strictDeps = true;
       __structuredAttrs = true;

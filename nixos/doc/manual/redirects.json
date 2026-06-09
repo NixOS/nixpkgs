@@ -65,6 +65,42 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-mautrix-discord": [
+    "index.html#module-services-mautrix-discord"
+  ],
+  "module-services-mautrix-discord-advanced": [
+    "index.html#module-services-mautrix-discord-advanced"
+  ],
+  "module-services-mautrix-discord-authentication": [
+    "index.html#module-services-mautrix-discord-authentication"
+  ],
+  "module-services-mautrix-discord-backfill": [
+    "index.html#module-services-mautrix-discord-backfill"
+  ],
+  "module-services-mautrix-discord-basic-example": [
+    "index.html#module-services-mautrix-discord-basic-example"
+  ],
+  "module-services-mautrix-discord-basic-usage": [
+    "index.html#module-services-mautrix-discord-basic-usage"
+  ],
+  "module-services-mautrix-discord-double-puppet": [
+    "index.html#module-services-mautrix-discord-double-puppet"
+  ],
+  "module-services-mautrix-discord-encryption": [
+    "index.html#module-services-mautrix-discord-encryption"
+  ],
+  "module-services-mautrix-discord-server-defaults": [
+    "index.html#module-services-mautrix-discord-server-defaults"
+  ],
+  "module-services-mautrix-discord-setup": [
+    "index.html#module-services-mautrix-discord-setup"
+  ],
+  "module-services-mautrix-discord-synapse": [
+    "index.html#module-services-mautrix-discord-synapse"
+  ],
+  "module-services-mautrix-discord-troubleshooting": [
+    "index.html#module-services-mautrix-discord-troubleshooting"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
@@ -150,6 +186,9 @@
   ],
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
+  ],
+  "sec-boot-problems-scripted-stage-1": [
+    "index.html#sec-boot-problems-scripted-stage-1"
   ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
@@ -1463,6 +1502,24 @@
   "module-services-mailman-other-mtas": [
     "index.html#module-services-mailman-other-mtas"
   ],
+  "test-opt-requiredFeatures": [
+    "index.html#test-opt-requiredFeatures"
+  ],
+  "test-opt-requiredFeatures.apple-virt": [
+    "index.html#test-opt-requiredFeatures.apple-virt"
+  ],
+  "test-opt-requiredFeatures.devnet": [
+    "index.html#test-opt-requiredFeatures.devnet"
+  ],
+  "test-opt-requiredFeatures.kvm": [
+    "index.html#test-opt-requiredFeatures.kvm"
+  ],
+  "test-opt-requiredFeatures.nixos-test": [
+    "index.html#test-opt-requiredFeatures.nixos-test"
+  ],
+  "test-opt-requiredFeatures.uid-range": [
+    "index.html#test-opt-requiredFeatures.uid-range"
+  ],
   "trezor": [
     "index.html#trezor"
   ],
@@ -1540,6 +1597,21 @@
   ],
   "module-services-emacs-man-pages": [
     "index.html#module-services-emacs-man-pages"
+  ],
+  "module-services-ente": [
+    "index.html#module-services-ente"
+  ],
+  "module-services-ente-quickstart": [
+    "index.html#module-services-ente-quickstart"
+  ],
+  "module-services-ente-registering-users": [
+    "index.html#module-services-ente-registering-users"
+  ],
+  "module-services-ente-increasing-storage-limit": [
+    "index.html#module-services-ente-increasing-storage-limit"
+  ],
+  "module-services-ente-ios-background-sync": [
+    "index.html#module-services-ente-ios-background-sync"
   ],
   "module-services-livebook": [
     "index.html#module-services-livebook"
@@ -2171,9 +2243,6 @@
   "test-opt-sshBackdoor.enable": [
     "index.html#test-opt-sshBackdoor.enable"
   ],
-  "test-opt-sshBackdoor.vsockOffset": [
-    "index.html#test-opt-sshBackdoor.vsockOffset"
-  ],
   "test-opt-enableDebugHook": [
     "index.html#test-opt-enableDebugHook"
   ],
@@ -2203,6 +2272,9 @@
   ],
   "test-opt-interactive": [
     "index.html#test-opt-interactive"
+  ],
+  "test-opt-logLevel": [
+    "index.html#test-opt-logLevel"
   ],
   "test-opt-meta": [
     "index.html#test-opt-meta"
@@ -2239,6 +2311,9 @@
   ],
   "test-opt-passthru": [
     "index.html#test-opt-passthru"
+  ],
+  "test-opt-qemu.forceAccel": [
+    "index.html#test-opt-qemu.forceAccel"
   ],
   "test-opt-qemu.package": [
     "index.html#test-opt-qemu.package"
@@ -2323,6 +2398,21 @@
   ],
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
+  ],
+  "sec-release-26.11": [
+    "release-notes.html#sec-release-26.11"
+  ],
+  "sec-release-26.11-highlights": [
+    "release-notes.html#sec-release-26.11-highlights"
+  ],
+  "sec-release-26.11-new-modules": [
+    "release-notes.html#sec-release-26.11-new-modules"
+  ],
+  "sec-release-26.11-incompatibilities": [
+    "release-notes.html#sec-release-26.11-incompatibilities"
+  ],
+  "sec-release-26.11-notable-changes": [
+    "release-notes.html#sec-release-26.11-notable-changes"
   ],
   "sec-release-26.05": [
     "release-notes.html#sec-release-26.05"

@@ -14,14 +14,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cuda-pathfinder";
-  version = "1.4.0";
+  version = "1.5.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-pathfinder-v${finalAttrs.version}";
-    hash = "sha256-Bsou6vLyMBNbVMPT4vtnWpoi05lXG6pjhuee6Hg/Mm8=";
+    hash = "sha256-hvCwN6uLGiZLdAholFy3Jqb+ys7mAqVNc9UonPXm3+M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_pathfinder";

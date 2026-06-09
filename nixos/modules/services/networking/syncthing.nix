@@ -16,7 +16,7 @@ let
   settingsFormat = pkgs.formats.json { };
   cleanedConfig = converge (filterAttrsRecursive (_: v: v != null && v != { })) cfg.settings;
 
-  isUnixGui = (builtins.substring 0 1 cfg.guiAddress) == "/";
+  isUnixGui = lib.strings.hasPrefix "unix://" cfg.guiAddress;
 
   # Syncthing supports serving the GUI over Unix sockets. If that happens, the
   # API is served over the Unix socket as well.  This function returns the correct
@@ -30,7 +30,7 @@ let
     # note that the dot in front of `${path}` is the hostname, which is
     # required.
     then
-      "--unix-socket ${cfg.guiAddress} http://.${path}"
+      "--unix-socket ${lib.strings.removePrefix "unix://" cfg.guiAddress} http://.${path}"
     # no adjustments are needed if cfg.guiAddress is a network address
     else
       "${cfg.guiAddress}${path}";
@@ -290,7 +290,7 @@ let
               )"
               for id in ''${stale_${conf_type}_ids}; do
                 >&2 echo "Deleting stale device: $id"
-                curl -X DELETE "${s.baseAddress}/$id"
+                curl -X DELETE ${s.baseAddress}/$id
               done
             ''
           ))
@@ -774,6 +774,7 @@ in
       guiAddress = mkOption {
         type = types.str;
         default = "127.0.0.1:8384";
+        apply = x: if lib.strings.hasPrefix "/" x then "unix://${x}" else x;
         description = ''
           The address to serve the web interface at.
         '';
@@ -1000,7 +1001,7 @@ in
               args = lib.escapeShellArgs (
                 (lib.cli.toCommandLineGNU { } {
                   "no-browser" = true;
-                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "gui-address" = cfg.guiAddress;
                   "config" = cfg.configDir;
                   "data" = cfg.databaseDir;
                 })
@@ -1008,6 +1009,7 @@ in
               );
             in
             "${lib.getExe cfg.package} ${args}";
+          RuntimeDirectory = "syncthing";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

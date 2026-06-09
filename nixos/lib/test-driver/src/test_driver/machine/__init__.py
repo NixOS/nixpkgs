@@ -24,9 +24,11 @@ from typing import Any
 
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
-
-from .ocr import perform_ocr_on_screenshot, perform_ocr_variants_on_screenshot
-from .qmp import QMPSession
+from test_driver.machine.ocr import (
+    perform_ocr_on_screenshot,
+    perform_ocr_variants_on_screenshot,
+)
+from test_driver.machine.qmp import QMPSession
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -147,6 +149,7 @@ class QemuStartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool = False,
+        vsock_guest: Path | None = None,
     ) -> str:
         display_opts = ""
 
@@ -169,6 +172,12 @@ class QemuStartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
+
+        if vsock_guest is not None:
+            qemu_opts += (
+                f" -chardev socket,id=vsock_ssh,path={vsock_guest} "
+                f"-device vhost-user-vsock-pci,chardev=vsock_ssh "
+            )
 
         return (
             f"{self._cmd}"
@@ -203,13 +212,19 @@ class QemuStartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
+        vsock_guest: Path | None = None,
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(
-                monitor_socket_path, qmp_socket_path, shell_socket_path, allow_reboot
+                monitor_socket_path,
+                qmp_socket_path,
+                shell_socket_path,
+                allow_reboot,
+                vsock_guest,
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
             env=self.build_environment(state_dir, shared_dir),
@@ -724,6 +739,9 @@ class QemuMachine(BaseMachine):
     shell: socket.socket | None
     serial_thread: threading.Thread | None
 
+    vsock_guest: Path | None
+    vsock_host: Path | None
+
     booted: bool
     connected: bool
     # Store last serial console lines for use
@@ -741,6 +759,8 @@ class QemuMachine(BaseMachine):
         name: str | None = None,
         keep_machine_state: bool = False,
         callbacks: list[Callable] | None = None,
+        vsock_guest: Path | None = None,
+        vsock_host: Path | None = None,
     ) -> None:
         self.start_command = QemuStartCommand(start_command)
         super().__init__(
@@ -753,6 +773,8 @@ class QemuMachine(BaseMachine):
         )
 
         self.full_console_log = []
+        self.vsock_guest = vsock_guest
+        self.vsock_host = vsock_host
 
         # set up directories
         self.monitor_path = self.state_dir / "monitor"
@@ -769,8 +791,9 @@ class QemuMachine(BaseMachine):
         self.booted = False
         self.connected = False
 
-    def ssh_backdoor_command(self, index: int) -> str:
-        return f"ssh -o User=root vsock/{index}"
+    def ssh_backdoor_command(self) -> str:
+        assert self.vsock_host is not None
+        return f"ssh -o User=root vsock-mux/{self.vsock_host}"
 
     def is_up(self) -> bool:
         return self.booted and self.connected
@@ -1008,6 +1031,7 @@ class QemuMachine(BaseMachine):
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
+            assert self.shell
             (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
             return bool(ready)
 
@@ -1224,9 +1248,31 @@ class QemuMachine(BaseMachine):
             self.qmp_path,
             self.shell_path,
             allow_reboot,
+            self.vsock_guest,
         )
-        self.monitor, _ = monitor_socket.accept()
-        self.shell, _ = shell_socket.accept()
+
+        def accept_or_fail(sock: socket.socket, name: str) -> socket.socket:
+            """Accept a connection on a socket, polling the status to check
+            if the QEMU process is still alive. Without this, socket.accept()
+            would block forever if QEMU exits before connecting.
+            """
+            assert self.process
+            while True:
+                readable, _, _ = select.select([sock], [], [], 1.0)
+                if readable:
+                    conn, _ = sock.accept()
+                    return conn
+                rc = self.process.poll()
+                if rc is not None:
+                    output = ""
+                    if self.process.stdout:
+                        output = self.process.stdout.read().decode(errors="ignore")
+                    raise MachineError(
+                        f"QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
+                    )
+
+        self.monitor = accept_or_fail(monitor_socket, "monitor")
+        self.shell = accept_or_fail(shell_socket, "shell")
         self.qmp_client = QMPSession.from_path(self.qmp_path)
 
         # Store last serial console lines for use
@@ -1430,26 +1476,35 @@ class NspawnMachine(BaseMachine):
 
         self.start_command = start_command
         self.process = None
-        self.pid = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
-    def ssh_backdoor_command(self, index: int) -> str:
+    def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
         socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
         proxy_cmd = f"socat - UNIX-CLIENT:{socket_path}"
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
-        if self.pid is None:
+        if self.process is None:
             return
 
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
-        assert self.process is not None
+        self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.process.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
@@ -1638,9 +1693,7 @@ class NspawnMachine(BaseMachine):
             stdout=subprocess.PIPE,
         )
 
-        self.pid = self.process.pid
-
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
@@ -1665,3 +1718,18 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+
+
+class MachineDeprecationWrapper:
+    def __init__(self, msg: str, machine: QemuMachine | NspawnMachine):
+        self.msg = msg
+        self.machine = machine
+
+    def __getattribute__(self, name: str):
+        if name in ("msg", "machine"):
+            return object.__getattribute__(self, name)
+        typename = self.machine.__class__.__name__
+        warnings.warn(
+            f"invoking '{typename}.{name}' is deprecated: {self.msg}",
+        )
+        return self.machine.__getattribute__(name)

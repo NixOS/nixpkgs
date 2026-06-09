@@ -2,7 +2,11 @@
   stdenv,
   lib,
   coreutils,
+  gawk,
+  getconf,
   gnugrep,
+  gnused,
+  jq,
   copyDesktopItems,
   makeDesktopItem,
   unzip,
@@ -33,6 +37,7 @@
   openssl,
   webkitgtk_4_1,
   ripgrep,
+  which,
 
   # needed to fix "Save as Root"
   asar,
@@ -269,6 +274,7 @@ stdenv.mkDerivation (
       autoPatchelfHook
       asar
       copyDesktopItems
+      jq
       # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
       # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
@@ -332,8 +338,10 @@ stdenv.mkDerivation (
         # Remove native encryption code, as it derives the key from the executable path which does not work for us.
         # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
         # in the first place.
+        # Also remove prebuilt Copilot binaries that seemingly have been added by accident.
         + ''
           rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
+          rm -rf $out/lib/${libraryName}/resources/app/node_modules/@github/copilot-linuxmusl*
         ''
     )
     + ''
@@ -348,14 +356,23 @@ stdenv.mkDerivation (
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
         --prefix PATH : ${
-          lib.makeBinPath [
-            # for moving files to trash
-            glib
+          lib.makeBinPath (
+            [
+              # for moving files to trash
+              glib
 
-            # for launcher script
-            gnugrep
-            coreutils
-          ]
+              # for launcher and bundled helper scripts
+              gawk
+              gnugrep
+              gnused
+              coreutils
+              which
+            ]
+            # provides `getconf` for ps-fallback script that only runs on Linux
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.sh#L2
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.ts#L203-L217
+            ++ lib.optional stdenv.hostPlatform.isLinux getconf
+          )
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
@@ -365,9 +382,15 @@ stdenv.mkDerivation (
     # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
     # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
     postPatch =
-      # this is a fix for "save as root" functionality
       lib.optionalString stdenv.hostPlatform.isLinux (
+        # disable update checks
         ''
+          tmpProductJson="$(mktemp)"
+          jq 'del(.updateUrl, .backupUpdateUrl)' resources/app/product.json > "$tmpProductJson"
+          mv "$tmpProductJson" resources/app/product.json
+        ''
+        # this is a fix for "save as root" functionality
+        + ''
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"
@@ -386,14 +409,38 @@ stdenv.mkDerivation (
       )
       + (
         let
-          vscodeRipgrep =
+          nodeModulesPath =
             if stdenv.hostPlatform.isDarwin then
               if lib.versionAtLeast vscodeVersion "1.94.0" then
-                "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
+                "Contents/Resources/app/node_modules"
               else
-                "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+                "Contents/Resources/app/node_modules.asar.unpacked"
             else
-              "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+              "resources/app/node_modules";
+
+          # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
+          ripgrepSystem =
+            {
+              x86_64-darwin = "darwin-x64";
+              aarch64-darwin = "darwin-arm64";
+              armv7l-linux = "linux-arm";
+              aarch64-linux = "linux-arm64";
+              i686-linux = "linux-ia32";
+              powerpc64-linux = "linux-ppc64";
+              riscv64-linux = "linux-riscv64";
+              s390x-linux = "linux-s390x";
+              x86_64-linux = "linux-x64";
+            }
+            .${stdenv.hostPlatform.system}
+              or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
+
+          ripgrepPath =
+            if lib.versionAtLeast vscodeVersion "1.122.0" then
+              "@vscode/ripgrep-universal/bin/${ripgrepSystem}/rg"
+            else
+              "@vscode/ripgrep/bin/rg";
+
+          vscodeRipgrep = "${nodeModulesPath}/${ripgrepPath}";
         in
         if !useVSCodeRipgrep then
           ''

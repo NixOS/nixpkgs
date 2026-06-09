@@ -2,43 +2,66 @@
   lib,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
   ninja,
   llvmPackages,
+  gtest,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 # redumper is using C++ modules, this requires latest C++20 compiler and build tools
 llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
-  version = "708";
+  version = "722";
 
   src = fetchFromGitHub {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-sn5afjJB50ZyFg7kOalHi+O61LRHMWqOIOV+MxnXcRQ=";
+    hash = "sha256-6UphK1Dq7szUMNqVuFNDK6/5AraOHDGeTXa5bzZo3PI=";
   };
+
+  patches = [
+    ./remove-static-linking.patch
+  ];
+
+  __structuredAttrs = true;
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    ctestCheckHook
     ninja
     llvmPackages.clang-tools
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-isystem ${llvmPackages.libcxx.dev}/include/c++/v1";
-
   # https://github.com/superg/redumper/blob/main/.github/workflows/cmake.yml
   cmakeFlags = [
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
-    "-DREDUMPER_VERSION_BUILD=${finalAttrs.version}"
-    "-DREDUMPER_CLANG_LINK_OPTIONS=" # overrides the '-static' default
+    (lib.cmakeFeature "REDUMPER_VERSION_BUILD" "${finalAttrs.src.tag}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
   ];
+
+  doCheck = true;
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/superg/redumper";
     description = "Low level CD dumper utility";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hughobrien ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "redumper";
   };
 })

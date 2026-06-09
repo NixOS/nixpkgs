@@ -47,10 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     patchShebangs "script"
-
-    # root not present in build /etc/passwd
-    substituteInPlace test/helper-expand.c \
-      --replace-fail "~root" "~nobody"
   '';
 
   depsBuildBuild = [
@@ -100,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "xcb" x11Support)
   ];
 
-  doCheck = false;
+  doCheck = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook

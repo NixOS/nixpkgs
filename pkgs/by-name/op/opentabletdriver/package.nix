@@ -23,13 +23,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "OpenTabletDriver";
-  version = "0.6.6.2";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OeioFdevYPiLl9w7FXVmpbcp1cIMoMYnSLgoBisOOOU=";
+    hash = "sha256-jL3d1DjY9n85BrO6ajZVvJMHmPYfxng4YE25s/9hfGA=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -91,17 +91,23 @@ buildDotnetModule (finalAttrs: {
       --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
   '';
 
+  dontWrapGApps = true;
+
   postFixup = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
     mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
+    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/icons
 
     # Generate udev rules from source
     mkdir -p $out/lib/udev/rules.d
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
+
+    wrapProgram $out/bin/otd-gui \
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags --skipupdate
   '';
 
   desktopItems = [

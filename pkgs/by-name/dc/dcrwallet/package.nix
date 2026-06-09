@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcrwallet";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
     rev = "release-v${finalAttrs.version}";
-    hash = "sha256-9CblBsZa2jAzp58Qj/Zoq68JcuKxzDO51P19XZJIJ6I=";
+    hash = "sha256-1PCxS67hXmwUD08OGyt6szVSgQ5M9e0j8ivNxmitfR8=";
   };
 
-  vendorHash = "sha256-J1Iy3XWvLNLEf+0kDYbX1UbgBvxz7C3NSPeF/PpuD5E=";
+  vendorHash = "sha256-5rI6z7fC7jKPxovWp7nlZrR25NuUEz5obCn2HA6Crpk=";
 
   subPackages = [ "." ];
 

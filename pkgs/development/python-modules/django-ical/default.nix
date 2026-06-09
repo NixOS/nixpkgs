@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "iCal feeds for Django based on Django's syndication feed framework";
     homepage = "https://github.com/jazzband/django-ical";
-    changelog = "https://github.com/jazzband/django-ical/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/jazzband/django-ical/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kurogeek ];
   };

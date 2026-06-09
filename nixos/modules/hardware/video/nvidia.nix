@@ -6,9 +6,11 @@
 }:
 let
   nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-  nvidia_x11 = if nvidiaEnabled || cfg.datacenter.enable then cfg.package else null;
+  nvidia_x11 = if cfg.enabled then cfg.package else null;
 
   cfg = config.hardware.nvidia;
+
+  inherit (config.boot.kernelPackages) nvidiaPackages;
 
   useOpenModules = cfg.open == true;
 
@@ -27,7 +29,7 @@ in
       enabled = lib.mkOption {
         readOnly = true;
         type = lib.types.bool;
-        default = nvidia_x11 != null;
+        default = nvidiaEnabled || cfg.datacenter.enable;
         defaultText = lib.literalMD "`true` if NVIDIA support is enabled";
         description = "True if NVIDIA support is enabled";
       };
@@ -296,15 +298,63 @@ in
         It also drastically increases the time the driver needs to clock down after load
       '';
 
-      package = lib.mkOption {
-        default =
-          config.boot.kernelPackages.nvidiaPackages."${if cfg.datacenter.enable then "dc" else "stable"}";
+      branch = lib.mkOption {
+        type =
+          (lib.types.enum (builtins.attrNames (lib.filterAttrs (_: lib.isDerivation) nvidiaPackages)))
+          // {
+            description = "one of the available driver branches in `pkgs/os-specific/linux/nvidia-x11/default.nix`";
+          };
+        default = if cfg.datacenter.enable then "dc" else "stable";
         defaultText = lib.literalExpression ''
-          config.boot.kernelPackages.nvidiaPackages."\$\{if cfg.datacenter.enable then "dc" else "stable"}"
+          if config.hardware.nvidia.datacenter.enable then "dc" else "stable"
         '';
-        example = "config.boot.kernelPackages.nvidiaPackages.legacy_470";
+        example = "bleeding_edge";
+        description = ''
+          The branch of the NVIDIA driver to use.
+
+          Note: if {option}`hardware.nvidia.package` is set, it overrides this option.
+
+          Commonly interesting branches for end users:
+
+          - production, new_feature, beta:
+            NVIDIA's official production / new feature / beta release branches.
+
+          - stable:
+            The default; the highest stable version.
+
+          - latest:
+            Whichever is newer of `production` and `new_feature`.
+
+          - bleeding_edge:
+            Whichever is newer of `latest` and `beta`.
+
+          - legacy_580:
+            The long-lived 580 series (LTSB), for GPUs that newer driver branches
+            no longer support (often Maxwell through Volta; roughly GeForce GTX 9xx
+            through 10xx, plus rare Volta cards like TITAN V).
+
+          - vulkan_beta:
+            The Vulkan developer beta driver, for users interested in testing new
+            Vulkan features.
+        '';
+      };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = nvidiaPackages.${cfg.branch};
+        defaultText = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.\${config.hardware.nvidia.branch}";
+        example = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_470";
         description = ''
           The NVIDIA driver package to use.
+
+          Prefer using {option}`hardware.nvidia.branch` when possible.
+
+          If you set this option, it is recommended to pick a package from
+          `config.boot.kernelPackages.nvidiaPackages` so the driver build matches
+          your configured kernel.
+
+          For custom versions, you can use `nvidiaPackages.mkDriver`; see
+          `pkgs/os-specific/linux/nvidia-x11/default.nix` for examples.
         '';
       };
 
@@ -332,6 +382,20 @@ in
       videoAcceleration = lib.mkEnableOption "video acceleration (VA-API)" // {
         default = true;
       };
+
+      moduleParams = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
+        default = { };
+        example = ''
+          {
+            nvidia = {
+              NVreg_UsePageAttributeTable = 1;
+              NVreg_RegistryDwords = "EnableBrightnessControl=1"
+            };
+          }
+        '';
+        description = "Additional parameters to pass to the NVIDIA kernel module.";
+      };
     };
   };
 
@@ -354,6 +418,13 @@ in
               message = ''
                 You must configure `hardware.nvidia.open` on NVIDIA driver versions >= 560.
                 It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
+              '';
+            }
+            {
+              assertion = !cfg.open || (nvidia_x11.open != null);
+              message = ''
+                The selected NVIDIA package does not provide open kernel modules.
+                Set hardware.nvidia.open = false or choose a package branch with open module support.
               '';
             }
           ];
@@ -394,10 +465,52 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
-          hardware.graphics = {
-            extraPackages = [ nvidia_x11.out ];
-            extraPackages32 = [ nvidia_x11.lib32 ];
-          };
+          hardware.graphics =
+            let
+              icd = [
+                "egl-wayland"
+              ]
+              # GBM support was added in 495.
+              ++ lib.optionals (lib.versionAtLeast nvidia_x11.version "495") [
+                "egl-gbm"
+              ]
+              # ICDs below use a new driver interface, which is added in the 560 series drivers.
+              ++ lib.optionals (lib.versionAtLeast nvidia_x11.version "560") [
+                "egl-wayland2"
+                "egl-x11"
+              ];
+              combineIcdPkgs =
+                icd: pkgs:
+                pkgs.symlinkJoin {
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  paths = lib.attrVals icd pkgs;
+                  # Remediate reversed priorities in pre-595 drivers,
+                  # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793
+                  postBuild = lib.optionalString (lib.versionOlder nvidia_x11.version "595") ''
+                    pushd $out/share/egl/egl_external_platform.d
+                    for f in [0-9][0-9]_*; do
+                      num=''${f:0:2}
+                      rest=''${f:2}
+                      new=$(printf "%02d" $((99 - 10#$num)))
+                      mv -- "$f" "tmp-$new$rest"
+                    done
+                    for f in tmp-*; do
+                      mv -- "$f" "''${f#tmp-}"
+                    done
+                    popd
+                  '';
+                };
+            in
+            {
+              extraPackages = [
+                nvidia_x11.out
+                (combineIcdPkgs icd pkgs)
+              ];
+              extraPackages32 = [
+                nvidia_x11.lib32
+                (combineIcdPkgs icd pkgs.pkgsi686Linux)
+              ];
+            };
           environment.systemPackages = [ nvidia_x11.bin ];
         }
 
@@ -481,6 +594,17 @@ in
                 cfg.powerManagement.kernelSuspendNotifier
                 -> (useOpenModules && lib.versionAtLeast nvidia_x11.version "595");
               message = "NVIDIA driver support for kernel suspend notifiers requires NVIDIA driver version 595 or newer, and the open source kernel modules.";
+            }
+
+            {
+              assertion =
+                removeAttrs cfg.moduleParams [
+                  "nvidia"
+                  "nvidia-drm"
+                  "nvidia-modeset"
+                  "nvidia-uvm"
+                ] == { };
+              message = "You can only use `hardware.nvidia.moduleParams` to set parameters for the kernel modules of NVIDIA drivers.";
             }
           ];
 
@@ -673,8 +797,25 @@ in
             lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
+          hardware.nvidia.moduleParams = lib.mkMerge (
+            lib.optional (offloadCfg.enable || cfg.modesetting.enable) { nvidia-drm.modeset = 1; }
+            ++ lib.optional (
+              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+            ) { nvidia-drm.fbdev = 1; }
+            ++ lib.optional (cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier) {
+              nvidia.NVreg_UseKernelSuspendNotifiers = 1;
+            }
+            ++ lib.optional cfg.powerManagement.enable { nvidia.NVreg_PreserveVideoMemoryAllocations = 1; }
+            ++ lib.optional (
+              useOpenModules
+              && lib.versionAtLeast nvidia_x11.version "515.43.04"
+              && lib.versionOlder nvidia_x11.version "545.23.06"
+            ) { nvidia.NVreg_OpenRmEnableUnsupportedGpus = 1; }
+            ++ lib.optional cfg.powerManagement.finegrained { nvidia.NVreg_DynamicPowerManagement = "0x02"; }
+          );
+
           boot = {
-            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules = lib.optionals config.services.xserver.enable [
               "nvidia"
@@ -682,27 +823,16 @@ in
               "nvidia_drm"
             ];
 
-            # If requested enable modesetting via kernel parameters.
-            kernelParams =
-              lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-              ++ lib.optional (
-                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-              ) "nvidia-drm.fbdev=1"
-              ++ lib.optional (
-                cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier
-              ) "nvidia.NVreg_UseKernelSuspendNotifiers=1"
-              ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional (
-                useOpenModules
-                && lib.versionAtLeast nvidia_x11.version "515.43.04"
-                && lib.versionOlder nvidia_x11.version "545.23.06"
-              ) "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-              ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+            kernelParams = lib.optional (
+              config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport
+            ) "ibt=off";
 
-            # enable finegrained power management
-            extraModprobeConfig = lib.optionalString cfg.powerManagement.finegrained ''
-              options nvidia "NVreg_DynamicPowerManagement=0x02"
-            '';
+            extraModprobeConfig =
+              let
+                mergeParams = lib.concatMapAttrsStringSep " " (k: v: "${k}=${toString v}");
+                genModprobeLine = module: params: "options ${module} ${mergeParams params}";
+              in
+              lib.concatMapAttrsStringSep "\n" genModprobeLine cfg.moduleParams;
           };
           services.udev.extraRules = lib.optionalString cfg.powerManagement.finegrained (
             lib.optionalString (lib.versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
@@ -728,7 +858,7 @@ in
         })
         # Data Center
         (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = [ nvidia_x11.bin ];
+          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
 
           systemd = {
             tmpfiles.rules =

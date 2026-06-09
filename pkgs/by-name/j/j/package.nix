@@ -7,28 +7,7 @@
   avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "j";
-  version = "9.6.2";
-
-  src = fetchFromGitHub {
-    owner = "jsoftware";
-    repo = "jsource";
-    tag = version;
-    hash = "sha256-Afa2QzzgJYijcavurgGH/qwyofNn4rtFMIHzlqJwFGU=";
-  };
-
-  nativeBuildInputs = [ which ];
-  buildInputs = [ gmp ];
-
-  patches = [
-    ./fix-install-path.patch
-  ];
-
-  enableParallelBuilding = true;
-
-  dontConfigure = true;
-
+let
   # Emulate jplatform64.sh configuration variables
   jplatform =
     if stdenv.hostPlatform.isDarwin then
@@ -49,6 +28,28 @@ stdenv.mkDerivation rec {
       if stdenv.hostPlatform.isDarwin then "j64arm" else "j64"
     else
       "unsupported";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "j";
+  version = "9.7.1";
+
+  src = fetchFromGitHub {
+    owner = "jsoftware";
+    repo = "jsource";
+    tag = finalAttrs.version;
+    hash = "sha256-fW6Tc0UEPYFTgEFMUxZaVm2NU5LNFqszifqOqfdFJZY=";
+  };
+
+  nativeBuildInputs = [ which ];
+  buildInputs = [ gmp ];
+
+  patches = [
+    ./fix-install-path.patch
+  ];
+
+  enableParallelBuilding = true;
+
+  dontConfigure = true;
 
   env.NIX_LDFLAGS = "-lgmp";
 
@@ -94,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "jconsole";
   };
-}
+})

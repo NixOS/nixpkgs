@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://git.kittencollective.com/nebkor/joecalsend";

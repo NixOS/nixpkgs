@@ -66,11 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
     changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${finalAttrs.version}/NEWS";
-    license = with lib.licenses; [
-      bsd2
-      bsd3
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        bsd3
+        mit
+      ];
     pkgConfigModules = [ "pocketsphinx" ];
     mainProgram = "pocketsphinx";
     maintainers = with lib.maintainers; [ jopejoe1 ];

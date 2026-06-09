@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aqlprofile";
-  version = "7.2.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";

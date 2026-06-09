@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hipages";
-    repo = pname;
+    repo = "php-fpm_exporter";
     rev = "v${version}";
     hash = "sha256-ggrFnyEdGBoZVh4dHMw+7RUm8nJ1hJXo/fownO3wvzE=";
   };

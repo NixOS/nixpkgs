@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   vala,
+  json-glib,
   libadwaita,
   libgee,
   libgtop,
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "8.2.2";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-system";
     tag = version;
-    hash = "sha256-SPFCBsk4tVR+5Q6uuDG/fTIn+4TXdeAobfQxkmxMiW0=";
+    hash = "sha256-skuMgLZTkJEWrmDGwSuCivsJrvKIUYT2YISYj7/BVe4=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     fwupd
     granite7
     gtk4
+    json-glib
     libadwaita
     libgee
     libgtop

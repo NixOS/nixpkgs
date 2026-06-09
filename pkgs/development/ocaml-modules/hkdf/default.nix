@@ -7,14 +7,14 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "hkdf";
   version = "2.0.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/hannesm/ocaml-hkdf/releases/download/v${finalAttrs.version}/hkdf-${finalAttrs.version}.tbz";
     hash = "sha256-VLBxJ5viTTn1nK0QNIAGq/8961x0/RGHZN/C/7ITWNM=";
   };
 
@@ -31,4 +31,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "n8n-task-runner-launcher";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "task-runner-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-jn1zGADBk8adbainTRvT+Q8AqLK7KHJ7FN9Du9ytPig=";
+    hash = "sha256-9XbeAssVQBcAfuiCgLEAX0CkI9u1410PE2HOcrI2Uxs=";
   };
 
   vendorHash = "sha256-5dcIELsNFGB5qTmfpY/YRWeN2z9GdanysGw4Lqpfsi0=";

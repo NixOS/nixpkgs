@@ -40,13 +40,13 @@
 }:
 
 let
-  version = "39.3.1";
+  version = "39.4.2";
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-MRMMPITyjpEvWuzbeM1wTsmuHIbDDbczbFulKmOeNcU=";
+    hash = "sha256-xLOSdpkBjku3AehH6n9+hT1HM5QCwr1Sh7KEQRHr7jg=";
   };
 in
 buildPythonPackage {
@@ -57,27 +57,7 @@ buildPythonPackage {
   # future-1.0.0 not supported for interpreter python3.13
   disabled = pythonAtLeast "3.13";
 
-  pythonRelaxDeps = [
-    "alembic"
-    "argcomplete"
-    "dogpile.cache"
-    "flask"
-    "geoip2"
-    "google-auth"
-    "jsonschema"
-    "oic"
-    "packaging"
-    "paramiko"
-    "prometheus_client"
-    "python-dateutil"
-    "redis"
-    "requests"
-    "rich"
-    "sqlalchemy"
-    "stomp.py"
-    "typing_extensions"
-    "urllib3"
-  ];
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "boto" ];
 

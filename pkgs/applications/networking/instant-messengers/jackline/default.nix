@@ -19,6 +19,10 @@ buildDunePackage {
     hash = "sha256-6QZZ77C1G3x/GOJsUEQMrCatVsyyxNjq36ez/TgeHSY=";
   };
 
+  postPatch = ''
+    substituteInPlace cli/dune --replace-warn 'notty notty.lwt' 'notty-community.lwt'
+  '';
+
   nativeBuildInputs = [
     ppx_sexp_conv
     ppx_deriving
@@ -35,7 +39,7 @@ buildDunePackage {
     otr
     astring
     ptime
-    notty
+    notty-community
     sexplib
     hex
     uchar

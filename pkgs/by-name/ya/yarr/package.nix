@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
     description = "Yet another rss reader";
     mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
-    changelog = "https://github.com/nkanaev/yarr/blob/v${finalAttrs.version}/doc/changelog.txt";
+    changelog = "https://github.com/nkanaev/yarr/blob/v${finalAttrs.version}/doc/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sikmir

@@ -10,15 +10,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitsign";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "gitsign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jqWMZATeimmgyb0yD5dzp9h31c9RaClpH2cA+bvhxpg=";
+    hash = "sha256-XFeKU956FIfQhaca2M/OtYgCF8qErzPcyMBEGvzPAcc=";
   };
-  vendorHash = "sha256-NZvJGexfCjxCQI8R/thv0Z2PaMNSkkGmyPUFJyYxdgM=";
+  vendorHash = "sha256-fjrdQZVXgBvdKQFnmjtLShBHsKNIp5Y/uW7aU2cP1aY=";
 
   subPackages = [
     "."

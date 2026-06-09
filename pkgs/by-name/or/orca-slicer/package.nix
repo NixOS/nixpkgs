@@ -28,12 +28,13 @@
   hicolor-icon-theme,
   libsecret,
   libpng,
+  makeFontsConf,
   mpfr,
+  nanum,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
@@ -59,13 +60,19 @@ let
           "--enable-secretstore"
         ];
       });
+
+  # Workaround for crash due to missing font
+  # https://github.com/OrcaSlicer/OrcaSlicer/issues/11641
+  fontsConf = makeFontsConf {
+    fontDirectories = [ nanum ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
   version = "2.3.2";
 
   src = fetchFromGitHub {
-    owner = "SoftFever";
+    owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
     hash = "sha256-c1WTODLrXGtyJWkEueOz5jHhPbA/JFcMeAwhpvoKnKo=";
@@ -116,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
     opencascade-occt_7_6
     openvdb
-    pcre
     onetbb
     webkitgtk_4_1
     wxGTK'
@@ -132,11 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
-    # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
+    # The changeset from https://github.com/OrcaSlicer/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
     (fetchpatch {
       name = "pr-7650-configurable-update-check.patch";
-      url = "https://github.com/SoftFever/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
       hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
     })
 
@@ -219,6 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      --set FONTCONFIG_FILE "${fontsConf}"
       ${lib.optionalString withNvidiaGLWorkaround ''
         --set __GLX_VENDOR_LIBRARY_NAME mesa
         --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
@@ -235,8 +242,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
-    homepage = "https://github.com/SoftFever/OrcaSlicer";
-    changelog = "https://github.com/SoftFever/OrcaSlicer/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/OrcaSlicer/OrcaSlicer";
+    changelog = "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       zhaofengli

@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "accelerate";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PwwaQSLOm+8Hd3trM1P+jRhYyoWM3QxOe5XT99haEmg=";
+    hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -130,6 +130,11 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
     "test_accelerate_test"
+
+    # torch.mps does not expose a module-level set_device; keep skipped until
+    # the upstream fix lands: https://github.com/huggingface/accelerate/pull/4028
+    "test_env_var_device"
+
     "test_init_trackers"
     "test_init_trackers"
     "test_log"
@@ -180,15 +185,7 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
-  ]
-  ++
-    lib.optionals
-      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && (pythonAtLeast "3.14"))
-      [
-        # https://github.com/huggingface/accelerate/issues/3899
-        "test_accelerate_test"
-        "test_cpu"
-      ];
+  ];
 
   disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:

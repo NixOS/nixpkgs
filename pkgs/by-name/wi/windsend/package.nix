@@ -17,13 +17,13 @@
 
 flutter341.buildFlutterApplication (finalAttrs: {
   pname = "windsend";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zpbCtiGPjGLkcZ98uN0y0modMnhucV4g4Sc9P6cRPIw=";
+    hash = "sha256-r3D6Uj8buMceqXov6An+OxgOTcNFrX5PwxhphtbeUv0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

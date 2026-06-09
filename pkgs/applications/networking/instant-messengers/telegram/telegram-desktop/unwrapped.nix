@@ -15,7 +15,7 @@
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
+  xxhash,
   ffmpeg_6,
   protobuf,
   openal-soft,
@@ -45,14 +45,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.7.5";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HsXNTZY/+Xz7pIT7durOd5T/u7jML0rVBOPb4pnIXow=";
+    hash = "sha256-CcibFBPbviakOsf+BpAF8U0CRWIt3zO/KiHycwRw2V0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     lz4
-    xxHash
+    xxhash
     ffmpeg_6
     openal-soft
     minizip-ng

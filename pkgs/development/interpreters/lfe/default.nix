@@ -68,17 +68,22 @@ else
 
     beamDeps = [ proper ];
 
-    makeFlags = [
-      "-e"
-      "MANDB=''"
-      "PREFIX=$$out"
-    ];
-
     # override buildRebar3's install to let the builder use make install
-    installPhase = "";
+    installPhase = ''
+      runHook preInstall
+      make -e MANDB= PREFIX=$out install
+      runHook postInstall
+    '';
 
     doCheck = true;
     checkTarget = "travis";
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      test -e $out/bin/lfe
+      runHook postInstallCheck
+    '';
 
     postFixup = ''
       # LFE binaries are shell scripts which run erl and lfe.

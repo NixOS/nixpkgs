@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   withServer ? true, # the actual metrics server
   withVmAgent ? true, # Agent to collect metrics
@@ -13,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.139.0";
+  version = "1.144.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5+Hlt9cF/V3x+4TGrMd1NPaApQsIWWvDIYmN/BLhLMU=";
+    hash = "sha256-K8RCFHVL+E8w0webp6Bg3dma7I32iGXx9gCKnFp4d0g=";
   };
 
   vendorHash = null;
@@ -60,7 +61,7 @@ buildGoModule (finalAttrs: {
     substituteInPlace lib/storage/storage_test.go \
       --replace-fail "time.After(10 " "time.After(120 " \
       --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
-      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
+      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)"
   '';
 
   ldflags = [
@@ -78,7 +79,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {

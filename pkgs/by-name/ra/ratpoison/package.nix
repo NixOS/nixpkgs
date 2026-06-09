@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/getopt.h \
+      --replace-fail "extern int getopt ();" \
+                     "extern int getopt (int argc, char *const *argv, const char *shortopts);"
+  '';
+
   configureFlags = [
     # >=1.4.9 requires this even with readline in inputs
     "--enable-history"

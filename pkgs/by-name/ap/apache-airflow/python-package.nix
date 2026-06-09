@@ -7,7 +7,7 @@
   # javascript
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
 
   # python
@@ -19,6 +19,7 @@
   attrs,
   babel,
   buildPythonPackage,
+  cachetools,
   cadwyn,
   colorlog,
   cron-descriptor,
@@ -88,19 +89,25 @@
   enabledProviders,
 }:
 let
-  version = "3.1.7";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-qFgI65wAttERPCHn7ezSdNGB0sclEV7zYIBqaC0Gs4A=";
+    hash = "sha256-nAFSLdcKmP2CNm3rx+/fwIsJnpju7wBl+fYWQV8p+sU=";
   };
+
+  pnpm = pnpm_10;
 
   airflowUi = stdenv.mkDerivation rec {
     pname = "airflow-ui-assets";
     inherit src version;
     sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
+
+    # vite build resolves "localhost" during the build, which the darwin
+    # sandbox blocks by default (getaddrinfo ENOTFOUND localhost).
+    __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
 
     nativeBuildInputs = [
       nodejs
@@ -110,9 +117,14 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
-      inherit sourceRoot src version;
+      inherit
+        sourceRoot
+        src
+        version
+        pnpm
+        ;
       fetcherVersion = 3;
-      hash = "sha256-zPIql9rP4EkE0Y3ihP4MkWTTYCIDr8d1LpE6vePiNdU=";
+      hash = "sha256-wJ2u+y3umecL4IeVW/29/yDgYZ77ffOBQLHeplD3XlQ=";
     };
 
     buildPhase = ''
@@ -131,6 +143,8 @@ let
     inherit src version;
     sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
 
+    __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
+
     nativeBuildInputs = [
       nodejs
       pnpm
@@ -139,9 +153,14 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "simple-auth-manager-ui";
-      inherit sourceRoot src version;
+      inherit
+        sourceRoot
+        src
+        version
+        pnpm
+        ;
       fetcherVersion = 3;
-      hash = "sha256-ccLGYaAYJWSgegO+IfVZv1WdZ5YjhYYTZivqtDjdoOk=";
+      hash = "sha256-AKaafmDjIlg4eFJT1JGyelXVjcId8f0iXTR3JK4ZMq0=";
     };
 
     buildPhase = ''
@@ -199,10 +218,13 @@ let
       # remove cyclic dependency
       sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
 
-      substituteInPlace pyproject.toml \
-        --replace-fail "GitPython==3.1.45" "GitPython" \
-        --replace-fail "hatchling==1.27.0" "hatchling" \
-        --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+      # relax dependencies
+      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+      sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+      sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
+      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
 
       # Copy built UI assets
       cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
@@ -226,6 +248,7 @@ let
       argcomplete
       asgiref
       attrs
+      cachetools
       cadwyn
       colorlog
       cron-descriptor
@@ -283,12 +306,7 @@ let
     ]
     ++ (map buildProvider requiredProviders);
 
-    pythonRelaxDeps = [
-      # Temporary to fix CI only:
-      # https://github.com/apache/airflow/commit/c474be9ff06cf16bf96f93de9a09e30ffc476bee
-      "fastapi"
-      "universal-pathlib"
-    ];
+    pythonRelaxDeps = [ "starlette" ];
   };
 
   taskSdk = buildPythonPackage {
@@ -301,6 +319,16 @@ let
     postPatch = ''
       # resolve cyclic dependency
       sed -i -E 's/"apache-airflow-core[^"]+",//' pyproject.toml
+
+      # relax dependencies
+      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+
+      # task-sdk needs config.yml from core subpackage
+      mkdir -p src/airflow/config_templates
+      cp ../airflow-core/src/airflow/config_templates/* src/airflow/config_templates/
     '';
 
     build-system = [
@@ -316,6 +344,7 @@ let
       greenback
       httpx
       jinja2
+      jsonschema
       methodtools
       msgspec
       pendulum
@@ -338,10 +367,11 @@ buildPythonPackage rec {
   pyproject = true;
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "GitPython==3.1.45" "GitPython" \
-      --replace-fail "hatchling==1.27.0" "hatchling" \
-      --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+    # relax dependencies
+    sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+    sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+    sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+    sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
   '';
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];

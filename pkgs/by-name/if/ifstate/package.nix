@@ -13,12 +13,12 @@
 }:
 
 let
-  version = "2.2.5";
+  version = "2.3.0";
   src = fetchFromCodeberg {
     owner = "routerkit";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-KdOlKjs/Zv8TsCiMpA87gb7KKpl4Ohg512yiuNHcV9o=";
+    hash = "sha256-qJdWoe9hbLMmyaaK7m+NzU3415KavbBkHJdFPhmlOnY=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";

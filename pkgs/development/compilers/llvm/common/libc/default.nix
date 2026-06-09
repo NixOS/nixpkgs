@@ -31,6 +31,8 @@ let
       cp -r ${monorepoSrc}/third-party "$out"
     ''
   );
+
+  needHdrGen = isFullBuild || lib.versionAtLeast release_version "22";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version patches;
@@ -44,13 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     ninja
   ]
-  ++ (lib.optional isFullBuild python3Packages.pyyaml);
+  ++ (lib.optional needHdrGen python3Packages.pyyaml);
 
   buildInputs = lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
 
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
-  postUnpack = lib.optionalString isFullBuild ''
+  postUnpack = lib.optionalString needHdrGen ''
     chmod +w $sourceRoot/../$pname/utils/hdrgen
     patchShebangs $sourceRoot/../$pname/utils/hdrgen/main.py
     chmod +x $sourceRoot/../$pname/utils/hdrgen/main.py

@@ -9,7 +9,7 @@
   ffmpeg-headless,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ffmpy";
   version = "1.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "ffmpy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TDE/r6qoWpkIU47+FPLqWgZAJd9FxSbZthhLh9g4evo=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

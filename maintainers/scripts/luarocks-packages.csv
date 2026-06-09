@@ -49,6 +49,7 @@ lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,
+lrexlib-pcre2,,,,,,wishstudio
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,5.1,gepbird
 lsqlite3,,,,,,
@@ -123,6 +124,8 @@ magick,,,,,5.1,donovanglover
 markdown,,,,,,
 md5,,,,,,
 mediator_lua,,,,,,
+mega.cmdparse,,,,,,
+mega.logging,,,,,,
 middleclass,,,,,,
 mimetypes,,,,,,
 mini.test,,,,,,
@@ -165,12 +168,15 @@ telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
+tomlua,,,,,,birdee
 tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
+tree-sitter-norg-meta,,,,,,
 tree-sitter-orgmode,,,,,5.1,
 utf8,,,,,,
 tree-sitter-teal,,,,,,
+vicious,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
 xml2lua,,,,,,teto

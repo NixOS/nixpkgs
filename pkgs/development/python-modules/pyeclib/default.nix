@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
     tag = version;
-    hash = "sha256-wYzZUtr80KgVTznD0ISy7qhGngm4Xmt8Mauu9lP+2T4=";
+    hash = "sha256-v7pkV5s10AxU+vgp+gcQF8lJmm6yzDwkqunWuT0zU4c=";
   };
 
   build-system = [

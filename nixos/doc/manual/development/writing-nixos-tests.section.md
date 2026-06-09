@@ -512,19 +512,11 @@ Once you are in the sandbox shell, you can access the VMs (for example, `machine
 with SSH over vsock:
 
 ```
-bash# ssh -F ./ssh_config vsock/3
+bash# ssh -F ./ssh_config -o User=root vsock-mux//tmp/.../machine_host.socket
 ```
 
-For the AF_VSOCK feature to work, `/dev/vhost-vsock` is needed in the sandbox
-which can be done with e.g.
-
-```
-nix-build -A nixosTests.foo --option sandbox-paths /dev/vhost-vsock
-```
-
-As described in [](#sec-nixos-test-ssh-access), the numbers for vsock start at
-`3` instead of `1`. So the first VM in the network (sorted alphabetically) can
-be accessed with `vsock/3`.
+The socket paths are printed at the beginning of the test. See
+[](#sec-nixos-test-ssh-access) for more context.
 
 ### SSH access to test containers {#sec-test-container-ssh-access}
 

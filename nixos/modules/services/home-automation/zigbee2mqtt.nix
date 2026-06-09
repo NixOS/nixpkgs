@@ -12,10 +12,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    sweber
-    hexa
-  ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
 
   imports = [
     (lib.mkRemovedOptionModule [

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
-  version = "2.28.1";
+  version = "2.28.2";
 
   src = fetchFromGitHub {
     owner = "harness";
     repo = "drone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p4fsQu46HX8Gc2W/RCvvjI1KZGcN2S/3ZOLty0MHmfg=";
+    hash = "sha256-jKM+jET6dsMe5+QRDKIHA40OOHb/nZmli3owaDB7IvU=";
   };
 
-  vendorHash = "sha256-6a4Xdp8lcPq+GPewQmEPzr9hXjSrqHR7kqw7pqHzjXE=";
+  vendorHash = "sha256-BHfuQ4bloqvdqHK4HSlzHVd9r0yhGkWqLY0XZazwiZQ=";
 
   tags = lib.optionals (!enableUnfree) [
     "oss"

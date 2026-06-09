@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxt
   ];
 
+  # K&R-style declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     description = "Visual browser for netCDF format files";
     homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";

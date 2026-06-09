@@ -736,6 +736,35 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
+
+```nix
+pkgsCross.wasi32.callPackage (
+  {
+    fetchFromGitHub,
+    rustPlatform,
+    lld,
+  }:
+  rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "zellij-harpoon";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "Nacho114";
+      repo = "harpoon";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JmYcbzxIF6qZs2/RKuspHqNpyDibGp9CVQJj47y/BOQ=";
+    };
+
+    cargoHash = "sha256-lsv5Wssakni18jif++fPo3Z5WyBtvPsGpWwG3abR7jQ=";
+
+    # these two lines are currently required
+    env.RUSTFLAGS = "-C linker=wasm-ld";
+    nativeBuildInputs = [ lld ];
+  })
+) { }
+```
+
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
@@ -840,6 +869,15 @@ general. A number of other parameters can be overridden:
 
   ```nix
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
+  ```
+
+- Extra arguments passed to `rustc` when the crate is a proc-macro,
+  replacing `extraRustcOpts`. Useful to keep instrumentation flags
+  (sanitizers, coverage) off host dylibs. Defaults to `null`, which
+  inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
   ```
 
 - The lint level cap passed to `rustc`. Defaults to `null`, which

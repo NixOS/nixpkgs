@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tool to work with DNS MX records";
     homepage = "https://github.com/musana/mx-takeover";
-    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/musana/mx-takeover/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mx-takeover";

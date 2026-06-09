@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k6PMiKPwdV3eOFm9FEQPMbyN73DypAZ/UgwOR6aigHA=";
+    hash = "sha256-/lvKMC0bJdfqhPCuBYChX/6Aybpu+cPg0Vjl2HDbOeE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

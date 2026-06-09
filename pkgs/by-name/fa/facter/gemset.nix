@@ -33,6 +33,16 @@
     };
     version = "4.10.0";
   };
+  ffi = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0k1xaqw2jk13q3ss7cnyvkp8fzp75dk4kazysrxgfd1rpgvkk7qf";
+      type = "gem";
+    };
+    version = "1.17.3";
+  };
   hocon = {
     groups = [ "default" ];
     platforms = [ ];
@@ -52,6 +62,17 @@
       type = "gem";
     };
     version = "1.7.0";
+  };
+  sys-filesystem = {
+    dependencies = [ "ffi" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0cshw6aqq7ws4sbl0b4g50fgvffykbchjpnzanmg1f9lly85i6bg";
+      type = "gem";
+    };
+    version = "1.5.5";
   };
   thor = {
     groups = [ "default" ];

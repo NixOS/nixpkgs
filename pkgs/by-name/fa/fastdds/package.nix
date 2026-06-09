@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastdds";
-  version = "3.4.2";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NTdkGRbE4yVMMZ/PqLC2nZYD0uIcmo1tr+ieOBSijCM=";
+    hash = "sha256-C9MKfQJ+8XsiSIYaB43j6xmoIyRH7h7sgEyzj1gml/8=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       protocol, which provides publisher-subscriber communications over unreliable transports
       such as UDP, as defined and maintained by the Object Management Group (OMG) consortium.
     '';
+    maintainers = with lib.maintainers; [
+      panicgh
+    ];
     platforms = lib.platforms.linux;
   };
 })

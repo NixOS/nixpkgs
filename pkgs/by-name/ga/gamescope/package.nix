@@ -42,11 +42,12 @@
   glslang,
   hwdata,
   stb,
-  wlroots_0_18,
+  wlroots_0_19,
   libdecor,
   lcms,
   lib,
   luajit,
+  catch2_3,
   makeBinaryWrapper,
   nix-update-script,
   enableExecutable ? true,
@@ -62,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.22";
+  version = "3.16.24";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-FuQkKguW00yI2w5nCctcxz7e1ZUKSWJOCIS1UMJzsMA=";
+    hash = "sha256-+4jEQAUGKOFJkLUJHIz1hVx7kbt+wMhLcbboiz0PC/E=";
   };
 
   patches = [
@@ -84,12 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ValveSoftware/gamescope/commit/4ce1a91fb219f570b0871071a2ec8ac97d90c0bc.diff";
       hash = "sha256-O358ScIIndfkc1S0A8g2jKvFWoCzcXB/g6lRJamqOI4=";
     })
+
+    # Pending upstream patch to support stb_image_resize2.h
+    # See: https://github.com/ValveSoftware/gamescope/pull/2130
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/d49a2aded261030e649fee42ad295f1ef56b736b.diff";
+      hash = "sha256-Uh08ZRaV912ZOsl1DMpbVLxIgh4jEXevgihQf2W9KFk=";
+    })
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
-    substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
+    substituteInPlace src/Utils/DirHelpers.cpp --replace-fail "@out@" "$out"
 
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
@@ -145,13 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     wayland
     wayland-protocols
-    vulkan-loader
-  ]
-  ++ lib.optionals enableWsi [
     vulkan-headers
+    vulkan-loader
+    catch2_3
   ]
   ++ lib.optionals enableExecutable (
-    wlroots_0_18.buildInputs
+    wlroots_0_19.buildInputs
     ++ [
       # gamescope uses a custom wlroots branch
       libxcomposite

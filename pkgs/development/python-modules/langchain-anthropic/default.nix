@@ -24,19 +24,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.4.0";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${finalAttrs.version}";
-    hash = "sha256-nPVmyRvgGWDOANP0NalmX4obl+mMb/LdXtyO60k4zKs=";
+    hash = "sha256-u0Ur2SZFI8NkiVMBFieZIkc3cJL2IvrFvB4ueCvGMEU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
 
   build-system = [ hatchling ];
+
+  # Langchain always tracks the latest release of anthropic whether or not it's needed
+  pythonRelaxDeps = [ "anthropic" ];
 
   dependencies = [
     anthropic
@@ -72,7 +75,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Anthropic";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
     license = lib.licenses.mit;

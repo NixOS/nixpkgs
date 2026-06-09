@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -18,16 +19,41 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-HIWT09G8gqSFt9CIjsjJaDRnj2GO0G6JOGeI0p4/1vw=";
 
-  # Build fails on node 22, presumably because of esm.
-  # https://github.com/NixOS/nixpkgs/issues/371649
-  nodejs = nodejs_20;
+  patches = [
+    ./nix-compatibility.patch
+  ];
 
-  postInstall = ''
-    mkdir $out/bin
-    makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/scanservjs \
-      --set NODE_ENV production \
-      --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
+  postBuild = ''
+    # Install runtime dependencies
+    npm install \
+      --prefix ./dist \
+      --offline \
+      --production \
+      --ignore-scripts
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf $out/lib
+
+    mkdir -p $out/lib
+    cp -r dist/* $out/lib
+
+    substituteInPlace "$out/lib/server/express-configurer.js" \
+      --replace-fail "@client@" "$out/lib/client"
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe nodejs} $out/bin/scanservjs \
+      --set NODE_ENV production \
+      --add-flags "$out/lib/server/server.js"
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";

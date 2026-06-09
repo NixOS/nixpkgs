@@ -53,7 +53,7 @@
     client2.succeed("docker images | grep scratch")
 
     client2.succeed(
-        "curl -fsS -X DELETE registry:8080/v2/scratch/manifests/$(curl -fsS -I -H\"Accept: application/vnd.docker.distribution.manifest.v2+json\" registry:8080/v2/scratch/manifests/latest | grep Docker-Content-Digest | sed -e 's/Docker-Content-Digest: //' | tr -d '\\r')"
+        "curl -fsS -X DELETE registry:8080/v2/scratch/manifests/$(curl -fsS -I -H\"Accept: application/vnd.oci.image.manifest.v1+json\" registry:8080/v2/scratch/manifests/latest | grep Docker-Content-Digest | sed -e 's/Docker-Content-Digest: //' | tr -d '\\r')"
     )
 
     registry.systemctl("start docker-registry-garbage-collect.service")

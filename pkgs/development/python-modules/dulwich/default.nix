@@ -25,19 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${finalAttrs.version}";
-    hash = "sha256-9y7+00M2Ib5j+1fHNsJBomkyNZWhihqcIvAgGpJ5AB8=";
+    hash = "sha256-pyBAN1zSYGrOg4tic/SiKROHHUlFMtBSF0OOVNVvkyM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NEYauayn7laPLQUomQAFEskFP5m8546jYltazR/gn1A=";
+    hash = "sha256-U5X/D3iVg2qunji8HQbNeDzvYMoD4oRe5bL6l035lO0=";
   };
 
   nativeBuildInputs = [
@@ -89,8 +89,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
-    "tests/contrib"
     # AssertionError: GPGMEError not raised
     "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];

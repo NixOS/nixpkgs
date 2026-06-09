@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "2.1.9";
+  version = "2.1.11";
 
   jdk = zulu25.override { enableJavaFX = true; };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-E7GV4YGbF0Nj6aWVqJNUUpwLH1G5v5bEQamHP7OUzQY=";
+    hash = "sha256-Ts0u1Rapgfz/z17U3VSN17/rdACr/KOGmiZjWnGJmcw=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-bNZNRbm9uNGfLzGvshXNaRLUNX38Uz58GGy6WqJwV1E=";
+    hash = "sha256-/+HDj28uOFQwkrrzKfcQW0T5/qTIeB30Zd10EjeGhlU=";
   };
 
   nativeBuildInputs = [

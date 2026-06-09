@@ -19,23 +19,23 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "2.1.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pLiSidcuRTcykHDgW2pw+h0t/42g6u3LlioSEDA0lIo=";
+    hash = "sha256-SYI0LosdR82rUubxl0pNi1huEDcR6bxcaHbjCVT/T/0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-TcoyNIVb/aDgXIsNDvzTMfsewmefU9ck+uSHv/tbH/k=";
+    fetcherVersion = 3;
+    hash = "sha256-LXPQpQFXwPEHxktLoRiWTi8NbtzrS5ItUmoKJki3zcs";
   };
 
-  cargoRoot = "src-tauri";
+  cargoRoot = ".";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-R6lU4BPFlFxQqxmP5EWQsYwe1QGIlKVhp/iNiD9pKQo=";
+    hash = "sha256-cCaZ5X57WAaO9F2lP2/wdilXc0Al0Vr3ntyV1/Q5sj8=";
   };
 
   nativeBuildInputs = [
@@ -70,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     jq \
       '.plugins.updater.endpoints = [ ]
       | .bundle.createUpdaterArtifacts = false' \
-      src-tauri/tauri.conf.json \
-      | sponge src-tauri/tauri.conf.json
+      apps/tauri/tauri.conf.json \
+      | sponge apps/tauri/tauri.conf.json
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Causes fatal ldconfig cache generation attempt on non-NixOS Linux
     for mkfile in autoconf/Makefile.common.lib.in libAfter{Base,Image}/Makefile.in; do
       substituteInPlace $mkfile \
-        --replace 'test -w /etc' 'false'
+        --replace-fail 'test -w /etc' 'false'
     done
   '';
 
@@ -72,20 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-    # binutils 2.37 fix
-    # https://github.com/afterstep/afterstep/issues/2
-    fixupList=(
-      "autoconf/Makefile.defines.in"
-      "libAfterImage/aftershow/Makefile.in"
-      "libAfterImage/apps/Makefile.in"
-      "libAfterBase/Makefile.in"
-      "libAfterImage/Makefile.in"
-    )
-    for toFix in "''${fixupList[@]}"; do
-      substituteInPlace "$toFix" --replace "clq" "cq"
-    done
+    # A strange type of bug: dbus is not immediately found by pkg-config
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 

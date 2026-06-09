@@ -7,7 +7,7 @@
   llm-hacker-news,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-hacker-news";
   version = "0.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-hacker-news";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pywx9TAN/mnGR6Vv6YsPhLO4R5Geagw/bcydQjvTH5s=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin for pulling content from Hacker News";
     homepage = "https://github.com/simonw/llm-hacker-news";
-    changelog = "https://github.com/simonw/llm-hacker-news/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-hacker-news/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

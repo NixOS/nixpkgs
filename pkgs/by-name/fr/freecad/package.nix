@@ -55,13 +55,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.1.0";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       tag = finalAttrs.version;
-      hash = "sha256-knyc4Ts9dd12i0SsVDeoCs37jrMxekc07KBf3wJvNgk=";
+      hash = "sha256-7/VEbs8YDM1Xwc819ab6av5fgRSIbbB6LeCM0V08vRU=";
       fetchSubmodules = true;
     };
 

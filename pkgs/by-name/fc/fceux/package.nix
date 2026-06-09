@@ -31,17 +31,18 @@ assert lib.elem ___qtVersion [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6-unstable-2025-01-20";
+  version = "2.6.6-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "2b8f6e76271341616920bb7e0c54ee48570783d3";
-    hash = "sha256-2QDiAk2HO9oQ1gNvc7QFZSCbWkCDYW5OJWT8f4bmXyg=";
+    rev = "1e1168db6662ce86848460b5d078e17c6dc6e2ce";
+    hash = "sha256-FHNMDvEMgKnZjpm0DEN2rj0aI3T244zfcS+NEYWytaU=";
   };
 
   patches = [
-    ./0001-fix-build-with-minizip-1.3.2.patch
+    # https://github.com/TASEmulators/fceux/pull/834
+    ./0001-cmake-fix-qt6-build-on-linux.patch
   ];
 
   nativeBuildInputs = [
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "fceux";
-    maintainers = with lib.maintainers; [ sbruder ];
+    maintainers = with lib.maintainers; [ kuflierl ];
     platforms = lib.platforms.linux;
   };
 })

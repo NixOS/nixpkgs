@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cxx-rs";
-  version = "1.0.175";
+  version = "1.0.194";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
     tag = finalAttrs.version;
-    sha256 = "sha256-haAcBBI5ol+gcqKzasyHU43ewGA0L4FlL4o1QlJJukc=";
+    sha256 = "sha256-PIeF9VuyJOIs1x02YETKIP0+nCG3RZXLMJdFNlgAFzo=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

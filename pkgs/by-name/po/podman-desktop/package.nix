@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_41,
-  nodejs,
+  nodejs-slim_24,
   pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -21,12 +21,14 @@
 }:
 
 let
+  nodejs-slim = nodejs-slim_24;
+  pnpm = pnpm_10_29_2.override { inherit nodejs-slim; };
   electron = electron_41;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.26.2";
+  version = "1.27.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -43,8 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
       };
       text = ''
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-        new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-        new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        get_major_version() {
+          jq -r "$1" "$new_src/package.json" | grep --perl-regexp --only-matching '[0-9]+' | head -n 1
+        }
+
+        new_node_major="$(get_major_version '.engines.node')"
+        new_electron_major="$(get_major_version '.devDependencies.electron')"
+        new_pnpm_major="$(get_major_version '.packageManager')"
+
+        sed -i -E "s/nodejs_[0-9]+/nodejs_$new_node_major/g" "$PKG_FILE"
         sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
         sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
       '';
@@ -56,17 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VVyKC1z7YECZlbTaFaq2OwGg0k22qBbn/HEOYiJ8fcw=";
+    hash = "sha256-HcT33KjWnoY/pGuolt0BZurxdaWgUTF0tuACE9flfCM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 2;
-    hash = "sha256-tCp5qLZVo93H8VIToU3mkmwNsVXOAd1IEsL6RlazPXo=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-FD5lXAgA6uJLRLbaiZDbmow6BEiF6DWCzryAzyMGKe8=";
   };
 
   patches = [
@@ -82,9 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    nodejs
+    nodejs-slim
+    nodejs-slim.npm
+    pnpm
     pnpmConfigHook
-    pnpm_10_29_2
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
@@ -149,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     );
 
-  # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
+  # see: https://github.com/podman-desktop/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
     (makeDesktopItem {
       name = "podman-desktop";
@@ -166,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
-    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/podman-desktop/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       booxter

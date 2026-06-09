@@ -1,28 +1,28 @@
 {
-  lib,
   buildGo126Module,
   fetchFromGitHub,
+  lib,
 }:
-
 buildGo126Module (finalAttrs: {
   pname = "hyprmon";
-  version = "0.0.13";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "erans";
     repo = "hyprmon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fITGGP01RB8h8loClSZ+vuohViJQC8mpSt4iNZVK9yk=";
+    hash = "sha256-1rtmToVveAkNRqPR1gDCYIOS+nM9Ag+3T5QYJmdtbEg=";
   };
 
-  vendorHash = "sha256-JahEeFmPYfJVXjbKdfUePI/xF3Ob/c2czFXKCy92ouQ=";
+  vendorHash = "sha256-U2fw/1tnRwmd9qzEcrMduZbbNU67NbDhG2Id5IHj5js=";
 
   meta = {
     description = "TUI monitor configuration tool for Hyprland with visual layout, drag-and-drop, and profile management";
-    homepage = "https://github.com/erans/hyprmon";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onatustun ];
     mainProgram = "hyprmon";
+    platforms = lib.platforms.linux;
   };
 })

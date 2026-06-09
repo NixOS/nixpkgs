@@ -34,10 +34,10 @@
 }@pkgs:
 
 let
-  defaultVersion = "2025.10";
+  defaultVersion = "2026.04";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-tPAyhI5WzI8hOtWfkTLAhNu7YyvCkXbQJOWCIODv30o=";
+    hash = "sha256-rHwEuLcASSOwCk5dZpnF300hIzusn9ppDYz7wgn/8v0=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -115,14 +115,12 @@ let
         ]
         ++ extraMakeFlags;
 
-        passAsFile = [ "extraConfig" ];
-
         configurePhase = ''
           runHook preConfigure
 
           make -j$NIX_BUILD_CORES ${defconfig}
 
-          cat $extraConfigPath >> .config
+          printf "%s" "$extraConfig" >> .config
 
           runHook postConfigure
         '';
@@ -145,17 +143,17 @@ let
 
         dontStrip = true;
 
-        meta =
+        __structuredAttrs = true;
 
-          {
-            homepage = "https://www.denx.de/wiki/U-Boot/";
-            description = "Boot loader for embedded systems";
-            license = lib.licenses.gpl2Plus;
-            maintainers = with lib.maintainers; [
-              lopsided98
-            ];
-          }
-          // extraMeta;
+        meta = {
+          homepage = "https://www.denx.de/wiki/U-Boot/";
+          description = "Boot loader for embedded systems";
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [
+            lopsided98
+          ];
+        }
+        // extraMeta;
       }
       // removeAttrs args [
         "extraMeta"
@@ -793,6 +791,23 @@ in
     filesToInstall = [ "u-boot.bin" ];
   };
 
+  ubootRock3C = buildUBoot {
+    defconfig = "rock-3c-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    strictDeps = true;
+    env = {
+      BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    };
+    filesToInstall = [
+      "idbloader.img"
+      "idbloader-spi.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
   ubootRock4CPlus = buildUBoot {
     defconfig = "rock-4c-plus-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
@@ -815,6 +830,20 @@ in
       "idbloader.img"
       "u-boot-rockchip.bin"
       "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootRock5ModelC = buildUBoot {
+    defconfig = "rock-5c-rk3588s_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    env = {
+      BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    };
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+      "u-boot-rockchip.bin"
     ];
   };
 

@@ -32,6 +32,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   enabledTestPaths = [ "tests/*" ];
 
+  disabledTests = [
+    # requires real tty
+    "test_run_app"
+  ];
+
   meta = {
     description = "TUI application that provides a multi-timezone graphical clock in a terminal environment";
     homepage = "https://github.com/ddelabru/world-wall-clock";

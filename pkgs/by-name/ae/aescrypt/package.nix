@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
+    substituteInPlace src/Makefile --replace-fail "CC=gcc" "CC?=gcc"
     cd src
   '';
 
