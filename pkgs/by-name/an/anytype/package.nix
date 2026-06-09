@@ -87,7 +87,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    #TODO: update it in update script
     outputHash = "sha256-6IHFidjVDDzUOCRXVwjvzcLGKV6dWWS7k2jwrOuJ748=";
     outputHashMode = "recursive";
   };
