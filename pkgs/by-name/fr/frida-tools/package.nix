@@ -35,7 +35,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (client tools)";
     homepage = "https://www.frida.re/";
-    maintainers = with lib.maintainers; [ s1341 ];
+    maintainers = with lib.maintainers; [
+      s1341
+      eyjhb
+    ];
     license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
