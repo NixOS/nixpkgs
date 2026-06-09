@@ -4893,7 +4893,8 @@
       ];
     "ouman_eh_800" =
       ps: with ps; [
-      ]; # missing inputs: ouman-eh-800-api
+        ouman-eh-800-api
+      ];
     "ourgroceries" =
       ps: with ps; [
         ourgroceries
@@ -8432,6 +8433,7 @@
     "osoenergy"
     "otbr"
     "otp"
+    "ouman_eh_800"
     "ourgroceries"
     "overkiz"
     "overseerr"
