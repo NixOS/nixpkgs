@@ -125,6 +125,12 @@ in
     };
     users.groups.scanservjs = { };
 
+    systemd.tmpfiles.rules = [
+      "d ${cfg.stateDir}/data 0755 scanservjs scanservjs - -"
+      "d ${cfg.stateDir}/data/preview 0755 scanservjs scanservjs - -"
+      "L+ ${cfg.stateDir}/data/preview/default.jpg - - - - ${package}/lib/data/preview/default.jpg"
+    ];
+
     systemd.services.scanservjs = {
       description = "scanservjs";
       after = [ "network.target" ];

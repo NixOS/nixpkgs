@@ -1728,10 +1728,9 @@ with pkgs;
 
   inherit (go-containerregistry) crane gcrane;
 
-  geekbench_4 = callPackage ../tools/misc/geekbench/4.nix { };
-  geekbench_5 = callPackage ../tools/misc/geekbench/5.nix { };
-  geekbench_6 = callPackage ../tools/misc/geekbench/6.nix { };
-  geekbench = geekbench_6;
+  geekbench_4 = callPackage ../by-name/ge/geekbench/4.nix { };
+  geekbench_5 = callPackage ../by-name/ge/geekbench/5.nix { };
+  geekbench_6 = geekbench;
 
   ghidra = callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf_21;
@@ -1836,8 +1835,6 @@ with pkgs;
 
   pixcat = with python3Packages; toPythonApplication pixcat;
 
-  psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
-
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ropgadget = with python3Packages; toPythonApplication ropgadget;
@@ -1887,8 +1884,6 @@ with pkgs;
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
-
-  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -5533,8 +5528,6 @@ with pkgs;
   nwjs-sdk = nwjs.override {
     sdk = true;
   };
-
-  obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
   openai = with python3Packages; toPythonApplication openai;
 
@@ -9393,10 +9386,6 @@ with pkgs;
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurialFull = mercurial.override { fullBuild = true; };
-
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;

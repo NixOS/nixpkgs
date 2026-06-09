@@ -1215,8 +1215,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.134.0";
-          hash = "sha256-wWANxBh9Tg3VkfbcrR0NgOIC8cpeZJCNfOevT7E4zKY=";
+          version = "3.136.0";
+          hash = "sha256-RK493qHjEK/k8oy/OIzO3bvNnFo+ZftQhZMIAmBCaJk=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.5.1779885478";
-          hash = "sha256-8RU6JWHeYOAxof2TXpeXlXSVD9+0e0E46X85A11l4Pk=";
+          version = "2026.6.1780508121";
+          hash = "sha256-4kb7Nk+gctECMQM/cko+q1Bta1EKPXPEqyCQLBMkbEo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -2324,8 +2324,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.77";
-          hash = "sha256-khxajorzIntF2YwKVd6aZ1+doEr2oN4OliBpc7TTB7o=";
+          version = "1.1.78";
+          hash = "sha256-w0i0Gmqj2atCtEYW+0XvZech37qQaTjkt8MJRdHamxs=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -3997,8 +3997,8 @@ let
         mktplcRef = {
           name = "wikitext";
           publisher = "RoweWilsonFrederiskHolme";
-          version = "4.0.4";
-          hash = "sha256-IEnWoRQfWx4TbysSQlOxG0c8kiqtR4fOhaV1JxDkRCw=";
+          version = "4.0.5";
+          hash = "sha256-VyrcgS93B5Xd4s101lnTw9o27ffcvmxkShCKJ+6H+2w=";
         };
         meta = {
           description = "Extension that helps users view and write MediaWiki's Wikitext files";

@@ -1,60 +1,29 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash common-updater-scripts coreutils curl gnutar nix
-# shellcheck shell=bash
+#!nix-shell -i bash -p bash nix-update common-updater-scripts nix jq
+
 set -euo pipefail
 
-script_dir="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-nixpkgs_root="$(realpath "$script_dir/../../../..")"
-package_file="$script_dir/package.nix"
-tmpdir="$(mktemp -d)"
-trap 'rm -rf "$tmpdir"' EXIT
+baseUrl=https://storage.googleapis.com/antigravity-public/antigravity-cli
 
-cd -- "$nixpkgs_root"
+currentVersion=$(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.version or (lib.getVersion antigravity-cli)")
+latestVersion=$(curl $baseUrl/latest)
 
-if (( $# < 3 || ($# - 1) % 2 != 0 )); then
-  echo "Usage: $0 <version> [<system> <url>]..." >&2
-  exit 1
+if [[ "$currentVersion" == "$latestVersion" ]]; then
+    echo "package is up-to-date: $currentVersion"
+    exit 0
 fi
 
-version="$1"
-shift
+# urls unfortunately include a weird buildid that make it hard to get
+latestWholeVersion=$(curl $baseUrl/$latestVersion/manifest.json | jq -r '.platforms."linux-x64".url' | cut -d/ -f6)
 
-export NIXPKGS_ALLOW_UNFREE=1
+update-source-version --version-key=wholeVersion antigravity-cli $latestWholeVersion || true
 
-hash_url() {
-  local system="$1"
-  local url="$2"
-  local archive="$tmpdir/$system.tar.gz"
-  local unpack_dir="$tmpdir/$system-unpack"
-
-  mkdir -p "$unpack_dir"
-  curl -fsSL "$url" -o "$archive" || return
-  tar -xzf "$archive" -C "$unpack_dir" || return
-
-  if [[ ! -x "$unpack_dir/antigravity" ]]; then
-    echo "Expected executable 'antigravity' in $url" >&2
-    exit 1
-  fi
-
-  nix hash path --type sha256 "$unpack_dir"
-}
-
-while (( $# > 0 )); do
-  system="$1"
-  url="$2"
-  shift 2
-
-  if [[ "$url" != *"/antigravity-cli/$version-"* ]]; then
-    echo "URL for $system does not match package version $version: $url" >&2
-    exit 1
-  fi
-
-  echo "Hashing $system from $url"
-  hash="$(hash_url "$system" "$url")"
-  update-source-version antigravity-cli "$version" "$hash" \
-    --file="$package_file" \
-    --ignore-same-hash \
-    --ignore-same-version \
-    --source-key="sources.$system" \
-    --system="$system"
+for system in \
+    x86_64-linux \
+    aarch64-linux \
+    x86_64-darwin \
+    aarch64-darwin; do
+    hash=$(nix store prefetch-file --json --hash-type sha256 \
+      $(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.src.url" --system "$system") | jq -r '.hash')
+    update-source-version --version-key=wholeVersion antigravity-cli $latestWholeVersion $hash --system=$system --ignore-same-version
 done
