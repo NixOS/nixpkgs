@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postPatch = ''
     substituteInPlace util.c --replace \
       "lscpu" "${lib.getBin util-linux}/bin/lscpu"
