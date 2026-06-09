@@ -29,6 +29,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://dgraph-io.github.io/badger";
     license = lib.licenses.asl20;
     mainProgram = "badger";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
