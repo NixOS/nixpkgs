@@ -3114,9 +3114,9 @@ with pkgs;
   voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
   voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
 
-  openconnectPackages = callPackage ../tools/networking/openconnect { };
-
-  inherit (openconnectPackages) openconnect openconnect_openssl;
+  openconnectPackages = {
+    inherit openconnect openconnect_openssl;
+  };
 
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
