@@ -13541,6 +13541,12 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
+  jpz13 = {
+    email = "jp@pipekit.io";
+    github = "JPZ13";
+    githubId = 6625432;
+    name = "J.P. Zivalich";
+  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
