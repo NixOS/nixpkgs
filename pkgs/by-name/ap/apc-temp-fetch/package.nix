@@ -1,27 +1,25 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  requests,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apc-temp-fetch";
   version = "0.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "APC-Temp-fetch";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lXGj/xrOkdMMYvuyVVSCojjQlzISFUT14VTn//iOARo=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     requests
   ];
 
@@ -35,4 +33,4 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

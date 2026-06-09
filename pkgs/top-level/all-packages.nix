@@ -1810,8 +1810,6 @@ with pkgs;
     util-linux = util-linuxMinimal;
   };
 
-  apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
-
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
   };
