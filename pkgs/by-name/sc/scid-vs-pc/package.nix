@@ -35,9 +35,13 @@ tcl.mkTclDerivation rec {
     zlib
   ];
 
+  addTclConfigureFlags = false;
   configureFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "SHAREDIR=${placeholder "out"}/share"
+    "--with-tcl=${tcl}/lib"
+    "--with-tclinclude=${tcl}/include"
+    "--exec-prefix=${placeholder "out"}"
   ];
 
   postInstall = ''
