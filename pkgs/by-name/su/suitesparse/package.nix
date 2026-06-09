@@ -13,11 +13,10 @@
   enableCuda ? config.cudaSupport,
   cudaPackages,
   llvmPackages,
-}@inputs:
+}:
 
 let
-  stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "suitesparse";

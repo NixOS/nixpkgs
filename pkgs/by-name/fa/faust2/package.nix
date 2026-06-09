@@ -224,7 +224,6 @@ let
   # propagatedBuildInputs.
   wrapWithBuildEnv =
     {
-      baseName,
       propagatedBuildInputs ? [ ],
       ...
     }@args:
@@ -275,7 +274,6 @@ let
   # The build input 'faust' is automatically added to the PATH.
   wrap =
     {
-      baseName,
       runtimeInputs ? [ ],
       ...
     }@args:

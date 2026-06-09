@@ -14,7 +14,7 @@
   llvmPackages,
   R,
   rPackages,
-}@inputs:
+}:
 
 assert ncclSupport -> (cudaSupport && cudaPackages.nccl.meta.available);
 # Disable regular tests when building the R package
@@ -28,9 +28,7 @@ let
   # This ensures xgboost gets the correct libstdc++ when
   # built with cuda support. This may be removed once
   # #226165 rewrites cudaStdenv
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
-  # Ensures we don't use the stdenv value by accident.
-  stdenv = throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 
 effectiveStdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-args@{
+{
   lib,
   stdenv,
   fetchFromGitHub,
   cmake,
-  hwloc, # Purposefully shadowed below
+  hwloc,
   ninja,
   pkg-config,
   ctestCheckHook,
@@ -13,7 +13,7 @@ let
   # However, the derivation *does* change, causing rebuilds of packages like Nix.
   # To avoid these pointless rebuilds, we make sure to always use a version of hwloc with CUDA
   # support disabled.
-  hwloc = args.hwloc.override { enableCuda = false; };
+  hwloc_nocuda = hwloc.override { enableCuda = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "onetbb";
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hwloc
+    hwloc_nocuda
   ];
 
   doCheck = !stdenv.hostPlatform.isStatic;

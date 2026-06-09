@@ -44,7 +44,6 @@ let
   mkAzExtension =
     {
       pname,
-      version,
       url,
       hash,
       description,

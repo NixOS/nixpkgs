@@ -32,14 +32,15 @@
   gl3w,
   SDL2,
   fmt,
-}@args:
+}:
 
 let
-  ruby = args.ruby.withPackages (ps: [
+  rubyWithPackages = ruby.withPackages (ps: [
     ps.prime
     ps.racc
     ps.rake
     ps.rexml
+    ps.mutex_m
   ]);
 in
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     cmake
     pkg-config
-    ruby
+    rubyWithPackages
     beamPackages.erlang
     beamPackages.elixir
     beamPackages.hex
@@ -89,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     crossguid
     reproc
     platform-folders
-    ruby
+    rubyWithPackages
     alsa-lib
     rtmidi
     boost
@@ -122,6 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix shebangs on files in app and bin scripts
   postPatch = ''
     patchShebangs app bin
+    # Boost 1.89.0 removed the compiled 'system' component (it is now header-only).
+    # Strip it from CMakeLists so find_package and target_link_libraries don't fail.
+    find . -type f -name "CMakeLists.txt" -exec sed -i '/find_package.*Boost/ s/\bsystem\b//g' {} +
+    find . -type f -name "CMakeLists.txt" -exec sed -i 's/Boost::system//g' {} +
   '';
 
   preConfigure =
@@ -210,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp $out/bin/sonic-pi \
       --prefix PATH : ${
         lib.makeBinPath [
-          ruby
+          rubyWithPackages
           supercollider-with-sc3-plugins
           jack2
           jack-example-tools
@@ -225,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0 \
         --prefix PATH : ${
           lib.makeBinPath [
-            ruby
+            rubyWithPackages
             supercollider-with-sc3-plugins
             jack2
             jack-example-tools
@@ -274,6 +279,5 @@ stdenv.mkDerivation (finalAttrs: {
       sohalt
     ];
     platforms = lib.platforms.linux;
-    broken = true;
   };
 })

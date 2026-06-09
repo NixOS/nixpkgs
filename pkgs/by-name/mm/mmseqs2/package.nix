@@ -18,10 +18,11 @@
   bzip2,
   zstd,
   runCommand,
-}@args:
+}:
+
 let
   # require static library, libzstd.a
-  zstd = args.zstd.override { enableStatic = true; };
+  zstdStatic = zstd.override { enableStatic = true; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    zstd
+    zstdStatic
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
