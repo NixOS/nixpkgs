@@ -656,8 +656,10 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # Requires file-io >= 0.2 if using OsPath flag (which we want for GHC >= 9.10)
-  git-annex = lib.pipe (super.git-annex.override { file-io = self.file-io_0_2_0; }) [
+  # Requires file-io >= 0.2 if using OsPath flag which is incompatible with the directory
+  # version shipped with GHC 9.12 and 9.14, so we're sticking with filepath-bytestring for now.
+  # TODO(@sternenseemann): look into restoring compat for file-io < 0.2 or upgrade to file-io
+  git-annex = lib.pipe (super.git-annex.override { file-io = self.filepath-bytestring; }) [
     (overrideCabal (drv: {
       # Hackage tarball only includes what is supported by `cabal install git-annex`,
       # but we want e.g. completions as well. See
@@ -667,7 +669,7 @@ with haskellLib;
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-9DHaOZplSGuUQufra/hMdpykztbKKjDfu1Rp9zUs+tg=";
+        sha256 = "sha256-PoO1vAUVZsHHFAusoxBJeSW4y9tn3/kKXFDGzr8hZh4=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
