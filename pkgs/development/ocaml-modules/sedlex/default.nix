@@ -41,7 +41,7 @@ let
   };
   atLeast31 = lib.versionAtLeast param.version "3.1";
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "sedlex";
   inherit (param) version;
 
@@ -50,7 +50,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     inherit (param) sha256;
   };
 
@@ -79,9 +79,9 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
-    changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
+    changelog = "https://github.com/ocaml-community/sedlex/raw/v${finalAttrs.version}/CHANGES";
     description = "OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

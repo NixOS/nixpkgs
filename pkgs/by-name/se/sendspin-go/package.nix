@@ -12,18 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "sendspin-go";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ME4LZp5NNLSAtdkIUZJWWWQTUr5Lt3y+HscJAR/AS7c=";
+    hash = "sha256-I4LhgW4uyA9m+tWQKhcAsh+55jtO77TP9AFBpGjGtJs=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-g2u3kkP6FUtHoCnY4PxqTp/d1wYQuz0uFZkeuobtl7U=";
+  vendorHash = "sha256-QAmC6bgOSlV8we9j3rDQ9V3sLdSvELu8zzn5UAw/uIY=";
 
   nativeBuildInputs = [ pkg-config ];
 

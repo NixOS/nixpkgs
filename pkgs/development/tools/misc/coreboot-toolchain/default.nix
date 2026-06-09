@@ -26,12 +26,12 @@ let
 
       stdenvNoCC.mkDerivation (finalAttrs: {
         pname = "coreboot-toolchain-${arch}";
-        version = "25.12";
+        version = "26.03";
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-zm1M+iveBxE/8/vIXZz1KoFkMaKW+bsQM4me5T6WqVY=";
+          hash = "sha256-9ollzu6vtU+uHibvV/B5N70ZVl701kuI/orWlFZLjIU=";
           fetchSubmodules = false;
           leaveDotGit = true;
           postFetch = ''

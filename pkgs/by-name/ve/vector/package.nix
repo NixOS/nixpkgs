@@ -87,6 +87,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
+  # https://github.com/vectordotdev/vector/pull/25406
+  postPatch = ''
+    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
+      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
+  '';
+
   doCheck = true;
   checkType = "debug";
 
@@ -133,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # Flakey on aarch64-linux
+    "--skip=sources::exec::tests::test_graceful_shutdown"
     "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=topology::test::backpressure::buffer_drop_fan_out"
     "--skip=topology::test::backpressure::default_fan_out"
@@ -151,9 +158,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 

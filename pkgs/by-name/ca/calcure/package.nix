@@ -37,6 +37,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/anufrievroman/calcure";
     changelog = "https://github.com/anufrievroman/calcure/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

@@ -186,7 +186,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Gabriella439
       booxter
       cameronyule
       viraptor

@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-track";
   version = "0.6.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "uncenter";
     repo = "nixpkgs-track";
@@ -21,11 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-lnv0nCyb2+7Xl+qAAeaHdbk4XOGdq4FINxPOIPchDhg=";
 
   buildInputs = [ openssl ];
-  nativeBuildInputs = [
-    pkg-config
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

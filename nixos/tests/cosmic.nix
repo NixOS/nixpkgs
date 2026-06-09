@@ -140,7 +140,7 @@
                   machine.succeed(f"pkill {gui_app}", timeout=5)
 
       machine.succeed("echo 'test completed succeessfully' > /${testName}", timeout=5)
-      machine.copy_from_vm('/${testName}')
+      machine.copy_from_machine('/${testName}')
 
       machine.shutdown()
     '';

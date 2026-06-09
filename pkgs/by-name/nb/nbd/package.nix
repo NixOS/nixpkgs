@@ -1,12 +1,18 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
+  autoconf-archive,
   pkg-config,
   glib,
   which,
   bison,
+  flex,
+  docbook2x,
+  docbook_sgml_dtd_41,
+  docbook_sgml_dtd_45,
   nixosTests,
   libnl,
   linuxHeaders,
@@ -15,26 +21,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbd";
-  version = "3.25";
+  version = "3.27.1";
 
-  src = fetchurl {
-    url = "https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-${finalAttrs.version}/nbd-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
+  src = fetchFromGitHub {
+    owner = "NetworkBlockDevice";
+    repo = "nbd";
+    tag = "nbd-${finalAttrs.version}";
+    hash = "sha256-0ahoLnwLdQdpr0AuRpNoid17hXo9BWlIOWRjRwhJ/LM=";
   };
 
   patches = [
-    # fix port setting from nbdtab
-    # https://github.com/NetworkBlockDevice/nbd/pull/154
+    # Fix nbd device parsing
     (fetchpatch {
-      url = "https://github.com/NetworkBlockDevice/nbd/commit/915444bc0b8a931d32dfb755542f4bd1d37f1449.patch";
-      hash = "sha256-6z+c2cXhY92WPDqRO6AJ5BBf1N38yTgOE1foduIr5Dg=";
+      url = "https://github.com/NetworkBlockDevice/nbd/commit/a80304e10e9709d4100c935bc4cdc9086e86d5ff.patch";
+      hash = "sha256-PMgVz2a8cwv1tO8ac5Wrf8ZFvOmCq+mC5bysJJGhpGc=";
     })
   ];
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "support/genver.sh" "echo ${finalAttrs.version}"
+    substituteInPlace man/Makefile.am \
+      --replace-fail "docbook2man" "docbook2man --sgml"
+  '';
+
   nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
     pkg-config
-    which
     bison
+    flex
+    docbook2x # docbook2man
   ];
 
   buildInputs = [
@@ -46,14 +63,20 @@ stdenv.mkDerivation (finalAttrs: {
     linuxHeaders
   ];
 
+  nativeCheckInputs = [
+    which
+  ];
+
   configureFlags = [
     "--sysconfdir=/etc"
   ];
 
-  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
-
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  env.SGML_CATALOG_FILES = lib.concatStringsSep ":" [
+    "${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat"
+    "${docbook_sgml_dtd_45}/sgml/dtd/docbook-4.5/docbook.cat"
+  ];
 
   passthru.tests = {
     test = nixosTests.nbd;

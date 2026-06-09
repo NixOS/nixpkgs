@@ -208,7 +208,7 @@ in
           LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
 
           BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths ++ [
-            "/run/credentials/radicle-ci-broker.service/xyz.radicle.node.secret:/var/lib/radicle/keys/radicle"
+            "/run/credentials/radicle-ci-broker.service/dev.radicle.node.secret:/var/lib/radicle/keys/radicle"
           ];
           ReadWritePaths = [ RAD_HOME ];
 

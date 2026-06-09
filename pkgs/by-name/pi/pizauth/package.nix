@@ -2,35 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
+  stdenv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.11";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${finalAttrs.version}";
-    hash = "sha256-e9YBeYMC9tfxZoXZi/QBW3FO5V6BAe7RSvVWs7rv0PI=";
+    hash = "sha256-VL58v/mBwFwDmF4Xg43bzitcBCsPsEwEaLKqV5X9rpg=";
   };
 
-  cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
+  cargoHash = "sha256-pxzPcieUXE3VOyGNDaeDHUQPayRDZXpW57VWMejlZ4k=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [
+    "systemd"
+  ];
+
+  preConfigure = ''
+    substituteInPlace lib/systemd/user/pizauth.service \
+      --replace-fail /usr/bin/ ''${!outputBin}/bin/
+  '';
 
   postInstall = ''
-    installShellCompletion --cmd pizauth \
-      --bash share/bash/completion.bash \
-      --fish share/fish/pizauth.fish
-
-    installManPage pizauth.1 pizauth.conf.5
-
-    substituteInPlace lib/systemd/user/pizauth.service \
-      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
-    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
+    make PREFIX=$out install ${lib.optionalString stdenv.hostPlatform.isLinux "install-systemd"}
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
@@ -43,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      doronbehar
+    ];
     mainProgram = "pizauth";
   };
 })

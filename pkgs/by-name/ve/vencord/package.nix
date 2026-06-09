@@ -17,16 +17,18 @@
   discord-development,
   buildWebExtension ? false,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.14.10";
+  version = "1.14.13";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    # For some reason 1.14.10 is not tagged
-    rev = "cacd0efd87a8aba95ad2a3be8ae569a295b9eaae";
-    hash = "sha256-RnxhUGI0eji7gQf+FJnG+BoHphJmjxT9EF5FYUWYCbs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xqk/akTa/NcHjSm6h77y6Fkvq7ayBcR0w0HG0Hwfkf8=";
   };
 
   patches = [ ./fix-deps.patch ];
@@ -43,16 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       postPatch
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-GiUV2x8i7ewzn66v5wBUq67oNvrxZzOsh5TuQUtpJNQ=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-hk1rnNog5xvuIVI0M1ZJ5xrEuk0zcBiYsbROUycdi+A=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
   ];
 
   env = {

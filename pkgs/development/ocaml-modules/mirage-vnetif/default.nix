@@ -11,14 +11,14 @@
   logs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-vnetif";
   version = "0.6.2";
 
   minimalOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/mirage/mirage-vnetif/releases/download/v${finalAttrs.version}/mirage-vnetif-${finalAttrs.version}.tbz";
     hash = "sha256-SorcrPRhhCYhHasLQGHvTtLo229/3xVB6f7/XOlFRSI=";
   };
 
@@ -34,8 +34,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Virtual network interface and software switch for Mirage";
-    homepage = "https://github.com/mirage/${pname}";
+    homepage = "https://github.com/mirage/mirage-vnetif";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

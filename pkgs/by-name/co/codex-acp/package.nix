@@ -1,60 +1,52 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   pkg-config,
   openssl,
   libcap,
+  bubblewrap,
+  librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 let
-  versionData = builtins.fromJSON (builtins.readFile ./hashes.json);
-  inherit (versionData)
-    version
-    hash
-    cargoHash
-    codexRev
-    codexSrcHash
-    nodeVersionHash
-    ;
-
-  # codex-core uses include_str!("../../../../node-version.txt"), so we need
-  # to place node-version.txt at the vendored workspace root.
-  nodeVersionFile = fetchurl {
-    url = "https://raw.githubusercontent.com/zed-industries/codex/${codexRev}/codex-rs/node-version.txt";
-    hash = nodeVersionHash;
-  };
-
-  # codex-linux-sandbox compiles a patched bubblewrap source tree from
-  # codex-rs/vendor/bubblewrap. Cargo vendoring flattens workspace layout,
-  # so this directory must be provided explicitly.
+  # codex-acp 0.13.0 pins openai/codex rust-v0.128.0 in Cargo.lock.
+  codexRev = "e4310be51f617f5e60382038fa9cbf53a2429ca4";
+  codexHash = "sha256-v2W0eslPOPHxHX76+bnkE/f4y+MnQuopeOoAC5X16TA=";
   codexSrc = fetchFromGitHub {
-    owner = "zed-industries";
+    owner = "openai";
     repo = "codex";
     rev = codexRev;
-    hash = codexSrcHash;
+    hash = codexHash;
   };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-acp";
-  inherit version;
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "codex-acp";
-    rev = "v${version}";
-    inherit hash;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Mz3xPhGSjaucZ9c0etGOe4JJC8vJhGFOnAhkwXmhyY=";
   };
 
-  inherit cargoHash;
+  cargoHash = "sha256-kneMay6MGXhHA0q/usKsLFs/YKmdSHmrgSthzhaPgbk=";
 
-  preBuild = ''
-    cp ${nodeVersionFile} "$NIX_BUILD_TOP/codex-acp-${version}-vendor/node-version.txt"
+  # fetchCargoVendor only keeps the individual git crate subtrees. Older Codex
+  # crates included this workspace-root file from codex-core.
+  postPatch = ''
+    if [ -e ${codexSrc}/codex-rs/node-version.txt ]; then
+      cp ${codexSrc}/codex-rs/node-version.txt "$cargoDepsCopy/source-git-0/node-version.txt"
+    fi
   '';
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    CODEX_BWRAP_SOURCE_DIR = "${codexSrc}/codex-rs/vendor/bubblewrap";
+  env = {
+    RUSTY_V8_ARCHIVE = librusty_v8;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    CODEX_BWRAP_SOURCE_DIR = "${bubblewrap.src}";
   };
 
   nativeBuildInputs = [
@@ -70,16 +62,16 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  passthru.updateScript = ./update.py;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";
     homepage = "https://github.com/zed-industries/codex-acp";
-    changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${version}";
+    changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tlvince ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "codex-acp";
   };
-}
+})

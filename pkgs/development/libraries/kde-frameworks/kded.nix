@@ -3,6 +3,7 @@
   lib,
   propagate,
   wrapGAppsHook3,
+  cmake,
   extra-cmake-modules,
   kdoctools,
   gsettings-desktop-schemas,
@@ -17,6 +18,7 @@
 mkDerivation {
   pname = "kded";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
     wrapGAppsHook3

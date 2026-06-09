@@ -7,19 +7,19 @@
 let
   supported = {
     x86_64-linux = {
-      hash = "sha256-B1ymOFv6CPGhlyA14wis7qn+JlHv09FOt0OYyPtnyEA=";
+      hash = "sha256-7uZZuEijg1Aca1h2NrBwFU9iFnfhG17waXxqVlAKzTA=";
       arch = "linux-x64";
     };
     x86_64-darwin = {
-      hash = "sha256-127gG0MZ+SikOLrDyQgmiPukkCXjR/tWOCmT9lDphBU=";
+      hash = "sha256-NPh3Sxf2k/Nj4vt0SGsa5H6QOI1IBaL20g79Pl4/iPg=";
       arch = "darwin-x64";
     };
     aarch64-linux = {
-      hash = "sha256-UJ515dYrIdP4EyZXSrI3OzM620WUHwlemd1mfoXRw4E=";
+      hash = "sha256-tszcouaPUGTH1MpGJfU0RiLvBN7qIhH1vC3XiAmHFK8=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-amlxTRVVIFmcXErvGBh2ZSXoSzJN1Pmr2uWcnRRpcJU=";
+      hash = "sha256-JV9pZqq48q00GM0cg3Wu00qrrkn2fczbHBVqnCM84lI=";
       arch = "darwin-arm64";
     };
   };
@@ -34,7 +34,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "tombi";
     publisher = "tombi-toml";
-    version = "0.9.24";
+    version = "1.1.2";
   };
   meta = {
     description = "TOML Language Server";

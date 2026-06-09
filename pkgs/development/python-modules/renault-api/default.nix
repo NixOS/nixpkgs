@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.5.7";
+  version = "0.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-12xeTaGwKRELbMVmzjhlPm0xnkmVTHUJC2zE0Xkne9s=";
+    hash = "sha256-rIUG+HuHf5MXxPtOPjMRtRfurm1yUoNuqG494im2dQw=";
   };
 
   build-system = [ poetry-core ];

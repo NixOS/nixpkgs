@@ -3,11 +3,13 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   fetchFromGitHub,
 }:
 
 let
+  pnpm = pnpm_11;
+
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname
     version

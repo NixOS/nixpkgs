@@ -54,6 +54,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://git.sr.ht/~geb/dotool";
     changelog = "https://git.sr.ht/~geb/dotool/tree/${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

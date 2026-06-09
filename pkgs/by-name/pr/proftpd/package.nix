@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   fetchFromGitHub,
   libcap,
   libsodium,
@@ -28,7 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SNLzIwMF6XU2SAc5B9LIW2Jeh1Fa4CVumQYd2O0XxRY=";
   };
 
-  patches = [ ./no-install-user.patch ];
+  patches = [
+    ./no-install-user.patch
+    (fetchpatch {
+      name = "CVE-2026-44331.patch";
+      url = "https://github.com/proftpd/proftpd/commit/5e06acc4687046c7bf794b55bd8c44a86a05ae61.patch";
+      hash = "sha256-1YM9yeiZJwU2CasPhf4g9O8Jf/B01ullFeUkERFe9WY=";
+    })
+  ];
 
   strictDeps = true;
   enableParallelBuilding = true;

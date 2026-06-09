@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  nodejs_20,
-  pnpm_9,
+  nodejs,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -13,26 +13,26 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L4LBHVVtgMhSJm+IzZSYOR0UXPbvIRg4xiEV5urYxdI=";
+    hash = "sha256-VZZ/ukjciXqiebwei2JizyOnxx0T3IeoowFWElKec4o=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-9s2kdvd7svK4hofnD66HkDc86WTQeayfF5y7L2dmjNg=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-p44ctVCA3d1CXoq+zzhswVqhScF23ZhvpLUVVcrgQlM=";
   };
 
   nativeBuildInputs = [
-    nodejs_20
+    nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     makeWrapper
     installShellFiles
   ];
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/lib/openspec
 
     substituteInPlace bin/openspec.js \
-      --replace '#!/usr/bin/env node' '#!${nodejs_20}/bin/node' \
+      --replace '#!/usr/bin/env node' '#!${nodejs}/bin/node' \
       --replace "../dist" "$out/lib/openspec/dist"
     install -Dm755 bin/openspec.js $out/bin/openspec
 

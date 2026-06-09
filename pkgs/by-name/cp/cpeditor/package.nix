@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
+  kdePackages,
   pkg-config,
   cmake,
   ninja,
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpeditor";
-  version = "7.1.1";
+  version = "7.1.1-unstable-2026-04-07";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
-    tag = finalAttrs.version;
-    hash = "sha256-zEK3137DjQmuc7Y4c/HF0n37bdokj9ci2/agSaG7nZE=";
+    rev = "912784abcbfb38d70911c45d15a308c339894cec";
+    hash = "sha256-udpDsYve1QIQTT75Xk8HHBV1lTTTjauDMyfJKbShgEs=";
     fetchSubmodules = true;
   };
 
@@ -26,13 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     python3
   ];
+
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qttools
-    libsForQt5.syntax-highlighting
+    qt6.qtbase
+    qt6.qttools
+    qt6.qt5compat
+    kdePackages.syntax-highlighting
   ];
 
   postPatch = ''

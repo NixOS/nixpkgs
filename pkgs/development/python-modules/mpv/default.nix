@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyvirtualdisplay
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     xvfb
   ];
 

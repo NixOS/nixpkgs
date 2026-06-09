@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Arthur-Ficial/apfel";
     changelog = "https://github.com/Arthur-Ficial/apfel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arthurficial ];
     platforms = [ "aarch64-darwin" ];
     mainProgram = "apfel";
     sourceProvenance = [

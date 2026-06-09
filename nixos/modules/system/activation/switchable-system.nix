@@ -58,7 +58,11 @@
             --set DISTRO_ID ${lib.escapeShellArg config.system.nixos.distroId} \
             --set INSTALL_BOOTLOADER ${lib.escapeShellArg config.system.build.installBootLoader} \
             --set PRE_SWITCH_CHECK ${lib.escapeShellArg config.system.preSwitchChecksScript} \
-            --set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive \
+            ${
+              lib.optionalString (
+                config.i18n.glibcLocales != null
+              ) "--set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive"
+            } \
             --set SYSTEMD ${config.systemd.package}
         )
       '';

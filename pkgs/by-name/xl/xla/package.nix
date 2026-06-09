@@ -96,6 +96,19 @@ in
           '] + extra_patches,' \
           '"@xla//third_party/py:rules_python_nix_patchelf.patch",
           ] + extra_patches,'
+    ''
+    # Pin gRPC's rules_go SDK metadata. Without `sdks`, rules_go downloads the
+    # live Go release manifest into @go_sdk/versions.json, making the deps tar
+    # change whenever go.dev publishes a new release.
+    + ''
+      cp ${./grpc-pin-go-sdk.patch} third_party/grpc/grpc-pin-go-sdk.patch
+      substituteInPlace workspace2.bzl \
+        --replace-fail \
+          'patch_file = ["//third_party/grpc:grpc.patch"],' \
+          'patch_file = [
+            "//third_party/grpc:grpc.patch",
+            "//third_party/grpc:grpc-pin-go-sdk.patch",
+          ],'
     '';
 
   # Configure XLA for CPU-only build using the official configure.py script.
@@ -146,7 +159,7 @@ in
   fetchAttrs = {
     sha256 =
       {
-        x86_64-linux = "sha256-QTUqcP5t91Z4s+esxxFz2tGJAJplWXWZuYPqcC7ld+E=";
+        x86_64-linux = "sha256-9L+oVq/yHqUGLhzSpwqxfYSJ1bIVcnaZgFVB3sjokXs=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     preInstall =

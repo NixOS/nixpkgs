@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small binary that runs a list of commands in parallel and awaits termination";
     homepage = "https://github.com/slavaGanzin/await";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "await";
   };

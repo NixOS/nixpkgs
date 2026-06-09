@@ -26,6 +26,8 @@ in
 
     package = lib.mkPackageOption pkgs "gamescope" { };
 
+    enableWsi = lib.mkEnableOption "gamescope-wsi, the Vulkan WSI layer, alongside gamescope";
+
     capSysNice = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -76,6 +78,11 @@ in
     };
 
     environment.systemPackages = lib.mkIf (!cfg.capSysNice) [ gamescope ];
+
+    hardware.graphics = lib.optionalAttrs cfg.enableWsi {
+      extraPackages = with pkgs; [ gamescope-wsi ];
+      extraPackages32 = with pkgs; [ pkgsi686Linux.gamescope-wsi ];
+    };
   };
 
   meta.maintainers = [ ];

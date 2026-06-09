@@ -1,33 +1,29 @@
 {
-  buildPythonApplication,
-  fetchFromGitHub,
   lib,
-  natsort,
-  panflute,
-  lxml,
-  setuptools,
+  python3Packages,
+  fetchFromGitHub,
   nix-update-script,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pandoc-include";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCsunset";
     repo = "pandoc-include";
     tag = "v${version}";
-    hash = "sha256-8ldIywvCExnbMNs9m7iLwM1HrTRHl7j4t3JQuBt0Z7U=";
+    hash = "sha256-M0frQGg2nHbgY53ejMdbXKLJjXQgx8aNUVxeDDIHdp4=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     natsort
     panflute
     lxml

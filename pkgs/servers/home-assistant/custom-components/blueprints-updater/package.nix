@@ -1,0 +1,65 @@
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  h2,
+  home-assistant,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
+  pytest-asyncio,
+  pytestCheckHook,
+}:
+
+buildHomeAssistantComponent rec {
+  owner = "luuquangvu";
+  domain = "blueprints_updater";
+  version = "2.7.2";
+
+  src = fetchFromGitHub {
+    inherit owner;
+    repo = "blueprints-updater";
+    tag = version;
+    hash = "sha256-qWWb4n20wFiunvjYUFWXnze3kqYF4n2GCNy5Q34+7ao=";
+  };
+
+  patches = [
+    # Do not skip blueprints symlinked from the nix store.
+    # They cannot be updated, but users probably still want to be notified if they have an update.
+    ./allow-symlinked-blueprints.diff
+  ];
+
+  postPatch = ''
+    # avoid dependency on rather big pytest-timeout
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--timeout=60",' ""
+  '';
+
+  dependencies = [
+    # Uncodumented, but otherwise the home-assistant helpers/httpx_client.py fails like:
+    # ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
+    h2
+  ];
+
+  nativeCheckInputs = [
+    home-assistant
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-homeassistant-custom-component
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # pytest-homeassistant-custom-component tries to create temporary directories inside the nix store
+    "tests/integration/test_init.py::test_full_update_lifecycle"
+    "tests/integration/test_services.py::test_restore_blueprint_service"
+    "tests/integration/test_services.py::test_update_all_service"
+  ];
+
+  meta = {
+    description = "Automatically update Home Assistant blueprints via native update entities";
+    homepage = "https://github.com/luuquangvu/blueprints-updater/";
+    changelog = "https://github.com/luuquangvu/blueprints-updater/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+  };
+}

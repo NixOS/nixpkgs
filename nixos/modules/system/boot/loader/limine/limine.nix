@@ -29,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
@@ -297,9 +297,25 @@ in
 
         brandingColor = lib.mkOption {
           default = null;
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.str;
           description = ''
-            Color index of the title at the top of the screen in the range of 0-7 (Limine defaults to 6 (cyan)).
+            Color of the title at the top of the screen in RRGGBB format (Limine defaults to #00AAAA (cyan)).
+          '';
+        };
+
+        helpColor = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the help text displayed beside keybinds in RRGGBB format (Limine defaults to #00AA00 (dark green)).
+          '';
+        };
+
+        helpColorBright = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the bright help text used for the auto-boot countdown digit in RRGGBB format (Limine defaults to #55FF55 (bright green)).
           '';
         };
 
@@ -487,7 +503,9 @@ in
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          for efi in "''${fwupd_efi[@]}"; do
+            ${lib.getExe cfg.secureBoot.sbctl} sign -o "/run/fwupd-efi/$(basename "$efi").signed" "$efi"
+          done
         '';
       };
 

@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-LWrAr3i2CgOMZFxWi9B3kiou0UtaHdDbpkr6f9pReRA=";
   };
 
+  patches = [
+    # https://github.com/omnilib/aiomultiprocess/issues/220
+    ./python314-compat.patch
+  ];
+
   build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];

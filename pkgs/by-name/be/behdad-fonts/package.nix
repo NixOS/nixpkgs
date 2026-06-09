@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "behdad-fonts";
   version = "0.0.3";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "font-store";
     repo = "BehdadFont";

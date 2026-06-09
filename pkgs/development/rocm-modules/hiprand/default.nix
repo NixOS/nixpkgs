@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprand";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"

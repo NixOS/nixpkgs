@@ -18,7 +18,6 @@
   # test dependencies
   pytest-aiohttp,
   pytest-cov-stub,
-  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
 
@@ -44,6 +43,9 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+
+    # too narrow timeouts, so remove pytest-timeout
+    sed -i "/addopts/d" pyproject.toml
   '';
 
   build-system = [
@@ -63,7 +65,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-aiohttp
     pytest-cov-stub
-    pytest-timeout
     pytest-xdist
     pytestCheckHook
   ];

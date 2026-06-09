@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 
   buildVST3 ? true,
-  buildLV2 ? stdenv.isLinux,
+  buildLV2 ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
     libxcomposite

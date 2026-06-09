@@ -14,13 +14,13 @@
 # Should be solved when libpqxx 8.x is released.
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.10.5";
+  version = "7.10.7";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = finalAttrs.version;
-    hash = "sha256-QlzP/4ze9PFdadkcCxppVeOAKYGscrc4Db52xHcbPIA=";
+    hash = "sha256-A33Z6xSIReYHHS3KerBSDTuo59tixduxXVEMfa/2I7A=";
   };
 
   outputs = [

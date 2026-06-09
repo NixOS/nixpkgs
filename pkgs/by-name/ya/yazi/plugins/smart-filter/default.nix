@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "smart-filter.yazi";
-  version = "25.12.29-unstable-2025-12-29";
+  version = "0-unstable-2025-12-29";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";

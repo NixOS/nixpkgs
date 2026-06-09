@@ -5,7 +5,7 @@
 }:
 let
   pname = "nbping";
-  version = "0.6.1";
+  version = "0.7.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
     owner = "hanshuaikang";
     repo = "Nping";
     tag = "v${version}";
-    hash = "sha256-6eUsvNMQoJ5TUWPkOlmcJqdmxaXoBStnhiXiya+0nV8=";
+    hash = "sha256-rGWYvYJs6vkG+HQuT4NJGMUUG9QzIhyJThgDWTC6/JI=";
   };
 
-  cargoHash = "sha256-6+drbq9dQ5/Atzoz9VPS4BoYEPeM5OqPXUuM1AXP72g=";
+  cargoHash = "sha256-6AdqPm07lbMzeqihQC3mCoBYZ1cduGo1rCvYsF+4XL4=";
 
   meta = {
     description = "Ping Tool in Rust with Real-Time Data and Visualizations";

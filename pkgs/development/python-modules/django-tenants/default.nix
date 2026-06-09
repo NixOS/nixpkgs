@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-tenants/django-tenants";
     changelog = "https://github.com/django-tenants/django-tenants/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

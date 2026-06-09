@@ -36,7 +36,7 @@
 }:
 
 let
-  version = "7.2.2";
+  version = "7.2.3";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "22.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion

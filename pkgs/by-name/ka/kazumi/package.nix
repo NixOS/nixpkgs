@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter338,
+  flutter,
   fetchFromGitHub,
   autoPatchelfHook,
   alsa-lib,
@@ -18,16 +18,16 @@
 }:
 
 let
-  version = "2.0.8";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-ph9VFRBGwkEjKJGjnPGldLDOwIdHpZtEWydW80hKOFg=";
+    hash = "sha256-GpHLqqvjfgLRICIHO7YPLdzrQWHexJlg0ilqCJkkOfw=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter.buildFlutterApplication {
   pname = "kazumi";
   inherit version src;
 
@@ -97,6 +97,13 @@ flutter338.buildFlutterApplication {
     mpv-unwrapped
     webkitgtk_4_1
   ];
+
+  # patch onReorderItem to onReorder for nixpkgs Flutter compatibility
+  postPatch = ''
+    substituteInPlace \
+      lib/pages/plugin_editor/plugin_view_page.dart \
+      --replace-fail "onReorderItem:" "onReorder:"
+  '';
 
   postInstall = ''
     ln -snf ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/$pname/lib/libmpv.so.2

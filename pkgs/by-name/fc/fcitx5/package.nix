@@ -6,7 +6,7 @@
   pkg-config,
   buildPackages,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   wayland-scanner,
   cairo,
   pango,
@@ -61,13 +61,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wayland-scanner
     gettext
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     expat
     isocodes
     cairo

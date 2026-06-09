@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "ipython"
+    "jedi"
     "python-lsp-server"
   ];
 

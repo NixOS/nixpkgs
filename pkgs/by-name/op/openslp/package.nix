@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.openslp.org/";
     description = "Open-source implementation of the IETF Service Location Protocol";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs

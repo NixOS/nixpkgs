@@ -13,26 +13,34 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weechat-matrix-rs";
   version = "0-unstable-2025-10-09";
+
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "weechat-matrix-rs";
     rev = "4cc5777b630ba4d6a9c964248531f283178a4717";
     hash = "sha256-CF4xDoRYey9F8/XSW/euNb8IjZXyP6k0Nj61shsmyEo=";
   };
+
+  patches = [ ./increase-recursion-limit.patch ];
+
   cargoHash = "sha256-jAlBCmLJfWWAUHd3ySB930iqAVXMh6ueba7xS///Rt0=";
+
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
+
   buildInputs = [
     weechat
     openssl
     sqlite
   ];
+
   postInstall = ''
     mkdir -p $out/lib/weechat/plugins
     mv $out/lib/libmatrix${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/weechat/plugins/matrix${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
+
   passthru.tests.load-plugin =
     runCommand "${finalAttrs.pname}-test-load"
       {
@@ -50,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           exit 1
         fi
       '';
+
   meta = {
     description = "Rust plugin for WeeChat to communicate over Matrix";
     homepage = "https://github.com/poljar/weechat-matrix-rs";

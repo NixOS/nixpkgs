@@ -10,21 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyRj00+2RjfcwAPD4h34bWy5g+GnWYkkNQ936mKZzw0=";
+    hash = "sha256-l+9DcqAxrrjLxs/7KxY6QlfIAlwMVjQztt4lgJJMsyI=";
   };
 
-  cargoHash = "sha256-rNLtRNVL6JLoUUZTev4Mktha8nAgIgTYl+0k44J3hPg=";
-
-  # All integration tests require networking.
-  postPatch = ''
-    echo "fn main() {}" > tests/integration/main.rs
-  '';
+  cargoHash = "sha256-euWvpEjSW2JeDysBul5eR4M27LwkRSZDlsp57lMBpAE=";
 
   nativeBuildInputs = [
     cmake
@@ -34,11 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   strictDeps = true;
 
   useNextest = true;
-  checkFlags = [
-    # Some unit tests require networking.
-    "--skip"
-    "login"
-  ];
+  # Skip tests that require networking.
+  cargoTestFlags = [ "--profile=no-network" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -54,6 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sandhole";
     maintainers = with lib.maintainers; [ EpicEric ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.all;
   };
 })

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   fcitx5,
   anthy,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext # msgfmt
     pkg-config
     zstd

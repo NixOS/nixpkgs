@@ -6,7 +6,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron_40,
+  electron_41,
   python3Packages,
   pipewire,
   libpulseaudio,
@@ -18,17 +18,17 @@
   withMiddleClickScroll ? false,
 }:
 let
-  electron = electron_40;
+  electron = electron_41;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.1.9";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4v0NKGmdbEdHyjz35l+QUnXvnVfLzIe1vLxOSmdgbYQ=";
+    hash = "sha256-CPRn1F15N4Rjry91Gu+ZXWpKVTOEnHI3TmZn8502QB4=";
   };
 
   postPatch = ''
@@ -38,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     # disable auto updates
     substituteInPlace src/main/updater.ts \
       --replace-fail 'const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));' 'const isOutdated = false;'
+
+    # disable auto update for bun
+    substituteInPlace scripts/build/compileArrpc.mts \
+      --replace-fail -baseline ""
   '';
 
   node-modules = callPackage ./node-modules.nix { };
@@ -71,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  # electron builds must be writable to support electron fuses
   preBuild = ''
     # Validate electron version matches upstream package.json
     if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
@@ -79,12 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       echo "ERROR: electron version mismatch between package.json and nixpkgs"
       exit 1
     fi
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -r ${electron.dist}/Electron.app .
-    chmod -R u+w Electron.app
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+
+    # electron builds must be writable to support electron fuses
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
   '';
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     # can't run it via bunx / npx since fixupPhase was skipped for node_modules
     node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false
 
@@ -177,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       NotAShelf
       rexies
+      PerchunPak
     ];
     mainProgram = "equibop";
     # I am not confident in my ability to support Darwin, please PR if this is important to you

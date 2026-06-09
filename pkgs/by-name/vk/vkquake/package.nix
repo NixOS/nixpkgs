@@ -1,7 +1,6 @@
 {
   SDL2,
   fetchFromGitHub,
-  fetchpatch2,
   flac,
   glslang,
   gzip,
@@ -25,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.32.3.1";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    hash = "sha256-Hsj6LgxlEICI3MMDMCE1KvslYrsYfQPhShpP5kzLCTI=";
+    hash = "sha256-vCjL8zDf+VJjYHQoXPY9kqrAiU7HA7avJcOx6v2Jujg=";
   };
 
   nativeBuildInputs = [
@@ -58,14 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     vulkan-headers
-  ];
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/Novum/vkQuake/pull/809
-      url = "https://github.com/Novum/vkQuake/commit/85ddf2386f15944c26317a763d4044077fc8731f.patch?full_index=1";
-      hash = "sha256-t+atA+ilCwGwLpql5BZO2OF4Xh1KdzRFjOpglTIA/KY=";
-    })
   ];
 
   mesonFlags = [ "-Ddo_userdirs=enabled" ];

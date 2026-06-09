@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     cctools # contains libtool, required by better-sqlite3
   ];
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-gDffEtUWqSWbwr4S0HZIPTvSrXDvl/q2Y5QuA+U6Ndk=";
+    fetcherVersion = 3;
+    hash = "sha256-ldxhP+I455PEfBrkJIlHudNvAsI4EN34ZkQXMBciOo4=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

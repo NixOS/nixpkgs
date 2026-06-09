@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magika-cli";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "magika";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-1WJRkqFQqlSFzr4wkEbRwj1WoxDKTG/1OCtC+914ryY=";
+    hash = "sha256-rxkyC8/4nnVqfoubXiOchvmmGI1Z6dC8j2Oqpbt9kE0=";
   };
 
-  cargoHash = "sha256-rA+GYCWuinwRVWf3VuFbPgmAwl3vDsaxLjCtsKMtpiU=";
+  cargoHash = "sha256-08dbfb4F2A3hB2xKKqR/+BNG7M74HG5UZi4ejULwVRw=";
 
   cargoRoot = "rust/cli";
   buildAndTestSubdir = finalAttrs.cargoRoot;

@@ -3,11 +3,12 @@
   stdenv,
   enableMultilib,
   targetConfig,
+  hostIsTarget,
 }:
 
 let
   forceLibgccToBuildCrtStuff = import ./libgcc-buildstuff.nix { inherit lib stdenv; };
-  isCross = !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform;
+  isCross = !hostIsTarget;
 in
 
 # We don't support multilib and cross at the same time

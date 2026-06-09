@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron_39,
+  electron_41,
   rustPlatform,
   cargo,
   rustc,
@@ -20,19 +20,19 @@
   removeReferencesTo,
 }:
 let
-  electron = electron_39;
+  electron = electron_41;
   pnpm = pnpm_10_29_2;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
-    owner = "imsyy";
+    owner = "SPlayer-Dev";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
+    hash = "sha256-7oLFJqZ1Apq2GK5G3r10I+c3liSweDD2ZPhjpq0f+bM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 2;
-    hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
+    fetcherVersion = 3;
+    hash = "sha256-zmLc+ExrZg/y2PEI5rH+no9WenE6I+2bLkdXcA/nOic=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
+    hash = "sha256-dv8WqT6ei0dMwXcTQmUVHO9u1nGZ8iGhP2S8DpL+Hxk=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -157,8 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple Netease Cloud Music player";
-    homepage = "https://github.com/imsyy/SPlayer";
-    changelog = "https://github.com/imsyy/SPlayer/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/SPlayer-Dev/SPlayer";
+    changelog = "https://github.com/SPlayer-Dev/SPlayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "splayer";

@@ -40,6 +40,7 @@ let
     "network-online.target"
     "nss-lookup.target"
     "nss-user-lookup.target"
+    "time-set.target"
     "time-sync.target"
     "first-boot-complete.target"
   ]
@@ -143,6 +144,8 @@ let
     "final.target"
     "kexec.target"
     "systemd-kexec.service"
+    "soft-reboot.target"
+    "systemd-soft-reboot.service"
   ]
   ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
   ++ [
@@ -603,6 +606,10 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    environment.variables = {
+      SYSTEMD_XKB_DIRECTORY = "/etc/X11/xkb";
+    };
+
     environment.etc =
       let
         # generate contents for /etc/systemd/${dir} from attrset of links and packages
@@ -800,7 +807,10 @@ in
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.services.systemd-importd.environment = proxy_env;
+    systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
+      environment = proxy_env;
+      path = [ pkgs.gnupgMinimal ];
+    };
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
     # NixOS has kernel modules in a different location, so override that here.
@@ -822,10 +832,12 @@ in
     # because either the overlay is mutable (and users can legitimately change
     # values without them being overridden) or it is immutable and systemd will
     # suggest to only make runtime changes.
-    systemd.services."systemd-localed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
-      SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
-      SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
-    };
+    systemd.services."systemd-localed".environment =
+      lib.mkIf (!config.system.etc.overlay.enable && !config.i18n.imperativeLocale)
+        {
+          SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
+          SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
+        };
     systemd.services."systemd-timedated".environment =
       lib.mkIf (!config.system.etc.overlay.enable && config.time.timeZone != null)
         {

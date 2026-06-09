@@ -56,14 +56,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.14.3";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-AMGAo2fllV4RasRXoeOpJii8aWfu7/JW1iXp3VgTGVo=";
+    hash = "sha256-QrJM2oVoqos8GMhrn9E6i1m1O1guP/q+51b8NYtJA5Q=";
   };
 
   postPatch = ''

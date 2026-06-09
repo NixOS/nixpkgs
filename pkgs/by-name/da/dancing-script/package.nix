@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-B9oAZFPH3dG/Nt5FfKfFVJYtfUKGK0AXNkQHRC7IgdU=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
-
-    runHook postInstall
-  '';
+  preInstall = "rm -r legacy";
 
   meta = {
     description = "Dancing Script";

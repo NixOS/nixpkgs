@@ -45,24 +45,24 @@ let
     # Timeouts
     "TestRunJob_WithConnectionFromCommandOptions"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Uses docker-specific options, unsupported on Darwin
     "TestMergeJobOptions"
   ];
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.9.0";
+  version = "12.10.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yhcD+FiRuo+WAvKFtgAI+36/uIci9O1s9RtXT0Q75Uo=";
+    hash = "sha256-Uo+x02HgpfOY+KXug7cmnW4d85AlX6wqz+nYGF/JrHk=";
   };
 
-  vendorHash = "sha256-CCUyL6ZxLRQy30TQUj1yOAuR7Ctp06/0jG8Q3De6/oo=";
+  vendorHash = "sha256-0gOftkxkBPziU0Tm8lIiD72rXcMMY5M57G9/Bt/mneI=";
 
   nativeBuildInputs = [ makeWrapper ];
 

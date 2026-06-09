@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

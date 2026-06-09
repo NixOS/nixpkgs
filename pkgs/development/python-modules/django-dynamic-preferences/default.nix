@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
     homepage = "https://github.com/agateblue/django-dynamic-preferences";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

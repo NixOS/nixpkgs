@@ -5,13 +5,13 @@
   flac,
   lame,
   makeBinaryWrapper,
-  sox,
+  sox_ng,
 }:
 let
   runtimeDeps = [
     flac
     lame
-    sox
+    sox_ng
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {

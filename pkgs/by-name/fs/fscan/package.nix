@@ -6,16 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "fscan";
-  version = "2.0.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wvtabfLoPKCmoWL083z1c3g0iOQRtTtgwZxozIaeiw0=";
+    hash = "sha256-ZfzFBOIsuwcfmmyZMPhgP9Oznec+rJs16IuIG7gwZhA=";
   };
 
-  vendorHash = "sha256-hDe5IMvOUeAvst8mCWNMCRWcPyJ9Ufomv1Zpjxgcj/0=";
+  vendorHash = "sha256-ihaGbm4iLjwvTzM278wuwom8LrmHB3WgmbfcJxtkbYc=";
+
+  subPackages = [ "." ];
 
   meta = {
     description = "Intranet comprehensive scanning tool";

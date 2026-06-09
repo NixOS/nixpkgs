@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -146,7 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-rpath $out/lib:$external/lib:${libPath} $out/{bin/*,lib/*.so*}
     '';
 
-  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
+  passthru.updateScript = rocmUpdateScript {
+    inherit finalAttrs;
+    page = "tags";
+  };
 
   meta = {
     description = "MLIR-based convolution and GEMM kernel generator";

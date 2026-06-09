@@ -7,9 +7,20 @@
   makeBinaryWrapper,
 }:
 
+let
+  binarySuffix =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "aarch64"
+    else if stdenv.hostPlatform.isi686 then
+      "i386"
+    else
+      throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
+in
 symlinkJoin {
   pname = "etlegacy";
-  version = "2.83.2";
+  version = "2.84.0";
 
   paths = [
     etlegacy-assets
@@ -39,7 +50,7 @@ symlinkJoin {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    mainProgram = "etl." + (if stdenv.hostPlatform.isi686 then "i386" else "x86_64");
+    mainProgram = "etl." + binarySuffix;
     maintainers = with lib.maintainers; [
       ashleyghooper
     ];

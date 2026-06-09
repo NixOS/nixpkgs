@@ -12,24 +12,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare-engine";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-engine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIzfTqwZJ8NAPB/TWzvPjepHb7hIbIr+Kk+doXJmpLc=";
+    hash = "sha256-QwrSMkJE8dNIODlmdi1c6qgTULhJP9HEV8wI7k5vHAA=";
   };
 
   patches = [
     ./desktop.patch
-
-    # cmake-4 compatibility patch
-    (fetchpatch {
-      name = "cmake-4.patch";
-      url = "https://github.com/flareteam/flare-engine/commit/9500379f886484382bba2f893faf49865de9f2c0.patch";
-      hash = "sha256-nUn54ZBEvvFkIhzE/UBbsvF0rFC9JAeQACTAPtsc1VI=";
-    })
   ];
 
   nativeBuildInputs = [ cmake ];

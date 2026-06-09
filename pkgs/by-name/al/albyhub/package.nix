@@ -21,16 +21,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "albyhub";
-  version = "1.21.6";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xjFEou+mDtEf7079en5ypoU5P0tf+looeHZS4j1jKzg=";
+    hash = "sha256-xP/J9zdh4sZ1x+JUpOf12ft8f2II2Mn1Q7/gnMuFzy8=";
   };
 
-  vendorHash = "sha256-NJeIEFc8oc5rMWAuvrgsnOi3j779mhwMKSALswRy+nE=";
+  vendorHash = "sha256-nzdHXY14o4D8NrcXu2JvDagvIfemfVAaGU3IDifhyW0=";
   proxyVendor = true; # needed for secp256k1-zkp CGO bindings
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/frontend/yarn.lock";
-    hash = "sha256-wdKm8Zk2iAPvH+EbQxvznctkqHgx8xl/Im37vHmHnoA=";
+    hash = "sha256-BeuTBLJ/Iakd4jhIkI2+oHc4MFy6DSn8QcygTHEMmQo=";
   };
 
   preBuild = ''

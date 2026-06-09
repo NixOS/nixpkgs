@@ -393,7 +393,7 @@ in
                 ${lib.concatStringsSep " " cfg.gunicornArgs}
             '';
             PrivateTmp = true;
-            TimeoutStartSec = lib.mkDefault "5min";
+            TimeoutStartSec = lib.mkDefault "10min";
           };
         };
 

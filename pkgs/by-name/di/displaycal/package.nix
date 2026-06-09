@@ -16,7 +16,7 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
   version = "3.9.17";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "DisplayCAL";
@@ -29,7 +29,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     build
     certifi
     wxpython

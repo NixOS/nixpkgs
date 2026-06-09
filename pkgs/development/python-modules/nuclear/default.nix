@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   colorama,
   mock,
@@ -22,6 +23,13 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-hoOvISKjl5XTxtv8I3BSkOI7oZFSL+yA3NiYceJGcIY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/igrek51/nuclear/commit/e6930046d1312f92e231ec8e2b435bc184a75823.patch";
+      hash = "sha256-roE4ZGK1TeVupJL9KQYZtY+lZtRgJ03AQNKrT1F5ajc=";
+    })
+  ];
 
   build-system = [ setuptools ];
   dependencies = [

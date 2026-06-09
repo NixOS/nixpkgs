@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
+    homepage = "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription = ''
       CFITSIO is a library of C and Fortran subroutines for reading and
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       FITS files.
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
-    license = lib.licenses.mit;
+    license = lib.licenses.cfitsio;
     maintainers = with lib.maintainers; [
       returntoreality
       xbreak

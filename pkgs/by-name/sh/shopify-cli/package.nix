@@ -4,16 +4,18 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   faketty,
-  nodejs_22,
+  nodejs-slim_22,
   versionCheckHook,
   makeBinaryWrapper,
   nix-update-script,
 }:
 let
-  nodejs = nodejs_22;
-  pnpm' = pnpm.override { inherit nodejs; };
+  pnpm = pnpm_10;
+
+  nodejs-slim = nodejs-slim_22;
+  pnpm' = pnpm.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
@@ -28,13 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-5rghSHGigsw193OJLiVegjNs1qDj+sCq1KJ1J8oPnrA=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-gwEVlvr8hxgyCsGjxjz1UkbDZYYq1iukKTPJ7JHdo2U=";
   };
 
   nativeBuildInputs = [
     faketty
-    nodejs
+    nodejs-slim
     pnpmConfigHook
     pnpm'
     makeBinaryWrapper
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --offline --prod --ignore-scripts --frozen-lockfile
     mv node_modules $out/lib/node_modules/@shopify/cli/node_modules
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/shopify \
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/shopify \
       --add-flags "$out/lib/node_modules/@shopify/cli/bin/run.js"
 
     runHook postInstall

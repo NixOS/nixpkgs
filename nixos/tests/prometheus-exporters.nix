@@ -436,6 +436,30 @@ let
         '';
       };
 
+    elasticsearch =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          url = "http://localhost:9200";
+        };
+        metricProvider = {
+          # `services.elasticsearch` is unmaintained; OpenSearch is the same
+          # engine class and is explicitly supported by the exporter.
+          services.opensearch.enable = true;
+          virtualisation.memorySize = 2048;
+        };
+        exporterTest = ''
+          wait_for_unit("opensearch.service")
+          wait_for_open_port(9200)
+          wait_for_unit("prometheus-elasticsearch-exporter.service")
+          wait_for_open_port(9114)
+          succeed(
+              "curl -sSf localhost:9114/metrics | grep 'elasticsearch_cluster_health_status'"
+          )
+        '';
+      };
+
     fail2ban =
       { ... }:
       {
@@ -815,6 +839,7 @@ let
           };
           # initialize wallet, creates macaroon needed by exporter
           systemd.services.lnd.postStart = ''
+            until [ -f /var/lib/lnd/tls.cert ]; do sleep 1; done
             ${pkgs.curl}/bin/curl \
               --retry 20 \
               --retry-delay 1 \
@@ -1737,6 +1762,16 @@ let
           enable = true;
           tokenFile = "/tmp/faketoken";
         };
+        metricProvider = {
+          networking = {
+            # The exporter tries to access Hetzner on startup and crashes.
+            # Blocking this on the firewall level allows the exporter to start.
+            extraHosts = "127.0.0.1 api.hetzner.com";
+            firewall.extraCommands = ''
+              iptables -A OUTPUT -p tcp --dport 443 -d 127.0.0.1 -j DROP
+            '';
+          };
+        };
         exporterTest = ''
           succeed(
             'echo faketoken > /tmp/faketoken'
@@ -2041,7 +2076,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          instance = "/run/varnish/varnish";
+          instance = "/var/run/varnishd";
           group = "varnish";
         };
         metricProvider = {

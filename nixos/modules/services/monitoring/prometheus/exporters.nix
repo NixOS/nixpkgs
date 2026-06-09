@@ -62,6 +62,7 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
         "fail2ban"
         "fastly"
         "flow"
@@ -119,6 +120,7 @@ let
         "smartctl"
         "smokeping"
         "snmp"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
@@ -131,6 +133,7 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "zfs-siebenmann"
         "zfs"
       ]
       (

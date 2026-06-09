@@ -5,7 +5,7 @@
   gtk3,
   gnome-icon-theme,
   hicolor-icon-theme,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   meta = {
     description = "Gruvbox icons for GTK based desktop environments";

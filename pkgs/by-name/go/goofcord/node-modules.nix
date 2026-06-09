@@ -50,8 +50,8 @@ stdenv.mkDerivation {
 
   outputHash =
     {
-      x86_64-linux = "sha256-EEl+hrdMR6z1PAy+uIhl2UYtajXWiUQMQxIfYpMRw6Y=";
-      aarch64-linux = "sha256-ba+j8FGKNH3Mpql7xvLgHHuJxDGVlZ+TeZ3Oxsw3ot4=";
+      x86_64-linux = "sha256-2PH4qa4M/y4AzVT9dW4BK1jE3RWSr+NWY1AhU3cfUTE=";
+      aarch64-linux = "sha256-RGJGUdp3i6Q/tCuQ42NfF4eFGrrgoyhx1l14fPwlCN8=";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   outputHashAlgo = "sha256";

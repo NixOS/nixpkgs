@@ -18,34 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib3mf";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = "lib3mf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wq/dT/8m+em/qFoNNj6s5lyx/MgNeEBGSMBpuJiORqA=";
+    hash = "sha256-8S892kvea6c9RynfVHo7epBjT9cWCV4VchGZ8G1hvHc=";
   };
-
-  patches = [
-    # some patches are required for the gcc 14 source build
-    # remove next release
-    # https://github.com/3MFConsortium/lib3mf/pull/413
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/413/commits/96b2f5ec9714088907fe8a6f05633e2bbd82053f.patch?full_index=1";
-      hash = "sha256-cJRc+SW1/6Ypf2r34yroVTxu4NMJWuoSmzsmoXogrUk=";
-    })
-    # https://github.com/3MFConsortium/lib3mf/pull/421
-    (fetchpatch {
-      url = "https://github.com/3MFConsortium/lib3mf/pull/421/commits/6d7b5709a4a1cf9bd55ae8b4ae999c9ca014f62c.patch?full_index=1";
-      hash = "sha256-rGOyXZUZglRNMu1/oVhgSpRdi0pUa/wn5SFHCS9jVOY=";
-    })
-    (fetchpatch {
-      name = "lib3mf-fix-cmake-4.patch";
-      url = "https://github.com/3MFConsortium/lib3mf/commit/01325a73de25d2ad49e992b5b6294beb32298c92.patch";
-      hash = "sha256-8vv2ydnDgvSKkGjpmk5ng1BGKK0okTMOeAoGwlKcziY=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -67,12 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libzip
     gtest
     openssl
     zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
+
+  propagatedBuildInputs = [
+    libzip
+  ];
 
   postPatch = ''
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
@@ -91,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     mkdir Libraries/fast_float
-    ln -s ${lib.getInclude fast-float}/include/fast_float Libraries/fast_float/Include
+    ln -s ${lib.getInclude fast-float}/include/ Libraries/fast_float/Include
 
     # functions are no longer in openssl, remove them from test cleanup function
     substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \

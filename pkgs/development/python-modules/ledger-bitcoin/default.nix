@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ledger-bitcoin";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ledger_bitcoin";
-    hash = "sha256-IkJFLnjPS1fIuNNQnoMYYP1IUbChv6uV8vXj9H1NFQA=";
+    hash = "sha256-PLQpftflV++YNJzcvWZ+9zaMBH1oGMfNy8p6+YuABrY=";
   };
 
   nativeBuildInputs = [ setuptools ];

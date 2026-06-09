@@ -18,7 +18,7 @@
   tesseract5,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -29,6 +29,8 @@
   lndir,
 }:
 let
+  pnpm = pnpm_10;
+
   version = "2.20.15";
 
   src = fetchFromGitHub {
@@ -80,8 +82,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit pnpm;
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
+      fetcherVersion = 3;
+      hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
     };
 
     nativeBuildInputs = [

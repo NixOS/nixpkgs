@@ -3,11 +3,11 @@
 {
   lib,
   stdenv,
+  fetchurl,
   meson,
   ninja,
   pkg-config,
   xorg-server,
-  fetchurl,
   dri-pkgconfig-stub,
   libdrm,
   libGL,
@@ -38,12 +38,12 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
 
-  #FIXME: go back to xorg-server version on nixpkgs staging
-  #inherit (xorg-server) src version;
-  version = "21.1.21";
+  # TODO: rebuild avoidance. revert on staging.
+  # inherit (xorg-server) src version;
+  version = "21.1.22";
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+    hash = "sha256-GiQsiRfEm6KczB9gIWE9iiuYBd0NJxpmrp0J9LC7BrM=";
   };
 
   strictDeps = true;

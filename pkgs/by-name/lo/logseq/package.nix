@@ -14,7 +14,6 @@
   darwin,
   makeDesktopItem,
   makeWrapper,
-  nodejs,
   nodejs-slim,
   removeReferencesTo,
   yarnBuildHook,
@@ -22,10 +21,13 @@
   xcbuild,
   zip,
 
-  electron,
+  electron_39,
   git,
 }:
 
+let
+  electron = electron_39;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
   version = "0.10.15";
@@ -148,7 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
       copyDesktopItems
       fakeGit
       makeWrapper
-      nodejs
+      nodejs-slim
+      nodejs-slim.npm
       (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
       removeReferencesTo
       yarnBuildHook
@@ -197,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline --cwd tldraw postinstall
 
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     pushd packages/amplify
     npm rebuild --verbose
     popd
@@ -244,7 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # remove references to nodejs
-    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
+    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs-slim} '{}' \;
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"

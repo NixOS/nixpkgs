@@ -8,7 +8,7 @@
   makeWrapper,
   fetchpatch,
   replaceVars,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -27,6 +27,8 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {

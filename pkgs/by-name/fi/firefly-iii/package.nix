@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchzip,
   stdenvNoCC,
   nodejs-slim,
   fetchNpmDeps,
@@ -10,19 +11,26 @@
   nix-update-script,
   dataDir ? "/var/lib/firefly-iii",
 }:
-
 let
   php = php85;
+  version = "6.6.3";
+
+  # Release tarball contains translations downloaded from crowdin
+  releaseTarball = fetchzip {
+    url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-vPuLCjU8MzV5odoDl9QQXj4kKnT6QBSAPwvekMxJtEM=";
+  };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.6.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JnErWcq7aVkeZAIaINSEqmi/Fi/9wrPqFZ583EG8qyg=";
+    hash = "sha256-MPBWurmtaIaKHRLf4TPCdgTVWRZ0JdZ0Ix2N7d80s8c=";
   };
 
   buildInputs = [ php ];
@@ -40,13 +48,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname src version;
     composerStrictValidation = true;
     strictDeps = true;
-    vendorHash = "sha256-iYW5GrUaHwoJzv4WN1r5YPEMUOH15A4BmOSlKIqCcdg=";
+    vendorHash = "sha256-qjMDZbPpyTkKxvZhgNERe2ZuRFj7LmRW7XZoeezizbk=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-6zha6lTkdrcMc9EAhFvSg1LRAw0HJlUITPqguCVrx+8=";
+    hash = "sha256-QlLFhrD94mpfoe9mmCVmem9E4oPsLAGMMf+MbI/5Vx0=";
   };
 
   preInstall = ''
@@ -55,6 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit releaseTarball;
     phpPackage = php;
     tests = nixosTests.firefly-iii;
     updateScript = nix-update-script {
@@ -68,6 +77,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     mv $out/share/php/firefly-iii/* $out/
+
+    # Copy language files from release tarball (contains all translations)
+    cp -r ${finalAttrs.passthru.releaseTarball}/resources/lang/* $out/resources/lang/
+
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache

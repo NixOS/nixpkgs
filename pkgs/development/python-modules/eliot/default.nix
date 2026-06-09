@@ -6,6 +6,8 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
+  versioneer,
 
   # dependencies
   boltons,
@@ -27,22 +29,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "eliot";
-  version = "1.17.5";
+  version = "1.18.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "eliot";
     tag = finalAttrs.version;
-    hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
+    hash = "sha256-YUvHdnpWtsy2NlrVLaaewcUPKGLfdfX/zvowV0jcXuw=";
   };
 
-  patches = [
-    # Upstream PR: https://github.com/itamarst/eliot/pull/520
-    ./python-3.14.patch
+  build-system = [
+    setuptools
+    setuptools-scm
+    versioneer
   ];
-
-  build-system = [ setuptools ];
 
   dependencies = [
     boltons

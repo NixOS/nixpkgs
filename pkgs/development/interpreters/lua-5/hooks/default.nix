@@ -1,5 +1,6 @@
 # Hooks for building lua packages.
 {
+  lib,
   lua,
   makeSetupHook,
 }:
@@ -19,6 +20,7 @@ in
       propagatedBuildInputs = [
         busted
       ];
+      meta.license = lib.licenses.mit;
     } ./busted-check-hook.sh
   ) { };
 
@@ -27,6 +29,7 @@ in
     makeSetupHook {
       name = "luarocks-check-hook";
       propagatedBuildInputs = [ luarocks ];
+      meta.license = lib.licenses.mit;
     } ./luarocks-check-hook.sh
   ) { };
 
@@ -34,5 +37,6 @@ in
   # we move the files around ourselves
   luarocksMoveDataFolder = makeSetupHook {
     name = "luarocks-move-rock";
+    meta.license = lib.licenses.mit;
   } ./luarocks-move-data.sh;
 }

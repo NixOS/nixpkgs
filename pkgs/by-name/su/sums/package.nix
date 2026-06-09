@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-X+AMUH8nJli0Um1bH0gDGLnfHGknqea3DZxH+tdTEr8=";
   };
 
+  postPatch = ''
+    # tests target has racy config.h dep
+    substituteInPlace meson.build \
+      --replace-fail "subdir('tests')" ""
+  '';
+
   nativeBuildInputs = [
     meson
     ninja

@@ -9,7 +9,8 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpmBuildHook,
+  pnpm_10,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -20,6 +21,8 @@
   basePath ? "",
 }:
 let
+  pnpm = pnpm_10;
+
   sources = lib.importJSON ./sources.json;
 
   geocities = stdenvNoCC.mkDerivation {
@@ -81,6 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
   ];
 
@@ -107,6 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
   };
@@ -131,14 +136,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # Only needed at build time for `prisma generate`.
   env.PRISMA_QUERY_ENGINE_LIBRARY = "${finalAttrs.passthru.prisma-engines}/lib/libquery_engine.node";
   env.PRISMA_SCHEMA_ENGINE_BINARY = "${finalAttrs.passthru.prisma-engines}/bin/schema-engine";
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build
-
-    runHook postBuild
-  '';
 
   checkPhase = ''
     runHook preCheck

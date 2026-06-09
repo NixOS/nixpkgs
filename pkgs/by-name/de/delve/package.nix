@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "delve";
-  version = "1.26.1";
+  version = "1.26.3";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j/uGkAd/4Hpspgcb2J3UOs8iThx2YydUee31Hddl9zw=";
+    hash = "sha256-R7rxWJZ1AfwH/ytgQnq21D5d4YRm3fzYSIG0eugww1U=";
   };
 
   patches = [

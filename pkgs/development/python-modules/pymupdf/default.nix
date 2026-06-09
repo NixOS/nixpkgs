@@ -8,6 +8,7 @@
 
   # build-system
   libclang,
+  pipcl,
   psutil,
   setuptools,
   swig,
@@ -44,14 +45,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.27.2.2";
+  version = "1.27.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = finalAttrs.version;
-    hash = "sha256-o70IMa64jjX+b83uW4gISOiNrWtefQ8nc8Z99DfqrQI=";
+    hash = "sha256-KeddkzRkJ/tcINftYrx/BY0Z3WUaTU9iBqL5UorvclU=";
   };
 
   patches = [
@@ -75,6 +76,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     libclang
+    pipcl
     swig
     setuptools
   ];
@@ -151,6 +153,76 @@ buildPythonPackage (finalAttrs: {
     # Trace/BPT trap: 5 when getting widget options
     "tests/test_4505.py"
     "tests/test_widgets.py"
+
+    # Tests memory usage which is machine-dependent
+    # AssertionError: r1=403619840 r2=382353408 r=0.947310736756647.
+    "tests/test_memory.py::test_4090"
+
+    # https://github.com/pymupdf/PyMuPDF/issues/4988 triggered by
+    # https://github.com/swig/swig/issues/3279
+    "tests/test_font.py::test_load_system_font"
+    "tests/test_general.py::test_add_ink_annot"
+    "tests/test_general.py::test_2533"
+    "tests/test_general.py::test_2506"
+    "tests/test_general.py::test_2093"
+    "tests/test_general.py::test_2430"
+    "tests/test_general.py::test_2553"
+    "tests/test_general.py::test_2736"
+    "tests/test_general.py::test_subset_fonts"
+    "tests/test_general.py::test_2957_2"
+    "tests/test_general.py::test_707560"
+    "tests/test_general.py::test_3140"
+    "tests/test_general.py::test_3654"
+    "tests/test_general.py::test_3624"
+    "tests/test_general.py::test_4415"
+    "tests/test_general.py::test_4496"
+    "tests/test_general.py::test_4590"
+    "tests/test_general.py::test_4712"
+    "tests/test_general.py::test_4712m"
+    "tests/test_general.py::test_4902"
+    "tests/test_imagebbox.py::test_bboxlog"
+    "tests/test_imagebbox.py::test_image_bbox"
+    "tests/test_insertpdf.py::test_issue1417_insertpdf_in_loop"
+    "tests/test_mupdf_regressions.py::test_707673"
+    "tests/test_mupdf_regressions.py::test_3376"
+    "tests/test_nonpdf.py::test_pageids"
+    "tests/test_objectstreams.py::test_objectstream1"
+    "tests/test_objectstreams.py::test_objectstream2"
+    "tests/test_objectstreams.py::test_objectstream3"
+    "tests/test_pagedelete.py::test_3094"
+    "tests/test_pixmap.py::test_pdfpixmap"
+    "tests/test_pixmap.py::test_3854"
+    "tests/test_pixmap.py::test_4155"
+    "tests/test_pixmap.py::test_4699"
+    "tests/test_remove-rotation.py::test_remove_rotation"
+    "tests/test_spikes.py::test_spikes"
+    "tests/test_story.py::test_story"
+    "tests/test_story.py::test_2753"
+    "tests/test_story.py::test_fit_springer"
+    "tests/test_story.py::test_write_stabilized_with_links"
+    "tests/test_story.py::test_3813"
+    "tests/test_tables.py::test_2979"
+    "tests/test_tables.py::test_strict_lines"
+    "tests/test_tables.py::test_3148"
+    "tests/test_tables.py::test_battery_file"
+    "tests/test_tables.py::test_dotted_grid"
+    "tests/test_textbox.py::test_textbox4"
+    "tests/test_textbox.py::test_2637"
+    "tests/test_textbox.py::test_htmlbox1"
+    "tests/test_textbox.py::test_htmlbox2"
+    "tests/test_textbox.py::test_htmlbox3"
+    "tests/test_textbox.py::test_3559"
+    "tests/test_textbox.py::test_3916"
+    "tests/test_textbox.py::test_4613"
+    "tests/test_textextract.py::test_extract4"
+    "tests/test_textextract.py::test_3197"
+    "tests/test_textextract.py::test_3705"
+    "tests/test_textextract.py::test_4147"
+    "tests/test_textextract.py::test_4179"
+    "tests/test_textextract.py::test_extendable_textpage"
+    "tests/test_textextract.py::test_4503"
+    "tests/test_toc.py::test_simple_toc"
+    "tests/test_toc.py::test_3400"
   ];
 
   pythonImportsCheck = [

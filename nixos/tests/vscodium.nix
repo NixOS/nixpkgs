@@ -51,6 +51,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def codium_running():
               machine.succeed('pgrep -x codium')
@@ -62,9 +64,9 @@ let
 
           codium_running.wait() # type: ignore[union-attr]
           with codium_running: # type: ignore[union-attr]
-              # Wait until vscodium is visible. "File" is in the menu bar.
-              machine.wait_for_text('(Get|Started|with|Customize|theme)')
-              machine.screenshot('start_screen')
+              # Wait until vscodium is visible.
+              machine.wait_for_text('Search')
+              machine.screenshot('screen')
 
               test_string = 'testfile'
 

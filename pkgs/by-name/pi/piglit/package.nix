@@ -29,14 +29,14 @@
 
 stdenv.mkDerivation {
   pname = "piglit";
-  version = "unstable-2025-04-15";
+  version = "unstable-2026-05-04";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "piglit";
-    rev = "d06f7bac988e67db53cbc05dc0b096b00856ab93";
-    hash = "sha256-bH9NjLEldlZwylq7S0q2vC5IQhUej0xZ6wD+mrWBK5A=";
+    rev = "1bb2910c3fced64396feddd205e356d80e5ff7d9";
+    hash = "sha256-/3OQeZiK7fHfPpSlFtbW7DLEFV3YFBL1cLMndXyxwYs=";
   };
 
   buildInputs = [

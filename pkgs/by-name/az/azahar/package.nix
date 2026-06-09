@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2125.1.1";
+  version = "2125.1.2";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-cSnD4H7rruhnSeVPQqvzLqvL5tM1o5WZ4oZunrlHZOM=";
+    hash = "sha256-B3mReLoVqFCqUeunst95AX0veGlZJNyeBBdDIFbf4HI=";
   };
 
   strictDeps = true;
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
-  installPhase = optionalString stdenv.isDarwin ''
+  installPhase = optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/Applications $out/bin
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
-      ${optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+      ${optionalString stdenv.hostPlatform.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
         lib.makeLibraryPath [ moltenvk ]
       }"}
     )

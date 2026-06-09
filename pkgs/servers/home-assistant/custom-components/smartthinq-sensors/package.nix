@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "ollo69";
   domain = "smartthinq_sensors";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-smartthinq-sensors";
     rev = "v${version}";
-    hash = "sha256-ks1feF4TjzQaI6r6HzZ2cXPcUO+yMoeav34C/2jlH3k=";
+    hash = "sha256-QD7p6yldjqgcZTRjztuLsHTBh+PDOQjLq5BGjw5yg8o=";
   };
 
   dependencies = [

@@ -34,7 +34,7 @@
 }:
 
 let
-  version = "0.56.1";
+  version = "0.56.2";
   binary-deps-version = "11";
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ let
     repo = "Unvanquished";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MIsHW56RYkh5xtidHpBOEwQQSsvGMEdAdGt5fQvqXxQ=";
+    hash = "sha256-+3y9UJAMfMDIO4feHTyb5IWIelRSsH6KF6WAtx7rric=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -121,7 +121,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-HnWdOvi7fcKmktLVbdUfMnB8v3iHb1t7jEERUcYcxNg=";
+    outputHash = "sha256-lXhzrA30wiNtCvpl4xxrIyl5Vcd4TvSQAuBK73vZXHs=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [

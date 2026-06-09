@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Property I/O for C++";
+    homepage = "https://github.com/Grumbel/priocpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hcdiag";
-  version = "0.5.12";
+  version = "0.5.13";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcdiag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SXP5Poa4mjlvp4AQzSekHBCc07+a3bWVOPJWxfOuB/Q=";
+    hash = "sha256-OHCxyBA4kCeCwvl8ZM33gLGc19wl7DtZ2gHveNCSAc0=";
   };
 
-  vendorHash = "sha256-mUqXnUAnN052RMsMtiUpOTlDVb59Xh3+++E/BtEEQGk=";
+  vendorHash = "sha256-otBZVOc0lS9IFk0w8A4gD+0MVEn35h0uk5Ul9eH9lFw=";
 
   nativeInstallCheckHooks = [
     versionCheckHook

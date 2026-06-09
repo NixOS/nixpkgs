@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tabledata";
-  version = "1.3.4";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "tabledata";
     tag = "v${version}";
-    hash = "sha256-kZAEKUOcxb3fK3Oh6+4byJJlB/xzDAEGNpUDEKyVkhs=";
+    hash = "sha256-yt71e2ZPJ5WpDLs6sU4kYQGR13IgJB7gMEzhaCHblos=";
   };
 
   build-system = [ setuptools-scm ];

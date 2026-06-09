@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://www.w3.org/TR/xhtml1/";
     description = "DTDs for XHTML 1.0, the Extensible HyperText Markup Language";
     platforms = lib.platforms.unix;
+    license = lib.licenses.w3c-19980720;
   };
 }

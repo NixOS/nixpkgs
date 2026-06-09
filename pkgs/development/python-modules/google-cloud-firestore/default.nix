@@ -82,7 +82,7 @@ buildPythonPackage (finalAttrs: {
     "google.cloud.firestore_admin_v1"
   ];
 
-  updateScript = nix-update-script {
+  passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
       "google-cloud-firestore-v(.*)"

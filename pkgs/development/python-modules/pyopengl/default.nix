@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  replaceVars,
   fetchPypi,
   setuptools,
   pkgs,
@@ -9,13 +10,13 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopengl";
   version = "3.1.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xKAtaGa1TrEZyOmz+wT6g1qVq4At2WYHq0zbABLfgzU=";
   };
 
@@ -23,46 +24,20 @@ buildPythonPackage rec {
 
   dependencies = [ pillow ];
 
-  patchPhase =
-    let
-      ext = stdenv.hostPlatform.extensions.sharedLibrary;
-    in
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # Theses lines are patching the name of dynamic libraries
-      # so pyopengl can find them at runtime.
-      substituteInPlace OpenGL/platform/glx.py \
-        --replace-fail "'OpenGL'"  '"${pkgs.libGL}/lib/libOpenGL${ext}"' \
-        --replace-fail "'GL'"  '"${pkgs.libGL}/lib/libGL${ext}"' \
-        --replace-fail '"GLU",' '"${pkgs.libGLU}/lib/libGLU${ext}",' \
-        --replace-fail "'GLX'" '"${pkgs.libglvnd}/lib/libGLX${ext}"' \
-        --replace-fail '"glut",' '"${pkgs.libglut}/lib/libglut${ext}",' \
-        --replace-fail '"GLESv1_CM",' '"${pkgs.libGL}/lib/libGLESv1_CM${ext}",' \
-        --replace-fail '"GLESv2",' '"${pkgs.libGL}/lib/libGLESv2${ext}",' \
-        --replace-fail '"gle",' '"${pkgs.gle}/lib/libgle${ext}",' \
-        --replace-fail "'EGL'" "'${pkgs.libGL}/lib/libEGL${ext}'"
-      substituteInPlace OpenGL/platform/egl.py \
-        --replace-fail "('OpenGL','GL')" "('${pkgs.libGL}/lib/libOpenGL${ext}', '${pkgs.libGL}/lib/libGL${ext}')" \
-        --replace-fail "'GLU'," "'${pkgs.libGLU}/lib/libGLU${ext}'," \
-        --replace-fail "'glut'," "'${pkgs.libglut}/lib/libglut${ext}'," \
-        --replace-fail "'GLESv1_CM'," "'${pkgs.libGL}/lib/libGLESv1_CM${ext}'," \
-        --replace-fail "'GLESv2'," "'${pkgs.libGL}/lib/libGLESv2${ext}'," \
-        --replace-fail "'gle'," '"${pkgs.gle}/lib/libgle${ext}",' \
-        --replace-fail "'EGL'," "'${pkgs.libGL}/lib/libEGL${ext}',"
-      substituteInPlace OpenGL/platform/darwin.py \
-        --replace-fail "'OpenGL'," "'${pkgs.libGL}/lib/libGL${ext}'," \
-        --replace-fail "'GLUT'," "'${pkgs.libglut}/lib/libglut${ext}',"
-    ''
-    + ''
-      # https://github.com/NixOS/nixpkgs/issues/76822
-      # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
-      # The later patch of the filepath does not work anymore because
-      # pyopengl takes the "name" (for us: the path) and tries to add a
-      # few suffix during its loading phase.
-      # The following patch put back the "name" (i.e. the path) in the
-      # list of possible files.
-      substituteInPlace OpenGL/platform/ctypesloader.py \
-        --replace-fail "filenames_to_try = [base_name]" "filenames_to_try = [name]"
-    '';
+  passthru.runtimeLibs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "/run/opengl-driver/lib"
+    pkgs.libglvnd
+    pkgs.libGLU
+    pkgs.libglut
+    pkgs.gle
+  ];
+
+  patches = lib.optionals (finalAttrs.passthru.runtimeLibs != [ ]) [
+    # patch OpenGL.platform.ctypesloader::_loadLibraryPosix with extra search paths
+    (replaceVars ./ld-preload-gl.patch {
+      GL_LD_LIBRARY_PATH = lib.makeLibraryPath finalAttrs.passthru.runtimeLibs;
+    })
+  ];
 
   # Need to fix test runner
   # Tests have many dependencies
@@ -70,12 +45,19 @@ buildPythonPackage rec {
   # Should run test suite from $out/${python.sitePackages}
   doCheck = false; # does not affect pythonImportsCheck
 
-  # OpenGL looks for libraries during import, making this a somewhat decent test of the flaky patching above.
+  # PyOpenGL looks for libraries during import, making this a somewhat decent test of our patching
+  # (these are impure deps on darwin)
   pythonImportsCheck = [
     "OpenGL"
     "OpenGL.GL"
+    "OpenGL.GLE"
+    "OpenGL.GLU"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "OpenGL.EGL"
+    "OpenGL.GLES1"
+    "OpenGL.GLES2"
+    "OpenGL.GLES3"
     "OpenGL.GLX"
   ];
 
@@ -91,4 +73,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
   };
-}
+})

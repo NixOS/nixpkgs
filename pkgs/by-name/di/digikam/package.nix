@@ -7,8 +7,8 @@
   gitUpdater,
 
   cmake,
+  pkg-config,
   ninja,
-  extra-cmake-modules,
   flex,
   bison,
   wrapGAppsHook3,
@@ -81,8 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     flex
     bison
     kdePackages.wrapQtAppsHook

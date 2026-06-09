@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iroh-ssh";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "rustonbsd";
     repo = "iroh-ssh";
     tag = finalAttrs.version;
-    hash = "sha256-A/QdpPHI9TCqQ2oghxPUJl4KKX8gqkA3kBvN8f1Kegg=";
+    hash = "sha256-/g5U8WW/iqf+ccIsZ5tPhkjVFsoVgDj6sfk/aSgGJBw=";
   };
 
-  cargoHash = "sha256-/cq/rOzrQ4t0qvdaqM3JhRn8IMncx7jWYDjdYmLCYvc=";
+  cargoHash = "sha256-2NAl4ClPN+OI1EBAkuL/KSiByxU34sBmYDjnRXYuiOY=";
 
   nativeBuildInputs = [
     installShellFiles

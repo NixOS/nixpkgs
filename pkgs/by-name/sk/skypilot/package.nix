@@ -35,6 +35,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
   pythonRelaxDeps = true;
 
+  patches = [
+    ./0001-Fix-docker-flag-default-for-Click-8.2-compatibility.patch
+    ./0002-Fix-websocket-proxy-call-script-directly-as-executable.patch
+  ];
+
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
   ];
@@ -215,6 +220,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstall = ''
     mkdir -p $out/${python3Packages.python.sitePackages}/sky/dashboard/out
     cp -r ${dashboard}/* $out/${python3Packages.python.sitePackages}/sky/dashboard/out/
+  '';
+
+  postFixup = ''
+    chmod +x $out/${python3Packages.python.sitePackages}/sky/templates/websocket_proxy.py
+    wrapPythonProgramsIn "$out/${python3Packages.python.sitePackages}/sky/templates" "$out ''${pythonPath[*]}"
   '';
 
   # Excluding the tests as it fails with error:

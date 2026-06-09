@@ -9,24 +9,24 @@
 
 let
   pname = "caido-desktop";
-  version = "0.55.3";
+  version = "0.56.2";
 
   sources = {
     x86_64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-      hash = "sha256-pGRmFYE7uO5Ka94Kfjl9LR5PAwZ5dCxHqCqJKhtLPco=";
+      hash = "sha256-GW8prdvR9+WNO7bdz9ok27Aqra9+jgpZyBnYIM+G5Ys=";
     };
     aarch64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-aarch64.AppImage";
-      hash = "sha256-s99+HXf7Ada2wiPUZ/5M/p09JiadFn5GnKrzqo9yNPQ=";
+      hash = "sha256-mN5wf9RUllfbR/CfLTE6Ywzoj8wKmEG1clVCKRqPUtU=";
     };
     x86_64-darwin = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-x86_64.dmg";
-      hash = "sha256-V33bRaTwhxozBR/wV83bU89TZluenKpFc8GU0KaaO8w=";
+      hash = "sha256-4B3DQJL8M6otnLpFjr4haZA4EWHpgVADQW4DcwsDhIM=";
     };
     aarch64-darwin = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-aarch64.dmg";
-      hash = "sha256-fEzPN84zoSvlIgUBYVmPta7SUmTDRQghoJMTZXW7eI4=";
+      hash = "sha256-kZdfcZueMmgEHpNTIPANsN7X4lnVOfZXbKHxComaalM=";
     };
   };
 
@@ -71,6 +71,8 @@ let
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop \
         -t $out/share/applications
+      substituteInPlace $out/share/applications/caido.desktop \
+        --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/${pname} \
@@ -111,9 +113,9 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   linux
-else if stdenv.isDarwin then
+else if stdenv.hostPlatform.isDarwin then
   darwin
 else
   throw "caido-desktop: unsupported platform ${stdenv.hostPlatform.system}"

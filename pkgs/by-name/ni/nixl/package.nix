@@ -21,6 +21,7 @@
   liburing,
   numactl,
   taskflow,
+  tomlplusplus,
   ucx,
 
   # passthru
@@ -35,7 +36,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.0.1";
+  version = "1.2.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -44,7 +45,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mDpDqwUwI0baIDDpt9/wgIP3saBWY8yWKgwzHgrzJiU=";
+    hash = "sha256-viyoFc8g0B8kXW2umd7vdAAu+XMk0CJwQEGw+ll3AJ4=";
   };
 
   postPatch =
@@ -103,6 +104,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     liburing
     numactl
     taskflow
+    tomlplusplus
     ucx
 
     python3Packages.python

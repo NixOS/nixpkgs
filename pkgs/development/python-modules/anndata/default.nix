@@ -126,7 +126,7 @@ buildPythonPackage rec {
     # Tests that are seemingly broken. See https://github.com/scverse/anndata/issues/2017.
     "test_concat_dask_sparse_matches_memory"
   ]
-  ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     # RuntimeError: Cluster failed to start: [Errno 1] Operation not permitted
     "test_dask_distributed_write"
     "test_read_lazy_h5_cluster"

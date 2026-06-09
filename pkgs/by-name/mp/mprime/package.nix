@@ -28,6 +28,8 @@ let
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
   docDir = "share/mprime/doc";
+  ccArch = stdenv.hostPlatform.gcc.arch or "x86-64";
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
@@ -67,17 +69,30 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # The following is needed because compiling with stdenv.hostPlatform.gcc.arch
+      # set to something like "znver1" causes fatal errors during runtime due to
+      # rounding issues
+      lib.optional (stdenv.hostPlatform.isx86_64 && ccArch != "x86-64") "-march=x86-64"
+    );
+  };
+
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
     make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
     make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 -t $out/bin ${srcDir}/mprime
 
     install -Dm444 -t $out/${docDir} license.txt readme.txt stress.txt undoc.txt
+    runHook postInstall
   '';
 
   meta = {

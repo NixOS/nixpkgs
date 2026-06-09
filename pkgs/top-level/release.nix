@@ -86,7 +86,6 @@ let
     id
     isDerivation
     optionals
-    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;

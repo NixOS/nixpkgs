@@ -32,6 +32,9 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    # Requires pyobjc-framework-coreservices and pyobjc-framework-uniformtypeidentifiers
+    # which are currently not packaged in nixpgs.
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Utilities for working with Uniform Type Identifiers";
     homepage = "https://github.com/RhetTbull/utitools";
     changelog = "https://github.com/RhetTbull/utitools/blob/${finalAttrs.src.tag}/CHANGELOG.md";

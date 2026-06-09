@@ -6,9 +6,10 @@ import warnings
 from pathlib import Path
 
 import ptpython.ipython
+from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver, DriverConfiguration, load_driver_configuration
+from test_driver.driver import Driver, load_driver_configuration
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
@@ -53,6 +54,29 @@ def writeable_dir(arg: str) -> Path:
     if not os.access(path, os.W_OK):
         raise argparse.ArgumentTypeError(f"{path} is not a writeable directory")
     return path
+
+
+def formatwarning(
+    message: Warning | str,
+    category: type[Warning],
+    filename: str,
+    lineno: int,
+    line: str | None = None,
+) -> str:
+    return (
+        Style.BRIGHT
+        + Fore.YELLOW
+        + f"??? Warning ({category.__name__}): "  # ty: ignore[unsupported-operator]
+        + Style.NORMAL
+        + str(message)
+        + "\n"
+        + f'    File "{filename}", line {lineno}\n'
+        + (f"      {line}\n" if line is not None else "")
+        + Style.RESET_ALL
+    )
+
+
+warnings.formatwarning = formatwarning  # ty:ignore[invalid-assignment]
 
 
 def main() -> None:
@@ -159,30 +183,3 @@ def main() -> None:
             driver.run_tests()
             toc = time.time()
             logger.info(f"test script finished in {(toc - tic):.2f}s")
-
-
-def generate_driver_symbols() -> None:
-    """
-    This generates a file with symbols of the test-driver code that can be used
-    in user's test scripts. That list is then used by pyflakes to lint those
-    scripts.
-    """
-    d = Driver(
-        config=DriverConfiguration(
-            vms=dict(),
-            containers=dict(),
-            vlans=[],
-            global_timeout=0,
-            enable_ssh_backdoor=False,
-            test_script=(
-                Path("testScriptWithTypes")
-                if (Path("testScriptWithTypes").is_file())
-                else Path("testScriptFile")
-            ),
-        ),
-        out_dir=Path(),
-        logger=CompositeLogger([]),
-    )
-    test_symbols = d.test_symbols()
-    with open("driver-symbols", "w") as fp:
-        fp.write(",".join(test_symbols.keys()))

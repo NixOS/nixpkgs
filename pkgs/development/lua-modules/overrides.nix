@@ -45,6 +45,7 @@
   openldap,
   openssl,
   pcre,
+  pcre2,
   pkg-config,
   readline,
   ripgrep,
@@ -303,13 +304,10 @@ in
         sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
       })
 
-      # https://github.com/lgi-devs/lgi/issues/346
-      # https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/issues/1
-      (fetchpatch {
-        name = "glib-2.86.0.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/raw/05a0c9df75883da235bacd4379b769e7d7713fb9/0001-Use-TypeClass.get-instead-of-.ref.patch";
-        hash = "sha256-Z1rNv0VzVrK41rV73KiPXq9yLaNxbTOFiSd6eLZyrbY=";
-      })
+      # https://github.com/lgi-devs/lgi/issues/362
+      # https://github.com/lgi-devs/lgi/pull/361
+      # https://github.com/NixOS/nixpkgs/issues/523345
+      ./lgi/glib-2.88.patch
     ];
 
     # https://github.com/lgi-devs/lgi/pull/300
@@ -434,6 +432,15 @@ in
       {
         name = "PCRE";
         dep = pcre;
+      }
+    ];
+  };
+
+  lrexlib-pcre2 = prev.lrexlib-pcre2.overrideAttrs {
+    externalDeps = [
+      {
+        name = "PCRE2";
+        dep = pcre2;
       }
     ];
   };
@@ -692,6 +699,11 @@ in
 
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
+    };
+
+    meta = (old.meta or { }) // {
+      # https://github.com/wahern/luaossl/pull/221
+      broken = luaAtLeast "5.5";
     };
   });
 
@@ -1077,10 +1089,6 @@ in
     # TODO: figure out darwin failure
     doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
-    nvimSkipModules = [
-      "bootstrap" # tries to install luarocks from network
-    ];
-
     bustedFlags = [
       "--run=offline"
     ];
@@ -1156,21 +1164,6 @@ in
   };
 
   teal-language-server = prev.teal-language-server.overrideAttrs (old: {
-    # TODO: Remove this prerelease override once upstream publishes a release
-    # or rockspec that the luarocks updater can consume directly.
-    version = "0.1.2-pre-1";
-    knownRockspec =
-      (fetchurl {
-        url = "https://raw.githubusercontent.com/teal-language/teal-language-server/0.1.2-pre-1/teal-language-server-0.1.2-1.rockspec";
-        sha256 = "1z7nbzhdqh2w7k635hbbfba2s37rxbcphaxq7dfsjfj3sgkj9snf";
-      }).outPath;
-    src = fetchFromGitHub {
-      owner = "teal-language";
-      repo = "teal-language-server";
-      tag = "0.1.2-pre-1";
-      hash = "sha256-1ssgt+/e28TJ+1G1TWAPbZe5DiUYOafsSbc9exttesk=";
-    };
-    strictDeps = false;
     # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
     # packaged versions can satisfy dependencies.
     preConfigure = (old.preConfigure or "") + ''
@@ -1178,23 +1171,10 @@ in
     '';
     postConfigure = (old.postConfigure or "") + ''
       substituteInPlace ''${rockspecFilename} \
-        --replace-fail 'tag = "0.1.2"' 'tag = "0.1.2-pre-1"' \
         --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
         --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tree-sitter-cli == 0.24.7",' "" \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",' \
-        --replace-fail '"tree-sitter-teal == 0.0.34",' '"tree-sitter-teal >= 0.0.34",'
+        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",'
     '';
-    propagatedBuildInputs =
-      (lib.filter (
-        drv:
-        !(lib.elem (lib.getName drv) [
-          "ltreesitter-ts"
-        ])
-      ) (old.propagatedBuildInputs or [ ]))
-      ++ [
-        final.ltreesitter
-      ];
   });
 
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
@@ -1238,6 +1218,22 @@ in
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
+  });
+
+  tomlua = prev.tomlua.overrideAttrs (old: {
+    postConfigure = ''
+      chmod +w "$rockspecFilename"
+      echo "deploy = { wrap_bin_scripts = false, }" >> "$rockspecFilename"
+    '';
+    checkPhase = ''
+      runHook preCheck
+      runHook postCheck
+    '';
+    installCheckPhase = ''
+      runHook preInstallCheck
+      make test
+      runHook postInstallCheck
+    '';
   });
 
   tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
@@ -1299,6 +1295,19 @@ in
       ' lutf8lib.c
     '';
   };
+
+  vicious = prev.vicious.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [
+        makefu
+        mic92
+        mrcjkb
+        McSinyx
+      ];
+      platforms = lib.platforms.linux;
+    };
+  });
 
   vstruct = prev.vstruct.overrideAttrs (old: {
     meta = (old.meta or { }) // {

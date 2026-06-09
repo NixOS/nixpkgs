@@ -731,7 +731,7 @@ let
             ;
 
           debsFlat = lib.flatten debs;
-          debsGrouped = debs;
+          debsGrouped = map toString debs;
 
           preVM = createEmptyImage { inherit size fullName; };
 
@@ -1327,6 +1327,42 @@ let
         })
       ];
       urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z";
+      packages = commonDebPackages ++ [
+        "diffutils"
+        "libc-bin"
+      ];
+    };
+
+    ubuntu2604x86_64 = {
+      name = "ubuntu-26.04-resolute-amd64";
+      fullName = "Ubuntu 26.04 Resolute (amd64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/main/binary-amd64/Packages.xz";
+          hash = "sha256-7ZrEHLJj767MWgagdC3FZXDi+1/5TE8uSy+9zd1zzyQ=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/universe/binary-amd64/Packages.xz";
+          hash = "sha256-FYe+htZtOFQjJSFeDhCfdb1pXI8k15Os4nYgOKatWB4=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-xaUdPgtH3jCgTJXYUbksMHvzt6jj6YfdzSAb+91tQNw=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-tzAvbwp+/6snpL8TtbtTx2kEL2f+XfGAwDCl/r6ka6Y=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+        })
+      ];
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"

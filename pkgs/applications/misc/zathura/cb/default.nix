@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
-  version = "2026.02.03";
+  version = "2026.05.10";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-cb";
     tag = finalAttrs.version;
-    hash = "sha256-k5WbJR0PToiSQo00igH/3uHWp7z4dNxwSXiAos6OgJ8=";
+    hash = "sha256-rSRUNPmmAXmxarAE+y4cwfvAZ9AajeaWLWoRFo5DZ7M=";
   };
 
   nativeBuildInputs = [

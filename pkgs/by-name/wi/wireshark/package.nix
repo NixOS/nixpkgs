@@ -52,6 +52,7 @@
   withQt ? true,
   qt6,
   libpcap' ? libpcap.override { withBluez = stdenv.hostPlatform.isLinux; },
+  withExtras ? stdenv.hostPlatform.isLinux,
 }:
 let
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
@@ -59,7 +60,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.6.5";
+  version = "4.6.6";
 
   outputs = [
     "out"
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wireshark";
     owner = "wireshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zvrwxjp4LK2J3QnxmPxKKrU01YHQvPyp54UWzeGNCjA=";
+    hash = "sha256-ysSfCLnCakxsjLKt+UxzrcPWNXiqdvTlI/1dq56lMfA=";
   };
 
   patches = [
@@ -184,6 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     cmake --install . --prefix "''${!outputDev}" --component Development
+  ''
+  + lib.optionalString withExtras ''
+    ln -s $out/libexec/wireshark/extcap/* -t $out/bin/
   ''
   + lib.optionalString isAppBundle ''
     mkdir -p $out/Applications

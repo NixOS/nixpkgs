@@ -395,7 +395,7 @@ def option_from_config(name: str, config_path: List[str]) -> str:
         return ""
     if isinstance(value, bool):
         value = bool_to_yes_no(value)
-    return f"{name}: {config(*config_path)}\n"
+    return f"{name}: {value}\n"
 
 
 def install_bootloader() -> None:
@@ -479,6 +479,8 @@ def install_bootloader() -> None:
     config_file += option_from_config('interface_resolution', ['style', 'interface', 'resolution'])
     config_file += option_from_config('interface_branding', ['style', 'interface', 'branding'])
     config_file += option_from_config('interface_branding_colour', ['style', 'interface', 'brandingColor'])
+    config_file += option_from_config('interface_help_colour', ['style', 'interface', 'helpColor'])
+    config_file += option_from_config('interface_help_colour_bright', ['style', 'interface', 'helpColorBright'])
     config_file += option_from_config('interface_help_hidden', ['style', 'interface', 'helpHidden'])
     config_file += option_from_config('term_font_scale', ['style', 'graphicalTerminal', 'font', 'scale'])
     config_file += option_from_config('term_font_spacing', ['style', 'graphicalTerminal', 'font', 'spacing'])

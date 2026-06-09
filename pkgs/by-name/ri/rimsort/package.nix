@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchzip,
   makeBinaryWrapper,
+  nix-update-script,
 
   makeDesktopItem,
   copyDesktopItems,
@@ -16,13 +17,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.73";
+  version = "1.0.76";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
-    rev = "v${version}";
-    hash = "sha256-xNmJ1XvnLTKhicVchzG9CQtRVoZjRkBEvfn/WWesDRU=";
+    tag = "v${version}";
+    hash = "sha256-EO1j4GPRQSB+QEF4tB87x4nCUKpdWU9aGlDFghwxar0=";
     fetchSubmodules = true;
   };
 
@@ -49,14 +50,15 @@ let
     }).run;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   inherit version;
+  inherit src;
 
   unpackPhase = ''
     runHook preUnpack
 
-    cp -r ${src} source
+    cp -r ${finalAttrs.src} source
     chmod -R 755 source
     cp ${steamworksSrc}/redistributable_bin/linux64/libsteam_api.so source/
 
@@ -168,6 +170,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # To skip checking the pre-release 'Edge' release as 'vEdge'.
+      "--version-regex"
+      "v([0-9.]+)"
+    ];
+  };
+
   meta = {
     description = "Open source mod manager for the video game RimWorld";
     homepage = "https://github.com/RimSort/RimSort";
@@ -186,4 +196,4 @@ stdenv.mkDerivation {
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
   };
-}
+})

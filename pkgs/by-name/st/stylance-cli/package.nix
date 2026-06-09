@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stylance-cli";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "basro";
     repo = "stylance-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YMC7pldkabU669CKeXX5QQOcN974/cZ42nTPphZPq5U=";
+    hash = "sha256-UVRUPjDxfwnajkY3KUa/615pIo/uAyGu1ngQBSAnEBE=";
   };
 
-  cargoHash = "sha256-hn1nEnihgWtj1JaRcUZTm6lrThnugUMs6mAs0lsWpbU=";
+  cargoHash = "sha256-bNOOp/6myQX7z/O0gmW/2s9eEog5ZMlL5hD0GFgj7OY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

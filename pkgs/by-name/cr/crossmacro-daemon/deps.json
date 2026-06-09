@@ -1,8 +1,8 @@
 [
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.5",
-    "hash": "sha256-KrP+hE3gk7pATbJYZsJ1LHiXjzLA+ntHW7G/VGgHk2g="
+    "version": "10.0.7",
+    "hash": "sha256-uQmTQarMn0fuZV03MyCb78Ex+96cuqFHNO5SyFOPkJk="
   },
   {
     "pname": "Serilog",
@@ -38,10 +38,5 @@
     "pname": "Serilog.Sinks.File",
     "version": "7.0.0",
     "hash": "sha256-LxZYUoUPkCjIIVarJilnXnqQiMrFNJtoRilmzTNtUjo="
-  },
-  {
-    "pname": "Tmds.DBus",
-    "version": "0.91.1",
-    "hash": "sha256-MtHZFutIm0VKVkM/kRMucZIRL0jAEEPSj2D2MLxbAH4="
   }
 ]

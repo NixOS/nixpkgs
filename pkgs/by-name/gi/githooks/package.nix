@@ -9,17 +9,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "githooks";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "gabyx";
     repo = "githooks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aVrMM7gZF7o6WR2/8SEsfLFsqTSbXpr7UtcSB+eO/oQ=";
+    hash = "sha256-aRv8zSTnpoQfhajagMKT0rpOmNWt0X4jiKv0kS6cQUE=";
   };
 
   modRoot = "./githooks";
-  vendorHash = "sha256-ZcDD4Z/thtyCvXg6GzzKC/FSbh700QEaqXU8FaZaZc4=";
+  vendorHash = "sha256-ULPbM/6DqyVPwq68MnpVesS3w1uxKBbVIZ7i5Kng+1Y=";
 
   nativeBuildInputs = [ makeWrapper ];
 

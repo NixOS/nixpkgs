@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nedit";
-  version = "5.7";
+  version = "5.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/nedit/nedit-source/nedit-${finalAttrs.version}-src.tar.gz";
-    sha256 = "0ym1zhjx9976rf2z5nr7dj4mjkxcicimhs686snjhdcpzxwsrndd";
+    sha256 = "sha256-WFGqclLa2VIIRSkXNkAjJWLexKfEQCCfGW1T1KWoB00=";
   };
 
   hardeningDisable = [ "format" ];

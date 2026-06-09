@@ -153,7 +153,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ui::viewport::tests::test_add_line_scrolling"
     "--skip=ui::viewport::tests::test_line_wrapping"
   ];
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __structuredAttrs = true;
 

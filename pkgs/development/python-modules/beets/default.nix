@@ -113,12 +113,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.10.0";
+  version = "2.11.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DbZV8n+2nbILLIi7niXohcIynwza+w5LVo/jy4wmTbw=";
+    hash = "sha256-fi6D0P2GtEO41VL6UKAArRedZVxw97yqDUAoilktUho=";
   };
   pyproject = true;
 
@@ -384,6 +384,7 @@ buildPythonPackage (finalAttrs: {
         substitute = {
           testPaths = [ ];
         };
+        tidal = { };
         the = { };
         titlecase.propagatedBuildInputs = [ titlecase ];
         thumbnails = {

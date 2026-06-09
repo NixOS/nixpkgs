@@ -11,6 +11,7 @@
   cmake,
   ncurses,
   scdoc,
+  shaderc,
   pkg-config,
   gcc-unwrapped,
   fontconfig,
@@ -50,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.3.11";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mzOgto8ELVrf1RWyL4BoU836HGnMBBeyWwfBFAPgoDE=";
+    hash = "sha256-ON7CJ1NDwLfjvLZ0ugN45LUjBGiwRNASiQwuDa6F1vM=";
   };
 
-  cargoHash = "sha256-wO6PCnV95tKsRzyV1kVxxp7pNTsrR92HtNpZYg3U51w=";
+  cargoHash = "sha256-vSQ5heZZ8tYKeMABhZ8AziEAniavnAasH04BVlqYF4g=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     autoPatchelfHook
+    shaderc
   ];
 
   runtimeDependencies = rlinkLibs;

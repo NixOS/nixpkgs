@@ -8,7 +8,6 @@
   datafusion,
   fastavro,
   pyarrow,
-  pydantic-core,
   pyiceberg,
   pytestCheckHook,
 
@@ -18,14 +17,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O7Vw31UbnxJxnxrdbORiMyodZFqDwmcA8H/WiIBhwOk=";
+    hash = "sha256-PE19tUEk3VmJ9h4JiBVYgbAVuQ3EzSngESj+CZc7ODs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-AMP58JrlKP16PT43U2pPORWBtITlULTGjQtmuR/hK4U=";
+    hash = "sha256-aEk+K9dWwgkiE7Wx2J+rF3JLQ5deTqRm2sfFSphyALY=";
   };
 
   nativeBuildInputs = [

@@ -42,11 +42,13 @@ let
       mathcomp = callPackage ../development/rocq-modules/mathcomp { };
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
-      mathcomp-fingroup = self.mathcomp.fingroup;
+      mathcomp-finite-group = self.mathcomp.finite-group;
+      mathcomp-fingroup = self.mathcomp-finite-group;
       mathcomp-algebra = self.mathcomp.algebra;
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
-      mathcomp-character = self.mathcomp.character;
+      mathcomp-group-representation = self.mathcomp.group-representation;
+      mathcomp-character = self.mathcomp-group-representation;
       mathcomp-analysis = callPackage ../development/rocq-modules/mathcomp-analysis { };
       mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-bigenough = callPackage ../development/rocq-modules/mathcomp-bigenough { };
@@ -55,6 +57,7 @@ let
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
       mathcomp-reals = self.mathcomp-analysis.reals;
       mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
+      micromega-plugin = callPackage ../development/rocq-modules/micromega-plugin { };
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };

@@ -6,6 +6,7 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -51,6 +52,15 @@ buildPythonPackage (finalAttrs: {
     tag = "jax-v${finalAttrs.version}";
     hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
   };
+
+  patches = [
+    # setup.py: Include only jax.* in the built wheel
+    # https://github.com/jax-ml/jax/pull/37182
+    (fetchpatch {
+      url = "https://github.com/jax-ml/jax/commit/cb5a91780f84f124090d8f94e99c8771e87590f6.patch";
+      hash = "sha256-p6X9IFe4YUb2MQp7YjJHme1dueZ1Y37IKnANGruW1cM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

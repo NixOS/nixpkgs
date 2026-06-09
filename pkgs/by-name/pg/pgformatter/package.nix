@@ -8,14 +8,17 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.9";
+  version = "5.10";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
     tag = "v${version}";
-    hash = "sha256-G4Bbg8tNlwV8VCVKCamhlQ/pGf8hWCkABm6f8i5doos=";
+    hash = "sha256-OWw47okAs8x4Ri8+IJHPhy6YSkSN2sBlJ0v8h6GlhfU=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [ "out" ];
 
@@ -54,10 +57,12 @@ perlPackages.buildPerlPackage rec {
       thunze
       mfairley
     ];
-    license = [
-      lib.licenses.postgresql
-      lib.licenses.artistic2
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        postgresql
+        artistic2
+      ];
     mainProgram = "pg_format";
   };
 }

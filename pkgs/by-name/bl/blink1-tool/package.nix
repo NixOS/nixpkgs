@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libusb1 ];
 
   makeFlags = [
+    "GIT_TAG_RAW=v${finalAttrs.version}"
     "GIT_TAG=v${finalAttrs.version}"
     "USBLIB_TYPE=HIDAPI"
     "HIDAPI_TYPE=LIBUSB"

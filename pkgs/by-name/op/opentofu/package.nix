@@ -16,16 +16,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.11.6";
+    version = "1.12.1";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-H+noiYY/Nv7DfUTWbvsCnKbjOc2494FVn7Fqos/3ThU=";
+      hash = "sha256-zD1oYHftqBrHGgF8QDHe+2VSfuKLi8ZhocD+0pL9mlI=";
     };
 
-    vendorHash = "sha256-WO5OtKwluks5nuSHJ4NO1+EKhtCrJE9MuMGmu5fYKM4=";
+    vendorHash = "sha256-fsAdTkCU1C6iCKMRc+NRKqfHJ5FczUISfO+g4wGnMJw=";
     ldflags = [
       "-s"
       "-w"
@@ -34,7 +34,7 @@ let
     ];
 
     nativeBuildInputs = [ installShellFiles ];
-    patches = [ ./provider-path-0_15.patch ];
+    patches = [ ./provider-path-1_12.patch ];
 
     passthru = {
       inherit plugins;

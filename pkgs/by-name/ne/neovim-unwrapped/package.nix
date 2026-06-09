@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gettext,
   libuv,
@@ -123,6 +124,11 @@ stdenv.mkDerivation (
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+      (fetchpatch {
+        name = "CVE-2026-11487.patch";
+        url = "https://github.com/neovim/neovim/commit/f83e0dcaf8cf18de94828341b0a1a61a86c75baf.patch";
+        hash = "sha256-iWnq0ezbKYJqjvevVlcTJBvUc17ZvrhsanhtuKrh8zM=";
+      })
     ];
 
     inherit lua;
@@ -247,7 +253,7 @@ stdenv.mkDerivation (
     ''
     + lib.concatStrings (
       lib.mapAttrsToList (language: grammar: ''
-        ln -s \
+        ln -sf \
           ${grammar}/parser \
           $out/lib/nvim/parser/${language}.so
       '') finalAttrs.treesitter-parsers
@@ -287,6 +293,7 @@ stdenv.mkDerivation (
       '';
       homepage = "https://neovim.io";
       changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
+      donationPage = "https://neovim.io/sponsors/";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.

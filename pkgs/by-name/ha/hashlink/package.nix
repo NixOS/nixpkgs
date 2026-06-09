@@ -12,7 +12,6 @@
   libvorbis,
   mbedtls,
   openal,
-  pcre,
   SDL2,
   sqlite,
 }:
@@ -45,7 +44,6 @@ stdenv.mkDerivation rec {
     libvorbis
     mbedtls
     openal
-    pcre
     SDL2
     sqlite
   ];

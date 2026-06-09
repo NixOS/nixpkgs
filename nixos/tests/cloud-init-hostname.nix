@@ -27,7 +27,7 @@ in
     illustris
   ];
 
-  nodes.machine2 =
+  nodes.unnamed =
     { ... }:
     {
       virtualisation.qemu.options = [

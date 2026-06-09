@@ -81,6 +81,8 @@ let
       str
       ;
   };
+
+  json2x = pkgs.buildPackages.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
@@ -140,12 +142,12 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              jq . "$valuePath" > $out
+              jq .value "$NIX_ATTRS_JSON_FILE" > $out
             ''
         ) { };
 
@@ -163,12 +165,12 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal_0_17 ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2yaml "$valuePath" "$out"
+              json2yaml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -186,12 +188,12 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2yaml "$valuePath" "$out"
+              json2yaml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -454,25 +456,22 @@ optionalAttrs allowAliases aliases
 
   toml =
     { }:
-    json { }
-    // {
+    {
       type = types.toml;
 
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, go-toml }:
+          { runCommand, remarshal }:
           runCommand name
             {
-              nativeBuildInputs = [ go-toml ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              nativeBuildInputs = [ json2x ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
-            # -use-json-number: preserve JSON ints as TOML ints
-            # (Go's json.Decoder defaults to float64 for all numbers)
             ''
-              jsontoml -use-json-number < "$valuePath" > "$out"
+              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -501,10 +500,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ json2cdn ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -736,12 +737,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -785,14 +786,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -931,9 +932,9 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = builtins.toJSON (value._imports or [ ]);
-              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
-              pythonGen = ''
+              imports = value._imports or [ ];
+              value = removeAttrs value [ "_imports" ];
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
@@ -955,27 +956,21 @@ optionalAttrs allowAliases aliases
                     else:
                         return repr(value)
 
-                with open(os.environ["importsPath"], "r") as f:
-                    imports = json.load(f)
-                    if imports is not None:
-                        for i in imports:
+                with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                    attrs = json.load(f)
+                    if attrs["imports"] is not None:
+                        for i in attrs["imports"]:
                             print(f"import {i}")
                         print()
 
-                with open(os.environ["valuePath"], "r") as f:
-                    for key, value in json.load(f).items():
+                    for key, value in attrs["value"].items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "imports"
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -1004,25 +999,22 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                value = builtins.toJSON value;
-                pythonGen = ''
+                inherit value;
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
 
-                  with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${
+                  with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                      print(xmltodict.unparse(json.load(f)["value"], full_document=${
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };

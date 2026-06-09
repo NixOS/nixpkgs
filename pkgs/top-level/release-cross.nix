@@ -47,7 +47,6 @@ let
     linux
     mapTestOnCross
     pkgsForCross
-    unix
     ;
 
   inherit (release-lib.lib)
@@ -198,8 +197,8 @@ in
 
   crossIphone32 = mapTestOnCross systems.examples.iphone32 darwinCommon;
 
-  # Test some cross builds to the Sheevaplug
-  crossSheevaplugLinux = mapTestOnCross systems.examples.sheevaplug (
+  # Test some cross builds to ARMv5
+  armv5tel = mapTestOnCross systems.examples.armv5tel-multiplatform (
     linuxCommon
     // {
       ubootSheevaplug = nativePlatforms;
@@ -235,8 +234,6 @@ in
 
   # Linux on armv7l-hf
   armv7l-hf = mapTestOnCross systems.examples.armv7l-hf-multiplatform linuxCommon;
-
-  pogoplug4 = mapTestOnCross systems.examples.pogoplug4 linuxCommon;
 
   # Linux on aarch64
   aarch64 = mapTestOnCross systems.examples.aarch64-multiplatform linuxCommon;

@@ -41,7 +41,6 @@
   libxkbcommon,
   libxml2_13,
   libxslt,
-  mesa,
   libgbm,
   sqlite,
   systemdLibs,
@@ -187,16 +186,7 @@ let
 
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
-        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib \
-        --run '
-          # Use Mesa as EGL vendor fallback when no system EGL vendor is configured.
-          # libglvnd discovers vendors via JSON files https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md
-          if [ -z "$__EGL_VENDOR_LIBRARY_DIRS" ] && [ -z "$__EGL_VENDOR_LIBRARY_FILENAMES" ] && \
-             ! [ -d /usr/share/glvnd/egl_vendor.d ] && ! [ -d /etc/glvnd/egl_vendor.d ] && \
-             ! [ -d /run/opengl-driver/share/glvnd/egl_vendor.d ]; then
-            export __EGL_VENDOR_LIBRARY_FILENAMES="${mesa}/share/glvnd/egl_vendor.d/50_mesa.json"
-          fi
-        '
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
     '';
   };
   webkit-darwin = fetchzip {

@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BnaPw9edaI1nKAu421JBkI9dAV3Xu3Yr5VQILN0QUTM=";
+    hash = "sha256-qcgEUkPh671q9aJtge+PSbBTrg7vY+iz+H+SKXPFqFI=";
   };
 
   nativeBuildInputs = [
@@ -64,19 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
-  '';
-
   buildPhase = ''
     runHook preBuild
 
     bun run build -- --skipTypecheck
 
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
     node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.electronDist="${if stdenv.hostPlatform.isLinux then "electron-dist" else electron.dist}" \
+      -c.electronDist=electron-dist \
       -c.electronVersion="${electron.version}" \
       -c.npmRebuild=false
 
@@ -147,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       nyabinary
       miniharinn
+      baba
     ];
     platforms = lib.platforms.linux;
     mainProgram = "goofcord";

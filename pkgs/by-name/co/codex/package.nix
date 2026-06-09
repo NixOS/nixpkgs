@@ -25,21 +25,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.125.0";
+  version = "0.137.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-q175gmBw+edb5+w8TM36yUeFsyIdB1/IwWzbxBbBmoA=";
+    hash = "sha256-puszZqi1lZeq8iXWAD9U9+WMnNvzMYKf6wVT9mtjSUU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-fDVlj7zAZnwP9YBaYaSQZXYYWrBm5IEyLT9zoorvzFg=";
+  cargoHash = "sha256-SX5LMO+IWismbH61Jd0g1mgykfav8DrqG+wjyNCWyCo=";
 
-  # Match upstream's release build (codex only) and drop the expensive
-  # release profile tweaks that dominate cold build time in nixpkgs.
+  __structuredAttrs = true;
+
+  # Match upstream's release build for the codex binary only.
   cargoBuildFlags = [
     "--package"
     "codex-cli"
@@ -56,7 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # to use the shared library instead
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "fat"' "" \
       --replace-fail 'codegen-units = 1' ""

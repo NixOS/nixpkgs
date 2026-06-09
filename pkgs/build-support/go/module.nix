@@ -283,7 +283,7 @@ lib.extendMkDerivation {
 
               exclude='\(/_\|examples\|Godeps\|testdata'
               if [[ -n "$excludedPackages" ]]; then
-                IFS=' ' read -r -a excludedArr <<<$excludedPackages
+                IFS=' ' read -r -a excludedArr <<<"''${excludedPackages[@]}"
                 printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
                 excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
                 exclude+='\|'"$excludedAlternates"

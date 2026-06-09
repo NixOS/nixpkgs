@@ -11,7 +11,7 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkDefault;
+  inherit (lib) mkIf;
 
   cfg = config.services.hercules-ci-agent;
 

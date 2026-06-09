@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString gimp2Support ''
       sed -i \
-        -e "s,gimp2_plug_indir=.*,gimp2_plug_indir=\"$out/lib/gimp/${gimp.majorVersion}\",g" \
+        -e "s,gimp2_plug_indir=.*,gimp2_plug_indir=\"$out/lib/gimp/${gimp.apiVersion}\",g" \
         configure
     '';
 

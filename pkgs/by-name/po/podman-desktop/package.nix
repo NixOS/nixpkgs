@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_41,
-  nodejs_24,
+  nodejs-slim_24,
   pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -21,14 +21,14 @@
 }:
 
 let
-  nodejs = nodejs_24;
-  pnpm = pnpm_10_29_2.override { inherit nodejs; };
+  nodejs-slim = nodejs-slim_24;
+  pnpm = pnpm_10_29_2.override { inherit nodejs-slim; };
   electron = electron_41;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.26.2";
+  version = "1.27.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -68,14 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VVyKC1z7YECZlbTaFaq2OwGg0k22qBbn/HEOYiJ8fcw=";
+    hash = "sha256-HcT33KjWnoY/pGuolt0BZurxdaWgUTF0tuACE9flfCM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 2;
-    hash = "sha256-tCp5qLZVo93H8VIToU3mkmwNsVXOAd1IEsL6RlazPXo=";
+    fetcherVersion = 3;
+    hash = "sha256-FD5lXAgA6uJLRLbaiZDbmow6BEiF6DWCzryAzyMGKe8=";
   };
 
   patches = [
@@ -91,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    nodejs
+    nodejs-slim
+    nodejs-slim.npm
     pnpm
     pnpmConfigHook
   ]

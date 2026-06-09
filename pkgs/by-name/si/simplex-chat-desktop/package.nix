@@ -2,22 +2,21 @@
   lib,
   appimageTools,
   fetchurl,
-  gitUpdater,
   stdenv,
 }:
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.4.11";
+  version = "6.5.2";
 
   sources = {
     "aarch64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-aarch64.AppImage";
-      hash = "sha256-CvHwYKbieRYbBKUCoKAa11rTy5Opdfb7FKS4poantKs=";
+      hash = "sha256-VrPNKXgVO/9yvGqseOVkYKMFVqhtExL2PCJb6stn3ko=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-      hash = "sha256-0b88H6eMYO+EgRnWzd9x/MUCr7CE/AHDZnKILQJS1DQ=";
+      hash = "sha256-caRL09PKJ33XHRReZ5qSpfgKH0wpJxGSHXfA83sz5UE=";
     };
   };
 
@@ -33,6 +32,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  extraPkgs = pkgs: [ pkgs.libnotify ];
+
   extraBwrapArgs = [
     "--setenv _JAVA_AWT_WM_NONREPARENTING 1"
   ];
@@ -44,11 +45,9 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/simplex-chat/simplex-chat";
-    rev-prefix = "v";
-    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
-    ignoredVersions = "-";
+  passthru = {
+    inherit sources;
+    updateScript = ./update.sh;
   };
 
   meta = {

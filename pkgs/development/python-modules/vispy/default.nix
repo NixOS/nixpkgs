@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.16.1";
+  version = "0.16.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uTwyyF0IwGro9eMXf5z9bEleF0XyEgt3eDCt7l2cNkg=";
+    hash = "sha256-CUUavoeBM2/WhCIHzZXOXoYJ2Z8TvN6JhBJTgSXDUIg=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [

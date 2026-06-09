@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aKcgjq6jDKRzNlKHyDMHj2VK8eGGsk/AEF53F8k7uWc=";
+    hash = "sha256-hpGz7fdPl5ZBFieXDmps0Q7Fhcmr9K3ULZPimzhl/SI=";
   };
 
   postPatch = ''

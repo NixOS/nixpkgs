@@ -44,16 +44,12 @@ let
           defaultGateway6 = {
             address = "fd00:1234:5678:1::1";
             interface = "enp1s0";
-            source = "fd00:1234:5678:1::3";
+            source = "fd00:1234:5678:1::3"; # implicit dependency on enp2s0
           };
           interfaces.enp1s0.ipv6.addresses = [
             {
               address = "fd00:1234:5678:1::2";
               prefixLength = 64;
-            }
-            {
-              address = "fd00:1234:5678:1::3";
-              prefixLength = 128;
             }
           ];
           interfaces.enp1s0.ipv4.addresses = [
@@ -74,6 +70,12 @@ let
             {
               address = "192.168.2.2";
               prefixLength = 24;
+            }
+          ];
+          interfaces.enp2s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:1::3";
+              prefixLength = 128;
             }
           ];
         };
@@ -106,6 +108,41 @@ let
         with subtest("Test default addresses"):
             client.succeed("ip -4 route show default | grep -q 'src 192.168.1.3'")
             client.succeed("ip -6 route show default | grep -q 'src fd00:1234:5678:1::3'")
+      '';
+    };
+    dynamicInterface = {
+      name = "dynamicInterface";
+      nodes.machine = clientConfig {
+        networking.interfaces.usb0 = {
+          ipv6.addresses = lib.singleton {
+            address = "fd::1";
+            prefixLength = 127;
+          };
+        };
+        networking.defaultGateway6 = {
+          address = "fd::";
+          interface = "usb0";
+          source = "fd::1";
+        };
+      };
+      testScript = ''
+        with subtest("Network comes up without usb0"):
+          machine.wait_for_unit("network.target")
+
+        with subtest("multi-user.target does not hang"):
+          machine.require_unit_state("multi-user.target", "active")
+
+        with subtest("usb0 is configured when plugged in"):
+          machine.succeed("ip link add usb0 type sit local 1.2.3.4")
+          machine.wait_until_succeeds("ip addr show dev usb0 | grep -q fd::1")
+
+        with subtest("Network is now online"):
+          machine.systemctl("start network-online.target")
+          machine.require_unit_state("network-online.target", "active")
+
+        with subtest("Default gateway is now set"):
+          machine.succeed("ip -6 route show default | grep -q 'via fd::'")
+          machine.succeed("ip -6 route show default | grep -q 'src fd::1'")
       '';
     };
     routeType = {

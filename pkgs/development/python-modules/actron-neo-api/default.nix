@@ -1,34 +1,36 @@
 {
   aiohttp,
+  aiomqtt,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   lib,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "actron-neo-api";
-  version = "0.5.5";
+  version = "0.5.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kclif9";
     repo = "actronneoapi";
     tag = "v${version}";
-    hash = "sha256-bBPhwiJQYDBEPZKA1Cq94X9LYAmBkOWCI+4afrQntmw=";
+    hash = "sha256-j7qjVkpZFkWLVQd+/ndnjPOi8/xo357ez6yte78ny5U=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     aiohttp
+    aiomqtt
     pydantic
   ];
 

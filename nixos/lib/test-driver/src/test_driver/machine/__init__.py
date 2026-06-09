@@ -1031,6 +1031,7 @@ class QemuMachine(BaseMachine):
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
+            assert self.shell
             (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
             return bool(ready)
 
@@ -1475,7 +1476,6 @@ class NspawnMachine(BaseMachine):
 
         self.start_command = start_command
         self.process = None
-        self.pid = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
@@ -1486,15 +1486,25 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
-        if self.pid is None:
+        if self.process is None:
             return
 
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
-        assert self.process is not None
+        self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.process.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
@@ -1683,9 +1693,7 @@ class NspawnMachine(BaseMachine):
             stdout=subprocess.PIPE,
         )
 
-        self.pid = self.process.pid
-
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
@@ -1710,3 +1718,18 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+
+
+class MachineDeprecationWrapper:
+    def __init__(self, msg: str, machine: QemuMachine | NspawnMachine):
+        self.msg = msg
+        self.machine = machine
+
+    def __getattribute__(self, name: str):
+        if name in ("msg", "machine"):
+            return object.__getattribute__(self, name)
+        typename = self.machine.__class__.__name__
+        warnings.warn(
+            f"invoking '{typename}.{name}' is deprecated: {self.msg}",
+        )
+        return self.machine.__getattribute__(name)

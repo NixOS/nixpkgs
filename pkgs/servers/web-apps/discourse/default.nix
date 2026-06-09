@@ -39,7 +39,7 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
@@ -53,14 +53,16 @@
 }:
 
 let
-  version = "2026.1.3";
+  version = "2026.1.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-0jbO1rJQ0AISo7h+SZfovubReCjR2zT6KWX9LxBeFtE=";
+    sha256 = "sha256-kQYDKZIMsWByuCZQfUlwhoIew5QykVylRMh6xvrHIBY=";
   };
+
+  pnpm = pnpm_10;
 
   ruby = ruby_3_3;
 
@@ -303,8 +305,7 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
-      inherit version src;
-      pnpm = pnpm;
+      inherit version src pnpm;
       fetcherVersion = 3;
       hash = "sha256-xft/2x0iti0yJ53uI9q2+FSvKgWWfKQzlMlPFz3RZsE=";
     };

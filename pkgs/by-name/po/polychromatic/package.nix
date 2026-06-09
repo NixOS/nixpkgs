@@ -4,7 +4,6 @@
   gettext,
   ninja,
   meson,
-  sassc,
   python3Packages,
   gobject-introspection,
   wrapGAppsHook3,
@@ -18,27 +17,20 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "polychromatic";
-  version = "0.9.3";
+  version = "0.9.7";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fw4XLaivf8kRkNaemHvd9zcVKn87ZZhP+ZDJsCJHv/4=";
+    hash = "sha256-2Uo6/74o+cSQQsYsE+7nVDsetnaYjQzL8xkJhUN3E2o=";
   };
 
   postPatch = ''
     patchShebangs scripts
-    substituteInPlace scripts/build-styles.sh \
-      --replace-fail '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
-      --replace-fail '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
     substituteInPlace polychromatic/paths.py \
       --replace-fail "/usr/share/polychromatic" "$out/share/polychromatic"
-  '';
-
-  preConfigure = ''
-    scripts/build-styles.sh
   '';
 
   nativeBuildInputs = [
@@ -46,7 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gobject-introspection
     meson
     ninja
-    sassc
     wrapGAppsHook3
     qt6.wrapQtAppsHook
     qt6.qtbase
@@ -89,9 +80,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       Polychromatic is a frontend for OpenRazer that enables Razer devices
       to control lighting effects and more on GNU/Linux.
     '';
+    changelog = "https://github.com/polychromatic/polychromatic/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ evanjs ];
+    maintainers = with lib.maintainers; [
+      evanjs
+      nadir-ishiguro
+    ];
     mainProgram = "polychromatic-controller";
   };
 })

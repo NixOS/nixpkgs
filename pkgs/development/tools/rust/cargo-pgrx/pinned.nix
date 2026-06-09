@@ -17,9 +17,16 @@
     hash = "sha256-AjoBr+/sEPdzbD0wLUNVm2syCySkGaFOFQ70TST1U9w=";
     cargoHash = "sha256-95DHq5GLnAqb3bbKwwaeBeKEmkfRh81ZTRaJ7L59DAg=";
   };
+
   cargo-pgrx_0_17_0 = {
     version = "0.17.0";
     hash = "sha256-Ld7m7ggxlf8FufpeiAE9qcu49X0SgX6XXHS6KIewGyA=";
     cargoHash = "sha256-hNj39YzJna8iZxnlrLz+uLduxaD+uvggQRM7ng3MN1k=";
+  };
+
+  cargo-pgrx_0_18_0 = {
+    version = "0.18.0";
+    hash = "sha256-sBezVDNnyqFQwvFm/CkhlY1zm7Ii2NQPeTfoUQu55e0=";
+    cargoHash = "sha256-/miOlhZ87fnKT1f+XVaWK4xAzHje8OGVlYl4iU0Sf34=";
   };
 }

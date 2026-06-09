@@ -12,7 +12,7 @@
   graphql-lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "graphql-cohttp";
 
   inherit (graphql) version src;
@@ -28,7 +28,7 @@ buildDunePackage rec {
     ocplib-endian
   ];
 
-  checkInputs = lib.optionals doCheck [
+  checkInputs = lib.optionals finalAttrs.doCheck [
     alcotest
     cohttp-lwt-unix
     graphql-lwt
@@ -45,4 +45,4 @@ buildDunePackage rec {
     description = "Run GraphQL servers with “cohttp”";
   };
 
-}
+})

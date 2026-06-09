@@ -23,6 +23,10 @@ on:
         default: false
         type: boolean
     secrets:
+      # Can be provided in pull requests because the job it is used in does
+      # not evaluate untrusted code.
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY:
+        required: false
       # Should only be provided in the merge queue, not in pull requests,
       # where we're evaluating untrusted code.
       CACHIX_AUTH_TOKEN_GHA:
@@ -43,7 +47,7 @@ jobs:
       ciPinBumpCommit: ${{ steps.find-pinned-commit.outputs.ciPinBumpCommit }}
       ciPinBumpCommitShort: ${{ steps.find-pinned-commit.outputs.ciPinBumpCommitShort }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: trusted
@@ -51,7 +55,7 @@ jobs:
             ci/supportedVersions.nix
 
       - name: Check out the PR at the test merge commit
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           ref: ${{ inputs.mergedSha }}
@@ -132,7 +136,7 @@ jobs:
             core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
-        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
 
       - name: Load supported versions
         id: versions
@@ -167,7 +171,7 @@ jobs:
           sudo mkswap /swap
           sudo swapon /swap
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -180,9 +184,9 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
 
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         continue-on-error: true
         with:
           # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.
@@ -252,7 +256,7 @@ jobs:
       statuses: write # creating 'Eval Summary' commit statuses
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -270,7 +274,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
 
       - name: Combine all output paths and eval stats
         run: |
@@ -349,10 +353,22 @@ jobs:
               description,
               target_url
             })
+
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        if: github.event_name == 'pull_request_target' && vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID
+        id: app-token
+        with:
+          client-id: ${{ vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID }}
+          private-key: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
+      # It's fine to reuse this app in the 'pull-request-target / prepare' job,
+      # because that job has to run before this one.
       - name: Request changes if PR is against an inappropriate branch
         if: ${{ github.event_name == 'pull_request_target' }}
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             require('./nixpkgs/trusted/ci/github-script/check-target-branch.js')({
               github,
@@ -455,7 +471,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -465,7 +481,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'

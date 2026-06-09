@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "flask-sqlalchemy";
   version = "3.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "flask_sqlalchemy";

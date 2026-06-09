@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.111.1";
+  version = "0.113.0";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eAiExxvLFkHsmslfhhbQG0ogaSMF9eOeCq0u2wUimp0=";
+    hash = "sha256-wNInrYI7cxn/WsPLZp01rEzQm4gUG0xUgvSLlv27WUM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-rsdZt+xKjIJpWS5pYx8A+ryY1D2WIKquKjsQBkxToUQ=";
+  vendorHash = "sha256-VZutEOKZK0aYiS5e9WWXCBOw7epr3xfYJo0xrpSecdk=";
 
   patches = [
     # several test golden files have unstable paths based on the platform
@@ -82,6 +82,13 @@ buildGoModule (finalAttrs: {
 
     # patch utility script
     patchShebangs grype/db/v5/distribution/testdata/tls/generate-x509-cert-pair.sh
+
+    # test build fingerprinting expects a git repository
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+    git add .
+    git commit -m "initial commit"
   '';
 
   checkFlags =
@@ -106,7 +113,7 @@ buildGoModule (finalAttrs: {
         "Test_dpkgUseCPEsForEOLEnvVar"
         "Test_rpmUseCPEsForEOLEnvVar"
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # fails to generate x509 certificate
         # cat: /etc/ssl/openssl.cnf: Operation not permitted
         "Test_defaultHTTPClientHasCert"

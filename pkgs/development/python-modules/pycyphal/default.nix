@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build system
   setuptools,
@@ -33,6 +34,9 @@ buildPythonPackage rec {
     hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
+
+  # Set an event loop in the doctest helper; policy.get_event_loop no longer auto-creates one on 3.14.
+  patches = lib.optional (pythonAtLeast "3.14") ./python-3.14-asyncio-loop.patch;
 
   build-system = [ setuptools ];
 
@@ -89,6 +93,13 @@ buildPythonPackage rec {
     # These are flaky -- test against string representations of values
     "pycyphal/application/register/_registry.py"
     "pycyphal/application/register/_value.py"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # leaked tasks from prior doctest's event loop break doctest stdout capture, causing "Got nothing" on REPL-style assertions
+    "MonotonicClusteringSynchronizer"
+    "TransferIDSynchronizer"
+    "PythonCANMedia"
   ];
 
   pythonImportsCheck = [ "pycyphal" ];

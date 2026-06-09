@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "4.2.1";
+  version = "4.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${finalAttrs.version}";
-    hash = "sha256-aNmYj5eOWDgHYlSLElwQXQByQg8gHqiybM19JQlkluk=";
+    hash = "sha256-OJQRYCzMa6y1F3gHFBAY+G3v3ZWzhw1ZqvbePTJyzr8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/genai";
@@ -72,7 +72,8 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # AssertionError: assert {'google_maps...s': None, ...} == {'google_maps...a'...
-    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata[raw_response0-expected_grounding_metadata0]"
+    # https://github.com/langchain-ai/langchain-google/issues/1791
+    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata"
   ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];

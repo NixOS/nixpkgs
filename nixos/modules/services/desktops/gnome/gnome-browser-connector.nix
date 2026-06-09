@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkRenamedOptionModule
     teams
     ;
 in

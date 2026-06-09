@@ -37,9 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pycairo
       pygobject3
     ]
-    ++ lib.optional withVLC [
-      python-vlc
-    ];
+    ++ lib.optional withVLC python-vlc;
 
   nativeBuildInputs = [
     wrapGAppsHook3

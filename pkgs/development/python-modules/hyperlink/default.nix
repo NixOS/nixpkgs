@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   idna,
-  typing ? null,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0sx50lkivsfjxx9zr4yh7l9gll2l9kvl0v0w8w4wk2x5v9bzjyj2";
   };
 
-  propagatedBuildInputs = [ idna ] ++ lib.optionals isPy27 [ typing ];
+  propagatedBuildInputs = [ idna ];
 
   meta = {
     description = "Featureful, correct URL for Python";

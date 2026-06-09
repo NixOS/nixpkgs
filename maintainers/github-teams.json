@@ -2,10 +2,11 @@
   "acme": {
     "description": "Maintain ACME-related packages and modules.",
     "id": 3806126,
-    "maintainers": {},
+    "maintainers": {
+      "emilazy": 18535642
+    },
     "members": {
       "arianvp": 628387,
-      "emilazy": 18535642,
       "m1cr0man": 3044438
     },
     "name": "ACME"
@@ -40,8 +41,7 @@
   "bazel": {
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
-    "maintainers": {
-    },
+    "maintainers": {},
     "members": {
       "aherrmann": 732652,
       "avdv": 3471749,
@@ -72,11 +72,10 @@
     "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
     "id": 9141350,
     "maintainers": {
+      "philiptaron": 43863,
       "zeuner": 2545850
     },
-    "members": {
-      "philiptaron": 43863
-    },
+    "members": {},
     "name": "bootstrapping"
   },
   "categorization": {
@@ -128,7 +127,6 @@
       "HeitorAugustoLN": 44377258,
       "Pandapip1": 45835846,
       "a-kenji": 65275785,
-      "ahoneybun": 4884946,
       "drakon64": 6444703,
       "michaelBelsanti": 62124625,
       "thefossguy": 44400303
@@ -178,6 +176,7 @@
     "description": "Improve Darwin-support across Nixpkgs and help maintainers without access to Darwin hardware. Apply to join through https://github.com/NixOS/nixpkgs/issues/323144 to keep the process transparent.",
     "id": 2385202,
     "maintainers": {
+      "emilazy": 18535642,
       "toonn": 1486805
     },
     "members": {
@@ -207,13 +206,11 @@
       "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
-      "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
       "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
-      "groodt": 343415,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
@@ -295,7 +292,6 @@
       "mdarocha": 11572618
     },
     "members": {
-      "GGG-KILLER": 5892127,
       "IvarWithoutBones": 41924494,
       "JamieMagee": 1358764,
       "anpin": 6060545,
@@ -313,8 +309,7 @@
     "members": {
       "AndersonTorres": 5954806,
       "adisbladis": 63286,
-      "panchoh": 471059,
-      "ttuegel": 563054
+      "panchoh": 471059
     },
     "name": "emacs"
   },
@@ -411,12 +406,11 @@
   "gnome": {
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
-    "maintainers": {},
-    "members": {
-      "bobby285271": 20080233,
-      "dasj19": 7589338,
-      "hedning": 71978,
+    "maintainers": {
       "jtojnar": 705123
+    },
+    "members": {
+      "bobby285271": 20080233
     },
     "name": "GNOME"
   },
@@ -560,11 +554,12 @@
     "id": 9955829,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "alyssais": 2768870
+      "alyssais": 2768870,
+      "emilazy": 18535642
     },
     "members": {
       "Ericson2314": 1055245,
-      "emilazy": 18535642,
+      "peterwaller-arm": 52030119,
       "rrbutani": 7833358,
       "sternenseemann": 3154475
     },
@@ -595,6 +590,8 @@
       "7c6f434c": 1891350,
       "Shados": 338268,
       "khaneliman": 1778670,
+      "lolbinarycat": 19915050,
+      "mrcjkb": 12857160,
       "spencerpogo": 34356756
     },
     "name": "lua"
@@ -697,14 +694,15 @@
     "description": "",
     "id": 174820,
     "maintainers": {
-      "Ericson2314": 1055245,
-      "tomberek": 178444
+      "Ericson2314": 1055245
     },
     "members": {
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
+      "tomberek": 178444,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -821,14 +819,13 @@
     "description": "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects",
     "id": 4341481,
     "maintainers": {
-      "ttuegel": 563054
+      "K900": 386765,
+      "NickCao": 15247171,
+      "SuperSandro2000": 7258858
     },
     "members": {
       "FRidh": 2129135,
-      "K900": 386765,
       "LunNova": 782440,
-      "NickCao": 15247171,
-      "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
       "mjm": 1181,
@@ -854,15 +851,15 @@
     "description": "Team that is interested in reproducible builds",
     "id": 7625643,
     "maintainers": {
-      "raboof": 131856,
-      "zimbatm": 3248
+      "raboof": 131856
     },
     "members": {
       "Artturin": 56650223,
       "Atemu": 18599032,
       "RaitoBezarius": 314564,
       "davidak": 91113,
-      "mschwaig": 3856390
+      "mschwaig": 3856390,
+      "zimbatm": 3248
     },
     "name": "reproducible"
   },
@@ -898,8 +895,7 @@
     "id": 7304571,
     "maintainers": {
       "Mic92": 96200,
-      "winterqt": 78392041,
-      "zowoq": 59103226
+      "winterqt": 78392041
     },
     "members": {},
     "name": "rust"
@@ -938,6 +934,7 @@
       "infinisil": 20525370
     },
     "members": {
+      "andir": 638836,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -966,13 +963,13 @@
     "description": "Maintain the standard environment and its surrounding logic.",
     "id": 11265412,
     "maintainers": {
-      "RossComputerGuy": 19699320
+      "RossComputerGuy": 19699320,
+      "emilazy": 18535642,
+      "philiptaron": 43863
     },
     "members": {
       "Artturin": 56650223,
       "Ericson2314": 1055245,
-      "emilazy": 18535642,
-      "philiptaron": 43863,
       "reckenrode": 7413633
     },
     "name": "stdenv"

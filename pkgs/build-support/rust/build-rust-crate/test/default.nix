@@ -836,6 +836,32 @@ rec {
             ];
           };
         };
+        # Default (null) inherits extraRustcOpts for proc-macros.
+        procMacroExtraOptsInherit = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(not(target_only))]
+            compile_error!("extraRustcOpts not inherited by proc-macro");
+            use proc_macro as _;
+          '';
+        };
+        # When set, extraRustcOptsForProcMacro replaces extraRustcOpts
+        # for proc-macro crates.
+        procMacroExtraOptsOverride = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          extraRustcOptsForProcMacro = [ "--cfg=host_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(target_only)]
+            compile_error!("extraRustcOpts leaked into proc-macro");
+            #[cfg(not(host_only))]
+            compile_error!("extraRustcOptsForProcMacro not applied");
+            use proc_macro as _;
+          '';
+        };
         # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
         # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
         # entries are emitted first so that higher-priority specific lints
@@ -1060,6 +1086,69 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
+
+      # Test that propagatedBuildInputs declared in a crate override are
+      # collected by completePropagatedBuildInputs and propagate transitively
+      # to all crates that depend on it.
+      propagatedBuildInputsTest =
+        let
+          fakeNativeLib = runCommand "fake-native-lib" { } "mkdir -p $out/lib && touch $out/lib/libfoo.a";
+
+          # Library crate that declares a native dep via propagatedBuildInputs
+          libCrate = mkHostCrate {
+            crateName = "mylib";
+            src = mkLib "src/lib.rs";
+            propagatedBuildInputs = [ fakeNativeLib ];
+          };
+
+          # Binary crate with a direct dependency on libCrate
+          binCrate = mkHostCrate {
+            crateName = "mybin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ libCrate ];
+          };
+
+          # Intermediate library that depends on libCrate
+          transitiveLib = mkHostCrate {
+            crateName = "transitivelib";
+            src = mkLib "src/lib.rs";
+            dependencies = [ libCrate ];
+          };
+
+          # Binary crate that only depends on transitiveLib (not libCrate directly)
+          transitiveBin = mkHostCrate {
+            crateName = "transitivebin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ transitiveLib ];
+          };
+        in
+        runCommand "propagated-build-inputs-test"
+          {
+            libCrateInputs = libCrate.completePropagatedBuildInputs;
+            binCrateInputs = binCrate.completePropagatedBuildInputs;
+            transitiveBinInputs = transitiveBin.completePropagatedBuildInputs;
+          }
+          ''
+            # libCrate itself should have fakeNativeLib in completePropagatedBuildInputs
+            echo "$libCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not in libCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # binCrate depends on libCrate, so fakeNativeLib should propagate
+            echo "$binCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not propagated to binCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # transitiveBin → transitiveLib → libCrate: fakeNativeLib should propagate transitively
+            echo "$transitiveBinInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not transitively propagated to transitiveBin.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            touch $out
+          '';
     }
   );
   test = releaseTools.aggregate {

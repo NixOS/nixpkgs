@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "26.04.19";
+  version = "26.05.08";
 in
 
 rustPlatform.buildRustPackage {
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage {
     owner = "josh-project";
     repo = "josh";
     rev = "r${version}";
-    hash = "sha256-tWU7ZGs148fmCXJxUM1RiDIgJONMZnFXO7ksaqqoT9I=";
+    hash = "sha256-rG5ZkEH8ZL8t0sDnBnNPtVtaR1I8BoulXlFh0HCpMsw=";
   };
 
-  cargoHash = "sha256-Ksl3dFeEpwhpiotNuM9/vg7aD2TUuHKvqUaZkbceCdY=";
+  cargoHash = "sha256-/hMn80jHDF9gh+K8IOV5zXllzJkCdcmvI/NmbKFd/uM=";
 
   nativeBuildInputs = [
     pkg-config

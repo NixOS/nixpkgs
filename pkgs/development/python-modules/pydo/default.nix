@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydo";
-  version = "0.31.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-66DdlrfK+scSCGJ9sCsTjiUxLhY5jKAKdg4JTfBMfso=";
+    hash = "sha256-XCCud5F5JbeVTWkAOP3DRXBNzVeAGh8VvhvHU5N78y8=";
   };
 
   build-system = [ poetry-core ];

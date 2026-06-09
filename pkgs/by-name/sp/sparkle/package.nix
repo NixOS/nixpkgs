@@ -22,6 +22,8 @@
 }:
 
 let
+  pnpm = pnpm_10_29_2;
+
   sparkle-service = buildGoModule {
     pname = "sparkle-service";
     version = "0-unstable-2025-10-24";
@@ -37,8 +39,6 @@ let
 
     meta.mainProgram = "sparkle-service";
   };
-
-  pnpm = pnpm_10_29_2;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {

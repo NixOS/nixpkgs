@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lazycommit";
-  version = "1.4.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "m7medvision";
     repo = "lazycommit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tS5jWucT4/1YRAXySUnElEkjaF2+Bl7O3taSzZf2NF0=";
+    hash = "sha256-ygWGR7CNLV5Z9MOl45Y57aay8PYt/5PnYZCJCJy0fFg=";
   };
 
   vendorHash = "sha256-4OPCUWXxsAnzxsqZPHhjvhxQQf5Knm7nGqrdjH4I4YY=";

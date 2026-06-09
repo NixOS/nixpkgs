@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/jazzband/django-auditlog/blob/${src.tag}/CHANGELOG.md";
     description = "Django app that keeps a log of changes made to an object";
+    homepage = "https://github.com/jazzband/django-auditlog";
     downloadPage = "https://github.com/jazzband/django-auditlog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];

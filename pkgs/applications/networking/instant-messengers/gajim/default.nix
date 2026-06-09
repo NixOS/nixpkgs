@@ -31,7 +31,7 @@
   enableRST ? true,
   docutils,
   enableSpelling ? true,
-  gspell,
+  libspelling,
   enableUPnP ? true,
   gupnp-igd,
   enableAppIndicator ? true,
@@ -43,14 +43,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-5daPMlC2Ejfi5UXsRLaLWwEZHHEC0szbfkqavIisoUQ=";
+    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
   };
 
   pyproject = true;
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableSpelling libspelling
   ++ lib.optional enableUPnP gupnp-igd
   ++ lib.optional enableAppIndicator libappindicator-gtk3
   ++ lib.optional enableSoundNotifications gsound;
@@ -113,10 +113,10 @@ python3.pkgs.buildPythonApplication rec {
       sqlalchemy
       emoji
       httpx
-      httpx.optional-dependencies.socks
       h2
       truststore
     ]
+    ++ httpx.optional-dependencies.socks
     ++ lib.optionals enableE2E [
       pycrypto
       python-gnupg

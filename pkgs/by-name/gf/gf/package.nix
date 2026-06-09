@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2026-04-11";
+  version = "0-unstable-2026-05-03";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "93066aae8d7328c41f0da9985c680691fafa3fab";
-    hash = "sha256-2nA9c8PAIr8o/of//WUI9XHZgVNtXYsnMaaTOdAMTwc=";
+    rev = "46174e9b25850c9898ca0c2de90af31ad83122d7";
+    hash = "sha256-UnMpV9RCDsJEDBj4/gypzYFhR4IqEVKYKLpvrLlTGaA=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +76,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "gf2";
-    maintainers = with lib.maintainers; [ _0xd61 ];
+    maintainers = [ ];
   };
 }

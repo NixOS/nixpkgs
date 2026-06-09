@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jackett";
-  version = "0.24.1591";
+  version = "0.24.2021";
 
   src = fetchFromGitHub {
     owner = "jackett";
     repo = "jackett";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HMf88nXx8FZBsVKttCziHARwlckTTMia4gK3BpQQ5Do=";
+    hash = "sha256-/9NDFedtjMholM3Doqt/5hJ+Zw68DJheWNxZ0X+Kvuk=";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";

@@ -70,7 +70,10 @@ let
 
     zluda = {
       onFeatures = [
+        "amd-gpu"
         "cuda"
+        "gpu"
+        "opengl"
       ];
       paths = [
         pkgs.addDriverRunpath.driverLink

@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ perlPackages.LocaleGettext ];
 
+  # Remove once upstream ports to c23: https://sourceforge.net/p/dc3dd/bugs/24/
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   makeFlags = [
     "PREFIX=$out"
     "CC=${stdenv.cc.targetPrefix}cc"

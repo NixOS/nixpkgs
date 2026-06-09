@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.8.2.4";
+  version = "1.8.2.5";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
     tag = finalAttrs.version;
-    hash = "sha256-bttJFHgmZgN0p6eT7vGzz2DsrrUgB+uGnnPz2Ep+eB4=";
+    hash = "sha256-sqMtB5THrspxkapB8eBfb9LNEnghE0UolivOvOEf7cs=";
   };
 
   dontConfigure = true;

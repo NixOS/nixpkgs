@@ -51,6 +51,7 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
+  testers,
   rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
@@ -61,7 +62,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.53.0";
+  version = "2.54.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-WBi9fYCwYbu9/sikM9YJ3IgYoFmR9zH/xKVh4soYxlM=";
+    hash = "sha256-9okWI2TBDeee+Jqo2/SHMesFfjTtu9IKylEM4BVGgaM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -123,19 +124,20 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
+    # The 'total N' header from ls -l is unstable on ZFS and similar
+    # filesystems, causing spurious failures.
+    # https://github.com/NixOS/nixpkgs/issues/498789
+    (fetchurl {
+      name = "t7703-ignore-ls-total.patch";
+      url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
+      hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
+    })
     # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
     # installed by `make install`.
     (fetchurl {
       name = "expect-gui--askyesno-failure-in-t1517.patch";
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
-    })
-    # Fix build failure on Darwin when building Keychain integration
-    # See https://github.com/git/git/pull/2188 and https://github.com/Homebrew/homebrew-core/pull/266961
-    (fetchurl {
-      name = "osxkeychain-define-build-targets-in-toplevel-Makefile.patch";
-      url = "https://lore.kernel.org/git/pull.2046.v2.git.1770775169908.gitgitgadget@gmail.com/raw";
-      hash = "sha256-7jTiMM5XFRDj/srtVf8olW62T/mesqLcyRp3NZJcid8=";
     })
   ]
   ++ lib.optionals rustSupport [
@@ -155,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString doInstallCheck ''
+  + lib.optionalString finalAttrs.doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
   ''
@@ -168,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) ''
     substituteInPlace Makefile \
       --replace-fail "RUST_TARGET_DIR = target/" \
-                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.rustcTargetSpec}/"
+                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
   nativeBuildInputs = [
@@ -208,6 +210,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     glib
     libsecret
+  ];
+
+  # This is required for building the rust build.rs script when cross compiling
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
   ];
 
   env = {
@@ -575,6 +582,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails largely due to assumptions about BOM
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
+  ''
+  + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    # Time zones are not available in the build sandbox.
+    # This can be fixed if/when we decide on how the hardcoded libc paths should look
+    disable_test t0006-date
+    # Kernel bug (?) related to confusion over whether ulimit -n should set max fd or num files
+    disable_test t5324-split-commit-graph
+    # known breakage vanished?
+    disable_test t7815-grep-binary
   '';
 
   stripDebugList = [
@@ -591,6 +607,13 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
+    }
+    // lib.optionalAttrs svnSupport {
+      git-svn-version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "git svn --version";
+        version = "git-svn version ${version}";
+      };
     }
     // tests.fetchgit;
     updateScript = ./update.sh;

@@ -2,15 +2,17 @@
 const { classify } = require('../supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
 
+/** @typedef {import('./get-pr-commit-details.js').Commit} Commit */
+
 /**
  * @param {{
  *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context,
+ *  context: typeof import('@actions/github').context,
  *  core: import('@actions/core'),
  *  repoPath?: string,
- * }} CheckCommitMessagesProps
+ * }} LintCommitsProps
  */
-async function checkCommitMessages({ github, context, core, repoPath }) {
+async function lintCommits({ github, context, core, repoPath }) {
   // This check should only be run when we have the pull_request context.
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
@@ -48,6 +50,17 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
 
   const commits = await getCommitDetailsForPR({ core, pr, repoPath })
 
+  await checkCommitMessages({ commits, core })
+  await checkCommitMetadata({ commits, core })
+}
+
+/**
+ * @param {{
+ *  commits: Commit[],
+ *  core: import('@actions/core'),
+ * }} CheckCommitMessagesProps
+ */
+async function checkCommitMessages({ commits, core }) {
   const failures = new Set()
 
   const conventionalCommitTypes = [
@@ -152,4 +165,59 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
   }
 }
 
-module.exports = checkCommitMessages
+/**
+ * @param {{
+ *  commits: Commit[],
+ *  core: import('@actions/core'),
+ * }} CheckGitFieldsProps
+ */
+async function checkCommitMetadata({ commits, core }) {
+  const failures = new Set()
+
+  /** @type {(s: string) => boolean} */
+  const isEmail = (s) => /^.+@.*$/.test(s)
+
+  for (const commit of commits) {
+    if (!commit.author.name) {
+      core.error(`Commit ${commit.sha} author's name field is missing`)
+      failures.add(commit.sha)
+    }
+
+    if (!commit.author.email || !isEmail(commit.author.email)) {
+      core.error(
+        `Commit ${commit.sha} author's email field is missing or invalid`,
+      )
+      failures.add(commit.sha)
+    }
+
+    if (!commit.committer.name) {
+      core.error(`Commit ${commit.sha} committer's name field is missing`)
+      failures.add(commit.sha)
+    }
+
+    if (!commit.committer.email || !isEmail(commit.committer.email)) {
+      core.error(
+        `Commit ${commit.sha} committer's email field is missing or invalid`,
+      )
+      failures.add(commit.sha)
+    }
+
+    if (!failures.has(commit.sha)) {
+      core.info(
+        `Commit ${commit.sha}'s git fields passed our automated checks!`,
+      )
+    }
+  }
+
+  if (failures.size !== 0) {
+    core.error(
+      'Please add the missing commit fields. ' +
+        'You can use the noreply email address generated for you by GitHub ' +
+        '(https://docs.github.com/en/account-and-profile/reference/email-addresses-reference#your-noreply-email-address) ' +
+        "if you'd like.",
+    )
+    core.setFailed('Committers: merging is discouraged.')
+  }
+}
+
+module.exports = lintCommits

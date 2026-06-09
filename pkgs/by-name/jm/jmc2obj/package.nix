@@ -4,20 +4,21 @@
   jre,
   makeWrapper,
   maven,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {
   pname = "j-mc-2-obj";
-  version = "126";
+  version = "128";
 
   src = fetchFromGitHub {
     owner = "jmc2obj";
     repo = "j-mc-2-obj";
-    rev = version;
-    hash = "sha256-c0qLryv9Gx9BlKXmwSKkK5/v3Wypny841htNfsNNxpg=";
+    tag = version;
+    hash = "sha256-3+vH1pGJ6I4oobb2vk+J5GrOQrSLNoCuBIC9OsWYCj0=";
   };
 
-  mvnHash = "sha256-ya8E/6tOxyW+AO7v9p0dg72qFpQjWwvntZOw+TEKq0k=";
+  mvnHash = "sha256-ZU/5RGujCdmlBuxtHDaBpF/54e8W/Kca+2jtTudMXWo=";
 
   mvnParameters = "-Dmaven.gitcommitid.skip=true";
 
@@ -32,6 +33,8 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/jMc2Obj/jMc2Obj-${version}.jar"
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jmc2obj/j-mc-2-obj/releases/tag/${version}";

@@ -2,29 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacparser";
-  version = "1.4.6";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "manugarg";
     repo = "pacparser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rHRW/zzQS2vV+rQeZBQNSp2id0Gir1yFPwN2OPMOvVo=";
+    hash = "sha256-CkaRgm5xZHKiewPDSp0bzVkgAOeTbuGrY3FM4HaN97I=";
   };
-
-  patches = [
-    # jsapi.c:96:35: error: passing argument 5 of 'TryArgumentFormatter' from incompatible pointer type []
-    #   96 | #define JS_ADDRESSOF_VA_LIST(ap) (&(ap))
-    # suggested by https://github.com/manugarg/pacparser/issues/194#issuecomment-2262030966
-    ./fix-invalid-pointer-type.patch
-  ];
 
   makeFlags = [
     "NO_INTERNET=1"
     "PREFIX=${placeholder "out"}"
+    "VERSION=v${finalAttrs.version}"
   ];
 
   enableParallelBuilding = true;
@@ -35,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   hardeningDisable = [ "format" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Library to parse proxy auto-config (PAC) files";

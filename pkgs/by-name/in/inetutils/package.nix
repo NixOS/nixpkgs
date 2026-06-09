@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
 
-    (if stdenv.isDarwin then ./tests-libls-2.sh.patch else ./tests-libls.sh.patch)
+    (if stdenv.hostPlatform.isDarwin then ./tests-libls-2.sh.patch else ./tests-libls.sh.patch)
 
     (fetchpatch {
       name = "CVE-2026-24061_1.patch";
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
 
-  ${if stdenv.isDarwin then "hardeningDisable" else null} = [ "format" ];
+  ${if stdenv.hostPlatform.isDarwin then "hardeningDisable" else null} = [ "format" ];
 
   doCheck = true;
 

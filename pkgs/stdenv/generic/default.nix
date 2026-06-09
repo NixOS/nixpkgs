@@ -1,11 +1,43 @@
+{
+  defaultConfig ? null,
+}@args:
 let
   lib = import ../../../lib;
+
+  # By taking defaultConfig early, we can cache the result of calling
+  # make-derivation.nix with config, which leads to more memoisation between
+  # bootstrapping stages. We only have to re-call the file with another config
+  # if stdenv-overridable is actually called with config, otherwise we stick to
+  # defaultConfig. No stdenvs currently specify a non-default config, but we
+  # leave it open as a possibility.
+  makeDerivationFile = import ./make-derivation.nix lib;
+  makeDerivationFileWithConfig =
+    assert args ? defaultConfig;
+    makeDerivationFile args.defaultConfig;
+
+  defaultNativeBuildInputs0 = [
+    ../../build-support/setup-hooks/no-broken-symlinks.sh
+    ../../build-support/setup-hooks/audit-tmpdir.sh
+    ../../build-support/setup-hooks/compress-man-pages.sh
+    ../../build-support/setup-hooks/make-symlinks-relative.sh
+    ../../build-support/setup-hooks/move-docs.sh
+    ../../build-support/setup-hooks/move-lib64.sh
+    ../../build-support/setup-hooks/move-sbin.sh
+    ../../build-support/setup-hooks/move-systemd-user-units.sh
+    ../../build-support/setup-hooks/multiple-outputs.sh
+    ../../build-support/setup-hooks/patch-shebangs.sh
+    ../../build-support/setup-hooks/prune-libtool-files.sh
+    ../../build-support/setup-hooks/reproducible-builds.sh
+    ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+    ../../build-support/setup-hooks/strip.sh
+  ];
+
   stdenv-overridable = lib.makeOverridable (
 
     argsStdenv@{
       name ? "stdenv",
       pname ? name,
-      version ? lib.trivial.release + "pre-git",
+      version ? "26.05pre-git",
       preHook ? "",
       initialPath,
 
@@ -21,7 +53,7 @@ let
       allowedRequisites ? null,
       extraAttrs ? { },
       overrides ? (self: super: { }),
-      config,
+      config ? args.defaultConfig,
       disallowedRequisites ? [ ],
 
       # The `fetchurl' to use for downloading curl and its dependencies
@@ -64,29 +96,16 @@ let
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
       # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
-        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+        let
+          makeDerivationWithConfig' =
+            if argsStdenv ? config then makeDerivationFile config else makeDerivationFileWithConfig;
+        in
+        stdenv: (makeDerivationWithConfig' stdenv).mkDerivation,
     }:
 
     let
       defaultNativeBuildInputs =
-        extraNativeBuildInputs
-        ++ [
-          ../../build-support/setup-hooks/no-broken-symlinks.sh
-          ../../build-support/setup-hooks/audit-tmpdir.sh
-          ../../build-support/setup-hooks/compress-man-pages.sh
-          ../../build-support/setup-hooks/make-symlinks-relative.sh
-          ../../build-support/setup-hooks/move-docs.sh
-          ../../build-support/setup-hooks/move-lib64.sh
-          ../../build-support/setup-hooks/move-sbin.sh
-          ../../build-support/setup-hooks/move-systemd-user-units.sh
-          ../../build-support/setup-hooks/multiple-outputs.sh
-          ../../build-support/setup-hooks/patch-shebangs.sh
-          ../../build-support/setup-hooks/prune-libtool-files.sh
-          ../../build-support/setup-hooks/reproducible-builds.sh
-          ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-          ../../build-support/setup-hooks/strip.sh
-        ]
-        ++ lib.optionals hasCC [ cc ];
+        extraNativeBuildInputs ++ defaultNativeBuildInputs0 ++ lib.optionals hasCC [ cc ];
 
       defaultBuildInputs = extraBuildInputs;
 
@@ -94,71 +113,64 @@ let
 
     in
     # The stdenv that we are producing.
-    derivation (
-      lib.optionalAttrs (allowedRequisites != null) {
-        allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs ++ defaultBuildInputs;
-      }
-      // lib.optionalAttrs config.contentAddressedByDefault {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      }
-      // {
-        inherit name pname version;
-        inherit disallowedRequisites;
+    derivation {
+      ${if allowedRequisites != null then "allowedRequisites" else null} =
+        allowedRequisites ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+      ${if config.contentAddressedByDefault then "__contentAddressed" else null} = true;
+      ${if config.contentAddressedByDefault then "outputHashAlgo" else null} = "sha256";
+      ${if config.contentAddressedByDefault then "outputHashMode" else null} = "recursive";
+      inherit name pname version;
+      inherit disallowedRequisites;
 
-        # Nix itself uses the `system` field of a derivation to decide where to
-        # build it. This is a bit confusing for cross compilation.
-        inherit (buildPlatform) system;
+      # Nix itself uses the `system` field of a derivation to decide where to
+      # build it. This is a bit confusing for cross compilation.
+      inherit (buildPlatform) system;
 
-        builder = shell;
+      builder = shell;
 
-        args = [
-          "-e"
-          ./builder.sh
-        ];
+      args = [
+        "-e"
+        ./builder.sh
+      ];
 
-        setup = setupScript;
+      setup = setupScript;
 
-        # We pretty much never need rpaths on Darwin, since all library path references
-        # are absolute unless we go out of our way to make them relative (like with CF)
-        # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
-        # there (yet?) so it goes here until then.
-        preHook =
-          preHook
-          + lib.optionalString buildPlatform.isDarwin ''
-            export NIX_DONT_SET_RPATH_FOR_BUILD=1
-          ''
-          + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
-            export NIX_DONT_SET_RPATH=1
-            export NIX_NO_SELF_RPATH=1
-          ''
-          + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
-            export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
-          ''
-        # TODO this should be uncommented, but it causes stupid mass rebuilds due to
-        # `pkgsCross.*.buildPackages` not being the same, resulting in cross-compiling
-        # for a target rebuilding all of `nativeBuildInputs` for that target.
-        #
-        # I think the best solution would just be to fixup linux RPATHs so we don't
-        # need to set `-rpath` anywhere.
-        # + lib.optionalString targetPlatform.isDarwin ''
-        #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
-        # ''
+      # We pretty much never need rpaths on Darwin, since all library path references
+      # are absolute unless we go out of our way to make them relative (like with CF)
+      # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
+      # there (yet?) so it goes here until then.
+      preHook =
+        preHook
+        + lib.optionalString buildPlatform.isDarwin ''
+          export NIX_DONT_SET_RPATH_FOR_BUILD=1
+        ''
+        + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
+          export NIX_DONT_SET_RPATH=1
+          export NIX_NO_SELF_RPATH=1
+        ''
+        + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+          export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
+        ''
+      # TODO this should be uncommented, but it causes stupid mass rebuilds due to
+      # `pkgsCross.*.buildPackages` not being the same, resulting in cross-compiling
+      # for a target rebuilding all of `nativeBuildInputs` for that target.
+      #
+      # I think the best solution would just be to fixup linux RPATHs so we don't
+      # need to set `-rpath` anywhere.
+      # + lib.optionalString targetPlatform.isDarwin ''
+      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
+      # ''
+      ;
+
+      inherit
+        initialPath
+        shell
+        defaultNativeBuildInputs
+        defaultBuildInputs
         ;
-
-        inherit
-          initialPath
-          shell
-          defaultNativeBuildInputs
-          defaultBuildInputs
-          ;
-      }
-      // lib.optionalAttrs buildPlatform.isDarwin {
-        __sandboxProfile = stdenvSandboxProfile;
-        __impureHostDeps = __stdenvImpureHostDeps;
-      }
-    )
+      ${if buildPlatform.isDarwin then "__sandboxProfile" else null} = stdenvSandboxProfile;
+      ${if buildPlatform.isDarwin then "__impureHostDeps" else null} = __stdenvImpureHostDeps;
+    }
 
     // {
 

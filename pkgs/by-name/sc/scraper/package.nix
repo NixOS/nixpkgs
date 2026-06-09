@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scraper";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "rust-scraper";
     repo = "scraper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gdxE9vkN9y5KCmPF0IzSodgxKyWTzYHuLrIMFu4To1E=";
+    hash = "sha256-6gCoF+Uafw0WISuksBh4kwF7TL6N73Y8CpkcKe8Nyqw=";
   };
 
-  cargoHash = "sha256-xpg5/ZZEUVNLHGJsbpb/m9TRUJS6wb2HOIoPt407+q0=";
+  cargoHash = "sha256-Mse6pO9VXturMxMpPe3zaNTsvRpADdns1zu/pX4mfgE=";
 
   nativeBuildInputs = [ installShellFiles ];
 

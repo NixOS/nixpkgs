@@ -3,21 +3,28 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
-  libx11,
   bzip2,
   zlib,
   brotli,
   zstd,
   xz,
   openssl,
-  autoreconfHook,
+  meson,
+  ninja,
   gettext,
+  python3,
   pkg-config,
-  libev,
+  xmlto,
+  docbook_xml_dtd_42,
   gpm,
-  libidn,
+  libidn2,
   tre,
   expat,
+  lua,
+  curl,
+  libcss,
+  libdom,
+  nix-update-script,
   # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile ? false,
   guile ? null,
@@ -42,55 +49,95 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aQ+q2I6uTVv5kpKBaGJ1xiE/9vv9T7JI05VX/ROkAqA=";
   };
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   buildInputs = [
     ncurses
-    libx11
     bzip2
     zlib
     brotli
     zstd
     xz
     openssl
-    libidn
+    libidn2
     tre
     expat
-    libev
+    lua
+    curl
+    libcss
+    libdom
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux gpm
+  ++ lib.optional stdenv.hostPlatform.isDarwin gettext
   ++ lib.optional enableGuile guile
   ++ lib.optional enablePython python
   ++ lib.optional enablePerl perl;
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     gettext
+    perl
+    python3
     pkg-config
+    xmlto
   ];
 
-  configureFlags = [
-    "--enable-finger"
-    "--enable-html-highlight"
-    "--enable-gopher"
-    "--enable-gemini"
-    "--enable-cgi"
-    "--enable-bittorrent"
-    "--enable-nntp"
-    "--enable-256-colors"
-    "--enable-true-color"
-    "--with-brotli"
-    "--with-lzma"
-    "--with-libev"
-    "--with-terminfo"
-  ]
-  ++ lib.optional enableGuile "--with-guile"
-  ++ lib.optional enablePython "--with-python"
-  ++ lib.optional enablePerl "--with-perl";
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      C_INCLUDE_PATH = "${lib.getInclude gpm}/include";
+      LIBRARY_PATH = "${lib.getLib gpm}/lib";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      LDFLAGS = "-liconv";
+    };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  mesonFlags =
+    (map (f: lib.mesonBool f true) [
+      "finger"
+      "html-highlight"
+      "gopher"
+      "gemini"
+      "cgi"
+      "nntp"
+      "256-colors"
+      "true-color"
+      "brotli"
+      "lzma"
+      "terminfo"
+      "reproducible"
+    ])
+    ++ [
+      (lib.mesonOption "luapkg" "lua")
+      (lib.mesonBool "gpm" stdenv.hostPlatform.isLinux)
+      (lib.mesonBool "guile" enableGuile)
+      (lib.mesonBool "python" enablePython)
+      (lib.mesonBool "perl" enablePerl)
+    ];
+
+  postPatch = ''
+    patchShebangs doc/tools
+    substituteInPlace doc/tools/asciidoc/docbook.conf \
+      --replace-fail "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" "${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd"
+  '';
+
+  preConfigure = ''
+    mesonFlags+=("-Dsource-date-epoch=$SOURCE_DATE_EPOCH")
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Full-featured text-mode web browser";
     mainProgram = "elinks";
     homepage = "https://github.com/rkd77/elinks";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       iblech

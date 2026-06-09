@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3,
   qt6,
+  gitUpdater,
   nixosTests,
 }:
 
@@ -64,7 +65,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "maestral_qt" ];
 
-  passthru.tests.maestral = nixosTests.maestral;
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+      rev-prefix = "v";
+    };
+    tests.maestral = nixosTests.maestral;
+  };
 
   __structuredAttrs = true;
 

@@ -56,8 +56,13 @@ let
       # Initialise the container side of the veth pair.
       if [[ -n "''${HOST_ADDRESS-}" ]]   || [[ -n "''${HOST_ADDRESS6-}" ]]  ||
          [[ -n "''${LOCAL_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
-         [[ -n "''${HOST_BRIDGE-}" ]]; then
+         [[ -n "''${HOST_BRIDGE-}" ]]    || [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
         ip link set host0 name eth0
+
+        if [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
+          ip link set dev eth0 address "$LOCAL_MAC_ADDRESS"
+        fi
+
         ip link set dev eth0 up
 
         if [[ -n "''${LOCAL_ADDRESS-}" ]]; then
@@ -140,7 +145,8 @@ let
     fi
 
     if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
-       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+       [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
       extraFlags+=("--network-veth")
     fi
 
@@ -207,6 +213,7 @@ let
       --setenv LOCAL_ADDRESS="''${LOCAL_ADDRESS-}" \
       --setenv HOST_ADDRESS6="''${HOST_ADDRESS6-}" \
       --setenv LOCAL_ADDRESS6="''${LOCAL_ADDRESS6-}" \
+      --setenv LOCAL_MAC_ADDRESS="''${LOCAL_MAC_ADDRESS-}" \
       --setenv HOST_PORT="''${HOST_PORT-}" \
       --setenv PATH="$PATH" \
       ${optionalString cfg.ephemeral "--ephemeral"} \
@@ -489,6 +496,18 @@ let
       '';
     };
 
+    localMacAddress = mkOption {
+      type = types.nullOr (lib.types.strMatching "([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}");
+      default = null;
+      example = "de:b7:73:01:10:90";
+      description = ''
+        The MAC address assigned to the interface in the container. This address
+        is assigned early during container boot, and can thus be reliably used
+        for setups like IPv6 SLAAC with router advertisements. If this option is
+        not specified, the veth devices gets assigned a random,
+        locally-administered unicast MAC address.
+      '';
+    };
   };
 
   dummyConfig = {
@@ -501,8 +520,22 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
+    localmacAddress = null;
     tmpfs = null;
   };
+
+  # Parses an IPv4 address with an optional prefix
+  ipv4FromString =
+    str:
+    let
+      segments = lib.splitString "/" str;
+      prefix = lib.elemAt segments 1;
+      hasPrefix = builtins.length segments == 2;
+    in
+    {
+      address = lib.head segments;
+      prefixLength = if hasPrefix then builtins.fromJSON prefix else 32;
+    };
 
 in
 
@@ -574,6 +607,16 @@ in
                                 boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
+                                networking.interfaces = lib.mkIf config.privateNetwork (
+                                  lib.mkMerge [
+                                    (lib.mkIf (config.localAddress != null) {
+                                      eth0.ipv4.addresses = [ (ipv4FromString config.localAddress) ];
+                                    })
+                                    (lib.mkIf (config.localAddress6 != null) {
+                                      eth0.ipv6.addresses = [ (lib.network.ipv6.fromString config.localAddress6) ];
+                                    })
+                                  ]
+                                );
                                 assertions = [
                                   {
                                     assertion =
@@ -1114,6 +1157,9 @@ in
                   ''}
                   ${optionalString (cfg.localAddress6 != null) ''
                     LOCAL_ADDRESS6=${cfg.localAddress6}
+                  ''}
+                  ${optionalString (cfg.localMacAddress != null) ''
+                    LOCAL_MAC_ADDRESS=${cfg.localMacAddress}
                   ''}
                 ''}
                 ${optionalString (cfg.networkNamespace != null) ''

@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       # raskin: tested amd64-linux;
       # not setting platforms because it is 0.5+ GiB of game data
       [ ];
-    license = "freeware"; # as an aggregate - data files have different licenses code is under zlib license
+    license = lib.licenses.unfreeRedistributable; # as an aggregate - data files have different licenses code is under zlib license
     platforms = lib.platforms.linux;
   };
 })

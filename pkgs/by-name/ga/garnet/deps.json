@@ -31,8 +31,8 @@
   },
   {
     "pname": "diskann-garnet",
-    "version": "1.0.26",
-    "hash": "sha256-xKcv20olcK/0HBKsiaB+gNXqz6YyKHEdvYVjqssIjy0="
+    "version": "1.0.27",
+    "hash": "sha256-z1kj3LbJGVk0X4SDocHO9SaS/b5bMhRIvHNhjTEObi8="
   },
   {
     "pname": "KeraLua",
@@ -163,6 +163,11 @@
     "pname": "Microsoft.IdentityModel.Validators",
     "version": "8.17.0",
     "hash": "sha256-kmYad8WDMK9lZQBOCrsu3HuzXCbD+oQmRcOZU9++VPI="
+  },
+  {
+    "pname": "Microsoft.VisualStudio.Threading.Analyzers",
+    "version": "17.14.15",
+    "hash": "sha256-wv0Hi7pjPYeSwDFyaa8baIOyiUraVfudmVtpm0okoYU="
   },
   {
     "pname": "System.ClientModel",

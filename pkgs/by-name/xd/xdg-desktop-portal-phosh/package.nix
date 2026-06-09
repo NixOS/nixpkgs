@@ -11,6 +11,8 @@
   rustc,
   desktop-file-utils,
   cargo,
+  docutils,
+  glib,
   rustPlatform,
   gettext,
 }:
@@ -18,27 +20,29 @@ let
   # Derived from subprojects/pfs.wrap
   pfs = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "guidog";
+    group = "World";
+    owner = "Phosh";
     repo = "pfs";
-    tag = "v0.0.4";
-    hash = "sha256-b0S/jNE03h26bGA76fb/qlyJ8/MifZeltTc16UX2h9w=";
+    tag = "v0.1.0";
+    hash = "sha256-u0Ac3DJ0FaawlRNQwPp6tVKJkUaFHH/r1T0QRa4bIaU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-phosh";
-  version = "0.49.0";
+  version = "0.55.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "guidog";
+    group = "World";
+    owner = "Phosh";
     repo = "xdg-desktop-portal-phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VF+ZNUP5Y2xm2nlNN3QsLJh8yNRJH7d3k+kLJ+4eu9s=";
+    hash = "sha256-oHjBuQ9kD1RnBKSi+w3xxYBPrByzqsmKVOMIoHepoyQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-h+VQqtirReLIHlVByKSb6DpqR1FtCxSwQpjowHX1mcg=";
+    hash = "sha256-cPuyI0PtdbAgbZ3ZCTRIBcjNROVi0wCHSfST+kzJSd4=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     desktop-file-utils
     cargo
+    docutils
     rustPlatform.cargoSetupHook
     gettext
+    glib
   ];
 
   buildInputs = [
@@ -63,19 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = ''
     cp -r ${pfs} subprojects/pfs
     chmod +w -R subprojects/pfs # Allow patches for subprojects to work
+    # xdg-desktop-portal-phosh's Cargo.lock closes over pfs and its dependencies,
+    # making pfs's own lockfile extraneous.
+    rm subprojects/pfs/Cargo.lock
   '';
-
-  patches = [
-    # Patch that fixes the issue with two Rust package versions.
-    # For reasons that I don't understand, rustPlatform.fetchCargoVendor seems to not fetch the version inside the Cargo.lock file.
-    # Like with libadwaita, fetchCargoVendor download the version 0.7.2 but in the lock file specified 0.7.1 and in the toml file specified 0.7.
-    ./cargo_lock_deps_version.patch
-  ];
 
   meta = {
     description = "A backend implementation for xdg-desktop-portal that is using GTK/GNOME/Phosh to provide interfaces that aren't provided by the GTK portal";
-    homepage = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh";
-    changelog = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh/-/blob/main/NEWS";
+    homepage = "https://gitlab.gnome.org/World/Phosh/xdg-desktop-portal-phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/xdg-desktop-portal-phosh/-/blob/main/NEWS";
     maintainers = with lib.maintainers; [ armelclo ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;

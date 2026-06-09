@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation {
   pname = "linden-hill";
   version = "2011-05-25";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "theleagueof";
     repo = "linden-hill";

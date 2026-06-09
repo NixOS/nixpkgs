@@ -1,5 +1,5 @@
 /**
-  nixosTests.simple, but with skipTypeCheck.
+  nixosTests.simple-vm, but with skipTypeCheck.
   This catches regressions in the wiring, e.g.
   https://github.com/NixOS/nixpkgs/pull/511225
 */

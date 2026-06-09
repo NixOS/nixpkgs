@@ -31,7 +31,7 @@ let
     }
     .${system} or (throw "Unsupported system: ${system}");
 in
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   mktplcRef = {
     name = "typos-vscode";
     publisher = "tekumara";
@@ -57,7 +57,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
-    changelog = "https://marketplace.visualstudio.com/items/tekumara.typos-vscode/changelog";
+    changelog = "https://github.com/tekumara/typos-lsp/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "VSCode extension for providing a low false-positive source code spell checker";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode";
     homepage = "https://github.com/tekumara/typos-lsp";
@@ -70,4 +70,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     ];
     maintainers = [ ];
   };
-}
+})

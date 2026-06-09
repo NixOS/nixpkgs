@@ -9,12 +9,12 @@
   protobuf,
   installShellFiles,
   makeBinaryWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
+  versionCheckHook,
+  librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
   lld,
   writableTmpDirAsHomeHook,
-  fetchpatch,
 
   # Test deps
   curl,
@@ -22,6 +22,10 @@
   git,
   python3,
   esbuild,
+  runCommand,
+
+  # self for passthru
+  deno,
 }:
 
 let
@@ -29,17 +33,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.7.13";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-LGTA2xwT939GlAaKfUU3XA0Jx0h1P+8eFgPLmddHxlo=";
+    hash = "sha256-WtACDLrC1c7KxkoQgYrNavykkm8+tZmF46UU1YrLwVs=";
   };
 
-  cargoHash = "sha256-CLI54HSEOC/OVnIf0FmizVrS0adfzukFFBDl+EUP7BE=";
+  cargoHash = "sha256-Og+owcfHfdFJ08Xtiye2IEvKWd2Q/7f7QzQ/898IOcQ=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -90,13 +94,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
-  # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
-  # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
-  # these four arch+platform combinations.
-  doCheck =
-    stdenv.hostPlatform.isDarwin
-    || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
-
+  # Don't run checks on hydra as they've been observed to be flakey for us and
+  # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
+  # We haven't reproduced it on local machines, could be related to doing other
+  # builds simultaneously.
+  # A build with tests (+ librusty_v8 tests) is included in `deno.passhtru.tests`
+  doCheck = false;
+  # check related config is left in the main package so if someone uses
+  # `overrideAttrs` to always build with tests, it'll all work.
   preCheck =
     # Provide esbuild binary at `./third_party/prebuilt/` just like upstream:
     # https://github.com/denoland/deno_third_party/tree/master/prebuilt
@@ -234,21 +239,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = ./update.sh;
-    tests = callPackage ./tests { };
+    tests = (import ./tests { inherit deno runCommand lib; }) // {
+      build-with-unit-tests = deno.overrideAttrs (fa: {
+        # The tools test suite requires building the test server
+        dontBuild = false;
+        # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
+        # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
+        # these four arch+platform combinations.
+        doCheck =
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
+      });
+      # Also include librusty_v8 tests
+      librusty_v8-tests = librusty_v8.passthru.tests;
+    };
     inherit librusty_v8;
   };
 
   meta = {
-    homepage = "https://deno.land/";
+    homepage = "https://deno.com/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
@@ -267,6 +280,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ofalvai
       mynacol
     ];
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

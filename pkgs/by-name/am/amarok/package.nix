@@ -3,7 +3,6 @@
   fetchurl,
   lib,
   cmake,
-  extra-cmake-modules,
   pkg-config,
   kdePackages,
   fftw,

@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/elkowar/eww";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      coffeeispower
       w-lfchen
     ];
     mainProgram = "eww";

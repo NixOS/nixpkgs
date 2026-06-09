@@ -2,7 +2,7 @@
   pkgs,
   lib,
   makeWrapper,
-  nodejs ? pkgs.nodejs_20,
+  nodejs,
   config,
 }:
 

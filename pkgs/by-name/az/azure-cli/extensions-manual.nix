@@ -125,9 +125,9 @@
 
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
-    version = "1.0.3";
+    version = "1.0.4";
     url = "https://github.com/Azure/azure-cli-extensions/releases/download/azure-devops-${version}/azure_devops-${version}-py2.py3-none-any.whl";
-    hash = "sha256-CbBskqfEktpW+ziRkdZO0kCW70FJ+vaBQjEn66nOCXM=";
+    hash = "sha256-MYW8CnDfBnBi/dfOgSsI+yT605M8uSxvfjEkEdqYVSo=";
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
@@ -174,9 +174,9 @@
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "2.0.0b2";
+    version = "2.0.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-1j1ASDf/g4eSixhvxBFCS4yPiX8QG/+x7IC07g5aLfw=";
+    hash = "sha256-Nol3gbwgq76ijbmRyfV64kcArqeCk4/riBr4FxAeNtk=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ openssl ];
@@ -192,7 +192,7 @@
       chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
     '';
     meta = {
-      maintainers = with lib.maintainers; [ miampf ];
+      maintainers = [ ];
       platforms = lib.platforms.linux; # confcom is linux only
     };
   };
@@ -313,9 +313,9 @@
 
   ssh = mkAzExtension rec {
     pname = "ssh";
-    version = "2.0.7";
+    version = "2.0.8";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
-    hash = "sha256-H/CwitltPFB6E2FK9HsDEEjmn2NOD9/O4BOdBlRQAwY=";
+    hash = "sha256-eX42Pr1rTPWqUna4nvNMv7sWtIGcXyc/CbmhwRjQxoM=";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
     propagatedBuildInputs = with python3Packages; [
       oras
@@ -330,9 +330,9 @@
 
   storage-preview = mkAzExtension rec {
     pname = "storage-preview";
-    version = "1.0.0b7";
+    version = "1.0.0b8";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
-    hash = "sha256-wtf+4TBDzpWO55w5VXnoERAbksP2QaSc29FHL3MNOBo=";
+    hash = "sha256-qgDslmBX/XJA5nn95hJJb06vMC3izdbz7qlmQpx74T8=";
     description = "Provides a preview for upcoming storage features";
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];

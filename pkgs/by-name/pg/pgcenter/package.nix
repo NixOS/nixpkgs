@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   meta = {
-    homepage = "https://pgcenter.org/";
+    homepage = "https://github.com/lesovsky/pgcenter";
     changelog = "https://github.com/lesovsky/pgcenter/raw/v${finalAttrs.version}/doc/Changelog";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = lib.licenses.bsd3;

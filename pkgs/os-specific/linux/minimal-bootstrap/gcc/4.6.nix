@@ -124,6 +124,7 @@ bash.runCommand "${pname}-${version}"
       --host=${fakeHostPlatform} \
       --with-native-system-header-dir=${tinycc.libs}/include \
       --with-build-sysroot=${tinycc.libs}/include \
+      --enable-checking=release \
       --disable-bootstrap \
       --disable-decimal-float \
       --disable-dependency-tracking \
@@ -139,6 +140,7 @@ bash.runCommand "${pname}-${version}"
       --disable-lto \
       --disable-lto-plugin \
       --disable-multilib \
+      --disable-nls \
       --disable-plugin \
       --disable-threads \
       --enable-languages=c \
@@ -152,5 +154,5 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
   ''

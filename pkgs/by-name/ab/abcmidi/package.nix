@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcmidi";
-  version = "2026.02.24";
+  version = "2026.06.06";
 
   src = fetchFromGitHub {
     owner = "sshlien";
     repo = "abcmidi";
     tag = finalAttrs.version;
-    hash = "sha256-Hy0ICuMK4pCaJn/36QwkCfEI5kgmkWyr9V4RhMpGQes=";
+    hash = "sha256-2XPtLjvj+gyXTOOvUWzAO0magnjF3CWC7ZDCCuYN6vE=";
   };
 
   # TODO: remove once https://github.com/sshlien/abcmidi/pull/15 merged

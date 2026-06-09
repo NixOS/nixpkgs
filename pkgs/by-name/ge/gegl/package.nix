@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.68";
+  version = "0.4.70";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UAIwm5pwEmBljos6YVQP1Wc4h875mDOOGZJSSjOyOuM=";
+    hash = "sha256-R/UNnDrs03XetIwR6/6tUtFi5PwWKks9RGGCd/H67AI=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
     openexr
     suitesparse
+    vala
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -94,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     babl
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dmrg=disabled" # not sure what that is
     "-Dsdl2=disabled"
@@ -104,8 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
-    # Selecting platform default is broken by -Dauto_features.
-    "-Drelocatable=disabled"
   ]
   ++ lib.optionals (!withLuaJIT) [
     "-Dlua=disabled"

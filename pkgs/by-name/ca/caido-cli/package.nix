@@ -9,25 +9,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "caido-cli";
-  version = "0.55.3";
+  version = "0.56.2";
 
   src = fetchurl (
     {
       x86_64-linux = {
         url = "https://caido.download/releases/v${finalAttrs.version}/caido-cli-v${finalAttrs.version}-linux-x86_64.tar.gz";
-        hash = "sha256-ys5gMO0jGy5d8ncwQo9ES0gn7Ddckf3496CAyGgKEus=";
+        hash = "sha256-SUkysiFdH4ilA6MKYMiSqC80NkYZ9YVO/7CT0hQY++Q=";
       };
       aarch64-linux = {
         url = "https://caido.download/releases/v${finalAttrs.version}/caido-cli-v${finalAttrs.version}-linux-aarch64.tar.gz";
-        hash = "sha256-JvWktRnNyzu98NeSOFJ6nhF60uQfSL6ys5BmTkYuwCQ=";
+        hash = "sha256-rYRzo3iYjWAvRGm1+wBLGkr3eUoAGbi71+AX0qmoIXs=";
       };
       x86_64-darwin = {
         url = "https://caido.download/releases/v${finalAttrs.version}/caido-cli-v${finalAttrs.version}-mac-x86_64.zip";
-        hash = "sha256-bnFGa8GMDTdCjk9xJL9rGvZ1H6MMzzXrlWXGRlE5XPg=";
+        hash = "sha256-mMWivNwgAmMYitERwnP/lAzgzua/2UDDDffSbgZXlr4=";
       };
       aarch64-darwin = {
         url = "https://caido.download/releases/v${finalAttrs.version}/caido-cli-v${finalAttrs.version}-mac-aarch64.zip";
-        hash = "sha256-UVBQKkGsYJ84cthFkCXrHI85t8LJPy4z5sP5TobVNeA=";
+        hash = "sha256-19eEV79yk6PCHdl7oTw4Gqt10B7rYnZCJxBebDssFZc=";
       };
     }
     .${stdenv.hostPlatform.system}
@@ -35,9 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   nativeBuildInputs =
-    lib.optionals stdenv.isLinux [ autoPatchelfHook ] ++ lib.optionals stdenv.isDarwin [ unzip ];
+    lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ libgcc ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libgcc ];
 
   sourceRoot = ".";
 

@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-tests";
-  version = "1.1.6";
+  version = "1.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${finalAttrs.version}";
-    hash = "sha256-W+uJy0t6awNwMpMHEftHV8tDliEhvL/g8V2ZJPWeYk8=";
+    hash = "sha256-zesNbesiLMayvlVrU6NagmE2+o0l6ozwZlOGqvyGpnQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/standard-tests";

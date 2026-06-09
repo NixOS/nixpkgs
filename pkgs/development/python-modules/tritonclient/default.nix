@@ -5,6 +5,7 @@
   fetchPypi,
   numpy,
   python-rapidjson,
+  urllib3,
   # optional dependencies
   aiohttp,
   geventhttpclient,
@@ -14,7 +15,7 @@
 
 let
   pname = "tritonclient";
-  version = "2.54.0";
+  version = "2.68.0";
   format = "wheel";
 in
 buildPythonPackage rec {
@@ -27,8 +28,8 @@ buildPythonPackage rec {
         x86_64-linux = "manylinux1_x86_64";
       };
       hashes = {
-        aarch64-linux = "e485a67c75121a2b58456bd6275086252dd72208674b0c85bd57a60f428b686f";
-        x86_64-linux = "53c326498e9036f99347a938d52abd819743e957223edec31ae3c9681e5a6065";
+        aarch64-linux = "sha256-RkHdD4yPvo85Fqts07XFsgiMUCFXWiWuHQqfGDznJGk=";
+        x86_64-linux = "sha256-7h98H/ipZk56193fhhaSR62Mnis4Wakn/ZhOrhWa4vc=";
       };
     in
     fetchPypi {
@@ -38,13 +39,14 @@ buildPythonPackage rec {
       platform =
         platforms.${stdenv.hostPlatform.system}
           or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     };
 
   propagatedBuildInputs = [
     numpy
     python-rapidjson
+    urllib3
   ];
 
   pythonImportsCheck = [ "tritonclient" ];

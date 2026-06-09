@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.37.2";
+  version = "1.38.1";
   pname = "fakeroot";
 
   src = fetchFromGitLab {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "fakeroot";
     rev = "upstream/${finalAttrs.version}";
     domain = "salsa.debian.org";
-    hash = "sha256-TU/9oltd+2wYums8EEDUhaIVzwPeQvW13laCrJqb5A4=";
+    hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [

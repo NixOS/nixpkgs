@@ -82,7 +82,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.8.0";
+  version = "3.8.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-X/Aqab5CZX+HbGLZBgtGB08XaNno5883c2yLuRRSkAM=";
+    hash = "sha256-eoZblIIH+tUNKPdVERGh1dE0KoWwMpP0LA6FgcJCiNU=";
   };
 
   patches = [

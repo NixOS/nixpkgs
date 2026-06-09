@@ -30,7 +30,7 @@
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
+  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
@@ -61,9 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
 
-  patches = [
-    ./darwin.patch
-  ];
+  patches = [ ./darwin-remove-macdeployqt.patch ];
+
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -190,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
+    donationPage = "https://keepassxc.org/donate/";
     changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";

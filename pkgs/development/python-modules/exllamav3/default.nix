@@ -8,6 +8,7 @@
   setuptools,
 
   flash-attn,
+  flash-linear-attention,
   formatron,
   kbnf,
   marisa-trie,
@@ -21,20 +22,21 @@
   tokenizers,
   torch,
   typing-extensions,
+  xformers,
 }:
 let
   newerThanTuring = lib.filter (version: lib.versionOlder "7.9" version) torch.cudaCapabilities;
 in
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "0.0.25";
+  version = "0.0.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CltM0bQ3mvQwUYulsVByS7mcIIy6O/P1+nq4h5UAO6E=";
+    hash = "sha256-auAOnsNOr22TTIBR9L81tp9ZCrSLY4RxXWAJ1E39EwM=";
   };
 
   pythonRelaxDeps = [
@@ -59,6 +61,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     flash-attn
+    flash-linear-attention
     formatron
     kbnf
     marisa-trie
@@ -71,6 +74,7 @@ buildPythonPackage (finalAttrs: {
     tokenizers
     torch
     typing-extensions
+    xformers
   ];
 
   env = lib.optionalAttrs torch.cudaSupport {

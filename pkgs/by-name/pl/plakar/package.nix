@@ -33,7 +33,7 @@ buildGo125Module (finalAttrs: {
         # mount: fusermount: exec: "fusermount": executable file not found in $PATH
         "TestExecuteCmdMountDefault"
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBTreeScanMemory"
         "TestBTreeScanPebble"
         "TestExecuteCmdServerDefault"

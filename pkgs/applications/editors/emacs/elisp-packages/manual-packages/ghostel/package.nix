@@ -13,13 +13,13 @@ let
 
   pname = "ghostel";
 
-  version = "0.18.1-unstable-2026-04-24";
+  version = "0.33.0-unstable-2026-06-06";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
-    rev = "fdfb68f70ca6f43277ef8a0ba4103631857e4ad4";
-    hash = "sha256-u3zUj5uUHqFEP7mjmADNB6n6n/LmGR6ne0ylalop8WI=";
+    rev = "a614f0f30d8a65da928a840e62cc9b2c6a1381af";
+    hash = "sha256-vG7JfgXUm6b1zf0WgyDlvy29wpTvcI/X74NP8s66c/4=";
   };
 
   module = stdenv.mkDerivation (finalAttrs: {
@@ -28,12 +28,24 @@ let
     deps = zig.fetchDeps {
       inherit (finalAttrs) src pname version;
       fetchAll = true;
-      hash = "sha256-ghN/UMACgkFQQEr4nH5gbbJbt/+2bz6tL2bJpbw9mGE=";
+      hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
     };
 
     nativeBuildInputs = [ zig ];
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
+
+    dontSetZigDefaultFlags = true;
+
+    doCheck = true;
+
+    zigCheckFlags = [
+      "-Dcpu=baseline"
+      # See https://github.com/ghostty-org/ghostty/blob/main/PACKAGING.md#build-options
+      "-Doptimize=ReleaseFast"
+    ];
+
+    zigBuildFlags = finalAttrs.zigCheckFlags;
 
     postConfigure = ''
       cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
