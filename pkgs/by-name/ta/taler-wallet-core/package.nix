@@ -8,7 +8,7 @@
   srcOnly,
   removeReferencesTo,
   nodejs_24,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -18,7 +18,7 @@
 }:
 let
   nodeSources = srcOnly nodejs_24;
-  pnpm' = pnpm_9.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_11.override { nodejs = nodejs_24; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 3;
-    hash = "sha256-W5C2JVFbEccf4b+ppeEJ68au/2Tqfsry7ri6Qi1M50k=";
+    fetcherVersion = 4;
+    hash = "sha256-ZoxAZ5f3Szz2goGOE5yn/aCZ5fuhDt1owZ/o1kvX7d0=";
   };
 
   nativeBuildInputs = [
