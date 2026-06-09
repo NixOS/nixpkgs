@@ -157,10 +157,10 @@ index 2a2f478fd7..f22281bdca 100644
  list(REMOVE_DUPLICATES _CPACK_IFW_PATHS)
  
 diff --git a/Modules/FindBLAS.cmake b/Modules/FindBLAS.cmake
-index b45a279b94..884ccc0e32 100644
+index 9f986a78e7..5a6a9758ea 100644
 --- a/Modules/FindBLAS.cmake
 +++ b/Modules/FindBLAS.cmake
-@@ -1098,16 +1098,8 @@
+@@ -1112,16 +1112,10 @@ if(BLA_VENDOR MATCHES "ACML" OR BLA_VENDOR STREQUAL "All")
      ((BLA_VENDOR STREQUAL "ACML_GPU") AND (NOT BLAS_ACML_GPU_LIB_DIRS))
      )
    # try to find acml in "standard" paths
@@ -176,9 +176,11 @@ index b45a279b94..884ccc0e32 100644
 -  endif()
 +  set(_ACML_ROOT)
 +  set(_ACML_GPU_ROOT)
-   list(GET _ACML_ROOT 0 _ACML_ROOT)
-   list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
++  list(GET _ACML_ROOT 0 _ACML_ROOT)
++  list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
    if(_ACML_ROOT)
+     list(GET _ACML_ROOT 0 _ACML_ROOT)
+     list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
 diff --git a/Modules/FindCUDA.cmake b/Modules/FindCUDA.cmake
 index bceb615ca0..2350b15655 100644
 --- a/Modules/FindCUDA.cmake
@@ -229,26 +231,13 @@ index bceb615ca0..2350b15655 100644
  
  # Example of how to find an include file from the CUDA_SDK_ROOT_DIR
 diff --git a/Modules/FindCUDAToolkit.cmake b/Modules/FindCUDAToolkit.cmake
-index b00cd26b7e..f5f74ebe1d 100644
+index df36f9a19b..825d1e7386 100644
 --- a/Modules/FindCUDAToolkit.cmake
 +++ b/Modules/FindCUDAToolkit.cmake
-@@ -776,12 +776,6 @@
-       elseif(CUDAToolkit_ROOT_DIR AND EXISTS "${CUDAToolkit_ROOT_DIR}/${vf}")
-         set(${result_variable} "${CUDAToolkit_ROOT_DIR}/${vf}" PARENT_SCOPE)
-         break()
--      elseif(CMAKE_SYSROOT_LINK AND EXISTS "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}")
--        set(${result_variable} "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}" PARENT_SCOPE)
--        break()
--      elseif(EXISTS "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}")
--        set(${result_variable} "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}" PARENT_SCOPE)
--        break()
-       endif()
-     endforeach()
-   endfunction()
-@@ -864,18 +858,8 @@
-   # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
-   # directory is the desired location.
-   if(NOT CUDAToolkit_ROOT_DIR)
+@@ -830,18 +830,9 @@ else()
+     # We will also search the default symlink location /usr/local/cuda first since
+     # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
+     # directory is the desired location.
 -    if(UNIX)
 -      if(NOT APPLE)
 -        set(platform_base "/usr/local/cuda-")
@@ -258,14 +247,14 @@ index b00cd26b7e..f5f74ebe1d 100644
 -    else()
 -      set(platform_base "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v")
 -    endif()
--
+ 
      # Build out a descending list of possible cuda installations, e.g.
 -    file(GLOB possible_paths "${platform_base}*")
 +    set(possible_paths)
      # Iterate the glob results and create a descending list.
      set(versions)
      foreach(p ${possible_paths})
-@@ -891,14 +875,6 @@
+@@ -857,14 +848,6 @@ else()
  
      # With a descending list of versions, populate possible paths to search.
      set(search_paths)
@@ -280,6 +269,19 @@ index b00cd26b7e..f5f74ebe1d 100644
  
      # Now search for the toolkit again using the platform default search paths.
      _CUDAToolkit_find_root_dir(SEARCH_PATHS "${search_paths}" FIND_FLAGS PATH_SUFFIXES bin)
+@@ -889,12 +872,6 @@ else()
+       elseif(CUDAToolkit_ROOT_DIR AND EXISTS "${CUDAToolkit_ROOT_DIR}/${vf}")
+         set(${result_variable} "${CUDAToolkit_ROOT_DIR}/${vf}" PARENT_SCOPE)
+         break()
+-      elseif(CMAKE_SYSROOT_LINK AND EXISTS "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}")
+-        set(${result_variable} "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}" PARENT_SCOPE)
+-        break()
+-      elseif(EXISTS "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}")
+-        set(${result_variable} "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}" PARENT_SCOPE)
+-        break()
+       endif()
+     endforeach()
+   endfunction()
 diff --git a/Modules/FindCoin3D.cmake b/Modules/FindCoin3D.cmake
 index 1d89c604e0..5b70e71a87 100644
 --- a/Modules/FindCoin3D.cmake
@@ -579,10 +581,10 @@ index 82156747d3..cc3f2a64af 100644
         "Ice-${Ice_VERSION_SLICE2CPP_FULL}/slice"
         "Ice-${Ice_VERSION_SLICE2CPP_SHORT}/slice"
 diff --git a/Modules/FindJNI.cmake b/Modules/FindJNI.cmake
-index 10dcc51776..e272bd9583 100644
+index a70b00f330..1962b55d4a 100644
 --- a/Modules/FindJNI.cmake
 +++ b/Modules/FindJNI.cmake
-@@ -363,51 +363,6 @@
+@@ -367,57 +367,6 @@ if (WIN32)
  endif()
  
  set(_JNI_JAVA_DIRECTORIES_BASE
@@ -604,6 +606,11 @@ index 10dcc51776..e272bd9583 100644
 -  # Arch Linux specific paths for default JVM
 -  /usr/lib/jvm/default
 -  # Ubuntu specific paths for default JVM
+-  /usr/lib/jvm/java-26-openjdk-{libarch}
+-  /usr/lib/jvm/java-25-openjdk-{libarch}    # Ubuntu 24.04 LTS
+-  /usr/lib/jvm/java-24-openjdk-{libarch}
+-  /usr/lib/jvm/java-23-openjdk-{libarch}
+-  /usr/lib/jvm/java-22-openjdk-{libarch}
 -  /usr/lib/jvm/java-21-openjdk-{libarch}    # Ubuntu 23.04
 -  /usr/lib/jvm/java-20-openjdk-{libarch}    # Ubuntu 22.10
 -  /usr/lib/jvm/java-19-openjdk-{libarch}    # Ubuntu 22.04 LTS
@@ -631,9 +638,10 @@ index 10dcc51776..e272bd9583 100644
 -  # SuSE specific paths for default JVM
 -  /usr/lib64/jvm/java
 -  /usr/lib64/jvm/jre
-   )
+-  )
  
  set(_JNI_JAVA_AWT_LIBRARY_TRIES)
+ set(_JNI_JAVA_INCLUDE_TRIES)
 diff --git a/Modules/FindJava.cmake b/Modules/FindJava.cmake
 index 1587ce648b..e92213cba7 100644
 --- a/Modules/FindJava.cmake
@@ -1093,28 +1101,28 @@ index edef791cb8..5515f44710 100644
  
  find_path(PHP4_FOUND_INCLUDE_PATH main/php.h
 diff --git a/Modules/FindPerlLibs.cmake b/Modules/FindPerlLibs.cmake
-index 330700e183..7fc89df6eb 100644
+index fbe1aade72..34562e7807 100644
 --- a/Modules/FindPerlLibs.cmake
 +++ b/Modules/FindPerlLibs.cmake
-@@ -141,10 +141,6 @@
+@@ -176,10 +176,6 @@ if (PERL_EXECUTABLE)
      PATHS
        "${PERL_UPDATE_ARCHLIB}/CORE"
        "${PERL_ARCHLIB}/CORE"
--      /usr/lib/perl5/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
--      /usr/lib/perl/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
--      /usr/lib/perl5/${PERL_VERSION_STRING}/CORE
--      /usr/lib/perl/${PERL_VERSION_STRING}/CORE
+-      /usr/lib/perl5/${PerlLibs_VERSION}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl/${PerlLibs_VERSION}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl5/${PerlLibs_VERSION}/CORE
+-      /usr/lib/perl/${PerlLibs_VERSION}/CORE
    )
  
    ### PERL_LIBRARY
-@@ -154,10 +150,6 @@
+@@ -189,10 +185,6 @@ if (PERL_EXECUTABLE)
      PATHS
        "${PERL_UPDATE_ARCHLIB}/CORE"
        "${PERL_ARCHLIB}/CORE"
--      /usr/lib/perl5/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
--      /usr/lib/perl/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
--      /usr/lib/perl5/${PERL_VERSION_STRING}/CORE
--      /usr/lib/perl/${PERL_VERSION_STRING}/CORE
+-      /usr/lib/perl5/${PerlLibs_VERSION}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl/${PerlLibs_VERSION}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl5/${PerlLibs_VERSION}/CORE
+-      /usr/lib/perl/${PerlLibs_VERSION}/CORE
    )
  
  endif ()
@@ -1343,17 +1351,21 @@ index 2c62a5f17f..772a8d88f6 100644
    PATH_SUFFIXES
      bin lib/qt lib/qt3 qt qt3 qt/bin qt3/bin lib/qt/bin lib/qt3/bin
 diff --git a/Modules/FindRuby.cmake b/Modules/FindRuby.cmake
-index 18b9e35855..dba9976565 100644
+index 863f70a7f2..17e3ac606a 100644
 --- a/Modules/FindRuby.cmake
 +++ b/Modules/FindRuby.cmake
-@@ -367,7 +367,6 @@
-           HINTS
-           ${Ruby_HDR_DIR}
-           ${Ruby_ARCH_DIR}
--          /usr/lib/ruby/${_Ruby_VERSION_SHORT}/i586-linux-gnu/
- )
+@@ -366,11 +366,6 @@ if (NOT Ruby_EXECUTABLE AND Ruby_FIND_VIRTUALENV MATCHES "^(FIRST|ONLY)$")
+   endif ()
+ endif ()
  
- set(Ruby_INCLUDE_DIRS ${Ruby_INCLUDE_DIR})
+-# Check for Homebrew Ruby (non-virtualenv, common on MacOS)
+-if (NOT Ruby_EXECUTABLE AND NOT Ruby_FIND_VIRTUALENV STREQUAL "ONLY")
+-  _RUBY_CHECK_BREW()
+-endif ()
+-
+ # Fallback to system installed Ruby
+ if (NOT Ruby_EXECUTABLE AND NOT Ruby_FIND_VIRTUALENV STREQUAL "ONLY")
+   _RUBY_CHECK_SYSTEM()
 diff --git a/Modules/FindSDL.cmake b/Modules/FindSDL.cmake
 index a720dcc3df..73e222a27c 100644
 --- a/Modules/FindSDL.cmake
@@ -1644,6 +1656,20 @@ index 7c4f123a1d..4cfd53de9f 100644
  
  if(NOT CMAKE_CROSSCOMPILING)
    execute_process(COMMAND @sw_vers@ -productVersion
+@@ -277,13 +277,6 @@ if(NOT CMAKE_OSX_SYSROOT)
+     RESULT_VARIABLE _result
+   )
+   unset(_sdk_macosx)
+-
+-  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES_EXCLUDE
+-    # Without -isysroot, some compiler drivers implicitly pass -L/usr/local/lib
+-    # to the linker.  Since the macOS dynamic loader does not search it by
+-    # default, it is not a fully-implemented implicit link directory.
+-    /usr/local/lib
+-  )
+ endif()
+ 
+ #----------------------------------------------------------------------------
 diff --git a/Modules/Platform/Darwin.cmake b/Modules/Platform/Darwin.cmake
 index 42c6b35424..f2985f3765 100644
 --- a/Modules/Platform/Darwin.cmake
@@ -1905,10 +1931,10 @@ index b977d955ca..5ff835298d 100644
      set(_jar_doc "NOTSET")
  
 diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
-index 8ff651fd90..9659deedf5 100644
+index 2c6a6e6a19..3a43da619a 100644
 --- a/Utilities/cmcurl/CMakeLists.txt
 +++ b/Utilities/cmcurl/CMakeLists.txt
-@@ -1826,43 +1826,6 @@
+@@ -1566,43 +1566,6 @@ if(_curl_ca_bundle_supported)
    endif()
    mark_as_advanced(CURL_CA_PATH_SET)
  
@@ -1929,8 +1955,8 @@ index 8ff651fd90..9659deedf5 100644
 -        if(EXISTS "${_search_ca_bundle_path}")
 -          message(STATUS "Found CA bundle: ${_search_ca_bundle_path}")
 -          set(CURL_CA_BUNDLE "${_search_ca_bundle_path}" CACHE
--            STRING "Path to the CA bundle. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
--          set(CURL_CA_BUNDLE_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-            STRING "Absolute path to the CA bundle. ${_ca_opt_desc}")
+-          set(CURL_CA_BUNDLE_SET TRUE CACHE BOOL "Absolute path to the CA bundle has been set")
 -          break()
 -        endif()
 -      endforeach()
@@ -1943,8 +1969,8 @@ index 8ff651fd90..9659deedf5 100644
 -        unset(_curl_ca_files_found)
 -        message(STATUS "Found CA path: ${_search_ca_path}")
 -        set(CURL_CA_PATH "${_search_ca_path}" CACHE
--          STRING "Location of default CA path. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
--        set(CURL_CA_PATH_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-          STRING "Absolute path to a directory containing CA certificates stored individually. ${_ca_opt_desc}")
+-        set(CURL_CA_PATH_SET TRUE CACHE BOOL "Absolute path to the CA bundle has been set")
 -      endif()
 -    endif()
 -  endif()
