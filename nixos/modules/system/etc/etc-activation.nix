@@ -194,6 +194,25 @@
         text = "";
         mode = "0444";
       };
+
+      # The upstream unit has ConditionPathIsReadWrite=/etc, which is always
+      # false here. Replace it with ConditionFirstBoot: with the empty
+      # placeholder above first-boot is "no" and commit stays skipped, but
+      # when a persistence module bind-mounts a writable file containing
+      # "uninitialized" over /etc/machine-id, first-boot is "yes" once and
+      # commit writes the generated ID through the bind mount.
+      #
+      # An empty Condition*= assignment resets *all* condition types, and
+      # this attrset is serialised in key order, so the reset goes through
+      # ConditionFirstBoot (sorts first) and we re-add the upstream
+      # ConditionPathIsMountPoint afterwards.
+      systemd.services.systemd-machine-id-commit.unitConfig = {
+        ConditionFirstBoot = lib.mkDefault [
+          ""
+          "true"
+        ];
+        ConditionPathIsMountPoint = lib.mkDefault "/etc/machine-id";
+      };
     })
 
   ];
