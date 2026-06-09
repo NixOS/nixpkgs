@@ -13,6 +13,7 @@
   # dependencies
   click,
   fastapi,
+  h2,
   httpx,
   litellm,
   opentelemetry-api,
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
     ast-grep-cli
     click
     fastapi
+    h2
     httpx
     litellm
     opentelemetry-api
