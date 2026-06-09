@@ -4,24 +4,17 @@
   fetchFromGitHub,
   unstableGitUpdater,
   openssl,
-  nss,
-  nspr,
-  libkrb5,
   gmp,
   zlib,
   libpcap,
-  re2,
-  gcc,
-  python3Packages,
+  python3,
   perl,
-  perlPackages,
   withOpenCL ? true,
   opencl-headers,
   ocl-icd,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
   replaceVars,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation {
@@ -70,63 +63,37 @@ stdenv.mkDerivation {
 
   buildInputs = [
     openssl
-    nss
-    nspr
-    libkrb5
     gmp
     zlib
     libpcap
-    re2
   ]
   ++ lib.optionals withOpenCL [
     opencl-headers
     ocl-icd
   ];
   nativeBuildInputs = [
-    gcc
-    python3Packages.wrapPython
-    perl
-    makeWrapper
+    python3 # for opencl_generate_dynamic_loader.py
+    perl # detected by configure; gates the crypt(3) format
   ];
-  propagatedBuildInputs =
-    # For pcap2john.py
-    (with python3Packages; [
-      dpkt
-      scapy
-      lxml
-    ])
-    ++ (with perlPackages; [
-      # For pass_gen.pl
-      DigestMD4
-      DigestSHA1
-      GetoptLong
-      # For 7z2john.pl
-      CompressRawLzma
-      # For sha-dump.pl
-      perlldap
-    ]);
-  # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
+    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl"
+    # Install the john binary and the compiled C *2john helpers only. The
+    # interpreted *.py / *.pl conversion scripts are shipped separately in the
+    # `john-data` package, since they pull in a large python/perl closure.
     find -L ../run -mindepth 1 -maxdepth 1 -type f -executable \
+      ! -name '*.py' ! -name '*.pl' \
       -exec cp -d {} "$out/bin" \;
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
     cp -vt "$out/share/john/opencl" ../run/opencl/*.cl ../run/opencl/*.h
     cp -vLrt "$out/share/doc/john" ../doc/*
-    cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
-  '';
-
-  postFixup = ''
-    wrapPythonPrograms
-
-    for i in $out/bin/*.pl; do
-      wrapProgram "$i" --prefix PERL5LIB : "$PERL5LIB:$out/${perlPackages.perl.libPrefix}"
-    done
+    # john.conf has `.include <rules/foo.rule>` resolved against
+    # $out/etc/john; the actual rule files live under share/john.
+    ln -s "$out/share/john/rules" "$out/etc/john/rules"
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -143,6 +110,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       cherrykitten
       therealhammer
+      mag1cbyt3s
     ];
     platforms = lib.platforms.unix;
   };
