@@ -36,6 +36,7 @@ let
       };
     }) interfaceNames
   );
+  perInterfaceChanges = builtins.mapAttrs (_: _: { useDHCP = true; }) perInterfaceConfig;
 in
 {
   imports = [
@@ -65,5 +66,10 @@ in
 
     # Per-interface DHCP configuration
     networking.interfaces = perInterfaceConfig;
+
+    hardware.facter.changes = {
+      "networking.useDHCP".networking = true;
+      "networking.interfaces".networking = perInterfaceChanges;
+    };
   };
 }

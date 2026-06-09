@@ -7,6 +7,36 @@
 let
   inherit (config.hardware.facter) report;
   cfg = config.hardware.facter.detected.virtualisation;
+  hasCPUFeature =
+    feature:
+    lib.any (
+      {
+        features ? [ ],
+        ...
+      }:
+      lib.elem feature features
+    ) (report.hardware.cpu or [ ]);
+  kvmKernelModules =
+    lib.optionals (hasCPUFeature "vmx") [ "kvm-intel" ]
+    ++ lib.optionals (hasCPUFeature "svm") [ "kvm-amd" ];
+  qemuInitrdKernelModules = lib.optionals cfg.qemu.enable [
+    "virtio_balloon"
+    "virtio_console"
+    "virtio_rng"
+    "virtio_gpu"
+  ];
+  qemuAvailableKernelModules =
+    lib.optionals cfg.qemu.enable [
+      "virtio_net"
+      "virtio_pci"
+      "virtio_mmio"
+      "virtio_blk"
+      "9p"
+      "9pnet_virtio"
+    ]
+    ++ lib.optionals cfg.virtio_scsi.enable [
+      "virtio_scsi"
+    ];
 in
 {
   options.hardware.facter.detected.virtualisation = {
@@ -54,45 +84,12 @@ in
   config = lib.mkIf config.hardware.facter.enable {
 
     # KVM support
-    boot.kernelModules =
-      let
-        hasCPUFeature =
-          feature:
-          lib.any (
-            {
-              features ? [ ],
-              ...
-            }:
-            lib.elem feature features
-          ) (report.hardware.cpu or [ ]);
-      in
-      lib.mkMerge [
-        (lib.mkIf (hasCPUFeature "vmx") [ "kvm-intel" ])
-        (lib.mkIf (hasCPUFeature "svm") [ "kvm-amd" ])
-      ];
+    boot.kernelModules = kvmKernelModules;
 
     # virtio & qemu
     boot.initrd = {
-      kernelModules = lib.optionals cfg.qemu.enable [
-        "virtio_balloon"
-        "virtio_console"
-        "virtio_rng"
-        "virtio_gpu"
-      ];
-
-      availableKernelModules = lib.mkMerge [
-        (lib.mkIf cfg.qemu.enable [
-          "virtio_net"
-          "virtio_pci"
-          "virtio_mmio"
-          "virtio_blk"
-          "9p"
-          "9pnet_virtio"
-        ])
-        (lib.mkIf cfg.virtio_scsi.enable [
-          "virtio_scsi"
-        ])
-      ];
+      kernelModules = qemuInitrdKernelModules;
+      availableKernelModules = qemuAvailableKernelModules;
     };
 
     virtualisation = {
@@ -106,6 +103,24 @@ in
     hardware.parallels.enable = lib.mkIf cfg.parallels.enable (lib.mkDefault true);
     nixpkgs.config = lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
       allowUnfreePackages = [ "prl-tools" ];
+    };
+
+    hardware.facter.changes = {
+      "boot.kernelModules".virtualisation = kvmKernelModules;
+      "boot.initrd.kernelModules".virtualisation = qemuInitrdKernelModules;
+      "boot.initrd.availableKernelModules".virtualisation = qemuAvailableKernelModules;
+    }
+    // lib.optionalAttrs cfg.oracle.enable {
+      "virtualisation.virtualbox.guest.enable" = true;
+    }
+    // lib.optionalAttrs cfg.hyperv.enable {
+      "virtualisation.hypervGuest.enable" = true;
+    }
+    // lib.optionalAttrs cfg.parallels.enable {
+      "hardware.parallels.enable" = true;
+    }
+    // lib.optionalAttrs (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
+      "nixpkgs.config.allowUnfreePackages" = [ "prl-tools" ];
     };
   };
 }

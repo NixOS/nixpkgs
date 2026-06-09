@@ -31,7 +31,11 @@ in
     defaultText = "hardware dependent";
   };
 
-  config.services.fprintd.enable = lib.mkIf config.hardware.facter.detected.fingerprint.enable (
-    lib.mkDefault true
-  );
+  config = lib.mkIf config.hardware.facter.detected.fingerprint.enable {
+    services.fprintd.enable = lib.mkDefault true;
+
+    hardware.facter.changes = {
+      "services.fprintd.enable".fingerprint = true;
+    };
+  };
 }

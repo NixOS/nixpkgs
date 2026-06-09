@@ -35,6 +35,15 @@ let
   ];
 
   devices = builtins.fromJSON (builtins.readFile ./ipu6-devices.json);
+  ipu6Platform =
+    if isTigerLake then
+      "ipu6"
+    else if isAdlerLake || isRaptorLake then
+      "ipu6ep"
+    else if isMeteorLake then
+      "ipu6epmtl"
+    else
+      throw "Unexpected CPU generation for ipu6 detected.";
   isCameraSupported =
     let
       default = {
@@ -89,27 +98,29 @@ in
       defaultText = "hardware dependent";
     };
 
-  config.hardware.ipu6 = lib.mkIf detected.camera.ipu6.enable {
-    enable = true;
-    platform =
-      if isTigerLake then
-        "ipu6"
-      else if isAdlerLake || isRaptorLake then
-        "ipu6ep"
-      else if isMeteorLake then
-        "ipu6epmtl"
-      else
-        throw "Unexpected CPU generation for ipu6 detected.";
-  };
+  config = lib.mkMerge [
+    (lib.mkIf detected.camera.ipu6.enable {
+      hardware.ipu6 = {
+        enable = true;
+        platform = ipu6Platform;
+      };
 
-  config.warnings =
-    let
-      isKernel6_16OrLater = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.16";
-      inherit (detected.camera) ipu6;
-    in
-    lib.optional (isKernel6_16OrLater && ipu6.enable) ''
-      A regression bug can occur when combining ipu6 with kernel version 6.16 or later.
-      This will most likely prevent your system from properly suspending or shutting down.
-      For more information see: https://github.com/intel/ipu6-drivers/issues/381
-    '';
+      hardware.facter.changes = {
+        "hardware.ipu6.enable".ipu6 = true;
+        "hardware.ipu6.platform".ipu6 = ipu6Platform;
+      };
+    })
+    {
+      warnings =
+        let
+          isKernel6_16OrLater = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.16";
+          inherit (detected.camera) ipu6;
+        in
+        lib.optional (isKernel6_16OrLater && ipu6.enable) ''
+          A regression bug can occur when combining ipu6 with kernel version 6.16 or later.
+          This will most likely prevent your system from properly suspending or shutting down.
+          For more information see: https://github.com/intel/ipu6-drivers/issues/381
+        '';
+    }
+  ];
 }

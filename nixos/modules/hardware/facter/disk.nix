@@ -24,5 +24,9 @@ in
 
   config = lib.mkIf config.hardware.facter.enable {
     boot.initrd.availableKernelModules = config.hardware.facter.detected.boot.disk.kernelModules;
+
+    hardware.facter.changes = {
+      "boot.initrd.availableKernelModules".disk = config.hardware.facter.detected.boot.disk.kernelModules;
+    };
   };
 }

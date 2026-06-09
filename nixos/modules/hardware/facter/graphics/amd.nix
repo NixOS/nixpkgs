@@ -14,5 +14,9 @@ in
   };
   config = lib.mkIf (config.hardware.facter.enable && cfg.enable) {
     services.xserver.videoDrivers = [ "modesetting" ];
+
+    hardware.facter.changes = {
+      "services.xserver.videoDrivers"."graphics-amd" = [ "modesetting" ];
+    };
   };
 }

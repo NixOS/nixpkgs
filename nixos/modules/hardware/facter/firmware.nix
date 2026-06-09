@@ -20,5 +20,15 @@ in
     hardware.cpu.intel.updateMicrocode = lib.mkIf hasIntelCpu (
       lib.mkDefault config.hardware.enableRedistributableFirmware
     );
+
+    hardware.facter.changes = {
+      "hardware.enableRedistributableFirmware".firmware = true;
+    }
+    // lib.optionalAttrs hasAmdCpu {
+      "hardware.cpu.amd.updateMicrocode".firmware = true;
+    }
+    // lib.optionalAttrs hasIntelCpu {
+      "hardware.cpu.intel.updateMicrocode".firmware = true;
+    };
   };
 }

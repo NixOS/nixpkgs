@@ -5,14 +5,12 @@
   ...
 }:
 {
-  # Skip setting hostPlatform if it's read-only
   config.nixpkgs =
-    lib.optionalAttrs
-      (
-        config.hardware.facter.report.system or null != null
-        && !(options.nixpkgs.hostPlatform.readOnly or false)
-      )
-      {
-        hostPlatform = lib.mkDefault config.hardware.facter.report.system;
-      };
+    let
+      detectedSystem = config.hardware.facter.report.system or null;
+      canSetHostPlatform = detectedSystem != null && !(options.nixpkgs.hostPlatform.readOnly or false);
+    in
+    lib.mkIf canSetHostPlatform {
+      hostPlatform = lib.mkDefault detectedSystem;
+    };
 }

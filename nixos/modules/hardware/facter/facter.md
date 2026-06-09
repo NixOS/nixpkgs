@@ -90,6 +90,59 @@ $ nix-build '<nixpkgs/nixos>' -A config.hardware.facter.debug.nix-diff -I nixos-
 $ ./result/bin/facter-nix-diff
 ```
 
+### changes {#module-hardware-facter-debugging-changes}
+
+Shows the final value retained by NixOS alongside the values facter tried to contribute.
+
+Facter modules record their contributions in `hardware.facter.changes` using the following convention:
+
+```nix
+{
+  hardware.facter.changes = {
+    "option.path".source = value;
+  };
+}
+```
+
+Examples:
+
+```nix
+{
+  hardware.facter.changes = {
+    "hardware.bluetooth.enable".bluetooth = true;
+  };
+}
+```
+
+```nix
+{
+  hardware.facter.changes = {
+    "boot.initrd.availableKernelModules".disk = [ "ahci" "nvme" "sd_mod" ];
+  };
+}
+```
+
+With flakes:
+```console
+$ nix run .#nixosConfigurations.<hostname>.config.hardware.facter.debug.changes -- .#nixosConfigurations.<hostname>
+```
+
+Without flakes:
+```console
+$ nix-build '<nixpkgs/nixos>' -A config.hardware.facter.debug.changes -I nixos-config=./configuration.nix
+$ ./result/bin/facter-changes -I nixos-config=./configuration.nix
+```
+
+Example output:
+```text
+# facter bluetooth = true
+hardware.bluetooth.enable = false
+
+# facter disk = ["ahci","nvme","sd_mod"]
+# facter keyboard = ["xhci_pci"]
+boot.initrd.availableKernelModules = ["aes", "..."]
+```
+
 ## Options {#module-hardware-facter-options}
 
 A complete list of options for the facter module may be found [here](#opt-hardware.facter.report).

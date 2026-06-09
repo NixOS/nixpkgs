@@ -7,7 +7,11 @@
       defaultText = "hardware dependent";
     };
 
-  config.hardware.bluetooth.enable = lib.mkIf config.hardware.facter.detected.bluetooth.enable (
-    lib.mkDefault true
-  );
+  config = lib.mkIf config.hardware.facter.detected.bluetooth.enable {
+    hardware.bluetooth.enable = lib.mkDefault true;
+
+    hardware.facter.changes = {
+      "hardware.bluetooth.enable".bluetooth = true;
+    };
+  };
 }
