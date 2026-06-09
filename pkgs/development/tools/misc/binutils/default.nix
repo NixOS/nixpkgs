@@ -34,7 +34,7 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.46";
+  version = "2.46.1";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
-    hash = "sha256-uMmj15bcCw6OqTXcJMXI1vNF6xd62lrGpbESLHfWIVg=";
+    hash = "sha256-5t/jYBJt8l/+sgE1k7lFcqxxKhQz8h4ZxEytnkDTbNU=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
