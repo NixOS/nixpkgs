@@ -408,6 +408,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withSelinux "selinux")
   ];
 
+  __structuredAttrs = true;
+
   env =
     lib.optionalAttrs withNativeCompilation {
       NATIVE_FULL_AOT = "1";
