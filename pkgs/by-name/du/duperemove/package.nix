@@ -10,8 +10,7 @@
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   sqlite,
   util-linux,
-  testers,
-  duperemove,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,11 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=v${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = duperemove;
-    command = "duperemove --version";
-    version = "v${finalAttrs.version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
