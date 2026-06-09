@@ -160,6 +160,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       luNeder
       jopejoe1
+      eyjhb
     ];
     platforms = lib.platforms.linux;
   };
