@@ -1693,6 +1693,7 @@ in
   teleports = runTest ./teleports.nix;
   temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
+  terminusdb = runTest ./terminusdb.nix;
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
