@@ -27046,6 +27046,12 @@
     githubId = 6064962;
     name = "TakWolf";
   };
+  talal = {
+    email = "noreply@talal.ch";
+    github = "talal";
+    githubId = 3526562;
+    name = "Muhammad Talal Anwar";
+  };
   talhaHavadar = {
     email = "havadartalha@gmail.com";
     github = "talhaHavadar";
