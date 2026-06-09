@@ -962,8 +962,8 @@ in
       "sha256-BUl/wnJKR3TB1YsTCLrJdEoH9Lz8DZ6H94STOOX8gkQ=";
 
   mypy-boto3-omics =
-    buildMypyBoto3Package "omics" "1.43.18"
-      "sha256-aMV1kli90lXUsGmOwP1lPW9yTH+0/520hBonZC3AIjY=";
+    buildMypyBoto3Package "omics" "1.43.25"
+      "sha256-EcyGzTAvrwhS25jx7LrKCa4cKgcO+FvlS41Va0YhOIY=";
 
   mypy-boto3-opensearch =
     buildMypyBoto3Package "opensearch" "1.43.16"
