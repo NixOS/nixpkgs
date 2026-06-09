@@ -20063,6 +20063,12 @@
     githubId = 4242897;
     name = "Nikolai Mishin";
   };
+  nmwsharp = {
+    email = "nmwsharp@gmail.com";
+    github = "nmwsharp";
+    githubId = 12726725;
+    name = "Nicholas Sharp";
+  };
   noaccos = {
     name = "Francesco Noacco";
     email = "francesco.noacco2000@gmail.com";
