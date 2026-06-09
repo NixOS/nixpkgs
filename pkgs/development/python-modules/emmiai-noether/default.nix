@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "numpy"
+    "torch"
   ];
   dependencies = [
     aistore
