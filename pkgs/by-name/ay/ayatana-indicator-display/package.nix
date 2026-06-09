@@ -39,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rsZjEfAiz1HC5XMjPume1Y6miNAv1kmPFP4J/+NKlsA=";
   };
 
+  patches = [
+    # This should be dropped once the issue is fixed upstream.
+    # https://github.com/AyatanaIndicators/ayatana-indicator-display/pull/108
+    ./patches/0001-service.cpp-Mark-create_phone_menu-as-static.patch
+    ./patches/0002-cppcheck-Workaround-undefined-function-like-macro-fo.patch
+    ./patches/0003-Fix-cppcheck-warning-has-no-initializer.patch
+  ];
+
   postPatch = ''
     # Replace systemd prefix in pkg-config query, use GNUInstallDirs location for /etc
     substituteInPlace data/CMakeLists.txt \
