@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "pyxdg";
-    rev = "rel-${finalAttrs.version}";
+    tag = "rel-${finalAttrs.version}";
     hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
 
