@@ -1,12 +1,10 @@
 {
-  fetchFromGitHub,
-  buildPythonApplication,
   lib,
-  pandocfilters,
-  six,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pandoc-imagine";
   version = "0.1.7";
   format = "setuptools";
@@ -18,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "sha256-IJAXrJakKjROF2xi9dsLvGzyGIyB+GDnx/Z7BRlwSqc=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pandocfilters
     six
   ];

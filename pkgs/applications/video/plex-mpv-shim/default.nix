@@ -1,20 +1,13 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  fetchpatch,
-  python,
-  mpv,
-  requests,
-  python-mpv-jsonipc,
-  pystray,
-  tkinter,
   wrapGAppsHook3,
   gobject-introspection,
   mpv-shim-default-shaders,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "plex-mpv-shim";
   version = "1.11.0-unstable-2025-03-17";
   format = "setuptools";
@@ -31,7 +24,7 @@ buildPythonApplication {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     mpv
     requests
     python-mpv-jsonipc
@@ -47,7 +40,7 @@ buildPythonApplication {
 
   postInstall = ''
     # put link to shaders where upstream package expects them
-    ln -s ${mpv-shim-default-shaders}/share/mpv-shim-default-shaders $out/${python.sitePackages}/plex_mpv_shim/default_shader_pack
+    ln -s ${mpv-shim-default-shaders}/share/mpv-shim-default-shaders $out/${python3Packages.python.sitePackages}/plex_mpv_shim/default_shader_pack
   '';
 
   # does not contain tests

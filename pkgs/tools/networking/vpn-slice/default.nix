@@ -1,18 +1,15 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
+  python3Packages,
   nix-update-script,
   fetchFromGitHub,
-  dnspython,
   iproute2,
   iptables,
-  setproctitle,
-  setuptools,
   unixtools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vpn-slice";
   version = "0.16.1";
   pyproject = true;
@@ -35,11 +32,11 @@ buildPythonApplication rec {
         --replace-fail "'/sbin/iptables'" "'${iptables}/bin/iptables'"
     '';
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     setuptools # can be removed with next package update, upstream no longer has a dependency on distutils
     setproctitle
     dnspython
