@@ -16633,6 +16633,12 @@
     githubId = 1433367;
     name = "Marc Fontaine";
   };
+  mag1cbyt3s = {
+    email = "ppeinecke@protonmail.com";
+    github = "Mag1cByt3s";
+    githubId = 48777549;
+    name = "MagicBytes";
+  };
   magicquark = {
     name = "magicquark";
     github = "magicquark";
