@@ -44,7 +44,11 @@ appimageTools.wrapAppImage {
 
   src = appimageContents;
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  # add libunity because Electron loads it dynamically for app.setBadgeCount();
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    pkgs.libunity
+  ];
 
   extraInstallCommands = ''
     install -Dm 644 ${appimageContents}/beepertexts.png $out/share/icons/hicolor/512x512/apps/beepertexts.png
