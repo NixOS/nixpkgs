@@ -6,8 +6,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-sqlite3-editor";
     publisher = "yy0931";
-    version = "1.0.212";
-    hash = "sha256-mG75eEK7agZ8R4LNN5xM7GqaBQC5JKhUR0/ZogZTHpY=";
+    version = "1.0.214";
+    hash = "sha256-lxH+j83R2ZYCWrEB0c70DRSCMn5iH1Xz/vXLZBE42Eg=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/yy0931.vscode-sqlite3-editor/changelog";
