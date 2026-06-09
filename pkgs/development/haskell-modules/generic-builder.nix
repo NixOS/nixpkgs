@@ -684,7 +684,8 @@ lib.fix (
         # cabal2nix-generated expressions run hpack not until prePatch to create
         # the .cabal file (if necessary)
         + lib.optionalString (!dontConvertCabalFileToUnix) ''
-          sed -i -e 's/\r$//' *.cabal
+          echo -n 'Converting to UNIX line endings: '
+          stat -t *.cabal && sed -i -e 's/\r$//' *.cabal
         '';
 
       postPatch =
