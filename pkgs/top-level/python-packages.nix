@@ -11268,47 +11268,47 @@ self: super: with self; {
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
   netbox-attachments =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-attachments/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-attachments/package.nix
       { };
 
-  netbox-bgp = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-bgp/package.nix { };
+  netbox-bgp = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-bgp/package.nix { };
 
   netbox-contextmenus =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contextmenus/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-contextmenus/package.nix
       { };
 
-  netbox-contract = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contract/package.nix { };
+  netbox-contract = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-contract/package.nix { };
 
-  netbox-dns = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-dns/package.nix { };
+  netbox-dns = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-dns/package.nix { };
 
-  netbox-documents = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-documents/package.nix { };
+  netbox-documents = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-documents/package.nix { };
 
   netbox-floorplan-plugin =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-floorplan-plugin/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-floorplan-plugin/package.nix
       { };
 
   netbox-interface-synchronization =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-interface-synchronization/package.nix
       { };
 
   netbox-napalm-plugin =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-napalm-plugin/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-napalm-plugin/package.nix
       { };
 
   netbox-plugin-prometheus-sd =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-plugin-prometheus-sd/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-plugin-prometheus-sd/package.nix
       { };
 
-  netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
+  netbox-qrcode = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-qrcode/package.nix { };
 
   netbox-reorder-rack =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-reorder-rack/package.nix
       { };
 
-  netbox-routing = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-routing/package.nix { };
+  netbox-routing = callPackage ../by-name/ne/netbox_4_6/plugins/netbox-routing/package.nix { };
 
   netbox-topology-views =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-topology-views/package.nix
+    callPackage ../by-name/ne/netbox_4_6/plugins/netbox-topology-views/package.nix
       { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
