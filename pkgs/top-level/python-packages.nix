@@ -3338,6 +3338,8 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  credsweeper = callPackage ../development/python-modules/credsweeper { };
+
   crewai = callPackage ../development/python-modules/crewai { };
 
   crispy-bootstrap3 = callPackage ../development/python-modules/crispy-bootstrap3 { };
@@ -13631,6 +13633,8 @@ self: super: with self; {
   pybalboa = callPackage ../development/python-modules/pybalboa { };
 
   pybars3 = callPackage ../development/python-modules/pybars3 { };
+
+  pybase62 = callPackage ../development/python-modules/pybase62 { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
