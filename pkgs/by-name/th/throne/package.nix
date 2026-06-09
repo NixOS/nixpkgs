@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchurl,
   makeDesktopItem,
+  nix-update-script,
 
   protobuf,
   protoc-gen-go,
@@ -19,8 +20,8 @@
 
   # override if you want to have more up-to-date rulesets
   throne-srslist ? fetchurl {
-    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/c637d0bb8a3707eb5e122c81753600d3e18a5969/srslist.h";
-    hash = "sha256-Kf3TAGXi7Y0PhWjdTOZdPUMlimszWkcrQw9zv8pb76s=";
+    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/ee86f2c19bf86ec3f9c4c8ed99f49f3c3e496f08/srslist.h";
+    hash = "sha256-Do/dOKlqCIAHHaYhKiTL2F2kk8Rvi+SrP/zEy00jv3k=";
   },
 }:
 
@@ -60,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     # to make use of security wrappers
     ./nixos-disable-setuid-request.patch
 
-    # sets the Exec field of the auto-run .desktop file to use the Throne binary from PATH
-    ./fix-autorun-desktop-exec.patch
+    # sets the Exec field of the auto-run and the scheme-handler .desktop files to use the Throne binary from PATH
+    ./fix-desktop-exec.patch
   ];
 
   preBuild = ''
@@ -100,15 +101,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.core = buildGoModule {
     pname = "throne-core";
     inherit (finalAttrs) version src;
-    sourceRoot = "${finalAttrs.src.name}/core/server";
+    modRoot = "./core/server";
 
     patches = [
       # also check cap_net_admin so we don't have to set suid
       ./core-also-check-capabilities.patch
+
+      # disable a security check, which hopefully is not too bad
+      ./dont-check-parent.patch
     ];
 
-    proxyVendor = true;
-    vendorHash = "sha256-G0ev2my+sHQFYdmfkR2Zq3ujSeqi5fZ4BdrnUS8mfDE=";
+    vendorHash = "sha256-1yVQspaI0wLLJ6IrGABTpF3YSL3uhJTbapo1A0hAPZo=";
 
     nativeBuildInputs = [
       protobuf
@@ -116,14 +119,22 @@ stdenv.mkDerivation (finalAttrs: {
       protoc-gen-go-grpc
     ];
 
-    # taken from script/build_go.sh
     preBuild = ''
-      pushd gen
-      protoc -I . --go_out=. --go-grpc_out=. libcore.proto
-      popd
+      # run only if we're not in the FOD fetcher
+      if [ -d vendor ]; then
+        install -Dm755 vendor/github.com/sagernet/cronet-go/lib/"$GOOS"_"$GOARCH"/libcronet.so -t "$out/lib/"
 
-      VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
-      ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
+        substituteInPlace vendor/github.com/sagernet/cronet-go/internal/cronet/loader_unix.go \
+          --replace-fail "path = findLibrary()" "path = \"$out/lib/libcronet.so\""
+
+        # taken from script/build_go.sh
+        pushd gen
+        protoc -I . --go_out=. --go-grpc_out=. libcore.proto
+        popd
+
+        VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
+        ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
+      fi
     '';
 
     # ldflags and tags are taken from script/build_go.sh
@@ -146,12 +157,16 @@ stdenv.mkDerivation (finalAttrs: {
       "badlinkname"
       "tfogo_checklinkname"
       "with_naive_outbound"
-      "with_purego" # prebuilt .a files inside cronet-go are annoying to fix
+      "with_purego" # use prebuilt .so instead of prebuilt .a files for cronet-go
     ];
   };
 
-  # this tricks nix-update into also updating the vendorHash of passthru.core
-  passthru.goModules = finalAttrs.passthru.core.goModules;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "core"
+    ];
+  };
 
   meta = {
     description = "Qt based cross-platform GUI proxy configuration manager";
@@ -163,5 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
       aleksana
     ];
     platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # libcronet.so used by throne.core
+    ];
   };
 })
