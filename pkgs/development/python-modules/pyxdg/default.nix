@@ -52,6 +52,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
     license = lib.licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ambossmann ];
   };
 })
