@@ -366,10 +366,10 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
         return;
       }
       unsigned long sep_len = strlen(sep);
-      int n_before = existing_prefix - existing_env;
+      int n_before = existing_prefix - existing_env - sep_len;
       assert_success(asprintf(&val, \"%s%s%.*s%s\", prefix, sep,
                               n_before, existing_env,
-                              existing_prefix + prefix_len + sep_len));
+                              existing_prefix + prefix_len));
     } else {
       assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing_env));
     }
