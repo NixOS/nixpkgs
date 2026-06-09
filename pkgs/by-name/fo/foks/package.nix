@@ -20,16 +20,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "foks";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "foks-proj";
     repo = "go-foks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UZ4BZ2/S44hnG+uLHtWR/qqQtr6tbbQbQOgIrN4ciT0=";
+    hash = "sha256-JY0ec+LNRQf0S8gTeazvQhvQ7LRM3zz1qvopGPaKM1k=";
   };
 
-  vendorHash = "sha256-+ysHa5KNhoxtoXPgOWC9ZDJKYqF+84s7oyxRib2S6a8=";
+  vendorHash = "sha256-W0lyLy7k3xin8VSdxNgeh1FpHprOKIDduHIW3Oqk1LY=";
 
   postPatch = ''
     cd ./server/web/templates
