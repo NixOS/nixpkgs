@@ -106,6 +106,11 @@ let
           description = "Path of the device or swap file.";
         };
 
+        isDevice = mkOption {
+          default = lib.substring 0 5 config.device == "/dev/";
+          internal = true;
+        };
+
         label = mkOption {
           example = "swap";
           type = types.str;
