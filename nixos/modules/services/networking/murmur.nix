@@ -479,5 +479,8 @@ in
     '';
   };
 
-  meta.maintainers = with lib.maintainers; [ felixsinger ];
+  meta.maintainers = with lib.maintainers; [
+    felixsinger
+    ldesgoui
+  ];
 }
