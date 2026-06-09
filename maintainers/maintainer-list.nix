@@ -3544,6 +3544,13 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bileam = {
+    email = "benedictbileam@gmx.de";
+    github = "bileamScheuvens";
+    githubId = 36153336;
+    name = "Bileam Scheuvens";
+    keys = [ { fingerprint = "17C7 E9F1 C1DF 5B32 2E99  E8BA 99CD 557C E98F 7B08"; } ];
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
