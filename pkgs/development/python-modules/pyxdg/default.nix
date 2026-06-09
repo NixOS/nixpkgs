@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyxdg";
   version = "0.28";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -18,6 +19,10 @@ buildPythonPackage (finalAttrs: {
     rev = "rel-${finalAttrs.version}";
     hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # Tests failed (errors=4, failures=4) on NixOS
   doCheck = false;
