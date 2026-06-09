@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   hatchling,
@@ -14,6 +15,7 @@
   langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-socket,
   syrupy,
 
   # passthru
@@ -53,10 +55,16 @@ buildPythonPackage rec {
     langchain-tests
     pytestCheckHook
     pytest-asyncio
+    pytest-socket
     syrupy
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Darwin prevents the expected shell from spawning to run this
+    "test_standard_params_model_override"
+  ];
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
