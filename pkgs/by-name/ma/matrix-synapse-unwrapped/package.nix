@@ -29,11 +29,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Cu5bXS6BprXr/dwkNXDjcP9hOfqQddoC5BxOus4rteM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "attrs>=26.1.0,!=21.1.0" "attrs>=19.2.0,!=21.1.0"
-  '';
-
   build-system =
     with python3Packages;
     [
