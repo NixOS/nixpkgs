@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-inventory";
   version = "2.5.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ArnesSI";
     repo = "netbox-inventory";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6MIYwz11YZhu3ksM7iAfKACKIKpuq283DTzaRR3lcXA=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin to manage hardware inventory";
     homepage = "https://github.com/ArnesSI/netbox-inventory";
-    changelog = "https://github.com/ArnesSI/netbox-inventory/releases/tag/${src.tag}";
+    changelog = "https://github.com/ArnesSI/netbox-inventory/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})
