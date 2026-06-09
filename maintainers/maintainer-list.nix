@@ -1479,6 +1479,12 @@
     githubId = 89567766;
     name = "Zynix";
   };
+  alsebrus = {
+    email = "babkin.alexey.1805@gmail.com";
+    github = "alsebrus";
+    githubId = 9195682;
+    name = "alsebrus";
+  };
   alternateved = {
     email = "alternateved@pm.me";
     github = "alternateved";
