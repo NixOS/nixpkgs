@@ -1,0 +1,39 @@
+From: Kajus Naujokaitis <kajusn@gmail.com>
+Date: Thu, 5 Jun 2026 00:00:00 +0000
+Subject: [PATCH] check all PAM service files for pam_fprintd.so
+
+/etc/pam.d/common-auth is a Debian convention. On other distributions
+(NixOS, Fedora, Arch, etc.) there is no common-auth; each PAM service
+has its own complete configuration. Scan all files under /etc/pam.d/
+instead so the check works generically.
+
+Also widen the search to pam_fprintd.so (the actual fingerprint module)
+in addition to pam_fingwit.so so that deployments which configure
+fprintd directly without pam_fingwit.so are still recognised.
+---
+ fingwit | 9 +++++++--
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/fingwit b/fingwit
+index 1111111..2222222 100755
+--- a/fingwit
++++ b/fingwit
+@@ -384,11 +384,14 @@
+
+     def check_pam_fprintd_enabled(self):
+         try:
+-            with open('/etc/pam.d/common-auth', 'r') as f:
+-                content = f.read()
+-                if 'pam_fingwit.so' in content:
+-                    return True
++            for filename in os.listdir('/etc/pam.d'):
++                filepath = os.path.join('/etc/pam.d', filename)
++                if os.path.isfile(filepath):
++                    with open(filepath, 'r', errors='replace') as f:
++                        content = f.read()
++                        if 'pam_fprintd.so' in content or 'pam_fingwit.so' in content:
++                            return True
+         except Exception as e:
+             print(e)
+         return False
+
