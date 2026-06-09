@@ -5539,10 +5539,6 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  spoofer = callPackage ../tools/networking/spoofer {
-    protobuf = protobuf_21;
-  };
-
   sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
