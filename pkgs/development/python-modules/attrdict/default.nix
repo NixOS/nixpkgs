@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dict with attribute-style access";
     homepage = "https://github.com/bcj/AttrDict";
-    changelog = "https://github.com/bcj/AttrDict/releases/tag/v${version}";
+    changelog = "https://github.com/bcj/AttrDict/blob/master/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

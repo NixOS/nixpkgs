@@ -79,7 +79,9 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
-    changelog = "https://github.com/ocaml-community/sedlex/raw/v${finalAttrs.version}/CHANGES";
+    changelog =
+      "https://github.com/ocaml-community/sedlex/blob/v${finalAttrs.version}/CHANGES"
+      + lib.optionalString (lib.versionAtLeast finalAttrs.version "3.1") ".md";
     description = "OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ ];

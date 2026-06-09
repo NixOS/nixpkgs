@@ -45,7 +45,7 @@ python3Packages.python.pkgs.buildPythonApplication (finalAttrs: {
       handling failures, command line integration, and much more.
     '';
     homepage = "https://github.com/spotify/luigi";
-    changelog = "https://github.com/spotify/luigi/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/spotify/luigi/releases/tag/v${finalAttrs.version}";
     license = [ lib.licenses.asl20 ];
   };
 })
