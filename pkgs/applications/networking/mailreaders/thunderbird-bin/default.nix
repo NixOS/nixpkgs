@@ -69,7 +69,8 @@ let
   meta = {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = "http://www.mozilla.org/thunderbird/";
+    homepage = "https://www.thunderbird.net/";
+    donationPage = "https://www.thunderbird.net/donate/";
     mainProgram = "thunderbird";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
