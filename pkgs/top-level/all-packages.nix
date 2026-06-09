@@ -5543,11 +5543,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  spoofer-gui = callPackage ../tools/networking/spoofer {
-    withGUI = true;
-    protobuf = protobuf_21;
-  };
-
   sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
