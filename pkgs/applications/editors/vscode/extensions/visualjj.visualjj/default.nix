@@ -37,6 +37,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
