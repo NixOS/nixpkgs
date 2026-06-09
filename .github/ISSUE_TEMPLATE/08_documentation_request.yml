@@ -39,7 +39,6 @@ body:
       description: |
         If possible, please draft a tentative documentation chapter to resolve this issue.
         Your proposal should be written in CommonMark Markdown, optionally enhanced with [Nix-specific extensions](https://github.com/NixOS/nixpkgs/tree/master/doc#syntax).
-      render: "markdown"
     validations:
       required: false
   - type: "textarea"
