@@ -54,6 +54,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "sparsediffpy"
+  ];
   dependencies = [
     clarabel
     cvxopt
