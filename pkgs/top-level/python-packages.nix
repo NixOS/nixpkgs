@@ -8788,6 +8788,8 @@ self: super: with self; {
 
   lexilang = callPackage ../development/python-modules/lexilang { };
 
+  lg-rs232-tv = callPackage ../development/python-modules/lg-rs232-tv { };
+
   lgpio = toPythonModule (
     pkgs.lgpio.override {
       inherit buildPythonPackage;

@@ -3613,8 +3613,9 @@
     "lg_tv_rs232" =
       ps: with ps; [
         aiousbwatcher
+        lg-rs232-tv
         serialx
-      ]; # missing inputs: lg-rs232-tv
+      ];
     "libre_hardware_monitor" =
       ps: with ps; [
         librehardwaremonitor-api
@@ -8234,6 +8235,7 @@
     "lg_netcast"
     "lg_soundbar"
     "lg_thinq"
+    "lg_tv_rs232"
     "libre_hardware_monitor"
     "lichess"
     "lidarr"
