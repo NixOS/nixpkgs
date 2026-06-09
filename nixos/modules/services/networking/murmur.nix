@@ -278,6 +278,7 @@ in
             create any certificates and it doesn't add subdomains to
             existing ones – you will need to create them manually using
             {option}`security.acme.certs`.*
+            The server gracefully reloads after certificates are renewed.
           '';
         };
       };
@@ -359,6 +360,10 @@ in
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
           -i ${configFile}
+      '';
+      reload = ''
+        echo 'Reloading TLS settings specified in murmur.ini'
+        kill -USR1 $MAINPID
       '';
 
       serviceConfig = {
