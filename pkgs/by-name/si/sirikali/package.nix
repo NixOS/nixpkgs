@@ -9,7 +9,6 @@
   qt6,
   kdePackages,
   cryfs,
-  encfs,
   fscrypt-experimental,
   gocryptfs,
   sshfs,
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${
       lib.makeBinPath [
         cryfs
-        encfs
         fscrypt-experimental
         gocryptfs
         sshfs
@@ -67,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, fscrypt and encfs";
+    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs and fscrypt";
     homepage = "https://github.com/mhogomchungu/sirikali";
     changelog = "https://github.com/mhogomchungu/sirikali/blob/${finalAttrs.src.rev}/changelog";
     license = lib.licenses.gpl3Only;
