@@ -9,12 +9,23 @@ let
   cfg = config.hardware.fw-fanctrl;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "hardware"
+        "fw-fanctrl"
+        "ectoolPackage"
+      ]
+      "The underlying tool has been changed from fw-ectool to framework-tool, which is now configurable via hardware.fw-fanctrl.frameworkToolPackage."
+    )
+  ];
+
   options.hardware.fw-fanctrl = {
     enable = lib.mkEnableOption "the fw-fanctrl systemd service and install the needed packages";
 
     package = lib.mkPackageOption pkgs "fw-fanctrl" { };
 
-    ectoolPackage = lib.mkPackageOption pkgs "fw-ectool" { };
+    frameworkToolPackage = lib.mkPackageOption pkgs "framework-tool" { };
 
     disableBatteryTempCheck = lib.mkOption {
       type = lib.types.bool;
@@ -104,7 +115,7 @@ in
     lib.mkIf cfg.enable {
       environment.systemPackages = [
         cfg.package
-        cfg.ectoolPackage
+        cfg.frameworkToolPackage
       ];
 
       systemd.services.fw-fanctrl = {
@@ -114,14 +125,24 @@ in
           Type = "simple";
           Restart = "always";
           ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
+          ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
         };
         wantedBy = [ "multi-user.target" ];
       };
 
-      # Create suspend config
-      environment.etc."systemd/system-sleep/fw-fanctrl-suspend.sh".source =
-        "${cfg.package}/share/fw-fanctrl/fw-fanctrl-suspend";
+      systemd.services.fw-fanctrl-suspend = {
+        description = "Framework Fan Controller sleep hook";
+        before = [ "sleep.target" ];
+        after = [ "fw-fanctrl.service" ];
+        requires = [ "fw-fanctrl.service" ];
+        wantedBy = [ "sleep.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${lib.getExe cfg.package} pause";
+          ExecStop = "${lib.getExe cfg.package} resume";
+        };
+      };
     };
 
   meta = {
