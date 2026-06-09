@@ -14122,6 +14122,8 @@ self: super: with self; {
 
   pyfzf = callPackage ../development/python-modules/pyfzf { inherit (pkgs) fzf; };
 
+  pyg-lib = callPackage ../development/python-modules/pyg-lib { };
+
   pygal = callPackage ../development/python-modules/pygal { };
 
   # pygame-ce is better maintained upstream, the breaking point was https://github.com/NixOS/nixpkgs/pull/475917#issuecomment-3706940043
