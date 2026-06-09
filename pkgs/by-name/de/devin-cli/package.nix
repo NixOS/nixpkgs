@@ -32,8 +32,6 @@ let
       hash = "sha256-HtB5iCT3d3AprPM+1uNkPkX0v4wSerTJlEu5F4P6pp0=";
     };
   };
-
-  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -49,17 +47,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  inherit src;
+  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
 
   sourceRoot = ".";
 
   nativeBuildInputs = [ installShellFiles ];
 
   dontConfigure = true;
-  dontStrip = true;
   dontBuild = true;
-
-  doCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -83,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Cognition's Devin Agent CLI";
     homepage = "https://devin.ai/";
     license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       nhshah15
