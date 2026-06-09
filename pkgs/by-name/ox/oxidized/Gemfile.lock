@@ -30,7 +30,7 @@ GEM
     net-ssh (7.3.2)
     net-telnet (0.2.0)
     nio4r (2.7.5)
-    oxidized (0.36.0)
+    oxidized (0.37.0)
       asetus (~> 0.4)
       bcrypt_pbkdf (~> 1.0)
       ed25519 (~> 1.2)
@@ -103,7 +103,7 @@ PLATFORMS
 
 DEPENDENCIES
   net-scp (~> 4.1)
-  oxidized (= 0.36.0)
+  oxidized (= 0.37.0)
   oxidized-script (= 0.7.0)
   oxidized-web (= 0.18.1)
   psych (~> 5.0)

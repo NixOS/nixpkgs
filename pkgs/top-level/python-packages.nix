@@ -2691,8 +2691,6 @@ self: super: with self; {
     callPackage ../development/python-modules/chacha20poly1305-reuseable
       { };
 
-  chai = callPackage ../development/python-modules/chai { };
-
   chainmap = callPackage ../development/python-modules/chainmap { };
 
   chainstream = callPackage ../development/python-modules/chainstream { };
@@ -5170,6 +5168,8 @@ self: super: with self; {
 
   eseries = callPackage ../development/python-modules/eseries { };
 
+  esios-api = callPackage ../development/python-modules/esios-api { };
+
   esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
@@ -6970,6 +6970,8 @@ self: super: with self; {
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs { };
 
   ha-silabs-firmware-client = callPackage ../development/python-modules/ha-silabs-firmware-client { };
+
+  ha-xthings-cloud = callPackage ../development/python-modules/ha-xthings-cloud { };
 
   habanero = callPackage ../development/python-modules/habanero { };
 
@@ -8788,6 +8790,8 @@ self: super: with self; {
 
   lexilang = callPackage ../development/python-modules/lexilang { };
 
+  lg-rs232-tv = callPackage ../development/python-modules/lg-rs232-tv { };
+
   lgpio = toPythonModule (
     pkgs.lgpio.override {
       inherit buildPythonPackage;
@@ -10109,6 +10113,8 @@ self: super: with self; {
   mitmproxy-rs = callPackage ../development/python-modules/mitmproxy-rs { };
 
   mitogen = callPackage ../development/python-modules/mitogen { };
+
+  mitsubishi-comfort = callPackage ../development/python-modules/mitsubishi-comfort { };
 
   mixbox = callPackage ../development/python-modules/mixbox { };
 
@@ -12172,6 +12178,8 @@ self: super: with self; {
 
   otxv2 = callPackage ../development/python-modules/otxv2 { };
 
+  ouman-eh-800-api = callPackage ../development/python-modules/ouman-eh-800-api { };
+
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
   outcome = callPackage ../development/python-modules/outcome { };
@@ -12235,6 +12243,8 @@ self: super: with self; {
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt/default.nix { };
 
   paintcompiler = callPackage ../development/python-modules/paintcompiler { };
+
+  pajgps-api = callPackage ../development/python-modules/pajgps-api { };
 
   palace = callPackage ../development/python-modules/palace { };
 

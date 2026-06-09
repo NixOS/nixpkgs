@@ -11,6 +11,7 @@
   decorator,
   h11,
   puremagic,
+  typing-extensions,
   urllib3,
 
   # optional-dependencies
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     decorator
     h11
     puremagic
+    typing-extensions
     urllib3
   ];
 

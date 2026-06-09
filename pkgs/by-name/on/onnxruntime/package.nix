@@ -3,7 +3,7 @@
   config,
   stdenv,
   fetchFromGitHub,
-  abseil-cpp_202508,
+  abseil-cpp,
   buildPackages,
   cmake,
   cpuinfo,
@@ -138,8 +138,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
     echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
-  ''
-  + ''
     substituteInPlace onnxruntime/core/platform/posix/env.cc --replace-fail \
       "return PathString{};" \
       "return PathString(\"$out/lib/\");"
@@ -275,7 +273,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11-src}")
@@ -289,7 +287,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
-    (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+    (lib.cmakeBool "onnxruntime_USE_NCCL" ncclSupport)
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
