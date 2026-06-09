@@ -56,7 +56,10 @@ buildPythonPackage {
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with lib.maintainers; [ s1341 ];
+    maintainers = with lib.maintainers; [
+      s1341
+      eyjhb
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
