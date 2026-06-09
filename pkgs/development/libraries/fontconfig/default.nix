@@ -69,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   doCheck = true;
