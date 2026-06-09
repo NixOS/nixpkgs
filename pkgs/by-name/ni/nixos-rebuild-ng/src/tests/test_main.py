@@ -89,6 +89,22 @@ def test_parse_args() -> None:
     assert r_store_path.flake is False
     assert r_store_path.store_path == "/nix/store/foo"
 
+    # --file and --attr should disable flake auto-detection
+    r_file, _ = nr.parse_args(["nixos-rebuild", "switch", "--file", "foo.nix"])
+    assert r_file.flake is False
+    assert r_file.file == "foo.nix"
+
+    r_attr, _ = nr.parse_args(["nixos-rebuild", "switch", "--attr", "bar"])
+    assert r_attr.flake is False
+    assert r_attr.attr == "bar"
+
+    r_file_attr, _ = nr.parse_args(
+        ["nixos-rebuild", "switch", "--file", "foo.nix", "--attr", "bar"]
+    )
+    assert r_file_attr.flake is False
+    assert r_file_attr.file == "foo.nix"
+    assert r_file_attr.attr == "bar"
+
     r1, g1 = nr.parse_args(
         [
             "nixos-rebuild",

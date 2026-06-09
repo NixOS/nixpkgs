@@ -8908,6 +8908,8 @@ self: super: with self; {
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
 
+  libmobility = callPackage ../development/python-modules/libmobility { };
+
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (
@@ -15931,6 +15933,8 @@ self: super: with self; {
   python-dropbox-api = callPackage ../development/python-modules/python-dropbox-api { };
 
   python-duco-client = callPackage ../development/python-modules/python-duco-client { };
+
+  python-duco-connectivity = callPackage ../development/python-modules/python-duco-connectivity { };
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
