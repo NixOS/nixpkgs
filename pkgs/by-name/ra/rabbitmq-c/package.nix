@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rabbitmq-c";
-  version = "0.15.0";
+  version = "0.16.0";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alanxz";
     repo = "rabbitmq-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uOI+YV9aV/LGlSxr75sSii5jQ005smCVe14QAGNpKY8=";
+    hash = "sha256-DsoChT8NZGza0rqWpx5c+ogC0gS9l/h6jrbIO8w1TZQ=";
   };
 
   nativeBuildInputs = [ cmake ];
