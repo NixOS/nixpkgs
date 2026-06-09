@@ -54,14 +54,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.5.0";
+  version = "2026.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-twXz3RaFujhZmARzZ5zIjGAwWchwhV8knq8Cr3h0Gjg=";
+    hash = "sha256-p4ZZzfoR4Wg65xeqk9JyCdZ+S7RqBVd1drWpHjj8oqc=";
   };
 
   patches = [
