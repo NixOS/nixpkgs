@@ -3,6 +3,7 @@
   xsel,
   serve,
   fetchzip,
+  stdenvNoCC,
   makeWrapper,
   buildNpmPackage,
   fetchFromGitHub,
@@ -67,15 +68,31 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru = {
-    drawioEmbed = fetchzip {
-      url = "https://github.com/TeXlyre/drawio-embed-mirror/archive/refs/tags/v29.7.9.zip";
-      hash = "sha256-mj+i+6n14Koo9TYaygrCgFg0OLfBZnnL6rE3PkJGa9w=";
-    };
-    busytexAssets = fetchzip {
-      url = "https://github.com/TeXlyre/texlyre-busytex/releases/download/assets-v1.1.1/busytex-assets.tar.gz";
-      hash = "sha256-CLhLYLNXsJflX6o642EEJu+hxwoy3zkzfAOShiZGVPg=";
-      stripRoot = false;
-    };
+    updateScript = ./update.sh;
+    drawioEmbed = stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "drawio-embed";
+      version = "29.7.9";
+      src = fetchFromGitHub {
+        owner = "TeXlyre";
+        repo = "drawio-embed-mirror";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-mj+i+6n14Koo9TYaygrCgFg0OLfBZnnL6rE3PkJGa9w=";
+      };
+      dontBuild = true;
+      installPhase = "cp -a . $out";
+    });
+    busytexAssets = stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "busytex-assets";
+      version = "1.1.1";
+      src = fetchFromGitHub {
+        owner = "TeXlyre";
+        repo = "texlyre-busytex";
+        tag = "assets-v${finalAttrs.version}";
+        hash = "sha256-vlLoJw5EX6x3nTQvBC8hntDa5QKtY46eJSxJLJzs4EE=";
+      };
+      dontBuild = true;
+      installPhase = "cp -a . $out";
+    });
   };
 
   meta = {
