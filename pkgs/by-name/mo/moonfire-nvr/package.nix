@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -8,54 +8,26 @@
   sqlite,
   testers,
   moonfire-nvr,
-  nodejs,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  nix-update,
+  writeShellApplication,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonfire-nvr";
   version = "0.7.31";
+
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QgsaiWcXeU4y7z9mcqUAl4mQ/M4p38yRjOB/4MKlpVA=";
   };
-  ui = stdenv.mkDerivation (finalAttrs: {
-    inherit version src;
-    pname = "${pname}-ui";
-    sourceRoot = "${src.name}/ui";
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_10
-    ];
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      sourceRoot = "${finalAttrs.src.name}/ui";
-      fetcherVersion = 4;
-      hash = "sha256-U/SHOVlx0kj1hfl09KcPg3CQZX9HZE5SghVEThWL1RA=";
-    };
-    installPhase = ''
-      runHook preInstall
 
-      cp -r public $out
-
-      runHook postInstall
-    '';
-  });
-in
-rustPlatform.buildRustPackage {
-  inherit pname version src;
-
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
   cargoHash = "sha256-TDFe5pD+8eSwvw0h9GLM+JfODlSBU1CO8fw4FVjy8xk=";
 
-  env.VERSION = "v${version}";
+  env.VERSION = "v${finalAttrs.version}";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,26 +40,40 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     mkdir -p $out/lib
-    ln -s ${ui} $out/lib/ui
+    ln -s ${moonfire-nvr.ui} $out/lib/ui
   '';
 
   doCheck = false;
 
   passthru = {
-    inherit ui;
+    ui = callPackage ./ui.nix { };
     tests.version = testers.testVersion {
       package = moonfire-nvr;
       command = "moonfire-nvr --version";
-      version = "Version: v${version}";
+      version = "Version: v${finalAttrs.version}";
     };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-moonfire-nvr";
+
+      runtimeInputs = [
+        nix-update
+      ];
+
+      text = ''
+        set -euo pipefail
+
+        nix-update moonfire-nvr
+        nix-update moonfire-nvr.ui --version=skip
+      '';
+    });
   };
 
   meta = {
     description = "Moonfire NVR, a security camera network video recorder";
     homepage = "https://github.com/scottlamb/moonfire-nvr";
-    changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
+    changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "moonfire-nvr";
   };
-}
+})
