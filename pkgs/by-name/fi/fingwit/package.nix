@@ -82,5 +82,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     mainProgram = "fingwit";
+    maintainers = with lib.maintainers; [
+      kajusnau
+    ];
   };
 })
