@@ -7,7 +7,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
-  version = "2.0.0";
+  version = "2.0.1";
 
   __structuredAttrs = true;
 
@@ -15,18 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "manic-systems";
     repo = "dix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5aH8zX/Wm+KHzd1fjmjlxjDB+psDG42JAY5U8lrjGDU=";
+    hash = "sha256-KTlFgBEVKJIXymfN2UU8hvGM71PYRcNgJ1XWUmG2AI4=";
   };
 
-  cargoHash = "sha256-llStz2BaHBH9iHhfbptAE+Td5HPsvzAlPtXohrCxY4w=";
-
-  env.TMPDIR = "/tmp/";
-  checkFlags = [
-    "--skip=store::nix_command::tests::test_query_closure_path_info"
-    "--skip=store::nix_command::tests::test_query_closure_size"
-    "--skip=store::nix_command::tests::test_query_dependents"
-    "--skip=store::nix_command::tests::test_query_system_derivations"
-  ];
+  cargoHash = "sha256-pNkSdsxOpv0E/xXs7tMg2vtP0PBU7p8fh3H4IX/u5k4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
