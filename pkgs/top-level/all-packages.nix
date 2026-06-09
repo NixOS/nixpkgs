@@ -2258,6 +2258,10 @@ with pkgs;
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
+  gnupgMinimal = gnupg.override {
+    enableMinimal = true;
+    guiSupport = false;
+  };
 
   gnused = callPackage ../tools/text/gnused { };
 
