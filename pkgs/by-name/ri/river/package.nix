@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Non-monolithic Wayland compositor";
     homepage = "https://codeberg.org/river/river";
+    donationPage = "https://codeberg.org/river/river#donate";
     longDescription = ''
       River is a non-monolithic Wayland compositor.
       Unlike other Wayland compositors, river does not combine the compositor and window manager into one program.

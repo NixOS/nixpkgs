@@ -13,6 +13,7 @@
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  ffmpeg,
   flac,
   freetype,
   kdePackages,
@@ -180,6 +181,15 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     kdePackages'.qtwayland
   ];
+
+  # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
+  # Nixpkgs' provided ffmpeg, for both MacOS & Linux. Note that upstream uses
+  # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
+  preConfigure = ''
+    substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+  '';
 
   strictDeps = true;
   __structuredAttrs = true;
