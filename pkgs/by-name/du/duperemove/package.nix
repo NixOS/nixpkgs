@@ -30,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
       "lscpu" "${lib.getBin util-linux}/bin/lscpu"
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libbsd
