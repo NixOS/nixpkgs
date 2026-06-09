@@ -1,48 +1,40 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  curl,
-  common-updater-scripts,
-  jq,
+  rustPlatform,
+  fetchFromGitHub,
   keyutils,
   libgcc,
   makeBinaryWrapper,
+  perl,
   versionCheckHook,
-  writeShellScript,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proton-pass-cli";
   version = "2.4.2";
 
-  __structuredAttrs = true;
-  strictDeps = true;
+  src = fetchFromGitHub {
+    owner = "protonpass";
+    repo = "pass-cli";
+    tag = finalAttrs.version;
+    hash = "sha256-gDXMUNgW/xQOA7jTI7bBXQqAnj0LdyVfax/Y6lOYH8s=";
+  };
 
-  src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
+  cargoHash = "";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeBinaryWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
+    perl
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     keyutils
     libgcc
   ];
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 $src $out/bin/pass-cli
-
-    runHook postInstall
-  '';
 
   postFixup = ''
     wrapProgram $out/bin/pass-cli --set PROTON_PASS_NO_UPDATE_CHECK 1
@@ -53,40 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
 
-  passthru = {
-    sources = {
-      "aarch64-darwin" = fetchurl {
-        url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-aarch64";
-        hash = "sha256-mehiCU/SpPgniMkAC6WpIkbnc5+Gw1qEZVudfirfcic=";
-      };
-      "aarch64-linux" = fetchurl {
-        url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-aarch64";
-        hash = "sha256-7uOPxFSaXfy7eUqvy21RfJ4M0Nw8U7uymX/YFC7Wgcc=";
-      };
-      "x86_64-linux" = fetchurl {
-        url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-x86_64";
-        hash = "sha256-QIm99ZgRQKxb7mXS15v5h2dTf1TTMZe3nl+GxjBxSEI=";
-      };
-    };
-    updateScript = writeShellScript "update-proton-pass-cli" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          jq
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent https://proton.me/download/pass-cli/versions.json | jq '.passCliVersions.version' --raw-output)
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "No update available."
-          exit 0
-      fi
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "proton-pass-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
-    '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line interface for managing your Proton Pass vaults, items, and secrets";
@@ -94,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "pass-cli";
     maintainers = with lib.maintainers; [ delafthi ];
-    platforms = lib.attrNames finalAttrs.passthru.sources;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
