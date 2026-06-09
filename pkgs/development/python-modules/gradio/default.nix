@@ -380,7 +380,7 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
     knownVulnerabilities = [
-      "gradio v5 is unmaintained, upgrade to v6 on nixos-unstable"
+      "gradio v5 is unmaintained, upgrade to v6 on nixos-unstable or on nixos-26.05"
       "CVE-2026-27167" # https://github.com/NixOS/nixpkgs/issues/496131
       "CVE-2026-28416" # https://github.com/NixOS/nixpkgs/issues/496130
       "CVE-2026-28415" # https://github.com/NixOS/nixpkgs/issues/496125
