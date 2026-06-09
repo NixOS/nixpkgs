@@ -90,8 +90,8 @@ let
           umount --lazy "$tmp"
           rm -rf "$tmp"
         else
-          # On a writable /etc the target may not exist yet on first run.
-          # On an immutable overlay it is provided as a baked-in placeholder.
+          # The target is provided via environment.etc; this is just a
+          # safety net for a manually-deleted file on a writable /etc.
           if [ ! -e "$dst" ]; then
             touch "$dst"
           fi
@@ -321,11 +321,9 @@ in
         )
       ))
 
-      (lib.mkIf (needsSubIdBind && immutableEtc) (
-        # Empty regular-file placeholders to bind-mount the real subuid/subgid
-        # onto. Symlinks would be rejected by newuidmap (O_NOFOLLOW). Only
-        # needed when /etc is read-only, otherwise the refresh script creates
-        # the target itself.
+      (lib.mkIf needsSubIdBind (
+        # Empty regular-file bind targets for the real subuid/subgid.
+        # Symlinks would be rejected by newuidmap (O_NOFOLLOW).
         lib.listToAttrs (
           lib.map (
             file:
