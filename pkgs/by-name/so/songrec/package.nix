@@ -68,10 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/marin-m/SongRec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      tcbravo
-      tomasrivera
-    ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
     mainProgram = "songrec";
   };
 })
