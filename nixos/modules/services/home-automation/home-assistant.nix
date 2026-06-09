@@ -864,11 +864,18 @@ in
 
     networking.firewall.allowedTCPPorts = mkMerge [
       (mkIf cfg.openFirewall [ cfg.config.http.server_port ])
-      (mkIf cfg.openFirewallForComponents
+      (mkIf cfg.openFirewallForComponents (
+        # https://www.home-assistant.io/integrations/homekit/#firewall
+        optionals (useComponent "homekit") [ 21063 ]
         # https://www.home-assistant.io/integrations/sonos/#network-requirements
-        (optionals (useComponent "sonos") [ 1400 ])
-      )
+        ++ optionals (useComponent "sonos") [ 1400 ]
+      ))
     ];
+
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewallForComponents (
+      # https://www.home-assistant.io/integrations/homekit/#firewall
+      optionals (useComponent "homekit") [ 5353 ]
+    );
 
     # symlink the configuration to /etc/home-assistant
     environment.etc = mkMerge [

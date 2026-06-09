@@ -252,12 +252,13 @@ in
             in
             {
               "/" = {
+                # recommendedProxySettings sets the standard headers (Host, X-Forwarded-*), so
+                # don't also set them via proxy_set_header in extraConfig below. Nginx would then
+                # send Host twice and Django rejects it with DisallowedHost. Enabled per-location
+                # so it works even if the host's global recommendedProxySettings is off.
+                recommendedProxySettings = true;
                 extraConfig = ''
-                  proxy_set_header Host $host;
                   proxy_set_header X-Forwarded-By $server_addr:$server_port;
-                  proxy_set_header X-Forwarded-For $remote_addr;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-                  proxy_set_header X-Real-IP $remote_addr;
                   proxy_set_header CLIENT_IP $remote_addr;
 
                   proxy_pass_request_headers on;
@@ -272,6 +273,8 @@ in
                 proxyPass = "http://unix:${unixPath}";
               };
               "/auth" = {
+                # same reasoning as "/"; this subrequest also reaches Django
+                recommendedProxySettings = true;
                 extraConfig = ''
                   internal;
                   proxy_pass_request_body off;
