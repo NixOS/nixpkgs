@@ -12242,6 +12242,8 @@ self: super: with self; {
 
   paintcompiler = callPackage ../development/python-modules/paintcompiler { };
 
+  pajgps-api = callPackage ../development/python-modules/pajgps-api { };
+
   palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
