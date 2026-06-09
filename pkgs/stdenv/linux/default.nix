@@ -832,7 +832,6 @@ in
               xz
               bashNonInteractive
               coreutils
-              diffutils
               findutils
               gawk
               gnused
