@@ -1,0 +1,14 @@
+diff --git i/configure.ac w/configure.ac
+index dcc3c3d..888dc12 100644
+--- i/configure.ac
++++ w/configure.ac
+@@ -4,6 +4,9 @@ AC_INIT([mpDris2],
+ 	[mpdris2],
+ 	[https://github.com/eonpatapon/mpDris2])
+ AC_CONFIG_AUX_DIR([build-aux])
++AC_CONFIG_MACRO_DIRS([m4])
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
+ AM_INIT_AUTOMAKE([1.11 tar-ustar foreign])
+ 
+ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])

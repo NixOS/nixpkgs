@@ -1,0 +1,168 @@
+diff --git a/app/main/package.json b/app/main/package.json
+index c86974c..3d892d4 100644
+--- a/app/main/package.json
++++ b/app/main/package.json
+@@ -18,13 +18,13 @@
+   },
+   "dependencies": {
+     "@martichou/core_lib": "link:../../core_lib",
+-    "@tauri-apps/api": "^2.0.3",
+-    "@tauri-apps/plugin-autostart": "^2.0.0",
+-    "@tauri-apps/plugin-clipboard-manager": "^2.0.0",
+-    "@tauri-apps/plugin-dialog": "^2.0.1",
+-    "@tauri-apps/plugin-notification": "^2.0.0",
+-    "@tauri-apps/plugin-shell": "^2.0.1",
+-    "@tauri-apps/plugin-store": "^2.1.0",
++    "@tauri-apps/api": "~2.2.0",
++    "@tauri-apps/plugin-autostart": "~2.2.0",
++    "@tauri-apps/plugin-clipboard-manager": "~2.2.0",
++    "@tauri-apps/plugin-dialog": "~2.2.0",
++    "@tauri-apps/plugin-notification": "~2.2.0",
++    "@tauri-apps/plugin-shell": "~2.2.0",
++    "@tauri-apps/plugin-store": "~2.2.0",
+     "pinia": "^2.2.6",
+     "semver": "^7.6.3",
+     "vue": "3.5.12"
+diff --git a/app/main/pnpm-lock.yaml b/app/main/pnpm-lock.yaml
+index a03fc6f..521274d 100644
+--- a/app/main/pnpm-lock.yaml
++++ b/app/main/pnpm-lock.yaml
+@@ -12,26 +12,26 @@ importers:
+         specifier: link:../../core_lib
+         version: link:../../core_lib
+       '@tauri-apps/api':
+-        specifier: ^2.0.3
+-        version: 2.0.3
++        specifier: ~2.2.0
++        version: 2.2.0
+       '@tauri-apps/plugin-autostart':
+-        specifier: ^2.0.0
+-        version: 2.0.0
++        specifier: ~2.2.0
++        version: 2.2.0
+       '@tauri-apps/plugin-clipboard-manager':
+-        specifier: ^2.0.0
+-        version: 2.0.0
++        specifier: ~2.2.0
++        version: 2.2.3
+       '@tauri-apps/plugin-dialog':
+-        specifier: ^2.0.1
+-        version: 2.0.1
++        specifier: ~2.2.0
++        version: 2.2.2
+       '@tauri-apps/plugin-notification':
+-        specifier: ^2.0.0
+-        version: 2.0.0
++        specifier: ~2.2.0
++        version: 2.2.3
+       '@tauri-apps/plugin-shell':
+-        specifier: ^2.0.1
+-        version: 2.0.1
++        specifier: ~2.2.0
++        version: 2.2.2
+       '@tauri-apps/plugin-store':
+-        specifier: ^2.1.0
+-        version: 2.1.0
++        specifier: ~2.2.0
++        version: 2.2.1
+       pinia:
+         specifier: ^2.2.6
+         version: 2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
+@@ -514,8 +514,8 @@ packages:
+     peerDependencies:
+       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20'
+ 
+-  '@tauri-apps/api@2.0.3':
+-    resolution: {integrity: sha512-840qk6n8rbXBXMA5/aAgTYsg5JAubKO0nXw5wf7IzGnUuYKGbB4oFBIZtXOIWy+E0kNTDI3qhq5iqsoMJfwp8g==}
++  '@tauri-apps/api@2.2.0':
++    resolution: {integrity: sha512-R8epOeZl1eJEl603aUMIGb4RXlhPjpgxbGVEaqY+0G5JG9vzV/clNlzTeqc+NLYXVqXcn8mb4c5b9pJIUDEyAg==}
+ 
+   '@tauri-apps/cli-darwin-arm64@2.0.4':
+     resolution: {integrity: sha512-siH7rOHobb16rPbc11k64p1mxIpiRCkWmzs2qmL5IX21Gx9K5onI3Tk67Oqpf2uNupbYzItrOttaDT4NHFC7tw==}
+@@ -582,23 +582,23 @@ packages:
+     engines: {node: '>= 10'}
+     hasBin: true
+ 
+-  '@tauri-apps/plugin-autostart@2.0.0':
+-    resolution: {integrity: sha512-NEwOQWVasZ8RczXkMLNJokRDujneuMH/UFA5t84DLkbNZUmiD3G7HZWhgSd1YQ0BFU9h9w+h2B/py3y6bzWg4Q==}
++  '@tauri-apps/plugin-autostart@2.2.0':
++    resolution: {integrity: sha512-TzVcDZdOvdot0avkpstUWJKKEl4cyxLpFB9DZZRW5zH8k+Bv8IVJmO0zyYuw+7oKlGdHOINbD/7Je7GHMViw5w==}
+ 
+-  '@tauri-apps/plugin-clipboard-manager@2.0.0':
+-    resolution: {integrity: sha512-V1sXmbjnwfXt/r48RJMwfUmDMSaP/8/YbH4CLNxt+/sf1eHlIP8PRFdFDQwLN0cNQKu2rqQVbG/Wc/Ps6cDUhw==}
++  '@tauri-apps/plugin-clipboard-manager@2.2.3':
++    resolution: {integrity: sha512-myZTLyBpJ9gnDsywtdgRpAYLxEtSVaJa11s1xoiB6w8cjFtG2/znas4Cz3vqYigJkY0A57tyZUE6tjxavIAzgw==}
+ 
+-  '@tauri-apps/plugin-dialog@2.0.1':
+-    resolution: {integrity: sha512-fnUrNr6EfvTqdls/ufusU7h6UbNFzLKvHk/zTuOiBq01R3dTODqwctZlzakdbfSp/7pNwTKvgKTAgl/NAP/Z0Q==}
++  '@tauri-apps/plugin-dialog@2.2.2':
++    resolution: {integrity: sha512-Pm9qnXQq8ZVhAMFSEPwxvh+nWb2mk7LASVlNEHYaksHvcz8P6+ElR5U5dNL9Ofrm+uwhh1/gYKWswK8JJJAh6A==}
+ 
+-  '@tauri-apps/plugin-notification@2.0.0':
+-    resolution: {integrity: sha512-6qEDYJS7mgXZWLXA0EFL+DVCJh8sJlzSoyw6B50pxhLPVFjc5Vr5DVzl5W3mUHaYhod5wsC984eQnlCCGqxYDA==}
++  '@tauri-apps/plugin-notification@2.2.3':
++    resolution: {integrity: sha512-IlMdSVFsrKg0eIHBloFFosnWbbz6JdwBywfZrYZnE1+acgXvNS3T1YB5w9R6UXw+KKQ94ODBu7JF7a1YUiAK6A==}
+ 
+-  '@tauri-apps/plugin-shell@2.0.1':
+-    resolution: {integrity: sha512-akU1b77sw3qHiynrK0s930y8zKmcdrSD60htjH+mFZqv5WaakZA/XxHR3/sF1nNv9Mgmt/Shls37HwnOr00aSw==}
++  '@tauri-apps/plugin-shell@2.2.2':
++    resolution: {integrity: sha512-fg9XKWfzRQsN8p+Zrk82WeHvXFvGVnG0/mTlujQdLWNnO5cM6WD9qCrHbFytScVS+WhmRAkuypQPcxeKKl3VBg==}
+ 
+-  '@tauri-apps/plugin-store@2.1.0':
+-    resolution: {integrity: sha512-GADqrc17opUKYIAKnGHIUgEeTZ2wJGu1ZITKQ1WMuOFdv8fvXRFBAqsqPjE3opgWohbczX6e1NpwmZK1AnuWVw==}
++  '@tauri-apps/plugin-store@2.2.1':
++    resolution: {integrity: sha512-/hPafeliMe0tMc8NB9tSlkAH+Ww3H7BGD8NycjfY6QBM//0jSoqCO1QGdngPxugeF5NgUNspsVkpvpTz1lLAVQ==}
+ 
+   '@types/cacheable-request@6.0.3':
+     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
+@@ -2671,7 +2671,7 @@ snapshots:
+       postcss-selector-parser: 6.0.10
+       tailwindcss: 3.4.14
+ 
+-  '@tauri-apps/api@2.0.3': {}
++  '@tauri-apps/api@2.2.0': {}
+ 
+   '@tauri-apps/cli-darwin-arm64@2.0.4':
+     optional: true
+@@ -2716,29 +2716,29 @@ snapshots:
+       '@tauri-apps/cli-win32-ia32-msvc': 2.0.4
+       '@tauri-apps/cli-win32-x64-msvc': 2.0.4
+ 
+-  '@tauri-apps/plugin-autostart@2.0.0':
++  '@tauri-apps/plugin-autostart@2.2.0':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+-  '@tauri-apps/plugin-clipboard-manager@2.0.0':
++  '@tauri-apps/plugin-clipboard-manager@2.2.3':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+-  '@tauri-apps/plugin-dialog@2.0.1':
++  '@tauri-apps/plugin-dialog@2.2.2':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+-  '@tauri-apps/plugin-notification@2.0.0':
++  '@tauri-apps/plugin-notification@2.2.3':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+-  '@tauri-apps/plugin-shell@2.0.1':
++  '@tauri-apps/plugin-shell@2.2.2':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+-  '@tauri-apps/plugin-store@2.1.0':
++  '@tauri-apps/plugin-store@2.2.1':
+     dependencies:
+-      '@tauri-apps/api': 2.0.3
++      '@tauri-apps/api': 2.2.0
+ 
+   '@types/cacheable-request@6.0.3':
+     dependencies:

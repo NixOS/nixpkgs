@@ -1,0 +1,18 @@
+# the :idea_plugin is problematic on both darwin and linux, so just skip building it as we only care about the CLI in this package anyway.
+#
+# darwin: it depends on the builtin hdiutil executable on darwin, which is not packaged yet.
+# linux: it errors with "Could not resolve all files for configuration ':idea_plugin:intellijPlatformClasspath'. > Could not find idea:ideaIC:2022.3."
+
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index ea48f26..52fe28e 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -26,8 +26,6 @@ project(":ktfmt").projectDir = file("core")
+ 
+ project(":lambda").projectDir = file("online_formatter")
+ 
+-project(":idea_plugin").projectDir = file("ktfmt_idea_plugin")
+-
+ dependencyResolutionManagement {
+   versionCatalogs {
+     create("libs") {

@@ -1,0 +1,139 @@
+diff --git a/src/backend/cryfs.rs b/src/backend/cryfs.rs
+index 089bf03..157c72a 100644
+--- a/src/backend/cryfs.rs
++++ b/src/backend/cryfs.rs
+@@ -35,13 +35,7 @@ fn get_binary_path(vault_config: &VaultConfig) -> String {
+         }
+     }
+ 
+-    let global_config = GlobalConfigManager::instance().get_flatpak_info();
+-    let instance_path = global_config
+-        .section(Some("Instance"))
+-        .unwrap()
+-        .get("app-path")
+-        .unwrap();
+-    let cryfs_instance_path = instance_path.to_owned() + "/bin/cryfs";
++    let cryfs_instance_path = "@cryfs@".to_string();
+     log::info!("CryFS binary path: {}", cryfs_instance_path);
+     cryfs_instance_path
+ }
+@@ -49,9 +43,7 @@ fn get_binary_path(vault_config: &VaultConfig) -> String {
+ pub fn is_available(vault_config: &VaultConfig) -> Result<bool, BackendError> {
+     log::trace!("is_available({:?})", vault_config);
+ 
+-    let output = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let output = Command::new(get_binary_path(vault_config))
+         .arg("--version")
+         .output()?;
+     log::debug!("CryFS output: {:?}", output);
+@@ -64,9 +56,7 @@ pub fn is_available(vault_config: &VaultConfig) -> Result<bool, BackendError> {
+ pub fn init(vault_config: &VaultConfig, password: String) -> Result<(), BackendError> {
+     log::trace!("init({:?}, password: <redacted>)", vault_config);
+ 
+-    let mut child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let mut child = Command::new(get_binary_path(vault_config))
+         .env("CRYFS_FRONTEND", "noninteractive")
+         .stdin(Stdio::piped())
+         .stdout(Stdio::piped())
+@@ -106,9 +96,7 @@ pub fn init(vault_config: &VaultConfig, password: String) -> Result<(), BackendE
+ pub fn open(vault_config: &VaultConfig, password: String) -> Result<(), BackendError> {
+     log::trace!("open({:?}, password: <redacted>)", vault_config);
+ 
+-    let mut child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let mut child = Command::new(get_binary_path(vault_config))
+         .env("CRYFS_FRONTEND", "noninteractive")
+         .stdin(Stdio::piped())
+         .stdout(Stdio::piped())
+@@ -143,9 +131,7 @@ pub fn open(vault_config: &VaultConfig, password: String) -> Result<(), BackendE
+ pub fn close(vault_config: &VaultConfig) -> Result<(), BackendError> {
+     log::trace!("close({:?})", vault_config);
+ 
+-    let child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg("fusermount")
++    let child = Command::new("@fusermount@")
+         .arg("-u")
+         .stdout(Stdio::piped())
+         .arg(&vault_config.mount_directory)
+diff --git a/src/backend/gocryptfs.rs b/src/backend/gocryptfs.rs
+index 9638f3a..ffa8f44 100644
+--- a/src/backend/gocryptfs.rs
++++ b/src/backend/gocryptfs.rs
+@@ -35,13 +35,7 @@ fn get_binary_path(vault_config: &VaultConfig) -> String {
+         }
+     }
+ 
+-    let global_config = GlobalConfigManager::instance().get_flatpak_info();
+-    let instance_path = global_config
+-        .section(Some("Instance"))
+-        .unwrap()
+-        .get("app-path")
+-        .unwrap();
+-    let gocryptfs_instance_path = instance_path.to_owned() + "/bin/gocryptfs";
++    let gocryptfs_instance_path = "@gocryptfs@".to_string();
+     log::info!("gocryptfs binary path: {}", gocryptfs_instance_path);
+     gocryptfs_instance_path
+ }
+@@ -49,9 +43,7 @@ fn get_binary_path(vault_config: &VaultConfig) -> String {
+ pub fn is_available(vault_config: &VaultConfig) -> Result<bool, BackendError> {
+     log::trace!("is_available({:?})", vault_config);
+ 
+-    let output = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let output = Command::new(get_binary_path(vault_config))
+         .arg("--version")
+         .output()?;
+     log::debug!("gocryptfs output: {:?}", output);
+@@ -64,9 +56,7 @@ pub fn is_available(vault_config: &VaultConfig) -> Result<bool, BackendError> {
+ pub fn init(vault_config: &VaultConfig, password: String) -> Result<(), BackendError> {
+     log::trace!("init({:?}, password: <redacted>)", vault_config);
+ 
+-    let mut child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let mut child = Command::new(get_binary_path(vault_config))
+         .stdin(Stdio::piped())
+         .stdout(Stdio::piped())
+         .arg("--init")
+@@ -104,9 +94,7 @@ pub fn init(vault_config: &VaultConfig, password: String) -> Result<(), BackendE
+ pub fn open(vault_config: &VaultConfig, password: String) -> Result<(), BackendError> {
+     log::trace!("open({:?}, password: <redacted>)", vault_config);
+ 
+-    let mut child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg(get_binary_path(vault_config))
++    let mut child = Command::new(get_binary_path(vault_config))
+         .stdin(Stdio::piped())
+         .stdout(Stdio::piped())
+         .arg("-q")
+@@ -142,9 +130,7 @@ pub fn open(vault_config: &VaultConfig, password: String) -> Result<(), BackendE
+ pub fn close(vault_config: &VaultConfig) -> Result<(), BackendError> {
+     log::trace!("close({:?}, password: <redacted>)", vault_config);
+ 
+-    let child = Command::new("flatpak-spawn")
+-        .arg("--host")
+-        .arg("umount")
++    let child = Command::new("@umount@")
+         .stdout(Stdio::piped())
+         .arg(&vault_config.mount_directory)
+         .spawn()?;
+diff --git a/src/global_config_manager.rs b/src/global_config_manager.rs
+index 619bb18..cea9ac3 100644
+--- a/src/global_config_manager.rs
++++ b/src/global_config_manager.rs
+@@ -102,7 +102,7 @@ impl GlobalConfigManager {
+         let object: Self = glib::Object::new();
+ 
+         *object.imp().flatpak_info.borrow_mut() =
+-            Ini::load_from_file("/.flatpak-info").expect("Could not load .flatpak-info");
++            Ini::load_from_file("/.flatpak-info").unwrap_or_else(|_| Ini::new());
+ 
+         match user_config_dir().as_os_str().to_str() {
+             Some(user_config_directory) => {

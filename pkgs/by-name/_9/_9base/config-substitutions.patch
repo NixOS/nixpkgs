@@ -1,0 +1,56 @@
+diff --git a/config.mk b/config.mk
+index 1ebfd49..ec076b3 100644
+--- a/config.mk
++++ b/config.mk
+@@ -1,25 +1,17 @@
+ # Customize to fit your system
+
+ # paths
+-PREFIX      = /usr/local/plan9
+ MANPREFIX   = ${PREFIX}/share/man
+
+ VERSION     = 7
+-OBJTYPE     = 386
+-#OBJTYPE     = arm
+-#OBJTYPE     = x86_64
+-#OBJTYPE     = sun4u
+
+ # Linux/BSD
+ #CFLAGS      += -Wall -Wno-missing-braces -Wno-parentheses -Wno-switch -c -I. -DPREFIX="\"${PREFIX}\""
+ CFLAGS      += -c -I. -DPLAN9PORT -DPREFIX="\"${PREFIX}\""
+-LDFLAGS     += -static
+
+ # Solaris
+ #CFLAGS      = -fast -xtarget=ultra -D__sun__ -c -I. -DPREFIX="\"${PREFIX}\""
+ #LDFLAGS     = -dn
+
+ # compiler
+-AR          = ar rc
+-CC          = cc
+ YACC        = ../yacc/9yacc
+diff --git a/lib9/Makefile b/lib9/Makefile
+index b83ab2b..e3744a4 100644
+--- a/lib9/Makefile
++++ b/lib9/Makefile
+@@ -221,7 +221,7 @@ uninstall:
+
+ ${LIB}: ${OFILES}
+ 	@echo AR ${TARG}
+-	@${AR} ${LIB} ${OFILES}
++	@${AR} rc ${LIB} ${OFILES}
+
+ .c.o:
+ 	@echo CC $<
+diff --git a/troff/Makefile b/troff/Makefile
+index b4e3d88..3aac6bf 100644
+--- a/troff/Makefile
++++ b/troff/Makefile
+@@ -6,7 +6,7 @@ TARG      = troff
+ OFILES    = n1.o n2.o n3.o n4.o n5.o t6.o n6.o n7.o n8.o n9.o t10.o\
+             n10.o t11.o ni.o hytab.o suftab.o dwbinit.o mbwc.o
+ MANFILES  = troff.1
+-TROFFDIR  = ${PREFIX}/lib/troff
++TROFFDIR  = ${PREFIX_TROFF}/lib/troff
+
+ include ../std.mk
+

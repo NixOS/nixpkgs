@@ -1,0 +1,29 @@
+diff --git a/crates/tauri-bundler/src/bundle/macos/dmg/bundle_dmg b/crates/tauri-bundler/src/bundle/macos/dmg/bundle_dmg
+index fee840034..cfa584d52 100644
+--- a/crates/tauri-bundler/src/bundle/macos/dmg/bundle_dmg
++++ b/crates/tauri-bundler/src/bundle/macos/dmg/bundle_dmg
+@@ -461,12 +461,6 @@ if [[ -n "$QL_LINK" ]]; then
+ 	ln -s "/Library/QuickLook" "$MOUNT_DIR/QuickLook"
+ fi
+ 
+-if [[ -n "$VOLUME_ICON_FILE" ]]; then
+-	echo "Copying volume icon file '$VOLUME_ICON_FILE'..."
+-	cp "$VOLUME_ICON_FILE" "$MOUNT_DIR/.VolumeIcon.icns"
+-	SetFile -c icnC "$MOUNT_DIR/.VolumeIcon.icns"
+-fi
+-
+ if [[ -n "$ADD_FILE_SOURCES" ]]; then
+ 	echo "Copying custom files..."
+ 	for i in "${!ADD_FILE_SOURCES[@]}"; do
+@@ -538,11 +532,6 @@ else
+ 	echo "Skipping blessing on sandbox"
+ fi
+ 
+-if [[ -n "$VOLUME_ICON_FILE" ]]; then
+-	# Tell the volume that it has a special file attribute
+-	SetFile -a C "$MOUNT_DIR"
+-fi
+-
+ # Delete unnecessary file system events log if possible
+ echo "Deleting .fseventsd"
+ rm -rf "${MOUNT_DIR}/.fseventsd" || true

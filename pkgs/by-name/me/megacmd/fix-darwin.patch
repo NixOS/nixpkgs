@@ -1,0 +1,30 @@
+diff --git a/src/megacmdshell/megacmdshellcommunications.cpp b/src/megacmdshell/megacmdshellcommunications.cpp
+index bdd683b2..266e17ee 100644
+--- a/src/megacmdshell/megacmdshellcommunications.cpp
++++ b/src/megacmdshell/megacmdshellcommunications.cpp
+@@ -153,12 +153,9 @@ SOCKET MegaCmdShellCommunicationsPosix::createSocket(int number, bool initialize
+ #ifndef NDEBUG
+                 const char executable[] = "./mega-cmd-server";
+ #else
+-    #ifdef __MACH__
+-                const char executable[] = "/Applications/MEGAcmd.app/Contents/MacOS/mega-cmd";
+-                const char executable2[] = "./mega-cmd";
+-    #else
+                 const char executable[] = "mega-cmd-server";
+                 char executable2[PATH_MAX];
++    #ifdef __linux__
+                 sprintf(executable2, "%s/mega-cmd-server", getCurrentExecPath().c_str());
+     #endif
+ #endif
+@@ -217,11 +214,7 @@ SOCKET MegaCmdShellCommunicationsPosix::createSocket(int number, bool initialize
+             {
+ 
+                 cerr << "Unable to connect to " << (number?("response socket N "+std::to_string(number)):"service") << ": error=" << ERRNO << endl;
+-#ifdef __linux__
+                 cerr << "Please ensure mega-cmd-server is running" << endl;
+-#else
+-                cerr << "Please ensure MEGAcmdServer is running" << endl;
+-#endif
+                 return INVALID_SOCKET;
+             }
+             else

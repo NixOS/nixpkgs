@@ -1,0 +1,12 @@
+diff --git a/sip/QtWebEngineCore/qwebengineframe.sip b/sip/QtWebEngineCore/qwebengineframe.sip
+index d5420e6..5a29f29 100644
+--- a/sip/QtWebEngineCore/qwebengineframe.sip
++++ b/sip/QtWebEngineCore/qwebengineframe.sip
+@@ -26,6 +26,7 @@ class QWebEngineFrame /NoDefaultCtors/
+ {
+ %TypeHeaderCode
+ #include <qwebengineframe.h>
++#include <QVariant>
+ %End
+ 
+ public:

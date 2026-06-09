@@ -1,0 +1,45 @@
+From 428c6e0eb604b63a67fda6af445c10c8ae3c1826 Mon Sep 17 00:00:00 2001
+From: Philipp Gesang <phg@phi-gamma.net>
+Date: Sun, 27 Jan 2019 21:37:13 +0100
+Subject: [PATCH] makefile: fix installation
+
+- comment hard-coded $(CC)
+- avoid full paths during install
+- set proper permissions
+---
+ Makefile | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9268c6f..0797579 100644
+--- a/Makefile
++++ b/Makefile
+@@ -76,7 +76,7 @@ MW=-Wformat -Werror=format-security -Wall
+ 
+ CFLAGS1 = -Wall -Wstrict-prototypes -s -O2 -fomit-frame-pointer -Wno-unused-result $(LARGEFILEFLAGS) $(MW)
+ 
+-CC=gcc
++#CC=gcc
+ 
+ # also using contents of usin CPPFLAGS, CFLAGS, LDFLAGS out of environment
+ # variables, if they exist
+@@ -94,9 +94,14 @@ clean:
+ 	rm -f regtest/statsize regtest/statsize64
+ 	cd regtest; /bin/sh regtest.clean
+ 
++ifndef DESTDIR
++install:
++	$(error Please specify install prefix as $$DESTDIR)
++else
+ install: afio
+-	cp afio /usr/local/bin
+-	cp afio.1 /usr/share/man/man1
++	install -Dm755 afio $(DESTDIR)/bin/afio
++	install -Dm644 afio.1 $(DESTDIR)/share/man/man1/afio.1
++endif
+ 
+ # generate default list of -E extensions from manpage
+ # note: on sun, I had to change awk command below to nawk or gawk
+-- 
+2.18.1
+

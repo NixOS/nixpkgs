@@ -1,0 +1,52 @@
+From d7bbf24df5eecb61caebdf55b0d26da60a9d9609 Mon Sep 17 00:00:00 2001
+From: soyouzpanda <soyouzpanda@soyouzpanda.fr>
+Date: Fri, 16 May 2025 23:41:12 +0200
+Subject: [PATCH 1/2] =?UTF-8?q?=F0=9F=94=A7(backend)=20allow=20SECURE=20en?=
+ =?UTF-8?q?vironment=20variables=20to=20be=20configured?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ meet/settings.py | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/meet/settings.py b/meet/settings.py
+index ebb0837..9c67986 100755
+--- a/meet/settings.py
++++ b/meet/settings.py
+@@ -755,19 +755,24 @@ class Production(Base):
+     # - Your proxy sets the X-Forwarded-Proto header and sends it to Django
+     #
+     # In other cases, you should comment the following line to avoid security issues.
+-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+-    SECURE_HSTS_SECONDS = 60
+-    SECURE_HSTS_PRELOAD = True
+-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+-    SECURE_SSL_REDIRECT = True
++    SECURE_PROXY_SSL_HEADER = values.TupleValue(("HTTP_X_FORWARDED_PROTO", "https"),
++                                                environ_name="SECURE_PROXY_SSL_HEADER")
++    SECURE_HSTS_SECONDS = values.IntegerValue(
++        60, environ_name="SECURE_HSTS_SECONDS")
++    SECURE_HSTS_PRELOAD = values.BooleanValue(
++        True, environ_name="SECURE_HSTS_PRELOAD")
++    SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(
++        True, environ_name="SECURE_HSTS_INCLUDE_SUBDOMAINS")
++    SECURE_SSL_REDIRECT = values.BooleanValue(
++        True, environ_name="SECURE_SSL_REDIRECT")
+     SECURE_REDIRECT_EXEMPT = [
+         "^__lbheartbeat__",
+         "^__heartbeat__",
+     ]
+ 
+     # Modern browsers require to have the `secure` attribute on cookies with `Samesite=none`
+-    CSRF_COOKIE_SECURE = True
+-    SESSION_COOKIE_SECURE = True
++    CSRF_COOKIE_SECURE = values.BooleanValue(True, environ_name="CSRF_COOKIE_SECURE")
++    SESSION_COOKIE_SECURE = values.BooleanValue(True, environ_name="SESSION_COOKIE_SECURE")
+ 
+     # Privacy
+     SECURE_REFERRER_POLICY = "same-origin"
+-- 
+2.47.2
+
