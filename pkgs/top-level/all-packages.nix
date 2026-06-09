@@ -3055,10 +3055,6 @@ with pkgs;
     libxml2 = libxml2Python;
   };
 
-  privoxy = callPackage ../tools/networking/privoxy {
-    w3m = w3m-batch;
-  };
-
   tartube-yt-dlp = tartube.override {
     youtube-dl = yt-dlp;
   };

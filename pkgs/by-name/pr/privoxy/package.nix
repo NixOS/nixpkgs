@@ -7,27 +7,27 @@
   autoreconfHook,
   zlib,
   pcre2,
-  w3m,
+  w3m-batch,
   man,
   openssl,
   brotli,
 }:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "privoxy";
   version = "4.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-I+RoblhIx0y2gMCcKBHwNXc57P5kH5xAcu5COZCSyXs=";
+    url = "mirror://sourceforge/ijbswa/Sources/${finalAttrs.version}%20%28stable%29/privoxy-${finalAttrs.version}-stable-src.tar.gz";
+    hash = "sha256-I+RoblhIx0y2gMCcKBHwNXc57P5kH5xAcu5COZCSyXs=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    w3m
+    w3m-batch
     man
   ];
+
   buildInputs = [
     zlib
     pcre2
@@ -59,5 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "privoxy";
   };
-
-}
+})
