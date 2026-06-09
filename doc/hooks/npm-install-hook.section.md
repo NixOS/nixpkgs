@@ -25,7 +25,10 @@ Defaults to `--omit=dev --no-save` which cannot be modified.
 #### `dontNpmInstall` {#npm-install-hook-dont}
 
 Controls whether `npmInstallHook` is enabled or not.
-Defaults to `true`, so the hook will run.
+Primarily for use in multi-language environments. Allow disabling the setting of `installPhase`, and
+the core logic can then be called in `postInstall` or `preInstall` via `npmInstallPhase`.
+
+[](#ex-npm-build-hook-multilanguage)
 
 ### Honored Variables {#npm-install-hook-honored-variables}
 

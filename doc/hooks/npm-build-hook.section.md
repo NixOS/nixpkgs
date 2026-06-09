@@ -83,7 +83,48 @@ Controls the arguments to the {command}`npm run $npmBuildScript` command.
 
 #### `dontNpmBuild` {#npm-build-hook-dont}
 
-Disables `npmBuildHook` when enabled
+Disables running `npmBuildHook` when enabled.
+Allows usage of the hook logic outside of `buildPhase` via the bash command `npmBuildPhase`.
+Primarily for use in multi-language builds.
+
+:::{.example #ex-npm-build-hook-multilanguage}
+# npmHooks in multilanguage environments
+```nix
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  npmHooks,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "rust-web-app";
+  version = "1.0";
+
+  src = fetchFromGitHub {
+    owner = "rusty-web-app";
+    repo = "cool-web-app";
+    tag = finalAttrs.version;
+    hash = lib.fakeHash;
+  };
+
+  cargoHash = lib.fakeHash;
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    npmHooks.npmBuildHook
+    npmHooks.npmInstallHook
+  ];
+
+  preBuild = ''
+    npmBuildPhase
+  '';
+
+  preInstall = ''
+    npmInstallPhase
+  '';
+})
+```
+:::
 
 ### Honored Variables {#npm-build-hook-honored-variables}
 
