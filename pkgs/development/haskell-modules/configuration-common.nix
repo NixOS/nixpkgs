@@ -805,15 +805,6 @@ with haskellLib;
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
-  # https://github.com/itchyny/qhs/issues/8
-  qhs = overrideSrc {
-    version = "0.4.3";
-    src = pkgs.fetchzip {
-      url = "mirror://hackage/qhs-0.4.3/qhs-0.4.3.tar.gz";
-      sha256 = "191015m47qdxzi8w5pvadgv95g8vk7v2gr76jzfgglyjy6zhb5wb";
-    };
-  } (warnAfterVersion "0.4.2" super.qhs);
-
   # Fix build with time >= 1.10 while retaining compat with time < 1.9
   mbox = appendPatch ./patches/mbox-time-1.10.patch (
     overrideCabal {
@@ -1512,10 +1503,6 @@ with haskellLib;
   # 2026-05-18: allow QuickCheck 2.16
   # Already updated upstream, but not released on hackage, yet.
   finite-typelits = warnAfterVersion "0.2.1.0" (doJailbreak super.finite-typelits);
-
-  # 2026-05-16: allow QuickCheck 2.16
-  # https://github.com/pcapriotti/optparse-applicative/issues/516
-  optparse-applicative = doJailbreak super.optparse-applicative;
 
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/fizruk/http-api-data/issues/157

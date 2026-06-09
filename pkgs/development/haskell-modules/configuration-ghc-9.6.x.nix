@@ -110,9 +110,6 @@ in
   cabal-install-solver = doJailbreak super.cabal-install-solver;
   cabal-install = doJailbreak super.cabal-install;
 
-  # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
-  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
-
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
