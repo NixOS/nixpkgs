@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   ...
 }:
@@ -7,8 +8,12 @@
   config =
     let
       detectedSystem = config.hardware.facter.report.system or null;
+      canSetHostPlatform =
+        detectedSystem != null
+        && !config.boot.isContainer
+        && !options.nixpkgs.pkgs.isDefined;
     in
-    lib.mkIf (!config.boot.isContainer && detectedSystem != null) {
+    lib.mkIf canSetHostPlatform {
       nixpkgs.hostPlatform = lib.mkDefault detectedSystem;
     };
 }
