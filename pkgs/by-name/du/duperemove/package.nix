@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
+    changelog = "https://github.com/markfasheh/duperemove/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       thoughtpolice
