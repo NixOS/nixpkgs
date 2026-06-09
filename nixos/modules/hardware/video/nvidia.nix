@@ -774,20 +774,26 @@ in
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${cfg.package.persistenced}/origBin/nvidia-persistenced";
 
           hardware.nvidia.moduleParams = lib.mkMerge (
-            lib.optional (offloadCfg.enable || cfg.modesetting.enable) { nvidia-drm.modeset = 1; }
-            ++ lib.optional (
-              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast cfg.package.version "545"
-            ) { nvidia-drm.fbdev = 1; }
-            ++ lib.optional (cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier) {
-              nvidia.NVreg_UseKernelSuspendNotifiers = 1;
+            lib.optional (cfg.modesetting.enable && lib.versionOlder cfg.package.version "595") {
+              nvidia-drm.modeset = 1;
             }
-            ++ lib.optional cfg.powerManagement.enable { nvidia.NVreg_PreserveVideoMemoryAllocations = 1; }
+            ++ lib.optional (
+              cfg.modesetting.enable
+              && lib.versionAtLeast cfg.package.version "545"
+              && lib.versionOlder cfg.package.version "570"
+            ) { nvidia-drm.fbdev = 1; }
+            ++ lib.optional cfg.powerManagement.enable (
+              if cfg.powerManagement.kernelSuspendNotifier then
+                { nvidia.NVreg_UseKernelSuspendNotifiers = 1; }
+              else
+                { nvidia.NVreg_PreserveVideoMemoryAllocations = 1; }
+            )
             ++ lib.optional (
               useOpenModules
               && lib.versionAtLeast cfg.package.version "515.43.04"
               && lib.versionOlder cfg.package.version "545.23.06"
             ) { nvidia.NVreg_OpenRmEnableUnsupportedGpus = 1; }
-            ++ lib.optional cfg.powerManagement.finegrained { nvidia.NVreg_DynamicPowerManagement = "0x02"; }
+            ++ lib.optional cfg.powerManagement.finegrained { nvidia.NVreg_DynamicPowerManagement = 2; }
           );
 
           boot = {
