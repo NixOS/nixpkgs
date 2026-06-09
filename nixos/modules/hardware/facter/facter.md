@@ -117,7 +117,11 @@ Examples:
 ```nix
 {
   hardware.facter.changes = {
-    "boot.initrd.availableKernelModules".disk = [ "ahci" "nvme" "sd_mod" ];
+    "boot.initrd.availableKernelModules".disk = [
+      "ahci"
+      "nvme"
+      "sd_mod"
+    ];
   };
 }
 ```

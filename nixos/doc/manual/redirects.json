@@ -11,6 +11,9 @@
   "module-hardware-facter-debugging-nvd": [
     "index.html#module-hardware-facter-debugging-nvd"
   ],
+  "module-hardware-facter-debugging-changes": [
+      "index.html#module-hardware-facter-debugging-changes"
+  ],
   "module-hardware-facter-features": [
     "index.html#module-hardware-facter-features"
   ],
