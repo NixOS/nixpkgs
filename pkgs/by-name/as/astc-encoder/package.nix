@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astc-encoder";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     tag = finalAttrs.version;
-    hash = "sha256-mpaLSf1K+SsxkQm/b+QIWU34TzHQ7CAkyDNczBrcmBo=";
+    hash = "sha256-oWQVFrwSGL6iYbXXtgwfOE0P2VCqeNeencxDZYYChHU=";
   };
 
   nativeBuildInputs = [ cmake ];
