@@ -31,6 +31,8 @@
   codex,
   enableCursor ? false,
   code-cursor,
+  enableCursorCli ? false,
+  cursor-cli,
   enableGitHub ? true,
   gh,
   enableGit ? true,
@@ -39,6 +41,8 @@
   glab,
   enableJujutsu ? false,
   jujutsu,
+  enableOpencode ? false,
+  opencode,
 }:
 
 stdenv.mkDerivation (
@@ -52,6 +56,7 @@ stdenv.mkDerivation (
         "assets/prod/black-macos-1024.png"
       else
         "assets/prod/black-universal-1024.png";
+
     runtimePackages =
       lib.optionals enableAzureDevOps [
         azure-cli.withExtensions
@@ -61,10 +66,13 @@ stdenv.mkDerivation (
       ++ lib.optionals enableClaude [ claude-code ]
       ++ lib.optionals enableCodex [ codex ]
       ++ lib.optionals enableCursor [ code-cursor ]
+      ++ lib.optionals enableCursorCli [ cursor-cli ]
       ++ lib.optionals enableGitHub [ gh ]
       ++ lib.optionals enableGit [ git ]
       ++ lib.optionals enableGitLab [ glab ]
-      ++ lib.optionals enableJujutsu [ jujutsu ];
+      ++ lib.optionals enableJujutsu [ jujutsu ]
+      ++ lib.optionals enableOpencode [ opencode ];
+
     runtimePathWrapperArgs = lib.optionalString (runtimePackages != [ ]) ''
       \
         --prefix PATH : ${lib.makeBinPath runtimePackages}
