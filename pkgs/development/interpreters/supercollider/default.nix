@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     qt6.qtwebsockets
     qt6.qtwayland
+    qt6.qtwebengine
     readline
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
-    (lib.cmakeBool "SC_USE_QTWEBENGINE" false)
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" true)
   ];
 
   passthru = {
