@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "10.1.5.1",
-    "hash": "sha256-XSLNUNXlOj0YCqe4Ix+mvbR64Mr/mQgeXTif0q+OSCo="
+    "version": "10.2.0.1",
+    "hash": "sha256-z0IzuOE8eDWyyz7gf1gMGdVMMIhs6axoAceaafaZbbw="
   },
   {
     "pname": "Avalonia",
@@ -626,13 +626,13 @@
   },
   {
     "pname": "ReactiveUI",
-    "version": "23.2.1",
-    "hash": "sha256-Na0BtJBMBdz8JiK+2cbaM/7lkd+tuGL9Lr5gEVPfPX0="
+    "version": "23.2.28",
+    "hash": "sha256-GaPH7EqdaamvhyVphO9TLfD5dFMVV2gA33JwbR6Lzoc="
   },
   {
     "pname": "ReactiveUI.Avalonia",
-    "version": "12.0.1",
-    "hash": "sha256-MoNUvbQ5XTuDNVPC4bVHcxRtRiU/oduaHCRL6IfKb+Q="
+    "version": "12.0.2",
+    "hash": "sha256-bFylVd7nljJMBszmAWNJa9R3Q03s/Bp2M2+GJKjYxWU="
   },
   {
     "pname": "Serilog",
@@ -701,23 +701,23 @@
   },
   {
     "pname": "Splat",
-    "version": "19.3.1",
-    "hash": "sha256-ri8qniMdAzAO4cjjVfuSFxMM6MvxFrG6+d2cPWJeLUE="
+    "version": "19.4.1",
+    "hash": "sha256-+huQc0B/7XQA7zPf+4jFLXfBj6Y8K9gRRp7tATKuXH8="
   },
   {
     "pname": "Splat.Builder",
-    "version": "19.3.1",
-    "hash": "sha256-XN/3+5BEaq6v17eWKFUOqqCmVWJLEVQBm5cvejxetw8="
+    "version": "19.4.1",
+    "hash": "sha256-fVTi/MpA4t6QR3+NgNTL3lRwcVCkKFAZYHGDvChVadM="
   },
   {
     "pname": "Splat.Core",
-    "version": "19.3.1",
-    "hash": "sha256-Fav212nMhUGO5/1zFKevXVm21MH+x7NTqgq1jD1WRKw="
+    "version": "19.4.1",
+    "hash": "sha256-0XxTbnSH8yLC6XSbnhm1qv3YlDYTzpvFJlt/6mz0o/g="
   },
   {
     "pname": "Splat.Logging",
-    "version": "19.3.1",
-    "hash": "sha256-rTXD2bqIa/IjeN/mFv9n9mkL2rujEg1iIUPimVpYLBQ="
+    "version": "19.4.1",
+    "hash": "sha256-nk4NgktArB7v9HNdu9NnewYQcwaQl+fZlRZbieXW6Dw="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
