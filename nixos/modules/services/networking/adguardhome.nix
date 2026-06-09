@@ -20,8 +20,7 @@ let
 
   settings =
     if (cfg.settings != null) then
-      cfg.settings
-      // (
+      lib.recursiveUpdate cfg.settings (
         if cfg.settings.schema_version < 23 then
           {
             bind_host = cfg.host;
