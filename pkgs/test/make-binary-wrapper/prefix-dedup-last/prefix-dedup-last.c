@@ -63,8 +63,8 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
 }
 
 int main(int argc, char **argv) {
-    set_env_prefix("PATH", ":", "/usr/bin/");
-    set_env_prefix("PATH", ":", "/usr/local/bin/");
+    putenv("PATH=/usr/bin:/usr/local/bin");
+    set_env_prefix("PATH", ":", "/usr/local/bin");
     argv[0] = "/send/me/flags";
     return execv("/send/me/flags", argv);
 }
