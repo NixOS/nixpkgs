@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
+    changelog = "https://github.com/sahib/rmlint/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
