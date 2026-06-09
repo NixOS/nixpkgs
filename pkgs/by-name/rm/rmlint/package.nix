@@ -15,7 +15,6 @@
   polkit,
   python3,
   scons,
-  sphinx,
   util-linux,
   wrapGAppsHook3,
   withGui ? false,
@@ -23,15 +22,15 @@
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rmlint";
   version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
-    rev = "v${version}";
-    sha256 = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
   };
 
   patches = [
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    sphinx
+    python3.pkgs.sphinx
     scons
   ]
   ++ lib.optionals withGui [
@@ -103,4 +102,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "rmlint";
   };
-}
+})
