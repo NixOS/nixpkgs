@@ -5170,6 +5170,8 @@ self: super: with self; {
 
   eseries = callPackage ../development/python-modules/eseries { };
 
+  esios-api = callPackage ../development/python-modules/esios-api { };
+
   esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
