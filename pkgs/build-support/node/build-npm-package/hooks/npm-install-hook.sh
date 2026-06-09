@@ -1,9 +1,8 @@
 # shellcheck shell=bash
 
-npmInstallHook() {
+# For use outside installPhase
+npmInstallPhase() {
     echo "Executing npmInstallHook"
-
-    runHook preInstall
 
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
@@ -39,9 +38,15 @@ npmInstallHook() {
         cp -r node_modules "$nodeModulesPath"
     fi
 
-    runHook postInstall
-
     echo "Finished npmInstallHook"
+}
+
+npmInstallHook() {
+    runHook preInstall
+
+    npmInstallPhase
+
+    runHook postInstall
 }
 
 if [ -z "${dontNpmInstall-}" ] && [ -z "${installPhase-}" ]; then
