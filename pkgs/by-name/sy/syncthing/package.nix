@@ -119,6 +119,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       joko
       peterhoeg
+      zainkergaye
     ];
     mainProgram = target;
     platforms = lib.platforms.unix;
