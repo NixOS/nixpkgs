@@ -2102,6 +2102,13 @@
     githubId = 914687;
     name = "Alexis Praga";
   };
+  aprilnea = {
+    name = "AprilNEA";
+    github = "AprilNEA";
+    githubId = 37977109;
+    email = "dev@aprilnea.me";
+    keys = [ { fingerprint = "9AB9 3FCB B8BA 05A2 5BCD  2F5A 831C 62E9 704C B50B"; } ];
+  };
   aprl = {
     email = "aprl@acab.dev";
     github = "aprilthepink";
