@@ -1329,10 +1329,6 @@ with haskellLib;
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
-  # 2026-05-18: too strict bounds on QuickCheck < 2.16
-  # https://github.com/hasufell/lzma-static/issues/16
-  xz = doJailbreak super.xz;
-
   ghcup =
     lib.throwIf pkgs.config.allowAliases
       "ghcup cannot be used to install the haskell tool chain on NixOS because there is no compatible bindist. Please install ghc etc. via Nix. On non-NixOS systems you can use the ghcup shell installer"
@@ -1520,10 +1516,6 @@ with haskellLib;
   optparse-applicative = doJailbreak super.optparse-applicative;
 
   # 2026-05-17: allow QuickCheck 2.16
-  # https://github.com/jaspervdj/psqueues/issues/67
-  psqueues = doJailbreak super.psqueues;
-
-  # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/fizruk/http-api-data/issues/157
   http-api-data = doJailbreak super.http-api-data;
 
@@ -1538,10 +1530,6 @@ with haskellLib;
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell/fgl/issues/119
   fgl = doJailbreak super.fgl;
-
-  # 2026-05-17: allow QuickCheck 2.16
-  # Sent Claude an email on 2026-05-18.
-  bitwise = doJailbreak super.bitwise;
 
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
