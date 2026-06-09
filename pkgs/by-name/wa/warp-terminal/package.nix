@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  undmg,
+  _7zz,
   zstd,
   alsa-lib,
   curl,
@@ -107,7 +107,8 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    # Warp.dmg is APFS formatted, which is unsupported by undmg
+    nativeBuildInputs = [ _7zz ];
 
     installPhase = ''
       runHook preInstall
