@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ninja,
   libprojectm,
   libGL,
   libx11,
@@ -12,33 +13,21 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2026-01-20";
+  version = "2.0.0-pre1";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "7a07229428c51378f43843cf160bcddc21ef70ff";
-    hash = "sha256-hz1Au5Gn10Yi5f7d7UiQOHTCU00Ze5UoQ40jirg54Pc=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-JCnvlX1pQeLsqI/74tBGKd2ONydABqulOZ8kghiDn8s=";
     fetchSubmodules = true;
   };
 
-  # Probably an artifact of the vcpkg package
-  postPatch = ''
-    substituteInPlace ImGui.cmake \
-      --replace-fail "SDL2::SDL2main" ""
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "SDL2::SDL2main" ""
-  '';
-
-  cmakeFlags = [
-    # Doesn't seem to be present in the source tree, so the installation fails if enabled
-    (lib.cmakeBool "ENABLE_DESKTOP_ICON" false)
-  ];
-
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   buildInputs = [
@@ -50,12 +39,7 @@ stdenv.mkDerivation {
     SDL2
   ];
 
-  # poco 1.14 requires c++17
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
-
   strictDeps = true;
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Standalone application based on libprojectM and libSDL that turns your desktop audio into awesome visuals";
@@ -66,4 +50,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # TODO build probably needs some fixing
   };
-}
+})
