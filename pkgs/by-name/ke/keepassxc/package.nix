@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
+    donationPage = "https://keepassxc.org/donate/";
     changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
