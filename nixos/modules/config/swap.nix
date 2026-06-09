@@ -334,6 +334,7 @@ in
                   )
                 } ${sw.device} ${sw.deviceName}
                 mkswap ${sw.realDevice}
+                ${lib.optionalString sw.isDevice "udevadm trigger ${sw.realDevice}"}
               ''}
             '';
             enableStrictShellChecks = true;
