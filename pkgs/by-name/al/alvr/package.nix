@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   nix-update-script,
   pkg-config,
@@ -58,6 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (replaceVars ./fix-finding-libs.patch {
       ffmpeg = lib.getDev ffmpeg_7;
       x264 = lib.getDev x264;
+    })
+    (fetchpatch {
+      url = "https://github.com/alvr-org/ALVR/commit/12a238b9ac9d63438163ff82cbd689733558a1e4.patch";
+      hash = "sha256-yvIGjopXIwGXajs5/RlAo+eqfVNnXlomKy/VO/dL+gc=";
     })
   ];
 
