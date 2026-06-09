@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace util.c --replace \
-      "lscpu" "${lib.getBin util-linux}/bin/lscpu"
+    substituteInPlace util.c --replace-fail \
+      "lscpu" "${lib.getExe' util-linux "lscpu"}"
   '';
 
   __structuredAttrs = true;
