@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "msedit";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "edit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sb73awgdajBKKW0QIpmKF6g9mIIS/1f0a6D/jQulnUM=";
+    hash = "sha256-9HoK5i0IimujfTQxDplBNJRO7qmD/S+SnLLnR95RHiQ=";
   };
 
-  cargoHash = "sha256-U8U70nzTmpY6r8J661EJ4CGjx6vWrGovu5m25dvz5sY=";
+  cargoHash = "sha256-r7AR6Mf13UUeooPV5/8gyp7HvmOeSaOJNotWWqU10SQ=";
 
   # Requires nightly features
   env = {
