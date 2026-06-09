@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow";
-  version = "0.315.0";
+  version = "0.317.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEiyI0RObGColAEiDXVg7wXxsHttce+6nL+uzKwcRcA=";
+    hash = "sha256-3r330N+bmtMhUszOoaRqVqbrno7tZatXMO6szvPKqAc=";
   };
 
   patches = [

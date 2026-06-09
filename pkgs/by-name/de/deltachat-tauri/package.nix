@@ -12,7 +12,7 @@
   openssl,
   perl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   pnpmConfigHook,
   python3,
   rustPlatform,
@@ -23,7 +23,7 @@
 }:
 
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";
@@ -38,16 +38,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    pname = "deltachat-desktop";
+    inherit (finalAttrs) version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-OP+FbBxSnyFdeKvhqhmdEr1htFSX+WoPj6Ti8Q+ab/Y=";
+    fetcherVersion = 4;
+    hash = "sha256-BSDeOkT75usLmXdAY8QNO+9YxxchrJH2gjFpTzErPXo=";
   };
 
   cargoHash = "sha256-JhsoIQZrU4GVcs/TCIug6y/84gODyEWl0Bl2jRNxL5Y=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/source-registry-0/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail libayatana-appindicator3.so.1 '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1'
   '';
 

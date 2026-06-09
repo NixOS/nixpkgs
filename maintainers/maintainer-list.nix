@@ -5150,6 +5150,13 @@
     githubId = 68239;
     name = "Christine Koppelt";
   };
+  ckruse = {
+    email = "cjk@defunct.ch";
+    github = "ckruse";
+    githubId = 175095;
+    name = "Christian Kruse";
+    keys = [ { fingerprint = "BC5D 9F4E F7FB 4382 6056  E834 B8E0 F342 A99A 9D73"; } ];
+  };
   clacke = {
     email = "claes.wallin@greatsinodevelopment.com";
     github = "clacke";
@@ -23078,12 +23085,6 @@
     githubId = 7775707;
     name = "RB";
   };
-  rb2k = {
-    email = "nix@marc-seeger.com";
-    github = "rb2k";
-    githubId = 9519;
-    name = "Marc Seeger";
-  };
   rbasso = {
     email = "rbasso@sharpgeeks.net";
     github = "rbasso";
@@ -27832,6 +27833,12 @@
     email = "mr.trubach@icloud.com";
     github = "tie";
     githubId = 14792994;
+  };
+  tiebe = {
+    name = "Tiebe Groosman";
+    email = "tiebe@groosman.nl";
+    github = "Tiebe";
+    githubId = 9307389;
   };
   tiferrei = {
     name = "Tiago Ferreira";
