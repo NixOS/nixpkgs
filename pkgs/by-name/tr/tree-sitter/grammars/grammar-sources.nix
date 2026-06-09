@@ -1696,10 +1696,10 @@
   };
 
   nginx = {
-    version = "0-unstable-2024-10-15";
+    version = "0-unstable-2026-06-03";
     url = "gitlab:joncoole/tree-sitter-nginx";
-    rev = "f6d13cf6281b25f2ce342a49a41a10a0381e00f0";
-    hash = "sha256-ofFBxW4p7rZFZm9w5cyA0semYLJWFu9emv8bfTfAFok=";
+    rev = "9413233132d1787aa8d7e8f295ee20b55ba991de";
+    hash = "sha256-VqVMIy+xdt1EnnqP1G2nMgCg6DLgtGRLj4d/b8IakIk=";
     meta = {
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
