@@ -15,6 +15,9 @@
   # in the configuration if you disable transcodingSupport.
   transcodingSupport ? true,
   ffmpeg,
+  # Setting this to false does not disable the jukebox feature,
+  # but avoids the dependency on mpv at least.
+  jukeboxSupport ? true,
   mpv,
 }:
 
@@ -40,7 +43,7 @@ buildGoModule (finalAttrs: {
           '`ffmpeg' \
           '`${lib.getBin ffmpeg}/bin/ffmpeg'
     ''
-    + ''
+    + lib.optionalString jukeboxSupport ''
       substituteInPlace \
         jukebox/jukebox.go \
         --replace-fail \
