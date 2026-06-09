@@ -1,19 +1,19 @@
 {
   lib,
-  pythonPackages,
+  python3Packages,
   fetchurl,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mir.qualia";
   version = "2.0.0";
   format = "setuptools";
   doCheck = false; # 2.0.0-released pytests are broken
 
-  buildInputs = with pythonPackages; [ pytest ];
+  buildInputs = with python3Packages; [ pytest ];
 
   src = fetchurl {
-    url = "mirror://pypi/m/mir.qualia/mir.qualia-${version}.tar.gz";
+    url = "mirror://pypi/m/mir.qualia/mir.qualia-${finalAttrs.version}.tar.gz";
     sha256 = "1ybq6jb5clh9hw0sp3idp4hjv2gkm9yiaph48gcc208affflc8m9";
   };
 
@@ -24,4 +24,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.srhb ];
   };
-}
+})

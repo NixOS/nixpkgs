@@ -2629,10 +2629,6 @@ with pkgs;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
-  mir-qualia = callPackage ../tools/text/mir-qualia {
-    pythonPackages = python3Packages;
-  };
-
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
   mjpegtoolsFull = mjpegtools.override {
