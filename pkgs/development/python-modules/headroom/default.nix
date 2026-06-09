@@ -46,6 +46,10 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace crates/headroom-core/Cargo.toml \
       --replace-fail '"ort-download-binaries-rustls-tls"' '"ort-load-dynamic"'
+    substituteInPlace headroom/cli/wrap.py \
+      --replace-fail \
+        '[sys.executable, "-m", "headroom.cli", "proxy",' \
+        '["headroom", "proxy",'
   '';
 
   nativeBuildInputs = [
