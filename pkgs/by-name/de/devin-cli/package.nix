@@ -7,29 +7,29 @@
 }:
 
 let
-  version = "2026.5.26-6";
+  version = "2026.5.26-8";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-unknown-linux.tar.gz";
-      hash = "sha256-8jEq0X2owEnOdSWzEhDOYahAdq/3G/JIUZShHbYrR2c=";
+      hash = "sha256-TqSABBxigiYTafi0vxFYnssLjHbiXYaNxI8prkkp8CE=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-unknown-linux.tar.gz";
-      hash = "sha256-i8m05WrmO/KQCt/4jVFkRxz9nIXZEDi8idVhXkXxDig=";
+      hash = "sha256-1hoTd6JR43nR+heLqU7igP+debI1bhWcIlG6BGyaj3I=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-apple-darwin.tar.gz";
-      hash = "sha256-WPL1kPMSmqh9/n2m9CvNnUcyLfjHz3PC9tAjGrjaZfw=";
+      hash = "sha256-/8vd26V0z1qyt8EOJ2Z/JdWNGjb+iN+YkgaJQRoBHUk=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-apple-darwin.tar.gz";
-      hash = "sha256-HtB5iCT3d3AprPM+1uNkPkX0v4wSerTJlEu5F4P6pp0=";
+      hash = "sha256-uF6ORbWwC0hgIURFoXFQh/5oPvfS4cgRBaCui4S0E0E=";
     };
   };
 
