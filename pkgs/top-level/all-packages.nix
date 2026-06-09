@@ -2208,8 +2208,6 @@ with pkgs;
     gitlabEnterprise = true;
   };
 
-  gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
-
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
     inherit (gst_all_1)
       gstreamer
