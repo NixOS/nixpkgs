@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_va_copy=C99"
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
