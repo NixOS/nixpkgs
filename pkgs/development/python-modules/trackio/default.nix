@@ -26,7 +26,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage (finalAttrs: rec {
+buildPythonPackage (finalAttrs: {
   pname = "trackio";
   version = "0.26.0";
   pyproject = true;
@@ -40,20 +40,17 @@ buildPythonPackage (finalAttrs: rec {
   };
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/trackio/frontend";
+    src = "${finalAttrs.src}/trackio/frontend";
     hash = "sha256-q1XMYwmQOULuReHnMdeRT4xzd4WOVsll6xdzv2UMgI8=";
   };
-  npmRoot = "trackio/frontend";
+  env.SKIP_FRONTEND_BUILD = "1";
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
+    npmHooks.npmBuildHook
   ];
+  npmRoot = "trackio/frontend";
 
-  preBuild = ''
-    pushd trackio/frontend
-    npm run build
-    popd
-  '';
   build-system = [
     hatchling
   ];
@@ -103,6 +100,6 @@ buildPythonPackage (finalAttrs: rec {
     homepage = "https://github.com/gradio-app/trackio";
     changelog = "https://github.com/gradio-app/trackio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bileam ];
   };
 })
