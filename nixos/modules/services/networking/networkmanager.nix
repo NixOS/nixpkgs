@@ -24,6 +24,9 @@ let
       rc-manager = if config.networking.resolvconf.enable then "resolvconf" else "unmanaged";
     };
     keyfile = {
+      # NM's compiled-in default; made explicit so the tmpfiles rule below
+      # can follow it when the user redirects the keyfile store elsewhere.
+      path = "/etc/NetworkManager/system-connections";
       unmanaged-devices = if cfg.unmanaged == [ ] then null else lib.concatStringsSep ";" cfg.unmanaged;
     };
     logging = {
@@ -602,7 +605,7 @@ in
     systemd.packages = packages;
 
     systemd.tmpfiles.settings.networkmanager = {
-      "/etc/NetworkManager/system-connections".d = {
+      ${configAttrs.keyfile.path}.d = {
         mode = "0700";
         user = "root";
         group = "root";
