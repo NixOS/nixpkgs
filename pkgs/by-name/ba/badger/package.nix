@@ -21,9 +21,12 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
+    changelog = "https://github.com/dgraph-io/badger/releases/tag/${finalAttrs.src.tag}";
     description = "Fast key-value DB in Go";
-    homepage = "https://github.com/dgraph-io/badger";
+    homepage = "https://dgraph-io.github.io/badger";
     license = lib.licenses.asl20;
     mainProgram = "badger";
     maintainers = [ ];
