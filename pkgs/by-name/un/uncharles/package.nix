@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "leopepe";
     repo = "automata-atelier";
-    rev = "uncharles-v${version}";
+    tag = "uncharles-v${version}";
     hash = "sha256-P3h/OtGga8lkSQs/OFky8Ik5S+EFEeNEmvjVaZiMArs=";
   };
 
