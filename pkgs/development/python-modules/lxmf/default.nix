@@ -25,8 +25,6 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "rns" ];
-
   buildInputs = lib.optionals (!propagateRns) [
     rns
   ];

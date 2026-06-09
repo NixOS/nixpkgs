@@ -329,6 +329,10 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
+    if (args.file or args.attr) and args.flake is None:
+        # Disable flake auto-detection when --file or --attr is used
+        args.flake = False
+
     if args.store_path:
         if args.rollback:
             parser.error("--store-path and --rollback are mutually exclusive")
