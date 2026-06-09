@@ -18,13 +18,11 @@
   gtksourceview5,
   libadwaita,
   libglycin,
-  libseccomp,
   libxml2,
   openssl,
   sqlite,
   webkitgtk_6_0,
   glib-networking,
-  librsvg,
   gst_all_1,
   nix-update-script,
 }:
@@ -79,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libglycin
-    libseccomp
     libxml2
     openssl
     sqlite
@@ -87,9 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # TLS support for loading external content in webkitgtk WebView
     glib-networking
-
-    # SVG support for gdk-pixbuf
-    librsvg
   ]
   ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
