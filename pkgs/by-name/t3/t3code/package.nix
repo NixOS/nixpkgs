@@ -29,6 +29,8 @@
   claude-code,
   enableCodex ? true,
   codex,
+  enableCursor ? false,
+  code-cursor,
   enableGitHub ? true,
   gh,
   enableGit ? true,
@@ -58,6 +60,7 @@ stdenv.mkDerivation (
       ++ lib.optionals enableBitbucket [ bitbucket-cli ]
       ++ lib.optionals enableClaude [ claude-code ]
       ++ lib.optionals enableCodex [ codex ]
+      ++ lib.optionals enableCursor [ code-cursor ]
       ++ lib.optionals enableGitHub [ gh ]
       ++ lib.optionals enableGit [ git ]
       ++ lib.optionals enableGitLab [ glab ]

@@ -1056,7 +1056,7 @@ dependencies = [
  "resolv-conf",
  "rustls",
  "smallvec",
- "system-configuration 0.7.0",
+ "system-configuration",
  "thiserror 2.0.18",
  "tokio",
  "tokio-rustls",
@@ -2043,7 +2043,7 @@ dependencies = [
 
 [[package]]
 name = "primp"
-version = "1.3.0"
+version = "1.3.1"
 dependencies = [
  "criterion",
  "http",
@@ -2059,7 +2059,7 @@ dependencies = [
 
 [[package]]
 name = "primp-h2"
-version = "0.4.14"
+version = "0.4.15"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -2084,7 +2084,7 @@ dependencies = [
 
 [[package]]
 name = "primp-hyper"
-version = "1.9.0"
+version = "1.9.1"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -2133,12 +2133,11 @@ dependencies = [
 
 [[package]]
 name = "primp-hyper-util"
-version = "0.1.21"
+version = "0.1.22"
 dependencies = [
  "base64",
  "bytes",
  "futures-channel",
- "futures-core",
  "futures-util",
  "http",
  "http-body",
@@ -2151,7 +2150,7 @@ dependencies = [
  "pretty_env_logger",
  "primp-hyper",
  "socket2",
- "system-configuration 0.6.1",
+ "system-configuration",
  "tokio",
  "tokio-test",
  "tower-layer",
@@ -2163,7 +2162,7 @@ dependencies = [
 
 [[package]]
 name = "primp-python"
-version = "1.3.0"
+version = "1.3.1"
 dependencies = [
  "anyhow",
  "bytes",
@@ -2188,7 +2187,7 @@ dependencies = [
 
 [[package]]
 name = "primp-reqwest"
-version = "0.13.3"
+version = "0.13.4"
 dependencies = [
  "base64",
  "brotli",
@@ -3060,17 +3059,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "system-configuration"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c879d448e9d986b661742763247d3693ed13609438cf3d006f51f5368a5ba6b"
-dependencies = [
- "bitflags",
- "core-foundation 0.9.4",
- "system-configuration-sys",
 ]
 
 [[package]]
