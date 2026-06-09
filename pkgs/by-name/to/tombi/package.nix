@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombi";
   version = "1.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tombi-toml";
     repo = "tombi";
@@ -20,7 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Tests relies on the presence of network
   doCheck = false;
-  cargoBuildFlags = [ "--package tombi-cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "tombi-cli"
+  ];
   cargoHash = "sha256-IgtFNjp8fql01KGCR6h4+QtEm3AxJxsq900ZEwhRWhg=";
 
   postPatch = ''
