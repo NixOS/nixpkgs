@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mooltipass/moolticute";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      kirikaza
-      hughobrien
-    ];
+    maintainers = with lib.maintainers; [ hughobrien ];
     platforms = lib.platforms.linux;
   };
 }

@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) version;
     format = "wheel";
     python = "py2.py3";
-    hash = "sha256-4kSDPW8ATfNcajb4Ebz6llwqfsX8lNYlYDZbekdcmMk=";
+    hash = "sha256-GDgqFShq40hcptQPie9pwyZFed/9kBmvke5/OwfHl6M=";
   };
 
   pythonRelaxDeps = [

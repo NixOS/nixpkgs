@@ -710,106 +710,140 @@ stdenv.mkDerivation (finalAttrs: {
     # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
     withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
 
-    tests =
+    # These are all the tests that need to pass in order to merge a PR that
+    # updates systemd.
+    #
+    # This list cannot grow indefinitely. It needs to balance the coverage of
+    # important features of a NixOS system exposed via systemd and the actual
+    # ability of maintainers to execute the tests. Only if this remains
+    # executable with reasonable effort, can it serve its purpose as a quality
+    # gate for updating systemd.
+    nixosTests =
       let
-        # Some entries in the `nixosTests.systemd-*` set of attributes are collections of tests,
-        # not individual tests themselves. Let's gather them into one set.
-        gatherNixosTestsFromCollection =
-          prefix: collection:
+        prefixTests =
+          prefix:
           lib.mapAttrs' (name: value: {
             name = "${prefix}-${name}";
             inherit value;
-          }) collection;
-
-        # Here's all the nixosTests that are collections of tests, rather than individual tests.
-        collectedNixosTests = lib.mergeAttrsList (
-          lib.mapAttrsToList gatherNixosTestsFromCollection {
-            inherit (nixosTests)
-              systemd-binfmt
-              systemd-boot
-              systemd-initrd-networkd
-              systemd-repart
-              installer-systemd-stage-1
-              ;
-          }
-        );
-
-        # ... and here's all the individual tests.
-        individualNixosTests = {
-          inherit (nixosTests)
-            fsck-systemd-stage-1
-            hibernate-systemd-stage-1
-            switchTest
-            systemd
-            systemd-analyze
-            systemd-bpf
-            systemd-confinement
-            systemd-coredump
-            systemd-cryptenroll
-            systemd-credentials-tpm2
-            systemd-escaping
-            systemd-initrd-btrfs-raid
-            systemd-initrd-luks-fido2
-            systemd-initrd-luks-keyfile
-            systemd-initrd-luks-empty-passphrase
-            systemd-initrd-luks-password
-            systemd-initrd-luks-tpm2
-            systemd-initrd-modprobe
-            systemd-initrd-shutdown
-            systemd-initrd-simple
-            systemd-initrd-swraid
-            systemd-initrd-vconsole
-            systemd-initrd-networkd-ssh
-            systemd-initrd-networkd-openvpn
-            systemd-initrd-vlan
-            systemd-journal
-            systemd-journal-gateway
-            systemd-journal-upload
-            systemd-machinectl
-            systemd-networkd
-            systemd-networkd-bridge
-            systemd-networkd-dhcpserver
-            systemd-networkd-dhcpserver-static-leases
-            systemd-networkd-ipv6-prefix-delegation
-            systemd-networkd-vrf
-            systemd-no-tainted
-            systemd-nspawn
-            systemd-nspawn-configfile
-            systemd-oomd
-            systemd-portabled
-            systemd-pstore
-            systemd-resolved
-            systemd-shutdown
-            systemd-sysupdate
-            systemd-sysusers-mutable
-            systemd-sysusers-immutable
-            systemd-sysusers-password-option-override-ordering
-            systemd-timesyncd-nscd-dnssec
-            systemd-user-linger
-            systemd-user-tmpfiles-rules
-            systemd-misc
-            systemd-userdbd
-            systemd-homed
-            ;
-        };
-
-        # Finally, make an attrset we're fairly sure is just tests.
-        relevantNixosTests = lib.mapAttrs (
-          name: value:
-          assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
-          value
-        ) (individualNixosTests // collectedNixosTests);
+          }) nixosTests."${prefix}";
       in
-      relevantNixosTests
+      {
+        inherit (prefixTests "systemd-binfmt")
+          systemd-binfmt-basic
+          systemd-binfmt-chroot
+          systemd-binfmt-ldPreload
+          systemd-binfmt-preserveArgvZero
+          ;
+      }
       // {
-        cross =
-          let
-            systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
-          in
-          pkgsCross.${systemString}.systemd;
-
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+        inherit (prefixTests "systemd-initrd-networkd")
+          systemd-initrd-networkd-basic
+          systemd-initrd-networkd-doFlush
+          systemd-initrd-networkd-dontFlush
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-boot")
+          systemd-boot-basic
+          systemd-boot-basicXbootldr
+          systemd-boot-bootCounting
+          systemd-boot-bootCountingSpecialisation
+          systemd-boot-defaultEntry
+          systemd-boot-defaultEntryWithBootCounting
+          systemd-boot-edk2-uefi-shell
+          systemd-boot-entryFilenameXbootldr
+          systemd-boot-extraEntries
+          systemd-boot-extraFiles
+          systemd-boot-fallback
+          systemd-boot-garbage-collect-entry
+          systemd-boot-garbageCollectEntryWithBootCounting
+          systemd-boot-memtest86
+          systemd-boot-memtestSortKey
+          systemd-boot-netbootxyz
+          systemd-boot-secureBoot
+          systemd-boot-specialisation
+          systemd-boot-switch-test
+          systemd-boot-update
+          systemd-boot-windows
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-repart")
+          systemd-repart-after-initrd
+          systemd-repart-basic
+          systemd-repart-create-root
+          systemd-repart-encrypt-tpm2
+          systemd-repart-factory-reset
+          ;
+      }
+      // {
+        inherit (nixosTests)
+          simple-vm
+          fsck-systemd-stage-1
+          hibernate-systemd-stage-1
+          switchTest
+          # systemd # broken on master
+          systemd-analyze
+          systemd-bpf
+          systemd-confinement
+          # systemd-coredump # broken on master
+          systemd-cryptenroll
+          systemd-credentials-tpm2
+          systemd-escaping
+          systemd-initrd-btrfs-raid
+          systemd-initrd-luks-fido2
+          systemd-initrd-luks-keyfile
+          systemd-initrd-luks-empty-passphrase
+          systemd-initrd-luks-password
+          systemd-initrd-luks-tpm2
+          systemd-initrd-modprobe
+          systemd-initrd-shutdown
+          systemd-initrd-simple
+          systemd-initrd-swraid
+          # systemd-initrd-vconsole # broken on master
+          systemd-initrd-networkd-ssh
+          systemd-initrd-networkd-openvpn
+          systemd-initrd-vlan
+          systemd-journal
+          # systemd-journal-gateway # broken on master
+          systemd-journal-upload
+          # systemd-machinectl # broken on master
+          systemd-networkd
+          systemd-networkd-bridge
+          systemd-networkd-dhcpserver
+          systemd-networkd-dhcpserver-static-leases
+          systemd-networkd-ipv6-prefix-delegation
+          systemd-networkd-vrf
+          systemd-no-tainted
+          systemd-nspawn
+          systemd-nspawn-configfile
+          systemd-oomd
+          systemd-portabled
+          systemd-pstore
+          systemd-resolved
+          systemd-shutdown
+          systemd-sysupdate
+          systemd-sysusers-mutable
+          systemd-sysusers-immutable
+          systemd-sysusers-password-option-override-ordering
+          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-user-linger
+          systemd-user-tmpfiles-rules
+          systemd-misc
+          systemd-userdbd
+          # systemd-homed # broken on master
+          ;
       };
+
+    tests = finalAttrs.passthru.nixosTests // {
+      cross =
+        let
+          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {

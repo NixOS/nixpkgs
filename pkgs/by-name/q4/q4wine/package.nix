@@ -7,7 +7,6 @@
   qt6,
   icoutils, # build and runtime deps.
   wget,
-  fuseiso,
   wine,
   which, # runtime deps.
 }:
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           icoutils
           wget
-          fuseiso
           wine
           which
         ]

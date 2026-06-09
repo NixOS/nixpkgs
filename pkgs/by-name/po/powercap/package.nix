@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tools and library to read/write to the Linux power capping framework (sysfs interface)";
+    homepage = "https://github.com/powercap/powercap";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rowanG077 ];

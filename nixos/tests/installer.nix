@@ -1118,6 +1118,7 @@ let
         enableOCR = fallback;
         extraInstallerConfig = {
           boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
           environment.systemPackages = with pkgs; [ clevis ];
         };
         createPartitions = ''
@@ -1208,9 +1209,9 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 100MiB"  # /boot
+          + " mkpart ESP fat32 1M 170MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 100MiB 1024MiB"
+          + " mkpart primary linux-swap 170MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -1276,6 +1277,7 @@ in
   separateBootZfs = makeInstallerTest "separateBootZfs" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
@@ -1348,6 +1350,7 @@ in
   zfsroot = makeInstallerTest "zfs-root" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''

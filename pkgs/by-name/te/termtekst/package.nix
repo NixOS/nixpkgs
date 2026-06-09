@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       as a workaround the braille set is abused to approximate the
       graphics.
     '';
+    homepage = "https://github.com/zevv/termtekst";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

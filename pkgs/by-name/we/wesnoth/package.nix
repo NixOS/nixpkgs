@@ -17,7 +17,6 @@
   fribidi,
   dbus,
   libpng,
-  pcre,
   openssl,
   icu,
   lua5_4,
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     dbus
     libpng
-    pcre
     openssl
     icu
     lua

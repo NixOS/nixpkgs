@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0-unstable-2026-05-10";
+  version = "0.2.0.2-unstable-2026-05-10";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";

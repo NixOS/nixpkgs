@@ -6,7 +6,7 @@
   util-linux,
   groff,
   perl,
-  pcre,
+  pcre2,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-epgsearch";
@@ -33,12 +33,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vdr
-    pcre
+    pcre2
   ];
 
   buildFlags = [
     "SENDMAIL="
-    "REGEXLIB=pcre"
   ];
 
   installFlags = [

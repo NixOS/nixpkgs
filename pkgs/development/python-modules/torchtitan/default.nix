@@ -22,6 +22,7 @@
   # tests
   pytestCheckHook,
   tomli-w,
+  triton,
   writableTmpDirAsHomeHook,
 }:
 
@@ -60,6 +61,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     tomli-w
     transformers
+    triton
     writableTmpDirAsHomeHook
   ];
 

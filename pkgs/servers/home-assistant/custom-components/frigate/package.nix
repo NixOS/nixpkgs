@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.15.3";
+  version = "5.15.4";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-ZDTwC5dm9kAgT/pIHQAK56L2pjyf/PmOjDr0F+Fr+JA=";
+    hash = "sha256-xckHpwKujlWJ0M/fDlCU96WocMIlMk37+TwmY8iEnNo=";
   };
 
   patches = [
@@ -33,6 +33,10 @@ buildHomeAssistantComponent rec {
     ./service-to-action.patch
     # https://github.com/blakeblackshear/frigate-hass-integration/pull/1085
     ./llmcontext-user-prompt.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1096
+    ./async-publish-compat.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1095
+    ./remove-advanced-options-gate.patch
   ];
 
   dependencies = [
@@ -48,8 +52,8 @@ buildHomeAssistantComponent rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
-  ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python3Packages)
+  ++ (homeassistant.getPackages "stream" homeassistant.python3Packages);
 
   disabledTests = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/922

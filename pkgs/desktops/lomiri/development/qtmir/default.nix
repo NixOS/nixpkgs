@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  nixosTests,
   testers,
   cmake,
   cmake-extras,
@@ -36,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Not regular qtmir, experimental support for Mir 2.x
   # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/sunweaver/debian-upstream
   pname = "qtmir-debian-upstream";
-  version = "0.8.0-unstable-2025-05-20";
+  version = "0.8.0-unstable-2026-03-11";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qtmir";
-    rev = "b35762f5198873560138a810b387ae9401615c02";
-    hash = "sha256-v5mdu3XLK4F5O56GDItyeCFsFMey4JaNWwXRlgjKFMA=";
+    rev = "57d9e9763933a5d6ca696676ebdde934529a71fe";
+    hash = "sha256-xlMxBnEru4YK0BxUOd/jni9OTb6lZlw6nyHLNqdfY20=";
   };
 
   outputs = [
@@ -50,19 +51,24 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    # 10s timeout for Mir startup is too tight for VM tests on weaker hardwre (aarch64)
-    substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
-      --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
-      --replace-fail 'const int timeout = 10' 'const int timeout = 90'
-
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \
-
-    substituteInPlace data/xwayland.qtmir.desktop \
-      --replace-fail '/usr/bin/Xwayland' 'Xwayland'
-  '';
+  postPatch =
+    # 10s timeout for Mir startup is too tight for VM tests on weaker hardware (aarch64)
+    ''
+      substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
+        --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
+        --replace-fail 'const int timeout = 10' 'const int timeout = 90'
+    ''
+    # Fix where Qt plugins & QML modules should be installed to. We don't use "qt5" for Qt5.
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+        --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms"
+    ''
+    # Look up Xwayland in environment
+    + ''
+      substituteInPlace data/xwayland.qtmir.desktop \
+        --replace-fail '/usr/bin/Xwayland' 'Xwayland'
+    '';
 
   strictDeps = true;
 
@@ -120,7 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests currently unavailable when building with Mir2
   doCheck = false;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = nixosTests.lomiri // {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "QPA plugin to make Qt a Mir server";

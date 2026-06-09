@@ -102,7 +102,33 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       yzx9
     ];
-    platforms = lib.platforms.all;
+    # CMake script rejects non-approved platform targets
+    # https://github.com/google/libultrahdr/pull/383 would get rid of that
+    platforms =
+      let
+        # Values from the "Detect system" section in /CMakeLists.txt
+        # https://github.com/google/libultrahdr/blob/d52a0d13814ca399fc8a07e23de1d2c63f0e8404/CMakeLists.txt#L34
+        oss = [
+          "linux"
+          "windows"
+          "darwin"
+        ];
+        archs = [
+          "i686"
+          "x86_64"
+          "aarch64"
+          "armv7l"
+          "riscv64"
+          "riscv32"
+          "loongarch64"
+        ];
+      in
+      lib.lists.intersectLists lib.platforms.all (
+        lib.lists.crossLists (arch: os: "${arch}-${os}") [
+          archs
+          oss
+        ]
+      );
     license = with lib.licenses; [
       asl20
     ];

@@ -1577,169 +1577,6 @@
     },
     {
       "dependencies": [
-        "bundled-python3-windows-x86",
-        "bundled-python3-windows-x86_64",
-        "core"
-      ],
-      "details": {
-        "description": "Provides stand-alone Python 3.14 install.",
-        "display_name": "Bundled Python 3.14"
-      },
-      "gdu_only": false,
-      "id": "bundled-python3",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "architectures": [
-          "x86",
-          "x86_64"
-        ],
-        "operating_systems": [
-          "WINDOWS"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 0,
-        "version_string": "3.14.4"
-      }
-    },
-    {
-      "dependencies": [
-        "bundled-python3-unix-linux-x86_64",
-        "core"
-      ],
-      "details": {
-        "description": "Provides stand-alone Python 3.14.5 installation for UNIX.",
-        "display_name": "Bundled Python 3.14"
-      },
-      "gdu_only": false,
-      "id": "bundled-python3-unix",
-      "is_configuration": false,
-      "is_hidden": false,
-      "is_required": false,
-      "platform": {
-        "architectures": [
-          "x86_64"
-        ],
-        "operating_systems": [
-          "LINUX"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 0,
-        "version_string": "3.14.5"
-      }
-    },
-    {
-      "data": {
-        "checksum": "5c4ce4eb75b99cd5e06fae99f6e45c42b88df3225699629715dba64a85a7fd39",
-        "contents_checksum": "f23b948b0e0ed0d93d7e3e51375347b1f72212ce6b5d70b4e8729e404e415b8f",
-        "size": 27198113,
-        "source": "components/google-cloud-sdk-bundled-python3-unix-linux-x86_64-20260522195849.tar.gz",
-        "type": "tar"
-      },
-      "dependencies": [
-        "bundled-python3-unix",
-        "core"
-      ],
-      "details": {
-        "description": "Provides stand-alone Python 3.14.5 installation for UNIX.",
-        "display_name": "Bundled Python 3.14 (Platform Specific)"
-      },
-      "gdu_only": false,
-      "id": "bundled-python3-unix-linux-x86_64",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "architectures": [
-          "x86_64"
-        ],
-        "operating_systems": [
-          "LINUX"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 20260522195849,
-        "version_string": "3.14.5"
-      }
-    },
-    {
-      "data": {
-        "checksum": "393967c25a467c4faaadda895810a1f725d1c2416fc29e1a4f3c08c57e0c6949",
-        "contents_checksum": "78156598f73fc69a32f30a5efac14c526cf8f44ccf2a7e0ef2db75b915331772",
-        "size": 21432688,
-        "source": "components/google-cloud-sdk-bundled-python3-windows-x86-20260522195849.tar.gz",
-        "type": "tar"
-      },
-      "dependencies": [
-        "bundled-python3",
-        "core"
-      ],
-      "details": {
-        "description": "Provides stand-alone Python 3.14 install.",
-        "display_name": "Bundled Python 3.14 (Platform Specific)"
-      },
-      "gdu_only": false,
-      "id": "bundled-python3-windows-x86",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "architectures": [
-          "x86"
-        ],
-        "operating_systems": [
-          "WINDOWS"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 20260522195849,
-        "version_string": "3.14.4"
-      }
-    },
-    {
-      "data": {
-        "checksum": "dbe1d783730a03c1fe04b47a1e8611754ee021433e2dbbaf8194fc958355f148",
-        "contents_checksum": "0b369522fe69d7c12f178e1ed3b15f6dd15e8fa94d05f1be10c96e75930f81f4",
-        "size": 23967274,
-        "source": "components/google-cloud-sdk-bundled-python3-windows-x86_64-20260522195849.tar.gz",
-        "type": "tar"
-      },
-      "dependencies": [
-        "bundled-python3",
-        "core"
-      ],
-      "details": {
-        "description": "Provides stand-alone Python 3.14 install.",
-        "display_name": "Bundled Python 3.14 (Platform Specific)"
-      },
-      "gdu_only": false,
-      "id": "bundled-python3-windows-x86_64",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "architectures": [
-          "x86_64"
-        ],
-        "operating_systems": [
-          "WINDOWS"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 20260522195849,
-        "version_string": "3.14.4"
-      }
-    },
-    {
-      "dependencies": [
         "cbt-darwin-arm",
         "cbt-darwin-x86",
         "cbt-darwin-x86_64",
@@ -3265,7 +3102,6 @@
         "type": "tar"
       },
       "dependencies": [
-        "bundled-python3-unix",
         "core-nix",
         "core-win",
         "gcloud-deps",
@@ -3296,7 +3132,6 @@
         "type": "tar"
       },
       "dependencies": [
-        "bundled-python3-unix",
         "core",
         "gcloud-deps",
         "ssh-tools"
@@ -3333,7 +3168,6 @@
         "type": "tar"
       },
       "dependencies": [
-        "bundled-python3-unix",
         "core",
         "gcloud-deps",
         "ssh-tools"

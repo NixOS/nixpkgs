@@ -7,48 +7,41 @@
   pkg-config,
   electron,
   chromium,
+  cacert,
   clojure,
+  git,
   vips,
 
   writeShellScriptBin,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
-  replaceVars,
 
   nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.14";
+  version = "0.4.15";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-El3gXpfNofHev84tpa0v16y2Sjdo6kmlm44hgHcinCk=";
+    hash = "sha256-Fnu7tZ8chvnDMuMw4QD1NuQgaFOBzHfzl2ePQ5iwnao=";
   };
 
   patches = [
-    (replaceVars ./hardcode-git-paths.patch {
-      clj-kdtree_src = fetchFromGitHub {
-        owner = "abscondment";
-        repo = "clj-kdtree";
-        rev = "5ec321c5e8006db00fa8b45a8ed9eb0b8f3dd56d";
-        hash = "sha256-ZOv+9TxBsOnSSbfM7kJLP3cQH9FpgA15aETszg7YSes=";
-      };
-    })
-    # outputHash of manvenDeps changes each time `clojure` is updated
+    # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-gOk/hHWGLwAxPIBqasoUzfszPv911afb/VLn7w7g5KE=";
+  npmDepsHash = "sha256-0dSFEZ02D83yplqT3GV9TyUwJ3lDjxM47pGYwUXzatw=";
 
   nativeBuildInputs = [
-    finalAttrs.passthru.clojureWithCache
+    finalAttrs.passthru.clojureWithHome
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
@@ -138,48 +131,72 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     # this was taken and adapted from "logseq" package's nixpkgs derivation
-    mavenRepo = stdenv.mkDerivation {
-      name = "repath-studio-${finalAttrs.version}-maven-deps";
+    clojureHome = stdenv.mkDerivation {
+      name = "repath-studio-${finalAttrs.version}-clojure-home";
       inherit (finalAttrs) src patches;
 
-      nativeBuildInputs = [ clojure ];
+      nativeBuildInputs = [
+        cacert
+        clojure
+        git
+      ];
 
       buildPhase = ''
         runHook preBuild
 
-        export HOME="$(mktemp -d)"
         mkdir -p "$out"
+        export HOME="$out"
+        export JAVA_TOOL_OPTIONS="-Duser.home=$out"
 
         # -P       -> resolve all normal deps
         # -M:alias -> resolve extra-deps of the listed aliases
-        clj -Sdeps "{:mvn/local-repo \"$out\"}" -P -M:dev:cljs
+        clojure -P -M:dev:cljs
 
         runHook postBuild
       '';
 
-      # copied from buildMavenPackage
-      # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
       installPhase = ''
         runHook preInstall
 
-        find $out -type f \( \
+        # copied from buildMavenPackage
+        # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+        find "$out/.m2/repository" -type f \( \
           -name \*.lastUpdated \
           -o -name resolver-status.properties \
           -o -name _remote.repositories \) \
           -delete
+
+        # remove .git pointers to the bare repos in _repos
+        find "$out/.gitlibs/libs" -type f -name .git -delete
+
+        # keep only the bare repo config files so the clojure CLI doesn't want to fetch the repos again
+        # but make them be empty for reproducibility
+        find "$out/.gitlibs/_repos" -type f -name "config" -print0 | while read -d "" f; do
+          rm -rf "$(dirname "$f")"
+          mkdir "$(dirname "$f")"
+          touch "$f"
+        done
+
+        # recreate .clojure with empty settings
+        rm -r "$out/.clojure"
+        mkdir -p "$out/.clojure/tools"
+        echo "{}" > "$out/.clojure/deps.edn"
+        echo "{}" > "$out/.clojure/tools/tools.edn"
 
         runHook postInstall
       '';
 
       dontFixup = true;
 
-      outputHash = "sha256-fwKeKfOIAWj9HQdXpEafZuJz5jwXNKpkS0JmuP3FXo0=";
+      outputHash = "sha256-2ijBbKXKiXStWAyeLoRv8OSMoCfB2xA1TVw6xtlBPes=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
 
-    clojureWithCache = writeShellScriptBin "clojure" ''
-      exec ${lib.getExe' clojure "clojure"} -Sdeps '{:mvn/local-repo "${finalAttrs.passthru.mavenRepo}"}' "$@"
+    clojureWithHome = writeShellScriptBin "clojure" ''
+      export HOME="${finalAttrs.passthru.clojureHome}"
+      export JAVA_TOOL_OPTIONS="-Duser.home=${finalAttrs.passthru.clojureHome}"
+      exec ${lib.getExe' clojure "clojure"} "$@"
     '';
 
     updateScript = ./update.sh;

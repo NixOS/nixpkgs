@@ -70,7 +70,6 @@ buildGoModule rec {
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      euxane
       martinetd
     ];
     mainProgram = "rmfakecloud";

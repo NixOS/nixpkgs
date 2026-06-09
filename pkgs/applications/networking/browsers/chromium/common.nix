@@ -621,7 +621,7 @@ let
       # clang++: error: unknown argument: '-fno-lifetime-dse'
       ./patches/chromium-147-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "148" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "148" "149" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
       (fetchpatch {
         name = "chromium-148-revert-build-Add--fsanitizer=return-config.patch";
@@ -651,7 +651,22 @@ let
         hash = "sha256-jR0G9z2R8VGl2tkB3u0368RyWM1J6qYXqNWwKkYd5zU=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "148") [
+    ++ lib.optionals (chromiumVersionAtLeast "149" && lib.versionOlder llvmVersion "23") [
+      # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+      ./patches/chromium-149-llvm-22.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
+      # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
+      # FAILED: [code=1] obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
+      # clang++ -MD -MF obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o.d [...]
+      # ../../media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc:123:9: error: use of undeclared identifier 'ERROR'
+      #   123 |     LOG(ERROR) << "dlopen(radeonsi_dri.so) failed with error: " << dlerror();
+      #       |         ^~~~~
+      ./patches/chromium-149-use-of-undeclared-identifier-ERROR.patch
+    ]
+    ++ lib.optionals (versionRange "148" "149") [
       # ninja: error: '../../third_party/rust-toolchain/bin/rustc', needed by 'phony/default_for_rust_host_build_tools_rust_bin_inputs', missing and no known rule to make it
       (fetchpatch {
         name = "chromium-148-revert-Reland-build-use-tool-inputs-instead-of-siso-config-for-rust-actions.patch";
@@ -791,6 +806,12 @@ let
       + lib.optionalString (chromiumVersionAtLeast "148") ''
         mkdir -p third_party/gperf/cipd/bin
         ln -s "${pkgsBuildHost.gperf}/bin/gperf" third_party/gperf/cipd/bin/gperf
+      ''
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7719879
+      # ninja: error: '../../third_party/rust-toolchain/bin/rustc', needed by 'phony/default_for_rust_host_build_tools_rust_bin_inputs', missing and no known rule to make it
+      + lib.optionalString (chromiumVersionAtLeast "149") ''
+        mkdir -p third_party/rust-toolchain/bin
+        ln -s "${buildPackages.rustc}/bin/rustc" third_party/rust-toolchain/bin/rustc
       ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
@@ -973,7 +994,11 @@ let
     # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow";
+    env.NIX_CFLAGS_COMPILE =
+      "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow"
+      # warning: '_LIBCPP_HARDENING_MODE' macro redefined [-Wmacro-redefined]
+      # because of hardeningDisable = [ "strictflexarrays1" ];
+      + lib.optionalString (chromiumVersionAtLeast "149") " -Wno-macro-redefined";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";

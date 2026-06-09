@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.11";
+  version = "3.5.12";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-nW+yq330lQRfo1RtxUtbkQ336WeE8BjC9jYAIibfdXo=";
+    hash = "sha256-/ehwjv1ipvxhmZYye1avkpz8uyO8YEWl0iM8U8n6pwE=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -100,9 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --cwd app/node_modules/desktop-notifications run install
 
     # use git from nixpkgs instead of an automatically downloaded one by dugite
-    makeWrapper ${lib.getExe git} app/node_modules/dugite/git/bin/git \
+    gitRoot=app/node_modules/dugite/git
+    makeWrapper ${lib.getExe git} "$gitRoot/bin/git" \
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
+    mkdir -p "$gitRoot/libexec/git-core"
+
+    for script in ${git}/libexec/git-core/*; do
+      ln -s "$script" "$gitRoot/libexec/git-core/$(basename "$script")"
+    done
 
     # exception: printenvz needs `node-gyp` configure first for some reason
     pushd node_modules/printenvz

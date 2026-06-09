@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/martinus/nanobench/pull/98/commits/17a1f0b598a09d399dd492c72bca5b48ad76c794.patch";
       hash = "sha256-2lOD63qN7gywUQxrdSRVyddpzcQjjeWOrA3hqu7x+CY=";
     })
+
+    # Drop when https://github.com/martinus/nanobench/pull/134 is merged
+    # This is a slice of what that PR provides, it makes it possible for packages to do "find_package"
+    ./fix-cmake-find_package.patch
   ];
 
   nativeBuildInputs = [ cmake ];

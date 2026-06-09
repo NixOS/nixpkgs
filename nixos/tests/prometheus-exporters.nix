@@ -436,6 +436,30 @@ let
         '';
       };
 
+    elasticsearch =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          url = "http://localhost:9200";
+        };
+        metricProvider = {
+          # `services.elasticsearch` is unmaintained; OpenSearch is the same
+          # engine class and is explicitly supported by the exporter.
+          services.opensearch.enable = true;
+          virtualisation.memorySize = 2048;
+        };
+        exporterTest = ''
+          wait_for_unit("opensearch.service")
+          wait_for_open_port(9200)
+          wait_for_unit("prometheus-elasticsearch-exporter.service")
+          wait_for_open_port(9114)
+          succeed(
+              "curl -sSf localhost:9114/metrics | grep 'elasticsearch_cluster_health_status'"
+          )
+        '';
+      };
+
     fail2ban =
       { ... }:
       {

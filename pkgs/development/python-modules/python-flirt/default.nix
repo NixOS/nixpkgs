@@ -7,7 +7,7 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-flirt";
   version = "0.9.10";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fZZTEBkpCE5L4efcNGzAuxCWgOSqc2r77F5U6kpMU6M=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

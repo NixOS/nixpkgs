@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "safety";
-  version = "3.8.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = finalAttrs.version;
-    hash = "sha256-/iLxcVku8ogVZyhQI0/U+m1RyECDYWxLix+S83HHrS4=";
+    hash = "sha256-xKZ8uhwuM6eu1NTppPFTBkxSjrguTw9GuIvPhPaTIAI=";
   };
 
   patches = [

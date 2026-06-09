@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2026-03-21";
+  version = "0.13.0-unstable-2026-05-09";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "594ec7e1205450ff0753d19f0724bbe8b380465d";
-    sha256 = "sha256-a496Ayas2IsP3K320EXc/7VDAtrqUzF8OaKNKBWf8lQ=";
+    rev = "4767a8ed97c57e4bb2ecf60fd72e345f58dfa3fc";
+    sha256 = "sha256-ZwPy1Et0ftCX8haogRSOUm1et2pvYZxvdsuM74acu6Q=";
   };
 
   sourceRoot = "${src.name}/klippy";
@@ -77,12 +77,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in klippy.py console.py parsedump.py; do
       substituteInPlace $file \
-        --replace '/usr/bin/env python2' '/usr/bin/env python'
+        --replace-warn '/usr/bin/env python2' '/usr/bin/env python'
     done
 
     # needed for cross compilation
     substituteInPlace ./chelper/__init__*.py \
-      --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
+      --replace-warn 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
 
   pythonInterpreter =
@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
       p: with p; [
         numpy
         matplotlib
+        python-can
       ]
     )).interpreter;
 
@@ -109,8 +110,10 @@ stdenv.mkDerivation rec {
     # under `klipper_path`
     cp -r $src/docs $out/lib/docs
     cp -r $src/config $out/lib/config
-    cp -r $src/scripts $out/lib/scripts
     cp -r $src/klippy $out/lib/klippy
+    mkdir -p $out/lib/scripts
+    cp -r $src/scripts/* $out/lib/scripts
+    cp $src/lib/katapult/flashtool.py $out/lib/scripts/flash_can.py
 
     # Add version information. For the normal procedure see https://www.klipper3d.org/Packaging.html#versioning
     # This is done like this because scripts/make_version.py is not available when sourceRoot is set to "${src.name}/klippy"
@@ -124,6 +127,11 @@ stdenv.mkDerivation rec {
       --subst-var "out" \
       --subst-var-by "script" "calibrate_shaper.py"
     chmod 755 "$out/bin/klipper-calibrate-shaper"
+
+    substitute "$pythonScriptWrapper" "$out/bin/klipper-canbus-query" \
+      --subst-var "out" \
+      --subst-var-by "script" "canbus_query.py"
+    chmod 755 "$out/bin/klipper-canbus-query"
 
     runHook postInstall
   '';

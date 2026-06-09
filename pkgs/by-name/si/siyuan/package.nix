@@ -9,6 +9,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
   ]
   ++ lib.optionals isLinux [
+    pnpmBuildHook
     makeWrapper
     copyDesktopItems
   ]
@@ -120,11 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build
-
+  postBuild = ''
     electronBuilderArgs=(
       --dir
       --config electron-builder-${platformId}.yml
@@ -134,8 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
 
     npm exec electron-builder -- "''${electronBuilderArgs[@]}"
-
-    runHook postBuild
   '';
 
   installPhase = ''

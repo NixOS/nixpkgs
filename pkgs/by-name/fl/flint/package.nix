@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast Library for Number Theory";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.smasher164 ];
+    maintainers = [
+      lib.maintainers.smasher164
+      lib.maintainers.wegank
+    ];
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
     homepage = "https://www.flintlib.org/";

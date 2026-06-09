@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.21";
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RiKFSKHnyeiIcSaOltr4qv0pEBX5wctfztZ+8yrHjnE=";
+    hash = "sha256-X6oc6DTwIseNvWHhHoHv1Ur2zoaaGCdxYVe4+5+zjvA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-FiM1FuWeGmfZlnKiIImGOsJnKt3qsLqvY6oRUvOSBWM=";
+  cargoHash = "sha256-dwGJKLO+3i5FUgv+Huu1ZD/hFg/KdyWofApwkIDFD1I=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;

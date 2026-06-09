@@ -1,25 +1,14 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   copyDesktopItems,
   fetchPypi,
   gobject-introspection,
-  jellyfin-apiclient-python,
-  jinja2,
   makeDesktopItem,
-  mpv,
-  pillow,
-  pystray,
-  python,
-  python-mpv-jsonipc,
-  pywebview,
-  setuptools,
-  tkinter,
   wrapGAppsHook3,
-  pypresence,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
   version = "2.9.0";
   pyproject = true;
@@ -35,9 +24,9 @@ buildPythonApplication rec {
     gobject-introspection
   ];
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     jellyfin-apiclient-python
     mpv
     pillow
@@ -51,7 +40,7 @@ buildPythonApplication rec {
     jinja2
     pywebview
 
-    # discord rich presence dependencie
+    # discord rich presence dependency
     pypresence
   ];
 
@@ -80,7 +69,7 @@ buildPythonApplication rec {
   postInstall = ''
     for s in 16 32 48 64 128 256; do
       mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
-      ln -s $out/${python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
+      ln -s $out/${python3Packages.python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
         $out/share/icons/hicolor/''${s}x''${s}/apps/${pname}.png
     done
   '';

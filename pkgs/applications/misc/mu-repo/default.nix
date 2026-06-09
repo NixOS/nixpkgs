@@ -1,14 +1,13 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pytestCheckHook,
   git,
   testers,
   mu-repo,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mu-repo";
   version = "1.9.0";
   format = "setuptools";
@@ -23,7 +22,7 @@ buildPythonApplication rec {
   dependencies = [ git ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    python3Packages.pytestCheckHook
     git
   ];
 

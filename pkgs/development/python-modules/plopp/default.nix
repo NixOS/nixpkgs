@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-UYEbJtWSTwF4z8Ga+IsCk+yQVT5xMvEENqT+hrbxPEc=";
+    hash = "sha256-8rwF40aeJMyIcmMsSyea42B6poXHxHQlPIlw0ROeyzY=";
   };
 
   build-system = [

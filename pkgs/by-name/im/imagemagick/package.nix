@@ -41,7 +41,7 @@
   pango,
   libtiffSupport ? true,
   libtiff,
-  libultrahdrSupport ? true,
+  libultrahdrSupport ? lib.meta.availableOn stdenv.hostPlatform libultrahdr,
   libultrahdr,
   libxml2Support ? true,
   libxml2,

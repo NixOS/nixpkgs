@@ -126,7 +126,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      # The LICENSE file clearly claims the project is using AGPL-3.0
+      #
+      # c.f. https://github.com/AppFlowy-IO/AppFlowy/blob/main/LICENSE
+      agpl3Only
+      # But, the source code has not been synced with any major release since
+      # the end of 2025. One of the core team member said that they will "merge
+      # Flutter code back into this public repository at a later stage". However,
+      # 2 months later, nothing has changed.
+      #
+      # c.f. https://github.com/AppFlowy-IO/AppFlowy/issues/8479#issuecomment-4053301446
+      unfreeRedistributable
+    ];
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;

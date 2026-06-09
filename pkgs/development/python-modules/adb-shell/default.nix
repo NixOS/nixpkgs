@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     pycryptodome
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "adb_shell" ];
 

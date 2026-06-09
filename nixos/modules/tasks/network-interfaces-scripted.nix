@@ -430,8 +430,9 @@ let
                 rm -f /run/${n}.interfaces
               '';
               reload = ''
+                # shellcheck disable=SC2013
                 # Un-enslave child interfaces (old list of interfaces)
-                for interface in `cat /run/${n}.interfaces`; do
+                for interface in $(cat /run/${n}.interfaces); do
                   ip link set dev "$interface" nomaster up
                 done
 

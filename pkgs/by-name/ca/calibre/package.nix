@@ -40,16 +40,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.8.0";
+  version = "9.9.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3dkWokb8gh4JPbrBsJ9dGy/IS1PfNrAU775qxo8CaO8=";
+    hash = "sha256-ozwoRlJThVLiFmaR0fXdfxLDTEF4935rQGLZ+MzwXLk=";
   };
 
   patches =
     let
-      debian-source = "ds+_0.10.5-1";
+      debian-source = "ds+_0.10.6-1";
       debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [

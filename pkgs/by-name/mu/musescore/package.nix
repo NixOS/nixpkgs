@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -12,6 +13,7 @@
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  ffmpeg,
   flac,
   freetype,
   kdePackages,
@@ -33,6 +35,53 @@
   nixosTests,
 }:
 
+let
+  # TODO(@doronbehar): Contribute this one day to lib/? See:
+  # https://discourse.nixos.org/t/rfc-nix-function-that-overrides-a-scope-with-automatic-inheritance-propagation/78025
+  overrideScopeFully =
+    s: scopeOverrideFunc:
+    let
+      partiallyOverriddenScope = s.overrideScope scopeOverrideFunc;
+      directlyOverriddenAttrs = builtins.attrNames (scopeOverrideFunc partiallyOverriddenScope s);
+    in
+    builtins.mapAttrs (
+      attrName: pkg:
+      pkg.override (
+        lib.pipe directlyOverriddenAttrs [
+          (builtins.filter (
+            oAttr:
+            # Don't include in this filter the attribute `attrName` from the
+            # full scope, if it is already part of the _directly_ overridden
+            # attributes.
+            !(builtins.elem attrName directlyOverriddenAttrs)
+            && pkg ? override
+            # Continue with the creation of the `.override` arguments only for
+            # overridden attributes (`oAttr`) which are possible arguments to the
+            # `.override` function of the `pkg` at hand.
+            && pkg.override.__functionArgs ? ${oAttr}
+          ))
+          # Generate the `.override` argument using the attribute names `aNames`
+          (aNames: lib.genAttrs aNames (oAttr: partiallyOverriddenScope.${oAttr}))
+        ]
+      )
+    ) partiallyOverriddenScope;
+  kdePackages' = overrideScopeFully kdePackages (
+    self: super: {
+      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
+      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
+      qtdeclarative = super.qtdeclarative.overrideAttrs (
+        new: old: {
+          patches = old.patches ++ [
+            (fetchpatch {
+              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
+              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
+            })
+          ];
+        }
+      );
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
   version = "4.7.2";
@@ -94,8 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.qttools
-    kdePackages.wrapQtAppsHook
+    kdePackages'.qttools
+    kdePackages'.wrapQtAppsHook
     ninja
     pkg-config
   ]
@@ -108,12 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     flac
     freetype
-    kdePackages.qt5compat
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qtnetworkauth
-    kdePackages.qtscxml
-    kdePackages.qtsvg
+    kdePackages'.qt5compat
+    kdePackages'.qtbase
+    kdePackages'.qtdeclarative
+    kdePackages'.qtnetworkauth
+    kdePackages'.qtscxml
+    kdePackages'.qtsvg
     lame
     libjack2
     libogg
@@ -130,8 +179,20 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    kdePackages.qtwayland
+    kdePackages'.qtwayland
   ];
+
+  # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
+  # Nixpkgs' provided ffmpeg, for both MacOS & Linux. Note that upstream uses
+  # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
+  preConfigure = ''
+    substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -166,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";

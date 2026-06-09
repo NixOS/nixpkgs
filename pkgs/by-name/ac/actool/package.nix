@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "actool";
-  version = "2.0.0";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "actool";
     tag = finalAttrs.version;
-    hash = "sha256-TRxA9c6q66Gso/ziqvly8IJR2AEHMc197gC9cUSuwAw=";
+    hash = "sha256-dDTa6J2by6uvg4gecwCcBIRGesZ1F0gAXSLr+6DYjGc=";
   };
 
-  cargoHash = "sha256-BhR5gwIrFE0OuSAxVTY5kMfmMlPfIABfOgmX/rOvpug=";
+  cargoHash = "sha256-Q0fSZNXw/71kMemYzwVsBRFcAMNl4ItKu56YdB0AAdM=";
 
   meta = {
     description = "Apple's actool reimplementation";

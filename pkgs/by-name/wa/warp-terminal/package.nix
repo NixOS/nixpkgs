@@ -125,7 +125,6 @@ let
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      imadnyc
       FlameFlag
       johnrtitor
       logger

@@ -37,7 +37,7 @@ buildNpmPackage rec {
     description = "Gauge plugin that lets you write tests in JavaScript";
     homepage = "https://github.com/getgauge/gauge-js/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = [ ];
     inherit (gauge-unwrapped.meta) platforms;
   };
 }

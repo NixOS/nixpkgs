@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   colander,
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colanderalchemy";
   version = "0.3.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ColanderAlchemy";
-    sha256 = "006wcfch2skwvma9bq3l06dyjnz309pa75h1rviq7i4pd9g463bl";
+    hash = "sha256-dA1DXmqXxIPjzgGWo24C41vpmwF04JVU3XxqAZlj3AA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colander
     sqlalchemy
   ];
@@ -25,9 +30,11 @@ buildPythonPackage rec {
   # Tests are not included in Pypi
   doCheck = false;
 
+  pythonImportsCheck = [ "colanderalchemy" ];
+
   meta = {
     description = "Autogenerate Colander schemas based on SQLAlchemy models";
     homepage = "https://github.com/stefanofontanelli/ColanderAlchemy";
     license = lib.licenses.mit;
   };
-}
+})

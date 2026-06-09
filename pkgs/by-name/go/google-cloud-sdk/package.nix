@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     if [ -d platform/bundledpythonunix ]; then
       rm -r platform/bundledpythonunix
     fi
+    rm -f .install/bundled-python*
     cp -R * .install $out/google-cloud-sdk/
 
     # Resolve readlink noise in shell initialization
@@ -199,6 +200,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
+    tests.gke-gcloud-auth-plugin = withExtraComponents [
+      components.gke-gcloud-auth-plugin
+    ];
     updateScript = ./update.sh;
   };
 

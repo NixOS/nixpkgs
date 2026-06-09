@@ -1,6 +1,5 @@
 {
   lib,
-  go_1_26,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -8,18 +7,18 @@
   nixosTests,
 }:
 
-buildGoModule.override { go = go_1_26; } (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.17";
+  version = "0.0.22";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NuJM7MneCptlmX0NV7c/7T1E5xhzM8Z59xNwEEGVuHM=";
+    hash = "sha256-30+rLt0VonbwP3I09OrAxiCqrUuIvGivE3+6sQ/hnRo=";
   };
 
-  vendorHash = "sha256-YbpBZhXTlSEKkCRDzFeDWRT8HEsCG2905WVGjxvW6oY=";
+  vendorHash = "sha256-gto2lD3atZTy5QMECarLBWQR7Z1bBlFAoJtJYrzg7bY=";
 
   ldflags = [
     "-s"
