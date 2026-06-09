@@ -4067,7 +4067,8 @@
       ];
     "mitsubishi_comfort" =
       ps: with ps; [
-      ]; # missing inputs: mitsubishi-comfort
+        mitsubishi-comfort
+      ];
     "mjpeg" =
       ps: with ps; [
       ];
@@ -8309,6 +8310,7 @@
     "min_max"
     "minecraft_server"
     "minio"
+    "mitsubishi_comfort"
     "mjpeg"
     "moat"
     "mobile_app"
