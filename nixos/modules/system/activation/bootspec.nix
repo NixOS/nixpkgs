@@ -97,13 +97,13 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "boot" "bootspec" "enable" ] ''
+      Bootspec is now always generated and can no longer be disabled.
+    '')
+  ];
+
   options.boot.bootspec = {
-    enable =
-      lib.mkEnableOption "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json"
-      // {
-        default = true;
-        internal = true;
-      };
     enableValidation = lib.mkEnableOption ''
       the validation of bootspec documents for each build.
             This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
