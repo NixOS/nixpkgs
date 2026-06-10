@@ -11,7 +11,6 @@
   nix-update-script,
   testers,
   matrix-tuwunel,
-  enableBlurhashing ? true,
   # upstream tuwunel enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
@@ -89,16 +88,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bB42SEa/gkFlkjb4L12Uh7xI4+3NmJgfbUPU01NXaEQ=";
+    hash = "sha256-KbcijWL4PwEUycE9pxdJjnBP0pxK6ywuf7wpuy2eA60=";
   };
 
-  cargoHash = "sha256-czCKzV/DCMJK0sN/jP5Jo98Zdii9DIAGAVnFnK0YtmY=";
+  cargoHash = "sha256-RsZWk+cm9JJ6+8xsWXNyN2QcHSMFOD3CikNm84DhXWU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -127,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   # See https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
   # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
+  # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
   buildFeatures = [
     "brotli_compression"
@@ -140,7 +139,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
