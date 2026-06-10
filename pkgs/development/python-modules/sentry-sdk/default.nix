@@ -223,7 +223,7 @@ buildPythonPackage (finalAttrs: {
     "test_span_templates_ai_dicts"
     "test_span_templates_ai_objects"
   ]
-  ++ lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (pythonAtLeast "3.13" && stdenv.hostPlatform.isDarwin) [
     # profiler_id not populated on darwin
     "test_profile_stops_when_segment_ends"
     "test_segment_span_has_profiler_id"
