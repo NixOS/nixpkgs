@@ -5,6 +5,8 @@
 
   # build-sysetm
   cmake,
+  setuptools,
+  wheel,
 
   # build inputs
   blas,
@@ -13,29 +15,40 @@
   xcfun,
 
   # dependencies
-  cppe,
   h5py,
   numpy,
   scipy,
+
+  # optional-dependencies
+  cppe,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pyscf";
-  version = "2.13.0";
-  format = "setuptools";
+  version = "2.13.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
-    rev = "e8642fb7220248bd750c34ef6adf88a9744977ee";
-    hash = "sha256-RVv5vTmTtHDAbgOXHW1DUzYVsf+NvrYh9++WfNGJ07k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IEgbm7sZqxKxI+VPE9IoH+BAHkNgasGmRsdDykUFCeM=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  build-system = [ cmake ];
+  build-system = [
+    setuptools
+    wheel
+    cmake
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cmake<4.0" "cmake"
+  '';
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -50,13 +63,19 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    cppe
     h5py
     numpy
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    cppe = [ cppe ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cppe;
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''
     # Set config used by tests to ensure reproducibility
@@ -89,6 +108,7 @@ buildPythonPackage {
     "test_finite_diff_roks_grad"
     "test_finite_diff_df_roks_grad"
     "test_frac_particles"
+    "test_gwac_pade_frozen"
     "test_nosymm_sa4_newton"
     "test_pipek"
     "test_n3_cis_ewald"
@@ -117,4 +137,4 @@ buildPythonPackage {
     ];
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})
