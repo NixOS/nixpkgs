@@ -3,21 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.5.1";
+  version = "0.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
     tag = version;
-    hash = "sha256-lGlg8AgP7VtwZm5xfpEzs1VJSbfBdYns/l4ROP0LtEQ=";
+    hash = "sha256-W6F0/CGm713HhCtgqv+tEDm5mlkx0JJRmnUc9j+Fnvs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
+
+  dependencies = [
+    pydantic
+  ];
 
   postPatch = ''
     # Drop circular dependency on ttp
