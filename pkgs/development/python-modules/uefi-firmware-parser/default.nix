@@ -4,7 +4,7 @@
   buildPythonPackage,
   nix-update-script,
   setuptools,
-  wheel,
+  setuptools-scm,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   pythonRemoveDeps = [ "future" ];
