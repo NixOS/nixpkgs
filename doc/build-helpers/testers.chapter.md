@@ -98,6 +98,14 @@ It has two modes:
 
 : The path to the files to check.
 
+`relocatable` (boolean, optional) {#tester-lycheeLinkCheck-param-relocatable}
+
+: Whether the site is expected to be relocatable, i.e. servable from any URL path prefix.
+
+  When `true` (the default), root-relative links (starting with `/`) are treated as errors, because they break when the site is served from a subpath or opened via `file://` URLs.
+
+  When `false`, root-relative links are resolved against the `site` directory.
+
 `remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
