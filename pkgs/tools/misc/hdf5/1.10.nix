@@ -15,12 +15,16 @@ let
   inherit (lib) optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.10.11";
   pname = "hdf5";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor finalAttrs.version}/hdf5-${finalAttrs.version}/src/hdf5-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
   };
 
   outputs = [
@@ -62,4 +66,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
-}
+})
