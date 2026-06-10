@@ -18,6 +18,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.10";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "stravaweblib";
