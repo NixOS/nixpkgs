@@ -63,6 +63,7 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       aiotter
+      hibiday
       matthiasbeyer
     ];
     platforms = lib.platforms.unix;
