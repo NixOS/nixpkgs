@@ -433,7 +433,6 @@ let
         The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
       '';
       default = null;
-      defaultText = literalExpression "(url: url)";
       example = literalExpression ''
         {
           # Use Nix like it's 2024! ;-)
