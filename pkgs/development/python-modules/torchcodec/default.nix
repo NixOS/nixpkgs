@@ -99,6 +99,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     ENABLE_CUDA = cudaSupport;
   }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  }
   // lib.optionalAttrs rocmSupport {
     ROCM_PATH = torch.rocmtoolkit_joined;
     ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
