@@ -9908,6 +9908,8 @@ with pkgs;
 
   vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/full.nix { });
 
+  vim-classic = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/classic.nix { });
+
   vim-darwin =
     (vim-full.override {
       config = {
