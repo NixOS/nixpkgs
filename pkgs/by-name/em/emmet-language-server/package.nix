@@ -2,13 +2,16 @@
   lib,
   stdenvNoCC,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
   fetchFromGitHub,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
   version = "2.8.0";
@@ -22,16 +25,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-livnY/iwd7gqy6SKFBMF2MSIs7LVFec4BFqMBVasGWE=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-FbwciSGn/W8xQhTU2rHdYIX01wUAqcgY67za8n5AMcM=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
     pnpmBuildHook
-    pnpm_9
+    pnpm
   ];
 
   # remove unnecessary and non-deterministic files
