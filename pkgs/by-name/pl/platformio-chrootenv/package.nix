@@ -14,6 +14,7 @@ let
       platformio-core
       zlib
       git
+      libusb1
       xdg-user-dirs
       ncurses
       udev
