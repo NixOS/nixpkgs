@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "railroad-diagrams";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -15,6 +16,8 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-qRMyuskAyzw2czH6m2mfCJe8+GtyZPZUWGdd9DDQTOM=";
   };
+
+  build-system = [ setuptools ];
 
   # This is a dependency of pyparsing, which is a dependency of pytest
   doCheck = false;
