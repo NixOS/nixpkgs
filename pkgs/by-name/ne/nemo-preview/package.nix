@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-preview";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    tag = finalAttrs.version;
-    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+    tag = "${finalAttrs.version}-unstable";
+    hash = "sha256-msmy//e15B6lYLfsqqUhPAYt/PK+c4k6piY7pw4eqkI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-preview";
