@@ -124,6 +124,93 @@ A list of all available rake tasks can be obtained by running:
 $ sudo -u git -H gitlab-rake -T
 ```
 
+## Enterprise Edition {#module-services-gitlab-enterprise}
+
+GitLab Enterprise Edition (EE) includes proprietary features that require a valid
+license. Configure it through the `services.gitlab.enterprise` option group.
+
+### Enabling EE {#module-services-gitlab-enterprise-enabling}
+
+`gitlab-ee` carries an unfree license, so you'll need to allow unfree packages:
+
+```nix
+{
+  nixpkgs.config.allowUnfree = true;
+
+  services.gitlab = {
+    enable = true;
+    enterprise.enable = true;
+  };
+}
+```
+
+This switches `services.gitlab.packages.gitlab` to `pkgs.gitlab-ee`. Without a
+valid license the instance runs EE binaries but only Community Edition features
+are available.
+
+### Offline license file {#module-services-gitlab-enterprise-license-file}
+
+For air-gapped instances, request an offline `.gitlab-license` file from GitLab
+Sales. It is recommended a secrets management tool is used to keep the license
+secure.
+
+```nix
+{
+  services.gitlab.enterprise = {
+    enable = true;
+    licenseFile = "/var/keys/gitlab/gitlab.gitlab-license";
+  };
+}
+```
+
+The file is loaded during `gitlab-db-config.service`. A sha256 sentinel prevents
+duplicate database entries across reboots, replacing the secret and running
+`nixos-rebuild switch` will invalidate this and apply a renewed license.
+If loading fails, the unit retries and holds back all GitLab services until
+a valid license is provided, and activation succeeds.
+
+### Cloud activation code {#module-services-gitlab-enterprise-activation-code}
+
+For instances with internet access, use the 24-character activation code from the
+GitLab customer portal:
+
+```nix
+{
+  services.gitlab.enterprise = {
+    enable = true;
+    activationCodeFile = "/var/keys/gitlab/activation_code";
+  };
+}
+```
+
+The activation code should be kept private, so it is recommended a secrets
+management tool is used to store and supply it at runtime.
+
+This contacts `https://customers.gitlab.com` on every boot to sync the license.
+If the portal is unreachable, `gitlab-db-config.service` retries and holds back
+all GitLab services until activation succeeds.
+
+`licenseFile` and `activationCodeFile` cannot be used at the same time.
+
+### Customer Portal URL {#module-services-gitlab-enterprise-portal-url}
+
+Override the portal URL, for example when using the staging portal:
+
+```nix
+{
+  services.gitlab.enterprise = {
+    enable = true;
+    customerPortalUrl = "https://customers.staging.gitlab.com";
+    licenseMode = "test"; # required for staging-issued licenses
+  };
+}
+```
+
+`licenseMode = "test"` selects the staging license decryption key. Leave it unset
+for production licenses.
+
+Most installs will not need to customize this and should use the production portal.
+
 ## Runner {#module-services-gitlab-runner}
 
 GitLab Runner is a CI runner which is an executable which you can host yourself.
