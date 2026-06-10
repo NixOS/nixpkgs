@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
     tag = "slix-${finalAttrs.version}";
-    hash = "sha256-1Jns7kqYGpUvwfwyMoZ9ygD2Sm148f/QdJ0atvfwGTo=";
+    hash = "sha256-d0laQWaqZUoviF7NM/egENQ3ArQE12ER0TzfPBcnc7Q=";
   };
 
   patches = [
@@ -71,7 +71,10 @@ buildPythonPackage (finalAttrs: {
     safer-xml-parsing = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree
