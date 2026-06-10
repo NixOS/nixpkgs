@@ -30,10 +30,9 @@ stdenv.mkDerivation {
   buildInputs = [
     fcitx5
   ];
-  
+
   strictDeps = true;
   __structuredAttrs = true;
-  
 
   meta = {
     description = "Input method for Sitelen Pona";
