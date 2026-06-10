@@ -1165,6 +1165,10 @@ with haskellLib;
     hz3
     ;
 
+  # 2026-06-10: Too strict bounds on template-haskell <2.23 and time <1.13
+  # https://github.com/SupercedeTech/yesod-middleware-csp/issues/13
+  yesod-middleware-csp = doJailbreak super.yesod-middleware-csp;
+
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
