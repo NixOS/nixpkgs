@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "http://www.gtk-server.org/";
+    homepage = "https://www.gtk-server.org/";
     description = "Gtk-server for interpreted GUI programming";
-    changelog = "http://www.gtk-server.org/notes.txt";
+    changelog = "https://www.gtk-server.org/notes.txt";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
