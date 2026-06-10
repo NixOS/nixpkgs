@@ -26,11 +26,13 @@ assert (
 stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
   version = "0.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
   };
 
@@ -48,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
 
   buildInputs = [
     blas
@@ -85,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "multicharge";
     license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/multicharge";
+    changelog = "https://github.com/grimme-lab/multicharge/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
