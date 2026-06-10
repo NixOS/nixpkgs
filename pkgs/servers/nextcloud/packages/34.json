@@ -1,14 +1,4 @@
 {
-  "bookmarks": {
-    "hash": "sha256-Q4NwDrCuex5e2sGEG4Gu00Ne3UeojrSRlGPKQ8R2+/0=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v16.1.4/bookmarks-16.1.4.tar.gz",
-    "version": "16.1.4",
-    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users, groups and teams or via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
-    "homepage": "https://github.com/nextcloud/bookmarks",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "calendar": {
     "hash": "sha256-PAf/8YBhE87bfW0IZgDw6OsneafFvJADzqwjNp+M6wE=",
     "url": "https://github.com/nextcloud-releases/calendar/releases/download/v6.4.2/calendar-v6.4.2.tar.gz",
@@ -69,60 +59,30 @@
       "agpl"
     ]
   },
-  "dav_push": {
-    "hash": "sha256-tSLsSgPHdpfcKPzJubwchBqQykLf9WV/mXfKKM2CSxs=",
-    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v1.0.1/dav_push.tar.gz",
-    "version": "1.0.1",
-    "description": "In proprietary environments, changes in events and contacts are nowadays usually pushed to other clients so that they can update their views almost in real-time.\n\nWebDAV however (and in this context, especially CalDAV and CardDAV) doesn't currently support push notifications of clients when a collection has changed. So clients have to periodically ask the server for changes. This causes unnecessary delays and battery usage.\n\nThe WebDAV-Push standard, which is currently in development, wants to solve this problem with an open protocol, too.\n\nThis is the server part of these efforts to draft a standard and provide a working implementation (server + client) in order to demonstrate it.\n\n\nThe current WebDAV-Push draft is provided by [@bitfireAT](https://github.com/bitfireAT).\n          \nThis Nextcloud extension has been developed by [@verdigado](https://github.com/verdigado).",
-    "homepage": "",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "deck": {
-    "hash": "sha256-n0q700fSmqZ9tvsfSquXwh4ujtiBsW3wUaLnohu1MFg=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.17.3/deck-v1.17.3.tar.gz",
-    "version": "1.17.3",
+    "hash": "sha256-u0ewTWvzPm8PFH1XlVO4TUdn6a99RXtuh8z0RrGqo8Y=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.18.0/deck-v1.18.0.tar.gz",
+    "version": "1.18.0",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
       "agpl"
     ]
   },
-  "end_to_end_encryption": {
-    "hash": "sha256-+krBgynHh8sz6HZrpHsrRQRc/NedD6fW5jEwPrz8Vas=",
-    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v2.1.1/end_to_end_encryption-v2.1.1.tar.gz",
-    "version": "2.1.1",
-    "description": "## **End-to-End Encryption**\n\n### For End Users\n\n**Protect your most sensitive files with strong encryption.**\n\nThe End-to-End Encryption app gives you complete control over your data privacy.\nWith this app, you can encrypt specific folders so that only you (and those you trust) can access their contents.\nYour files are encrypted on your device before they reach the server, ensuring that no one—not even the server administrator—can read them.\n\n**Benefits:**\n- 🔒 **True privacy**: Files are encrypted on your device and can only be decrypted by you\n- 📱 **Works across all platforms**: Fully supported on desktop, Android, iOS clients, and as you wish even in the browser\n- 🎯 **Selective encryption**: Choose which folders to encrypt\n- 🛡️ **Secure sharing**: Share encrypted files with other users or even secure public upload using the encrypted file drop\n\n---\n\n### For Administrators\n\n**Enterprise-ready end-to-end encryption infrastructure for your Nextcloud instance.**\n\nThis app provides all the necessary server-side APIs and infrastructure to enable End-to-End encryption (E2EE) for your users.\nIt ensures that encrypted data remains secure throughout its lifecycle on your server.\n\n**Technical highlights:**\n- 🔐 **Complete API suite**: Provides all client-side APIs needed for E2EE implementation\n- 🔒 **Secure FileDrop integration**: Enables secure file sharing with encryption\n- 🛡️ **Zero-knowledge architecture**: Server never has access to encryption keys\n- ⚙️ **Group restrictions**: Limit app usage to specific user groups if needed\n- 🔄 **Background job management**: Automatic rollback handling for failed operations\n\n### Setup\nThis application provides the server-side infrastructure for end-to-end encryption, but it requires client support to function.\nTo enable end-to-end encryption, users will need to install the corresponding client-side app on their devices (desktop, Android, iOS) or use the web client.\n\nUsing the web interface, after enabling it in the personal settings, allows you to encrypt files and folders directly in the browser,\nproviding a seamless experience without needing additional software. But also requires some kind of trust in the server as the code is delivered by the server and could be manipulated.\n\nOnce enable through clients or the web interface, you can create encrypted folders and upload or move files into them.\nThe clients and the web interface will handle the encryption and decryption processes automatically.\n\n⚠️ This comes with some limitations and caveats, as only normal file operations can be handled.\nMeaning that some apps in the web interface do not work with encrypted files.",
-    "homepage": "https://github.com/nextcloud/end_to_end_encryption",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "files_automatedtagging": {
-    "hash": "sha256-A9cjrz0sJKMA+LinBiyUWJ5UOgvyfiJ3dLLP2NKBy50=",
-    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v4.0.0/files_automatedtagging-v4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-3lsRT8oZ4lP1Kngl8E47rc/7FJmiaXv/x3BfGMfHcC8=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v5.0.0/files_automatedtagging-v5.0.0.tar.gz",
+    "version": "5.0.0",
     "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
     "homepage": "https://github.com/nextcloud/files_automatedtagging",
     "licenses": [
       "agpl"
     ]
   },
-  "files_linkeditor": {
-    "hash": "sha256-yT3b0K31PfK8ApI23yQAZRfTiWyFZnBVlTi+/sZCv+Y=",
-    "url": "https://github.com/te-online/nextcloud-app-releases/raw/main/files_linkeditor/v1.1.24/files_linkeditor.tar.gz",
-    "version": "1.1.24",
-    "description": "### External web links in Nextcloud!\n* ✍️ **create and edit** .URL and .webloc links in the file view\n* 🌍 **open links** by clicking them and confirming you want to go to the external site\n* 📤 **works in public shares** so you can share links easily with others\n* 🔄 **sync your links** as .URL and .webloc are web links as created on most operating systems.\n\n_[View changelog](https://github.com/te-online/files_linkeditor/blob/main/CHANGELOG.md)_",
-    "homepage": "https://github.com/te-online/files_linkeditor",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "files_retention": {
-    "hash": "sha256-67MPooGJuSX/sL/l44z/9CYSlv5/ACVRpl1Z5QTJ/xw=",
-    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.1/files_retention-v4.0.1.tar.gz",
-    "version": "4.0.1",
+    "hash": "sha256-aHcg9eKEd/4CXNUy5rrWmw9pP/mf54wp/PVQfqrHSM0=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v5.0.0/files_retention-v5.0.0.tar.gz",
+    "version": "5.0.0",
     "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
     "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
@@ -139,20 +99,10 @@
       "AGPL-3.0-or-later"
     ]
   },
-  "gpoddersync": {
-    "hash": "sha256-9BcXVauZWFlmlXtnwdSo5xISbhhssa7ao5ulKpziOnU=",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.16.0/gpoddersync.tar.gz",
-    "version": "3.16.0",
-    "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
-    "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "groupfolders": {
-    "hash": "sha256-yLcyZCI3IHEiZJDAH/vb7uqi5UmNMHFsRedK2pN88mc=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.7/groupfolders-v21.0.7.tar.gz",
-    "version": "21.0.7",
+    "hash": "sha256-gZbsf7XDPVV+qwvU4Uwb0YBTWgwxb8K4za7grK75EPU=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v22.0.0/groupfolders-v22.0.0.tar.gz",
+    "version": "22.0.0",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -165,16 +115,6 @@
     "version": "4.7.5",
     "description": "👥 Allows for better collaboration with external users by allowing users to create guests account.\n\nGuests accounts can be created from the share menu by entering either the recipients email or name and choosing \"create guest account\", once the share is created the guest user will receive an email notification about the mail with a link to set their password.\n\nGuests users can only access files shared to them and cannot create any files outside of shares, additionally, the apps accessible to guest accounts are whitelisted.",
     "homepage": "https://github.com/nextcloud/guests/",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "impersonate": {
-    "hash": "sha256-gAitAuNsRP1EbtO7VayGbL+2IlEoFQsomrPegUEDbqg=",
-    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v4.0.0/impersonate-v4.0.0.tar.gz",
-    "version": "4.0.0",
-    "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
-    "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
       "agpl"
     ]
@@ -279,26 +219,6 @@
       "agpl"
     ]
   },
-  "oidc_login": {
-    "hash": "sha256-KBa8A7aC0uS6FQoOSa7nIkaaYe+A2KeAtzfqoKw0Gn4=",
-    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.3.1/oidc_login.tar.gz",
-    "version": "3.3.1",
-    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication\n- Optional removal of special characters in UID\n- Mapping of multiple names to a single display name\n- Mapping for birthdate",
-    "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "onlyoffice": {
-    "hash": "sha256-YBg/rrXPZyd0pqaOez/GjfraCqS7kwNTAXjIwBvExLM=",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v10.0.0/onlyoffice.tar.gz",
-    "version": "10.0.0",
-    "description": "The ONLYOFFICE app for Nextcloud brings powerful document editing and collaboration tools directly to your Nextcloud environment. With this integration, you can seamlessly create, edit, and co-author text documents, spreadsheets, presentations, and PDFs, as well as build and fill out PDF forms.\n\nCollaborate with your team in real time, make use of Track Changes, version history, comments, integrated chat, and more. Work together on files with federated cloud sharing. Flexible access permissions allow you to control who can view, edit, or comment, ensuring secure role-based collaboration tailored to your needs. Documents can also be protected with watermarks, password settings, and encryption for added security.\n\nThe app offers support for over 50 file formats, including DOCX, XLSX, PPTX, PDF, RTF, TXT, CSV, ODT, ODS, ODP, EPUB, FB2, HTML, HWP, HWPX, Pages, Numbers, Keynote, etc. Seamless desktop and mobile app integration means you'll have access to your Nextcloud files wherever you go.\n\nFurthermore, you can seamlessly connect any AI assistant, including local ones, directly to the editors to work faster and more efficient. This allows you to leverage various AI models for tasks like chatbot interactions, translations, OCR, and more.\n\nWhether you’re working with internal teams or external collaborators, the ONLYOFFICE app for Nextcloud enhances productivity, simplifies workflows, and ensures your files remain secure.",
-    "homepage": "https://www.onlyoffice.com",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "phonetrack": {
     "hash": "sha256-d6vPKCJ1Us0zQIFkIlSQ5cmEgO1zXGtdDniIjfqGh28=",
     "url": "https://github.com/julien-nc/phonetrack/releases/download/v1.2.0/phonetrack-1.2.0.tar.gz",
@@ -315,16 +235,6 @@
     "version": "9.1.4",
     "description": "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "previewgenerator": {
-    "hash": "sha256-i2Z/kOEi1e3SoNj5zs3CyDHeRTAGYpuCzH5zybDQ38A=",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.13.0/previewgenerator-v5.13.0.tar.gz",
-    "version": "5.13.0",
-    "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
-    "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
       "agpl"
     ]
@@ -349,16 +259,6 @@
       "agpl"
     ]
   },
-  "registration": {
-    "hash": "sha256-EzKIk9o4+i9+6oa3B4ZP1tAnXnL6zO6LjSXmPEzvbGE=",
-    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.9.0/registration-v2.9.0.tar.gz",
-    "version": "2.9.0",
-    "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
-    "homepage": "https://github.com/nextcloud/registration",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "repod": {
     "hash": "sha256-wLglJfhATgmHjagwClZHtXm8HQ8vSE0DUG4KXTHRapI=",
     "url": "https://git.crystalyx.net/Xefir/repod/releases/download/4.2.1/repod.tar.gz",
@@ -370,9 +270,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-HGNCueLlZuauHi/0dltApMDj8FBZ4Ruj2T2F+/4qWY4=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v10.2.0/richdocuments-v10.2.0.tar.gz",
-    "version": "10.2.0",
+    "hash": "sha256-uGoXL/LnFaWlLRDdx95qmhD4HIW3p51CWlpKiWTScYg=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v11.0.0/richdocuments-v11.0.0.tar.gz",
+    "version": "11.0.0",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -390,9 +290,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-D/S4OCkpWm9DqGZlTSfWGnVIsAWfcdlFX8mCQ6M6qjk=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.6/spreed-v23.0.6.tar.gz",
-    "version": "23.0.6",
+    "hash": "sha256-PGeMyWXg3PtrN5TBt4LBD9JISAqjZ5HamLPicP/9ptI=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v24.0.0/spreed-v24.0.0.tar.gz",
+    "version": "24.0.0",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -407,36 +307,6 @@
     "homepage": "https://github.com/nextcloud/tables",
     "licenses": [
       "AGPL-3.0-or-later"
-    ]
-  },
-  "tasks": {
-    "hash": "sha256-I5QdNavgv74FSuXwFWNz/++LOY9Z8kNZhEKf2k118L8=",
-    "url": "https://github.com/nextcloud/tasks/releases/download/v0.17.1/tasks.tar.gz",
-    "version": "0.17.1",
-    "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
-    "homepage": "https://github.com/nextcloud/tasks/",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "theming_customcss": {
-    "hash": "sha256-Fgu31s+K4MFUgvNe9mAVHi9C0iJnv40v1onUMk+lFZk=",
-    "url": "https://github.com/nextcloud/theming_customcss/releases/download/v1.20.0/theming_customcss.tar.gz",
-    "version": "1.20.0",
-    "description": "This app allows admins to customize the appearance of their Nextcloud instance by adding their own CSS rules.\n\nThe rules can be added in the admin settings in the \"Theming\" section. This allows you to easily adjust the look and feel of your Nextcloud instance without having to modify any files on the server.",
-    "homepage": "",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "twofactor_admin": {
-    "hash": "sha256-dx8bEsC/rSAKN9rwP2hf3d8G3f3J1RzCrSqU6BbcvRY=",
-    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.1/twofactor_admin-v4.11.1.tar.gz",
-    "version": "4.11.1",
-    "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
-    "homepage": "",
-    "licenses": [
-      "agpl"
     ]
   },
   "twofactor_webauthn": {
@@ -455,16 +325,6 @@
     "version": "1.1.5",
     "description": "# Unrounded Corners\nA Nextcloud app that restores the corners of buttons and widgets to their original looks by unrounding them.",
     "homepage": "https://github.com/OliverParoczai/nextcloud-unroundedcorners",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "uppush": {
-    "hash": "sha256-MFOZqCQRyzICFPMyJGJIr366QpF47GZM/SpzqiY0HWQ=",
-    "url": "https://codeberg.org/NextPush/uppush/archive/2.4.1.tar.gz",
-    "version": "2.4.0",
-    "description": "Once the mobile phone is connected with NextPush, push notifications can be forwarded to applications implementing UnifiedPush.\n\nMore information about UnifiedPush at https://unifiedpush.org",
-    "homepage": "",
     "licenses": [
       "agpl"
     ]
