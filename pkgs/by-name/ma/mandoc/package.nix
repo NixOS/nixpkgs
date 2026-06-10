@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   buildInputs = [ zlib ];
 
