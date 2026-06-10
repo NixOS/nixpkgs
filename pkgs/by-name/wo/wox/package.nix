@@ -18,13 +18,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wox";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qav2RhmhJQr2D1D3okshIrnnQuOh7V1gWbZwXR3LBAc=";
+    hash = "sha256-jiid8emFUN7554ijyL5jTvaQPNz+1rO6IwBMrqdkm4I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/wox.core";
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     substituteInPlace plugin/host/host_python.go \
       --replace-fail \
-        'n.findPythonPath(ctx), path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' \
+        'pythonPath, path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' \
         '"env", "${finalAttrs.passthru.plugin-host-python}/bin/run"'
     substituteInPlace plugin/host/host_nodejs.go \
       --replace-fail "/usr/bin/node" "${lib.getExe nodejs}"

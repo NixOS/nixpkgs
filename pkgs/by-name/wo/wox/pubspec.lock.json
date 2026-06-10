@@ -54,11 +54,11 @@
       "dependency": "transitive",
       "description": {
         "name": "characters",
-        "sha256": "f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803",
+        "sha256": "faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.4.0"
+      "version": "1.4.1"
     },
     "charcode": {
       "dependency": "transitive",
@@ -213,11 +213,12 @@
     "extended_text_field": {
       "dependency": "direct main",
       "description": {
-        "name": "extended_text_field",
-        "sha256": "3996195c117c6beb734026a7bc0ba80d7e4e84e4edd4728caa544d8209ab4d7d",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "b9b2c8faff334c794ce70e5b6a30bda43e407009",
+        "resolved-ref": "b9b2c8faff334c794ce70e5b6a30bda43e407009",
+        "url": "https://github.com/qianlifeng/extended_text_field.git"
       },
-      "source": "hosted",
+      "source": "git",
       "version": "16.0.2"
     },
     "extended_text_library": {
@@ -285,16 +286,6 @@
       "description": "flutter",
       "source": "sdk",
       "version": "0.0.0"
-    },
-    "flutter_acrylic": {
-      "dependency": "direct main",
-      "description": {
-        "name": "flutter_acrylic",
-        "sha256": "b3996dbde5abf5823cc9ead4cf2e5267c3181f15585fe47ce4dc4472e7ec827a",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.1.4"
     },
     "flutter_code_editor": {
       "dependency": "direct main",
@@ -414,11 +405,11 @@
       "dependency": "direct main",
       "description": {
         "name": "gpt_markdown",
-        "sha256": "9b88dfaffea644070b648c204ca4a55745a49f4ad0b58ed0ab70913ad593c7a1",
+        "sha256": "c14c2a4599a67df5b6a984808cbb7631b8d15c91984ffdd7998597b93a6ff136",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.5"
+      "version": "1.1.7"
     },
     "highlight": {
       "dependency": "direct main",
@@ -616,35 +607,25 @@
       "source": "hosted",
       "version": "2.0.3"
     },
-    "macos_window_utils": {
-      "dependency": "transitive",
-      "description": {
-        "name": "macos_window_utils",
-        "sha256": "d4df3501fd32ac0d2d7590cb6a8e4758337d061c8fa0db816fdd636be63a8438",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.9.0"
-    },
     "matcher": {
       "dependency": "transitive",
       "description": {
         "name": "matcher",
-        "sha256": "dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2",
+        "sha256": "dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.12.17"
+      "version": "0.12.19"
     },
     "material_color_utilities": {
       "dependency": "transitive",
       "description": {
         "name": "material_color_utilities",
-        "sha256": "f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec",
+        "sha256": "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.11.1"
+      "version": "0.13.0"
     },
     "math_expressions": {
       "dependency": "direct main",
@@ -660,11 +641,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c",
+        "sha256": "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.16.0"
+      "version": "1.18.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -1066,11 +1047,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00",
+        "sha256": "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.6"
+      "version": "0.7.11"
     },
     "tuple": {
       "dependency": "transitive",
@@ -1334,7 +1315,7 @@
     }
   },
   "sdks": {
-    "dart": ">=3.9.0 <4.0.0",
+    "dart": ">=3.10.0-0 <4.0.0",
     "flutter": ">=3.35.1"
   }
 }
