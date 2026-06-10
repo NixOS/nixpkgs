@@ -226,17 +226,20 @@ let
       __structuredAttrs = package.__structuredAttrs;
       # https://github.com/NixOS/nixpkgs/issues/325892
       srihash = !(lib.hasInfix ":" package.src.hash);
+      ${if package.src ? gitRepoUrl then "gittag" else null} = package.src.tag != null;
+
       # ${ if ? then } syntax over // optionalAttrs for perf benefits
       # see https://github.com/NixOS/nixpkgs/pull/506793
       # premature optimization can be fun :)
       languageAttrs = {
-        # python
+        ## python
         ${if package ? pyproject then "pyproject" else null} =
           package.pyproject != null && package.pyproject != false;
+
         # checks pyproject because its in all python builders
         ${if package ? pyproject then "pythonImportsCheck" else null} = package ? pythonImportsCheck;
 
-        # node/npm
+        ## node/npm
         # https://github.com/NixOS/nixpkgs/issues/529285
         ${if package ? pnpmDeps then "pnpm" else null} =
           package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
@@ -249,7 +252,7 @@ let
         } =
           true;
 
-        # rust
+        ## rust
         # https://github.com/NixOS/nixpkgs/issues/327064
         ${if package ? cargoDeps && package.cargoDeps ? lockFile then "lockFile" else null} = true; # want to get rid of these
 
