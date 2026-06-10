@@ -15,7 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1dmsr7whxcxwnlvl1x4s3bqr5cr6q5ssb28vqi67w5hj4sshisry";
   };
 
-  patches = [ ./hostlist.patch ];
+  patches = [
+    ./hostlist.patch
+    ./backward-compat.patch
+  ];
 
   # Required for build with gcc-14
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
