@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "termtekst";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1gm7j5d49a60wm7px82b76f610i8pl8ccz4r6qsz90z4mp3lyw9b";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K3FPx63kg/Q1Npl8xhC9KIJgnDlLoH5P5cCoRFqRp74=";
   };
 
   dependencies = with python3Packages; [
