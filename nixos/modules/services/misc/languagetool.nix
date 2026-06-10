@@ -97,13 +97,13 @@ in
           [
             (lib.getExe cfg.package.jre)
             "-cp ${cfg.package}/share/languagetool-server.jar"
-            (toString cfg.jvmOptions)
+            (lib.escapeShellArgs cfg.jvmOptions)
             "org.languagetool.server.HTTPServer"
             "--config ${settingsFormat.generate "languagetool.conf" cfg.settings}"
             "--port ${toString cfg.port}"
           ]
           ++ lib.optional cfg.public "--public"
-          ++ lib.optional (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"
+          ++ lib.optional (cfg.allowOrigin != null) "--allow-origin ${lib.escapeShellArg cfg.allowOrigin}"
         );
       };
     };
