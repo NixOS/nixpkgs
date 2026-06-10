@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "8.2.0";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     tag = "v${version}";
-    hash = "sha256-MtRlZFrTlY7t0n08X0aYN5HRGZUGLHkcU1gaZCtj07Q=";
+    hash = "sha256-Lq2wXnC/0sT96AA0eW1TsrIm6qencXE4/3bHSni9nlQ=";
   };
 
   postPatch = ''
