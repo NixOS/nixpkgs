@@ -7,17 +7,18 @@
   vulkan-loader,
   nix-update-script,
   callPackage,
+  makePkgconfigItem,
+  copyPkgconfigItems,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-native";
-  version = "27.0.4.0";
+  version = "29.0.0.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XOT6Wx5TfbFzwcSjoyqUwv7mbN0RShaMf99qADmCKxg=";
+    hash = "sha256-XaNNqQ7YcAuINSrG0Ri8qRA7b5iJPTbTKlFutKw2MQU=";
     fetchSubmodules = true;
   };
 
@@ -26,10 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  cargoHash = "sha256-PZHS2lUX6PbIG1xF6jhreGjdtCbS/GWeY1pHhRPo2aU=";
+  cargoHash = "sha256-M0yQhKqs1ifOlh5yDsajMH3P2Qj2rUIqrhUhyl1FKV4=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    copyPkgconfigItems
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -37,7 +39,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
   ];
 
-  env.WGPU_NATIVE_VERSION = finalAttrs.version;
+  pkgconfigItems = [
+    (makePkgconfigItem {
+      name = "wgpu-native";
+      inherit (finalAttrs) version;
+      inherit (finalAttrs.meta) description;
+      libs = [
+        "-L\${libdir}"
+        "-lwgpu_native"
+      ];
+      cflags = [ "-I\${includedir}" ];
+      variables = {
+        includedir = "@includedir@";
+        libdir = "@libdir@";
+      };
+    })
+  ];
+
+  env = {
+    WGPU_NATIVE_VERSION = finalAttrs.version;
+    # copyPkgconfigItems will substitute these in the pkg-config file
+    includedir = "${placeholder "dev"}/include";
+    libdir = "${placeholder "out"}/lib";
+  };
 
   postInstall = ''
     rm $out/lib/libwgpu_native.a
