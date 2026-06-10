@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "restish";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4piN0W/9y2NTsTuZ2B4Czhr9RQNb4eT9ZIX9MYzfMLI=";
+    hash = "sha256-wGchbKSEbzr1vQlYWgUTubA1xQVcxq7iyRUIuWqVL0Y=";
   };
 
-  vendorHash = "sha256-ZRyGCdmPenOeLtFuj0howJH0rah05sPUuD7RH/c0LKI=";
+  vendorHash = "sha256-Y0GwgrkD09WAlmyI6Oe3Kw6L62E7QRTCIThZGXbbn74=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libx11
@@ -37,6 +37,11 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=main.version=${finalAttrs.version}"
+  ];
+
+  checkFlags = [
+    # Test requires network access  
+    "-skip=TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec"
   ];
 
   preCheck = ''
