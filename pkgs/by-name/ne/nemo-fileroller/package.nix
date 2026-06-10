@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-fileroller";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = finalAttrs.version;
-    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+    rev = "${finalAttrs.version}-unstable";
+    hash = "sha256-msmy//e15B6lYLfsqqUhPAYt/PK+c4k6piY7pw4eqkI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-fileroller";
@@ -39,8 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/nemo-fileroller.c \
-      --replace "file-roller" "${lib.getExe file-roller}" \
-      --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
+      --replace-fail "file-roller" "${lib.getExe file-roller}"
+
+    substituteInPlace meson.build \
+      --replace-fail "config.set_quoted('GNOMELOCALEDIR', get_option('prefix')/get_option('datadir')/'locale')" \
+        "config.set_quoted('GNOMELOCALEDIR', '${cinnamon-translations}/share/locale')"
   '';
 
   env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
