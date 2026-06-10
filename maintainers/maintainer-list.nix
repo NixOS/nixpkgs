@@ -4445,6 +4445,12 @@
     githubId = 21013281;
     name = "Cameron Fyfe";
   };
+  cameroncandau = {
+    email = "open-source@cameroncandau.com";
+    github = "CameronCandau";
+    githubId = 121522527;
+    name = "Cameron Candau";
+  };
   cameronnemo = {
     email = "cnemo@tutanota.com";
     github = "CameronNemo";
