@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.49.0";
+  version = "3.49.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvclive";
     tag = version;
-    hash = "sha256-jjYglvXPtwPJEp2Qo309QeRLYooUmsDhO1Dc1S3OjQg=";
+    hash = "sha256-dB8V0CYVw8qN67Lykc9vaSWyCEDO7dROX6JrxO1WBv0=";
   };
 
   build-system = [ setuptools-scm ];
