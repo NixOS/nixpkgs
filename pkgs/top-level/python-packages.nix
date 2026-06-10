@@ -18658,6 +18658,8 @@ self: super: with self; {
 
   splinter = callPackage ../development/python-modules/splinter { };
 
+  splitzip = callPackage ../development/python-modules/splitzip { };
+
   splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
 
   spotapi = callPackage ../development/python-modules/spotapi { };
