@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ngff-zarr";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fideus-labs";
     repo = "ngff-zarr";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-5OiC1NHVEX60oHPwTJ0RN2fQnitwPBMNSfvbMcKAgvc=";
+    hash = "sha256-GJt6N5xMmlCHSzKZhHKsZaD4P8fWnTQi4tqP/YnPkQk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/";

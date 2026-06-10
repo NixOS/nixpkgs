@@ -66,7 +66,7 @@
   # Optional Dependencies
   curl,
   expat,
-  fuse,
+  fuse3,
   libatomic_ops,
   libedit,
   libs3,
@@ -106,7 +106,7 @@ let
   optYasm = shouldUsePkg yasm;
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
-  optFuse = shouldUsePkg fuse;
+  optFuse = shouldUsePkg fuse3;
   optLibedit = shouldUsePkg libedit;
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optLibs3 = shouldUsePkg libs3;

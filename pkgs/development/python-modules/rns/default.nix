@@ -53,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     # https://github.com/markqvist/Reticulum/blob/master/LICENSE
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      drupol
       fab
       qbit
     ];
