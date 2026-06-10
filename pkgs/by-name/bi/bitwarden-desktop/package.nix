@@ -9,7 +9,6 @@
   fetchFromGitHub,
   gnome-keyring,
   jq,
-  llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -25,13 +24,8 @@ let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_39;
-
-  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
 in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bitwarden-desktop";
   version = "2026.5.0";
 
