@@ -12,7 +12,6 @@
   libsndfile,
   speexdsp,
   protobuf,
-  libcap,
   alsa-lib,
   python3,
   rnnoise,
@@ -21,10 +20,7 @@
   flac,
   libogg,
   libvorbis,
-  stdenv_32bit,
   alsaSupport ? stdenv.hostPlatform.isLinux,
-  iceSupport ? true,
-  zeroc-ice,
   jackSupport ? false,
   libjack2,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
@@ -187,36 +183,6 @@ let
 
     } source;
 
-  server =
-    source:
-    generic {
-      type = "murmur";
-
-      cmakeFlags = [
-        "-D client=OFF"
-        (lib.cmakeBool "ice" iceSupport)
-      ]
-      ++ lib.optionals iceSupport [
-        "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-        "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
-      ];
-
-      buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
-    } source;
-
-  overlay =
-    source:
-    generic {
-      stdenv = stdenv_32bit;
-      type = "mumble-overlay";
-
-      cmakeFlags = [
-        "-D server=OFF"
-        "-D client=OFF"
-        "-D overlay=ON"
-      ];
-    } source;
-
   source = rec {
     version = "1.5.901";
 
@@ -230,8 +196,4 @@ let
     };
   };
 in
-{
-  mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
-  murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
-  overlay = overlay source;
-}
+lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; }
