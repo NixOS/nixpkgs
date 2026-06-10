@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-memlab";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stonesjtu";
     repo = "pytorch_memlab";
     tag = version;
-    hash = "sha256-wNgbipvi3vYr9Ka9hA7I+C4y8Nf6AiZXUoXX+qKtZ+I=";
+    hash = "sha256-46C/2RvzhbHt1IHPmPCrLsIk2D3POhzuADNaXqUe0F4=";
   };
 
   build-system = [ setuptools ];
