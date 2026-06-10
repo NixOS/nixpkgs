@@ -28,6 +28,11 @@ buildPythonPackage (finalAttrs: {
       url = "https://gitlab.freedesktop.org/xdg/pyxdg/-/commit/9291d419017263c922869d79ac1fe8d423e5f929.diff";
       sha256 = "sha256-sFChDLwBvJWkZES7mZszVChmwCuc9+oAi9fMUcwF298=";
     })
+    (fetchpatch2 {
+      name = "python315-ast.diff";
+      url = "https://gitlab.freedesktop.org/xdg/pyxdg/-/commit/63033ac306aa26d32e1439417e59ae8f8a4c9820.diff";
+      sha256 = "sha256-dK+d8DSCM9N9wzJHJssVkFElqutLkmBQvT1dg3v17MY=";
+    })
   ];
 
   postPatch = ''
