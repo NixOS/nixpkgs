@@ -8,13 +8,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "serve";
-  version = "14.2.4";
+  version = "14.2.6";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "serve";
-    tag = finalAttrs.version;
-    hash = "sha256-QVbau4MrpgEQkwlWx4tU9H93zdM0mSZgIzXpjHRM5mk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lM04fuzgcLHz8/Jf4wJVYXveFcO6sFyJ9PQAcpweyjk=";
   };
 
   npmDeps = null;
@@ -22,7 +22,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-N5oasGilHECndJZYdRHZFvAa4aYwmPtOTBZtcty4g/k=";
+    hash = "sha256-6JcH7ODO78Vu7sd55npJYRnkCLSMKJM/iSv+isBsBdU=";
   };
 
   nativeBuildInputs = [ pnpm_9 ];
