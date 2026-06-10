@@ -9578,6 +9578,8 @@ self: super: with self; {
 
   macaddress = callPackage ../development/python-modules/macaddress { };
 
+  mace-torch = callPackage ../development/python-modules/mace-torch { };
+
   macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
