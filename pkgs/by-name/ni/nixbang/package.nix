@@ -4,18 +4,20 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixbang";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "madjar";
     repo = "nixbang";
-    rev = version;
-    sha256 = "1kzk53ry60i814wa6n9y2ni0bcxhbi9p8gdv10b974gf23mhi8vc";
+    tag = finalAttrs.version;
+    hash = "sha256-bKMI6xDukZMWCLs9dFNcsLMFohU+WaM4CSgC4/Mo888=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   meta = {
     homepage = "https://github.com/madjar/nixbang";
@@ -24,4 +26,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.madjar ];
     platforms = lib.platforms.all;
   };
-}
+})
