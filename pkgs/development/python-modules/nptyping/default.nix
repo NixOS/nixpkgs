@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
   beartype,
   invoke,
   numpy,
@@ -13,7 +14,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "nptyping";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -28,7 +29,9 @@ buildPythonPackage (finalAttrs: {
     ./numpy-2.0-compat.patch
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     beartype
