@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "Command line tool for datetime arithmetic, parsing, formatting and more. Replaces biff.";
+    description = "Command line tool for datetime arithmetic, parsing, formatting and more. Replacment for biff";
     homepage = "https://github.com/BurntSushi/bttf";
     changelog = "https://github.com/BurntSushi/bttf/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
