@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
+    rm $out/bin/xtask
+
     installManPage gen/sd.1
 
     installShellCompletion gen/completions/sd.{bash,fish}
