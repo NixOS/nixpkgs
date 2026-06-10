@@ -4,6 +4,7 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
   six,
   ssdeep,
 }:
@@ -11,7 +12,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "ssdeep";
   version = "3.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -24,7 +25,9 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [ ssdeep ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     six
   ];
