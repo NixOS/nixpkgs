@@ -9,6 +9,7 @@
   libxinerama,
   libxrandr,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -32,7 +33,10 @@ buildGoModule (finalAttrs: {
     libxrandr
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
@@ -44,10 +48,6 @@ buildGoModule (finalAttrs: {
     # Test requires network access and test with hard-coded version '2.0.0'
     "-skip=TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec|TestVersion$|TestVersionCommand"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   doInstallCheck = true;
 
