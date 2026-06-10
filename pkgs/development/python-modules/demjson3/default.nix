@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -17,9 +17,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-N8g7DG6wjSXe/IjfCipIddWKeAmpZQvW7uev2AU826w=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} test/test_demjson3.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "demjson3" ];
 
