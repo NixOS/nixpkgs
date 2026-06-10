@@ -51,7 +51,7 @@ let
   # built, then python-matter-server is built again with the dashboard.
   matterServerDashboard =
     let
-      pythonWithChip = python.withPackages (ps: [
+      pythonWithChip = python.pythonOnBuildForHost.withPackages (ps: [
         ps.home-assistant-chip-clusters
         (ps.python-matter-server.override { withDashboard = false; })
       ]);
