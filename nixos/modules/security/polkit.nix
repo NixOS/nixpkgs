@@ -99,7 +99,6 @@ in
       reloadTriggers = [
         config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
       ];
-      stopIfChanged = false;
       serviceConfig.ExecStart = [
         # nuke default ExecStart
         ""
