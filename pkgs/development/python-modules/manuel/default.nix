@@ -4,6 +4,7 @@
   fetchPypi,
   fetchpatch,
   python,
+  setuptools,
   six,
   zope-testing,
 }:
@@ -11,7 +12,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "manuel";
   version = "1.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -30,7 +31,10 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
+
   nativeCheckInputs = [ zope-testing ];
 
   meta = {
