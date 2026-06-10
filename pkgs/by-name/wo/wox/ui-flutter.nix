@@ -15,14 +15,11 @@ flutter341.buildFlutterApplication (finalAttrs: {
     src
     ;
 
-  postPatch = ''
-    substituteInPlace linux/runner/my_application.cc \
-      --replace-fail "X11/Xkeysym.h" "X11/keysym.h"
-  '';
-
   sourceRoot = "${finalAttrs.src.name}/wox.ui.flutter/wox";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes.extended_text_field = "sha256-GOvaWGklfmJKRWYbVTvpZfKj9QMxxlaqrJkfDKR2T0o=";
 
   nativeBuildInputs = [
     autoPatchelfHook
