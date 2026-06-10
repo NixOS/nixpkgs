@@ -2343,8 +2343,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
-
   hdf5-mpi = hdf5.override {
     mpiSupport = true;
     cppSupport = false;
