@@ -7,8 +7,10 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.4";
-  format = "setuptools";
   pname = "wikicurses";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "ids1024";
@@ -26,7 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     urwid
     beautifulsoup4
     lxml
