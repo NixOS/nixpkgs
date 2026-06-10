@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Documentation builder";
     homepage = "https://pypi.org/project/manuel/";
+    changelog = "https://github.com/benji-york/manuel/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl20;
   };
 })
