@@ -3,13 +3,12 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  restish,
-  testers,
-  libxrandr,
+  libx11,
+  libxcursor,
   libxi,
   libxinerama,
-  libxcursor,
-  libx11,
+  libxrandr,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,25 +32,24 @@ buildGoModule (finalAttrs: {
     libxrandr
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${finalAttrs.version}"
+    "-X=github.com/rest-sh/restish/v2/internal/cli.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
-    # Test requires network access  
-    "-skip=TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec"
+    # Test requires network access and test with hard-coded version '2.0.0'
+    "-skip=TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec|TestVersion$|TestVersionCommand"
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = restish;
-    command = "HOME=$(mktemp -d) restish --version";
-  };
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
