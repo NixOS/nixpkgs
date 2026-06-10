@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "readme-renderer";
   version = "45.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "readme_renderer";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-AwqPrHSQT4+6Ea0btpZOP3boltx+XnHxavGQyQVmltE=";
   };
 
@@ -29,9 +29,14 @@ buildPythonPackage rec {
     pygments
   ];
 
-  optional-dependencies.md = [ cmarkgfm ];
+  optional-dependencies = {
+    md = [ cmarkgfm ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.md;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     "test_rst_fixtures"
@@ -43,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
-    changelog = "https://github.com/pypa/readme_renderer/releases/tag/${version}";
+    changelog = "https://github.com/pypa/readme_renderer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
