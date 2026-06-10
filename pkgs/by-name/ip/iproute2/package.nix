@@ -16,12 +16,12 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2";
   version = "7.0.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${finalAttrs.version}.tar.xz";
     hash = "sha256-5iiQ97XeY8BaO/Mx3I3rTAFcM2AT80Gk7fRpaXl/L04=";
   };
 
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})
