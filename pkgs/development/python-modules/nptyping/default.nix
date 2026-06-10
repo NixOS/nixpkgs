@@ -15,6 +15,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.5.0";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "nptyping";
