@@ -66,6 +66,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # don't call git
     + ''
       sed -i '/def get_git_commit_id()/a\\    return None' version_provider.py
+    ''
+    # fix permissions for install_name_tool -id
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/pypi-z3/FindZ3.cmake \
+        --replace-fail COPYONLY 'FILE_PERMISSIONS
+          OWNER_READ OWNER_WRITE OWNER_EXECUTE
+          GROUP_READ GROUP_WRITE GROUP_EXECUTE
+          WORLD_READ WORLD_WRITE WORLD_EXECUTE
+          COPYONLY'
     '';
 
   nativeBuildInputs = [
@@ -123,12 +132,18 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ];
   };
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # libtvm_ffi.so
-    addAutoPatchelfSearchPath "${finalAttrs.passthru.apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
-    # libz3.so.4.16
-    addAutoPatchelfSearchPath "${z3-solver.lib}/lib"
-  '';
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # libtvm_ffi.so
+      addAutoPatchelfSearchPath "${finalAttrs.passthru.apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
+      # libz3.so.4.16
+      addAutoPatchelfSearchPath "${z3-solver.lib}/lib"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # @rpath/libz3.dylib
+      install_name_tool -add_rpath "${z3-solver.lib}/lib" \
+        "$out/${python.sitePackages}/tilelang/lib/libtvm_compiler.dylib"
+    '';
 
   pythonImportsCheck = [ "tilelang" ];
 
