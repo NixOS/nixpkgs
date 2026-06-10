@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  diff-cover,
   graphviz,
   hatchling,
   hatch-vcs,
   packaging,
-  pytest-mock,
+  pip-requirements-parser,
   pytestCheckHook,
-  pip,
+  pytest-mock,
+  pytest-subprocess,
+  rich,
   virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.30.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = version;
-    hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
+    hash = "sha256-poUults9ev+5aryrZPxnxF/X9u0iivnlc1ceLxB7dys=";
   };
 
   build-system = [
@@ -30,18 +31,21 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies = [
-    pip
-    packaging
-  ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     graphviz = [ graphviz ];
+    index = [
+      # nab-index # Unstable + not packaged yet
+      # nab-python # Same
+      pip-requirements-parser
+    ];
+    rich = [ rich ];
   };
 
   nativeCheckInputs = [
-    diff-cover
     pytest-mock
+    pytest-subprocess
     pytestCheckHook
     virtualenv
   ]
