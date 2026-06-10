@@ -224,6 +224,8 @@ let
       version = lib.getVersion package;
       strictDeps = package.strictDeps;
       __structuredAttrs = package.__structuredAttrs;
+      # https://github.com/NixOS/nixpkgs/issues/325892
+      srihash = !(lib.hasInfix ":" package.src.hash);
       # ${ if ? then } syntax over // optionalAttrs for perf benefits
       # see https://github.com/NixOS/nixpkgs/pull/506793
       # premature optimization can be fun :)
