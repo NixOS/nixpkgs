@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   lib,
-  nodejs,
+  nodejs-slim,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -22,11 +22,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-LUX/H7yY8Dl44vgpf7vOgtMdY7h//m5BAfrK5RRH9DM=";
   };
 
-  buildInputs = [
-    nodejs
-  ];
-
   nativeBuildInputs = [
+    nodejs-slim
     pnpmConfigHook
     pnpmBuildHook
     pnpm_9
@@ -53,7 +50,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/stylelint-lsp}
     mv {dist,node_modules} $out/lib/stylelint-lsp
+
     chmod a+x $out/lib/stylelint-lsp/dist/index.js
+    patchShebangs $out/lib/stylelint-lsp/dist/index.js
     ln -s $out/lib/stylelint-lsp/dist/index.js $out/bin/stylelint-lsp
 
     runHook postInstall
