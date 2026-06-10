@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  fetchpatch2,
   pytestCheckHook,
   setuptools,
 }:
@@ -20,6 +21,14 @@ buildPythonPackage (finalAttrs: {
     tag = "rel-${finalAttrs.version}";
     hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python314-ast.diff";
+      url = "https://gitlab.freedesktop.org/xdg/pyxdg/-/commit/9291d419017263c922869d79ac1fe8d423e5f929.diff";
+      sha256 = "sha256-sFChDLwBvJWkZES7mZszVChmwCuc9+oAi9fMUcwF298=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace test/test_basedirectory.py \
