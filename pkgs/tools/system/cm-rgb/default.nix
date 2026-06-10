@@ -1,19 +1,14 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   atk,
   gobject-introspection,
   wrapGAppsHook3,
-  click,
-  hidapi,
-  psutil,
-  pygobject3,
   udevCheckHook,
-  stdenv,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cm-rgb";
   version = "0.3.6";
   format = "setuptools";
@@ -34,7 +29,7 @@ buildPythonApplication rec {
     udevCheckHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     hidapi
     psutil
