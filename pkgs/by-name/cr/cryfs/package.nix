@@ -13,37 +13,30 @@
   range-v3,
   spdlog,
   llvmPackages,
+  writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryfs";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "cryfs";
     repo = "cryfs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bBe//AjA9QmdSDlb0xiOboE5F4g6LJ03cHQZpfOk+Y4=";
   };
 
   postPatch = ''
     patchShebangs src
 
-    # remove tests that require network access
-    substituteInPlace test/cpp-utils/CMakeLists.txt \
-      --replace "network/CurlHttpClientTest.cpp" "" \
-      --replace "network/FakeHttpClientTest.cpp" ""
-
-    # remove CLI test trying to access /dev/fuse
-    substituteInPlace test/cryfs-cli/CMakeLists.txt \
-      --replace "CliTest_IntegrityCheck.cpp" "" \
-      --replace "CliTest_Setup.cpp" "" \
-      --replace "CliTest_WrongEnvironment.cpp" "" \
-      --replace "CryfsUnmountTest.cpp" ""
+    # set Boost_USE_STATIC_LIBS via CMake command line (see cmakeFlags)
+    substituteInPlace cmake-utils/Dependencies.cmake \
+      --replace-fail "set(Boost_USE_STATIC_LIBS OFF)" ""
 
     # downsize large file test as 4.5G is too big for Hydra
     substituteInPlace test/cpp-utils/data/DataTest.cpp \
-      --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
+      --replace-fail "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
   nativeBuildInputs = [
@@ -66,25 +59,36 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
-    "-DDEPENDENCY_CONFIG='../cmake-utils/DependenciesFromLocalSystem.cmake'"
-    "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
-    "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive
-    "-DBUILD_TESTING:BOOL=${if doCheck then "TRUE" else "FALSE"}"
+    (lib.cmakeFeature "DEPENDENCY_CONFIG" "../cmake-utils/DependenciesFromLocalSystem.cmake")
+    (lib.cmakeBool "CRYFS_UPDATE_CHECKS" false)
+    (lib.cmakeBool "Boost_USE_STATIC_LIBS" stdenv.hostPlatform.isStatic) # this option is case sensitive
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
   ];
 
   # macFUSE needs to be installed for the test to succeed on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   checkPhase = ''
     runHook preCheck
-    export HOME=$(mktemp -d)
 
-    # Skip CMakeFiles directory and tests depending on fuse (does not work well with sandboxing)
-    SKIP_IMPURE_TESTS="CMakeFiles|fspp|my-gtest-main"
-
-    for t in $(ls -d test/*/ | grep -E -v "$SKIP_IMPURE_TESTS") ; do
-      "./$t$(basename $t)-test"
-    done
+    # https://github.com/cryfs/cryfs/blob/1.0.3/.github/workflows/actions/run_tests/action.yaml
+    cd test/
+    set -x
+    ./gitversion/gitversion-test
+    ./cpp-utils/cpp-utils-test ${lib.optionalString stdenv.hostPlatform.isStatic "'--gtest_filter=*-BacktraceTest.*:*.AssertMessageContainsBacktrace'"}
+    ./parallelaccessstore/parallelaccessstore-test
+    ./blockstore/blockstore-test
+    ./blobstore/blobstore-test
+    ./cryfs/cryfs-test
+    # skip tests trying to access /dev/fuse
+    ./fspp/fspp-test '--gtest_filter=' # skip all
+    ./cryfs-cli/cryfs-cli-test '--gtest_filter=*-CliTest.WorksWithCommasInBasedir:CliTest_IntegrityCheck.*:CliTest_Setup.*:CliTest_Unmount.*:RunningInForeground*'
+    set +x
+    cd -
 
     runHook postCheck
   '';
@@ -92,7 +96,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cryptographic filesystem for the cloud";
     homepage = "https://www.cryfs.org/";
-    changelog = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
+    changelog = "https://github.com/cryfs/cryfs/raw/${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       peterhoeg
@@ -100,4 +104,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
