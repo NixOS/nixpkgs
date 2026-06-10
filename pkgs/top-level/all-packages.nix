@@ -2153,10 +2153,6 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
-  fltrdr = callPackage ../tools/misc/fltrdr {
-    icu = icu63;
-  };
-
   file = callPackage ../tools/misc/file {
     inherit (windows) libgnurx;
   };
