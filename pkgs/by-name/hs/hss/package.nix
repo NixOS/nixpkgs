@@ -17,12 +17,12 @@ buildRubyGem rec {
   name = "hss-${version}";
   inherit ruby;
   gemName = "hss";
-  version = "1.0.1";
-  source.sha256 = "0hdfpxxqsh6gisn8mm0knsl1aig9fir0h2x9sirk3gr36qbz5xa4";
+  version = "1.1.0";
+  source.sha256 = "0zfgsiqy2c99c6hlg69bzj83kn6clkw1jmz6n6xh9ap4hz17blgm";
 
   postInstall = ''
     substituteInPlace $GEM_HOME/gems/${gemName}-${version}/bin/hss \
-      --replace \
+      --replace-fail \
         "'ssh'" \
         "'${openssh}/bin/ssh'"
   '';
