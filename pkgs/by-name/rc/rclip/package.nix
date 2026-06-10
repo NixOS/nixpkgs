@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "3.0.10";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FRsdZ0sM8Ato+v7239bZygZ98eYOQqiD0vLXa/+ybIg=";
+    hash = "sha256-C/93z6iUulwjeqAqzqya57vtlEynSde7Txn9mfphBpA=";
   };
 
   postPatch = ''
