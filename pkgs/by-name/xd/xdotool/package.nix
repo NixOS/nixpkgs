@@ -48,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.semicomplete.com/projects/xdotool/";
     description = "Fake keyboard/mouse input, window management, and more";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = with lib.platforms; linux;
     mainProgram = "xdotool";
   };
