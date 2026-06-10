@@ -52,10 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   version = "22Jul2025_update4";
   pname = "lammps";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
-    rev = "stable_${finalAttrs.version}";
+    tag = "stable_${finalAttrs.version}";
     hash = "sha256-QH63nh7J3NjfdfpN7J96Q+9ZGqj8cA0YwEmgTuBbGmg=";
   };
   preConfigure = ''
@@ -67,7 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Although not always needed, it is needed if cmakeFlags include
     # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
     autoAddDriverRunpath
-  ];
+  ]
+  ++ lib.optionals packages.PYTHON [ python3 ];
 
   passthru = {
     inherit packages;

@@ -3,19 +3,26 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  icu,
+  icu63,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+let
+  icu = icu63;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "fltrdr";
   version = "0.3.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "fltrdr";
     owner = "octobanana";
-    rev = version;
-    sha256 = "1vpci7vqzcpdd21zgigyz38k77r9fc81dmiwsvfr8w7gad5sg6sj";
+    tag = finalAttrs.version;
+    hash = "sha256-UpunS1PvcJTd1jzWFhBzKZ8z0fj+xfeDaO2yj/eJ7O4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -48,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "fltrdr";
   };
-}
+})
