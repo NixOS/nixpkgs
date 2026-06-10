@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   ];
   
   strictDeps = true;
+  _structuredArrts = true;
+  
 
   meta = {
     description = "Input method for Sitelen Pona";
