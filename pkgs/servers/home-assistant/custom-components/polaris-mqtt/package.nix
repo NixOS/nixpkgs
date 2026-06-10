@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "samoswall";
   domain = "polaris";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "samoswall";
     repo = "polaris-mqtt";
     tag = "v${version}";
-    hash = "sha256-H/SYO3suxtLnvAvk2gdgMT+gBlvymmgmvRCVk1zMtHo=";
+    hash = "sha256-G0DWgDLS62yKXE6gktb8z2xKFeH7Cu2zssQhEiuhwD0=";
   };
 
   meta = {

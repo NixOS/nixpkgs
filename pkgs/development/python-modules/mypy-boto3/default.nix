@@ -255,8 +255,8 @@ in
       "sha256-PVskBSuwqSfNybHDtLLfVpDG0dwR/Q1LhrHz1imsR8A=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.43.2"
-      "sha256-oI+4JjIbiNqAQ6QXXX3OeigRmsIqym4S2TiwrjMijQU=";
+    buildMypyBoto3Package "cloudwatch" "1.43.26"
+      "sha256-O14h+8ujsxe+RSA5NxmZyfRHMdQDr9g3Yre15qjV7Oc=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.43.0"
@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.20"
-      "sha256-OGxCwLfDYlx43+HEuVHsrC59c67yTJ37ttOu4TWw3U0=";
+    buildMypyBoto3Package "ec2" "1.43.26"
+      "sha256-IGl4y8hDpdsqKcky6UgukfDlnSjbyYsa69sPiYZYcN4=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -990,8 +990,8 @@ in
       "sha256-0rAEnU+3VsESGKlu8OTnY//rzwRqvROhRFga+vnwd1k=";
 
   mypy-boto3-outposts =
-    buildMypyBoto3Package "outposts" "1.43.0"
-      "sha256-fVKNAX3cx9jeCndcQYyxp9lgqHL91yFOg6dX/kNv27Q=";
+    buildMypyBoto3Package "outposts" "1.43.26"
+      "sha256-GWsZ1RZyTt8A04O9s1HeakDhUpOmdGRSGjXy2lIXxKo=";
 
   mypy-boto3-panorama =
     buildMypyBoto3Package "panorama" "1.43.0"

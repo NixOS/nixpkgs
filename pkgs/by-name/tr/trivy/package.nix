@@ -17,19 +17,19 @@ buildGoModule (finalAttrs: {
   # that the signs present then are not present now.
   # Finally, weigh the risk of a compromised release against the expected
   # benefit of the update, and consider the possibility of not updating.
-  version = "0.69.3"; # Did you read the comment?
+  version = "0.71.0"; # Did you read the comment?
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lzFcLyrORA+1LxS4nzJVvilg29GTNiGRmnjJ47ev/yU=";
+    hash = "sha256-wlvG8iGPBbHV66SOT0zek2VN1QawksVQwM9LSEItzh4=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-aqSB2pakYH713GSbIAHwAL9Gio17MzZtwqfh9sbzDBs=";
+  vendorHash = "sha256-n5eWyKpG47LuXPzMO+/tzhFs4F+grWQAThCoGEMQ2S8=";
 
   subPackages = [ "cmd/trivy" ];
 
