@@ -7,6 +7,7 @@
   accountsservice,
   dbus,
   glib,
+  gst_all_1,
   gtk4,
   pango,
   librsvg,
@@ -37,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     glib
     gtk4
+    gst_all_1.gstreamer # Used for animated wallpapers or video playback
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
     pango
     librsvg
   ];
