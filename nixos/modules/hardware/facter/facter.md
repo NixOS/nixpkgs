@@ -126,9 +126,9 @@ Examples:
 }
 ```
 
-With flakes:
+With flakes, pass the flake target explicitly with `--flake` or `-F`:
 ```console
-$ nix run .#nixosConfigurations.<hostname>.config.hardware.facter.debug.changes -- .#nixosConfigurations.<hostname>
+$ nix run .#nixosConfigurations.<hostname>.config.hardware.facter.debug.changes -- --flake .#nixosConfigurations.<hostname>
 ```
 
 Without flakes:
