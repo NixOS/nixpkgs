@@ -5,6 +5,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   stdenvNoCC,
   nix-update-script,
 }:
@@ -25,6 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
+    pnpmBuildHook
     pnpm_9
   ];
 
@@ -34,14 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetcherVersion = 3;
     hash = "sha256-qzUvA00ujnIibQAONOPlp5BsXcwQb/gQvOPp83hMT5A=";
   };
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build
-
-    runHook postBuild
-  '';
 
   preInstall = ''
     # remove unnecessary files
