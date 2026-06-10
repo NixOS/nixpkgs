@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "augustus-go";
-  version = "0.0.10";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "augustus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lh0N2wWTPCsWWaiIcntCqeMIo9ZPGhMEwy0pP42iLzY=";
+    hash = "sha256-ZQoE8liABfAEceNvtJsHtLyfxECEJIRwK3eKGrMIpIE=";
   };
 
-  vendorHash = "sha256-LPBv1i2F5hgJBXBcuZiBwgY0S5OGi0B9Nmy488mbaBQ=";
+  vendorHash = "sha256-IdfrBD0N9zEreUzwMmT84d/UP6KnGETzvwyUfJVpNXo=";
 
   ldflags = [ "-s" ];
 

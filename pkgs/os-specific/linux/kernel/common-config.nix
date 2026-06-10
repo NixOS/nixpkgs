@@ -1134,7 +1134,7 @@ let
         useZstd = stdenv.buildPlatform.is64bit;
       in
       {
-        # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+        # The default target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
 
         KERNEL_XZ = lib.mkIf (

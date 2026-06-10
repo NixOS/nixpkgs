@@ -9663,6 +9663,11 @@
     githubId = 293586;
     name = "Adam Gamble";
   };
+  gamebeaker = {
+    github = "gamebeaker";
+    githubId = 9269847;
+    name = "gamebeaker";
+  };
   gamedungeon = {
     github = "GameDungeon";
     githubId = 60719255;
@@ -10929,6 +10934,11 @@
     github = "hcur";
     githubId = 58676303;
     name = "hhydraa";
+  };
+  hibiday = {
+    name = "Katsumi Takeuchi";
+    github = "hibiday";
+    githubId = 137286929;
   };
   higebu = {
     name = "Yuya Kusakabe";
