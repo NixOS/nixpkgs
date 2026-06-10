@@ -5,6 +5,7 @@
   nixosTests,
   nextcloud32Packages,
   nextcloud33Packages,
+  nextcloud34Packages,
 }:
 
 let
@@ -62,6 +63,12 @@ in
     version = "33.0.5";
     hash = "sha256-7Ua5HY2k4fAjTQGIslvulEj6LzAYh+WygBPmtUfW3Mo=";
     packages = nextcloud33Packages;
+  };
+
+  nextcloud34 = generic {
+    version = "34.0.0";
+    hash = "sha256-NsVXztwqGhLNaM/+U18hNQoCy9T/YN16na45WceHO+Q=";
+    packages = nextcloud34Packages;
   };
 
   # tip: get the sha with:
