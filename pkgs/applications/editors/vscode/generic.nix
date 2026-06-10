@@ -188,6 +188,7 @@ stdenv.mkDerivation (
     passthru = {
       inherit
         executableName
+        hasVsceSign
         longName
         tests
         updateScript
