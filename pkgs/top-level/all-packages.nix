@@ -5503,11 +5503,6 @@ with pkgs;
     )
       haskellPackages.haskell-ci;
 
-  nexusmods-app-unfree = nexusmods-app.override {
-    pname = "nexusmods-app-unfree";
-    _7zz = _7zz-rar;
-  };
-
   nwjs-sdk = nwjs.override {
     sdk = true;
   };

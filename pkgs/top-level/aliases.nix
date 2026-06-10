@@ -1566,6 +1566,13 @@ mapAliases {
     first on 25.11 because Nextcloud doesn't support upgrades across multiple major versions!
   "; # Added 2026-02-20
   nextcloud31Packages = throw "Nextcloud 31 is EOL!"; # Added 2026-02-20
+  nexusmods-app = throw ''
+    nexusmods-app has been removed because NexusMods.App was discontinued upstream.
+    It is recommended to switch to an actively maintained mod manager.
+
+    Users who still require NexusMods.App may use the external packaging repository:
+    https://github.com/MattSturgeon/nma-nix''; # Added 2026-06-10
+  nexusmods-app-unfree = nexusmods-app; # Added 2026-06-10
   nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
   nginxQuic = throw "'nginxQuic' has been removed. QUIC support is now available in the default nginx builds.";
   ngrid = throw "'ngrid' has been removed as it has been unmaintained upstream and broken"; # Added 2025-11-15
