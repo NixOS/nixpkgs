@@ -9537,15 +9537,6 @@ with pkgs;
 
   parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
 
-  pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-libav
-      ;
-  };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
