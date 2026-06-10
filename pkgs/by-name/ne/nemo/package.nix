@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo";
-  version = "6.6.4";
+  version = "6.7.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
-    rev = finalAttrs.version;
-    hash = "sha256-HYrpq22rWScdweDQQlrQbOShYFH4FjZWQKBnvKIsOAI=";
+    rev = "${finalAttrs.version}-unstable";
+    hash = "sha256-MkMbX3XCONHdE+WznUmHlP1HUFnaIHpoTIvVPQmV/vM=";
   };
 
   patches = [
