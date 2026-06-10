@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = false;
   withDistOutput = false;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ProtonVPN";
     repo = "local-agent-rs";
     rev = version;
-    hash = "sha256-VmZ8nsKqP8jyNe7Rl+PHsXhsjgchq3rKmTtAqFEe7yM=";
+    hash = "sha256-y2FEfICwWa/GgaKkq8CR+lVDYIsk0HsuKuGUsUQZAFo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-MOCLMQ8mqv8Q3I3bIS0ynfpPmrULMA+80RHZBeu7r5s=";
+    hash = "sha256-y8I806dbC7n3eMFyrzGJokfVDwEGFdC7NgzSA0G8hkQ=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
