@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ids1024";
     repo = "wikicurses";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0f14s4qx3q5pr5vn460c34b5mbz2xs62d8ljs3kic8gmdn8x2knm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1U7RkW31IRbn0JKiJozu4q9aFhkMGGJ3ybfg0THRJDg=";
   };
 
   outputs = [
