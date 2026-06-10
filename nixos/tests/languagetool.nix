@@ -1,19 +1,15 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 let
   port = 8082;
 in
 {
   name = "languagetool";
-  meta = with lib.maintainers; {
-    maintainers = [ fbeffa ];
-  };
+  meta.maintainers = [ lib.maintainers.fbeffa ];
 
-  nodes.machine =
-    { ... }:
-    {
-      services.languagetool.enable = true;
-      services.languagetool.port = port;
-    };
+  containers.machine.services.languagetool = {
+    enable = true;
+    inherit port;
+  };
 
   testScript = ''
     machine.start()
