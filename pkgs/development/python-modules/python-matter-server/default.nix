@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenvNoCC,
   buildNpmPackage,
   python,
-  home-assistant-chip-wheels,
 
   # build
   setuptools,
