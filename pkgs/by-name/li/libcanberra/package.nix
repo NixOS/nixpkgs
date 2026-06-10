@@ -70,6 +70,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # musl doesn't provide ldconfig, so we bypass it
+  #
+  # We also bypass relinking as we dont need to do so and it causes
+  # a build failure when libcanberra-gtk3-module relinks against
+  # libcanberra-gtk3
+  postConfigure = lib.optionalString (stdenv.hostPlatform.isMusl) ''
+    substituteInPlace libtool \
+      --replace-fail 'ldconfig' 'true'
+    substituteInPlace libtool \
+      --replace-fail 'relink_command=' 'true; relink_command='
+  '';
+
   postInstall = ''
     for f in $out/lib/*.la; do
       sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $f
