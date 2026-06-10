@@ -2,7 +2,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
@@ -20,12 +20,12 @@ buildNpmPackage (finalAttrs: {
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-6JcH7ODO78Vu7sd55npJYRnkCLSMKJM/iSv+isBsBdU=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-9gejKf+GqB8BPAQtQSuZsTb6jFro3X1aL1noVfyKTPg=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm_10 ];
   npmConfigHook = pnpmConfigHook;
 
   dontNpmBuild = true;
