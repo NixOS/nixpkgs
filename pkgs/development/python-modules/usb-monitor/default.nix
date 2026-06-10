@@ -1,14 +1,15 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
-  lib,
+  setuptools,
   pyudev,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "usb-monitor";
   version = "1.23";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -17,6 +18,8 @@ buildPythonPackage (finalAttrs: {
     pname = "usb_monitor";
     hash = "sha256-7xZ30JLPduY0y2SHWI7fvZHB27FbNFAMczHMXnaXl88=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [ pyudev ];
 
