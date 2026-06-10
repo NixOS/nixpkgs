@@ -1,8 +1,7 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pkgconfig,
   wrapGAppsHook3,
   gettext,
   gtk3,
@@ -10,12 +9,6 @@
   dbus,
   gobject-introspection,
   xmodmap,
-  pygobject3,
-  setuptools,
-  evdev,
-  pydantic,
-  pydbus,
-  psutil,
   procps,
   gtksourceview4,
   bash,
@@ -37,7 +30,7 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(buildPythonApplication rec {
+(python3Packages.buildPythonApplication rec {
   pname = "input-remapper";
   version = "2.2.0";
   format = "setuptools";
@@ -66,11 +59,11 @@ in
     gtk3
     glib
     gobject-introspection
-    pygobject3
+    python3Packages.pygobject3
   ]
   ++ maybeXmodmap;
 
-  dependencies = [
+  dependencies = with python3Packages; [
     setuptools # needs pkg_resources
     pygobject3
     evdev
@@ -86,7 +79,7 @@ in
     udevCheckHook
     versionCheckHook
   ]
-  ++ lib.optionals withDoCheck [ psutil ];
+  ++ lib.optionals withDoCheck [ python3Packages.psutil ];
 
   versionCheckProgram = "${placeholder "out"}/bin/input-remapper-control";
 

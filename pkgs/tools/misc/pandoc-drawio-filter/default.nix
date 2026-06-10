@@ -1,10 +1,9 @@
 {
-  buildPythonApplication,
-  drawio-headless,
-  fetchFromGitHub,
   lib,
+  python3Packages,
+  fetchFromGitHub,
+  drawio-headless,
   pandoc,
-  pandocfilters,
   runCommand,
   texliveTeTeX,
 }:
@@ -19,7 +18,7 @@ let
     sha256 = "sha256-2XJSAfxqEmmamWIAM3vZqi0mZjUUugmR3zWw8Imjadk=";
   };
 
-  pandoc-drawio-filter = buildPythonApplication {
+  pandoc-drawio-filter = python3Packages.buildPythonApplication {
     format = "setuptools";
     pname = "pandoc-drawio-filter";
 
@@ -27,7 +26,7 @@ let
 
     propagatedBuildInputs = [
       drawio-headless
-      pandocfilters
+      python3Packages.pandocfilters
     ];
 
     passthru.tests.example-doc =
