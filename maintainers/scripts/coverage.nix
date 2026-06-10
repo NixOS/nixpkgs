@@ -156,8 +156,6 @@ let
     in
     if package == null then
       throw "Package with an attribute name `${path}` does not exist."
-    else if get-script package == null then
-      throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
     else
       {
         attrPath = path;
@@ -226,13 +224,41 @@ let
       version = lib.getVersion package;
       strictDeps = package.strictDeps;
       __structuredAttrs = package.__structuredAttrs;
+      # ${ if ? then } syntax over // optionalAttrs for perf benefits
+      # see https://github.com/NixOS/nixpkgs/pull/506793
+      # premature optimization can be fun :)
+      languageAttrs = {
+        # python
+        ${if package ? pyproject then "pyproject" else null} =
+          package.pyproject != null && package.pyproject != false;
+        # checks pyproject because its in all python builders
+        ${if package ? pyproject then "pythonImportsCheck" else null} = package ? pythonImportsCheck;
+
+        # node/npm
+        # https://github.com/NixOS/nixpkgs/issues/529285
+        ${if package ? pnpmDeps then "pnpm" else null} =
+          package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
+        # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
+        ${
+          if package ? postPatch && lib.hasInfix "package-lock.json" package.postPatch then
+            "lockFile"
+          else
+            null
+        } =
+          true;
+
+        # rust
+        # https://github.com/NixOS/nixpkgs/issues/327064
+        ${if package ? cargoDeps && package.cargoDeps ? lockFile then "lockFile" else null} = true; # want to get rid of these
+
+      };
     };
 
   # JSON file with data for update.py.
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 in
-pkgs.stdenv.mkDerivation {
-  name = "nixpkgs-update-script";
+pkgs.stdenvNoCC.mkDerivation {
+  name = "nixpkgs-coverage-checker";
   buildCommand = ''
     echo ""
     echo "----------------------------------------------------------------"
@@ -246,5 +272,6 @@ pkgs.stdenv.mkDerivation {
   shellHook = ''
     unset shellHook # do not contaminate nested shells
     exec ${lib.getExe' pkgs.toybox "cat"} ${packagesJson} | ${lib.getExe pkgs.jq}
+    exit 0 # prevent new shell
   '';
 }
