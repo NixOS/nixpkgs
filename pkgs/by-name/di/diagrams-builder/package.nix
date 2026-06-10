@@ -13,9 +13,8 @@
 {
   lib,
   stdenv,
-  ghcWithPackages,
   makeWrapper,
-  diagrams-builder,
+  haskellPackages,
   extraPackages ? (self: [ ]),
 }:
 
@@ -24,6 +23,8 @@ let
   # Used same technique as for the yiCustom package.
   wrappedGhc = ghcWithPackages (self: [ diagrams-builder ] ++ extraPackages self);
   ghc = lib.getExe' wrappedGhc "ghc";
+
+  inherit (haskellPackages) ghcWithPackages diagrams-builder;
 
   exeWrapper =
     backend:
