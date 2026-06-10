@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.0";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     repo = "pyScss";
     owner = "Kronuz";
