@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "demjson3";
   version = "3.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -16,6 +17,8 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-N8g7DG6wjSXe/IjfCipIddWKeAmpZQvW7uev2AU826w=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
