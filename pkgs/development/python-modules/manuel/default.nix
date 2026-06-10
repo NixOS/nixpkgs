@@ -8,13 +8,13 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manuel";
   version = "1.13.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XWMSDej6bZJ3gLaa4oqj6dFmmxCvPTJ4Xz+6EaW+iFo=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/manuel/";
     license = lib.licenses.zpl20;
   };
-}
+})
