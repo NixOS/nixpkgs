@@ -43,18 +43,13 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "prowlpy" ];
 
   nativeCheckInputs = [
+    cacert
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     respx
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
-
-  preCheck = ''
-    # Without this pyreqwest fails with
-    #     unexpected error: No CA certificates were loaded from the system
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
 
   # tests fail without this
   pytestFlags = [ "-v" ];
