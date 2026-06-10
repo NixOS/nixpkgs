@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "JACK Audio Connection Kit client for Python";
     homepage = "https://github.com/spatialaudio/jackclient-python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DimseBoms ];
     platforms = lib.platforms.linux;
   };
 }

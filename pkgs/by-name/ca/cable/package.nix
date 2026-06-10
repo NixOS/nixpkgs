@@ -89,7 +89,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "GUI to dynamically modify PipeWire and WirePlumber settings at runtime";
     homepage = "https://github.com/magillos/Cable";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ DimseBoms ];
     mainProgram = "cable";
     platforms = lib.platforms.linux;
   };

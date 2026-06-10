@@ -6957,6 +6957,12 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
+  DimseBoms = {
+     name = "Dmitriy Safiullin";
+     github = "DimseBoms";
+     githubId = 72513291;
+     email = "dmisaf@posteo.net";
+   };
   diniamo = {
     name = "diniamo";
     email = "diniamo53@gmail.com";
