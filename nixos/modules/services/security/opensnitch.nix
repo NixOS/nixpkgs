@@ -106,10 +106,9 @@ in
                 "iptables"
                 "nftables"
               ];
-              default = if config.networking.nftables.enable then "nftables" else "iptables";
-              defaultText = lib.literalExpression ''if config.networking.nftables.enable then "nftables" else "iptables"'';
+              default = "nftables";
               description = ''
-                Which firewall backend to use.
+                Which firewall backend to use. `nftables` ruleset can be used for `iptables` firewall too, if `iptables` is built with nftables compatibility.
               '';
             };
             Ebpf.ModulesPath = lib.mkOption {
