@@ -30,7 +30,7 @@
   xmodem,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "labgrid";
   version = "25.0.1";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cLofkkp2T6Y9nQ5LIS7w9URZlt8DQNN8dm3NnrvcKWY=";
   };
 
@@ -123,4 +123,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux;
   };
-}
+})
