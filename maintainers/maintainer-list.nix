@@ -31190,7 +31190,7 @@
     name = "Marc Zweiler";
     email = "marc.zweiler@outlook.at";
     github = "zweiler1";
-    githubId = 131394789 ;
+    githubId = 131394789;
     keys = [ { fingerprint = "5D51 A11D 0F30 FD88 D291  73AC 6D7C F0EA 0ABD 3370"; } ];
   };
   zx2c4 = {
