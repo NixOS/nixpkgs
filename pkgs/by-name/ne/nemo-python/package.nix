@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-python";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = finalAttrs.version;
-    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+    rev = "${finalAttrs.version}-unstable";
+    hash = "sha256-msmy//e15B6lYLfsqqUhPAYt/PK+c4k6piY7pw4eqkI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-python";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Tries to load libpython3.so via g_module_open ().
     substituteInPlace meson.build \
-      --replace "get_option('prefix'), get_option('libdir')" "'${python3}/lib'"
+      --replace-fail "get_option('prefix'), get_option('libdir')" "'${python3}/lib'"
   '';
 
   env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
