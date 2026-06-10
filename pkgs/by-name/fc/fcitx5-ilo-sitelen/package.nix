@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   ];
   
   strictDeps = true;
-  _structuredArrts = true;
+  _structuredAttrs = true;
   
 
   meta = {
