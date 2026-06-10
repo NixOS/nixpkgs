@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     libbpf
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
