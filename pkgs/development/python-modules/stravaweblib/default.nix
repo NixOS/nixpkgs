@@ -16,7 +16,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "stravaweblib";
   version = "0.0.10";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -35,6 +35,10 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     stravalib
     beautifulsoup4
+  ];
+
+  pythonRelaxDeps = [
+    "stravalib"
   ];
 
   pythonImportsCheck = [ "stravaweblib" ];
