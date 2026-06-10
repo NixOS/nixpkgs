@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     libupnp
     boost
   ]
-  # the GUI and daemon bind the Wayland app_id / X11 WM_CLASS via g_set_prgname();
+  # the GUI and daemon bind the Wayland app_id/X11 WM_CLASS via g_set_prgname();
   # libsysprof-capture satisfies glib-2.0.pc's Requires.private so the
   # pkg-config checks resolve cleanly
   ++ lib.optionals (stdenv.hostPlatform.isLinux && (monolithic || enableDaemon || client)) [
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux curl
   # StatusNotifierItem tray icon; without it aMule falls back to the legacy
   # GtkStatusIcon, invisible on modern GNOME/wlroots. gtk3 brings the
-  # gtk+-3.0.pc that ayatana-appindicator3-0.1.pc requires.
+  # gtk+-3.0.pc that ayatana-appindicator3-0.1.pc requires
   ++ lib.optionals (stdenv.hostPlatform.isLinux && monolithic) [
     gtk3
     libayatana-appindicator
@@ -120,15 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_REMOTEGUI" client)
     (lib.cmakeBool "BUILD_AMULECMD" textClient)
     (lib.cmakeBool "BUILD_WEBSERVER" httpServer)
-    # with strictDeps FindwxWidgets cannot find wx-config in PATH; the
-    # script runs on the build machine even when wxwidgets is a host dep
+    # with strictDeps FindwxWidgets cannot find wx-config in PATH
+    # the script runs on the build machine even when wxwidgets is a host dependency
     (lib.cmakeFeature "wxWidgets_CONFIG_EXECUTABLE" (
       lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"
     ))
   ];
 
-  # On darwin the GUIs are installed as app bundles in $out; move them to
-  # $out/Applications and expose the inner binaries in $out/bin.
+  # On darwin the GUIs are installed as app bundles in $out
+  # move them to $out/Applications and expose the inner binaries in $out/bin
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for app in "$out"/*.app; do
       [ -e "$app" ] || continue
