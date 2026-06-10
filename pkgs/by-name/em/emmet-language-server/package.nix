@@ -5,6 +5,7 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -29,17 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm_9
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
-    pnpm build
-
-    runHook postBuild
-  '';
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
