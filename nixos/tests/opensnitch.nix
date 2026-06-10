@@ -88,10 +88,10 @@ in
     lib.concatLines (
       map (m: ''
         client_blocked_${m}.wait_for_unit("opensnitchd.service")
-        client_blocked_${m}.fail("curl http://server")
+        client_blocked_${m}.fail("curl --connect-timeout 3 http://server")
 
         client_allowed_${m}.wait_for_unit("opensnitchd.service")
-        client_allowed_${m}.succeed("curl http://server")
+        client_allowed_${m}.succeed("curl --connect-timeout 3 http://server")
       '') monitorMethods
     )
     + ''
