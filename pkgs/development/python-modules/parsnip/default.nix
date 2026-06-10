@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "parsnip";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "glotzerlab";
     repo = "parsnip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BCEQnClT/dI+t8RwMEQkzbFVCmDThiS9m8ZBCIEFrlg=";
+    hash = "sha256-A1YoTBRN3ukcueUso5P2zPZ/pxu25k9h6aI7+AQvr1Q=";
   };
 
   build-system = [
