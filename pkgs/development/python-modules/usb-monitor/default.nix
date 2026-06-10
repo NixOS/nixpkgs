@@ -10,6 +10,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.23";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "usb_monitor";
