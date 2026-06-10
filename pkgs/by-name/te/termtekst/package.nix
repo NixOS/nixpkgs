@@ -8,7 +8,9 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "termtekst";
   version = "1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "zevv";
@@ -17,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     sha256 = "1gm7j5d49a60wm7px82b76f610i8pl8ccz4r6qsz90z4mp3lyw9b";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     ncurses
     requests
   ];
