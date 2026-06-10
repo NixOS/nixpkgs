@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   dontPatch = true;
   dontConfigure = true;
   dontBuild = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
