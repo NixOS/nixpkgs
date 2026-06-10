@@ -1,3 +1,4 @@
+# nixos/modules/hardware/facter/system.nix
 {
   config,
   options,
@@ -12,7 +13,7 @@
         detectedSystem != null
         && !config.boot.isContainer
         && !options.nixpkgs.pkgs.isDefined
-        && !(options.nixpkgs.hostPlatform.readOnly or false);
+        && !options.nixpkgs.hostPlatform.isDefined;
     in
     lib.mkIf canSetHostPlatform {
       nixpkgs.hostPlatform = lib.mkDefault detectedSystem;
