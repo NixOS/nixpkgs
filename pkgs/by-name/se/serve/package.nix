@@ -2,8 +2,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
-  makeWrapper,
-  nodejs,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
