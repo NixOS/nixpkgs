@@ -66,7 +66,6 @@ mkLibretroCore rec {
     hash = "sha256-EeXYibPV9BPazC/i5UqXEd4BKlIZbNbPNgpsoo4ws7k=";
   };
 
-  patches = [ ./patches/melondsds-noslirpcopy.patch ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "find_package(Git REQUIRED)" ""
