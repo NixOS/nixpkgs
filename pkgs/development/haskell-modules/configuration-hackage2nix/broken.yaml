@@ -7438,7 +7438,6 @@ broken-packages:
   - yesod-links # failure in job https://hydra.nixos.org/build/233257763 at 2023-09-02
   - yesod-lucid # failure in job https://hydra.nixos.org/build/233231687 at 2023-09-02
   - yesod-media-simple # failure in job https://hydra.nixos.org/build/307611606 at 2025-09-19
-  - yesod-middleware-csp # failure in job https://hydra.nixos.org/build/295098382 at 2025-04-22
   - yesod-paginate # failure in job https://hydra.nixos.org/build/233218563 at 2023-09-02
   - yesod-pagination # failure in job https://hydra.nixos.org/build/233204022 at 2023-09-02
   - yesod-pnotify # failure in job https://hydra.nixos.org/build/233258047 at 2023-09-02
