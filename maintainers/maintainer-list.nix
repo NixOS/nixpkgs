@@ -10930,6 +10930,11 @@
     githubId = 58676303;
     name = "hhydraa";
   };
+  hibiday = {
+    name = "Katsumi Takeuchi";
+    github = "hibiday";
+    githubId = 137286929;
+  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
