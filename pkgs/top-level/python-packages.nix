@@ -12052,6 +12052,8 @@ self: super: with self; {
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
+  opt-einsum-fx = callPackage ../development/python-modules/opt-einsum-fx { };
+
   optax = callPackage ../development/python-modules/optax { };
 
   optiland = callPackage ../development/python-modules/optiland { };
