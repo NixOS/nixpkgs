@@ -81,7 +81,10 @@ buildPythonPackage (finalAttrs: {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/gtronset/beets-filetote";
     changelog = "https://github.com/gtronset/beets-filetote/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ dansbandit ];
+    maintainers = with lib.maintainers; [
+      dansbandit
+      returntoreality
+    ];
     license = lib.licenses.mit;
     inherit (beets-minimal.meta) platforms;
   };
