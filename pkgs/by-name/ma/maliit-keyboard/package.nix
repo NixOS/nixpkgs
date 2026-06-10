@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
 
-  anthy,
+  anthy-unicode,
   hunspell,
   libchewing,
   libpinyin,
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    anthy
+    anthy-unicode
     hunspell
     libchewing
     libpinyin

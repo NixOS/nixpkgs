@@ -16,7 +16,7 @@
   m17n_db,
   expat,
   withAnthy ? true,
-  anthy,
+  anthy-unicode,
   withGtk ? true,
   withGtk2 ? withGtk,
   gtk2,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     m17n_db
     expat
   ]
-  ++ lib.optional withAnthy anthy
+  ++ lib.optional withAnthy anthy-unicode
   ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3
   ++ lib.optionals withQt5 [
