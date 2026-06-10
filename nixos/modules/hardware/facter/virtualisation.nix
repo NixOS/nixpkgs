@@ -5,6 +5,7 @@
   ...
 }:
 let
+  facterLib = import ./lib.nix lib;
   inherit (config.hardware.facter) report;
   cfg = config.hardware.facter.detected.virtualisation;
   hasCPUFeature =
@@ -81,46 +82,84 @@ in
     };
   };
 
-  config = lib.mkIf config.hardware.facter.enable {
+  config = lib.mkIf config.hardware.facter.enable (
+    lib.mkMerge [
+      {
+        # KVM support
+        boot.kernelModules = kvmKernelModules;
 
-    # KVM support
-    boot.kernelModules = kvmKernelModules;
+        # virtio & qemu
+        boot.initrd = {
+          kernelModules = qemuInitrdKernelModules;
+          availableKernelModules = qemuAvailableKernelModules;
+        };
 
-    # virtio & qemu
-    boot.initrd = {
-      kernelModules = qemuInitrdKernelModules;
-      availableKernelModules = qemuAvailableKernelModules;
-    };
+        virtualisation = {
+          # oracle
+          virtualbox.guest.enable = lib.mkIf cfg.oracle.enable (lib.mkDefault true);
+          # hyper-v
+          hypervGuest.enable = lib.mkIf cfg.hyperv.enable (lib.mkDefault true);
+        };
 
-    virtualisation = {
-      # oracle
-      virtualbox.guest.enable = lib.mkIf cfg.oracle.enable (lib.mkDefault true);
-      # hyper-v
-      hypervGuest.enable = lib.mkIf cfg.hyperv.enable (lib.mkDefault true);
-    };
+        # parallels
+        hardware.parallels.enable = lib.mkIf cfg.parallels.enable (lib.mkDefault true);
+        nixpkgs.config = lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
+          allowUnfreePackages = [ "prl-tools" ];
+        };
+      }
 
-    # parallels
-    hardware.parallels.enable = lib.mkIf cfg.parallels.enable (lib.mkDefault true);
-    nixpkgs.config = lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
-      allowUnfreePackages = [ "prl-tools" ];
-    };
+      (facterLib.mkFacterAssignment {
+        moduleName = "virtualisation";
+        path = "boot.kernelModules";
+        value = kvmKernelModules;
+      })
 
-    hardware.facter.changes = {
-      "boot.kernelModules".virtualisation = kvmKernelModules;
-      "boot.initrd.kernelModules".virtualisation = qemuInitrdKernelModules;
-      "boot.initrd.availableKernelModules".virtualisation = qemuAvailableKernelModules;
-    }
-    // lib.optionalAttrs cfg.oracle.enable {
-      "virtualisation.virtualbox.guest.enable" = true;
-    }
-    // lib.optionalAttrs cfg.hyperv.enable {
-      "virtualisation.hypervGuest.enable" = true;
-    }
-    // lib.optionalAttrs cfg.parallels.enable {
-      "hardware.parallels.enable" = true;
-    }
-    // lib.optionalAttrs (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) {
-      "nixpkgs.config.allowUnfreePackages" = [ "prl-tools" ];
-    };
-  };
+      (facterLib.mkFacterAssignment {
+        moduleName = "virtualisation";
+        path = "boot.initrd.kernelModules";
+        value = qemuInitrdKernelModules;
+      })
+
+      (facterLib.mkFacterAssignment {
+        moduleName = "virtualisation";
+        path = "boot.initrd.availableKernelModules";
+        value = qemuAvailableKernelModules;
+      })
+
+      (lib.mkIf cfg.oracle.enable (
+        facterLib.mkFacterAssignment {
+          moduleName = "virtualisation";
+          path = "virtualisation.virtualbox.guest.enable";
+          value = lib.mkDefault true;
+          facterValue = true;
+        }
+      ))
+
+      (lib.mkIf cfg.hyperv.enable (
+        facterLib.mkFacterAssignment {
+          moduleName = "virtualisation";
+          path = "virtualisation.hypervGuest.enable";
+          value = lib.mkDefault true;
+          facterValue = true;
+        }
+      ))
+
+      (lib.mkIf cfg.parallels.enable (
+        facterLib.mkFacterAssignment {
+          moduleName = "virtualisation";
+          path = "hardware.parallels.enable";
+          value = lib.mkDefault true;
+          facterValue = true;
+        }
+      ))
+
+      (lib.mkIf (!options.nixpkgs.pkgs.isDefined && cfg.parallels.enable) (
+        facterLib.mkFacterAssignment {
+          moduleName = "virtualisation";
+          path = "nixpkgs.config.allowUnfreePackages";
+          value = [ "prl-tools" ];
+        }
+      ))
+    ]
+  );
 }

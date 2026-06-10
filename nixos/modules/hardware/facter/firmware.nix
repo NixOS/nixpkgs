@@ -8,27 +8,35 @@ let
   hasIntelCpu = facterLib.hasIntelCpu report;
 in
 {
-  config = lib.mkIf (config.hardware.facter.enable && isBaremetal) {
-    # none (e.g. bare-metal)
-    # provide firmware for devices that might not have been detected by nixos-facter
-    hardware.enableRedistributableFirmware = lib.mkDefault true;
+  config = lib.mkIf (config.hardware.facter.enable && isBaremetal) (
+    lib.mkMerge [
+      # none (e.g. bare-metal)
+      # provide firmware for devices that might not have been detected by nixos-facter
+      (facterLib.mkFacterAssignment {
+        moduleName = "firmware";
+        path = "hardware.enableRedistributableFirmware";
+        value = lib.mkDefault true;
+        facterValue = true;
+      })
 
-    # update microcode
-    hardware.cpu.amd.updateMicrocode = lib.mkIf hasAmdCpu (
-      lib.mkDefault config.hardware.enableRedistributableFirmware
-    );
-    hardware.cpu.intel.updateMicrocode = lib.mkIf hasIntelCpu (
-      lib.mkDefault config.hardware.enableRedistributableFirmware
-    );
+      # update microcode
+      (lib.mkIf hasAmdCpu (
+        facterLib.mkFacterAssignment {
+          moduleName = "firmware";
+          path = "hardware.cpu.amd.updateMicrocode";
+          value = lib.mkDefault config.hardware.enableRedistributableFirmware;
+          facterValue = true;
+        }
+      ))
 
-    hardware.facter.changes = {
-      "hardware.enableRedistributableFirmware".firmware = true;
-    }
-    // lib.optionalAttrs hasAmdCpu {
-      "hardware.cpu.amd.updateMicrocode".firmware = true;
-    }
-    // lib.optionalAttrs hasIntelCpu {
-      "hardware.cpu.intel.updateMicrocode".firmware = true;
-    };
-  };
+      (lib.mkIf hasIntelCpu (
+        facterLib.mkFacterAssignment {
+          moduleName = "firmware";
+          path = "hardware.cpu.intel.updateMicrocode";
+          value = lib.mkDefault config.hardware.enableRedistributableFirmware;
+          facterValue = true;
+        }
+      ))
+    ]
+  );
 }

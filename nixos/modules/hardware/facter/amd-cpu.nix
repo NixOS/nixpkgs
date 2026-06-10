@@ -20,24 +20,35 @@ let
     (lib.versionAtLeast kver "5.17") && (lib.versionOlder kver "6.1")
   ) [ "amd-pstate" ];
 in
-lib.mkIf (config.hardware.facter.enable && isBaremetal && hasAmdCpu) {
-  boot = lib.mkMerge [
-    (lib.mkIf ((lib.versionAtLeast kver "5.17") && (lib.versionOlder kver "6.1")) {
-      kernelParams = amdPstateKernelParams;
-      kernelModules = amdPstateKernelModules;
-    })
-    (lib.mkIf ((lib.versionAtLeast kver "6.1") && (lib.versionOlder kver "6.3")) {
-      kernelParams = amdPstateKernelParams;
-    })
-    (lib.mkIf (lib.versionAtLeast kver "6.3") {
-      kernelParams = amdPstateKernelParams;
-    })
-  ];
+lib.mkIf (config.hardware.facter.enable && isBaremetal && hasAmdCpu) (
+  lib.mkMerge [
+    {
+      boot = lib.mkMerge [
+        (lib.mkIf ((lib.versionAtLeast kver "5.17") && (lib.versionOlder kver "6.1")) {
+          kernelParams = amdPstateKernelParams;
+          kernelModules = amdPstateKernelModules;
+        })
+        (lib.mkIf ((lib.versionAtLeast kver "6.1") && (lib.versionOlder kver "6.3")) {
+          kernelParams = amdPstateKernelParams;
+        })
+        (lib.mkIf (lib.versionAtLeast kver "6.3") {
+          kernelParams = amdPstateKernelParams;
+        })
+      ];
+    }
 
-  hardware.facter.changes = {
-    "boot.kernelParams"."amd-cpu" = amdPstateKernelParams;
-  }
-  // lib.optionalAttrs (amdPstateKernelModules != [ ]) {
-    "boot.kernelModules"."amd-cpu" = amdPstateKernelModules;
-  };
-}
+    (facterLib.mkFacterAssignment {
+      moduleName = "amd-cpu";
+      path = "boot.kernelParams";
+      value = amdPstateKernelParams;
+    })
+
+    (lib.mkIf (amdPstateKernelModules != [ ]) (
+      facterLib.mkFacterAssignment {
+        moduleName = "amd-cpu";
+        path = "boot.kernelModules";
+        value = amdPstateKernelModules;
+      }
+    ))
+  ]
+)

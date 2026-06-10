@@ -14,12 +14,11 @@ in
     '';
   };
 
-  config = lib.mkIf (config.hardware.facter.enable && config.boot.initrd.network.enable) {
-    boot.initrd.kernelModules = config.hardware.facter.detected.boot.initrd.networking.kernelModules;
-
-    hardware.facter.changes = {
-      "boot.initrd.kernelModules"."networking-initrd" =
-        config.hardware.facter.detected.boot.initrd.networking.kernelModules;
-    };
-  };
+  config = lib.mkIf (config.hardware.facter.enable && config.boot.initrd.network.enable) (
+    facterLib.mkFacterAssignment {
+      moduleName = "networking-initrd";
+      path = "boot.initrd.kernelModules";
+      value = config.hardware.facter.detected.boot.initrd.networking.kernelModules;
+    }
+  );
 }

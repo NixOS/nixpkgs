@@ -99,17 +99,20 @@ in
     };
 
   config = lib.mkMerge [
-    (lib.mkIf detected.camera.ipu6.enable {
-      hardware.ipu6 = {
-        enable = true;
-        platform = ipu6Platform;
-      };
-
-      hardware.facter.changes = {
-        "hardware.ipu6.enable".ipu6 = true;
-        "hardware.ipu6.platform".ipu6 = ipu6Platform;
-      };
-    })
+    (lib.mkIf detected.camera.ipu6.enable (
+      lib.mkMerge [
+        (facterLib.mkFacterAssignment {
+          moduleName = "ipu6";
+          path = "hardware.ipu6.enable";
+          value = true;
+        })
+        (facterLib.mkFacterAssignment {
+          moduleName = "ipu6";
+          path = "hardware.ipu6.platform";
+          value = ipu6Platform;
+        })
+      ]
+    ))
     {
       warnings =
         let

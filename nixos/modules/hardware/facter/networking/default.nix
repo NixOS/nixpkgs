@@ -1,5 +1,6 @@
 { config, lib, ... }:
 let
+  facterLib = import ../lib.nix lib;
   # Filter network interfaces from facter report to only those suitable for DHCP
   physicalInterfaces = lib.filter (
     iface:
@@ -61,15 +62,22 @@ in
       ];
     };
   };
-  config = lib.mkIf (config.hardware.facter.enable && config.hardware.facter.detected.dhcp.enable) {
-    networking.useDHCP = lib.mkDefault true;
+  config = lib.mkIf (config.hardware.facter.enable && config.hardware.facter.detected.dhcp.enable) (
+    lib.mkMerge [
+      (facterLib.mkFacterAssignment {
+        moduleName = "networking";
+        path = "networking.useDHCP";
+        value = lib.mkDefault true;
+        facterValue = true;
+      })
 
-    # Per-interface DHCP configuration
-    networking.interfaces = perInterfaceConfig;
-
-    hardware.facter.changes = {
-      "networking.useDHCP".networking = true;
-      "networking.interfaces".networking = perInterfaceChanges;
-    };
-  };
+      # Per-interface DHCP configuration
+      (facterLib.mkFacterAssignment {
+        moduleName = "networking";
+        path = "networking.interfaces";
+        value = perInterfaceConfig;
+        facterValue = perInterfaceChanges;
+      })
+    ]
+  );
 }

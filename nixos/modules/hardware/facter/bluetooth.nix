@@ -1,4 +1,7 @@
 { lib, config, ... }:
+let
+  facterLib = import ./lib.nix lib;
+in
 {
   options.hardware.facter.detected.bluetooth.enable =
     lib.mkEnableOption "Enable the Facter bluetooth module"
@@ -7,11 +10,12 @@
       defaultText = "hardware dependent";
     };
 
-  config = lib.mkIf config.hardware.facter.detected.bluetooth.enable {
-    hardware.bluetooth.enable = lib.mkDefault true;
-
-    hardware.facter.changes = {
-      "hardware.bluetooth.enable".bluetooth = true;
-    };
-  };
+  config = lib.mkIf config.hardware.facter.detected.bluetooth.enable (
+    facterLib.mkFacterAssignment {
+      moduleName = "bluetooth";
+      path = "hardware.bluetooth.enable";
+      value = lib.mkDefault true;
+      facterValue = true;
+    }
+  );
 }
