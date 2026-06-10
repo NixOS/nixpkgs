@@ -2,23 +2,25 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   six,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gviz_api";
   version = "1.10.0";
-  format = "wheel";
+  pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    format = "wheel";
-    sha256 = "a05055fed8c279f34f4b496eace7648c7fe9c1b06851e8a36e748541f1adbb05";
+    sha256 = "sha256-hGaS3YzHMiT8MbGOQVib2TThzAUJDGV2r0tLJsLnG5A=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   meta = {
     description = "Python API for Google Visualization";
