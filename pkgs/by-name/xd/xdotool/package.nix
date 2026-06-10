@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdotool";
-  version = "3.20211022.1";
+  version = "4.20260303.1";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "xdotool";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XFiaiHHtUSNFw+xhUR29+2RUHOa+Eyj1HHfjCUjwd9k=";
+    hash = "sha256-cgCZuvcxD1qQPpzSmYQZJj9TH8Vq9xTZLU8Rg7sUrvI=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxext
   ];
+
+  strictDeps = true;
 
   preBuild = ''
     mkdir -p $out/lib
