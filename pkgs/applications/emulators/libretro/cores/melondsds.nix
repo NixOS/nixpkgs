@@ -1,5 +1,6 @@
 {
   lib,
+  applyPatches,
   fetchFromGitHub,
   glm,
   libslirp,
@@ -28,8 +29,8 @@ let
   embed-binaries-src = fetchFromGitHub {
     owner = "andoalon";
     repo = "embed-binaries";
-    rev = "21f28cabbba02cd657578c70b7aedd0f141467ff";
-    hash = "sha256-iW3DBGdp/ykE3EoGcuirq5V5lKV0vemzIjDFrINzQPM=";
+    rev = "078b62beba97e8192c99bfb16d5e17220cfc7598";
+    hash = "sha256-EkK+ZCbrZ2Y9wJ864OIwRWDfHcmxzKMco0QAkLOQOwY=";
   };
   pntr-src = fetchFromGitHub {
     owner = "robloach";
@@ -44,22 +45,25 @@ let
     hash = "sha256-J5wAqF5yQ5KYArJJyKzaqscWsXq+KAPKXybYfVgasXs=";
   };
   # using nixpkgs zlib gives a linking error
-  zlib-src = fetchFromGitHub {
-    owner = "madler";
-    repo = "zlib";
-    rev = "570720b0c24f9686c33f35a1b3165c1f568b96be";
-    hash = "sha256-5g/Jo8M/jvkgV0NofSAV4JdwJSk5Lyv9iGRb2Kz/CC0=";
+  zlib-src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "madler";
+      repo = "zlib";
+      rev = "925af44f3cde53c6b076611c297850091b5dc7bb";
+      hash = "sha256-TkPLWSN5QcPlL9D0kc/yhH0/puE9bFND24aj5NVDKYs=";
+    };
+    patches = [ ./patches/melondsds-zlib-no-zconf-rename.patch ];
   };
 in
 mkLibretroCore rec {
   core = "melondsds";
-  version = "1.2.0";
+  version = "0-unstable-2026-03-03";
 
   src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonds-ds";
-    rev = "33c48260402865ef77667487528efd5ca7ce1233";
-    hash = "sha256-n5MZ6BWUWRi+jz34EbL+SeSkjFZeqQNXE3hS6JzS424=";
+    rev = "bac0256dc6a8736c5a228f57c562257e45fd49f3";
+    hash = "sha256-EeXYibPV9BPazC/i5UqXEd4BKlIZbNbPNgpsoo4ws7k=";
   };
 
   patches = [ ./patches/melondsds-noslirpcopy.patch ];
@@ -69,10 +73,6 @@ mkLibretroCore rec {
 
     substituteInPlace src/libretro/CMakeLists.txt \
       --replace-fail "include(embed-binaries)" "include(${embed-binaries-src}/cmake/embed-binaries.cmake)"
-
-    substituteInPlace cmake/FetchDependencies.cmake \
-      --replace-fail "set_target_properties(example" "set_target_properties(zlib_example" \
-      --replace-fail "set_target_properties(zlib_example64 minigzip64" "set_target_properties(zlib_example64"
   '';
 
   makefile = "";
