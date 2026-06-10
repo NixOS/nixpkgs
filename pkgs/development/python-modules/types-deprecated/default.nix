@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-deprecated";
   version = "1.3.1.20260520";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_deprecated";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-TQ2eVSFDLZzogWn7i3k7RdcNjozBp+zVpEZau/g8mrQ=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
