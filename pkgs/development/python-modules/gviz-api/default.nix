@@ -10,6 +10,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.10.0";
   format = "wheel";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     format = "wheel";
