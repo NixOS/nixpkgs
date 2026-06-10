@@ -4657,11 +4657,23 @@
       }
     ];
   };
+  cameroncandau = {
+    email = "open-source@cameroncandau.com";
+    github = "CameronCandau";
+    githubId = 121522527;
+    name = "Cameron Candau";
+  };
   camerondugan = {
     email = "cameron.dugan@protonmail.com";
     github = "camerondugan";
     githubId = 54632731;
     name = "Cameron Dugan";
+  };
+  cameronfyfe = {
+    email = "cameron.j.fyfe@gmail.com";
+    github = "cameronfyfe";
+    githubId = 21013281;
+    name = "Cameron Fyfe";
   };
   cameronnemo = {
     email = "cnemo@tutanota.com";
