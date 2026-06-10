@@ -525,6 +525,19 @@
     };
   };
 
+  dune = {
+    version = "0-unstable-2026-05-21";
+    url = "github:tmcgilchrist/tree-sitter-dune";
+    rev = "dd00f0d232e5f081b583966a414994338614b35b";
+    hash = "sha256-yJYuK1uPgN2DH8SIq67prQ1eEazPeBQNlPgGdkEjjHg=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        leungbk
+      ];
+    };
+  };
+
   dunstrc = {
     version = "0-unstable-2025-05-04";
     url = "github:rotmh/tree-sitter-dunstrc";

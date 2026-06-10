@@ -3,74 +3,21 @@
 # targetPlatform, etc) containing at least the minimal set of attrs
 # required (see types.parsedPlatform in lib/systems/parse.nix).  This
 # file takes an already-valid platform and further elaborates it with
-# optional fields; currently these are: linux-kernel, gcc, and rustc.
+# optional fields; currently these are: gcc, and rustc.
 
 { lib }:
 rec {
-  pc = {
-    linux-kernel = {
-      name = "pc";
-
-      baseConfig = "defconfig";
-      # Build whatever possible as a module, if not stated in the extra config.
-      autoModules = true;
-      target = "bzImage";
-    };
-  };
-
-  ##
-  ## POWER
-  ##
-
-  powernv = {
-    linux-kernel = {
-      name = "PowerNV";
-
-      baseConfig = "powernv_defconfig";
-      target = "vmlinux";
-      autoModules = true;
-    };
-  };
-
-  ppc64 = {
-    linux-kernel = {
-      name = "powerpc64";
-
-      baseConfig = "ppc64_defconfig";
-      target = "vmlinux";
-      autoModules = true;
-    };
-  };
-
   ##
   ## ARM
   ##
 
   armv5tel-multiplatform = {
-    linux-kernel = {
-      name = "armv5tel-multiplatform";
-
-      baseConfig = "multi_v5_defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
     gcc = {
       arch = "armv5te";
     };
   };
 
   raspberrypi = {
-    linux-kernel = {
-      name = "raspberrypi";
-
-      baseConfig = "bcm2835_defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
     gcc = {
       # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
       arch = "armv6kz";
@@ -105,7 +52,6 @@ rec {
 
   # https://developer.android.com/ndk/guides/abis#v7a
   armv7a-android = {
-    linux-kernel.name = "armeabi-v7a";
     gcc = {
       arch = "armv7-a";
       float-abi = "softfp";
@@ -114,14 +60,6 @@ rec {
   };
 
   armv7l-hf-multiplatform = {
-    linux-kernel = {
-      name = "armv7l-hf-multiplatform";
-      baseConfig = "defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
     gcc = {
       # Some table about fpu flags:
       # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
@@ -146,14 +84,6 @@ rec {
   };
 
   aarch64-multiplatform = {
-    linux-kernel = {
-      name = "aarch64-multiplatform";
-      baseConfig = "defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "Image";
-    };
     gcc = {
       arch = "armv8-a";
     };
@@ -171,9 +101,6 @@ rec {
   ##
 
   ben_nanonote = {
-    linux-kernel = {
-      name = "ben_nanonote";
-    };
     gcc = {
       arch = "mips32";
       float = "soft";
@@ -230,17 +157,6 @@ rec {
   ## Other
   ##
 
-  riscv-multiplatform = {
-    linux-kernel = {
-      name = "riscv-multiplatform";
-      target = "Image";
-      autoModules = true;
-      preferBuiltin = true;
-      baseConfig = "defconfig";
-      DTB = true;
-    };
-  };
-
   loongarch64-multiplatform = {
     gcc = {
       # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
@@ -252,14 +168,6 @@ rec {
       # https://github.com/llvm/llvm-project/pull/132173
       cmodel = "medium";
     };
-    linux-kernel = {
-      name = "loongarch-multiplatform";
-      target = "vmlinuz.efi";
-      autoModules = true;
-      preferBuiltin = true;
-      baseConfig = "defconfig";
-      DTB = true;
-    };
   };
 
   # This function takes a minimally-valid "platform" and returns an
@@ -267,17 +175,13 @@ rec {
   # included in the platform in order to further elaborate it.
   select =
     platform:
-    # x86
-    if platform.isx86 then
-      pc
-
     # ARM
-    else if platform.isAarch32 then
+    if platform.isAarch32 then
       let
         version = platform.parsed.cpu.version or null;
       in
       if version == null then
-        pc
+        { }
       else if lib.versionOlder version "6" then
         armv5tel-multiplatform
       else if lib.versionOlder version "7" then
@@ -291,23 +195,8 @@ rec {
     else if platform.isLoongArch64 then
       loongarch64-multiplatform
 
-    else if platform.isRiscV then
-      riscv-multiplatform
-
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
-
-    else if platform.isPower64 then
-      if platform.isLittleEndian then powernv else ppc64
-
-    else if platform.isSh4 then
-      {
-        linux-kernel = {
-          target = "vmlinux";
-          # SH arch doesn't have a 'make install' target.
-          installTarget = "vmlinux";
-        };
-      }
 
     else
       { };
