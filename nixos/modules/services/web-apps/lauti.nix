@@ -74,7 +74,7 @@ in
         ExecStart = lib.getExe pkgs.lauti;
         WorkingDirectory = cfg.dataDir;
         StateDirectory = default;
-        EnvironmentFile = [ cfg.secrets ];
+        EnvironmentFile = cfg.secrets;
 
         # hardening
         AmbientCapabilities = "";
