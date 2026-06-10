@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-dotenv
     pyyaml
     mwparserfromhell
+    pyosmium
   ];
 
   propagatedBuildInputs = [
