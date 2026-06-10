@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, autoPatchelfHook, lib }:
+{
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  lib
+}:
 
 stdenv.mkDerivation rec {
   pname = "fip-c";
