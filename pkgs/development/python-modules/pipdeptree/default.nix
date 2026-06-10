@@ -14,7 +14,7 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
   version = "3.1.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-poUults9ev+5aryrZPxnxF/X9u0iivnlc1ceLxB7dys=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     virtualenv
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
+    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       charlesbaynham
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "pipdeptree";
   };
-}
+})
