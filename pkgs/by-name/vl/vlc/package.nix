@@ -316,7 +316,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.videolan.org/vlc/";
     donationPage = "https://www.videolan.org/contribute.html#money";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vlc";
   };
