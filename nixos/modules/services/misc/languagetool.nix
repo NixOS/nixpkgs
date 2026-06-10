@@ -93,16 +93,18 @@ in
         ];
         ProtectHome = "yes";
         Restart = "on-failure";
-        ExecStart = ''
-          ${lib.getExe cfg.package.jre} \
-            -cp ${cfg.package}/share/languagetool-server.jar \
-            ${toString cfg.jvmOptions} \
-            org.languagetool.server.HTTPServer \
-              --port ${toString cfg.port} \
-              ${lib.optionalString cfg.public "--public"} \
-              ${lib.optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
-              "--config" ${settingsFormat.generate "languagetool.conf" cfg.settings}
-        '';
+        ExecStart = lib.concatStringsSep " " (
+          [
+            (lib.getExe cfg.package.jre)
+            "-cp ${cfg.package}/share/languagetool-server.jar"
+            (toString cfg.jvmOptions)
+            "org.languagetool.server.HTTPServer"
+            "--config ${settingsFormat.generate "languagetool.conf" cfg.settings}"
+            "--port ${toString cfg.port}"
+          ]
+          ++ lib.optional cfg.public "--public"
+          ++ lib.optional (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"
+        );
       };
     };
   };
