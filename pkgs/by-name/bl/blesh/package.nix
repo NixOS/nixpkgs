@@ -1,36 +1,56 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
-  runtimeShell,
+  fetchFromGitHub,
   bashInteractive,
-  glibcLocales,
+  gawk,
+  runtimeShell,
+  unstableGitUpdater,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blesh";
   version = "0.4.0-devel3-unstable-2026-03-10";
 
-  src = fetchzip {
-    url = "https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly-20260310%2Bb99cadb.tar.xz";
-    name = "ble-nightly-20260310+b99cadb.tar.xz";
-    sha256 = "sha256-rJnSEY7J4wfy8dnL9Bg59u0epPe0HL1J7piPbkNyes0=";
+  src = fetchFromGitHub {
+    owner = "akinomyoga";
+    repo = "ble.sh";
+    rev = "b99cadb4520a1fdec0067fdc007b39cc905ecbad";
+    fetchSubmodules = true;
+    hash = "sha256-LXDow/4yv3V0Liy12bXQ1qwO5z4u0equRO9xeJaDaWo=";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [
+    gawk
+  ];
+
+  # Fix the cache invalidation not working; see
+  # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4641313131
+  postPatch = ''
+    substituteInPlace ble.pp \
+      --replace-fail \
+        'local ver=''${BLE_VERSINFO[0]}.''${BLE_VERSINFO[1]}' \
+        'local ver=$BLE_VERSION'
+  '';
+
+  # ble.sh embeds the commit id, normally read from .git, which fetchFromGitHub omits.
+  makeFlags = [
+    "PREFIX=$(out)"
+    "BLE_GIT_COMMIT_ID=${builtins.substring 0 7 finalAttrs.src.rev}"
+    "BLE_GIT_BRANCH=master"
+  ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    bashInteractive
-    glibcLocales
-  ];
-  preCheck = "export LC_ALL=en_US.UTF-8";
+  # auto-detection runs `make -n check` without makeFlags, which fails without BLE_GIT_COMMIT_ID
+  checkTarget = "check";
+  nativeCheckInputs = [ bashInteractive ];
+  preCheck = ''
+    export HOME=$TMPDIR
+    # upstream skips its flaky sleep-timing tests under GitHub CI
+    export CI=true GITHUB_ACTION=nix
+  '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/share/blesh/lib"
-
+  postInstall = ''
     cat <<EOF >"$out/share/blesh/lib/_package.sh"
     _ble_base_package_type=nix
 
@@ -40,12 +60,6 @@ stdenvNoCC.mkDerivation {
     }
     EOF
 
-    cp -rv $src/* $out/share/blesh
-
-    runHook postInstall
-  '';
-
-  postInstall = ''
     mkdir -p "$out/bin"
     cat <<EOF >"$out/bin/blesh-share"
     #!${runtimeShell}
@@ -54,7 +68,17 @@ stdenvNoCC.mkDerivation {
     echo "$out/share/blesh"
     EOF
     chmod +x "$out/bin/blesh-share"
+
+    rm -rf "$out/share/blesh/cache.d" "$out/share/blesh/run"
   '';
+
+  # tagFormat skips the "nightly"/"spike-*" tags; the newest tag is too far
+  # behind HEAD for shallow deepening, so clone fully.
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    tagFormat = "v*";
+    shallowClone = false;
+  };
 
   meta = {
     homepage = "https://github.com/akinomyoga/ble.sh";
@@ -67,4 +91,4 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
