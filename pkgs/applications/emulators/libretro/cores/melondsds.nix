@@ -21,6 +21,7 @@
   writeShellApplication,
 }:
 let
+  # NOTE: before changing the following fetches, see the updateScript below
   # https://github.com/JesseTG/melonds-ds/blob/33c48260402865ef77667487528efd5ca7ce1233/cmake/FetchDependencies.cmake#L44
   melonDS-src = fetchFromGitHub {
     owner = "JesseTG";
