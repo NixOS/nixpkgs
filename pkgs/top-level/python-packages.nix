@@ -9752,6 +9752,8 @@ self: super: with self; {
 
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
+  matscipy = callPackage ../development/python-modules/matscipy { };
+
   matter-ble-proxy = callPackage ../development/python-modules/matter-ble-proxy { };
 
   matter-python-client = callPackage ../development/python-modules/matter-python-client { };
