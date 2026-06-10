@@ -854,18 +854,6 @@ with haskellLib;
     doJailbreak
   ];
 
-  pandoc = overrideCabal (drv: {
-    patches = drv.patches or [ ] ++ [
-      # Resolve test suite race condition(s) due to tasty >= 1.5.4 and
-      # inDirectory, https://github.com/jgm/pandoc/issues/11566 krank:ignore-line
-      (pkgs.fetchpatch {
-        name = "pandoc-tests-fix-race-condition.patch";
-        url = "https://github.com/jgm/pandoc/commit/134296c54145ef8ea7de523774837055239e0b3d.patch";
-        hash = "sha256-s3v6ukoVZm8cvh9mAp0U+cQDT3p8QSu1F0oQD4Ks9F8=";
-      })
-    ];
-  }) super.pandoc;
-
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
   dotenv = doJailbreak super.dotenv;
