@@ -39,7 +39,7 @@
   fastai,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvclive";
   version = "3.49.1";
   pyproject = true;
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvclive";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dB8V0CYVw8qN67Lykc9vaSWyCEDO7dROX6JrxO1WBv0=";
   };
 
@@ -123,8 +123,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for logging machine learning metrics and other metadata in simple file formats";
     homepage = "https://github.com/iterative/dvclive";
-    changelog = "https://github.com/iterative/dvclive/releases/tag/${src.tag}";
+    changelog = "https://github.com/iterative/dvclive/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
