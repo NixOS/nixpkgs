@@ -21,19 +21,19 @@ assert lib.elem variant [
 
 let
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.76.tar.xz";
-    hash = "sha256-u7Q+g0xG5r1JpcKPIuZ5qTdENATh9lMgTUskkp862JY=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.91.tar.xz";
+    hash = "sha256-D/KrnhafnxlIVXRx+7RQ0wGPjFt3yvKI4aOYJYJZeWk=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
-  version = "5.3.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "libkrunfw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fhG/bP1HzmhyU2N+wnr1074WEGsD9RdTUUBhYUFpWlA=";
+    hash = "sha256-MF1oDqhS4xqyQJIntl4DBfDBvuqCxQn9Zdws82Tn5Gg=";
   };
 
   postPatch = ''
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Dynamic library bundling the guest payload consumed by libkrun";
-    homepage = "https://github.com/containers/libkrunfw";
+    homepage = "https://github.com/libkrun/libkrunfw";
     license = with lib.licenses; [
       lgpl2Only
       lgpl21Only

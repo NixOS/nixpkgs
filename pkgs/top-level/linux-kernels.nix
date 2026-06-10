@@ -332,6 +332,8 @@ in
           inherit kernel;
         };
 
+        ethercat = callPackage pkgs.ethercat.kernelModule { };
+
         evdi = callPackage ../os-specific/linux/evdi { };
 
         fanout = callPackage ../os-specific/linux/fanout { };

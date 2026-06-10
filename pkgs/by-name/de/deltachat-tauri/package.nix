@@ -2,6 +2,7 @@
   apple-sdk_14,
   cargo-tauri,
   darwin,
+  deltachat-desktop,
   fetchFromGitHub,
   fetchPnpmDeps,
   gst_all_1,
@@ -27,25 +28,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";
-  version = "2.51.0";
+  inherit (deltachat-desktop)
+    version
+    src
+    pnpmDeps
+    ;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "deltachat";
-    repo = "deltachat-desktop";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ORp8lZcHzswrSCe30cGKpZdyqZCcvqLgu2hwvadMHN0=";
-  };
-
-  pnpmDeps = fetchPnpmDeps {
-    pname = "deltachat-desktop";
-    inherit (finalAttrs) version src;
-    inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-BSDeOkT75usLmXdAY8QNO+9YxxchrJH2gjFpTzErPXo=";
-  };
-
-  cargoHash = "sha256-JhsoIQZrU4GVcs/TCIug6y/84gODyEWl0Bl2jRNxL5Y=";
+  cargoHash = "sha256-euRUA4LTmAdb9466DAMqKgAPX3N4KNXCh1ED9cL42lA=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \

@@ -265,7 +265,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.6.1";
+  hassVersion = "2026.6.2";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -286,13 +286,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-gjXhWv64Uu3LHwxDR8HwsTFeAncgY94JeOqfKEnvgJ8=";
+    hash = "sha256-wDGXJoo1R2YX2qNRsMYNHm94WCsSHsC7ihCW6w8YAD8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-gtnIsOrJWyLhjEc9dstvRiVd4LrqJ6W48qXNwaV8YlU=";
+    hash = "sha256-XpFnxxa1liRUm8KEoI73t9wAfnsLKC3G56vrgkcIqR0=";
   };
 
   build-system = with python3Packages; [

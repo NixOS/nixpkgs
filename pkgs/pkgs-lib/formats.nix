@@ -142,12 +142,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              inherit value;
+              value = builtins.toJSON value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              jq .value "$NIX_ATTRS_JSON_FILE" > $out
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -165,12 +167,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal_0_17 ];
-              inherit value;
+              value = builtins.toJSON value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              json2yaml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              json2yaml "$valuePath" "$out"
             ''
         ) { };
 
@@ -188,12 +192,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              inherit value;
+              value = builtins.toJSON value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              json2yaml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              json2yaml "$valuePath" "$out"
             ''
         ) { };
 
@@ -466,12 +472,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ json2x ];
-              inherit value;
+              value = builtins.toJSON value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              json2x toml "$valuePath" "$out"
             ''
         ) { };
 
@@ -932,8 +940,8 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = value._imports or [ ];
-              value = removeAttrs value [ "_imports" ];
+              imports = builtins.toJSON (value._imports or [ ]);
+              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
               pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
@@ -956,20 +964,26 @@ optionalAttrs allowAliases aliases
                     else:
                         return repr(value)
 
-                with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
-                    attrs = json.load(f)
-                    if attrs["imports"] is not None:
-                        for i in attrs["imports"]:
+                with open(os.environ["importsPath"], "r") as f:
+                    imports = json.load(f)
+                    if imports is not None:
+                        for i in imports:
                             print(f"import {i}")
                         print()
 
-                    for key, value in attrs["value"].items():
+                with open(os.environ["valuePath"], "r") as f:
+                    for key, value in json.load(f).items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
+              export importsPath="$TMPDIR/imports"
+              printf "%s" "$imports" > "$importsPath"
+              export valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              cat "$valuePath"
               python3 "$pythonGen" > $out
               black $out
             ''
@@ -999,14 +1013,14 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                inherit value;
+                value = builtins.toJSON value;
                 pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
 
-                  with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
-                      print(xmltodict.unparse(json.load(f)["value"], full_document=${
+                  with open(os.environ["valuePath"], "r") as f:
+                      print(xmltodict.unparse(json.load(f), full_document=${
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
@@ -1014,6 +1028,8 @@ optionalAttrs allowAliases aliases
                 __structuredAttrs = true;
               }
               ''
+                export valuePath="$TMPDIR/value"
+                printf "%s" "$value" > "$valuePath"
                 python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
