@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.7.5";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8GBHUXYssJcFnVQSRExAV7lfOGx+2Vg2PPY/RT5RCNo=";
+    hash = "sha256-sgG0FvfWzqm9L5dyd6X1HW5SpDTW7FEaizSZDfKxqcU=";
   };
 
   build-system = [ setuptools ];
