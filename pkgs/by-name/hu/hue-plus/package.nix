@@ -31,7 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
-  doCheck = false;
   dontWrapQtApps = true;
 
   makeWrapperArgs = [
