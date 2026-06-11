@@ -19731,6 +19731,8 @@ self: super: with self; {
 
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
+  tilelang = callPackage ../development/python-modules/tilelang { };
+
   tilequant = callPackage ../development/python-modules/tilequant { };
 
   tiler = callPackage ../development/python-modules/tiler { };
