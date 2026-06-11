@@ -20,7 +20,9 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gscreenshot";
   version = "3.11.1";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
@@ -35,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
-  propagatedBuildInputs = [
+  dependencies = [
     gettext
     gobject-introspection
     gtk3
