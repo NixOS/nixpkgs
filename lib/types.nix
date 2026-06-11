@@ -99,7 +99,6 @@ let
     { elemType, ... }@payload:
     {
       inherit name payload;
-      wrappedDeprecationMessage = makeWrappedDeprecationMessage payload;
       type = types.${name};
       binOp =
         a: b:
@@ -108,14 +107,6 @@ let
         in
         if merged == null then null else { elemType = merged; };
     };
-  makeWrappedDeprecationMessage =
-    payload:
-    { loc }:
-    lib.warn ''
-      The deprecated `${lib.optionalString (loc != null) "type."}functor.wrapped` attribute ${
-        lib.optionalString (loc != null) "of the option `${showOption loc}` "
-      }is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
-    '' payload.elemType;
 
   checkDefsForError =
     check: loc: defs:
@@ -168,21 +159,11 @@ rec {
   defaultTypeMerge =
     f: f':
     let
-      mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
       mergedPayload = f.binOp f.payload f'.payload;
 
       hasPayload =
         assert (f'.payload != null) == (f.payload != null);
         f.payload != null;
-      hasWrapped =
-        let
-          hasWrappedNonNull = set: set ? "wrapped" && set.wrapped != null;
-        in
-        assert (hasWrappedNonNull f') == (hasWrappedNonNull f);
-        hasWrappedNonNull f;
-
-      typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
-      typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
     in
     # Abort early: cannot merge different types
     if f.name != f'.name then
@@ -190,22 +171,7 @@ rec {
     else
 
     if hasPayload then
-      # Just return the payload if returning wrapped is deprecated
-      if f ? wrappedDeprecationMessage then
-        typeFromPayload
-      else if hasWrapped then
-        # Has both wrapped and payload
-        throw ''
-          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
-
-          Use either `functor.payload` or `functor.wrapped` but not both.
-
-          If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
-        ''
-      else
-        typeFromPayload
-    else if hasWrapped then
-      typeFromWrapped
+      if mergedPayload == null then null else f.type mergedPayload
     else
       f.type;
 
@@ -213,7 +179,6 @@ rec {
   defaultFunctor = name: {
     inherit name;
     type = lib.types.${name} or null;
-    wrapped = null;
     payload = null;
     binOp = a: b: null;
   };
@@ -309,17 +274,8 @@ rec {
         deprecationMessage
         nestedTypes
         descriptionClass
+        functor
         ;
-      functor =
-        if functor ? wrappedDeprecationMessage then
-          functor
-          // {
-            wrapped = functor.wrappedDeprecationMessage {
-              loc = null;
-            };
-          }
-        else
-          functor;
       description = if description == null then name else description;
     };
 
@@ -1834,9 +1790,7 @@ rec {
       getSubModules = finalType.getSubModules;
       substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
       typeMerge = t: null;
-      functor = (defaultFunctor name) // {
-        wrappedDeprecationMessage = makeWrappedDeprecationMessage { elemType = finalType; };
-      };
+      functor = defaultFunctor name;
       nestedTypes.coercedType = coercedType;
       nestedTypes.finalType = finalType;
     };

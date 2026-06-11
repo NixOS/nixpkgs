@@ -1,20 +1,25 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
-  lib,
+  setuptools,
   pyudev,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "usb-monitor";
   version = "1.23";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "usb_monitor";
     hash = "sha256-7xZ30JLPduY0y2SHWI7fvZHB27FbNFAMczHMXnaXl88=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [ pyudev ];
 
@@ -30,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.linux;
   };
-}
+})

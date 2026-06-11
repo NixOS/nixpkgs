@@ -772,26 +772,6 @@ in
     }
   );
 
-  no-bootspec = runTest (
-    { lib, ... }:
-    {
-      name = "systemd-boot-no-bootspec";
-      meta.maintainers = with lib.maintainers; [ julienmalka ];
-
-      nodes.machine = {
-        imports = [ common ];
-        boot.bootspec.enable = false;
-      };
-
-      testScript =
-        # python
-        ''
-          machine.start()
-          machine.wait_for_unit("multi-user.target")
-        '';
-    }
-  );
-
   bootCounting =
     let
       baseConfig = {

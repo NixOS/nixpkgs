@@ -16,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "15cpd49ccvzsmmr3gk8svm2nz461rvs4ybczckyf4yla0xzp06gj";
   };
 
-  patches = [ ./hostlist.patch ];
+  patches = [
+    ./hostlist.patch
+    ./backward-compat.patch
+  ];
 
   buildPhase = ''
     gcc -I${lib.getDev slurm}/include -shared -fPIC -o stunnel.so slurm-spank-stunnel.c

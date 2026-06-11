@@ -40,7 +40,10 @@ buildPythonPackage.override { inherit (nixl) stdenv; } (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail \
         '"patchelf",' \
-        ""
+        "" \
+      --replace-fail \
+        "torch==2.11.*" \
+        "torch"
   '';
 
   build-system = [
