@@ -301,7 +301,7 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders", "devices", or "guiPasswordFile".
+        "folders", "devices", "guiPasswordFile", or "defaults".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
@@ -309,6 +309,7 @@ let
           "folders"
           "devices"
           "guiPasswordFile"
+          "defaults"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -317,6 +318,19 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Handle the "defaults" option separately, as it has multiple sub-endpoints.
+      (lib.optionalString (cleanedConfig ? defaults) (
+        lib.pipe cleanedConfig.defaults [
+          builtins.attrNames
+          (map (subOption: ''
+            curl -X PUT -d ${
+              lib.escapeShellArg (builtins.toJSON cleanedConfig.defaults.${subOption})
+            } ${curlAddressArgs "/rest/config/defaults/${subOption}"}
+          ''))
+          (lib.concatStringsSep "\n")
+        ]
+      ))
     +
       # Now we hash the contents of guiPasswordFile and use the result to update the gui password
       (lib.optionalString (cfg.guiPasswordFile != null) ''
