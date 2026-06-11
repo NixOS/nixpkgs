@@ -7,7 +7,7 @@
   mu-repo,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mu-repo";
   version = "1.9.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fabioz";
     repo = "mu-repo";
-    tag = "mu_repo_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "mu_repo_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-aSRf0B/skoZLsn4dykWOFKVNtHYCsD9RtZ1frHDrcJU=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "mu";
   };
-}
+})

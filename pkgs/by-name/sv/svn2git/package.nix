@@ -4,18 +4,18 @@
   fetchFromGitHub,
   ruby,
   makeWrapper,
-  git,
+  gitSVN,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "svn2git";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "nirvdrum";
     repo = "svn2git";
-    rev = "v${version}";
-    sha256 = "sha256-w649l/WO68vYYxZOBKzI8XhGFkaSwWx/O3oVOtnGg6w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w649l/WO68vYYxZOBKzI8XhGFkaSwWx/O3oVOtnGg6w=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/svn2git \
       --set RUBYLIB $out/lib \
-      --prefix PATH : ${git}/bin
+      --prefix PATH : ${gitSVN}/bin
   '';
 
   meta = {
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "svn2git";
   };
-}
+})
