@@ -133,6 +133,7 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "xray"
         "zfs-siebenmann"
         "zfs"
       ]
