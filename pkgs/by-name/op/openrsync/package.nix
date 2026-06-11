@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -17,6 +18,13 @@ stdenv.mkDerivation {
 
   # Uses oconfigure
   prefixKey = "PREFIX=";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=^VERSION_(\\d+)_(\\d+)_(\\d+.*)"
+      "--version=branch"
+    ];
+  };
 
   meta = {
     homepage = "https://www.openrsync.org/";
