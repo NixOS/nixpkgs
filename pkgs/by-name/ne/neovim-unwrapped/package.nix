@@ -106,7 +106,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.12.2";
+    version = "0.12.3";
 
     __structuredAttrs = true;
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-V+jZiNv0SvG/GOOUPzmBkOQGrnrN3UW2BY2n9NxP2Eg=";
+      hash = "sha256-JjDU3GZf+wvsMyDjIfu1btTUBkOlpp6E1HFLqBLR9po=";
     };
 
     strictDeps = true;
@@ -124,11 +124,6 @@ stdenv.mkDerivation (
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
-      (fetchpatch {
-        name = "CVE-2026-11487.patch";
-        url = "https://github.com/neovim/neovim/commit/f83e0dcaf8cf18de94828341b0a1a61a86c75baf.patch";
-        hash = "sha256-iWnq0ezbKYJqjvevVlcTJBvUc17ZvrhsanhtuKrh8zM=";
-      })
     ];
 
     inherit lua;
