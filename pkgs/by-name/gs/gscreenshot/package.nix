@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "thenaterhood";
     repo = "gscreenshot";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-24eo4ihWM/sJXj7Dp3hSp0FEP1uYzvCON2emuMiONSc=";
+    hash = "sha256-24eo4ihWM/sJXj7Dp3hSp0FEP1uYzvCON2emuMiONSc=";
   };
 
   # needed for wrapGAppsHook3 to function
