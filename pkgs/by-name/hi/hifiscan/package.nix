@@ -7,9 +7,11 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hifiscan";
   version = "1.5.2";
-  format = "setuptools";
+  pyproject = true;
 
-  pythonPath = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     eventkit
     numpy
     sounddevice
