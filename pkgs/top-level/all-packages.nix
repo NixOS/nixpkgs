@@ -2956,7 +2956,6 @@ with pkgs;
     pnpm_10
     pnpm_11
     ;
-  pnpm = pnpm_11;
 
   inherit (callPackages ../build-support/node/fetch-pnpm-deps { })
     fetchPnpmDeps

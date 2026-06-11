@@ -6,7 +6,7 @@
   moreutils,
   cacert,
   makeSetupHook,
-  pnpm,
+  pnpm_11,
   pnpm-fixup-state-db,
   sqlite,
   writableTmpDirAsHomeHook,
@@ -14,8 +14,6 @@
   zstd,
 }:
 let
-  pnpmLatest = pnpm;
-
   supportedFetcherVersions = [
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
     4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
@@ -26,7 +24,7 @@ in
     {
       hash ? "",
       pname,
-      pnpm ? pnpmLatest,
+      pnpm ? pnpm_11,
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
