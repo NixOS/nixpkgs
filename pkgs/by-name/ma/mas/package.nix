@@ -3,9 +3,11 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
+  jq,
   libarchive,
   p7zip,
   versionCheckHook,
+  zsh,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
@@ -58,6 +60,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin usr/local/opt/mas/bin/mas
+    install -D --mode=755 usr/local/opt/mas/libexec/bin/mas "$out/libexec/bin/mas"
+
+    substituteInPlace "$out/bin/mas" \
+      --replace-fail "#!/bin/zsh" "#!${lib.getExe zsh}" \
+      --replace-fail "/usr/bin/jq" "${lib.getExe jq}"
 
     installManPage usr/local/opt/mas/share/man/man1/mas.1
     installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
