@@ -17974,6 +17974,8 @@ self: super: with self; {
 
   shellingham = callPackage ../development/python-modules/shellingham { };
 
+  sherlock-project = callPackage ../development/python-modules/sherlock-project { };
+
   sherpa-onnx = callPackage ../development/python-modules/sherpa-onnx {
     sherpa-onnx = pkgs.sherpa-onnx.override {
       python3Packages = self;
