@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-custom-objects";
   version = "0.5.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netboxlabs";
     repo = "netbox-custom-objects";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8PEqt6TpoQ8ncyZPesRos0BQHF3cKIzgoFr56v8UTTY=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin to create new object types";
     homepage = "https://github.com/netboxlabs/netbox-custom-objects";
-    changelog = "https://github.com/netboxlabs/netbox-custom-objects/releases/tag/${src.tag}";
+    changelog = "https://github.com/netboxlabs/netbox-custom-objects/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.netboxLimitedUse;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})
