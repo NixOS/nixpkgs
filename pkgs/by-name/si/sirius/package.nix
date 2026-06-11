@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
   ];
 
-  doCheck = true;
+  doCheck = !umpire.passthru.rocmSupport;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
   # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox
