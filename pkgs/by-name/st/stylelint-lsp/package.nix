@@ -2,7 +2,7 @@
   fetchFromGitHub,
   lib,
   nodejs-slim,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -11,6 +11,9 @@
   runCommand,
   stylelint-lsp,
 }:
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
   version = "2.0.1";
@@ -22,18 +25,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-LUX/H7yY8Dl44vgpf7vOgtMdY7h//m5BAfrK5RRH9DM=";
   };
 
+  patches = [
+    ./pnpm-11.patch
+  ];
+
   nativeBuildInputs = [
     nodejs-slim
     pnpmConfigHook
     pnpmBuildHook
-    pnpm_9
+    pnpm
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-qzUvA00ujnIibQAONOPlp5BsXcwQb/gQvOPp83hMT5A=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-LD64pODWZDal+WnHCQbTZ+cM9E3SrYvXVZqH25lU3s4=";
   };
 
   preInstall = ''
