@@ -27,5 +27,7 @@ in
       # we can get them from yubikey-personalization.
       udev.packages = [ pkgs.yubikey-personalization ];
     };
+
+    users.groups.plugdev = { };
   };
 }
