@@ -1,6 +1,7 @@
 {
   alsa-lib,
   autoPatchelfHook,
+  darwin,
   fetchzip,
   gtk2,
   gtk3,
@@ -54,6 +55,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     unzip
     makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
