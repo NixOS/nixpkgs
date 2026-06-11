@@ -3,8 +3,10 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  git,
   pkg-config,
   pcre2,
+  python3Packages,
   zlib,
   xz,
 }:
@@ -30,11 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
     pcre2
     zlib
     xz
   ];
+
+  doCheck = true;
+  nativeCheckInputs = [
+    python3Packages.cram
+    git
+  ];
+  checkPhase = ''
+    runHook preCheck
+
+    make test
+
+    runHook postCheck
+  '';
 
   meta = {
     homepage = "https://github.com/silver-searcher/silver-searcher-ng";
