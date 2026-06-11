@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.10.8";
-          hash = "sha256-pBfD6HwPP9CybROC2W27CAq2RSAgRJ3ZrxvUOBzRyC8=";
+          version = "2.11.0";
+          hash = "sha256-9izhQvZmfUVeKS0H89XXkN1bNP4+AZyUuetfD0kRJ/c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
