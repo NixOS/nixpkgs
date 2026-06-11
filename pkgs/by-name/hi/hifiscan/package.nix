@@ -3,14 +3,11 @@
   python3Packages,
   fetchPypi,
 }:
-let
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hifiscan";
   version = "1.5.2";
-  hash = "sha256-8eystqjNdDP2X9beogRcsa+Wqu50uMHZv59jdc5GjUc=";
-in
-python3Packages.buildPythonApplication {
   format = "setuptools";
-  inherit pname version;
 
   pythonPath = with python3Packages; [
     eventkit
@@ -22,7 +19,8 @@ python3Packages.buildPythonApplication {
   ];
 
   src = fetchPypi {
-    inherit pname version hash;
+    inherit (finalAttrs) pname version;
+    hash = "sha256-8eystqjNdDP2X9beogRcsa+Wqu50uMHZv59jdc5GjUc=";
   };
 
   meta = {
@@ -32,4 +30,4 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ cab404 ];
     mainProgram = "hifiscan";
   };
-}
+})
