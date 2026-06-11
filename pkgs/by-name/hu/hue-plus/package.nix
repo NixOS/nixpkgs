@@ -5,7 +5,7 @@
   libsForQt5,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hue-plus";
   version = "1.4.5";
   format = "setuptools";
@@ -13,8 +13,8 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "kusti8";
     repo = "hue-plus";
-    rev = "7ce7c4603c6d0ab1da29b0d4080aa05f57bd1760";
-    sha256 = "sha256-dDIJXhB3rmKnawOYJHE7WK38b0M5722zA+yLgpEjDyI=";
+    tag = "v.${finalAttrs.version}"; # Only the latest tag uses a . between v and 1.
+    hash = "sha256-dDIJXhB3rmKnawOYJHE7WK38b0M5722zA+yLgpEjDyI=";
   };
 
   buildInputs = [ libsForQt5.qtbase ];
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ garaiza-93 ];
   };
-}
+})
