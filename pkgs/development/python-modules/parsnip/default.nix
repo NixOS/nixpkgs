@@ -5,6 +5,12 @@
   setuptools,
   more-itertools,
   numpy,
+  ase,
+  gemmi,
+  pycifrw,
+  pytest-doctestplus,
+  pytestCheckHook,
+  sympy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,8 +36,22 @@ buildPythonPackage (finalAttrs: {
     numpy
   ];
 
+  nativeCheckInputs = [
+    ase
+    gemmi
+    pycifrw
+    pytest-doctestplus
+    pytestCheckHook
+    sympy
+  ];
+
   pythonImportsCheck = [
     "parsnip"
+  ];
+
+  disabledTestPaths = [
+    # Don't test docs
+    "doc/source/"
   ];
 
   meta = {
