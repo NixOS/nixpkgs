@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch2 {
-      url = "https://github.com/stefanberger/libtpms/pull/588.patch?full_index=1";
+      url = "https://github.com/stefanberger/libtpms/commit/2d9b00c4e42677cd0a9b67344f4d873ddc409a21.patch?full_index=1";
       hash = "sha256-MVHy0sdg8ywKzu9M4ueRjH786uXQK8al21k8f+mAdR0=";
     })
   ];
