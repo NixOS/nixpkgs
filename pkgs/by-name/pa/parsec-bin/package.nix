@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://web.archive.org/web/20250226223019/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-8Wkbo6l1NGBPX2QMJszq+u9nLM96tu7WYRTQq6/CzM8=";
+    hash = "sha256-8Wkbo6l1NGBPX2QMJszq+u9nLM96tu7WYRTQq6/CzM8=";
   };
 
   nativeBuildInputs = [

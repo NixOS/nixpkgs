@@ -1180,8 +1180,6 @@ self: super: with self; {
 
   asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
 
-  asyncstdlib-fw = callPackage ../development/python-modules/asyncstdlib-fw { };
-
   asynctest = callPackage ../development/python-modules/asynctest { };
 
   asyncua = callPackage ../development/python-modules/asyncua { };
@@ -2031,8 +2029,6 @@ self: super: with self; {
   better-exceptions = callPackage ../development/python-modules/better-exceptions { };
 
   betterproto = callPackage ../development/python-modules/betterproto { };
-
-  betterproto-fw = callPackage ../development/python-modules/betterproto-fw { };
 
   betterproto-rust-codec = callPackage ../development/python-modules/betterproto-rust-codec { };
 

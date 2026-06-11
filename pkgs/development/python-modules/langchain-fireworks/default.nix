@@ -22,19 +22,21 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-fireworks";
-  version = "1.3.1";
+  version = "1.4.2";
   pyproject = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-fireworks==${version}";
-    hash = "sha256-ladhHikzzLOf8mz98c+vawoSCTKBAx2XcQPtzMePr2A=";
+    tag = "langchain-fireworks==${finalAttrs.version}";
+    hash = "sha256-d0Pd44/+YX+eOZ9a5P3V9cBASTEW/vvLUv5Kt5nWI8w=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/fireworks";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/fireworks";
 
   build-system = [ hatchling ];
 
@@ -47,8 +49,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
+    "fireworks-ai"
     "langchain-core"
   ];
 
@@ -76,7 +77,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Fireworks";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/fireworks";
     license = lib.licenses.mit;
@@ -84,4 +85,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})
