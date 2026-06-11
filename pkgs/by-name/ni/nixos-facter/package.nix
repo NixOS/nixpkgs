@@ -34,6 +34,11 @@ buildGoModule (finalAttrs: {
     hash = "sha256-bbF16siqAqokXOHwLmBL61p/C7YiDGqBJhhJiF08pHk=";
   };
 
+  # Ignore unsupported udev bus values seen in the NixOS VM test environment.
+  patches = [
+    ./ignore-unknown-udev-bus.patch
+  ];
+
   vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
 
   env.CGO_ENABLED = 1;
