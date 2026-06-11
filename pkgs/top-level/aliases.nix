@@ -1069,6 +1069,7 @@ mapAliases {
   kbibtex = throw "'kbibtex' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   kchmviewer = throw "'kchmviewer' has been removed as it was unmaintained upstream since 2022 and depended on qt5 webengine. Consider switching to 'uchmviewer', a fork of 'kchmviewer'."; # Added 2026-02-10
   kcli = throw "kcli has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
+  kdash = throw "'kdash' has been removed because upstream tag changes broke the source derivation and trust in future tag stability"; # Added 2026-06-11
   kdeltacht = throw "'kdeltachat' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
   kdesvn = throw "'kdesvn' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
