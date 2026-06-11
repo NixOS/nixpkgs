@@ -128,7 +128,7 @@ let
           ]
           ++ lib.optionals cfg.userControlled [
             # set up client sockets directory
-            "+${pkgs.coreutils}/bin/mkdir /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/mkdir -p /run/wpa_supplicant/client"
             "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
             "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
           ];
