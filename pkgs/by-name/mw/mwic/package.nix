@@ -2,25 +2,25 @@
   lib,
   stdenv,
   fetchurl,
-  pythonPackages,
+  python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.7.10";
   pname = "mwic";
 
   src = fetchurl {
-    url = "https://github.com/jwilk/mwic/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/jwilk/mwic/releases/download/${finalAttrs.version}/mwic-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-dmIHPehkxpSb78ymVpcPCu4L41coskrHQOg067dprOo=";
   };
 
   makeFlags = [ "PREFIX=\${out}" ];
 
   nativeBuildInputs = [
-    pythonPackages.wrapPython
+    python3Packages.wrapPython
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     pyenchant
     regex
   ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

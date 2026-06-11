@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  curses,
+  ncurses,
   fetchpatch,
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       ' -Werror ' ' '
   '';
 
-  buildInputs = [ curses ];
+  buildInputs = [ ncurses ];
 
   installPhase = ''
     make install PREFIX=$out

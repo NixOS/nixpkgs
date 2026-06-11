@@ -2,11 +2,11 @@
   stdenv,
   lib,
   makeWrapper,
-  ghcWithPackages,
+  haskellPackages,
   packages ? (_: [ ]),
 }:
 let
-  blucontrolEnv = ghcWithPackages (self: [ self.blucontrol ] ++ packages self);
+  blucontrolEnv = haskellPackages.ghcWithPackages (self: [ self.blucontrol ] ++ packages self);
 in
 stdenv.mkDerivation {
   pname = "blucontrol-with-packages";
