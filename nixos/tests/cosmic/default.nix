@@ -7,6 +7,30 @@
   ...
 }:
 
+let
+  user = config.nodes.machine.users.users.alice;
+  logFilePath = "/home/${user.name}/${testName}";
+  # Use `writeShellScriptBin` instead of `writeShellScript` so that the
+  # process name in the journald log appears as 'cosmicTest[$pid]'
+  cosmicTest = config.node.pkgs.writeShellScriptBin "cosmicTest" ''
+    exec ${lib.getExe config.node.pkgs.python3Minimal} ${./test-script.py} \
+        --log-file-path ${logFilePath} \
+        --cosmic-reader-pdf ${config.node.pkgs.empty-pdf} \
+        --polkit-agent-helper-path ${config.node.pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1 \
+        --root-user-password ${user.password} \
+        --ydotool-drv-store-path ${config.node.pkgs.ydotool}
+  '';
+  cosmicTestDesktop = config.node.pkgs.makeDesktopItem {
+    name = "cosmicTest";
+    desktopName = "COSMIC NixOS VM test (${testName})";
+    exec = "cosmicTest";
+  };
+  cosmicTestAutostartItem = config.node.pkgs.makeAutostartItem {
+    name = "cosmicTest";
+    package = cosmicTestDesktop;
+  };
+in
+
 {
   name = testName;
 
@@ -30,10 +54,13 @@
 
     services.displayManager.autoLogin = lib.mkIf enableAutologin {
       enable = true;
-      user = "alice";
+      user = user.name;
     };
 
     environment.systemPackages = with config.node.pkgs; [
+      cosmicTest
+      cosmicTestAutostartItem
+
       # These two packages are used to check if a window was opened
       # under the COSMIC session or not. Kinda important.
       # TODO: Move the check from the test module to
@@ -58,27 +85,9 @@
 
   testScript =
     { nodes, ... }:
-    let
-      cfg = nodes.machine;
-      user = cfg.users.users.alice;
-      DISPLAY = lib.strings.optionalString enableXWayland (
-        if enableAutologin then "DISPLAY=:0" else "DISPLAY=:1"
-      );
-      emptyPDF = config.node.pkgs.stdenvNoCC.mkDerivation {
-        name = "empty-pdf";
-        dontUnpack = true;
-        nativeBuildInputs = [ config.node.pkgs.imagemagick ];
-        buildPhase = ''
-          magick xc:none -page Letter empty.pdf
-        '';
-        installPhase = ''
-          mkdir $out
-          mv empty.pdf $out/empty.pdf
-        '';
-      };
-    in
     ''
       #testName: ${testName}
+      import sys
     ''
     + (
       if enableAutologin then
@@ -91,7 +100,7 @@
           from time import sleep
 
           machine.wait_for_unit("graphical.target", timeout=120)
-          machine.wait_until_succeeds("pgrep --uid ${toString cfg.users.users.cosmic-greeter.name} --full cosmic-greeter", timeout=30)
+          machine.wait_until_succeeds("pgrep --uid ${config.nodes.machine.users.users.cosmic-greeter.name} --full cosmic-greeter", timeout=30)
           # Sleep for 10 seconds for ensuring that `greetd` loads the
           # password prompt for the login screen properly.
           sleep(10)
@@ -101,47 +110,48 @@
         ''
     )
     + ''
-          # _One_ of the final processes to start as part of the
-          # `cosmic-session` target is the Workspaces applet. So, wait
-          # for it to start. The process existing means that COSMIC
-          # now handles any opened windows from now on.
-          machine.wait_until_succeeds("pgrep --uid ${toString user.uid} --full 'cosmic-panel-button com.system76.CosmicWorkspaces'", timeout=30)
+      with subtest("xdg autostart support in cosmic"):
+          # When checking the status of our `cosmicTest` package with:
+          # `machine.wait_for_unit("app-cosmicTest@autostart.service", user="${user.name}")`
+          # We are immediately greeted with the error:
+          # ```
+          # subtest: xdg autostart support in cosmic
+          # machine: waiting for unit app-cosmicTest@autostart.service with user alice
+          # machine # [   26.497516] cosmic-comp[1352]: [EGL] 0x3008 (BAD_DISPLAY) eglCreateSync: _eglCreateSync
+          # machine # [   26.511706] su[1416]: Successful su for alice by root
+          # machine # [   26.528190] su[1416]: pam_unix(su:session): session opened for user alice(uid=1000) by (uid=0)
+          # machine # Failed to connect to user scope bus via local transport: No such file or directory
+          # machine # [   26.599563] su[1416]: pam_unix(su:session): session closed for user alice
+          # !!! Test "xdg autostart support in cosmic" failed with error: "retrieving systemctl property "ActiveState" for unit "app-cosmicTest@autostart.service" under user "alice" failed with exit code 1"
+          # ```
+          # Meaning, our session is extremely new and the D-Bus user
+          # session socket does not yet exist. Instead, lets poll for
+          # the log file that the test is guaranteed to write to, as
+          # soon as it starts.
+          machine.wait_for_file("${logFilePath}.log", timeout=120)
 
-      # The best way to test for Wayland and XWayland is to launch
-      # the GUI applications and see the results yourself.
-      with subtest("Launch applications"):
-          # key: binary_name
-          # value: "app-id" as reported by `lswt`
-          gui_apps_to_launch = {}
+      exit_code = 0
+      try:
+          machine.wait_for_file("${logFilePath}.done", timeout=700)
+      except Exception:
+          exit_code = 1
 
-          # We want to ensure that the first-party applications
-          # start/launch properly.
-          gui_apps_to_launch['cosmic-edit'] = 'com.system76.CosmicEdit'
-          gui_apps_to_launch['cosmic-files'] = 'com.system76.CosmicFiles'
-          gui_apps_to_launch['cosmic-player'] = 'com.system76.CosmicPlayer'
-          gui_apps_to_launch['cosmic-reader'] = 'com.system76.CosmicReader'
-          gui_apps_to_launch['cosmic-settings'] = 'com.system76.CosmicSettings'
-          gui_apps_to_launch['cosmic-store'] = 'com.system76.CosmicStore'
-          gui_apps_to_launch['cosmic-term'] = 'com.system76.CosmicTerm'
-
-          for gui_app, app_id in gui_apps_to_launch.items():
-              # Don't fail the test if binary is absent
-              if machine.execute(f"su - ${user.name} -c 'command -v {gui_app}'", timeout=5)[0] == 0:
-                  match gui_app:
-                      case 'cosmic-reader':
-                          opt_arg = '${emptyPDF}/empty.pdf'
-                      case _:
-                          opt_arg = ""
-
-                  machine.succeed(f"su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} ${DISPLAY} {gui_app} {opt_arg} >&2 &'", timeout=5)
-                  # Nix builds the following non-commented expression to the following:
-                  #                              `su - alice -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/1000 lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' `
-                  machine.wait_until_succeeds(f''''su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' '''', timeout=60)
-                  machine.succeed(f"pkill {gui_app}", timeout=5)
-
-      machine.succeed("echo 'test completed succeessfully' > /${testName}", timeout=5)
-      machine.copy_from_machine('/${testName}')
+      # The log file is created in the very beginning of the test
+      # script's execution. If we are here, it means that the
+      # `wait_for_unit`'s "guard" on the test script's autostart unit
+      # plus the 630 second combined timeout of other two
+      # `wait_for_file`s, make it extremely likely for the log file to
+      # be present.
+      machine.copy_from_machine("${logFilePath}.log")
 
       machine.shutdown()
+
+      with open(f"{machine.out_dir}/${testName}.log") as test_log_file:
+          contents = test_log_file.read()
+          print(contents)
+          if any("Z [ERROR] [L:" in line for line in contents.splitlines()):
+              exit_code = 1
+
+      sys.exit(exit_code)
     '';
 }

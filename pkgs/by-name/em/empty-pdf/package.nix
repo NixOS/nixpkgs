@@ -6,7 +6,9 @@
 
 stdenvNoCC.mkDerivation {
   name = "empty-pdf";
+
   __structuredAttrs = true;
+  strictDeps = true;
 
   dontUnpack = true;
 
