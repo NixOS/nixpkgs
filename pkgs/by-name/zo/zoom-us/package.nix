@@ -197,8 +197,9 @@ let
       pkgs.libxrandr
       pkgs.libxrender
       pkgs.libxtst
-      pkgs.libxcb
       pkgs.libxshmfence
+      pkgs.libxcb
+      pkgs.libxcb-util
       pkgs.libxcb-cursor
       pkgs.libxcb-image
       pkgs.libxcb-keysyms
