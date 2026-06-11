@@ -44,5 +44,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ garaiza-93 ];
+    mainProgram = "hue";
   };
 })
