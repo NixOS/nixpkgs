@@ -1,32 +1,28 @@
 {
   lib,
-  fetchFromGitLab,
   git,
   buildGoModule,
+  gitlab,
 }:
-let
-  data = lib.importJSON ../data.json;
-in
+
 buildGoModule (finalAttrs: {
   pname = "gitlab-workhorse";
 
-  version = "18.11.4";
+  version = gitlab.passthru.GITLAB_WORKHORSE_VERSION;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
-  src = fetchFromGitLab {
-    owner = data.owner;
-    repo = data.repo;
-    rev = data.rev;
-    sha256 = data.repo_hash;
-  };
+  src = gitlab.src;
 
   sourceRoot = "${finalAttrs.src.name}/workhorse";
 
-  vendorHash = "sha256-X1+neA2g61BR1VRKXzeqNath0+SYXRbU4vzEg1KD2sY=";
+  vendorHash = "sha256-6/50YxOW3NK5qzy0ALERCMK3JpLJflnw8ePAvNXANxQ=";
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
   doCheck = false;
-  prodyVendor = true;
+  proxyVendor = true;
 
   meta = {
     homepage = "http://www.gitlab.com/";
