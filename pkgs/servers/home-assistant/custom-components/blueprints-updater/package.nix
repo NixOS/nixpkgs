@@ -2,7 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  h2,
+  httpx,
   home-assistant,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
@@ -34,11 +34,7 @@ buildHomeAssistantComponent rec {
       --replace-fail '"--timeout=60",' ""
   '';
 
-  dependencies = [
-    # Uncodumented, but otherwise the home-assistant helpers/httpx_client.py fails like:
-    # ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
-    h2
-  ];
+  dependencies = httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     home-assistant
