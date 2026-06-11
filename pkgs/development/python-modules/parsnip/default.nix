@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "parsnip";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BCEQnClT/dI+t8RwMEQkzbFVCmDThiS9m8ZBCIEFrlg=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight, performant library for parsing CIF files in Python";
     homepage = "https://github.com/glotzerlab/parsnip";
-    changelog = "https://github.com/glotzerlab/parsnip/blob/${src.rev}/changelog.rst";
+    changelog = "https://github.com/glotzerlab/parsnip/blob/${src.tag}/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
