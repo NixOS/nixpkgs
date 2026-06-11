@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "6.4.1";
+  version = "6.5.2";
 
   src = fetchzip {
-    url = "https://www.macbartender.com/B2/updates/${
+    url = "https://downloads.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/Bartender%20${lib.versions.major finalAttrs.version}.zip";
-    hash = "sha256-UtLTfRhL7JTYzQXf7kyYyGZXy1TLJ0ODk1nRs2pLfQ4=";
+    hash = "sha256-b2FOhbsVCk8Ae5g/Si9RJLmgN+v5ETnxaRas3GOTb08=";
   };
 
   dontPatch = true;
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     text = ''
       version_major="${lib.versions.major finalAttrs.version}"
-      url="https://www.macbartender.com/B2/updates/AppcastB$version_major.xml"
+      url="https://downloads.macbartender.com/B2/updates/AppcastB$version_major.xml"
       version=$(curl -s "$url" | xmlstarlet sel -t -v '(//item)[last()]/sparkle:shortVersionString' -n)
       update-source-version bartender "$version"
     '';
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Bartender improves your workflow with quick reveal, search, custom hotkeys and triggers, and lots more.
     '';
     homepage = "https://www.macbartender.com";
-    changelog = "https://macbartender.com/B2/updates/${
+    changelog = "https://downloads.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/rnotes.html";
     license = [ lib.licenses.unfree ];
