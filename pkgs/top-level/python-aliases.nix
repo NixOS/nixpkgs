@@ -513,6 +513,7 @@ mapAliases {
   pytorchWithCuda = throw "'pytorchWithCuda' has been renamed to/replaced by 'torchWithCuda'"; # Converted to throw 2025-10-29
   pytorchWithoutCuda = throw "'pytorchWithoutCuda' has been renamed to/replaced by 'torchWithoutCuda'"; # Converted to throw 2025-10-29
   pytwitchapi = throw "'pytwitchapi' has been renamed to/replaced by 'twitchapi'"; # Converted to throw 2025-10-29
+  pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11

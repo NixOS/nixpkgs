@@ -16508,8 +16508,6 @@ self: super: with self; {
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
 
-  pyupdate = callPackage ../development/python-modules/pyupdate { };
-
   pyupgrade = callPackage ../development/python-modules/pyupgrade { };
 
   pyuptimerobot = callPackage ../development/python-modules/pyuptimerobot { };
