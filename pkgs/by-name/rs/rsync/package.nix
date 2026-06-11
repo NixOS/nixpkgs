@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
 
   updateAutotoolsGnuConfigScriptsHook,
   perl,
@@ -35,6 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
     hash = "sha256-vYjPgvplPaMjFPsikTZAfFyQ+A0XWNj0sJF2eHfY+pY=";
   };
+
+  patches = [
+    # Fixes test failure on darwin
+    (fetchpatch {
+      url = "https://github.com/RsyncProject/rsync/commit/e1c5f0e93a75dd45f32f3b92ba221ef158ac2e5f.patch";
+      hash = "sha256-pg65K9BCTq/WvS5icK6KT28ARccFKedp2445wLYdRsE=";
+      excludes = [
+        ".github/workflows/cygwin-build.yml"
+      ];
+    })
+  ];
 
   preBuild = ''
     patchShebangs ./runtests.py
