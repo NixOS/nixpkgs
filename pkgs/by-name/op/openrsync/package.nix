@@ -16,8 +16,12 @@ stdenv.mkDerivation {
     hash = "sha256-9ApkHIak1/XQn1nMwdC0iiZEzZI2gHCOIj8P6bQPFyA=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+
   # Uses oconfigure
-  prefixKey = "PREFIX=";
+  env.prefixKey = "PREFIX=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
