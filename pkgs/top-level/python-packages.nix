@@ -19913,6 +19913,8 @@ self: super: with self; {
 
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
 
+  torch-ema = callPackage ../development/python-modules/torch-ema { };
+
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
   torch-memory-saver = callPackage ../development/python-modules/torch-memory-saver { };
