@@ -1,3 +1,4 @@
+# Tests the legacy FileStore OSD backend.
 { lib, ... }:
 let
   cfg = {
@@ -258,7 +259,7 @@ let
     '';
 in
 {
-  name = "basic-multi-node-ceph-cluster";
+  name = "basic-multi-node-ceph-cluster-deprecated-filestore";
   meta = with lib.maintainers; {
     maintainers = [ lejonet ];
   };
