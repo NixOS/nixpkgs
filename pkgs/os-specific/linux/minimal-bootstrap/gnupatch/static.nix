@@ -78,4 +78,5 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/share
   ''

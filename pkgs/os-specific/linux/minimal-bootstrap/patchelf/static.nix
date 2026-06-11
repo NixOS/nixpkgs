@@ -43,6 +43,8 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
+    disallowedReferences = [ gcc ];
+
     passthru.tests.get-version =
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
@@ -70,11 +72,12 @@ bash.runCommand "${pname}-${version}"
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
       CC=musl-gcc \
-      CXXFLAGS=-static
+      CXXFLAGS="-static -g0 -O2 -DNDEBUG -ffile-prefix-map=${gcc}=. -fmacro-prefix-map=${gcc}=."
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/share
   ''
