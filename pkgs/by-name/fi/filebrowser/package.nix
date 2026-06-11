@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "2.63.5";
+  version = "2.63.14";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     tag = "v${version}";
-    hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
+    hash = "sha256-9CXHoQWr1RpTwFR8JRR72oQZxHrndTrnxYa6/0Z3Mk0=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalAttrs: {
