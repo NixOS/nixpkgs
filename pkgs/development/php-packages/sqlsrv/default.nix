@@ -9,8 +9,8 @@
 buildPecl {
   pname = "sqlsrv";
 
-  version = "5.12.0";
-  sha256 = "sha256-qeu4gLKlWNPWaE9uaALFPFv/pJ4e5g0Uc6cST8nLcq0=";
+  version = "5.13.1";
+  sha256 = "sha256-fE6o8l67yJmQhCOefg73UxUJfgE98OKQ/O92w9l3udg=";
 
   buildInputs = [ unixodbc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
