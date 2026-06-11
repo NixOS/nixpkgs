@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
     hash = "sha256-TvymN030Q9k9qPbBvrtHcOjT9KILw0tzCle1pdI7Bj8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "questdb/questdb@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

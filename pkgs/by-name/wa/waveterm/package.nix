@@ -65,6 +65,10 @@ let
           x86_64-linux = "sha256-q2rdc/DpVVRDK2X9QyS8w7gkHZAQR+Wopn40Vip9CeE=";
           aarch64-linux = "sha256-hPcZp0mBzEnaY+e+Kg5XynROWduydutQ2davhLg9bI4=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "wavetermdev/waveterm@${version}";
+        };
       };
 
     nativeBuildInputs = [
@@ -138,6 +142,10 @@ let
         hash = selectSystem {
           x86_64-darwin = "sha256-U22AVln0IhGrL41YUbJMi2agjfAs1N8Zd6msElpAXD8=";
           aarch64-darwin = "sha256-NY/KFFGgtrQr9YL32nudWeTIGNDjswelcOD1wo+Jh3s=";
+        };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "wavetermdev/waveterm@${version}";
         };
       };
 

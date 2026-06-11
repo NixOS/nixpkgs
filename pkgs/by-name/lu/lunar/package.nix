@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/alin23/Lunar/releases/download/v${finalAttrs.version}/Lunar-${finalAttrs.version}.dmg";
     hash = "sha256-CqxhLUL/Vnt665xcZFaXg/MWywca6j/pr03oLoyofYQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "alin23/Lunar@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

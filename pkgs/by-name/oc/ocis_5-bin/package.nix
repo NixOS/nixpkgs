@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/owncloud/ocis/releases/download/v${finalAttrs.version}/ocis-${finalAttrs.version}-${os}-${arch}";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "owncloud/ocis@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

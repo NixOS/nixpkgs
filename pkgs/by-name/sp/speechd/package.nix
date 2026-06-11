@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${finalAttrs.version}/speech-dispatcher-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-sUpSONKH0tzOTdQrvWbKZfoijn5oNwgmf3s0A297pLQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "brailcom/speechd@${finalAttrs.version}";
+    };
   };
 
   patches = [

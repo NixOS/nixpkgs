@@ -47,6 +47,10 @@ rustPlatform.buildRustPackage {
         swaggerUi = fetchurl {
           url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
           hash = "sha256-HK4z/JI+1yq8BTBJveYXv9bpN/sXru7bn/8g5mf2B/I=";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "swagger-api/swagger-ui@${swaggerUiVersion}";
+          };
         };
       in
       "file://${swaggerUi}";

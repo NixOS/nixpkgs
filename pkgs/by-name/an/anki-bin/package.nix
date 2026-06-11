@@ -21,16 +21,28 @@ let
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
       hash = "sha256-wYFqT1g+rtoqOR7+Bb5mIJLZ5JdT2M1kcHqJUCuNElA=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
       hash = "sha256-PDlu+oFKWHraPdTuGDCUkO0bhPtkNVibo11B1QkCICw=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
       hash = "sha256-RqcGHXN29GDGGuFbrQCBmj3cctzoRQZ8svR5hMYPhxs=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ankitects/anki@${version}";
+      };
     };
   };
 

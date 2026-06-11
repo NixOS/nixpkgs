@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${finalAttrs.version}/jq-${finalAttrs.version}.tar.gz";
     hash = "sha256-K+ZOcSnOyxHVkGKQ66EK9pT7nj5/n8IIoxHcM8qDfrA=";
+    identifiers.purlParts = {
+      type = "github";
+      spec = "jqlang/jq@jq-${finalAttrs.version}";
+    };
   };
 
   outputs = [
@@ -139,9 +143,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "jq";
-    identifiers.purlParts = {
-      type = "github";
-      spec = "jqlang/jq@jq-${finalAttrs.version}";
-    };
   };
 })

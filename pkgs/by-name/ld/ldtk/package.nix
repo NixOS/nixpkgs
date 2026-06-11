@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/deepnight/ldtk/releases/download/v${finalAttrs.version}/ubuntu-distribution.zip";
     hash = "sha256-i7HIcKs10srfvwihGdMEnnmGoqgFWNJhC6vGf81QJWY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "deepnight/ldtk@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

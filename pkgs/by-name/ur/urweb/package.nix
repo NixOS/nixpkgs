@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0qh6wcxfk5kf735i5gqwnkdirnnmqhnnpkfz96gz144dgz2i0c5c";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "urweb/urweb@${version}";
+    };
   };
 
   patches = [

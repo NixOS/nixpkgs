@@ -83,6 +83,10 @@ let
       sharphound = fetchurl {
         url = "https://github.com/SpecterOps/SharpHound/releases/download/${shver}/sharphound_${shver}_windows_x86.zip";
         hash = "sha256-BjBOxjhQYpqD/qUy9EsuXplK8JAuPU/LE2O0Ooxr+r4=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "SpecterOps/SharpHound@${finalAttrs.version}";
+        };
       };
     in
     pipe
@@ -125,6 +129,10 @@ let
             fetchurl {
               url = "https://github.com/SpecterOps/AzureHound/releases/download/${azver}/azurehound_${azver}_${x.os}_${x.arch}.zip";
               inherit (x) hash;
+              meta.identifiers.purlParts = {
+                type = "github";
+                spec = "SpecterOps/AzureHound@${finalAttrs.version}";
+              };
             }
           } azurehound_${azver}_${x.os}_${x.arch}.zip"
         ))

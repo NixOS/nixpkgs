@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/valentjn/ltex-ls/releases/download/${version}/ltex-ls-${version}.tar.gz";
     sha256 = "sha256-lW1TfTckqhCmhjcvduISY9qAdKPM/0cobxbIrCq5JkQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "valentjn/ltex-ls@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

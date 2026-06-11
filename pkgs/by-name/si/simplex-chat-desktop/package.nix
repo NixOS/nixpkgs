@@ -13,10 +13,18 @@ let
     "aarch64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-aarch64.AppImage";
       hash = "sha256-VrPNKXgVO/9yvGqseOVkYKMFVqhtExL2PCJb6stn3ko=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "simplex-chat/simplex-chat@${version}";
+      };
     };
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
       hash = "sha256-caRL09PKJ33XHRReZ5qSpfgKH0wpJxGSHXfA83sz5UE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "simplex-chat/simplex-chat@${version}";
+      };
     };
   };
 

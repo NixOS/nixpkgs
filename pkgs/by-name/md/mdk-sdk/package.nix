@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
     hash = "sha256-qdsYWu0bRRhPTbOEeGBFhPdk3S2JpqroOz+gd3KMDts=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wang-bin/mdk-sdk@${version}";
+    };
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/alerque/git-warp-time/releases/download/v${finalAttrs.version}/git-warp-time-${finalAttrs.version}.tar.zst";
     hash = "sha256-bt94Y1EIcLzz1v2Nwyde63y6FWD+iaFkoEYoQpWVWGY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "alerque/git-warp-time@${finalAttrs.version}";
+    };
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

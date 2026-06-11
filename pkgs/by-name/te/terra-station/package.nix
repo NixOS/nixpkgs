@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/terra-money/station-desktop/releases/download/v${version}/Terra.Station_${version}_${arch}.deb";
     inherit sha256;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "terra-money/station-desktop@${version}";
+    };
   };
 
   nativeBuildInputs = [

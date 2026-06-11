@@ -43,11 +43,19 @@ let
     "E222AA02" = fetchurl {
       url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
       hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "bisq-network/bisq2@${finalAttrs.version}";
+      };
     };
 
     "387C8307" = fetchurl {
       url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
       hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "bisq-network/bisq2@${finalAttrs.version}";
+      };
     };
   };
 
@@ -90,11 +98,19 @@ stdenv.mkDerivation (finalAttrs: {
       popd
       mv $downloadedFile $out
     '';
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bisq-network/bisq2@${finalAttrs.version}";
+    };
   };
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
     hash = "sha256-/+HDj28uOFQwkrrzKfcQW0T5/qTIeB30Zd10EjeGhlU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bisq-network/bisq2@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

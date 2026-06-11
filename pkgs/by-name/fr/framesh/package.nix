@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
     hash = "sha256-t60jsA4ojXF805OUrqIOdk8eP9PlwA/g0XxEBCahmb4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "floating/frame@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

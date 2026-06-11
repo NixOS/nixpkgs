@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/airsonic/airsonic/releases/download/v${finalAttrs.version}/airsonic.war";
     sha256 = "0q3qnqymj3gaa6n79pvbyidn1ga99lpngp5wvhlw1aarg1m7vccl";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "airsonic/airsonic@${finalAttrs.version}";
+    };
   };
 
   buildCommand = ''

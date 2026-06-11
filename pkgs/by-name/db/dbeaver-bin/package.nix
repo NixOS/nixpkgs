@@ -41,6 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/dbeaver/dbeaver/releases/download/${finalAttrs.version}/dbeaver-ce-${finalAttrs.version}-${suffix}";
       inherit hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "dbeaver/dbeaver@${finalAttrs.version}";
+      };
     };
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";

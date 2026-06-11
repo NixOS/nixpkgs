@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Mysticial/y-cruncher/releases/download/v${finalAttrs.version}/y-cruncher.v${finalAttrs.version}-static.tar.xz";
     hash = "sha256-4i/zRPQnY1INIzHxntYXfzp8eKxb1GLpwGDDgmcYFJA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Mysticial/y-cruncher@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

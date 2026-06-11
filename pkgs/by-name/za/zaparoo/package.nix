@@ -27,6 +27,10 @@ buildGoModule (finalAttrs: {
   webUI = fetchurl {
     url = "https://github.com/ZaparooProject/zaparoo-app/releases/download/v${finalAttrs.webUIVersion}/zaparoo_app-web-${finalAttrs.webUIVersion}.tar.gz";
     hash = "sha256-77QyMFbx73vaKIRDCnhdqDXBb8MfQSsCWghe3XEL0tk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ZaparooProject/zaparoo-app@${finalAttrs.webUIVersion}";
+    };
   };
 
   subPackages = [ "cmd/linux" ];

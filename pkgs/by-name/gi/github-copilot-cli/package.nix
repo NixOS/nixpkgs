@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
     hash = "sha256-zNO0clQRfgw6CX9K8NaJXsoOhhNjBfK7KAr0AoL7Oqo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "github/copilot-cli@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

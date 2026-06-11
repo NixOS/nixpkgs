@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/agalwood/Motrix/releases/download/v${version}/Motrix-${version}.AppImage";
     hash = "sha256-oSO+VH3bZcjnXjECqZgOmsvlOONbfgOq50qVLvHdKfo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "agalwood/Motrix@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

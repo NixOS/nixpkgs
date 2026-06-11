@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
     hash = "sha256-Lg/Yn7uhySpsEVFx5bUZBIg7tJf75ROmlh0ID7qwj/Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "iina/iina@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ undmg ];

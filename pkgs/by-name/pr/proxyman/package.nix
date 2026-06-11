@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
     hash = "sha256-hzpSei0gR9apcJ6AVNoiqSUJLMvP0V/6STmGKeUg5vI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ProxymanApp/proxyman-windows-linux@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

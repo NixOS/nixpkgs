@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/selmf/unarr/releases/download/v${finalAttrs.version}/unarr-${finalAttrs.version}.tar.xz";
     hash = "sha256-Mo76BOqZbdOJFrEkeozxdqwpuFyvkhdONNMZmN5BdNI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "selmf/unarr@${finalAttrs.version}";
+    };
   };
 
   patches = [

@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pavlobu/deskreen/releases/download/v${finalAttrs.version}/Deskreen-${finalAttrs.version}.AppImage";
     hash = "sha256-0jI/mbXaXanY6ay2zn+dPWGvsqWRcF8aYHRvfGVsObE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pavlobu/deskreen@${finalAttrs.version}";
+    };
   };
   deskreenUnwrapped = appimageTools.wrapType2 {
     inherit (finalAttrs) pname version;

@@ -42,16 +42,28 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
       hash = "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
 
     aarch64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
       hash = "sha256-a8hye/27bXMdWvmgb1HW3nBhxoyQjIrotDqe03miAmA=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
 
     x86_64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
       hash = "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "obsidianmd/obsidian-releases@${version}";
+      };
     };
 
     aarch64-darwin = x86_64-darwin;

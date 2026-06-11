@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mdjurfeldt/guile-mqtt/releases/download/v${finalAttrs.version}/guile-mqtt-${finalAttrs.version}.tar.gz";
     hash = "sha256-6+U3FHewbdI8l7r4pVCrd0DNKPy4BHHy2m/hcQ7ByBQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mdjurfeldt/guile-mqtt@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

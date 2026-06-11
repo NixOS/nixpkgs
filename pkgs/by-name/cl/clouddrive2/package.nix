@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-darwin = "sha256-frldCUG6aGfXDoPzvG8QYMTL4SxTEd2hPLy0+7YWtIE=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cloud-fs/cloud-fs.github.io@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/clementgallet/libTAS/commit/779ff0fb0f3accfc62949680d85ecf96b28d18ef.patch";
       hash = "sha256-xAaTWIXt8FkMu6GE5mBWtLypROFZ1aEqmBTtG+6rTWk=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "clementgallet/libTAS@${finalAttrs.version}";
+      };
     })
     # Fix build with gcc15
     (fetchpatch2 {

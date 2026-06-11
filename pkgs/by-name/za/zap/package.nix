@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${finalAttrs.version}/ZAP_${finalAttrs.version}_Linux.tar.gz";
     hash = "sha256-7+eZqqNifbaDtD8AycIQrqC3XADMjwoPBDTRK7Pd3lo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "zaproxy/zaproxy@${finalAttrs.version}";
+    };
   };
 
   desktopItems = [

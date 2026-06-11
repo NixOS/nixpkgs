@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${finalAttrs.version}/vifm-${finalAttrs.version}.tar.bz2";
     hash = "sha256-QLwy7BDYKa2j0Cl9M81PMCxSC7QxKH1UT8CgWuRf2xs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "vifm/vifm@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

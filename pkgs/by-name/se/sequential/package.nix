@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/chuchusoft/Sequential/releases/download/v${finalAttrs.version}/Sequential.app.${finalAttrs.buildDate}.tar.xz";
     hash = "sha256-tgpzMAHw266UhKo43GIHFCx/SDq/zIJkWz1TPYTeTzI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "chuchusoft/Sequential@${finalAttrs.version}";
+    };
   };
 
   installPhase = ''

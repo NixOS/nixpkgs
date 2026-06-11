@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     # Note: tag name varies in some versions, e.g. v1.30.0, c-ares-1_17_0.
     url = "https://github.com/c-ares/c-ares/releases/download/v${version}/c-ares-${version}.tar.gz";
     hash = "sha256-kS3XzDs+innFL9f7nA9Ozwqqc+Re/aiAJmotbia4TvU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "c-ares/c-ares@${version}";
+    };
   };
 
   outputs = [

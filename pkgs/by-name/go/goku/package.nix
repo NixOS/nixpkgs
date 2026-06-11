@@ -16,11 +16,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       fetchurl {
         url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
         hash = "sha256-yRLxUfAQZ+rE7/42wnjls6UnT+vb/b5Y3lVWujZGEAg=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "yqrashawn/GokuRakuJoudo@${finalAttrs.version}";
+        };
       }
     else
       fetchurl {
         url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku.zip";
         hash = "sha256-hbk7QF0kTeBcot4OFV/yhVOUV/OpE44d/7nofdoBipg=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "yqrashawn/GokuRakuJoudo@${finalAttrs.version}";
+        };
       };
 
   nativeBuildInputs = [ unzip ];

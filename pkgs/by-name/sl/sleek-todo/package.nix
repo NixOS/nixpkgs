@@ -23,6 +23,10 @@ let
           url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-2.0.14.AppImage";
           hash = "sha256-d2fLsCI7peuNBtjgHs1qumgPAF9eJeBYiIIffoSv9Jk=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "ransome1/sleek@${version}";
+        };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
 

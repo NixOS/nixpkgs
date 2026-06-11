@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/heyman/heynote/releases/download/v${version}/Heynote_${version}_x86_64.AppImage";
     sha256 = "sha256-5SCIMvhpFUwpcZaxUwDjWRN05QFLgKKE1C2J32lapH8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "heyman/heynote@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

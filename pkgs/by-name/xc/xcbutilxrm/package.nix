@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Airblader/xcb-util-xrm/releases/download/v${finalAttrs.version}/xcb-util-xrm-${finalAttrs.version}.tar.bz2";
     sha256 = "118cj1ybw86pgw0l5whn9vbg5n5b0ijcpx295mwahzi004vz671h";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Airblader/xcb-util-xrm@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

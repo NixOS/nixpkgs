@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}.gz";
     url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${finalAttrs.version}/language_server_${plat}.gz";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Exafunction/codeium@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];

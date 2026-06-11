@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
     hash = "sha256-Y6DmoWGvNp0cvRYgDDMHul5K6CzhiWxMxVTR+W9PE5E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mockoon/mockoon@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

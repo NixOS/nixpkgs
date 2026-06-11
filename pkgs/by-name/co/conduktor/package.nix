@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
       icon = fetchurl {
         url = "https://github.com/conduktor/builds/raw/v${finalAttrs.version}/.github/resources/Conduktor.png";
         hash = "sha256-mk4c9ecookRb7gR56cedIWfPfQy2uGF+ZbX6NI90KI0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "conduktor/builds@${finalAttrs.version}";
+        };
       };
       comment = "A beautiful and fully-featured desktop client for Apache Kafka";
     })

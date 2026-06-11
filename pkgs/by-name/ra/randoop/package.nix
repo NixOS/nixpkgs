@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/randoop/randoop/releases/download/v${finalAttrs.version}/randoop-${finalAttrs.version}.zip";
     sha256 = "sha256-yzQw9l3uAq51SHXJ4rsZNRCiFdhOEoSrwv9iPvD2i9c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "randoop/randoop@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

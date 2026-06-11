@@ -14,6 +14,10 @@ appimageTools.wrapAppImage rec {
     src = fetchurl {
       url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
       hash = "sha256-OdogpqqNZiwKqj2ELfmAw/601iVHMsTqxl5CUjqRQBs=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "DavidoTek/ProtonUp-Qt@${version}";
+      };
     };
   };
 

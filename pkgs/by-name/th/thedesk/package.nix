@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/cutls/thedesk-next/releases/download/v${finalAttrs.version}/thedesk-next_${finalAttrs.version}_amd64.deb";
     hash = "sha256-DNZVHSd9dG4h6lv0PoUUaBaA/ijJJtX8d9Qy5iPdLoc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cutls/thedesk-next@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

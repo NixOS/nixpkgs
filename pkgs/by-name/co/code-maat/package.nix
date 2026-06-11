@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/adamtornhill/code-maat/releases/download/v${finalAttrs.version}/code-maat-${finalAttrs.version}-standalone.jar";
     hash = "sha256-QoeuIDSQGERFD3aVR7xEl6DaGm0cf6b63IWHBeZ0O18=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "adamtornhill/code-maat@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

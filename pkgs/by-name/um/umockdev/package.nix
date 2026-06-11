@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
     hash = "sha256-RuReq29la/wJJDjX4OXfTF9R0Y46gzYMK+aAsgehoLc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "martinpitt/umockdev@${finalAttrs.version}";
+    };
   };
 
   patches = [

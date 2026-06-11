@@ -32,6 +32,10 @@ stdenvNoCC.mkDerivation {
   src = fetchurl {
     url = "https://github.com/envoyproxy/envoy/releases/download/v${version}/envoy-${version}-linux-${plat}";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "envoyproxy/envoy@${version}";
+    };
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

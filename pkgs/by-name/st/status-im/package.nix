@@ -32,6 +32,10 @@ let
   icon = fetchurl {
     url = "https://github.com/status-im/status-desktop/raw/afde83651724a555626b5d9a3d582918de6c3d59/status.png";
     hash = "sha256-ViGuOr9LskGs/P7pjPO9zYgosWaZlZZYVuPpliOA5dY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "status-im/status-desktop@${version}";
+    };
   };
   pname = "status-desktop";
 in

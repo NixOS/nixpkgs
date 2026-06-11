@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pxb1988/dex2jar/releases/download/v${finalAttrs.version}/dex-tools-v${finalAttrs.version}.zip";
     hash = "sha256-7nxF6zwdJHSmFF2NRH5lGnNqItlmS209O+WlqBfdojo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pxb1988/dex2jar@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

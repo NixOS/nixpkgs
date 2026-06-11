@@ -35,6 +35,10 @@ let
     src = fetchurl {
       url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
       hash = "sha256-FjDKUrroby/zfrIgaZ/IL5UbWxgIDt+j9Q3TalJsLZU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "rizinorg/rizin@${version}";
+      };
     };
 
     mesonFlags = [

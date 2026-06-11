@@ -24,6 +24,10 @@ let
   openloco-objects = fetchurl {
     url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.8/objects.zip";
     sha256 = "sha256-ZYiR2UpGBAt79x39fwG7wd2mRwcSyz3AdIKTH+tQE8c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenLoco/OpenGraphics@0.1.8";
+    };
   };
 
 in

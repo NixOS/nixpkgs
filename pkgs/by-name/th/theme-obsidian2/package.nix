@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
     sha256 = "sha256-Hajz2bFcsi+9kSjxuZ6Jav8t7S6trDUF5yJivw+Vypw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "madmaxms/theme-obsidian-2@${version}";
+    };
   };
 
   sourceRoot = ".";

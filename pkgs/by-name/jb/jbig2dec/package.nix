@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/jbig2dec/archive/${finalAttrs.version}/jbig2dec-${finalAttrs.version}.tar.gz";
     hash = "sha256-qXBTaaZjOrpTJpNFDsgCxWI5fhuCRmLegJ7ekvZ6/yE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ArtifexSoftware/jbig2dec@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

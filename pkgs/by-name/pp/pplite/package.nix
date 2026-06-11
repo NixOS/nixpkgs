@@ -7,13 +7,17 @@
   gmp,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pplite";
   version = "0.12";
 
   src = fetchurl {
     url = "https://github.com/ezaffanella/PPLite/raw/main/releases/pplite-0.12.tar.gz";
     hash = "sha256-9qulVEIZRPHV5GnVmp65nMrGrUwRGkR8i8ORbLdHb1E=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ezaffanella/PPLite@${version}";
+    };
   };
 
   buildInputs = [

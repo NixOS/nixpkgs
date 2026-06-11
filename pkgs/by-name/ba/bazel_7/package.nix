@@ -55,6 +55,10 @@ let
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
     hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bazelbuild/bazel@${version}";
+    };
   };
 
   defaultShellUtils =
@@ -112,22 +116,38 @@ let
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
           hash = "sha256-94KFvsS7fInXFTQZPzMq6DxnHQrRktljwACyAz8adSw=";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "bazelbuild/bazel@${version}";
+          };
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
           hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "bazelbuild/bazel@${version}";
+          };
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
           hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "bazelbuild/bazel@${version}";
+          };
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
           hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "bazelbuild/bazel@${version}";
+          };
         };
 
     nativeBuildInputs = defaultShellUtils;

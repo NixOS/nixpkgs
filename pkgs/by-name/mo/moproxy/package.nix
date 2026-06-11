@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       webBundle = fetchurl {
         url = "https://github.com/sorz/moproxy-web/releases/download/v0.1.8/build.zip";
         hash = "sha256-bLC76LnTWR2/xnDcZtX/t0OUmP7vdI/o3TCRzG9eH/g=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "sorz/moproxy-web@0.1.8";
+        };
       };
     in
     ''

@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pallotron/yubiswitch/releases/download/v${finalAttrs.version}/yubiswitch_${finalAttrs.version}.dmg";
     hash = "sha256-ee7l8jj1pJdj+SjMNWcLfHV//G0FG9bdBkNcxUh8Zuk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pallotron/yubiswitch@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

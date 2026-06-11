@@ -24,6 +24,10 @@ let
   src = fetchurl {
     url = "https://github.com/patrikx3/onenote/releases/download/v${version}/P3X-OneNote-${version}${plat}.AppImage";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "patrikx3/onenote@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

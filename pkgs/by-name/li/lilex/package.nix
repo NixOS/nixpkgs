@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mishamyrt/Lilex/releases/download/${finalAttrs.version}/Lilex.zip";
     hash = "sha256-NDEO20unSfdy1CuI4+7EpjGFJ+dc7qqWz8VW7jU2b7w=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mishamyrt/Lilex@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

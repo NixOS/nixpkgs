@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kythe/kythe/releases/download/v${finalAttrs.version}/kythe-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ZFZh3kt32UeqAl8AYbvrwjhqRVWtgyI/3k+Vb4/jAGo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kythe/kythe@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [ binutils ];

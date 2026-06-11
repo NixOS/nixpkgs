@@ -46,11 +46,19 @@ stdenv.mkDerivation rec {
   bazelapi = fetchurl {
     url = "https://github.com/bazelbuild/remote-apis/archive/9ef19c6b5fbf77d6dd9d84d75fbb5a20a6b62ef1.tar.gz";
     hash = "sha256-zPV1ObY0fOsKp+k+5Duf/xrrSW02zAl9qRjEo172WDk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bazelbuild/remote-apis@${version}";
+    };
   };
 
   googleapi = fetchurl {
     url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "googleapis/googleapis@${version}";
+    };
   };
 
   nativeBuildInputs = [

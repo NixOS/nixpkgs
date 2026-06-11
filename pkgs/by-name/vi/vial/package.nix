@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
     hash = "sha256-sN8i/MOPhaLZ4iJNKz/MdpRIGTZVV/G5qD7o+ID8dAM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "vial-kb/vial-gui@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

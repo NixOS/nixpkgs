@@ -23,6 +23,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Ultimaker/Cura/releases/download/${version}/Ultimaker-Cura-${version}-linux-X64.AppImage";
     hash = "sha256-GBQvMZRaOqbOmBOOaIfduWKkwHbyZosr6AaFMty0Jfo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Ultimaker/Cura@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

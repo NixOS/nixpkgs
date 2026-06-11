@@ -15,6 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lib.strings.replaceStrings [ "_" ] [ "-" ] finalAttrs.version
     }.zip";
     hash = "sha256-O+V7x0AJBgsPL7clEpQYvvE38/0IxyN8J4tptxCmgo0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Wouter01/MediaMate-Releases@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

@@ -71,6 +71,10 @@ stdenvNoCC.mkDerivation (
           # example: https://github.com/toeverything/AFFiNE/releases/download/v0.18.1/affine-0.18.1-stable-darwin-arm64.zip
           url = "https://github.com/toeverything/AFFiNE/releases/download/v${version}/affine-${version}-${buildType}-${platform}-${nodeArch}.zip";
           sha512 = affinePrebuiltBinariesHashes."${nodePlatform}-${nodeArch}";
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "toeverything/AFFiNE@${finalAttrs.version}";
+          };
         }
       );
 

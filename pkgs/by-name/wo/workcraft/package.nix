@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${finalAttrs.version}/workcraft-v${finalAttrs.version}-linux.tar.gz";
     hash = "sha256-+G4Z9GfyfdBL3qb8RqtmRPq6wC6et4P3S6Owy/L5sSU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "workcraft/workcraft@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

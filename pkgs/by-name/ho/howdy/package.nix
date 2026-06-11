@@ -146,6 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
         name = "howdy-${name}.dat";
         url = "https://github.com/davisking/dlib-models/raw/daf943f7819a3dda8aec4276754ef918dc26491f/${name}.dat.bz2";
         inherit hash;
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "davisking/dlib-models@${finalAttrs.version}";
+        };
       }
     ) finalAttrs.finalPackage.passthru.dlibModelsHashes;
     dlibModelsHashes = {

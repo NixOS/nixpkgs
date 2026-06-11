@@ -109,6 +109,10 @@ let
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
       hash = "sha256-/fGkLuE+uf3WrpTcWIOYHooJWZ51i94j9uZ3xPq1yTw=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "localsend/localsend@${version}";
+      };
     };
 
     nativeBuildInputs = [

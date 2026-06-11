@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     # This is the same with build-aux/darkreader/Makefile
     url = "https://github.com/birros/web-archives-darkreader/releases/download/v0.0.1/web-archives-darkreader_v0.0.1.js";
     hash = "sha256-juhAqs2eCYZKerLnX3NvaW3NS0uOhqB7pyf/PRDvMqE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "birros/web-archives-darkreader@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/stathissideris/ditaa/releases/download/v${finalAttrs.version}/ditaa-${finalAttrs.version}-standalone.jar";
     sha256 = "1acnl7khz8aasg230nbsx9dyf8716scgb5l3679cb2bdzxisl64l";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "stathissideris/ditaa@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

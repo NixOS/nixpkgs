@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/neurolabusc/MRIcron/releases/download/v${finalAttrs.version}/MRIcron_linux.zip";
     hash = "sha256-C155u9dvYEyWRfTv3KNQFI6aMWIAjgvdSIqMuYVIOQA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "neurolabusc/MRIcron@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

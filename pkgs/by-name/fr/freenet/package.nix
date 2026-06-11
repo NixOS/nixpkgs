@@ -20,6 +20,10 @@ let
   freenet_ext = fetchurl {
     url = "https://github.com/hyphanet/fred/releases/download/build01495/freenet-ext.jar";
     hash = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "hyphanet/fred@${version}";
+    };
   };
 
   seednodes = fetchFromGitHub {

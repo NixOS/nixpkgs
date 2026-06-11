@@ -14,6 +14,10 @@ let
     # source URL accordingly.
     url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
     hash = "sha256-k3qGWPn+O4kazsrrZAYHIvSrrix9LNnnJgZGJqlJbJE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "nukeop/nuclear@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

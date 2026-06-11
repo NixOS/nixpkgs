@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation {
   src = fetchurl {
     url = "https://github.com/IdreesInc/Miracode/releases/download/v${version}/Miracode.ttf";
     hash = "sha256-Q+/D/TPlqOt779qYS/dF7ahEd3Mm4a4G+wdHB+Gutmo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "IdreesInc/Miracode@${version}";
+    };
   };
 
   dontUnpack = true;

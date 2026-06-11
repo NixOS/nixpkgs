@@ -10,6 +10,10 @@ let
   icon = fetchurl {
     url = "https://github.com/mawww/kakoune/raw/master/doc/kakoune_logo.svg";
     hash = "sha256-JxhIEmjiGrisaarA1sX1AfzNjHNIm9xjyPs/nG1uL/U=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mawww/kakoune@0-unstable-2021-11-12";
+    };
   };
 in
 crystal.buildCrystalPackage rec {

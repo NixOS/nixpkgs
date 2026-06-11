@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rundeck/rundeck-cli/releases/download/v${finalAttrs.version}/rundeck-cli-${finalAttrs.version}-all.jar";
     hash = "sha256-RiGWsscenvNpKr+yOHpy2F7dPZ3M/R9SWD+EKF7nq18=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rundeck/rundeck-cli@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

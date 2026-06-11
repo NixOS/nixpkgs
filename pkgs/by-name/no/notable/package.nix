@@ -13,6 +13,10 @@ let
   src = fetchurl {
     url = "https://github.com/notable/notable/releases/download/v${version}/Notable-${version}.AppImage";
     inherit sha256;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "notable/notable@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

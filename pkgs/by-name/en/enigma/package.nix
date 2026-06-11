@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Enigma-Game/Enigma/releases/download/${finalAttrs.version}/Enigma-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-rmS5H7wrEJcAcdDXjtW07enuOGjeLm6VaVRvxYQ3+K8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Enigma-Game/Enigma@${finalAttrs.version}";
+    };
   };
 
   patches = [

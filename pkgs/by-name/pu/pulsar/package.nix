@@ -99,10 +99,18 @@ stdenv.mkDerivation (finalAttrs: {
     x86_64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
       hash = "sha256-66kubyDMEHgRdT38TTESMIZ+wQPPXWHBc0jYY3aMSkU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "pulsar-edit/pulsar@${finalAttrs.version}";
+      };
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
       hash = "sha256-MTWqUlbfjJlIQVy0YBLbenMzA7Xgnkr34nr2t8nhofc=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "pulsar-edit/pulsar@${finalAttrs.version}";
+      };
     };
   };
 

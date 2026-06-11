@@ -17,6 +17,10 @@ let
     src = fetchurl {
       url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
       hash = "sha256-k4/oMHvtq5YXY8hRlX4gWN16ClfjXEAn6mRIoEBHNJo=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "com-lihaoyi/mill@${version}";
+      };
     };
   });
 in

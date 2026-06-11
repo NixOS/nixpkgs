@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/flix/flix/releases/download/v${version}/flix.jar";
     sha256 = "sha256-UgYMaZ/v99dmfSUekU2xSOoJecrmvUoVfO5eYm9prZw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "flix/flix@${version}";
+    };
   };
 
   dontUnpack = true;

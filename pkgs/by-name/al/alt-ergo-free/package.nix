@@ -12,6 +12,10 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${finalAttrs.version}-free/alt-ergo-${finalAttrs.version}-free.tar.gz";
     hash = "sha256-ksVP9HH9pY+T6Es/wgC9pGd805AGw1e1vgfVlNGCXG8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OCamlPro/alt-ergo@${version}";
+    };
   };
 
   nativeBuildInputs = [ ocamlPackages.menhir ];

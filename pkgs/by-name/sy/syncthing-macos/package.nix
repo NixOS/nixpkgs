@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/syncthing/syncthing-macos/releases/download/v${finalAttrs.version}/Syncthing-${finalAttrs.version}.dmg";
     hash = "sha256-5BjYwS2xcANqEXWadbppUwIGNd1UTQjzhWIAyATwWEU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "syncthing/syncthing-macos@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ undmg ];

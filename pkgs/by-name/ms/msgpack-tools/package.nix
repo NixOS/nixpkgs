@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   mpack = fetchurl {
     url = "https://github.com/ludocode/mpack/archive/df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz";
     hash = "sha256-hyiXygbAHnNgF4TIg+DemBvtdBnSgJ7fAhknVuL+T/c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ludocode/mpack@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

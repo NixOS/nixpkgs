@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kkos/oniguruma/releases/download/v${finalAttrs.version}/onig-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Klz8WuJZ5Ol/hraN//wVLNr/6U4gYLdwy4JyONdp/AU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kkos/oniguruma@${finalAttrs.version}";
+    };
   };
 
   outputs = [

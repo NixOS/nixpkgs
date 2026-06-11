@@ -126,17 +126,29 @@ let
   deckjsBackendSrc = fetchurl {
     url = "https://github.com/downloads/houqp/asciidoc-deckjs/deckjs-1.6.2.zip";
     sha256 = "1siy1j8naj5irrrrv5bfgl4d8nal6j9pyahy4f50wmrr9wv59s46";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "downloads/houqp@${version}";
+    };
   };
 
   # the odf backend is actually two plugins: odt + odp
   odtBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
     sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "downloads/dagwieers@${version}";
+    };
   };
 
   odpBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "downloads/dagwieers@${version}";
+    };
   };
 
 in

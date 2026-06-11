@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/svanderburg/disnixos/releases/download/disnixos-${finalAttrs.version}/disnixos-${finalAttrs.version}.tar.gz";
     sha256 = "0adv6dm6hszjhzkfkw48pmi37zj32plcibk80r6bm907mm7n50lj";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "svanderburg/disnixos@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ pkg-config ];

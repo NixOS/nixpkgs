@@ -24,6 +24,10 @@ let
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
           hash = "sha256-/0fJmbXhjrcVVSFvxd847mSKrzrZRK3Sqi6rjyaBOUw=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "Kong/insomnia@${version}";
+        };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 

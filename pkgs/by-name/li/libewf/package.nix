@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libyal/libewf/releases/download/${finalAttrs.version}/libewf-experimental-${finalAttrs.version}.tar.gz";
     hash = "sha256-7AjUEaXasOzJV9ErZK2a4HMTaqhcBbLKd8M+A5SbKrc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libyal/libewf@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ pkg-config ];

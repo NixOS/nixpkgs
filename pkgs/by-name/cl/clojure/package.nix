@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-3IbMVrw3L87we9h/RGk+60thz19ENHiDh4Nk0Dtfs0I=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "clojure/brew-install@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

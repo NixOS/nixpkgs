@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
     hash = "sha256-F6BzwnrsaELegdo6Bdju1OG+RI9zKnn4tIASR3q6zYk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "MuseScoreFonts/Edwin@${version}";
+    };
   };
 
   nativeBuildInputs = [ installFonts ];

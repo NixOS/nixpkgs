@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libyal/libbde/releases/download/${finalAttrs.version}/libbde-alpha-${finalAttrs.version}.tar.gz";
     hash = "sha256-La6rzBOfyBIXDn78vXb8GUt8jgQkzsqM38kRZ7t3Fp0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libyal/libbde@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

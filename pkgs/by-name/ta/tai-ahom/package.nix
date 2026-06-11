@@ -4,13 +4,17 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "tai-ahom";
   version = "unstable-2015-07-06";
 
   src = fetchurl {
     url = "https://github.com/enabling-languages/tai-languages/raw/b57a3ea4589af69bb8e87c6c4bb7cd367b52f0b7/ahom/.fonts/ttf/.original/AhomUnicode_FromMartin.ttf";
     hash = "sha256-U1vcVf/VgXhvK1f2Iw2JKkd2EzJgz7KbHAwnUanX8n4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "enabling-languages/tai-languages@${version}";
+    };
   };
 
   dontUnpack = true;

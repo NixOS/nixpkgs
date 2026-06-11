@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/x42/libltc/releases/download/v${finalAttrs.version}/libltc-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Cm1CzWwh6SWif6Vg3EWsgAV9J18jNCECglkJwC07Ekk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "x42/libltc@${finalAttrs.version}";
+    };
   };
 
   meta = {

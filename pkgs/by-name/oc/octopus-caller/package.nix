@@ -39,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/luntergroup/octopus/commit/17a597d192bcd5192689bf38c5836a98b824867a.patch";
       sha256 = "sha256-VaUr63v7mzhh4VBghH7a7qrqOYwl6vucmmKzTi9yAjY=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "luntergroup/octopus@${finalAttrs.version}";
+      };
     })
   ];
 

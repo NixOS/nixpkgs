@@ -11,6 +11,10 @@ let
     url = "https://github.com/the-via/releases/releases/download/v${version}/via-${version}-linux.AppImage";
     name = "via-${version}-linux.AppImage";
     sha256 = "sha256-+uTvmrqHK7L5VA/lUHCZZeRYPUrcVA+vjG7venxuHhs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "the-via/releases@${version}";
+    };
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

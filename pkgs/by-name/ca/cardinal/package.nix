@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${finalAttrs.version}/cardinal+deps-${finalAttrs.version}.tar.xz";
     hash = "sha256-4xjRCYN6Y7YtFc4gCd8F7CQxB02PLZQ6DN59rZVPYh0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "DISTRHO/Cardinal@${finalAttrs.version}";
+    };
   };
 
   prePatch = ''

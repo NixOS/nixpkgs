@@ -154,6 +154,10 @@ let
         src = pkgs.fetchurl {
           url = "https://github.com/ethereum/solidity/releases/download/v${version}/solc-macos";
           hash = darwinHash;
+          meta.identifiers.purlParts = {
+            type = "github";
+            spec = "ethereum/solidity@${version}";
+          };
         };
         dontUnpack = true;
 

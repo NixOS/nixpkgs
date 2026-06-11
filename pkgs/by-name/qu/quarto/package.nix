@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-amd64.tar.gz";
     hash = "sha256-ePzZDpg+Pn2+Pw0ZIcwQJTweynuSwg3UvCo8G8oKmvU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "quarto-dev/quarto-cli@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

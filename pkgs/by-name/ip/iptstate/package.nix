@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jaymzh/iptstate/releases/download/v${finalAttrs.version}/iptstate-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-iW3wYCiFRWomMfeV1jT8ITEeUF+MkQNI5jEoYPIJeVU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jaymzh/iptstate@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

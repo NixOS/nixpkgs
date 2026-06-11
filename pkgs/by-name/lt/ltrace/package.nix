@@ -8,7 +8,7 @@
   elfutils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ltrace";
   version = "0.7.91";
 
@@ -52,6 +52,10 @@ stdenv.mkDerivation {
     (fetchurl {
       url = "https://github.com/gentoo/gentoo/raw/a2eb7e103ec985ff90f59e722e0a8a43373972a2/dev-debug/ltrace/files/ltrace-0.7.3-print-test-pie.patch";
       hash = "sha256-QRsUoN3WLzfiY5GDPwVYXtJPFMJt6rcc6eE96SAtI6Q=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gentoo/gentoo@${version}";
+      };
     })
     # fix pointer conversion warning with Gcc15
     (fetchurl {

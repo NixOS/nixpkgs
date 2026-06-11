@@ -25,13 +25,17 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libsciter";
   version = "4.4.8.23-bis"; # Version specified in GitHub commit title
 
   src = fetchurl {
     url = "https://github.com/c-smile/sciter-sdk/raw/524a90ef7eab16575df9496f7e4c374bbd5fb1fe/bin.lnx/${src.${system}.urlPath}/libsciter-gtk.so";
     inherit (src.${system}) sha256;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "c-smile/sciter-sdk@${version}";
+    };
   };
 
   nativeBuildInputs = [

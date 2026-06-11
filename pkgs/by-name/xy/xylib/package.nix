@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/wojdyr/xylib/releases/download/v${finalAttrs.version}/xylib-${finalAttrs.version}.tar.bz2";
     sha256 = "1iqfrfrk78mki5csxysw86zm35ag71w0jvim0f12nwq1z8rwnhdn";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wojdyr/xylib@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

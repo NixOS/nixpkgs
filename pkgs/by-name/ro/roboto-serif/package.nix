@@ -18,6 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/googlefonts/roboto-serif/releases/download/v${finalAttrs.version}/RobotoSerifFonts-v${finalAttrs.version}.zip";
     hash = "sha256-Nm9DcxL0CgA51nGeZJPWSCipgqwnNPlhj0wHyGhLaYQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "googlefonts/roboto-serif@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

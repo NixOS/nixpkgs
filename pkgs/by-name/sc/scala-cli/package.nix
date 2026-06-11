@@ -45,6 +45,10 @@ stdenv.mkDerivation {
     fetchurl {
       url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
       sha256 = asset.sha256;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "Virtuslab/scala-cli@${version}";
+      };
     };
   unpackPhase = ''
     runHook preUnpack

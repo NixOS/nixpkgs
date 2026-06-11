@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
     hash = "sha256-HsanoX1iJpLC8p64H4enlo20X6LOBNAxkubwPBp5juA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "RPGLogs/Uploaders-fflogs@${version}";
+    };
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in

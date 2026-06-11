@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
     hash = "sha256-xQUoMQbq3fpbvFbYwbHPMz0SZU3LN/gOaF01duhwKGU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Limine-Bootloader/Limine@${finalAttrs.version}";
+    };
   };
 
   enableParallelBuilding = true;

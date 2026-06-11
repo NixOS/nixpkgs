@@ -20,6 +20,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/angular/releases/download/vsix-${finalAttrs.version}/ng-template-${finalAttrs.version}.vsix";
     hash = "sha256-rpll3EsTGEuynrw7EsP3GeltG/vtYqgO8mvTCVyU1ao=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "angular/angular@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

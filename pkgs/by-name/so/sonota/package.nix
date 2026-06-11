@@ -14,6 +14,10 @@ let
   core = fetchurl {
     url = "https://github.com/xoseperez/espurna/releases/download/${coreVersion}/espurna-${coreVersion}-espurna-core-${coreSize}.bin";
     sha256 = coreSha256;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "xoseperez/espurna@${version}";
+    };
   };
 
 in

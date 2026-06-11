@@ -63,6 +63,10 @@ let
   fridaNodeBinding = fetchurl {
     url = "https://github.com/frida/frida/releases/download/${fridaVersion}/frida-v${fridaVersion}-napi-v8-${currentPlatform.fridaArch}.tar.gz";
     hash = currentPlatform.fridaHash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "frida/frida@${version}";
+    };
   };
 
   runtimeTools = [

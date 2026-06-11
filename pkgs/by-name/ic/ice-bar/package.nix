@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jordanbaird/Ice/releases/download/${finalAttrs.version}/Ice.zip";
     hash = "sha256-13DoFZdWbdLSNj/rNQ+AjHqS42PflcUeSBQOsw5FLMk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jordanbaird/Ice@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";
