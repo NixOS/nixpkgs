@@ -591,8 +591,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
-        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/mysql";
       };
     };
     buildInputs = old.buildInputs ++ [
@@ -1004,9 +1004,11 @@ in
       rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
       rm tests/plenary/capture/capture_spec.lua # because clipboard not available
 
+      # UI tests depend on the neovim version
+      rm -r tests/plenary/ui/*
+
       # not sure why yet
-      rm tests/plenary/ui/mappings/date_spec.lua \
-        tests/plenary/capture/templates_spec.lua
+      rm tests/plenary/capture/templates_spec.lua
 
       # bypass upstream launcher that interacts with network
       nvim --headless -i NONE \
