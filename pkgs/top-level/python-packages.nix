@@ -5904,6 +5904,8 @@ self: super: with self; {
 
   flowsint-core = callPackage ../development/python-modules/flowsint-core { };
 
+  flowsint-enrichers = callPackage ../development/python-modules/flowsint-enrichers { };
+
   flowsint-types = callPackage ../development/python-modules/flowsint-types { };
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
