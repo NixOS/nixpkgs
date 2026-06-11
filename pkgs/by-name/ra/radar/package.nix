@@ -5,31 +5,23 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-}: let
-  version = "1.7.6";
+}:
+let
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "skyhook-io";
     repo = "radar";
     tag = "v${version}";
-    hash = "sha256-LT9OThOevyH5mfPI1+/RH2roQfz2jMVBBXVHfhmDxNA=";
+    hash = "sha256-oPWdG1K0cHgFstzKV5XUkhZr9WRGmmgM8bxS4xaXbgE=";
   };
 
   frontend = buildNpmPackage {
     pname = "radar-web";
     inherit version src;
 
-    npmDepsHash = "sha256-HFDTj/9jwYkzdiEZh83UB82ufsJ7BeWVdpuBHfNegLA=";
-    npmDepsFetcherVersion = 2;
-
-    # Upstream's lockfile entry for the deprecated @types/diff stub lacks
-    # `resolved`/`integrity`, so Nix's offline fetcher skips it and the install
-    # fails with ETARGET. Backfill the registry metadata. buildNpmPackage feeds
-    # this same postPatch to fetchNpmDeps, so both stay consistent.
-    postPatch = ''
-      sed -i '/"web\/node_modules\/@types\/diff": {/a\      "resolved": "https://registry.npmjs.org/@types/diff/-/diff-8.0.0.tgz",\n      "integrity": "sha512-o7jqJM04gfaYrdCecCVMbZhNdG6T1MHg/oQoRFdERLV+4d+V7FijhiEAbFu0Usww84Yijk9yH58U4Jk4HbtzZw==",' \
-        package-lock.json
-    '';
+    npmDepsHash = "sha256-2UUS7IAUz4SrZZcu23ERewZIlI3N8yG3Ji5xouQPf5U=";
+    npmDepsFetcherVersion = 3;
 
     npmWorkspace = "web";
 
@@ -40,46 +32,58 @@
     '';
   };
 in
-  buildGoModule (finalAttrs: {
-    pname = "radar";
-    inherit version src;
+buildGoModule (finalAttrs: {
+  pname = "radar";
+  inherit version src;
 
-    vendorHash = "sha256-Dg7Dhxt9Yc31RrKNsPRyKZqLXKW++vBjOT8yJT9MhP0=";
+  __structuredAttrs = true;
 
-    subPackages = ["cmd/explorer"];
+  vendorHash = "sha256-zjTNroU7jwaoZ+UObtEcxYeGk1EHUy6+jRC4OrphOE8=";
 
-    preBuild = ''
-      cp -r ${frontend}/. internal/static/dist/
-    '';
+  subPackages = [ "cmd/explorer" ];
 
-    ldflags = [
-      "-s"
-      "-w"
-      "-X main.version=${finalAttrs.version}"
-    ];
+  preBuild = ''
+    cp -r ${frontend}/. internal/static/dist/
+  '';
 
-    postInstall = ''
-      mv "$out/bin/explorer" "$out/bin/kubectl-radar"
-    '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${finalAttrs.version}"
+  ];
 
-    versionCheckProgramArg = ["version"];
-    nativeInstallCheckInputs = [
-      versionCheckHook
-    ];
-    doInstallCheck = true;
+  # `subPackages` restricts the default checkPhase to cmd/explorer, so run the
+  # whole test suite explicitly. The e2e tests are gated behind a build tag and
+  # are skipped here.
+  checkPhase = ''
+    runHook preCheck
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    go test ./...
+    runHook postCheck
+  '';
 
-    passthru = {
-      inherit frontend;
-      updateScript = nix-update-script {};
-    };
+  postInstall = ''
+    mv "$out/bin/explorer" "$out/bin/kubectl-radar"
+  '';
 
-    meta = {
-      description = "Local-first Kubernetes visibility: topology, event timeline, and service traffic";
-      mainProgram = "kubectl-radar";
-      homepage = "https://github.com/skyhook-io/radar";
-      changelog = "https://github.com/skyhook-io/radar/releases/tag/v${finalAttrs.version}";
-      license = lib.licenses.asl20;
-      maintainers = [lib.maintainers.gaupee];
-      platforms = lib.platforms.unix;
-    };
-  })
+  versionCheckProgramArg = [ "version" ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Local-first Kubernetes visibility: topology, event timeline, and service traffic";
+    mainProgram = "kubectl-radar";
+    homepage = "https://github.com/skyhook-io/radar";
+    changelog = "https://github.com/skyhook-io/radar/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.gaupee ];
+    platforms = lib.platforms.unix;
+  };
+})
