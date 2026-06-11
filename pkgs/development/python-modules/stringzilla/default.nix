@@ -1,24 +1,15 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
-  lib,
   numpy,
+  pkgs,
   pytest-repeat,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
-  pname = "stringzilla";
-  version = "4.6.1";
+buildPythonPackage {
+  inherit (pkgs.stringzilla) pname version src;
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "ashvardanian";
-    repo = "stringzilla";
-    tag = "v${version}";
-    hash = "sha256-yAxHOcxS4YYX0lvKwUExIBFBM5RDyFgeW9QA0WZBthA=";
-  };
 
   build-system = [
     setuptools
@@ -35,13 +26,12 @@ buildPythonPackage rec {
   enabledTestPaths = [ "scripts/test_stringzilla.py" ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
-    description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
-    homepage = "https://github.com/ashvardanian/stringzilla";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      aciceri
-      dotlambda
-    ];
+    inherit (pkgs.stringzilla.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      ;
   };
 }
