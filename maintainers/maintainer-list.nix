@@ -3133,7 +3133,10 @@
     email = "bastian@asmussen.tech";
     github = "BastianAsmussen";
     githubId = 76102128;
-    keys = [ { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; } ];
+    keys = [
+      { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; }
+      { fingerprint = "220D 68EC DF94 20EE 1E6C  B215 D92D 668B 77A2 9897"; }
+    ];
   };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
