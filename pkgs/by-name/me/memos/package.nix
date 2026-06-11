@@ -14,12 +14,12 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "memos";
-  version = "0.29.0";
+  version = "0.29.1";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-l9jyByfVCx+z41H+RVgkggjkVSoleHq+mR6nhgk9Pj8=";
+    hash = "sha256-bc9NWP/CauR3gKBOPFg8urD9dSUq0jtfwQOknkPbX0s=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
       inherit pnpm;
       sourceRoot = "${finalWebAttrs.src.name}/web";
       fetcherVersion = 3;
-      hash = "sha256-Ki9rC1i0gvz+4La0GZIF40mZPwv/EwzhHUaealSpU40=";
+      hash = "sha256-wj8Rh1/wYDKIrJQgdoJBtoP2xeQnrUBORE2Gegxwim0=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [

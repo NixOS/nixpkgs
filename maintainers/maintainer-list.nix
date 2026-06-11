@@ -2133,6 +2133,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  arcayr = {
+    email = "nixpkgs@arcayr.online";
+    github = "arcayr";
+    githubId = 11192354;
+    name = "Elliot Speck";
+  };
   archer-65 = {
     email = "mario.liguori.056@gmail.com";
     github = "archer-65";
@@ -12121,6 +12127,12 @@
     github = "Jaculabilis";
     githubId = 10787844;
   };
+  jadewilk = {
+    name = "Jade Wilk";
+    email = "p.wilk@student.reading.ac.uk";
+    github = "jadewilk";
+    githubId = 50517631;
+  };
   jaduff = {
     email = "jdduffpublic@proton.me";
     github = "jaduff";
@@ -21642,12 +21654,6 @@
     github = "philiptaron";
     githubId = 43863;
     name = "Philip Taron";
-  };
-  philipwilk = {
-    name = "Philip Wilk";
-    email = "p.wilk@student.reading.ac.uk";
-    github = "philipwilk";
-    githubId = 50517631;
   };
   philocalyst = {
     name = "Myles Wirth";
