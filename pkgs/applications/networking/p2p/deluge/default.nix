@@ -19,13 +19,16 @@ let
 
   generic =
     { pname, withGUI }:
-    pypkgs.buildPythonPackage rec {
+    pypkgs.buildPythonPackage (finalAttrs: {
       inherit pname;
       version = "2.2.0";
       format = "setuptools";
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       src = fetchurl {
-        url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
+        url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor finalAttrs.version}/deluge-${finalAttrs.version}.tar.xz";
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
@@ -109,7 +112,7 @@ let
         maintainers = with lib.maintainers; [ a-peirogon ];
         platforms = lib.platforms.all;
       };
-    };
+    });
 
 in
 rec {
