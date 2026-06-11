@@ -17810,6 +17810,8 @@ self: super: with self; {
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
 
+  selenium-wire-roadtx = callPackage ../development/python-modules/selenium-wire-roadtx { };
+
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
