@@ -312,7 +312,7 @@ let
           "defaults"
         ])
         (map (subOption: ''
-          curl -X PUT -d ${
+          curl -X PATCH -d ${
             lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})
           } ${curlAddressArgs "/rest/config/${subOption}"}
         ''))
@@ -323,11 +323,18 @@ let
       (lib.optionalString (cleanedConfig ? defaults) (
         lib.pipe cleanedConfig.defaults [
           builtins.attrNames
-          (map (subOption: ''
-            curl -X PUT -d ${
-              lib.escapeShellArg (builtins.toJSON cleanedConfig.defaults.${subOption})
-            } ${curlAddressArgs "/rest/config/defaults/${subOption}"}
-          ''))
+          (map (
+            subOption:
+            let
+              # /rest/config/defaults/ignores only supports PUT
+              method = if subOption == "ignores" then "PUT" else "PATCH";
+            in
+            ''
+              curl -X ${method} -d ${
+                lib.escapeShellArg (builtins.toJSON cleanedConfig.defaults.${subOption})
+              } ${curlAddressArgs "/rest/config/defaults/${subOption}"}
+            ''
+          ))
           (lib.concatStringsSep "\n")
         ]
       ))
