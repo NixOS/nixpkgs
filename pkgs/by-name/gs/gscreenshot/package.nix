@@ -33,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # needed for wrapGAppsHook3 to function
   strictDeps = false;
-  # tests require a display and fail
-  doCheck = false;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
   dependencies = [
