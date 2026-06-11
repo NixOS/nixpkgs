@@ -90,6 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,^#LIBUSB_INSTALL.*,LIBUSB_INSTALL = ${libusb-compat-0_1},' src/gcconfig.pri
     sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include,' src/gcconfig.pri
     sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
+  ''
+  # required to generate `src/goldencheetah_plugin_import.cpp` and link
+  # qdarwinbluetoothpermission for functional BLE on darwin
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cat >> src/gcconfig.pri <<'EOF'
+    QTPLUGIN += qdarwinbluetoothpermission
+    QT_PLUGIN.qdarwinbluetoothpermission.PATH = ${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}
+    EOF
   '';
 
   installPhase =
