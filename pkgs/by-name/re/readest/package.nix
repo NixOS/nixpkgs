@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
     pnpm = pnpm_11;
     fetcherVersion = 3;
-    hash = "sha256-NEnZYXN83zYkkIJ5ZjzPqaaee+GE5jYGNGcaxzY9ae8=";
+    hash = "sha256-RIoTkX0ivaM9EJt3fsLpZhHd2lE4ZtDnAi9syONXUus=";
   };
 
   passthru.tursoPlugin = stdenv.mkDerivation {
