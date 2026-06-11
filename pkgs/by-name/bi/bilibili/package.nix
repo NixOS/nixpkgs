@@ -15,10 +15,18 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
       hash = sources.x86_64-hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "msojocs/bilibili-linux@${version}";
+      };
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_arm64.deb";
       hash = sources.arm64-hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "msojocs/bilibili-linux@${version}";
+      };
     };
   };
   src =

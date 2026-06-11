@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/wallabag/wallabag/releases/download/${finalAttrs.version}/wallabag-${finalAttrs.version}.tar.gz";
     hash = "sha256-AEk0WuxZfazo4r4shcK453RCF/4V/VMDvKs4EXGe/w0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wallabag/wallabag@${finalAttrs.version}";
+    };
   };
 
   patches = [

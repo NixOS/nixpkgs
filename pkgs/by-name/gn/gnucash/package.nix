@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
     hash = "sha256-sL1K9Dtr3jRUIn1LOY6ex6Db1RQ0acE3P8gkw8qrCQk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Gnucash/gnucash@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

@@ -12,6 +12,10 @@ let
     url = "https://github.com/uw-labs/${pname}/releases/download/${version}/BloomRPC-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
     hash = "sha512-PebdYDpcplPN5y3mRu1mG6CXenYfYvBXNLgIGEr7ZgKnR5pIaOfJNORSNYSdagdGDb/B1sxuKfX4+4f2cqgb6Q==";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "uw-labs/${pname}@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

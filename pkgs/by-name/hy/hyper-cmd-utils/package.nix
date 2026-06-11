@@ -28,6 +28,10 @@ buildNpmPackage {
     (fetchurl {
       url = "https://github.com/holepunchto/hyper-cmd-utils/commit/9bec5ca0a58fc9ba263afe750134f82e7e1c30c4.patch";
       hash = "sha256-p32r5y8PnROePbpsBLYza1+lGR2n0amSdo8qDWhyYxo=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "holepunchto/hyper-cmd-utils@1.0.0";
+      };
     })
   ];
 

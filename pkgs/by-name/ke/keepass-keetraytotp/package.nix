@@ -16,6 +16,10 @@ let
     src = fetchurl {
       url = "https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases/download/v${version}/KeeTrayTOTP.plgx";
       sha256 = "4f7251a9bbb79cad04aee96d1809c6b36d43285a9f3834fef5330fc97ae8bc09";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "KeeTrayTOTP/KeeTrayTOTP@${version}";
+      };
     };
 
     dontUnpack = true;

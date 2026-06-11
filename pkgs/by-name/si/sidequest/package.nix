@@ -47,6 +47,10 @@ let
     src = fetchurl {
       url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
       hash = "sha256-YZp7OAjUOXepVv5dPhh9Q2HicUKjSOGfhrWyMKy2gME=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "SideQuestVR/SideQuest@${version}";
+      };
     };
 
     nativeBuildInputs = [

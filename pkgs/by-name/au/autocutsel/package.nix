@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/sigmike/autocutsel/releases/download/${finalAttrs.version}/autocutsel-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-8X4G1C90lENtSyb0vgtrDaOUgcBADJZ3jkuQW2NB6xc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sigmike/autocutsel@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

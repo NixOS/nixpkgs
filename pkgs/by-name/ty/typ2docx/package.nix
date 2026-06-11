@@ -25,6 +25,10 @@ python3Packages.buildPythonApplication rec {
   lockFile = fetchurl {
     url = "https://github.com/sghng/typ2docx/releases/download/v${version}/Cargo.lock";
     hash = "sha256-irWv7+uqNyyq42JVLSy9WQz78ynYVsYuQ8fk5nardWw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sghng/typ2docx@${version}";
+    };
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

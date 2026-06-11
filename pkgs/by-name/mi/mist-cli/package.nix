@@ -14,6 +14,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ninxsoft/mist-cli/releases/download/v${finalAttrs.version}/mist-cli.${finalAttrs.version}.pkg";
     hash = "sha256-d+tm37X6JC5r23D8WTsxIkL0RU4U58pJmLermwjOgCE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ninxsoft/mist-cli@${finalAttrs.version}";
+    };
   };
 
   __structuredAttrs = true;

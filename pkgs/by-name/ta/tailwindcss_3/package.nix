@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v${finalAttrs.version}/tailwindcss-${plat}";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tailwindlabs/tailwindcss@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/downloads/chokkan/liblbfgs/liblbfgs-${finalAttrs.version}.tar.gz";
     sha256 = "1kv8d289rbz38wrpswx5dkhr2yh4fg4h6sszkp3fawxm09sann21";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "downloads/chokkan@${finalAttrs.version}";
+    };
   };
 
   meta = {

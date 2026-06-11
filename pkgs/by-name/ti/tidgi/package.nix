@@ -18,10 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
       x86_64-darwin = fetchurl {
         url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-x64-${finalAttrs.version}.zip";
         hash = "sha256-nxfnPz2oxsYUsT2Q9ADDxVq5xcJvkNDQTBX8EkGUF4g=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "tiddly-gittly/TidGi-Desktop@${finalAttrs.version}";
+        };
       };
       aarch64-darwin = fetchurl {
         url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-arm64-${finalAttrs.version}.zip";
         hash = "sha256-bSJFM67+KVECUqjwu1HYipn+zOps1ahNzM721yZL52c=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "tiddly-gittly/TidGi-Desktop@${finalAttrs.version}";
+        };
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

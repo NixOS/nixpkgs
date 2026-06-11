@@ -48,18 +48,34 @@ let
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
     hash = "sha256-VUYe0gxugvFOmiec2ERlSwJkmZu5QDTVj6kS/e4m6tY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenRCT2/objects@${objects-version}";
+    };
   };
   openmusic = fetchurl {
     url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmusic-version}/openmusic.zip";
     hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenRCT2/OpenMusic@${openmusic-version}";
+    };
   };
   opensfx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${opensfx-version}/opensound.zip";
     hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenRCT2/OpenSoundEffects@${opensfx-version}";
+    };
   };
   title-sequences = fetchurl {
     url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
     hash = "sha256-2ruXh7FXY0L8pN2fZLP4z6BKfmzpwruWEPR7dikFyFg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OpenRCT2/title-sequences@${title-sequences-version}";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {

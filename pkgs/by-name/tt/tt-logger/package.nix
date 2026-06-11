@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
   cpm = fetchurl {
     url = "https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.40.2/CPM.cmake";
     hash = "sha256-yM3DLAOBZTjOInge1ylk3IZLKjSjENO3EEgSpcotg10=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cpm-cmake/CPM.cmake@${finalAttrs.version}";
+    };
   };
 
   patches = [

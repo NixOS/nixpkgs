@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/facebook/idb/releases/download/v${finalAttrs.version}/idb-companion.universal.tar.gz";
     hash = "sha256-O3LMappbGiKhiCBahAkNOilDR6hGGA79dVzxo8hI4+c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "facebook/idb@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = "idb-companion.universal";

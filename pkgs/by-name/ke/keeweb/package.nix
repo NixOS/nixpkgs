@@ -35,14 +35,26 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.linux.x64.deb";
       hash = "sha256-/U+vn5TLIU9/J6cRFjuAdyGzlwC04mp4L2X2ETp+ZSE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "keeweb/keeweb@${version}";
+      };
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.x64.dmg";
       hash = "sha256-+ZFGrrw0tZ7F6lb/3iBIyGD+tp1puVhkPv10hfp6ATU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "keeweb/keeweb@${version}";
+      };
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.arm64.dmg";
       hash = "sha256-bkhwsWYLkec16vMOfXUce7jfrmI9W2xHiZvU1asebK4=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "keeweb/keeweb@${version}";
+      };
     };
   };
   src =

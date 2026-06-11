@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jepsen-io/maelstrom/releases/download/v${finalAttrs.version}/maelstrom.tar.bz2";
     hash = "sha256-MB7HHWsSrw12XttBP1z1qhBGtWCb1OMTdqC1SVSOV5k=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jepsen-io/maelstrom@${finalAttrs.version}";
+    };
   };
 
   installPhase = ''

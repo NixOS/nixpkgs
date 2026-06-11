@@ -58,6 +58,10 @@ let
     url = "https://github.com/signalapp/Signal-Desktop/raw/refs/tags/v${version}/fonts/emoji.woff2";
     hash = "sha256-yGdx5GZVnsmYn+SI9/yAfGhRyzO5Q5Bd0bW9AQyVzv8=";
     meta.license = lib.licenses.unfree;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "signalapp/Signal-Desktop@${version}";
+    };
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {

@@ -37,6 +37,10 @@ stdenv.mkDerivation {
     url =
       "https://github.com/tailwindlabs/tailwindcss/releases/download/v${version}/tailwindcss-" + plat;
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tailwindlabs/tailwindcss@${version}";
+    };
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;

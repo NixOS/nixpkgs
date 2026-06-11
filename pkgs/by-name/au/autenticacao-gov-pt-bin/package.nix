@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${version}/pteid-mw-${version}.flatpak";
     hash = "sha256-eOUW3sWG8ujihqNuTvYbwzQh9sP5nS4YxL2kHngQ/V0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "amagovpt/autenticacao.gov@${version}";
+    };
   };
 
   dontConfigure = true;

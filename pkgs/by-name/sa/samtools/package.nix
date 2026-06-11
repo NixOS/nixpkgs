@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${finalAttrs.version}/samtools-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Aqpc0LpS4GwggAVOBZ19d6iF3+lxfDHNid/npAR+2g4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "samtools/samtools@${finalAttrs.version}";
+    };
   };
 
   # tests require `bgzip` from the htslib package

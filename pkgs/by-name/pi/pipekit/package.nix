@@ -30,6 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pipekit/cli/releases/download/v${finalAttrs.version}/cli_${finalAttrs.version}_${source.suffix}.tar.gz";
     inherit (source) hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pipekit/cli@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

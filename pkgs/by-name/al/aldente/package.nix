@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/AppHouseKitchen/AlDente-Battery_Care_and_Monitoring/releases/download/${finalAttrs.version}/AlDente.dmg";
     hash = "sha256-nkwJl4xMhbdodBRtwyG2IcmDlTJnErOvEycjcdAMP2o=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "AppHouseKitchen/AlDente-Battery_Care_and_Monitoring@${finalAttrs.version}";
+    };
   };
 
   dontBuild = true;

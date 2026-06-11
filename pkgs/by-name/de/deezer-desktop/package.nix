@@ -13,10 +13,18 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-x64.tar.xz";
       hash = "sha256-OP5ceyGQQFRgW1GZPElxdjkYikNVMkvomkXCr9dD67Y=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "aunetx/deezer-linux@${finalAttrs.version}";
+      };
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/aunetx/deezer-linux/releases/download/v${version}/deezer-desktop-${version}-arm64.tar.xz";
       hash = "sha256-IiUZgMHdhkU0B5uDLARHpcCUxlsZ4+rj5sAKJXZpcBw=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "aunetx/deezer-linux@${finalAttrs.version}";
+      };
     };
   };
 

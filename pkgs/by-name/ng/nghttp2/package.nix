@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
     hash = "sha256-PxhfWxw+d4heuc8/LE2ksan3OiS/WVe4KRg60Tf4Lcg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "nghttp2/nghttp2@${version}";
+    };
   };
 
   outputs = [

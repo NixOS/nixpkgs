@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/appneta/tcpreplay/releases/download/v${finalAttrs.version}/tcpreplay-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-zP87spRpoEzMIO0LUY4+Q8Sntah2M52UNb/Z23/l0PE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "appneta/tcpreplay@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [ libpcap ];

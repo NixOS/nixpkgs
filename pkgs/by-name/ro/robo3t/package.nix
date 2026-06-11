@@ -29,11 +29,19 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Studio3T/robomongo/releases/download/v${version}/robo3t-${version}-linux-x86_64-${rev}.tar.gz";
     sha256 = "sha256-pH4q/O3bq45ZZn+s/12iScd0WbfkcLjK4MBdVCMXK00=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Studio3T/robomongo@${version}";
+    };
   };
 
   icon = fetchurl {
     url = "https://github.com/Studio3T/robomongo/raw/${rev}/install/macosx/robomongo.iconset/icon_128x128.png";
     sha256 = "sha256-2PkUxBq2ow0wl09k8B6LJJUQ+y4GpnmoAeumKN1u5xg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Studio3T/robomongo@${version}";
+    };
   };
 
   desktopItem = makeDesktopItem {

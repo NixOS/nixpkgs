@@ -14,6 +14,10 @@ let
   webext = fetchurl {
     url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}.xpi";
     hash = "sha256-wLctfGHDCgy3nMG/nc882qNjHOAp8VeOZcEWJD7QThY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "browsh-org/browsh@${version}";
+    };
   };
 
 in

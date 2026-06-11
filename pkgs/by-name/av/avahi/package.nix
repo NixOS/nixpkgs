@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lathiat/avahi@${version}";
+    };
   };
 
   outputs = [

@@ -31,6 +31,10 @@ let
   src = fetchurl {
     url = "https://github.com/buckets/application/releases/download/v${version}/Buckets-linux-latest-${platform}-${version}.AppImage";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "buckets/application@${version}";
+    };
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

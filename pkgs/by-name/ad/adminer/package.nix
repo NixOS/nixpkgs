@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/vrana/adminer/releases/download/v${finalAttrs.version}/adminer-${finalAttrs.version}.zip";
     hash = "sha256-nzMc1Iq9YxaKh4oYTCox5vVqV2yUn0o7XqMTLmTWkXs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "vrana/adminer@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

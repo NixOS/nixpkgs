@@ -27,18 +27,34 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-amd64.tar.bz2";
       hash = "sha256-CMgGqjchsZcARaoVitkAUTKdmC6KmjZhFTkA6cy/aww=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "OldUnreal/UnrealTournamentPatches@${version}";
+      };
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-arm64.tar.bz2";
       hash = "sha256-TDl4BzsSsEnD/9600nXPx6IxNlDz61uU2wb7/ud8Pjs=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "OldUnreal/UnrealTournamentPatches@${version}";
+      };
     };
     i686-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-x86.tar.bz2";
       hash = "sha256-y9bYAW77MOOYJ1elgsaIUygDch7B7HOPwor5s+FdPBQ=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "OldUnreal/UnrealTournamentPatches@${version}";
+      };
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
       hash = "sha256-trOh9GLktwLfDuz5DWY+8fhHzDaq3KHsbdNSeNCR+g0=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "OldUnreal/UnrealTournamentPatches@${version}";
+      };
     };
     # fat binary
     aarch64-darwin = x86_64-darwin;

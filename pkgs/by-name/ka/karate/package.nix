@@ -13,6 +13,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/karatelabs/karate/releases/download/v${version}/karate-${version}.jar";
     sha256 = "sha256-zPR0DGShVMTCRX1vD9GajzeQLCnTKqxOIwEuCoeGFL4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "karatelabs/karate@${version}";
+    };
   };
   dontUnpack = true;
 

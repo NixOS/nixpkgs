@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/openSUSE/xinetd/releases/download/${finalAttrs.version}/xinetd-${finalAttrs.version}.tar.xz";
     hash = "sha256-K6pYEBC8cDYavfo38SHpKuucXOZ/mnGRPOvWk1nMllQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "openSUSE/xinetd@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

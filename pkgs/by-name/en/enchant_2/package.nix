@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rrthomas/enchant/releases/download/v${finalAttrs.version}/enchant-${finalAttrs.version}.tar.gz";
     hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rrthomas/enchant@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

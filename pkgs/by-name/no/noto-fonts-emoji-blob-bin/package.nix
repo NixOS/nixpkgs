@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
     hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "C1710/blobmoji@${version}";
+    };
   };
 
   dontUnpack = true;

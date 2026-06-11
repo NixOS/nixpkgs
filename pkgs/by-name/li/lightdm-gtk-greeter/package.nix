@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Release tarball differs from source tarball.
     url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${finalAttrs.version}/lightdm-gtk-greeter-${finalAttrs.version}.tar.gz";
     hash = "sha256-yP3xmKqaP50NrQtI3+I8Ine3kQfo/PxillKQ8QgfZF0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Xubuntu/lightdm-gtk-greeter@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

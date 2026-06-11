@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/riemann/riemann/releases/download/${finalAttrs.version}/riemann-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-gsJMfLo7zpaVfyVmHznGFiomK6dq7yTphuc9vyp5t6Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "riemann/riemann@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

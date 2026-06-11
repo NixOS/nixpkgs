@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   lockFile = fetchurl {
     url = "https://github.com/Blobfolio/flaca/releases/download/v${finalAttrs.version}/Cargo.lock";
     hash = "sha256-GNpL51rx3na+ECHUl0JAUQJBRQQ12Ubg4RIhNfXxMRQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Blobfolio/flaca@${version}";
+    };
   };
 
   src = fetchFromGitHub {

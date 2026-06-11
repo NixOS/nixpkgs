@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/outloudvi/mw2fcitx/releases/download/${finalAttrs.version}/moegirl.dict";
     hash = "sha256-H9SZRkwZJZ9LMDiyfXXZm8zCq3E3CjbSCBePjf1pPd4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "outloudvi/mw2fcitx@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

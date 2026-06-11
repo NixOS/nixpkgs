@@ -83,6 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${finalAttrs.version}/rn-debugger-linux-x64.zip";
     sha256 = "sha256-RioBe0MAR47M84aavFaTJikGsJtcZDak8Tkg3WtX2l0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jhen0409/react-native-debugger@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

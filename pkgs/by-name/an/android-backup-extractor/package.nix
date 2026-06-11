@@ -13,6 +13,10 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://github.com/nelenkov/android-backup-extractor/releases/download/latest/abe-540a57d.jar";
     hash = "sha256-7RAJLOZJ8/TXN7boS0w1t4r/wHu/RwN3/N6HGmTMfhM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "nelenkov/android-backup-extractor@${version}";
+    };
   };
 
   dontUnpack = true;

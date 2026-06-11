@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/yui/yuicompressor/releases/download/v${finalAttrs.version}/yuicompressor-${finalAttrs.version}.jar";
     sha256 = "1qjxlak9hbl9zd3dl5ks0w4zx5z64wjsbk7ic73r1r45fasisdrh";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yui/yuicompressor@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

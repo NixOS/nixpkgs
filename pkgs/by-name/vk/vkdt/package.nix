@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/hanatos/vkdt/releases/download/${version}/vkdt-${version}.tar.xz";
     hash = "sha256-oLJ5IlWOJoe2vUBaI9nyAhfjuw/lF63ZCdhMSF5D0pE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "hanatos/vkdt@${version}";
+    };
   };
 
   cargoRoot = "src/pipe/modules/i-raw/rawloader-c";

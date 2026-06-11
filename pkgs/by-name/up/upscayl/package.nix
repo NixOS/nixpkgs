@@ -12,10 +12,18 @@ let
     x86_64-linux = fetchurl {
       url = "https://github.com/upscayl/upscayl/releases/download/v${version}/upscayl-${version}-linux.AppImage";
       hash = "sha256-ZFlFfliby5nneepELc5gi6zaM5FrcBmohit8YlKqgik=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "upscayl/upscayl@${version}";
+      };
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/upscayl/upscayl/releases/download/v${version}/upscayl-${version}-mac.zip";
       hash = "sha256-gXqeRaNW0g7ZVkCSbxps9SqPMuVSzLTCGL5F3Om/iwo=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "upscayl/upscayl@${version}";
+      };
     };
     x86_64-darwin = aarch64-darwin;
   };

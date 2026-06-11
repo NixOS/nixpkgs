@@ -28,18 +28,30 @@ let
   asio = fetchurl {
     url = "https://github.com/diasurgical/asio/archive/4bcf552fcea3e1ae555dde2ab33bc9fa6770da4d.tar.gz";
     sha256 = "sha256-AFBy5OFsAzxZsiI4DirIHh+VjFkdalEhN9OGqhC0Cvc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "diasurgical/asio@${finalAttrs.version}";
+    };
   };
 
   # fork with patches, upstream seems to be dead
   libmpq = fetchurl {
     url = "https://github.com/diasurgical/libmpq/archive/b78d66c6fee6a501cc9b95d8556a129c68841b05.tar.gz";
     sha256 = "sha256-NIzZwr6cBn38uKLWzW+Uet5QiOFUPB5dsf3FsS22ruo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "diasurgical/libmpq@${finalAttrs.version}";
+    };
   };
 
   # not "real" package with pkg-config or cmake file, just collection of source files
   libsmackerdec = fetchurl {
     url = "https://github.com/diasurgical/libsmackerdec/archive/91e732bb6953489077430572f43fc802bf2c75b2.tar.gz";
     sha256 = "sha256-5WXjfvGuT4hG2cnCS4YbxW/c4tek7OR95EjgCqkEi4c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "diasurgical/libsmackerdec@${finalAttrs.version}";
+    };
   };
 
   # fork with patches, far behind upstream

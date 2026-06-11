@@ -47,6 +47,10 @@ let
       src = fetchurl {
         url = "https://github.com/wasmerio/v8-custom-builds/releases/download/${v8Version}/${assetName}";
         hash = v8Hashes.${assetName};
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "wasmerio/v8-custom-builds@${v8Version}";
+        };
       };
       sourceRoot = ".";
       dontBuild = true;

@@ -37,6 +37,10 @@ let
   simdutf = fetchurl {
     url = "https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip";
     hash = "sha256-n+TW9RVySlXI3oj+5EY+CJChq+ImfNoTxLXSRdWAOeY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "simdutf/simdutf@${version}";
+    };
   };
 
   zlib-root = runCommand "zlib-root" { } ''
@@ -140,6 +144,10 @@ let
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
       hash = "sha256-khmDHKsW8zs7ehIj86EgqortRKKDUoOfPsX7VpvnfNY=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "edde746/plezy@${version}";
+      };
     };
 
     nativeBuildInputs = [

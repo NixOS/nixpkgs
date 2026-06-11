@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
     sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "irccloud/irccloud-desktop@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 {

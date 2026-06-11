@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jagrosh/MusicBot/releases/download/${finalAttrs.version}/JMusicBot-${finalAttrs.version}.jar";
     sha256 = "sha256-7CHFc94Fe6ip7RY+XJR9gWpZPKM5JY7utHp8C3paU9s=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jagrosh/MusicBot@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

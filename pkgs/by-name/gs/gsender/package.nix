@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/Sienci-Labs/gsender/releases/download/v${version}/gSender-${version}-Linux-Intel-64Bit.AppImage";
     hash = "sha256-DZBTnvbxh2n4KVhbbe7JG0/q+wNQVEkHN8w4+5RuQGw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Sienci-Labs/gsender@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

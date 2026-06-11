@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${finalAttrs.version}/jasmin-compiler-v${finalAttrs.version}.tar.bz2";
     hash = "sha256-eOn5KWNAPx7Z+VMm8mclUyxDlW8Q/MR9EayUxmojb1I=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jasmin-lang/jasmin@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = with ocamlPackages; [

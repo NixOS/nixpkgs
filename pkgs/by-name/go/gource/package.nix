@@ -27,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/gource-${finalAttrs.version}/gource-${finalAttrs.version}.tar.gz";
     hash = "sha256-My2Jual5sXQX+84O3XKxmRTxQJ/RJqE9EXh9DhXcDXk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "acaudwell/Gource@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

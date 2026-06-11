@@ -31,6 +31,10 @@ let
     src = fetchurl {
       url = "https://github.com/gobby/libinfinity/releases/download/${version}/libinfinity-${version}.tar.gz";
       sha256 = "17i3g61hxz9pzl3ryd1yr15142r25m06jfzjrpdy7ic1b8vjjw3f";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gobby/libinfinity@${version}";
+      };
     };
 
     outputs = [

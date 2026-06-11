@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rrthomas/recode/releases/download/v${finalAttrs.version}/recode-${finalAttrs.version}.tar.gz";
     hash = "sha256-9ZBAf8UbrbNRlz/BMz7jMRHwXsg6j5VP2M8MXjBDmAY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rrthomas/recode@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

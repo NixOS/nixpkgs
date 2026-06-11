@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${finalAttrs.version}/mupen64plus-bundle-src-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mupen64plus/mupen64plus-core@${finalAttrs.version}";
+    };
   };
 
   patches = [

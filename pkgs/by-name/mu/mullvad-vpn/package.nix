@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${finalAttrs.version}/MullvadVPN-${finalAttrs.version}_${platform}.deb";
     inherit hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mullvad/mullvadvpn-app@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

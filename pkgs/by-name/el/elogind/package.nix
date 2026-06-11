@@ -95,10 +95,18 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/strerror_r.patch";
       hash = "sha256-amqXP12mLtrkWuAURb3/aoQeeTSRYlYqL2q2zrKbhxk=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "chimera-linux/cports@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/strerror_r_1.patch";
       hash = "sha256-tVUlmPValUPApqRX+Cqkzn7bkIILYSuCouvgRsdl9XE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "chimera-linux/cports@${finalAttrs.version}";
+      };
     })
     (fetchpatch {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/xxx-musl-fixes.patch";
@@ -111,6 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/gshadow.patch";
       hash = "sha256-YBy1OeWD1EluLTeUvqUvZKyrZyoUbGg1mxwqG5+VNO0=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "chimera-linux/cports@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       name = "FTW.patch";

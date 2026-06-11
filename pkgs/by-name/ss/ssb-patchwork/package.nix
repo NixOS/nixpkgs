@@ -14,6 +14,10 @@ let
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${name}.AppImage";
     sha256 = "F8n6LLbgkg3z55lSY60T+pn2lra8aPt6Ztepw1gf2rI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ssbc/patchwork@${version}";
+    };
   };
 
   binary = appimageTools.wrapType2 {

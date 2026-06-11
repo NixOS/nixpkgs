@@ -18,6 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}.jar";
     hash = "sha256-UeMHwlgeThoAKZGrPjp3UDyLB0xCaVmHqYSnOC0Kxa8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Suwayomi/Suwayomi-Server@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/linux-thinkpad/hdapsd/releases/download/${finalAttrs.version}/hdapsd-${finalAttrs.version}.tar.gz";
     hash = "sha256-qENcOFJ9x5CkN72ZkTx/OL+gpwAYJlJomKvAjTklDYQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "linux-thinkpad/hdapsd@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

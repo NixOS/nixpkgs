@@ -64,12 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
       hash = archHashes.buck2;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "facebook/buck2@${finalAttrs.version}";
+      };
     })
     # rust-project, which is used to provide IDE integration Buck2 Rust projects,
     # is part of the official distribution
     (fetchurl {
       url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/rust-project-${platform-suffix}.zst";
       hash = archHashes.rust-project;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "facebook/buck2@${finalAttrs.version}";
+      };
     })
   ];
 
@@ -127,6 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     prelude = fetchurl {
       url = "https://github.com/facebook/buck2-prelude/archive/${buildHashes.preludeGit}.tar.gz";
       hash = buildHashes.preludeFod;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "facebook/buck2-prelude@${finalAttrs.version}";
+      };
     };
 
     updateScript = ./update.nu;

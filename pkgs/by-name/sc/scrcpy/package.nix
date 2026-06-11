@@ -22,6 +22,10 @@ let
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
     hash = "sha256-hJJL1WSh62CJyHLHUh+WgFiXf5H1/wJRSox0r/MhDzo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Genymobile/scrcpy@${version}";
+    };
   };
 in
 stdenv.mkDerivation rec {

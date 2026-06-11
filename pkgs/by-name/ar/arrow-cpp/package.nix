@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
       ARROW_JEMALLOC_URL = fetchurl {
         url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
         hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "jemalloc/jemalloc@${finalAttrs.version}";
+        };
       };
     }
     // {

@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/jvoisin/fortify-headers/archive/refs/tags/${finalAttrs.version}.tar.gz";
     hash = "sha256-V2rB3C25pQPYRYwen0ps6LBDfPw8UHhZ12AaO42KwOY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "jvoisin/fortify-headers@${finalAttrs.version}";
+    };
   };
 
   patches = [

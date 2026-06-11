@@ -33,6 +33,10 @@ let
   remix = fetchurl {
     url = "https://github.com/omf2097/openomf/releases/download/0.8.0/ARENA2.ogg";
     hash = "sha256-jOIzDaIwQDlwCaPrRZdG5Y0g7bWKwc38mPKP030PGb4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "omf2097/openomf@0.8.0";
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {

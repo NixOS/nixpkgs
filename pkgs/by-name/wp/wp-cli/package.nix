@@ -38,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/wp-cli-${version}.phar";
     hash = "sha256-zjTd2Dj3NR1nWQaNCXk/JnVUY7SkYQpaXAqXtoIg2Fw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wp-cli/wp-cli@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

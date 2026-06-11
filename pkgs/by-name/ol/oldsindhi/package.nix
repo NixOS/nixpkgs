@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/MihailJP/oldsindhi/releases/download/v${finalAttrs.version}/OldSindhi-${finalAttrs.version}.tar.xz";
     hash = "sha256-jOcl+mo6CJ9Lnn3nAUiXXHCJssovVgLoPrbGxj4uzQs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "MihailJP/oldsindhi@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ installFonts ];

@@ -10,6 +10,10 @@ let
   src = fetchurl {
     url = "https://github.com/hhd-dev/hhd-ui/releases/download/v${version}/hhd-ui.Appimage";
     hash = "sha256-OeZMh3lC3fluwz1pU3JnLRkwFYiIkthGuclYkOJm430=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "hhd-dev/hhd-ui@${version}";
+    };
   };
   extractedFiles = appimageTools.extractType2 { inherit pname version src; };
 in

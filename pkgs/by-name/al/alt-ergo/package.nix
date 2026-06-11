@@ -13,6 +13,10 @@ let
   src = fetchurl {
     url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
     hash = "sha256-SsK12K5sVKEaDMNJ7HahU6qVcnv1fvnLMwmnBqf7G/o=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "OCamlPro/alt-ergo@${version}";
+    };
   };
 in
 

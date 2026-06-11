@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/monicahq/monica/releases/download/v${finalAttrs.version}/monica-v${finalAttrs.version}.tar.bz2";
     hash = "sha256-7ZdOSI/gldSWub5FIyYQw3gpLe+PRAnq03u6DXdZ2YE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "monicahq/monica@${finalAttrs.version}";
+    };
   };
 
   dontBuild = true;

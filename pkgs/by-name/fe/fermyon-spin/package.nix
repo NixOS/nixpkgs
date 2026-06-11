@@ -38,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
     hash = packageHash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "spinframework/spin@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = ".";

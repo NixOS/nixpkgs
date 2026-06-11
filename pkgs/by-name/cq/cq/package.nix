@@ -14,6 +14,10 @@ buildGraalvmNativeImage (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/markus-wa/cq/releases/download/${finalAttrs.version}/cq.jar";
     hash = "sha256-CUErNKworfgKIrOQ7V5vcnudTdZzdVdyA/gsOZUOQBI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "markus-wa/cq@${version}";
+    };
   };
 
   # and build-src (for the native-image build process)

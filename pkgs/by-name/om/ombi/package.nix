@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Ombi-app/Ombi/releases/download/v${version}/${os}-${arch}.tar.gz";
     sha256 = hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Ombi-app/Ombi@${version}";
+    };
   };
 
   sourceRoot = "source";

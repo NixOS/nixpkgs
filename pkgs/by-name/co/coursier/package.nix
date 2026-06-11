@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
     hash = "sha256-eql18SRpcm1ruHhSEHr+C41vPIKxKknvQ8xmR8TgV8o=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "coursier/coursier@${version}";
+    };
   };
 
   dontUnpack = true;

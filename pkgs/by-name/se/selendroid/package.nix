@@ -15,6 +15,10 @@ let
     jar = fetchurl {
       url = "https://github.com/selendroid/selendroid/releases/download/${version}/selendroid-standalone-${version}-with-dependencies.jar";
       sha256 = "10lxdsgp711pv8r6dk2aagnbvnn1b25zfqjvz7plc73zqhx1dxvw";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "selendroid/selendroid@${version}";
+      };
     };
     gridPlugin = fetchurl {
       url = "https://search.maven.org/remotecontent?filepath=io/selendroid/selendroid-grid-plugin/${version}/${pluginName}.jar";

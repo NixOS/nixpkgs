@@ -33,6 +33,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-${sources.arch}.pkg";
       inherit (sources) hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "mas-cli/mas@${finalAttrs.version}";
+      };
     };
 
   nativeBuildInputs = [

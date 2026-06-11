@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/archagon/sensible-side-buttons/releases/download/${finalAttrs.version}/SensibleSideButtons-${finalAttrs.version}.dmg";
     hash = "sha256-Hys678R6wf+M4eg6892rgU3Xxua5dLc9zjaU7HQ1iBs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "archagon/sensible-side-buttons@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = "SensibleSideButtons.app";

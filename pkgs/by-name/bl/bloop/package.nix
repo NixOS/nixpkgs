@@ -26,16 +26,28 @@ stdenv.mkDerivation rec {
   bloop-bash = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
     sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scalacenter/bloop@${version}";
+    };
   };
 
   bloop-fish = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
     sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scalacenter/bloop@${version}";
+    };
   };
 
   bloop-zsh = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
     sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scalacenter/bloop@${version}";
+    };
   };
 
   bloop-binary = fetchurl {
@@ -49,6 +61,10 @@ stdenv.mkDerivation rec {
         "sha256-1MO14ChMnn/cDSEl1qiwDhzgX3pQjsSN8ksp4WkPDMk="
       else
         throw "unsupported platform";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "scalacenter/bloop@${version}";
+    };
   };
 
   dontUnpack = true;

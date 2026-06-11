@@ -30,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
       PandocMan = fetchurl {
         url = "https://github.com/rnpgp/cmake-modules/raw/387084811ee01a69911fe86bcc644b7ed8ad6304/PandocMan.cmake";
         hash = "sha256-KI55Yc2IuQtmbptqkk6Hzr75gIE/uQdUbQsm/fDpaWg=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "rnpgp/cmake-modules@${finalAttrs.version}";
+        };
       };
     in
     ''

@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
     sha256 = hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Readarr/Readarr@${version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

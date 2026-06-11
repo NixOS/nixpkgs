@@ -51,6 +51,10 @@ let
     darwin = fetchurl {
       url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${version}/Nextcloud.Talk-macos-universal.dmg";
       hash = hashes.darwin;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "nextcloud-releases/talk-desktop@${version}";
+      };
     };
   };
 

@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/zlin/wgetpaste/releases/download/${finalAttrs.version}/wgetpaste-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-vW0G7ZAaPWPJyMVxJghP8JlPCZAb+xY4uHlT6sHpQz8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "zlin/wgetpaste@${finalAttrs.version}";
+    };
   };
   # currently zsh-autocompletion support is not installed
 

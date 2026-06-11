@@ -12,6 +12,10 @@ let
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
       hash = "sha256-OAwHeLLbW+FlKeyxS+MCOTirHCvqZptiYXbeA3l4YJc=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "Dygmalab/Bazecor@${version}";
+      };
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370

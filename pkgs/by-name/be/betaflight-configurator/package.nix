@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
     sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "betaflight/${pname}@${version}";
+    };
   };
 
   # remove large unneeded files

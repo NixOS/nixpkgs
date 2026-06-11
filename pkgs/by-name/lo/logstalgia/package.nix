@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/acaudwell/Logstalgia/releases/download/logstalgia-${finalAttrs.version}/logstalgia-${finalAttrs.version}.tar.gz";
     hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "acaudwell/Logstalgia@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

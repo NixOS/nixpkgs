@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/leoprover/Leo-III/releases/download/v${finalAttrs.version}/leo3.jar";
     sha256 = "1lgwxbr1rnk72rnvc8raq5i1q71ckhn998pwd9xk6zf27wlzijk7";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "leoprover/Leo-III@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

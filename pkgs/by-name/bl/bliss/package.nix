@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/sagemath/sage/raw/0fc563cc566ac4e9d0b713195d0a4fb138abca06/build/pkgs/bliss/patches/bliss-0.77-install.patch";
       hash = "sha256-x2xTfR98eipLxskqHEwFBT9xciwFOFpeJWfg4IcepKQ=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "sagemath/sage@${finalAttrs.version}";
+      };
     })
   ];
 

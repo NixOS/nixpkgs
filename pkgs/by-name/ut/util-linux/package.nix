@@ -66,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
       name = "pidfd-utils-linux-only.patch";
       url = "https://github.com/util-linux/util-linux/commit/afdade4a3d8e4e6070343c5576470c575719b81f.patch";
       hash = "sha256-EnHsIhU6jaS4Qm+kQMP2an7Ay08nKbIO0MbU7Y2pwkU=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "util-linux/util-linux@${finalAttrs.version}";
+      };
     })
 
     # Musl does not define AT_HANDLE_FID, hard-code it if left undefined.
@@ -74,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
       name = "fix-musl-nsenter.patch";
       url = "https://github.com/util-linux/util-linux/commit/000aff333e5c3a23967280cb0d6451fbbfc9c91b.patch";
       hash = "sha256-6K3jRr2RsAfHnweBOlMn2F0h8hD3xjZobJ1pSlCQHw8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "util-linux/util-linux@${finalAttrs.version}";
+      };
     })
 
     # `script` is broken with options after non-option args and has new memory leaks
@@ -83,11 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
       name = "script-fix-backwards-compat.patch";
       url = "https://github.com/util-linux/util-linux/commit/70507ab9eaed10b8dd77b77d4ea25c11ee726bed.patch";
       hash = "sha256-PpFtv8XOK36npCVSvdgKcxGQmkJtgdyMmlN+4yQuWS8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "util-linux/util-linux@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       name = "script-fix-memory-leaks.patch";
       url = "https://github.com/util-linux/util-linux/commit/2f1c12a49500ca7ed9c3d5e80664c1622925456b.patch";
       hash = "sha256-9ZwA6sZwM1rQDoxV5x1KHLWxsFpI5CGWJqubtdEHj/I=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "util-linux/util-linux@${finalAttrs.version}";
+      };
     })
   ];
 

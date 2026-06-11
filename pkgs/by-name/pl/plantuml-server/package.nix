@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml-server/releases/download/v${finalAttrs.version}/plantuml-v${finalAttrs.version}.war";
     hash = "sha256-Ub6Ao+m1hC+tEerkVnMXN2CMRf8CKg9XcB9E8JsunvY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "plantuml/plantuml-server@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

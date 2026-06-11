@@ -13,6 +13,10 @@ buildGraalvmNativeImage (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/greglook/cljstyle/releases/download/${finalAttrs.version}/cljstyle-${finalAttrs.version}.jar";
     hash = "sha256-AkCuTZeDXbNBuwPZEMhYGF/oOGIKq5zVDwL8xwnj+mE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "greglook/cljstyle@${version}";
+    };
   };
 
   extraNativeImageBuildArgs = [

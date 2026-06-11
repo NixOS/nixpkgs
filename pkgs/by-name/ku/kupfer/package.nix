@@ -27,6 +27,10 @@ buildPythonApplication (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kupferlauncher/kupfer/releases/download/v${finalAttrs.version}/kupfer-v${finalAttrs.version}.tar.xz";
     sha256 = "sha256-9kX30EYYkb7s/T5VfpyqZQ5F1wpvtWfTT790LZmVqq0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kupferlauncher/kupfer@${version}";
+    };
   };
 
   nativeBuildInputs = [

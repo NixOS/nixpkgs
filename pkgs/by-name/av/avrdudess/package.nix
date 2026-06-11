@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v${finalAttrs.version}/AVRDUDESS-${finalAttrs.version}-portable.zip";
     hash = "sha256-t89iSLjbb7eIQIwB0oEXhNHnzpTEHJhS0P53kOVJ3qY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ZakKemble/AVRDUDESS@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

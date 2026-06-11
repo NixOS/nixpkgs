@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/Homebrew/formula-patches/raw/bb92449ad6b3878b4d6f472237152df28080df86/uni2ascii/uni2ascii-4.20.patch";
       hash = "sha256-JQpSntoTbQ7fnmO5Km/pX071360/lOb9jYdxOK2oV/g=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "Homebrew/formula-patches@${finalAttrs.version}";
+      };
     })
   ];
 

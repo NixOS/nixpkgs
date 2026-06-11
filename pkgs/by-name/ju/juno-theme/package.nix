@@ -13,18 +13,34 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno.tar.xz";
       sha256 = "sha256-G/H5FZ6VSLHwtMtttRafvPFE2sd30FHbep/0i4dGfl8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gvolpe/Juno@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-mirage.tar.xz";
       sha256 = "sha256-VU8uNH6T9FyOWgIfsGCCihnX3uHfOy6dXsANWKRPQ1c=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gvolpe/Juno@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-ocean.tar.xz";
       sha256 = "sha256-OeMXR0nE9aUmwAGfOAfbNP2Rgvv1u/2vj3LKb88mD1s=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gvolpe/Juno@${finalAttrs.version}";
+      };
     })
     (fetchurl {
       url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-palenight.tar.xz";
       sha256 = "sha256-DP3fKXYxUHpsw0msfPAZB3UtEa6CCOfqsabAmsmWq44=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "gvolpe/Juno@${finalAttrs.version}";
+      };
     })
   ];
 

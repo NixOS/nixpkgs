@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/lepton-eda/lepton-eda/releases/download/${version}/lepton-eda-${builtins.head (lib.splitString "-" version)}.tar.gz";
     hash = "sha256-X9yNuosNR1Jf3gYWQZeOnKdxzJLld29Sn9XYsPGWYYI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "lepton-eda/lepton-eda@${version}";
+    };
   };
 
   nativeBuildInputs = [

@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
       name = "libxml-2.14.patch";
       url = "https://github.com/termux/termux-packages/raw/39135f3f1190268d127b998c2c6040d9af611ba5/packages/xmlstarlet/libxml2-2.14-attribute-unused.patch";
       hash = "sha256-zHkUQsrhPLWI3kdfCITbcixpBmDRmxSM2Viz5R+8q5E=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "termux/termux-packages@${finalAttrs.version}";
+      };
     })
   ];
 

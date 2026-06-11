@@ -22,6 +22,10 @@ buildGoModule (finalAttrs: {
   src-webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${finalAttrs.version}/plik-${finalAttrs.version}-linux-amd64.tar.gz";
     hash = "sha256-taUFXZJeUHYjjhrVlLgKYPxNn6W5o8uoEVcu+f5flCA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "root-gg/plik@${finalAttrs.version}";
+    };
   };
 
   subPackages = [ "server" ];

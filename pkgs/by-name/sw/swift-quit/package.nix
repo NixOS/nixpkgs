@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/onebadidea/swiftquit/releases/download/v${finalAttrs.version}/Swift.Quit.zip";
     sha256 = "sha256-pORnyxOhTc/zykBHF5ujsWEZ9FjNauJGeBDz9bnHTvs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "onebadidea/swiftquit@${finalAttrs.version}";
+    };
   };
   dontUnpack = true;
 

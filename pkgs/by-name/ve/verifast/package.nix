@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/verifast-${finalAttrs.version}-linux.tar.gz";
     sha256 = "sha256-HkABnWrdkb9yFByG9AB/L+Hu9n9FPLf7jx9at9MdUJ8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "verifast/verifast@${finalAttrs.version}";
+    };
   };
 
   dontConfigure = true;

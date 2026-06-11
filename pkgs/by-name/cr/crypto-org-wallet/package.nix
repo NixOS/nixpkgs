@@ -14,6 +14,10 @@ appimageTools.wrapAppImage rec {
     src = fetchurl {
       url = "https://github.com/crypto-com/chain-desktop-wallet/releases/download/v${version}/Crypto.com-DeFi-Desktop-Wallet-${version}.AppImage";
       hash = "sha256-dXJMU6abg31ZyETKl5Hh6fxn1Gd1FbSHGJh1z0R7XPM=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "crypto-com/chain-desktop-wallet@${version}";
+      };
     };
   };
 

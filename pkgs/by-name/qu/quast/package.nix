@@ -20,6 +20,10 @@ pythonPackages.buildPythonApplication rec {
   src = fetchurl {
     url = "https://github.com/ablab/quast/releases/download/quast_${version}/quast-${version}.tar.gz";
     hash = "sha256-rJ26A++dClHXqeLFaCYQTnjzQPYmOjrTk2SEQt68dOw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ablab/quast@${version}";
+    };
   };
 
   pythonPath = with pythonPackages; [

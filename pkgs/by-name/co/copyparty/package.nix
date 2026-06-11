@@ -76,6 +76,10 @@ python3Packages.buildPythonApplication rec {
   src = fetchurl {
     url = "https://github.com/9001/copyparty/releases/download/v${version}/copyparty-${version}.tar.gz";
     hash = "sha256-Yl+V1l2VzdaJhRBRjQE5BeZ2bH0q4Oqa59XeyW6J4C0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "9001/copyparty@${version}";
+    };
   };
 
   pyproject = true;

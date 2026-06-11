@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
     hash = "sha256-m4RYtjJMZ01M1qwKc70Gkey9QLQ4Gk59rwpunm4TY2g=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "arduino/arduino-ide@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

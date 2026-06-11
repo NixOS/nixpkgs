@@ -14,6 +14,10 @@ let
   desktop = fetchurl {
     url = "https://github.com/THMonster/Revda/raw/e1c236f6f940443419b6202735b6f8a0c9cdbe8b/misc/dmlive-mime.desktop";
     hash = "sha256-k4h0cSfjuTZAYLjbaTfcye1aC5obd6D3tAZjgBV8xCI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "THMonster/Revda@${version}";
+    };
   };
 in
 

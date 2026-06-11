@@ -28,6 +28,10 @@ buildNpmPackage {
     (fetchurl {
       url = "https://github.com/mafintosh/hyperssh/commit/ad1d0e06a133e71c9df9f59dd5f805c49f46ec70.patch";
       hash = "sha256-fUjgHHbZHgqokNg2fVVZCjoDA3LqSJiFzBwgA8Tt1m4=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "mafintosh/hyperssh@5.0.3";
+      };
     })
   ];
 

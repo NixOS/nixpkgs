@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/galenframework/galen/releases/download/galen-${finalAttrs.version}/galen-bin-${finalAttrs.version}.zip";
     sha256 = "13dq8cf0yy24vym6z7p8hb0mybgpcl4j5crsaq8a6pjfxz6d17mq";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "galenframework/galen@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ unzip ];

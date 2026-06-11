@@ -34,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
       };
     in
     sources.${stdenv.hostPlatform.system}
+    // {
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "microsoft/pgsql-tools@${finalAttrs.version}";
+      };
+    }
   );
 
   nativeBuildInputs = [

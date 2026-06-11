@@ -52,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-cI/imLX4pdZTl1HDKaE2WwOOaWpwC78KyqWHmxsFQj0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rabbitmq/rabbitmq-server@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

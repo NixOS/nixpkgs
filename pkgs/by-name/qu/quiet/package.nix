@@ -40,6 +40,10 @@ let
     src = fetchurl {
       url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.AppImage";
       hash = "sha256-MMfovDYEqppn+8wQcg1dflShuWkMDwMbFbTJl0MmCxw=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "TryQuiet/quiet@${version}";
+      };
     };
 
     meta = meta // {
@@ -53,6 +57,10 @@ let
     src = fetchurl {
       url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.dmg";
       hash = "sha256-8k6X29Gxl5ZhAwj9SKn6E7ITjXhxAgsRT5dbP4MjgB8=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "TryQuiet/quiet@${version}";
+      };
     };
 
     nativeBuildInputs = [

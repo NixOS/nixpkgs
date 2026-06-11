@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/emuflight/EmuConfigurator/releases/download/${version}/emuflight-configurator_${version}_linux64.zip";
     sha256 = "sha256-7NcN1wF3BUClJBVm13VnV80N/+a2jAEIRqB/x9+GDEg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "emuflight/EmuConfigurator@${version}";
+    };
   };
 
   nativeBuildInputs = [

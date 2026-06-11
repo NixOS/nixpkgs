@@ -10,6 +10,10 @@ alephone.makeWrapper rec {
   zip = fetchurl {
     url = "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
     hash = "sha256-shZ82e7veaaT/petxDQ8Fd7YtJPmTgxSCStf0kGfrFs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Aleph-One-Marathon/alephone@${version}";
+    };
   };
 
   meta = {

@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/zeromq/czmq/releases/download/v${finalAttrs.version}/czmq-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-XXIKIEwqWGRdb3ZDrxXVY6cS2tmMnTLB7ZEzd9qmrDk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "zeromq/czmq@${finalAttrs.version}";
+    };
   };
 
   # Needs to be propagated for the .pc file to work

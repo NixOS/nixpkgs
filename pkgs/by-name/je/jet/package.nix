@@ -12,6 +12,10 @@ buildGraalvmNativeImage (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/borkdude/jet/releases/download/v${finalAttrs.version}/jet-${finalAttrs.version}-standalone.jar";
     sha256 = "sha256-250/1DBNCXlU1b4jjLUUOXI+uSbOyPXtBN1JJRpdmFc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "borkdude/jet@${finalAttrs.version}";
+    };
   };
 
   extraNativeImageBuildArgs = [

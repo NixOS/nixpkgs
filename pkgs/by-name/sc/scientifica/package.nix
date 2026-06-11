@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/oppiliappan/scientifica/releases/download/v${version}/scientifica.tar";
     hash = "sha256-8IV4aaDoRsbxddy4U90fEZ6henUhjmO38HNtWo4ein8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "oppiliappan/scientifica@${version}";
+    };
   };
 
   nativeBuildInputs = [ installFonts ];

@@ -32,6 +32,10 @@ let
   src = fetchurl {
     url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}.AppImage";
     hash = "sha256-xB1r8DNFOFQQx+MeGC1mWhf7PuMavM7DyYRBlEjAZ8k=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ZUGFeRD/quba-viewer@${version}";
+    };
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -64,6 +68,10 @@ let
     src = fetchurl {
       url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}-universal.dmg";
       hash = "sha256-niuU1zkxNRmCYxzto3g6i6Z3k5KCAgVIVQMgOLZJnSE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "ZUGFeRD/quba-viewer@${version}";
+      };
     };
 
     unpackCmd = "7zz x -bd -osource -xr'!*/Applications' -xr'!*com.apple.provenance' $curSrc";

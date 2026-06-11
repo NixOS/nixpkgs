@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/oppiliappan/curie/releases/download/v${version}/curie-v${version}.tar.gz";
     hash = "sha256-B89GNbOmm3lY/cRWQJEFu/5morCM/WrRQb/m6covbt8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "oppiliappan/curie@${version}";
+    };
   };
 
   sourceRoot = ".";
