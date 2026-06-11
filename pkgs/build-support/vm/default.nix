@@ -235,7 +235,7 @@ let
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${lib.getOutput "modules" kernel}/lib/modules/
+    export MODULE_DIR=${lib.getOutput "modules" kernelModules}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -432,7 +432,7 @@ let
         name = "extract-file";
         buildInputs = [ util-linux ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe loop
           ${kmod}/bin/modprobe ext4
           ${kmod}/bin/modprobe hfs
@@ -464,7 +464,7 @@ let
           mtdutils
         ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe mtd
           ${kmod}/bin/modprobe mtdram total_size=131072
           ${kmod}/bin/modprobe mtdchar
