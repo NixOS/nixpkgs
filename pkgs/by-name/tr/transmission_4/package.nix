@@ -255,6 +255,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       mit
     ];
-    platforms = lib.platforms.unix;
+    platforms = if enableMac then lib.platforms.darwin else lib.platforms.unix;
   };
 })
