@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   fetchFromGitHub,
   pkg-config,
   qt5,
@@ -16,7 +15,6 @@
   speexdsp,
   protobuf,
   libcap,
-  alsa-lib,
   python3,
   rnnoise,
   nixosTests,
@@ -28,20 +26,21 @@
   nlohmann_json,
   xar,
   makeBinaryWrapper,
-  zeroc-ice,
-  speechd-minimal,
-  libpulseaudio,
-  pipewire,
-  libjack2,
   # Which Mumble component to build. The `murmur` (server) and
   # `mumble-overlay` packages are derived from this one via `.override`.
   type ? "mumble",
   alsaSupport ? stdenv.hostPlatform.isLinux,
-  iceSupport ? config.murmur.iceSupport or true,
-  jackSupport ? config.mumble.jackSupport or false,
+  alsa-lib,
+  iceSupport ? false,
+  zeroc-ice,
+  jackSupport ? false,
+  libjack2,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pipewire,
   pulseSupport ? true,
-  speechdSupport ? config.mumble.speechdSupport or false,
+  libpulseaudio,
+  speechdSupport ? false,
+  speechd-minimal,
 }:
 
 let

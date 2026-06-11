@@ -1,7 +1,6 @@
 {
   mumble,
-  config,
-  iceSupport ? config.murmur.iceSupport or true,
+  iceSupport ? true,
 }@args:
 
 mumble.override (
