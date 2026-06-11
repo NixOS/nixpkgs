@@ -13,13 +13,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lime";
   version = "0.2.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dpYOTwVf61Pom1AiODuvyHtj8lusYmWYSwozPRpX94E=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Local Interpretable Model-Agnostic Explanations for machine learning classifiers";
     homepage = "https://github.com/marcotcr/lime";
-    changelog = "https://github.com/marcotcr/lime/releases/tag/${version}";
+    changelog = "https://github.com/marcotcr/lime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ khaser ];
   };
-}
+})
