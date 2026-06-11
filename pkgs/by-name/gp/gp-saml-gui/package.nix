@@ -12,7 +12,9 @@
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "gp-saml-gui";
   version = "0.1+20240731-${lib.strings.substring 0 7 finalAttrs.src.rev}";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "dlenski";
