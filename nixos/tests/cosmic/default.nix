@@ -17,8 +17,7 @@ let
         --log-file-path ${logFilePath} \
         --cosmic-reader-pdf ${config.node.pkgs.empty-pdf} \
         --polkit-agent-helper-path ${config.node.pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1 \
-        --root-user-password ${user.password} \
-        --ydotool-drv-store-path ${config.node.pkgs.ydotool}
+        --root-user-password ${user.password}
   '';
   cosmicTestDesktop = config.node.pkgs.makeDesktopItem {
     name = "cosmicTest";
@@ -57,7 +56,19 @@ in
       user = user.name;
     };
 
+    users.users = {
+      alice.extraGroups = [
+        "uinput" # for ydotoold
+      ];
+
+      root.password = user.password;
+      root.hashedPasswordFile = lib.mkForce null;
+    };
+
+    hardware.uinput.enable = true;
+
     environment.systemPackages = with config.node.pkgs; [
+      ydotool
       cosmicTest
       cosmicTestAutostartItem
 
