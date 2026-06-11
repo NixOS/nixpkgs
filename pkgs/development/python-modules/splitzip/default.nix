@@ -30,14 +30,6 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  optional-dependencies = {
-    dev = [
-      mypy
-      pytest
-      pytest-cov
-      ruff
-    ];
-  };
 
   postPatch = ''
     # See upstream issue https://github.com/twwat/splitzip/issues/1
