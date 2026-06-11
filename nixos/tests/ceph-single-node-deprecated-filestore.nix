@@ -269,7 +269,7 @@ let
   '';
 in
 {
-  name = "basic-single-node-ceph-cluster";
+  name = "basic-single-node-ceph-cluster-deprecated-filestore";
   meta = with lib.maintainers; {
     maintainers = [
       lejonet
