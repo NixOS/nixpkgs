@@ -9,25 +9,23 @@
 
 buildNpmPackage rec {
   pname = "node-red";
-  version = "4.1.8";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
     tag = version;
-    hash = "sha256-IjV3hS1v+KgtXbXO2/Nr4GpABK+l2HXfqsPukGD7ViQ=";
+    hash = "sha256-CKYIlBTZsnkgbhWs1Bg04r8JIubCmVgDEUbvCXvaNck=";
   };
 
-  npmDepsHash = "sha256-eFRA3oJeuxHWrZepWyGztvNdJ3QKG+J6pAxQhdVqxxw=";
-
-  nativeBuildInputs = [ jq ];
+  npmDepsHash = "sha256-bm9C2MWV3BlyxXrBBy/ZyGkWSyh1w9b8/IJI1W74O00=";
 
   postPatch =
     let
       packageDir = "packages/node_modules/node-red";
     in
     ''
-      jq '. += {"bin": {"node-red": "${packageDir}/red.js", "node-red-pi": "${packageDir}/bin/node-red-pi"}}' package.json > package.json.tmp
+      ${lib.getExe jq} '. += {"bin": {"node-red": "${packageDir}/red.js", "node-red-pi": "${packageDir}/bin/node-red-pi"}}' package.json > package.json.tmp
       mv package.json.tmp package.json
     '';
 
