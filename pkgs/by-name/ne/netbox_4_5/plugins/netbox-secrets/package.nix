@@ -8,7 +8,7 @@
   pycryptodome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-secrets";
   version = "3.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Onemind-Services-LLC";
     repo = "netbox-secrets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4qUbzQTfSCXT7b8DfrsP9y3tatJZa5F40kl9tuMKed4=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin to enhance secret management with encrypted storage and flexible, user-friendly features";
     homepage = "https://github.com/Onemind-Services-LLC/netbox-secrets";
-    changelog = "https://github.com/Onemind-Services-LLC/netbox-secrets/releases/tag/${src.tag}";
+    changelog = "https://github.com/Onemind-Services-LLC/netbox-secrets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})
