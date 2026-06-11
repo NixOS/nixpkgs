@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fertilizer";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moleculekayak";
     repo = "fertilizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sDoAjEiKxHf+HtFLZr6RwuXN+rl0ZQnFUoQ09QiE6Xc=";
+    hash = "sha256-dPTR3GfofXBV1gwQ8Xdl8Dyz23CU9qBLAahwpxj8z+Q=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
