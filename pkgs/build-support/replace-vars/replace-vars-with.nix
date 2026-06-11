@@ -122,8 +122,7 @@ in
 
 stdenvNoCC.mkDerivation (
   {
-    pname = optionalAttrs.pname or optionalAttrs.name or (baseNameOf src);
-    version = "26.11pre-git";
+    name = baseNameOf src;
   }
   // optionalAttrs
   // forcedAttrs
