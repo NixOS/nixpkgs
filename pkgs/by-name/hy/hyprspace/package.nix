@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprspace";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "hyprspace";
     repo = "hyprspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d8sCs81Va/RQL8k+6GIMp9z0C0AmWEhvZSijRKyVBC0=";
+    hash = "sha256-BtotGhctQKfP68VgG6+NsrDdEOmN/wiAzvBqloHU5BQ=";
   };
 
   env.CGO_ENABLED = "0";
