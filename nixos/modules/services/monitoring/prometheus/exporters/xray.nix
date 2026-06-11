@@ -58,6 +58,14 @@ in
         Time window in minutes for user metrics.
       '';
     };
+
+    withUserMetrics = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Collect user metrics from the Xray access log.
+      '';
+    };
   };
 
   serviceOpts = {
@@ -70,6 +78,7 @@ in
           --scrape-timeout ${toString cfg.scrapeTimeout} \
           ${optionalString (cfg.logPath != "") "--log-path ${cfg.logPath}"} \
           --log-time-window ${toString cfg.logTimeWindow} \
+          ${optionalString cfg.withUserMetrics "--with-user-metrics"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
