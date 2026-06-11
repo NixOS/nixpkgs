@@ -2214,6 +2214,8 @@ self: super: with self; {
 
   blurhash-python = callPackage ../development/python-modules/blurhash-python { };
 
+  bm25s = callPackage ../development/python-modules/bm25s { };
+
   bme280spi = callPackage ../development/python-modules/bme280spi { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
@@ -10312,6 +10314,8 @@ self: super: with self; {
       { };
 
   model-signing = callPackage ../development/python-modules/model-signing { };
+
+  model2vec = callPackage ../development/python-modules/model2vec { };
 
   modelcif = callPackage ../development/python-modules/modelcif { };
 
@@ -21216,6 +21220,8 @@ self: super: with self; {
   vharfbuzz = callPackage ../development/python-modules/vharfbuzz { };
 
   viaggiatreno-ha = callPackage ../development/python-modules/viaggiatreno-ha { };
+
+  vicinity = callPackage ../development/python-modules/vicinity { };
 
   victron-ble = callPackage ../development/python-modules/victron-ble { };
 
