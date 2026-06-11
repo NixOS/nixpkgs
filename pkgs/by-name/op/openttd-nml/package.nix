@@ -34,6 +34,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Compiler for OpenTTD NML files";
     mainProgram = "nmlc";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ToxicFrog ];
+    maintainers = [ ];
   };
 })

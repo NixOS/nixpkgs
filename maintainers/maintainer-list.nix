@@ -28288,12 +28288,6 @@
     github = "toXel";
     githubId = 2300709;
   };
-  ToxicFrog = {
-    email = "toxicfrog@ancilla.ca";
-    github = "ToxicFrog";
-    githubId = 90456;
-    name = "Rebecca (Bex) Kelly";
-  };
   toyboot4e = {
     email = "toyboot4e@gmail.com";
     github = "toyboot4e";
