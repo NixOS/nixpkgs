@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = "kdash";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CFGZIRZgOUiB/evCDUQFB+w5PJCJNtrWqYzx2yRQKpE=";
   };
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple and fast dashboard for Kubernetes";
     mainProgram = "kdash";
     homepage = "https://github.com/kdash-rs/kdash";
+    changelog = "https://github.com/kdash-rs/kdash/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
