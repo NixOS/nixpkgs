@@ -13,7 +13,7 @@
   meta.maintainers = lib.teams.cosmic.members;
 
   nodes.machine = {
-    imports = [ ./common/user-account.nix ];
+    imports = [ ../common/user-account.nix ];
 
     services = {
       # For `cosmic-store` to be added to `environment.systemPackages`
