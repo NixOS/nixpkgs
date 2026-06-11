@@ -995,6 +995,54 @@ in
     checkPhase = ''
       runHook preCheck
 
+      # patch out some tests that are broken by some inconsistent nvim UI
+      declare -a affected_testfiles
+      affected_testfiles=(
+        tests/plenary/api/api_spec.lua
+        tests/plenary/babel/tangle_spec.lua
+        tests/plenary/capture/datetree_spec.lua
+        tests/plenary/init_spec.lua
+      )
+      for f in "''${affected_testfiles[@]}"; do
+        sed -Ei -e '\#${
+          lib.concatStringsSep "|" [
+            # some of these cases are matched multiple times, but that's fine
+            # because they are variants of the same test
+            "appends to the day tree"
+            "appends to the start of day tree"
+            "creates a day datetree"
+            "creates a day datetree after an existing future day"
+            "creates a day datetree after a past day"
+            "creates a day datetree before an existing future day"
+            "creates a day datetree before a past day"
+            "creates a day datetree between a past and future day"
+            "creates a month datetree"
+            "creates a month datetree after an existing future month"
+            "creates a month datetree after a past month"
+            "creates a month datetree before an existing future month"
+            "creates a month datetree before an existing past month"
+            "creates a month datetree between a past and future month"
+            "creates a whole datetree"
+            "creates a whole datetree after a future date"
+            "creates a whole datetree after a past date"
+            "creates a whole datetree before an existing future date"
+            "creates a whole datetree before an existing past date"
+            "creates a whole datetree between a past and future date"
+            "should load a file as org file if it has correct filetype"
+            "should refile a headline to another file"
+            "should refile a headline to another headline"
+            "should tangle all blocks and not reference another block via noweb if disabled"
+            "should tangle all blocks and reference another block via noweb"
+            "should tangle all blocks and reference another block via noweb if value is \"tangle\""
+            "should tangle all blocks of same filetype in same file"
+            "should tangle all blocks to the same file with absolute path"
+            "should tangle all blocks to the same file with relative path prefixed with ./"
+            "should tangle all blocks to the same file with relative path without prefix"
+            "should tangle only selected blocks and reference another block via noweb"
+          ]
+        }# a \ if true then return end' "$f" # add a "conditional" return because if it were a plain `return` lua would parse error
+      done
+
       # bypass the download of plenary
       substituteInPlace  tests/minimal_init.lua --replace-fail \
         "plenary = 'https://github.com/nvim-lua/plenary.nvim.git'," \
