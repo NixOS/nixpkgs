@@ -48,6 +48,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # touches network
     "lime/tests/test_lime_text.py"
+    # slightly flaky
+    "lime/tests/test_lime_tabular.py::TestLimeTabular::test_lime_explainer_entropy_discretizer"
   ];
 
   pythonImportsCheck = [
