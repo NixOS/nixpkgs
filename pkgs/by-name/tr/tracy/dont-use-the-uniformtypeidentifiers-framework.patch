@@ -1,0 +1,24 @@
+From 05074295013a2bf7fa1b6af1b6575e5e0c491454 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Thu, 18 Jul 2024 21:54:44 +0300
+Subject: [PATCH] Don't use the `UniformTypeIdentifiers` framework.
+
+---
+ cmake/vendor.cmake | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/cmake/vendor.cmake b/cmake/vendor.cmake
+index bd53a4db..8079d8c2 100644
+--- a/cmake/vendor.cmake
++++ b/cmake/vendor.cmake
+@@ -182,7 +182,6 @@ if (NOT NO_FILESELECTOR AND NOT EMSCRIPTEN)
+
+     if (APPLE)
+         find_library(APPKIT_LIBRARY AppKit)
+-        find_library(UNIFORMTYPEIDENTIFIERS_LIBRARY UniformTypeIdentifiers)
+         target_link_libraries(TracyNfd PUBLIC ${APPKIT_LIBRARY} ${UNIFORMTYPEIDENTIFIERS_LIBRARY})
+     elseif (UNIX)
+         if (GTK_FILESELECTOR)
+--
+2.45.2
+

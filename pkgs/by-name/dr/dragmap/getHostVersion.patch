@@ -1,0 +1,11 @@
+diff --git a/thirdparty/dragen/src/common/hash_generation/gen_hash_table.c b/thirdparty/dragen/src/common/hash_generation/gen_hash_table.c
+index cdca3df..5a55699 100644
+--- a/thirdparty/dragen/src/common/hash_generation/gen_hash_table.c
++++ b/thirdparty/dragen/src/common/hash_generation/gen_hash_table.c
+@@ -249,7 +249,7 @@ void setDefaultHashParams(hashTableConfig_t* defConfig, const char* destDir, Has
+     free(dir);
+   }
+
+-  defConfig->hostVersion = (char*)getHostVersion(0);
++  defConfig->hostVersion = (char*)getHostVersion();
+ }

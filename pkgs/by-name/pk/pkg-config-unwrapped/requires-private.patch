@@ -1,0 +1,17 @@
+diff --git a/main.c b/main.c
+index b61ca34..5a420c2 100644
+--- a/main.c
++++ b/main.c
+@@ -602,10 +602,10 @@ main (int argc, char **argv)
+   else
+     disable_private_libs();
+ 
+-  /* honor Requires.private if any Cflags are requested or any static
++  /* honor Requires.private if any any static
+    * libs are requested */
+ 
+-  if (pkg_flags & CFLAGS_ANY || want_requires_private || want_exists ||
++  if (want_requires_private ||
+       (want_static_lib_list && (pkg_flags & LIBS_ANY)))
+     enable_requires_private();
+ 

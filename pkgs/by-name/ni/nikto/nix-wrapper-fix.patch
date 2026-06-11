@@ -1,0 +1,22 @@
+diff --git a/program/nikto.pl b/program/nikto.pl
+index 2cb07f9..323e666 100755
+--- a/program/nikto.pl
++++ b/program/nikto.pl
+@@ -269,6 +269,7 @@
+     # Use RealBin to get absolute path even if script was invoked via symlink
+     my $NIKTODIR = $FindBin::RealBin || $FindBin::Bin;
+     $NIKTODIR = File::Spec->rel2abs($NIKTODIR) if defined $NIKTODIR;
++    $NIKTODIR =~ s#[\\/]bin$##;
+ 
+     # Guess user's home directory -- to support Windows
+     foreach my $var (split(/ /, "HOME USERPROFILE")) {
+@@ -280,8 +281,8 @@
+     # Priority: --config option > local configs > user home > system-wide
+     push(@CF, "$VARIABLES{'configfile'}")
+       if defined $VARIABLES{'configfile'} && $VARIABLES{'configfile'} ne "";
+-    push(@CF, File::Spec->catfile($NIKTODIR, "nikto.conf"))         if defined $NIKTODIR;
+-    push(@CF, File::Spec->catfile($NIKTODIR, "nikto.conf.default")) if defined $NIKTODIR;
++    push(@CF, File::Spec->catfile($NIKTODIR, "etc", "nikto.conf"))         if defined $NIKTODIR;
++    push(@CF, File::Spec->catfile($NIKTODIR, "etc", "nikto.conf.default")) if defined $NIKTODIR;
+     push(@CF, "nikto.conf");
+     push(@CF, File::Spec->catfile($home, "nikto.conf")) if defined $home;

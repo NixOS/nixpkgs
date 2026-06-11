@@ -1,0 +1,30 @@
+From f8e0f3a0035b44fa2541e2c447ed1599f220c4b5 Mon Sep 17 00:00:00 2001
+From: Alexander Shadchin <shadchin@yandex-team.com>
+Date: Thu, 9 Apr 2026 12:22:29 +0300
+Subject: [PATCH] Fix tests with new Python
+
+---
+ src/ecdsa/der.py | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/src/ecdsa/der.py b/src/ecdsa/der.py
+index 5d35d698..587d7852 100644
+--- a/src/ecdsa/der.py
++++ b/src/ecdsa/der.py
+@@ -464,12 +464,11 @@ def unpem(pem):
+     if isinstance(pem, text_type):  # pragma: no branch
+         pem = pem.encode()
+ 
++    lines = (l.strip() for l in pem.split(b"\n"))
+     d = b"".join(
+-        [
+-            l.strip()
+-            for l in pem.split(b"\n")
+-            if l and not l.startswith(b"-----")
+-        ]
++        l
++        for l in lines
++        if l and not l.startswith(b"-----")
+     )
+     return base64.b64decode(d)
+ 

@@ -1,0 +1,10 @@
+diff --git a/OFDFile/test/main.cpp b/OFDFile/test/main.cpp
+index 92189f10ff..7aff6df96f 100644
+--- a/OFDFile/test/main.cpp
++++ b/OFDFile/test/main.cpp
+@@ -1,4 +1,4 @@
+-#include "../OfdFile.h"
++#include "../OFDFile.h"
+ #include <iostream>
+ 
+ #include "../../DesktopEditor/common/Directory.h"

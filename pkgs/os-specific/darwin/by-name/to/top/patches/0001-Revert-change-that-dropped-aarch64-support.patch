@@ -1,0 +1,68 @@
+diff --git a/libtop.c b/libtop.c
+index 5afeaf3f90..755a584073 100644
+--- a/libtop.c
++++ b/libtop.c
+@@ -703,11 +703,20 @@
+ 	mach_vm_address_t base = 0, size = 0;
+ 
+ 	switch (type) {
++	case CPU_TYPE_ARM64_32:
++	   	base = SHARED_REGION_BASE_ARM64_32;
++		size = SHARED_REGION_SIZE_ARM64_32;
++		break;
++
+ 	case CPU_TYPE_ARM:
+ 		base = SHARED_REGION_BASE_ARM;
+ 		size = SHARED_REGION_SIZE_ARM;
+ 		break;
+ 
++	case CPU_TYPE_ARM64:
++		base = SHARED_REGION_BASE_ARM64;
++		size = SHARED_REGION_SIZE_ARM64;
++		break;
+ 
+ 	case CPU_TYPE_X86_64:
+ 		base = SHARED_REGION_BASE_X86_64;
+@@ -816,6 +825,8 @@
+ 
+ #if defined(__arm__)
+ 	libtop_p_fw_scan(mach_task_self(), SHARED_REGION_BASE_ARM, SHARED_REGION_SIZE_ARM);
++#elif defined(__arm64__) && !defined(__LP64__)
++	libtop_p_fw_scan(mach_task_self(), SHARED_REGION_BASE_ARM64_32, SHARED_REGION_SIZE_ARM64_32);
+ #elif defined(__arm64__)
+ 	libtop_p_fw_scan(mach_task_self(), SHARED_REGION_BASE_ARM64, SHARED_REGION_SIZE_ARM64);
+ #elif defined(__x86_64__) || defined(__i386__)
+@@ -1329,6 +1340,14 @@
+ 	switch (type) {
+ 	case CPU_TYPE_ARM:
+ 		return SHARED_REGION_SIZE_ARM;
++#if defined(CPU_TYPE_ARM64)
++	case CPU_TYPE_ARM64:
++		return SHARED_REGION_SIZE_ARM64;
++#endif
++#if defined(CPU_TYPE_ARM64_32)
++	case CPU_TYPE_ARM64_32:
++		return SHARED_REGION_SIZE_ARM64_32;
++#endif
+ 	case CPU_TYPE_POWERPC:
+ 		return SHARED_REGION_SIZE_PPC;
+ 	case CPU_TYPE_POWERPC64:
+diff --git a/pid.c b/pid.c
+index 0d9a77460a..54d532d51b 100644
+--- a/pid.c
++++ b/pid.c
+@@ -54,8 +54,13 @@
+ 		proc_is_foreign = true;
+ #endif
+ 		break;
++#if defined(CPU_TYPE_ARM64)
++	case CPU_TYPE_ARM64:
++		proc_is_64 = true;
++		// FALLTHROUGH
++#endif
+ 	case CPU_TYPE_ARM:
+-#if !defined(__arm__)
++#if !defined(__arm__) && !defined(__arm64__)
+ 		proc_is_foreign = true;
+ #endif
+ 		break;

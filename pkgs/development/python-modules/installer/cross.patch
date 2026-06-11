@@ -1,0 +1,60 @@
+diff --git a/src/installer/__main__.py b/src/installer/__main__.py
+index b7a7445..6110e62 100644
+--- a/src/installer/__main__.py
++++ b/src/installer/__main__.py
+@@ -30,6 +30,13 @@ def _get_main_parser() -> argparse.ArgumentParser:
+         type=str,
+         help="override prefix to install packages to",
+     )
++    parser.add_argument(
++        "--executable",
++        metavar="path",
++        default=sys.executable,
++        type=str,
++        help="#! executable to install scripts with (default=sys.executable)",
++    )
+     parser.add_argument(
+         "--compile-bytecode",
+         action="append",
+@@ -102,7 +109,7 @@ def _main(cli_args: Sequence[str], program: str | None = None) -> None:
+                 source.validate_record(validate_contents=args.validate_record == "all")
+             destination = SchemeDictionaryDestination(
+                 scheme_dict=_get_scheme_dict(source.distribution, prefix=args.prefix),
+-                interpreter=sys.executable,
++                interpreter=args.executable,
+                 script_kind=get_launcher_kind(),
+                 bytecode_optimization_levels=bytecode_levels,
+                 destdir=args.destdir,
+diff --git a/tests/test_main.py b/tests/test_main.py
+index cb09b3d..3200819 100644
+--- a/tests/test_main.py
++++ b/tests/test_main.py
+@@ -74,6 +74,28 @@ def test_main_prefix(fancy_wheel, tmp_path):
+     }
+ 
+ 
++def test_main_executable(fancy_wheel, tmp_path):
++    destdir = tmp_path / "dest"
++
++    main(
++        [
++            str(fancy_wheel),
++            "-d",
++            str(destdir),
++            "--executable",
++            "/monty/python3.x",
++        ],
++        "python -m installer",
++    )
++
++    installed_scripts = destdir.rglob("bin/*")
++
++    for f in installed_scripts:
++        with f.open("rb") as fp:
++            shebang = fp.readline()
++            assert shebang == b"#!/monty/python3.x\n"
++
++
+ def test_main_no_pyc(fancy_wheel, tmp_path):
+     destdir = tmp_path / "dest"
+ 

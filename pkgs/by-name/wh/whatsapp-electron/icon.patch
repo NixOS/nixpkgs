@@ -1,0 +1,13 @@
+diff --git a/src/index.js b/src/index.js
+index cf77b75..4ceb2da 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -14,7 +14,7 @@ class WhatsAppElectron
+ {
+ 	constructor() {
+ 		this.store    = new Store();
+-		this.baseIcon = isDev ? path.join(__dirname, "../assets/whatsapp-icon-512x512.png") : path.join(process.resourcesPath, "app.asar.unpacked/assets/whatsapp-icon-512x512.png");
++		this.baseIcon = isDev ? path.join(__dirname, "../assets/whatsapp-icon-512x512.png") : path.join(app.getAppPath(), "assets/whatsapp-icon-512x512.png");
+ 		this.isQuit   = false;
+ 
+ 		this.bounds = this.store.get("bounds");

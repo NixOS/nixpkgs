@@ -1,0 +1,110 @@
+diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
+index 5afd6e17..0db47849 100644
+--- a/src/ocrmypdf/_exec/ghostscript.py
++++ b/src/ocrmypdf/_exec/ghostscript.py
+@@ -36,7 +36,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
+     ]
+ )
+ # Ghostscript executable - gswin32c is not supported
+-GS = 'gswin64c' if os.name == 'nt' else 'gs'
++GS = '@gs@'
+ 
+ 
+ log = logging.getLogger(__name__)
+diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
+index 9f107a07..469aed48 100644
+--- a/src/ocrmypdf/_exec/jbig2enc.py
++++ b/src/ocrmypdf/_exec/jbig2enc.py
+@@ -13,7 +13,7 @@ from ocrmypdf._exec._probe import ToolProbe
+ from ocrmypdf.exceptions import MissingDependencyError
+ from ocrmypdf.subprocess import run
+ 
+-_PROBE = ToolProbe(program='jbig2', version_regex=r'jbig2enc (\d+(\.\d+)*).*')
++_PROBE = ToolProbe(program='@jbig2@', version_regex=r'jbig2enc (\d+(\.\d+)*).*')
+ 
+ 
+ def version() -> Version:
+@@ -34,7 +34,7 @@ def available() -> bool:
+ 
+ 
+ def convert_single(cwd, infile, outfile, threshold):
+-    args = ['jbig2', '--pdf', '-t', str(threshold), infile]
++    args = ['@jbig2@', '--pdf', '-t', str(threshold), infile]
+     with open(outfile, 'wb') as fstdout:
+         proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
+     proc.check_returncode()
+diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
+index 94bcdbf0..c0ae0fa3 100644
+--- a/src/ocrmypdf/_exec/pngquant.py
++++ b/src/ocrmypdf/_exec/pngquant.py
+@@ -11,7 +11,7 @@ from subprocess import PIPE
+ from ocrmypdf._exec._probe import ToolProbe
+ from ocrmypdf.subprocess import run
+ 
+-PROBE = ToolProbe(program='pngquant', version_regex=r'(\d+(\.\d+)*).*')
++PROBE = ToolProbe(program='@pngquant@', version_regex=r'(\d+(\.\d+)*).*')
+ version = PROBE.version
+ available = PROBE.available
+ 
+@@ -27,7 +27,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
+     """
+     with open(input_file, 'rb') as input_stream:
+         args = [
+-            'pngquant',
++            '@pngquant@',
+             '--force',
+             '--skip-if-larger',
+             '--quality',
+diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
+index 861f2d50..010ef6a6 100644
+--- a/src/ocrmypdf/_exec/tesseract.py
++++ b/src/ocrmypdf/_exec/tesseract.py
+@@ -117,7 +117,7 @@ class TesseractVersion(Version):
+ 
+ 
+ PROBE = ToolProbe(
+-    program='tesseract',
++    program='@tesseract@',
+     version_regex=r'tesseract\s(.+)',
+     version_cls=TesseractVersion,
+ )
+@@ -140,7 +140,7 @@ def get_languages() -> set[str]:
+         msg += output
+         return msg
+ 
+-    args_tess = ['tesseract', '--list-langs']
++    args_tess = ['@tesseract@', '--list-langs']
+     try:
+         proc = run(
+             args_tess,
+@@ -162,7 +162,7 @@ def get_languages() -> set[str]:
+ 
+ 
+ def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
+-    args = ['tesseract']
++    args = ['@tesseract@']
+     if langs:
+         args.extend(['-l', '+'.join(langs)])
+     if engine_mode is not None:
+diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
+index 54bf6a24..5d8ee18a 100644
+--- a/src/ocrmypdf/_exec/unpaper.py
++++ b/src/ocrmypdf/_exec/unpaper.py
+@@ -46,7 +46,7 @@ class UnpaperImageTooLargeError(Exception):
+         super().__init__(self.message)
+ 
+ 
+-PROBE = ToolProbe(program='unpaper', version_regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)')
++PROBE = ToolProbe(program='@unpaper@', version_regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)')
+ version = PROBE.version
+ available = PROBE.available
+ 
+@@ -70,7 +70,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+ def run_unpaper(
+     input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
+ ) -> None:
+-    args_unpaper = ['unpaper', '-v', '--dpi', str(round(dpi, 6))] + mode_args
++    args_unpaper = ['@unpaper@', '-v', '--dpi', str(round(dpi, 6))] + mode_args
+ 
+     with _setup_unpaper_io(input_file) as (input_png, output_pnm, tmpdir):
+         # To prevent any shenanigans from accepting arbitrary parameters in

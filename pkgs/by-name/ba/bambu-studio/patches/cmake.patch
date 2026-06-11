@@ -1,0 +1,200 @@
+diff --git a/cmake/modules/FindOpenVDB.cmake b/cmake/modules/FindOpenVDB.cmake
+index 76ddb0d2f..4d30f6865 100644
+--- a/cmake/modules/FindOpenVDB.cmake
++++ b/cmake/modules/FindOpenVDB.cmake
+@@ -123,7 +123,7 @@ if (OPENVDB_FIND_MODULE_PATH)
+ endif ()
+ # ###########################################################################
+ 
+-cmake_minimum_required(VERSION 3.3)
++cmake_minimum_required(VERSION 3.3...3.10)
+ # Monitoring <PackageName>_ROOT variables
+ if(POLICY CMP0074)
+   cmake_policy(SET CMP0074 NEW)
+diff --git a/deps/CMakeLists.txt b/deps/CMakeLists.txt
+index 54b9a2497..3b4a32829 100644
+--- a/deps/CMakeLists.txt
++++ b/deps/CMakeLists.txt
+@@ -21,7 +21,7 @@
+ #
+ 
+ project(BambuStudio-deps)
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.2...3.10)
+ 
+ include(ExternalProject)
+ include(ProcessorCount)
+diff --git a/deps/EXPAT/expat/CMakeLists.txt b/deps/EXPAT/expat/CMakeLists.txt
+index 585a678b8..77d3c13d8 100644
+--- a/deps/EXPAT/expat/CMakeLists.txt
++++ b/deps/EXPAT/expat/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.0...3.10)
+ 
+ project(EXPAT)
+ 
+diff --git a/deps/GLEW/glew/CMakeLists.txt b/deps/GLEW/glew/CMakeLists.txt
+index 513ee4ebb..e262f65e8 100644
+--- a/deps/GLEW/glew/CMakeLists.txt
++++ b/deps/GLEW/glew/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.0...3.10)
+ project(GLEW)
+ 
+ find_package(OpenGL REQUIRED)
+diff --git a/sandboxes/opencsg/CMakeLists.txt b/sandboxes/opencsg/CMakeLists.txt
+index ace8f4d53..304ff4e01 100644
+--- a/sandboxes/opencsg/CMakeLists.txt
++++ b/sandboxes/opencsg/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.0...3.10)
+ 
+ project(OpenCSG-example)
+ 
+diff --git a/src/Shiny/CMakeLists.txt b/src/Shiny/CMakeLists.txt
+index abdb96a72..7e6f16500 100644
+--- a/src/Shiny/CMakeLists.txt
++++ b/src/Shiny/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(Shiny)
+ 
+ add_library(Shiny STATIC
+diff --git a/src/admesh/CMakeLists.txt b/src/admesh/CMakeLists.txt
+index 217976318..6450abc87 100644
+--- a/src/admesh/CMakeLists.txt
++++ b/src/admesh/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(admesh)
+ 
+ add_library(admesh STATIC
+diff --git a/src/boost/CMakeLists.txt b/src/boost/CMakeLists.txt
+index e8c9e11ce..3c62ccf7e 100644
+--- a/src/boost/CMakeLists.txt
++++ b/src/boost/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(nowide)
+ 
+ add_library(nowide STATIC
+diff --git a/src/clipper/CMakeLists.txt b/src/clipper/CMakeLists.txt
+index f62508820..44aa59f23 100644
+--- a/src/clipper/CMakeLists.txt
++++ b/src/clipper/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(clipper)
+ 
+ add_library(clipper STATIC
+diff --git a/src/earcut/CMakeLists.txt b/src/earcut/CMakeLists.txt
+index 08c7bb1be..cb10fea7b 100644
+--- a/src/earcut/CMakeLists.txt
++++ b/src/earcut/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.2)
++cmake_minimum_required(VERSION 3.2...3.10)
+ project(earcut_hpp LANGUAGES CXX C)
+ 
+ option(EARCUT_BUILD_TESTS "Build the earcut test program" ON)
+diff --git a/src/glu-libtess/CMakeLists.txt b/src/glu-libtess/CMakeLists.txt
+index 8fca992a3..662b5593e 100644
+--- a/src/glu-libtess/CMakeLists.txt
++++ b/src/glu-libtess/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(glu-libtess)
+ 
+ add_library(glu-libtess STATIC 
+diff --git a/src/imgui/CMakeLists.txt b/src/imgui/CMakeLists.txt
+index 592e78c8e..718a05439 100644
+--- a/src/imgui/CMakeLists.txt
++++ b/src/imgui/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(imgui)
+ 
+ add_library(imgui STATIC
+diff --git a/src/imguizmo/CMakeLists.txt b/src/imguizmo/CMakeLists.txt
+index fec443180..461d4f684 100644
+--- a/src/imguizmo/CMakeLists.txt
++++ b/src/imguizmo/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(imguizmo)
+ 
+ add_library(imguizmo STATIC
+diff --git a/src/libigl/CMakeLists.txt b/src/libigl/CMakeLists.txt
+index f023826a5..449a3cbef 100644
+--- a/src/libigl/CMakeLists.txt
++++ b/src/libigl/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.0...3.10)
+ project(libigl)
+ 
+ add_library(libigl INTERFACE)
+diff --git a/src/minilzo/CMakeLists.txt b/src/minilzo/CMakeLists.txt
+index c5122ccf0..97e749e04 100644
+--- a/src/minilzo/CMakeLists.txt
++++ b/src/minilzo/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project(minilzo)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 2.6...3.10)
+ 
+ add_library(minilzo INTERFACE)
+ 
+diff --git a/src/miniz/CMakeLists.txt b/src/miniz/CMakeLists.txt
+index 04d562b76..e3d6fbc6f 100644
+--- a/src/miniz/CMakeLists.txt
++++ b/src/miniz/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(miniz)
+ 
+ add_library(miniz INTERFACE)
+diff --git a/src/qhull/CMakeLists.txt b/src/qhull/CMakeLists.txt
+index ab9aba9af..350539681 100644
+--- a/src/qhull/CMakeLists.txt
++++ b/src/qhull/CMakeLists.txt
+@@ -28,7 +28,7 @@ endif()
+ else(Qhull_FOUND)
+ 
+ project(qhull)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 2.6...3.10)
+ 
+ # Define qhull_VERSION in CMakeLists.txt, Makefile, qhull-exports.def, qhull_p-exports.def, qhull_r-exports.def, qhull-warn.pri
+ set(qhull_VERSION2 "2015.2 2016/01/18")  # not used, See global.c, global_r.c, rbox.c, rbox_r.c
+diff --git a/src/semver/CMakeLists.txt b/src/semver/CMakeLists.txt
+index 4b61a7456..76a231074 100644
+--- a/src/semver/CMakeLists.txt
++++ b/src/semver/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ project(semver)
+ 
+ add_library(semver STATIC
+diff --git a/tests/cpp17/CMakeLists.txt b/tests/cpp17/CMakeLists.txt
+index 4e151ecbf..2ac0a9e3d 100644
+--- a/tests/cpp17/CMakeLists.txt
++++ b/tests/cpp17/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.1...3.10)
+ 
+ project(Cpp17Test)
+ 
