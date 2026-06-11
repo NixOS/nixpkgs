@@ -41,10 +41,13 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "alembic"
+    "asyncpg"
     "bcrypt"
     "cryptography"
     "neo4j"
     "networkx"
+    "pytest"
+    "python-multipart"
     "redis"
     "sse-starlette"
   ];
