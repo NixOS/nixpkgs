@@ -1014,6 +1014,13 @@ assertNoAdditions {
 
   copilot-cmp = super.copilot-cmp.overrideAttrs {
     dependencies = [ self.copilot-lua ];
+    patches = [
+      (fetchpatch {
+        name = "fix-deprecated-function-call.patch";
+        url = "https://github.com/zbirenbaum/copilot-cmp/commit/06430ebf99834ebc5d86c63816e409f4cb51fe79.patch";
+        sha256 = "sha256-YOJPFC+qbyURFU58tAiAqbamQLmi7ovnJGkOeOTUPH0=";
+      })
+    ];
   };
 
   copilot-lualine = super.copilot-lualine.overrideAttrs {
