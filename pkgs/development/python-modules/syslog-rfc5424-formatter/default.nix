@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "syslog-rfc5424-formatter";
   version = "1.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -18,7 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-dvRSOMXRmZf0vEEyX6H7OBSfo/PgyOLKuDS8X6g4qe0=";
   };
 
-  # Tests are not picked up, review later again
+  build-system = [
+    setuptools
+  ];
+
+  # Tests depend on syslog_rfc5424_parser, which we don't package
   doCheck = false;
 
   pythonImportsCheck = [ "syslog_rfc5424_formatter" ];
