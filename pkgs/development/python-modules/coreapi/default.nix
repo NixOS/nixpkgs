@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -36,6 +37,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # All tests require live network DNS resolution, which fails in the macOS sandbox
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "Python client library for Core API";
