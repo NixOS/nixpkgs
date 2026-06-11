@@ -2051,11 +2051,7 @@ with pkgs;
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
-  inherit (callPackages ../applications/networking/p2p/deluge { })
-    deluge-gtk
-    deluged
-    deluge
-    ;
+  deluge = deluge-gtk;
 
   deluge-2_x = deluge;
 
