@@ -261,6 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib \
+        --suffix VK_ADD_DRIVER_FILES : "${addDriverRunpath.driverLink}/share/vulkan/icd.d" \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         --run "${stageModules} $out/opt/${binaryName}/modules" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
