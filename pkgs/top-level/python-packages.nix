@@ -5902,6 +5902,8 @@ self: super: with self; {
 
   flowmc = callPackage ../development/python-modules/flowmc { };
 
+  flowsint-api = callPackage ../development/python-modules/flowsint-api { };
+
   flowsint-core = callPackage ../development/python-modules/flowsint-core { };
 
   flowsint-enrichers = callPackage ../development/python-modules/flowsint-enrichers { };
