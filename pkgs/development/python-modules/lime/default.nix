@@ -3,6 +3,8 @@
   fetchPypi,
   buildPythonPackage,
 
+  setuptools,
+
   matplotlib,
   numpy,
   scipy,
@@ -16,7 +18,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "lime";
   version = "0.2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -30,7 +32,9 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "random_seed" "rng"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     numpy
     scipy
