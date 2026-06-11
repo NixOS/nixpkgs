@@ -330,8 +330,8 @@ in
   };
   castopod = runTest ./castopod.nix;
   centrifugo = runTest ./centrifugo.nix;
-  ceph-multi-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix;
-  ceph-single-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix;
+  ceph-multi-node-deprecated-filestore =
+    runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node-deprecated-filestore.nix;
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
@@ -340,6 +340,10 @@ in
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore-dmcrypt.nix;
+  ceph-single-node-deprecated-filestore = runTestOn [
+    "aarch64-linux"
+    "x86_64-linux"
+  ] ./ceph-single-node-deprecated-filestore.nix;
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
