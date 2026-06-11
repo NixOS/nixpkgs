@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "types-urllib3";
   version = "1.26.25.14";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -15,6 +16,8 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-Ipt/V3yVG4wbksG8Ky/bC0mEe9KvbRzCouPdNA872o8=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
