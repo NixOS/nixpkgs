@@ -8,7 +8,9 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hue-plus";
   version = "1.4.5";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "kusti8";
