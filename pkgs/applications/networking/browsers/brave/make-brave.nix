@@ -157,8 +157,7 @@ let
   # Upstream Exec= target in .desktop files (replaced with our wrapper).
   # browser-stable uniquely uses "brave-browser-stable" rather than the plain
   # filename stem; every other combination matches `fileBase`.
-  upstreamBin =
-    if flavor == "browser" && channel == "stable" then "brave-browser-stable" else fileBase;
+  upstreamBin = if channel == "stable" then "brave-${flavor}-stable" else fileBase;
   # Upstream icon filename suffix ("_beta", "_nightly", or empty).
   iconSuffix = if channel == "stable" then "" else "_${channel}";
 
