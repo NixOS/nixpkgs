@@ -9,6 +9,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.3";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "easypost";
     repo = "syslog-rfc5424-formatter";
