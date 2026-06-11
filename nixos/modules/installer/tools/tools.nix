@@ -287,7 +287,7 @@ in
         {
           options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
             default = config.nix.enable && !config.system.disableInstallerTools;
-            defaultText = "config.nix.enable && !config.system.disableInstallerTools";
+            defaultText = lib.literalExpression "config.nix.enable && !config.system.disableInstallerTools";
           };
 
           config = lib.mkIf config.system.tools.${name}.enable {
