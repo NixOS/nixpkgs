@@ -2946,17 +2946,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luadbi";
-      version = "0.7.4-1";
+      version = "0.7.5-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luadbi-0.7.4-1.rockspec";
-          sha256 = "12nqbl2zmwyz7k0x1y5h235di3jb0xwf27p1rh8lcgg4cqx6izr7";
+          url = "mirror://luarocks/luadbi-0.7.5-1.rockspec";
+          sha256 = "1xd4jkqd74zqcpql4kyqlv2n1q4k4bvj2l59nz0fmqbmmlmfk0fw";
         }).outPath;
       src = fetchFromGitHub {
         owner = "mwild1";
         repo = "luadbi";
-        tag = "v0.7.4";
-        hash = "sha256-N4I8zVTodS01QUIncwAts/vxh2aFY2nYCnVmpN+2HwM=";
+        tag = "v0.7.5";
+        hash = "sha256-KShn2FLRYf7oc0+jce2JIUePx+eRFeCq+K9EFXz5tU8=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.5";
