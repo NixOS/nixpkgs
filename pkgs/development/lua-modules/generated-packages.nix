@@ -5619,21 +5619,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "9.0.4-2";
+      version = "9.0.5-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-9.0.4-2.rockspec";
-          sha256 = "1l5jnk665cig8hgcfby4g2w8ffi5lsndx6nvc1pjjjhqz3m69c3w";
+          url = "mirror://luarocks/rustaceanvim-9.0.5-2.rockspec";
+          sha256 = "1wqs1nri1q4j91l7myn57667sxznisa1sgwhx4cakgancnl5m8s1";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.4.zip";
-        sha256 = "1m9ryz4ivrvjmz6zmffj01xc13kral6zvkwqaivhi6gx4553ya09";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.5.zip";
+        sha256 = "14396a3m4px4zcnpmfwkj3csxsmrbgx0v7yx6w8zni94zaixdacx";
       };
 
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.4.zip";
+        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.5.zip";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license = lib.licenses.gpl2Only;
         description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
