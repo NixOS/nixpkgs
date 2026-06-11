@@ -10159,6 +10159,10 @@ with pkgs;
 
   zed-editor-fhs = zed-editor.fhs;
 
+  zen-browser = (wrapFirefox zen-browser-unwrapped { }) // {
+    strictDeps = true;
+  };
+
   zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
