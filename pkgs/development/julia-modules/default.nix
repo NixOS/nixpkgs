@@ -27,6 +27,7 @@
   extraLibs ? [ ],
   juliaCpuTarget ? null,
   makeTransitiveDependenciesImportable ? false, # Used to support symbol indexing
+  pythonSupport ? true,
   makeWrapperArgs ? "",
   packageOverrides ? { },
   precompile ? true,
@@ -66,9 +67,10 @@ let
         makeWrapper ${julia}/bin/julia $out/bin/julia \
           --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLibs}" \
           --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf \
-          --set PYTHONHOME "${pythonToUse}" \
-          --prefix PYTHONPATH : "${pythonToUse}/${pythonToUse.sitePackages}" \
-          --set PYTHON ${pythonToUse}/bin/python $makeWrapperArgs \
+          ${lib.optionalString pythonSupport "--set PYTHONHOME ${pythonToUse}"} \
+          ${lib.optionalString pythonSupport "--prefix PYTHONPATH : ${pythonToUse}/${pythonToUse.sitePackages}"} \
+          ${lib.optionalString pythonSupport "--set PYTHON ${pythonToUse}/bin/python"} \
+          $makeWrapperArgs \
           --set JULIA_CONDAPKG_OFFLINE yes \
           --set JULIA_CONDAPKG_BACKEND Null \
           --set JULIA_PYTHONCALL_EXE "@PyCall"
