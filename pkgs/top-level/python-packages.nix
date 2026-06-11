@@ -19857,6 +19857,14 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tokenspeed-mla = callPackage ../development/python-modules/tokenspeed-mla { };
+
+  tokenspeed-mla-bin = callPackage ../development/python-modules/tokenspeed-mla/bin.nix { };
+
+  tokenspeed-triton = callPackage ../development/python-modules/tokenspeed-triton { };
+
+  tokenspeed-triton-bin = callPackage ../development/python-modules/tokenspeed-triton/bin.nix { };
+
   tokentrim = callPackage ../development/python-modules/tokentrim { };
 
   tololib = callPackage ../development/python-modules/tololib { };
