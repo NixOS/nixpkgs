@@ -10,16 +10,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "scip";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpzGrTvWUXUFfmyn5z4rsqJEcAOA8D1qfN1assRAdn4=";
+    hash = "sha256-VdlOiIU36jXkxIXcC6qVM4g7RvRn7shTgXV5E7PM52M=";
   };
 
-  vendorHash = "sha256-ARfsSW/d2bb4Lp6hedSmMerr3LrkuTfUCi569hI6eYY=";
+  vendorHash = "sha256-dDPcCOpsNGKLpkvsQh0QZb4aiQcoQGYJYhpuYdW3Du0=";
 
   subPackages = [ "cmd/scip" ];
 
