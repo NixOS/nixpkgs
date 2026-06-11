@@ -16029,6 +16029,8 @@ self: super: with self; {
 
   python-homewizard-energy = callPackage ../development/python-modules/python-homewizard-energy { };
 
+  python-hostlist = callPackage ../development/python-modules/python-hostlist { };
+
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
