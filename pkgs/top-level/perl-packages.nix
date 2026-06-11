@@ -32603,12 +32603,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "12.1.0";
+    version = "12.4.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-WjTDvmnj1i1hoC6dska1VEJOiKi+obPjGlO7T2Now+U=";
+      hash = "sha256-GMZvSRZnxrPvhhLOJoFnNas7+ccsGXsL6s16EAeeFJQ=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [

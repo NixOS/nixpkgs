@@ -1207,10 +1207,6 @@ with pkgs;
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
 
-  svn2git = callPackage ../applications/version-management/svn2git {
-    git = gitSVN;
-  };
-
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
@@ -1620,11 +1616,6 @@ with pkgs;
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
-  };
-
-  ding = callPackage ../applications/misc/ding {
-    aspellDicts_de = aspellDicts.de;
-    aspellDicts_en = aspellDicts.en;
   };
 
   discourse = callPackage ../servers/web-apps/discourse { };
@@ -8741,10 +8732,6 @@ with pkgs;
 
   bitwig-studio = bitwig-studio6;
 
-  blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
-    inherit (haskellPackages) ghcWithPackages;
-  };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
@@ -9404,8 +9391,6 @@ with pkgs;
 
   mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
-  mu-repo = callPackage ../applications/misc/mu-repo { };
-
   murmur =
     (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
@@ -9421,10 +9406,6 @@ with pkgs;
     }).mumble;
 
   mumble_overlay = (callPackages ../applications/networking/mumble { }).overlay;
-
-  mwic = callPackage ../applications/misc/mwic {
-    pythonPackages = python3Packages;
-  };
 
   netmaker = callPackage ../applications/networking/netmaker { subPackages = [ "." ]; };
   netmaker-full = callPackage ../applications/networking/netmaker { };
@@ -9524,8 +9505,6 @@ with pkgs;
   orpie = callPackage ../applications/misc/orpie {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
-
-  parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1)
@@ -9632,8 +9611,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  rednotebook = callPackage ../applications/editors/rednotebook { };
-
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
   ripcord =
@@ -9671,10 +9648,6 @@ with pkgs;
   scantailor-advanced = callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
-
-  stag = callPackage ../applications/misc/stag {
-    curses = ncurses;
-  };
 
   sweethome3d = recurseIntoAttrs (
     (callPackage ../applications/misc/sweethome3d { })
@@ -10211,11 +10184,6 @@ with pkgs;
   napari = with python312Packages; toPythonApplication napari;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
-
-  inherit (callPackages ../applications/blockchains/teos { })
-    teos
-    teos-watchtower-plugin
-    ;
 
   vertcoind = vertcoin.override {
     withGui = false;
