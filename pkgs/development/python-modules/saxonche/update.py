@@ -24,7 +24,6 @@ version = resp["info"]["version"]
 wheels["version"] = version
 
 for file in resp["urls"]:
-    python_version: str = file["python_version"]  # for example "cp310"
     _, _, _, tags = parse_wheel_filename(file["filename"])
     (tag,) = tags  # There should only be one tag, take it from the frozenset
     platform = tag.platform
@@ -46,7 +45,7 @@ for file in resp["urls"]:
     hex_hash: str = file["digests"]["sha256"]
     sri_hash = f"sha256-{base64.b64encode(bytes.fromhex(hex_hash)).decode('utf-8')}"
 
-    wheels[f"{python_version}-{isa}-{os}"] = {
+    wheels[f"{tag.interpreter}-{tag.abi}-{isa}-{os}"] = {
         "platform": platform,
         "hash": sri_hash,
     }
