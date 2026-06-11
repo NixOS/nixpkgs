@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "syslog-rfc5424-formatter";
   version = "1.2.3";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "easypost";
     repo = "syslog-rfc5424-formatter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dvRSOMXRmZf0vEEyX6H7OBSfo/PgyOLKuDS8X6g4qe0=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
