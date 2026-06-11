@@ -98,14 +98,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.2";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HY8FaOUU2kp/39OqO+7Xpepiu/6obxTMir11jGtRAkE=";
+    hash = "sha256-CTW8p8cPSZnTMgXk9F6oHvbfIiTtgKZVvRygUZbccJw=";
   };
 
   build-system = [
@@ -193,6 +193,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError (mocked_open.call_count == 2)
     "test_delete_token_from_config"
+
+    # circular imports (reflex-docgen)
+    "test_compiling_docs_does_not_evaluate_upload"
+    "test_enterprise_parent_breadcrumb_uses_overview_route"
   ];
 
   disabledTestPaths = [
@@ -205,6 +209,7 @@ buildPythonPackage (finalAttrs: {
     # circular imports (reflex-docgen)
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
+    "tests/units/docgen/test_reflex_transformer.py"
     "docs/app/tests/test_doc_links.py"
     "docs/app/tests/test_docgen_double_eval.py"
 
@@ -369,7 +374,6 @@ buildPythonPackage (finalAttrs: {
           mistletoe
           pyyaml
           finalAttrs.finalPackage # reflex
-          typing-extensions
           typing-inspection
         ];
         reflex-hosting-cli.dependencies = [

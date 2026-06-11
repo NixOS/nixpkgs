@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   makeWrapper,
 
@@ -20,6 +20,7 @@
   libunwind,
   libusb1,
   magic-enum,
+  minimp3,
   miniz,
   nlohmann_json,
   libgbm,
@@ -52,15 +53,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-76rbxOf4grDWPVILy8nF35wQ6/NcxHQkmiQOB0u4oJo=";
+    hash = "sha256-SavSUHtnJeRi2mzIyUhLfLk37Y/PSuI3bbbqWA7qVbg=";
 
     postCheckout = ''
       cd "$out"
@@ -73,13 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
         zydis \
         sirit \
         tracy \
-        ext-libusb \
+        libusb \
         discord-rpc \
         hwinfo \
         openal-soft \
         dear_imgui \
         LibAtrac9 \
-        aacdec/fdk-aac
+        aacdec/fdk-aac \
+        spdlog \
+        libressl \
+        ImGuiFileDialog
     '';
   };
 
@@ -90,10 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
       --replace-fail @GIT_DESC@ nixpkgs \
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
-
-    substituteInPlace src/core/libraries/np/trophy_ui.cpp \
-      --replace-fail "MIX_SetMasterGain" "MIX_SetMixerGain" \
-      --replace-fail "MIX_GetMasterGain" "MIX_GetMixerGain"
   '';
 
   buildInputs = [
@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxscrnsaver
     libxtst
     magic-enum
+    minimp3
     miniz
     libgbm
     nlohmann_json

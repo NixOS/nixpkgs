@@ -23,7 +23,7 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torch-cluster";
-  version = "1.6.3-unstable-2026-03-26";
+  version = "1.6.3-unstable-2026-06-05";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,8 +33,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rusty1s";
     repo = "pytorch_cluster";
-    rev = "af7b9f0af6b74be1594eb3d0a1685470cbb21265";
-    hash = "sha256-2SXkk7m+feqk7uDir3Ov31TujyIUrRSEwONaiaq3Vvs=";
+    rev = "e9a855c284b45edcbf0282cf70ac09bee0ce4e49";
+    hash = "sha256-0VgJBo37IUXZT3NC40fQ9pttDM3J6l2ks0061Mv3hk8=";
   };
 
   build-system = [

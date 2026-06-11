@@ -3,27 +3,57 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "scanservjs";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "sbs20";
     repo = "scanservjs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qCJyQO/hSDF4NOupV7sepwvpNyjSElnqT71LJuIKe+A=";
+    hash = "sha256-VfFahIyn2MIW4E0sMCpqdduP7F0U7t4a5c1fwpQl7Dc=";
   };
 
-  npmDepsHash = "sha256-HIWT09G8gqSFt9CIjsjJaDRnj2GO0G6JOGeI0p4/1vw=";
+  npmDepsHash = "sha256-VB4z7PCOUzhSbSbxLj/47oppMdTvd2lT7WZKDqd+jfo=";
 
-  postInstall = ''
-    mkdir $out/bin
+  patches = [
+    ./nix-compatibility.patch
+  ];
+
+  postBuild = ''
+    # Install runtime dependencies
+    npm install \
+      --prefix ./dist \
+      --offline \
+      --production \
+      --ignore-scripts
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf $out/lib
+
+    mkdir -p $out/lib
+    cp -r dist/* $out/lib
+
+    substituteInPlace "$out/lib/server/express-configurer.js" \
+      --replace-fail "@client@" "$out/lib/client"
+
+    mkdir -p $out/bin
     makeWrapper ${lib.getExe nodejs} $out/bin/scanservjs \
       --set NODE_ENV production \
-      --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
+      --add-flags "$out/lib/server/server.js"
+
+    runHook postInstall
   '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";

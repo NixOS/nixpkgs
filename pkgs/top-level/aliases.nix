@@ -383,6 +383,7 @@ mapAliases {
   bencode = throw "'bencode' has been removed because it is unmaintained upstream"; # Added 2026-04-09
   bfc = throw "bfc has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   bfr = throw "bfr has been removed, did not update since 2004, fails to build on gcc-15, no homepage"; # Added 2026-01-28
+  biff = throw "biff has been renamed to/replaced by 'bttf'"; # Added 2026-06-04
   bindle = throw "bindle has been removed since it is vulnerable to CVE-2025-62518 and upstream has been archived"; # Added 2025-10-24
   binserve = throw "'binserve' has been removed because it is unmaintained upstream."; # Added 2025-11-29
   bitbucket-server-cli = throw "bitbucket-server-cli has been removed due to lack of maintenance upstream."; # Added 2025-05-27
@@ -423,6 +424,7 @@ mapAliases {
   buildXenPackage = throw "'buildXenPackage' has been removed as a custom Xen build can now be achieved by simply overriding 'xen'."; # Added 2025-05-12
   bullet-roboschool = throw "'bullet-roboschool' has been removed as its build was broken and it was deprecated with its last update in 2019."; # Added 2025-11-15
   bwidget = throw "'bwidget' has been renamed to/replaced by 'tclPackages.bwidget'"; # Converted to throw 2025-10-27
+  bzip2_1_1 = throw "'bzip2_1_1' has been removed as it was an unmaintained 2020 snapshot with no remaining users; use 'bzip2' instead"; # Added 2026-05-31
   bzrtp = throw "'bzrtp' has been moved to 'linphonePackages.bzrtp'"; # Added 2025-09-20
   c0 = throw "'c0' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   caido = warnAlias "'caido' has been split into 'caido-cli' and 'caido-desktop'." caido-desktop; # Added 2026-03-03
@@ -479,6 +481,7 @@ mapAliases {
   ChowPhaser = throw "'ChowPhaser' has been renamed to/replaced by 'chow-phaser'"; # Converted to throw 2025-10-27
   CHOWTapeModel = throw "'CHOWTapeModel' has been renamed to/replaced by 'chow-tape-model'"; # Converted to throw 2025-10-27
   chrome-gnome-shell = throw "'chrome-gnome-shell' has been renamed to/replaced by 'gnome-browser-connector'"; # Converted to throw 2025-10-27
+  chromium-xorg-conf = throw "'chromium-xorg-conf' has been removed as it was only used by the 'cmt' NixOS module, which was removed"; # Added 2026-05-25
   ci-edit = throw "'ci-edit' has been removed due to lack of maintenance upstream"; # Added 2025-08-26
   cinnamon-common = cinnamon; # Added 2025-08-06
   ciopfs = throw "'ciopfs' has been removed due to lack of fuse 3 support."; # Added 2026-06-05
@@ -530,6 +533,7 @@ mapAliases {
   clucene_core = warnAlias "'clucene_core' has been renamed to 'clucene-core'" clucene-core; # Added 2026-01-12
   clucene_core_2 = warnAlias "'clucene_core_2' has been renamed to 'clucene-core_2'" clucene-core_2; # Added 2026-01-12
   cmtk = throw "'cmtk' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
+  coc-cmake = throw "'coc-cmake' has been removed, as it required pnpm 8 (EOL) and its upstream lockfile is incompatible with newer pnpm"; # Added 2026-06-10
   coc-sumneko-lua = throw "'coc-sumneko-lua' has been removed due to unmaintained and broken package. 'lua_ls' can be used as a replacement"; # Added 2026-02-04
   cockroachdb-bin = throw "'cockroachdb-bin' has been renamed to/replaced by 'cockroachdb'"; # Converted to throw 2025-10-27
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
@@ -695,6 +699,7 @@ mapAliases {
   EmptyEpsilon = throw "'EmptyEpsilon' has been renamed to/replaced by 'empty-epsilon'"; # Converted to throw 2025-10-27
   emulationstation = throw "emulationstation was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   emulationstation-de = throw "emulationstation-de was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
+  encfs = throw "'encfs' has been removed as it depends on fuse2, which is deprecated"; # Added 2026-05-05
   enchant2 = warnAlias "'enchant2' has been renamed to 'enchant_2'" enchant_2; # Added 2026-01-14
   encodings = font-encodings; # Added 2026-01-19
   enyo-doom = throw "'enyo-doom' has been renamed to/replaced by 'enyo-launcher'"; # Converted to throw 2025-10-27
@@ -851,6 +856,7 @@ mapAliases {
   gdc11 = throw "gdc11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gdc = throw "gdc has been removed from Nixpkgs, as recent versions require complex bootstrapping"; # Added 2025-08-08
   gdmd = throw "gdmd has been removed from Nixpkgs, as it depends on GDC which was removed"; # Added 2025-08-08
+  gencfsm = throw "'gnecfsm' has been removed as it depends on encfs, which depends on the deprecated fuse2"; # Added 2026-05-05
   gensgs = throw "gensgs has been removed as it was unmaintained, abandoned upstream since 2009 and relied on gtk2"; # Added 2025-10-29
   geos_3_9 = throw "geos_3_9 has been removed from nixpkgs. Please use a more recent 'geos' instead."; # Added 2025-09-21
   gfie = throw "'gfie' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
@@ -2251,6 +2257,7 @@ mapAliases {
   vistafonts-cht = throw "'vistafonts-cht' has been renamed to/replaced by 'vista-fonts-cht'"; # Converted to throw 2025-10-27
   vkBasalt = throw "'vkBasalt' has been renamed to/replaced by 'vkbasalt'"; # Converted to throw 2025-10-27
   vkdt-wayland = throw "'vkdt-wayland' has been renamed to/replaced by 'vkdt'"; # Converted to throw 2025-10-27
+  vmfs-tools = throw "'vmfs-tools' has been removed as it depends on unsupported fuse2 and is unmaintained upstream"; # Added 2026-06-07
   vokoscreen = throw "'vokoscreen' has been replaced by vokoscreen-ng"; # Added 2025-10-21
   volk_2 = throw "'volk_2' has been removed after not being used by any package for a long time"; # Added 2025-10-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream. Consider using 'rumno' instead."; # Added 2024-12-04

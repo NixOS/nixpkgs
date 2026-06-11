@@ -793,7 +793,6 @@ let
                 ++ optionals (bootLoader == "systemd-boot") [
                   pkgs.zstd.bin
                   pkgs.mypy
-                  config.boot.bootspec.package
                 ]
                 ++ optionals clevisTest [ pkgs.klibc ]
                 ++ optional systemdStage1 config.system.nixos-init.package;

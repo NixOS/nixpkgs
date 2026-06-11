@@ -1,25 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-
-  certifi,
-  charset-normalizer,
-  enochecker-core,
-  exceptiongroup,
-  idna,
-  iniconfig,
-  jsons,
-  packaging,
-  pluggy,
-  pytest,
-  requests,
-  tomli,
-  typish,
-  urllib3,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "enochecker-test";
   version = "0.9.0";
   format = "setuptools";
@@ -35,7 +20,7 @@ buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     certifi
     charset-normalizer
     enochecker-core

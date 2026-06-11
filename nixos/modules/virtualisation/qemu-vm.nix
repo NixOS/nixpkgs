@@ -1307,6 +1307,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        User = lib.mkIf (config.nix.daemonUser != "root") config.nix.daemonUser;
+        Group = lib.mkIf (config.nix.daemonGroup != "root") config.nix.daemonGroup;
       };
       script = ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
@@ -1379,7 +1381,6 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"

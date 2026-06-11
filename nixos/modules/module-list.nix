@@ -245,6 +245,7 @@
   ./programs/iio-hyprland.nix
   ./programs/immersed.nix
   ./programs/iotop.nix
+  ./programs/jai-jail.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
@@ -1033,6 +1034,7 @@
   ./services/monitoring/grafana-to-ntfy.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
+  ./services/monitoring/gs1200-exporter.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix
@@ -1485,6 +1487,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/scheduling/prefect.nix
+  ./services/scheduling/scx-loader.nix
   ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix

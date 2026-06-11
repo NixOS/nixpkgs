@@ -13,17 +13,17 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  version = "0.8.0";
+  version = "0.9.0";
   pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2+ZkyWhEnnO/QgCzWscbMr0u5kwdv2HqPLjtiXDfv/o=";
+    hash = "sha256-JRXRN/jOwM3j59ckOcIlbLdSvV9PFueOPs/EVHCF8JE=";
   };
 
-  cargoHash = "sha256-XvtEXBsdxUMJJntzzKVbUIjg78JpwyuUlTm6J3huDPE=";
+  cargoHash = "sha256-qbMnJjJQbNqs6AAgMjtqPEMxIDxdF5a8/tWAVW0Vrig=";
 
   nativeBuildInputs = [
     pkg-config

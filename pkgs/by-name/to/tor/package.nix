@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     description = "Anonymizing overlay network";
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a

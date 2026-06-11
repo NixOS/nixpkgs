@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybugdb";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "LadybugDB";
     repo = "ladybug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-58Wx3QtDS1PSLjuyZ36u3Tq7kiQj+zFxfsMiCJyDUU4=";
+    hash = "sha256-3d0gsSLkO5Np6P4l8AEfEPvzMlkf2wYMCluAtDrwEDc=";
   };
 
   outputs = [

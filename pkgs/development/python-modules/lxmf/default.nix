@@ -25,8 +25,6 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "rns" ];
-
   buildInputs = lib.optionals (!propagateRns) [
     rns
   ];
@@ -51,7 +49,10 @@ buildPythonPackage (finalAttrs: {
     # Reticulum License
     # https://github.com/markqvist/LXMF/blob/master/LICENSE
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      drupol
+      fab
+    ];
     mainProgram = "lxmd";
   };
 })

@@ -558,4 +558,25 @@ pkgs.lib.recurseIntoAttrs rec {
       EOF
     '';
   };
+
+  nvim_require_check_rtp_no_duplicate = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-rtp-no-duplicate-test";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-rtp-no-duplicate-src" { } ''
+      mkdir -p "$out/lua/require-check-rtp-dedup"
+      cat > "$out/lua/require-check-rtp-dedup/init.lua" <<'EOF'
+      local target = "lua/require-check-rtp-dedup/init.lua"
+      local matches = vim.api.nvim_get_runtime_file(target, true)
+      if #matches ~= 1 then
+        error(
+          ("expected plugin on runtimepath exactly once, found %d:\n%s"):format(
+            #matches,
+            table.concat(matches, "\n")
+          )
+        )
+      end
+      return {}
+      EOF
+    '';
+  };
 }

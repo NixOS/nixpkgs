@@ -6,9 +6,12 @@
   py-cpuinfo,
   h5py,
   pkgconfig,
+  c-blosc,
   c-blosc2,
+  bzip2,
   charls,
   lz4,
+  zfp,
   zlib,
   zstd,
   stdenv,
@@ -18,7 +21,12 @@
   avx512Support ? stdenv.hostPlatform.avx512Support,
 }:
 
-buildPythonPackage rec {
+let
+  c-blosc' = c-blosc.override { snappySupport = true; };
+  # H5Z-ZFP needs an 8-bit bitstream word so the compressed HDF5 data is byte-portable
+  zfp' = zfp.override { bitStreamWordSize = 8; };
+in
+buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
   version = "6.0.0";
   pyproject = true;
@@ -26,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LW6rY+zLta4hENBbTll+1amf9TYJiuAumwzgpk1LZ3M=";
   };
 
@@ -39,27 +47,25 @@ buildPythonPackage rec {
   dependencies = [ h5py ];
 
   buildInputs = [
-    #c-blosc
+    c-blosc'
     c-blosc2
-    # bzip2_1_1
+    bzip2
     charls
     lz4
-    # snappy
-    # zfp
+    zfp'
     zlib
     zstd
   ];
 
   # opt-in to use use system libs instead
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
-    #"blosc" # AssertionError: 4000 not less than 4000
+    "blosc"
     "blosc2"
-    # "bz2" # only works with bzip2_1_1
+    "bz2"
     "charls"
     "lz4"
-    # "snappy" # snappy tests fail
     # "sperr" # not packaged?
-    # "zfp" #  pkgconfig: (lib)zfp not found
+    "zfp"
     "zlib"
     "zstd"
   ];
@@ -82,6 +88,19 @@ buildPythonPackage rec {
 
   preBuild = ''
     mkdir src/hdf5plugin/plugins
+
+    mkdir -p pkg-config
+    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config/bz2.pc
+    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
+    {
+      echo "includedir=${lib.getDev zfp'}/include"
+      echo "Name: zfp"
+      echo "Version: ${zfp'.version}"
+      echo "Description: zfp"
+      echo "Libs: -L${lib.getLib zfp'}/lib -lzfp"
+      echo "Cflags: -I${lib.getDev zfp'}/include"
+    } > pkg-config/zfp.pc
+    export PKG_CONFIG_PATH="$PWD/pkg-config''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
   '';
 
   meta = {
@@ -94,4 +113,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.6.1";
+  version = "2026.6.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1011,7 +1011,8 @@
       ];
     "cielo_home" =
       ps: with ps; [
-      ]; # missing inputs: cielo-connect-api
+        cielo-connect-api
+      ];
     "cisco_ios" =
       ps: with ps; [
         pexpect
@@ -1207,7 +1208,8 @@
       ];
     "data_grand_lyon" =
       ps: with ps; [
-      ]; # missing inputs: data-grand-lyon-ha
+        data-grand-lyon-ha
+      ];
     "datadog" =
       ps: with ps; [
         datadog
@@ -1494,7 +1496,8 @@
       ];
     "duco" =
       ps: with ps; [
-      ]; # missing inputs: python-duco-connectivity
+        python-duco-connectivity
+      ];
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -3610,8 +3613,9 @@
     "lg_tv_rs232" =
       ps: with ps; [
         aiousbwatcher
+        lg-rs232-tv
         serialx
-      ]; # missing inputs: lg-rs232-tv
+      ];
     "libre_hardware_monitor" =
       ps: with ps; [
         librehardwaremonitor-api
@@ -4063,7 +4067,8 @@
       ];
     "mitsubishi_comfort" =
       ps: with ps; [
-      ]; # missing inputs: mitsubishi-comfort
+        mitsubishi-comfort
+      ];
     "mjpeg" =
       ps: with ps; [
       ];
@@ -4888,7 +4893,8 @@
       ];
     "ouman_eh_800" =
       ps: with ps; [
-      ]; # missing inputs: ouman-eh-800-api
+        ouman-eh-800-api
+      ];
     "ourgroceries" =
       ps: with ps; [
         ourgroceries
@@ -4972,7 +4978,8 @@
       ];
     "paj_gps" =
       ps: with ps; [
-      ]; # missing inputs: pajgps-api
+        pajgps-api
+      ];
     "palazzetti" =
       ps: with ps; [
         pypalazzetti
@@ -5312,7 +5319,8 @@
       ];
     "pvpc_hourly_pricing" =
       ps: with ps; [
-      ]; # missing inputs: esios_api
+        esios-api
+      ];
     "pyload" =
       ps: with ps; [
         pyloadapi
@@ -7526,7 +7534,8 @@
       ];
     "xthings_cloud" =
       ps: with ps; [
-      ]; # missing inputs: ha-xthings-cloud
+        ha-xthings-cloud
+      ];
     "yale" =
       ps: with ps; [
         aiohasupervisor
@@ -7854,6 +7863,7 @@
     "cert_expiry"
     "chacon_dio"
     "chess_com"
+    "cielo_home"
     "citybikes"
     "clicksend_tts"
     "climate"
@@ -7881,6 +7891,7 @@
     "crownstone"
     "cync"
     "daikin"
+    "data_grand_lyon"
     "datadog"
     "date"
     "datetime"
@@ -7923,6 +7934,7 @@
     "dsmr"
     "dsmr_reader"
     "duckdns"
+    "duco"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
@@ -8228,6 +8240,7 @@
     "lg_netcast"
     "lg_soundbar"
     "lg_thinq"
+    "lg_tv_rs232"
     "libre_hardware_monitor"
     "lichess"
     "lidarr"
@@ -8301,6 +8314,7 @@
     "min_max"
     "minecraft_server"
     "minio"
+    "mitsubishi_comfort"
     "mjpeg"
     "moat"
     "mobile_app"
@@ -8422,6 +8436,7 @@
     "osoenergy"
     "otbr"
     "otp"
+    "ouman_eh_800"
     "ourgroceries"
     "overkiz"
     "overseerr"
@@ -8429,6 +8444,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "paj_gps"
     "palazzetti"
     "panasonic_viera"
     "panel_custom"
@@ -8479,6 +8495,7 @@
     "pushbullet"
     "pushover"
     "pvoutput"
+    "pvpc_hourly_pricing"
     "pyload"
     "python_script"
     "qbittorrent"
@@ -8816,6 +8833,7 @@
     "xiaomi_aqara"
     "xiaomi_ble"
     "xiaomi_miio"
+    "xthings_cloud"
     "yale"
     "yale_smart_alarm"
     "yalexs_ble"

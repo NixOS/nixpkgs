@@ -332,6 +332,8 @@ in
           inherit kernel;
         };
 
+        ethercat = callPackage pkgs.ethercat.kernelModule { };
+
         evdi = callPackage ../os-specific/linux/evdi { };
 
         fanout = callPackage ../os-specific/linux/fanout { };
@@ -555,7 +557,7 @@ in
         veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
         vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-        vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+        vhba = callPackage ../by-name/cd/cdemu-daemon/vhba.nix { };
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 

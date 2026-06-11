@@ -45,11 +45,11 @@
     "vendorHash": "sha256-5IfYhOEhXRpdL7G3Op9a0Ep14el2gwcVmRMkGB7oWH4="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-YmfHL9uCtbxKE1wdacn9gf4Jo85/ivCkxOtMuBQin0I=",
+    "hash": "sha256-dIMlk/ZKIJjrkAk0EGCz3UTZvjbEltWq879331EEMD0=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.279.0",
+    "rev": "v1.281.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-lBD9ifRpUwg45V7zZG3grHvndG0V42oiX68zgcM7t74="
   },
@@ -787,13 +787,13 @@
     "vendorHash": "sha256-mnKXYT0GfIS+ODzBCS9l4rLF1ugadesmpgdOgj74nLg="
   },
   "jianyuan_sentry": {
-    "hash": "sha256-5PXljI0uRjmpJXwJZsoEod/GCgxCA4ti94ubflyaNJY=",
+    "hash": "sha256-/FOpuCdMkUHpJN3z18guNqzG4Ujv8B+gZ67R2TgqKBk=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.14.13",
+    "rev": "v0.15.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-RAVDPsbCnZ/3TSpq5lZb9Ega0AigNLxyG5wsLWPkoaU="
+    "vendorHash": "sha256-6XGS1T1bMUQKPOTqS3i92ZMfyD00ZovTuCViYyM/OEU="
   },
   "joneshf_openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
@@ -1319,11 +1319,11 @@
     "vendorHash": "sha256-7ZoJg1HEVj5Nygr46lmBZeJDfZuU4F90yntrgkBVgGg="
   },
   "tencentcloudstack_tencentcloud": {
-    "hash": "sha256-hBKPD0hQ9kjypeG8Q8xLD2pKGnyWjKAKGnImYG9hsq8=",
+    "hash": "sha256-9TTN1DmIXxqIWWiPdFQLRZbJ1mXkibXAOKfF4rJTPBE=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.82.98",
+    "rev": "v1.82.101",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

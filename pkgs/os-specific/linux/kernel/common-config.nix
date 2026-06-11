@@ -248,6 +248,10 @@ let
       BOUNCE = option yes;
     };
 
+    iommu = lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+      ARM_SMMU_V3_SVA = whenAtLeast "5.9" yes;
+    };
+
     memtest = {
       MEMTEST = yes;
     };
@@ -672,6 +676,10 @@ let
       USB_DWC3_DUAL_ROLE = yes;
 
       USB_XHCI_SIDEBAND = whenAtLeast "6.16" yes; # needed for audio offload
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA = lib.mkIf stdenv.hostPlatform.isAarch64 module;
     };
 
     usb-serial = {
@@ -788,6 +796,10 @@ let
       DEVTMPFS = yes;
 
       UNICODE = yes; # Casefolding support for filesystems
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isPower {
+      # Needed to use the installation iso image formatted for tbxi booting (ISO9660 w/ hybrid HFS+ partition).
+      HFSPLUS_FS = yes;
     };
 
     security = {
@@ -798,7 +810,9 @@ let
       FORTIFY_SOURCE = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
-      DEBUG_LIST = yes;
+      DEBUG_LIST = whenOlder "6.6" yes;
+      # https://git.kernel.org/torvalds/c/aebc7b0d8d91bbc69e976909963046bc48bca4fd
+      LIST_HARDENED = whenAtLeast "6.6" yes;
 
       HARDENED_USERCOPY = yes;
       RANDOMIZE_BASE = option yes;
@@ -1120,7 +1134,7 @@ let
         useZstd = stdenv.buildPlatform.is64bit;
       in
       {
-        # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+        # The default target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
 
         KERNEL_XZ = lib.mkIf (
@@ -1613,6 +1627,12 @@ let
         # > round to working out why.  The workaround is to build it in[…].
         # > (It won't do any harm on non-Mac systems.)
         I2C_POWERMAC = yes;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isPower {
+        # Needed for booting PowerMacs from disc
+        # (the only nice way that doesn't involve messing around with internal drives or in Open Firmware)
+        ATA = yes;
+        PATA_MACIO = yes;
       };
 
     accel = {

@@ -407,7 +407,7 @@ with pkgs;
 
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
-  enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
+  enochecker-test = callPackage ../development/tools/enochecker-test { };
 
   inherit (gridlock) nyarr;
 
@@ -909,9 +909,7 @@ with pkgs;
     inherit (darwin) signingUtils;
   };
 
-  vmTools = callPackage ../build-support/vm {
-    img = stdenv.hostPlatform.linux-kernel.target;
-  };
+  vmTools = callPackage ../build-support/vm { };
 
   releaseTools = callPackage ../build-support/release { };
 
@@ -1253,20 +1251,10 @@ with pkgs;
     else
       throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
 
-  cdemu-client = callPackage ../applications/emulators/cdemu/client.nix { };
-
-  cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
-
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
-
-  image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
-
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
-
-  libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
   mame-tools = lib.addMetaAttrs {
     description = mame.meta.description + " (tools only)";
@@ -1433,7 +1421,7 @@ with pkgs;
     bitwarden-directory-connector
     ;
 
-  bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
+  bitwarden-menu = callPackage ../applications/misc/bitwarden-menu { };
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
@@ -1728,10 +1716,9 @@ with pkgs;
 
   inherit (go-containerregistry) crane gcrane;
 
-  geekbench_4 = callPackage ../tools/misc/geekbench/4.nix { };
-  geekbench_5 = callPackage ../tools/misc/geekbench/5.nix { };
-  geekbench_6 = callPackage ../tools/misc/geekbench/6.nix { };
-  geekbench = geekbench_6;
+  geekbench_4 = callPackage ../by-name/ge/geekbench/4.nix { };
+  geekbench_5 = callPackage ../by-name/ge/geekbench/5.nix { };
+  geekbench_6 = geekbench;
 
   ghidra = callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf_21;
@@ -1747,7 +1734,7 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  hyprshade = python3Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
+  hyprshade = callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
   hyprlandPlugins = recurseIntoAttrs (
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
@@ -1755,7 +1742,7 @@ with pkgs;
 
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
-  jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
+  jellyfin-mpv-shim = callPackage ../applications/video/jellyfin-mpv-shim { };
 
   klaus = with python3Packages; toPythonApplication klaus;
 
@@ -1824,9 +1811,7 @@ with pkgs;
 
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
-  online-judge-template-generator =
-    python3Packages.callPackage ../tools/misc/online-judge-template-generator
-      { };
+  online-judge-template-generator = callPackage ../tools/misc/online-judge-template-generator { };
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
@@ -1836,9 +1821,7 @@ with pkgs;
 
   pixcat = with python3Packages; toPythonApplication pixcat;
 
-  psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
-
-  remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
+  remarkable-mouse = callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
@@ -1887,8 +1870,6 @@ with pkgs;
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
-
-  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -2000,7 +1981,7 @@ with pkgs;
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
-  bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
+  bluetooth_battery = callPackage ../applications/misc/bluetooth_battery { };
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
@@ -2075,7 +2056,7 @@ with pkgs;
     ngtcp2 = ngtcp2-gnutls;
   };
 
-  cve-bin-tool = python3Packages.callPackage ../tools/security/cve-bin-tool { };
+  cve-bin-tool = callPackage ../tools/security/cve-bin-tool { };
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
@@ -2166,14 +2147,8 @@ with pkgs;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
-  fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
-
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
-  };
-
-  fltrdr = callPackage ../tools/misc/fltrdr {
-    icu = icu63;
   };
 
   file = callPackage ../tools/misc/file {
@@ -2265,6 +2240,10 @@ with pkgs;
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
+  gnupgMinimal = gnupg.override {
+    enableMinimal = true;
+    guiSupport = false;
+  };
 
   gnused = callPackage ../tools/text/gnused { };
 
@@ -2430,7 +2409,7 @@ with pkgs;
 
   infisical = callPackage ../development/tools/infisical { };
 
-  input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
+  input-remapper = callPackage ../tools/inputmethods/input-remapper { };
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
@@ -2791,21 +2770,20 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
+  pandoc-acro = callPackage ../tools/misc/pandoc-acro { };
 
-  pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
+  pandoc-imagine = callPackage ../tools/misc/pandoc-imagine { };
 
-  pandoc-include = python3Packages.callPackage ../tools/misc/pandoc-include { };
+  pandoc-include = callPackage ../tools/misc/pandoc-include { };
 
-  pandoc-drawio-filter = python3Packages.callPackage ../tools/misc/pandoc-drawio-filter { };
+  pandoc-drawio-filter = callPackage ../tools/misc/pandoc-drawio-filter { };
 
-  pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
+  pandoc-plantuml-filter = callPackage ../tools/misc/pandoc-plantuml-filter { };
 
-  # pandoc-*nos is a filter suite, where pandoc-xnos has all functionality and the others are used for only specific functionality
-  pandoc-eqnos = python3Packages.callPackage ../tools/misc/pandoc-eqnos { };
-  pandoc-fignos = python3Packages.callPackage ../tools/misc/pandoc-fignos { };
-  pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
-  pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
+  pandoc-eqnos = callPackage ../tools/misc/pandoc-eqnos { };
+  pandoc-fignos = callPackage ../tools/misc/pandoc-fignos { };
+  pandoc-secnos = callPackage ../tools/misc/pandoc-secnos { };
+  pandoc-tablenos = callPackage ../tools/misc/pandoc-tablenos { };
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
@@ -2875,7 +2853,7 @@ with pkgs;
     inherit (llvmPackages) stdenv;
   };
 
-  namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
+  namespaced-openvpn = callPackage ../tools/networking/namespaced-openvpn { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
@@ -2934,7 +2912,7 @@ with pkgs;
     polkitSupport = true;
   };
 
-  pdd = python3Packages.callPackage ../tools/misc/pdd { };
+  pdd = callPackage ../tools/misc/pdd { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
@@ -3042,7 +3020,7 @@ with pkgs;
 
   recoll-nox = recoll.override { withGui = false; };
 
-  remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
+  remote-exec = callPackage ../tools/misc/remote-exec { };
 
   reptor = with python3.pkgs; toPythonApplication reptor;
 
@@ -3068,7 +3046,7 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
+  s3cmd = callPackage ../tools/networking/s3cmd { };
 
   s3-credentials = with python3Packages; toPythonApplication s3-credentials;
 
@@ -3118,9 +3096,7 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
-  sumorobot-manager =
-    python3Packages.callPackage ../applications/science/robotics/sumorobot-manager
-      { };
+  sumorobot-manager = callPackage ../applications/science/robotics/sumorobot-manager { };
 
   sslscan = callPackage ../tools/security/sslscan {
     openssl = openssl.override { withZlib = true; };
@@ -3210,12 +3186,12 @@ with pkgs;
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
-  vimwiki-markdown = python3Packages.callPackage ../tools/misc/vimwiki-markdown { };
+  vimwiki-markdown = callPackage ../tools/misc/vimwiki-markdown { };
 
   voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
   voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
 
-  vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
+  vpn-slice = callPackage ../tools/networking/vpn-slice { };
 
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
@@ -5042,7 +5018,7 @@ with pkgs;
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
-  yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
+  yakut = callPackage ../development/tools/misc/yakut { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
@@ -5074,7 +5050,7 @@ with pkgs;
 
   apacheKafka = apacheKafka_4_2;
 
-  asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
+  asn2quickder = callPackage ../development/tools/asn2quickder { };
 
   libastyle = astyle.override { asLibrary = true; };
 
@@ -5349,7 +5325,7 @@ with pkgs;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
-  cvise = python3Packages.callPackage ../development/tools/misc/cvise {
+  cvise = callPackage ../development/tools/misc/cvise {
     # cvise needs a port to latest llvm-21:
     #   https://github.com/marxin/cvise/issues/340
     inherit (llvmPackages_20) llvm libclang;
@@ -5426,7 +5402,7 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
-  gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
+  gdbgui = callPackage ../development/tools/misc/gdbgui { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
@@ -5487,7 +5463,7 @@ with pkgs;
   maven3 = maven;
   inherit (maven) buildMaven;
 
-  mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
+  mavproxy = callPackage ../applications/science/robotics/mavproxy { };
 
   python-matter-server =
     with python3Packages;
@@ -5527,8 +5503,6 @@ with pkgs;
   nwjs-sdk = nwjs.override {
     sdk = true;
   };
-
-  obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
   openai = with python3Packages; toPythonApplication openai;
 
@@ -8057,7 +8031,7 @@ with pkgs;
   };
   busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
-  cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
+  cm-rgb = callPackage ../tools/system/cm-rgb { };
 
   conky = callPackage ../os-specific/linux/conky (
     {
@@ -8067,9 +8041,7 @@ with pkgs;
     // config.conky or { }
   );
 
-  cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
-    inherit (pkgs) meson;
-  };
+  cpupower-gui = callPackage ../os-specific/linux/cpupower-gui { };
 
   # Darwin package set
   #
@@ -8870,7 +8842,7 @@ with pkgs;
 
   drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
-  droopy = python3Packages.callPackage ../applications/networking/droopy { };
+  droopy = callPackage ../applications/networking/droopy { };
 
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];
@@ -9187,7 +9159,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
+  pass2csv = callPackage ../tools/security/pass2csv { };
 
   pinboard = with python3Packages; toPythonApplication pinboard;
 
@@ -9377,9 +9349,7 @@ with pkgs;
     shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
   };
 
-  matrix-commander =
-    python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander
-      { };
+  matrix-commander = callPackage ../applications/networking/instant-messengers/matrix-commander { };
 
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
@@ -9387,10 +9357,6 @@ with pkgs;
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurialFull = mercurial.override { fullBuild = true; };
-
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
@@ -9446,7 +9412,7 @@ with pkgs;
 
   mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
-  mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
+  mu-repo = callPackage ../applications/misc/mu-repo { };
 
   murmur =
     (callPackages ../applications/networking/mumble {
@@ -9586,7 +9552,7 @@ with pkgs;
 
   inherit (pidginPackages) pidgin;
 
-  plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
+  plex-mpv-shim = callPackage ../applications/video/plex-mpv-shim { };
 
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
@@ -9674,7 +9640,7 @@ with pkgs;
     withXineBackend = true;
   };
 
-  rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
+  rednotebook = callPackage ../applications/editors/rednotebook { };
 
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
@@ -10194,7 +10160,7 @@ with pkgs;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
-  yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
+  yokadi = callPackage ../applications/misc/yokadi { };
 
   your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
 
@@ -11344,7 +11310,7 @@ with pkgs;
     hasktags = haskellPackages.hasktags;
   };
 
-  termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
+  termpdfpy = callPackage ../applications/misc/termpdf.py { };
 
   inherit (callPackage ../applications/networking/cluster/terraform { })
     mkTerraform
@@ -11456,7 +11422,7 @@ with pkgs;
 
   torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 
-  nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
+  nitrokey-app2 = callPackage ../tools/security/nitrokey-app2 { };
 
   hy = with python3Packages; toPythonApplication hy;
 
@@ -11573,5 +11539,10 @@ with pkgs;
 
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
+  };
+
+  clipse-x11 = callPackage ../by-name/cl/clipse/package.nix {
+    enableWayland = false;
+    enableX11 = true;
   };
 }
