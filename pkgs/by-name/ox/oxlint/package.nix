@@ -23,25 +23,25 @@
 # runs without an external linter, which leaves `jsPlugins` configs inert.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxlint";
-  version = "1.68.0";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-/AXBMb+EEpA10omlpxG1jkCqMrhbB8AdEewyQrMJqTk=";
+    hash = "sha256-jbPKyQ1A7jrHWRaG2a2fIqOhTrzBI3e6fQD/b9wRUQM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JHTbbVzXWyigk8NGqvBjVKUuR2p6+gpFRY1GWZEvEFk=";
+    hash = "sha256-VgrHzUfRPARd90kcCGHzhxPDOJzKsh7nvyg6TxbV9RU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-mYwkBQZ3ik3yGoPXc3BtLFhavmkj+QzZNMnYG3qyzyc=";
+    hash = "sha256-UTJMkkdIhBZSbGyjBLACfwWI6jKNsdK5zk322EgvJf8=";
   };
 
   dontUseCmakeConfigure = true;
