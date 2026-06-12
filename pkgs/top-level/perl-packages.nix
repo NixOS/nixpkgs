@@ -9726,10 +9726,10 @@ with self;
 
   DBDCSV = buildPerlPackage {
     pname = "DBD-CSV";
-    version = "0.60";
+    version = "0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.60.tgz";
-      hash = "sha256-AYuDow95mXm8jDwwRMixyAAc32C9w+dGhIgYGVJUtOc=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.62.tgz";
+      hash = "sha256-0/EVD+IGfA49FJWHZeqNQZWDSY+WMTawQC2qkwvJMOM=";
     };
     patches = [
       (fetchpatch2 {
