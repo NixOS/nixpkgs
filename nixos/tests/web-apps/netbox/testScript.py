@@ -62,7 +62,7 @@ def compare(a: str, b: str):
 
 with subtest("Home screen loads"):
     machine.wait_until_succeeds(
-        "curl -sSfL http://[::1]:8001 | grep '<title>Home | NetBox</title>'"
+        "curl -sSfL http://[::1]:80 | grep '<title>Home | NetBox</title>'"
     )
 
 with subtest("Staticfiles are generated"):
