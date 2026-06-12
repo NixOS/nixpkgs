@@ -16,12 +16,12 @@ let
     mapAttrsToList
     ;
 
-  version = "0.32.7";
+  version = "0.32.8";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-JPRyLQzQmC3EiIp+rOMx24JVneFUN7ovC2eYrKxf3ik=";
+    hash = "sha256-Kqv3wbqiOnqEQiaz0J2P8Y2TToX5WiuKCZCbsl1bopM=";
   };
   vendorHash = "sha256-ST33a/YNJiE70ORWNxS9gFNfHcNGGiQhOpUwqgbEJiQ=";
 
