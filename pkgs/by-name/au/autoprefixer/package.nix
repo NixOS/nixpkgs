@@ -63,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "autoprefixer";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.skohtv ];
   };
 })
