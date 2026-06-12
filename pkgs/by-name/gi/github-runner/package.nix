@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.334.0";
+  version = "2.335.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSfzWwIf8Vpc8H0XM1tIqdZhdY/noZCeYLBvdWjqmLA=";
+    hash = "sha256-mFwWhpFzp0pT7WaMpF/N6PGw0IJt3I6/e7GDgw9wA2U=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -210,6 +210,10 @@ buildDotnetModule (finalAttrs: {
     "RepositoryActionWithDockerfilePrepareActions_Repository"
     "RepositoryActionWithInvalidWrapperActionfile_Node"
     "RepositoryActionWithWrapperActionfile_PreSteps"
+  ]
+  ++ [
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_OmitsDependencies_WhenEmpty"
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_PropagatesDependencies_WhenPresent"
   ]
   ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
     "EnsureDotnetsdkBashDownloadScriptUpToDate"
