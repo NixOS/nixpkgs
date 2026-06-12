@@ -188,6 +188,10 @@ stdenv.mkDerivation (
       mv $out/share/doc/lua $out/share/doc/lua-${finalAttrs.version}
     '';
 
+    postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && luaversion == "5.5" && !staticOnly) ''
+      patchelf --add-rpath "${readline}/lib" "$out/bin/lua"
+    '';
+
     # copied from python
     passthru =
       let
