@@ -62,20 +62,27 @@ let
       {
         inherit (cfg) plugins;
       };
-  netboxManageScript =
-    with pkgs;
-    (writeScriptBin "netbox-manage" ''
-      #!${stdenv.shell}
+
+  netboxManageScript = (
+    pkgs.writeShellScriptBin "netbox-manage" ''
+      ${lib.concatMapStringsSep "\n" (envFile: ''
+        . "${envFile}"
+      '') cfg.environmentFiles}
       export PYTHONPATH=${pkg.pythonPath}
       case "$(whoami)" in
-      "root")
-        ${util-linux}/bin/runuser -u netbox -- ${pkg}/bin/netbox "$@";;
-      "netbox")
-        ${pkg}/bin/netbox "$@";;
-      *)
-        echo "This must be run by either by root 'netbox' user"
+        "root")
+          ${lib.getExe' pkgs.util-linux "runuser"} ${lib.cli.toCommandLineShellGNU { } {
+            preserve-environment = true;
+            user = "netbox";
+          }} -- ${pkg}/bin/netbox "$@";;
+        "netbox")
+          exec ${pkg}/bin/netbox "$@";;
+        *)
+          echo "This must be run by either the root or the 'netbox' user." >&2
+          exit 1
       esac
-    '');
+    ''
+  );
 
 in
 {
@@ -110,6 +117,15 @@ in
 
         This module requires a reverse proxy that serves `/static` separately.
         See this [example](https://github.com/netbox-community/netbox/blob/develop/contrib/nginx.conf/) on how to configure this.
+      '';
+    };
+
+    environmentFiles = mkOption {
+      type = with lib.types; listOf path;
+      default = [ ];
+      description = ''
+        Environment files loaded into all NetBox services and consumable in
+        {option}`services.netbox.extraConfig`.
       '';
     };
 
@@ -396,6 +412,7 @@ in
           StateDirectoryMode = "0750";
           Restart = "on-failure";
           RestartSec = 30;
+          EnvironmentFile = cfg.environmentFiles;
         };
       in
       {
