@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/testing-cabal/testtools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

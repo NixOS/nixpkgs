@@ -22,5 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://www.libsrs2.net/";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bindings for libmagic";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

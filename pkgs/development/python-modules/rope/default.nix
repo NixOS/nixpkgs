@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-rope/rope/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

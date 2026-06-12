@@ -22,5 +22,6 @@ gccStdenv.mkDerivation rec {
     homepage = "https://www.ginac.de/CLN/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix; # Once had cygwin problems
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -65,5 +65,6 @@ buildPythonPackage rec {
     mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

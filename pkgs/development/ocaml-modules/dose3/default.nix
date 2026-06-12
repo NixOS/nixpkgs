@@ -59,5 +59,6 @@ buildDunePackage (finalAttrs: {
       * dose-challenged, a Debian-specific tool for checking which packages will certainly become uninstallable when some existing package is upgraded to a newer version.
       * dose-deb-coinstall, a Debian-specific tool for checking whether a set of packages can be installed all together.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

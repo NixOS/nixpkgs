@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -18,5 +18,6 @@ buildDunePackage {
     inherit (dune.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

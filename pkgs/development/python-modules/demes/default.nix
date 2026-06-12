@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/popsim-consortium/demes-python";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

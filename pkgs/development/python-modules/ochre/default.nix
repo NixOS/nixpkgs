@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/getcuia/ochre/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

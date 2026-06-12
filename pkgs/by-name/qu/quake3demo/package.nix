@@ -10,4 +10,5 @@ quake3wrapper {
     quake3demodata
     quake3pointrelease
   ];
+  meta.hasNoMaintainersButDependents = true;
 }

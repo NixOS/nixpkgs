@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jsonpickle/jsonpickle/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     # builds fine but fails to parse most ASN.1 files at runtime
     broken = true;
+    hasNoMaintainersButDependents = true;
   };
 })

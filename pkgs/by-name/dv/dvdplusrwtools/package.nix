@@ -103,5 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       publicDomain
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

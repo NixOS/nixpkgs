@@ -42,5 +42,6 @@ buildPythonApplication rec {
     mainProgram = "tinyprog";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

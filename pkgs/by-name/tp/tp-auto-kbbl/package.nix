@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "tp-auto-kbbl";
+    hasNoMaintainersButDependents = true;
   };
 })

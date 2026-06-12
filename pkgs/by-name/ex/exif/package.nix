@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
     mainProgram = "exif";
+    hasNoMaintainersButDependents = true;
   };
 })

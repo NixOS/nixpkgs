@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     license = lib.licenses.cc-by-sa-40;
     mainProgram = "ent";
+    hasNoMaintainersButDependents = true;
   };
 }

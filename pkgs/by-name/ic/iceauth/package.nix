@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "iceauth";
     maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

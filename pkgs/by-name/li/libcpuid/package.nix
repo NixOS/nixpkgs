@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
     pkgConfigModules = [ "libcpuid" ];
+    hasNoMaintainersButDependents = true;
   };
 })

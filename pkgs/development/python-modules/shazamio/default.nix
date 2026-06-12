@@ -75,5 +75,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # https://github.com/shazamio/ShazamIO/issues/80
     broken = lib.versionAtLeast pydantic.version "2";
+    hasNoMaintainersButDependents = true;
   };
 }

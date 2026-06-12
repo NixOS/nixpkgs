@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "shc";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

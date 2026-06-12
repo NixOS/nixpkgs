@@ -154,6 +154,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/dotnet/vscode-csharp";
     license = lib.licenses.unfree;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

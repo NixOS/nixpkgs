@@ -130,6 +130,7 @@ let
       description = "Oxc Parser Node API";
       homepage = "https://oxc.rs/docs/guide/usage/parser";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   });
 in

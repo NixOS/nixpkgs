@@ -25,5 +25,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/fedora-infra/kitchen/blob/${version}/NEWS.rst";
     license = lib.licenses.lgpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

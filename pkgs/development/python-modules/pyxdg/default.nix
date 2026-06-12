@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Contains implementations of freedesktop.org standards";
     license = lib.licenses.lgpl2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

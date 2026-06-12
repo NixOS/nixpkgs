@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "stepreduce";
+    hasNoMaintainersButDependents = true;
   };
 }

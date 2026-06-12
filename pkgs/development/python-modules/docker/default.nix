@@ -72,5 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/docker/docker-py";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

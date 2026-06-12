@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/alabaster";
     description = "Light, configurable Sphinx theme";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

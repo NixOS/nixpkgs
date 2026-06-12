@@ -27,5 +27,6 @@ buildPythonPackage rec {
       lib.licenses.mit
       lib.licenses.bsd3
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

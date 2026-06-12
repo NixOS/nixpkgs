@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/lazr.restfulclient";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

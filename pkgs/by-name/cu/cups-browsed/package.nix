@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "cups-browsed";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

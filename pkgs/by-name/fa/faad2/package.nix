@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "faad";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

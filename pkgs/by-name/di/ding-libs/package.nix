@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.gpl3
       lib.licenses.lgpl3
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

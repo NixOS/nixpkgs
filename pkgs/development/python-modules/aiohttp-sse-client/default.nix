@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/aiohttp-sse-client/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

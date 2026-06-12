@@ -63,5 +63,6 @@ python3Packages.buildPythonApplication rec {
       lgpl2Plus
     ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

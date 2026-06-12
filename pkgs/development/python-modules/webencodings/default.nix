@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/CourtBouillon/webencodings/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

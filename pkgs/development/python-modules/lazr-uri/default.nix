@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://git.launchpad.net/lazr.uri/tree/NEWS.rst?h=${version}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

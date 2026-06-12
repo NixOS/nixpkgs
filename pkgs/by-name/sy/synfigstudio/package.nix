@@ -162,5 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "synfigstudio";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

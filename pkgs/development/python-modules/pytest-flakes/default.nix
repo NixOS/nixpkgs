@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://pypi.org/project/pytest-flakes/";
     description = "Pytest plugin to check source code with pyflakes";
+    hasNoMaintainersButDependents = true;
   };
 })

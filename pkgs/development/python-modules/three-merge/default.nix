@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/spyder-ide/three-merge";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

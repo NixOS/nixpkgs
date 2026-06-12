@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/willynilly/rfc3987-syntax";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

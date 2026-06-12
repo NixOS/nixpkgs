@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "PdfDing frontend";
+    hasNoMaintainersButDependents = true;
   };
 })

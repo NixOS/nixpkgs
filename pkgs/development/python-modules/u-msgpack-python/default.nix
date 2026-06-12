@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/vsergeev/u-msgpack-python";
     changelog = "https://github.com/vsergeev/u-msgpack-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

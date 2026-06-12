@@ -36,5 +36,6 @@ buildPythonPackage {
     homepage = "https://github.com/pybluez/pybluez";
     license = lib.licenses.gpl2;
     broken = stdenv.hostPlatform.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -16,5 +16,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://gitlab.com/gasche/path_glob";
     description = "Checking glob patterns on paths";
     license = lib.licenses.lgpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 })

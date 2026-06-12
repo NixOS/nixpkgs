@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scikit-fmm/scikit-fmm";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

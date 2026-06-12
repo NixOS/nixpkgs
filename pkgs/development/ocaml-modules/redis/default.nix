@@ -30,5 +30,6 @@ buildDunePackage (finalAttrs: {
     description = "Redis client";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/0xffea/ocaml-redis";
+    hasNoMaintainersButDependents = true;
   };
 })

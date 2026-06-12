@@ -32,5 +32,6 @@ buildPythonPackage {
     homepage = "https://github.com/ua-nick/fleep-py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

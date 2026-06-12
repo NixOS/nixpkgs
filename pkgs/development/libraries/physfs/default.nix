@@ -52,6 +52,7 @@ let
         changelog = "https://github.com/icculus/physfs/releases/tag/release-${version}";
         license = lib.licenses.zlib;
         platforms = lib.platforms.all;
+        hasNoMaintainersButDependents = true;
       };
     };
 

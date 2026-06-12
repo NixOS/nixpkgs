@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

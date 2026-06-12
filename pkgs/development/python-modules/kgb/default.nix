@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/kgb";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

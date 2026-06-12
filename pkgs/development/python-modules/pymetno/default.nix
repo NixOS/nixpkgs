@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     changelog = "https://github.com/Danielhiversen/pyMetno/releases/tag/${version}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

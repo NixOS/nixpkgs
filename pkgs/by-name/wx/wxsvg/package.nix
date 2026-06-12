@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     inherit (wxwidgets_3_2.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

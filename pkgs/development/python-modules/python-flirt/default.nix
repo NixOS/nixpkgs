@@ -46,5 +46,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/williballenthin/lancelot/tree/master/pyflirt";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

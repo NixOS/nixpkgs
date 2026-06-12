@@ -36,5 +36,6 @@ replaceVarsWith {
     description = "Convert a nuget packages directory to a lockfile for buildDotnetModule";
     mainProgram = "nuget-to-json";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

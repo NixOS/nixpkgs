@@ -178,6 +178,7 @@ in
           expand-response-params = "";
           inherit lib nativePrefix;
           runtimeShell = shell;
+          meta.hasNoMaintainersButDependents = true;
           bintools = import ../../build-support/bintools-wrapper {
             name = "bintools";
             inherit lib stdenvNoCC nativePrefix;
@@ -185,6 +186,7 @@ in
             nativeLibc = true;
             expand-response-params = "";
             runtimeShell = shell;
+            meta.hasNoMaintainersButDependents = true;
           };
           inherit stdenvNoCC;
         };

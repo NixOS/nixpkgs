@@ -87,5 +87,6 @@ buildPythonPackage rec {
     changelog = "https://ase-lib.org/releasenotes.html";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

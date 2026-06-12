@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

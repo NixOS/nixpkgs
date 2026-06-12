@@ -36,5 +36,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
         asl20
       ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

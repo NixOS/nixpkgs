@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/intake/python-snappy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

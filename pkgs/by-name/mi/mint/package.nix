@@ -49,5 +49,6 @@ crystal.buildCrystalPackage rec {
     mainProgram = "mint";
     homepage = "https://www.mint-lang.com/";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

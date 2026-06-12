@@ -39,5 +39,6 @@ buildDunePackage {
     homepage = "https://github.com/Embedded-SW-VnV/osdp";
     license = lib.licenses.lgpl3Plus;
     broken = lib.versionAtLeast ocaml.version "5.0";
+    hasNoMaintainersButDependents = true;
   };
 }

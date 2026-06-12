@@ -26,5 +26,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     license = lib.licenses.bsd0;
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

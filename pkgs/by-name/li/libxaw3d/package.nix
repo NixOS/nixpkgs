@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "xaw3d" ];
+    hasNoMaintainersButDependents = true;
   };
 })

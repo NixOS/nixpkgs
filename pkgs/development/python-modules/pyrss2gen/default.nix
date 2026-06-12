@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Library for generating RSS 2.0 feeds";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

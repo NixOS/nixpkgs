@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
         cc0
       ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

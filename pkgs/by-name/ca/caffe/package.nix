@@ -184,5 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
       || !(pythonSupport -> (python != null && numpy != null));
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

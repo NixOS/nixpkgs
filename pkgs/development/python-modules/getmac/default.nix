@@ -45,5 +45,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "getmac";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
+    hasNoMaintainersButDependents = true;
   };
 })

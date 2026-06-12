@@ -31,5 +31,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "peerflix-server";
+    hasNoMaintainersButDependents = true;
   };
 })

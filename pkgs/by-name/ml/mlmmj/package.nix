@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mailing List Management Made Joyful";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

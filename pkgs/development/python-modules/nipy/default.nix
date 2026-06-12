@@ -81,5 +81,6 @@ buildPythonPackage rec {
     description = "Software for structural and functional neuroimaging analysis";
     downloadPage = "https://github.com/nipy/nipy";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

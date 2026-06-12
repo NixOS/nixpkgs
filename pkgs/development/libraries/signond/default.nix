@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     description = "Signon Daemon for Qt";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

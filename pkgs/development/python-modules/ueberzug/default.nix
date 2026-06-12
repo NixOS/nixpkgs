@@ -57,5 +57,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "ueberzug";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

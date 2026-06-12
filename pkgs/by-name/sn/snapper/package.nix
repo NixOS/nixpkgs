@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "snapper";
     maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

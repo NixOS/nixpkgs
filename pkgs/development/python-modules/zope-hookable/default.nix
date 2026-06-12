@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/zopefoundation/zope.hookable";
     changelog = "https://github.com/zopefoundation/zope.hookable/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

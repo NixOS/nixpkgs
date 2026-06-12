@@ -29,5 +29,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/robertlugg/easygui";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

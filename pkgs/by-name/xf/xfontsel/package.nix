@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xfontsel";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

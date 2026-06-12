@@ -61,5 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/florisla/stm32loader";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

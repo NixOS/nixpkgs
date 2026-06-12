@@ -311,6 +311,7 @@ let
           description = "OpenSCAD highlighting, snippets, and more for VSCode";
           homepage = "https://github.com/Antyos/vscode-openscad";
           license = lib.licenses.gpl3;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -1170,6 +1171,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielGavin.ols";
           homepage = "https://github.com/DanielGavin/ols";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -1437,6 +1439,7 @@ let
           description = "XML Tools";
           homepage = "https://github.com/DotJoshJohnson/vscode-xml";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -1855,6 +1858,7 @@ let
           homepage = "https://github.com/reasonml-editor/vscode-reasonml";
           license = lib.licenses.asl20;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
         mktplcRef = {
           name = "reasonml";
@@ -2059,6 +2063,7 @@ let
           homepage = "https://github.com/gleam-lang/vscode-gleam#readme";
           license = lib.licenses.asl20;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -2075,6 +2080,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=golang.Go";
           homepage = "https://github.com/golang/vscode-go";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -2160,6 +2166,7 @@ let
           homepage = "https://github.com/griimick/vscode-vhs";
           license = lib.licenses.mit;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -3439,6 +3446,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server";
           homepage = "https://github.com/microsoft/vscode-livepreview";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -3808,6 +3816,7 @@ let
           homepage = "https://github.com/phoenixframework/vscode-phoenix";
           license = lib.licenses.mit;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -3899,6 +3908,7 @@ let
           homepage = "https://github.com/prisma/language-tools";
           license = lib.licenses.asl20;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -3935,6 +3945,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype";
           homepage = "https://github.com/glideapps/quicktype";
           license = lib.licenses.asl20;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -4017,6 +4028,7 @@ let
           changelog = "https://marketplace.visualstudio.com/items/redhat.java/changelog";
           license = lib.licenses.epl20;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
           broken = lib.versionOlder jdk.version "17";
         };
       };
@@ -4375,6 +4387,7 @@ let
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -4909,6 +4922,7 @@ let
           description = "Show PDF preview in VSCode";
           homepage = "https://github.com/tomoki1207/vscode-pdfviewer";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -5361,6 +5375,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vytautassurvila.csharp-ls";
           homepage = "https://github.com/vytautassurvila/vscode-csharp-ls";
           license = lib.licenses.mit;
+          hasNoMaintainersButDependents = true;
         };
       };
 
@@ -5609,6 +5624,7 @@ let
           homepage = "https://github.com/zguolee/vscode-tabler-icons";
           license = lib.licenses.mit;
           maintainers = [ ];
+          hasNoMaintainersButDependents = true;
         };
       };
 

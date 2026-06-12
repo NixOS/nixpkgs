@@ -70,5 +70,6 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "pygal_gen.py";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

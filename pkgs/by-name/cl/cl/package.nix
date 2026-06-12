@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     description = "OpenCL binding for Erlang";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

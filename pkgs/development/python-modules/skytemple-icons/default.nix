@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Icons for SkyTemple";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

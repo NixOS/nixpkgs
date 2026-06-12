@@ -46,5 +46,6 @@ buildPythonPackage {
     description = "Python XMP Toolkit for working with metadata";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -35,5 +35,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     description = "Mopidy webclient based on the Spotify webbased interface";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

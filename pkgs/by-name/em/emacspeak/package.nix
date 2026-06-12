@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     # Emacspeak requires a minimal Emacs version; let's use the broken flag
     broken = lib.versionOlder (lib.getVersion emacs) "29.1";
+    hasNoMaintainersButDependents = true;
   };
 })

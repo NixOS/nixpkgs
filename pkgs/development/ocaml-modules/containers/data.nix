@@ -28,5 +28,6 @@ buildDunePackage {
 
   meta = containers.meta // {
     description = "Set of advanced datatypes for containers";
+    hasNoMaintainersButDependents = true;
   };
 }

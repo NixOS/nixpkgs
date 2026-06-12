@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Keyless Signature Infrastructure API library";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

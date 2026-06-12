@@ -158,5 +158,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
+    hasNoMaintainersButDependents = true;
   };
 }

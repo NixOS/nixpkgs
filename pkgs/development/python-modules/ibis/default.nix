@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dmulholland/ibis";
     license = lib.licenses.publicDomain;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

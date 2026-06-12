@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
       maintainers
       platforms
       ;
+    hasNoMaintainersButDependents = true;
   };
 })

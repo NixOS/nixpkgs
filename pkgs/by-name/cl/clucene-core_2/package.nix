@@ -99,5 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       lgpl2
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

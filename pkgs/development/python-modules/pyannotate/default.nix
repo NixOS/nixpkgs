@@ -48,5 +48,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannotate";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.chisel-lang.org/firrtl/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

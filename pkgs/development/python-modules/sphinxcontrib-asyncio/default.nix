@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs/sphinxcontrib-asyncio";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

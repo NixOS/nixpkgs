@@ -38,5 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Miicroo/python-vasttrafik/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

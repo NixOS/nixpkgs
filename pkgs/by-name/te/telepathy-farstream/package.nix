@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://telepathy.freedesktop.org/wiki/Components/Telepathy-Farstream/";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Only;
+    hasNoMaintainersButDependents = true;
   };
 })

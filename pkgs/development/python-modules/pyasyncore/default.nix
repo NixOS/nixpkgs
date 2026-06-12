@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonrob/pyasyncore";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/charettes/django-colorful";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

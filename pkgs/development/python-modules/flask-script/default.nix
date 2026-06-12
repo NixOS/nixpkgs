@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Scripting support for Flask";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

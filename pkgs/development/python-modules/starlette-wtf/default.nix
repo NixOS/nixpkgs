@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/amorey/starlette-wtf/releases/tag/${version}";
     homepage = "https://github.com/amorey/starlette-wtf";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -77,5 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/cjdelisle/cjdns/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

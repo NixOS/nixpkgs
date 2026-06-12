@@ -41,6 +41,7 @@ let
       description = "Extensible Library Management and Path Resolution";
       homepage = "https://github.com/RedPRL/bantorra";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
   kado = buildDunePackage {
@@ -62,6 +63,7 @@ let
       description = "Cofibrations in Cartecian Cubical Type Theory";
       homepage = "https://github.com/RedPRL/kado";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

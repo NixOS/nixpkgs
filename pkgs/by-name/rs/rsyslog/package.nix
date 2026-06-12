@@ -199,5 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "rsyslogd";
+    hasNoMaintainersButDependents = true;
   };
 })

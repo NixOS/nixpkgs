@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

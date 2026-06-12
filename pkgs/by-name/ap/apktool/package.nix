@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qrzbing ];
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 })

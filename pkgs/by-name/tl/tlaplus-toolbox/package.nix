@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

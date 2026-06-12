@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aliles/funcsigs";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

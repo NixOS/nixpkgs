@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mstpd/mstpd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

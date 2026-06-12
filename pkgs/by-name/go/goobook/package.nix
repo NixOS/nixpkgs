@@ -67,5 +67,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://gitlab.com/goobook/goobook/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "twm";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

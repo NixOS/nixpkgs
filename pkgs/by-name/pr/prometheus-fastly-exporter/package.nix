@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/fastly/fastly-exporter";
     license = lib.licenses.asl20;
     mainProgram = "fastly-exporter";
+    hasNoMaintainersButDependents = true;
   };
 }

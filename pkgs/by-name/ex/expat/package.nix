@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.mit; # expat version
     pkgConfigModules = [ "expat" ];
+    hasNoMaintainersButDependents = true;
   };
 })

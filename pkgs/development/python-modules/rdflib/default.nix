@@ -90,5 +90,6 @@ buildPythonPackage rec {
     homepage = "https://rdflib.readthedocs.io";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -102,5 +102,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

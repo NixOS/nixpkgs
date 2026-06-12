@@ -62,5 +62,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "credstash";
+    hasNoMaintainersButDependents = true;
   };
 }

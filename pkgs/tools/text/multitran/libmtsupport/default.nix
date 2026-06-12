@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multitran lib: basic useful functions";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

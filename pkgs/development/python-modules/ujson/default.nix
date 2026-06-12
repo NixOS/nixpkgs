@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ultrajson/ultrajson";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

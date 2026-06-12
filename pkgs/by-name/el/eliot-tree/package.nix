@@ -42,5 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Render Eliot logs as an ASCII tree";
     mainProgram = "eliot-tree";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

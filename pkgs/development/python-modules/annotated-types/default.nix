@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/annotated-types/annotated-types/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

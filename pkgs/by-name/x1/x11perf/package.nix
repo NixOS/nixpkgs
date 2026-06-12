@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "x11perf";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

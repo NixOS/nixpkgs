@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

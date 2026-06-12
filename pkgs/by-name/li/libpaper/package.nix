@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

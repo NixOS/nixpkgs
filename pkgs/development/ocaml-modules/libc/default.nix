@@ -22,5 +22,6 @@ buildDunePackage (finalAttrs: {
     description = "Raw definitions and bindings to platforms system libraries";
     homepage = "https://github.com/ocaml-sys/libc.ml";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

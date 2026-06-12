@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Show where your regex match assertion failed";
     license = lib.licenses.mit;
     homepage = "https://github.com/asottile/re-assert";
+    hasNoMaintainersButDependents = true;
   };
 }

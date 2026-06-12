@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "plac_runner.py";
+    hasNoMaintainersButDependents = true;
   };
 })

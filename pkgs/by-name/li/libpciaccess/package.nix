@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
       # mandatory shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

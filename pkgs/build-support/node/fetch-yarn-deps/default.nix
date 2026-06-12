@@ -186,6 +186,7 @@ in
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   } ./yarn-config-hook.sh;
 
@@ -194,6 +195,7 @@ in
     meta = {
       description = "Run yarn build in buildPhase";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   } ./yarn-build-hook.sh;
 
@@ -210,6 +212,7 @@ in
     meta = {
       description = "Prune yarn dependencies and install files for packages using Yarn 1";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   } ./yarn-install-hook.sh;
 }

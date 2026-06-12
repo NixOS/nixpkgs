@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.booxter ];
     mainProgram = "iftop";
+    hasNoMaintainersButDependents = true;
   };
 })

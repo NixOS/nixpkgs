@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "tuigreet";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Ultimaker/libnest2d";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

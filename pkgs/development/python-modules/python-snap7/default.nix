@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gijzelaerr/python-snap7";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

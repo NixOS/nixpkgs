@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

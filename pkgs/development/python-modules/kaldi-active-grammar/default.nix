@@ -80,5 +80,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # Other platforms are supported upstream.
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

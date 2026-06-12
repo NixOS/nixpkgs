@@ -59,5 +59,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Neo23x0/yarGen";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

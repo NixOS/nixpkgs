@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     # Change license for font files/assets to SIL Open Font License 1.1 since version 38.
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

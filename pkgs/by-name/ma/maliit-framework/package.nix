@@ -70,5 +70,6 @@ stdenv.mkDerivation {
     homepage = "http://maliit.github.io/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

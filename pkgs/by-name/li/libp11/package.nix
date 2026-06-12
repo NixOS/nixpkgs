@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenSC/libp11";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

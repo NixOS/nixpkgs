@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${finalAttrs.version}_base";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

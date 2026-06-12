@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl21Plus;
     platforms = kdePackages.qtbase.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

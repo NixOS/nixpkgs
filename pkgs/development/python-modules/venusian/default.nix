@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pylonsproject.org/";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

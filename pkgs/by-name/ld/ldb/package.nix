@@ -115,5 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     pkgConfigModules = [ "ldb" ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

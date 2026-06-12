@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -46,5 +46,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

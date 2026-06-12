@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools for generating recursive-descent parsers: programs that perform pattern matching on text";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

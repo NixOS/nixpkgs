@@ -84,5 +84,6 @@ stdenv.mkDerivation {
     description = "Some additional CUPS drivers including Canon drivers";
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

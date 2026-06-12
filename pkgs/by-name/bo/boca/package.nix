@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/enzo1982/boca";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

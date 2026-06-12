@@ -70,5 +70,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "xhtml2pdf";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

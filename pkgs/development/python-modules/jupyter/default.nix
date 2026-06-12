@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     priority = 100; # This is a metapackage which is unimportant
+    hasNoMaintainersButDependents = true;
   };
 }

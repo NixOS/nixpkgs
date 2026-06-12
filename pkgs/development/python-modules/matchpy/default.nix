@@ -57,5 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/HPAC/matchpy";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,6 +40,7 @@ let
 
           runHook postInstall
         '';
+        meta.hasNoMaintainersButDependents = true;
       }
     );
 in

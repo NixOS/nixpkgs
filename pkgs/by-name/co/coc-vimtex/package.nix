@@ -37,5 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-vimtex";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

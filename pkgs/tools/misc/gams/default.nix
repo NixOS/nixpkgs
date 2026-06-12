@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.Scriptkiddi ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

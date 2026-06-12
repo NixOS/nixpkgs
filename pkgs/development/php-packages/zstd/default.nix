@@ -28,5 +28,6 @@ buildPecl (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/kjdev/php-ext-zstd";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

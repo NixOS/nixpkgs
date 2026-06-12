@@ -49,5 +49,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/amsehili/auditok/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

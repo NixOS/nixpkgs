@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mohanson/leb128";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

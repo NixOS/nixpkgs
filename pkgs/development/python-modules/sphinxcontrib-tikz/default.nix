@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/philexander/tikz";
     maintainers = [ ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

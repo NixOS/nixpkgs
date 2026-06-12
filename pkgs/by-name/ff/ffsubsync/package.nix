@@ -58,5 +58,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       davinci42
     ];
     mainProgram = "ffsubsync";
+    hasNoMaintainersButDependents = true;
   };
 })

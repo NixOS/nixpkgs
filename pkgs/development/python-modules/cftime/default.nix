@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Unidata/cftime";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

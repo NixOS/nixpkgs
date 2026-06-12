@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/newspaper3k";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

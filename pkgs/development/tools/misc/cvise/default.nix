@@ -91,5 +91,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.ncsa;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -26,5 +26,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "nextcloud-exporter";
+    hasNoMaintainersButDependents = true;
   };
 }

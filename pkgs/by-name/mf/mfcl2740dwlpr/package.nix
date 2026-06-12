@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

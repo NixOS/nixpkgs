@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     homepage = "https://www.uhub.org/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hynek/argon2-cffi-bindings";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

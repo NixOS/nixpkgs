@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

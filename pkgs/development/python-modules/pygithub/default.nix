@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

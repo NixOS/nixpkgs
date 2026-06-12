@@ -9,5 +9,6 @@ mkPythonMetaPackage {
   dependencies = [ faiss ];
   meta = {
     inherit (faiss.meta) description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

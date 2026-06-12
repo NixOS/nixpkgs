@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mitsuhiko/python-inifile";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

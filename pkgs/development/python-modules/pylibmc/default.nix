@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "http://sendapatch.se/projects/pylibmc/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

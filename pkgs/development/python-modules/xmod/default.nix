@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/rec/xmod/blob/${src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

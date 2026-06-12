@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     inherit (python3.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+    hasNoMaintainersButDependents = true;
   };
 })

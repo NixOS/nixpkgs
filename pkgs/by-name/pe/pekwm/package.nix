@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pekwm";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -158,5 +158,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [ juli0604 ];
     mainProgram = "calibre-web";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

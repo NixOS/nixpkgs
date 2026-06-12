@@ -66,5 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vega/vl-convert";
     changelog = "https://github.com/vega/vl-convert/releases/tag/v${version}";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

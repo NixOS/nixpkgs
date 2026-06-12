@@ -112,5 +112,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters/tree/main/dbt-postgres";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-postgres/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

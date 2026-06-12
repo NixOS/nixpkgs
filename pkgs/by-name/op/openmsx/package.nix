@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "openmsx";
+    hasNoMaintainersButDependents = true;
   };
 })

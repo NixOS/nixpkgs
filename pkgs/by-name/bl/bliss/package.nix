@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://users.aalto.fi/~tjunttil/bliss/";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

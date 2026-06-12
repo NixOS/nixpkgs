@@ -44,5 +44,6 @@ buildPythonPackage rec {
       "CVE-2021-28363"
     ];
     priority = 10;
+    hasNoMaintainersButDependents = true;
   };
 }

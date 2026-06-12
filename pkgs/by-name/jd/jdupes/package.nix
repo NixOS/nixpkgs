@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jdupes";
+    hasNoMaintainersButDependents = true;
   };
 })

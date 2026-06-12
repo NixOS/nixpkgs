@@ -54,5 +54,6 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

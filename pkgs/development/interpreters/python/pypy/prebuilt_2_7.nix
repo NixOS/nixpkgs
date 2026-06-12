@@ -180,6 +180,7 @@ stdenv.mkDerivation {
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = lib.licenses.mit;
     platforms = lib.attrNames downloadUrls;
+    hasNoMaintainersButDependents = true;
   };
 
 }

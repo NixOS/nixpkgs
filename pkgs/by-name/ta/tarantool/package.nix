@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "tarantool";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

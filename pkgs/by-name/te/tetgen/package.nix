@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://tetgen.org/";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

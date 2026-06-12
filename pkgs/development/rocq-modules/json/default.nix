@@ -39,6 +39,7 @@
   meta = {
     description = "From JSON to Coq, and vice versa";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }).overrideAttrs
   (

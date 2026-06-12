@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/life4/textdistance/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

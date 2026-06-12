@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "http://readthedocs.org/docs/simplenotepy/en/latest/api.html";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

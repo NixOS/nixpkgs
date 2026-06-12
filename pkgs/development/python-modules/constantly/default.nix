@@ -49,6 +49,7 @@ let
       homepage = "https://github.com/twisted/constantly";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

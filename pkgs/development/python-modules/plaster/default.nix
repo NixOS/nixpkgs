@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/plaster/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "fontutil" ];
     platforms = lib.platforms.unix;
     teams = [ lib.teams.freedesktop ];
+    hasNoMaintainersButDependents = true;
   };
 })

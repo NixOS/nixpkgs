@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

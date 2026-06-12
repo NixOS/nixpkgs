@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.unix;
     mainProgram = "mscgen";
+    hasNoMaintainersButDependents = true;
   };
 })

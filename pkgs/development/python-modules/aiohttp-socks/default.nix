@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/romis2012/aiohttp-socks/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

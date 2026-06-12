@@ -35,5 +35,6 @@ buildPythonPackage {
     homepage = "https://github.com/mvasilkov/python-get-video-properties";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

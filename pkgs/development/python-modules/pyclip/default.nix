@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spyoungtech/pyclip";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

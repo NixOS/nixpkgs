@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     pkgConfigModules = [ "apr-1" ];
+    hasNoMaintainersButDependents = true;
   };
 })

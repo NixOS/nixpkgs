@@ -72,5 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       bsd3
     ];
     mainProgram = "deeptools";
+    hasNoMaintainersButDependents = true;
   };
 })

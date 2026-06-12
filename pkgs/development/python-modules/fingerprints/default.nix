@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/opensanctions/fingerprints";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

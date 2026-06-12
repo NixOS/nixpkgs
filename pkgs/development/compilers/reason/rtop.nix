@@ -35,5 +35,6 @@ buildDunePackage {
   meta = reason.meta // {
     description = "Toplevel (or REPL) for Reason, based on utop";
     mainProgram = "rtop";
+    hasNoMaintainersButDependents = true;
   };
 }

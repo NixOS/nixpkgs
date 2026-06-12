@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "numlockx";
+    hasNoMaintainersButDependents = true;
   };
 }

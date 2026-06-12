@@ -31,5 +31,6 @@ buildPythonPackage {
     homepage = "https://github.com/sraaphorst/dlx-python";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

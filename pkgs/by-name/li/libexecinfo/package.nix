@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     homepage = "https://www.freshports.org/devel/libexecinfo";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

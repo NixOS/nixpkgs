@@ -44,5 +44,6 @@ buildPythonPackage rec {
     description = "Jinja2 Extension for Dates and Times";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

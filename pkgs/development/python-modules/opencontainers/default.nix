@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vsoch/oci-python";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

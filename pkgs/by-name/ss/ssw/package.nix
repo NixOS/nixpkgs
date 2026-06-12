@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     description = "GNU Spread Sheet Widget";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

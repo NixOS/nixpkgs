@@ -54,5 +54,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

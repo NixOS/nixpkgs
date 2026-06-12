@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ panicgh ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

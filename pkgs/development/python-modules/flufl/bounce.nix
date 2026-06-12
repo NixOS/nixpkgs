@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://gitlab.com/warsaw/flufl.bounce/-/blob/${finalAttrs.src.tag}/docs/NEWS.rst";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

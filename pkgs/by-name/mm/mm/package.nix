@@ -22,5 +22,6 @@ buildGoModule {
     homepage = "https://git.lost.host/meutraa/mm";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -81,5 +81,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
     broken = true;
+    hasNoMaintainersButDependents = true;
   };
 }

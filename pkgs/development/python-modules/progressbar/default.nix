@@ -22,5 +22,6 @@ buildPythonPackage (finalAttrs: {
     description = "Text progressbar library for python";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rollbar/pyrollbar";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

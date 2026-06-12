@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xdpyinfo";
     maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

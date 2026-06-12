@@ -22,5 +22,6 @@ buildDunePackage {
     description = "Glob string matching language supported by dune";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

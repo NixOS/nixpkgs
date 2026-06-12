@@ -56,5 +56,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

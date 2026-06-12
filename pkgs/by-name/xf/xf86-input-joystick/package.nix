@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xorg-joystick" ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # no darwin driver
+    hasNoMaintainersButDependents = true;
   };
 })

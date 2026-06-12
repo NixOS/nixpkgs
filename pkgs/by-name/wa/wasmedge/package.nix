@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wasmedge";
     maintainers = with lib.maintainers; [ ilkecan ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

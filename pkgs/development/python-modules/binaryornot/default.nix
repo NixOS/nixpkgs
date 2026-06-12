@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/binaryornot/binaryornot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

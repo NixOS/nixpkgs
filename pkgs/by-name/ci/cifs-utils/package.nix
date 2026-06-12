@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

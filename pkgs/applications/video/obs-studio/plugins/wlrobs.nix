@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

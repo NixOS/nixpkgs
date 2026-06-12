@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flock";
     platforms = lib.platforms.all;
     license = lib.licenses.isc;
+    hasNoMaintainersButDependents = true;
   };
 })

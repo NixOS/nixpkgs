@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/domdfcoding/apeye";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

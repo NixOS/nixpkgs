@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Juniper/jxmlease";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

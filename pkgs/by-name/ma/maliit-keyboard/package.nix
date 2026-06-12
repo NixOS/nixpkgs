@@ -69,5 +69,6 @@ stdenv.mkDerivation {
       cc-by-30
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

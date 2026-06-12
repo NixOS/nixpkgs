@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
     mainProgram = "starry";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -43,6 +43,7 @@ pkgs.haskell.packages.ghc98.override {
                 # elm-format needs the standard newer version
                 ansi-wl-pprint = overrideCabal (drv: {
                   jailbreak = true;
+                  hasNoMaintainersButDependents = true;
                 }) (self.callPackage ./ansi-wl-pprint { });
               }
             );

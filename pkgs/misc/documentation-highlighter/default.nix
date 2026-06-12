@@ -9,6 +9,7 @@ runCommand "documentation-highlighter"
       homepage = "https://highlightjs.org";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
     src = lib.sources.cleanSourceWith {
       src = ./.;

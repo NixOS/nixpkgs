@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scikit-tda/tadasets/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

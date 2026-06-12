@@ -36,6 +36,7 @@ let
           (haskell.lib.compose.overrideCabal (drv: {
             inherit src;
             postUnpack = "sourceRoot+=/frontend";
+            hasNoMaintainersButDependents = true;
           }))
         ];
       };

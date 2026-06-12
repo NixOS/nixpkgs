@@ -51,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

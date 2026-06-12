@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     homepage = "https://www.qsl.net/kd2bd/splat.html";
     platforms = lib.platforms.x86_64;
+    hasNoMaintainersButDependents = true;
   };
 
 })

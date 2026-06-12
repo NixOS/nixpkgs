@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Lykos153/python-drivelib";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

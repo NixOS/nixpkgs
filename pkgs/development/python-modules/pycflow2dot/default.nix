@@ -46,5 +46,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "cflow2dot";
+    hasNoMaintainersButDependents = true;
   };
 }

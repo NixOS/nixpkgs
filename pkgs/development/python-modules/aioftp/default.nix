@@ -52,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

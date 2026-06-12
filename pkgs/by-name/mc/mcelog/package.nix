@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://mcelog.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

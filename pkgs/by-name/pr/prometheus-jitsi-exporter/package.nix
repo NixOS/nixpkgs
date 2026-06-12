@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://git.xsfx.dev/prometheus/jitsiexporter";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -39,5 +39,6 @@ buildDunePackage rec {
     homepage = "https://github.com/andrenth/ocaml-stdint";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -94,5 +94,6 @@ stdenv.mkDerivation {
     homepage = "https://sourceforge.net/projects/tinyxml/";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

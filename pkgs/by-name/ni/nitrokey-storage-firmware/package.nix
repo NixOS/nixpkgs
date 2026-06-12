@@ -44,6 +44,7 @@ let
       # it should be licensed under GPLv2+
       license = lib.licenses.gpl2Plus;
       platforms = [ "x86_64-linux" ];
+      hasNoMaintainersButDependents = true;
     };
   });
 in

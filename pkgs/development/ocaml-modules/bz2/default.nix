@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -57,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

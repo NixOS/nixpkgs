@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/duet";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

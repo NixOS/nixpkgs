@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/glaubitz/hfs";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

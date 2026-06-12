@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "jp.py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

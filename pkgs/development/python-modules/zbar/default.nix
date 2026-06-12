@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mchehab/zbar";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

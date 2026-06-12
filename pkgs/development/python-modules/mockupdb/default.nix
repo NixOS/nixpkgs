@@ -40,5 +40,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/ajdavis/mongo-mockup-db";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

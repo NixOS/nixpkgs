@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     description = "Convex polyhedra library for Abstract Interpretation";
     mainProgram = "pplite_lcdd";
     license = lib.licenses.gpl3Only;
+    hasNoMaintainersButDependents = true;
   };
 }

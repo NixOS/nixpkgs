@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     mainProgram = "patchelf";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

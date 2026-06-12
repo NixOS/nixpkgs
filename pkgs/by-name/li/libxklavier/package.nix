@@ -89,5 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://freedesktop.org/wiki/Software/LibXklavier";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

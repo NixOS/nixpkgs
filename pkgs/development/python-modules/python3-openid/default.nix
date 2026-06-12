@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "OpenID support for modern servers and consumers";
     homepage = "https://github.com/necaris/python3-openid";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

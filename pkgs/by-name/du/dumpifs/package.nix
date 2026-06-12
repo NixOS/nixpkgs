@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "dumpifs";
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 })

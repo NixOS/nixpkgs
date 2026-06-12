@@ -48,5 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/jd/pifpaf";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

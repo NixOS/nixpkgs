@@ -41,5 +41,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "scfbuild";
+    hasNoMaintainersButDependents = true;
   };
 }

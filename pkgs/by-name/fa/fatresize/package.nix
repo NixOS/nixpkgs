@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     mainProgram = "fatresize";
+    hasNoMaintainersButDependents = true;
   };
 })

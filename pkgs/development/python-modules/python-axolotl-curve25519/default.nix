@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Curve25519 with ed25519 signatures";
     maintainers = [ ];
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 }

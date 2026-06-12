@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
       already supports IPv6.  So, the FreeBSD release 5.2.1 TI-RPC has
       been ported to replace the SunRPC of the glibc.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

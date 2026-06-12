@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     mainProgram = "cddb_query";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

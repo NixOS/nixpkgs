@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/empicano/aiomqtt/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.artistic1;
     platforms = lib.platforms.all;
     mainProgram = "rman";
+    hasNoMaintainersButDependents = true;
   };
 })

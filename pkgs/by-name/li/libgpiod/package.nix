@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional enable-tools gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

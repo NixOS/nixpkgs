@@ -57,5 +57,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pwiz.py";
+    hasNoMaintainersButDependents = true;
   };
 }

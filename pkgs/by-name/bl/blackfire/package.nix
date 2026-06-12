@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
       "i686-linux"
       "aarch64-darwin"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

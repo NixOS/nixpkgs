@@ -64,5 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "xcp";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -45,5 +45,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.bettercap.org/";
     license = lib.licenses.gpl3Only;
     mainProgram = "bettercap";
+    hasNoMaintainersButDependents = true;
   };
 })

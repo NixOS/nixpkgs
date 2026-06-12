@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pudo/banal";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

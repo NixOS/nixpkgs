@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mk-fg/pretty-yaml";
     license = lib.licenses.wtfpl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

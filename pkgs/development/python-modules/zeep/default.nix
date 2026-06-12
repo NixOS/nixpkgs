@@ -91,5 +91,6 @@ buildPythonPackage rec {
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

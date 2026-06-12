@@ -64,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kmike/marisa-trie";
     changelog = "https://github.com/pytries/marisa-trie/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

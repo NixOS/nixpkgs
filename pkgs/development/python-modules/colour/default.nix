@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
     homepage = "https://github.com/vaab/colour";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

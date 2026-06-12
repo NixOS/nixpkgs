@@ -90,5 +90,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = [ ];
     mainProgram = "mako-render";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

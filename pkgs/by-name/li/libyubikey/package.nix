@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for manipulating Yubico YubiKey One-Time Passwords (OTPs)";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

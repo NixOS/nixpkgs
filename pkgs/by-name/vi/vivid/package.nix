@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "vivid";
+    hasNoMaintainersButDependents = true;
   };
 })

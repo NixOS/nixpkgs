@@ -47,5 +47,6 @@ buildPythonPackage rec {
       lib.licenses.lgpl3Only
       lib.licenses.gpl3Only
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

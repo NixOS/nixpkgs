@@ -41,5 +41,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ kamadorueda ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "go-mtpfs";
+    hasNoMaintainersButDependents = true;
   };
 })

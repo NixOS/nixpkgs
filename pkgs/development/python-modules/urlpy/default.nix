@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aboutcode-org/urlpy";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

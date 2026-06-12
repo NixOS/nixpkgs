@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ Scriptkiddi ];
     mainProgram = "precice-tools";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

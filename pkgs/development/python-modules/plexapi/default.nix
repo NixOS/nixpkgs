@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pushingkarmaorg/python-plexapi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

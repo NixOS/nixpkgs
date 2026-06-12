@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "ucg";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin;
   };

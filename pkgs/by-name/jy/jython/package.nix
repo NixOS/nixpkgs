@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://jython.org/";
     license = lib.licenses.psfl;
     platforms = jre.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

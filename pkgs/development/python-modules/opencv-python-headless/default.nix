@@ -12,5 +12,6 @@ mkPythonMetaPackage {
   passthru.updateScript = null;
   meta = {
     inherit (opencv4.meta) description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

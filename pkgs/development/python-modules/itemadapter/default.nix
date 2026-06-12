@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

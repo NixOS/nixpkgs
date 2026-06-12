@@ -28,5 +28,6 @@ buildDunePackage {
     homepage = "https://reason-native.com/docs/file-context-printer/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

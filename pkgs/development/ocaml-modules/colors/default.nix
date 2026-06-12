@@ -33,5 +33,6 @@ buildDunePackage (finalAttrs: {
     changelog = "https://github.com/leostera/colors/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

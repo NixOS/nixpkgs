@@ -24,5 +24,6 @@ build-idris-package {
     description = "Testing library for Idris";
     homepage = "https://github.com/pheymann/specdris";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

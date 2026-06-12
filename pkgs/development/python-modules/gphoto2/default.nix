@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

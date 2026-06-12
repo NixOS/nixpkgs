@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
       table of contents.
     '';
     mainProgram = "htmldoc";
+    hasNoMaintainersButDependents = true;
   };
 })

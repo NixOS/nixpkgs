@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://hitchdev.com/strictyaml/changelog/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

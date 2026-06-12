@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
        * no need to be constantly connected to work with files.
     '';
     mainProgram = "yandex-disk";
+    hasNoMaintainersButDependents = true;
   };
 }

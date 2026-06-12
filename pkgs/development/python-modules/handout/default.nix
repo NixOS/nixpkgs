@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/danijar/handout";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

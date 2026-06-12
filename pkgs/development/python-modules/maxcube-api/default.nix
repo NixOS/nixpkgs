@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/uebelack/python-maxcube-api";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

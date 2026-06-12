@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/testing-cabal/fixtures";
     changelog = "https://github.com/testing-cabal/fixtures/blob/${version}/NEWS";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

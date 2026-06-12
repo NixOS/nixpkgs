@@ -84,5 +84,6 @@ resholve.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "zxfer";
+    hasNoMaintainersButDependents = true;
   };
 })

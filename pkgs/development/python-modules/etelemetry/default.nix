@@ -57,5 +57,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/sensein/etelemetry-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

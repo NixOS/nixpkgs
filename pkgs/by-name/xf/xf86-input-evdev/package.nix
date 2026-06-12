@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "xorg-evdev" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

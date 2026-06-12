@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amitt001/delegator.py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

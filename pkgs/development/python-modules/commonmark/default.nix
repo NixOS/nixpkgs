@@ -42,5 +42,6 @@ buildPythonPackage rec {
     mainProgram = "cmark";
     homepage = "https://github.com/readthedocs/commonmark.py";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

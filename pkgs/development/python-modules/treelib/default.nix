@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

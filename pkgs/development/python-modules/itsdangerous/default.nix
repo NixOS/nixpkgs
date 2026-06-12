@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Safely pass data to untrusted environments and back";
     homepage = "https://itsdangerous.palletsprojects.com";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

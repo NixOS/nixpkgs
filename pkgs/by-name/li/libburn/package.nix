@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "cdrskin";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

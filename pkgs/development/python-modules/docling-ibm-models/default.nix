@@ -72,5 +72,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/docling-project/docling-ibm-models";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

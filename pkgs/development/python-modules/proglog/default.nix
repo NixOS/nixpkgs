@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Logs and progress bars manager for Python";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Proglog";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

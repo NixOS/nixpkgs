@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     mainProgram = "fossil";
+    hasNoMaintainersButDependents = true;
   };
 })

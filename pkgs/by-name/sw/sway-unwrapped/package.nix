@@ -144,5 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
       sotormd
     ];
     mainProgram = "sway";
+    hasNoMaintainersButDependents = true;
   };
 })

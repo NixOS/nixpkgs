@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

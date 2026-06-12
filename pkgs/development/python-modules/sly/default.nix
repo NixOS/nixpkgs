@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dabeaz/sly";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

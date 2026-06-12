@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    hasNoMaintainersButDependents = true;
   };
 }

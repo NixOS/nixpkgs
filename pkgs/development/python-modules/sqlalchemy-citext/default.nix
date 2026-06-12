@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

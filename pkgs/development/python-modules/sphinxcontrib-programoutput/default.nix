@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/OpenNTI/sphinxcontrib-programoutput/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

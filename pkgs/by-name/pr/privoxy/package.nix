@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "privoxy";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -31,5 +31,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     description = "Amazon S3 filesystem for PyFilesystem2";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

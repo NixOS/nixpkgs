@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.codeblocks.org";
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 }

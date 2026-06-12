@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scrapy/queuelib/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -54,5 +54,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/prometheus/client_python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

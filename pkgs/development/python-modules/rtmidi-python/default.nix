@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/superquadratic/rtmidi-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

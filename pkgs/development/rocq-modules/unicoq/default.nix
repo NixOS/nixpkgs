@@ -29,6 +29,7 @@
   meta = {
     description = "Enhanced unification algorithm for Coq";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
   useDuneifVersion = v: v != null && (v == "dev" || lib.versions.isGt "1.6-9.1" v);
 }).overrideAttrs

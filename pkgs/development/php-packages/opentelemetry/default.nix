@@ -27,5 +27,6 @@ buildPecl (finalAttrs: {
     homepage = "https://opentelemetry.io/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

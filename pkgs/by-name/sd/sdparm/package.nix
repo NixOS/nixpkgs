@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utility to access SCSI device parameters";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux;
+    hasNoMaintainersButDependents = true;
   };
 })

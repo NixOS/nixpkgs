@@ -172,5 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
     maintainers = [ ];
     pkgConfigModules = [ "libzstd" ];
+    hasNoMaintainersButDependents = true;
   };
 })

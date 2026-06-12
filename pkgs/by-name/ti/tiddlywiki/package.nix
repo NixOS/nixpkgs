@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "tiddlywiki";
+    hasNoMaintainersButDependents = true;
   };
 })

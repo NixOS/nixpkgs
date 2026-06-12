@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }
 # Many thanks Jack Ryan from Nix-dev mailing list!

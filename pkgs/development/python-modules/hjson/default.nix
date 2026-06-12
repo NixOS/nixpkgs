@@ -46,5 +46,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hjson/hjson-py/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "hjson";
+    hasNoMaintainersButDependents = true;
   };
 }

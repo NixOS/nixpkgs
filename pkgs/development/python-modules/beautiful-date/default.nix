@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/kuzmoyev/beautiful-date";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

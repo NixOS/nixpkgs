@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     # requires 6.10
     broken = kernel.kernelOlder "6.10";
+    hasNoMaintainersButDependents = true;
   };
 }

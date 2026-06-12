@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/candlepin/python-iniparse";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

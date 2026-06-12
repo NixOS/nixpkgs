@@ -51,5 +51,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     # sqlalchemy.exc.InvalidRequestError: The 'sqlalchemy.orm.mapper()' function is removed as of SQLAlchemy 2.0.
     broken = lib.versionAtLeast sqlalchemy.version "2";
+    hasNoMaintainersButDependents = true;
   };
 }

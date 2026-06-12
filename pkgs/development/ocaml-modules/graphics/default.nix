@@ -28,5 +28,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/ocaml/graphics";
     description = "Set of portable drawing primitives";
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

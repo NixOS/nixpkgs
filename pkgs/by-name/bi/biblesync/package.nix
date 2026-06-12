@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ mBornand ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "write-good";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/vokimon/python-wavefile#version-history";
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

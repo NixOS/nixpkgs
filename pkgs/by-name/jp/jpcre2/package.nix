@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ wrapper for PCRE2 Library";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

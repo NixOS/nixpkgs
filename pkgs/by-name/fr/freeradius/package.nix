@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+    hasNoMaintainersButDependents = true;
   };
 }
 ## TODO: include windbind optionally (via samba?)

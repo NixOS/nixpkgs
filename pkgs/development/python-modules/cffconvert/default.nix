@@ -58,5 +58,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "cffconvert";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Library to handle automated deprecations";
     homepage = "https://deprecation.readthedocs.io/";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -88,5 +88,6 @@ stdenv.mkDerivation rec {
       ++ setuptools.meta.license
     );
     homepage = pip.meta.homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

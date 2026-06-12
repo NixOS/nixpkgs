@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     mainProgram = "vix";
     # sys/io.h missing on other platforms
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

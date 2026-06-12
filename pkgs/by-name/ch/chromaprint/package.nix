@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.quantenzitrone ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "libchromaprint" ];
+    hasNoMaintainersButDependents = true;
   }
   // lib.attrsets.optionalAttrs withTools {
     mainProgram = "fpcalc";

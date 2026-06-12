@@ -68,5 +68,6 @@ stdenv.mkDerivation {
     description = "ISO-compatible high-performance Prolog compiler";
     license = lib.licenses.artistic2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

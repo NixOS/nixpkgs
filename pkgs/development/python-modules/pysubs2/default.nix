@@ -30,5 +30,6 @@ buildPythonPackage rec {
     mainProgram = "pysubs2";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

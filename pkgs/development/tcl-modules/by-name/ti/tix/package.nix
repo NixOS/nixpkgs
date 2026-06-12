@@ -61,5 +61,6 @@ tcl.mkTclDerivation {
       gpl2 # patches from portage
     ];
     broken = tcl.isTcl9;
+    hasNoMaintainersButDependents = true;
   };
 }

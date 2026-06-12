@@ -38,5 +38,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     description = "Python library used to edit or create SubRip files";
     mainProgram = "srt";
+    hasNoMaintainersButDependents = true;
   };
 }

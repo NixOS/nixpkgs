@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xcursorgen";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

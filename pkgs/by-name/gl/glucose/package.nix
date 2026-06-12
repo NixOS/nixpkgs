@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = if enableUnfree then lib.licenses.unfreeRedistributable else lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

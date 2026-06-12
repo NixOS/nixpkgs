@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sqlalchemy/dogpile.cache";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -23,5 +23,6 @@ buildPythonPackage {
     description = "Library that provides the `editor` module for programmatically";
     homepage = "https://github.com/fmoo/python-editor";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

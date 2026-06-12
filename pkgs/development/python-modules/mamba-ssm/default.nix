@@ -72,5 +72,6 @@ buildPythonPackage rec {
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;
+    hasNoMaintainersButDependents = true;
   };
 }

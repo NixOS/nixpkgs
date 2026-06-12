@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://developers.yubico.com/yubico-c-client";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

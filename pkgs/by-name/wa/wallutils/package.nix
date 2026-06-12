@@ -73,5 +73,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

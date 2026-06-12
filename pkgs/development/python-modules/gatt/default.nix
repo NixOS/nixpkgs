@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/getsenic/gatt-python/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

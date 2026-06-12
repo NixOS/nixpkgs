@@ -112,5 +112,6 @@ maven.buildMavenPackage {
     mainProgram = "commafeed";
     maintainers = with lib.maintainers; [ svrana ];
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjade.sourceforge.net/";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

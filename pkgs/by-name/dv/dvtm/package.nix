@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "dvtm";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

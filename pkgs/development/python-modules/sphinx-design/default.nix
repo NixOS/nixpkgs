@@ -62,5 +62,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/executablebooks/sphinx-design/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

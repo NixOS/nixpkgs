@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "tincd";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -60,5 +60,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

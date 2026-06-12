@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Library for communicating with AMQP peers and brokers using Twisted";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

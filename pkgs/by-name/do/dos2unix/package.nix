@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ highghlow ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

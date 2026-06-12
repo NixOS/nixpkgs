@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20
     ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })
