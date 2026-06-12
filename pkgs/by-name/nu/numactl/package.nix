@@ -4,26 +4,19 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "numactl";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "numactl";
     repo = "numactl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
+    hash = "sha256-88fxc7u7l7n0WLZ56vDmvdAoh8BaKTXUHWfqCycyoOw=";
   };
-
-  patches = [
-    # Fix for memory corruption in set_nodemask_size
-    (fetchpatch {
-      url = "https://github.com/numactl/numactl/commit/f9deba0c8404529772468d6dd01389f7dbfa5ba9.patch";
-      hash = "sha256-TmWfD99YaSIHA5PSsWHE91GSsdsVgVU+qIow7LOwOGw=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -42,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
@@ -49,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       lgpl21
     ]; # libnuma is lgpl21
+    maintainers = with lib.maintainers; [ VZstless ];
     platforms = lib.platforms.linux;
   };
 })
