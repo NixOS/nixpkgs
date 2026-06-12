@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.20.14";
-          hash = "sha256-jD+e+s4iaX1p+KR3neJUwvPm/DQiX1gSTt595ryw8xE=";
+          version = "3.22.1";
+          hash = "sha256-ln9DcfjW0QO7V6hF+QNqy+V13hbjWwhsisrgZPrk1R4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.10.8";
-          hash = "sha256-pBfD6HwPP9CybROC2W27CAq2RSAgRJ3ZrxvUOBzRyC8=";
+          version = "2.11.0";
+          hash = "sha256-9izhQvZmfUVeKS0H89XXkN1bNP4+AZyUuetfD0kRJ/c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.42.0";
-          hash = "sha256-mk4ZgaBxLFPvrm3EU+hdidorhdWp7EGfRP0e/kARd1A=";
+          version = "0.43.1";
+          hash = "sha256-rZjdBzqXpSG4aCMjRCmIrWtQdmmh7vEJQLIuH65Ewf0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -4534,8 +4534,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "110.1.0";
-          hash = "sha256-i6FObecuMylaCZYl/KLMscE07JIzQz+NSkfRdxtSfgg=";
+          version = "110.2.0";
+          hash = "sha256-5WCaYhWA6soB2AALFY/5Z7Y8IBAj5/4XSR/I4jHhth8=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

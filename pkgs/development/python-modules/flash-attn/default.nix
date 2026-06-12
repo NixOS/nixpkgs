@@ -31,7 +31,7 @@ let
 
   self = buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     pname = "flash-attention";
-    version = "2.8.3";
+    version = "2.8.3.post1";
     pyproject = true;
     __structuredAttrs = true;
 
@@ -40,7 +40,7 @@ let
       repo = "flash-attention";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-6I1O4E5K5IdbpzrXFHK06QVcOE8zuVkFE338ffk6N8M=";
+      hash = "sha256-IgK517JorAf9ERcimusF20HgnuETBNKgnGaOxWBuV/M=";
     };
 
     patches = [

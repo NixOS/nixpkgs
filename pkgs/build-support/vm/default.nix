@@ -30,7 +30,22 @@
   # ----------------------------
   customQemu ? null,
   kernel ? linux,
-  img ? kernel.target,
+  # Name of the kernel image file inside the `kernel` output.
+  kernelImage ?
+    kernel.target or (throw ''
+      vmTools: the `kernel` argument (${kernel.name or "<unknown>"}) has no
+      `target` attribute, so the kernel image filename cannot be determined.
+
+      If you are passing a module tree (e.g. from `pkgs.aggregateModules`) to
+      make extra modules available, pass it via `kernelModules` instead and
+      keep `kernel` pointing at a real kernel derivation. Alternatively, pass
+      `kernelImage` explicitly with the path of the bootable image relative
+      to the `kernel` derivation output (e.g. "bzImage" or "Image").
+    ''),
+  # Package providing `lib/modules` for the VM initrd. Override this (e.g.
+  # with `pkgs.aggregateModules [ ... ]`) to make extra kernel modules
+  # available inside the VM without replacing the boot kernel.
+  kernelModules ? kernel,
   storeDir ? builtins.storeDir,
   rootModules ? [
     "virtio_pci"
@@ -50,9 +65,9 @@ let
   qemu = buildPackages.qemu_kvm;
 
   modulesClosure = makeModulesClosure {
-    kernel = lib.getOutput "modules" kernel;
+    kernel = lib.getOutput "modules" kernelModules;
     inherit rootModules;
-    firmware = kernel;
+    firmware = kernelModules;
   };
 
   hd = "vda"; # either "sda" or "vda"
@@ -220,7 +235,7 @@ let
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${lib.getOutput "modules" kernel}/lib/modules/
+    export MODULE_DIR=${lib.getOutput "modules" kernelModules}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -260,7 +275,7 @@ let
       -chardev socket,id=xchg,path=virtio-xchg.sock \
       -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
-      -kernel ${kernel}/${img} \
+      -kernel ${kernel}/${kernelImage} \
       -initrd ${initrd}/initrd \
       -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
@@ -417,7 +432,7 @@ let
         name = "extract-file";
         buildInputs = [ util-linux ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe loop
           ${kmod}/bin/modprobe ext4
           ${kmod}/bin/modprobe hfs
@@ -449,7 +464,7 @@ let
           mtdutils
         ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe mtd
           ${kmod}/bin/modprobe mtdram total_size=131072
           ${kmod}/bin/modprobe mtdchar
