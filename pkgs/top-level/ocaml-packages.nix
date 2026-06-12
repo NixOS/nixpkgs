@@ -22,6 +22,8 @@ let
 
         afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
+        aeneas = callPackage ../development/ocaml-modules/aeneas { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
