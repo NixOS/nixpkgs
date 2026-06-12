@@ -25,6 +25,8 @@ in
 buildNodejs {
   version = "26.3.0";
   sha256 = "319ad5d7d20cc622e55eb75b9f1a2546b77a08bd462b67030d0c89316c2c2349";
+  v8Version = "14.6.202.34-node.20";
+  v8Sha256 = "sha256-8WEv1qMUER3cub7OB2LxNB6RYcQMSfs0sGU6rtb53DY=";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then

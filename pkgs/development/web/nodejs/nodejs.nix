@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchpatch2,
   fetchFromGitHub,
@@ -73,6 +74,8 @@
 {
   version,
   sha256,
+  v8Sha256 ? null,
+  v8Version ? null,
   patches ? [ ],
 }@args:
 
@@ -149,6 +152,8 @@ let
   useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
 
+  useSeparateV8Drv = lib.versionAtLeast version "26.3";
+
   sharedLibDeps = {
     inherit
       brotli
@@ -168,6 +173,8 @@ let
       ada
       simdjson
       ;
+  })
+  // (lib.optionalAttrs (useSharedAdaAndSimd && !useSeparateV8Drv) {
     simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
   })
   // (lib.optionalAttrs useSharedSQLite {
@@ -235,6 +242,90 @@ let
     '';
 
   downloadDir = if lib.strings.hasInfix "-rc." version then "download/rc" else "dist";
+  src = fetchurl {
+    url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
+    inherit sha256;
+  };
+  configureScript = writeScript "nodejs-configure" ''
+    exec ${python.executable} configure.py "$@"
+  '';
+
+  libv8 = callPackage ./v8.nix {
+    inherit
+      configureScript
+      darwin-cctools-only-libtool
+      icu
+      python
+      ;
+    version = v8Version;
+    src = stdenvNoCC.mkDerivation {
+      pname = "nodejs-v8-src";
+      version = v8Version;
+      inherit src patches;
+
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      outputHash = v8Sha256;
+
+      dontBuild = true;
+      dontConfigure = true;
+      dontPatchShebangs = true;
+      dontFixup = true;
+
+      installPhase = ''
+        mkdir -p $out/tools/gyp
+        cp -r tools/gyp/pylib $out/tools/gyp/.
+
+        mkdir -p $out/deps/crates/vendor/zoneinfo64/src/data/
+        cp deps/crates/vendor/zoneinfo64/src/data/zoneinfo64.res $out/deps/crates/vendor/zoneinfo64/src/data/.
+        cp -r deps/v8 $out/deps/.
+
+        cp common.gypi $out/.
+        cp configure.py $out/.
+        sed "s#'includes' : \\[ 'src/inspector/node_inspector.gypi' \\]#'includes' : \\[\\]#" node.gyp > $out/node.gyp
+        cp node.gypi $out/.
+        cp tools/gyp_node.py $out/tools/.
+
+        mkdir $out/tools/icu
+        cp tools/icu/icu_versions.json $out/tools/icu/.
+        cp tools/icu/icu-system.gyp $out/tools/icu/.
+
+        mkdir $out/tools/v8_gypfiles
+        cp tools/v8_gypfiles/abseil.gyp $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/features.gypi $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/ForEachFormat.py $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/ForEachReplace.py $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/GN-scraper.py $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/inspector.gypi $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/toolchain.gypi $out/tools/v8_gypfiles/.
+        cp tools/v8_gypfiles/v8.gyp $out/tools/v8_gypfiles/.
+      ''
+      # We also need to mock some Python util files that are not used to configure Python.
+      # Mocking lets us avoid rebuilding the whole derivation if there's a unrelated
+      # change in one of those files.
+      + ''
+        mkdir -p $out/tools/configure.d
+        cat -> $out/tools/configure.d/nodedownload.py <<'EOF'
+        def parse(opt):
+          return {}
+        def help():
+          return ""
+        EOF
+        cat -> $out/tools/getmoduleversion.py <<'EOF'
+        def get_version():
+          return "99"
+        EOF
+        cat -> $out/tools/getnapibuildversion.py <<'EOF'
+        def get_napi_version():
+          return "9"
+        EOF
+        cat -> $out/tools/utils.py <<'EOF'
+        def SearchFiles(dir, ext):
+          return []
+        EOF
+      '';
+    };
+  };
 
   package = stdenv.mkDerivation (
     finalAttrs:
@@ -245,12 +336,12 @@ let
       self = finalAttrs.finalPackage;
     in
     {
-      inherit pname version;
-
-      src = fetchurl {
-        url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
-        inherit sha256;
-      };
+      inherit
+        pname
+        version
+        src
+        configureScript
+        ;
 
       strictDeps = true;
 
@@ -276,6 +367,7 @@ let
         bash
         icu
       ]
+      ++ lib.optional useSeparateV8Drv libv8
       ++ builtins.attrValues sharedLibDeps;
 
       nativeBuildInputs = [
@@ -318,6 +410,7 @@ let
         "--dest-os=${destOS}"
         "--dest-cpu=${stdenv.hostPlatform.node.arch}"
       ]
+      ++ lib.optional useSeparateV8Drv "--without-bundled-v8"
       ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
       ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
       ++ lib.optionals (!canExecute && canEmulate) [
@@ -346,10 +439,6 @@ let
       configurePlatforms = [ ];
 
       dontDisableStatic = true;
-
-      configureScript = writeScript "nodejs-configure" ''
-        exec ${python.executable} configure.py "$@"
-      '';
 
       # In order to support unsupported cross configurations, we copy some intermediate executables
       # from a native build and replace all the build-system tools with a script which simply touches
@@ -599,7 +688,7 @@ let
             else
               "{bytecode_builtins_list_generator,mksnapshot,torque,node_js2c,gen-regexp-special-case}";
         in
-        lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        lib.optionalString (!useSeparateV8Drv && stdenv.hostPlatform == stdenv.buildPlatform) ''
           mkdir -p $dev/bin
           cp out/Release/${tools} $dev/bin
         ''
@@ -618,36 +707,43 @@ let
           # TODO: use propagatedBuildInputs instead of copying headers.
           cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
 
-          # assemble a static v8 library and put it in the 'libv8' output
-          mkdir -p $libv8/lib
-          pushd out/Release/obj
-          find . -path "**/torque_*/**/*.o" -or -path "**/v8*/**/*.o" \
-            -and -not -name "torque.*" \
-            -and -not -name "mksnapshot.*" \
-            -and -not -name "gen-regexp-special-case.*" \
-            -and -not -name "bytecode_builtins_list_generator.*" \
-            | sort -u >files
-          test -s files # ensure that the list is not empty
-          $AR -cqs $libv8/lib/libv8.a @files
-          popd
+          ${
+            if useSeparateV8Drv then
+              #FIXME: avoid duplicating those files
+              "cp -R ${libv8} $libv8"
+            else
+              ''
+                # assemble a static v8 library and put it in the 'libv8' output
+                mkdir -p $libv8/lib
+                pushd out/Release/obj
+                find . -path "**/torque_*/**/*.o" -or -path "**/v8*/**/*.o" \
+                  -and -not -name "torque.*" \
+                  -and -not -name "mksnapshot.*" \
+                  -and -not -name "gen-regexp-special-case.*" \
+                  -and -not -name "bytecode_builtins_list_generator.*" \
+                  | sort -u >files
+                test -s files # ensure that the list is not empty
+                $AR -cqs $libv8/lib/libv8.a @files
+                popd
 
-          # copy v8 headers
-          cp -r deps/v8/include $libv8/
+                # copy v8 headers
+                cp -r deps/v8/include $libv8/
 
-          # create a pkgconfig file for v8
-          major=$(grep V8_MAJOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
-          minor=$(grep V8_MINOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
-          patch=$(grep V8_PATCH_LEVEL deps/v8/include/v8-version.h | cut -d ' ' -f 3)
-          mkdir -p $libv8/lib/pkgconfig
-          cat > $libv8/lib/pkgconfig/v8.pc << EOF
-          Name: v8
-          Description: V8 JavaScript Engine
-          Version: $major.$minor.$patch
-          Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
-          Cflags: -I$libv8/include
-          EOF
+                # create a pkgconfig file for v8
+                major=$(grep V8_MAJOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+                minor=$(grep V8_MINOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+                patch=$(grep V8_PATCH_LEVEL deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+                mkdir -p $libv8/lib/pkgconfig
+                cat > $libv8/lib/pkgconfig/v8.pc << EOF
+                Name: v8
+                Description: V8 JavaScript Engine
+                Version: $major.$minor.$patch
+                Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
+                Cflags: -I$libv8/include
+                EOF''
+          }
         ''
-        + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        + lib.optionalString (!useSeparateV8Drv && stdenv.hostPlatform == stdenv.buildPlatform) ''
           cp -r $out/include $dev/include
         '';
 
