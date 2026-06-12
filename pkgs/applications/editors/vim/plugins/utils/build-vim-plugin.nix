@@ -52,7 +52,11 @@
           meta = {
             platforms = lib.platforms.all;
           }
-          // meta;
+          // meta
+          // lib.optionalAttrs (pos.file == toString ../generated.nix) {
+            # Because generated
+            requiresMaintainers = false;
+          };
         }
       );
     in

@@ -128,6 +128,8 @@ makeScope {
               buildPlatformEgg = if isCross then eggSplices.selfBuildHost.${pname} else null;
               meta.homepage = "https://wiki.call-cc.org/eggref/${majorVersion}/${pname}";
               meta.description = synopsis;
+              # TODO: Why?
+              meta.requiresMaintainers = false;
               meta.license =
                 (
                   lib.licenses

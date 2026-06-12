@@ -255,6 +255,15 @@ let
           maintainers = (attrs.meta.maintainers or [ ]) ++ [ ];
           broken = disabled;
         }
+        //
+          lib.optionalAttrs
+            (
+              (builtins.unsafeGetAttrPos "pname" attrs).file == toString ../../lua-modules/generated-packages.nix
+            )
+            {
+              # Because generated
+              requiresMaintainers = false;
+            }
         // attrs.meta or { };
       }
     )

@@ -24,6 +24,8 @@ let
         {
           version = lib.sources.shortRev lockedGrammar.nurl.args.rev;
           src = (pkgs.${lockedGrammar.nurl.fetcher} lockedGrammar.nurl.args);
+          # TODO: Why not?
+          meta.requiresMaintainers = false;
         }
     ) prev;
 
