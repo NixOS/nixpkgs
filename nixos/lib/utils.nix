@@ -14,6 +14,7 @@ let
     escapeShellArg
     filter
     flatten
+    foldl'
     getName
     hasPrefix
     hasSuffix
@@ -31,13 +32,13 @@ let
     nameValuePair
     optionalString
     removePrefix
-    removeSuffix
     replaceStrings
+    splitString
     stringToCharacters
     types
     ;
 
-  inherit (lib.strings) toJSON normalizePath escapeC;
+  inherit (lib.strings) toJSON escapeC;
 in
 
 let
@@ -98,26 +99,60 @@ let
       || hasPrefix a'.mountPoint b'.mountPoint
       || any (hasPrefix a'.mountPoint) b'.depends;
 
-    # Escape a path according to the systemd rules. FIXME: slow
+    # Escape a path according to the systemd rules.
     # The rules are described in systemd.unit(5) as follows:
     # The escaping algorithm operates as follows: given a string, any "/" character is replaced by "-", and all other characters which are not ASCII alphanumerics, ":", "_" or "." are replaced by C-style "\x2d" escapes. In addition, "." is replaced with such a C-style escape when it would appear as the first character in the escaped string.
     # When the input qualifies as absolute file system path, this algorithm is extended slightly: the path to the root directory "/" is encoded as single dash "-". In addition, any leading, trailing or duplicate "/" characters are removed from the string before transformation. Example: /foo//bar/baz/ becomes "foo-bar-baz".
     escapeSystemdPath =
-      s:
       let
+        # These don't depend on the path being escaped, so build them once
+        # rather than on every call.
+        escapeChar = escapeC (stringToCharacters " !\"#$%&'()*+,;<=>?@[\\]^`{|}~-");
+        escapeLeadingDot = escapeC [ "." ] ".";
+        slashesToDashes = replaceStrings [ "/" ] [ "-" ];
         replacePrefix =
           p: r: s:
-          (if (hasPrefix p s) then r + (removePrefix p s) else s);
-        trim = s: removeSuffix "/" (removePrefix "/" s);
-        normalizedPath = normalizePath s;
+          (if hasPrefix p s then r + removePrefix p s else s);
       in
-      replaceStrings [ "/" ] [ "-" ] (
-        replacePrefix "." (escapeC [ "." ] ".") (
-          escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-") (
-            if normalizedPath == "/" then normalizedPath else trim normalizedPath
-          )
-        )
-      );
+      s:
+      let
+        isAbsolute = hasPrefix "/" s;
+        # path_simplify(): collapse duplicate slashes and drop "." components.
+        rawComponents = filter (c: c != "" && c != ".") (splitString "/" s);
+        # systemd accepts ".." only where it is redundant: a leading ".." in an
+        # absolute path refers to the root's parent, i.e. the root itself, and is
+        # dropped. Any other ".." cannot be resolved without the filesystem, so
+        # the path is not normalized and systemd-escape errors on it.
+        simplified =
+          foldl'
+            (
+              acc: c:
+              if c == ".." then
+                # A leading ".." in an absolute path is the only redundant case.
+                if isAbsolute && acc.components == [ ] then acc else acc // { normalized = false; }
+              else
+                acc // { components = acc.components ++ [ c ]; }
+            )
+            {
+              components = [ ];
+              normalized = true;
+            }
+            rawComponents;
+        notNormalized = throw "escapeSystemdPath: ${s} is not a normalized path";
+        simplifiedPath =
+          if !simplified.normalized then
+            notNormalized
+          else if simplified.components != [ ] then
+            concatStringsSep "/" simplified.components
+          # The root directory, and - matching systemd-escape - the empty string.
+          else if isAbsolute || s == "" then
+            "/"
+          # A relative path that reduces to nothing (e.g. "."), which has no
+          # valid escaping.
+          else
+            notNormalized;
+      in
+      slashesToDashes (replacePrefix "." escapeLeadingDot (escapeChar simplifiedPath));
 
     # Quotes an argument for use in Exec* service lines.
     # systemd accepts "-quoted strings with escape sequences, toJSON produces
