@@ -6,10 +6,12 @@
   netbox,
   pytestCheckHook,
   python,
-  netbox-napalm-plugin,
+  netboxPlugins,
   pydriller,
 }:
-
+let
+  inherit (netboxPlugins) netbox-napalm-plugin;
+in
 buildPythonPackage (finalAttrs: {
   pname = "netbox-config-backup";
   version = "2.2.2";
