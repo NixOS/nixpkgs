@@ -10,10 +10,12 @@
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-cc";
   version = "0.5.2";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
@@ -22,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cc";
-    rev = version;
-    sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
+    tag = finalAttrs.version;
+    hash = "sha256-U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
   build-system = [ setuptools ];
@@ -58,4 +60,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})
