@@ -1332,3 +1332,7 @@ If you are investigating an [issue opened by the security tracker](https://githu
     - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests);
   - **Yes**: [Backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
 - When the patch has made it into all the relevant branches (`master`, and the vulnerable releases), close the relevant issue(s).
+
+## Guideline for hasNoMaintainerButDependents
+
+CI may complain about this meta field needing to be set or unset.
