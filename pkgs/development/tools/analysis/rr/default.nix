@@ -1,6 +1,6 @@
 {
   lib,
-  gccMultiStdenv,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   bash,
@@ -18,7 +18,7 @@
   zstd,
 }:
 
-gccMultiStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.9.0";
   pname = "rr";
 
@@ -77,7 +77,7 @@ gccMultiStdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "disable32bit" false)
+    (lib.cmakeBool "disable32bit" true)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
