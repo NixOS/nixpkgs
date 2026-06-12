@@ -44,6 +44,10 @@
                 "man"
                 "out"
                 "static"
+
+                # Filter out outputs that didn't exist on 25.11
+                "npm"
+                "corepack"
               ])
               && !(builtins.hasAttr name nodejs)
             ) (builtins.attrNames nodejs-slim)
