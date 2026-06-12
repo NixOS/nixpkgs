@@ -363,7 +363,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
-  ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+  ++ lib.optional withUkify (
+    python3Packages.python.withPackages (
+      ps: with ps; [
+        cryptography
+        pefile
+      ]
+    )
+  )
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
