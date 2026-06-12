@@ -103,6 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix path to ps2pdf binary
       inherit ghostscript;
     })
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/7919
+    (fetchpatch {
+      name = "fix-build-poppler-26.05.0";
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/98828255aa0c1212329236b3ff4ac7f41efb4a67.patch";
+      hash = "sha256-ujUl0SxZyb/TyJRmq1ETNn5W8lDDNn3JqHQQQPU5klA=";
+    })
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/7968
+    ./fix-build-poppler-26.06.0.patch
   ];
 
   postPatch = ''
