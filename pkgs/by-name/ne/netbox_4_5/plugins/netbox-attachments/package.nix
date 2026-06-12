@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_attachments" ];
 
+  passthru.pluginName = "netbox_attachments";
+
   meta = {
     description = "Plugin to manage attachments for any model";
     homepage = "https://github.com/Kani999/netbox-attachments";
