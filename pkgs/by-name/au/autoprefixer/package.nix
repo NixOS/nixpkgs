@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-s152v9sIuQLvhfPsZvQa+O9UhoASgm/e8dnz0t4pP3A=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Parse CSS and add vendor prefixes to CSS rules using values from the Can I Use website";
     homepage = "https://github.com/postcss/autoprefixer";
-    changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/postcss/autoprefixer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "autoprefixer";
     maintainers = [ ];
