@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_lists" ];
 
+  passthru.pluginName = "netbox_lists";
+
   meta = {
     description = "NetBox plugin to generate IP and prefix lists. Integrates with Ansible, Terraform, Prometheus, Oxidized and more";
     homepage = "https://github.com/devon-mar/netbox-lists";
