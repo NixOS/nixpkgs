@@ -3,6 +3,7 @@
   asynctest,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "zigpy-cc";
   version = "0.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
@@ -25,7 +26,9 @@ buildPythonPackage rec {
     sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyserial-asyncio
     zigpy
   ];
