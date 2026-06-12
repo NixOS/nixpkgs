@@ -1105,7 +1105,11 @@ lib.fix (
       // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
       // optionalAttrs (args ? badPlatforms) { inherit badPlatforms; }
       // optionalAttrs (args ? changelog) { inherit changelog; }
-      // optionalAttrs (args ? mainProgram) { inherit mainProgram; };
+      // optionalAttrs (args ? mainProgram) { inherit mainProgram; }
+      // optionalAttrs (pos.file == toString ./hackage-packages.nix) {
+        # Because generated
+        requiresMaintainers = false;
+      };
 
     }
     // optionalAttrs (args ? sourceRoot) { inherit sourceRoot; }

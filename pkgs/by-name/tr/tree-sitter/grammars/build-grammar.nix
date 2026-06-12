@@ -4,6 +4,7 @@
   tree-sitter,
   jq,
   lib,
+  generatedFile ? ./grammar-sources.nix,
 }:
 
 {
@@ -153,6 +154,10 @@ stdenv.mkDerivation (
     # Merge default meta attrs with any explicitly defined on the source.
     meta = {
       description = "Tree-sitter grammar for ${language}";
+    }
+    // lib.optionalAttrs (pos.file == toString generatedFile) {
+      # Because these are generated
+      requiresMaintainers = false;
     }
     // (lib.optionalAttrs (src ? meta.homepage) {
       homepage = src.meta.homepage;

@@ -51,6 +51,8 @@ let
         homepage = "https://github.com/youtype/mypy_boto3_builder";
         license = lib.licenses.mit;
         maintainers = [ ];
+        # TODO: Why?
+        requiresMaintainers = false;
       };
     });
 in

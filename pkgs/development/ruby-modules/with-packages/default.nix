@@ -35,6 +35,8 @@ let
             {
               inherit ruby;
               gemName = name;
+              # TODO: Why?
+              meta.requiresMaintainers = false;
             }
             // initialAttrs
           );
