@@ -40,12 +40,12 @@ let
 in
 buildGo126Module (finalAttrs: {
   pname = "tonearm";
-  version = "1.4.1";
+  version = "1.4.2";
   src = fetchFromCodeberg {
     owner = "dergs";
     repo = "Tonearm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uhKWUF8IhihaCA+BkKBEIYB/kbnxdxmJwidsJ52L4yQ=";
+    hash = "sha256-XXL0PfBNBuYkoDocZTWr26ogcgPJX6fUkzj9ccEmt84=";
   };
   vendorHash = "sha256-vOkOSquBbWjx1eK7h3vmmHKzaopkbu2iL5mbknMo1Kg=";
 
