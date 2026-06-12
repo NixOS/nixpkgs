@@ -17,9 +17,7 @@
   zip,
 }:
 let
-  nodeSources = (srcOnly nodejs-slim_24).overrideAttrs {
-    outputChecks = { };
-  };
+  nodeSources = srcOnly nodejs-slim_24;
   pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
   esbuild' = esbuild.override {
     buildGoModule =
