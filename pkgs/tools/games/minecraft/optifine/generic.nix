@@ -1,4 +1,5 @@
 {
+  attr,
   version,
   sha256,
   lib,
@@ -45,6 +46,9 @@ runCommand "optifine-${mcVersion}"
       maintainers = [ ];
       platforms = lib.platforms.unix;
       mainProgram = "optifine";
+    }
+    // lib.optionalAttrs (attr == "optifine-latest") {
+      hasNoMaintainersButDependents = true;
     };
   }
   ''

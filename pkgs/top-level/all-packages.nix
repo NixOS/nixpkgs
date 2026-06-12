@@ -1286,7 +1286,13 @@ with pkgs;
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
-  bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
+  bucklespring-x11 =
+    (callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; }).overrideAttrs
+      (old: {
+        meta = old.meta // {
+          hasNoMaintainersButDependents = true;
+        };
+      });
   bucklespring = bucklespring-x11;
 
   buildbotPackages = recurseIntoAttrs (
