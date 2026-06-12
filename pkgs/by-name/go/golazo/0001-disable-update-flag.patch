@@ -1,0 +1,17 @@
+diff --git i/cmd/root.go w/cmd/root.go
+index 7b42feb..c5d01f7 100644
+--- i/cmd/root.go
++++ w/cmd/root.go
+@@ -124,10 +124,10 @@ func decideUpdate(current, latest string, fetchErr error) (proceed bool, message
+ 		return false, "Running a dev build; skipping update."
+ 	}
+ 	if fetchErr != nil || latest == "" {
+-		return true, ""
++		return false, "The update flag is unsupported for the nixpkgs package."
+ 	}
+ 	if version.IsOlder(current, latest) {
+-		return true, ""
++		return false, "The update flag is unsupported for the nixpkgs package."
+ 	}
+ 	return false, fmt.Sprintf("Already on the latest version (%s).", current)
+ }
