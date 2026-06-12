@@ -29486,6 +29486,12 @@
     github = "w1lldu";
     githubId = 70287641;
   };
+  w4tsn = {
+    email = "w4tsn@221b.uk";
+    name = "Alexander Wellbrock";
+    github = "w4tsn";
+    githubId = 2271467;
+  };
   waelwindows = {
     email = "waelwindows9922@gmail.com";
     github = "Waelwindows";
