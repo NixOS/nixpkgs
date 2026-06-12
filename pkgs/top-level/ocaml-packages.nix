@@ -541,6 +541,8 @@ let
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+        easy_logging = callPackage ../development/ocaml-modules/easy_logging { };
+
         eigen = callPackage ../development/ocaml-modules/eigen {
           stdenv = pkgs.gcc14Stdenv;
         };
