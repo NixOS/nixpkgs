@@ -10,4 +10,7 @@ bossa.overrideAttrs (attrs: rec {
     tag = version;
     sha256 = "sha256-sBJ6QMd7cTClDnGCeOU0FT6IczEjqqRxCD7kef5GuY8=";
   };
+  meta = attrs.meta // {
+    hasNoMaintainersButDependents = false;
+  };
 })

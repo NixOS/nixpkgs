@@ -1,7 +1,10 @@
 {
   gnuplot,
+  noMaintainersNorDependents,
 }:
 
-gnuplot.override {
-  aquaterm = true;
-}
+noMaintainersNorDependents (
+  gnuplot.override {
+    aquaterm = true;
+  }
+)

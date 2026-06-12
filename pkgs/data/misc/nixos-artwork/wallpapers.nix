@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  noMaintainersNorDependents,
 }:
 
 let
