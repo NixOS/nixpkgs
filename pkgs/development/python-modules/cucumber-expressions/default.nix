@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cucumber-expressions";
-  version = "19.0.1";
+  version = "20.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "cucumber-expressions";
     tag = "v${version}";
-    hash = "sha256-RosIA8LaXdpnqJYfowB4d1gWZTd8OfuetiBLNYX5dRc=";
+    hash = "sha256-aPxD6snSQCA0y5tagvMy95bVtsk0qGf4KglTsuCGolU=";
   };
 
   sourceRoot = "${src.name}/python";
