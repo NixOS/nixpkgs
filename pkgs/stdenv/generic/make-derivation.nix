@@ -980,7 +980,7 @@ let
           ++ attrs.propagatedNativeBuildInputs or [ ]
           ++ attrs.propagatedBuildInputs or [ ];
       };
-      validity = assertValidity { inherit meta attrs; };
+      validity = assertValidity { inherit meta attrs pos; };
 
       checkedEnv =
         let
