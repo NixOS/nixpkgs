@@ -54,6 +54,12 @@ python3Packages.buildPythonApplication rec {
     ''}
   '';
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [
@@ -137,7 +143,7 @@ python3Packages.buildPythonApplication rec {
       --fish completions/fish/yt-dlp.fish \
       --zsh completions/zsh/_yt-dlp
 
-    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+    install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
   ''
   + lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
