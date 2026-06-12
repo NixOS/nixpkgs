@@ -24,7 +24,6 @@ let
 
     meta = oldAttrs.meta // {
       homepage = "https://codeberg.org/fgaz/changelog-d";
-      maintainers = [ lib.maintainers.roberth ];
     };
 
   };
