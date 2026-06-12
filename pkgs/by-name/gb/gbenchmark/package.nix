@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   gtest,
@@ -20,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Mm4pG7zMB00iof32CxreoNBFnduPZTMp3reHMCIAFPQ=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "portability.patch";
+      url = "https://github.com/google/benchmark/commit/b5ba9bab85d80f29a161dd634b7d234cf3722f90.patch";
+      hash = "sha256-/X01AWXK0eJ59F8oSREZ7V5Cpw1y35n9uFB1mCvMOus=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -27,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtest ];
 
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
+  nativeCheckInputs = lib.optionals (glibcLocales != null) [ glibcLocales ];
 
   cmakeFlags = [
     (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)
@@ -45,10 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     # with Xcode, but we just work around it by silencing the warning.
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
   }
-  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+  // lib.optionalAttrs stdenv.hostPlatform.isGnu {
     # For test:locale_impermeability_test
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
+  }
+  // lib.optionalAttrs (glibcLocales != null) {
     LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
   };
 
