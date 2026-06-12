@@ -2212,6 +2212,9 @@
   "ex-testversion-hello": [
     "index.html#ex-testversion-hello"
   ],
+  "ex-testversion-finalAttrs": [
+    "index.html#ex-testversion-finalAttrs"
+  ],
   "ex-testversion-different-commandversion": [
     "index.html#ex-testversion-different-commandversion"
   ],
