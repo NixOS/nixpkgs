@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/configparser";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

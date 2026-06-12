@@ -169,6 +169,7 @@ rec {
       hash = "sha256-fmKFYw2gYAYFjOv4lr8IkXPtZfE1+88yKQ4vjEcax1s=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   dracula = mkNixBackground {
@@ -180,6 +181,7 @@ rec {
       hash = "sha256-SykeFJXCzkeaxw06np0QkJCK28e0k30PdY8ZDVcQnh4=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   gear = mkNixBackground {
@@ -191,6 +193,7 @@ rec {
       hash = "sha256-2sT6b49/iClTs9QuUvpmZ5gcIeXI9kebs5IqgQN1RL8=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   gnome-dark = simple-dark-gray-bottom;
@@ -237,6 +240,7 @@ rec {
       hash = "sha256-EMSD1XQLaqHs0NbLY0lS1oZ4rKznO+h9XOGDS121m9c=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   nineish-dark-gray = mkNixBackground {
@@ -248,6 +252,7 @@ rec {
       hash = "sha256-nhIUtCy/Hb8UbuxXeL3l3FMausjQrnjTVi1B3GkL9B8=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   nineish-solarized-dark = mkNixBackground {
@@ -369,6 +374,7 @@ rec {
       hash = "sha256-YvFrlysNGMwJ7eMFOoz0KI8AjoPN3ao+AVOgnVZzkFE=";
     };
     license = lib.licenses.cc-by-sa-40;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-blue = mkNixBackground {
@@ -380,6 +386,7 @@ rec {
       hash = "sha256-utrcjzfeJoFOpUbFY2eIUNCKy5rjLt57xIoUUssJmdI=";
     };
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray = mkNixBackground {
@@ -391,6 +398,7 @@ rec {
       hash = "sha256-JaLHdBxwrphKVherDVe5fgh+3zqUtpcwuNbjwrBlAok=";
     };
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray-bootloader = mkNixBackground {
@@ -402,6 +410,7 @@ rec {
       hash = "sha256-Sd52CEw/pHmk6Cs+yrM/8wscG9bvYuECylQd27ybRmw=";
     };
     # license not clarified
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-dark-gray-bottom = mkNixBackground {
@@ -413,6 +422,7 @@ rec {
       hash = "sha256-JUyzf9dYRyLQmxJPKptDxXL7yRqAFt5uM0C9crkkEY4=";
     };
     # license not clarified
+    meta.hasNoMaintainersButDependents = true;
   };
 
   simple-light-gray = mkNixBackground {
@@ -435,6 +445,7 @@ rec {
       hash = "sha256-WnKjgvnn5Rg4R3xaJQ2mhBHQqCfl9jV6Xx3hEXW+uZk=";
     };
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   stripes-logo = mkNixBackground {
@@ -457,6 +468,7 @@ rec {
       hash = "sha256-o3GqbFZ/18ScLOlAL6GRy54l8P/U6wUeeK4HtPkZw4Q=";
     };
     license = lib.licenses.cc0;
+    meta.hasNoMaintainersButDependents = true;
   };
 
   waterfall = mkNixBackground {

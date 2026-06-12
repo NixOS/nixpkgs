@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
     mainProgram = "unclutter";
+    hasNoMaintainersButDependents = true;
   };
 })

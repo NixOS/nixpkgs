@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ahobsonsayers/bthomehub5-devicelist";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

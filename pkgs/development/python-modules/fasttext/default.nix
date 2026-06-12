@@ -26,5 +26,6 @@ buildPythonPackage {
     homepage = "https://fasttext.cc/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

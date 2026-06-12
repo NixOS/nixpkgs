@@ -47,5 +47,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "vncdo";
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

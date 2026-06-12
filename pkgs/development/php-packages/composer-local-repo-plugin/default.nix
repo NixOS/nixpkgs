@@ -28,6 +28,7 @@ php.buildComposerWithPlugin {
     license = lib.licenses.mit;
     mainProgram = "composer";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.all;
   };
 }

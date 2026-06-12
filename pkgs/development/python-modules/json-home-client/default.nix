@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/plinss/json_home_client";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mher/flower";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

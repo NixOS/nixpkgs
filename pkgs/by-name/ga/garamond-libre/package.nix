@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.x11;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

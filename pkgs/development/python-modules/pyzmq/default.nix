@@ -90,5 +90,6 @@ buildPythonPackage rec {
       lgpl3Only
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

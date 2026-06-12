@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.afl21;
     platforms = lib.platforms.unix;
     mainProgram = "figlet";
+    hasNoMaintainersButDependents = true;
   };
 })

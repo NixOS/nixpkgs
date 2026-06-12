@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.mitAdvertising;
+    hasNoMaintainersButDependents = true;
   };
 })

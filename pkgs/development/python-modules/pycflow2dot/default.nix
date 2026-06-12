@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/johnyf/pycflow2dot";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

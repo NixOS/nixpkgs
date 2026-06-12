@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mwilliamson/python-mammoth/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

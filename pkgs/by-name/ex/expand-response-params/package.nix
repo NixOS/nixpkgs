@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "expand-response-params${stdenv.hostPlatform.extensions.executable}";
+    hasNoMaintainersButDependents = true;
   };
 }

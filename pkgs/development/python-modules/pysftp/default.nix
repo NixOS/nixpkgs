@@ -28,5 +28,6 @@ buildPythonPackage rec {
       and task based routines to handle your SFTP needs. Checkout the Cook
       Book, in the docs, to see what pysftp can do for you.
     '';
+    hasNoMaintainersButDependents = true;
   };
 }

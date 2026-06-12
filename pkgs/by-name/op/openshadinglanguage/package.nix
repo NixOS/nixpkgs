@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.amarshall ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

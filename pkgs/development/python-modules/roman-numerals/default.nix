@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/AA-Turner/roman-numerals/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

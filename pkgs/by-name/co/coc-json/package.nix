@@ -27,5 +27,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-json";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

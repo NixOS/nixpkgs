@@ -32,5 +32,6 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "Google Cloud DNS Authenticator plugin for Certbot";
+    hasNoMaintainersButDependents = true;
   };
 }

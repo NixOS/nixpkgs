@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.linuxfoundation.org/networking/bridge";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

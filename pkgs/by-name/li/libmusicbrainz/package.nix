@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     '';
     platforms = lib.platforms.all;
     license = lib.licenses.lgpl21Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

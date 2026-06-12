@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "dvgrab";
+    hasNoMaintainersButDependents = true;
   };
 }

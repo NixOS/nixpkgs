@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "appres";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

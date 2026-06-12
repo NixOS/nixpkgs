@@ -49,5 +49,6 @@ buildPythonPackage rec {
     description = "Python binding for Coin";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

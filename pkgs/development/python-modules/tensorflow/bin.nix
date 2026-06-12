@@ -243,5 +243,6 @@ buildPythonPackage (finalAttrs: {
     badPlatforms = [ "x86_64-darwin" ];
     # unsupported combination
     broken = stdenv.hostPlatform.isDarwin && cudaSupport;
+    hasNoMaintainersButDependents = true;
   };
 })

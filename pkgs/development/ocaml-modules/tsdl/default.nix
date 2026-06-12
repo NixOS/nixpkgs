@@ -61,5 +61,6 @@ stdenv.mkDerivation {
     license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.03";
+    hasNoMaintainersButDependents = true;
   };
 }

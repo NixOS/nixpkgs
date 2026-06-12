@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

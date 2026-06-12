@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/astropy/pytest-astropy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

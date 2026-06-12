@@ -41,5 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/weirongxu/coc-explorer";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

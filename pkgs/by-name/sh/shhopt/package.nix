@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://shh.thathost.com/pub-unix/";
     license = lib.licenses.artistic1;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

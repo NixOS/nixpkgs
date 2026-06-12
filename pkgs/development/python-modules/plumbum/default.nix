@@ -67,5 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tomerfiliba/plumbum";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/kerberos/";
     license = lib.licenses.asl20;
     knownVulnerabilities = [ "CVE-2015-3206" ];
+    hasNoMaintainersButDependents = true;
   };
 }

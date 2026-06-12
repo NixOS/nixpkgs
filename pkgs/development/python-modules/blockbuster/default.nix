@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cbornet/blockbuster";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

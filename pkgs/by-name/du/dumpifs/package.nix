@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/askac/dumpifs";
     platforms = lib.platforms.unix;
     mainProgram = "dumpifs";
+    hasNoMaintainersButDependents = true;
   };
 })

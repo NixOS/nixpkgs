@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
+    hasNoMaintainersButDependents = true;
   };
 })

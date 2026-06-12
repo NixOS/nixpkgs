@@ -42,5 +42,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/iamcco/coc-spell-checker";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

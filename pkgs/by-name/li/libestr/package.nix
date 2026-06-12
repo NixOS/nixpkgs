@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Some essentials for string handling";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

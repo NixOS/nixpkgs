@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-lml/lml/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

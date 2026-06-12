@@ -590,6 +590,7 @@ let
       homepage = "http://tensorflow.org";
       license = lib.licenses.asl20;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
       platforms = with lib.platforms; linux ++ darwin;
       broken =
         # Dependencies are EOL and have been removed; an update

@@ -33,5 +33,6 @@ buildPythonPackage {
     description = "Python interface to a plantuml web service instead of having to run java locally";
     homepage = "https://github.com/dougn/python-plantuml";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

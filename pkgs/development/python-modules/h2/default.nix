@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/h2";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

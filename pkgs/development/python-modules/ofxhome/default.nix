@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "ofxhome.com financial institution lookup REST client";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

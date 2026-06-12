@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     mainProgram = "srec2bin";
+    hasNoMaintainersButDependents = true;
   };
 })

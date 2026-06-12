@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/warsaw/flufl.bounce/-/blob/${version}/flufl/bounce/NEWS.rst";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

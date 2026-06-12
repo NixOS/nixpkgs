@@ -20,5 +20,6 @@ buildPythonPackage {
     # from py-smbus/smbusmodule.c
     license = [ lib.licenses.gpl2Only ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

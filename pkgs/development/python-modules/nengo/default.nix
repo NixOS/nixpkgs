@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://nengo.ai/";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

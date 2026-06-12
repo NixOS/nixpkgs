@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     description = "DLX simulator written in C";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

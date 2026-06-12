@@ -123,6 +123,7 @@ in
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-integrations";
       description = "Collection of open source Graylog integrations that will be released together";
+      hasNoMaintainersButDependents = true;
     };
   };
   internal-logs = glPlugin rec {
@@ -162,6 +163,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-jabber";
       description = "Jabber Alarmcallback Plugin for Graylog";
+      hasNoMaintainersButDependents = true;
     };
   };
   metrics = glPlugin rec {
@@ -175,6 +177,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-metrics";
       description = "Output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
+      hasNoMaintainersButDependents = true;
     };
   };
   mongodb-profiler = glPlugin rec {
@@ -201,6 +204,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-pagerduty";
       description = "Alarm callback plugin for integrating PagerDuty into Graylog";
+      hasNoMaintainersButDependents = true;
     };
   };
   redis = glPlugin rec {
@@ -214,6 +218,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-redis";
       description = "Redis plugin for Graylog";
+      hasNoMaintainersButDependents = true;
     };
   };
   slack = glPlugin rec {
@@ -227,6 +232,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-slack";
       description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
+      hasNoMaintainersButDependents = true;
     };
   };
   smseagle = glPlugin rec {
@@ -254,6 +260,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-snmp";
       description = "Graylog plugin to receive SNMP traps";
+      hasNoMaintainersButDependents = true;
     };
   };
   spaceweather = glPlugin rec {
@@ -281,6 +288,7 @@ in
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
       description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
       license = licenses.gpl3Only;
+      hasNoMaintainersButDependents = true;
     };
   };
   twiliosms = glPlugin rec {
@@ -307,6 +315,7 @@ in
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-twitter";
       description = "Graylog input plugin that reads Twitter messages based on keywords in realtime";
+      hasNoMaintainersButDependents = true;
     };
   };
 }

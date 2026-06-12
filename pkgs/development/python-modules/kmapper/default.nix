@@ -68,5 +68,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scikit-tda/kepler-mapper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

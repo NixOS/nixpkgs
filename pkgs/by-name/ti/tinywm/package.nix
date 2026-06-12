@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tinywm";
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pywbem/nocaselist/blob/${version}/docs/changes.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -25,5 +25,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/janestreet/ppx_yojson_conv_lib";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

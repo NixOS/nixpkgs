@@ -90,5 +90,6 @@ mkCoqDerivation {
     description = "Verified Software Toolchain";
     homepage = "https://vst.cs.princeton.edu/";
     inherit (compcert.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 }

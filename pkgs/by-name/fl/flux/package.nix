@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     mainProgram = "fluxcomp";
     homepage = "https://github.com/deniskropp/flux";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

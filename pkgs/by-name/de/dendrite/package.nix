@@ -71,5 +71,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/element-hq/dendrite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

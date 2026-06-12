@@ -99,6 +99,7 @@ let
       homepage = "https://github.com/contourpy/contourpy";
       license = lib.licenses.bsd3;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

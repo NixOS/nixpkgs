@@ -30,5 +30,6 @@ buildNpmPackage {
     homepage = "https://github.com/neoclide/coc-jest";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

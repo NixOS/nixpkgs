@@ -33,5 +33,6 @@ buildGoModule {
     license = lib.licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -54,4 +54,5 @@ mkDerivation {
   homepage = "https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool";
   license = lib.licenses.bsd2;
   maintainers = [ ];
+  hasNoMaintainersButDependents = true;
 }

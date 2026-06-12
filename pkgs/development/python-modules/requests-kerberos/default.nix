@@ -41,5 +41,6 @@ buildPythonPackage rec {
     description = "Authentication handler for using Kerberos with Python Requests";
     homepage = "https://github.com/requests/requests-kerberos";
     license = lib.licenses.isc;
+    hasNoMaintainersButDependents = true;
   };
 }

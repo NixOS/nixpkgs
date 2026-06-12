@@ -116,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     # checking for a Python interpreter with version >= 2.4... none
     # configure: error: no suitable Python interpreter found
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    hasNoMaintainersButDependents = true;
   };
 })

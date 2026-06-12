@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hackercowboy/python-maxcube-api";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

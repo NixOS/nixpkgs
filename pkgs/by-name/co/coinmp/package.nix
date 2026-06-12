@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
     platforms = lib.platforms.unix;
     license = lib.licenses.epl10;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     description = "Installs the BlocksRuntime library from the compiler-rt";
     homepage = "https://github.com/mackyle/blocksruntime";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

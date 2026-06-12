@@ -240,6 +240,7 @@ rec {
     };
 
     meta.description = "nix example to play with the container nix store";
+    meta.hasNoMaintainersButDependents = true;
   };
 
   # 7. example of adding something on top of an image pull by our

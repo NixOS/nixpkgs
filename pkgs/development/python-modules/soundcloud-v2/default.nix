@@ -38,5 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/7x11x13/soundcloud.py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -248,5 +248,6 @@ stdenv.mkDerivation {
       mit
     ];
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

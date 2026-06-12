@@ -42,5 +42,6 @@ stdenv.mkDerivation {
       gpl2Plus
       lgpl21Plus
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

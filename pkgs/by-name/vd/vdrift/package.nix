@@ -77,6 +77,7 @@ let
       license = lib.licenses.gpl2Plus;
       maintainers = [ ];
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";

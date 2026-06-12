@@ -38,5 +38,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "uefi-firmware-parser";
     maintainers = [ lib.maintainers.elliotberman ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,4 +30,5 @@ mkDerivation {
   ];
   description = "Utility for managing GHC target toolchains";
   license = lib.licenses.bsd3;
+  hasNoMaintainersButDependents = true;
 }

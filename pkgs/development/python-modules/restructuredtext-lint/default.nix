@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/twolfson/restructuredtext-lint/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.unlicense;
     mainProgram = "rst-lint";
+    hasNoMaintainersButDependents = true;
   };
 }

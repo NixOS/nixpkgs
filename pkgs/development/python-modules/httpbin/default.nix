@@ -76,5 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/httpbin";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

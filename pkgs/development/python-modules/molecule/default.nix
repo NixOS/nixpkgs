@@ -72,5 +72,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "molecule";
+    hasNoMaintainersButDependents = true;
   };
 }

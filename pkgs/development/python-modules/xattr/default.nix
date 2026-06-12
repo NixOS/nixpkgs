@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/xattr/xattr/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

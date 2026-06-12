@@ -67,5 +67,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

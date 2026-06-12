@@ -27,5 +27,6 @@ buildPythonPackage rec {
   meta = {
     description = "High-level interface to Kerberos";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.linux;
     mainProgram = "safecopy";
+    hasNoMaintainersButDependents = true;
   };
 })

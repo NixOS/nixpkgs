@@ -53,5 +53,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/genuinetools/img";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

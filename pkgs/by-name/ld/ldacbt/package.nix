@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     # libldac code detects & #error's out on non-LE byte order
     platforms = lib.platforms.littleEndian;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/anthonyharrison/lib4package";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

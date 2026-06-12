@@ -154,5 +154,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     # COPYING.NEWLIB
     # COPYING3
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

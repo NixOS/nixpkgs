@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     description = "Applet that will display XMonad log information (${desktopSupport} version)";
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

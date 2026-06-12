@@ -50,5 +50,6 @@ flutter335.buildFlutterApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

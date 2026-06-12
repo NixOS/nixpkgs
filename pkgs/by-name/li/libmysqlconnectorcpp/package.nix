@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ library for connecting to mysql servers";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

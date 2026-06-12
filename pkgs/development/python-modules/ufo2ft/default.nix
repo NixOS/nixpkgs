@@ -72,5 +72,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

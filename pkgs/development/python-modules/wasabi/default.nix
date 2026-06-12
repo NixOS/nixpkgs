@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/explosion/wasabi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

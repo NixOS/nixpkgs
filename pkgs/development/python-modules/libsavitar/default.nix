@@ -45,5 +45,6 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

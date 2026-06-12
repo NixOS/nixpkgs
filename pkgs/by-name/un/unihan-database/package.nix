@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.unicode.org/";
     license = lib.licenses.unicode-dfs-2016;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

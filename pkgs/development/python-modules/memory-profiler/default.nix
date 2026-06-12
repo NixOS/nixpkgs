@@ -29,5 +29,6 @@ python.pkgs.buildPythonPackage rec {
     '';
     homepage = "https://pypi.org/project/memory_profiler/";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

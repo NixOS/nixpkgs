@@ -168,5 +168,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

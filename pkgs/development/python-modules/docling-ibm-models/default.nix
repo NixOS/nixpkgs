@@ -94,5 +94,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/DS4SD/docling-ibm-models";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

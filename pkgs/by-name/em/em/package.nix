@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "em";
+    hasNoMaintainersButDependents = true;
   };
 })

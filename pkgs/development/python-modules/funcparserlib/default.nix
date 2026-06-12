@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vlasovskikh/funcparserlib";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

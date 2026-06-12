@@ -56,5 +56,6 @@ buildPythonPackage rec {
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

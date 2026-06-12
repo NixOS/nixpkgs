@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "slop";
+    hasNoMaintainersButDependents = true;
   };
 })

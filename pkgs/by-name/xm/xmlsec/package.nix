@@ -123,6 +123,7 @@ lib.fix (
       mainProgram = "xmlsec1";
       maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
+      hasNoMaintainersButDependents = true;
     };
   })
 )

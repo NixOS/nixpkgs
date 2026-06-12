@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Adaptive Entropy Coding library";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

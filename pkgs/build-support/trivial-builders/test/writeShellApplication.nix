@@ -39,6 +39,7 @@ linkFarm "writeShellApplication-tests" {
         name = "test-meta";
         text = "";
         meta.description = "Test for the `writeShellApplication` `meta` argument";
+        meta.hasNoMaintainersButDependents = true;
       };
       script = writeShellApplication args;
     in
@@ -147,6 +148,7 @@ linkFarm "writeShellApplication-tests" {
       fi
     '';
     meta.description = "Test checking that `writeShellApplication` forwards extra arguments to `stdenv.mkDerivation`";
+    meta.hasNoMaintainersButDependents = true;
     expected = "";
   };
 

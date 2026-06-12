@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/c-oreills/before_after";
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 })

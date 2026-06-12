@@ -151,5 +151,6 @@ buildPythonApplication rec {
     homepage = "https://hotdoc.github.io/";
     license = [ lib.licenses.lgpl21Plus ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

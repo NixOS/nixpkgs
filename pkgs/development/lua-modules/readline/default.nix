@@ -42,5 +42,6 @@ buildLuarocksPackage {
     description = "Interface to the readline library";
     license = lib.licenses.mit;
     broken = (luaOlder "5.1") || (luaAtLeast "5.5");
+    hasNoMaintainersButDependents = true;
   };
 }

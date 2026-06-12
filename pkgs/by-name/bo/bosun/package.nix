@@ -34,5 +34,6 @@ buildGoModule {
     homepage = "https://bosun.org";
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 }

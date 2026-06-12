@@ -102,5 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "MPEG decoding library";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

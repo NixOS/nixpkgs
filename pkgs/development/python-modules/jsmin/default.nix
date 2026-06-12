@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tikitu/jsmin/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,6 +67,7 @@ let
       # python3Packages.fastapi. Because this package is primarily used for the purpose of
       # implementing the CLI for python3Packages.fastapi, we reduce the executable's priority
       priority = 10;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

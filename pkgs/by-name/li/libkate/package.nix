@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.xiph.org/index.php/OggKate";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

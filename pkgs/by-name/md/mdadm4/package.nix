@@ -92,5 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mdadm";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

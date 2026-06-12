@@ -107,5 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "prepare_builtins";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

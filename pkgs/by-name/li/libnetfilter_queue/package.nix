@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Userspace API to packets queued by the kernel packet filter";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     mainProgram = "sdl-config";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

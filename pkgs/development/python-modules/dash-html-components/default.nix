@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://dash.plot.ly/dash-html-components";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

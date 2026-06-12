@@ -45,5 +45,6 @@ buildPythonPackage rec {
       lgpl3Plus
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

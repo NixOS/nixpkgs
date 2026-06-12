@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xcmsdb";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

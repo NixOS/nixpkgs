@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matthewwithanm/pilkit/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

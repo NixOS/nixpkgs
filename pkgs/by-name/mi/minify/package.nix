@@ -52,5 +52,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "minify";
+    hasNoMaintainersButDependents = true;
   };
 })

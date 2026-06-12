@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://foss.heptapod.net/openpyxl/et_xmlfile";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -17,5 +17,6 @@ ocamlPackages.buildDunePackage {
   meta = opam.meta // {
     description = "Handle (un)installation from opam install files";
     mainProgram = "opam-installer";
+    hasNoMaintainersButDependents = true;
   };
 }

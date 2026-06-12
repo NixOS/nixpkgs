@@ -47,5 +47,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

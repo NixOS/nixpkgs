@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/wsproto/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

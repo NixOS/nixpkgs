@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Chilipp/autodocsumm";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

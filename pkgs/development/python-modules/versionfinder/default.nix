@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jantman/versionfinder";
     changelog = "https://github.com/jantman/versionfinder/blob/${version}/CHANGES.rst";
     license = lib.licenses.agpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

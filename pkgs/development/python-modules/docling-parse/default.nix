@@ -105,5 +105,6 @@ buildPythonPackage rec {
     # error: no matching conversion for functional-style cast from 'bool' to 'nlohmann::basic_json<>'
     # See https://github.com/docling-project/docling-parse/issues/172 for context
     broken = true;
+    hasNoMaintainersButDependents = true;
   };
 }

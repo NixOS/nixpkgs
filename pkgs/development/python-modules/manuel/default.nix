@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Documentation builder";
     homepage = "https://pypi.org/project/manuel/";
     license = lib.licenses.zpl20;
+    hasNoMaintainersButDependents = true;
   };
 }

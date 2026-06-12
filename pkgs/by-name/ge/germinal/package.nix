@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "germinal";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

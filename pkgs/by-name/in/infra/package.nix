@@ -30,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.elastic20;
     mainProgram = "infra";
+    hasNoMaintainersButDependents = true;
   };
 }

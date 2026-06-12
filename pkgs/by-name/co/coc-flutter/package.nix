@@ -68,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/iamcco/coc-flutter";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

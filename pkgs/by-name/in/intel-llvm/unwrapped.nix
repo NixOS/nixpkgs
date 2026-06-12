@@ -58,6 +58,7 @@ let
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang++
       '';
       passthru.isClang = true;
+      meta.hasNoMaintainersButDependents = true;
     }
   );
 

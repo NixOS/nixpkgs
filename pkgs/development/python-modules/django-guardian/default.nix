@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-guardian/django-guardian";
     license = with lib.licenses; [ bsd2 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/benoitc/http-parser";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

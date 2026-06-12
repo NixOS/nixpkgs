@@ -33,5 +33,6 @@ buildPythonPackage {
     homepage = "https://github.com/ipython/comm";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

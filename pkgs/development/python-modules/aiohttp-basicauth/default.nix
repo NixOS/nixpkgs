@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/romis2012/aiohttp-basicauth";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

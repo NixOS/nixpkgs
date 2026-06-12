@@ -29,5 +29,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/idlesign/srptools/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

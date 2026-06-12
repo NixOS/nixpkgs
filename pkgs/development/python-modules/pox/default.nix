@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://pox.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

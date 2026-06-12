@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.partow.net/programming/exprtk/index.html";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

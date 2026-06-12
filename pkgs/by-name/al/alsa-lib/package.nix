@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; linux ++ freebsd;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

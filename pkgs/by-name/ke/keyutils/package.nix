@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools used to control the Linux kernel key management system";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

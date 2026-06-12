@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/testing-cabal/testtools";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

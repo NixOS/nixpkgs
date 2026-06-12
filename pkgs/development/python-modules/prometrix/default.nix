@@ -64,5 +64,6 @@ buildPythonPackage {
     # prometheus-api-client 0.5.5 is not working
     # https://github.com/robusta-dev/prometrix/issues/14
     broken = lib.versionAtLeast prometheus-api-client.version "0.5.3";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     description = "Digital signal processing library for software-defined radios";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

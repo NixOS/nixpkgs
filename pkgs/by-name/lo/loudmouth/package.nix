@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     downloadPage = "http://mcabber.com/files/loudmouth/";
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

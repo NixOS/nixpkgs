@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dev-petrov/pytest-lazy-fixtures";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

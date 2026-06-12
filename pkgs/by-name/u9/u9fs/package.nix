@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     license = lib.licenses.dtoa;
     platforms = lib.platforms.unix;
     mainProgram = "u9fs";
+    hasNoMaintainersButDependents = true;
   };
 }

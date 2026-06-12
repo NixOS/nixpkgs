@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs/aiomysql";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

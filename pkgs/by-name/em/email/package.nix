@@ -58,5 +58,6 @@ stdenv.mkDerivation {
     homepage = "https://deanproxy.com/code";
     platforms = lib.platforms.unix;
     mainProgram = "email";
+    hasNoMaintainersButDependents = true;
   };
 }

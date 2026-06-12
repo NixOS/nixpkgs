@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for querying ATA SMART status";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

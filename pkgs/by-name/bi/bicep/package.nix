@@ -56,5 +56,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "bicep";
+    hasNoMaintainersButDependents = true;
   };
 }

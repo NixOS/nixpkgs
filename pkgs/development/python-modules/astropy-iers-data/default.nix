@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/astropy/astropy-iers-data";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://rawkit.readthedocs.org/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

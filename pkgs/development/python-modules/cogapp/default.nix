@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nedbat/cog/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

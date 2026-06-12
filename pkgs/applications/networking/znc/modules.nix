@@ -75,6 +75,7 @@ in
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = lib.licenses.asl20;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -140,6 +141,7 @@ in
       maintainers = [ ];
       # has no license
       license = lib.licenses.unfree;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -160,6 +162,7 @@ in
       homepage = "https://github.com/kylef/znc-contrib";
       license = lib.licenses.gpl2;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -199,6 +202,7 @@ in
       description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -239,6 +243,7 @@ in
       homepage = "https://github.com/jreese/znc-push";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 }

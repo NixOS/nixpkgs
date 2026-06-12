@@ -52,6 +52,8 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/jazzband/django-formtools";
     changelog = "https://github.com/jazzband/django-formtools/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [
+    ];
+    hasNoMaintainersButDependents = true;
   };
 })

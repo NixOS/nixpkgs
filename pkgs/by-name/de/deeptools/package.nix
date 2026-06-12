@@ -61,5 +61,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mit
       bsd3
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

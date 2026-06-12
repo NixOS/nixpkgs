@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/WebAssembly/wabt";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

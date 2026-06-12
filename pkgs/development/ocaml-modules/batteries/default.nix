@@ -43,5 +43,6 @@ buildDunePackage (finalAttrs: {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

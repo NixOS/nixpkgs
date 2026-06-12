@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-contrib/plantuml/";
     license = with lib.licenses; [ bsd2 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

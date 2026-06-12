@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wemake-services/django-test-migrations/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

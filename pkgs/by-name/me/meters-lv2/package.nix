@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://x42.github.io/meters.lv2/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

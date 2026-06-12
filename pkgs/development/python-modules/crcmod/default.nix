@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Python module for generating objects that compute the Cyclic Redundancy Check (CRC)";
     homepage = "https://crcmod.sourceforge.net/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

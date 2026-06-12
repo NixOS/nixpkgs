@@ -40,5 +40,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,4 +40,5 @@ mkDerivation {
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/language-nix#readme";
   description = "Data types and functions to represent the Nix language";
   license = lib.licensesSpdx."BSD-3-Clause";
+  hasNoMaintainersButDependents = true;
 }

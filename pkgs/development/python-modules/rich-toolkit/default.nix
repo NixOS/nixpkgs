@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/patrick91/rich-toolkit/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

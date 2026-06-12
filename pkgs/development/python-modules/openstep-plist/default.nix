@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fonttools/openstep-plist";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/guessit-io/guessit/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

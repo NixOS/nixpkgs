@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xev";
     maintainers = with lib.maintainers; [ aiyion ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

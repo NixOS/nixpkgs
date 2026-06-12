@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-redshift";
     changelog = "https://github.com/dbt-labs/dbt-redshift/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

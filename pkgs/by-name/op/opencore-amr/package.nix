@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     Library of VisualOn implementation of Adaptive Multi Rate Wideband (AMR-WB)";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

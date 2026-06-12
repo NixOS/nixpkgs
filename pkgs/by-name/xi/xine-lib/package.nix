@@ -100,5 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     # No useful mainProgram
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

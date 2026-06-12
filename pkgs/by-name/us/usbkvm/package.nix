@@ -47,6 +47,7 @@ let
       homepage = "https://github.com/carrotIndustries/ms-tools";
       description = "Program, library and reference designs to develop for MacroSilicon MS2106/MS2109/MS2130 chips";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

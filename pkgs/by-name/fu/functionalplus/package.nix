@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

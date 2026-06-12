@@ -51,5 +51,6 @@ mkRocqDerivation {
   meta = {
     description = "Plugin for (semi)decision procedures for arithmetic.";
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 }

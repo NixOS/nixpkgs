@@ -104,5 +104,6 @@ buildPythonPackage rec {
     description = "Python bindings for GStreamer";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     mainProgram = "base64";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

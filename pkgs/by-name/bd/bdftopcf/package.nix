@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bdftopcf";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

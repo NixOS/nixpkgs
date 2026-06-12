@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/matthewbauer/NSPlist";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

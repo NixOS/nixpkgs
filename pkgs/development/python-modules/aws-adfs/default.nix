@@ -68,5 +68,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
     license = lib.licenses.psfl;
     mainProgram = "aws-adfs";
+    hasNoMaintainersButDependents = true;
   };
 }

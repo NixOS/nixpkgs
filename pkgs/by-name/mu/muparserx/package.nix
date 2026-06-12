@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://beltoforion.de/en/muparserx/";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -44,5 +44,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/iamcco/coc-diagnostic";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

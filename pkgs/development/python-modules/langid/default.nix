@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/langid/";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

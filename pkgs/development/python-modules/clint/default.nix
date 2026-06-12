@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Python Command Line Interface Tools";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

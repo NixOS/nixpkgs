@@ -75,5 +75,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "fab";
+    hasNoMaintainersButDependents = true;
   };
 }

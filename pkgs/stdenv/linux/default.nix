@@ -214,6 +214,7 @@ let
               stdenvNoCC = prevStage.ccWrapperStdenv;
               fortify-headers = prevStage.fortify-headers;
               runtimeShell = prevStage.ccWrapperStdenv.shell;
+              meta.hasNoMaintainersButDependents = true;
             }).overrideAttrs
               (
                 a:
@@ -503,6 +504,7 @@ in
             pname = prevStage.bintools.bintools.pname + "-patchelfed-ld";
             inherit (prevStage.bintools.bintools) version;
             passthru = { inherit (prevStage.bintools.passthru) isFromBootstrapFiles; };
+            meta.hasNoMaintainersButDependents = true;
             enableParallelBuilding = true;
             dontUnpack = true;
             dontBuild = true;

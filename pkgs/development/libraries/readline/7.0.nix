@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     branch = "7.0";
+    hasNoMaintainersButDependents = true;
   };
 }

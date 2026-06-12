@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "daphne";
+    hasNoMaintainersButDependents = true;
   };
 })

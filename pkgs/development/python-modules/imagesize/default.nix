@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Getting image size from png/jpeg/jpeg2000/gif file";
     homepage = "https://github.com/shibukawa/imagesize_py";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

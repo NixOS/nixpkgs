@@ -41,5 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/iamcco/coc-vimlsp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

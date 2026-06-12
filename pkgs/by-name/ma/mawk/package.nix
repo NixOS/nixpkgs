@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     mainProgram = "mawk";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

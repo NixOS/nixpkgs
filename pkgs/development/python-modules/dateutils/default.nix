@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jmcantrell/python-dateutils";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

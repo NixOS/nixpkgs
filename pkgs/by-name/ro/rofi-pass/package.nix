@@ -105,5 +105,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

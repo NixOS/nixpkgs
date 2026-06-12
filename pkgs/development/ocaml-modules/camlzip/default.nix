@@ -95,5 +95,6 @@ stdenv.mkDerivation {
       ocamlLgplLinkingException
     ];
     inherit (ocaml.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
     mainProgram = "cpio";
+    hasNoMaintainersButDependents = true;
   };
 })

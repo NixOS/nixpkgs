@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Y2Z/monolith";
     license = lib.licenses.cc0;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tsutsu3/uc.micro-py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

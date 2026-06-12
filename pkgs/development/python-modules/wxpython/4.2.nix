@@ -185,5 +185,6 @@ buildPythonPackage rec {
       lgpl2Plus
       wxWindowsException31
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

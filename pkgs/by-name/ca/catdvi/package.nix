@@ -96,5 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "DVI to plain text translator";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

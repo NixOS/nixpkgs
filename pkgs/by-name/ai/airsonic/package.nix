@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

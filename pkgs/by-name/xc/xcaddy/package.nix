@@ -35,5 +35,6 @@ buildGoModule (finalAttrs: {
     description = "Build Caddy with plugins";
     mainProgram = "xcaddy";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

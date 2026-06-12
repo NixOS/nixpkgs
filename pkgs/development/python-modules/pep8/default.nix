@@ -23,5 +23,6 @@ buildPythonPackage rec {
     mainProgram = "pep8";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

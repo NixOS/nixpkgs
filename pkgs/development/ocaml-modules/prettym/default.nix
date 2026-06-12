@@ -44,5 +44,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/prettym";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

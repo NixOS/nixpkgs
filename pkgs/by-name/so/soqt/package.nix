@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glue between Coin high-level 3D visualization library and Qt";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

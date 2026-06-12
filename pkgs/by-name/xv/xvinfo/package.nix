@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xvinfo";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

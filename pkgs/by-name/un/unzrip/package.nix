@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "unzrip";
+    hasNoMaintainersButDependents = true;
   };
 }

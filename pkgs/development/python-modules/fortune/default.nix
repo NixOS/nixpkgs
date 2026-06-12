@@ -27,5 +27,6 @@ buildPythonPackage {
     homepage = "https://codeberg.org/jamesansley/fortune";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

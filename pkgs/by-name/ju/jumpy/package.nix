@@ -96,5 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       cc-by-nc-40
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

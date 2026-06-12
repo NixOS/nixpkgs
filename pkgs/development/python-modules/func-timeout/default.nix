@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kata198/func_timeout";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

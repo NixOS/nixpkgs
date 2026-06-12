@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/rhgrant10/ndjson/blob/v${version}/HISTORY.rst";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

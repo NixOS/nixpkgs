@@ -78,5 +78,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/googlefonts/nototools";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

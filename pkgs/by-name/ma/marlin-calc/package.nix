@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/marlin-calc.x86_64-darwin
     mainProgram = "marlin-calc";
+    hasNoMaintainersButDependents = true;
   };
 }

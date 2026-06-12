@@ -41,5 +41,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Alerta Monitoring System command-line interface";
     mainProgram = "alerta";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

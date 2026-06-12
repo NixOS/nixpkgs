@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://deeptools.readthedocs.io/en/develop";
     description = "Helper library for deeptools";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

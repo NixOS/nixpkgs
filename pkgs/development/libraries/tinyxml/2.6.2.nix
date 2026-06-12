@@ -94,5 +94,6 @@ stdenv.mkDerivation {
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "tweak";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -63,5 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";
+    hasNoMaintainersButDependents = true;
   };
 })

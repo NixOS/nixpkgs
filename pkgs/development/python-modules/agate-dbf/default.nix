@@ -38,5 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/wireservice/agate-dbf";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

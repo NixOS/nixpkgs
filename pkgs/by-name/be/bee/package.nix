@@ -53,5 +53,6 @@ buildGoModule (finalAttrs: {
     '';
     license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

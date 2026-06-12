@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

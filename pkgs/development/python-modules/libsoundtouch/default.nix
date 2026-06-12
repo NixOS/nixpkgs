@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CharlesBlonde/libsoundtouch";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

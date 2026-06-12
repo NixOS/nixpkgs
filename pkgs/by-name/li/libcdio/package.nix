@@ -110,5 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libudf"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

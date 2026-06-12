@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "mkfontscale";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

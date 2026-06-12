@@ -20,6 +20,7 @@ runCommand "${alsa-lib.pname}-${alsa-lib.version}"
       description = "Wrapper to ease access to ALSA plugins";
       mainProgram = "aserver";
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
     outputs = alsa-lib.outputs;
   }

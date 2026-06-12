@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Real-time strategy game with programmable bots";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux;
   };
 })

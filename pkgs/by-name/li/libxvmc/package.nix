@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xvmc-wrapper"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

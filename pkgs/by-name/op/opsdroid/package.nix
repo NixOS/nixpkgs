@@ -71,5 +71,6 @@ python3Packages.buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "opsdroid";
+    hasNoMaintainersButDependents = true;
   };
 }

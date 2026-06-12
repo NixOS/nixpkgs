@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xiph.org/vorbis/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

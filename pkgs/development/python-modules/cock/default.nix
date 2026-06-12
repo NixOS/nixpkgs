@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pohmelie/cock";
     description = "Configuration file with click";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

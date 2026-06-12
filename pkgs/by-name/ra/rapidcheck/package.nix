@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
       "rapidcheck_gtest"
     ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

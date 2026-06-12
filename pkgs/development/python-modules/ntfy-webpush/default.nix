@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://dschep.github.io/ntfy-webpush/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

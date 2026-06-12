@@ -28,5 +28,6 @@ buildPythonPackage rec {
     license = lib.licenses.cc0;
     maintainers = [ ];
     description = "Trained models for the face_recognition python library";
+    hasNoMaintainersButDependents = true;
   };
 }

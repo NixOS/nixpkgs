@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GrahamDumpleton/wrapt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

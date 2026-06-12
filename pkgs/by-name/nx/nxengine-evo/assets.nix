@@ -32,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       unfreeRedistributable
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

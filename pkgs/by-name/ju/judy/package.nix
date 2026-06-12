@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     description = "State-of-the-art C library that implements a sparse dynamic array";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

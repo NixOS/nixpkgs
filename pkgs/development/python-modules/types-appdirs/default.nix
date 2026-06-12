@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/types-appdirs";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

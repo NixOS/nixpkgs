@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

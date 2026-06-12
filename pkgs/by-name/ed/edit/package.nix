@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "edit";
+    hasNoMaintainersButDependents = true;
   };
 }

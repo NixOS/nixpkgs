@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "medusa";
+    hasNoMaintainersButDependents = true;
   };
 })

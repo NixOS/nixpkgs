@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     description = "Compression library implementing the deflate compression method found in gzip and PKZIP";
     inherit (zlib.meta) license homepage;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

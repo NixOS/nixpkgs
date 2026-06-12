@@ -54,5 +54,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

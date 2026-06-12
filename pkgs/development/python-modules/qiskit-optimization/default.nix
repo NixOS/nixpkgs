@@ -66,5 +66,6 @@ buildPythonPackage rec {
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://arthurdejong.org/nss-pam-ldapd/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

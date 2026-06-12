@@ -123,5 +123,6 @@ stdenv.mkDerivation rec {
     # Darwin‐specific derivation logic has been removed, check the
     # history if you want to fix this.
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 }

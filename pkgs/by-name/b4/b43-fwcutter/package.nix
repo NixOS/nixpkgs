@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wireless.docs.kernel.org/en/latest/en/users/drivers/b43.html";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

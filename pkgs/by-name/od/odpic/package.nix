@@ -54,5 +54,6 @@ stdenv.mkDerivation {
       "x86_64-darwin"
     ];
     hydraPlatforms = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

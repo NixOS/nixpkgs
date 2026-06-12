@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
+    hasNoMaintainersButDependents = true;
   };
 }

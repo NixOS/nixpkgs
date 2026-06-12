@@ -68,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "yad";
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -102,5 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
       Libgsf aims to provide an efficient extensible I/O abstraction for
       dealing with different structured file formats.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

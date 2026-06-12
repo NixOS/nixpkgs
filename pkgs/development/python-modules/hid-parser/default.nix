@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/usb-tools/python-hid-parser";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

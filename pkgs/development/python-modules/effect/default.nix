@@ -40,5 +40,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-effect/effect/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

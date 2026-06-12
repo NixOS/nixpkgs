@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
       "CVE-2023-4218"
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

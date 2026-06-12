@@ -68,5 +68,6 @@ buildDunePackage rec {
     description = "User-friendly programming language built on OCaml";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

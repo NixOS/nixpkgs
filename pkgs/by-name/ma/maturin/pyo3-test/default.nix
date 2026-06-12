@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyO3/pyo3";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

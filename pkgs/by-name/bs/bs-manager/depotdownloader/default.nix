@@ -31,5 +31,6 @@ buildDotnetModule {
       "aarch64-darwin"
     ];
     mainProgram = "DepotDownloader";
+    hasNoMaintainersButDependents = true;
   };
 }

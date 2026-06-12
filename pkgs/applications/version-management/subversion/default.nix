@@ -187,6 +187,7 @@ let
         mainProgram = "svn";
         maintainers = [ ];
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
+        hasNoMaintainersButDependents = true;
       };
     });
 

@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mchaput/whoosh";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

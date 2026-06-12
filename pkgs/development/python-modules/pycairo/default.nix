@@ -52,5 +52,6 @@ buildPythonPackage rec {
       mpl11
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

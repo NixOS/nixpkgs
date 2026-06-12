@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wolph/mt940/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

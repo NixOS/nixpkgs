@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     description = "Requests-like API built on top of twisted.web's Agent";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

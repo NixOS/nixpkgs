@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ralphbean/ansi2html";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

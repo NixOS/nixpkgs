@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/apmorton/pyhidapi";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

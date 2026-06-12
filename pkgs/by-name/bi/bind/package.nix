@@ -176,5 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
       "dnsutils"
       "host"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

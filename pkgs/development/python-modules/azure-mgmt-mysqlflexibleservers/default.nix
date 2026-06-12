@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/azure-mgmt-mysqlflexibleservers/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

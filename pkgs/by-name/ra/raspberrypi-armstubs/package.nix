@@ -63,5 +63,6 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

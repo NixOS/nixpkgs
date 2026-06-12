@@ -38,5 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/psf/pyperf/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

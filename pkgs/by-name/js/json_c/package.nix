@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     mainProgram = "optipng";
+    hasNoMaintainersButDependents = true;
   };
 }

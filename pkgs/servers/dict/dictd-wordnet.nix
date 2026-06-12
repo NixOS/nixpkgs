@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

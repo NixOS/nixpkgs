@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = lib.licenses.unlicense;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

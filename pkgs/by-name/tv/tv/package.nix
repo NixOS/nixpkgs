@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/uzimaru0000/tv/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

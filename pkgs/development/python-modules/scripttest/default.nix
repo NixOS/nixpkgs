@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/scripttest/";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tardyp/sphinx-jinja";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

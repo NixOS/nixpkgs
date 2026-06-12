@@ -35,5 +35,6 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";
+    hasNoMaintainersButDependents = true;
   };
 }

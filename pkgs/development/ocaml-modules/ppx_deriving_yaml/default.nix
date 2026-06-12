@@ -59,5 +59,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/patricoferris/ppx_deriving_yaml";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -56,5 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/googleapis/python-cloud-core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

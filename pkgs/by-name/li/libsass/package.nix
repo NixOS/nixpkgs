@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "libsass" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

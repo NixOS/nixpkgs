@@ -34,5 +34,6 @@ buildGoModule {
     homepage = "https://github.com/blynn/nex";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

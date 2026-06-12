@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyWavelets/pywt";
     changelog = "https://github.com/PyWavelets/pywt/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

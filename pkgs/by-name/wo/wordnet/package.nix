@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "wn";
+    hasNoMaintainersButDependents = true;
   };
 })

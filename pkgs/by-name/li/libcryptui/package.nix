@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
     # cannot open shared object file: No such file or directory
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    hasNoMaintainersButDependents = true;
   };
 })

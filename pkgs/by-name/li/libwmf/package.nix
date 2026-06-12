@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/caolanm/libwmf/releases";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

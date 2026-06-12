@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.all;
   };
 })

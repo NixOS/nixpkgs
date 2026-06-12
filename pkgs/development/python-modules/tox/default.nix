@@ -59,5 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tox-dev/tox";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

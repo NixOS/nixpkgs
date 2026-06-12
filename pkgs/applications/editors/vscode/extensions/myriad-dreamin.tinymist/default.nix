@@ -36,5 +36,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/myriad-dreamin/tinymist";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

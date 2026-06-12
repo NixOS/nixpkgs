@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     homepage = "https://github.com/agl/jbig2enc";
     mainProgram = "jbig2";
+    hasNoMaintainersButDependents = true;
   };
 })

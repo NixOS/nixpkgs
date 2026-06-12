@@ -35,5 +35,6 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
     mainProgram = "import-expression";
+    hasNoMaintainersButDependents = true;
   };
 }

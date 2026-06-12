@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "ip2location";
+    hasNoMaintainersButDependents = true;
   };
 })

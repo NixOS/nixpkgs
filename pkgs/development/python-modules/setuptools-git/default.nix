@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Setuptools revision control system plugin for Git";
     homepage = "https://github.com/msabramo/setuptools-git";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/srstevenson/xdg";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

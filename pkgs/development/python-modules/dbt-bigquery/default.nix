@@ -61,5 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-bigquery";
     changelog = "https://github.com/dbt-labs/dbt-bigquery/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

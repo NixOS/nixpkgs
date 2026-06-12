@@ -35,5 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "html2text";
+    hasNoMaintainersButDependents = true;
   };
 }

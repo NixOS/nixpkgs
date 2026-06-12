@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     platforms = lib.platforms.unix; # Once had cygwin problems
+    hasNoMaintainersButDependents = true;
   };
 })

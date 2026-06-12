@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

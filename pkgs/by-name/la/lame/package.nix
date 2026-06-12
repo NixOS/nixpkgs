@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "lame";
+    hasNoMaintainersButDependents = true;
   };
 })

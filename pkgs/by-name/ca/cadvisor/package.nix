@@ -40,5 +40,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

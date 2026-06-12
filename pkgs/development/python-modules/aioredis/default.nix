@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs-abandoned/aioredis-py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

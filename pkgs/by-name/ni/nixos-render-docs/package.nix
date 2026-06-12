@@ -85,5 +85,6 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "nixos-render-docs";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

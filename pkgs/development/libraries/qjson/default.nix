@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     description = "Lightweight data-interchange format";
     homepage = "https://qjson.sourceforge.net/";
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 }

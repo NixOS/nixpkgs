@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

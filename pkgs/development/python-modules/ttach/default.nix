@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Image Test Time Augmentation with PyTorch";
     homepage = "https://github.com/qubvel/ttach";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

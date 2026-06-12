@@ -31,5 +31,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "go-bindata";
     maintainers = [ ];
     license = lib.licenses.cc0;
+    hasNoMaintainersButDependents = true;
   };
 })

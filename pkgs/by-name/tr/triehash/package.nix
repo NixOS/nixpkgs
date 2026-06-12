@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = perlPackages.perl.meta.platforms;
     mainProgram = "triehash";
+    hasNoMaintainersButDependents = true;
   };
 }

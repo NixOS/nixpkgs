@@ -33,5 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 })

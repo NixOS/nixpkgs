@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/anakryiko/btfdump";
     license = with lib.licenses; [ bsd2 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

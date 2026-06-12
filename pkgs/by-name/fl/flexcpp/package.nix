@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fbb-git.github.io/flexcpp/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

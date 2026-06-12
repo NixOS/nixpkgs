@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://dash.plot.ly/datatable";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -26,6 +26,7 @@ final: prev: {
     ];
 
     meta.description = "Collection of popular vim plugins (for internal testing purposes)";
+    meta.hasNoMaintainersButDependents = true;
   };
 
 }

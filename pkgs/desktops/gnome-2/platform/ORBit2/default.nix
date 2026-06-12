@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
       C, and runs under Linux, UNIX (BSD, Solaris, HP-UX, ...), and Windows.
       ORBit2 is developed and released as open source software under GPL/LGPL.
     '';
+    hasNoMaintainersButDependents = true;
   };
 }

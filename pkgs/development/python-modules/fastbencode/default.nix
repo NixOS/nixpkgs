@@ -52,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -45,5 +45,6 @@ buildPythonPackage rec {
     description = "Play and Record Sound with Python";
     homepage = "http://python-sounddevice.rtfd.org/";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

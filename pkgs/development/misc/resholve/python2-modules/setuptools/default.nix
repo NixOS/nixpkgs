@@ -87,5 +87,6 @@ buildPythonPackage {
     ];
     platforms = python.meta.platforms;
     priority = 10;
+    hasNoMaintainersButDependents = true;
   };
 }

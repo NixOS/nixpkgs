@@ -140,5 +140,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = [ ];
     teams = [ lib.teams.geospatial ];
     mainProgram = "feature_download";
+    hasNoMaintainersButDependents = true;
   };
 })

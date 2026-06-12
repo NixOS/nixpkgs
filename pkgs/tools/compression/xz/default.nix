@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     pkgConfigModules = [ "liblzma" ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "tukaani" finalAttrs.version;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       binaryFirmware
       fromSource
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

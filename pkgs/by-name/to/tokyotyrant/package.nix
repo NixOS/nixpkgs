@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

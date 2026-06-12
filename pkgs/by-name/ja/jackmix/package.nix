@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/kampfschlaefer/jackmix";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -45,6 +45,7 @@ let
       license = lib.licenses.cc-by-40;
       platforms = lib.platforms.all;
       inherit (src.meta) homepage;
+      hasNoMaintainersButDependents = true;
     };
   };
 

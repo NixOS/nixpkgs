@@ -28,5 +28,6 @@ buildDunePackage (finalAttrs: {
     description = "Bindings to the UNIX tuntap facility";
     homepage = "https://github.com/mirage/ocaml-tuntap";
     license = lib.licenses.isc;
+    hasNoMaintainersButDependents = true;
   };
 })

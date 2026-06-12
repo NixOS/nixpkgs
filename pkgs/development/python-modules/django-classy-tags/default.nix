@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/django-cms/django-classy-tags/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -160,5 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://suricata.io";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

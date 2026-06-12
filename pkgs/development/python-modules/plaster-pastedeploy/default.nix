@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/plaster_pastedeploy";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

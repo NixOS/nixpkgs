@@ -81,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     inherit (ncurses.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

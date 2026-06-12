@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://spiro.trikaliotis.net/opencbm";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

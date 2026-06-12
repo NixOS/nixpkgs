@@ -25,5 +25,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "http://sigal.saimon.org/en/latest/index.html";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

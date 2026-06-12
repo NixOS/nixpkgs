@@ -136,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gmic_qt";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

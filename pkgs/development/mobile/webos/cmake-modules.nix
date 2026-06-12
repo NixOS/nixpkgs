@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openwebos/cmake-modules-webos";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

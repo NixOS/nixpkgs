@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://0pointer.de/lennart/projects/libdaemon/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

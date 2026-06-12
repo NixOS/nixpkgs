@@ -31,5 +31,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

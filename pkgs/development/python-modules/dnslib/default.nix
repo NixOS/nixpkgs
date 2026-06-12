@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/paulc/dnslib";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

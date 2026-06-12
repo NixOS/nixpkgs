@@ -27,5 +27,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/byllyfish/precis_i18n/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

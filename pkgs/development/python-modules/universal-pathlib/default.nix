@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/fsspec/universal_pathlib/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

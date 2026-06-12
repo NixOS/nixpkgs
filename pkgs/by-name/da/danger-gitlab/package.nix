@@ -16,5 +16,6 @@ bundlerApp {
     homepage = "https://github.com/danger/danger-gitlab-gem";
     license = lib.licenses.mit;
     mainProgram = "danger";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -99,5 +99,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

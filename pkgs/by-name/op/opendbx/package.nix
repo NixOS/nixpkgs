@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "odbx-sql";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

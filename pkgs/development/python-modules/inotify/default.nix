@@ -37,5 +37,6 @@ buildPythonPackage rec {
     description = "Monitor filesystems events on Linux platforms with inotify";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

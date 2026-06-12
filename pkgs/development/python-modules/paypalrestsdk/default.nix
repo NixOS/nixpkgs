@@ -40,5 +40,6 @@ buildPythonPackage rec {
       url = "https://github.com/paypal/PayPal-Python-SDK/blob/master/LICENSE";
     };
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

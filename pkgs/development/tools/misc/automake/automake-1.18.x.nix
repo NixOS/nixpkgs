@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

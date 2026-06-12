@@ -81,5 +81,6 @@ buildPythonPackage rec {
       zpl20
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

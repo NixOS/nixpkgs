@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iscc/mobi";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

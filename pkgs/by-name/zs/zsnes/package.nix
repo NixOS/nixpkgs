@@ -85,5 +85,6 @@ pkgsi686Linux.stdenv.mkDerivation {
     homepage = "https://www.zsnes.com";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
     mainProgram = "zsnes";
+    hasNoMaintainersButDependents = true;
   };
 }

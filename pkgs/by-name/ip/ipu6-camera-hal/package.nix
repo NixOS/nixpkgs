@@ -98,5 +98,6 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

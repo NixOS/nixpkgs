@@ -29,5 +29,6 @@ buildDunePackage (finalAttrs: {
     description = "Library for manipulation of MAC address representations";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

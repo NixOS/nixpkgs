@@ -60,5 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/djwooten/synergy";
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

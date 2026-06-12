@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/iterative/dvc-s3/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

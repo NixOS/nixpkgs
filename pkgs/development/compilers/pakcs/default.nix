@@ -37,6 +37,7 @@ let
           (haskell.lib.compose.overrideCabal (drv: {
             inherit src;
             postUnpack = "sourceRoot+=/frontend";
+            hasNoMaintainersButDependents = true;
           }))
           (haskell.lib.compose.appendPatch
             # mtl 2.3 compatibility has been fixed upstream but it's not in

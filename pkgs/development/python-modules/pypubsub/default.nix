@@ -38,5 +38,6 @@ buildPythonPackage {
       applications.
     '';
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

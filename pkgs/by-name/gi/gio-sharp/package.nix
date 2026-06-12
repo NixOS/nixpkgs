@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mono/gio-sharp";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

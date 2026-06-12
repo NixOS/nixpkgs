@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tradcpp";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

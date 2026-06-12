@@ -81,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "muse4";
+    hasNoMaintainersButDependents = true;
   };
 })

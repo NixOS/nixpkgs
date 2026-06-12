@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library and tool to access files on OBEX-based devices (such as Bluetooth phones)";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

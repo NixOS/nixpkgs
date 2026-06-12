@@ -94,5 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libffi" ];
+    hasNoMaintainersButDependents = true;
   };
 })

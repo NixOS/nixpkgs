@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "Diff, Match and Patch libraries for Plain Text";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

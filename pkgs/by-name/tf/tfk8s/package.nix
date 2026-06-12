@@ -49,6 +49,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jrhouston/tfk8s/";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram = "tfk8s";
   };
 }

@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

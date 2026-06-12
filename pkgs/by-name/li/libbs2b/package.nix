@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bauer stereophonic-to-binaural DSP library";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

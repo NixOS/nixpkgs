@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gtkspell.sourceforge.net";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

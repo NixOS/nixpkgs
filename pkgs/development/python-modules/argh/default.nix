@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Unobtrusive argparse wrapper with natural syntax";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

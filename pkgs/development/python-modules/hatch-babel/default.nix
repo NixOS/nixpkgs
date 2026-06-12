@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/NiklasRosenstein/hatch-babel/blob/${src.tag}/.changelog/${src.tag}.toml";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

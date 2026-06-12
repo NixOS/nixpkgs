@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/jinja2-ansible-filters/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

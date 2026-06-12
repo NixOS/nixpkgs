@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gdbmtool";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

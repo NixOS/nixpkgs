@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://tlsh.org/";
     changelog = "https://github.com/trendmicro/tlsh/releases/tag/${version}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

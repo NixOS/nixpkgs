@@ -52,6 +52,7 @@ let
       homepage = "https://github.com/jaraco/zipp";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

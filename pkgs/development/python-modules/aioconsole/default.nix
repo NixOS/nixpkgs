@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/vxgmichel/aioconsole";
     license = lib.licenses.gpl3Only;
     mainProgram = "apython";
+    hasNoMaintainersButDependents = true;
   };
 })

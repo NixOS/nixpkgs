@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "xkb-switch";
+    hasNoMaintainersButDependents = true;
   };
 })

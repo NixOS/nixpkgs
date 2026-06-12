@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-solaris"
     ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

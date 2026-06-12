@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drawbu ];
     license = lib.licenses.lgpl21;
     homepage = "http://log4cpp.sf.net";
+    hasNoMaintainersButDependents = true;
   };
 })

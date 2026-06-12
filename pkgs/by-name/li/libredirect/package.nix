@@ -136,5 +136,6 @@ else
         glibc calls based on the value of $NIX_REDIRECTS, a colon-separated list
         of path prefixes to be rewritten, e.g. "/src=/dst:/usr/=/nix/store/".
       '';
+      hasNoMaintainersButDependents = true;
     };
   }

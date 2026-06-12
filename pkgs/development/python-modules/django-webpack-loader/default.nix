@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/owais/django-webpack-loader";
     changelog = "https://github.com/django-webpack/django-webpack-loader/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

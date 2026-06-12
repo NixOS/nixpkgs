@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://www.yattag.org/";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

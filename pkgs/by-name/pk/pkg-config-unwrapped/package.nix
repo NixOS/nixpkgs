@@ -83,5 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
     mainProgram = "pkg-config";
+    hasNoMaintainersButDependents = true;
   };
 })

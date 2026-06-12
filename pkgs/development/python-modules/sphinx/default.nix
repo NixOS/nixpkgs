@@ -190,5 +190,6 @@ buildPythonPackage rec {
     homepage = "https://www.sphinx-doc.org";
     changelog = "https://www.sphinx-doc.org/en/master/changes.html";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ieee1394.wiki.kernel.org/index.php/Libraries#libraw1394";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

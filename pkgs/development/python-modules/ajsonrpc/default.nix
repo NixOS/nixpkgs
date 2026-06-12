@@ -29,5 +29,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "async-json-rpc-server";
+    hasNoMaintainersButDependents = true;
   };
 }

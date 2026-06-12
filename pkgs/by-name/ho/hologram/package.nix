@@ -33,5 +33,6 @@ buildGoModule (finalAttrs: {
     description = "Easy, painless AWS credentials on developer laptops";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

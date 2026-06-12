@@ -60,5 +60,6 @@ pythonPackages.buildPythonPackage rec {
     mainProgram = "telepresence";
     license = with lib.licenses; [ asl20 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

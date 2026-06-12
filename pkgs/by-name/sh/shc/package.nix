@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     mainProgram = "shc";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 }

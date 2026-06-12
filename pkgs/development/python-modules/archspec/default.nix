@@ -42,5 +42,6 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
     mainProgram = "archspec";
+    hasNoMaintainersButDependents = true;
   };
 }

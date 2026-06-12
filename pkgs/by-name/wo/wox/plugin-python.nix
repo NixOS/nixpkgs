@@ -23,5 +23,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       license
       maintainers
       ;
+    hasNoMaintainersButDependents = true;
   };
 })

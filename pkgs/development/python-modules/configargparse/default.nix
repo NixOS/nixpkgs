@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

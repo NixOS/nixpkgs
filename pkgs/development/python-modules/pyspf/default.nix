@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Python API for Sendmail Milters (SPF)";
     maintainers = [ ];
     license = lib.licenses.gpl2;
+    hasNoMaintainersButDependents = true;
   };
 }

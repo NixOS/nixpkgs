@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://dbfread.readthedocs.org/";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

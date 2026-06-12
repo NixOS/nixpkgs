@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

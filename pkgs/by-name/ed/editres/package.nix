@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mitOpenGroup;
     mainProgram = "editres";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

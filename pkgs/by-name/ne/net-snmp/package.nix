@@ -93,5 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/net-snmp/net-snmp/blob/v${finalAttrs.version}/NEWS";
+    hasNoMaintainersButDependents = true;
   };
 })

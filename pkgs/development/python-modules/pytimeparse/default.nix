@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

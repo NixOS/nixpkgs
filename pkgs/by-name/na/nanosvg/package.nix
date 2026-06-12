@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/memononen/nanosvg";
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

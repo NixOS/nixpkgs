@@ -173,5 +173,6 @@ buildDunePackage {
 
   meta = jsonrpc.meta // {
     description = "LSP protocol implementation in OCaml";
+    hasNoMaintainersButDependents = true;
   };
 }

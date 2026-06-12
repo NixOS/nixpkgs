@@ -187,5 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://dbmx.net/tkrzw/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

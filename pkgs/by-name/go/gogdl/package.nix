@@ -33,5 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
     license = with lib.licenses; [ gpl3 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

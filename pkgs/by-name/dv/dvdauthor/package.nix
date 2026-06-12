@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://dvdauthor.sourceforge.net/"; # or https://github.com/ldo/dvdauthor
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

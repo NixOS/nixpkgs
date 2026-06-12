@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mayeut/pybase64/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

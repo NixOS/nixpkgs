@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     broken =
       (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "glibc");
+    hasNoMaintainersButDependents = true;
   };
 })

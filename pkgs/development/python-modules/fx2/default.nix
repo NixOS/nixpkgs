@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/whitequark/libfx2";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

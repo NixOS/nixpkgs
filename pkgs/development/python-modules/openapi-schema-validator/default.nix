@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

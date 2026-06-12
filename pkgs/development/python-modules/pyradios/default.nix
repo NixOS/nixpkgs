@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/andreztz/pyradios";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

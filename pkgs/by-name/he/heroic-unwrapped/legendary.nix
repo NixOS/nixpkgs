@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Heroic-Games-Launcher/legendary";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram = "legendary";
   };
 })

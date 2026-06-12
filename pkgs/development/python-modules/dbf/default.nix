@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethanfurman/dbf";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

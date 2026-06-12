@@ -29,5 +29,6 @@ buildPythonPackage {
     description = "Discord RPC client written in Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

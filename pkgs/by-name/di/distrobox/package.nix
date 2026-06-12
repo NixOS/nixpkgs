@@ -71,5 +71,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "distrobox";
+    hasNoMaintainersButDependents = true;
   };
 })

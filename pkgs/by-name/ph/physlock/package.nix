@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "physlock";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

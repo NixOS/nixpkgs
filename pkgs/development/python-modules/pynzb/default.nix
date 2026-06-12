@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Unified API for parsing NZB files";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -32,5 +32,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

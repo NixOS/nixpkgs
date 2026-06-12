@@ -93,5 +93,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = if enableAMR then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

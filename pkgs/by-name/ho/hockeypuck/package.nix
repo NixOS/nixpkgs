@@ -27,5 +27,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/hockeypuck/hockeypuck";
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

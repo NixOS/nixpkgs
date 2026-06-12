@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jaraco/irc/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

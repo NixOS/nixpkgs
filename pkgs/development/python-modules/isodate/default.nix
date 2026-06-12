@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "ISO 8601 date/time parser";
     homepage = "https://github.com/gweis/isodate/";
     license = lib.licenses.bsd0;
+    hasNoMaintainersButDependents = true;
   };
 }

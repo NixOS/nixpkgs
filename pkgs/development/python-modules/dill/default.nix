@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/uqfoundation/dill/";
     changelog = "https://github.com/uqfoundation/dill/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ stdenvNoCC.mkDerivation rec {
     # WARNING: This only works with Linux because the pre-built PSOL binary is only supplied for Linux.
     # TODO: Build PSOL from source to support more platforms.
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

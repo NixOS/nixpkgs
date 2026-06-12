@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (mesa.meta) platforms;
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 })

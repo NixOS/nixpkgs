@@ -31,5 +31,6 @@ buildPythonPackage rec {
       lgpl21
       mpl20
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

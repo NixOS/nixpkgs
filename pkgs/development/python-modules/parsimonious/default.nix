@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/erikrose/parsimonious";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

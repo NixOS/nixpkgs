@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "CLI python OpenID Connect client with token caching and management";
     homepage = "https://github.com/puiterwijk";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

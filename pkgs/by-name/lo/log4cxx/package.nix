@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Logging framework for C++ patterned after Apache log4j";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

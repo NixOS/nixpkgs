@@ -127,5 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       "CVE-2026-1145"
       "CVE-2026-3979"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

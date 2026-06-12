@@ -58,5 +58,6 @@ stdenvForCppNetlib.mkDerivation rec {
     homepage = "https://cpp-netlib.org";
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

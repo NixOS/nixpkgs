@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xinit";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

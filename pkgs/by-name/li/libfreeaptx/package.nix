@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/iamthehorker/libfreeaptx";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/martinblech/xmltodict/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

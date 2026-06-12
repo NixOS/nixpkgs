@@ -274,6 +274,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local
@@ -281,7 +282,6 @@ stdenv.mkDerivation rec {
       DNS") and DNS-SD (for "DNS-Based Service Discovery")
       protocols.
     '';
-
     knownVulnerabilities = [
       # NOTE: CVE-2024-52615 mitigated by the default NixOS configuration.
       # "CVE-2024-52615: Avahi Wide-Area DNS Uses Constant Source Port"

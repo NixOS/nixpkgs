@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Userspace library providing interface to extended accounting infrastructure";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

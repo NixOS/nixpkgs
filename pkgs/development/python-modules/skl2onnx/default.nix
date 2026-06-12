@@ -57,5 +57,6 @@ buildPythonPackage (finalAttrs: {
     description = "Convert scikit-learn models to ONNX";
     changelog = "https://github.com/onnx/sklearn-onnx/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
+    hasNoMaintainersButDependents = true;
   };
 })

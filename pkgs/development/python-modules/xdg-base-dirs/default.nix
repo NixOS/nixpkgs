@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

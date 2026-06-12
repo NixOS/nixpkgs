@@ -87,6 +87,7 @@ mkCoqDerivation {
   meta = {
     description = "Coq/SSReflect Library for Monoidal Rings and Multinomials";
     license = lib.licenses.cecill-c;
+    hasNoMaintainersButDependents = true;
   };
 }
 // lib.optionalAttrs (args ? useDune) { inherit useDune; }

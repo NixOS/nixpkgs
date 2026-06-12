@@ -84,5 +84,6 @@ buildPythonPackage rec {
     homepage = "https://urwid.org/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

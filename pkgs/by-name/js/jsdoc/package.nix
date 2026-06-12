@@ -46,5 +46,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://jsdoc.app";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

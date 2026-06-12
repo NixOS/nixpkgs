@@ -64,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/minio/minio-py";
     changelog = "https://github.com/minio/minio-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

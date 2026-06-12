@@ -21,5 +21,6 @@ buildDunePackage (finalAttrs: {
     description = "SDK to extend Merlin";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

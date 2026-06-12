@@ -44,6 +44,7 @@ let
     meta = commonMeta // {
       description = "Server for running Java programs from the command line without incurring the JVM startup overhead";
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -62,6 +63,7 @@ let
 
     meta = commonMeta // {
       description = "Client for running Java programs from the command line without incurring the JVM startup overhead";
+      hasNoMaintainersButDependents = true;
     };
   };
 in

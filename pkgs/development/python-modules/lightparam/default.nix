@@ -36,5 +36,6 @@ buildPythonPackage rec {
     description = "Another attempt at parameters in Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

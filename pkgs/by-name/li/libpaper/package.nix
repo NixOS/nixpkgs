@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://packages.debian.org/unstable/source/libpaper";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

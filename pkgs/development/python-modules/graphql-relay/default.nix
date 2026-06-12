@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

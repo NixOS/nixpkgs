@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://unused.codes";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

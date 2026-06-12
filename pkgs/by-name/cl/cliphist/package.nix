@@ -36,5 +36,6 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "cliphist";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -48,6 +48,7 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "cbor2";
+    hasNoMaintainersButDependents = true;
 
   };
 }

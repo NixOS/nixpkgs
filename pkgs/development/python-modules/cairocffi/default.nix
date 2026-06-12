@@ -64,5 +64,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
+    hasNoMaintainersButDependents = true;
   };
 }

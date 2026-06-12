@@ -72,5 +72,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/piskvorky/gensim";
     changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
+    hasNoMaintainersButDependents = true;
   };
 }

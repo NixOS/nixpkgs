@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Library to apply true color for terminal text";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

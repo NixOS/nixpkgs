@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mbr/asciitree";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

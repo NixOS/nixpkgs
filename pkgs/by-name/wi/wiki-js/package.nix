@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and powerful wiki app built on Node.js";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

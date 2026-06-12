@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mosquito/python-pidfile";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

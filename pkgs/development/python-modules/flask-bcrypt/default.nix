@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maxcountryman/flask-bcrypt";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

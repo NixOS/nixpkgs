@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "samu";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

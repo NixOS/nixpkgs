@@ -86,6 +86,7 @@ let
       description = "Hooked WeMeet that enables screenshare on Wayland";
       homepage = "https://github.com/xuwd1/wemeet-wayland-screenshare";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -171,6 +172,7 @@ let
     meta = {
       description = "Fix for wemeet Wayland XSetInputFocus crash";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 

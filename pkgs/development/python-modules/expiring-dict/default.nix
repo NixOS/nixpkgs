@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dparker2/py-expiring-dict";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

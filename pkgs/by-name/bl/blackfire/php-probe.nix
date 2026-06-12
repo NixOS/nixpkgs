@@ -170,5 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    hasNoMaintainersButDependents = true;
   };
 })

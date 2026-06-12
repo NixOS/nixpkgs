@@ -69,5 +69,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

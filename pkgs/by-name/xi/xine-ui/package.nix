@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xine";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

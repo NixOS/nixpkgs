@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ivegotasthma/python-coreschema";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

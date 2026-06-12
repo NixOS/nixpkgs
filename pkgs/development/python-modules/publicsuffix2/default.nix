@@ -40,5 +40,6 @@ buildPythonPackage {
     homepage = "https://github.com/nexB/python-publicsuffix2";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

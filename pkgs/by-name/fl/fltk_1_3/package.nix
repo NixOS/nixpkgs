@@ -196,5 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     # LGPL2 with static linking exception
     # https://www.fltk.org/COPYING.php
     license = lib.licenses.lgpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 })

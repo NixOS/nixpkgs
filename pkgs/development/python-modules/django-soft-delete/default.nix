@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/san4ezy/django_softdelete";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

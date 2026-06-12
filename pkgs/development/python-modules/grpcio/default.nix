@@ -84,5 +84,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

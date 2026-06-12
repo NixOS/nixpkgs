@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

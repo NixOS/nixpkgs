@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MatthiasValvekens/python-pae";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/goinnn/django-multiselectfield/blob/master/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

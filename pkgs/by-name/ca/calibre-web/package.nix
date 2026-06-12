@@ -158,5 +158,6 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "calibre-web";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

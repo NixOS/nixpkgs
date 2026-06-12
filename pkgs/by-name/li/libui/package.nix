@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

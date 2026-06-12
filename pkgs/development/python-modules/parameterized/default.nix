@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

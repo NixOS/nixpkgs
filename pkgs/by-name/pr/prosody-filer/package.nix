@@ -26,5 +26,6 @@ buildGoModule {
     platforms = lib.platforms.linux;
     description = "Simple file server for handling XMPP http_upload requests";
     mainProgram = "prosody-filer";
+    hasNoMaintainersButDependents = true;
   };
 }

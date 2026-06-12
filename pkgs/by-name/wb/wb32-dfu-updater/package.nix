@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "wb32-dfu-updater_cli";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

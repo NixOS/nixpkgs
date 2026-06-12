@@ -29,5 +29,6 @@ buildGoModule {
     mainProgram = "molly-brown";
     homepage = "https://tildegit.org/solderpunk/molly-brown";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

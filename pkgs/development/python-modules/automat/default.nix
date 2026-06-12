@@ -46,6 +46,7 @@ let
       mainProgram = "automat-visualize";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

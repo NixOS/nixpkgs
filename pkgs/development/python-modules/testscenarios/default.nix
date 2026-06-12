@@ -54,5 +54,6 @@ buildPythonPackage rec {
     description = "Pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -123,5 +123,6 @@ buildDunePackage {
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

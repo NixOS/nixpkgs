@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "Multitran lib: enchanced locale facets";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

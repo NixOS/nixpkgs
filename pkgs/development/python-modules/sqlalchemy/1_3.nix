@@ -84,5 +84,6 @@ buildPythonPackage (finalAttrs: {
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

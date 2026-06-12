@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

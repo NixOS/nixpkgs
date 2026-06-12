@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dosfstools/dosfstools";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

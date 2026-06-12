@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/csscompressor/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

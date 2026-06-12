@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jkwill87/teletype";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -79,5 +79,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "qmk";
+    hasNoMaintainersButDependents = true;
   };
 })

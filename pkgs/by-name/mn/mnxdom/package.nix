@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
         homepage = "https://github.com/w3c/mnx";
         license = lib.licenses.w3c;
         platforms = lib.platforms.all;
+        hasNoMaintainersButDependents = true;
       };
     };
   };

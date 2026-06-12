@@ -38,5 +38,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = [ ];
     mainProgram = "ocaml-hid-enumerate";
+    hasNoMaintainersButDependents = true;
   };
 })

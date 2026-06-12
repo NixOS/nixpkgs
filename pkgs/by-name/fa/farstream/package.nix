@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

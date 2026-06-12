@@ -42,5 +42,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     mainProgram = "targetctl";
+    hasNoMaintainersButDependents = true;
   };
 }

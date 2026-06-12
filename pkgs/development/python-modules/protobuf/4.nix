@@ -144,5 +144,6 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     broken = lib.versionAtLeast protobuf.version "26";
+    hasNoMaintainersButDependents = true;
   };
 }

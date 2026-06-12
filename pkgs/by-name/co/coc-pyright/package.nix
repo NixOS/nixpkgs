@@ -26,5 +26,6 @@ buildNpmPackage {
     homepage = "https://github.com/fannheyward/coc-pyright";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

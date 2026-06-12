@@ -54,5 +54,6 @@ buildPythonPackage rec {
       mit
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

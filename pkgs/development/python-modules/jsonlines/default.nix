@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wbolster/jsonlines";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

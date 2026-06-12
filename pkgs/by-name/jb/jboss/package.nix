@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     knownVulnerabilities = [
       "CVE-2015-7501: remote code execution in apache-commons-collections: InvokerTransformer during deserialisation"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -20,5 +20,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/robur-coop/lun";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -61,5 +61,6 @@ stdenv.mkDerivation {
     homepage = "http://mygui.info/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

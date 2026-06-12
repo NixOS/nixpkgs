@@ -222,6 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WebRTC library used by Signal";
     homepage = "https://github.com/SignalApp/webrtc";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

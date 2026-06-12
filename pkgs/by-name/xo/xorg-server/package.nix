@@ -249,5 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "xorg-server" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

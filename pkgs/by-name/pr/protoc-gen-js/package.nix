@@ -68,5 +68,6 @@ buildBazelPackage' rec {
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

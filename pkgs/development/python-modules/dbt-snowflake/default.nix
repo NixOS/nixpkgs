@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-snowflake/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

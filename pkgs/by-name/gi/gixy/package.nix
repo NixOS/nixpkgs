@@ -77,5 +77,6 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

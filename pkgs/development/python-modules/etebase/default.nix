@@ -77,5 +77,6 @@ buildPythonPackage rec {
     description = "Python client library for Etebase";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

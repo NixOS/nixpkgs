@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iksteen/aws-request-signer";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

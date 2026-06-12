@@ -113,5 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

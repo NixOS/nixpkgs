@@ -57,5 +57,6 @@ stdenv.mkDerivation {
     homepage = "https://www.raylib.com/games.html";
     license = lib.licenses.zlib;
     inherit (raylib.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 }

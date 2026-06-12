@@ -25,5 +25,6 @@ buildPythonPackage rec {
     mainProgram = "asn1ate";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

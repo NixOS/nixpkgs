@@ -95,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

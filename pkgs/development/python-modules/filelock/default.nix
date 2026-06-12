@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.unlicense;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

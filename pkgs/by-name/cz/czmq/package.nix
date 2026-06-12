@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "zmakecert";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

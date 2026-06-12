@@ -27,5 +27,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -43,5 +43,6 @@ chickenPackages_4.eggDerivation rec {
     description = "Backup/archival system based around content-addressible storage";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

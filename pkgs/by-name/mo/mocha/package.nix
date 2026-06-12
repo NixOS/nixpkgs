@@ -32,5 +32,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "mocha";
+    hasNoMaintainersButDependents = true;
   };
 })

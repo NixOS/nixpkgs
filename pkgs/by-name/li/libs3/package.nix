@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl3Plus;
     mainProgram = "s3";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

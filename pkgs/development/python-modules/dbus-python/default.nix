@@ -93,6 +93,7 @@ lib.fix (
       license = lib.licenses.mit;
       platforms = dbus.meta.platforms;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   }
 )

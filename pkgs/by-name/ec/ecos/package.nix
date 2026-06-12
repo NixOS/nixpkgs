@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/embotech/ecos/releases";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

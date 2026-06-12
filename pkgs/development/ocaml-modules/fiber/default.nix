@@ -32,5 +32,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/ocaml-dune/fiber";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

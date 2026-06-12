@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/puyuan/py-nanoid";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

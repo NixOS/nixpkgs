@@ -49,5 +49,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     broken = true; # Not compatible with mirage-crypto ≥ 1.0
+    hasNoMaintainersButDependents = true;
   };
 })

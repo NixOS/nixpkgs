@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://stachenov.github.io/quazip/"; # Migrated from http://quazip.sourceforge.net/
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

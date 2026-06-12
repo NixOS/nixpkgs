@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.sane-project.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -113,5 +113,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/H-M-H/Weylus";
     license = with lib.licenses; [ agpl3Only ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -138,5 +138,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

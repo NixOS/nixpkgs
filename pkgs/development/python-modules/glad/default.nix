@@ -20,5 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Dav1dde/glad";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

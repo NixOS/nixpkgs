@@ -39,5 +39,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "drive";
+    hasNoMaintainersButDependents = true;
   };
 })

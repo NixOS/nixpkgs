@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "sonic-visualiser";
+    hasNoMaintainersButDependents = true;
   };
 })

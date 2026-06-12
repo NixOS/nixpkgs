@@ -27,5 +27,6 @@ buildDunePackage {
     homepage = "https://reason-native.com/docs/console/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

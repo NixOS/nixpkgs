@@ -31,5 +31,6 @@ buildDunePackage (finalAttrs: {
     description = "Ergonomic, lightweight conditional compilation through attributes";
     homepage = "https://github.com/ocaml-sys/config.ml";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

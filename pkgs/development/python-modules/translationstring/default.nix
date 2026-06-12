@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

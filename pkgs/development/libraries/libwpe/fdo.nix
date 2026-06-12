@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wpewebkit.org";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

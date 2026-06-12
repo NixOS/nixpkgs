@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     inherit (openexr_2.meta) knownVulnerabilities;
+    hasNoMaintainersButDependents = true;
   };
 }

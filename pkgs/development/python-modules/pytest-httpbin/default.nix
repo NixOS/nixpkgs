@@ -49,5 +49,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/kevin1024/pytest-httpbin/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -20,5 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ibr.cs.tu-bs.de/projects/libsmi/index.html";
     license = lib.licenses.free;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })
