@@ -3,6 +3,7 @@
   pkg-config,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   buildPackages,
   zstd,
   pytest,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "zstd";
   version = "1.5.7.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "/usr/bin/pkg-config" "${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zstd ];
