@@ -84,7 +84,7 @@ let
     "classical" = [ ];
     "reals" = [ "classical" ];
     "experimental-reals" = [ "reals" ];
-    "analysis" = [ "reals" ];
+    "analysis" = [ "reals" "real-closed" ];
     "reals-stdlib" = [ "reals" ];
     "analysis-stdlib" = [
       "analysis"
