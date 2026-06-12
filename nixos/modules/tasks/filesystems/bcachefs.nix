@@ -373,12 +373,16 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe cfg.package} data scrub ${fs}";
-
                 serviceConfig = {
                   Type = "oneshot";
                   Nice = 19;
                   IOSchedulingClass = "idle";
+
+                  ExecStart = lib.join " " [
+                    (lib.getExe cfg.package)
+                    (if lib.versionOlder cfg.package.version "v1.34.0" then "data scrub" else "scrub")
+                    (utils.escapeSystemdExecArg fs)
+                  ];
                 };
               };
           in
