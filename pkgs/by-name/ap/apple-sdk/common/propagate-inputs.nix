@@ -40,6 +40,7 @@ let
         description
         license
         maintainers
+        hasNoMaintainersButDependents
         platforms
         ;
     };
