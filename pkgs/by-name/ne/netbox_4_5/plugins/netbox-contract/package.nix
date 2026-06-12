@@ -43,6 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_contract" ];
 
+  passthru.pluginName = "netbox_contract";
+
   meta = {
     description = "Contract plugin for netbox";
     homepage = "https://github.com/mlebreuil/netbox-contract";
