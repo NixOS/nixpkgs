@@ -5,7 +5,6 @@
   avahi,
   bison,
   cairo,
-  curl,
   dbus,
   faad2,
   fetchFromGitLab,
@@ -83,10 +82,8 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  writeShellScript,
   libxcb-keysyms,
   zlib,
-
   chromecastSupport ? true,
   jackSupport ? false,
   onlyLibVLC ? false,
@@ -248,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo "$version" > src/revision.txt
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
-      --replace \
+      --replace-fail \
         /usr/share/fonts/truetype/freefont \
         ${freefont_ttf}/share/fonts/truetype
   ''
@@ -257,7 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.lua.org/wshop13/Jericke.pdf#page=39
   + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
     substituteInPlace share/Makefile.am \
-      --replace $'.luac \\\n' $'.lua \\\n'
+      --replace-fail $'.luac \\\n' $'.lua \\\n'
   '';
 
   enableParallelBuilding = true;
