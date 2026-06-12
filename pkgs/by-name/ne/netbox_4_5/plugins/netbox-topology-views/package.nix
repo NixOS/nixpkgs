@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_topology_views" ];
 
+  passthru.pluginName = "netbox_topology_views";
+
   meta = {
     description = "Netbox plugin for generate topology views/maps from your devices";
     homepage = "https://github.com/netbox-community/netbox-topology-views";
