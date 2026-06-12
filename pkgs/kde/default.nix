@@ -20,8 +20,8 @@ let
       plasma = import ./plasma { inherit (self) callPackage; };
 
       sets = [
-        "gear"
         "frameworks"
+        "gear"
         "plasma"
       ];
 
