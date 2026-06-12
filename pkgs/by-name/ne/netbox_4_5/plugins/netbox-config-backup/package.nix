@@ -42,6 +42,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_config_backup" ];
 
+  passthru.pluginName = "netbox_config_backup";
+
   meta = {
     description = "NetBox plugin for configuration backups using napalm";
     homepage = "https://github.com/DanSheps/netbox-config-backup";
