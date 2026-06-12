@@ -27,10 +27,9 @@ import ../../make-test-python.nix (
 
     skipTypeCheck = true;
 
-    nodes.machine =
+    containers.machine =
       { config, ... }:
       {
-        virtualisation.memorySize = 2048;
         services.netbox = {
           enable = true;
           package = netbox;
