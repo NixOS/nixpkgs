@@ -146,6 +146,15 @@ in
 
     nix = {
 
+      daemon.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = config.nix.enable;
+        defaultText = lib.literalExpression "config.nix.enable";
+        description = ''
+          Whether to enable the Nix Daemon.
+        '';
+      };
+
       daemonUser = lib.mkOption {
         type = lib.types.str;
         default = "root";
@@ -249,7 +258,15 @@ in
 
   ###### implementation
 
-  config = lib.mkIf (cfg.enable && nixPackage.pname != "lix") {
+  config = lib.mkIf (cfg.daemon.enable && nixPackage.pname != "lix") {
+    assertions = [
+      {
+        assertion = cfg.daemon.enable -> cfg.enable;
+        message = ''
+          Enabling the Nix Daemon requires also enabling Nix (config.nix.enable = true).
+        '';
+      }
+    ];
 
     systemd.packages = [ nixPackage ];
 
