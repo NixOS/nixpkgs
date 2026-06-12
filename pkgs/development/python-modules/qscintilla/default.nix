@@ -97,5 +97,6 @@ buildPythonPackage {
     description = "Python binding to QScintilla, Qt based text editing control";
     license = lib.licenses.lgpl21Plus;
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
+    hasNoMaintainersButDependents = true;
   };
 }

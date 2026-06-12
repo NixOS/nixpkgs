@@ -64,5 +64,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

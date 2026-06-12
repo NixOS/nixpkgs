@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/plinss/widlparser";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

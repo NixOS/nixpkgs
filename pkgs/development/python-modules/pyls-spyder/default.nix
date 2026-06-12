@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spyder-ide/pyls-spyder";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

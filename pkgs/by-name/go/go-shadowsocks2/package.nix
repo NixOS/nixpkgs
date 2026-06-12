@@ -23,5 +23,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "go-shadowsocks2";
+    hasNoMaintainersButDependents = true;
   };
 })

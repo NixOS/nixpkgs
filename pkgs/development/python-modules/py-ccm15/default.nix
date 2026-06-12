@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ocalvo/py-ccm15";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

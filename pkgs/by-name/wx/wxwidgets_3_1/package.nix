@@ -135,5 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       wxWindowsException31
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

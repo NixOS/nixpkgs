@@ -77,5 +77,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ProtonVPN/python-proton-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -54,5 +54,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/epsy/sigtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

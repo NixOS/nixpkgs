@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

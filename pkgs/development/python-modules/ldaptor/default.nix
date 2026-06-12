@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/ldaptor";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

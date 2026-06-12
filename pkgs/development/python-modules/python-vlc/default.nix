@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://wiki.videolan.org/PythonBinding";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

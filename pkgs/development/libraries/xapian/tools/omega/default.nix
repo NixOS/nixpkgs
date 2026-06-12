@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     changelog = "https://xapian.org/docs/xapian-omega-${version}/NEWS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

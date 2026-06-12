@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

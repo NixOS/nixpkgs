@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scrapy/w3lib/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

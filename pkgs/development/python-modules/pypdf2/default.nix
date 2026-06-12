@@ -37,5 +37,6 @@ buildPythonPackage rec {
       "CVE-2026-28351"
       "CVE-2026-33699"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

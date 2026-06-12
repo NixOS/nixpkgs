@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library providing high performance logging, tracing, ipc, and poll";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

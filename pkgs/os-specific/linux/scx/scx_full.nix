@@ -26,5 +26,6 @@ buildEnv {
       :::
     '';
     homepage = "https://github.com/sched-ext/scx";
+    hasNoMaintainersButDependents = true;
   };
 }

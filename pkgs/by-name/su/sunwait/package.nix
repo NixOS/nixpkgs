@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "sunwait";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

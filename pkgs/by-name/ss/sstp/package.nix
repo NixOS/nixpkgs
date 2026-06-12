@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "sstpc";
+    hasNoMaintainersButDependents = true;
   };
 }

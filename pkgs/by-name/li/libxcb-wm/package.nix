@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xcb-icccm"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

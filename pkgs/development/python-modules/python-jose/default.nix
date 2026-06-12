@@ -64,5 +64,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

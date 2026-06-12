@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

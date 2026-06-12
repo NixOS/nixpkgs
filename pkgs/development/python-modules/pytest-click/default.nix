@@ -31,5 +31,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

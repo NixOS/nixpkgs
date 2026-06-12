@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Jordi1990/aioaquacell";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

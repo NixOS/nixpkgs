@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xdm";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

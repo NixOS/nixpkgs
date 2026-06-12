@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
       "libpcre"
       "libpcreposix"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

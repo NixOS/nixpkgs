@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rhboot/efivar";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Only;
+    hasNoMaintainersButDependents = true;
   };
 })

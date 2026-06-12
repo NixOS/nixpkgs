@@ -124,5 +124,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
+    hasNoMaintainersButDependents = true;
   };
 }

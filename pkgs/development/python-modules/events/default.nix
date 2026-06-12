@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyeve/events/blob/v0.5/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

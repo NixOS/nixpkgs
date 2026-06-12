@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = lib.licenses.gpl2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

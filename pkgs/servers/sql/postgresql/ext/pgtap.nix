@@ -64,6 +64,7 @@ postgresqlBuildExtension (finalAttrs: {
       It can also be used in the xUnit testing style.
     '';
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
     license = lib.licenses.mit;

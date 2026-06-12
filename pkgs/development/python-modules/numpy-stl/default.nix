@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wolph/numpy-stl/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

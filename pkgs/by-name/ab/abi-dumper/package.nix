@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "abi-dumper";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

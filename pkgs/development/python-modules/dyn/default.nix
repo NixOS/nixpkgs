@@ -28,5 +28,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dyninc/dyn-python/blob/${version}/HISTORY.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

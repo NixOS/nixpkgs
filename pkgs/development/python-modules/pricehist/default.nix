@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = lib.licenses.mit;
     mainProgram = "pricehist";
+    hasNoMaintainersButDependents = true;
   };
 })

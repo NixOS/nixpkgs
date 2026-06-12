@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
+    hasNoMaintainersButDependents = true;
   };
 })

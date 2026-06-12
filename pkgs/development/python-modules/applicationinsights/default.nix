@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://pypi.org/project/applicationinsights/${finalAttrs.version}/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Module to work with countries and languages";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

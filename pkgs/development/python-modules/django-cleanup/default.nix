@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/un1t/django-cleanup/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

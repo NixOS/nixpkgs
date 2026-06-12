@@ -59,5 +59,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "php-fpm_exporter";
+    hasNoMaintainersButDependents = true;
   };
 }

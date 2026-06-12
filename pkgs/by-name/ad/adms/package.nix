@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Qucs/adms";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 })

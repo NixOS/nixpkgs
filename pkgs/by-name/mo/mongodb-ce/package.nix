@@ -128,5 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    hasNoMaintainersButDependents = true;
   };
 })

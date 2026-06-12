@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

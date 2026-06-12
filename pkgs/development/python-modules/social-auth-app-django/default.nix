@@ -46,5 +46,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/python-social-auth/social-app-django/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

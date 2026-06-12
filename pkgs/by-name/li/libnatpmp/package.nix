@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "natpmpc";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

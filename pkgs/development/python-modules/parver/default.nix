@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/RazerM/parver";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

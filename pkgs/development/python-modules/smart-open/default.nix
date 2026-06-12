@@ -1,7 +1,6 @@
 {
   lib,
-  awscli2,
-  azure-common,
+  awscli2, azure-common,
   azure-core,
   azure-storage-blob,
   backports-zstd,
@@ -91,5 +90,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -204,6 +204,7 @@ rec {
         homepage = "https://github.com/openresty/lua-resty-lrucache";
         license = lib.licenses.bsd3;
         maintainers = [ ];
+        hasNoMaintainersButDependents = true;
       };
     }
   ) { };

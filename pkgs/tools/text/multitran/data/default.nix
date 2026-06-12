@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     description = "Multitran data english-russian";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

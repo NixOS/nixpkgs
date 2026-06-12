@@ -159,6 +159,7 @@ rec {
       platforms = lib.platforms.unix;
       mainProgram = "redshift";
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 

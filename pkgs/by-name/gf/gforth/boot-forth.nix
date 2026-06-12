@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://www.gnu.org/software/gforth/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

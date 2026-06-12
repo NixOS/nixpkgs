@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alecthomas/injector";
     maintainers = [ ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Python port of libaxolotl-android";
     maintainers = [ ];
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 }

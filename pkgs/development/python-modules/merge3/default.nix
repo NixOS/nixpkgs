@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/breezy-team/merge3";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

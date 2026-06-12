@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.buddy;
 
     platforms = lib.platforms.unix; # Once had cygwin problems
+    hasNoMaintainersButDependents = true;
   };
 })

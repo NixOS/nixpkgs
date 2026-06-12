@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonrob/pyasynchat";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

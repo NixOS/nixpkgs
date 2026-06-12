@@ -220,6 +220,7 @@ stdenvNoCC.mkDerivation (
       platforms = [
         "x86_64-linux"
       ];
+      hasNoMaintainersButDependents = true;
     };
   }
   // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {

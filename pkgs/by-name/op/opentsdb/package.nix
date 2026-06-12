@@ -361,5 +361,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "tsdb";
+    hasNoMaintainersButDependents = true;
   };
 })

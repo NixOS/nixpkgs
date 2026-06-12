@@ -79,5 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mindsdb/dataprep_ml";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

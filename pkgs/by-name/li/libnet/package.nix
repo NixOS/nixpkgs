@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "libnet-config";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

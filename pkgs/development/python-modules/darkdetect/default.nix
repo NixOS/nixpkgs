@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/albertosottile/darkdetect";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

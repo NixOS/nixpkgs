@@ -67,5 +67,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       binaryBytecode
       binaryNativeCode
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     description = "TextUI colors for Python";
     homepage = "https://github.com/kennethreitz/crayons";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

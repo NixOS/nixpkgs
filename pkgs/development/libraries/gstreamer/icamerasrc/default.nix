@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = [ "x86_64-linux" ];
   };
 })

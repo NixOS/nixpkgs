@@ -68,6 +68,7 @@ buildGoModule rec {
       homepage = "https://github.com/docker/docker-credential-helpers";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       mainProgram = "docker-credential-osxkeychain";

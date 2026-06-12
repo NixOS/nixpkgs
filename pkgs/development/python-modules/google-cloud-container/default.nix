@@ -58,5 +58,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${finalAttrs.version}/packages/google-cloud-container/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -42,5 +42,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
     mainProgram = "nose2";
+    hasNoMaintainersButDependents = true;
   };
 }

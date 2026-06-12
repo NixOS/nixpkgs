@@ -55,5 +55,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://git.sr.ht/~geb/dotool/tree/${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

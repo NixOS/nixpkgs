@@ -90,5 +90,6 @@ buildPythonPackage rec {
     description = "CUDA integration for Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -76,6 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://pypi.org/project/rss2email/";
     license = lib.licenses.gpl2;
     mainProgram = "r2e";
+    hasNoMaintainersButDependents = true;
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

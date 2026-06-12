@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

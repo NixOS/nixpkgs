@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Secure PIN handling using NSS crypto";
     license = lib.licenses.mpl11;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

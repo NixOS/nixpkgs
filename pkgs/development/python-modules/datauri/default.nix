@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
     license = lib.licenses.unlicense;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

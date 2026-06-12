@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wireservice/agate/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

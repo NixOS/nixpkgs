@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://www.pyinvoke.org/";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/woff2";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -37,5 +37,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/more-itertools/more-itertools";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

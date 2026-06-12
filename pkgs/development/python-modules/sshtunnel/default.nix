@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pahaz/sshtunnel";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

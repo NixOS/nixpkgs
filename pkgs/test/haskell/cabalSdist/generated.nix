@@ -14,4 +14,5 @@ mkDerivation {
   description = "Nixpkgs test case";
   license = lib.licenses.mit;
   mainProgram = "local";
+  hasNoMaintainersButDependents = true;
 }

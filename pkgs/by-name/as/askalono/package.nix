@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "askalono";
+    hasNoMaintainersButDependents = true;
   };
 })

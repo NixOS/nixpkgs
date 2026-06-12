@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mkdocs/get-deps";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

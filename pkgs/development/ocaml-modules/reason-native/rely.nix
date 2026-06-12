@@ -32,5 +32,6 @@ buildDunePackage {
     homepage = "https://reason-native.com/docs/rely/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

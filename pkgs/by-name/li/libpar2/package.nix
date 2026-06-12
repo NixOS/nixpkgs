@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     description = "Library for using Parchives (parity archive volume sets)";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

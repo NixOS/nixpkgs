@@ -84,5 +84,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/getlogbook/logbook/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

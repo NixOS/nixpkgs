@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

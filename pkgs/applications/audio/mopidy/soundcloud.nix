@@ -35,5 +35,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/mopidy/mopidy-soundcloud";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

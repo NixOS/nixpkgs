@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "tlshd";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

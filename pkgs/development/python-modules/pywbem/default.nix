@@ -81,5 +81,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

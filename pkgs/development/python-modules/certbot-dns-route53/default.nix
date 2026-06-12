@@ -34,5 +34,6 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "Route53 DNS Authenticator plugin for Certbot";
+    hasNoMaintainersButDependents = true;
   };
 }

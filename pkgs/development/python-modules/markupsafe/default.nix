@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://palletsprojects.com/p/markupsafe/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -70,5 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kubernetes-client/python";
     changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

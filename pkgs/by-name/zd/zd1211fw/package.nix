@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
+    hasNoMaintainersButDependents = true;
   };
 })

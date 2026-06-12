@@ -53,5 +53,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/danielgtaylor/jpeg-archive";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

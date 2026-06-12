@@ -67,5 +67,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/fannheyward/coc-texlab";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

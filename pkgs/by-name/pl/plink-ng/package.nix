@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cog-genomics.org/plink2";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

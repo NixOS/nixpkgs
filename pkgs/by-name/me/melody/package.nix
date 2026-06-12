@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "melody";
+    hasNoMaintainersButDependents = true;
   };
 })

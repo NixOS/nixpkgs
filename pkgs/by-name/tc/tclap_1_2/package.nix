@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "Templatized C++ Command Line Parser Library";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

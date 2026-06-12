@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     ];
     description = "Library that simplifies the interaction with PKCS#11 providers";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

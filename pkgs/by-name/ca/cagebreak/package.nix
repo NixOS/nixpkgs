@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     changelog = "https://github.com/project-repo/cagebreak/blob/${finalAttrs.version}/Changelog.md";
     mainProgram = "cagebreak";
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

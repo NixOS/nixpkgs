@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-tenants/django-tenants/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

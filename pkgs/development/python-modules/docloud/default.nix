@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://community.ibm.com/community/user/groups/community-home?communitykey=ab7de0fd-6f43-47a9-8261-33578a231bb7";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

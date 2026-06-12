@@ -80,5 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ecederstrand/exchangelib";
     changelog = "https://github.com/ecederstrand/exchangelib/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

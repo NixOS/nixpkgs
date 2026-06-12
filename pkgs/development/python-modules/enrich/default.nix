@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycontribs/enrich";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -68,5 +68,6 @@ stdenv.mkDerivation {
     # 's/Linux/Darwin/' and 's/so/dylib/' or something similar.
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

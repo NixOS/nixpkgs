@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tanbro/pyyaml-include/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

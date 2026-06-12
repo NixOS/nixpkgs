@@ -166,5 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = [ ];
     pkgConfigModules = [ "libzstd" ];
+    hasNoMaintainersButDependents = true;
   };
 })

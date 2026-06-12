@@ -39,6 +39,7 @@ in
     license = lib.licenses.mit;
     homepage = "https://nixos.org";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru.tests = {

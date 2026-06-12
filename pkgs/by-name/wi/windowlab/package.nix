@@ -44,5 +44,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     mainProgram = "windowlab";
+    hasNoMaintainersButDependents = true;
   };
 }

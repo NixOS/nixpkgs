@@ -32,5 +32,6 @@ python3Packages.buildPythonPackage rec {
     description = "MeerK40t camera plugin";
     license = lib.licenses.mit;
     homepage = "https://github.com/meerk40t/meerk40t-camera";
+    hasNoMaintainersButDependents = true;
   };
 }

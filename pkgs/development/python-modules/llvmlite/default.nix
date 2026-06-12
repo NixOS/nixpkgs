@@ -71,5 +71,6 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/numba/llvmlite";
     changelog = "https://github.com/numba/llvmlite/blob/${finalAttrs.src.tag}/CHANGE_LOG";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

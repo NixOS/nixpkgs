@@ -151,5 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "appstreamcli";
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "appstream" ];
+    hasNoMaintainersButDependents = true;
   };
 })

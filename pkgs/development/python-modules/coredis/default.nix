@@ -78,5 +78,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

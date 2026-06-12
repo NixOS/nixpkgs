@@ -71,5 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/flasgger/flasgger/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

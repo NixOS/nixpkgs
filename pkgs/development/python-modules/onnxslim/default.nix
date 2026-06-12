@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     description = "Toolkit to Help Optimize Onnx Model";
     homepage = "https://pypi.org/project/onnxslim/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

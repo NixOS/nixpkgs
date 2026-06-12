@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     # are basically about making the license a little less share-alike.
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

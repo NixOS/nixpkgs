@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tskit-dev/tskit";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

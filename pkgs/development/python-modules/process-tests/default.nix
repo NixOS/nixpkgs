@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Tools for testing processes";
     license = lib.licenses.bsd2;
     homepage = "https://github.com/ionelmc/python-process-tests";
+    hasNoMaintainersButDependents = true;
   };
 }

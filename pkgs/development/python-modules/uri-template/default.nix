@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/plinss/uri_template/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

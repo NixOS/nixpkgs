@@ -38,5 +38,6 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "quicktype";
+    hasNoMaintainersButDependents = true;
   };
 }

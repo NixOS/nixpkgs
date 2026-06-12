@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
     mainProgram = "apk";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "node-gyp-build";
+    hasNoMaintainersButDependents = true;
   };
 })

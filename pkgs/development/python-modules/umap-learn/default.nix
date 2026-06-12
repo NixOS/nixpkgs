@@ -105,5 +105,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/lmcinnes/umap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -41,5 +41,6 @@ buildPythonPackage rec {
     description = "Hawk Access Authentication protocol";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

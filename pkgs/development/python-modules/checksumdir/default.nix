@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "checksumdir";
+    hasNoMaintainersButDependents = true;
   };
 })

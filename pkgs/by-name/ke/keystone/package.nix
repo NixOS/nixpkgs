@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "kstool";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -67,5 +67,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yaegassy/coc-sqlfluff";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

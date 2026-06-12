@@ -136,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       make it easy to extend for reading and writing new sound file
       formats.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

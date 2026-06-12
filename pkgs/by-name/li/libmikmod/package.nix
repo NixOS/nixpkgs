@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
       A library for playing tracker music module files supporting many formats,
       including MOD, S3M, IT and XM.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

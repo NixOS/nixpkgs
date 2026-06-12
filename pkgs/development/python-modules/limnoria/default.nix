@@ -60,5 +60,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ProgVal/Limnoria";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

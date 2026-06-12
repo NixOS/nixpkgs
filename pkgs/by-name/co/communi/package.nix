@@ -77,5 +77,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/communi/communi-desktop";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

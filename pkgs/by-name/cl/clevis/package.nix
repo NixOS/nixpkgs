@@ -148,5 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "clevis";
+    hasNoMaintainersButDependents = true;
   };
 })

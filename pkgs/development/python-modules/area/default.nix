@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     description = "Calculate the area inside of any GeoJSON geometry. This is a port of Mapbox’s geojson-area for Python";
     homepage = "https://github.com/scisco/area";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

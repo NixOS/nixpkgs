@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/bastikr/boolean.py";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

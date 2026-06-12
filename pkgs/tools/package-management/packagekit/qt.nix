@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
 
   meta = packagekit.meta // {
     description = "System to facilitate installing and updating packages - Qt";
+    hasNoMaintainersButDependents = true;
   };
 }

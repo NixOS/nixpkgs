@@ -178,5 +178,6 @@ buildPythonPackage (finalAttrs: {
       lgpl2Plus
       wxWindowsException31
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

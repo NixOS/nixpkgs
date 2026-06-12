@@ -55,5 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/polm/unidic-py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

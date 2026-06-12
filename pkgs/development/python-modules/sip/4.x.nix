@@ -64,6 +64,7 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.all;
   };
 }

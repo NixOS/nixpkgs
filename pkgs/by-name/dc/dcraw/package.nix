@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
       "CVE-2018-19567"
       "CVE-2018-19568"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

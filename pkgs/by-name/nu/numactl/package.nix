@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
     ]; # libnuma is lgpl21
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

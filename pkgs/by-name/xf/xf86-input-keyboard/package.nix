@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     # platforms according to the readme:
     # BSD, GNU Hurd, illumos & Solaris
     platforms = with lib.platforms; freebsd ++ netbsd ++ openbsd ++ illumos;
+    hasNoMaintainersButDependents = true;
   };
 })

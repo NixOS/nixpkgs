@@ -49,5 +49,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
     license = lib.licenses.bsd3;
     mainProgram = "sqlformat";
+    hasNoMaintainersButDependents = true;
   };
 }

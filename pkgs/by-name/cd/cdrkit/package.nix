@@ -99,5 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://cdrkit.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

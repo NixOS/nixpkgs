@@ -71,5 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/axnsan12/drf-yasg";
     maintainers = [ ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

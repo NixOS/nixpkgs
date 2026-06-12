@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/terencehonles/fusepy";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

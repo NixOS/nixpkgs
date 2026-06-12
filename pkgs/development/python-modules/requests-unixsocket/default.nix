@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/msabramo/requests-unixsocket";
     changelog = "https://github.com/msabramo/requests-unixsocket/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -50,5 +50,6 @@ buildPythonPackage rec {
     mainProgram = "manhole-cli";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

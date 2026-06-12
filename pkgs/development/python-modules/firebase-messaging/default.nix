@@ -86,5 +86,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

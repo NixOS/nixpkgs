@@ -57,5 +57,6 @@ buildPythonPackage (finalAttrs: {
       # https://github.com/tlsfuzzer/python-ecdsa/issues/330
       "CVE-2024-23342"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

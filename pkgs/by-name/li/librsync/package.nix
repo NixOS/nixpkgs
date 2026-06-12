@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     mainProgram = "rdiff";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -190,5 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "guile";
+    hasNoMaintainersButDependents = true;
   };
 })

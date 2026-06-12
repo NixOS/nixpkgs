@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://kakasi.namazu.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

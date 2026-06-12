@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus; # With some files being BSD as an exception
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

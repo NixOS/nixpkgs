@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Structured logger for Fluentd (Python)";
     homepage = "https://github.com/fluent/fluent-logger-python";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

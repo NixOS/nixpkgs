@@ -28,5 +28,6 @@ buildPythonPackage rec {
     mainProgram = "distro";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

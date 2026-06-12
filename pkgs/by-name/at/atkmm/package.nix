@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://gitlab.gnome.org/GNOME/atkmm";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

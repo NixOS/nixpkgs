@@ -87,5 +87,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/enthought/pyface/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     license = lib.licenses.bsdOriginal;
+    hasNoMaintainersButDependents = true;
   };
 })

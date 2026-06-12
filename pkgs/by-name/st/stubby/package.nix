@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       the getdns team.
     '';
     homepage = "https://dnsprivacy.org/dns_privacy_daemon_-_stubby/";
+    hasNoMaintainersButDependents = true;
   };
 })

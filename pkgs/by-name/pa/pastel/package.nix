@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "pastel";
+    hasNoMaintainersButDependents = true;
   };
 })

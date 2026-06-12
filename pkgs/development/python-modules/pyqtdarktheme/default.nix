@@ -56,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

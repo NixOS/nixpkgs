@@ -45,5 +45,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nschloe/pyfma/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

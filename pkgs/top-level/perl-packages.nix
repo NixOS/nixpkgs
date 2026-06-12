@@ -181,6 +181,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -219,6 +220,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -235,6 +237,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -270,6 +273,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -334,6 +338,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -367,6 +372,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -390,6 +396,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -445,6 +452,7 @@ with self;
       description = "Alien package for the GNU Multiple Precision library";
       homepage = "https://metacpan.org/pod/Alien::GMP";
       license = lib.licenses.lgpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -472,6 +480,7 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # Fails with: ld: unknown option
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -500,6 +509,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -517,6 +527,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -534,6 +545,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -614,6 +626,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -642,6 +655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -668,6 +682,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -713,6 +728,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -733,6 +749,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -773,6 +790,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -814,6 +832,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -834,6 +853,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -904,6 +924,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -921,6 +942,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -937,6 +959,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1011,6 +1034,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1031,6 +1055,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1045,6 +1070,7 @@ with self;
     meta = {
       description = "Test.pm wrapper with helpers for testing Apache";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1136,6 +1162,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1153,6 +1180,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1170,6 +1198,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "fatpack";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1223,6 +1252,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanm";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1332,6 +1362,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1412,6 +1443,7 @@ with self;
       description = "automated builder from DocBook/XML to its output formats (e.g XHTML5 or PDF)";
       homepage = "https://github.com/shlomif/docmake";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1433,6 +1465,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1484,6 +1517,7 @@ with self;
       homepage = "https://sqitch.org";
       license = lib.licenses.mit;
       mainProgram = "sqitch";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1658,6 +1692,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1714,6 +1749,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1764,6 +1800,7 @@ with self;
         gpl1Plus
       ]; # See https://rt.cpan.org/Public/Bug/Display.html?id=43597#txn-569710
       mainProgram = "cpio-filter";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1780,6 +1817,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1833,6 +1871,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "crc32";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1847,6 +1886,7 @@ with self;
       description = "Object-oriented interface to FITS HDUs";
       homepage = "https://github.com/timj/perl-Astro-FITS-Header";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1898,6 +1938,7 @@ with self;
       description = "Fast C metadata and tag reader for all common audio file formats, slimserver fork";
       homepage = "https://github.com/Logitech/slimserver-vendor";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1916,6 +1957,7 @@ with self;
     meta = {
       description = "DEC VMS password hashing";
       license = lib.licenses.gpl1Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1942,6 +1984,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -1964,6 +2007,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2073,6 +2117,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2111,6 +2156,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2193,6 +2239,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2214,6 +2261,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2232,6 +2280,7 @@ with self;
     meta = {
       description = "Call methods on native types";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2285,6 +2334,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2302,6 +2352,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2371,6 +2422,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlcc";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2387,6 +2439,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2403,6 +2456,7 @@ with self;
         artistic1
         gpl1Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2445,6 +2499,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2465,6 +2520,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2486,6 +2542,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2503,6 +2560,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2521,6 +2579,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2549,6 +2608,7 @@ with self;
     meta = {
       description = "Perl interface to HTS library for DNA sequencing";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2602,6 +2662,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2629,6 +2690,7 @@ with self;
         gpl1Plus
         lgpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2645,6 +2707,7 @@ with self;
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2662,6 +2725,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2743,6 +2807,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "bot-training";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2762,6 +2827,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2781,6 +2847,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2821,6 +2888,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2838,6 +2906,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2853,6 +2922,7 @@ with self;
       description = "Work with International Standard Book Numbers";
       homepage = "https://github.com/briandfoy/business-isbn";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2867,6 +2937,7 @@ with self;
       description = "Data pack for Business::ISBN";
       homepage = "https://github.com/briandfoy/business-isbn-data";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2882,6 +2953,7 @@ with self;
       description = "Work with International Standard Music Numbers";
       homepage = "https://github.com/briandfoy/business-ismn";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2896,6 +2968,7 @@ with self;
       description = "Perl extension for International Standard Serial Numbers";
       homepage = "https://github.com/briandfoy/business-issn";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2974,6 +3047,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -2991,6 +3065,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3092,6 +3167,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3114,6 +3190,7 @@ with self;
       description = "Perl interface to the cairo 2d vector graphics library";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3136,6 +3213,7 @@ with self;
       description = "Integrate Cairo into the Glib type system";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3190,6 +3268,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3203,6 +3282,7 @@ with self;
     meta = {
       description = "Canary to check perl compatibility for schmorp's modules";
       license = lib.licenses.gpl1Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3237,6 +3317,7 @@ with self;
       description = "Capture STDOUT and STDERR from Perl, XS or external programs";
       homepage = "https://github.com/dagolden/Capture-Tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3254,6 +3335,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3270,6 +3352,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3285,6 +3368,7 @@ with self;
     meta = {
       description = "Convenience assertions for common situations";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3302,6 +3386,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3346,6 +3431,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3367,6 +3453,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3446,6 +3533,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3473,6 +3561,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3490,6 +3579,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3536,6 +3626,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3596,6 +3687,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3629,6 +3721,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3659,6 +3752,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3706,6 +3800,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "catalyst.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3727,6 +3822,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3750,6 +3846,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3777,6 +3874,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3799,6 +3897,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3868,6 +3967,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3889,6 +3989,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3909,6 +4010,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -3979,6 +4081,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4005,6 +4108,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4039,6 +4143,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4059,6 +4164,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4080,6 +4186,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4123,6 +4230,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4152,6 +4260,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4226,6 +4335,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4243,6 +4353,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4264,6 +4375,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4284,6 +4396,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4304,6 +4417,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4330,6 +4444,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4357,6 +4472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4480,6 +4596,7 @@ with self;
     meta = {
       description = "Parse a CDDB/freedb data file";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4505,6 +4622,7 @@ with self;
       description = "Handle Common Gateway Interface requests and responses";
       homepage = "https://metacpan.org/module/CGI";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4537,6 +4655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4553,6 +4672,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4572,6 +4692,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4589,6 +4710,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4611,6 +4733,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4629,6 +4752,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4660,6 +4784,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4677,6 +4802,7 @@ with self;
     meta = {
       description = "Persistent session data in CGI applications";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4697,6 +4823,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4711,6 +4838,7 @@ with self;
     meta = {
       description = "Build structures from CGI data";
       license = lib.licenses.bsd2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4754,6 +4882,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4775,6 +4904,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4856,6 +4986,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4873,6 +5004,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4892,6 +5024,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4908,6 +5041,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4959,6 +5093,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -4981,6 +5116,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5003,6 +5139,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5037,6 +5174,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5053,6 +5191,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5069,6 +5208,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5085,6 +5225,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5101,6 +5242,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5146,6 +5288,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5163,6 +5306,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5179,6 +5323,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5195,6 +5340,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5211,6 +5357,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5265,6 +5412,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5286,6 +5434,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5303,6 +5452,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5330,6 +5480,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5348,6 +5499,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5364,6 +5516,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5386,6 +5539,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5400,6 +5554,7 @@ with self;
       description = "Minimalist class construction";
       homepage = "https://github.com/dagolden/Class-Tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5425,6 +5580,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5444,6 +5600,7 @@ with self;
       description = "XS implementation of parts of Class::Load";
       homepage = "https://github.com/moose/Class-Load-XS";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5477,6 +5634,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5498,6 +5656,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5516,6 +5675,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5538,6 +5698,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5554,6 +5715,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5631,6 +5793,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5648,6 +5811,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5670,6 +5834,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5686,6 +5851,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5733,6 +5899,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tidyall";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5753,6 +5920,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5781,6 +5949,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5805,6 +5974,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5821,6 +5991,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5844,6 +6015,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5860,6 +6032,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5876,6 +6049,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5899,6 +6073,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5922,6 +6097,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5954,6 +6130,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -5988,6 +6165,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6006,6 +6184,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6019,6 +6198,7 @@ with self;
     meta = {
       description = "Generic Config Module";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6040,6 +6220,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6057,6 +6238,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6075,6 +6257,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6097,6 +6280,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6137,6 +6321,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6162,6 +6347,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6188,6 +6374,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6209,6 +6396,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6241,6 +6429,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6258,6 +6447,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6275,6 +6465,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6297,6 +6488,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cfgver";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6363,6 +6555,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6396,6 +6589,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6451,6 +6645,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6490,6 +6685,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6507,6 +6703,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6523,6 +6720,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6536,6 +6734,7 @@ with self;
     meta = {
       description = "Constant subs with deferred value calculation";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6555,6 +6754,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6577,6 +6777,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6625,6 +6826,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6677,6 +6879,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "corona";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6783,6 +6986,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanel_json_xs";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6802,6 +7006,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6819,6 +7024,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tidy_changelog";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6840,6 +7046,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6865,6 +7072,7 @@ with self;
       description = "Common library for searching CPAN modules, authors and distributions";
       homepage = "https://github.com/Perl-Toolchain-Gang/CPAN-Common-Index";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6881,6 +7089,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6898,6 +7107,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6915,6 +7125,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6940,6 +7151,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpanp";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6964,6 +7176,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "cpan-upload";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6980,6 +7193,7 @@ with self;
       changelog = "https://github.com/Leont/crypt-argon2/blob/v0.031/Changes";
       description = "Perl interface to the Argon2 key derivation functions";
       license = lib.licenses.cc0;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -6996,6 +7210,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7009,6 +7224,7 @@ with self;
     meta = {
       description = "Perl Blowfish encryption module";
       license = lib.licenses.bsdOriginalShortened;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7047,6 +7263,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7064,6 +7281,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7082,6 +7300,7 @@ with self;
     meta = {
       description = "Perl DES encryption module";
       license = lib.licenses.bsdOriginalShortened;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7157,6 +7376,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7214,6 +7434,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7282,6 +7503,7 @@ with self;
     meta = {
       description = "Perl interface to IDEA block cipher";
       license = lib.licenses.bsdOriginalShortened;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7319,6 +7541,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7339,6 +7562,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7360,6 +7584,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7377,6 +7602,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7468,6 +7694,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7485,6 +7712,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7501,6 +7729,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7517,6 +7746,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7552,6 +7782,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7565,6 +7796,7 @@ with self;
     meta = {
       description = "Crypt::CBC compliant Rijndael encryption module";
       license = lib.licenses.gpl3Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7581,6 +7813,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7684,6 +7917,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7784,6 +8018,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7801,6 +8036,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7821,6 +8057,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7846,6 +8083,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -7982,6 +8220,7 @@ with self;
     meta = {
       description = "OpenSSL support for LWP";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8006,6 +8245,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8066,6 +8306,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8084,6 +8325,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8103,6 +8345,7 @@ with self;
     meta = {
       description = "Perl bindings to ncurses";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8123,6 +8366,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8160,6 +8404,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8177,6 +8422,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8194,6 +8440,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8214,6 +8461,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8238,6 +8486,7 @@ with self;
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8258,6 +8507,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8274,6 +8524,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8309,6 +8560,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8332,6 +8584,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8348,6 +8601,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8373,6 +8627,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8394,6 +8649,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8413,6 +8669,7 @@ with self;
       ];
       maintainers = [ ];
       mainProgram = "hexdump";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8429,6 +8686,7 @@ with self;
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8471,6 +8729,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8486,6 +8745,7 @@ with self;
       description = "Pack and unpack big-endian IEEE754 floats and doubles";
       homepage = "https://metacpan.org/release/Data-IEEE754";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8502,6 +8762,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8545,6 +8806,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8563,6 +8825,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8584,6 +8847,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8600,6 +8864,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8629,6 +8894,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8651,6 +8917,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8671,6 +8938,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8693,6 +8961,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8711,6 +8980,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8728,6 +8998,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8746,6 +9017,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8783,6 +9055,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8806,6 +9079,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8823,6 +9097,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8875,6 +9150,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8898,6 +9174,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8930,6 +9207,7 @@ with self;
     meta = {
       description = "Globally/Universally Unique Identifiers (GUIDs/UUIDs)";
       license = lib.licenses.bsd0;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8965,6 +9243,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -8984,6 +9263,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9026,6 +9306,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9044,6 +9325,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9065,6 +9347,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9101,6 +9384,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9115,6 +9399,7 @@ with self;
     meta = {
       description = "Work with a range of dates";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9131,6 +9416,7 @@ with self;
         artistic1
         gpl2Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9155,6 +9441,7 @@ with self;
       description = "Date and time object for Perl";
       homepage = "https://metacpan.org/release/DateTime";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9172,6 +9459,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9189,6 +9477,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9206,6 +9495,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9224,6 +9514,7 @@ with self;
       description = "Create DateTime parser classes and objects";
       homepage = "https://metacpan.org/release/DateTime-Format-Builder";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9244,6 +9535,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9270,6 +9562,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9290,6 +9583,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9307,6 +9601,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9326,6 +9621,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9346,6 +9642,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9376,6 +9673,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dateparse";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9431,6 +9729,7 @@ with self;
       description = "Parse and format strp and strf time patterns";
       homepage = "https://metacpan.org/release/DateTime-Format-Strptime";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9448,6 +9747,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9466,6 +9766,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9484,6 +9785,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9516,6 +9818,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9552,6 +9855,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9579,6 +9883,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9603,6 +9908,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9627,6 +9933,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9666,6 +9973,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9683,6 +9991,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9701,6 +10010,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9721,6 +10031,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9739,6 +10050,7 @@ with self;
         gpl2Only
         artistic1
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9758,6 +10070,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9799,6 +10112,7 @@ with self;
         gpl2Only
         artistic1
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9838,6 +10152,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "patchperl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9855,6 +10170,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9964,6 +10280,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -9985,6 +10302,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10031,6 +10349,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.unix;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10096,6 +10415,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10163,6 +10483,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.unix;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10188,6 +10509,7 @@ with self;
         artistic1
         gpl1Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10214,6 +10536,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10276,6 +10599,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10341,6 +10665,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dbicadmin";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10367,6 +10692,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10467,6 +10793,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10544,6 +10871,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dbicdump";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10579,6 +10907,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10605,6 +10934,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10622,6 +10952,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10659,6 +10990,7 @@ with self;
     meta = {
       description = "Simple detection of binary versus text in strings";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10702,6 +11034,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10736,6 +11069,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10761,6 +11095,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10777,6 +11112,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10795,6 +11131,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10811,6 +11148,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10827,6 +11165,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10874,6 +11213,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10891,6 +11231,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10915,6 +11256,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10929,6 +11271,7 @@ with self;
       description = "Object representing a stack trace";
       homepage = "https://metacpan.org/release/Devel-StackTrace";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10963,6 +11306,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10979,6 +11323,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -10992,6 +11337,7 @@ with self;
     meta = {
       description = "Module that calculates CRC sums of all sorts";
       license = lib.licenses.publicDomain;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11009,6 +11355,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11022,6 +11369,7 @@ with self;
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11055,6 +11403,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11072,6 +11421,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11088,6 +11438,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11104,6 +11455,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11155,6 +11507,7 @@ with self;
       description = "Treat a directory and a manifest file as a hash/dictionary of keys to texts or blobs";
       homepage = "https://metacpan.org/release/Dir-Manifest";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11172,6 +11525,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11189,6 +11543,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11208,6 +11563,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11256,6 +11612,7 @@ with self;
       description = "Distribution::Metadata - gather distribution metadata in local";
       homepage = "https://metacpan.org/pod/Distribution::Metadata";
       mainProgram = "Metadata.pm";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11302,6 +11659,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dzil";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11390,6 +11748,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11444,6 +11803,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11491,6 +11851,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11511,6 +11872,7 @@ with self;
       description = "Validate your CPAN META.json files";
       homepage = "https://p3rl.org/Dist::Zilla::Plugin::Test::CPAN::Meta::JSON";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11536,6 +11898,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11560,6 +11923,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11584,6 +11948,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11607,6 +11972,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11630,6 +11996,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11654,6 +12021,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11676,6 +12044,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11696,6 +12065,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11720,6 +12090,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11742,6 +12113,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11766,6 +12138,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11788,6 +12161,7 @@ with self;
     meta = {
       description = "Release Test::Version tests";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11814,6 +12188,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11883,6 +12258,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11900,6 +12276,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11918,6 +12295,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11934,6 +12312,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11951,6 +12330,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -11990,6 +12370,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12016,6 +12397,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12057,6 +12439,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12075,6 +12458,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12160,6 +12544,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12178,6 +12563,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12229,6 +12615,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12246,6 +12633,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12263,6 +12651,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "piconv";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12298,6 +12687,7 @@ with self;
         gpl2Plus
         lgpl2Plus
       ]; # taken from fedora
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12315,6 +12705,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12328,6 +12719,7 @@ with self;
     meta = {
       description = "Extra sets of Chinese encodings";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12345,6 +12737,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
     patches = [
       ../development/perl-modules/encode-imaputf7.patch
@@ -12365,6 +12758,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12390,6 +12784,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12407,6 +12802,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12443,6 +12839,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12477,6 +12874,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "envpath";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12494,6 +12892,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12526,6 +12925,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12548,6 +12948,7 @@ with self;
     meta = {
       description = "Perl interface to libev, a high performance full-featured event loop";
       license = lib.licenses.gpl1Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12569,6 +12970,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12585,6 +12987,7 @@ with self;
       homepage = "https://github.com/mkende/perl-eval-safe";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12624,6 +13027,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12644,6 +13048,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12668,6 +13073,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12689,6 +13095,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12714,6 +13121,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12730,6 +13138,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12747,6 +13156,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12764,6 +13174,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12781,6 +13192,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12840,6 +13252,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12856,6 +13269,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12895,6 +13309,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12913,6 +13328,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12931,6 +13347,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12947,6 +13364,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12964,6 +13382,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12981,6 +13400,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -12998,6 +13418,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13014,6 +13435,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13032,6 +13454,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "instmodsh";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13049,6 +13472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13120,6 +13544,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13140,6 +13565,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13161,6 +13587,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xspp";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13183,6 +13610,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13200,6 +13628,7 @@ with self;
     meta = {
       description = "Fast CGI module";
       license = lib.licenses.oml;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13222,6 +13651,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13235,6 +13665,7 @@ with self;
     meta = {
       description = "Perl-based FastCGI process manager";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13285,6 +13716,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13303,6 +13735,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13423,6 +13856,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13447,6 +13881,7 @@ with self;
     meta = {
       description = "Watch for changes to files, cross-platform style";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13463,6 +13898,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13481,6 +13917,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13533,6 +13970,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13574,6 +14012,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13595,6 +14034,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13611,6 +14051,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13631,6 +14072,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13650,6 +14092,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13667,6 +14110,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13686,6 +14130,7 @@ with self;
       description = "Object oriented File::Find replacement";
       homepage = "https://metacpan.org/release/File-Find-Object";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13715,6 +14160,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "findorule";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13736,6 +14182,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "findrule";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13757,6 +14204,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13869,6 +14317,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13902,6 +14351,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13919,6 +14369,7 @@ with self;
         gpl2Only
         gpl3Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13963,6 +14414,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13980,6 +14432,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -13997,6 +14450,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14019,6 +14473,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14032,6 +14487,7 @@ with self;
     meta = {
       description = "Guess file type from contents";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14056,6 +14512,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14086,6 +14543,7 @@ with self;
     meta = {
       description = "File-finding iterator";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14102,6 +14560,7 @@ with self;
         artistic1
         gpl1Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14118,6 +14577,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14160,6 +14620,7 @@ with self;
       description = "Change directory temporarily for a limited scope";
       homepage = "https://github.com/dagolden/File-pushd";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14177,6 +14638,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14193,6 +14655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14214,6 +14677,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14238,6 +14702,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14273,6 +14738,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14293,6 +14759,7 @@ with self;
       description = "an be used to determine if files should be updated based on the mtime timestamps of their dependencies";
       homepage = "https://github.com/shlomif/perl-File-ShouldUpdate";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14309,6 +14776,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14327,6 +14795,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14361,6 +14830,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14378,6 +14848,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14394,6 +14865,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14449,6 +14921,7 @@ with self;
       homepage = "http://metacpan.org/release/File-TreeCreate";
       description = "Recursively create a directory tree";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14465,6 +14938,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14522,6 +14996,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14660,6 +15135,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14674,6 +15150,7 @@ with self;
     meta = {
       description = "TTF font support for Perl";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14720,6 +15197,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14737,6 +15215,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14761,6 +15240,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14796,6 +15276,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14813,6 +15294,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14835,6 +15317,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14875,6 +15358,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14901,6 +15385,7 @@ with self;
       mainProgram = "verify-solitaire-solution";
       # Unsuccessful stat on filename containing newline at lib/perl5/5.40.0/File/Path.pm line 361.
       broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14948,6 +15433,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "bdf2gdfont.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14969,6 +15455,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -14995,6 +15482,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15012,6 +15500,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15033,6 +15522,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15093,6 +15583,7 @@ with self;
         artistic1
         gpl2Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15120,6 +15611,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15136,6 +15628,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15197,6 +15690,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15219,6 +15713,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15236,6 +15731,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15260,6 +15756,7 @@ with self;
       license = lib.licenses.lgpl21Only;
       # Can't load module IO, dynamic loading not available in this perl.
       broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15305,6 +15802,7 @@ with self;
       description = "Dynamically create Perl language bindings";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15330,6 +15828,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15373,6 +15872,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15393,6 +15893,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15433,6 +15934,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15453,6 +15955,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15510,6 +16013,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15527,6 +16031,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15554,6 +16059,7 @@ with self;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15591,6 +16097,7 @@ with self;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15667,6 +16174,7 @@ with self;
     };
   };
 
+      hasNoMaintainersButDependents = true;
   Gtk3 = buildPerlPackage rec {
     pname = "Gtk3";
     version = "0.038";
@@ -15691,6 +16199,7 @@ with self;
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15726,6 +16235,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15741,6 +16251,7 @@ with self;
       description = "Simple interface to Gtk3's complex MVC list widget";
       homepage = "https://github.com/soig/Gtk3-SimpleList";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15757,6 +16268,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15863,6 +16375,7 @@ with self;
     meta = {
       description = "Flatten/unflatten complex data hashes";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15885,6 +16398,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15933,6 +16447,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15950,6 +16465,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15967,6 +16483,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -15986,6 +16503,7 @@ with self;
       homepage = "https://github.com/dagolden/Hash-Ordered";
       description = "Fast, pure-Perl ordered hash class";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16002,6 +16520,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16024,6 +16543,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16041,6 +16561,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16057,6 +16578,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16073,6 +16595,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16091,6 +16614,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16125,6 +16649,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16146,6 +16671,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16189,6 +16715,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16214,6 +16741,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16233,6 +16761,7 @@ with self;
       description = "HTML to text formatting using external programs";
       homepage = "https://user42.tuxfamily.org/html-formatexternal/index.html";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16250,6 +16779,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16267,6 +16797,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16317,6 +16848,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16339,6 +16871,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16394,6 +16927,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16419,6 +16953,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16441,6 +16976,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16462,6 +16998,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16478,6 +17015,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16520,6 +17058,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16537,6 +17076,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16554,6 +17094,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16575,6 +17116,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16591,6 +17133,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16611,6 +17154,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16632,6 +17176,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16648,6 +17193,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16666,6 +17212,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16703,6 +17250,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16723,6 +17271,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16742,6 +17291,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "htmltree";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16762,6 +17312,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16789,6 +17340,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16807,6 +17359,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16825,6 +17378,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16847,6 +17401,7 @@ with self;
       description = "Minimalist HTTP user agent cookie jar";
       homepage = "https://github.com/dagolden/HTTP-CookieJar";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16865,6 +17420,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16888,6 +17444,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16934,6 +17491,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16952,6 +17510,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16980,6 +17539,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -16998,6 +17558,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "dave";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17025,6 +17586,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17047,6 +17609,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17064,6 +17627,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17096,6 +17660,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17113,6 +17678,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17130,6 +17696,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17146,6 +17713,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17165,6 +17733,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17185,6 +17754,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17221,6 +17791,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17241,6 +17812,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17280,6 +17852,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17323,6 +17896,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17364,6 +17938,7 @@ with self;
       ];
       mainProgram = "pnginspect";
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.ImagePNGLibpng.x86_64-darwin
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17396,6 +17971,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17431,6 +18007,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17458,6 +18035,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17486,6 +18064,7 @@ with self;
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17505,6 +18084,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "imgsize";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17580,6 +18160,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17597,6 +18178,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17614,6 +18196,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17633,6 +18216,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "treescan";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17650,6 +18234,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17678,6 +18263,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17716,6 +18302,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17733,6 +18320,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17757,6 +18345,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "streamzip";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17776,6 +18365,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17792,6 +18382,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17817,6 +18408,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17834,6 +18426,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17848,6 +18441,7 @@ with self;
       description = "Utilities for interactive I/O";
       homepage = "https://github.com/briandfoy/io-interactive";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17861,6 +18455,7 @@ with self;
     meta = {
       description = "Is_interactive() without large deps";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17877,6 +18472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17893,6 +18489,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17915,6 +18512,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "tp";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17956,6 +18554,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -17974,6 +18573,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18001,6 +18601,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18014,6 +18615,7 @@ with self;
     meta = {
       description = "Provides a way to create socks client or server both 4 and 5 version";
       license = lib.licenses.free;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18036,6 +18638,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18052,6 +18655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18068,6 +18672,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18088,6 +18693,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18104,6 +18710,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18121,6 +18728,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18143,6 +18751,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18179,6 +18788,7 @@ with self;
       description = "Fast lookup of country codes from IP addresses";
       license = lib.licenses.mit;
       mainProgram = "ip2cc";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18192,6 +18802,7 @@ with self;
     meta = {
       description = "2-letter, 3-letter, and numerical codes for countries";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18211,6 +18822,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18228,6 +18840,7 @@ with self;
         gpl1Plus
         bsd3
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18271,6 +18884,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18288,6 +18902,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18348,6 +18963,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18380,6 +18996,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18428,6 +19045,7 @@ with self;
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18444,6 +19062,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18462,6 +19081,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18479,6 +19099,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18503,6 +19124,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18526,6 +19148,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18563,6 +19186,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18580,6 +19204,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "json_pp";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18613,6 +19238,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "validjson";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18661,6 +19287,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18680,6 +19307,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "json_xs";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18697,6 +19325,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18713,6 +19342,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18829,6 +19459,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18845,6 +19476,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18861,6 +19493,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18943,6 +19576,7 @@ with self;
     meta = {
       description = "Portable l10n and i10n functions";
       license = lib.licenses.gpl3Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18959,6 +19593,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -18973,6 +19608,7 @@ with self;
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19011,6 +19647,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19028,6 +19665,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19046,6 +19684,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19062,6 +19701,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19080,6 +19720,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19103,6 +19744,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19125,6 +19767,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19143,6 +19786,7 @@ with self;
     meta = {
       description = "Part-of-speech tagger for English natural language processing";
       license = lib.licenses.gpl3Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19159,6 +19803,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19176,6 +19821,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19203,6 +19849,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19219,6 +19866,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19235,6 +19883,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19252,6 +19901,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19265,6 +19915,7 @@ with self;
     meta = {
       description = "Porters stemming algorithm for Denmark";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19283,6 +19934,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "translit";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19336,6 +19988,7 @@ with self;
       description = "Fast parsing of the Linux desktop files";
       homepage = "https://github.com/trizen/Linux-DesktopFiles";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19356,6 +20009,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19394,6 +20048,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19411,6 +20066,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19429,6 +20085,7 @@ with self;
       description = "Combines List::Util, List::SomeUtils and List::UtilsBy in one bite-sized package";
       homepage = "https://metacpan.org/release/List-AllUtils";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19463,6 +20120,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19484,6 +20142,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19498,6 +20157,7 @@ with self;
       description = "Provide the stuff missing in List::Util in XS";
       homepage = "https://metacpan.org/release/List-MoreUtils-XS";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19517,6 +20177,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19533,6 +20194,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19551,6 +20213,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19570,6 +20233,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19613,6 +20277,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19626,6 +20291,7 @@ with self;
     meta = {
       description = "Maketext from already interpolated strings";
       license = lib.licenses.cc0;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19641,6 +20307,7 @@ with self;
       homepage = "https://search.cpan.org/dist/Locale-Maketext-Lexicon";
       license = lib.licenses.mit;
       mainProgram = "xgettext.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19674,6 +20341,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19709,6 +20377,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19731,6 +20400,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19758,6 +20428,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19784,6 +20455,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19810,6 +20482,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19827,6 +20500,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19862,6 +20536,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19883,6 +20558,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -19952,6 +20628,7 @@ with self;
       description = "Dispatches messages to one or more outputs";
       homepage = "https://metacpan.org/release/Log-Dispatch";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20030,6 +20707,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20046,6 +20724,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20063,6 +20742,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20076,6 +20756,7 @@ with self;
     meta = {
       description = "Provides a unified approach to tracing";
       license = lib.licenses.gpl1Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20093,6 +20774,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20111,6 +20793,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20129,6 +20812,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "l4p-tmpl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20148,6 +20832,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20174,6 +20859,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20213,6 +20899,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20230,6 +20917,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20270,6 +20958,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20305,6 +20994,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20323,6 +21013,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20352,6 +21043,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20369,6 +21061,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20386,6 +21079,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20431,6 +21125,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20481,6 +21176,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20501,6 +21197,7 @@ with self;
       ];
       platforms = lib.platforms.darwin;
       mainProgram = "pbtool";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20516,6 +21213,7 @@ with self;
       description = "Work with Mac plists at a low level";
       homepage = "https://github.com/briandfoy/mac-propertylist";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20534,6 +21232,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.darwin;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20555,6 +21254,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20607,6 +21307,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20623,6 +21324,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20648,6 +21350,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20697,6 +21400,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20726,6 +21430,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20743,6 +21448,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20847,6 +21553,7 @@ with self;
       description = "Object-oriented implementation of Sender Policy Framework";
       license = lib.licenses.bsd3;
       mainProgram = "spfquery";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20865,6 +21572,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20883,6 +21591,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20899,6 +21608,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20915,6 +21625,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20931,6 +21642,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20965,6 +21677,7 @@ with self;
         gpl2Only
       ];
       mainProgram = "ucalc";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -20981,6 +21694,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21002,6 +21716,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21019,6 +21734,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21072,6 +21788,7 @@ with self;
     meta = {
       description = "This module provides a few functions related to Fibonacci numbers";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21091,6 +21808,7 @@ with self;
     meta = {
       description = "High speed arbitrary size integer math";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21153,6 +21871,7 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.is32bit; # compiler doesn't support a 128-bit integer type
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21170,6 +21889,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21203,6 +21923,7 @@ with self;
         gpl1Plus
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21328,6 +22049,7 @@ with self;
         artistic2
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21342,6 +22064,7 @@ with self;
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = lib.licenses.bsd3;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21381,6 +22104,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21417,6 +22141,7 @@ with self;
       description = "Code shared by the MaxMind DB reader and writer modules";
       homepage = "https://metacpan.org/release/MaxMind-DB-Common";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21444,6 +22169,7 @@ with self;
       description = "Read MaxMind DB files and look up IP addresses";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21470,6 +22196,7 @@ with self;
       description = "Fast XS implementation of MaxMind DB reader";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader-XS";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21523,6 +22250,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21540,6 +22268,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21563,6 +22292,7 @@ with self;
       homepage = "https://github.com/michal-josef-spacek/Memory-Process";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21579,6 +22309,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21610,6 +22341,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21628,6 +22360,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21645,6 +22378,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21665,6 +22399,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21739,6 +22474,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21764,6 +22500,7 @@ with self;
       description = "Mail-to-HTML converter";
       mainProgram = "mhonarc";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21797,6 +22534,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21812,6 +22550,7 @@ with self;
     meta = {
       description = "Construct and optionally mail MIME messages";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
     # Nothing in mime-construct --help or mime-construct’s man page mentions
     # anything about mime-construct executing its arguments.
@@ -21853,6 +22592,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21874,6 +22614,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21892,6 +22633,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -21909,6 +22651,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22014,6 +22757,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22050,6 +22794,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mo-inline";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22066,6 +22811,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22084,6 +22830,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22107,6 +22854,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22138,6 +22886,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "config_data";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22178,6 +22927,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22204,6 +22954,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22225,6 +22976,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22246,6 +22998,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22266,6 +23019,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22289,6 +23043,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22310,6 +23065,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22348,6 +23104,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22366,6 +23123,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22408,6 +23166,7 @@ with self;
       homepage = "https://github.com/briandfoy/module-extract-version";
       description = "Extract a module version safely";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22424,6 +23183,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22446,6 +23206,7 @@ with self;
       description = "Loads one of several alternate underlying implementations for a module";
       homepage = "https://metacpan.org/release/Module-Implementation";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22468,6 +23229,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "module_info";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22490,6 +23252,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22628,6 +23391,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22650,6 +23414,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22669,6 +23434,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mpath";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22690,6 +23456,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22707,6 +23474,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22724,6 +23492,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22740,6 +23509,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22758,6 +23528,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22780,6 +23551,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scandeps.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22795,6 +23567,7 @@ with self;
       description = "Module signature file manipulation";
       license = lib.licenses.cc0;
       mainProgram = "cpansign";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22812,6 +23585,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pm_which";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22845,6 +23619,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22859,6 +23634,7 @@ with self;
       description = "Minimalistic HTML/XML DOM parser with CSS selectors";
       homepage = "https://github.com/Grinnz/Mojo-DOM58";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22879,6 +23655,7 @@ with self;
       description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = lib.licenses.asl20;
       mainProgram = "mp2bug";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -22955,6 +23732,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23217,6 +23995,7 @@ with self;
       description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23359,6 +24138,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23382,6 +24162,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23424,6 +24205,7 @@ with self;
       ];
       maintainers = [ ];
       mainProgram = "moose-outdated";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23449,6 +24231,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23467,6 +24250,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23488,6 +24272,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23521,6 +24306,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23540,6 +24326,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23562,6 +24349,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23583,6 +24371,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23604,6 +24393,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23626,6 +24416,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23654,6 +24445,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23691,6 +24483,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23771,6 +24564,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23792,6 +24586,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23818,6 +24613,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23843,6 +24639,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23863,6 +24660,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23917,6 +24715,7 @@ with self;
       description = "PostgreSQL runner for tests";
       homepage = "https://github.com/TJC/Test-postgresql";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23933,6 +24732,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23956,6 +24756,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23977,6 +24778,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -23995,6 +24797,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24013,6 +24816,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24045,6 +24849,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24062,6 +24867,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24106,6 +24912,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24131,6 +24938,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24178,6 +24986,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24209,6 +25018,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24262,6 +25072,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24288,6 +25099,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24306,6 +25118,7 @@ with self;
       description = "Mark overload code symbols as methods";
       homepage = "https://metacpan.org/release/MooseX-MarkAsMethods";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24332,6 +25145,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24354,6 +25168,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24372,6 +25187,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24389,6 +25205,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24411,6 +25228,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24438,6 +25256,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24460,6 +25279,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24519,6 +25339,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24542,6 +25363,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24587,6 +25409,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24610,6 +25433,7 @@ with self;
       description = "Make your object constructors blow up on unknown attributes";
       homepage = "https://metacpan.org/release/MooseX-StrictConstructor";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24659,6 +25483,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24687,6 +25512,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24710,6 +25536,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24735,6 +25562,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24761,6 +25589,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24783,6 +25612,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24807,6 +25637,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24831,6 +25662,7 @@ with self;
       description = "Path::Tiny types and coercions for Moose";
       homepage = "https://github.com/karenetheridge/moosex-types-path-tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24849,6 +25681,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24864,6 +25697,7 @@ with self;
       description = "Moose type constraints for strings or string-like objects";
       homepage = "https://github.com/dagolden/MooseX-Types-Stringlike";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24934,6 +25768,7 @@ with self;
     meta = {
       description = "Split an MP3 file without gaps (based on pcutmp3)";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24950,6 +25785,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24972,6 +25808,7 @@ with self;
     meta = {
       description = "Module for reading tags of MP3 audio files";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -24989,6 +25826,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25016,6 +25854,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25037,6 +25876,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25056,6 +25896,7 @@ with self;
       description = "Mozilla's CA cert bundle in PEM format";
       homepage = "https://github.com/gisle/mozilla-ca";
       license = lib.licenses.mpl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25075,6 +25916,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25097,6 +25939,7 @@ with self;
         artistic1
       ];
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25121,6 +25964,7 @@ with self;
     meta = {
       description = "- Perl interface for the MusicBrainz libdiscid library";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25139,6 +25983,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25202,6 +26047,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25223,6 +26069,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25257,6 +26104,7 @@ with self;
         artistic1
       ];
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25288,6 +26136,7 @@ with self;
       description = "Lookup the username on the remote end of a TCP/IP connection";
       homepage = "https://github.com/toddr/Net-Ident";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25305,6 +26154,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25321,6 +26171,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25431,6 +26282,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "s3cl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25584,6 +26436,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25670,6 +26523,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25705,6 +26559,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25720,6 +26575,7 @@ with self;
     meta = {
       description = "Perl Interface to the Domain Name System";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25738,6 +26594,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25754,6 +26611,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25774,6 +26632,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25793,6 +26652,7 @@ with self;
     meta = {
       description = "Base framework for frame crafting";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25807,6 +26667,7 @@ with self;
     meta = {
       description = "Internet Protocol v6 layer object";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25838,6 +26699,7 @@ with self;
       description = "OOP Interface to FreeDB Server(s)";
       license = lib.licenses.artistic1;
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.NetFreeDB.x86_64-darwin
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25858,6 +26720,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25906,6 +26769,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25942,6 +26806,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25978,6 +26843,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ipv4calc";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25998,6 +26864,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26016,6 +26883,7 @@ with self;
       homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
       description = "IPv4/IPv6 address library";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26036,6 +26904,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26053,6 +26922,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26076,6 +26946,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26094,6 +26965,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26115,6 +26987,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26130,6 +27003,7 @@ with self;
       description = "Communicate with an MPD server";
       homepage = "https://metacpan.org/pod/Net::MPD";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26230,6 +27104,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26248,6 +27123,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26273,6 +27149,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26317,6 +27194,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "net-server";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26337,6 +27215,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26354,6 +27233,7 @@ with self;
     meta = {
       description = "Co-operative multithreaded server using Coro";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26385,6 +27265,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26402,6 +27283,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26491,6 +27373,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "snmpkey";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26529,6 +27412,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26580,6 +27464,7 @@ with self;
     meta = {
       description = "Perl bindings for OpenSSL and LibreSSL";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26597,6 +27482,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "benchmark.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26613,6 +27499,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26662,6 +27549,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26685,6 +27573,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26701,6 +27590,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26717,6 +27607,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26733,6 +27624,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26753,6 +27645,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26828,6 +27721,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26862,6 +27756,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26882,6 +27777,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26899,6 +27795,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26924,6 +27821,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26941,6 +27839,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26957,6 +27856,7 @@ with self;
     meta = {
       description = "Access Ogg Vorbis info and comment fields";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26973,6 +27873,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -26989,6 +27890,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27048,6 +27950,7 @@ with self;
         gpl1Plus
       ]; # taken from EPEL
       badPlatforms = lib.platforms.darwin;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27086,6 +27989,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27107,6 +28011,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27123,6 +28028,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27213,6 +28119,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27237,6 +28144,7 @@ with self;
       description = "Manage deprecation warnings for your distribution";
       homepage = "https://metacpan.org/release/Package-DeprecationManager";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27278,6 +28186,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "package-stash-conflicts";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27299,6 +28208,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27349,6 +28259,7 @@ with self;
       description = "Layout and render international text";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27368,6 +28279,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27405,6 +28317,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27432,6 +28345,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27448,6 +28362,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27465,6 +28380,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27484,6 +28400,7 @@ with self;
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27508,6 +28425,7 @@ with self;
       description = "Build an optimized subroutine parameter validator once, use it forever";
       homepage = "https://metacpan.org/release/Params-ValidationCompiler";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27530,6 +28448,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27571,6 +28490,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pause-permissions";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27587,6 +28507,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27603,6 +28524,7 @@ with self;
         artistic1
         gpl1Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27617,6 +28539,7 @@ with self;
     meta = {
       description = "Extended display identification data (EDID) parser";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27637,6 +28560,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27658,6 +28582,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27697,6 +28622,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27738,6 +28664,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27754,6 +28681,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27770,6 +28698,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27788,6 +28717,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27805,6 +28735,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "yapp";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27821,6 +28752,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27848,6 +28780,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27873,6 +28806,7 @@ with self;
       description = "Iterative, recursive file finder";
       homepage = "https://github.com/dagolden/Path-Iterator-Rule";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27894,6 +28828,7 @@ with self;
       description = "File path utility";
       homepage = "https://github.com/dagolden/Path-Tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27915,6 +28850,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27948,6 +28884,7 @@ with self;
     meta = {
       description = "Create, modify, and examine PDF files";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -27967,6 +28904,7 @@ with self;
       description = "Facilitates the creation and modification of PDF files";
       homepage = "https://metacpan.org/pod/PDF::Builder";
       license = lib.licenses.lgpl21Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28047,6 +28985,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28082,6 +29021,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28123,6 +29063,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlcritic";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28145,6 +29086,7 @@ with self;
       description = "Community-inspired Perl::Critic policies";
       homepage = "https://github.com/Grinnz/Perl-Critic-Community";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28179,6 +29121,7 @@ with self;
       homepage = "https://metacpan.org/pod/Perl::Critic::Policy::Plicease::ProhibitArrayAssignAref";
       description = "Don't assign an anonymous arrayref to an array";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28196,6 +29139,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28233,6 +29177,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28249,6 +29194,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28265,6 +29211,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28283,6 +29230,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28300,6 +29248,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28316,6 +29265,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28361,6 +29311,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28412,6 +29363,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28431,6 +29383,7 @@ with self;
     meta = {
       description = "Objected-oriented Perl interface to ImageMagick. Use it to read, manipulate, or write an image or image sequence from within a Perl script";
       license = lib.licenses.imagemagick;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28445,6 +29398,7 @@ with self;
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
       mainProgram = "perltidy";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28485,6 +29439,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "ppkg-config";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28534,6 +29489,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "plackup";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28560,6 +29516,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28587,6 +29544,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28612,6 +29570,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28640,6 +29599,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28662,6 +29622,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28683,6 +29644,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28700,6 +29662,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28717,6 +29680,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28735,6 +29699,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28753,6 +29718,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28784,6 +29750,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28807,6 +29774,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28863,6 +29831,7 @@ with self;
       homepage = "https://user42.tuxfamily.org/pod-minimumversion/index.html";
       license = lib.licenses.gpl3Plus;
       mainProgram = "pod-minimumversion";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28927,6 +29896,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "poe-gen-tests";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28968,6 +29938,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -28988,6 +29959,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29005,6 +29977,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29027,6 +30000,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29048,6 +30022,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29079,6 +30054,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "timed-process";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29092,6 +30068,7 @@ with self;
     meta = {
       description = "Perl extension to access the unix process table";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29110,6 +30087,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29127,6 +30105,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29161,6 +30140,7 @@ with self;
         gpl1Only
         bsd2
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29177,6 +30157,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29193,6 +30174,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29210,6 +30192,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29233,6 +30216,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29263,6 +30247,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29314,6 +30299,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29352,6 +30338,7 @@ with self;
     meta = {
       description = "Perl Web Server Gateway Interface Specification";
       license = lib.licenses.cc-by-sa-25;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29368,6 +30355,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29407,6 +30395,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlver";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29436,6 +30425,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan-perl-prereqs";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29466,6 +30456,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan-perl-prereqs-nqlite";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29504,6 +30495,7 @@ with self;
     meta = {
       description = "Perl::Strip - reduce file size by stripping whitespace, comments, pod etc";
       mainProgram = "perlstrip";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29526,6 +30518,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "paf";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29568,6 +30561,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod_cover";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29589,6 +30583,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29616,6 +30611,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29638,6 +30634,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29661,6 +30658,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29675,6 +30673,7 @@ with self;
       description = "Modules for parsing/translating POD format documents";
       license = lib.licenses.artistic1;
       mainProgram = "podselect";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29698,6 +30697,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pom2";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29715,6 +30715,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29734,6 +30735,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podsection";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29796,6 +30798,7 @@ with self;
       description = "Check POD L<> link references";
       homepage = "https://user42.tuxfamily.org/podlinkcheck/index.html";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29813,6 +30816,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29830,6 +30834,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perldoc";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29867,6 +30872,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod2markdown";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29886,6 +30892,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "pod2github";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29928,6 +30935,7 @@ with self;
       homepage = "https://github.com/perl-pod/Pod-Spell";
       license = lib.licenses.artistic2;
       mainProgram = "podspell";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29945,6 +30953,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29969,6 +30978,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podtidy";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -29998,6 +31008,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30016,6 +31027,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "podwrap";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30032,6 +31044,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30072,6 +31085,7 @@ with self;
       broken = stdenv.hostPlatform.isMusl; # Broken for Musl at 2023-01-14, reports:
       # Nixpkgs: https://github.com/NixOS/nixpkgs/issues/210749
       # Upstream: https://github.com/kazeburo/POSIX-strftime-Compiler/issues/8
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30111,6 +31125,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30126,6 +31141,7 @@ with self;
       description = "Facility for creating read-only scalars, arrays, hashes";
       homepage = "https://github.com/sanko/readonly";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30144,6 +31160,7 @@ with self;
       description = "Faster facility for creating read-only scalars, arrays, hashes";
       homepage = "https://github.com/sanko/readonly";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30161,6 +31178,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30187,6 +31205,7 @@ with self;
       description = "Perl binding for Redis database";
       homepage = "https://github.com/PerlRedis/perl-redis";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30200,6 +31219,7 @@ with self;
     meta = {
       description = "Utility functions for checking references";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30216,6 +31236,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30229,6 +31250,7 @@ with self;
     meta = {
       description = "Provide commonly requested regular expressions";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30246,6 +31268,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30282,6 +31305,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30298,6 +31322,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30331,6 +31356,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30391,6 +31417,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "make_method";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30409,6 +31436,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30425,6 +31453,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30441,6 +31470,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30462,6 +31492,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30481,6 +31512,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30499,6 +31531,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30515,6 +31548,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30621,6 +31655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30637,6 +31672,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30653,6 +31689,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30673,6 +31710,7 @@ with self;
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30706,6 +31744,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30723,6 +31762,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30851,6 +31891,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "modemtest";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30875,6 +31916,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "start_server";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30923,6 +31965,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30940,6 +31983,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30953,6 +31997,7 @@ with self;
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -30969,6 +32014,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31001,6 +32047,7 @@ with self;
       description = "Library for parsing the output from SGMLS and NSGMLS parsers";
       license = lib.licenses.gpl2Plus;
       mainProgram = "sgmlspl.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31018,6 +32065,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31035,6 +32083,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "stemmer-no.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31052,6 +32101,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "stemmer-se.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31080,6 +32130,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31100,6 +32151,7 @@ with self;
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = lib.licenses.bsd3;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31123,6 +32175,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux; # configure probes PF_NETLINK; unavailable on Darwin
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31145,6 +32198,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31177,6 +32231,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31193,6 +32248,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31220,6 +32276,7 @@ with self;
       description = "Type constraints and coercions for Perl";
       homepage = "https://metacpan.org/release/Specio";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31242,6 +32299,7 @@ with self;
       description = "Path::Tiny types and coercions for Specio";
       homepage = "https://metacpan.org/release/Specio-Library-Path-Tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31258,6 +32316,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31304,6 +32363,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31350,6 +32410,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31377,6 +32438,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31399,6 +32461,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31439,6 +32502,7 @@ with self;
       description = "PostgreSQL features for SQL::Abstract";
       homepage = "https://mojolicious.org";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31465,6 +32529,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "sql-split";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31491,6 +32556,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31548,6 +32614,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "sqlt";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31569,6 +32636,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31585,6 +32653,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31612,6 +32681,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31646,6 +32716,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "starman";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31676,6 +32747,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31692,6 +32764,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31710,6 +32783,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31726,6 +32800,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31763,6 +32838,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31780,6 +32856,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31796,6 +32873,7 @@ with self;
         artistic2
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31812,6 +32890,7 @@ with self;
         artistic2
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31828,6 +32907,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31844,6 +32924,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31857,6 +32938,7 @@ with self;
     meta = {
       description = "Perl interface for cyclic redundancy check generation";
       license = lib.licenses.publicDomain;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31913,6 +32995,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31929,6 +33012,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31950,6 +33034,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31963,6 +33048,7 @@ with self;
     meta = {
       description = "Sprintf-like string formatting capabilities with arbitrary format definitions";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31977,6 +33063,7 @@ with self;
     meta = {
       description = "Build sprintf-like functions of your own";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -31991,6 +33078,7 @@ with self;
       # https://metacpan.org/pod/String::Interpolate
       description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine";
       license = lib.licenses.gpl1Plus;
+      hasNoMaintainersButDependents = true;
     };
     propagatedBuildInputs = [
       PadWalker
@@ -32011,6 +33099,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32045,6 +33134,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32063,6 +33153,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32081,6 +33172,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "shell-quote";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32095,6 +33187,7 @@ with self;
     meta = {
       description = "Calculate the similarity of two strings";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32111,6 +33204,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32130,6 +33224,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32147,6 +33242,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32168,6 +33264,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32186,6 +33283,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32228,6 +33326,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32247,6 +33346,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32265,6 +33365,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32287,6 +33388,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32305,6 +33407,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32322,6 +33425,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32350,6 +33454,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32371,6 +33476,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32388,6 +33494,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32405,6 +33512,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32426,6 +33534,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32443,6 +33552,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32460,6 +33570,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32494,6 +33605,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32528,6 +33640,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32571,6 +33684,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32609,6 +33723,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32629,6 +33744,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32650,6 +33766,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32669,6 +33786,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32687,6 +33805,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32744,6 +33863,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32779,6 +33899,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32812,6 +33933,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32835,6 +33957,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32880,6 +34003,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -32945,6 +34069,7 @@ with self;
       description = "Install the CPAN dependencies of the Freecell Solver test suite";
       homepage = "https://metacpan.org/release/Task-FreecellSolver-Testing";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33012,6 +34137,7 @@ with self;
       description = "Specifications for installing all the Test::Run";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33029,6 +34155,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33055,6 +34182,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33198,6 +34326,7 @@ with self;
         artistic2
         gpl3Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33215,6 +34344,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33238,6 +34368,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33275,6 +34406,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33300,6 +34432,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33321,6 +34454,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33339,6 +34473,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33377,6 +34512,7 @@ with self;
           artistic1
           gpl1Plus
         ];
+        hasNoMaintainersButDependents = true;
       };
     };
 
@@ -33414,6 +34550,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "perlsh";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33474,6 +34611,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33487,6 +34625,7 @@ with self;
     meta = {
       description = "Fully-featured shell-like command line environment";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33507,6 +34646,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33523,6 +34663,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33540,6 +34681,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33556,6 +34698,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33573,6 +34716,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33586,6 +34730,7 @@ with self;
     meta = {
       description = "Class to emulate a DEC VT102 terminal";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33603,6 +34748,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33620,6 +34766,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33662,6 +34809,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "yath";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33679,6 +34827,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33697,6 +34846,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33715,6 +34865,7 @@ with self;
       description = "Fail if tests warn";
       homepage = "https://metacpan.org/release/Test2-Plugin-NoWarnings";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33737,6 +34888,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33807,6 +34959,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33831,6 +34984,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33849,6 +35003,7 @@ with self;
     meta = {
       description = "Simple set of building blocks for both unit and runtime testing";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33892,6 +35047,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33908,6 +35064,7 @@ with self;
       description = "Provides a bits_is() subroutine for testing binary data";
       homepage = "https://metacpan.org/release/Test-Bits";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33925,6 +35082,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33955,6 +35113,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -33979,6 +35138,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34011,6 +35171,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34029,6 +35190,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34046,6 +35208,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34063,6 +35226,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34076,6 +35240,7 @@ with self;
     meta = {
       description = "Validate your CPAN META.json files";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34090,6 +35255,7 @@ with self;
     meta = {
       description = "Validate your CPAN META.json files";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34111,6 +35277,7 @@ with self;
       description = "Split data-driven tests into several test scripts";
       homepage = "https://metacpan.org/release/Test-Data-Split";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34128,6 +35295,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34151,6 +35319,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34176,6 +35345,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34191,6 +35361,7 @@ with self;
       homepage = "https://github.com/dagolden/Test-DiagINC";
       description = "List modules and versions loaded if tests fail";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34207,6 +35378,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34227,6 +35399,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34246,6 +35419,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34263,6 +35437,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34284,6 +35459,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34301,6 +35477,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34321,6 +35498,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34336,6 +35514,7 @@ with self;
       description = "Add test failures if warnings are caught";
       homepage = "https://github.com/dagolden/Test-FailWarnings";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34365,6 +35544,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34383,6 +35563,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34397,6 +35578,7 @@ with self;
       description = "Test file attributes";
       homepage = "https://github.com/briandfoy/test-file";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34414,6 +35596,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34439,6 +35622,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34454,6 +35638,7 @@ with self;
       description = "Portable filename comparison";
       homepage = "https://metacpan.org/release/Test-Filename";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34470,6 +35655,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34487,6 +35673,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34527,6 +35714,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34543,6 +35731,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34559,6 +35748,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34618,6 +35808,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "kwalitee-metrics";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34649,6 +35840,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34671,6 +35863,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34691,6 +35884,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34727,6 +35921,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34744,6 +35939,7 @@ with self;
     meta = {
       description = "Verifies code hasn't left circular references";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34778,6 +35974,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34819,6 +36016,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34858,6 +36056,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34875,6 +36074,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34899,6 +36099,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34915,6 +36116,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34939,6 +36141,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34961,6 +36164,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "scan_mojibake";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -34977,6 +36181,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35000,6 +36205,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35044,6 +36250,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35061,6 +36268,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35074,6 +36282,7 @@ with self;
     meta = {
       description = "Make sure you didn't emit any warnings while testing";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35090,6 +36299,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35104,6 +36314,7 @@ with self;
     meta = {
       description = "Utilities to test STDOUT and STDERR messages";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35129,6 +36340,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35149,6 +36361,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35179,6 +36392,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35196,6 +36410,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35210,6 +36425,7 @@ with self;
     meta = {
       description = "Check for pod coverage in your distribution";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35236,6 +36452,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35277,6 +36494,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35293,6 +36511,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35310,6 +36529,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35327,6 +36547,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35344,6 +36565,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35365,6 +36587,7 @@ with self;
     meta = {
       description = "Composable, reusable tests with roles and Moo";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35412,6 +36635,7 @@ with self;
       description = "Base class to run standard TAP scripts";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35437,6 +36661,7 @@ with self;
       homepage = "https://metacpan.org/pod/Test::Run::CmdLine";
       license = lib.licenses.mit;
       mainProgram = "runprove";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35458,6 +36683,7 @@ with self;
       description = "Define different interpreters for different test scripts with Test::Run";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35479,6 +36705,7 @@ with self;
       description = "Stop processing the entire test suite";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35501,6 +36728,7 @@ with self;
       description = "Make the file verdict ('ok', 'NOT OK')";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35522,6 +36750,7 @@ with self;
       description = "Test::Run plugin that";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35543,6 +36772,7 @@ with self;
       description = "Trim the first components";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35559,6 +36789,7 @@ with self;
       description = "Tests that an external program is valgrind-clean";
       homepage = "https://metacpan.org/release/Test-RunValgrind";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35584,6 +36815,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35604,6 +36836,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35622,6 +36855,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35637,6 +36871,7 @@ with self;
     meta = {
       description = "Test against data stored in automatically-named file";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35662,6 +36897,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35696,6 +36932,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35713,6 +36950,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35729,6 +36967,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35743,6 +36982,7 @@ with self;
       description = "Temporary directories that stick around when tests fail";
       homepage = "https://github.com/dagolden/Test-TempDir-Tiny";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35761,6 +37001,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35783,6 +37024,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35800,6 +37042,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35832,6 +37075,7 @@ with self;
       description = "Test for trailing space in source files";
       homepage = "https://metacpan.org/release/Test-TrailingSpace";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35848,6 +37092,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35868,6 +37113,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35889,6 +37135,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35906,6 +37153,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35922,6 +37170,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35942,6 +37191,7 @@ with self;
       description = "Testing-specific WWW::Mechanize subclass";
       homepage = "https://github.com/libwww-perl/WWW-Mechanize";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35970,6 +37220,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -35991,6 +37242,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36053,6 +37305,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "test-yaml";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36067,6 +37320,7 @@ with self;
       description = "Module to align text";
       homepage = "https://metacpan.org/release/Text-Aligner";
       license = lib.licenses.isc;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36105,6 +37359,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36121,6 +37376,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36154,6 +37410,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36170,6 +37427,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36186,6 +37444,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36202,6 +37461,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36237,6 +37497,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36254,6 +37515,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36325,6 +37587,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36341,6 +37604,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36368,6 +37632,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36420,6 +37685,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36441,6 +37707,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36489,6 +37756,7 @@ with self;
       description = "Interact with a t/test_manifest file";
       homepage = "https://github.com/briandfoy/test-manifest";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36508,6 +37776,7 @@ with self;
       description = "Convert Markdown syntax to (X)HTML";
       license = lib.licenses.bsd3;
       mainProgram = "Markdown.pl";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36526,6 +37795,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36544,6 +37814,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36560,6 +37831,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36596,6 +37868,7 @@ with self;
       description = "Compare the difference between numbers against a given tolerance";
       homepage = "https://github.com/dagolden/Test-Number-Delta";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36612,6 +37885,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36628,6 +37902,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36642,6 +37917,7 @@ with self;
     meta = {
       description = "Patches text with given patch";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36658,6 +37934,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36675,6 +37952,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36717,6 +37995,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36733,6 +38012,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36750,6 +38030,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36764,6 +38045,7 @@ with self;
     meta = {
       description = "Simple eyecandy ASCII tables";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36780,6 +38062,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36795,6 +38078,7 @@ with self;
       description = "Sprintf-like function with named conversions";
       homepage = "https://metacpan.org/release/Text-Sprintf-Named";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36810,6 +38094,7 @@ with self;
       description = "Organize Data in Tables";
       homepage = "https://metacpan.org/release/Text-Table";
       license = lib.licenses.isc;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36823,6 +38108,7 @@ with self;
     meta = {
       description = "Display text in formatted table output";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36843,6 +38129,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36860,6 +38147,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36882,6 +38170,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36897,6 +38186,7 @@ with self;
     meta = {
       description = "Check to see that version's in modules are sane";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36913,6 +38203,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36956,6 +38247,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -36973,6 +38265,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37004,6 +38297,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37021,6 +38315,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37042,6 +38337,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37063,6 +38359,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37080,6 +38377,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37101,6 +38399,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37121,6 +38420,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37149,6 +38449,7 @@ with self;
       description = "Cycle through a list of values via a scalar";
       homepage = "https://github.com/briandfoy/tie-cycle";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37203,6 +38504,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37217,6 +38519,7 @@ with self;
       description = "Tied handle that hides the beginning of a file";
       homepage = "https://github.com/dagolden/tie-handle-offset";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37247,6 +38550,7 @@ with self;
     meta = {
       description = "Tied hash with specific methods overridden by callbacks";
       license = lib.licenses.artistic1;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37292,6 +38596,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37315,6 +38620,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37331,6 +38637,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37347,6 +38654,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37364,6 +38672,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37383,6 +38692,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37400,6 +38710,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37437,6 +38748,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37451,6 +38763,7 @@ with self;
     meta = {
       description = "Parse and format time values";
       license = lib.licenses.publicDomain;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37533,6 +38846,7 @@ with self;
     meta = {
       description = "Tk - a Graphical User Interface Toolkit";
       license = lib.licenses.tcltk;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37572,6 +38886,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37589,6 +38904,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37607,6 +38923,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37625,6 +38942,7 @@ with self;
       description = "Minimal try/catch with proper preservation of $@";
       homepage = "https://github.com/p5sagit/Try-Tiny";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37645,6 +38963,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37672,6 +38991,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "twiggy";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37691,6 +39011,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37725,6 +39046,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37742,6 +39064,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37759,6 +39082,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37775,6 +39099,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37826,6 +39151,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37842,6 +39168,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37917,6 +39244,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37935,6 +39263,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37954,6 +39283,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "urifind";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -37973,6 +39303,7 @@ with self;
       description = "Build a URI from a set of named parameters";
       homepage = "https://metacpan.org/release/URI-FromHash";
       license = lib.licenses.artistic2;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38008,6 +39339,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38043,6 +39375,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38071,6 +39404,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38088,6 +39422,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38109,6 +39444,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38137,6 +39473,7 @@ with self;
         gpl1Plus
       ];
       platforms = lib.platforms.linux; # configure phase fails with "OS unsupported"
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38153,6 +39490,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38201,6 +39539,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38243,6 +39582,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38360,6 +39700,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38393,6 +39734,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "mech-dump";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38418,6 +39760,7 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.WWWMechanizeCGI.x86_64-darwin
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38435,6 +39778,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38471,6 +39815,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38487,6 +39832,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38527,6 +39873,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38571,6 +39918,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38636,6 +39984,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38658,6 +40007,7 @@ with self;
         gpl1Plus
         gpl3Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38725,6 +40075,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38772,6 +40123,7 @@ with self;
       description = "Bindings allowing Xapian to be used from Perl";
       homepage = "https://xapian.org";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38790,6 +40142,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38824,6 +40177,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38841,6 +40195,7 @@ with self;
     meta = {
       description = "Interface to XML::DOM toolset";
       license = lib.licenses.gpl2Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38876,6 +40231,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38914,6 +40270,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xmlsort";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38979,6 +40336,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -38996,6 +40354,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39019,6 +40378,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39048,6 +40408,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39077,6 +40438,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39094,6 +40456,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39110,6 +40473,7 @@ with self;
       description = "Parse and evaluate XPath statements";
       license = lib.licenses.artistic2;
       mainProgram = "xpath";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39126,6 +40490,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39139,6 +40504,7 @@ with self;
     meta = {
       description = "Regular expressions for XML tokens";
       license = lib.licenses.gpl2Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39180,6 +40546,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39221,6 +40588,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39238,6 +40606,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39260,6 +40629,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39282,6 +40652,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39316,6 +40687,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39333,6 +40705,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39350,6 +40723,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39373,6 +40747,7 @@ with self;
         gpl1Plus
       ];
       mainProgram = "xml_grep";
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39394,6 +40769,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39407,6 +40783,7 @@ with self;
     meta = {
       description = "Module for creating a XML document object oriented with on the fly validating towards the given DTD";
       license = lib.licenses.gpl1Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39428,6 +40805,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39449,6 +40827,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39467,6 +40846,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39485,6 +40865,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39509,6 +40890,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39530,6 +40912,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39545,6 +40928,7 @@ with self;
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39561,6 +40945,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39578,6 +40963,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39598,6 +40984,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39661,6 +41048,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39695,6 +41083,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39822,6 +41211,7 @@ with self;
     meta = {
       description = "A tool to check the quality of a DNS zone";
       license = lib.licenses.bsd3;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -39855,6 +41245,7 @@ with self;
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = lib.licenses.bsd3;
+      hasNoMaintainersButDependents = true;
     };
   };
 

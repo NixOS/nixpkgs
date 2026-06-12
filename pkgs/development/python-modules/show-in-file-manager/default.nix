@@ -44,5 +44,6 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

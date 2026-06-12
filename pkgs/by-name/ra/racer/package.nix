@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://hippo.nipax.cz/download.en.php";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

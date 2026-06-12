@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Toolkit for building high-level compound widgets in Python using the Tkinter module";
     homepage = "https://pmw.sourceforge.net/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

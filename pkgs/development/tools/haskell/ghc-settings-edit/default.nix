@@ -24,5 +24,6 @@ mkDerivation {
     lib.licenses.bsd3
   ];
   description = "Tool for editing GHC's settings file";
+  hasNoMaintainersButDependents = true;
   mainProgram = "ghc-settings-edit";
 }

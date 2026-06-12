@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 })

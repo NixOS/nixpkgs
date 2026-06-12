@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/iniconfig";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

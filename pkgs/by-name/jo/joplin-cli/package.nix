@@ -132,5 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "joplin";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -85,5 +85,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

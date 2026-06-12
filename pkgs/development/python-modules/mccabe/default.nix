@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/flintwork/mccabe";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

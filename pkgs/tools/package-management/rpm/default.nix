@@ -138,5 +138,6 @@ stdenv.mkDerivation rec {
     description = "RPM package manager";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-otr/pure-python-otr";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

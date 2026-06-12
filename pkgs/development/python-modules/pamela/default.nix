@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     description = "PAM interface using ctypes";
     homepage = "https://github.com/minrk/pamela";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

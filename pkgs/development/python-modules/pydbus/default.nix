@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Pythonic DBus library";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

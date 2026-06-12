@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     mainProgram = "emv";
+    hasNoMaintainersButDependents = true;
   };
 }

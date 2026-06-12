@@ -67,5 +67,6 @@ buildGoModule rec {
     maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

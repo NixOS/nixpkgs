@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     description = "NumPy-based text/binary PLY file reader/writer for Python";
     homepage = "https://github.com/dranjan/python-plyfile";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

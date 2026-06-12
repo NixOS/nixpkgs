@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/slicerator";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

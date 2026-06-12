@@ -28,5 +28,6 @@ buildDunePackage (finalAttrs: {
     changelog = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/-/releases/v${finalAttrs.version}";
     license = lib.licenses.cecill21;
     mainProgram = "gnuplot-rif";
+    hasNoMaintainersButDependents = true;
   };
 })

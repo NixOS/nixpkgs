@@ -135,5 +135,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "conan";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/duo-labs/py_webauthn/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

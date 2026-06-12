@@ -85,5 +85,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [ j0schu ];
     platforms = lib.platforms.unix;
     mainProgram = "autorandr";
+    hasNoMaintainersButDependents = true;
   };
 })

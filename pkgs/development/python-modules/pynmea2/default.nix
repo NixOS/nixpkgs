@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Knio/pynmea2";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -54,5 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

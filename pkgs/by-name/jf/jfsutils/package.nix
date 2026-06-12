@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://jfs.sourceforge.net";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

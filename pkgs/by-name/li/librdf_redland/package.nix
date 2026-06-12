@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://librdf.org/";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -83,6 +83,7 @@ let
       platforms = lib.platforms.unix;
       maintainers = [ ];
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   });
 

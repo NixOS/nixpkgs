@@ -23,5 +23,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Suor/funcy/blob/2.0/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

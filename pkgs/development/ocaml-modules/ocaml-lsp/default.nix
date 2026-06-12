@@ -86,5 +86,6 @@ buildDunePackage (finalAttrs: {
     description = "OCaml Language Server Protocol implementation";
     mainProgram = "ocamllsp";
     broken = lib.versionAtLeast ocaml.version "4.13" && lib.versionOlder ocaml.version "5.4";
+    hasNoMaintainersButDependents = true;
   };
 })
