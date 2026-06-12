@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kjd/idna/";
-    changelog = "https://github.com/kjd/idna/releases/tag/${src.tag}";
+    changelog = "https://github.com/kjd/idna/blob/${src.tag}/HISTORY.md";
     description = "Internationalized Domain Names in Applications (IDNA)";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
