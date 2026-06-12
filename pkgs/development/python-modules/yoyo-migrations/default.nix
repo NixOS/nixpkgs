@@ -11,14 +11,16 @@
 buildPythonPackage rec {
   pname = "yoyo-migrations";
   version = "8.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ggYGoD4mLPHNT1niVsKPpEZCUiTVuCo9EnX9eBeFI+Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     importlib-metadata
     setuptools
     sqlparse
