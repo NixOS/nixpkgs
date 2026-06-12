@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
         meta =
           finalAttrs.finalPackage.meta
           // {
+            hasNoMaintainersButDependents = false;
             license = lib.licenses.free;
             mainProgram = "alephone";
             hydraPlatforms = [ ];
