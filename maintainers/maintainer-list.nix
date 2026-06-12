@@ -208,6 +208,11 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _30350n = {
+    name = "Max Schlecht";
+    github = "30350n";
+    githubId = 34186858;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
