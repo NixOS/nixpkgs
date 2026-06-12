@@ -549,10 +549,10 @@ in
         kind = "removal";
         handler = "warn";
       }
-      (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
+      {
         kind = "maintainerless";
         handler = "warn";
-      })
+      }
     ];
   };
 
