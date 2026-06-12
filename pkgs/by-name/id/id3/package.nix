@@ -7,19 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "id3";
-  version = "0.81";
+  version = "0.81-unstable-2026-06-07";
 
   src = fetchFromGitHub {
     owner = "squell";
     repo = "id3";
-    rev = finalAttrs.version;
-    hash = "sha256-+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
+    rev = "6b78cd983a3eeb32eca515f5681ffbd8f73a5d95";
+    hash = "sha256-QOhGZCqkXzDJb+62nYCkvj9UDDuhAT/BXcXIrE70CwA=";
   };
-
-  patches = [
-    # https://github.com/squell/id3/pull/35
-    ./fix-gcc15.patch
-  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
