@@ -1061,6 +1061,7 @@ in
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix { };
   mysql-backup = handleTest ./mysql/mysql-backup.nix { };
   mysql-replication = handleTest ./mysql/mysql-replication.nix { };
+  mysql-secure-root = handleTest ./mysql/mysql-secure-root.nix { };
   n8n = runTest ./n8n.nix;
   nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
   nar-serve = runTest ./nar-serve.nix;
