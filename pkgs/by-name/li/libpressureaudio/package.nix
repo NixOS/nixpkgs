@@ -91,5 +91,6 @@ stdenv.mkDerivation {
       You can simply override libpulse with this and most
       packages would just work.
     '';
+    hasNoMaintainersButDependents = false;
   };
 }
