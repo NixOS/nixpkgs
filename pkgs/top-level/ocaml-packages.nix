@@ -247,6 +247,8 @@ let
 
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
+        charon = callPackage ../development/ocaml-modules/charon { };
+
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
         cil = callPackage ../development/ocaml-modules/cil { };
@@ -1422,6 +1424,8 @@ let
         mustache = callPackage ../development/ocaml-modules/mustache { };
 
         ### N ###
+
+        name_matcher_parser = callPackage ../development/ocaml-modules/name_matcher_parser { };
 
         nbd = pkgs.libnbd.override {
           ocamlPackages = self;
