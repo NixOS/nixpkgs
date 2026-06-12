@@ -1585,6 +1585,7 @@ in
   sx = runTest ./sx.nix;
   sympa = runTest ./sympa.nix;
   syncthing = runTest ./syncthing/main.nix;
+  syncthing-defaults = runTest ./syncthing/defaults.nix;
   syncthing-folders = runTest ./syncthing/folders.nix;
   syncthing-guiPassword = runTest ./syncthing/guiPassword.nix;
   syncthing-guiPasswordFile = runTest ./syncthing/guiPasswordFile.nix;

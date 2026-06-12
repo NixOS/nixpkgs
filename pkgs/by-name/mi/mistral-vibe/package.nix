@@ -28,7 +28,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.13.0";
+  version = "2.14.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4VkqsqcjJfRJwShs5JGyoeGXgc8Ioa0M3UZbO68z0A=";
+    hash = "sha256-Mkz4COMQDQvMZ5rKOYLsIUWFcZfI/dUqpf8z/23YDrY=";
   };
 
   build-system = with python3Packages; [
@@ -70,6 +70,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       httpcore
       httpx
       httpx-sse
+      humanize
       idna
       importlib-metadata
       jaraco-classes
