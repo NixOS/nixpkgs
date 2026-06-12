@@ -104,10 +104,11 @@ let
         vsix ? null,
         mktplcRef,
         ...
-      }:
+      }@attrs:
       assert "" == name;
       assert null == src;
       {
+        pos = builtins.unsafeGetAttrPos "mktplcRef" attrs;
         inherit (mktplcRef) version;
         pname = "${mktplcRef.publisher}-${mktplcRef.name}";
         src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;

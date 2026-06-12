@@ -23,11 +23,13 @@
       ...
     }@attrs:
     let
+      pos = builtins.unsafeGetAttrPos "src" attrs;
       drv = stdenv.mkDerivation (
         attrs
         // {
           name = lib.warnIf (attrs ? vimprefix) "The 'vimprefix' is now hardcoded in toVimPlugin" name;
 
+          inherit pos;
           __structuredAttrs = true;
           inherit
             unpackPhase

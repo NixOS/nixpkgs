@@ -11,6 +11,7 @@
   version,
   src,
   meta ? { },
+  pos ? builtins.unsafeGetAttrPos "language" args,
   generate ? false,
   excludeBrokenTreeSitterJson ? false,
   ...
@@ -25,7 +26,7 @@ stdenv.mkDerivation (
   {
     pname = "tree-sitter-${language}";
 
-    inherit version src;
+    inherit version src pos;
 
     nativeBuildInputs = [
       jq

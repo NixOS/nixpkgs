@@ -633,6 +633,8 @@ let
       + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
   };
 
+  pos = builtins.unsafeGetAttrPos "pname" args;
+
 in
 lib.fix (
   drv:
@@ -651,7 +653,7 @@ lib.fix (
 
       setOutputFlags = false;
 
-      pos = builtins.unsafeGetAttrPos "pname" args;
+      inherit pos;
 
       prePhases = [ "setupCompilerEnvironmentPhase" ];
       preConfigurePhases = [ "compileBuildDriverPhase" ];

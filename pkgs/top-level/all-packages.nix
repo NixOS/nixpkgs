@@ -5065,12 +5065,15 @@ with pkgs;
     makeOverridable
       (
         { extraConfig, cc }:
-        cc.override {
+        (cc.override {
           cc = ccache.links {
             inherit extraConfig;
             unwrappedCC = cc.cc;
           };
-        }
+        }).overrideAttrs
+          (old: {
+            meta.maintainers = ccache.meta.maintainers;
+          })
       )
       {
         extraConfig = "";
