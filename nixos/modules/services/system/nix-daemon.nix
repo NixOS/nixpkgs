@@ -7,7 +7,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -15,25 +14,6 @@ let
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
-
-  makeNixBuildUser = nr: {
-    name = "nixbld${toString nr}";
-    value = {
-      description = "Nix build user ${toString nr}";
-
-      /*
-        For consistency with the setgid(2), setuid(2), and setgroups(2)
-        calls in `libstore/build.cc', don't add any supplementary group
-        here except "nixbld".
-      */
-      uid = builtins.add config.ids.uids.nixbld nr;
-      isSystemUser = true;
-      group = "nixbld";
-      extraGroups = [ "nixbld" ];
-    };
-  };
-
-  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
 
 in
 
@@ -264,37 +244,13 @@ in
         default = { };
         description = "Environment variables used by Nix.";
       };
-
-      nrBuildUsers = lib.mkOption {
-        type = lib.types.int;
-        description = ''
-          Number of `nixbld` user accounts created to
-          perform secure concurrent builds.  If you receive an error
-          message saying that “all build users are currently in use”,
-          you should increase this value.
-        '';
-      };
     };
   };
 
   ###### implementation
 
   config = lib.mkMerge [
-    (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [
-        "d  /nix/var                           0755 root root - -"
-        "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
-        # Boot-time cleanup
-        "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
-        "R! /nix/var/nix/temproots             -    -    -    - -"
-      ];
-    })
     (lib.mkIf (cfg.enable && nixPackage.pname != "lix") {
-      environment.systemPackages = [
-        nixPackage
-        pkgs.nix-info
-      ]
-      ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
       systemd.packages = [ nixPackage ];
 
@@ -363,17 +319,6 @@ in
 
       # Set up the environment variables for running Nix.
       environment.sessionVariables = cfg.envVars;
-
-      nix.nrBuildUsers = lib.mkDefault (
-        if cfg.settings.auto-allocate-uids or false then
-          0
-        else
-          lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
-      );
-
-      users.users = nixbldUsers;
-
-      services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
 
       # Legacy configuration conversion.
       nix.settings.sandbox-fallback = false;
