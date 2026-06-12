@@ -10,6 +10,7 @@ let
     any
     attrValues
     mkChangedOptionModule
+    mkRemovedOptionModule
     optionalString
     ;
 
@@ -43,11 +44,7 @@ let
           '') cfg.apiTokenPepperFiles
         )}
       }
-    ''
-    + (lib.optionalString (cfg.keycloakClientSecret != null) ''
-      with open("${cfg.keycloakClientSecret}", "r") as file:
-          SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
-    '');
+    '';
   };
 
   pkg =
@@ -89,6 +86,10 @@ in
         "1" = config.services.netbox.apiTokenPeppersFile;
       })
     )
+    (mkRemovedOptionModule
+      [ "services" "netbox" "keycloakClientSecret" ] ''
+        Too much granularity hurts maintainability. Please configure secret key loading via `services.netbox.extraConfig` instead.
+      '')
   ];
 
   options.services.netbox = {
@@ -304,14 +305,6 @@ in
 
         # For more granular permissions, we can map LDAP groups to Django groups.
         AUTH_LDAP_FIND_GROUP_PERMS = True
-      '';
-    };
-
-    keycloakClientSecret = lib.mkOption {
-      type = with lib.types; nullOr path;
-      default = null;
-      description = ''
-        File that contains the keycloak client secret.
       '';
     };
   };
