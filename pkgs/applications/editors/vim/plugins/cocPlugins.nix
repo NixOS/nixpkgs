@@ -57,6 +57,7 @@ lib.genAttrs cocPackages (
     inherit (cocPkg) pname version;
     meta = cocPkg.meta // {
       # TODO: Why?
+      hasNoMaintainersButDependents = false;
       requiresMaintainers = false;
     };
     src = "${cocPkg}/lib/node_modules/${cocPkg.pname}";
@@ -67,6 +68,7 @@ lib.genAttrs cocPackages (
     inherit (coc-nginx) pname version;
     meta = coc-nginx.meta // {
       # TODO: Why?
+      hasNoMaintainersButDependents = false;
       requiresMaintainers = false;
     };
     src = "${coc-nginx}/lib/node_modules/@yaegassy/coc-nginx";

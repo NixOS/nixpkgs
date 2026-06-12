@@ -1,10 +1,13 @@
 {
   lib,
   cocoapods,
+  noMaintainersNorDependents,
 }:
 
 lib.lowPrio (
-  cocoapods.override {
-    beta = true;
-  }
+  noMaintainersNorDependents (
+    cocoapods.override {
+      beta = true;
+    }
+  )
 )
