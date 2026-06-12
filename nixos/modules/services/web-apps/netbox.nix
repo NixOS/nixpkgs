@@ -23,11 +23,32 @@ let
     text = cfg.extraConfig;
   };
   configFile = pkgs.concatText "configuration.py" [
+    nixosOptionsConfig
     settingsFile
     extraConfigFile
   ];
   secretKeyFile =
     if cfg.secretKeyFile != null then cfg.secretKeyFile else "${cfg.dataDir}/secret.key";
+
+  nixosOptionsConfig = pkgs.writeTextFile {
+    name = "netbox-nixos-options.py";
+    text = ''
+      with open("${secretKeyFile}", "r") as file:
+          SECRET_KEY = file.readline()
+
+      API_TOKEN_PEPPERS = {
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (id: file: ''
+            ${id}: open("${file}", "r").read().strip(),
+          '') cfg.apiTokenPepperFiles
+        )}
+      }
+    ''
+    + (lib.optionalString (cfg.keycloakClientSecret != null) ''
+      with open("${cfg.keycloakClientSecret}", "r") as file:
+          SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
+    '');
+  };
 
   pkg =
     (cfg.package.overrideAttrs (old: {
@@ -349,23 +370,6 @@ in
           };
         };
       };
-
-      extraConfig = ''
-        with open("${secretKeyFile}", "r") as file:
-            SECRET_KEY = file.readline()
-
-        API_TOKEN_PEPPERS = {
-          ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (id: file: ''
-              ${id}: open("${file}", "r").read().strip(),
-            '') cfg.apiTokenPepperFiles
-          )}
-        }
-      ''
-      + (lib.optionalString (cfg.keycloakClientSecret != null) ''
-        with open("${cfg.keycloakClientSecret}", "r") as file:
-            SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
-      '');
     };
 
     services.redis.servers.netbox.enable = true;
