@@ -20,6 +20,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-M2gfqU5rOfuiVSZnH/Dr8OVmDhyU2jYkgW7RuIUTd+E=";
 
+  patches = [ ./0001-disable-update-flag.patch ];
+
   subPackages = [ "." ];
 
   ldflags = [
