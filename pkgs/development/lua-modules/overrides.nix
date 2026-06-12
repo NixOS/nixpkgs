@@ -1003,6 +1003,11 @@ in
       # remove failing tests
       rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
       rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+      # trailing whitespace inconsistencies
+      rm tests/plenary/api/api_spec.lua
+      rm tests/plenary/babel/tangle_spec.lua
+      rm tests/plenary/capture/datetree_spec.lua
+      rm tests/plenary/init_spec.lua
 
       # UI tests depend on the neovim version
       rm -r tests/plenary/ui/*

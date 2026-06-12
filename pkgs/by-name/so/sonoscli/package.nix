@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sonoscli";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "steipete";
     repo = "sonoscli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q7YVZcEKBHAX5vcel24DNLHhx3t+V7jWOWS7mrUGHqQ=";
+    hash = "sha256-PCHFK72HJtqjlxdLwOYKkMCXvp9UIyQRUBm0Nx5GUKQ=";
   };
 
   vendorHash = "sha256-9jK3jKbFp+5WSQfMbNzwIB55bC5KScZOaFHItffTF00=";

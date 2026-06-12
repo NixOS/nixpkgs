@@ -10,16 +10,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "scaleway-cli";
-  version = "2.56.1";
+  version = "2.56.3";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iQ91lhyMcpj5zHke/JxxD8csAYmmOCmdErlKvEEAMgA=";
+    hash = "sha256-Sq/uTl7in/rrujY9UXoeAIbqgEowy3WeEROrxM5gV4I=";
   };
 
-  vendorHash = "sha256-lZNlNfmFa26wXtZe79r5+k5hcC8XlbDRj0wz/odrNvU=";
+  vendorHash = "sha256-ekQxkenKpVpzhj1n/HHXITCXDQUV9t9YxE6iUosQJlo=";
 
   env.CGO_ENABLED = 0;
 
