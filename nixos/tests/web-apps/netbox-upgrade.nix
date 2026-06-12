@@ -34,12 +34,6 @@ in
         # Pick the NetBox package from this config's "pkgs" argument,
         # so that `nixpkgs.config.permittedInsecurePackages` works
         package = pkgs.${oldNetbox};
-        secretKeyFile = pkgs.writeText "secret" ''
-          abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-        '';
-        apiTokenPeppersFile = pkgs.writeText "pepper" ''
-          kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
-        '';
       };
 
       services.nginx = {

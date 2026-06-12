@@ -34,13 +34,6 @@ import ../../make-test-python.nix (
         services.netbox = {
           enable = true;
           package = netbox;
-          secretKeyFile = pkgs.writeText "secret" ''
-            abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-          '';
-          # Value from https://netbox.readthedocs.io/en/feature/configuration/required-parameters/#api_token_peppers
-          apiTokenPeppersFile = pkgs.writeText "pepper" ''
-            kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
-          '';
 
           enableLdap = true;
           ldapConfigPath = pkgs.writeText "ldap_config.py" ''
