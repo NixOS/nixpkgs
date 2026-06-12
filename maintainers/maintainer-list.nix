@@ -11906,12 +11906,6 @@
     github = "ivan-timokhin";
     githubId = 9802104;
   };
-  ivan-tkatchev = {
-    email = "tkatchev@gmail.com";
-    github = "ivan-tkatchev";
-    githubId = 650601;
-    name = "Ivan Tkatchev";
-  };
   ivan770 = {
     email = "ivan@ivan770.me";
     github = "ivan770";
