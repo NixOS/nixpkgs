@@ -34,5 +34,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/automattic/harper";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ MasterEvarior ];
+    broken = true; # the src hash is sometimes platform dependent and contains binaries we ought to devendor
   };
 }
