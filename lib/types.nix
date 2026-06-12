@@ -27,6 +27,7 @@ let
     ;
   inherit (lib.lists)
     concatLists
+    concatMap
     elemAt
     filter
     foldl'
@@ -1004,6 +1005,27 @@ rec {
         else
           throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
       nestedTypes = tags;
+      getSubModules =
+        let
+          tagsWithSubModules = filterAttrs (_: mods: mods != null) (
+            mapAttrs (_: opt: opt.type.getSubModules) tags
+          );
+        in
+        if tagsWithSubModules == { } then null else [ tagsWithSubModules ];
+      substSubModules =
+        allWrappedModules:
+        let
+          tagsWithNewTypes = zipAttrsWith (tag: tags.${tag}.type.substSubModules) (
+            concatMap (
+              { _file, imports }: map (mapAttrs (_: imports: { inherit _file imports; })) imports
+            ) allWrappedModules
+          );
+        in
+        attrTag (
+          mapAttrs (
+            tag: opt: opt // (optionalAttrs (tagsWithNewTypes ? ${tag}) { type = tagsWithNewTypes.${tag}; })
+          ) tags
+        );
       functor = defaultFunctor "attrTag" // {
         type = { tags, ... }: lib.types.attrTag tags;
         payload = { inherit tags; };
