@@ -324,6 +324,7 @@ let
       identifiers = attrs;
 
       requiresMaintainers = bool;
+      hasNoMaintainersButDependents = bool;
     };
 
   checkMeta = config.checkMeta;
@@ -564,6 +565,7 @@ let
       nonTeamMaintainers = attrs.meta.nonTeamMaintainers or attrs.meta.maintainers or [ ];
 
       requiresMaintainers = attrs.meta.requiresMaintainers or (defaultRequiresMaintainers attrs pos);
+      hasNoMaintainersButDependents = attrs.meta.hasNoMaintainersButDependents or false;
 
       identifiers =
         let

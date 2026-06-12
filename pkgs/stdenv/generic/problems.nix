@@ -88,8 +88,11 @@ rec {
           # Simply checking whether `meta` is defined is insufficient,
           # as some fetchers and trivial builders do define meta.
           config: attrs: requiresMaintainers:
-          requiresMaintainers && (attrs.meta.maintainers or [ ] == [ ]) && (attrs.meta.teams or [ ] == [ ]);
-        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+          requiresMaintainers
+          && (attrs.meta.maintainers or [ ] == [ ])
+          && (attrs.meta.teams or [ ] == [ ])
+          && (attrs.meta.hasNoMaintainersButDependents or false == false);
+        value.message = "This is a leaf package without maintainer. If you need this package, become a maintainer to avoid it being removed.";
       };
     };
     broken = {
