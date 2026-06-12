@@ -54,6 +54,14 @@ with pkgs;
   # it's just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
 
+  noMaintainersNorDependents =
+    drv:
+    drv.overrideAttrs (old: {
+      meta = old.meta // {
+        hasNoMaintainersButDependents = false;
+      };
+    });
+
   mkStdenvNoLibs =
     stdenv:
     let
