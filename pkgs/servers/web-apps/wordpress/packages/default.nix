@@ -198,6 +198,8 @@ let
               type = lib.removeSuffix "s" type;
               inherit pname data;
               license = sourceJson.${type}.${pname};
+              # TODO: Why not?
+              meta.requiresMaintainers = false;
             }
           ) pkgs
         )

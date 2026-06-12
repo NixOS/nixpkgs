@@ -34,6 +34,8 @@ buildDunePackage (
     meta = {
       license = lib.licenses.mit;
       homepage = "https://github.com/janestreet/${pname}";
+      # TODO: Why?
+      requiresMaintainers = false;
     }
     // args.meta;
   }
