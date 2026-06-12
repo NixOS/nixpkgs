@@ -35,6 +35,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_secrets" ];
 
+  passthru.pluginName = "netbox_secrets";
+
   meta = {
     description = "NetBox plugin to enhance secret management with encrypted storage and flexible, user-friendly features";
     homepage = "https://github.com/Onemind-Services-LLC/netbox-secrets";
