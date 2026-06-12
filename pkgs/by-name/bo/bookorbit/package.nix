@@ -9,6 +9,7 @@
   pnpmConfigHook,
   ffmpeg,
   makeWrapper,
+  nixosTests,
 }:
 let
   pnpm = pnpm_10;
@@ -108,7 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) bookorbit;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "BookOrbit, self-hosted library management and reading platform for ebooks, PDFs, audiobooks, and comics.";
