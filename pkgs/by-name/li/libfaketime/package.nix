@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   __structuredAttrs = true;
+  structDeps = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
