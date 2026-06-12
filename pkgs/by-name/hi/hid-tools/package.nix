@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "hid-tools";
-  version = "0.7";
+  version = "0.12";
 
   pyproject = true;
 
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonPackage rec {
     owner = "libevdev";
     repo = "hid-tools";
     rev = version;
-    hash = "sha256-h880jJcZDc9pIPf+nr30wu2i9y3saAKFZpooJ4MF67E=";
+    hash = "sha256-00Vsnjio8LEcuCfvNVEbFpJ2JabmMZqwXli1My5SVWs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonPackage rec {
     parse
     pyyaml
     click
+    pyroute2
     pyudev
     typing-extensions
   ];
