@@ -49,7 +49,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python scripts to manipulate HID data";
     homepage = "https://gitlab.freedesktop.org/libevdev/hid-tools";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.freedesktop ];
   };
 })
