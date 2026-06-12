@@ -241,6 +241,7 @@ in
       pkgs.phoc
       cfg.package
       pkgs.stevia
+      pkgs.phosh-mobile-settings
     ];
 
     systemd.packages = [ cfg.package ];
