@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-netapp_${finalAttrs.version}/sdk/netapp/azure-mgmt-netapp/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

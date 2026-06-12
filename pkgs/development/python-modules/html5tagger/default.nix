@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/html5tagger";
     license = lib.licenses.unlicense;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

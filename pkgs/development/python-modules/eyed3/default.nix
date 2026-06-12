@@ -47,5 +47,6 @@ buildPythonPackage rec {
       time, etc.) is also provided. The formats supported are ID3 v1.0/v1.1
       and v2.3/v2.4.
     '';
+    hasNoMaintainersButDependents = true;
   };
 }

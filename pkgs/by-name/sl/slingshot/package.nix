@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slingshot";
+    hasNoMaintainersButDependents = true;
   };
 })

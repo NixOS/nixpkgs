@@ -32,5 +32,6 @@ buildGoModule (finalAttrs: {
     description = "Embed files into a Go executable";
     mainProgram = "statik";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

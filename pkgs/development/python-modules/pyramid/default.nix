@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Pylons/pyramid/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

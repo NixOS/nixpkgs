@@ -42,5 +42,6 @@ buildPythonPackage {
     homepage = "https://github.com/nix-community/nixops-encrypted-links";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

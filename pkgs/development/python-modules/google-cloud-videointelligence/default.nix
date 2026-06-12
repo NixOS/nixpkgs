@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-videointelligence-v${finalAttrs.version}/packages/google-cloud-videointelligence/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

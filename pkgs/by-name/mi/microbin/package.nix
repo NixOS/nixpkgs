@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [
     ];
     mainProgram = "microbin";
+    hasNoMaintainersButDependents = true;
   };
 })

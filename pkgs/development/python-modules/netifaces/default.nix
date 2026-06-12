@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/al45tair/netifaces";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
         asl20
       ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

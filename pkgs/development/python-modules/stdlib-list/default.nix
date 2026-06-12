@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pypi/stdlib-list/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

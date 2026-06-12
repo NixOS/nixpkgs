@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for manipulating polynomials";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

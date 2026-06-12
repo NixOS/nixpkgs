@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/portalocker";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

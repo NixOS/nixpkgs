@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/pyrlp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

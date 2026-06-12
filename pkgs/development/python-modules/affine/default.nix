@@ -27,5 +27,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/rasterio/affine";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

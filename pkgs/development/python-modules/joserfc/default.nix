@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/authlib/joserfc";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

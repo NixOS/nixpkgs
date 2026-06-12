@@ -100,5 +100,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

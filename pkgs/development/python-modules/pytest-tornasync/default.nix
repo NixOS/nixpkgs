@@ -40,5 +40,6 @@ buildPythonPackage {
     homepage = "https://github.com/eukaryote/pytest-tornasync";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

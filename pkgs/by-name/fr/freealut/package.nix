@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2;
     pkgConfigModules = [ "freealut" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

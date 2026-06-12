@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     description = "OCaml bindings for Augeas";
     license = with lib.licenses; lgpl21Plus;
     platforms = with lib.platforms; linux;
+    hasNoMaintainersButDependents = true;
   };
 }

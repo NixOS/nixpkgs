@@ -61,5 +61,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
+    hasNoMaintainersButDependents = true;
   };
 }

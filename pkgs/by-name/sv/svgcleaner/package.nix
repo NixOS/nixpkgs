@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "svgcleaner";
+    hasNoMaintainersButDependents = true;
   };
 }

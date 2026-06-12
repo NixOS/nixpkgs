@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://faker.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

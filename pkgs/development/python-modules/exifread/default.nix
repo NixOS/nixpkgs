@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ianare/exif-py";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

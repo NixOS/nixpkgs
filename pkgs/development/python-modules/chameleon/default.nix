@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://chameleon.readthedocs.io";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

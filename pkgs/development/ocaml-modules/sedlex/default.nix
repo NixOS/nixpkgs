@@ -79,5 +79,6 @@ buildDunePackage (finalAttrs: {
     description = "OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

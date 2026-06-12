@@ -23,5 +23,6 @@ buildDunePackage {
     homepage = "https://github.com/jordwalke/flex";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

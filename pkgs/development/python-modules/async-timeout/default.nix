@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Timeout context manager for asyncio programs";
     homepage = "https://github.com/aio-libs/async_timeout/";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

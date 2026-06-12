@@ -89,5 +89,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/executablebooks/markdown-it-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "markdown-it";
+    hasNoMaintainersButDependents = true;
   };
 }

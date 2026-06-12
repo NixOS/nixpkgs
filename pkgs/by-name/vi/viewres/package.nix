@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "viewres";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

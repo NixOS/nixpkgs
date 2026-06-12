@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/braintree/braintree_python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

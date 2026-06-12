@@ -46,5 +46,6 @@ buildPythonPackage rec {
     description = "Asset management for Flask, to compress and merge CSS and Javascript files";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

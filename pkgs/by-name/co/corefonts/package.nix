@@ -155,5 +155,6 @@ stdenv.mkDerivation {
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;
+    hasNoMaintainersButDependents = true;
   };
 }

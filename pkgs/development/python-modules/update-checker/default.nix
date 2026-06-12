@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Python module that will check for package updates";
     homepage = "https://github.com/bboe/update_checker";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

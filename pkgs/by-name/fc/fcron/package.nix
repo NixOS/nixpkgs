@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://fcron.free.fr";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -42,5 +42,6 @@ flutter341.buildFlutterApplication (finalAttrs: {
       license
       maintainers
       ;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -209,6 +209,7 @@ let
       ];
       maintainers = [ ];
       platforms = lib.platforms.linux; # TODO: ++ darwin;
+      hasNoMaintainersButDependents = true;
     };
   };
 

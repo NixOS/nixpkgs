@@ -129,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ evanwporter ];
     inherit (wayland.meta) platforms;
     mainProgram = "dwl";
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: custom patches from upstream website

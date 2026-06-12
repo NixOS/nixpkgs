@@ -46,5 +46,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/kipe/pycron";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

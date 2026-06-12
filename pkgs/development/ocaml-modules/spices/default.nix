@@ -30,5 +30,6 @@ buildDunePackage rec {
     changelog = "https://github.com/leostera/minttea/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

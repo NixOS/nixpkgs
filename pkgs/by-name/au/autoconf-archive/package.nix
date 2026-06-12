@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/autoconf-archive/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

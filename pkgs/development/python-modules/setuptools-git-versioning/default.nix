@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://setuptools-git-versioning.readthedocs.io/en/${finalAttrs.src.tag}/changelog.html";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

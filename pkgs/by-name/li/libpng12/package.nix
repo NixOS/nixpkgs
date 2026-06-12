@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libpng12"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

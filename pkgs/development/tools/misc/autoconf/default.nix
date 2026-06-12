@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

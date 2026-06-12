@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cjpeg";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

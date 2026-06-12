@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sassoftware/python-keyutils";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

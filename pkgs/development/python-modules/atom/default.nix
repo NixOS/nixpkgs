@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nucleic/atom";
     changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

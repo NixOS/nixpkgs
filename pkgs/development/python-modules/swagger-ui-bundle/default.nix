@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Bundled swagger-ui pip package";
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

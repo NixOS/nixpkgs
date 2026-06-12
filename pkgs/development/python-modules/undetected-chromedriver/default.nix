@@ -50,5 +50,6 @@ buildPythonPackage {
     homepage = "https://github.com/ultrafunkamsterdam/undetected-chromedriver";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

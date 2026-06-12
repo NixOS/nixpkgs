@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

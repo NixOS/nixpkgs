@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gitpython-developers/smmap";
     maintainers = [ ];
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

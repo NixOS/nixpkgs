@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

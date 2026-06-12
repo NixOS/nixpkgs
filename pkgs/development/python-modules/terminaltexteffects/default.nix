@@ -28,5 +28,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "tte";
+    hasNoMaintainersButDependents = true;
   };
 }

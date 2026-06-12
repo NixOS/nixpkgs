@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "http://mongoengine.org/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

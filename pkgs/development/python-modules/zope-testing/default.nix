@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/zopefoundation/zope.testing/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

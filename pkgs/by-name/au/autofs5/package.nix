@@ -99,5 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     executables = [ "automount" ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

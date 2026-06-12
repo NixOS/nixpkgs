@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://agauniyal.github.io/rang/";
     license = lib.licenses.unlicense;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

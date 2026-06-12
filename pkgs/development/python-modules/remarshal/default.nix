@@ -56,5 +56,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/remarshal-project/remarshal";
     maintainers = [ ];
     mainProgram = "remarshal";
+    hasNoMaintainersButDependents = true;
   };
 })

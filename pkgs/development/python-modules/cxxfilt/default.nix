@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/afq984/python-cxxfilt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

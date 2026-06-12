@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "aiounifi";
+    hasNoMaintainersButDependents = true;
   };
 })

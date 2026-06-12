@@ -194,5 +194,6 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = [ ];
     mainProgram = "cxfreeze";
+    hasNoMaintainersButDependents = true;
   };
 }

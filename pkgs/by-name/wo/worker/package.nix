@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "worker";
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

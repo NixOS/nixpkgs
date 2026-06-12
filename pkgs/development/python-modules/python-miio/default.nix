@@ -79,5 +79,6 @@ buildPythonPackage rec {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
     license = lib.licenses.gpl3Only;
+    hasNoMaintainersButDependents = true;
   };
 }

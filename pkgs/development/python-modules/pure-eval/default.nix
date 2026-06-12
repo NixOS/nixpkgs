@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alexmojaki/pure_eval";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

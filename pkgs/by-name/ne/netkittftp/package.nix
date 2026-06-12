@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+    hasNoMaintainersButDependents = true;
   };
 })

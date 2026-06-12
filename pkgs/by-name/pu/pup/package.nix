@@ -23,5 +23,6 @@ buildGoModule {
     homepage = "https://github.com/ericchiang/pup";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

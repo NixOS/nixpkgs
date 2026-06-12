@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/jsonrpclib-pelix/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

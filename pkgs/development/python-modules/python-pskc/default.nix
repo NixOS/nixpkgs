@@ -68,5 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/arthurdejong/python-pskc";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -72,5 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/agronholm/apscheduler";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

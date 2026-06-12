@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/tlsa/libcyaml/raw/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

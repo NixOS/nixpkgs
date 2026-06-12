@@ -16,5 +16,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ndonfris.fish-lsp";
     homepage = "https://github.com/ndonfris/fish-lsp";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

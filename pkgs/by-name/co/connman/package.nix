@@ -194,5 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "connmanctl";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

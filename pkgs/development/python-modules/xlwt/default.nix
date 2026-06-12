@@ -37,5 +37,6 @@ buildPythonPackage {
       lgpl21Plus
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

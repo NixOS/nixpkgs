@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "soplex";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

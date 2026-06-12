@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
         gpl2Plus # Bundles some GPL2+ dependencies
         free # Package itself is miscellaneously free
       ];
+    hasNoMaintainersButDependents = true;
   };
 })

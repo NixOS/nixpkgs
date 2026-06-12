@@ -14,5 +14,6 @@ buildDunePackage {
     description = "Chrome trace event generation library";
     inherit (dune.meta) homepage;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

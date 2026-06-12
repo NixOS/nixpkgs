@@ -35,5 +35,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.unicode.org/";
     license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

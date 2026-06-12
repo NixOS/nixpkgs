@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "sedutil-cli";
+    hasNoMaintainersButDependents = true;
   };
 })

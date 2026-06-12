@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

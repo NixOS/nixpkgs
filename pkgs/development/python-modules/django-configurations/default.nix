@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://django-configurations.readthedocs.io/";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

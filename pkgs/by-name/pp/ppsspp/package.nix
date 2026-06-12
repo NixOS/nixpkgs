@@ -186,5 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "ppsspp";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

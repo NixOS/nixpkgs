@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/greatscottgadgets/libbtbb";
     license = lib.licenses.gpl2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

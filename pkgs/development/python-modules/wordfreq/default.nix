@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/rspeer/wordfreq/";
     changelog = "https://github.com/rspeer/wordfreq/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

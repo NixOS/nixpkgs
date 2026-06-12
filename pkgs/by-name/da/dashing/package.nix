@@ -35,5 +35,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dashing";
+    hasNoMaintainersButDependents = true;
   };
 })

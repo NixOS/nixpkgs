@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.free; # some custom license
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

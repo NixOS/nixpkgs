@@ -77,5 +77,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

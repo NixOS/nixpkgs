@@ -50,5 +50,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jump";
+    hasNoMaintainersButDependents = true;
   };
 })

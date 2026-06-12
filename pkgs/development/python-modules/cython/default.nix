@@ -119,6 +119,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "cython";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: investigate recursive loop when doCheck is true

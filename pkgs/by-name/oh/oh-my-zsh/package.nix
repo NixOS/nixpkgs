@@ -130,5 +130,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ohmyz.sh/";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

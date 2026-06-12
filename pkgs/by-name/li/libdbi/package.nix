@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "DB independent interface to DB";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

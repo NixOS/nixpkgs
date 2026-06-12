@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/obob/pymatreader/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

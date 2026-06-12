@@ -39,5 +39,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux; # fails on Darwin
+    hasNoMaintainersButDependents = true;
   };
 }

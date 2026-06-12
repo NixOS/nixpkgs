@@ -38,5 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-accesscontrol_${version}/sdk/synapse/azure-synapse-accesscontrol/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

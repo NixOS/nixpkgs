@@ -76,5 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

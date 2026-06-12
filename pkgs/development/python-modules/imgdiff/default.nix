@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

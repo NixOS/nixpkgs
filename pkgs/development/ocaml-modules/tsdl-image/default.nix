@@ -36,5 +36,6 @@ buildDunePackage rec {
     homepage = "https://github.com/sanette/tsdl-image";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

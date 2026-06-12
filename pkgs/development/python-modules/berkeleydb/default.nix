@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

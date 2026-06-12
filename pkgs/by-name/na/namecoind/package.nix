@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lukas-sgx ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

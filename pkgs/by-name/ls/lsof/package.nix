@@ -91,5 +91,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lsof;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

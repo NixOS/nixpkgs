@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "JMusicBot";
+    hasNoMaintainersButDependents = true;
   };
 })

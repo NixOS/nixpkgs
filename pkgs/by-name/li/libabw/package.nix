@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library parsing abiword documents";
     platforms = lib.platforms.unix;
     license = lib.licenses.mpl20;
+    hasNoMaintainersButDependents = true;
   };
 })

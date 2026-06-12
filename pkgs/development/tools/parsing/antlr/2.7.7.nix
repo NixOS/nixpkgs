@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.antlr.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

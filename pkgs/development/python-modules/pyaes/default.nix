@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Pure-Python AES";
     license = lib.licenses.mit;
     homepage = "https://github.com/ricmoo/pyaes";
+    hasNoMaintainersButDependents = true;
   };
 }

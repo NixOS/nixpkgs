@@ -37,5 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/EbbLabs/mopidy-tidal/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

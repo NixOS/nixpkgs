@@ -23,5 +23,6 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "uuuu.generate";
+    hasNoMaintainersButDependents = true;
   };
 }

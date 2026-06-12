@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-server/jupyter_server_mathjax";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

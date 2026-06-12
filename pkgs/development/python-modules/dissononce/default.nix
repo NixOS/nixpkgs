@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://pypi.org/project/dissononce/";
     license = lib.licenses.mit;
     description = "Python implementation for Noise Protocol Framework";
+    hasNoMaintainersButDependents = true;
   };
 })

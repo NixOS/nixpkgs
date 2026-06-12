@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

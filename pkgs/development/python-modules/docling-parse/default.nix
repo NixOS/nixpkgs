@@ -107,5 +107,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

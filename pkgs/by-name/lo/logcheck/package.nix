@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

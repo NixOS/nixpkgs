@@ -81,5 +81,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     mainProgram = "nntp-proxy";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/nvidia-modprobe";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

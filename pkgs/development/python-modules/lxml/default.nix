@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://lxml.de";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

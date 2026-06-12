@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/IBM/python-sdk-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://id3lib.sourceforge.net";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

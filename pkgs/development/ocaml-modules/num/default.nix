@@ -41,6 +41,7 @@ stdenv.mkDerivation (
       license = lib.licenses.lgpl21;
       inherit (ocaml.meta) platforms;
       inherit (src.meta) homepage;
+      hasNoMaintainersButDependents = true;
     };
   }
   // (lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "4.06") {

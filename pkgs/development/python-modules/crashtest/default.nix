@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Manage Python errors with ease";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

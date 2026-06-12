@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ wrapper library for sqlite";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

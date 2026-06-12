@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pallets-eco/flask-mail";
     changelog = "https://github.com/pallets-eco/flask-mail/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

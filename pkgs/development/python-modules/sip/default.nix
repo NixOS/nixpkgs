@@ -58,5 +58,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://riverbankcomputing.com/";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

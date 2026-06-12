@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/betodealmeida/python-rison";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

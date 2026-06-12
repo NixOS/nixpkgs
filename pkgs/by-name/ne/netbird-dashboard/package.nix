@@ -33,5 +33,6 @@ buildNpmPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

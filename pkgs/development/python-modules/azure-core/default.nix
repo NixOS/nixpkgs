@@ -110,5 +110,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 })

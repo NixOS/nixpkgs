@@ -73,5 +73,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/sdispater/pendulum/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

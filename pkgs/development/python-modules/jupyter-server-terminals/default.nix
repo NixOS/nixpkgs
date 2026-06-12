@@ -53,6 +53,7 @@ let
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
       license = lib.licenses.bsd3;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/django-guardian/django-guardian";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

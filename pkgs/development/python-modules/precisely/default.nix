@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/python-precisely";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

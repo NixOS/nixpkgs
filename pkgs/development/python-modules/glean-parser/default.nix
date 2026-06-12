@@ -61,5 +61,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

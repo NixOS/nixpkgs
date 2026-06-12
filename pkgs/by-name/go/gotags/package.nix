@@ -37,5 +37,6 @@ buildGoModule {
     homepage = "https://github.com/jstemmer/gotags";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

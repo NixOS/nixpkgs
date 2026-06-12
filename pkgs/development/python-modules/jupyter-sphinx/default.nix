@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
     changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

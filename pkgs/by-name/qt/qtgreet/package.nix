@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "qtgreet";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

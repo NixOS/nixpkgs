@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/scopatz/nanorc";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

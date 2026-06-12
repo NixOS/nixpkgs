@@ -46,5 +46,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://sigtools.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

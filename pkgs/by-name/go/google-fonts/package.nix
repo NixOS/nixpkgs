@@ -79,5 +79,6 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.all;
     hydraPlatforms = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       gpl2Plus
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Carreau/undefined";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

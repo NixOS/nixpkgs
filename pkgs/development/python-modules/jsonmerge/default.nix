@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

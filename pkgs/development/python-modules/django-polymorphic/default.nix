@@ -51,5 +51,6 @@ buildPythonPackage rec {
     description = "Improved Django model inheritance with automatic downcasting";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,5 +41,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/riot-ml/riot";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

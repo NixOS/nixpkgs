@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/heywbj/django-rest-framework-recursive";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

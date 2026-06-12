@@ -72,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.platforms.riscv
       ++ lib.platforms.x86
     );
+    hasNoMaintainersButDependents = true;
   };
 })

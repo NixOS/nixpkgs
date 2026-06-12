@@ -25,5 +25,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

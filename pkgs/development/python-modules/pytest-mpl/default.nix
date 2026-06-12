@@ -68,5 +68,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/matplotlib/pytest-mpl";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

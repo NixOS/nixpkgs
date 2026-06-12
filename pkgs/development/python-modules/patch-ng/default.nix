@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/conan-io/python-patch";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

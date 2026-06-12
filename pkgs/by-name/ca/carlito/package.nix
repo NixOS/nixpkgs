@@ -38,5 +38,6 @@ stdenvNoCC.mkDerivation rec {
     # also install the `vista-fonts` package, then you probably will
     # not want to install the font alias of this package.
     priority = 10;
+    hasNoMaintainersButDependents = true;
   };
 }

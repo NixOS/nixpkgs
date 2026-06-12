@@ -61,5 +61,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

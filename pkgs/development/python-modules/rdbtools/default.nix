@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sripathikrishnan/redis-rdb-tools/blob/rdbtools-${version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

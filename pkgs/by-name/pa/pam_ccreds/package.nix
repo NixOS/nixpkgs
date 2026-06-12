@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ccreds_chkpwd";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

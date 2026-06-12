@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for functional interactive c++ programs";
     maintainers = [ ];
     license = lib.licenses.boost;
+    hasNoMaintainersButDependents = true;
   };
 })

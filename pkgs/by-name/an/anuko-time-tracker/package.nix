@@ -39,5 +39,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/anuko/timetracker/";
     platforms = php.meta.platforms;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

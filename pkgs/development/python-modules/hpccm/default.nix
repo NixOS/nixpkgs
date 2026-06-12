@@ -51,5 +51,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "hpccm";
     platforms = lib.platforms.x86;
+    hasNoMaintainersButDependents = true;
   };
 }

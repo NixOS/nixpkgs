@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating XML parser written in a portable subset of C++";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

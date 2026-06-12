@@ -74,6 +74,7 @@ let
       homepage = "https://github.com/jupyter-server/pytest-jupyter";
       license = lib.licenses.bsd3;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

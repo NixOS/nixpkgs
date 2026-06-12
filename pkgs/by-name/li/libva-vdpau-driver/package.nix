@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

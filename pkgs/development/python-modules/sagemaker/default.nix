@@ -118,5 +118,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
     changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

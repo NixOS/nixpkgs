@@ -139,5 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
       use e.g. `lib.setPrio 5 inetutils`.
     */
     priority = (util-linux.meta.priority or lib.meta.defaultPriority) + 1;
+    hasNoMaintainersButDependents = true;
   };
 })

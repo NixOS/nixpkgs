@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.14.0";
+    hasNoMaintainersButDependents = true;
   };
 }

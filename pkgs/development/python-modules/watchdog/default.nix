@@ -87,5 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

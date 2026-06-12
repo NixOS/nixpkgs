@@ -67,5 +67,6 @@ buildPythonPackage (finalAttrs: {
       mit
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

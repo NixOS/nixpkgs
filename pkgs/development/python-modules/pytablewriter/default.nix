@@ -107,5 +107,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

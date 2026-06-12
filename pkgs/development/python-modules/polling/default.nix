@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/justiniso/polling";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

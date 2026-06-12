@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

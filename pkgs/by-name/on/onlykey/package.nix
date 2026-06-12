@@ -105,5 +105,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/trustcrypto/OnlyKey-App/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "onlykey";
+    hasNoMaintainersButDependents = true;
   };
 })

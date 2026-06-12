@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "dtach";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       nick-linux
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     description = "Decorator for REST endpoints in flask. Validate JSON request data";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

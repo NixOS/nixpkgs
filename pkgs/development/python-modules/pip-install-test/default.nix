@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pip-install-test";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

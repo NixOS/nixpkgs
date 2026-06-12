@@ -54,5 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

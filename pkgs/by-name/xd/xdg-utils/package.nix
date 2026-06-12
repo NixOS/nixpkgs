@@ -369,5 +369,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     teams = [ lib.teams.freedesktop ];
+    hasNoMaintainersButDependents = true;
   };
 })

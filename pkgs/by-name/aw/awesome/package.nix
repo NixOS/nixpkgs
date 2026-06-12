@@ -187,5 +187,6 @@ stdenv.mkDerivation rec {
     maintainers = [
     ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

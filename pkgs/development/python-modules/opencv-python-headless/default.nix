@@ -10,5 +10,6 @@ mkPythonMetaPackage {
   optional-dependencies = opencv4.optional-dependencies or { };
   meta = {
     inherit (opencv4.meta) description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

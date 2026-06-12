@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Port the log4j library from Java to C++";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

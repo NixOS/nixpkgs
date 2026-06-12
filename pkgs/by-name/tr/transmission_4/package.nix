@@ -248,5 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     platforms = if enableMac then lib.platforms.darwin else lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

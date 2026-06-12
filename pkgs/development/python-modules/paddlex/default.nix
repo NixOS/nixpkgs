@@ -81,5 +81,6 @@ buildPythonPackage (finalAttrs: {
       "aarch64-linux"
       "aarch64-darwin"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

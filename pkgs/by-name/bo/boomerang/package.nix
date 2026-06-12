@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     description = "General, open source, retargetable decompiler";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

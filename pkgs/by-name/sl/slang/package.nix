@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "slsh";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

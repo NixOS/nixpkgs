@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/arvetech/asyncarve";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${finalAttrs.version}/ChangeLog";
     license = lib.licenses.openldap;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

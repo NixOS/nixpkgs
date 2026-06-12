@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       wtfpl
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

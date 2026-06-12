@@ -31,5 +31,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/kingosticks/mopidy-tunein";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

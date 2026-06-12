@@ -46,5 +46,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     mainProgram = "logilab-pytest";
+    hasNoMaintainersButDependents = true;
   };
 })

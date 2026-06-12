@@ -60,5 +60,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/outscale/osc-sdk-python";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

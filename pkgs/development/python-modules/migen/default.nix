@@ -40,5 +40,6 @@ buildPythonPackage {
     homepage = "https://m-labs.hk/migen";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

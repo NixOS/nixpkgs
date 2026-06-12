@@ -19,5 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Minimal unprivileged process supervisor making use of modern Linux features";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

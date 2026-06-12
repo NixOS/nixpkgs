@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/rec/runs/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

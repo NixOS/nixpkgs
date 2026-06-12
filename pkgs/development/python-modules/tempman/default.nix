@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/python-tempman";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

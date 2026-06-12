@@ -24,5 +24,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ep";
+    hasNoMaintainersButDependents = true;
   };
 })

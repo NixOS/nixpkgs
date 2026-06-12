@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

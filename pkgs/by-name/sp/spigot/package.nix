@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "spigot";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.unix;
   };
 })

@@ -32,5 +32,6 @@ buildDunePackage (finalAttrs: {
     description = "Bigstring built on top of bigarrays, and convenient functions";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

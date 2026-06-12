@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/hpack";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

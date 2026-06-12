@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = if enableReadline then lib.licenses.gpl2Only else lib.licenses.lgpl21Only;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

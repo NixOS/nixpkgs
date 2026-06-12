@@ -75,5 +75,6 @@ resholve.mkDerivation (finalAttrs: {
     homepage = "https://krumpetpirate.github.io/AAXtoMP3";
     license = lib.licenses.wtfpl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

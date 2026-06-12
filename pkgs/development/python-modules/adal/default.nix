@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/AzureAD/azure-activedirectory-library-for-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

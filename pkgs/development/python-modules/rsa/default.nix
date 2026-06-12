@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://stuvel.eu/rsa";
     license = lib.licenses.asl20;
     description = "Pure-Python RSA implementation";
+    hasNoMaintainersButDependents = true;
   };
 }

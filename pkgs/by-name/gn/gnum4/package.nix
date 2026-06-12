@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "m4";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    hasNoMaintainersButDependents = true;
   };
 
 })

@@ -69,5 +69,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/epsy/clize/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

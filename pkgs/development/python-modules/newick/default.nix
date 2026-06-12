@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dlce-eva/python-newick";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -16,5 +16,6 @@ mkDiscoursePlugin {
     homepage = "https://github.com/discourse/discourse-saved-searches";
     license = lib.licenses.mit;
     description = "Allow users to save searches and be notified of new results";
+    hasNoMaintainersButDependents = true;
   };
 }

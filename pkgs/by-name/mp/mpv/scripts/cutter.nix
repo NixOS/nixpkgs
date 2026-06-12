@@ -44,5 +44,6 @@ buildLua {
     homepage = "https://github.com/rushmj/mpv-video-cutter";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

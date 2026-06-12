@@ -78,5 +78,6 @@ gccStdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
+    hasNoMaintainersButDependents = true;
   };
 }

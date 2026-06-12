@@ -164,5 +164,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       "riscv64-linux"
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

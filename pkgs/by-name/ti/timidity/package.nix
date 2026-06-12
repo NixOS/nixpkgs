@@ -136,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "timidity";
+    hasNoMaintainersButDependents = true;
   };
 })

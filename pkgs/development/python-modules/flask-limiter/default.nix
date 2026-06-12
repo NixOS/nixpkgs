@@ -101,5 +101,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

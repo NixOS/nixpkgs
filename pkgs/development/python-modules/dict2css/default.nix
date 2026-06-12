@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-toolbox/dict2css";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

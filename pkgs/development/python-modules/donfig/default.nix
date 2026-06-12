@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytroll/donfig/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

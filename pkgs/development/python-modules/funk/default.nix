@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mwilliamson/funk/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more";
     mainProgram = "slice2py";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

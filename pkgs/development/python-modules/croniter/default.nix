@@ -64,5 +64,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/kiorky/croniter/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

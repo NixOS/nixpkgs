@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/lf-/gridlock";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

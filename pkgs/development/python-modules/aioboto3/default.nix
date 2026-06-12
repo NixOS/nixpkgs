@@ -96,5 +96,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/terricain/aioboto3/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

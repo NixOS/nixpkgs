@@ -86,5 +86,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

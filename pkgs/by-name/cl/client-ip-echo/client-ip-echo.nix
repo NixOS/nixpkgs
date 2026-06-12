@@ -25,4 +25,5 @@ mkDerivation {
   description = "Accepts TCP connections and echoes the client's IP address back to it";
   license = lib.licenses.lgpl3;
   mainProgram = "client-ip-echo";
+  hasNoMaintainersButDependents = true;
 }

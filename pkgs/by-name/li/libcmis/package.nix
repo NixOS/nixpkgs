@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     mainProgram = "cmis-client";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -40,5 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "photon";
+    hasNoMaintainersButDependents = true;
   };
 })

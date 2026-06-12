@@ -49,5 +49,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "goose";
+    hasNoMaintainersButDependents = true;
   };
 })

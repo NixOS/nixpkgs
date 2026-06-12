@@ -66,5 +66,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

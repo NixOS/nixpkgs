@@ -57,6 +57,7 @@
     };
     meta = common_meta // {
       description = "Plugin to support " + passthru.hw + " scanner in sane";
+      hasNoMaintainersButDependents = true;
     };
   };
   v370 = stdenv.mkDerivation rec {
@@ -97,6 +98,7 @@
     };
     meta = common_meta // {
       description = "Plugin to support " + passthru.hw + " scanner in sane";
+      hasNoMaintainersButDependents = true;
     };
   };
   v550 = stdenv.mkDerivation rec {
@@ -132,6 +134,7 @@
     };
     meta = common_meta // {
       description = "Plugin to support " + passthru.hw + " scanner in sane";
+      hasNoMaintainersButDependents = true;
     };
   };
   v600 = stdenv.mkDerivation rec {
@@ -167,6 +170,7 @@
     };
     meta = common_meta // {
       description = "iscan esci x820 plugin for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   x770 = stdenv.mkDerivation rec {
@@ -202,6 +206,7 @@
     };
     meta = common_meta // {
       description = "iscan esci x770 plugin for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   f720 = stdenv.mkDerivation rec {
@@ -235,6 +240,7 @@
 
     meta = common_meta // {
       description = "iscan esci f720 plugin for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   s80 = stdenv.mkDerivation rec {
@@ -276,6 +282,7 @@
 
     meta = common_meta // {
       description = "iscan esci s80 plugin for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   s600 = stdenv.mkDerivation rec {
@@ -314,6 +321,7 @@
     };
     meta = common_meta // {
       description = "iscan gt-s600 plugin for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   s650 = stdenv.mkDerivation rec {
@@ -353,6 +361,7 @@
     };
     meta = common_meta // {
       description = "iscan GT-S650 for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   x750 = stdenv.mkDerivation rec {
@@ -391,6 +400,7 @@
     };
     meta = common_meta // {
       description = "iscan GT-X750 for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   gt1500 = stdenv.mkDerivation rec {
@@ -429,6 +439,7 @@
     };
     meta = common_meta // {
       description = "iscan GT-1500 for " + passthru.hw;
+      hasNoMaintainersButDependents = true;
     };
   };
   ds30 = stdenv.mkDerivation rec {
@@ -466,6 +477,7 @@
     };
     meta = common_meta // {
       description = "Plugin to support " + passthru.hw + " scanner in sane";
+      hasNoMaintainersButDependents = true;
     };
   };
   network = stdenv.mkDerivation rec {
@@ -500,6 +512,7 @@
 
     meta = common_meta // {
       description = "iscan network plugin";
+      hasNoMaintainersButDependents = true;
     };
   };
 }

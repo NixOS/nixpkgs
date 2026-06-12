@@ -58,5 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tgalal/consonance";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/matrix-org/python-signedjson";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

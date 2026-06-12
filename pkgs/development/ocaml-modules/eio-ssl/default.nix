@@ -32,5 +32,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/anmonteiro/eio-ssl";
     description = "OpenSSL binding to EIO";
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

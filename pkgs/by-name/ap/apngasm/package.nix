@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "apngasm";
+    hasNoMaintainersButDependents = true;
   };
 
 }

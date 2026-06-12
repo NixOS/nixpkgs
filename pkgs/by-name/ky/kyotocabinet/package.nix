@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library of routines for managing a database";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hynek/prometheus-async/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

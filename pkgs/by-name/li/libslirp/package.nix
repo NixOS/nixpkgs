@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.freedesktop ];
+    hasNoMaintainersButDependents = true;
   };
 })

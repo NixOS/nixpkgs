@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     mainProgram = "gnulib-tool";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

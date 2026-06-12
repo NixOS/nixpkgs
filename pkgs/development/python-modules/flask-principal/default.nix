@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "Identity management for flask";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

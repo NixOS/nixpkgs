@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3;
     maintainers = [ ];
     inherit (mesa.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

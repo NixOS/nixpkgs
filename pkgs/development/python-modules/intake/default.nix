@@ -149,5 +149,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/intake/intake/blob/${finalAttrs.src.rev}/docs/source/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

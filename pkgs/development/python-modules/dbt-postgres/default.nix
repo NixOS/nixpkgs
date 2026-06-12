@@ -43,5 +43,6 @@ buildPythonPackage rec {
     description = "Plugin enabling dbt to work with a Postgres database";
     homepage = "https://github.com/dbt-labs/dbt-core";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

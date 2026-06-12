@@ -68,5 +68,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_bigquery_storage_v1_keywords.py";
+    hasNoMaintainersButDependents = true;
   };
 }

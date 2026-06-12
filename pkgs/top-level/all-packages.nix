@@ -3495,6 +3495,7 @@ with pkgs;
     // {
       # not supported on darwin: https://github.com/golang/go/issues/463
       meta.broken = stdenv.hostPlatform.isDarwin;
+      meta.hasNoMaintainersButDependents = true;
     }
   );
 
