@@ -2223,8 +2223,6 @@ with pkgs;
     threadsafe = true;
   };
 
-  highlight = callPackage ../tools/text/highlight { };
-
   host = bind.host;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
