@@ -8,6 +8,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "iperf";
   version = "2.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/iperf2/files/iperf-${finalAttrs.version}.tar.gz";
     hash = "sha256-dUqwp+KAM9vqgTCO9CS8ffTW4v4xtgzFNrYbUf772Ps=";

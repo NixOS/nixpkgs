@@ -7,12 +7,15 @@
   lksctp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iperf";
   version = "3.21";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
+    url = "https://downloads.es.net/pub/iperf/iperf-${finalAttrs.version}.tar.gz";
     hash = "sha256-ZW5EBevWIBId587KPq9DqI956huFfQQaagsTFIAazdg=";
   };
 
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=7f979fc51ae31d5c695d8481ba84a4afc5080efb";
       name = "remove-pg-flags.patch";
-      sha256 = "0z3zsmf7ln08rg1mmzl8s8jm5gp8x62f5cxiqcmi8dcs2nsxwgbi";
+      hash = "sha256-cT3etRWaNRQrw7Gz4oTp6L5SJdKI/lrDywhYelzVf3w=";
     })
   ];
 
@@ -47,4 +50,4 @@ stdenv.mkDerivation rec {
     mainProgram = "iperf3";
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})
