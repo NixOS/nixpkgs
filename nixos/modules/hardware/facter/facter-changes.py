@@ -32,9 +32,9 @@ def run_command(args: list[str], *, suppress_stderr: bool = False) -> str:
     result = subprocess.run(
         args,
         check=True,
-        capture_output=True,
-        text=True,
+        stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL if suppress_stderr else None,
+        text=True,
     )
     return result.stdout.strip()
 
