@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/TabbyML/tabby";
-    changelog = "https://github.com/TabbyML/tabby/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/TabbyML/tabby/releases/tag/v${finalAttrs.src.tag}";
     description = "Language server used to communicate with Tabby server";
     mainProgram = "tabby-agent";
     license = lib.licenses.asl20;
