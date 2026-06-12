@@ -22,7 +22,10 @@ let
     {
       language,
       requires ? [ ],
-    }:
+    }@args:
+    let
+      pos = builtins.unsafeGetAttrPos "language" args;
+    in
     vimUtils.toVimPlugin (
       # Just mkdir + ln -s; cheaper to build than to substitute (and not
       # on cache.nixos.org anyway since release.nix doesn't recurse into
@@ -30,6 +33,7 @@ let
       # round-tripping each to a remote builder is very slow.
       runCommandLocal "nvim-treesitter-queries-${language}"
         {
+          inherit pos;
           passthru = {
             inherit language requires;
             isTreesitterQuery = true;

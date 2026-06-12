@@ -77,25 +77,31 @@ let
       # variables like DISTCC_HOSTS, DISTCC_DIR, ...
       links =
         extraConfig:
-        (runCommand "distcc-links" { passthru.gcc = gcc.cc; } ''
-          mkdir -p $out/bin
-          if [ -x "${gcc.cc}/bin/gcc" ]; then
-            cat > $out/bin/gcc << EOF
-            #!${runtimeShell}
-            ${extraConfig}
-            exec ${distcc}/bin/distcc gcc "\$@"
-          EOF
-            chmod +x $out/bin/gcc
-          fi
-          if [ -x "${gcc.cc}/bin/g++" ]; then
-            cat > $out/bin/g++ << EOF
-            #!${runtimeShell}
-            ${extraConfig}
-            exec ${distcc}/bin/distcc g++ "\$@"
-          EOF
-            chmod +x $out/bin/g++
-          fi
-        '');
+        (runCommand "distcc-links"
+          {
+            passthru.gcc = gcc.cc;
+            meta = distcc.meta;
+          }
+          ''
+            mkdir -p $out/bin
+            if [ -x "${gcc.cc}/bin/gcc" ]; then
+              cat > $out/bin/gcc << EOF
+              #!${runtimeShell}
+              ${extraConfig}
+              exec ${distcc}/bin/distcc gcc "\$@"
+            EOF
+              chmod +x $out/bin/gcc
+            fi
+            if [ -x "${gcc.cc}/bin/g++" ]; then
+              cat > $out/bin/g++ << EOF
+              #!${runtimeShell}
+              ${extraConfig}
+              exec ${distcc}/bin/distcc g++ "\$@"
+            EOF
+              chmod +x $out/bin/g++
+            fi
+          ''
+        );
 
       updateScript = gitUpdater {
         rev-prefix = "v";
