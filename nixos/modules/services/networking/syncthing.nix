@@ -43,31 +43,10 @@ let
 
   anyAutoAccept = builtins.any (dev: dev.autoAcceptFolders) devices;
 
-  folders = lib.mapAttrsToList (
-    _: folder:
-    folder
-    //
-      lib.throwIf (folder ? rescanInterval || folder ? watch || folder ? watchDelay)
-        ''
-          The options services.syncthing.settings.folders.<name>.{rescanInterval,watch,watchDelay}
-          were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
-        ''
-        {
-          devices =
-            let
-              folderDevices = folder.devices;
-            in
-            map (
-              device:
-              if builtins.isString device then
-                { deviceId = cfg.settings.devices.${device}.id; }
-              else if builtins.isAttrs device then
-                { deviceId = cfg.settings.devices.${device.name}.id; } // device
-              else
-                throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
-            ) folderDevices;
-        }
-  ) (lib.filterAttrs (_: folder: folder.enable) cfg.settings.folders);
+  folders = lib.pipe cfg.settings.folders [
+    (lib.filterAttrs (_: folder: folder.enable))
+    builtins.attrValues
+  ];
 
   jq = "${pkgs.jq}/bin/jq";
   grep = lib.getExe pkgs.gnugrep;
