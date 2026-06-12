@@ -76,6 +76,8 @@
   gccForLibs ? if useCcForLibs then cc else null,
   fortify-headers ? null,
   includeFortifyHeaders ? null,
+
+  meta ? { },
 }:
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
@@ -1060,6 +1062,7 @@ stdenvNoCC.mkDerivation {
       cc_ = optionalAttrs (cc != null) cc;
     in
     (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta [ "priority" ]))
+    // meta
     // {
       description = attrByPath [ "meta" "description" ] "System C compiler" cc_ + " (wrapper script)";
       priority = 10;
