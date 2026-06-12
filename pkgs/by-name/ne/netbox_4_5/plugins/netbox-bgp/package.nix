@@ -33,6 +33,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_bgp" ];
 
+  passthru.pluginName = "netbox_bgp";
+
   meta = {
     description = "NetBox plugin for BGP related objects documentation";
     homepage = "https://github.com/netbox-community/netbox-bgp";
