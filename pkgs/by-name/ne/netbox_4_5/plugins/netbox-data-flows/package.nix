@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_data_flows" ];
 
+  passthru.pluginName = "netbox_data_flows";
+
   meta = {
     description = "NetBox plugin to document data flows between systems and applications";
     homepage = "https://github.com/Alef-Burzmali/netbox-data-flows";
