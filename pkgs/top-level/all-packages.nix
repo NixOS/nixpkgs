@@ -2223,9 +2223,7 @@ with pkgs;
     threadsafe = true;
   };
 
-  highlight = callPackage ../tools/text/highlight {
-    lua = lua5;
-  };
+  highlight = callPackage ../tools/text/highlight { };
 
   host = bind.host;
 
