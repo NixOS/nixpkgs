@@ -8,6 +8,7 @@
   yarn,
   stdenv,
   makeWrapper,
+  runCommand,
   callPackage,
 }:
 
@@ -96,6 +97,41 @@ buildGoModule (finalAttrs: {
         (lib.getLib stdenv.cc.cc)
       ]
     } $out/bin/albyhub
+  '';
+
+  passthru.tests.startup = runCommand "${finalAttrs.pname}-startup-test" { } ''
+    export HOME="$TMPDIR"
+    export AUTO_LINK_ALBY_ACCOUNT=false
+    export WORK_DIR="$TMPDIR/albyhub"
+    export DATABASE_URI="$WORK_DIR/nwc.db"
+    export PORT=8099
+    export LDK_LOG_LEVEL=2
+    export LOG_LEVEL=5
+
+    mkdir -p "$WORK_DIR"
+
+    ${lib.getExe finalAttrs.finalPackage} > "$TMPDIR/albyhub.log" 2>&1 &
+    pid=$!
+    trap 'kill "$pid" 2>/dev/null || true' EXIT
+
+    for _ in $(seq 1 30); do
+      if grep -q "http server started" "$TMPDIR/albyhub.log"; then
+        touch "$out"
+        exit 0
+      fi
+
+      if ! kill -0 "$pid" 2>/dev/null; then
+        echo "albyhub exited before startup" >&2
+        cat "$TMPDIR/albyhub.log" >&2
+        exit 1
+      fi
+
+      sleep 1
+    done
+
+    echo "timed out waiting for albyhub to start" >&2
+    cat "$TMPDIR/albyhub.log" >&2
+    exit 1
   '';
 
   meta = {
