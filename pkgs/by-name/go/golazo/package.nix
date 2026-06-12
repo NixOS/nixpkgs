@@ -28,6 +28,7 @@ buildGoModule (finalAttrs: {
   ];
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
