@@ -19808,6 +19808,11 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  nikhilmaddirala = {
+    name = "Nikhil Maddirala";
+    github = "nikhilmaddirala";
+    githubId = 4138581;
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikivdev";
@@ -27126,7 +27131,7 @@
     email = "taranarmo@gmail.com";
     github = "taranarmo";
     githubId = 11619234;
-    name = "Sergey Volkov";
+    name = "Sergei Volkov";
   };
   tarantoj = {
     email = "taranto.james@gmail.com";

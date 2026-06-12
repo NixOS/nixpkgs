@@ -37,6 +37,7 @@
   nodejs,
   openscad,
   openssh,
+  openssl,
   ranger,
   ripgrep,
   sqlite,
@@ -54,7 +55,6 @@
   xwininfo,
   xxd,
   ycmd,
-  zathura,
   zenity,
   zoxide,
   zsh,
@@ -1014,6 +1014,13 @@ assertNoAdditions {
 
   copilot-cmp = super.copilot-cmp.overrideAttrs {
     dependencies = [ self.copilot-lua ];
+    patches = [
+      (fetchpatch {
+        name = "fix-deprecated-function-call.patch";
+        url = "https://github.com/zbirenbaum/copilot-cmp/commit/06430ebf99834ebc5d86c63816e409f4cb51fe79.patch";
+        sha256 = "sha256-YOJPFC+qbyURFU58tAiAqbamQLmi7ovnJGkOeOTUPH0=";
+      })
+    ];
   };
 
   copilot-lualine = super.copilot-lualine.overrideAttrs {
@@ -1523,6 +1530,12 @@ assertNoAdditions {
         --replace-fail \
         'local gpgme_library_path = "gpgme"' \
         'local gpgme_library_path = "${lib.getLib gpgme}/lib/libgpgme${stdenv.hostPlatform.extensions.sharedLibrary}"'
+
+      # Upstream typo: pendulum was moved to fugit2.util but this require was not updated
+      substituteInPlace lua/fugit2/view/git_blame_file.lua \
+        --replace-fail \
+        'require "fugit2.core.pendulum"' \
+        'require "fugit2.util.pendulum"'
     '';
   };
 
@@ -2307,6 +2320,17 @@ assertNoAdditions {
       license = lib.licenses.gpl3Only;
     };
   });
+
+  live-share-nvim = super.live-share-nvim.overrideAttrs {
+    # Loading the system libcrypto aborts the process on darwin,
+    # point the FFI loader at the nixpkgs openssl instead
+    postPatch = ''
+      substituteInPlace lua/live-share/collab/crypto.lua \
+        --replace-fail \
+        '"crypto",' \
+        '"${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}",'
+    '';
+  };
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -3657,11 +3681,6 @@ assertNoAdditions {
       openscad
     ];
 
-    buildInputs = [
-      zathura
-      openscad
-    ];
-
     # FIXME: can't find plugin root dir
     nvimSkipModules = [
       "openscad"
@@ -4686,8 +4705,8 @@ assertNoAdditions {
   });
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
-    # on linux can use either Zenity or Yad.
-    propagatedBuildInputs = [ zenity ];
+    # on linux can use either Zenity or Yad, on darwin it uses AppleScript
+    propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ zenity ];
     meta = old.meta // {
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;
