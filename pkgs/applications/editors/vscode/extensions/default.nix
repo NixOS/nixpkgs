@@ -4222,8 +4222,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.27";
-          hash = "sha256-v4CZul1uuNlMrIgfml9EjUy0I626GkBArNH7F+5Z/dA=";
+          version = "0.8.30";
+          hash = "sha256-wtI+W+ZNxXv8WonGDmSt1NxeF8WN8fqPCuMougERxDE=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
