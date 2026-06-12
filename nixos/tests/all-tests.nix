@@ -1179,6 +1179,7 @@ in
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-daemon-unprivileged = runTest ./nix-daemon-unprivileged.nix;
   nix-ld = runTest ./nix-ld.nix;
+  nix-local-store = runTest ./nix-local-store.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
