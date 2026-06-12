@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zxcvbn";
   version = "4.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-0SVJkJMEMnZVMpamDVP02kMwWRSj5zGlrMYG9kn0aXQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
