@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   fetchpatch,
-
-  # build-system
   hatchling,
 
   # dependencies
@@ -23,11 +21,9 @@ buildPythonPackage (finalAttrs: {
   version = "2.3.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "meshcore-dev";
-    repo = "meshcore_py";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Vz2LQaP44Yojf9h2rSBvKRjW99IOj7C5MxqQnIUoIRE=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-7Vo1l2qnh04pD8urIZjC5onws1aCULYK7FLmueO9K3s=";
   };
 
   patches = [
