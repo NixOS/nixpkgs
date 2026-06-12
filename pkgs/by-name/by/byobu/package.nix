@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "6.13";
+  version = "7.12";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "byobu";
     rev = finalAttrs.version;
-    hash = "sha256-h+3BEMfBRozmpqFNRyfKzjKgevaYm8v7DsJMwkhiCQ4=";
+    hash = "sha256-S/AXJ6i4Uk2xpkC24jz51uH4Pi6oJ1LRvOJDmEC1jQE=";
   };
 
   nativeBuildInputs = [
