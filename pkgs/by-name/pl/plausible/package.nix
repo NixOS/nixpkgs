@@ -160,9 +160,7 @@ beamPackages.mixRelease rec {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) plausible;
-    };
+    tests = nixosTests.plausible;
     updateScript = nix-update-script {
       extraArgs = [
         "-s"
