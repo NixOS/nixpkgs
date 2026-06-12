@@ -5,19 +5,19 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "etcd";
-  version = "3.4.42";
+  version = "3.4.45";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
-    hash = "sha256-Ue5Mcksy3LiXLaVdxNz83V9qrxQfzxL5kw4rZobYcvY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GvhejN7+woYK7UBNguzEaO6rqAbT7Vbwl5nFmI/F6Sc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-DqKVZ4Z2RMRwi4Z/6Rh3SE6NSyuHePSYrIM7sPyPC74=";
+  vendorHash = "sha256-0xIK71sAwMzzSaN2lFKKdGtDKWYtL25x5GDoO6bO0wI=";
 
   preBuild = ''
     go mod tidy
@@ -46,4 +46,4 @@ buildGoModule rec {
     homepage = "https://etcd.io/";
     maintainers = [ ];
   };
-}
+})
