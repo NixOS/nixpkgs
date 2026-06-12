@@ -2359,8 +2359,6 @@ with pkgs;
     threadsafe = true;
   };
 
-  highlight = callPackage ../tools/text/highlight { };
-
   host = bind.host;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
