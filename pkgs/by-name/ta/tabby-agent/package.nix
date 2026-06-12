@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   wrapGAppsHook3,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     wrapGAppsHook3
   ];
 
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-xx45vudeW6OnUgyH0N+gQI5GPT8k5B4x0HdCvHF+f9A=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-idEByCnQmqpnvni0RahZ7qEa0C/0zVPRFv0jaj3BcnM=";
   };
 
   passthru.updateScript = nix-update-script {
