@@ -13,7 +13,7 @@ in
 
   meta.maintainers = pkgs.rustical.meta.maintainers;
 
-  nodes.machine =
+  containers.machine =
     {
       pkgs,
       ...
@@ -28,7 +28,7 @@ in
 
   testScript =
     {
-      nodes,
+      containers,
       ...
     }:
     let
