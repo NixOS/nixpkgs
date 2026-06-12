@@ -35,9 +35,17 @@ pkgs.haskell.packages.ghc98.override {
       inherit elmPkgs;
 
       # Needed for elm-format
-      avh4-lib = self.callPackage ./elm-format/avh4-lib.nix { };
-      elm-format-lib = self.callPackage ./elm-format/elm-format-lib.nix { };
-      elm-format-test-lib = self.callPackage ./elm-format/elm-format-test-lib.nix { };
-      elm-format-markdown = self.callPackage ./elm-format/elm-format-markdown.nix { };
+      avh4-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/avh4-lib.nix { });
+      elm-format-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/elm-format-lib.nix { });
+      elm-format-test-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/elm-format-test-lib.nix { });
+      elm-format-markdown = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/elm-format-markdown.nix { });
     };
 }
