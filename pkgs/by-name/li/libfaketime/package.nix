@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = hashes.${finalAttrs.version};
   };
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   patches = [
     ./nix-store-date.patch
   ]
