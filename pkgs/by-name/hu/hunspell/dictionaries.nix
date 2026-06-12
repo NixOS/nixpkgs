@@ -125,6 +125,8 @@ let
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = lib.licenses.lgpl3;
         platforms = lib.platforms.all;
+        # TODO: Why not?
+        requiresMaintainers = false;
       };
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
