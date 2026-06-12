@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = finalAttrs.version;
-    hash = "sha256-mDsI/pGMIcyfFqX9uWWlg09As+4Mth9WK5xylQvSVGM=";
+    hash = "sha256-1l6EZBQ1lSnjGa+nIZ6TWxkgB2Od+Zjihme+vII8GcU=";
   };
 
   build-system = [
