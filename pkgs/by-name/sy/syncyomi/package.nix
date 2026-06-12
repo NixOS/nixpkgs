@@ -6,7 +6,7 @@
   libredirect,
   buildGoModule,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   esbuild,
@@ -51,15 +51,15 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-i4ji/NjK6/hpqrma+DJ2x5kKq/YEN3Cy8mKQLy1M+dU=";
+      hash = "sha256-8grlBi//dO+mgU5HKYHwNtlCbNbYV4VrptbSgg+ntvQ=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm_11
     ];
 
     env.ESBUILD_BINARY_PATH = lib.getExe lockedEsbuild;
