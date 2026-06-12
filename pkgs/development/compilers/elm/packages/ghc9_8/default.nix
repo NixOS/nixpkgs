@@ -84,14 +84,20 @@ pkgs.haskell.packages.ghc98.override {
 
       # Needed for elm-format
 
-      avh4-lib = self.callPackage ./elm-format/avh4-lib.nix { };
+      avh4-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/avh4-lib.nix { });
       # jailbreak required due to optparse-applicative bounds
       # optparse-applicative >=0.17.0.0 && <0.19
       # upstream PR https://github.com/avh4/elm-format/pull/841
-      elm-format-lib = pkgs.haskell.lib.doJailbreak (
-        self.callPackage ./elm-format/elm-format-lib.nix { }
-      );
-      elm-format-test-lib = self.callPackage ./elm-format/elm-format-test-lib.nix { };
-      elm-format-markdown = self.callPackage ./elm-format/elm-format-markdown.nix { };
+      elm-format-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (pkgs.haskell.lib.doJailbreak (self.callPackage ./elm-format/elm-format-lib.nix { }));
+      elm-format-test-lib = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/elm-format-test-lib.nix { });
+      elm-format-markdown = overrideCabal (oldAttrs: {
+        hasNoMaintainersButDependents = true;
+      }) (self.callPackage ./elm-format/elm-format-markdown.nix { });
     };
 }

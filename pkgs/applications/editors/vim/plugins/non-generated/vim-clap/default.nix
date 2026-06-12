@@ -33,7 +33,7 @@ let
 
   maple = rustPlatform.buildRustPackage {
     pname = "maple";
-    inherit version src meta;
+    inherit version src;
 
     strictDeps = false;
 
@@ -58,6 +58,10 @@ let
       rust-jemalloc-sys
       zlib
     ];
+
+    meta = meta // {
+      hasNoMaintainersButDependents = true;
+    };
   };
 in
 

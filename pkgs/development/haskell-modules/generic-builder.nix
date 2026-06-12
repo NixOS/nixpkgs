@@ -157,6 +157,7 @@ in
   license ? null,
   enableParallelBuilding ? true,
   maintainers ? null,
+  hasNoMaintainersButDependents ? false,
   teams ? null,
   changelog ? null,
   mainProgram ? null,
@@ -1113,7 +1114,8 @@ lib.fix (
       // optionalAttrs (pos.file == toString ./hackage-packages.nix) {
         # Because generated
         requiresMaintainers = false;
-      };
+      }
+      // optionalAttrs (args ? hasNoMaintainersButDependents) { inherit hasNoMaintainersButDependents; };
 
     }
     // optionalAttrs (args ? sourceRoot) { inherit sourceRoot; }

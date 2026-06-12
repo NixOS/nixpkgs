@@ -32,7 +32,16 @@ let
       meta = {
         description = "Dictd-db dictionary for dictd";
         platforms = lib.platforms.linux;
-      };
+      }
+      //
+        lib.optionalAttrs
+          (lib.elem _name [
+            "eng-jpn"
+            "jpn-eng"
+          ])
+          {
+            hasNoMaintainersButDependents = true;
+          };
     };
 in
 rec {

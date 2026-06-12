@@ -11,5 +11,7 @@
 # $ nix-shell ./maintainers/scripts/update.nix --argstr package optifinePackages.optifine-latest --arg commit true
 
 lib.recurseIntoAttrs (
-  lib.mapAttrs (name: value: callPackage ./generic.nix value) (lib.importJSON ./versions.json)
+  lib.mapAttrs (attr: value: callPackage ./generic.nix (value // { inherit attr; })) (
+    lib.importJSON ./versions.json
+  )
 )
