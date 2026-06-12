@@ -70,7 +70,7 @@ import ../../make-test-python.nix (
 
           virtualHosts.netbox = {
             default = true;
-            locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
+            locations."/".proxyPass = "http://${toString config.services.netbox.bind}";
             locations."/static/".alias = "/var/lib/netbox/static/";
           };
         };

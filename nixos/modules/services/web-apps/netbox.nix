@@ -10,6 +10,7 @@ let
     any
     attrValues
     mkChangedOptionModule
+    mkOption
     mkRemovedOptionModule
     optionalString
     ;
@@ -86,10 +87,18 @@ in
         "1" = config.services.netbox.apiTokenPeppersFile;
       })
     )
-    (mkRemovedOptionModule
-      [ "services" "netbox" "keycloakClientSecret" ] ''
-        Too much granularity hurts maintainability. Please configure secret key loading via `services.netbox.extraConfig` instead.
-      '')
+    (mkRemovedOptionModule [ "services" "netbox" "listenAddress" ] ''
+      Use `services.netbox.bind` with <ip>:<port> format instead.
+    '')
+    (mkRemovedOptionModule [ "services" "netbox" "port" ] ''
+      Use `services.netbox.bind` with <ip>:<port> format instead.
+    '')
+    (mkRemovedOptionModule [ "services" "netbox" "unixSocket" ] ''
+      Use `services.netbox.bind` with unix:<path> format instead.
+    '')
+    (mkRemovedOptionModule [ "services" "netbox" "keycloakClientSecret" ] ''
+      Too much granularity hurts maintainability. Please configure secret key loading via `services.netbox.extraConfig` instead.
+    '')
   ];
 
   options.services.netbox = {
@@ -128,23 +137,19 @@ in
       };
     };
 
-    listenAddress = lib.mkOption {
+    bind = lib.mkOption {
       type = lib.types.str;
-      default = "[::1]";
+      default = "unix:/run/netbox/netbox.sock";
+      example = "[::1]:8001";
       description = ''
-        Address the server will listen on.
-        Ignored if `unixSocket` is set.
-      '';
-    };
+        IP and port or Unix domain socket path to bind the HTTP socket to.
 
-    unixSocket = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = ''
-        Enable Unix Socket for the server to listen on.
-        `listenAddress` and `port` will be ignored.
+        ::: {.tip}
+        This setting will be passed to gunicorn's [--bind] flag.
+        :::
+
+        [--bind]: https://gunicorn.org/reference/settings/#bind
       '';
-      example = "/run/netbox/netbox.sock";
     };
 
     gunicornArgs = lib.mkOption {
@@ -168,15 +173,6 @@ in
       '';
       description = ''
         NetBox package to use.
-      '';
-    };
-
-    port = lib.mkOption {
-      type = lib.types.port;
-      default = 8001;
-      description = ''
-        Port the server will listen on.
-        Ignored if `unixSocket` is set.
       '';
     };
 
@@ -457,16 +453,12 @@ in
           serviceConfig = defaultServiceConfig // {
             ExecStart = ''
               ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
-                --bind ${
-                  if (cfg.unixSocket != null) then
-                    "unix:${cfg.unixSocket}"
-                  else
-                    "${cfg.listenAddress}:${toString cfg.port}"
-                } \
+                --bind ${cfg.bind} \
                 --pythonpath ${pkg}/opt/netbox/netbox \
                 ${lib.concatStringsSep " " cfg.gunicornArgs}
             '';
             PrivateTmp = true;
+            RuntimeDirectory = "netbox";
             TimeoutStartSec = lib.mkDefault "10min";
           };
         };
