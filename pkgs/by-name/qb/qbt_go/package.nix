@@ -6,18 +6,21 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "qbt_go";
-  version = "2.2.0";
+  version = "2.2.0-unstable-2026-05-11";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ludviglundgren";
     repo = "qbittorrent-cli";
-    tag = "v${version}";
-    hash = "sha256-7d5z/+948tfxkrs/s9Zv9guCCEIOuZhE9P954N4TD/g=";
+    # tag = "v${version}";
+    rev = "7f9095d28f28a7dd4ef3c7b8cc53266f4c55edb7";
+    hash = "sha256-BpvvU5WSxYLvraXAPzz8wgZ3m9L+MCwaSgJbgTMK3jY=";
   };
 
-  vendorHash = "sha256-we4iI4s8PvBak67lTZZ3jLThQ3bqBhkEh3QRGcQgH80=";
+  vendorHash = "sha256-fcLuFZrJV4qjLWxI/aq2dnn4A1WxHm63fcD/TARFtxY=";
 
   postPatch = ''
     substituteInPlace cmd/qbt/main.go \
