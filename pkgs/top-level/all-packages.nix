@@ -2063,8 +2063,6 @@ with pkgs;
     enableBloat = false;
   };
 
-  diffutils = callPackage ../tools/text/diffutils { };
-
   inherit (import ../build-support/dlang/dub-support.nix { inherit lib callPackage; })
     dub-to-nix
     importDubLock
