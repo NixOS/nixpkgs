@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.6.3";
+  version = "8.6.4";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-Zg2bghU4uExwI1SWplYIGCeGRhgRxdh3Oy9k1DZPado=";
+    hash = "sha256-w8LOcWTe0AT1qYrNDN3OAzQz8v3Im4/TzJok1CFMdiY=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -41,13 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
 
-  postPatch = ''
-    # Using `yes` seems to be an invalid value and causes the test to fail. See
-    # https://github.com/redis/redis/blob/bd3b38d41070b478c58bc8b72d2af89cbccd1a40/redis.conf#L674-L688
-    substituteInPlace tests/integration/replication.tcl \
-      --replace-fail 'repl-diskless-load yes' ' repl-diskless-load on-empty-db'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
     # can provide that functionality for us.
     substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
