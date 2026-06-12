@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pygments,
   gitMinimal,
   mercurial,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "ydiff";
   version = "1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ymattw";
@@ -35,6 +36,8 @@ buildPythonPackage rec {
     patchShebangs setup.py
     patchShebangs tests/*.sh
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pygments ];
 
