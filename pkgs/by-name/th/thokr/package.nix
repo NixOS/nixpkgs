@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Typing tui with visualized results and historical logging";
     homepage = "https://github.com/jrnxf/thokr";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
     mainProgram = "thokr";
   };
 })
