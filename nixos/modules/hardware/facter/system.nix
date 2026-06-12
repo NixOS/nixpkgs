@@ -1,20 +1,3 @@
-# {
-#   config,
-#   options,
-#   lib,
-#   ...
-# }:
-# {
-#   config =
-#     let
-#       detectedSystem = config.hardware.facter.report.system or null;
-#       hasExternalPkgs = options.nixpkgs.pkgs.isDefined || (config.nixpkgs ? pkgs);
-#       canSetHostPlatform = detectedSystem != null && !config.boot.isContainer && !hasExternalPkgs;
-#     in
-#     lib.mkIf canSetHostPlatform {
-#       nixpkgs.hostPlatform = lib.mkDefault detectedSystem;
-#     };
-# }
 {
   config,
   options,
@@ -24,10 +7,13 @@
 {
   config.nixpkgs =
     let
-      detectedSystem = config.hardware.facter.report.system or null;
-      canSetHostPlatform = detectedSystem != null && !(options.nixpkgs.hostPlatform.readOnly or false);
+      hasExplicitReport =
+        options.hardware.facter.report.isDefined || options.hardware.facter.reportPath.isDefined;
+      detectedSystem = if hasExplicitReport then config.hardware.facter.report.system or null else null;
+      canSetHostPlatform =
+        hasExplicitReport && detectedSystem != null && !(options.nixpkgs.hostPlatform.readOnly or false);
     in
-    lib.mkIf canSetHostPlatform {
+    lib.optionalAttrs canSetHostPlatform {
       hostPlatform = lib.mkDefault detectedSystem;
     };
 }

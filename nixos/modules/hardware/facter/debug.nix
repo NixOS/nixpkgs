@@ -39,57 +39,55 @@
 
   };
 
-  config.system.build = {
-    noFacter = extendModules {
+  config = lib.mkIf config.hardware.facter.enable {
+    system.build.noFacter = extendModules {
       modules = [
         {
-          # we 'disable' facter by overriding the report and setting it to empty with one caveat: hostPlatform
+          # We 'disable' facter by overriding the report and setting it to empty with one caveat: hostPlatform.
           config.hardware.facter.report = lib.mkForce {
-            system = config.nixpkgs.hostPlatform;
+            system = config.hardware.facter.report.system or config.nixpkgs.hostPlatform;
           };
         }
       ];
     };
-  };
 
-  config.hardware.facter.debug = {
+    hardware.facter.debug = {
+      nvd = pkgs.writeShellApplication {
+        name = "facter-nvd-diff";
+        runtimeInputs = [
+          config.nix.package
+          pkgs.nvd
+        ];
+        text = ''
+          nvd diff \
+            ${config.system.build.noFacter.config.system.build.toplevel} \
+            ${config.system.build.toplevel} \
+            "$@"
+        '';
+      };
 
-    nvd = pkgs.writeShellApplication {
-      name = "facter-nvd-diff";
-      runtimeInputs = [
-        config.nix.package
-        pkgs.nvd
-      ];
-      text = ''
-        nvd diff \
-          ${config.system.build.noFacter.config.system.build.toplevel} \
-          ${config.system.build.toplevel} \
-          "$@"
-      '';
+      nix-diff = pkgs.writeShellApplication {
+        name = "facter-nix-diff";
+        runtimeInputs = [
+          config.nix.package
+          pkgs.nix-diff
+        ];
+        text = ''
+          nix-diff \
+            ${config.system.build.noFacter.config.system.build.toplevel} \
+            ${config.system.build.toplevel} \
+            "$@"
+        '';
+      };
+
+      changes = pkgs.writeShellApplication {
+        name = "facter-changes";
+        runtimeInputs = [ config.nix.package ];
+        text = ''
+          exec ${pkgs.python3}/bin/python ${./facter-changes.py} "$@"
+        '';
+      };
     };
-
-    nix-diff = pkgs.writeShellApplication {
-      name = "facter-nix-diff";
-      runtimeInputs = [
-        config.nix.package
-        pkgs.nix-diff
-      ];
-      text = ''
-        nix-diff \
-          ${config.system.build.noFacter.config.system.build.toplevel} \
-          ${config.system.build.toplevel} \
-          "$@"
-      '';
-    };
-
-    changes = pkgs.writeShellApplication {
-      name = "facter-changes";
-      runtimeInputs = [ config.nix.package ];
-      text = ''
-        exec ${pkgs.python3}/bin/python ${./facter-changes.py} "$@"
-      '';
-    };
-
   };
 
 }
