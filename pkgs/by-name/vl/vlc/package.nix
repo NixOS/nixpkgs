@@ -26,6 +26,7 @@
   libxinerama,
   libxpm,
   libarchive,
+  libaacs,
   libass,
   libbluray-full,
   libcaca,
@@ -152,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libsm
     libarchive
+    libaacs
     libass
     libbluray-full
     libcaca
@@ -299,6 +301,7 @@ stdenv.mkDerivation (finalAttrs: {
   # depends on a qt5.qttranslations that doesn't build, even though it
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup = ''
+    patchelf --add-rpath ${libaacs}/lib "$out/lib/vlc/plugins/access/liblibbluray_plugin.so"
     patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
     ${
