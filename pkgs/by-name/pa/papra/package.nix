@@ -1,4 +1,5 @@
 {
+  applyPatches,
   makeBinaryWrapper,
   nodejs,
   node-gyp,
@@ -18,20 +19,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.4.0";
+  version = "26.4.2";
 
-  src = fetchFromGitHub {
-    owner = "papra-hq";
-    repo = "papra";
-    tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-wQdDBS+QRarZhEIRmLQ4VRtq73I5YFIN2P3ZtAZWvxw=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "papra-hq";
+      repo = "papra";
+      tag = "@papra/app@${finalAttrs.version}";
+      hash = "sha256-VNafM3vjb4HnjdEjdWdary0JAMnHb/r9P+W0nGOt5e0=";
+    };
+    patches = [ ./sharp-version.patch ];
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm;
     fetcherVersion = 3;
-    hash = "sha256-8k8hzpyOQuHAPF+zzIhW+5vo6lHSyZeKAY+tYIf6jKU=";
+    hash = "sha256-hc5aYC33jySzhdoUrD9t+XH9CplfYagROziHb/Sgr68=";
     pnpmWorkspaces = [
       "@papra/app-client..."
       "@papra/app-server..."
