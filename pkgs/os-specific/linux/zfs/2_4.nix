@@ -16,7 +16,7 @@ callPackage ./generic.nix args {
   kernelMaxSupportedMajorMinor = "7.0";
 
   # this package should point to the latest release.
-  version = "2.4.2";
+  version = "2.4.3";
 
   tests = {
     inherit (nixosTests.zfs) series_2_4;
@@ -30,5 +30,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-OqsKHzyFjjyX8CoajDGydY4TbuQqMA37PIaEOL+vDug=";
+  hash = "sha256-I1wLbstr0cFiGsyynP9kJ9ATRp/2b+fnnsdz0up+IzM=";
 }
