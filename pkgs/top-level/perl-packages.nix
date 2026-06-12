@@ -9731,6 +9731,13 @@ with self;
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.60.tgz";
       hash = "sha256-AYuDow95mXm8jDwwRMixyAAc32C9w+dGhIgYGVJUtOc=";
     };
+    patches = [
+      (fetchpatch2 {
+        url = "https://github.com/perl5-dbi/DBD-CSV/commit/ae091790398088a66b22fa572856bfeb4db4c78a.patch?full_index=1";
+        excludes = [ "ChangeLog" ];
+        hash = "sha256-eZdCNSi3YJrZdZcK/8nFx5Q4rB89b0ynKemupvKrfys=";
+      })
+    ];
     propagatedBuildInputs = [
       DBI
       SQLStatement
