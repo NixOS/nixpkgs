@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
