@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_floorplan" ];
 
+  passthru.pluginName = "netbox_floorplan";
+
   meta = {
     description = "Netbox plugin providing floorplan mapping capability for locations and sites";
     homepage = "https://github.com/netbox-community/netbox-floorplan-plugin";
