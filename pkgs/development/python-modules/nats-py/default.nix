@@ -13,7 +13,7 @@
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nats-py";
   version = "2.15.0";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rs+C++g21dKZ6c7L5dJYqWSiv4J8qMGobW7R8icUfVw=";
   };
 
-  sourceRoot = "${src.name}/nats";
+  sourceRoot = "${finalAttrs.src.name}/nats";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
-    changelog = "https://github.com/nats-io/nats.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
