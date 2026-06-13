@@ -117,7 +117,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit
     pname
     version
@@ -171,12 +171,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     pproxy
+    psycopg-c
+    psycopg-pool
     pytestCheckHook
     postgresql
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
-  ++ optional-dependencies.c
-  ++ optional-dependencies.pool;
+  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook;
 
   env = {
     # Introduce this file necessary for the docs build via environment var
@@ -240,4 +240,4 @@ buildPythonPackage rec {
   meta = baseMeta // {
     description = "PostgreSQL database adapter for Python";
   };
-}
+})
