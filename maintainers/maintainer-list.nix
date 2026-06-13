@@ -18081,6 +18081,11 @@
     githubId = 48838244;
     name = "Mislav Zanic";
   };
+  misogihagi = {
+    github = "misogihagi";
+    githubId = 47350059;
+    name = "misogihagi";
+  };
   misterio77 = {
     email = "eu@misterio.me";
     github = "Misterio77";
