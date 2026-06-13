@@ -99,7 +99,7 @@ sub runConfig {
             # Is this a choice? ("choice[1-N]: ")
             elsif ($line =~ /choice\[(.*)\]: ###$/) {
                 my $answer = "";
-                foreach my $name (keys %choices) {
+                foreach my $name (sort (keys %choices)) {
                     $answer = $choices{$name} if ($answers{$name} || "") eq "y";
                 }
                 print STDERR "CHOICE: $1, ANSWER: $answer\n" if $debug;
