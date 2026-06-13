@@ -1,41 +1,71 @@
 {
   lib,
+  callPackage,
+  clang_20,
   fetchFromGitHub,
-  fetchYarnDeps,
+  jq,
+  libsecret,
   makeWrapper,
   nodejs,
+  pkg-config,
+  python3,
   stdenv,
-  yarnBuildHook,
-  yarnConfigHook,
   versionCheckHook,
+  xcbuild,
+  yarn-berry_4,
 }:
-
+let
+  inherit (callPackage ./version.nix { })
+    changelog
+    src
+    version
+    yarn
+    ;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphql-language-service-cli";
-  version = "3.5.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "graphql";
     repo = "graphiql";
-    tag = "graphql-language-service-cli@${finalAttrs.version}";
-    hash = "sha256-NJTggaMNMjOP5oN+gHxFTwEdNipPNzTFfA6f975HDgM=";
+    inherit (src) rev hash;
   };
 
   patches = [
     ./patches/0001-repurpose-vscode-graphql-build-script.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-ae6KP2sFgw8/8YaTJSPscBlVQ5/bzbvHRZygcMgFAlU=";
+  inherit (yarn) missingHashes;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    inherit (yarn) hash;
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    nodejs
+    (python3.withPackages (ps: [ ps.setuptools ])) # node-gyp
+    jq
     makeWrapper
+    nodejs
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    libsecret
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    clang_20 # clang_21 breaks @vscode/vsce's optional dependency keytar
   ];
+
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  };
+
+  buildPhase = ''
+    npm run tsc -b packages/graphql-language-service-cli/
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -46,8 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     node esbuild.js --minify
 
+    mv out/graphql.js $out/lib
     # copy package.json for --version command
-    mv {out/graphql.js,package.json} $out/lib
+    jq '.version |= "${version}"' package.json > $out/lib/package.json
 
     makeWrapper ${lib.getExe nodejs} $out/bin/graphql-lsp \
       --add-flags $out/lib/graphql.js \
@@ -62,13 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
-    updateScript = ./updater.sh;
+    updateScript = ./update.py;
   };
 
   meta = {
     description = "Official, runtime independent Language Service for GraphQL";
     homepage = "https://github.com/graphql/graphiql";
-    changelog = "https://github.com/graphql/graphiql/blob/${finalAttrs.src.tag}/packages/graphql-language-service-cli/CHANGELOG.md";
+    inherit changelog;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nathanregner ];
     mainProgram = "graphql-lsp";
