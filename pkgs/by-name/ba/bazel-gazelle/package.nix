@@ -30,7 +30,10 @@ buildGoModule (finalAttrs: {
       and custom rule sets.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kalbasit ];
+    maintainers = with lib.maintainers; [
+      kalbasit
+      hythera
+    ];
     mainProgram = "gazelle";
   };
 })
