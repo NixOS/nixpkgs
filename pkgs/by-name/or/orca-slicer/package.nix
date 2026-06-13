@@ -58,6 +58,12 @@ let
           "--enable-secretstore"
         ];
       });
+
+  # Workaround missing preview due to EGL
+  # https://github.com/NixOS/nixpkgs/issues/513195
+  glew' = glew.override {
+    enableEGL = false;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
@@ -98,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     ffmpeg
     gcc-unwrapped
-    glew
+    glew'
     glfw
     glib
     glib-networking
@@ -213,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${
         lib.makeLibraryPath [
-          glew
+          glew'
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
