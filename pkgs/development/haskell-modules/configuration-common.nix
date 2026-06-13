@@ -384,6 +384,10 @@ with haskellLib;
   }) super.rvar;
   random-fu = doJailbreak super.random-fu;
 
+  # Allow QuickCheck >= 2.16
+  # https://github.com/int-e/QuickCheck-safe/issues/3
+  QuickCheck-safe = doJailbreak super.QuickCheck-safe;
+
   # Work around -Werror failures until a more permanent solution is released
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
