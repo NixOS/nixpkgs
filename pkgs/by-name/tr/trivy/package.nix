@@ -10,14 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "trivy";
-  # As of March 2026, trivy has made compromised releases twice.
-  # At a minimum, before updating, check the diff of this package, and of all
-  # dependencies/GitHub Actions changes, carefully.
-  # Also read about how the previous compromises occurred, and ensure
-  # that the signs present then are not present now.
-  # Finally, weigh the risk of a compromised release against the expected
-  # benefit of the update, and consider the possibility of not updating.
-  version = "0.71.1"; # Did you read the comment?
+  version = "0.71.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
@@ -35,7 +28,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${finalAttrs.version}"
   ];
 
