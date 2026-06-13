@@ -77,9 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     pnpm = pnpm_11;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     sourceRoot = "source";
-    hash = "sha256-zl+ZrI21EnMBeMInKvEkUObiZ0OA5SJLJjnHwu/Dagc=";
+    hash = "sha256-ZxlP6zOwY9Fxa4BCqnUoCmci3lviHn7H3HU5SnmdrSU=";
   };
 
   patches = [
