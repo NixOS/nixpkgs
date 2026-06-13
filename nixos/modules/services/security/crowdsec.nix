@@ -20,7 +20,7 @@ in
       "services"
       "crowdsec"
       "localConfig"
-    ] "Please move options from `services.crowdsec.localConfig` to `services.crowdsec.settings`.")
+    ] "Please move options to `services.crowdsec.settings`.")
 
     (lib.mkChangedOptionModule
       [ "services" "crowdsec" "enrollKeyFile" ]
@@ -98,9 +98,9 @@ in
     readOnlyPaths = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = ''
-        Additional read-only paths of the host which the crowdsec service can access.
+        Additional read-only paths from the host which the crowdsec service can access.
 
-        Mostly relevant if you'd like to let `crowdsec` read additional log files.
+        The main usecase for this is to allow crowdsec to read additional log files.
       '';
       default = [ ];
       example = [
@@ -112,9 +112,9 @@ in
     extraGroups = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = ''
-        List of groups which the internal (dynamic-) user should be assigned to.
+        List of additional groups that are assigned to the crowdsec user.
 
-        Relevant if only some groups are able to read some logs.
+        The main usecase for this is to allow reading group readable log files.
       '';
       default = [ "systemd-journal" ];
       example = [
@@ -185,7 +185,7 @@ in
 
               Defaults are _mostly_ equal to the default linux config file: <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
 
-              See here for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
+              See the upstream documenation for possible values: <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#configuration-directives>.
             '';
             type = lib.types.submodule {
               freeformType = yaml.type;
@@ -217,11 +217,10 @@ in
                   simulation_path = lib.mkOption {
                     type = lib.types.path;
                     default = yaml.generate "simulation.yaml" cfg.settings.simulation;
-                    defaultText = "Path to the nixos generated file.";
+                    defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "simulation.yaml" config.services.crowdsec.settings.simulation'';
                     description = ''
-                      NOTE: This file is generated from `config.services.crowdsec.settings.simulation`.
-                      If you change this path then `config.services.crowdsec.settings.simulation` will be ignored so you have to
-                      write the content this file on your own.
+                      This file is generated from `config.services.crowdsec.settings.simulation`.
+                      If you change this option then `config.services.crowdsec.settings.simulation` will be ignored and you have to set relevant options on your own.
                     '';
                   };
 
@@ -259,7 +258,7 @@ in
                       name = "crowdsec-patterns";
                       paths = [
                         cfg.settings.patterns
-                        "${lib.attrsets.getOutput "out" cfg.package}/share/crowdsec/config/patterns/"
+                        "${cfg.package.out}/share/crowdsec/config/patterns/"
                       ];
                     };
                     defaultText = ''
@@ -296,6 +295,7 @@ in
                     type = lib.types.str;
                     default = "http://${cfg.settings.config.prometheus.listen_addr}:${toString cfg.settings.config.prometheus.listen_port}";
                     defaultText = "The prometheus address and port set in `services.crowdsec.settings.config.prometheus`.";
+                    example = "http://127.0.0.1:6060";
                     description = ''
                       (>1.0.7) An uri (without the trailing /metrics) that will be used by cscli metrics command, ie. http://127.0.0.1:6060/
 
@@ -328,7 +328,7 @@ in
                     description = "The path to the database file (only if the type of database is `sqlite`) or path to socket file (only if the type of database is `mysql|pgx`)";
                   };
                   type = lib.mkOption {
-                    type = lib.types.str;
+                    type = lib.types.enum [ "sqlite" "mysql" "pgx" ];
                     default = "sqlite";
                     description = "The database type";
                   };
@@ -339,20 +339,20 @@ in
                     type = secret_path;
                     default = "${config_paths.data_dir}/local_api_credentials.yaml";
                     defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/local_api_credentials.yaml";
-                    description = "Path to the credential files (contains API url + login/password).";
+                    description = "Path to the credential file that contains the API URL and login/password.";
                   };
 
                   server = {
                     enable = lib.mkOption {
                       type = lib.types.bool;
                       default = true;
-                      description = "Enable or disable the CrowdSec Local API (`true` by default).";
+                      description = "Whether to enable the CrowdSec Local API.";
                     };
 
                     listen_uri = lib.mkOption {
                       type = lib.types.nonEmptyStr;
                       default = "127.0.0.1:8080";
-                      description = "Address and port listen configuration, the form `host:port`.";
+                      description = "The address and port on which the API will listen on in the form of `host:port`.";
                     };
 
                     profiles_path = lib.mkOption {
@@ -390,19 +390,19 @@ in
                   enabled = lib.mkOption {
                     type = lib.types.bool;
                     default = true;
-                    description = "Enable or disable the CrowdSec prometheus exporter.";
+                    description = "Whether to enable the CrowdSec prometheus exporter.";
                   };
 
                   listen_addr = lib.mkOption {
                     type = lib.types.str;
                     default = "127.0.0.1";
-                    description = "Prometheus listen address.";
+                    description = "Prometheus exporter listen address.";
                   };
 
                   listen_port = lib.mkOption {
                     type = lib.types.port;
                     default = 6060;
-                    description = "Prometheus listen port.";
+                    description = "Prometheus exporter listen port.";
                   };
                 };
               };
@@ -667,9 +667,9 @@ in
                   description = ''
                     The Console Token file to use.
 
-                    Normally you'd have to do `cscli enroll <token>`. You can put this `<token>` in a file instead and pass a path to this file into this option.
+                    Normally you would do `cscli enroll <token>`, but you can put the token in a file instead and pass the path of that  file to this option.
 
-                    Available by clicking the "Enroll command" button at https://app.crowdsec.net/security-engines?distribution=linux
+                    The token is available by clicking the "Enroll command" button at <https://app.crowdsec.net/security-engines?distribution=linux>
                   '';
                   default = null;
                 };

@@ -19,10 +19,6 @@
           # for interactive with non-root users
           security.sudo-rs.enable = true;
 
-          # useful for debugging
-          environment.systemPackages = with pkgs; [
-            file
-          ];
 
           # to test auto completion for different shells
           programs = {
