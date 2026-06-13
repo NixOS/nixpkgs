@@ -7,7 +7,7 @@ The `pnpmBuildHook` in Nixpkgs overrides the default build phase for building pa
 :::{.example #ex-pnpm-build-hook}
 ## pnpmBuildHook example code snippet {#pnpm-build-hook-code-snippet}
 
-```
+```nix
 {
   lib,
   stdenv,
@@ -94,7 +94,7 @@ Controls the flags pass only to the pnpm build script invocation.
 
 Disables automatically running `pnpmBuildHook`. The build can still be run manually if needed, for example:
 
-```
+```nix
 {
   lib,
   rustPlatform,
@@ -123,9 +123,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherversion = 3;
+    fetcherversion = 4;
     hash = lib.fakeHash;
-  }
+  };
 
   dontPnpmBuild = true;
   postBuild = ''
