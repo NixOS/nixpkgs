@@ -158,7 +158,7 @@ rec {
 
           Package names are taken from `lib.getName`, which looks at the `pname` first and falls back to extracting the "pname" part from the `name` attribute.
 
-          See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-ignore-problems">Installing packages with problems</link> in the NixOS manual.
+          See [Installing packages with problems](https://nixos.org/manual/nixpkgs/stable/#sec-ignore-problems) in the NixOS manual.
         '';
       };
 

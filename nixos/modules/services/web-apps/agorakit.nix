@@ -272,15 +272,15 @@ in
         Agorakit configuration options to set in the
         <filename>.env</filename> file.
 
-        Refer to <link xlink:href="https://github.com/agorakit/agorakit"/>
+        Refer to <https://github.com/agorakit/agorakit>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
         this: in the resulting <filename>.env</filename> file, the
-        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
+        `OIDC_CLIENT_SECRET` key will be set to the
         contents of the <filename>/run/keys/oidc_secret</filename>
         file.
       '';
