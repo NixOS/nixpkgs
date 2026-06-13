@@ -705,7 +705,7 @@ with pkgs;
 
   fetchFromGitea = callPackage ../build-support/fetchgitea { };
 
-  fetchFromForgejo = fetchFromGitea;
+  fetchFromForgejo = callPackage ../build-support/fetchforgejo { };
 
   fetchFromCodeberg = callPackage ../build-support/fetchcodeberg { };
 
