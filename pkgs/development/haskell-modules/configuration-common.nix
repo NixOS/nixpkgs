@@ -2492,6 +2492,10 @@ with haskellLib;
   hs-opentelemetry-instrumentation-yesod = doJailbreak super.hs-opentelemetry-instrumentation-yesod;
   hs-opentelemetry-utils-exceptions = doJailbreak super.hs-opentelemetry-utils-exceptions;
 
+  # Too strict bounds on hedgehog
+  # https://github.com/fused-effects/fused-effects/issues/473
+  fused-effects = doJailbreak super.fused-effects;
+
   html-charset = dontCheck super.html-charset;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
