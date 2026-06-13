@@ -28,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   installFlags = [
     "PREFIX=${placeholder "out"}"
     "SYSCONFDIR=${placeholder "out"}/share"
