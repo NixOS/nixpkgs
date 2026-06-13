@@ -75,7 +75,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DSC_WII=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
     (lib.cmakeBool "SC_USE_QTWEBENGINE" useQtWebEngine)
   ];
