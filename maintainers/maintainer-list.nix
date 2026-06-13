@@ -20665,12 +20665,6 @@
     matrix = "@olduser101:matrix.org";
     name = "Nathan Gill";
   };
-  olebedev = {
-    email = "ole6edev@gmail.com";
-    github = "olebedev";
-    githubId = 848535;
-    name = "Oleg Lebedev";
-  };
   oleina = {
     email = "antholeinik@gmail.com";
     github = "antholeole";
