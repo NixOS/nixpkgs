@@ -27,7 +27,7 @@
     on-unmatched = "debug";
 
     formatter = {
-
+      # keep-sorted start block=yes newline_separated=yes
       actionlint = {
         command = lib.getExe pkgs.actionlint;
         includes = [
@@ -66,34 +66,36 @@
         ];
       };
 
+      editorconfig-checker = {
+        command = lib.getExe pkgs.editorconfig-checker;
+        options = [
+          "-disable-indent-size"
+          # TODO: Remove this once this upstream issue is fixed:
+          #   https://github.com/editorconfig-checker/editorconfig-checker/issues/505
+          "-disable-charset"
+        ];
+        includes = [ "*" ];
+        priority = 1;
+      };
+
       keep-sorted = {
         command = lib.getExe pkgs.keep-sorted;
         includes = [ "*" ];
       };
 
-      # This uses nixfmt underneath, the default formatter for Nix code.
-      # See https://github.com/NixOS/nixfmt
-      nixfmt = {
-        command = lib.getExe pkgs.nixfmt;
-        includes = [ "*.nix" ];
-      };
-
-      yamlfmt = {
-        command = lib.getExe pkgs.yamlfmt;
-        excludes = [
-          # Aligns comments with whitespace
-          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
-          # TODO: Fix formatting for auto-generated file
-          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
-        ];
-        includes = [
-          "*.yaml"
-          "*.yml"
-        ];
-        options = [
-          "-formatter"
-          "retain_line_breaks=true"
-        ];
+      markdown-code-runner = {
+        command = lib.getExe pkgs.markdown-code-runner;
+        options =
+          let
+            config = pkgs.writers.writeTOML "markdown-code-runner-config" {
+              presets.nixfmt = {
+                language = "nix";
+                command = [ (lib.getExe pkgs.nixfmt) ];
+              };
+            };
+          in
+          [ "--config=${config}" ];
+        includes = [ "*.md" ];
       };
 
       nixf-diagnose = {
@@ -130,31 +132,29 @@
         priority = -1;
       };
 
-      editorconfig-checker = {
-        command = lib.getExe pkgs.editorconfig-checker;
-        options = [
-          "-disable-indent-size"
-          # TODO: Remove this once this upstream issue is fixed:
-          #   https://github.com/editorconfig-checker/editorconfig-checker/issues/505
-          "-disable-charset"
-        ];
-        includes = [ "*" ];
-        priority = 1;
+      # This uses nixfmt underneath, the default formatter for Nix code.
+      # See https://github.com/NixOS/nixfmt
+      nixfmt = {
+        command = lib.getExe pkgs.nixfmt;
+        includes = [ "*.nix" ];
       };
 
-      markdown-code-runner = {
-        command = lib.getExe pkgs.markdown-code-runner;
-        options =
-          let
-            config = pkgs.writers.writeTOML "markdown-code-runner-config" {
-              presets.nixfmt = {
-                language = "nix";
-                command = [ (lib.getExe pkgs.nixfmt) ];
-              };
-            };
-          in
-          [ "--config=${config}" ];
-        includes = [ "*.md" ];
+      yamlfmt = {
+        command = lib.getExe pkgs.yamlfmt;
+        excludes = [
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
+        includes = [
+          "*.yaml"
+          "*.yml"
+        ];
+        options = [
+          "-formatter"
+          "retain_line_breaks=true"
+        ];
       };
 
       zizmor = {
@@ -166,6 +166,7 @@
           ".github/actions/**/*.yaml"
         ];
       };
+      # keep-sorted end
     };
   };
 }
