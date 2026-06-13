@@ -6,7 +6,7 @@ This is in contrast with [`maintainers/scripts`](../maintainers/scripts) which i
 ## Pinned Nixpkgs
 
 CI may need certain packages from Nixpkgs.
-In order to ensure that the needed packages are generally available without building, [`pinned.json`](./pinned.json) contains a pinned Nixpkgs version tested by Hydra.
+In order to ensure that the needed packages are generally available without building, [`ci`'s flake](./flake.nix) provides a pinned Nixpkgs version tested by Hydra.
 
 Run [`update-pinned.sh`](./update-pinned.sh) to update it.
 
