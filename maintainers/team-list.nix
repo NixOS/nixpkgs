@@ -68,7 +68,6 @@ with lib.maintainers;
 
   bazel = {
     members = [
-      mboes
       cbley
       olebedev
       groodt
