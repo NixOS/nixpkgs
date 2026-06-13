@@ -70,7 +70,6 @@ with lib.maintainers;
     members = [
       cbley
       groodt
-      aherrmann
       boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
