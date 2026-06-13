@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.26";
+  version = "1.0.61";
 
   # GitHub provide platform-specific SEA binaries as well as a "universal"
   # package.  Use the universal package as it gives us a bit more flexibility
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   # about how paths should be set up which don't reliably hold when using Nix.
   src = fetchurl {
     url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-zNO0clQRfgw6CX9K8NaJXsoOhhNjBfK7KAr0AoL7Oqo=";
+    hash = "sha256-8Lks8lHa5XF9ZrC+fU/9VlzD1W32MbRZ7PZtL5YWLTA=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     "libpng16.so.16"
     "libpipewire-0.3.so.0"
     "libei.so.1"
+    "libc.musl-*.so.1"
   ];
 
   installPhase = ''
