@@ -36,6 +36,20 @@
   pyobjc-core,
 }:
 
+let
+  # Replacement for missing pyside6-essentials tools,
+  # workaround for https://github.com/NixOS/nixpkgs/issues/277849.
+  # Ideally this would be solved in pyside6 itself but I spent four
+  # hours trying to untangle its build system before giving up. If
+  # anyone wants to spend the time fixing it feel free to request
+  # me (@Pandapip1) as a reviewer.
+  pyside-tools-rcc = buildPackages.writeShellScriptBin "pyside6-rcc" ''
+    exec ${buildPackages.qt6.qtbase}/libexec/rcc -g python "$@"
+  '';
+  pyside-tools-uic = buildPackages.writeShellScriptBin "pyside6-uic" ''
+    exec ${buildPackages.qt6.qtbase}/libexec/uic -g python "$@"
+  '';
+in
 buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
@@ -50,9 +64,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1NpZmUDq806geKANqswPYglHwInxum/c/Hxq7JhTpbc=";
   };
 
-  # pythonRelaxDeps seemingly doesn't work here
   postPatch = ''
+    # pythonRelaxDeps doesn't work for build-system dependencies
     sed -i 's/,<77//g' pyproject.toml
+
+    substituteInPlace plover_build_utils/setup.py \
+      --replace-fail "pyside6-rcc" ${lib.getExe pyside-tools-rcc} \
+      --replace-fail "pyside6-uic" ${lib.getExe pyside-tools-uic}
   '';
 
   pythonRelaxDeps = [
@@ -69,19 +87,6 @@ buildPythonPackage (finalAttrs: {
     setuptools
     pyside6
     wheel
-
-    # Replacement for missing pyside6-essentials tools,
-    # workaround for https://github.com/NixOS/nixpkgs/issues/277849.
-    # Ideally this would be solved in pyside6 itself but I spent four
-    # hours trying to untangle its build system before giving up. If
-    # anyone wants to spend the time fixing it feel free to request
-    # me (@Pandapip1) as a reviewer.
-    (buildPackages.writeShellScriptBin "pyside6-uic" ''
-      exec ${qtbase}/libexec/uic -g python "$@"
-    '')
-    (buildPackages.writeShellScriptBin "pyside6-rcc" ''
-      exec ${qtbase}/libexec/rcc -g python "$@"
-    '')
   ];
   dependencies = [
     appdirs
