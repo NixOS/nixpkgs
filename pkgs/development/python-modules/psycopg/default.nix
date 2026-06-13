@@ -174,9 +174,7 @@ buildPythonPackage (finalAttrs: {
     psycopg-c
     psycopg-pool
     pytestCheckHook
-    postgresql
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook;
+  ];
 
   env = {
     # Introduce this file necessary for the docs build via environment var
@@ -184,16 +182,10 @@ buildPythonPackage (finalAttrs: {
       url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
       hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
     };
-    postgresqlEnableTCP = 1;
-    PGUSER = "psycopg";
-    PGDATABASE = "psycopg";
   };
 
   preCheck = ''
     cd ..
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
   disabledTests = [
@@ -235,6 +227,24 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     c = psycopg-c;
     pool = psycopg-pool;
+    tests = {
+      self = finalAttrs.finalPackage.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs stdenv.hostPlatform.isLinux {
+          nativeInstallCheckInputs = oldAttrs.nativeInstallCheckInputs ++ [
+            postgresql
+            postgresqlTestHook
+          ];
+
+          env = oldAttrs.env // {
+            postgresqlEnableTCP = 1;
+            PGUSER = "psycopg";
+            PGDATABASE = "psycopg";
+            PSYCOPG_TEST_DSN = "host=/build/run/postgresql user=psycopg";
+          };
+        }
+      );
+    };
   };
 
   meta = baseMeta // {
