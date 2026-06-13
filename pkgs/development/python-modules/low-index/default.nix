@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "low-index";
-  version = "1.2.1";
+  version = "1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "low_index";
     tag = "v${version}_as_released";
-    hash = "sha256-T8hzC9ulikQ1pUdbXgjuKAX5oMJEycPvXWv74rCkQGY=";
+    hash = "sha256-m3p05bqu70pMOsb9drW1B6+N893eBSZBFTNNS23OY6w=";
   };
 
   build-system = [ setuptools ];
