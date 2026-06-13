@@ -14,21 +14,24 @@
   sigtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "krunvm";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "krunvm";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-peOaPivQKOwioh5skPNFiA3ptHv9pSsnjpy43cms8O8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-MRcQ0Vnd3PJqE2q981JpXPjwMUKT4t+RcOvzWptK7PQ=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -77,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = libkrun.meta.platforms;
     mainProgram = "krunvm";
   };
-}
+})
