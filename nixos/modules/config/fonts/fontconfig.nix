@@ -135,7 +135,7 @@ let
         key: fonts:
         lib.optionalString ((builtins.length fonts) > 0) ''
           <${key}>
-          ${lib.concatStringsSep "" (map (font: "<family>${font}</family>") fonts)}
+          ${lib.concatMapStrings (font: "<family>${font}</family>") fonts}
           </${key}>
         '';
 
