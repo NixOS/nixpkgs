@@ -5,12 +5,12 @@
 }:
 buildDartApplication (finalAttrs: {
   pname = "melos";
-  version = "7.8.1";
+  version = "7.8.2";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
     tag = "melos-v${finalAttrs.version}";
-    hash = "sha256-ApD4F0JljoRKNnRVXZq4c2VFr8ewN1Bf0iKyeC/RF0Q=";
+    hash = "sha256-5HLd0NUaRd0zl8WtTOGX4nHXwzCOOvCQcUW8GmmBqEw=";
   };
 
   patches = [
