@@ -194,7 +194,7 @@ For an upgrade, a script like this can be used to simplify the process:
         # XXX specify the postgresql package you'd like to upgrade to.
         # Do not forget to list the extensions you need.
         newPostgres = pkgs.postgresql_15.withPackages (pp: [
-          # pp.plv8
+          # pp.pl_cron
         ]);
         cfg = config.services.postgresql;
       in
