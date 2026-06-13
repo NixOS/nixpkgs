@@ -16,6 +16,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "NomadNet";
