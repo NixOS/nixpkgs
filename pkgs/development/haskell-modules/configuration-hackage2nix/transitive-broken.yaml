@@ -136,6 +136,8 @@ dont-distribute-packages:
  - ast-monad-json
  - astview
  - async-ajax
+ - atelier-db
+ - atelier-testing
  - aterm-utils
  - atlassian-connect-core
  - atmos-dimensional-tf
@@ -189,6 +191,8 @@ dont-distribute-packages:
  - babylon
  - backblaze-b2-hs
  - backdropper
+ - baikai-claude
+ - baikai-openai
  - balkon
  - ballast
  - bamboo
@@ -644,6 +648,7 @@ dont-distribute-packages:
  - dahdit-network
  - dahdit-test
  - daino
+ - danecheck
  - Dangerous
  - dapi
  - darcs-benchmark
@@ -672,7 +677,6 @@ dont-distribute-packages:
  - dataframe-lazy
  - dataframe-parquet
  - dataframe-parquet-th
- - dataframe-persistent
  - datasets
  - date-conversions
  - dbjava
@@ -771,6 +775,7 @@ dont-distribute-packages:
  - DMuCheck
  - DnaProteinAlignment
  - dnf-repo
+ - dnsbase
  - dobutokO-poetry
  - dobutokO-poetry-general
  - dobutokO-poetry-general-languages
@@ -1965,7 +1970,6 @@ dont-distribute-packages:
  - kif-parser
  - kind-integer
  - kind-rational
- - kiroku-otel
  - kit
  - kmeans-par
  - kmeans-vector
@@ -2248,6 +2252,7 @@ dont-distribute-packages:
  - minirotate
  - mismi-kernel
  - mismi-s3-core
+ - miso-css
  - miss
  - miss-porcelain
  - missing-py2
@@ -2448,6 +2453,7 @@ dont-distribute-packages:
  - nonlinear-optimization-ad
  - nonlinear-optimization-backprop
  - NoSlow
+ - nostr
  - not-gloss
  - not-gloss-examples
  - notmuch-web
@@ -2658,6 +2664,8 @@ dont-distribute-packages:
  - pms-application-service
  - pms-domain-service
  - pms-infra-agent-process
+ - pms-infra-agent-serial
+ - pms-infra-agent-socket
  - pms-infra-cmdrun
  - pms-infra-filesystem
  - pms-infra-procspawn
@@ -3522,6 +3530,7 @@ dont-distribute-packages:
  - toxcore-c
  - toysolver
  - tpb
+ - tpdb
  - trace-embrace
  - tracing-control
  - trajectory
