@@ -177,6 +177,9 @@ buildFHSEnv {
     # These environment variables sometimes silently cause plex to crash.
     unset QT_QPA_PLATFORM QT_STYLE_OVERRIDE
 
+    # Use EGL for Qt's XCB GL integration so libmpv can use direct VAAPI
+    export QT_XCB_GL_INTEGRATION=xcb_egl
+
     set -o allexport
     ${lib.toShellVars extraEnv}
     exec ${plex-desktop}/Plex.sh
