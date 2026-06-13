@@ -175,5 +175,8 @@ in
     ) enabledInstances;
   };
 
-  meta.maintainers = with lib.maintainers; [ zaldnoay ];
+  meta.maintainers = with lib.maintainers; [
+    zaldnoay
+    epireyn
+  ];
 }

@@ -13,7 +13,10 @@ let
 in
 {
   name = "frp";
-  meta.maintainers = with lib.maintainers; [ zaldnoay ];
+  meta.maintainers = with lib.maintainers; [
+    zaldnoay
+    epireyn
+  ];
   nodes = {
     frps = {
       networking = {
