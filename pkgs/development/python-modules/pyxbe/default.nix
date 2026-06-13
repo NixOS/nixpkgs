@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyxbe";
   version = "1.0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyxbe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MtkY4vwPvlYoS4ws8MzIFR8D6ORVqFXA0JvOEspzmtQ=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
