@@ -390,6 +390,25 @@ in
       '';
     };
 
+    redis.createLocally = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable and set up a Redis database for NetBox locally.
+      '';
+    };
+
+    postgresql.createLocally = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable and set up PostgreSQL locally.
+
+        This will automatically created a database and a local user, that can
+        authenticate over  Unix domain sockets with `SO_PEERCRED`.
+      '';
+    };
+
     package = lib.mkOption {
       type = types.package;
       default =
@@ -521,9 +540,9 @@ in
   config = lib.mkIf cfg.enable {
     services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
 
-    services.redis.servers.netbox.enable = true;
+    services.redis.servers.netbox.enable = cfg.redis.createLocally;
 
-    services.postgresql = {
+    services.postgresql = lib.mkIf cfg.postgresql.createLocally {
       enable = true;
       ensureDatabases = [ "netbox" ];
       ensureUsers = [
