@@ -15,10 +15,13 @@
   quack-kernels,
   torch,
   torch-c-dlpack-ext,
+
+  # passthru
+  nix-update-script,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "flash-attn-4";
-  version = "4.0.0.beta15";
+  version = "4.0.0.beta17";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Dao-AILab";
     repo = "flash-attention";
     tag = "fa4-v${finalAttrs.version}";
-    hash = "sha256-k6158mEJocKIRS4MQIM+Ih4VMHnXCKJGcykZFi91J2w=";
+    hash = "sha256-DL3qe3sPU/GY/iyPibVXli/lw4U/Ul04XIv0NEQk9ns=";
   };
 
   # FA4 is a separate distribution shipped under flash_attn/cute/ with its own pyproject.toml.
@@ -54,6 +57,13 @@ buildPythonPackage (finalAttrs: {
 
   # No tests
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=fa4-v(.*)"
+      "--version=unstable"
+    ];
+  };
 
   meta = {
     description = "CuTeDSL-based implementation of FlashAttention for Hopper and Blackwell GPUs";

@@ -26,9 +26,9 @@ let
     url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.7/android-studio-quail1-rc2-linux.tar.gz";
   };
   latestVersion = {
-    version = "2026.1.2.4"; # "Android Studio Quail 2 | 2026.1.2 Canary 4"
-    sha256Hash = "sha256-fnJYHZPy9bOZJ2leG2+Mr5JGH5HMc2HeMeYGHBUxJXo=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.2.4/android-studio-quail2-canary4-linux.tar.gz";
+    version = "2026.1.2.7"; # "Android Studio Quail 2 | 2026.1.2 Canary 7"
+    sha256Hash = "sha256-LHszfAtM5ZLNbTZG0isb+aUW3uwp+zav/igHT4HDeEM=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.2.7/android-studio-quail2-canary7-linux.tar.gz";
   };
 in
 {

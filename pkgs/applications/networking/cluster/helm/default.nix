@@ -72,15 +72,15 @@ buildGoModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/dependency_build_test.go \
+    substituteInPlace pkg/cmd/dependency_build_test.go \
       --replace-fail "TestDependencyBuildCmd" "SkipDependencyBuildCmd"
-    substituteInPlace cmd/helm/dependency_update_test.go \
+    substituteInPlace pkg/cmd/dependency_update_test.go \
       --replace-fail "TestDependencyUpdateCmd" "SkipDependencyUpdateCmd"
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/install_test.go \
+    substituteInPlace pkg/cmd/install_test.go \
       --replace-fail "TestInstall" "SkipInstall"
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/pull_test.go \
+    substituteInPlace pkg/cmd/pull_test.go \
       --replace-fail "TestPullCmd" "SkipPullCmd" \
       --replace-fail "TestPullWithCredentialsCmd" "SkipPullWithCredentialsCmd"
   '';

@@ -244,7 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariantMitDisclaimerXserver # 1780-1793
     ];
     mainProgram = "X";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     pkgConfigModules = [ "xorg-server" ];
     platforms = lib.platforms.unix;
   };

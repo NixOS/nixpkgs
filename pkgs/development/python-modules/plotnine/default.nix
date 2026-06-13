@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plotnine";
-  version = "0.15.5";
+  version = "0.15.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "has2k1";
     repo = "plotnine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o2yCZeYMIKpmJ7ekH4dCFZXnxyw7uN5rhXYehCNOOWI=";
+    hash = "sha256-5/1LV5MvqXZZiXxp1HnUb665kaRPfaiLH750iovoH4g=";
   };
 
   build-system = [ setuptools-scm ];

@@ -25,6 +25,8 @@
   wlroots_0_20,
   libxcb-wm,
   xwayland,
+
+  enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  mesonFlags = [ (lib.mesonEnable "xwayland" true) ];
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" true)
+    (lib.mesonEnable "systemd-session" enableSystemd)
+  ];
 
   strictDeps = true;
 

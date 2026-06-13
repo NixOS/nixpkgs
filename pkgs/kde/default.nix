@@ -20,8 +20,8 @@ let
       plasma = import ./plasma { inherit (self) callPackage; };
 
       sets = [
-        "gear"
         "frameworks"
+        "gear"
         "plasma"
       ];
 
@@ -81,7 +81,6 @@ let
         kup = self.callPackage ./misc/kup { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };
-        oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
         plasma-pass = self.callPackage ./misc/plasma-pass { };

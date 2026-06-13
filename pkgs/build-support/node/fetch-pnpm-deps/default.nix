@@ -52,19 +52,7 @@ in
       pnpm-fixup-state-db' =
         if pnpm.nodejs-slim or null != null then
           pnpm-fixup-state-db.override {
-            # FIXME: make npm-config-hook accept nodejs-slim
-            nodejs =
-              let
-                inherit (pnpm) nodejs-slim;
-              in
-              if nodejs-slim ? paths && builtins.isList nodejs-slim.paths then
-                # If nodejs-slim has a list `paths` attribute, it's likely a simlinkJoin
-                nodejs-slim
-              else
-                # Otherwise we need to recreate one by overriding the default one
-                pnpm-fixup-state-db.nodejs.override {
-                  inherit nodejs-slim;
-                };
+            inherit (pnpm) nodejs-slim;
           }
         else
           pnpm-fixup-state-db;

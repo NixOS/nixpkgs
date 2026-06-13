@@ -5103,12 +5103,6 @@
     githubId = 68112;
     name = "Simon";
   };
-  cirno-999 = {
-    email = "reverene@protonmail.com";
-    github = "cirno-999";
-    githubId = 73712874;
-    name = "cirno-999";
-  };
   citadelcore = {
     email = "alex@arctarus.co.uk";
     github = "RealityAnomaly";
@@ -11905,12 +11899,6 @@
     name = "Ivan Timokhin";
     github = "ivan-timokhin";
     githubId = 9802104;
-  };
-  ivan-tkatchev = {
-    email = "tkatchev@gmail.com";
-    github = "ivan-tkatchev";
-    githubId = 650601;
-    name = "Ivan Tkatchev";
   };
   ivan770 = {
     email = "ivan@ivan770.me";

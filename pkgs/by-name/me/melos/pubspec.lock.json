@@ -4,21 +4,21 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "563c6992eaeda8625f45b87f6a6a0c547df16565d1c93d8271c7c11057710ca7",
+        "sha256": "1b0e6a07425a3e460666e88bf1c949ccc7bb0116ad562ce94a1eca60fe820725",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "101.0.0"
+      "version": "103.0.0"
     },
     "analyzer": {
       "dependency": "transitive",
       "description": {
         "name": "analyzer",
-        "sha256": "aa6a9365901532864cae51208f2a6bb18dd01972ebead19c431efc848f60080b",
+        "sha256": "61c04d0c1bfed555c681ea079519933f071a5a026578ff73c4ff0df2d3462e5e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "13.1.0"
+      "version": "13.3.0"
     },
     "ansi_styles": {
       "dependency": "transitive",
@@ -134,11 +134,11 @@
       "dependency": "transitive",
       "description": {
         "name": "cli_util",
-        "sha256": "ff6785f7e9e3c38ac98b2fb035701789de90154024a75b6cb926445e83197d1c",
+        "sha256": "5909d2c6b66817222779e1eedc19e0e28b76d1df7bd9856a4792ccb9881df358",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.4.2"
+      "version": "0.5.1"
     },
     "code_builder": {
       "dependency": "transitive",
@@ -199,6 +199,16 @@
       },
       "source": "hosted",
       "version": "3.1.9"
+    },
+    "ffi": {
+      "dependency": "transitive",
+      "description": {
+        "name": "ffi",
+        "sha256": "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.0"
     },
     "file": {
       "dependency": "transitive",
