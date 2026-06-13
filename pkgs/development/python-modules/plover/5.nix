@@ -53,10 +53,16 @@ buildPythonPackage (finalAttrs: {
   # pythonRelaxDeps seemingly doesn't work here
   postPatch = ''
     sed -i 's/,<77//g' pyproject.toml
-    sed -i /PySide6-Essentials/d pyproject.toml
   '';
 
-  pythonRelaxDeps = [ "xkbcommon" ];
+  pythonRelaxDeps = [
+    "xkbcommon"
+  ];
+
+  pythonRemoveDeps = [
+    # We currently don't have it in Nixpkgs.
+    "PySide6-Essentials"
+  ];
 
   build-system = [
     babel
