@@ -29312,6 +29312,12 @@
     githubId = 83523507;
     name = "voidnoi";
   };
+  voidwalter = {
+    email = "voidwalter@tutamail.com";
+    github = "voidwalter";
+    githubId = 208814854;
+    name = "Walter";
+  };
   vojta001 = {
     email = "vojtech.kane@gmail.com";
     github = "vojta001";
