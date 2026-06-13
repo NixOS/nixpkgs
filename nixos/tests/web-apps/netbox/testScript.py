@@ -66,7 +66,7 @@ with subtest("Home screen loads"):
     )
 
 with subtest("Staticfiles are generated"):
-    machine.succeed("test -e /var/lib/netbox/static/netbox.js")
+    machine.wait_for_file("/var/lib/netbox/static/netbox.js")
 
 with subtest("Superuser can be created"):
     machine.succeed(
