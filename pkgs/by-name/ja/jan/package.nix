@@ -35,7 +35,7 @@ let
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
     mainProgram = "Jan";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
     platforms =
       lib.platforms.darwin
       ++ (with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64);
