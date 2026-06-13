@@ -69,5 +69,6 @@ mkJetBrainsProduct {
     ];
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+    platforms = [ "x86_64-linux" ]; # see source.nix - also some deps only support x86_64-linux anyway right now
   };
 }

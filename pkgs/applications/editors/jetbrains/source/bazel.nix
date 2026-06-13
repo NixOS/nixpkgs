@@ -51,6 +51,8 @@ in
       # Currently not available through top-level - is potentially pending to be rolled back into `buildBazelPackage`.
       package = callPackage ../../../../by-name/ba/bazel_8/build-support/bazelPackage.nix { };
       derivation = callPackage ../../../../by-name/ba/bazel_8/build-support/bazelDerivation.nix { };
+      addFilePatch =
+        (callPackage ../../../../by-name/ba/bazel_8/build-support/patching.nix { }).addFilePatch;
     };
   }
 )

@@ -32,6 +32,7 @@
   nativeBuildInputs ? [ ],
   autoPatchelfIgnoreMissingDeps ? null,
   autoPatchelfVendorDirs ? [ ],
+  passthru ? { },
 }:
 let
   # FOD produced by `bazel fetch`
@@ -166,6 +167,10 @@ let
     commandArgs = commandArgs ++ [ "--vendor_dir=vendor_dir" ];
     inherit installPhase;
     command = "build";
+
+    passthru = passthru // {
+      inherit bazelRepoCache;
+    };
   };
 in
-package // { passthru = { inherit bazelRepoCache; }; }
+package
