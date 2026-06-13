@@ -26,7 +26,6 @@
   libavif,
   libheif,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
   version = "1.2.2";
@@ -111,6 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "nocturne";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
