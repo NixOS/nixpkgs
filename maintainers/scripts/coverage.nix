@@ -8,6 +8,7 @@
 {
   package ? null,
   maintainer ? null,
+  team ? null,
   predicate ? null,
   get-script ? pkg: pkg.updateScript or null,
   path ? null,
@@ -28,6 +29,8 @@ let
     )
     // {
       config.allowAliases = false;
+      # allow maintainers to run this script on multiple platforms
+      config.allowUnsupportedSystem = true;
     }
   );
 
@@ -136,6 +139,31 @@ let
       )
     );
 
+    # Recursively find all packages in `pkgs` with updateScript by given team.
+  packagesWithUpdateScriptAndTeam =
+    team':
+    let
+      team =
+        if !builtins.hasAttr team' lib.teams then
+          throw "Team with name `${team'} does not exist in `maintainers/team-list.nix`."
+        else
+          builtins.getAttr team' lib.teams;
+    in
+    packagesWithUpdateScriptMatchingPredicate (
+      path: pkg:
+      (
+        if builtins.hasAttr "teams" pkg.meta then
+          (
+            if builtins.isList pkg.meta.teams then
+              builtins.elem team pkg.meta.teams
+            else
+              team == pkg.meta.teams
+          )
+        else
+          false
+      )
+    );
+
   # Recursively find all packages under `path` in `pkgs` with updateScript.
   packagesWithUpdateScript =
     path: pkgs:
@@ -170,6 +198,8 @@ let
       packagesWithUpdateScriptMatchingPredicate predicate pkgs
     else if maintainer != null then
       packagesWithUpdateScriptAndMaintainer maintainer pkgs
+    else if team != null then
+      packagesWithUpdateScriptAndTeam team pkgs
     else if path != null then
       packagesWithUpdateScript path pkgs
     else
@@ -222,11 +252,12 @@ let
       name = package.name;
       pname = lib.getName package;
       version = lib.getVersion package;
+      outputs = package.outputs;
       strictDeps = package.strictDeps;
       __structuredAttrs = package.__structuredAttrs;
       # https://github.com/NixOS/nixpkgs/issues/325892
       srihash = !(lib.hasInfix ":" package.src.hash);
-      ${if package.src ? gitRepoUrl then "gittag" else null} = package.src.tag != null;
+      ${if package.src ? gitRepoUrl && package.src.gitRepoUrl ? tag then "gittag" else null} = package.src.tag != null;
 
       # ${ if ? then } syntax over // optionalAttrs for perf benefits
       # see https://github.com/NixOS/nixpkgs/pull/506793
@@ -241,8 +272,9 @@ let
 
         ## node/npm
         # https://github.com/NixOS/nixpkgs/issues/529285
-        ${if package ? pnpmDeps then "pnpm" else null} =
+        ${if package ? pnpmDeps && package.pnpmDeps ? version then "pnpm" else null} =
           package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
+        ${if package ? pnpmDeps then "pnpmfetcher" else null} = package.pnpmDeps.fetcherVersion;
         # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
         ${
           if package ? postPatch && lib.hasInfix "package-lock.json" package.postPatch then
