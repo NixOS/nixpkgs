@@ -51,10 +51,10 @@ let
 
   enableLDAP = cfg.ldapConfigFile != null;
 
-  pkg =
-    (cfg.package.overrideAttrs (old: {
+  finalPackage =
+    (cfg.package.overrideAttrs (prev: {
       installPhase =
-        old.installPhase
+        prev.installPhase
         + ''
           ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
         ''
@@ -73,15 +73,17 @@ let
         . "${envFile}"
       '') cfg.environmentFiles}
       set +a
-      export PYTHONPATH=${pkg.pythonPath}
+      export PYTHONPATH=${finalPackage.pythonPath}
       case "$(whoami)" in
         "root")
-          ${lib.getExe' pkgs.util-linux "runuser"} ${lib.cli.toCommandLineShellGNU { } {
-            preserve-environment = true;
-            user = "netbox";
-          }} -- ${pkg}/bin/netbox "$@";;
+          ${lib.getExe' pkgs.util-linux "runuser"} ${
+            lib.cli.toCommandLineShellGNU { } {
+              preserve-environment = true;
+              user = "netbox";
+            }
+          } -- ${finalPackage}/bin/netbox "$@";;
         "netbox")
-          exec ${pkg}/bin/netbox "$@";;
+          exec ${finalPackage}/bin/netbox "$@";;
         *)
           echo "This must be run by either the root or the 'netbox' user." >&2
           exit 1
@@ -118,6 +120,9 @@ in
       [ "services" "netbox" "ldapConfigPath" ]
       [ "services" "netbox" "ldapConfigFile" ]
     )
+    (mkRemovedOptionModule [ "services" "nginx" "gunicornArgs" ] ''
+      Removed in favor of `services.netbox.gunicorn.extraArgs`, an attribute set passed to `lib.cli.toCommandLineGNU`.
+    '')
   ];
 
   options.services.netbox = {
@@ -372,14 +377,19 @@ in
       '';
     };
 
-    gunicornArgs = lib.mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = "extra args for gunicorn when serving netbox";
-      example = [
-        "--workers"
-        "9"
-      ];
+    gunicorn.extraArgs = lib.mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      description = ''
+        Extra arguments passed the Gunicorn process that runs NetBox.
+
+        See <https://gunicorn.org/reference/settings/> for possible flags.
+      '';
+      example = lib.literalExpression ''
+        {
+          workers = 9;
+        ];
+      '';
     };
 
     package = lib.mkOption {
@@ -540,6 +550,10 @@ in
 
     systemd.services =
       let
+        defaultUnitConfig = {
+          documentation = [ "https://netboxlabs.com/docs/netbox/" ];
+          environment.PYTHONPATH = finalPackage.pythonPath;
+        };
         defaultServiceConfig = {
           WorkingDirectory = "${cfg.dataDir}";
           User = "netbox";
@@ -552,29 +566,26 @@ in
         };
       in
       {
-        netbox = {
+        netbox = defaultUnitConfig // {
           description = "NetBox WSGI Service";
-          documentation = [ "https://docs.netbox.dev/" ];
 
           wantedBy = [ "netbox.target" ];
 
           after = [ "network-online.target" ];
           wants = [ "network-online.target" ];
 
-          environment.PYTHONPATH = pkg.pythonPath;
-
           preStart = ''
             # Generate random default secrets, if the user didn't supply any.
             ${optionalString (cfg.secretKeyFile == null) ''
               if [ ! -e "${secretKeyFile}" ]; then
-                ${pkg}/opt/netbox/netbox/generate_secret_key.py > "${secretKeyFile}"
+                ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${secretKeyFile}"
               fi
             ''}
             ${optionalString
               (any (path: path == "${cfg.dataDir}/pepper.1") (attrValues cfg.apiTokenPepperFiles))
               ''
                 if [ ! -e "${cfg.dataDir}/pepper.1" ]; then
-                  ${pkg}/opt/netbox/netbox/generate_secret_key.py > "${cfg.dataDir}/pepper.1"
+                  ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${cfg.dataDir}/pepper.1"
                 fi
               ''
             }
@@ -587,55 +598,56 @@ in
               exit 0
             fi
 
-            ${pkg}/bin/netbox migrate
-            ${pkg}/bin/netbox trace_paths --no-input
-            ${pkg}/bin/netbox collectstatic --clear --no-input
-            ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-            ${pkg}/bin/netbox reindex --lazy
-            ${pkg}/bin/netbox clearsessions
-            ${lib.optionalString
-              # The clearcache command was removed in 3.7.0:
-              # https://github.com/netbox-community/netbox/issues/14458
-              (lib.versionOlder cfg.package.version "3.7.0")
-              "${pkg}/bin/netbox clearcache"
-            }
+            ${lib.getExe finalPackage} migrate
+            ${lib.getExe finalPackage} trace_paths --no-input
+            ${lib.getExe finalPackage} collectstatic --clear --no-input
+            ${lib.getExe finalPackage} remove_stale_contenttypes --no-input
+            ${lib.getExe finalPackage} reindex --lazy
+            ${lib.getExe finalPackage} clearsessions
 
             ln -sfn "${cfg.package}" "$versionFile"
           '';
 
           serviceConfig = defaultServiceConfig // {
-            ExecStart = ''
-              ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
-                --bind ${cfg.bind} \
-                --pythonpath ${pkg}/opt/netbox/netbox \
-                ${lib.concatStringsSep " " cfg.gunicornArgs}
-            '';
+            ExecStart = toString (
+              [
+                (lib.getExe finalPackage.gunicorn)
+                "netbox.wsgi"
+              ]
+              ++ lib.cli.toCommandLineGNU { } (
+                {
+                  inherit (cfg) bind;
+                  pythonpath = "${finalPackage}/opt/netbox/netbox";
+                }
+                // cfg.gunicorn.extraArgs
+              )
+            );
             PrivateTmp = true;
             RuntimeDirectory = "netbox";
             TimeoutStartSec = lib.mkDefault "10min";
           };
         };
 
-        netbox-rq = {
+        netbox-rq = defaultUnitConfig // {
           description = "NetBox Request Queue Worker";
-          documentation = [ "https://docs.netbox.dev/" ];
 
           wantedBy = [ "netbox.target" ];
           after = [ "netbox.service" ];
 
-          environment.PYTHONPATH = pkg.pythonPath;
-
           serviceConfig = defaultServiceConfig // {
-            ExecStart = ''
-              ${pkg}/bin/netbox rqworker high default low
-            '';
+            ExecStart = toString [
+              (lib.getExe finalPackage)
+              "rqworker"
+              "high"
+              "default"
+              "low"
+            ];
             PrivateTmp = true;
           };
         };
 
-        netbox-housekeeping = {
+        netbox-housekeeping = defaultUnitConfig // {
           description = "NetBox housekeeping job";
-          documentation = [ "https://docs.netbox.dev/" ];
 
           wantedBy = [ "multi-user.target" ];
 
@@ -645,20 +657,19 @@ in
           ];
           wants = [ "network-online.target" ];
 
-          environment.PYTHONPATH = pkg.pythonPath;
-
           serviceConfig = defaultServiceConfig // {
             Type = "oneshot";
-            ExecStart = ''
-              ${pkg}/bin/netbox housekeeping
-            '';
+            ExecStart = toString [
+              (lib.getExe finalPackage)
+              "housekeeping"
+            ];
           };
         };
       };
 
     systemd.timers.netbox-housekeeping = {
       description = "Run NetBox housekeeping job";
-      documentation = [ "https://docs.netbox.dev/" ];
+      documentation = [ "https://netboxlabs.com/docs/netbox/" ];
 
       wantedBy = [ "multi-user.target" ];
 
