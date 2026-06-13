@@ -2346,8 +2346,6 @@ with pkgs;
     withCloudUi = true;
   };
 
-  nyxt = callPackage ../applications/networking/browsers/nyxt { };
-
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
