@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "2.1.4";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "greeclimate";
     tag = "v${version}";
-    hash = "sha256-qYgwjVfH9Im0Mxd8YOjV1M4fKhSd3tKyQB2PZ9dkqTU=";
+    hash = "sha256-ikIpL9Il6uCA2z6SbceNzqTyC5P0lP5ZR4J3KfSgypo=";
   };
 
   build-system = [ setuptools ];
