@@ -4,7 +4,7 @@
   testers,
   wrapGAppsHook3,
   fetchzip,
-  sbcl,
+  sbcl_2_4_6,
   pkg-config,
   libfixposix,
   gobject-introspection,
@@ -18,12 +18,7 @@
   webkitgtk_4_1,
   openssl,
   sqlite,
-  gstreamer,
-  gst-libav,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
+  gst_all_1,
   xdg-utils,
   xclip,
   wl-clipboard,
@@ -31,9 +26,16 @@
   nixosTests,
 }:
 
+let
+  sbcl = sbcl_2_4_6;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
   version = "3.12.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
@@ -41,25 +43,29 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    pkg-config
+    sbcl
+  ];
 
   buildInputs = [
-    sbcl
     # for groveller
-    pkg-config
     libfixposix
     # for gappsWrapper
     gobject-introspection
     gsettings-desktop-schemas
     glib-networking
     gtk3
+  ]
+  ++ (with gst_all_1; [
     gstreamer
     gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ];
+  ]);
 
   # for cffi
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [
