@@ -47,6 +47,8 @@ stdenv.mkDerivation (
       cacert
     ];
 
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
     buildPhase = ''
       runHook preBuild
 
