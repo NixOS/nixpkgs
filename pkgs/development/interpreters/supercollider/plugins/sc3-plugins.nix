@@ -6,6 +6,7 @@
   cmake,
   supercollider,
   fftw,
+  fftwFloat,
   gitUpdater,
 }:
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     supercollider
     fftw
+    fftwFloat  # builds without this will return an error message about no FFTW3F-INCLUDE-DIR
   ];
 
   cmakeFlags = [
