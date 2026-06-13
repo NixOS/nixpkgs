@@ -15,12 +15,15 @@ let
 
   appimage-opts = {
     inherit pname version src;
-    extraPkgs = pkgs: [
-    ];
+    extraPkgs = pkgs: [ ];
+
+    __structuredAttrs = true;
   };
 
 in
 (appimageTools.wrapType2 appimage-opts).overrideAttrs (old: {
+  strictDeps = true;
+
   meta = with lib; {
     description = "Keyboard-first local Markdown notes with Vim motions, diagrams, and MCP integration";
     homepage = "https://github.com/ZenNotes/zennotes";
