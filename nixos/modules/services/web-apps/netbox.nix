@@ -536,6 +536,10 @@ in
 
     environment.systemPackages = [ netboxManageScript ];
 
+    systemd.slices.system-netbox = {
+      description = "Netbox DCIM/IPAM";
+    };
+
     systemd.targets.netbox = {
       description = "Target for all NetBox services";
       wantedBy = [ "multi-user.target" ];
@@ -560,6 +564,7 @@ in
           StateDirectoryMode = "0750";
           Restart = "on-failure";
           RestartSec = 30;
+          Slice = "system-netbox.slice";
           EnvironmentFile = cfg.environmentFiles;
         };
       in
