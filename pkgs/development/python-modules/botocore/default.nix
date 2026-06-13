@@ -1,6 +1,7 @@
 {
   lib,
   awscrt,
+  cacert,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -28,6 +29,10 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-avuv1uXKMeSr3SL+BI9XW8tDCQM/dlXFn590di3S03k=";
   };
+
+  postPatch = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt botocore/cacert.pem
+  '';
 
   build-system = [
     setuptools
