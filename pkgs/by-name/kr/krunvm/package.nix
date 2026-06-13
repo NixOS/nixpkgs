@@ -7,11 +7,11 @@
   buildah,
   buildah-unwrapped,
   cargo,
+  darwin,
   libiconv,
   libkrun,
   makeWrapper,
   rustc,
-  sigtool,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     asciidoctor
     makeWrapper
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
     libkrun
