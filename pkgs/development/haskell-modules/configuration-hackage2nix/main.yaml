@@ -129,6 +129,7 @@ extra-packages:
   - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
   - text-builder < 1                    # 2025-08-27: Needed for building postgrest
   - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
+  - validation == 1.1.5                 # 2026-06-10: Needed for building geojson 4.1
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no

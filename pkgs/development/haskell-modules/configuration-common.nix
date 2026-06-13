@@ -2120,6 +2120,9 @@ with haskellLib;
     doJailbreak
   ];
 
+  # 2026-06-10: pin validation to < 1.2 due to breaking API changes affecting geojson
+  validation = super.validation_1_1_5;
+
   # too strict bounds on extra < 1.8
   # https://github.com/georgefst/svgone/pull/3
   svgone = doJailbreak super.svgone;
