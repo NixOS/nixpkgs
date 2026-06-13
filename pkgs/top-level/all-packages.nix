@@ -2408,8 +2408,6 @@ with pkgs;
 
   iocsearcher = with python3Packages; toPythonApplication iocsearcher;
 
-  iperf2 = callPackage ../tools/networking/iperf/2.nix { };
-  iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
   i-pi = with python3Packages; toPythonApplication i-pi;
