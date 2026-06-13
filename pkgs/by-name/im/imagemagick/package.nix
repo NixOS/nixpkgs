@@ -61,6 +61,7 @@
   nixos-icons,
   perlPackages,
   python3,
+  nix-update-script,
 }:
 
 assert libXtSupport -> libX11Support;
@@ -203,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       version = lib.head (lib.splitString "-" finalAttrs.version);
     };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://www.imagemagick.org/";
