@@ -7858,12 +7858,6 @@
     githubId = 27162016;
     name = "Ramdip Gill";
   };
-  elasticdog = {
-    email = "aaron@elasticdog.com";
-    github = "elasticdog";
-    githubId = 4742;
-    name = "Aaron Bull Schaefer";
-  };
   elatov = {
     email = "elatov@gmail.com";
     github = "elatov";
