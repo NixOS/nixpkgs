@@ -154,7 +154,7 @@ let
       <fontconfig>
 
         <!-- User defined aliases -->
-        ${lib.concatStringsSep "" (lib.mapAttrsToList mkAliasBlock cfg.aliases)}
+        ${lib.concatStrings (lib.mapAttrsToList mkAliasBlock cfg.aliases)}
 
       </fontconfig>
     '';
