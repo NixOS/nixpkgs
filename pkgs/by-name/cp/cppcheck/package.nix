@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # nativeBuildInputs
+  cmake,
   docbook_xml_dtd_45,
   docbook_xsl,
   installShellFiles,
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    cmake
     docbook_xml_dtd_45
     docbook_xsl
     installShellFiles
@@ -50,11 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [ ps.pygments ]))
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "MATCHCOMPILER=yes"
-    "FILESDIR=$(out)/share/cppcheck"
-    "HAVE_RULES=yes"
+  cmakeFlags = with lib.strings; [
+    (cmakeBool "BUILD_MANPAGE" true)
+    (cmakeBool "MATCHCOMPILER" true)
+    (cmakeFeature "FILESDIR" "${placeholder "out"}/share/cppcheck")
+    (cmakeBool "HAVE_RULES" true)
+    (cmakeFeature "DB2MAN" "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl")
   ];
 
   enableParallelBuilding = true;
@@ -67,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
+    substituteInPlace man/CMakeLists.txt \
+       --replace-fail "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl" \
+                     "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
   ''
   # Expected:
   # Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid
@@ -88,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    installManPage cppcheck.1
+    installManPage man/cppcheck.1
   '';
 
   nativeInstallCheckInputs = [
