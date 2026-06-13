@@ -376,6 +376,14 @@ with haskellLib;
   # https://github.com/yesodweb/shakespeare/issues/294
   shakespeare = dontCheck super.shakespeare;
 
+  # https://github.com/haskell-numerics/random-fu/issues/100
+  rvar = appendPatch (fetchpatch {
+    url = "https://github.com/adamConnerSax/random-fu/commit/51ba79d2cea5279821523a3861d4ec7196e71759.patch";
+    relative = "rvar";
+    hash = "sha256-YxGl81GaZ896SL+BuXkVZFFuu4DuwzQD+rssjkP7aPM=";
+  }) super.rvar;
+  random-fu = doJailbreak super.random-fu;
+
   # Work around -Werror failures until a more permanent solution is released
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
