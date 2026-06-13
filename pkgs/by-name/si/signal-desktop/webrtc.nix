@@ -97,6 +97,32 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
       hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
     })
+
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L620-L623
+    # clang++: error: unknown argument: '-fno-lifetime-dse'
+    ./chromium-147-llvm-22.patch
+
+    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L624-L644
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+    (fetchpatch {
+      name = "chromium-148-revert-build-Add--fsanitizer=return-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7629257
+      url = "https://chromium.googlesource.com/chromium/src/+/99ba1f5302f9433efdb4df302cb7b7de56c72e4c^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-/qzzxwTdPMwIdsqD/G02S7kKHCj3QxECL+g1WYEaWmU=";
+    })
+    # ERROR Unresolved dependencies.
+    # //apps:apps(//build/toolchain/linux/unbundle:default)
+    #   needs //build/config/compiler:sanitize_return(//build/toolchain/linux/unbundle:default)
+    (fetchpatch {
+      name = "chromium-148-revert-build-Enable--fsanitizer=return-config.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7629258
+      url = "https://chromium.googlesource.com/chromium/src/+/9357bfbea03753fe52264c9ec36abe74f48cfef5^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-14fTHNh3vGsf4KgeH8uLX+aK3lrjK0VKd1dfK1g7r0I=";
+    })
   ];
 
   postPatch = ''
@@ -196,7 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WebRTC library used by Signal";
     homepage = "https://github.com/SignalApp/webrtc";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
