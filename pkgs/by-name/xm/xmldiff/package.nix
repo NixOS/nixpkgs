@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "2.6.3";
+  version = "3.0";
   src = fetchFromGitHub {
     owner = "Shoobx";
     repo = "xmldiff";
     rev = version;
-    hash = "sha256-qn8gGultTSNKPUro6Ap4xJGcbpxV+lKgZFpKvyPdhtc=";
+    hash = "sha256-hRzu4rLOqLl64phMSlfomh0uwxlthSnhHUmUwxjU/ww=";
   };
 in
 python3.pkgs.buildPythonApplication {
