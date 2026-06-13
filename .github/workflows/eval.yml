@@ -61,9 +61,9 @@ jobs:
           ref: ${{ inputs.mergedSha }}
           path: untrusted
           sparse-checkout: |
-            ci/pinned.json
+            ci/flake.lock
 
-      - name: Find commit that touched ci/pinned.json
+      - name: Find commit that touched ci lockfile
         id: find-pinned-commit
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
@@ -86,7 +86,7 @@ jobs:
             })
 
             if(comparison.data.commits.length > 50) {
-              core.setFailed('Error: Too many commits in comparison, cannot reliably find pinned.json change.')
+              core.setFailed('Error: Too many commits in comparison, cannot reliably find ci lockfile change.')
               return
             }
 
@@ -98,7 +98,7 @@ jobs:
 
             await logRateLimit('before commit filtering')
 
-            // Filter commits that modified ci/pinned.json
+            // Filter commits that modified ci lockfile
             const commitsModifyingPinned = (
               await Promise.all(
                 comparison.data.commits.map(async (commit) => {
@@ -107,7 +107,7 @@ jobs:
                     ref: commit.sha,
                   })
                   const modifiesPinned = commitDetails.data.files?.some(
-                    (file) => file.filename === "ci/pinned.json"
+                    (file) => file.filename === "ci/flake.lock"
                   )
                   return modifiesPinned ? commit.sha : null
                 })
@@ -118,14 +118,14 @@ jobs:
 
             if (commitsModifyingPinned.length === 0) {
               // This should not happen as testVersions should only be true
-              // when ci/pinned.json was modified in the PR.
-              core.setFailed("Error: ci/pinned.json was not modified in this PR")
+              // when ci lockfile was modified in the PR.
+              core.setFailed("Error: ci lockfile was not modified in this PR")
               return
             } else if (commitsModifyingPinned.length > 1) {
               core.setFailed([
-                "Error: Multiple commits touch ci/pinned.json in this PR:",
+                "Error: Multiple commits touch ci lockfile in this PR:",
                 ...commitsModifyingPinned,
-                "Please ensure only a single commit modifies ci/pinned.json for accurate version matrix evaluation."
+                "Please ensure only a single commit modifies ci/flake.lock for accurate version matrix evaluation."
               ].join("\n"))
               return
             }
@@ -133,7 +133,7 @@ jobs:
             const ciPinBumpCommit = commitsModifyingPinned[0]
             core.setOutput("ciPinBumpCommit", ciPinBumpCommit)
             core.setOutput("ciPinBumpCommitShort", ciPinBumpCommit.substring(0, 7))
-            core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
+            core.info(`Found ci lockfile commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
         uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
@@ -141,7 +141,14 @@ jobs:
       - name: Load supported versions
         id: versions
         run: |
-          echo "versions=$(trusted/ci/supportedVersions.nix --arg pinnedJson untrusted/ci/pinned.json)" >> "$GITHUB_OUTPUT"
+          # inputs.nix was added 2026-06-13, so pinned.json support can be removed ~2026-12-25 🎅
+          declare -a args=()
+          if [ -f untrusted/ci/inputs.nix ]; then
+            args+=(--arg inputs 'import ./untrusted/ci/inputs.nix')
+          else
+            args+=(--arg pinnedJson ./untrusted/ci/pinned.json)
+          fi
+          echo "versions=$(trusted/ci/supportedVersions.nix "${args[@]}")" >> "$GITHUB_OUTPUT"
 
   eval:
     runs-on: ubuntu-24.04-arm
@@ -153,7 +160,7 @@ jobs:
         system: ${{ fromJSON(inputs.systems) }}
         version:
           - "" # Default Eval triggering rebuild labels and such.
-          - ${{ fromJSON(needs.versions.outputs.versions || '[]') }} # Only for ci/pinned.json updates.
+          - ${{ fromJSON(needs.versions.outputs.versions || '[]') }} # Only for ci lockfile updates.
     # Failures for versioned Evals will be collected in a separate job below
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
@@ -406,7 +413,7 @@ jobs:
             const ciPinBumpCommit = process.env.CI_PIN_BUMP_COMMIT
 
             core.summary.addHeading('Lix/Nix version comparison')
-            core.summary.addRaw(`\n*Evaluated at commit: \`${ciPinBumpCommit}\` (commit that modified ci/pinned.json)*\n`, true)
+            core.summary.addRaw(`\n*Evaluated at commit: \`${ciPinBumpCommit}\` (commit that modified ci lockfile)*\n`, true)
             core.summary.addTable(
               [].concat(
                 [
@@ -439,9 +446,9 @@ jobs:
                           core.setFailed(
                             `${version} on ${system} has changed outpaths!\n` +
                               `Note: This indicates that commit ${ciPinBumpCommit} ` +
-                              `(which modified ci/pinned.json) also contains other ` +
+                              `(which modified ci lockfile) also contains other ` +
                               `changes affecting package outputs. ` +
-                              `Please ensure ci/pinned.json is updated in a standalone commit.`
+                              `Please ensure ci/flake.lock is updated in a standalone commit.`
                           )
                           return { data: ':x:' }
                         }

@@ -14,9 +14,9 @@
 {
   system ? builtins.currentSystem,
   nixpkgs ? null,
-}:
+}@args:
 let
-  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
+  inherit (import ./ci args) pkgs fmt;
 
   # For `nix-shell -A hello`
   curPkgs = removeAttrs (import ./. { inherit system; }) [

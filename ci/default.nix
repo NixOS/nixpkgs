@@ -1,23 +1,14 @@
 let
-  pinned = (builtins.fromJSON (builtins.readFile ./pinned.json)).pins;
+  inputs = import ./inputs.nix;
 in
 {
   system ? builtins.currentSystem,
 
-  nixpkgs ? null,
+  nixpkgs ? inputs.nixpkgs,
   nixPath ? "nixVersions.latest",
 }:
 let
-  nixpkgs' =
-    if nixpkgs == null then
-      fetchTarball {
-        inherit (pinned.nixpkgs) url;
-        sha256 = pinned.nixpkgs.hash;
-      }
-    else
-      nixpkgs;
-
-  pkgs = import nixpkgs' {
+  pkgs = import nixpkgs {
     inherit system;
     # Nixpkgs generally — and CI specifically — do not use aliases,
     # because we want to ensure they are not load-bearing.
@@ -26,11 +17,7 @@ let
 
   fmt =
     let
-      treefmtNixSrc = fetchTarball {
-        inherit (pinned.treefmt-nix) url;
-        sha256 = pinned.treefmt-nix.hash;
-      };
-      treefmtEval = (import treefmtNixSrc).evalModule pkgs ./treefmt.nix;
+      treefmtEval = (import inputs.treefmt-nix).evalModule pkgs ./treefmt.nix;
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
