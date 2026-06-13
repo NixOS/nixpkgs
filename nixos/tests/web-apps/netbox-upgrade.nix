@@ -75,7 +75,7 @@ in
           headers = machine.succeed(
             "curl -sSL http://localhost/api/ --head -H 'Content-Type: application/json'"
           )
-          assert api_version(headers) == version
+          t.assertEqual(api_version(headers), version)
 
       with subtest("NetBox version is the old one"):
           check_api_version("${oldApiVersion}")
