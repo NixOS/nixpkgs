@@ -1130,10 +1130,10 @@ let
                   {
                     name = "oath";
                     enable = cfg.oathAuth;
-                    control = "requisite";
+                    control = oath.control;
                     modulePath = "${pkgs.oath-toolkit}/lib/security/pam_oath.so";
                     settings = {
-                      inherit (oath) window digits;
+                      inherit (oath) window digits openasroot;
                       usersfile = oath.usersFile;
                     };
                   }
