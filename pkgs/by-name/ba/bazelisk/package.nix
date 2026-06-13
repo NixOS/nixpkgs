@@ -11,8 +11,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazelisk";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NijRYjJyWOqSkfDKOdki3nrc1OIhfooKLhusuiMY/Js=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NijRYjJyWOqSkfDKOdki3nrc1OIhfooKLhusuiMY/Js=";
   };
 
   vendorHash = "sha256-oycCqzUAn/lNFjeLjM+PQfYNscaTi5E9D7Pnv8jrO8M=";
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
       BEWARE: This package does not work on NixOS.
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
-    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
