@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.26";
+  version = "1.0.61";
 
   # GitHub provide platform-specific SEA binaries as well as a "universal"
   # package.  Use the universal package as it gives us a bit more flexibility
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   # about how paths should be set up which don't reliably hold when using Nix.
   src = fetchurl {
     url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-zNO0clQRfgw6CX9K8NaJXsoOhhNjBfK7KAr0AoL7Oqo=";
+    hash = "sha256-8Lks8lHa5XF9ZrC+fU/9VlzD1W32MbRZ7PZtL5YWLTA=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    # Upstream bundles linuxmusl prebuilds in the universal tarball; they are
+    # not needed on glibc systems and make autoPatchelf fail on musl libc deps.
+    find "$out"/lib/github-copilot-cli -depth -path '*/linuxmusl-*' -exec rm -rf '{}' +
+
     makeWrapper ${nodejs}/bin/node "$out"/bin/copilot \
       --add-flag "$out"/lib/github-copilot-cli/index.js \
       --add-flag --no-auto-update \
