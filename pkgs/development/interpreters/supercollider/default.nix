@@ -16,6 +16,7 @@
   libxt,
   readline,
   useSCEL ? false,
+  useQtWebEngine ? true,
   emacs,
   gitUpdater,
   supercollider-with-plugins,
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     "-DSC_WII=OFF"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
-    (lib.cmakeBool "SC_USE_QTWEBENGINE" true)
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" useQtWebEngine)
   ];
 
   passthru = {
