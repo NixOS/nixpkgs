@@ -1204,8 +1204,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.134.0";
-          hash = "sha256-/tWH2uGfOuyvF8mfga2YdGK1ok2UYQchaOeCC2n+IHk=";
+          version = "3.136.0";
+          hash = "sha256-XPajPR0MX6TiUfaCw/+WYyc453cZOMaK1Uen6ND+RKY=";
         };
 
         meta.license = lib.licenses.mit;
@@ -5134,8 +5134,8 @@ let
         mktplcRef = {
           name = "vscode-java-pack";
           publisher = "vscjava";
-          version = "0.30.5";
-          hash = "sha256-MlBACPD880QvsQpPDXe5384dlrMeKMSX1CUSIfzwwPo=";
+          version = "0.31.0";
+          hash = "sha256-E0GJoITZIh2XemVpyPh3gAEtlvM2PZHgNzZDctSpwIA=";
         };
         meta = {
           description = "Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more";
