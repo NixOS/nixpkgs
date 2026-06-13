@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,13 @@ buildPythonPackage rec {
     ${python.interpreter} -m low_index.test
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Enumerates low index subgroups of a finitely presented group";
