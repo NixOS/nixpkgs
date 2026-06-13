@@ -3,7 +3,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   python-dateutil,
   pytestCheckHook,
   requests,
@@ -14,21 +13,20 @@
 
 buildPythonPackage rec {
   pname = "py-tes";
-  version = "1.1.2";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ohsu-comp-bio";
     repo = "py-tes";
     tag = version;
-    hash = "sha256-hZF4koc/nZ8rBYKfhIQCLtn4DKiljJrSBgkKX8bMoQ0=";
+    hash = "sha256-/xgycSDFp17rPzC6ICf4e+vrIKWYPftDngx/u1/KHWk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     attrs
-    future
     python-dateutil
     requests
     sphinx-rtd-theme
