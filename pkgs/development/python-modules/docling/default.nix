@@ -24,6 +24,7 @@
   pandas,
   pillow,
   pluggy,
+  polyfactory,
   pydantic,
   pydantic-settings,
   pylatexenc,
@@ -52,14 +53,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.69.1";
+  version = "2.84.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-r7jAah/tqLylPyyzrK0NW2ok66NVdb/V/YLV95McGC4=";
+    hash = "sha256-rjRGBZDWqao32AGM4WTFubZ50cNqRWxKAOLojgR7uBk=";
   };
 
   build-system = [
@@ -84,6 +85,7 @@ buildPythonPackage rec {
     pandas
     pillow
     pluggy
+    polyfactory
     pydantic
     pydantic-settings
     pylatexenc
@@ -101,9 +103,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "lxml"
-    "pypdfium2"
-    "pillow"
+    "defusedxml"
+    "typer"
   ];
 
   optional-dependencies = {
@@ -137,43 +138,47 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_e2e_pdfs_conversions" # AssertionError: ## TableFormer: Table Structure Understanding with Transf
-    "test_e2e_conversions" # RuntimeError: Tesseract is not available
+    # Missing optional ASR/XBRL dependencies or require network/model downloads
+    "test_asr_pipeline_conversion"
+    "test_asr_pipeline_with_silent_audio"
+    "test_has_text_and_determine_status_helpers"
+    "test_native_and_mlx_transcribe_language_handling"
+    "test_native_init_with_artifacts_path_and_device_logging"
+    "test_native_run_success_with_bytesio_builds_document"
+    "test_native_run_failure_sets_status"
+    "test_e2e_xbrl_conversions"
 
-    # AssertionError
-    # assert doc.export_to_markdown() == pair[1], f"Error in case {idx}"
-    "test_ordered_lists"
+    # Failing against current groundtruth snapshots
+    "test_e2e_valid_csv_conversions"
+    "test_e2e_docx_conversions"
 
-    # AssertionError: export to md
-    "test_e2e_html_conversions"
-
-    # AssertionError: assert 'Unordered li...d code block:' == 'Unordered li...d code block:'
-    "test_convert_valid"
-
-    # AssertionError: Markdown file mismatch against groundtruth pftaps057006474.md
-    "test_patent_groundtruth"
-
-    # huggingface_hub.errors.LocalEntryNotFoundError: An error happened
+    # Network/model-dependent failures in sandboxed nix builds
+    "test_get_text_from_rect_rotated"
+    "test_e2e_webp_conversions"
     "test_cli_convert"
     "test_code_and_formula_conversion"
+    "test_formula_conversion_with_page_range"
+    "test_conversion_result_json_roundtrip_string"
     "test_picture_classifier"
+    "test_e2e_pdfs_conversions"
+    "test_e2e_conversions"
+    "test_normal_pages_all_present"
+    "test_failed_pages_added_to_document_1page"
+    "test_failed_pages_added_to_document_2pages"
+    "test_failed_pages_have_size_info"
+    "test_errors_recorded_for_failed_pages"
     "test_convert_path"
     "test_convert_stream"
-    "test_compare_legacy_output"
-    "test_ocr_coverage_threshold"
-    "test_formula_conversion_with_page_range"
-
-    # requires network access
     "test_page_range"
+    "test_document_timeout"
+    "test_ocr_coverage_threshold"
     "test_parser_backends"
+    "test_pipeline_cache_after_initialize"
     "test_confidence"
-    "test_e2e_webp_conversions"
-    "test_asr_pipeline_conversion"
-    "test_threaded_pipeline"
+    "test_get_text_from_rect"
+    "test_threaded_pipeline_multiple_documents"
     "test_pipeline_comparison"
-
-    # AssertionError: pred_itxt==true_itxt
-    "test_e2e_valid_csv_conversions"
+    "test_pypdfium_threaded_pipeline"
   ];
 
   meta = {

@@ -24,6 +24,7 @@
   msgpack,
 
   # tests
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   writableTmpDirAsHomeHook,
@@ -31,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.8.1";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-9DzQY/XMmx/8XP1bMYZYl+Bp7AVcYfuv3MtO6lvQ/24=";
+    hash = "sha256-GFta/0Bdu+lN1Yv97t9yVLoWQxkF9CZhBAL88UaaPqw=";
   };
 
   build-system = [
@@ -65,18 +66,13 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonRelaxDeps = [
-    "boto3"
-    "pandas"
-    "pyarrow"
-  ];
-
   pythonImportsCheck = [
     "docling"
     "docling_jobkit"
   ];
 
   nativeCheckInputs = [
+    aiohttp
     pytestCheckHook
     pytest-asyncio
     writableTmpDirAsHomeHook
@@ -84,12 +80,17 @@ buildPythonPackage rec {
   ++ optional-dependencies.rq;
 
   disabledTests = [
-    # requires network access
+    # requires network access / remote model downloads
     "test_chunk_file"
     "test_convert_file"
     "test_convert_warmup"
     "test_convert_url"
     "test_replicated_convert"
+    "test_clear_converters_clears_caches"
+    "test_chunker_manager_shared_across_workers"
+    "test_convert_with_callbacks"
+    "test_delete_task_cleans_up_job"
+    "test_clear_converters_clears_worker_cache"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky due to comparison with magic object

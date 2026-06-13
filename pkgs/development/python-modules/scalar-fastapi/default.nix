@@ -7,29 +7,20 @@
   setuptools,
 
   # python dependencies
-  annotated-types,
-  anyio,
   fastapi,
-  idna,
   pydantic,
-  sniffio,
-  starlette,
   typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  httpx,
 }:
 
 buildPythonPackage rec {
   pname = "scalar-fastapi";
-  version = "1.6.1";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scalar_fastapi";
     inherit version;
-    hash = "sha256-XTzJbw84TTiLWKuldqkDuQfjyY2sqxM5ByIQ6UbE8DM=";
+    hash = "sha256-6ttiXThvqUp55UY68Kprz14CvE1mVFTtB5WWCYcVJTE=";
   };
 
   build-system = [
@@ -37,13 +28,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    annotated-types
-    anyio
     fastapi
-    idna
     pydantic
-    sniffio
-    starlette
     typing-extensions
   ];
 
@@ -51,10 +37,8 @@ buildPythonPackage rec {
     "scalar_fastapi"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    httpx
-  ];
+  # Source distribution does not include tests.
+  doCheck = false;
 
   meta = {
     description = "Plugin for FastAPI to render a reference for your OpenAPI document";

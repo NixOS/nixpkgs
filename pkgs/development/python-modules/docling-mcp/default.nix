@@ -26,18 +26,19 @@
   smolagents,
   torch,
   transformers,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "docling-mcp";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-mcp";
     tag = "v${version}";
-    hash = "sha256-OyLL8g9fh1H9N3i5ok885IzC5pFckMoqsjd8oX/HdRY=";
+    hash = "sha256-GaAJU28zjs23PmN/iSXJghY6qWUt3Jp+j3XUkJf91ts=";
   };
 
   pythonRemoveDeps = [
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     pydantic
     pydantic-settings
     python-dotenv
+    typer
   ];
 
   optional-dependencies = {
@@ -81,12 +83,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    typer
   ];
 
   pythonImportsCheck = [ "docling_mcp" ];
 
   disabledTestPaths = [
-    # Tests require network access
+    # Tests require network access / MCP server setup not available in nix build sandbox
     "tests/test_mcp_server.py"
     "tests/test_conversion_tools.py"
   ];
