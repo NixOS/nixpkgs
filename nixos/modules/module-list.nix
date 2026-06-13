@@ -260,6 +260,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/librepods.nix
+  ./programs/linux-arctis-manager.nix
   ./programs/lix.nix
   ./programs/localsend.nix
   ./programs/mdevctl.nix
