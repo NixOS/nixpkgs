@@ -802,9 +802,81 @@ Additionally, the following optional arguments can be given:
 : Clone the entire repository as opposed to just creating a shallow clone.
   This implies `leaveDotGit`.
 
-*`fetchTags`* (Boolean)
+*`fetchTags`* ("Attribute set of lists" or boolean)
 
-: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
+: Tags to fetch for the main project and each submodule.
+
+  ::: {.note}
+  The `tag` arguments cover the most common tag fetching cases -- fetching a tag into the main project.
+  `fetchTags` are reserved for advanced tag fetching configuration, such as ones involving submodules or more than one tags.
+
+  See below for details about how the `tag` argument interacts with `fetchTags`.
+  :::
+
+  Each attribute name corresponds to the relative path to each submodule, with a list of tag names as its attribute value.
+  The attribute name correspond to the main project is an empty string (`""`).
+
+  ::: {.example #ex-fetchgit-fetchTags-attrs}
+  # Use of `fetchTags` to fetch Git tags deterministically
+
+  ```nix
+  { stdenv, fetchgit }:
+
+  stdenv.mkDerivation {
+    name = "hello";
+    src = fetchgit {
+      url = "https://...";
+      fetchTags = {
+        # Fetch tag1 and tag2 for the main project.
+        "" = [
+          "tag1"
+          "tag2"
+        ];
+        # Fetch tag3 for the submodule at contrib/submodule1 relative to the main project.
+        "contrib/submodule1" = [ "tag3" ];
+        # Fetch tag4 for the submodule tests/data/submodule2
+        "tests/data/submodule2" = [ "tag4" ];
+      };
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  }
+  ```
+  :::
+
+  When the `tag` argument is specified and `leaveDotGit` is false, `fetchgit` defaults to fetch the tag for the main project.
+  As this behaviour covers most of the tag-fetching cases, one usually don't have to set `fetchTags` manually.
+  - If `rev` is also specified, `fetchTags` will default to `{ "" = [ tag ]; }`, fetching `tag` into the main project.
+    This is useful for packages pinned to an unstable revision while requiring the presence of the previous stable tag to build.
+    ::: {.example #ex-fetchgit-both-tag-and-rev}
+
+    # Specify `rev` and `tag` simultaneously to fetch the tag `tag` while cloning from `rev`
+
+    ```nix
+    { fetchgit }:
+    fetchgit {
+      name = "describe-tag-nix-source";
+      url = "https://github.com/NixOS/nix";
+      rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+      # for `git describe`
+      tag = "2.3.15";
+      hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+      postCheckout = ''
+        { git -C "$out" describe || echo "git describe failed"; } | tee describe-output.txt
+      '';
+    }
+    ```
+    :::
+  - If `tag` is specified alone, `fetchTags` will default to `{ }`, while `fetchgit` still fetches the specified tag will still be fetched.
+
+  When specified as a boolean, it specifies whether to fetch all tags from the remote repository.
+  Setting `fetchTags = true` implies `leaveDotGit = true`, as tags are stored in the `.git` directory.
+
+  ::: {.warning}
+  Specifying `fetchTags` as boolean is deprecated.
+  The behaviour is kept for compatibility purposes.
+
+  Setting `fetchTags = true` makes the `.git` non-reproducible as the upstream pushes new tags into their repository.
+  :::
 
 *`sparseCheckout`* (List of String)
 
