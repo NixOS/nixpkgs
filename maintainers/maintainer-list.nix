@@ -6804,6 +6804,12 @@
     github = "dfithian";
     githubId = 8409320;
   };
+  dfjay = {
+    email = "github@dfjay.com";
+    name = "Pavel Yozhikov";
+    github = "dfjay";
+    githubId = 41841630;
+  };
   dflores = {
     email = "dflores.country455@passinbox.com";
     name = "David Flores";
