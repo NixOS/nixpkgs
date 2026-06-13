@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
       SuperSandro2000
