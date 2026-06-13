@@ -30,6 +30,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/hyprland-community/hyprls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprls";
   };
 })
