@@ -110,6 +110,12 @@ buildPythonPackage (finalAttrs: {
     pyobjc-framework-Cocoa
     pyobjc-framework-Quartz
   ];
+  optional-dependencies = {
+    gui-qt = [
+      # TODO(@ShamrockLee): use PySide6-Essentials once available
+      pyside6
+    ];
+  };
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
