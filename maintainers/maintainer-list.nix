@@ -157,6 +157,11 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
+  _0xSA7 = {
+    name = "Saleh Diaa Ahmed";
+    github = "0xSA7";
+    githubId = 153073356;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -328,12 +333,6 @@
     github = "9R";
     githubId = 381298;
     name = "9R";
-  };
-  _9yokuro = {
-    email = "xzstd099@protonmail.com";
-    github = "9yokuro";
-    githubId = 119095935;
-    name = "9yokuro";
   };
   a-camarillo = {
     name = "Anthony Camarillo";
@@ -8387,11 +8386,6 @@
     githubId = 16175276;
     keys = [ { fingerprint = "E4CE B0F0 B2EC 09A3 9678  F294 CC7A 7E3C 6CF3 1343"; } ];
   };
-  EstebanMacanek = {
-    name = "Esteban Macanek";
-    github = "EstebanMacanek";
-    githubId = 75503218;
-  };
   esteve = {
     name = "Esteve Fernandez";
     email = "nixpkgs@nara.ac";
@@ -13456,12 +13450,6 @@
     name = "Joshua Park";
     github = "joshprk";
     githubId = 123624726;
-  };
-  joshuafern = {
-    name = "Joshua Fern";
-    email = "joshuafern@protonmail.com";
-    github = "JoshuaFern";
-    githubId = 4300747;
   };
   joshvanl = {
     email = " me@joshvanl.dev ";
@@ -19259,12 +19247,6 @@
     name = "Nasir Hussain";
     keys = [ { fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D"; } ];
   };
-  nasrally = {
-    email = "suffer.ring@ya.ru";
-    github = "nasrally";
-    githubId = 50599445;
-    name = "Nikita Grishko";
-  };
   nat-418 = {
     github = "nat-418";
     githubId = 93013864;
@@ -22332,12 +22314,6 @@
     githubId = 6314611;
     keys = [ { fingerprint = "EEC7 53FC EAAA FD9E 4DC0  9BB5 CAEB 4185 C226 D76B"; } ];
   };
-  prominentretail = {
-    email = "me@jakepark.me";
-    github = "ProminentRetail";
-    githubId = 94048404;
-    name = "Jake Park";
-  };
   proofconstruction = {
     email = "source@proof.construction";
     github = "proofconstruction";
@@ -22785,11 +22761,6 @@
     githubId = 1542224;
     matrix = "@qyriad:katesiria.org";
     name = "Qyriad";
-  };
-  qzylinra = {
-    github = "qzylinra";
-    githubId = 225773816;
-    name = "qzylinra";
   };
   r-aizawa = {
     github = "Xantibody";
