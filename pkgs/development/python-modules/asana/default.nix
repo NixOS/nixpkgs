@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asana";
-  version = "5.2.4";
+  version = "5.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bfq3FKJoZE8edAAFVNYYrLJ8vp44QYboEVsCGsI5WMY=";
+    hash = "sha256-9AJTYTwqZGq2pW94uUdW3SvQRut3/JP0wZgmPAitPG4=";
   };
 
   build-system = [ setuptools ];
