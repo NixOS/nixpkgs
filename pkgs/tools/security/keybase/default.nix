@@ -6,9 +6,12 @@
   gnupg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keybase";
   version = "6.5.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   modRoot = "go";
   subPackages = [
@@ -21,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "client";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B3vedsxQM4FDZVpkMKR67DF7FtaTPhGIJ1e2lViKYzg=";
   };
   vendorHash = "sha256-uw1tiaYoMpMXCYt5bPL5OBbK09PJmAQYQDrDwuPShxU=";
@@ -52,4 +55,4 @@ buildGoModule rec {
     ];
     license = lib.licenses.bsd3;
   };
-}
+})
