@@ -7,7 +7,9 @@
 let
   cfg = config.services.stalwart;
   configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "stalwart.toml" cfg.settings;
+  configFile = pkgs.writers.writeText "stalwart-mail.toml" (
+    (lib.readFile (configFormat.generate "stalwart-mail-generated.toml" cfg.settings)) + cfg.extraConfig
+  );
   useLegacyStorage = lib.versionOlder cfg.stateVersion "24.11";
   pre2605 = lib.versionOlder cfg.stateVersion "26.05";
   stalwartIdentifier = if pre2605 then "stalwart-mail" else "stalwart";
@@ -102,6 +104,20 @@ in
       example = {
         user_admin_password = "/run/keys/stalwart_admin_password";
       };
+    };
+    extraConfig = lib.mkOption {
+      description = ''
+        Settings to append to the end of the configuration file.
+        Especially useful for non-standard TOML patterns such as conditions (see example).
+      '';
+      type = lib.types.lines;
+      default = "";
+      example = ''
+        [auth.dkim]
+        sign = [ { if = "listener != 'smtp'", then = "['rsa', 'ed25519']" },
+                  { "else" = false } ]
+        verify = "relaxed"
+      '';
     };
 
   };

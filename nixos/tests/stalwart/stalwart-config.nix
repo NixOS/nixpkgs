@@ -79,6 +79,12 @@ in
         ];
       };
     };
+
+    extraConfig = ''
+      [server.listener.http-extra]
+      bind = ["[::]:8888"]
+      protocol = "http"
+    '';
   };
 
 }
