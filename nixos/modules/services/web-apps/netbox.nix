@@ -12,14 +12,15 @@ let
     mkChangedOptionModule
     mkOption
     mkRemovedOptionModule
+    mkRenamedOptionModule
     optionalString
+    types
     ;
 
   cfg = config.services.netbox;
-  pythonFmt = pkgs.formats.pythonVars { };
-  staticDir = cfg.dataDir + "/static";
+  pythonVars = pkgs.formats.pythonVars { };
 
-  settingsFile = pythonFmt.generate "netbox-settings.py" cfg.settings;
+  settingsFile = pythonVars.generate "netbox-settings.py" cfg.settings;
   extraConfigFile = pkgs.writeTextFile {
     name = "netbox-extraConfig.py";
     text = cfg.extraConfig;
@@ -48,6 +49,8 @@ let
     '';
   };
 
+  enableLDAP = cfg.ldapConfigFile != null;
+
   pkg =
     (cfg.package.overrideAttrs (old: {
       installPhase =
@@ -55,8 +58,8 @@ let
         + ''
           ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
         ''
-        + lib.optionalString cfg.enableLdap ''
-          ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
+        + lib.optionalString enableLDAP ''
+          ln -s ${cfg.ldapConfigFile} $out/opt/netbox/netbox/netbox/ldap_config.py
         '';
     })).override
       {
@@ -106,22 +109,35 @@ in
     (mkRemovedOptionModule [ "services" "netbox" "keycloakClientSecret" ] ''
       Too much granularity hurts maintainability. Please configure secret key loading via `services.netbox.extraConfig` instead.
     '')
+    (mkRemovedOptionModule [ "services" "netbox" "enableLdap" ] ''
+      LDAP support is automatically enabled when `services.netbox.ldapConfigFile` is configured.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "netbox" "ldapConfigPath" ]
+      [ "services" "netbox" "ldapConfigFile" ]
+    )
   ];
 
   options.services.netbox = {
     enable = lib.mkOption {
-      type = lib.types.bool;
+      type = types.bool;
       default = false;
       description = ''
-        Enable Netbox.
+        Whether to enable Netbox, a DCIM and IPAM source of truth.
 
-        This module requires a reverse proxy that serves `/static` separately.
-        See this [example](https://github.com/netbox-community/netbox/blob/develop/contrib/nginx.conf/) on how to configure this.
+        This module requires setting up a reverse proxy. The NetBox project has
+        example configurations for [nginx] and the [Apache httpd] server.
+
+        The important change to make is to serve `/static` from
+        `''${config.services.netbox.settings.STATIC_ROOT}`.
+
+        [nginx]: https://github.com/netbox-community/netbox/blob/main/contrib/nginx.conf
+        [Apache httpd]: https://github.com/netbox-community/netbox/blob/main/contrib/apache.conf
       '';
     };
 
     environmentFiles = mkOption {
-      type = with lib.types; listOf path;
+      type = with types; listOf path;
       default = [ ];
       description = ''
         Environment files loaded into all NetBox services and consumable in
@@ -131,30 +147,216 @@ in
 
     settings = lib.mkOption {
       description = ''
-        Configuration options to set in `configuration.py`.
-        See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
+        The main {file}`configuration.py` to set up NetBox.
+
+        Can be used to define flat and nested key-value pairs. Check the \
+        [NetBox documentation] for possible options.
+
+        ::: {.tip}
+        Use {option}`services.netbox.extraConfig` to extend this file with Python code.
+        :::
+
+        [NetBox documentation]: https://netboxlabs.com/docs/netbox/configuration/#configuration-file
       '';
-
       default = { };
-
-      type = lib.types.submodule {
-        freeformType = pythonFmt.type;
-
+      type = types.submodule {
+        freeformType = pythonVars.type;
         options = {
           ALLOWED_HOSTS = lib.mkOption {
-            type = with lib.types; listOf str;
+            type = with types; listOf str;
             default = [ "*" ];
             description = ''
               A list of valid fully-qualified domain names (FQDNs) and/or IP
               addresses that can be used to reach the NetBox service.
             '';
           };
+
+          STATIC_ROOT = mkOption {
+            type = types.path;
+            readOnly = true;
+            default = "${cfg.dataDir}/static/";
+            defaultText = lib.literalExpression "$${config.services.netbox.dataDir}/static/";
+            description = ''
+              Path to the collected static assets, served below `/static/`.
+            '';
+          };
+
+          MEDIA_ROOT = mkOption {
+            type = types.path;
+            readOnly = true;
+            default = "${cfg.dataDir}/media/";
+            defaultText = lib.literalExpression "$${config.services.netbox.dataDir}/media";
+            description = ''
+              Path where uploaded media is stored.
+            '';
+          };
+
+          REPORTS_ROOT = mkOption {
+            type = types.path;
+            readOnly = true;
+            default = "${cfg.dataDir}/reports/";
+            defaultText = lib.literalExpression "$${config.services.netbox.dataDir}/reports";
+            description = ''
+              Path where generated reports are stored.
+            '';
+          };
+
+          SCRIPTS_ROOT = mkOption {
+            type = types.path;
+            readOnly = true;
+            default = "${cfg.dataDir}/scripts/";
+            defaultText = lib.literalExpression "$${config.services.netbox.dataDir}/scripts";
+            description = ''
+              Path where scripts are stored.
+            '';
+          };
+
+          DATABASES = mkOption {
+            type = with types; attrsOf (attrsOf str);
+            default = {
+              "default" = {
+                NAME = "netbox";
+                USER = "netbox";
+                HOST = "/run/postgresql";
+              };
+            };
+            description = ''
+              Configuration for one or multiple [database] backends.
+
+              At least one database named `default` must be defined.
+
+              [database]: https://netbox.readthedocs.io/en/stable/configuration/required-parameters/#database
+            '';
+          };
+
+          # Redis database settings. Redis is used for caching and for queuing
+          # background tasks such as webhook events. A separate configuration
+          # exists for each. Full connection details are required in both
+          # sections, and it is strongly recommended to use two separate database
+          # IDs.
+          REDIS = {
+            tasks = {
+              URL = mkOption {
+                type = types.str;
+                default = "unix://${config.services.redis.servers.netbox.unixSocket}?db=0";
+                defaultText = lib.literalExpression "unix://$${config.services.redis.servers.netbox.unixSocket}?db=0";
+                description = ''
+                  Redis database connection for queuing background tasks.
+
+                  > It is highly recommended to keep the task and cache
+                  > databases separate. Using the same database number on the
+                  > same Redis instance for both may result in queued background
+                  > tasks being lost during cache flushing events.
+
+                  <https://netboxlabs.com/docs/netbox/configuration/required-parameters/#redis>
+                '';
+              };
+            };
+            caching = {
+              URL = mkOption {
+                type = types.str;
+                default = "unix://${config.services.redis.servers.netbox.unixSocket}?db=1";
+                defaultText = "unix://$${config.services.redis.servers.netbox.unixSocket}?db=0";
+                description = ''
+                  Redis database connection for caching.
+
+                  > It is highly recommended to keep the task and cache
+                  > databases separate. Using the same database number on the
+                  > same Redis instance for both may result in queued background
+                  > tasks being lost during cache flushing events.
+
+                  <https://netboxlabs.com/docs/netbox/configuration/required-parameters/#redis>
+                '';
+              };
+            };
+          };
+
+          REMOTE_AUTH_BACKEND = mkOption {
+            type =
+              with types;
+              oneOf [
+                str
+                (listOf str)
+              ];
+            default =
+              if enableLDAP then
+                "netbox.authentication.LDAPBackend"
+              else
+                "netbox.authentication.RemoteUserBackend";
+            defaultText = lib.literalExpression ''
+              if config.services.netbox.ldapConfigFile != null then
+                "netbox.authentication.LDAPBackend"
+              else
+                "netbox.authentication.RemoteUserBackend"
+            '';
+            description = ''
+              One or multiple [backends] used for authenticating external users.
+
+              When multiple backends are specified, they are tried in order.
+
+              [backends]: https://netbox.readthedocs.io/en/stable/configuration/remote-authentication/#remote_auth_backend
+            '';
+          };
+
+          LOGGING = mkOption {
+            type = pythonVars.type;
+            default = {
+              version = 1;
+
+              formatters.precise.format = "[%(levelname)s@%(name)s] %(message)s";
+
+              handlers.console = {
+                class = "logging.StreamHandler";
+                formatter = "precise";
+              };
+
+              # log to console/systemd instead of file
+              root = {
+                level = "INFO";
+                handlers = [ "console" ];
+              };
+            };
+            description = ''
+              [Logging configuration] based on the Python [`logging.config`] module.
+
+              [`logging.config`]: https://docs.python.org/3/library/logging.config.html
+              [Logging configuration]: https://netboxlabs.com/docs/netbox/configuration/system/#logging
+            '';
+          };
         };
       };
     };
 
+    extraConfig = lib.mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        from os import environ
+
+        # https://python-social-auth.readthedocs.io/en/latest/backends/oidc.html
+        # From the environment:
+        SOCIAL_AUTH_OIDC_SECRET = environ.get("OIDC_CLIENT_SECRET")
+
+        # From a file:
+        with open("/run/keys/oidc-client-secret") as fd:
+          SOCIAL_AUTH_OIDC_SECRET = fd.read().strip()
+      '';
+      description = ''
+        Additional lines that are appended to {file}`configuration.py`.
+
+        This option supports native Python code and can be used for reading
+        secrets from files or the environment into configuration variables:
+
+        Possible options can be found in the [NetBox documentation] or, for
+        authentication purposes, in the [Python Social Auth] documentation.
+
+        [NetBox documentation]: https://netboxlabs.com/docs/netbox/configuration/
+        [Python Social Auth]: https://python-social-auth.readthedocs.io/en/latest/backends/index.html#
+      '';
+    };
+
     bind = lib.mkOption {
-      type = lib.types.str;
+      type = types.str;
       default = "unix:/run/netbox/netbox.sock";
       example = "[::1]:8001";
       description = ''
@@ -169,7 +371,7 @@ in
     };
 
     gunicornArgs = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+      type = types.listOf types.str;
       default = [ ];
       description = "extra args for gunicorn when serving netbox";
       example = [
@@ -179,7 +381,7 @@ in
     };
 
     package = lib.mkOption {
-      type = lib.types.package;
+      type = types.package;
       default =
         if lib.versionAtLeast config.system.stateVersion "26.05" then pkgs.netbox_4_5 else pkgs.netbox_4_4;
       defaultText = lib.literalExpression ''
@@ -193,7 +395,7 @@ in
     };
 
     plugins = lib.mkOption {
-      type = with lib.types; functionTo (listOf package);
+      type = with types; functionTo (listOf package);
       default = _: [ ];
       defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
@@ -204,7 +406,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = types.str;
       default = "/var/lib/netbox";
       description = ''
         Storage path of netbox.
@@ -213,7 +415,7 @@ in
 
     secretKeyFile = lib.mkOption {
       type =
-        with lib.types;
+        with types;
         nullOr (pathWith {
           inStore = false;
         });
@@ -236,7 +438,7 @@ in
 
     apiTokenPepperFiles = lib.mkOption {
       type =
-        with lib.types;
+        with types;
         attrsOf (pathWith {
           inStore = false;
         });
@@ -267,31 +469,16 @@ in
       '';
     };
 
-    extraConfig = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
+    ldapConfigFile = lib.mkOption {
+      type = with types; nullOr path;
+      default = null;
       description = ''
-        Additional lines of configuration appended to the `configuration.py`.
-        See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
-      '';
-    };
+        Path to the [LDAP configuration] file, also known as {file}`ldap_config.py`.
 
-    enableLdap = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Enable LDAP-Authentication for Netbox.
+        When set, will automatically load the `django-auth-ldap` plugin and
+        configure {option}`services.netbox.settings.REMOTE_AUTH_BACKEND`.
 
-        This requires a configuration file being pass through `ldapConfigPath`.
-      '';
-    };
-
-    ldapConfigPath = lib.mkOption {
-      type = lib.types.path;
-      default = "";
-      description = ''
-        Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
-        See the [documentation](https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration) for possible options.
+        [LDAP configuration]: https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration
       '';
       example = ''
         import ldap
@@ -322,60 +509,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.netbox = {
-      plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
-      settings = {
-        STATIC_ROOT = staticDir;
-        MEDIA_ROOT = "${cfg.dataDir}/media";
-        REPORTS_ROOT = "${cfg.dataDir}/reports";
-        SCRIPTS_ROOT = "${cfg.dataDir}/scripts";
-
-        GIT_PATH = "${pkgs.gitMinimal}/bin/git";
-
-        DATABASES = {
-          "default" = {
-            NAME = "netbox";
-            USER = "netbox";
-            HOST = "/run/postgresql";
-          };
-        };
-
-        # Redis database settings. Redis is used for caching and for queuing
-        # background tasks such as webhook events. A separate configuration
-        # exists for each. Full connection details are required in both
-        # sections, and it is strongly recommended to use two separate database
-        # IDs.
-        REDIS = {
-          tasks = {
-            URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=0";
-            SSL = false;
-          };
-          caching = {
-            URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=1";
-            SSL = false;
-          };
-        };
-
-        REMOTE_AUTH_BACKEND = lib.mkIf cfg.enableLdap "netbox.authentication.LDAPBackend";
-
-        LOGGING = lib.mkDefault {
-          version = 1;
-
-          formatters.precise.format = "[%(levelname)s@%(name)s] %(message)s";
-
-          handlers.console = {
-            class = "logging.StreamHandler";
-            formatter = "precise";
-          };
-
-          # log to console/systemd instead of file
-          root = {
-            level = "INFO";
-            handlers = [ "console" ];
-          };
-        };
-      };
-    };
+    services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
 
     services.redis.servers.netbox.enable = true;
 

@@ -34,8 +34,7 @@ import ../../make-test-python.nix (
           enable = true;
           package = netbox;
 
-          enableLdap = true;
-          ldapConfigPath = pkgs.writeText "ldap_config.py" ''
+          ldapConfigFile = pkgs.writeText "ldap_config.py" ''
             import ldap
             from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
