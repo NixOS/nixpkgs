@@ -11,17 +11,11 @@ let
     mkIf
     mkMerge
     mkOption
+    mkPackageOption
+    mkAliasOptionModule
     ;
 
   cfg = config.security.run0;
-
-  sudoAlias = pkgs.writeShellScriptBin "sudo" ''
-    if [[ "$1" == -* ]]; then
-      echo "This script is a sudo-alias to systemd's run0 and does not support any sudo parameters."
-      exit 1
-    fi
-    exec run0 "$@"
-  '';
 in
 {
   options.security.run0 = {
@@ -36,8 +30,16 @@ in
       '';
     };
 
-    enableSudoAlias = mkEnableOption "make {command}`sudo` an alias to {command}`run0`.";
+    sudo-shim.enable = mkEnableOption "make {command}`sudo` an alias to {command}`run0`.";
+    sudo-shim.package = mkPackageOption pkgs "run0-sudo-shim" { };
   };
+
+  imports = [
+    (mkAliasOptionModule
+      [ "security" "run0" "enableSudoAlias" ]
+      [ "security" "run0" "sudo-shim" "enable" ]
+    )
+  ];
 
   config = mkMerge [
     {
@@ -58,8 +60,8 @@ in
       assertions = [
         {
           assertion =
-            cfg.enableSudoAlias -> (!config.security.sudo.enable && !config.security.sudo-rs.enable);
-          message = "`security.run0.enableSudoAlias` cannot be enabled if `security.sudo` or `security.sudo-rs` are enabled.";
+            cfg.sudo-shim.enable -> (!config.security.sudo.enable && !config.security.sudo-rs.enable);
+          message = "`security.run0.sudo-shim.enable` cannot be enabled if `security.sudo` or `security.sudo-rs` are enabled.";
         }
       ];
 
@@ -74,7 +76,7 @@ in
         '';
       };
 
-      environment.systemPackages = lib.optional cfg.enableSudoAlias sudoAlias;
+      environment.systemPackages = lib.optional cfg.sudo-shim.enable cfg.sudo-shim.package;
     })
   ];
 
