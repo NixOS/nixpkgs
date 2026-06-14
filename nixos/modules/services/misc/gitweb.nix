@@ -31,6 +31,7 @@ in
         $feature{'highlight'}{'default'} = [1];
         $feature{'ctags'}{'default'} = [1];
         $feature{'avatar'}{'default'} = ['gravatar'];
+        $feature{'pathinfo'}{'default'} = [1];
       '';
     };
 
