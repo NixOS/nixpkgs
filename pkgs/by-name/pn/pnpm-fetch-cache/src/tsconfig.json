@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "module": "nodenext",
+    "outDir": "dist/",
+    "rootDir": "./",
+    "strict": true,
+    "target": "esnext",
+    "types": ["node", "mocha"]
+  },
+  "include": ["*.ts"],
+  "exclude": ["node_modules"]
+}

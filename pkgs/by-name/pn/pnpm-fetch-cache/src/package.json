@@ -1,0 +1,30 @@
+{
+  "name": "pnpm-fetch-cache",
+  "version": "0.0.0",
+  "description": "Fetch pnpm deps and produce a manifest for nixpkgs mitm-cache",
+  "license": "MIT",
+  "author": "Sefa Eyeoglu <contact@scrumplex.net>",
+  "type": "module",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@logtape/logtape": "^2.1.4",
+    "@pnpm/deps.path": "^1100.0.7",
+    "@pnpm/lockfile.fs": "^1100.1.4",
+    "p-map": "^7.0.4"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.9.3",
+    "mocha": "^11.7.6",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha --require tsx --extension spec.ts .",
+    "dev": "tsx ./index.ts"
+  },
+  "files": [
+    "dist/*.js"
+  ]
+}

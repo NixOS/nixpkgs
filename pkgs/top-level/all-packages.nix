@@ -2911,6 +2911,11 @@ with pkgs;
     pnpmConfigHook
     ;
 
+  inherit (callPackages ../build-support/node/fetch-pnpm-cache { })
+    fetchPnpmCache
+    pnpmCacheConfigHook
+    ;
+
   po4a = perlPackages.Po4a;
 
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
