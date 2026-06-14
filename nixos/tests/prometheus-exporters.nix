@@ -1112,7 +1112,7 @@ let
           wait_for_unit("nginx.service")
           wait_for_unit("prometheus-nextcloud-exporter.service")
           wait_for_open_port(9205)
-          succeed("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
+          wait_until_succeeds("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
         '';
       };
 
