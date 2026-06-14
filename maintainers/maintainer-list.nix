@@ -11747,6 +11747,12 @@
     github = "IogaMaster";
     githubId = 67164465;
   };
+  iokernel = {
+    email = "canyoujust@pm.me";
+    github = "IOKernel";
+    githubId = 26818683;
+    name = "IOKernel";
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
