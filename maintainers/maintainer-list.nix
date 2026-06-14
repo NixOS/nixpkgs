@@ -160,7 +160,8 @@
   _0xSA7 = {
     name = "Saleh Diaa Ahmed";
     github = "0xSA7";
-    githubId = 153073356;
+    githubId = 109046494;
+    email = "salehdiaaahmed@gmail.com";
   };
   _1000101 = {
     email = "b1000101@pm.me";
@@ -7857,12 +7858,6 @@
     github = "ekzyis";
     githubId = 27162016;
     name = "Ramdip Gill";
-  };
-  elasticdog = {
-    email = "aaron@elasticdog.com";
-    github = "elasticdog";
-    githubId = 4742;
-    name = "Aaron Bull Schaefer";
   };
   elatov = {
     email = "elatov@gmail.com";

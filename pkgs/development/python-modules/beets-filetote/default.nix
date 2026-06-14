@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   buildPythonPackage,
 
   # build-system
@@ -20,17 +21,26 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beets-filetote";
-  version = "1.1.1";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
-    tag = "v${version}";
-    hash = "sha256-NsYBsP60SiCfQ63C4WMkshyreFqOSmx3LP5Gwq6ECF0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qMHjcBrXkVG7U5a1E0yRwNgmg7XinRnK3gnV7jAZLTk=";
   };
+  # needed to keep beetsplug a namespace package, othwise other plugins will not be found
+  # can be removed with next version
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/gtronset/beets-filetote/commit/762cf0c4b60b8f6b38cf39b027de4241f12cef37.patch?full_index=1";
+      hash = "sha256-c7qIECcqwoV4ZOaA/8JYsM6Aym34peWPh7ZLWUxIYSI=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail "poetry-core<2.0.0" "poetry-core"
@@ -67,20 +77,15 @@ buildPythonPackage rec {
     "-rfEs"
   ];
 
-  disabledTestPaths = [
-    "tests/test_cli_operation.py"
-    "tests/test_pruning.py"
-    "tests/test_version.py"
-  ];
-
   meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/gtronset/beets-filetote";
-    changelog = "https://github.com/gtronset/beets-filetote/blob/${src.tag}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ dansbandit ];
+    changelog = "https://github.com/gtronset/beets-filetote/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      dansbandit
+      returntoreality
+    ];
     license = lib.licenses.mit;
     inherit (beets-minimal.meta) platforms;
-    # https://github.com/gtronset/beets-filetote/issues/211
-    broken = true;
   };
-}
+})

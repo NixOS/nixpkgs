@@ -2,9 +2,9 @@
 
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 
-TYPES="html pdf-a4 text texinfo"
-URL=https://docs.python.org/VERSION/archives/python-VERSION-docs-TYPE.tar.bz2
-VERSIONS=$(for major in 3; do curl https://docs.python.org/$major/archives/ 2>/dev/null | perl -l -n -e'/<a href="python-([23].[0-9]+(.[0-9]+)?)-docs-html.tar.bz2/ && print $1' | tail -n 1; done)
+TYPES="html text texinfo"
+URL=https://www.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
+VERSIONS=$(curl https://www.python.org/ftp/python/doc/ 2>/dev/null | perl -l -n -e'/<a href="([3].[0-9]+.[0-9]+)\// && print $1' | sort --version-sort | tail -n 1)
 echo "Generating expressions for:
 ${VERSIONS}
 "

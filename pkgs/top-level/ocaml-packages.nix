@@ -22,6 +22,8 @@ let
 
         afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
+        aeneas = callPackage ../development/ocaml-modules/aeneas { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
@@ -246,6 +248,8 @@ let
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
+        charon = callPackage ../development/ocaml-modules/charon { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
@@ -540,6 +544,8 @@ let
         earlybird = callPackage ../development/ocaml-modules/earlybird { };
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
+        easy_logging = callPackage ../development/ocaml-modules/easy_logging { };
 
         eigen = callPackage ../development/ocaml-modules/eigen {
           stdenv = pkgs.gcc14Stdenv;
@@ -1420,6 +1426,8 @@ let
         mustache = callPackage ../development/ocaml-modules/mustache { };
 
         ### N ###
+
+        name_matcher_parser = callPackage ../development/ocaml-modules/name_matcher_parser { };
 
         nbd = pkgs.libnbd.override {
           ocamlPackages = self;
