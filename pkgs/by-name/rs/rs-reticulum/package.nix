@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/rnid-rs";
 
   passthru.updateScript = nix-update-script { };
 
@@ -56,6 +57,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/ratspeak/rsReticulum";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "rs-reticulum";
   };
 })
