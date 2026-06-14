@@ -12,6 +12,7 @@
 }:
 
 let
+  barkFfiGo = callPackage ./bark-ffi-go { };
   ldkNode = callPackage ./ldk-node { };
   ldkNodeGo = callPackage ./ldk-node-go {
     inherit ldkNode;
@@ -21,17 +22,24 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "albyhub";
-  version = "1.22.2";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xP/J9zdh4sZ1x+JUpOf12ft8f2II2Mn1Q7/gnMuFzy8=";
+    hash = "sha256-1mdpsctrQN012+HAWSgorzlN2UBA5D4+sZIIVYCq8k8=";
   };
 
-  vendorHash = "sha256-nzdHXY14o4D8NrcXu2JvDagvIfemfVAaGU3IDifhyW0=";
+  vendorHash = "sha256-xQkQIWBrbrXzU9/5BMD3/+KKR847gh4XQrwj/CDoml0=";
   proxyVendor = true; # needed for secp256k1-zkp CGO bindings
+
+  postPatch = ''
+    cp -r ${barkFfiGo.src}/golang bark-ffi-bindings-golang
+    chmod -R u+w bark-ffi-bindings-golang
+    rm -r bark-ffi-bindings-golang/lib
+    go mod edit -replace gitlab.com/ark-bitcoin/bark-ffi-bindings/golang=./bark-ffi-bindings-golang
+  '';
 
   nativeBuildInputs = [
     fixup-yarn-lock
@@ -41,16 +49,21 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
+    barkFfiGo
     ldkNodeGo
     (lib.getLib stdenv.cc.cc)
   ];
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/frontend/yarn.lock";
-    hash = "sha256-BeuTBLJ/Iakd4jhIkI2+oHc4MFy6DSn8QcygTHEMmQo=";
+    hash = "sha256-VI4FRe1kzVMqqcZ68nZmZqmXW7FOQMbJ0z8QqZoLYEA=";
   };
 
   preBuild = ''
+    mkdir -p bark-ffi-bindings-golang/lib/linux_${stdenv.hostPlatform.go.GOARCH}
+    cp ${barkFfiGo}/lib/libbark_ffi_go.a \
+      bark-ffi-bindings-golang/lib/linux_${stdenv.hostPlatform.go.GOARCH}/libbark_ffi_go.a
+
     export HOME=$TMPDIR
     pushd frontend
       fixup-yarn-lock yarn.lock
