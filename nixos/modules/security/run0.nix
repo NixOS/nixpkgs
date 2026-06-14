@@ -77,4 +77,12 @@ in
       environment.systemPackages = lib.optional cfg.enableSudoAlias sudoAlias;
     })
   ];
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      zimward
+      grimmauld
+      kuflierl
+    ];
+  };
 }
