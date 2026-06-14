@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   watchman,
 }:
 
 buildPythonPackage rec {
   pname = "pywatchman";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     substituteInPlace pywatchman/__init__.py \
       --replace "'watchman'" "'${watchman}/bin/watchman'"
   '';
+
+  build-system = [ setuptools ];
 
   # No tests in archive
   doCheck = false;
