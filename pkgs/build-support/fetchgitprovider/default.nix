@@ -5,9 +5,9 @@
   fetchzip,
 }@args:
 let
-  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # Here defines fetchFromGitProvider arguments that determines useFetchGit,
   # The attribute value is their default values.
-  # As fetchFromGitHub prefers fetchzip for hash stability,
+  # As fetchFromGitProvider prefers fetchzip for hash stability,
   # `defaultFetchGitArgs` attributes should lead to `useFetchGit = false`.
   useFetchGitArgsDefault = {
     deepClone = false;
