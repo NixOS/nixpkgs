@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dracula-icon-theme";
-  version = "0-unstable-2024-05-26";
+  version = "0-unstable-2025-08-2";
 
   src = fetchFromGitHub {
-    owner = "m4thewz";
-    repo = "dracula-icons";
-    rev = "6232e5217429a3ae6396c9e054f5338cecdbb7a5";
-    hash = "sha256-u2cIUTLWYs8VIqg6ZAUyz0nmzuFAZC4oh7bE67+B1Vg=";
+    owner  = "m4thewz";
+    repo   = "dracula-icons";
+    rev    = "de2a8edd94608ba0ac4dcf5a187af0ffaa511ebc";
+    sha256 = "sha256-JUjC6oalD7teSzzdMqLTXn7eJTZQbPP/oDeLBC7bG6E=";
   };
 
   nativeBuildInputs = [
