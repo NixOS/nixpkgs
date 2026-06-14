@@ -399,7 +399,9 @@ in
       (pkgs.writeScriptBin "pretix-manage" ''
         cd ${cfg.settings.pretix.datadir}
         sudo=exec
-        if [[ "$USER" != ${cfg.user} ]]; then
+        if [[ "''${USER:-root}" == 'root' ]]; then
+          sudo='exec runuser -u ${cfg.user} --preserve-environment --'
+        elif [[ "$USER" != "${cfg.user}" ]]; then
           sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
         fi
         export PRETIX_CONFIG_FILE=${configFile}

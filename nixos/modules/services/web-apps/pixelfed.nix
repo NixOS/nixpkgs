@@ -42,7 +42,9 @@ let
   pixelfed-manage = pkgs.writeShellScriptBin "pixelfed-manage" ''
     cd ${pixelfed}
     sudo=exec
-    if [[ "$USER" != ${user} ]]; then
+    if [[ "''${USER:-root}" == 'root' ]]; then
+      sudo='exec runuser -u ${cfg.user} --'
+    elif [[ "$USER" != "${cfg.user}" ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
     $sudo ${phpPackage}/bin/php artisan "$@"

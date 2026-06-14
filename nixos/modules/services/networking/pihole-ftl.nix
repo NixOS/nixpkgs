@@ -25,7 +25,9 @@ let
 
   piholeScript = pkgs.writeScriptBin "pihole" ''
     sudo=exec
-    if [[ "$USER" != '${cfg.user}' ]]; then
+    if [[ "''${USER:-root}" == 'root' ]]; then
+      sudo='exec runuser -u ${cfg.user} --'
+    elif [[ "$USER" != "${cfg.user}" ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
     $sudo ${getExe cfg.piholePackage} "$@"

@@ -152,7 +152,9 @@ let
       cd /var/lib/mastodon
 
       sudo=exec
-      if [[ "$USER" != ${cfg.user} ]]; then
+      if [[ "''${USER:-root}" == 'root' ]]; then
+        sudo='exec runuser -u ${cfg.user} --preserve-environment --'
+      elif [[ "$USER" != "${cfg.user}" ]]; then
         sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env'
       fi
       $sudo ${cfg.package}/bin/tootctl "$@"
