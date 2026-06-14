@@ -4628,21 +4628,21 @@ with pkgs;
     ;
 
   inherit (beam.packages.erlang_27.beamPackages)
-    elixir
     elixir_1_18
     elixir_1_17
-    elixir-ls
-    ex_doc
-    lfe
     ;
 
   inherit (beam.packages.erlang)
-    erlfmt
+    elixir
+    elixir-ls
     elvis-erlang
+    erlfmt
+    ex_doc
+    fetchHex
+    lfe
     rebar
     rebar3
     rebar3WithPlugins
-    fetchHex
     ;
 
   beamPackages = dontRecurseIntoAttrs beam.packages.erlang.beamPackages;
