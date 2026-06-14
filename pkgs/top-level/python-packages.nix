@@ -10551,8 +10551,6 @@ self: super: with self; {
     callPackage ../development/python-modules/mozjpeg_lossless_optimization
       { };
 
-  mpd2 = callPackage ../development/python-modules/mpd2 { };
-
   mpegdash = callPackage ../development/python-modules/mpegdash { };
 
   mpi-pytest = callPackage ../development/python-modules/mpi-pytest { };
@@ -16304,6 +16302,8 @@ self: super: with self; {
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
   python-motionmount = callPackage ../development/python-modules/python-motionmount { };
+
+  python-mpd2 = callPackage ../development/python-modules/python-mpd2 { };
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
