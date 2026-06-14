@@ -1343,8 +1343,6 @@ self: super: with self; {
 
   awacs = callPackage ../development/python-modules/awacs { };
 
-  awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
-
   awesomeversion = callPackage ../development/python-modules/awesomeversion { };
 
   awkward = callPackage ../development/python-modules/awkward { };
