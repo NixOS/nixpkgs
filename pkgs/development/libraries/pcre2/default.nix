@@ -8,12 +8,12 @@
   withJitSealloc ? !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcre2";
   version = "10.47";
 
   src = fetchurl {
-    url = "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
+    url = "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${finalAttrs.version}/pcre2-${finalAttrs.version}.tar.bz2";
     hash = "sha256-R/6MmUYSUNQviebo/a66naBXhV0G63/AjZygP9CNe8c=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.pcre.org/";
-    changelog = "https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-${version}";
+    changelog = "https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-${finalAttrs.version}";
     description = "Perl Compatible Regular Expressions";
     license = lib.licenses.bsd3;
     maintainers = [ ];
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
       "libpcre2-16"
       "libpcre2-32"
     ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pcre" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pcre" finalAttrs.version;
   };
-}
+})
