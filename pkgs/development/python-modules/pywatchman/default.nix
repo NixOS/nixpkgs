@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pywatchman";
-  version = "3.0.0";
+  version = "4.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-79MqFzkaWHIRjFUEHacaIJYORrpLc0QMJO+sKH7qkR4=";
+    hash = "sha256-LeoQcQFgxva80iDEmieJUjSJfP3sYsWxCY9qDuTt15o=";
   };
 
   postPatch = ''
