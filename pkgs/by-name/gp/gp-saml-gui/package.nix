@@ -11,7 +11,7 @@
 }:
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "gp-saml-gui";
-  version = "0.1+20240731-${lib.strings.substring 0 7 finalAttrs.src.rev}";
+  version = "0.1-unstable-2024-07-31";
   pyproject = true;
 
   build-system = with python3Packages; [ setuptools ];
