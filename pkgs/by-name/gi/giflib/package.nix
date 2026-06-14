@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix missing symbol error on Darwin when linking libutil.dylib.
+    # Based on discussion in https://sourceforge.net/p/giflib/bugs/189/.
+    ./0001-Suppress-undefined-symbol-error-on-Darwin.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
