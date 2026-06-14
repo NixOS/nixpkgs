@@ -3,6 +3,7 @@
 import sys
 
 import argparse
+import asyncio
 import json
 
 from jetbrains_nix_updater.config import UpdaterConfig
@@ -10,9 +11,10 @@ from jetbrains_nix_updater.fetcher import VersionFetcher
 from jetbrains_nix_updater.ides import get_single_ide, get_all_ides
 from jetbrains_nix_updater.update_bin import run_bin_update
 from jetbrains_nix_updater.update_src import run_src_update
+from jetbrains_nix_updater.util import async_gen_to_list
 
 
-def main():
+async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "ide",
@@ -30,11 +32,6 @@ def main():
         "--no-src", action="store_true", help="do not update source IDEs"
     )
     parser.add_argument(
-        "--no-maven-deps",
-        action="store_true",
-        help="do not update maven dependencies for source IDEs",
-    )
-    parser.add_argument(
         "--old-version",
         type=str,
         help="old version of the IDE, only used if `ide` (or UPDATE_NIX_PNAME) is also used. "
@@ -50,9 +47,9 @@ def main():
     version_fetcher = VersionFetcher()
 
     ides_to_run_for = (
-        [get_single_ide(update_info, config.jetbrains_root, config.ide)]
+        [await get_single_ide(update_info, config.jetbrains_root, config.ide)]
         if config.ide is not None
-        else list(get_all_ides(update_info, config.jetbrains_root))
+        else await async_gen_to_list(get_all_ides(update_info, config.jetbrains_root))
     )
 
     print(f"[.] found IDEs to update: {', '.join(ide.name for ide in ides_to_run_for)}")
@@ -78,11 +75,11 @@ def main():
                 return
 
             if ide.is_source:
-                success &= run_src_update(ide, info, config)
+                success &= await run_src_update(ide, info, config)
             else:
-                success &= run_bin_update(ide, info, config)
+                success &= await run_bin_update(ide, info, config)
     exit(0 if success else 1)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

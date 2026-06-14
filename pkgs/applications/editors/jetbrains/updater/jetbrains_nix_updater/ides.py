@@ -1,7 +1,7 @@
 import sys
 
 from subprocess import CalledProcessError
-from typing import Iterable, TypedDict
+from typing import Iterable, TypedDict, AsyncGenerator, TypeVar
 
 import dataclasses
 from pathlib import Path
@@ -22,11 +22,11 @@ class Ide:
     update_info: UpdateInfo | None
 
 
-def is_source_ide(drv_path: Path):
+async def is_source_ide(drv_path: Path):
     assert " " not in str(drv_path)
     try:
         return (
-            run_command(
+            await run_command(
                 [
                     "nix-instantiate",
                     "--eval",
@@ -41,24 +41,28 @@ def is_source_ide(drv_path: Path):
         exit(1)
 
 
-def get_single_ide(update_info: dict[str, UpdateInfo], jb_root: Path, name: str) -> Ide:
+async def get_single_ide(
+    update_info: dict[str, UpdateInfo], jb_root: Path, name: str
+) -> Ide:
     drv_path = jb_root / "ides" / f"{name}.nix"
     if not drv_path.exists():
         raise Exception(f"IDE not found at {drv_path}")
     return Ide(
         name=name,
         drv_path=drv_path,
-        is_source=is_source_ide(drv_path),
+        is_source=await is_source_ide(drv_path),
         update_info=update_info.get(name),
     )
 
 
-def get_all_ides(update_info: dict[str, UpdateInfo], jb_root: Path) -> Iterable[Ide]:
+async def get_all_ides(
+    update_info: dict[str, UpdateInfo], jb_root: Path
+) -> AsyncGenerator[Ide]:
     for file in sorted((jb_root / "ides").iterdir()):
         if file.suffix == ".nix":
             yield Ide(
                 name=file.stem,
                 drv_path=file,
-                is_source=is_source_ide(file),
+                is_source=await is_source_ide(file),
                 update_info=update_info.get(file.stem),
             )

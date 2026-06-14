@@ -1,18 +1,48 @@
-from typing import Iterable
+import asyncio
+import io
+from subprocess import PIPE, CalledProcessError, CompletedProcess
+from typing import Iterable, TypeVar, AsyncGenerator
 
-import subprocess
 from pathlib import Path
 
 from jetbrains_nix_updater.config import UpdaterConfig
 
 
-def run_command(cmd: list[str], **kwargs) -> str:
-    result = subprocess.run(cmd, capture_output=True, check=True, text=True, **kwargs)
+# based on https://github.com/vgavro/asyncio-subprocess-run/blob/main/asyncio_subprocess_run.py,
+# Copyright (c) 2021 Victor Gavro, licensed under MIT
+async def run(cmd, *, cwd=None):
+    def _maybe_text(data):
+        if data is not None:
+            return io.TextIOWrapper(io.BytesIO(data)).read()
+        return data
+
+    proc = await asyncio.create_subprocess_exec(
+        *cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=cwd
+    )
+
+    try:
+        stdout, stderr = await asyncio.create_task(proc.communicate())
+    except asyncio.CancelledError:
+        proc.kill()
+        raise
+
+    if proc.returncode != 0:
+        raise CalledProcessError(
+            proc.returncode, cmd, _maybe_text(stdout), _maybe_text(stderr)
+        )
+
+    return CompletedProcess(
+        cmd, proc.returncode, _maybe_text(stdout), _maybe_text(stderr)
+    )
+
+
+async def run_command(cmd: list[str], *, cwd=None) -> str:
+    result = await run(cmd, cwd=cwd)
     return result.stdout.strip()
 
 
-def convert_hash_to_sri(base32: str) -> str:
-    return run_command(["nix-hash", "--to-sri", "--type", "sha256", base32])
+async def convert_hash_to_sri(base32: str) -> str:
+    return await run_command(["nix-hash", "--to-sri", "--type", "sha256", base32])
 
 
 def ensure_is_list(x):
@@ -25,7 +55,7 @@ def one_or_more(x):
     return x if isinstance(x, list) else [x]
 
 
-def replace_blocks(
+async def replace_blocks(
     config: UpdaterConfig, file: Path, blocks: Iterable[tuple[str, str]]
 ):
     """
@@ -76,7 +106,17 @@ def replace_blocks(
     with open(file, "w") as f:
         f.writelines(lines)
 
-    run_command(
+    await run_command(
         ["nix-shell", "--run", f"treefmt --no-cache {file.absolute()}"],
         cwd=config.nixpkgs_root,
     )
+
+
+T = TypeVar("T")
+
+
+async def async_gen_to_list(gen: AsyncGenerator[T]) -> list[T]:
+    out = []
+    async for item in gen:
+        out.append(item)
+    return out
