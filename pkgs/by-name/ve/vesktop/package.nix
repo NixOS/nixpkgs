@@ -14,8 +14,8 @@
   libpulseaudio,
   autoPatchelfHook,
   pnpm_10_29_2,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  fetchPnpmCache,
+  pnpmCacheConfigHook,
   nodejs,
   jq,
   nix-update-script,
@@ -39,21 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YPDlqiO+0BtDgC7aFl8B2KPYsT41WqzOQ7et2Tejs3M=";
   };
 
-  pnpmDeps = fetchPnpmDeps {
+  mitmCache = fetchPnpmCache {
     inherit (finalAttrs)
       pname
-      version
       src
       patches
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-Ue1K1KmRi4gF7E519deVY7QH+22dqlECMjdA7Z7qDCA=";
+    hash = "sha256-sCjpraHTZUktpADF3VQUv8kgcEoOYATaKKdSAWLMvqI=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpmConfigHook
+    pnpmCacheConfigHook
     pnpm_10_29_2
     jq
   ]
@@ -179,9 +176,11 @@ stdenv.mkDerivation (finalAttrs: {
   });
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Alternate client for Discord with Vencord built-in";
