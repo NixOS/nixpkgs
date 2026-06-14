@@ -4,9 +4,10 @@
   cbor2,
   fetchFromGitHub,
   pycryptodome,
+  pytestCheckHook,
   uv-build,
   solc-select,
-  toml,
+  solc,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -34,11 +35,17 @@ buildPythonPackage (finalAttrs: {
     cbor2
     pycryptodome
     solc-select
-    toml
   ];
 
-  # Test require network access
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    solc
+  ];
+
+  disabledTestPaths = [
+    # require network access
+    "tests/test_sourcify_proxy.py"
+  ];
 
   # required for import check to work
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
