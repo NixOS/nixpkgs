@@ -18466,13 +18466,6 @@
     github = "mohe2015";
     githubId = 13287984;
   };
-  momeemt = {
-    name = "Mutsuha Asada";
-    email = "me@momee.mt";
-    github = "momeemt";
-    githubId = 43488453;
-    keys = [ { fingerprint = "D94F EA9F 5B08 F6A1 7B8F  EB8B ACB5 4F0C BC6A A7C6"; } ];
-  };
   monaaraj = {
     name = "Mon Aaraj";
     email = "owo69uwu69@gmail.com";
