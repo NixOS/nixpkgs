@@ -88,11 +88,28 @@ with haskellLib;
   inherit
     (
       let
+        haveSemaphoreCompat200 =
+          # ATTN: we assume that semaphore-compat isn't changed in cabalInstallOverlay!
+          lib.versionAtLeast (self.semaphore-compat.version or "0") "2.0.0"
+          || (
+            lib.versionAtLeast self.ghc.version "9.12.4.20260606" # 9.12.5-rc1
+            && lib.versionOlder self.ghc.version "9.14"
+          );
+
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay =
           cself: csuper:
-          lib.optionalAttrs (lib.versionOlder csuper.ghc.version "9.14") {
-            Cabal = cself.Cabal_3_16_1_0;
+          lib.optionalAttrs (haveSemaphoreCompat200 || lib.versionOlder csuper.ghc.version "9.14") {
+            # Waiting on Cabal-3.18 with https://github.com/haskell/cabal/pull/11628
+            Cabal = appendPatches (lib.optionals haveSemaphoreCompat200 [
+              (pkgs.fetchpatch {
+                name = "Cabal-semaphore-compat-2.0.0.patch";
+                url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
+                hash = "sha256-+rcwBQILTc1ezcHb3VDampwMYGEG7S4HF1YKAk7QzUs=";
+                relative = "Cabal";
+              })
+
+            ]) cself.Cabal_3_16_1_0;
             Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
           };
       in
@@ -102,11 +119,23 @@ with haskellLib;
             cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
             scope = cabal-install.scope;
           in
-          # Some dead code is not properly eliminated on aarch64-darwin, leading
-          # to bogus references to some dependencies.
           overrideCabal (
             old:
-            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            {
+              patches = lib.optionals haveSemaphoreCompat200 [
+                # Waiting on cabal-install-3.18 with https://github.com/haskell/cabal/pull/11628
+                (pkgs.fetchpatch {
+                  name = "cabal-install-semaphore-compat-2.0.0.patch";
+                  url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
+                  hash = "sha256-7unna/3+/MPbD/6f5MBgggvy254YRXhHnHIrFzJoboQ=";
+                  relative = "cabal-install";
+                })
+              ];
+
+            }
+            # Some dead code is not properly eliminated on aarch64-darwin, leading
+            # to bogus references to some dependencies.
+            // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
