@@ -46,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/33Lx62S/9RcqrfJumE6/o3KnAObBa3DcmuGkcOXIQE=";
   };
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     gettext
@@ -79,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "'grep'" "'${lib.getExe gnugrep}'" \
 
     substituteInPlace "bitlicense.py" \
-      --replace-fail "/usr/share/doc" "$out/share/doc" \
+      --replace-fail "/usr/share/doc" "$doc/share/doc" \
   '';
 
   dontAddPrefix = true;
