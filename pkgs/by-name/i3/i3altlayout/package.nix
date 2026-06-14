@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.3";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-DhOYeSCxKthr2fEMGMBXjUYeCJjj6AV4d05So4eDF8A=";
