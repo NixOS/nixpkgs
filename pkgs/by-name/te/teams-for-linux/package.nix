@@ -37,11 +37,7 @@ buildNpmPackage rec {
 
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  env = {
-    # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  };
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   makeCacheWritable = true;
 

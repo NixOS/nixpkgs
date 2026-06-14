@@ -54,12 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     OPENCODE_CHANNEL = "prod";
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;
-  }
-  # Disable code signing on macOS. Public build hosts don't have Apple Developer
-  # certificates, so electron-builder's `security find-identity` spawns produce
-  # EPERM inside the nix sandbox.
-  // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   postPatch = ''
