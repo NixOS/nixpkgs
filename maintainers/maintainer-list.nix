@@ -6645,6 +6645,13 @@
     githubId = 8864716;
     name = "Duarte David";
   };
+  deni111bg = {
+    email = "d1bg@tuta.io";
+    github = "d1bg"
+    githubId = 144280774;
+    name = "Denis Georgiev";
+
+  };
   demin-dmitriy = {
     email = "demindf@gmail.com";
     github = "demin-dmitriy";
