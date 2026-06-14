@@ -15120,6 +15120,11 @@
     githubId = 27364685;
     name = "Lorenzo Pasqui";
   };
+  l1n = {
+    github = "l1n";
+    githubId = 1367322;
+    name = "Nova DasSarma";
+  };
   l1npengtul = {
     email = "l1npengtul@l1npengtul.lol";
     github = "l1npengtul";
