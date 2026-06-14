@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.plasma-desktop
   ];
 
+  propagatedUserEnvPkgs = [ glib ];
+
   strictDeps = true;
 
   cmakeFlags = [
