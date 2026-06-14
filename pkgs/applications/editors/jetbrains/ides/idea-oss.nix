@@ -34,12 +34,11 @@ let
           "0012-DRAFT-add-WindowsFileSystem-readdir-to-traverse-entr.patch"
           "0013-DRAFT-switch-to-jbrsdk-v25b176.4.patch"
           "0014-DRAFT-switch-back-to-zulu-v21.40.17-on-windows-arm64.patch"
-          #"0015-Allow-platform-specific-startup-bazelrc-flags.patch"
         ];
       };
       registry = {
-        rev = "3934afcc4a205b64b528d15612affb3c28a5ad93";
-        hash = "sha256-fU8h6Nu0UJgj0gU+5tH8C3l/RpKHSmZm377rQvJd1jw=";
+        rev = "694f4e0ff33369796b1aaf52a5d11e3128003299";
+        hash = "sha256-Cj158kkb8jr9t5mMmMcelkwRzkvmfV1sdG+LVFytLPM=";
       };
       repoCacheFODHashes = {
         x86_64-linux = "sha256-tTlUP8DcSS2lemXtDIu4QTcvi65PAM0FaU5i8XCKY7Q=";
