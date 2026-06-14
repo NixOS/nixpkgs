@@ -6647,7 +6647,7 @@
   };
   deni111bg = {
     email = "d1bg@tuta.io";
-    github = "d1bg"
+    github = "d1bg";
     githubId = 144280774;
     name = "Denis Georgiev";
 
