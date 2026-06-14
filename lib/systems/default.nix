@@ -423,7 +423,14 @@ let
 
       }
       // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or final.gcc.cpu or "default") architectures.predicates
+      // (
+        let
+          defaultArchitectureTarget = if final.isPower64 && final.isLittleEndian then "power8" else "default";
+        in
+        mapAttrs (
+          n: v: v final.gcc.arch or final.gcc.cpu or defaultArchitectureTarget
+        ) architectures.predicates
+      )
       // args
       // {
         rust = rust // {
