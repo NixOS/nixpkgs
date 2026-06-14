@@ -575,33 +575,50 @@ rec {
   findFirstIndex =
     pred: default: list:
     let
-      # A naive recursive implementation would be much simpler, but
-      # would also overflow the evaluator stack. We use `foldl'` as a workaround
-      # because it reuses the same stack space, evaluating the function for one
-      # element after another. We can't return early, so this means that we
-      # sacrifice early cutoff, but that appears to be an acceptable cost. A
-      # clever scheme with "exponential search" is possible, but appears over-
-      # engineered for now. See https://github.com/NixOS/nixpkgs/pull/235267
+      len = length list;
 
-      # Invariant:
-      # - if index < 0 then el == elemAt list (- index - 1) and all elements before el didn't satisfy pred
-      # - if index >= 0 then pred (elemAt list index) and all elements before (elemAt list index) didn't satisfy pred
-      #
-      # We start with index -1 and the 0'th element of the list, which satisfies the invariant
-      resultIndex = foldl' (
-        index: el:
-        if index < 0 then
-          # No match yet before the current index, we need to check the element
-          if pred el then
-            # We have a match! Turn it into the actual index to prevent future iterations from modifying it
-            -index - 1
-          else
-            # Still no match, update the index to the next element (we're counting down, so minus one)
-            index - 1
+      resultIndex =
+        # For short lists use a naive recursive scan.
+        #
+        # It returns as soon as a match is found which the `foldl'` fallback below cannot.
+        #
+        # For the common case where the element exists early cutoff makes it
+        # several times faster than the constant stack fallback.
+        if len < 1024 then
+          let
+            go =
+              i:
+              if i >= len then
+                -1
+              else if pred (elemAt list i) then
+                i
+              else
+                go (i + 1);
+          in
+          go 0
         else
-          # There's already a match, propagate the index without evaluating anything
-          index
-      ) (-1) list;
+          # Constant stack-safe fallback using `foldl'`.
+          # This sacrifices early cutoff, but doesn't blow up for large inputs.
+          #
+          # Invariant:
+          # - if index < 0 then el == elemAt list (- index - 1) and all elements before el didn't satisfy pred
+          # - if index >= 0 then pred (elemAt list index) and all elements before (elemAt list index) didn't satisfy pred
+          #
+          # We start with index -1 and the 0'th element of the list, which satisfies the invariant
+          foldl' (
+            index: el:
+            if index < 0 then
+              # No match yet before the current index, we need to check the element
+              if pred el then
+                # We have a match! Turn it into the actual index to prevent future iterations from modifying it
+                -index - 1
+              else
+                # Still no match, update the index to the next element (we're counting down, so minus one)
+                index - 1
+            else
+              # There's already a match, propagate the index without evaluating anything
+              index
+          ) (-1) list;
     in
     if resultIndex < 0 then default else resultIndex;
 
