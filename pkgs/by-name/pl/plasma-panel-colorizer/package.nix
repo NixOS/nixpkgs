@@ -39,12 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  postInstall = ''
+    chmod 755 $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/{list_presets.sh,service.py}
+  '';
+
   meta = {
     description = "Fully-featured widget to bring Latte-Dock and WM status bar customization features to the default KDE Plasma panel";
     homepage = "https://github.com/luisbocanegra/plasma-panel-colorizer";
     changelog = "https://github.com/luisbocanegra/plasma-panel-colorizer/blob/main/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
   };
 })
