@@ -84,9 +84,9 @@ python3Packages.buildPythonApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "jellyfin-mpv-shim";
+      exec = "jellyfin-mpv-shim";
+      icon = "jellyfin-mpv-shim";
       desktopName = "Jellyfin MPV Shim";
       categories = [
         "Video"
