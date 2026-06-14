@@ -45,6 +45,8 @@ pnpmCacheConfigHook() {
     export npm_config_platform="@npmPlatform@"
     export pnpm_config_platform="@npmPlatform@"
 
+    pnpm config set reporter append-only
+
     # Prevent hard linking on file systems without clone support.
     # See: https://pnpm.io/settings#packageimportmethod
     pnpm config set package-import-method clone-or-copy
@@ -59,7 +61,6 @@ pnpmCacheConfigHook() {
     echo
 
     if ! pnpm install \
-        --reporter append-only \
         --ignore-scripts \
         "${pnpmInstallFlags[@]}" \
         --frozen-lockfile
@@ -82,4 +83,6 @@ pnpmCacheConfigHook() {
     echo "Finished pnpmCacheConfigHook"
 }
 
-postConfigureHooks+=(pnpmCacheConfigHook)
+if [ -z "${dontPnpmConfigure-}" ]; then
+  postConfigureHooks+=(pnpmCacheConfigHook)
+fi
