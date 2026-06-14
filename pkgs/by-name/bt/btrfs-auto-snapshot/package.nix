@@ -14,14 +14,14 @@
 }:
 assert syslogSupport -> util-linux != null;
 stdenv.mkDerivation rec {
-  version = "2.0.4";
+  version = "2.1.1";
   pname = "btrfs-auto-snapshot";
 
   src = fetchFromGitHub {
     owner = "hunleyd";
     repo = "btrfs-auto-snapshot";
     rev = "v${version}";
-    hash = "sha256-QpuwkGaYAkpu5hYyb360Mr5tHsZc2LzMlKtpS8CyyhI=";
+    hash = "sha256-QpXD0u593BYONjscXSc7oZGUydygs/Hfk3A7MOpn8jQ=";
   };
 
   dontBuild = true;
