@@ -1817,8 +1817,8 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = mozc.override { withIbus = true; };
-    mozc-ut = mozc-ut.override { withIbus = true; };
+    mozc = ibus-mozc;
+    mozc-ut = ibus-mozc.override { mozc = mozc-ut; };
 
     pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
