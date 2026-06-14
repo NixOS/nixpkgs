@@ -84,6 +84,9 @@ lib.extendMkDerivation rec {
     "netrcMachineName"
     "varBase"
     "varPrefix"
+    "browsableUrl"
+    "archiveUrl"
+    "gitRepoUrl"
     "derivationArgs"
   ]
   ++ (lib.attrNames faUseFetchGit);
@@ -106,6 +109,9 @@ lib.extendMkDerivation rec {
     # NIX_${varPrefix}_GITHUB_PRIVATE
     varBase ? "NIX${lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"}_${lib.toUpper finalAttrs.providerName}_PRIVATE_",
     netrcMachineName ? finalAttrs.domain,
+    browsableUrl ? null,
+    archiveUrl,
+    gitRepoUrl ? "https://${finalAttrs.domain}/${finalAttrs.owner}/${finalAttrs.repo}.git",
     passthru ? { },
     meta ? { },
     derivationArgs ? { },
@@ -137,11 +143,10 @@ lib.extendMkDerivation rec {
       else
         builtins.unsafeGetAttrPos "rev" args
     );
-    baseUrl = "https://${domain}/${owner}/${repo}";
     newMeta =
       meta
       // {
-        homepage = meta.homepage or baseUrl;
+        ${if finalAttrs.browsableUrl != null then "homepage" else null} = meta.homepage or finalAttrs.browsableUrl;
         identifiers = {
           purlParts =
             if domain == "github.com" then
@@ -186,37 +191,15 @@ lib.extendMkDerivation rec {
       ]);
     };
 
-    gitRepoUrl = "${baseUrl}.git";
-
     fetcherArgs =
       (
         if useFetchGit then
           useFetchGitArgsWDPassing
           // {
             inherit tag rev;
-            url = finalAttrs.gitRepoUrl;
           }
         else
-          let
-            revWithTag = finalAttrs.rev;
-          in
           {
-            # Use the API endpoint for private repos, as the archive URI doesn't
-            # support access with GitHub's fine-grained access tokens.
-            #
-            # Use the archive URI for non-private repos, as the API endpoint has
-            # relatively restrictive rate limits for unauthenticated users.
-            url =
-              if finalAttrs.private then
-                let
-                  endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
-                in
-                if domain == "github.com" then
-                  "https://api.github.com${endpoint}"
-                else
-                  "https://${domain}/api/v3${endpoint}"
-              else
-                "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
           }
       )
@@ -229,6 +212,8 @@ lib.extendMkDerivation rec {
 
         derivationArgs = derivationArgs // {
           inherit
+            archiveUrl
+            browsableUrl
             domain
             gitRepoUrl
             netrcMachineName
@@ -252,6 +237,8 @@ lib.extendMkDerivation rec {
           });
           revCustom = rev;
         };
+
+        url = if finalAttrs.useFetchGit then finalAttrs.gitRepoUrl else finalAttrs.archiveUrl;
 
         meta = newMeta;
       };
