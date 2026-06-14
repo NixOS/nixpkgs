@@ -12197,6 +12197,11 @@
     github = "james-atkins";
     githubId = 9221409;
   };
+  jamesgallicchio = {
+    name = "James Gallicchio";
+    github = "JamesGallicchio";
+    githubId = 13753903;
+  };
   jamespeapen = {
     name = "James Eapen";
     email = "james.eapen@vai.org";

@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       ratsclub
       JacoMalan1
       jk
+      jamesgallicchio
     ];
     mainProgram = "p2pool";
     platforms = lib.platforms.all;
