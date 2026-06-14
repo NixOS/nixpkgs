@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
-  gtk3,
+  gtk4,
   vala,
   enchant,
   wrapGAppsHook3,
@@ -13,7 +13,7 @@
   gnome-online-accounts,
   gsettings-desktop-schemas,
   adwaita-icon-theme,
-  libpeas,
+  libpeas2,
   libsecret,
   gmime3,
   isocodes,
@@ -21,12 +21,11 @@
   libxml2,
   gettext,
   sqlite,
-  gcr,
   json-glib,
   itstool,
   libgee,
   gnome,
-  webkitgtk_4_1,
+  webkitgtk_6_0,
   python3,
   gnutls,
   cacert,
@@ -43,15 +42,22 @@
   libytnef,
   libhandy,
   gsound,
+  cmake,
+  gcr_4,
+  libspelling,
+  libadwaita,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geary";
-  version = "46.0";
+  version = "46.0-unstable-2026-05-30";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/geary/${lib.versions.major finalAttrs.version}/geary-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "geary";
+    rev = "9f81374a146cc17c6356b080e1c61b34d3e853ac";
+    hash = "sha256-xOqoWzIDdsScEeayqmSoW/Mv4iaFWYB0GYUnTw4c2gI=";
   };
 
   nativeBuildInputs = [
@@ -66,33 +72,36 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     vala
     wrapGAppsHook3
+    cmake
   ];
 
   buildInputs = [
     adwaita-icon-theme
     enchant
     folks
-    gcr
     glib-networking
     gmime3
     gnome-online-accounts
     gsettings-desktop-schemas
     gsound
     gspell
-    gtk3
+    gtk4
     isocodes
     icu
     json-glib
     libgee
     libhandy
-    libpeas
+    libpeas2
     libsecret
     libunwind
     libstemmer
     libxml2
     libytnef
     sqlite
-    webkitgtk_4_1
+    webkitgtk_6_0
+    gcr_4
+    libspelling
+    libadwaita
   ];
 
   nativeCheckInputs = [
@@ -110,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  patches = [ ./gtk4-fix.patch ];
+
   postPatch = ''
     chmod +x build-aux/git_version.py
 
@@ -117,8 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Only used for generating .pot file
     # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/856
-    substituteInPlace meson.build \
-      --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
+    #substituteInPlace meson.build \
+    #  --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
 
     chmod +x desktop/geary-attach
   '';
