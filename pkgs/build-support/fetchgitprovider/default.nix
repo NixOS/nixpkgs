@@ -92,7 +92,10 @@ lib.extendMkDerivation rec {
 
   let
     useFetchGit =
-      lib.mapAttrs (
+      # Check forceFetchGit first
+      # so that other useFetchGitArgs could reference finalAttrs
+      # with `forceFetchGit = true`.
+      args.forceFetchGit or false || lib.mapAttrs (
         name: nonNullDefault:
         if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
           args.${name}
