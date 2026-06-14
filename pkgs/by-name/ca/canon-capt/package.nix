@@ -8,17 +8,17 @@
 }:
 
 let
-  version = "0.1.4.2-GxB";
+  version = "2016-06-14";
 in
 stdenv.mkDerivation {
   pname = "canon-capt";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "mounaiban";
+    owner = "ValdikSS";
     repo = "captdriver";
-    rev = "8ecc3cde1ae9a20dcb015994bb0fea0dbefa2b83";
-    hash = "sha256-FslofWZNmF7G9+lmw1JehRBYZIAXcg6Dmv9xJ/c4Evo=";
+    rev = "892f320c019974a5b737e000fcc2c8582264a131";
+    hash = "sha256-CcLGIhJ8HU0eu2MdA8ssT1EQsNLQicpItmyoClJHW3g=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/cups/model/canon
     install -D -m 644 ./ppd/CanonLBP-2900-3000.ppd $out/share/cups/model/canon/CanonLBP-2900-3000.ppd
     install -D -m 644 ./ppd/CanonLBP-3010-3018-3050.ppd $out/share/cups/model/canon/CanonLBP-3010-3018-3050.ppd
+    install -D -m 644 ./ppd/CanonLBP-6000.ppd $out/share/cups/model/canon/CanonLBP-6000.ppd
 
     runHook postInstall
   '';
