@@ -2,8 +2,7 @@
 let
   inherit (lib) lists;
   inherit (lib.systems) parse;
-  inherit (lib.systems.inspect) predicates;
-  inherit (lib.attrsets) matchAttrs;
+  inherit (lib.systems.inspect) matchAnyAttrs predicates;
 
   all = [
     # Cygwin
@@ -160,31 +159,31 @@ in
   freebsd = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear.
   gnu =
-    filterDoubles (matchAttrs {
+    filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnu;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnueabi;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnueabihf;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnuabin32;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnuabi64;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnuabielfv1;
     })
-    ++ filterDoubles (matchAttrs {
+    ++ filterDoubles (matchAnyAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnuabielfv2;
     });

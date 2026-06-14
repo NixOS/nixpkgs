@@ -9,9 +9,11 @@ let
     hasPrefix
     isList
     mapAttrs
-    matchAttrs
     recursiveUpdateUntil
     toList
+    all
+    attrNames
+    isAttrs
     ;
 
   inherit (lib.strings) toJSON;
@@ -490,11 +492,36 @@ rec {
     ) pat1;
 
   matchAnyAttrs =
+    let
+      # Like lib.matchAttrs but with precomputed handlers.
+      # The way matchAnyAttrs is used in lib.systems benefits from partial application.
+      matchAttrs' =
+        pattern:
+        let
+          checks = map (
+            name:
+            let
+              expected = pattern.${name};
+            in
+            if isAttrs expected then
+              let
+                matchSub = matchAttrs' expected;
+              in
+              attrs: attrs ? ${name} && isAttrs attrs.${name} && matchSub attrs.${name}
+            else
+              attrs: attrs ? ${name} && attrs.${name} == expected
+          ) (attrNames pattern);
+        in
+        attrs: all (check: check attrs) checks;
+    in
     patterns:
     if isList patterns then
-      attrs: any (pattern: matchAttrs pattern attrs) patterns
+      let
+        matchers = map matchAttrs' patterns;
+      in
+      attrs: any (matcher: matcher attrs) matchers
     else
-      matchAttrs patterns;
+      matchAttrs' patterns;
 
   predicates = mapAttrs (_: matchAnyAttrs) patterns;
 
