@@ -22,6 +22,7 @@
   xvfb-run,
   makeBinaryWrapper,
   doCheck ? false,
+  zotero,
 }:
 let
   # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
@@ -345,7 +346,12 @@ buildNpmPackage (finalAttrs: {
     makeWrapper $out/Applications/Zotero.app/Contents/MacOS/zotero $out/bin/zotero
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.build-with-checks = zotero.override {
+      doCheck = true;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://www.zotero.org";

@@ -19376,6 +19376,12 @@
     githubId = 137805;
     name = "Alexander Tsvyashchenko";
   };
+  ndom91 = {
+    email = "nix@ndo.dev";
+    github = "ndom91";
+    githubId = 7415984;
+    name = "Nico Domino";
+  };
   nealfennimore = {
     email = "hi@neal.codes";
     github = "nealfennimore";
