@@ -39,4 +39,6 @@
   opencloud = lib.recurseIntoAttrs {
     inherit (opencloud.passthru) web idp-web;
   };
+
+  cache-simple = callPackage ./cache-simple { };
 }
