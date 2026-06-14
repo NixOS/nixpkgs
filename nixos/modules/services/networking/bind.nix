@@ -89,7 +89,7 @@ let
       ${lib.optionalString cfg.checkConfig ''
         echo "Checking named configuration file...";
         mkdir -p ${testFakeDir}
-        ${lib.getExe' bindPkg "named-checkconf"} -z $target
+        ${lib.getExe' bindPkg "named-checkconf"} -z $target || { exit=$?; cat -n $target; exit $exit; }
       ''}
 
       substituteInPlace $target \
