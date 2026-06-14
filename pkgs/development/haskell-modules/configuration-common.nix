@@ -1547,6 +1547,10 @@ with haskellLib;
     revision = null;
   }) super.svgcairo;
 
+  # Support GHC >= 9.12.3 || >= 9.14.1
+  # Patch from https://github.com/gtk2hs/gtk2hs/pull/349
+  glib = appendPatches [ ./patches/glib-support-rts-at-least-9.12.3-and-9.14.patch ] super.glib;
+
   # Too strict upper bound on tasty-hedgehog (<1.5)
   # https://github.com/typeclasses/ascii-predicates/pull/1
   ascii-predicates = doJailbreak super.ascii-predicates;
