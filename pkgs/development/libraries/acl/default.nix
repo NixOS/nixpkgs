@@ -11,12 +11,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acl";
   version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/acl/acl-${version}.tar.gz";
+    url = "mirror://savannah/acl/acl-${finalAttrs.version}.tar.gz";
     hash = "sha256-XyvbrWKXB6p9hcYj+ZSqih0t7FWnPeUgW6wL9gWKL3w=";
   };
 
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     "man"
     "doc"
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
@@ -41,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Library and tools for manipulating access control lists";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.security-review ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "acl_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "acl_project" finalAttrs.version;
   };
-}
+})
