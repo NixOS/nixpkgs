@@ -3737,6 +3737,10 @@ assertNoAdditions {
     dependencies = [ self.nui-nvim ];
   };
 
+  pantran-nvim = super.pantran-nvim.overrideAttrs {
+    runtimeDeps = [ curl ];
+  };
+
   parpar-nvim = super.parpar-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-parinfer

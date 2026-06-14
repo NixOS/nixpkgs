@@ -74,8 +74,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     apple-sdk_15
   ];
 
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
-
   doCheck = false; # there aren't any tests
 
   env.OPENSSL_NO_VENDOR = true;
