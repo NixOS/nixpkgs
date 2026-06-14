@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchzip,
   libGLU,
   libGL,
@@ -11,53 +12,64 @@
 }:
 
 let
-  common = import ./common.nix { inherit fetchzip; };
+  version = "1.8.5";
+
+  linuxSrc = fetchzip {
+    url = "mirror://sourceforge/irrlicht/irrlicht-${version}.zip";
+    hash = "sha256-cTkzxquMLl84/cSDZnSSQsmXRX/htV8M5NUTbnQuHoM=";
+  };
 in
 
-stdenv.mkDerivation {
-  pname = common.pname;
-  version = common.version;
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./mac.nix {
+    inherit version linuxSrc;
+  }
+else
+  stdenv.mkDerivation (finalAttrs: {
+    pname = "irrlicht";
+    inherit version;
 
-  src = common.src;
+    src = linuxSrc;
 
-  postPatch = ''
-    sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
-  ''
-  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace source/Irrlicht/Makefile \
-      --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
-  '';
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  preConfigure = ''
-    cd source/Irrlicht
-  '';
+    postPatch = ''
+      sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace source/Irrlicht/Makefile \
+        --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
+    '';
 
-  preBuild = ''
-    makeFlagsArray+=(sharedlib NDEBUG=1 LDFLAGS="-lX11 -lGL -lXxf86vm")
-  '';
+    preConfigure = ''
+      cd source/Irrlicht
+    '';
 
-  enableParallelBuilding = true;
+    preBuild = ''
+      makeFlagsArray+=(sharedlib NDEBUG=1 LDFLAGS="-lX11 -lGL -lXxf86vm")
+    '';
 
-  preInstall = ''
-    sed -i s,/usr/local/lib,$out/lib, Makefile
-    mkdir -p $out/lib
-  '';
+    enableParallelBuilding = true;
 
-  buildInputs = [
-    libGLU
-    libGL
-    libxrandr
-    libx11
-    libxxf86vm
-  ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
+    preInstall = ''
+      sed -i s,/usr/local/lib,$out/lib, Makefile
+      mkdir -p $out/lib
+    '';
 
-  meta = {
-    homepage = "https://irrlicht.sourceforge.io/";
-    license = lib.licenses.zlib;
-    description = "Open source high performance realtime 3D engine written in C++";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # The last successful Darwin Hydra build was in 2023
-    broken = stdenv.hostPlatform.isDarwin;
-  };
-}
+    buildInputs = [
+      libGLU
+      libGL
+      libxrandr
+      libx11
+      libxxf86vm
+    ]
+    ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
+
+    meta = {
+      homepage = "https://irrlicht.sourceforge.io/";
+      license = lib.licenses.zlib;
+      description = "Open source high performance realtime 3D engine written in C++";
+      platforms = lib.platforms.linux;
+    };
+  })
