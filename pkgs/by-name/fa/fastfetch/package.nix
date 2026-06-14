@@ -54,7 +54,8 @@
   dbusSupport ? true,
   flashfetchSupport ? false,
   terminalSupport ? true,
-  enlightenmentSupport ? true,
+  # NOTE: disabled by default until lib dependency closure is minimal
+  enlightenmentSupport ? false,
   gnomeSupport ? true,
   imageSupport ? true,
   openclSupport ? true,
