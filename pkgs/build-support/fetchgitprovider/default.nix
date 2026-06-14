@@ -34,13 +34,40 @@ let
 
   faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
 
-  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
-
   # fetchzip may not be overridable when using external tools, for example nix-prefetch
   fetchzip =
     if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
 in
-adjustFunctionArgs (
+lib.extendMkDerivation rec {
+  constructDrv = {
+    __functor =
+      self: fpArgsExtended:
+      let
+        blankArgs = lib.mapAttrs (n: v: null) (lib.filterAttrs (n: v: !v) (lib.functionArgs extendDrvArgs));
+        inherit (fpArgsExtended blankArgs) useFetchGit;
+        # We prefer fetchzip in cases we don't need submodules as the hash
+        # is more stable in that case.
+        fetcher = if useFetchGit then fetchgit else fetchzip;
+      in
+      fetcher (finalAttrs: lib.removeAttrs (fpArgsExtended finalAttrs) [ "useFetchGit" ]);
+    __functionArgs = lib.functionArgs fetchzip // lib.functionArgs fetchgit // faUseFetchGit;
+  };
+
+  excludeDrvArgNames = [
+    "owner"
+    "repo"
+    "tag"
+    "rev"
+    "functionName"
+    "private"
+    "domain"
+    "varPrefix"
+    "derivationArgs"
+  ]
+  ++ (lib.attrNames faUseFetchGit);
+
+  extendDrvArgs =
+  finalAttrs:
   {
     owner,
     repo,
@@ -109,24 +136,7 @@ adjustFunctionArgs (
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args (
-      [
-        "owner"
-        "repo"
-        "tag"
-        "rev"
-        "functionName"
-        "private"
-        "domain"
-        "varPrefix"
-        "derivationArgs"
-      ]
-      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
-    );
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    # We prefer fetchzip in cases we don't need submodules as the hash
-    # is more stable in that case.
-    fetcher = if useFetchGit then fetchgit else fetchzip;
     privateAttrs = lib.optionalAttrs private {
       netrcPhase =
         # When using private repos:
@@ -159,13 +169,12 @@ adjustFunctionArgs (
         domain
         owner
         repo
+        useFetchGit
         ;
     };
 
     fetcherArgs =
-      finalAttrs:
-      passthruAttrs
-      // (
+      (
         if useFetchGit then
           useFetchGitArgsWDPassing
           // {
@@ -222,6 +231,5 @@ adjustFunctionArgs (
         meta = newMeta;
       };
   in
-
-  fetcher fetcherArgs
-)
+  fetcherArgs // { inherit useFetchGit; };
+}
