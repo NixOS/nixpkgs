@@ -397,19 +397,16 @@ rec {
     ```
   */
   extendDerivation =
+    let
+      singleOutOutput = [ "out" ];
+    in
     condition: passthru: drv:
     let
+      outputs = drv.outputs or singleOutOutput;
+
       commonAttrs =
         drv
-        // listToAttrs (
-          outputsList
-          ++ [
-            {
-              name = "all";
-              value = map (x: x.value) outputsList;
-            }
-          ]
-        )
+        // outputAttrs
         // passthru
         // {
           drvPath =
@@ -420,9 +417,10 @@ rec {
             drv.outPath;
         };
 
-      outputsList = map (outputName: {
-        name = outputName;
-        value = commonAttrs // {
+      mkOutput =
+        outputName:
+        commonAttrs
+        // {
           inherit (drv.${outputName}) type outputName;
           outputSpecified = true;
           drvPath =
@@ -438,7 +436,33 @@ rec {
           ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
             f: (passthru.overrideAttrs f).${outputName};
         };
-      }) (drv.outputs or [ "out" ]);
+
+      outputAttrs =
+        # extendDerivation is a hot path which is called by stdenv.mkDerivation.
+        #
+        # The vast majority of derivations has an outputs outputs list with a single "out" output.
+        # Use this observation to avoid the dynamic listToAttrs & mapping below.
+        if outputs == singleOutOutput then
+          rec {
+            out = mkOutput "out";
+            all = [ out ];
+          }
+        else
+          let
+            outputsList = map (name: {
+              inherit name;
+              value = mkOutput name;
+            }) outputs;
+          in
+          listToAttrs (
+            outputsList
+            ++ [
+              {
+                name = "all";
+                value = map (x: x.value) outputsList;
+              }
+            ]
+          );
     in
     commonAttrs;
 
