@@ -9,7 +9,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crytic-compile";
   version = "0.3.11";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NVAIVUfh1bizg/HG1z7Ze6o5w6wto744Ogq0LPg0gXg=";
   };
 
@@ -41,11 +41,11 @@ buildPythonPackage rec {
     description = "Abstraction layer for smart contract build systems";
     mainProgram = "crytic-compile";
     homepage = "https://github.com/crytic/crytic-compile";
-    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${src.tag}";
+    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       arturcygan
       hellwolf
     ];
   };
-}
+})
