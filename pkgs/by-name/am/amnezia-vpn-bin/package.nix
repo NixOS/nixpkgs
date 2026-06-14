@@ -29,13 +29,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn-bin";
-  version = "4.8.16.0";
+  version = "4.8.18.0";
 
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/amnezia-vpn/amnezia-client/releases/download/${finalAttrs.version}/AmneziaVPN_${finalAttrs.version}_linux_x64.tar";
-    hash = "sha256-0gffxBD0pNsyTvqAFdYdjI8rzCkyaXHOApSCu4waP7s=";
+    hash = "sha256-Mypzq/Lm+JI0HljRJ6/0ZDFlwOeVbZB+Lmuy33xE06M=";
   };
 
   strictDeps = true;
