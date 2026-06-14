@@ -10,6 +10,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "domanchi";
     repo = "gibberish-detector";
