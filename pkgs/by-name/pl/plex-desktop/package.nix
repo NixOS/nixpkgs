@@ -32,6 +32,7 @@
   libxinerama,
   libxdamage,
   libxcomposite,
+  libxcursor,
   xrandr,
   libxshmfence,
 }:
@@ -151,6 +152,7 @@ buildFHSEnv {
   targetPkgs = pkgs: [
     alsa-lib
     libdrm
+    libxcursor
     xkeyboard_config
   ];
 
