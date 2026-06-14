@@ -23,6 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-HlPX9S9G3V+HXnf/HFWxJHfiFaCS5LZsl2SnffSptSA=";
   };
 
+  patches = [
+    ./0001-fix-support-packaging-26.0-changes.patch
+  ];
+
   build-system = [ pdm-backend ];
 
   dependencies = [
