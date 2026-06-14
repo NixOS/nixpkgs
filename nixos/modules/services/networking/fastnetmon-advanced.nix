@@ -70,6 +70,8 @@ in
   options.services.fastnetmon-advanced = with lib; {
     enable = mkEnableOption "the fastnetmon-advanced DDoS Protection daemon";
 
+    enableWebApi = mkEnableOption "the fastnetmon-advanced DDoS Protection web API daemon";
+
     settings = mkOption {
       description = ''
         Extra configuration options to declaratively load into FastNetMon Advanced.
@@ -169,6 +171,31 @@ in
           StateDirectory = "fastnetmon"; # for license file
         };
       };
+
+      systemd.services.fastnetmon_web_api = lib.mkIf cfg.enableWebApi {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "fastnetmon.service" ];
+        unitConfig = {
+          # Disable logic which shuts service when we do too many restarts
+          # We do restarts from sudo fcli commit and it's expected that we may have many restarts
+          # Details: https://github.com/systemd/systemd/issues/2416
+          StartLimitInterval = 0;
+        };
+        serviceConfig = {
+          ExecStart = "${pkgs.fastnetmon-advanced}/bin/fcli";
+
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        environment = {
+          HTTP_API_MODE = "on";
+          API_HOST = "127.0.0.1";
+        };
+      };
+
+      systemd.tmpfiles.rules = lib.mkIf cfg.enableWebApi [
+        "d /var/log/fastnetmon 0755 root root"
+      ];
 
       security.polkit.enable = true;
       security.polkit.extraConfig = ''
