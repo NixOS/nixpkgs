@@ -32,7 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     paramiko
     psycopg2
     pymysql
-    pyodbc
     pyperclip
     sqlparse
     sshtunnel
