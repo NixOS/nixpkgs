@@ -34,15 +34,13 @@ let
 
   faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
 
-  adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
-
-  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+  mirrorArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
 
   # fetchzip may not be overridable when using external tools, for example nix-prefetch
   fetchzip =
     if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
 in
-decorate (
+mirrorArgs (
   {
     owner,
     repo,
@@ -52,10 +50,11 @@ decorate (
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
     private ? false,
-    githubBase ? "github.com",
+    domain,
     varPrefix ? null,
     passthru ? { },
     meta ? { },
+    derivationArgs ? { },
     ... # For hash agility and additional fetchgit arguments
   }@args:
 
@@ -84,14 +83,14 @@ decorate (
       else
         builtins.unsafeGetAttrPos "rev" args
     );
-    baseUrl = "https://${githubBase}/${owner}/${repo}";
+    baseUrl = "https://${domain}/${owner}/${repo}";
     newMeta =
       meta
       // {
         homepage = meta.homepage or baseUrl;
         identifiers = {
           purlParts =
-            if githubBase == "github.com" then
+            if domain == "github.com" then
               {
                 type = "github";
                 # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
@@ -118,8 +117,9 @@ decorate (
         "rev"
         "functionName"
         "private"
-        "githubBase"
+        "domain"
         "varPrefix"
+        "derivationArgs"
       ]
       ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
     );
@@ -133,7 +133,7 @@ decorate (
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
-          machineName = if githubBase == "github.com" && !useFetchGit then "api.github.com" else githubBase;
+          machineName = if domain == "github.com" && !useFetchGit then "api.github.com" else domain;
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -164,9 +164,9 @@ decorate (
             inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
-            derivationArgs = {
+            derivationArgs = derivationArgs // {
               inherit
-                githubBase
+                domain
                 owner
                 repo
                 ;
@@ -187,16 +187,16 @@ decorate (
                 let
                   endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
                 in
-                if githubBase == "github.com" then
+                if domain == "github.com" then
                   "https://api.github.com${endpoint}"
                 else
-                  "https://${githubBase}/api/v3${endpoint}"
+                  "https://${domain}/api/v3${endpoint}"
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-            derivationArgs = {
+            derivationArgs = derivationArgs // {
               inherit
-                githubBase
+                domain
                 owner
                 repo
                 tag
