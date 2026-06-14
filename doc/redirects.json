@@ -194,6 +194,18 @@
   "javascript-buildNpmPackage-npmWorkspace": [
     "index.html#javascript-buildNpmPackage-npmWorkspace"
   ],
+  "javascript-pnpm-fetchPnpmCache": [
+    "index.html#javascript-pnpm-fetchPnpmCache"
+  ],
+  "javascript-pnpm-fetchPnpmCache-install-config": [
+    "index.html#javascript-pnpm-fetchPnpmCache-install-config"
+  ],
+  "javascript-pnpm-fetchPnpmCache-sourceRoot": [
+    "index.html#javascript-pnpm-fetchPnpmCache-sourceRoot"
+  ],
+  "javascript-fetchPnpmDeps": [
+    "index.html#javascript-fetchPnpmDeps"
+  ],
   "julec-hook": [
     "index.html#julec-hook"
   ],
