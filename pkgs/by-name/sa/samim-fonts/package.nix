@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Persian (Farsi) Font - فونت (قلم) فارسی صمیم";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 })
