@@ -669,7 +669,7 @@ in
 
               # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
               with subtest("polkit agent works"):
-                  machine.send_chars("pkexec touch /tmp/polkit-test\n")
+                  machine.send_chars("run0 touch /tmp/polkit-test\n")
                   # There's an authentication notification here that gains focus, but we struggle with OCRing it
                   # Just hope that it's up after a short wait
                   machine.sleep(10)

@@ -11,6 +11,9 @@ in
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
+  # required for calamares
+  security.polkit.enablePkexecWrapper = true;
+
   # required for kpmcore to work correctly
   programs.partition-manager.enable = true;
 
