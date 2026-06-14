@@ -1,11 +1,18 @@
 {
-  buildDotnetModule,
   lib,
+
+  # Build
+  buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+
+  # Runtime
   SDL2,
   SDL2_image,
   SDL2_ttf,
+
+  # Updates
+  nix-update-script,
 }:
 let
   dotnet = dotnetCorePackages.dotnet_8;
@@ -38,6 +45,8 @@ buildDotnetModule (finalAttrs: {
     SDL2_ttf
     SDL2_image
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";
