@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   nix-update-script,
+  enableSystemd ? stdenv.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pxzPcieUXE3VOyGNDaeDHUQPayRDZXpW57VWMejlZ4k=";
 
-  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [
+  buildFeatures = lib.optionals enableSystemd [
     "systemd"
   ];
 
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    make PREFIX=$out install ${lib.optionalString stdenv.hostPlatform.isLinux "install-systemd"}
+    make PREFIX=$out install ${lib.optionalString enableSystemd "install-systemd"}
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
