@@ -5015,6 +5015,27 @@
       };
     }
   ) { };
+  keymap-popup = callPackage (
+    {
+      elpaBuild,
+      fetchurl,
+      lib,
+    }:
+    elpaBuild {
+      pname = "keymap-popup";
+      ename = "keymap-popup";
+      version = "0.3.1";
+      src = fetchurl {
+        url = "https://elpa.gnu.org/packages/keymap-popup-0.3.1.tar";
+        sha256 = "0m44s8618n7g5pajxiv4k1dfx6l58gr01a3ga26fxc51j1d05q8b";
+      };
+      packageRequires = [ ];
+      meta = {
+        homepage = "https://elpa.gnu.org/packages/keymap-popup.html";
+        license = lib.licenses.free;
+      };
+    }
+  ) { };
   kind-icon = callPackage (
     {
       elpaBuild,
