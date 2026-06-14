@@ -16,14 +16,14 @@
 
 buildDunePackage (finalAttrs: {
   pname = "charon";
-  version = "2026.06.12";
+  version = "2026.06.14";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AeneasVerif";
     repo = "charon";
     tag = "nightly-${finalAttrs.version}";
-    hash = "sha256-XCNDFJ8HakRBQ68rWB29R5RF7zhmqmNMna098SvXDE0=";
+    hash = "sha256-EZ1Ueco4vK4mUKyOGXXHgToNLMp+1W7095HyU+1zQ2Q=";
   };
 
   propagatedBuildInputs = [
