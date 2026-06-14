@@ -1,45 +1,36 @@
 # TODO: This is currently only supported for x86_64-linux
-# TODO: Remove unused inputs & patches, etc.
 {
+  alsa-lib,
+  bash,
+  callPackage,
+  cmake,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
-  lib,
-  linkFarm,
-  runCommand,
-  stdenv,
-  rustPlatform,
-  callPackage,
-  bash,
-  replaceVars,
-  gcc,
-  which,
-  patchelf,
-  zlib,
-  libxi,
-  libxtst,
-  alsa-lib,
-  libxrender,
-  libxcrypt-legacy,
-  xz,
-  ncurses,
-  libxml2_13,
-  libpanel,
-  python3,
-  # TODO REMOVE
-  breakpointHook,
-
-  ant,
-  cmake,
   fsnotifier,
   glib,
   glibc,
   jetbrains,
+  lib,
   libdbusmenu,
-  maven,
-  p7zip,
-  pkg-config,
+  libpanel,
   libx11,
+  libxcrypt-legacy,
+  libxi,
+  libxml2_13,
+  libxrender,
+  libxtst,
+  linkFarm,
+  maven,
+  ncurses,
+  pkg-config,
+  python3,
+  replaceVars,
+  runCommand,
+  rustPlatform,
+  stdenv,
+  xz,
+  zlib,
 }:
 {
   version,
@@ -47,24 +38,20 @@
   buildType,
   ideaHash,
   androidHash,
-  jpsHash,
   restarterHash,
-  mvnDeps,
-  repositories,
-  kotlin-jps-plugin,
+  bazelConfig,
 }:
 let
   # The build number with the patch part removed. This is required for the build, since the build appends a patch part itself for plugins, otherwise
   # they fail with an invalid semver version ("The plugin build number 261.25134.95.20260601 is expected to match the Semantic Versioning")
   buildNumberMinor = builtins.concatStringsSep "." (lib.init (lib.splitString "." buildNumber));
 
-  bazel = callPackage ./bazel.nix { };
+  bazel = callPackage ./bazel.nix { } { inherit (bazelConfig) base jbPatches; };
   # If the build fails, try bumping up the registry commit.
   bazelRegistry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "3934afcc4a205b64b528d15612affb3c28a5ad93";
-    hash = "sha256-fU8h6Nu0UJgj0gU+5tH8C3l/RpKHSmZm377rQvJd1jw=";
+    inherit (bazelConfig.registry) rev hash;
   };
 
   localJdkVersion = "local_jdk_21";
@@ -231,15 +218,6 @@ let
       "@community//python/build:i_build_target"
     else
       "//build:i_build_target";
-  bazelRepoCacheFODHashes =
-    if buildType == "pycharm" then
-      {
-        x86_64-linux = "sha256-Jk2kFih5G4xU4IRNXKKYf5Gqus2RmMI07zhMk3tXBx8=";
-      }
-    else
-      {
-        x86_64-linux = "sha256-tTlUP8DcSS2lemXtDIu4QTcvi65PAM0FaU5i8XCKY7Q=";
-      };
 
   pname = "${buildType}-oss";
 
@@ -249,7 +227,6 @@ bazel.package {
   name = "${pname}-${version}.tar.gz";
   src = ideaSrc;
 
-  # TODO: Remove
   buildInputs = [
     zlib
     stdenv.cc
@@ -268,7 +245,6 @@ bazel.package {
   nativeBuildInputs = [
     stdenv.cc
     bash
-    breakpointHook # TODO: Remove
   ];
 
   bazel = bazel;
@@ -391,7 +367,7 @@ bazel.package {
   };
 
   bazelRepoCacheFOD = {
-    outputHash = bazelRepoCacheFODHashes.${stdenv.hostPlatform.system};
+    outputHash = bazelConfig.repoCacheFODHashes.${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
   };
 
@@ -401,7 +377,6 @@ bazel.package {
       buildNumber
       libdbm
       fsnotifier
-      #jps-bootstrap
       ;
   };
 }
