@@ -373,6 +373,53 @@ rec {
       "lamcas"
       "ld-seq-sa"
     ];
+
+    # Power ISA
+    # ~ PowerPC v2.01?
+    power4 = [ ];
+    G5 = [
+      "altivec"
+    ];
+    # PowerPC v2.02
+    power5 = [ ];
+    cell = [
+      "altivec"
+    ];
+    # Power ISA v2.03
+    "power5+" = [
+      "altivec"
+    ];
+    # Power ISA v2.04: no suitable -mcpu value for POWER5++ or PA6T
+    # Power ISA v2.05
+    power6 = [
+      "altivec"
+    ];
+    # Power ISA v2.06
+    power7 = [
+      "altivec"
+      "vsx"
+    ];
+    # Power ISA v2.07
+    power8 = [
+      "altivec"
+      "vsx"
+      "vsx-2"
+    ];
+    # Power ISA v3.0
+    power9 = [
+      "altivec"
+      "vsx"
+      "vsx-2"
+      "vsx-3"
+    ];
+    # Power ISA v3.1
+    power10 = [
+      "altivec"
+      "vsx"
+      "vsx-2"
+      "vsx-3"
+    ];
+
     # other
     armv5te = [ ];
     armv6 = [ ];
@@ -544,6 +591,18 @@ rec {
         "la64v1.1"
       ];
 
+      # Power ISA
+      power4 = [ ];
+      G5 = withInferiors [ "power4" ];
+      power5 = withInferiors [ "power4" ];
+      cell = withInferiors [ "power5" ];
+      "power5+" = withInferiors [ "power5" ];
+      power6 = withInferiors [ "power5+" ];
+      power7 = withInferiors [ "power6" ];
+      power8 = withInferiors [ "power7" ];
+      power9 = withInferiors [ "power8" ];
+      power10 = withInferiors [ "power9" ];
+
       # other
       armv5te = [ ];
       armv6 = [ ];
@@ -634,5 +693,9 @@ rec {
       fma4Support = featureSupport "fma4";
       lsxSupport = featureSupport "lsx";
       lasxSupport = featureSupport "lasx";
+      altivecSupport = featureSupport "altivec";
+      vsxSupport = featureSupport "vsx";
+      vsx-2Support = featureSupport "vsx-2";
+      vsx-3Support = featureSupport "vsx-3";
     };
 }
