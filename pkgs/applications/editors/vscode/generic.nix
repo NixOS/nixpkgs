@@ -188,6 +188,7 @@ stdenv.mkDerivation (
     passthru = {
       inherit
         executableName
+        iconName
         longName
         tests
         updateScript

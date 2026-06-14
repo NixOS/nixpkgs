@@ -14,6 +14,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.3.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
@@ -21,13 +23,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-VNb/U68NXmfH7eY8JOEk0z2yOUD4R/kFI1IShWS0pU4=";
   };
 
-  # The Cargo.lock is not pushed upstream
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
   buildAndTestSubdir = "crates/primp-python";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-fnOCsxR0/6AnVO7n2M92WIA6kbyOkI6fwQh5QLnsxSc=";
+  };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

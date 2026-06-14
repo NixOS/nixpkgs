@@ -727,8 +727,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.16.5";
-          hash = "sha256-ppWHZFQfC2bje1rNZh8Pu+BKQdAI60kpxRwUg8EfD8M=";
+          version = "1.18.4";
+          hash = "sha256-fGvQq8pGpDQc9q+uhouXNaWAHDGTl0cFla0qivhNaFQ=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -1204,8 +1204,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.134.0";
-          hash = "sha256-/tWH2uGfOuyvF8mfga2YdGK1ok2UYQchaOeCC2n+IHk=";
+          version = "3.136.0";
+          hash = "sha256-XPajPR0MX6TiUfaCw/+WYyc453cZOMaK1Uen6ND+RKY=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1929,6 +1929,23 @@ let
         };
       };
 
+      ginfuru.better-solarized = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ginfuru.ginfuru-better-solarized-dark-theme/changelog";
+          description = "A Better Solarized theme for Visual Studio Code include light and dark versions";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ginfuru.ginfuru-better-solarized-dark-theme";
+          homepage = "https://github.com/ginfuru/vscode-better-solarized";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+        mktplcRef = {
+          name = "ginfuru-better-solarized-dark-theme";
+          publisher = "ginfuru";
+          version = "0.10.9";
+          hash = "sha256-Zh3u1iq/kSzwtOY1RmG4cwvN6nJO6ys88BXn/EH/wTs=";
+        };
+      };
+
       github.codespaces = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "github";
@@ -1998,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.78.1";
-          hash = "sha256-N6M8HLSpnfUqMaPaWZuedWbA7ITwKhLS1n+uuwudpkU=";
+          version = "6.81.0";
+          hash = "sha256-0IN00IpgON/2nNl5/eQn+KABNtmG2ymVULOBPvi2dYA=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2047,6 +2064,21 @@ let
       Google.gemini-cli-vscode-ide-companion = callPackage ./Google.gemini-cli-vscode-ide-companion { };
 
       gplane.wasm-language-tools = callPackage ./gplane.wasm-language-tools { };
+
+      grafana.grafana-alloy = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "grafana-alloy";
+          publisher = "grafana";
+          version = "0.2.0";
+          hash = "sha256-XcoiEDCPp6GzYQDhJArZBEWxSnZrSTHofIyLFegsbh0=";
+        };
+        meta = {
+          changelog = "https://github.com/grafana/vscode-alloy/releases";
+          description = "Grafana Alloy support for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=grafana.grafana-alloy";
+          license = lib.licenses.asl20;
+        };
+      };
 
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2112,17 +2144,7 @@ let
         };
       };
 
-      gruntfuggly.todo-tree = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "todo-tree";
-          publisher = "Gruntfuggly";
-          version = "0.0.226";
-          hash = "sha256-Fj9cw+VJ2jkTGUclB1TLvURhzQsaryFQs/+f2RZOLHs=";
-        };
-        meta = {
-          license = lib.licenses.mit;
-        };
-      };
+      gruntfuggly.todo-tree = callPackage ./gruntfuggly.todo-tree { };
 
       hars.cppsnippets = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3147,8 +3169,8 @@ let
         mktplcRef = {
           name = "vscode-dotnet-runtime";
           publisher = "ms-dotnettools";
-          version = "3.0.0";
-          hash = "sha256-RA7skgj6yFZxk2XuJZtcDrI4dFrAbwODmwqSx4xWFUY=";
+          version = "3.1.0";
+          hash = "sha256-jmdf/l82dEMNY+KNLcBatA82yElOlUnnnTmV1yGxP1o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
@@ -3432,8 +3454,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.447.0";
-          hash = "sha256-JUTwzde97CQK/0Hp3E8JPrS3UY6vh9jud1ho1R0ODus=";
+          version = "0.459.1";
+          hash = "sha256-e5azL+9hluC/YyWb9uQxrr9p/9K2cYcUhalc9nZlOEg=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container";
@@ -4142,8 +4164,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.65.0";
-          hash = "sha256-Ob4F+MZI1hKi4bK8zM5kn0kjzhMklUqEB/B+hh612nU=";
+          version = "1.66.0";
+          hash = "sha256-hC2YR67hRfk9QuKVbmK1IzHIGyQ3XTBNvaCP66eC/no=";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -5134,8 +5156,8 @@ let
         mktplcRef = {
           name = "vscode-java-pack";
           publisher = "vscjava";
-          version = "0.30.5";
-          hash = "sha256-MlBACPD880QvsQpPDXe5384dlrMeKMSX1CUSIfzwwPo=";
+          version = "0.31.0";
+          hash = "sha256-E0GJoITZIh2XemVpyPh3gAEtlvM2PZHgNzZDctSpwIA=";
         };
         meta = {
           description = "Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more";
@@ -5200,8 +5222,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.3.3";
-          hash = "sha256-Q2PnfjO7wzHrmWAeD4dOFT+GFe8qGG8wHU1FpwYeDnA=";
+          version = "3.3.5";
+          hash = "sha256-Oz4or7AtfrlcAXmFB4lkNk4Uqmpm1AsGP4RLcdpzRbo=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";

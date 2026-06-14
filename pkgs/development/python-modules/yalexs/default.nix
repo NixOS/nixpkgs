@@ -3,7 +3,6 @@
   aiofiles,
   aiohttp,
   aioresponses,
-  aiounittest,
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
-    aiounittest
     pytest-asyncio
     pytest-cov-stub
     pytest-freezegun

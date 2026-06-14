@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syswatch";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "syswatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9LEZ9DWp5H+ODiuE6A5Qzr/ozXQaXQ7TbDnJY8B8GD4=";
+    hash = "sha256-2+ZF9QiJx37Jc7NqjkrrH/1llHfYtckrpiu0WiT4GAE=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-dGobKfemSrZ+Y4haHrmLt7dqv9yOBDJ2k3XnZ9LkIlw=";
+  cargoHash = "sha256-2iGSUhar6babzJUF3JVBdKleeyLSEuZoOEndCbOIfxY=";
 
   nativeCheckInputs = [ versionCheckHook ];
 
