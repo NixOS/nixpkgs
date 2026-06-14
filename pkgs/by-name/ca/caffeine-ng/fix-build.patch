@@ -13,12 +13,3 @@ index 3e4f9ea..5b82861 100644
  )
  
  dependency('pygobject-3.0')
-@@ -82,7 +78,7 @@ configure_file(
- 
- install_data(
-   'share/applications/caffeine.desktop',
--  install_dir: '/etc/xdg/autostart',
-+  install_dir: join_paths(get_option('sysconfdir'), 'xdg/autostart'),
- )
- 
- install_data(
