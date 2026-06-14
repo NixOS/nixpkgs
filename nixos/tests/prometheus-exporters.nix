@@ -21,6 +21,9 @@ let
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
+    *  `testBackend` (optional)
+    *    whether to run in `containers` (default) or `nodes` scope
+    *
     *  Example:
     *    exporterTests.<exporterName> = {
     *      exporterConfig = {
@@ -168,6 +171,7 @@ let
     blackbox =
       { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           configFile = pkgs.writeText "config.yml" (
@@ -423,6 +427,7 @@ let
     ebpf =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           names = [ "timers" ];
@@ -447,7 +452,6 @@ let
           # `services.elasticsearch` is unmaintained; OpenSearch is the same
           # engine class and is explicitly supported by the exporter.
           services.opensearch.enable = true;
-          virtualisation.memorySize = 2048;
         };
         exporterTest = ''
           wait_for_unit("opensearch.service")
@@ -463,6 +467,7 @@ let
     fail2ban =
       { ... }:
       {
+        testBackend = "nodes"; # setfacl
         exporterConfig = {
           enable = true;
           exitOnError = true;
@@ -964,6 +969,7 @@ let
     modemmanager =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           refreshRate = "10s";
@@ -2143,6 +2149,7 @@ let
     zfs =
       { ... }:
       {
+        testBackend = "nodes"; # zfs kmod
         exporterConfig = {
           enable = true;
         };
@@ -2165,13 +2172,14 @@ lib.mapAttrs (
     { pkgs, lib, ... }:
     let
       testConfig = testConfigFun { inherit pkgs lib; };
-      nodeName = testConfig.nodeName or exporter;
+      testBackend = testConfig.testBackend or "containers";
+      nodeName = "machine";
     in
     {
       name = "prometheus-${exporter}-exporter";
       node.pkgsReadOnly = testConfig.pkgsReadOnly or true;
 
-      nodes.${nodeName} = lib.mkMerge [
+      ${testBackend}.${nodeName} = lib.mkMerge [
         {
           services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
         }
