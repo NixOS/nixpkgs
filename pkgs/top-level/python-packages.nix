@@ -5593,6 +5593,8 @@ self: super: with self; {
 
   fastmcp = callPackage ../development/python-modules/fastmcp { };
 
+  fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
