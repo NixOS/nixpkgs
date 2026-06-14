@@ -43,6 +43,9 @@ ceph-python.withPackages (
     cryptography
     jsonpatch
 
+    # src/pybind/mgr/dashboard/services/sso.py
+    python3-saml
+
     # src/tools/cephfs/shell/setup.py
     cmd2
     colorama
