@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/silver-searcher/silver-searcher-ng";
     description = "Code-searching tool similar to ack, but faster";
