@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tool that blends TDD (Test Driven Development) + TCR (`test && commit || revert`)";
     homepage = "https://git-gamble.is-cool.dev";
-    changelog = "https://gitlab.com/pinage404/git-gamble/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://git-gamble.is-cool.dev/changelog/${finalAttrs.version}.html";
     license = lib.licenses.isc;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
