@@ -10,31 +10,30 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
   pyyaml,
+  requests,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.106.0";
+  version = "1.110.0";
   pyproject = true;
-
-  # https://github.com/aws/serverless-application-model/issues/3831
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-9KrBoa50lgZcqe/wzt05TsuUYbjRuQXgXTVHjDKBmr4=";
+    hash = "sha256-Zn+6cDyDZSsV9V+zAA8BOPs4aKl0j3dF92/azGYG+OI=";
   };
 
   postPatch = ''
     # don't try to use --cov or fail on new warnings
     rm pytest.ini
   '';
+
+  pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ setuptools ];
 
@@ -52,6 +51,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     pyyaml
+    requests
   ];
 
   preCheck = ''
@@ -64,26 +64,6 @@ buildPythonPackage rec {
 
   disabledTestMarks = [
     "slow"
-  ];
-
-  disabledTests = [
-    # urllib3 2.0 compat
-    "test_plugin_accepts_different_sar_client"
-    "test_plugin_accepts_flags"
-    "test_plugin_accepts_parameters"
-    "test_plugin_default_values"
-    "test_plugin_invalid_configuration_raises_exception"
-    "test_plugin_must_setup_correct_name"
-    "test_must_process_applications"
-    "test_must_process_applications_validate"
-    "test_process_invalid_applications"
-    "test_process_invalid_applications_validate"
-    "test_resolve_intrinsics"
-    "test_sar_service_calls"
-    "test_sar_success_one_app"
-    "test_sar_throttling_doesnt_stop_processing"
-    "test_sleep_between_sar_checks"
-    "test_unexpected_sar_error_stops_processing"
   ];
 
   __darwinAllowLocalNetworking = true;
