@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-groq";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-groq==${finalAttrs.version}";
-    hash = "sha256-OS9i4o8UhEmRFgZEKB5owWx2hJuVBRV5XvQLCQnBi9g=";
+    hash = "sha256-RwwlEL3P/6+Yf1bM5ALGxhUXG0C1XPlf0OQMcft4o4U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/groq";
