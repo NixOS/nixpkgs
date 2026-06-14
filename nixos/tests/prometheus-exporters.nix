@@ -2193,7 +2193,6 @@ lib.mapAttrs (
               "${nodeName}.${line}"
           ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest))
         )}
-        ${nodeName}.shutdown()
       '';
 
       meta.maintainers = [ ];
