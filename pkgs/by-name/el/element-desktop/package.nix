@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
         "InstantMessaging"
         "Chat"
       ];
-      startupWMClass = "Element";
+      startupWMClass = "element";
       mimeTypes = [
         "x-scheme-handler/element"
         "x-scheme-handler/io.element.desktop"
