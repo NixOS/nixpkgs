@@ -74,6 +74,8 @@ let
       installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
+    __structuredAttrs = true;
     strictDeps = true;
 
     preConfigure = ''
