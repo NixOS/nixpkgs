@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.24";
+  version = "1.26.29";
 
   src = fetchurl {
     url = "https://launchpad.net/veracrypt/trunk/${finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
-    hash = "sha256-f1wgr0KTd6tW97UsqGiTa5kj14T0YG2piGw2KXiQPng=";
+    hash = "sha256-YIJnMeKYK0vSMeOTDoWkQ5EWljhnGhsgDFGPjItGyyo=";
   };
 
   patches = [
