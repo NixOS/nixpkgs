@@ -19,7 +19,10 @@ let
     homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ners ];
+    maintainers = with lib.maintainers; [
+      ners
+      fabiob
+    ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
