@@ -48,6 +48,10 @@ buildPythonPackage (finalAttrs: {
     web3
   ];
 
+  pythonRelaxDeps = [
+    "crytic-compile"
+  ];
+
   nativeCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook

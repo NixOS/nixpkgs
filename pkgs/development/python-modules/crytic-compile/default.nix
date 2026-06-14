@@ -1,18 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  cbor2,
   fetchFromGitHub,
+  pytestCheckHook,
+  uv-build,
+  cbor2,
   pycryptodome,
-  setuptools,
   solc-select,
-  toml,
+  solc,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "crytic-compile";
-  version = "0.3.11";
-  format = "setuptools";
+  version = "0.4.1";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -20,19 +21,33 @@ buildPythonPackage (finalAttrs: {
     owner = "crytic";
     repo = "crytic-compile";
     tag = finalAttrs.version;
-    hash = "sha256-NVAIVUfh1bizg/HG1z7Ze6o5w6wto744Ogq0LPg0gXg=";
+    hash = "sha256-7FEjye7ukvNeF2LKUo4X/lAprXR87rc6WWtjBJnVL+0=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     cbor2
     pycryptodome
-    setuptools
     solc-select
-    toml
   ];
 
-  # Test require network access
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.6,<0.10" "uv_build"
+  '';
+
+  build-system = [
+    uv-build
+  ];
+
+  nativeBuildInputs = [
+    pytestCheckHook
+    solc
+  ];
+
+  # Tests require network access
+  disabledTestPaths = [
+    "tests/test_sourcify_proxy.py"
+  ];
 
   # required for import check to work
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
