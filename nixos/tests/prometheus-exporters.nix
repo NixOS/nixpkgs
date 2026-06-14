@@ -377,16 +377,23 @@ let
       };
 
     dovecot =
-      { ... }:
+      { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           scopes = [ "global" ];
-          socketPath = "/var/run/dovecot2/old-stats";
+          socketPath = "/var/run/dovecot2/stats-reader";
           user = "root"; # <- don't use user root in production
         };
         metricProvider = {
-          services.dovecot2.enable = true;
+          services.dovecot2 = {
+            enable = true;
+            settings = {
+              dovecot_config_version = pkgs.dovecot.version;
+              dovecot_storage_version = pkgs.dovecot.version;
+            };
+          };
         };
         exporterTest = ''
           wait_for_unit("prometheus-dovecot-exporter.service")
