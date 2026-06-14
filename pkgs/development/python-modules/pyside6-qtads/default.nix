@@ -1,46 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  cmake-build-extension,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
-  pyside6,
+  replaceVars,
+
+  # buildInputs
   qt6,
+
+  # build-system
+  cmake-build-extension,
   setuptools,
   setuptools-scm,
+
+  # dependencies
+  pyside6,
   shiboken6,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyside6-qtads";
-  version = "4.5.0";
+  version = "4.5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyside6_qtads";
-    tag = "v${version}";
-    hash = "sha256-rAkv6dFyS4Nw3FDLwZ1zp0EU4BhD/xrhNgUiIIktJ8s=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-XEcO1+NUEqi/voaNGWLaH+uILY+pfhKMIxckcGwq4mU=";
   };
 
   # bypass the broken parts of their bespoke python script cmake plugin
-  patches = [ ./find-nix-deps.patch ];
+  patches = [
+    (replaceVars ./find-nix-deps.patch {
+      inherit shiboken6 pyside6;
+    })
+  ];
 
+  # can't use pythonRelaxDepsHook because it runs postBuild but the dependency check
+  #  happens during build.
+  # -Essentials is a smaller version of PySide6, but the name mismatch breaks build
+  # _generator is also a virtual package with the same issue
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail @shiboken6@ ${shiboken6} \
-      --replace-fail @pyside6@ ${pyside6}
-
-    # can't use pythonRelaxDepsHook because it runs postBuild but the dependency check
-    #  happens during build.
-    # -Essentials is a smaller version of PySide6, but the name mismatch breaks build
-    # _generator is also a virtual package with the same issue
     substituteInPlace pyproject.toml \
-      --replace-warn 'PySide6-Essentials' "" \
-      --replace-warn 'shiboken6_generator' "" \
-      --replace-quiet '"",' "" \
-      --replace-quiet '""' ""
+      --replace-fail '"PySide6-Essentials",' "" \
+      --replace-fail '"shiboken6_generator",' ""
   '';
 
   buildInputs = [
@@ -59,14 +63,12 @@ buildPythonPackage rec {
     shiboken6
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   # cmake-build-extension will configure
   dontUseCmakeConfigure = true;
 
   dontWrapQtApps = true;
   # runtime deps check fails on the pyside6-essentials virtual package
-  dontCheckRuntimeDeps = true;
+  # dontCheckRuntimeDeps = true;
 
   pythonImportsCheck = [ "PySide6QtAds" ];
 
@@ -77,4 +79,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})

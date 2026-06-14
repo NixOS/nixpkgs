@@ -1,26 +1,40 @@
 {
   lib,
   stdenv,
-  bitstring,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  ninja,
+  scikit-build-core,
+
+  bitstring,
   buildPackages,
   cffi,
-  fetchPypi,
   pycparser,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvex";
-  version = "9.2.154";
+  version = "9.2.212";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+  src = fetchFromGitHub {
+    owner = "angr";
+    repo = "pyvex";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-0A4HdeuXo7YL392hPCV7SRxW7Vje1SUs7vaxawFbUPg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    ninja
+    scikit-build-core
+  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     bitstring
@@ -44,8 +58,8 @@ buildPythonPackage (finalAttrs: {
 
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile \
-      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
+    # substituteInPlace pyvex_c/Makefile \
+    #   --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
   # No tests are available on PyPI, GitHub release has tests

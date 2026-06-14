@@ -1,9 +1,16 @@
 {
   lib,
   stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+
+  # build-system
+  setuptools-rust,
+
+  # dependencies
   ailment,
   archinfo,
-  buildPythonPackage,
   cachetools,
   capstone,
   cffi,
@@ -12,7 +19,6 @@
   cppheaderparser,
   cxxheaderparser,
   dpkt,
-  fetchFromGitHub,
   gitpython,
   itanium-demangler,
   mulpyplexer,
@@ -27,30 +33,44 @@
   pyvex,
   rich,
   rpyc,
-  setuptools,
   sortedcontainers,
-  sqlalchemy,
   sympy,
-  unicorn-angr,
   unique-log-filter,
+
+  # optional-dependencies
+  sqlalchemy,
+  unicorn-angr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "angr";
-  version = "9.2.193";
+  version = "9.2.212";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    tag = "v${version}";
-    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wEIfmO3VGCEJnHENghG4o90r/kkZWjS/XiTyAl6zD9w=";
   };
 
-  pythonRelaxDeps = [ "capstone" ];
+  build-system = [
+    setuptools-rust
+  ];
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+  ];
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-WPMBFVb+D8eWkF25doTYcFM7s8XRgkoaHXL0rtLwoqk=";
+  };
+
+  pythonRelaxDeps = [
+    #"capstone"
+  ];
   dependencies = [
     ailment
     archinfo
@@ -106,7 +126,8 @@ buildPythonPackage rec {
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
+    downloadPage = "https://github.com/angr/angr";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
