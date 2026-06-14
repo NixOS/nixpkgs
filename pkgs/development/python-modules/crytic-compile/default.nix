@@ -14,6 +14,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.11";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";
