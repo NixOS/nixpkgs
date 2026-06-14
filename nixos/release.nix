@@ -111,7 +111,7 @@ let
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = makeModules module { };
       }).config.system.build.isoImage
@@ -123,7 +123,7 @@ let
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = makeModules module { };
       }).config.system.build.sdImage
@@ -141,7 +141,7 @@ let
     let
 
       config =
-        (import lib/eval-config.nix {
+        (import ./lib/eval-config.nix {
           inherit system;
           modules = makeModules module { };
         }).config;
@@ -183,7 +183,7 @@ let
   makeNetboot =
     { module, system, ... }:
     let
-      configEvaled = import lib/eval-config.nix {
+      configEvaled = import ./lib/eval-config.nix {
         inherit system;
         modules = makeModules module { };
       };
@@ -209,7 +209,7 @@ let
 in
 rec {
 
-  channel = import lib/make-channel.nix {
+  channel = import ./lib/make-channel.nix {
     inherit
       pkgs
       nixpkgs
@@ -232,7 +232,7 @@ rec {
 
   kexec = forMatchingSystems supportedSystems (
     system:
-    (import lib/eval-config.nix {
+    (import ./lib/eval-config.nix {
       inherit system;
       modules = [
         ./modules/installer/netboot/netboot-minimal.nix
@@ -312,7 +312,7 @@ rec {
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = [
           ./modules/virtualisation/proxmox-image.nix
@@ -331,7 +331,7 @@ rec {
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = [
           ./modules/virtualisation/proxmox-image.nix
@@ -346,7 +346,7 @@ rec {
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = [
           ./modules/virtualisation/proxmox-lxc.nix
@@ -362,7 +362,7 @@ rec {
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = [
           configuration
@@ -379,7 +379,7 @@ rec {
     with import ./.. { inherit system; };
 
     hydraJob (
-      (import lib/eval-config.nix {
+      (import ./lib/eval-config.nix {
         inherit system;
         modules = [
           configuration
@@ -403,7 +403,7 @@ rec {
         with import ./.. { inherit system; };
 
         hydraJob (
-          (import lib/eval-config.nix {
+          (import ./lib/eval-config.nix {
             inherit system;
             modules = [
               configuration
@@ -427,7 +427,7 @@ rec {
         with import ./.. { inherit system; };
 
         hydraJob (
-          (import lib/eval-config.nix {
+          (import ./lib/eval-config.nix {
             inherit system;
             modules = [
               configuration
@@ -451,7 +451,7 @@ rec {
         with import ./.. { inherit system; };
 
         hydraJob (
-          (import lib/eval-config.nix {
+          (import ./lib/eval-config.nix {
             inherit system;
             modules = [
               configuration
@@ -475,7 +475,7 @@ rec {
         with import ./.. { inherit system; };
 
         hydraJob (
-          (import lib/eval-config.nix {
+          (import ./lib/eval-config.nix {
             inherit system;
             modules = [
               configuration
@@ -491,7 +491,7 @@ rec {
     system:
     pkgs.runCommand "dummy" {
       toplevel =
-        (import lib/eval-config.nix {
+        (import ./lib/eval-config.nix {
           inherit system;
           modules = singleton (
             { ... }:
@@ -539,14 +539,14 @@ rec {
       { ... }:
       {
         boot.isContainer = true;
-        imports = [ modules/profiles/minimal.nix ];
+        imports = [ ./modules/profiles/minimal.nix ];
       }
     );
 
     ec2 = makeClosure (
       { ... }:
       {
-        imports = [ modules/virtualisation/amazon-image.nix ];
+        imports = [ ./modules/virtualisation/amazon-image.nix ];
       }
     );
 
