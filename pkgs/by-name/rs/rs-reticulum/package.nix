@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-reticulum";
-  version = "0.9.4";
+  version = "1.0.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsReticulum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9+Xn3fXcH+iTKh+SRh2CHLoK5N9Aqmk5cSXLQEmUYB0=";
+    hash = "sha256-CoA+HOcMkwmo7WUhXCLIwx4hMqLHFQqu6d1NOz1N2PY=";
   };
 
-  cargoHash = "sha256-uBYYK8RQ2+D51xUM51TY9K7WbYiw5oNaNouKn610YH0=";
+  cargoHash = "sha256-h8P2PuW3hiyQuvAHhat831dxBGSmV0rxDWB8lffZpac=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/ratspeak/rsReticulum/releases/tag/${finalAttrs.src.tag}";
     description = "Rust implementation of the Reticulum networking stack";
     homepage = "https://github.com/ratspeak/rsReticulum";
     license = lib.licenses.agpl3Only;
