@@ -10,17 +10,17 @@ buildGoModule.override
     stdenv = pkgs.clangStdenv;
   }
   (finalAttrs: {
-    version = "0.6.6";
+    version = "0.8.1";
     pname = "bigquery-emulator";
 
     src = fetchFromGitHub {
       owner = "goccy";
       repo = "bigquery-emulator";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-iAVbxbm1G7FIWTB5g6Ff8h2dZjZssONA2MOCGuvK180=";
+      hash = "sha256-/IwuXbw1Kaqji3UCTaCmAxZS2ZvX3SABYwjclA2f6eg=";
     };
 
-    vendorHash = "sha256-TQlsivudutyPFW+3HHX7rYuoB5wafmDTAO1TElO/8pc=";
+    vendorHash = "sha256-xfqXW1LukyCLMIl80FsjjhMfEymFnVY3VKtowmE7I4I=";
 
     postPatch = ''
       # main module does not contain package
