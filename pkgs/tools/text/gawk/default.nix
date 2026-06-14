@@ -49,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (!interactive) "man";
 
+  __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
   # no-pma fix
   nativeBuildInputs = [
