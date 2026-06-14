@@ -75,6 +75,7 @@ lib.extendMkDerivation rec {
     "repo"
     "tag"
     "rev"
+    "providerName"
     "functionName"
     "private"
     "domain"
@@ -90,9 +91,9 @@ lib.extendMkDerivation rec {
     repo,
     tag ? null,
     rev ? null,
-    functionName ? "fetchFromGitHub",
-    # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
-    # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
+    providerName,
+    functionName ? "fetchFrom${finalAttrs.providerName}",
+    name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) (lib.toLower finalAttrs.providerName),
     private ? false,
     domain,
     varPrefix ? null,
@@ -220,12 +221,18 @@ lib.extendMkDerivation rec {
       )
       // privateAttrs
       // {
+        inherit
+          name
+          ;
+
         derivationArgs = derivationArgs // {
           inherit
             domain
             owner
+            providerName
             repo
             tag
+            useFetchGit
             ;
 
           # This rev is revWithTag
@@ -239,10 +246,6 @@ lib.extendMkDerivation rec {
           revCustom = rev;
         };
 
-        # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
-        name =
-          args.name
-            or (repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github");
         meta = newMeta;
       };
   in
