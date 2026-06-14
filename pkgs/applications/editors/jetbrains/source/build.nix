@@ -355,7 +355,7 @@ bazel.package {
       --jvm_flag=-Dbuild.number=${buildNumberMinor} \
       --jvm_flag=-Dintellij.build.target.os=current \
       --jvm_flag=-Dintellij.build.target.arch=current
-      
+
     mv out/*/artifacts/*-no-jbr.tar.gz $out
 
     runHook postInstall
