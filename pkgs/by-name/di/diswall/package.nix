@@ -2,20 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diswall";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "dis-works";
     repo = "diswall-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-t2ZBi3ab6OUWzc0L0Hq/ay+s3KNDMeu6mkYxti48BuE=";
+    hash = "sha256-5kKVEdzN38gyovGAg3/FE5sbSwCBEiQH1GPsDeQ+rCg=";
   };
 
-  cargoHash = "sha256-I4jfeOtK+ho2jksGHgQqHE+L6UzS240t+7v3/Eb/xAs=";
+  cargoHash = "sha256-WXaNLlTbZc2On19azFUbcsx0fA2LpsNNWxO6BzJ469M=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
+
+  OPENSSL_NO_VENDOR = 1;
 
   doCheck = false;
 
