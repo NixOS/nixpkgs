@@ -1,8 +1,6 @@
 {
   replaceVarsWith,
   perl,
-  shadow,
-  util-linux,
   installShellFiles,
   configurationDirectory ? "/etc/nixos-containers",
   stateDirectory ? "/var/lib/nixos-containers",
@@ -20,10 +18,9 @@ replaceVarsWith {
       p.FileSlurp
       p.IPCRun
     ]);
-    su = "${shadow.su}/bin/su";
     lib = "${path + "/lib"}";
 
-    inherit configurationDirectory stateDirectory util-linux;
+    inherit configurationDirectory stateDirectory;
   };
 
   passthru = {
