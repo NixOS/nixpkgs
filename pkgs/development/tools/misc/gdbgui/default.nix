@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.15.3.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-/HyFE0JnoN03CDyCQCo/Y9RyH4YOMoeB7khReIb8t7Y=";
