@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "emhash";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ktprime";
     repo = "emhash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFj/QaGdTJYdcxKlS9tES6OHae8xPMnrG9ccRNM/hi8=";
+    hash = "sha256-+oJIJvtphPHXPbmRquHRV9KkI61qwuGjJw3O1hpzwIw=";
   };
 
   strictDeps = true;
