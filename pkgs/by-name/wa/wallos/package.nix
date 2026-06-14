@@ -3,6 +3,7 @@
   lib,
   stdenvNoCC,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wallos";
@@ -67,6 +68,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           runHook postInstall
         '';
       };
+      inherit (nixosTests) wallos;
+
     };
   };
 
