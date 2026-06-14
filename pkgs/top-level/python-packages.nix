@@ -6354,8 +6354,6 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
-  ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
-
   ghmap = callPackage ../development/python-modules/ghmap { };
 
   ghome-foyer-api = callPackage ../development/python-modules/ghome-foyer-api { };
@@ -8042,8 +8040,6 @@ self: super: with self; {
   jenkins-job-builder = callPackage ../development/python-modules/jenkins-job-builder { };
 
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
-
-  jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
 
   jh2 = callPackage ../development/python-modules/jh2 { };
 
@@ -14259,8 +14255,6 @@ self: super: with self; {
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
   pyhibp = callPackage ../development/python-modules/pyhibp { };
-
-  pyhidra = callPackage ../development/python-modules/pyhidra { };
 
   pyhik = callPackage ../development/python-modules/pyhik { };
 
