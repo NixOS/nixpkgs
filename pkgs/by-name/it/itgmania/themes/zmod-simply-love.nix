@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv * "$out/itgmania/Themes/Zmod Simply Love"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Zmod fork of Simply Love";
