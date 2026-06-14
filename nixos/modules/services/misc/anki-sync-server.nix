@@ -69,6 +69,18 @@ in
       description = "Whether to open the firewall for the specified port.";
     };
 
+    hashedPasswords = mkOption {
+      default = if (lib.versionAtLeast config.system.stateVersion "26.11") then true else false;
+      type = types.bool;
+      example = true;
+      description = ''
+        If this option is set, all passwords specified in {option}`services.anki-sync-server.users.*.password` and {option}`services.anki-sync-server.users.*.passwordFile` need to be specified as pbkdf2-sha256 hashes instead.
+        Mixing hashed and plaintext passwords is not supported by anki.
+
+        The pbkdf2-sha256 hashes need to specified like this: `$pbkdf2-sha256$i=600000,l=32$g6qx1Io6LBOBCPaddQZGrw$nTbHvImoONfL+Ju4n2IIg0Lw+pWQvrmiGTMyE/XNejk` and can be generated using the `pbkdf2-password-hash` package.
+      '';
+    };
+
     users = mkOption {
       type =
         with types;
@@ -83,10 +95,11 @@ in
               default = null;
               description = ''
                 Password accepted by anki-sync-server for the associated username.
-                **WARNING**: This option is **not secure**. This password will
+                **WARNING**: **If** {option}`services.anki-sync-server.hashedPasswords` is disabled (this is the case for `stateVersion < 26.11`), this option is **not secure**. This password will
                 be stored in *plaintext* and will be visible to *all users*.
-                See {option}`services.anki-sync-server.users.passwordFile` for
-                a more secure option.
+
+                **NOTE**: `stateVersion ≥ 26.11` sets hashedPasswords by default.
+                See the description of {option}`services.anki-sync-server.hashedPasswords` for details on how to specify the required hash format.
               '';
             };
             passwordFile = mkOption {
@@ -96,6 +109,9 @@ in
                 File containing the password accepted by anki-sync-server for
                 the associated username.  Make sure to make readable only by
                 root.
+
+                **NOTE**: `stateVersion ≥ 26.11` requires hashedPasswords by default.
+                See the description of {option}`services.anki-sync-server.hashedPasswords` for details on how to specify the required hash format.
               '';
             };
           };
@@ -130,6 +146,7 @@ in
         StateDirectory = name;
         ExecStart = anki-sync-server-run;
         Restart = "always";
+        Environment = lib.optional cfg.hashedPasswords "PASSWORDS_HASHED=1";
         LoadCredential = map (
           x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
         ) usersWithIndexesFile;
