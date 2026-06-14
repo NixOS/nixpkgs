@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lessc";
-  version = "4.6.3";
+  version = "4.6.6";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-udfqfjdIhQ6UGAeXCT5FbI+iXNqfkbQMqZnnIDUrQaQ=";
+    hash = "sha256-onTaVj69LYeYnywYXSC0I3ewF4rT0LAlRI61NEroLvc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-ZdADm6WKPP48DK+ezk/jdzXVEBX161SqgYgU5fsCW2k=";
+    hash = "sha256-sovZ/H+c1OisBHxSI1bm75eD3NrUV9OTkI6gtomTRLk=";
   };
 
   strictDeps = true;
