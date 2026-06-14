@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "symbolic";
-  version = "13.1.1";
+  version = "13.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -23,12 +23,12 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
-    hash = "sha256-nrEWnjMyp4KKBcdcqN0uWHIV59RHN+rJWzvJLznvh20=";
+    hash = "sha256-Nks8CClNENRFBbEGgFP3yhi5sWR/iiaLOdTayPD7M9k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-9yO+Y5Oxsfa/AM54TQTCEvnHr33L7/gh1q+hQq9iP3s=";
+    hash = "sha256-r+9mrGyr78UenC9BFpW1a+VjEAXgcamLOoI8V1N10Cg=";
   };
 
   nativeBuildInputs = [
