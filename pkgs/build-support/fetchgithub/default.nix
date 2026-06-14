@@ -11,12 +11,17 @@ lib.makeOverridable (
     extendDrvArgs =
       finalAttrs:
       {
+        providerName ? "GitHub",
+        functionName ? "fetchFrom${finalAttrs.providerName}",
         githubBase ? "github.com",
         ...
       }:
       {
+        inherit
+          providerName
+          functionName
+          ;
         domain = finalAttrs.githubBase;
-        functionName = "fetchFromGitHub";
         derivationArgs = {
           inherit githubBase;
         };
