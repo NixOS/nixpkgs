@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-lxmf";
-  version = "0.9.2";
+  version = "1.0.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsLXMF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jba/uiQQUO3MdmF2+6AOtdbUXYW43yqplRFUGujN0Oo=";
+    hash = "sha256-fqSd+XZayW8mYdUF3MY/KjclvhfHtO1I4y1ot3EbdnA=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  cargoHash = "sha256-ReWw16r9cYIEzilzSsFXYap9ZGhk1mrUVl/bKkQMcVA=";
+  cargoHash = "sha256-Lv+mxsAtpzjd9tbMioZEH+7rvYVRiPYfD3icgQc+BrU=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/ratspeak/rsLXMF/releases/tag/${finalAttrs.src.tag}";
     description = "Rust implementation of LXMF for Reticulum";
     homepage = "https://github.com/ratspeak/rsLXMF";
     license = lib.licenses.agpl3Only;
