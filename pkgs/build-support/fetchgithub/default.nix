@@ -20,6 +20,7 @@ lib.makeOverridable (
         functionName ? "fetchFrom${finalAttrs.providerName}",
         githubBase ? "github.com",
         providerName ? "GitHub",
+        meta ? { },
         ...
       }@args:
       {
@@ -59,6 +60,24 @@ lib.makeOverridable (
 
         derivationArgs = {
           inherit githubBase;
+        };
+        meta = meta // {
+          identifiers = {
+            purlParts =
+              if finalAttrs.domain == "github.com" then
+                {
+                  type = "github";
+                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                  spec = "${finalAttrs.owner}/${finalAttrs.repo}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
+                }
+              else
+                {
+                  type = "generic";
+                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                  spec = "${finalAttrs.repo}?vcs_url=${finalAttrs.gitRepoUrl}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
+                };
+          }
+          // meta.identifiers or { };
         };
       };
   }
