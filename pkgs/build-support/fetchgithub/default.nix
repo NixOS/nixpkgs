@@ -48,6 +48,7 @@ decorate (
     repo,
     tag ? null,
     rev ? null,
+    functionName ? "fetchFromGitHub",
     # TODO(@ShamrockLee): Add back after reconstruction with lib.extendMkDerivation
     # name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) "github",
     private ? false,
@@ -60,7 +61,7 @@ decorate (
 
   assert (
     lib.xor (tag == null) (rev == null)
-    || throw "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
+    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   let
@@ -115,6 +116,7 @@ decorate (
         "repo"
         "tag"
         "rev"
+        "functionName"
         "private"
         "githubBase"
         "varPrefix"
@@ -135,7 +137,7 @@ decorate (
         in
         ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
-            echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+            echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
             exit 1
           fi
           cat > netrc <<EOF
