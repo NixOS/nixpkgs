@@ -7,8 +7,8 @@
   nix-update,
   nodejs,
   pnpm_11,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  fetchPnpmCache,
+  pnpmCacheConfigHook,
   stdenv,
   writeShellScript,
   discord,
@@ -38,22 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.1.0"'
   '';
 
-  pnpmDeps = fetchPnpmDeps {
+  mitmCache = fetchPnpmCache {
     inherit (finalAttrs)
       pname
       src
       patches
       postPatch
       ;
-    inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-LiAcWwGmZlpO+rr0tcMNpViBiBRhSHj+wvyHFIe32lw=";
+    hash = "sha256-CYHvIgOzFfrUckZtIEgXEZgzOaiLTUPnDJ5l9rernSs=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpmConfigHook
+    pnpmCacheConfigHook
     pnpm
   ];
 
@@ -103,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
       p: lib.nameValuePair p.pname p.tests.withVencord
     );
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Cutest Discord client mod";
