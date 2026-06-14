@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gibberish-detector";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -18,6 +19,8 @@ buildPythonPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "1si0fkpnk9vjkwl31sq5jkyv3rz8a5f2nh3xq7591j9wv2b6dn0b";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
