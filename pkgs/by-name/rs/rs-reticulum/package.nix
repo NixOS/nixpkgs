@@ -1,27 +1,29 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   bzip2,
   dbus,
   python3,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-reticulum";
-  version = "1.0.0";
+  version = "1.0.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsReticulum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CoA+HOcMkwmo7WUhXCLIwx4hMqLHFQqu6d1NOz1N2PY=";
+    hash = "sha256-MSvIgB/E1Ce8M8vOaXlHQGYnxFf0lT2hg8g0tx6QY/w=";
   };
 
-  cargoHash = "sha256-h8P2PuW3hiyQuvAHhat831dxBGSmV0rxDWB8lffZpac=";
+  cargoHash = "sha256-Kv3aVET69yI28muyaJop4YQEqOxNeyajK7j5J+jDhe0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,6 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  checkFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Broken since 0.9.4
+    "--skip=actor::tests::test_rate_tracking"
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
