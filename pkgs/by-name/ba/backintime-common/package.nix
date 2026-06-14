@@ -15,6 +15,7 @@
   gnugrep,
   man,
   asciidoctor,
+  bashNonInteractive,
 }:
 
 let
@@ -46,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/33Lx62S/9RcqrfJumE6/o3KnAObBa3DcmuGkcOXIQE=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
   outputs = [
     "out"
     "man"
@@ -55,12 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     gettext
+    asciidoctor
+    man
   ];
 
   buildInputs = [
     python'
-    man
-    asciidoctor
+    bashNonInteractive
   ];
 
   installFlags = [ "DEST=$(out)" ];
