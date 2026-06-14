@@ -5,7 +5,16 @@
   cmake,
   kdePackages,
   nix-update-script,
+  makeWrapper,
+  python3,
+  glib,
 }:
+let
+  pythonEnv = python3.withPackages (p: [
+    p.dbus-python
+    p.pygobject3
+  ]);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-panel-colorizer";
@@ -21,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
+    makeWrapper
   ];
 
   buildInputs = [
@@ -39,8 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  patches = [ ./use-dbus-service-directly.patch ];
+
+  postPatch = ''
+    substituteInPlace package/contents/ui/tools/service.py \
+      --replace-fail '#!/usr/bin/env python' '#!${lib.getExe pythonEnv}'
+  '';
+
   postInstall = ''
     chmod 755 $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/{list_presets.sh,service.py}
+
+    wrapProgram $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/service.py \
+      --prefix GI_TYPELIB_PATH : "${glib.out}/lib/girepository-1.0"
   '';
 
   meta = {
