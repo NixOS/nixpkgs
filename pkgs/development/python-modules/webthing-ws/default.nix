@@ -7,15 +7,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webthing-ws";
   version = "0.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "webthing-ws";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j7nc4yJczDs28RVFDHeQ2ZIG9mIW2m25AAeErVKi4E4=";
   };
 
@@ -34,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "WebThing WebSocket consumer and API client";
     homepage = "https://github.com/home-assistant-ecosystem/webthing-ws";
-    changelog = "https://github.com/home-assistant-ecosystem/webthing-ws/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-ecosystem/webthing-ws/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
