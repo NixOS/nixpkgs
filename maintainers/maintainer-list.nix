@@ -24186,6 +24186,7 @@
   };
   ryand56 = {
     email = "git@ryand.ca";
+    matrix = "@ryan:ryand.ca";
     github = "ryand56";
     githubId = 22267679;
     name = "Ryan Omasta";
