@@ -13,6 +13,10 @@
   glib,
   gnome,
   gssdp-tools,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
@@ -38,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
     gi-docgen
@@ -53,16 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
     "-Dsniffer=false"
     # This packages only has manpages for gssdp-device-sniffer, which we disabled above.
     "-Dmanpages=false"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   # On Darwin: Failed to bind socket, Operation not permitted
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
