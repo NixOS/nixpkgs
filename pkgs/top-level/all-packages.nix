@@ -3149,8 +3149,6 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
-  sumorobot-manager = callPackage ../applications/science/robotics/sumorobot-manager { };
-
   sslscan = callPackage ../tools/security/sslscan {
     openssl = openssl.override { withZlib = true; };
   };
