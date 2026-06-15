@@ -147,6 +147,9 @@ stdenv.mkDerivation {
       --run '[ -t 1 ] || exec > /dev/null 2>&1' \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
+    mkdir -p $out/bin
+    ln -s "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}"
+
     runHook postInstall
   '';
 
