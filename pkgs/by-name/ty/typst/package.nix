@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/typst/typst/releases/tag/${finalAttrs.src.tag}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
