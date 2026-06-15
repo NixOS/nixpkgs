@@ -1723,8 +1723,6 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  hyprshade = callPackage ../applications/window-managers/hyprwm/hyprshade { };
-
   hyprlandPlugins = recurseIntoAttrs (
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
   );
