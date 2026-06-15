@@ -2,18 +2,21 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xstatic";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "XStatic";
     inherit version;
     hash = "sha256-QCVEzJ4XlIlEEFTwnIB4BOEV6iRpB96HwDVftPWjEmg=";
   };
+
+  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
