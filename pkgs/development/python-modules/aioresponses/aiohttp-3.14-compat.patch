@@ -1,0 +1,79 @@
+From 1a48e1f898035e3bedc981f06520842c55977706 Mon Sep 17 00:00:00 2001
+From: kleine-safie <k-guilherme@safie.jp>
+Date: Wed, 10 Jun 2026 11:05:30 +0900
+Subject: [PATCH] support for pause_reading
+
+---
+ aioresponses/compat.py     |  5 +++++
+ aioresponses/core.py       |  2 ++
+ tests/test_aioresponses.py | 11 ++++++++++-
+ tox.ini                    | 11 ++++++-----
+ 4 files changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/aioresponses/compat.py b/aioresponses/compat.py
+index 83fd47a..e95ecb2 100644
+--- a/aioresponses/compat.py
++++ b/aioresponses/compat.py
+@@ -2,6 +2,7 @@
+ import asyncio  # noqa: F401
+ from re import Pattern
+ from typing import Dict, Optional, Union  # noqa
++from unittest.mock import Mock
+ from urllib.parse import parse_qsl, urlencode
+ 
+ from aiohttp import __version__ as aiohttp_version, StreamReader
+@@ -17,6 +18,10 @@ def stream_reader_factory(  # noqa
+     loop: 'Optional[asyncio.AbstractEventLoop]' = None
+ ) -> StreamReader:
+     protocol = ResponseHandler(loop=loop)
++    # Satisfies BaseProtocol's flow control hooks that
++    # fire when a large payload exceeds the StreamReader limit.
++    protocol._parser = Mock()
++    protocol._parser.feed_data.return_value = ([], False, b'')
+     return StreamReader(protocol, limit=2 ** 16, loop=loop)
+ 
+ 
+diff --git a/aioresponses/core.py b/aioresponses/core.py
+index a904cf9..52640f3 100644
+--- a/aioresponses/core.py
++++ b/aioresponses/core.py
+@@ -182,6 +182,8 @@ def _build_response(self, url: 'Union[URL, str]',
+             headers=CIMultiDictProxy(self._prepare_request_headers(request_headers)),
+             real_url=url
+         )
++        if 'stream_writer' in inspect.signature(response_class).parameters:
++            kwargs['stream_writer'] = Mock(output_size=0)
+         kwargs['writer'] = None
+         kwargs['continue100'] = None
+         kwargs['timer'] = TimerNoop()
+diff --git a/tests/test_aioresponses.py b/tests/test_aioresponses.py
+index 68bec3f..45c0d87 100644
+--- a/tests/test_aioresponses.py
++++ b/tests/test_aioresponses.py
+@@ -4,9 +4,10 @@
+ from asyncio import CancelledError, TimeoutError
+ from random import uniform
+ from typing import Coroutine, Generator, Union
+-from unittest.mock import patch
++from unittest.mock import MagicMock, patch
+ 
+ from aiohttp import hdrs
++from aiohttp.base_protocol import BaseProtocol
+ from aiohttp import http
+ from aiohttp.client import ClientSession
+ from aiohttp.client_reqrep import ClientResponse
+@@ -312,6 +313,14 @@ async def test_streaming(self, m):
+         content = await resp.content.read()
+         self.assertEqual(content, b'Test')
+ 
++    @aioresponses()
++    async def test_streaming_large_body(self, m):
++        body = b'x' * (1024 * 1024)
++        m.get(self.url, body=body)
++        resp = await self.session.get(self.url)
++        content = await resp.content.read()
++        self.assertEqual(content, body)
++
+     @aioresponses()
+     async def test_streaming_up_to(self, m):
+         m.get(self.url, body='Test')
