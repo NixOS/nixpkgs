@@ -2803,8 +2803,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-acro = callPackage ../tools/misc/pandoc-acro { };
-
   pandoc-imagine = callPackage ../tools/misc/pandoc-imagine { };
 
   pandoc-include = callPackage ../tools/misc/pandoc-include { };
