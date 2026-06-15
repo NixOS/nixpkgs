@@ -24,7 +24,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ddvk/rmapi";
     changelog = "https://github.com/ddvk/rmapi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.nickhu ];
+    maintainers = with lib.maintainers; [
+      nickhu
+      boltzmannrain
+    ];
     mainProgram = "rmapi";
   };
 })

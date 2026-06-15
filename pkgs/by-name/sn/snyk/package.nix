@@ -43,7 +43,7 @@ buildNpmPackage {
     homepage = "https://snyk.io";
     changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "snyk";
   };
 }

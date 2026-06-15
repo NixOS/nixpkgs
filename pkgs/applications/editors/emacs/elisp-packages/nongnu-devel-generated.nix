@@ -3225,17 +3225,21 @@
       elpaBuild,
       fetchurl,
       fsm,
+      keymap-popup,
       lib,
     }:
     elpaBuild {
       pname = "jabber";
       ename = "jabber";
-      version = "0.10.5.0.20260423.192938";
+      version = "0.11.0.0.20260614.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu-devel/jabber-0.10.5.0.20260423.192938.tar";
-        sha256 = "1q79iv4znishj6rdz1m76r0c8h72i2g47xfh6xfw2gqxbkkyilv3";
+        url = "https://elpa.nongnu.org/nongnu-devel/jabber-0.11.0.0.20260614.0.tar";
+        sha256 = "19h0w85m6vzwwpsgg6ifcyx2j082cgj6dpd7s5yd7pr438jazkn3";
       };
-      packageRequires = [ fsm ];
+      packageRequires = [
+        fsm
+        keymap-popup
+      ];
       meta = {
         homepage = "https://elpa.nongnu.org/nongnu-devel/jabber.html";
         license = lib.licenses.free;

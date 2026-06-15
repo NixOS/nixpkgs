@@ -25,7 +25,7 @@ buildDunePackage {
     homepage = "https://github.com/andersfugmann/amqp-client";
     license = lib.licenses.bsd3;
     changelog = "https://raw.githubusercontent.com/andersfugmann/amqp-client/refs/tags/${version}/Changelog";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     longDescription = ''
       This library provides high level client bindings for amqp. The library
       is tested with rabbitmq, but should work with other amqp
