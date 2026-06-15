@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   lxml,
   six,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "xml-marshaller";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "xml_marshaller";
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
     six
   ];
