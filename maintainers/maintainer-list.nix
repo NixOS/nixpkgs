@@ -12144,6 +12144,12 @@
     github = "james-atkins";
     githubId = 9221409;
   };
+  jamesarch = {
+    email = "han.shan@live.cn";
+    github = "jamesarch";
+    githubId = 2214753;
+    name = "jamesarch";
+  };
   jamespeapen = {
     name = "James Eapen";
     email = "james.eapen@vai.org";
