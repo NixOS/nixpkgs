@@ -95,6 +95,10 @@ stdenv.mkDerivation {
       scapy
       lxml
     ])
+    # For office2john.py
+    ++ (with python3Packages; [
+      olefile
+    ])
     ++ (with perlPackages; [
       # For pass_gen.pl
       DigestMD4
