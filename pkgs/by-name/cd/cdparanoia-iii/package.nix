@@ -171,6 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl21Plus
     ];
+    maintainers = with lib.maintainers; [
+      olduser101
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "cdparanoia";
   };
