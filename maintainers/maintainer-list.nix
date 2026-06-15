@@ -18350,6 +18350,13 @@
     github = "mkleczek";
     githubId = 11559480;
   };
+  mkoppmann = {
+    email = "dev@mkoppmann.at";
+    github = "mkoppmann";
+    githubId = 21209717;
+    matrix = "@shibayashi:ncrypt.at";
+    name = "Michael Koppmann";
+  };
   mksafavi = {
     name = "MK Safavi";
     email = "mksafavi@gmail.com";
