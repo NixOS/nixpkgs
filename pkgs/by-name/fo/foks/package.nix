@@ -2,17 +2,27 @@
   lib,
   stdenv,
   buildGoModule,
+  buildPackages,
   fetchFromGitHub,
+  versionCheckHook,
 
   pcsclite,
   pkg-config,
-  templ,
+  foks, # self
+
+  server ? false,
 }:
+let
+  client = !server;
+  pname = if server then "foks-server" else "foks";
+  subPackages = if server then [ "server/foks-server" ] else [ "client/foks" ];
+in
 buildGoModule (finalAttrs: {
-  pname = "foks";
+  inherit pname;
   version = "0.1.7";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "foks-proj";
@@ -25,24 +35,29 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     cd ./server/web/templates
-    ${finalAttrs.passthru.templ}/bin/templ generate
+    templ generate
     cd -
   '';
 
-  subPackages = [ "client/foks" ];
+  inherit subPackages;
   excludedPackages = [ "server" ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [ pcsclite ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
   nativeBuildInputs = [
     pkg-config
+    finalAttrs.passthru.templ
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString client ''
     ln -s $out/bin/{foks,git-remote-foks}
   '';
 
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
-    templ = templ.overrideAttrs (old: {
+    templ = buildPackages.templ.overrideAttrs (old: {
       pname = "templ-foks";
       version = "0.3.833";
       src = old.src.override {
@@ -50,6 +65,7 @@ buildGoModule (finalAttrs: {
       };
       vendorHash = "sha256-OPADot7Lkn9IBjFCfbrqs3es3F6QnWNjSOHxONjG4MM=";
     });
+    server = foks.override { server = true; };
   };
 
   meta = {
@@ -59,6 +75,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/foks-proj/go-foks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ poptart ];
-    mainProgram = "foks";
+    mainProgram = pname;
   };
 })

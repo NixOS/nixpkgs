@@ -9627,6 +9627,8 @@ with pkgs;
 
   rstudio-server = rstudio.override { server = true; };
 
+  foks-server = foks.server;
+
   inherit (callPackages ../applications/radio/rtl-sdr { })
     rtl-sdr-librtlsdr
     rtl-sdr-osmocom
