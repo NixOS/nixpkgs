@@ -43,7 +43,12 @@ stdenv.mkDerivation (
 
     srcs = lib.attrValues finalAttrs.passthru.srcs;
     sourceRoot = "makemkv-oss-${version}";
-    patches = [ ./r13y.patch ];
+    patches = [
+      ./r13y.patch
+      # This patch is sourced from NonGuix, licensed GPLv3:
+      # https://gitlab.com/nonguix/nonguix/-/blob/2d1f3691546f007c7cd96ae87e4e970fed789182/nongnu/packages/patches/makemkv-app-id.patch
+      ./app-id.patch
+    ];
 
     enableParallelBuilding = true;
     nativeBuildInputs = [

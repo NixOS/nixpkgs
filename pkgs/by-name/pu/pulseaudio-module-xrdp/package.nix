@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/pulseaudio/modules $out/libexec/pulsaudio-xrdp-module $out/etc/xdg/autostart
+    mkdir -p $out/lib/pulseaudio/modules $out/libexec/pulseaudio-xrdp-module $out/etc/xdg/autostart
     install -m 755 src/.libs/*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/pulseaudio/modules
 
-    install -m 755 instfiles/load_pa_modules.sh $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init
-    substituteInPlace $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init \
+    install -m 755 instfiles/load_pa_modules.sh $out/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init
+    substituteInPlace $out/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init \
       --replace pactl ${pulseaudio}/bin/pactl
 
     runHook postInstall
