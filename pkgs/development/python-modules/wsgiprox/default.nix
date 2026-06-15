@@ -12,6 +12,8 @@ buildPythonPackage {
   version = "1.5.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "webrecorder";
     repo = "wsgiprox";
