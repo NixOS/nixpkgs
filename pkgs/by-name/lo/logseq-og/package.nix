@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.15";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "logseq";
-    repo = "logseq";
+    repo = "og";
     tag = finalAttrs.version;
-    hash = "sha256-knosNA2Gqy10Kr9HWnBdYNlV51zzgFuL8cdioVlAk0Q=";
+    hash = "sha256-4IvtEmgELTxc0AyzGK3xomYP//wAnwP4vtsJkZ36WbI=";
   };
 
   patches = [
@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs =
     let
