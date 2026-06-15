@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Character encoding aliases for legacy web content";
-    homepage = "https://github.com/SimonSapin/python-webencodings";
+    homepage = "https://github.com/gsnedders/python-webencodings";
     license = lib.licenses.bsd3;
   };
 })
