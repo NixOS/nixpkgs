@@ -29,13 +29,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "tblite";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "tblite";
     repo = "tblite";
     rev = "v${version}";
-    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
+    hash = "sha256-z0g+bf6APqNLB9mDE49FelitQ9ptZXdFQuYeXIT0NIw=";
   };
 
   patches = [
