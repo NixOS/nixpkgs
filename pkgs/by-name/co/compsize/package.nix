@@ -20,6 +20,10 @@ stdenv.mkDerivation {
     ./btrfs-progs-6-10-1.patch
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   outputs = [
     "out"
     "man"
