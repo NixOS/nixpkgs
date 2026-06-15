@@ -38,8 +38,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Lightweight console printing and formatting toolkit";
-    homepage = "https://github.com/ines/wasabi";
-    changelog = "https://github.com/ines/wasabi/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/explosion/wasabi";
+    changelog = "https://github.com/explosion/wasabi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
