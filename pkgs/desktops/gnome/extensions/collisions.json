@@ -12,6 +12,14 @@
     "battery-time@eetumos.github.com",
     "batterytime@typeof.pw"
   ],
+  "clipboard-line-cleaner": [
+    "clipboard-line-cleaner@epiphanius.github.io",
+    "clipboard-line-cleaner@example.com"
+  ],
+  "fuzzy-clock": [
+    "FuzzyClock@fire-man-x",
+    "FuzzyClock@johngoetz"
+  ],
   "internet-speed-meter": [
     "InternetSpeedMeter@alshakib.dev",
     "speed-meter@mojahid.lunecode.com"
@@ -48,7 +56,12 @@
     "System_Monitor@bghome.gmail.com",
     "sysmonitor@talhasiddique7",
     "system-monitor@axet.github.com",
-    "system-monitor@gnome-shell-extensions.gcampax.github.com"
+    "system-monitor@gnome-shell-extensions.gcampax.github.com",
+    "system-monitor@jtourteau"
+  ],
+  "systemquest": [
+    "system-rpg@conan513",
+    "system-rpg@gnome-rpg.local"
   ],
   "tailscale-qs": [
     "tailscale-gnome-qs@tailscale-qs.github.io",
