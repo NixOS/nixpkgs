@@ -50,28 +50,20 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # electronDist needs to be modifiable on Darwin
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
 
-    # Disable code signing during build on macOS.
-    # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    # the electronDist directory needs to be outside of the working directory
+    # otherwise the electron-builder config accidentally includes it inside the .asar file
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    npm exec electron-builder -- \
-      --dir \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
-  ''
-  + ''
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable codesigning on Darwin
+
     runHook postBuild
   '';
 
