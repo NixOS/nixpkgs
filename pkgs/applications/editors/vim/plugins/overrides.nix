@@ -1657,6 +1657,7 @@ assertNoAdditions {
     checkInputs = with self; [
       luasnip
       null-ls-nvim
+      plenary-nvim
     ];
     nvimSkipModules = [
       "init"
@@ -2012,9 +2013,8 @@ assertNoAdditions {
     let
       kulala-http-grammar = neovimUtils.grammarToPlugin (
         tree-sitter.buildGrammar {
-          inherit (old) version src meta;
           language = "kulala_http";
-          location = "lua/tree-sitter";
+          inherit (luaPackages.tree-sitter-kulala_http) version src meta;
           generate = false;
         }
       );
@@ -2036,6 +2036,7 @@ assertNoAdditions {
         "cli.kulala_cli"
         # Upstream test harnesses are not require-safe modules
         "minit"
+        "minit-userscript"
         "minitest"
         "test"
         # Legacy parser module; active parsing is handled by kulala-core
@@ -2482,6 +2483,7 @@ assertNoAdditions {
     dependencies = with self; [
       mason-nvim
       null-ls-nvim
+      plenary-nvim
     ];
   };
 
