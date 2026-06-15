@@ -1750,8 +1750,6 @@ with pkgs;
 
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
-  jellyfin-mpv-shim = callPackage ../applications/video/jellyfin-mpv-shim { };
-
   klaus = with python3Packages; toPythonApplication klaus;
 
   klipper = callPackage ../servers/klipper { };
