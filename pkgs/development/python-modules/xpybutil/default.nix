@@ -7,17 +7,19 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xpybutil";
   version = "0.0.6";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   # Pypi only offers a wheel
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "xpybutil";
-    rev = version;
-    sha256 = "17gbqq955fcl29aayn8l0x14azc60cxgkvdxblz9q8x3l50w0xpg";
+    tag = finalAttrs.version;
+    hash = "sha256-73bAQaGjI5w+Xb3t+ToDhn1FQgcUWa9UEpS5UhLG650=";
   };
 
   build-system = [ setuptools ];
@@ -41,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})
