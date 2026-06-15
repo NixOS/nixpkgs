@@ -1656,7 +1656,7 @@ assertNoAdditions {
     ];
     checkInputs = with self; [
       luasnip
-      null-ls-nvim
+      none-ls-nvim
       plenary-nvim
     ];
     nvimSkipModules = [
@@ -2482,7 +2482,7 @@ assertNoAdditions {
   mason-null-ls-nvim = super.mason-null-ls-nvim.overrideAttrs {
     dependencies = with self; [
       mason-nvim
-      null-ls-nvim
+      none-ls-nvim
       plenary-nvim
     ];
   };
@@ -3095,13 +3095,6 @@ assertNoAdditions {
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
   };
-
-  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    dependencies = [ self.plenary-nvim ];
-    meta = old.meta // {
-      license = lib.licenses.unlicense;
-    };
-  });
 
   nvchad = super.nvchad.overrideAttrs {
     # You've signed up for a distro, providing dependencies.
