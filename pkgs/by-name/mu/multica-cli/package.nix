@@ -9,18 +9,18 @@ buildGoModule rec {
   __structuredAttrs = true;
 
   pname = "multica-cli";
-  version = "0.3.16";
+  version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "multica-ai";
     repo = "multica";
     rev = "v${version}";
-    hash = "sha256-hD69SEhZL8TqZEg1/Hu+UDJnCZJsdDs4pai5wzMFq3I=";
+    hash = "sha256-qsQ2ycr+MU1A+U8LIbxnfaYtSHoMnLNO3P9ACJ6ThD4=";
   };
 
   sourceRoot = "${src.name}/server";
 
-  vendorHash = "sha256-96hxRLb+NBirsAzk80gtFYbSySKKWix/WJFLvokYKmU=";
+  vendorHash = "sha256-NXdBykPMWDD4BGLo2ams+KC14mxGNJYoV/dqobH6dv8=";
 
   subPackages = [ "cmd/multica" ];
 
