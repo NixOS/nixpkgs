@@ -6,6 +6,8 @@ lib.makeOverridable (
   lib.extendMkDerivation {
     constructDrv = fetchFromGitProvider;
     excludeDrvArgNames = [
+      "apiBaseUrl"
+      "apiVersion"
       "githubBase"
     ];
     extendDrvArgs =
@@ -14,47 +16,59 @@ lib.makeOverridable (
         providerName ? "GitHub",
         functionName ? "fetchFrom${finalAttrs.providerName}",
         githubBase ? "github.com",
+        domain ? finalAttrs.githubBase,
+        apiVersion ? 3,
+        apiBaseUrl ?
+          "https://"
+          + (
+            if finalAttrs.domain == "github.com" then
+              "api.github.com"
+            else
+              finalAttrs.domain + "/api/v" + toString finalAttrs.apiVersion
+          ),
         meta ? { },
         ...
-      }:
+      }@args:
       let
         baseUrl = "https://${finalAttrs.domain}/${finalAttrs.owner}/${finalAttrs.repo}";
         revWithTag = finalAttrs.rev;
       in
       {
         inherit
-          providerName
+          domain
           functionName
+          providerName
           ;
-        domain = finalAttrs.githubBase;
 
         netrcMachineName =
-          if finalAttrs.domain == "github.com" && !finalAttrs.useFetchGit then
-            "api.github.com"
-          else
-            finalAttrs.domain;
+          args.netrcMachineName or (
+            if finalAttrs.domain == "github.com" && !finalAttrs.useFetchGit then
+              "api.github.com"
+            else
+              finalAttrs.domain
+          );
 
         archiveUrl =
-          # Use the API endpoint for private repos, as the archive URI doesn't
-          # support access with GitHub's fine-grained access tokens.
-          #
-          # Use the archive URI for non-private repos, as the API endpoint has
-          # relatively restrictive rate limits for unauthenticated users.
-          if finalAttrs.private then
-            let
-              endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
-            in
-            if finalAttrs.domain == "github.com" then
-              "https://api.github.com${endpoint}"
+          args.archiveUrl or (
+            # Use the API endpoint for private repos, as the archive URI doesn't
+            # support access with GitHub's fine-grained access tokens.
+            #
+            # Use the archive URI for non-private repos, as the API endpoint has
+            # relatively restrictive rate limits for unauthenticated users.
+            if finalAttrs.private then
+              "${finalAttrs.apiBaseUrl}/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}"
             else
-              "https://${finalAttrs.domain}/api/v3${endpoint}"
-          else
-            "${baseUrl}/archive/${revWithTag}.tar.gz";
+              "${baseUrl}/archive/${revWithTag}.tar.gz"
+          );
 
-        browsableUrl = baseUrl;
+        browsableUrl = args.browsableUrl or baseUrl;
 
         derivationArgs = {
-          inherit githubBase;
+          inherit
+            apiBaseUrl
+            apiVersion
+            githubBase
+            ;
         };
         meta = {
           identifiers = {
