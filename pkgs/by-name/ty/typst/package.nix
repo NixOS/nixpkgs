@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EXcmL/KNj9vCChCs6RH1J/+aetYcXnEdGEhvVzGNNZA=";
+    hash = "sha256-R8hgStbn/oWN+FklUkbuKnODTToRvvw3XSE0AxN/EG0=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-HDu7/kgpBgUe/CrHm17BkNlg3DYlegTevgAeBCXp6so=";
+  cargoHash = "sha256-g+w0fkATxnWNcLuNrEMzI52psPKXMrsWqnHgfXNc8tI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,9 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace tests/src/args.rs --replace-fail \
       'num_threads' \
       'test_threads'
-    substituteInPlace crates/typst-cli/build.rs --replace-fail \
-      '"cargo:rustc-env=TYPST_COMMIT_SHA={}", typst_commit_sha()' \
-      "\"cargo:rustc-env=TYPST_COMMIT_SHA={}\", \"$(cat COMMIT | cut -c1-8)\""
+
+    export TYPST_COMMIT_SHA="$(cat COMMIT | cut -c1-8)"
   '';
 
   postInstall = ''
