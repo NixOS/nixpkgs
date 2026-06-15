@@ -21206,6 +21206,11 @@
     githubId = 20658472;
     name = "Parthiv Krishna";
   };
+  pascal = {
+    github = "Pascal0577";
+    githubId = 181921662;
+    name = "pascal";
+  };
   pascalj = {
     email = "nix@pascalj.de";
     github = "pascalj";
