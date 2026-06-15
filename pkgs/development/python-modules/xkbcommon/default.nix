@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   python,
+  setuptools,
   cffi,
   pkg-config,
   libxkbcommon,
@@ -12,17 +13,19 @@
 buildPythonPackage rec {
   pname = "xkbcommon";
   version = "1.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-rBdICNv2HTXZ2oBL8zuqx0vG8r4MEIWUrpPHnNFd3DY=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ libxkbcommon ];
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
