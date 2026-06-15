@@ -22,6 +22,13 @@ lib.makeOverridable (
           functionName
           ;
         domain = finalAttrs.githubBase;
+
+        netrcMachineName =
+          if finalAttrs.domain == "github.com" && !finalAttrs.useFetchGit then
+            "api.github.com"
+          else
+            finalAttrs.domain;
+
         derivationArgs = {
           inherit githubBase;
         };

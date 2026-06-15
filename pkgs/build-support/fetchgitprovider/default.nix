@@ -64,6 +64,7 @@ lib.extendMkDerivation rec {
     "functionName"
     "private"
     "domain"
+    "netrcMachineName"
     "varPrefix"
     "derivationArgs"
   ]
@@ -82,6 +83,7 @@ lib.extendMkDerivation rec {
     private ? false,
     domain,
     varPrefix ? null,
+    netrcMachineName ? finalAttrs.domain,
     passthru ? { },
     meta ? { },
     derivationArgs ? { },
@@ -143,16 +145,13 @@ lib.extendMkDerivation rec {
         # When using private repos:
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
-        let
-          machineName = if domain == "github.com" && !useFetchGit then "api.github.com" else domain;
-        in
         nullIfNot finalAttrs.private ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
             echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
             exit 1
           fi
           cat > netrc <<EOF
-          machine ${machineName}
+          machine $netrcMachineName
                   login ''$${varBase}USERNAME
                   password ''$${varBase}PASSWORD
           EOF
@@ -169,6 +168,7 @@ lib.extendMkDerivation rec {
     derivationArgsCommon = {
       inherit
         domain
+        netrcMachineName
         owner
         private
         providerName
