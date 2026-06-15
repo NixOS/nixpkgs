@@ -25,12 +25,6 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
-  # default installPhase invokes python, but we still want the font hook to run
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "New (2024) monospace sibling family to Atkinson Hyperlegible Next";
     homepage = "https://www.brailleinstitute.org/freefont/";

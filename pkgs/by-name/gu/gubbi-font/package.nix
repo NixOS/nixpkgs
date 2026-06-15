@@ -26,11 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "patchShebangs generate.pe";
 
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Kannada font";

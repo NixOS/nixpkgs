@@ -29,13 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm *.otf
   '';
 
-  # installFonts adds a hook to `postInstall` that installs fonts
-  # into the correct directories
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     homepage = "https://github.com/alif-type/xits";
     description = "OpenType implementation of STIX fonts with math support";

@@ -16,11 +16,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ installFonts ];
 
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "Unicode Sinhala font by Lanka Linux User Group";
     homepage = "http://www.lug.lk/fonts/lklug";

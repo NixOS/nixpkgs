@@ -25,12 +25,6 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ installFonts ];
 
-  # default installPhase invokes python, but we still want the font hook to run
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "New (2024) second version of the Atkinson Hyperlegible fonts";
     homepage = "https://www.brailleinstitute.org/freefont/";

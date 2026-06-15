@@ -18,11 +18,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-    runHook postInstall
-  '';
-
   meta = {
     description = "Chinese Unicode font with full CJK coverage";
     homepage = "http://wenq.org";
