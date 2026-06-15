@@ -39,6 +39,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.11.6";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
