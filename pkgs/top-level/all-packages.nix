@@ -2998,8 +2998,6 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  s3cmd = callPackage ../tools/networking/s3cmd { };
-
   s3-credentials = with python3Packages; toPythonApplication s3-credentials;
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
