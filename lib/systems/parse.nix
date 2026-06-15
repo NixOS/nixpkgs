@@ -605,6 +605,10 @@ rec {
         execFormat = wasm;
         families = { };
       };
+      wasip2 = {
+        execFormat = wasm;
+        families = { };
+      };
       redox = {
         execFormat = elf;
         families = { };

@@ -392,9 +392,13 @@ rec {
     };
     isWasi = [
       { kernel = kernels.wasip1; }
+      { kernel = kernels.wasip2; }
     ];
     isWasiP1 = {
       kernel = kernels.wasip1;
+    };
+    isWasiP2 = {
+      kernel = kernels.wasip2;
     };
     isRedox = {
       kernel = kernels.redox;

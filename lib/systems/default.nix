@@ -200,7 +200,9 @@ let
         # independently, so we are just doing `linker` and keeping `useLLVM` for
         # now.
         linker =
-          if final.useLLVM or false then
+          if final.isWasiP2 then
+            "wasm-component-ld"
+          else if final.useLLVM or false then
             "lld"
           else if final.isDarwin then
             "cctools"
@@ -246,6 +248,7 @@ let
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
               wasip1 = "WasiP1";
+              wasip2 = "WasiP2";
               redox = "Redox";
               genode = "Genode";
             }
@@ -532,6 +535,8 @@ let
               inferred =
                 if final.isWasiP1 then
                   "${cpu_}-wasip1"
+                else if final.isWasiP2 then
+                  "${cpu_}-wasip2"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
             in

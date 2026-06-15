@@ -4986,6 +4986,14 @@ with pkgs;
     in
     if linker == "lld" then
       llvmPackages.bintools-unwrapped
+    else if linker == "wasm-component-ld" then
+      symlinkJoin {
+        name = "wasi-bintools-unwrapped";
+        paths = [
+          llvmPackages.bintools-unwrapped
+          wasm-component-ld
+        ];
+      }
     else if linker == "cctools" then
       darwin.binutils-unwrapped
     else if linker == "bfd" then
