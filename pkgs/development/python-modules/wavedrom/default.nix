@@ -4,6 +4,7 @@
   buildPythonPackage,
   cairosvg,
   fetchPypi,
+  setuptools,
   pillow,
   pytestCheckHook,
   pyyaml,
@@ -16,16 +17,19 @@
 buildPythonPackage rec {
   pname = "wavedrom";
   version = "2.0.3.post3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MntNXcpZPIElfCAv6lFvepCHR/sRUnw1nwNPW3r39Hs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrdict
     pyyaml
     svgwrite
