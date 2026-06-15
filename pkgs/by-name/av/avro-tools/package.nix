@@ -36,6 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "avro-tools";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

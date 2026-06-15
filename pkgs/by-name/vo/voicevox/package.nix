@@ -86,9 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
-
   buildPhase = ''
     runHook preBuild
 
@@ -106,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       --dir \
       --config ./build/electronBuilderConfigLoader.cjs \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable codesigning on Darwin
 
     runHook postBuild
   '';

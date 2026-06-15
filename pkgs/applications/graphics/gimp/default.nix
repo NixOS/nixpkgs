@@ -338,8 +338,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
