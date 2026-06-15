@@ -28,13 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--workspace"
     "--exclude"
     "wit-dylib"
-  ]
-  ++
-    # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
-    [
-      "--"
-      "--test-threads=1"
-    ];
+  ];
 
   meta = {
     description = "Low level tooling for WebAssembly in Rust";
