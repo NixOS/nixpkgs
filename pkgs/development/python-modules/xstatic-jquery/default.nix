@@ -2,18 +2,21 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "xstatic-jquery";
   version = "3.5.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "XStatic-jQuery";
     inherit (finalAttrs) version;
     sha256 = "e0ae8f8ec5bbd28045ba4bca06767a38bd5fc27cf9b71f434589f59370dcd323";
   };
+
+  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
