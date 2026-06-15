@@ -7,17 +7,20 @@
   libxrandr,
   libxrender,
   xorgproto,
+  config,
   patches ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evilwm";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "https://www.6809.org.uk/evilwm/evilwm-${version}.tar.gz";
+    url = "https://www.6809.org.uk/evilwm/evilwm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-1ZRbILEskdskEvrA29o/ucPsjeu44bEJg4mSsrG75dQ=";
   };
+
+  patches = (config.evilwm.patches or [ ]) ++ patches;
 
   buildInputs = [
     libx11
@@ -33,9 +36,6 @@ stdenv.mkDerivation rec {
       --replace "CC = gcc" "#CC = gcc"
   '';
 
-  # Allow users set their own list of patches
-  inherit patches;
-
   meta = {
     homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "evilwm";
   };
-}
+})
