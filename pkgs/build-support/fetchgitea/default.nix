@@ -24,5 +24,10 @@ lib.makeOverridable (
           providerName
           ;
       };
+    transformDrv =
+      drv:
+      drv.overrideAttrs {
+        githubBase = null;
+      };
   }
 )
