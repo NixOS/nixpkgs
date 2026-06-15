@@ -37,6 +37,8 @@ let
   # fetchzip may not be overridable when using external tools, for example nix-prefetch
   fetchzip =
     if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
+
+  nullIfNot = condition: if condition then v: v else v: null;
 in
 lib.extendMkDerivation rec {
   constructDrv = {
@@ -135,16 +137,16 @@ lib.extendMkDerivation rec {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    privateAttrs = lib.optionalAttrs private {
-      netrcPhase =
+    varBase = "NIX${lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"}_GITHUB_PRIVATE_";
+    privateAttrs = {
+      netrcPhase = args.netrcPhase or (
         # When using private repos:
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         let
           machineName = if domain == "github.com" && !useFetchGit then "api.github.com" else domain;
         in
-        ''
+        nullIfNot finalAttrs.private ''
           if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
             echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
             exit 1
@@ -154,11 +156,12 @@ lib.extendMkDerivation rec {
                   login ''$${varBase}USERNAME
                   password ''$${varBase}PASSWORD
           EOF
-        '';
-      netrcImpureEnvVars = [
+        ''
+      );
+      netrcImpureEnvVars = args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
         "${varBase}USERNAME"
         "${varBase}PASSWORD"
-      ];
+      ]);
     };
 
     gitRepoUrl = "${baseUrl}.git";
@@ -167,9 +170,11 @@ lib.extendMkDerivation rec {
       inherit
         domain
         owner
+        private
         providerName
         repo
         useFetchGit
+        varPrefix
         ;
     };
 
@@ -202,7 +207,7 @@ lib.extendMkDerivation rec {
             # Use the archive URI for non-private repos, as the API endpoint has
             # relatively restrictive rate limits for unauthenticated users.
             url =
-              if private then
+              if finalAttrs.private then
                 let
                   endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
                 in
