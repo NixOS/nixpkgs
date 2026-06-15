@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   python,
   pyyaml,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "yacs";
   version = "0.1.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rbgirshick";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyyaml ];
 
   pythonImportsCheck = [ "yacs" ];
   checkPhase = ''
