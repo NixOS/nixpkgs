@@ -2,18 +2,21 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
   pytest,
 }:
 
 buildPythonPackage rec {
   pname = "webencodings";
   version = "0.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytest ];
 
