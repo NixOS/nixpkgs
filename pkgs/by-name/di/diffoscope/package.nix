@@ -344,6 +344,7 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       danielfullmer
+      mdaniels5757
       raitobezarius
     ];
     platforms = lib.platforms.unix;
