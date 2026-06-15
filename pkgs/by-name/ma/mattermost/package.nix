@@ -265,7 +265,7 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        for ws in platform/{types,client,components,shared} channels; do
+        for ws in platform/{types,client,shared,components} channels; do
           if [ -d "$ws" ]; then
             npm run build --workspace="$ws"
           fi
