@@ -11309,8 +11309,6 @@ with pkgs;
 
   torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 
-  nitrokey-app2 = callPackage ../tools/security/nitrokey-app2 { };
-
   hy = with python3Packages; toPythonApplication hy;
 
   ghc-standalone-archive =
