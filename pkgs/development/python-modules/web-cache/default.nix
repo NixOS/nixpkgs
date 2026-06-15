@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "web-cache";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     pname = "web_cache";
     sha256 = "1d8f1s3i0s3h1jqvjq6cp639hhbbpxvyq7cf9dwzrvvvr0s0m8fm";
   };
+
+  build-system = [ setuptools ];
 
   # No tests in downloaded archive
   doCheck = false;
