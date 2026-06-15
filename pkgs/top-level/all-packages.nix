@@ -409,8 +409,6 @@ with pkgs;
 
   enochecker-test = callPackage ../development/tools/enochecker-test { };
 
-  inherit (gridlock) nyarr;
-
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
