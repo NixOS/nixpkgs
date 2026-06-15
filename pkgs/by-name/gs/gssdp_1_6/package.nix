@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     vala
     gi-docgen
-    python3
   ];
 
   buildInputs = [
