@@ -112,7 +112,7 @@ in
       {
         boot.binfmt.emulatedSystems = [
           "aarch64-linux"
-          "wasm32-wasi"
+          "wasm32-wasip1"
         ];
         boot.binfmt.preferStaticEmulators = true;
 
