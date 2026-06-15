@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.28.1";
+  version = "2.29.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = finalAttrs.version;
-    hash = "sha256-S/IEk3fSoCzoVfyo9oaId9VGR8YTjzoCIWoZ3xYVVBc=";
+    hash = "sha256-xV+edbrBdPxF4J8q+IH71jewlgEFBTRGyv5SO7KMFIs=";
   };
 
   pythonRelaxDeps = [
