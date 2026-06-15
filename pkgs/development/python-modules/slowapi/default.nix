@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.9";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = "slowapi";
     tag = "v${version}";
-    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
+    hash = "sha256-YNL/xfs8fmkAGagMhqJX3tXoltjHznZjUrF/a2RWCDs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
