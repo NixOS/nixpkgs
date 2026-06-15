@@ -12,6 +12,9 @@
 buildPythonPackage {
   pname = "vqgan-jax";
   version = "unstable-2022-04-20";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patil-suraj";
@@ -21,8 +24,6 @@ buildPythonPackage {
   };
 
   build-system = [ setuptools ];
-
-  pyproject = true;
 
   buildInputs = [ jaxlib ];
 
