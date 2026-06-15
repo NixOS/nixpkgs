@@ -25,9 +25,6 @@
   libnotify,
   libpulseaudio,
   writeShellApplication,
-  curl,
-  yq,
-  common-updater-scripts,
 }:
 
 stdenv.mkDerivation rec {
@@ -108,18 +105,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-osmium";
-      runtimeInputs = [
-        curl
-        yq
-        common-updater-scripts
-      ];
-      text = ''
-        version="$(curl -s https://updater.osmium.chat/alpha-linux.yml | yq .version)"
-        update-source-version osmium "$version"
-      '';
-    });
+    updateScript = ./update.sh;
   };
 
   meta = {
