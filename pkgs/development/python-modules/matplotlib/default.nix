@@ -95,6 +95,9 @@ buildPythonPackage (finalAttrs: {
     ''
     + ''
       patchShebangs tools
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools_scm>=7,<10" "setuptools_scm"
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
