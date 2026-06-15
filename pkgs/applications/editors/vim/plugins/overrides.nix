@@ -4627,17 +4627,6 @@ assertNoAdditions {
     runtimeDeps = [ television ];
   };
 
-  typescript-nvim = super.typescript-nvim.overrideAttrs {
-    checkInputs = [
-      # Optional null-ls integration
-      self.none-ls-nvim
-    ];
-    dependencies = with self; [
-      nvim-lspconfig
-      plenary-nvim
-    ];
-  };
-
   typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-lspconfig
