@@ -2033,8 +2033,6 @@ with pkgs;
     ngtcp2 = ngtcp2-gnutls;
   };
 
-  cve-bin-tool = callPackage ../tools/security/cve-bin-tool { };
-
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   inherit (callPackages ../applications/networking/p2p/deluge { })
