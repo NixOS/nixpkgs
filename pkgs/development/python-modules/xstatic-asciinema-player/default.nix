@@ -2,18 +2,21 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xstatic-asciinema-player";
   version = "2.6.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "XStatic-asciinema-player";
     inherit version;
     hash = "sha256-yA6WC067St82Dm6StaCKdWrRBhmNemswetIO8iodfcw=";
   };
+
+  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
