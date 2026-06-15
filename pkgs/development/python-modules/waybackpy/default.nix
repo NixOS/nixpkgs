@@ -8,13 +8,15 @@
   requests,
   pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "waybackpy";
   version = "3.0.6";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SXo3F1arp2ROt62g69TtsVy4xTvBNMyXO/AjoSyv+D8=";
   };
 
@@ -36,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chpatrick ];
   };
-}
+})
