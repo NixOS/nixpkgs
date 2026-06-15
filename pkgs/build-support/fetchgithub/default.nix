@@ -6,6 +6,8 @@ lib.makeOverridable (
   lib.extendMkDerivation {
     constructDrv = fetchFromGitProvider;
     excludeDrvArgNames = [
+      "apiBaseUrl"
+      "apiVersion"
       "githubBase"
     ];
     extendDrvArgs =
@@ -15,6 +17,7 @@ lib.makeOverridable (
         revWithTag = finalAttrs.rev;
       in
       {
+        apiVersion ? 3,
         browsableUrl ? baseUrl,
         domain ? finalAttrs.githubBase,
         functionName ? "fetchFrom${finalAttrs.providerName}",
@@ -47,19 +50,23 @@ lib.makeOverridable (
             # Use the archive URI for non-private repos, as the API endpoint has
             # relatively restrictive rate limits for unauthenticated users.
             if finalAttrs.private then
-              let
-                endpoint = "/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}";
-              in
-              if finalAttrs.domain == "github.com" then
-                "https://api.github.com${endpoint}"
-              else
-                "https://${finalAttrs.domain}/api/v3${endpoint}"
+              "${finalAttrs.apiBaseUrl}/repos/${finalAttrs.owner}/${finalAttrs.repo}/tarball/${revWithTag}"
             else
               "${baseUrl}/archive/${revWithTag}.tar.gz"
           );
 
         derivationArgs = {
-          inherit githubBase;
+          inherit
+            apiVersion
+            githubBase
+            ;
+
+          apiBaseUrl = "https://${
+            if finalAttrs.domain == "github.com" then
+              "api.github.com"
+            else
+              finalAttrs.domain + "/api/v" + toString finalAttrs.apiVersion
+          }";
         };
         meta = meta // {
           identifiers = {
