@@ -154,6 +154,14 @@ adjustFunctionArgs (
 
     gitRepoUrl = "${baseUrl}.git";
 
+    derivationArgsCommon = {
+      inherit
+        domain
+        owner
+        repo
+        ;
+    };
+
     fetcherArgs =
       finalAttrs:
       passthruAttrs
@@ -164,14 +172,7 @@ adjustFunctionArgs (
             inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
-            derivationArgs = {
-              inherit
-                domain
-                owner
-                repo
-                ;
-            }
-            // derivationArgs;
+            derivationArgs = derivationArgsCommon // derivationArgs;
           }
         else
           let
@@ -195,11 +196,8 @@ adjustFunctionArgs (
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-            derivationArgs = {
+            derivationArgs = derivationArgsCommon // {
               inherit
-                domain
-                owner
-                repo
                 tag
                 ;
               rev = fetchgit.getRevWithTag {
