@@ -80,6 +80,10 @@ pythonPackages.buildPythonApplication rec {
     #                          ^^^^^^^^^^^^^^^
     # E   IndexError: tuple index out of range
     ./fix-webserver-tests-in-sandbox.patch
+
+    # As providers must be configured through the nixos module, there is no gain
+    # if Music Assistant tries to enable some of them without the proper dependencies.
+    ./disable-default-provider.diff
   ];
 
   postPatch = ''
