@@ -24,14 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gawk
   ];
 
-  # Fix the cache invalidation not working; see
-  # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4641313131
-  postPatch = ''
-    substituteInPlace ble.pp \
-      --replace-fail \
-        'local ver=''${BLE_VERSINFO[0]}.''${BLE_VERSINFO[1]}' \
-        'local ver=$BLE_VERSION'
-  '';
+  patches = [
+    # Fix the cache invalidation not working; see
+    # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4641313131
+    ./fix-cache-invalidation.patch
+    # ble.sh reaches a runtime-dir fallback under the install base when the
+    # others are unusable (always on WSL); see
+    # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4686973408
+    ./skip-readonly-runtime-dir.patch
+  ];
 
   # ble.sh embeds the commit id, normally read from .git, which fetchFromGitHub omits.
   makeFlags = [
