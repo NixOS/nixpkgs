@@ -11,13 +11,15 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wasabi";
   version = "1.1.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-S7MAjwA4CdsMPii02vIJBuqHGiu0P5kUGX1UD08uCHg=";
   };
 
@@ -37,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
-    changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
+    changelog = "https://github.com/ines/wasabi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
