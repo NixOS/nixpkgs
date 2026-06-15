@@ -24,16 +24,24 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   buildPhase = ''
+    runHook preBuild
+
     gcc -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" \
         -g -o slurm-spank-x11 slurm-spank-x11.c
     gcc -I${lib.getDev slurm}/include -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" -shared -fPIC \
         -g -o x11.so slurm-spank-x11-plug.c
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     install -m 755 slurm-spank-x11 $out/bin
     install -m 755 x11.so $out/lib
+
+    runHook postInstall
   '';
 
   meta = {

@@ -439,6 +439,13 @@ stdenv.mkDerivation (
         --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
       substituteInPlace doc/filters.texi \
         --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+    ''
+    # https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/22564, also fails on big-endian POWER
+    + lib.optionalString (lib.versionAtLeast version "8.1" && stdenv.hostPlatform.isBigEndian) ''
+      substituteInPlace tests/fate/vcodec.mak \
+        --replace-fail \
+          'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff420p12 ffvhuff422p10left ffvhuff444p16' \
+          'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff422p10left ffvhuff444p16'
     '';
 
     patches =
