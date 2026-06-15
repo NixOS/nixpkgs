@@ -20,6 +20,9 @@
     _cudaCapabilityIsSupported
     _mkCudaVariant
     allowUnfreeCudaPredicate
+    cudaCapabilitiesAreJetson
+    cudaCapabilitiesAreJetsonArch
+    cudaCapabilitiesJetsonSubset
     ;
 
   # See ./licenses.nix for documentation.

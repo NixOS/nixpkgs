@@ -119,4 +119,17 @@ bootstrapData
   cudaArchNameToJetsonCapabilities = lib.groupBy (
     cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
   ) db.jetsonCudaCapabilities;
+
+  /**
+    The micro-architecture names that have at least one Jetson capability.
+
+    This is the set of valid `archName` values for `_cuda.lib.cudaCapabilitiesAreJetsonArch`.
+
+    # Type
+
+    ```
+    jetsonArchNames :: [String]
+    ```
+  */
+  jetsonArchNames = lib.attrNames db.cudaArchNameToJetsonCapabilities;
 }
