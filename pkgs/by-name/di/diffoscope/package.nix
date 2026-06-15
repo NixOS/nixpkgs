@@ -128,7 +128,9 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
 
     substituteInPlace diffoscope/comparators/apk.py \
-      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
+      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk" \
+      --replace-fail "-k" "--keep-broken-res" \
+      --replace-fail "-m" "--match-original"
   '';
 
   nativeBuildInputs = [
