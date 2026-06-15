@@ -53,6 +53,7 @@ buildGo125Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       heph2
       qbit
+      nadir-ishiguro
     ];
   };
 })
