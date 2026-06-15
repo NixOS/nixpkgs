@@ -6,19 +6,23 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmljson";
   version = "0.2.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "b4158e66aa1e62ee39f7f80eb2fe4f767670ba3c0d5de9804420dc53427fdec8";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tBWOZqoeYu459/gOsv5PdnZwujwNXemARCDcU0J/3sg=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ lxml ];
+
+  pythonImportsCheck = [ "xmljson" ];
 
   meta = {
     description = "Converts XML into dictionary structures and vice-versa";
@@ -27,4 +31,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})
