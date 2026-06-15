@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "xstatic.pkg.asciinema_player" ];
 
   meta = {
-    homepage = "https://github.com/python-xstatic/asciinema-player";
+    homepage = "https://github.com/xstatic-py/xstatic-asciinema-player";
     description = "Asciinema-player packaged for python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aither64 ];
