@@ -7,6 +7,7 @@
   docopt,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   geopy,
   mock,
   pytest-asyncio_0,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "volvooncall";
   version = "0.10.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "molobrakos";
@@ -34,7 +35,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   optional-dependencies = {
     console = [
