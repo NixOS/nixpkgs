@@ -27,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     wafHook
   ];
   buildInputs = [
-    alsa-lib
     fftw
     libjack2
     libsamplerate
     libsndfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ];
 
   strictDeps = true;
@@ -51,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fpletz
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
