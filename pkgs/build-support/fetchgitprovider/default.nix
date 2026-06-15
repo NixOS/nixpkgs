@@ -85,11 +85,6 @@ lib.extendMkDerivation rec {
     ... # For hash agility and additional fetchgit arguments
   }@args:
 
-  assert (
-    lib.xor (tag == null) (rev == null)
-    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
-  );
-
   let
     useFetchGit =
       # Check forceFetchGit first
@@ -177,13 +172,21 @@ lib.extendMkDerivation rec {
     };
 
     fetcherArgs =
+      let
+        handleRevWithTag =
+          lib.throwIfNot
+            (lib.xor (finalAttrs.tag == null) (finalAttrs.revCustom == null))
+            "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
+      in
       (
         if useFetchGit then
           useFetchGitArgsWDPassing
           // {
             inherit tag rev;
             url = gitRepoUrl;
-            inherit passthru;
+            passthru = passthru // {
+              __handleRevWithTag = handleRevWithTag;
+            };
             derivationArgs = derivationArgsCommon // derivationArgs;
           }
         else
@@ -212,10 +215,13 @@ lib.extendMkDerivation rec {
               inherit
                 tag
                 ;
-              rev = fetchgit.getRevWithTag {
-                inherit (finalAttrs) tag;
-                rev = finalAttrs.revCustom;
-              };
+
+              rev = handleRevWithTag (
+                fetchgit.getRevWithTag {
+                  inherit (finalAttrs) tag;
+                  rev = finalAttrs.revCustom;
+                }
+              );
               revCustom = rev;
             }
             // derivationArgs;
@@ -235,4 +241,14 @@ lib.extendMkDerivation rec {
       };
   in
   fetcherArgs // { inherit useFetchGit; };
+
+  transformDrv =
+    drv:
+    drv.overrideAttrs (
+      finalAttrs: previousAttrs:
+      {
+        rev = (previousAttrs.passthru.__handleRevWithTag or lib.id) previousAttrs.rev;
+        passthru = removeAttrs previousAttrs.passthru [ "__handleRevWithTag" ];
+      }
+    );
 }
