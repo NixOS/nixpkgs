@@ -2,7 +2,7 @@
   lib,
   callPackage,
   stdenvNoCC,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchpatch,
   buildNpmPackage,
@@ -82,7 +82,7 @@ let
         };
       finalPassthru =
         let
-          withoutTestsUnwrapped = buildGoModule (args // { passthru = finalPassthru; });
+          withoutTestsUnwrapped = buildGo126Module (args // { passthru = finalPassthru; });
           withTestsUnwrapped = callPackage ./tests.nix { mattermost = withoutTestsUnwrapped; };
         in
         lib.recursiveUpdate passthru rec {
