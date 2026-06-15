@@ -57,6 +57,7 @@ mapAliases (
     neuron-nvim = throw "'vimPlugins.neuron-nvim' has been removed: archived repository 2023-02-19"; # Added 2025-09-10
     null-ls-nvim = throw "'vimPlugins.null-ls-nvim' has been removed: upstream deleted repository. Use none-ls-nvim instead."; # Added 2026-06-15
     nvim-gps = throw "'vimPlugins.nvim-gps' has been archived since 2022. Use nvim-navic instead."; # Added 2025-12-18
+    nvim-lsp-ts-utils = throw "'vimPlugins.nvim-lsp-ts-utils' has been removed: upstream deleted repository"; # Added 2026-06-15
     nvim-ts-rainbow = throw "'vimPlugins.nvim-ts-rainbow' has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     nvim-ts-rainbow2 = throw "'vimPlugins.nvim-ts-rainbow2' has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     peskcolor-vim = throw "'vimPlugins.peskcolor-vim' has been removed: abandoned by upstream"; # Added 2024-08-23
