@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "xstatic.pkg.jquery_file_upload" ];
 
   meta = {
-    homepage = "https://plugins.jquery.com/project/jQuery-File-Upload";
+    homepage = "https://github.com/blueimp/jQuery-File-Upload";
     description = "jquery-file-upload packaged static files for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
