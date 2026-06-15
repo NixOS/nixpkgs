@@ -18350,6 +18350,13 @@
     github = "mkleczek";
     githubId = 11559480;
   };
+  mkoppmann = {
+    email = "dev@mkoppmann.at";
+    github = "mkoppmann";
+    githubId = 21209717;
+    matrix = "@shibayashi:ncrypt.at";
+    name = "Michael Koppmann";
+  };
   mksafavi = {
     name = "MK Safavi";
     email = "mksafavi@gmail.com";
@@ -20635,12 +20642,6 @@
     githubId = 64069240;
     matrix = "@olduser101:matrix.org";
     name = "Nathan Gill";
-  };
-  olebedev = {
-    email = "ole6edev@gmail.com";
-    github = "olebedev";
-    githubId = 848535;
-    name = "Oleg Lebedev";
   };
   oleina = {
     email = "antholeinik@gmail.com";
