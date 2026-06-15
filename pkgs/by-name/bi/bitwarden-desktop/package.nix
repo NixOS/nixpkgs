@@ -101,9 +101,6 @@ buildNpmPackage' rec {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
-
   nativeBuildInputs = [
     cargo
     dart-sass
@@ -153,7 +150,8 @@ buildNpmPackage' rec {
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     popd
   '';

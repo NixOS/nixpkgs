@@ -181,10 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
     SOURCE_DATE_EPOCH = 1780508208;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Disable code signing during local macOS builds.
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   preBuild = ''
