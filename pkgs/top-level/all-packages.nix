@@ -2803,8 +2803,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-tablenos = callPackage ../tools/misc/pandoc-tablenos { };
-
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   nsjail = callPackage ../tools/security/nsjail {
