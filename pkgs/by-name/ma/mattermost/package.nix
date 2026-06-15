@@ -26,10 +26,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.18";
-    srcHash = "sha256-oHBuC31mvWiPbL6iOBg7yTxCXQbXmnfsCvSTGdmz+xk=";
+    version = "10.11.20";
+    srcHash = "sha256-t4mdb1agOl5k+IaHXy1hnpBsp/OfKwrJSuWZR9atnrY=";
     vendorHash = "sha256-zngDxO3UCuB53PMpaE+ga8v2FL5l78BD2NmJsu+zZ00=";
-    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
+    npmDepsHash = "sha256-CBv8LQtuSxxySM5A+FubEFbGSMQqdkD09pCcXS+Nx1s=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
