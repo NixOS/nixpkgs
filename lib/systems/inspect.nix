@@ -390,8 +390,11 @@ rec {
       kernel = kernels.windows;
       abi = abis.msvc;
     };
-    isWasi = {
-      kernel = kernels.wasi;
+    isWasi = [
+      { kernel = kernels.wasip1; }
+    ];
+    isWasiP1 = {
+      kernel = kernels.wasip1;
     };
     isRedox = {
       kernel = kernels.redox;
