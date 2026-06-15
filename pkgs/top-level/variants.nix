@@ -174,9 +174,24 @@ self: super: {
     ++ overlays;
   };
 
+  pkgsChecked = nixpkgsFun {
+    config = super.config // {
+      doCheckByDefault = true;
+    };
+  };
+  pkgsParallel = nixpkgsFun {
+    config = super.config // {
+      enableParallelBuildingByDefault = true;
+    };
+  };
   pkgsStrict = nixpkgsFun {
     config = super.config // {
       strictDepsByDefault = true;
+    };
+  };
+  pkgsStructured = nixpkgsFun {
+    config = super.config // {
+      structuredAttrsByDefault = true;
     };
   };
 }
