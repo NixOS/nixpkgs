@@ -8,13 +8,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wikipedia";
   version = "1.4.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
   };
 
@@ -29,6 +31,8 @@ buildPythonPackage rec {
 
   unittestFlagsArray = [ "tests/ '*test.py'" ];
 
+  pythonImportsCheck = [ "wikipedia" ];
+
   meta = {
     description = "Pythonic wrapper for the Wikipedia API";
     homepage = "https://github.com/goldsmith/Wikipedia";
@@ -36,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})
