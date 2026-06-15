@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   mock,
   boto3,
   envs,
@@ -13,7 +14,7 @@
 buildPythonPackage {
   pname = "warrant";
   version = "0.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
   src = fetchFromGitHub {
@@ -31,6 +32,8 @@ buildPythonPackage {
     })
   ];
 
+  build-system = [ setuptools ];
+
   # this needs to go when 0.6.2 or later is released
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -39,7 +42,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [ mock ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     envs
     python-jose
