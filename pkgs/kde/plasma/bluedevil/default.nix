@@ -5,5 +5,10 @@
 mkKdeDerivation {
   pname = "bluedevil";
 
+  outptus = [
+    "out"
+    "doc"
+  ];
+
   extraNativeBuildInputs = [ shared-mime-info ];
 }

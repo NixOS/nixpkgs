@@ -7,6 +7,11 @@
 mkKdeDerivation {
   pname = "filelight";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraBuildInputs = [
     kirigami-addons
     kquickcharts

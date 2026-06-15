@@ -54,6 +54,7 @@ mkKdeDerivation {
     "out"
     "dev"
     "devtools"
+    "doc"
     "sessions"
   ];
 

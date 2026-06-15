@@ -5,5 +5,10 @@
 mkKdeDerivation {
   pname = "kgamma";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraBuildInputs = [ libxxf86vm ];
 }

@@ -20,6 +20,12 @@ mkKdeDerivation {
     })
   ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
 
   extraBuildInputs = [

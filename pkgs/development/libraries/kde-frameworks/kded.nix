@@ -35,6 +35,7 @@ mkDerivation {
   outputs = [
     "out"
     "dev"
+    "man"
   ];
   setupHook = propagate "out";
   dontWrapGApps = true;

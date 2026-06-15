@@ -48,6 +48,11 @@ mkKdeDerivation {
     })
   ];
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtsvg

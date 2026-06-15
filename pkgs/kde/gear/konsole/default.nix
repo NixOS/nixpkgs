@@ -6,6 +6,11 @@
 mkKdeDerivation {
   pname = "konsole";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraBuildInputs = [
     qt5compat
     qtmultimedia

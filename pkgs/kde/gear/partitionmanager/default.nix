@@ -5,6 +5,11 @@
 mkKdeDerivation {
   pname = "partitionmanager";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   propagatedUserEnvPkgs = [ kpmcore ];
 
   passthru = {

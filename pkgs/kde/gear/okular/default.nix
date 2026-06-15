@@ -10,11 +10,16 @@
   libzip,
   djvulibre,
   ebook_tools,
-  fetchpatch,
   discount,
 }:
 mkKdeDerivation {
   pname = "okular";
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [

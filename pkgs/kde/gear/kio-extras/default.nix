@@ -19,6 +19,11 @@
 mkKdeDerivation {
   pname = "kio-extras";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   extraNativeBuildInputs = [
     pkg-config
     gperf

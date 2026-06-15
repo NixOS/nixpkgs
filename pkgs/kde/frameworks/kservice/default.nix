@@ -7,5 +7,11 @@ mkKdeDerivation {
     # explode less when sycoca is deleted
     ./handle-sycoca-deletion.patch
   ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta.mainProgram = "kbuildsycoca6";
 }
