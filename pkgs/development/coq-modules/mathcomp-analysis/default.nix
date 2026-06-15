@@ -4,6 +4,7 @@
   mathcomp,
   mathcomp-finmap,
   mathcomp-bigenough,
+  mathcomp-real-closed,
   hierarchy-builder,
   stdlib,
   single ? false,
@@ -84,10 +85,7 @@ let
     "classical" = [ ];
     "reals" = [ "classical" ];
     "experimental-reals" = [ "reals" ];
-    "analysis" = [
-      "reals"
-      "real-closed"
-    ];
+    "analysis" = [ "reals" ];
     "reals-stdlib" = [ "reals" ];
     "analysis-stdlib" = [
       "analysis"
@@ -107,6 +105,7 @@ let
       analysis-deps = [
         mathcomp.field
         mathcomp-bigenough
+        mathcomp-real-closed
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
