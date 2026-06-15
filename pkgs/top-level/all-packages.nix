@@ -1830,8 +1830,6 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
-  remarkable-mouse = callPackage ../applications/misc/remarkable/remarkable-mouse { };
-
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
   scour = with python3Packages; toPythonApplication scour;
