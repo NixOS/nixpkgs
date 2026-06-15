@@ -11258,8 +11258,6 @@ with pkgs;
     hasktags = haskellPackages.hasktags;
   };
 
-  termpdfpy = callPackage ../applications/misc/termpdf.py { };
-
   inherit (callPackage ../applications/networking/cluster/terraform { })
     mkTerraform
     terraform_1
