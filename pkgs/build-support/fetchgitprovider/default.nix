@@ -82,6 +82,7 @@ lib.extendMkDerivation rec {
     "private"
     "domain"
     "netrcMachineName"
+    "varBase"
     "varPrefix"
     "derivationArgs"
   ]
@@ -100,6 +101,10 @@ lib.extendMkDerivation rec {
     private ? false,
     domain,
     varPrefix ? null,
+    # For example, fetchFromGitHub's varBase defaults to
+    # NIX_GITHUB_PRIVATE if varPrefix == null, or otherwise
+    # NIX_${varPrefix}_GITHUB_PRIVATE
+    varBase ? "NIX${lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"}_${lib.toUpper finalAttrs.providerName}_PRIVATE_",
     netrcMachineName ? finalAttrs.domain,
     passthru ? { },
     meta ? { },
@@ -158,27 +163,26 @@ lib.extendMkDerivation rec {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    varBase = "NIX${lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"}_GITHUB_PRIVATE_";
     privateAttrs = {
       netrcPhase = args.netrcPhase or (
         # When using private repos:
         # - Fetching with git works using https://github.com but not with the GitHub API endpoint
         # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
         nullIfNot finalAttrs.private ''
-          if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
+          if [ -z "''$${finalAttrs.varBase}USERNAME" -o -z "''$${finalAttrs.varBase}PASSWORD" ]; then
             echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
             exit 1
           fi
           cat > netrc <<EOF
           machine $netrcMachineName
-                  login ''$${varBase}USERNAME
-                  password ''$${varBase}PASSWORD
+                  login ''$${finalAttrs.varBase}USERNAME
+                  password ''$${finalAttrs.varBase}PASSWORD
           EOF
         ''
       );
       netrcImpureEnvVars = args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
-        "${varBase}USERNAME"
-        "${varBase}PASSWORD"
+        "${finalAttrs.varBase}USERNAME"
+        "${finalAttrs.varBase}PASSWORD"
       ]);
     };
 
@@ -237,6 +241,7 @@ lib.extendMkDerivation rec {
             repo
             tag
             useFetchGit
+            varBase
             varPrefix
             ;
 
