@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   jwcrypto,
   numpy,
   pytestCheckHook,
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "websockify";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "novnc";
@@ -23,7 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jwcrypto
     numpy
     redis
