@@ -3182,6 +3182,8 @@ with pkgs;
 
   vpn-slice = callPackage ../tools/networking/vpn-slice { };
 
+  happ = qt6Packages.callPackage ../tools/networking/happ { };
+
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
