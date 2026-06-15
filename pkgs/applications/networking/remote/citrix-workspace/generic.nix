@@ -46,7 +46,7 @@
   libredirect,
   libseccomp,
   libsecret,
-  libsoup_2_4,
+  # libsoup_2_4,
   libvorbis,
   libxml2_13,
   libxslt,
@@ -210,7 +210,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libseccomp
     libsecret
-    libsoup_2_4
+    # libsoup_2_4
     libvorbis
     libxml2_13
     libxslt
@@ -443,9 +443,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    # Older versions need webkitgtk_4_0 which was removed.
-    # 25.08 bundles the same.
-    broken = lib.versionOlder version "25.08";
+    # citrix_workspace has a hard dependency on libsoup 2.4 (autoPatchelf
+    # fails if it is not present), which was removed for being insecure.
+    #
+    # Versions older than 25.08 also required webkitgtk_4_0, which was removed.
+    broken = true;
     license = lib.licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
