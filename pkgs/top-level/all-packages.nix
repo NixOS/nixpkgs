@@ -2934,8 +2934,6 @@ with pkgs;
     polkitSupport = true;
   };
 
-  pdd = callPackage ../tools/misc/pdd { };
-
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
