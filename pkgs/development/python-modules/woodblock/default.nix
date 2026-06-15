@@ -7,14 +7,16 @@
   multimethod,
   numpy,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "woodblock";
   version = "0.1.7";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c0347ece920b7009d94551983a01f42db02920ca8d7b0ff36d24a337e2c937f7";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-wDR+zpILcAnZRVGYOgH0LbApIMqNew/zbSSjN+LJN/c=";
   };
 
   build-system = [ setuptools ];
@@ -37,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
