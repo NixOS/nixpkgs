@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   beautifulsoup4,
   requests,
   unittestCheckHook,
@@ -10,14 +11,16 @@
 buildPythonPackage rec {
   pname = "wikipedia";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     requests
   ];
