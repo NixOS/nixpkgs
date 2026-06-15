@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 
   # tests
   ipykernel,
@@ -13,12 +14,14 @@
 buildPythonPackage rec {
   pname = "wasabi";
   version = "1.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-S7MAjwA4CdsMPii02vIJBuqHGiu0P5kUGX1UD08uCHg=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     ipykernel
