@@ -753,19 +753,6 @@ with pkgs;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
-  installFonts = makeSetupHook {
-    name = "install-fonts-hook";
-    meta = {
-      description = "Copies standard font extension into their respective installation path";
-      maintainers = with lib.maintainers; [
-        pancaek
-        sigmanificient
-        jopejoe1
-      ];
-      license = lib.licenses.mit;
-    };
-  } ../build-support/setup-hooks/install-fonts.sh;
-
   copyPkgconfigItems = makeSetupHook {
     name = "copy-pkg-config-items-hook";
     meta.license = lib.licenses.mit;
