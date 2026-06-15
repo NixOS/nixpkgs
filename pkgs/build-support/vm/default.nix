@@ -873,7 +873,7 @@ let
               ;;
           esac
         '') packagesLists}
-        perl -w ${rpm/rpm-closure.pl} \
+        perl -w ${./rpm/rpm-closure.pl} \
           ${
             lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (
               lib.zipLists packagesLists urlPrefixes
@@ -973,7 +973,7 @@ let
           esac
         done
 
-        perl -w ${deb/deb-closure.pl} \
+        perl -w ${./deb/deb-closure.pl} \
           ./Packages ${urlPrefix} ${toString packages} > $out
         nixfmt $out
       '';

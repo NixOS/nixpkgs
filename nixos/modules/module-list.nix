@@ -1961,6 +1961,7 @@
   ./system/boot/systemd/userdbd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
+  ./system/boot/tzpfms.nix
   ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix

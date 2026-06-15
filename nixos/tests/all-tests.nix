@@ -1742,6 +1742,7 @@ in
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
   typesense = runTest ./typesense.nix;
+  tzpfms = runTest ./tzpfms.nix;
   tzupdate = runTest ./tzupdate.nix;
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
