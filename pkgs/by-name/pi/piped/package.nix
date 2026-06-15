@@ -47,7 +47,7 @@ buildNpmPackage rec {
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     license = [ lib.licenses.agpl3Plus ];
   };
 
