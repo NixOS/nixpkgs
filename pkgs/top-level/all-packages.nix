@@ -8136,8 +8136,6 @@ with pkgs;
     // config.conky or { }
   );
 
-  cpupower-gui = callPackage ../os-specific/linux/cpupower-gui { };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
