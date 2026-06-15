@@ -65,9 +65,10 @@ let
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
     modules_dir="$HOME/Library/Application Support/${configDirName}/${version}/modules"
+    rm -rf "$modules_dir"
     mkdir -p "$modules_dir"
     for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-      ln -sfn "$store_modules/$m" "$modules_dir/$m"
+      ln -sn "$store_modules/$m" "$modules_dir/$m"
     done
     echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
       > "$modules_dir/installed.json"
