@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://salsa.debian.org/optical-media-team/cdparanoia/-/raw/f7bab3024c5576da1fdb7497abbd6abc8959a98c/debian/patches/04-endian.patch";
         hash = "sha256-krfprwls0L3hsNfoj2j69J5k1RTKEQtzE0fLYG9EJKo=";
       })
+      ./freebsd.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./utils.patch
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
