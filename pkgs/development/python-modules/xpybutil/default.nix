@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   xcffib,
   pillow,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "xpybutil";
   version = "0.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   # Pypi only offers a wheel
   src = fetchFromGitHub {
@@ -19,8 +20,10 @@ buildPythonPackage rec {
     sha256 = "17gbqq955fcl29aayn8l0x14azc60cxgkvdxblz9q8x3l50w0xpg";
   };
 
+  build-system = [ setuptools ];
+
   # pillow is a dependency in image.py which is not listed in setup.py
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
     xcffib
   ];
