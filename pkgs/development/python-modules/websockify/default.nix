@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
-    homepage = "https://github.com/kanaka/websockify";
+    homepage = "https://github.com/novnc/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
