@@ -1410,6 +1410,8 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
+  craftos-pc-accelerated = craftos-pc.override { enableLuaJIT = true; };
+
   crystfel-headless = crystfel.override { withGui = false; };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
