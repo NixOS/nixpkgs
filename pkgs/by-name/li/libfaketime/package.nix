@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   __structuredAttrs = true;
-  structDeps = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   meta = {
