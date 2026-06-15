@@ -5,6 +5,7 @@
   SDL2_ttf,
   boost,
   cmake,
+  gettext,
   fetchFromGitHub,
   ffmpeg,
   fuzzylite,
@@ -30,16 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
   version = "1.7.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-uzdnRKF0xb2B2r6kTzk6OEDGBdOwcu9eGYsvv4ALCF0=";
+    # Disable git background maintenance for the whole prefetch, including submodule clones.
+    # Upstream nix-prefetch-git only disables it on the outer repo (NixOS/nixpkgs#524215), so
+    # submodule clones can still race with their own maintenance and break `.git` cleanup.
+    preFetch = ''
+      export GIT_CONFIG_GLOBAL="$TMPDIR/gitconfig"
+      printf '[maintenance]\n\tauto = false\n' > "$GIT_CONFIG_GLOBAL"
+    '';
+    hash = "sha256-iV1twkoOJyUsUkq17mdTYk1YvfmUtLHdtR3H77BoNJk=";
   };
 
   nativeBuildInputs = [
     cmake
+    gettext # msgfmt
     ninja
     pkg-config
     python3
@@ -98,13 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/vcmiclient";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [
     "XDG_CACHE_HOME"
     "XDG_CONFIG_HOME"
     "XDG_DATA_HOME"
   ];
   preVersionCheck = ''
+    cd $(mktemp -d)
     export \
       XDG_CACHE_HOME="$TMPDIR" \
       XDG_CONFIG_HOME="$TMPDIR" \
