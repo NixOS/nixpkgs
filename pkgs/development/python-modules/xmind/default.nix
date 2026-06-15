@@ -5,16 +5,18 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmind";
   version = "1.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "zhuifengshen";
     repo = "xmind";
-    rev = "v${version}";
-    sha256 = "xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
   };
 
   build-system = [ setuptools ];
@@ -30,4 +32,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
