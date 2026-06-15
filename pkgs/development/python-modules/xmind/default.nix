@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmind";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhuifengshen";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
   };
+
+  build-system = [ setuptools ];
 
   # Project thas no tests
   doCheck = false;
