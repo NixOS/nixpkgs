@@ -66,12 +66,12 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -d "$lib/lib/mirth" "$doc/share/doc/mirth/tutorial" \
-      "$examples/share/mirth/examples" "$vim/share/vim-plugins/mirth"
+      "$examples/share/mirth/examples" "$vim"
 
     cp -Tr lib "$lib/lib/mirth"
     cp -Tr examples "$examples/share/mirth/examples"
     cp -Tr tutorial "$doc/share/doc/mirth/tutorial"
-    cp -Tr tools/mirth-vim  "$vim/share/vim-plugins/mirth"
+    cp -Tr tools/mirth-vim  "$vim"
 
     bin/mirth2 src/main.mth --docs "$doc/share/doc/mirth" -c
     install -Dm644 LICENSE README.md -t "$doc/share/doc/mirth"
