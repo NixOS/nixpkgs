@@ -2803,7 +2803,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-eqnos = callPackage ../tools/misc/pandoc-eqnos { };
   pandoc-fignos = callPackage ../tools/misc/pandoc-fignos { };
   pandoc-secnos = callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = callPackage ../tools/misc/pandoc-tablenos { };
