@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixseparatedebuginfod2";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D327Pz3oHOHgfekXnDRQ0l+GrIcFUK1zcIqzR2Y3zqU=";
+    hash = "sha256-PG/TqfXTuricAcwCB+2dKlVgHXxhCVVRJaVJ5v0xd4o=";
   };
 
-  cargoHash = "sha256-iAhm54jb+5Nv/XG6GYpoEgPjYmBTHvEnnmynFF8D8n4=";
+  cargoHash = "sha256-XDkW1tCSvmiTU0GN3L0oL0uhgWYQSlxRIV0xcwSlgkY=";
 
   buildInputs = [
     libarchive
@@ -56,12 +56,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) nixseparatedebuginfod2; };
 
-  # flaky tests
-  checkFlags = [ "--skip=substituter::http" ];
-
   meta = {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";
     homepage = "https://github.com/symphorien/nixseparatedebuginfod2";
+    changelog = "https://https://github.com/symphorien/nixseparatedebuginfod2/blob/v${finalAttrs.version}/CHANGELOG.md/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       symphorien

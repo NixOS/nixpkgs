@@ -70,7 +70,6 @@ with lib.maintainers;
     members = [
       mboes
       cbley
-      olebedev
       groodt
       aherrmann
       ylecornec

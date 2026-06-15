@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cartopy";
-  version = "0.25.0";
+  version = "0.25.0.post2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SciTools";
     repo = "cartopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qnsr8IgqgqQDyGslYBvpAr/+ccsUPOiA2yGOXge3nUw=";
+    hash = "sha256-N5cE+VKux5Wu2CtGujuMy3UA1fZBFkD+Fin/rb4rtUM=";
   };
 
   build-system = [
