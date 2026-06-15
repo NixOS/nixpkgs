@@ -211,11 +211,14 @@ pipe
       version = baseVersion;
 
       src = fetchurl {
-        url =
+        urls =
           if isSnapshot then
-            "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz"
+            [ "mirror://gcc/snapshots/${majorVersion}-${snapDate}/gcc-${majorVersion}-${snapDate}.tar.xz" ]
           else
-            "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+            [
+              "https://ftp.gnu.org/gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
+              "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz"
+            ];
         ${if is13 then "hash" else "sha256"} = gccVersions.srcHashForVersion version;
       };
 
