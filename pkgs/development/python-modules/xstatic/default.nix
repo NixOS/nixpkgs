@@ -5,14 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xstatic";
   version = "1.0.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "XStatic";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-QCVEzJ4XlIlEEFTwnIB4BOEV6iRpB96HwDVftPWjEmg=";
   };
 
@@ -21,10 +23,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
+  pythonImportsCheck = [ "xstatic" ];
+
   meta = {
     homepage = "https://bitbucket.org/thomaswaldmann/xstatic";
     description = "Base packaged static files for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})
