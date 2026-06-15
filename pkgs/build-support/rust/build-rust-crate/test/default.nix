@@ -1008,6 +1008,66 @@ rec {
         ];
       };
 
+      crateWasm32TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-target-env";
+          crateBin = [ { name = "wasm32-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "wasm32-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-target-env.wasm"
+        ];
+      };
+
+      crateGnu64TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.gnu64.buildRustCrate;
+        crateArgs = {
+          crateName = "gnu64-crate-target-env";
+          crateBin = [ { name = "gnu64-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "gnu64-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("gnu".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "gnu")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/gnu64-crate-target-env"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
