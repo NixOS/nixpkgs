@@ -45,6 +45,11 @@ buildPythonPackage rec {
       url = "https://github.com/valkey-io/valkey-py/commit/c01505e547f614f278b882a016557b6ed652bb9f.patch";
       hash = "sha256-rvA65inIioqdc+QV4KaaUv1I/TMZUq0TWaFJcJiy8NU=";
     })
+    (fetchpatch {
+      # valkey 9.1.0 compat
+      url = "https://github.com/valkey-io/valkey-py/commit/046c7fb9e8260c2d69d05141b1519903c4e40efe.patch";
+      hash = "sha256-/yN1y0hbmBR6o6ab4h0qkn/qhU6jASOIeqWhxUi5w/I=";
+    })
   ];
 
   build-system = [ setuptools ];
@@ -103,7 +108,18 @@ buildPythonPackage rec {
     "test_valkey_from_pool"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # The test hook runs Valkey without any modules loaded.
+    "tests/test_asyncio/test_bloom.py"
+    "tests/test_asyncio/test_json.py"
+    "tests/test_asyncio/test_search.py"
+    "tests/test_asyncio/test_timeseries.py"
+    "tests/test_bloom.py"
+    "tests/test_json.py"
+    "tests/test_search.py"
+    "tests/test_timeseries.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: Can't get local object 'TestMultiprocessing.test_valkey_client.<locals>.target'
     "tests/test_multiprocessing.py"
   ];
