@@ -1,26 +1,18 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+
   pcsclite,
   pkg-config,
-  stdenv,
   templ,
-  buildPackages,
 }:
-let
-  templFoks = buildPackages.templ.overrideAttrs (old: {
-    pname = "templ-foks";
-    version = "0.3.833";
-    src = old.src.override {
-      hash = "sha256-4K1MpsM3OuamXRYOllDsxxgpMRseFGviC4RJzNA7Cu8=";
-    };
-    vendorHash = "sha256-OPADot7Lkn9IBjFCfbrqs3es3F6QnWNjSOHxONjG4MM=";
-  });
-in
 buildGoModule (finalAttrs: {
   pname = "foks";
   version = "0.1.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "foks-proj";
@@ -33,11 +25,8 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     cd ./server/web/templates
-    ${templFoks}/bin/templ generate
+    ${finalAttrs.passthru.templ}/bin/templ generate
     cd -
-  '';
-  postInstall = ''
-    ln -s $out/bin/{foks,git-remote-foks}
   '';
 
   subPackages = [ "client/foks" ];
@@ -48,7 +37,20 @@ buildGoModule (finalAttrs: {
     pkg-config
   ];
 
-  __structuredAttrs = true;
+  postInstall = ''
+    ln -s $out/bin/{foks,git-remote-foks}
+  '';
+
+  passthru = {
+    templ = templ.overrideAttrs (old: {
+      pname = "templ-foks";
+      version = "0.3.833";
+      src = old.src.override {
+        hash = "sha256-4K1MpsM3OuamXRYOllDsxxgpMRseFGviC4RJzNA7Cu8=";
+      };
+      vendorHash = "sha256-OPADot7Lkn9IBjFCfbrqs3es3F6QnWNjSOHxONjG4MM=";
+    });
+  };
 
   meta = {
     description = "Federated key management and distribution system";
