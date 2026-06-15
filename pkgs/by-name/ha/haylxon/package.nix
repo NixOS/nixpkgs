@@ -6,15 +6,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "haylxon";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchCrate {
     inherit (finalAttrs) version;
     pname = "hxn";
-    hash = "sha256-pNOMCltMIKLJ8dNDzVa7MShpAROzvqK65d37fj+VXLQ=";
+    hash = "sha256-L1Xd6u4B8DR9jR//FNloiOzzXiLnWP+580izP2NVvoY=";
   };
 
-  cargoHash = "sha256-3muxqWOYCNXcV6WEcUwtmn2fKudU0vJtNegr8Nf6x50=";
+  cargoHash = "sha256-aQSn3LT0gNQWXrPWVe/ulP446Dk9o1N0OGka3gGhNYg=";
 
   meta = {
     description = "Save screenshots of urls and webpages from terminal";

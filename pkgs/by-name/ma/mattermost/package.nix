@@ -27,10 +27,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.2";
-    srcHash = "sha256-qqBqV55Qq2zZOKIZmRB0MyCjFkHDmfvQjmuMn2cP4hY=";
+    version = "11.7.3";
+    srcHash = "sha256-73WGxvdsDZ3v4UJGDDy+nAkT9DFMsGk29ruThwxoclw=";
     vendorHash = "sha256-XaXqQN20c3DhW2/L0zhTA8dLeRp4MyBxUKpiMVwp/7s=";
-    npmDepsHash = "sha256-37nkbIMuCI0ZSFc+TXky+kkrbLJNNzX/xBXGZjp4r7o=";
+    npmDepsHash = "sha256-MRH7canRhFtFppKi1eKMqr8JnWenw29689l2GSpXyFU=";
   },
   ...
 }:
