@@ -43,6 +43,7 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
+    broken = true;
     description = "Unofficial Home Assistant integration for interacting with myVAILLANT";
     changelog = "https://github.com/signalkraft/mypyllant-component/releases/tag/${src.tag}";
     homepage = "https://github.com/signalkraft/mypyllant-component";
