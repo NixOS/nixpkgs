@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   flax,
   jax,
   jaxlib,
@@ -19,11 +20,13 @@ buildPythonPackage {
     hash = "sha256-OZihAXpE0UsgauQ38XDmAF+lrIgz05uK0ro8SCdVsPc=";
   };
 
-  format = "setuptools";
+  build-system = [ setuptools ];
+
+  pyproject = true;
 
   buildInputs = [ jaxlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flax
     jax
     transformers
