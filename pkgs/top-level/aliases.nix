@@ -687,8 +687,12 @@ mapAliases {
   electron_37 = throw "electron_37 has been removed in favor of newer versions"; # Added 2026-03-20
   electron_37-bin = throw "electron_37-bin has been removed in favor of newer versions"; # Added 2026-03-20
   elementsd-simplicity = throw "'elementsd-simplicity' has been removed due to lack of maintenance, consider using 'elementsd' instead"; # Added 2025-06-04
+  elixir = warnAlias "'elixir' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir' instead." beamPackages.elixir; # added 2026-06-15
   elixir_1_15 = throw "'elixir_1_15' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
   elixir_1_16 = throw "'elixir_1_16' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
+  elixir_1_17 = warnAlias "'elixir_1_17' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir_1_17' instead." beamPackages.elixir_1_17; # added 2026-06-15
+  elixir_1_18 = warnAlias "'elixir_1_18' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir_1_18' instead." beamPackages.elixir_1_18; # added 2026-06-15
+  elixir_1_19 = warnAlias "'elixir_1_19' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir_1_19' instead." beamPackages.elixir_1_19; # added 2026-06-15
   elixir_ls = throw "'elixir_ls' has been renamed to/replaced by 'elixir-ls'"; # Converted to throw 2025-10-27
   elm-github-install = throw "'elm-github-install' has been removed as it is abandoned upstream and only supports Elm 0.18.0"; # Added 2025-08-25
   emacsMacport = throw "'emacsMacport' has been renamed to/replaced by 'emacs-macport'"; # Converted to throw 2025-10-27
@@ -708,8 +712,11 @@ mapAliases {
   epick = throw "'epick' has been removed as it has been unmaintained upstream since November 2022"; # Added 2026-02-07
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
+  erlang = warnAlias "'erlang' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.erlang' instead." beamPackages.erlang; # added 2026-06-15
   erlang-ls = throw "'erlang-ls' has been removed as it has been archived upstream. Consider using 'erlang-language-platform' instead"; # Added 2025-10-02
   erlang_26 = throw "'erlang_26' has been removed, as it is EOL"; # added 2026-04-01
+  erlang_27 = warnAlias "'erlang_27' is deprecated in favor of using the beamPackages sets. Use 'beam27Packages.erlang' instead." beam27Packages.erlang; # added 2026-06-15
+  erlang_28 = warnAlias "'erlang_28' is deprecated in favor of using the beamPackages sets. Use 'beam28Packages.erlang' instead." beam28Packages.erlang; # added 2026-06-15
   esbuild-config = throw "'esbuild-config' has been removed as it has been unmaintained upstream since September 2022"; # Added 2026-02-07
   etBook = warnAlias "'etBook' has been renamed to 'et-book'" et-book; # Added 2026-02-08
   ethercalc = throw "'ethercalc' has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs"; # Added 2025-11-28
@@ -717,6 +724,7 @@ mapAliases {
   eureka-ideas = throw "'eureka-ideas' has been removed as it has been unmaintained upstream since April 2023"; # Added 2026-02-07
   evolve-core = throw "'evolve-core' has been removed, as it hindered the removal of flutter329"; # Added 2026-01-25
   eww-wayland = throw "'eww-wayland' has been renamed to/replaced by 'eww'"; # Converted to throw 2025-10-27
+  ex_doc = warnAlias "'ex_doc' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.ex_doc' instead." beamPackages.ex_doc; # added 2026-06-15
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
@@ -1126,6 +1134,7 @@ mapAliases {
   ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   lesstif = throw "'lesstif' has been removed due to its being broken and unmaintained upstream. Consider using 'motif' instead."; # Added 2025-06-09
   lexical = throw "'lexical' has been removed because it was deprecated and archived upstream. Consider using 'beamPackages.expert' instead"; # Added 2026-02-24
+  lfe = warnAlias "'lfe' is deprecated in favor of using the beamPackages sets. Use 'beam27Packages.lfe' instead." beam27Packages.lfe; # added 2026-06-15
   lfs = throw "'lfs' has been renamed to/replaced by 'dysk'"; # Converted to throw 2025-10-27
   libAppleWM = libapplewm; # Added 2026-02-04
   libast = throw "'libast' has been removed due to lack of maintenance upstream."; # Added 2025-06-09
