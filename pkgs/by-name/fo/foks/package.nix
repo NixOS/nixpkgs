@@ -74,7 +74,10 @@ buildGoModule (finalAttrs: {
     downloadPage = "https://github.com/foks-proj/go-foks";
     changelog = "https://github.com/foks-proj/go-foks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ poptart ];
+    maintainers = with lib.maintainers; [
+      poptart
+      phanirithvij
+    ];
     mainProgram = pname;
   };
 })
