@@ -137,11 +137,14 @@ stdenv.mkDerivation {
       '') moduleSrcs
     )}
 
-    # wrap executable to $out/bin
-    mkdir -p $out/bin
-    makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
+    # Wrap the binary in-place inside the .app bundle
+    mv "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" \
+       "$out/Applications/${desktopName}.app/Contents/MacOS/.${binaryName}-wrapped"
+    makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/.${binaryName}-wrapped" \
+                "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" \
       --run ${lib.getExe disableBreakingUpdates} \
       --run "${stageModules} \"$out/Applications/${desktopName}.app/Contents/Resources/modules\"" \
+      --run '[ -t 1 ] || exec > /dev/null 2>&1' \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
