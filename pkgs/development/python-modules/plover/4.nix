@@ -56,6 +56,11 @@ buildPythonPackage (finalAttrs: {
     wcwidth
     xlib
   ];
+  optional-dependencies = {
+    gui-qt = [
+      pyqt5
+    ];
+  };
   nativeBuildInputs = [
     wrapQtAppsHook
   ];

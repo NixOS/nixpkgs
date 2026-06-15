@@ -12903,6 +12903,8 @@ self: super: with self; {
   # https://github.com/opensteno/plover_plugins_registry/blob/master/unsupported.json
   plover = plover_5;
 
+  plover-combo = callPackage ../development/python-modules/plover-combo { };
+
   plover-dict-commands = callPackage ../development/python-modules/plover-dict-commands { };
 
   plover-lapwing-aio = callPackage ../development/python-modules/plover-lapwing-aio { };
@@ -16528,8 +16530,6 @@ self: super: with self; {
   pyunormalize = callPackage ../development/python-modules/pyunormalize { };
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
-
-  pyupdate = callPackage ../development/python-modules/pyupdate { };
 
   pyupgrade = callPackage ../development/python-modules/pyupgrade { };
 

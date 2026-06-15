@@ -481,8 +481,8 @@ let
         mktplcRef = {
           publisher = "ban";
           name = "spellright";
-          version = "3.0.148";
-          hash = "sha256-h1xKEpKg4j7mGw3EQQDPZBDBDY/xjk2lsGk0ktd2ems=";
+          version = "3.0.154";
+          hash = "sha256-vGzmzY78FOS8ZsrT1YpTNOUJprW4rZHVuM83cZz6V+Q=";
         };
         meta = {
           description = "Visual Studio Code extension for Spellchecker";
@@ -2346,8 +2346,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.78";
-          hash = "sha256-w0i0Gmqj2atCtEYW+0XvZech37qQaTjkt8MJRdHamxs=";
+          version = "1.1.79";
+          hash = "sha256-Yja0W+wIizOOyF9um8t1V7g0DMdv9fVlR4uJCE/pbjk=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -4164,8 +4164,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.66.0";
-          hash = "sha256-hC2YR67hRfk9QuKVbmK1IzHIGyQ3XTBNvaCP66eC/no=";
+          version = "1.67.0";
+          hash = "sha256-THrd3Yix0gohTo/cshy9ZYZysA+xCGLx4KJHFk4zmCM=";
         };
         meta = {
           license = lib.licenses.asl20;
