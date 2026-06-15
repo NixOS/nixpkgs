@@ -94,6 +94,9 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "/usr/bin/env python3" "/usr/bin/env pypy3"
     ''
     + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools_scm>=7,<10" setuptools_scm
+
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
