@@ -12,15 +12,17 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "websockify";
   version = "0.13.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "websockify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
 
@@ -48,8 +50,8 @@ buildPythonPackage rec {
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
     homepage = "https://github.com/kanaka/websockify";
-    changelog = "https://github.com/novnc/websockify/releases/tag/${src.tag}";
+    changelog = "https://github.com/novnc/websockify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})
