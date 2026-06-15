@@ -2803,8 +2803,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-include = callPackage ../tools/misc/pandoc-include { };
-
   pandoc-drawio-filter = callPackage ../tools/misc/pandoc-drawio-filter { };
 
   pandoc-plantuml-filter = callPackage ../tools/misc/pandoc-plantuml-filter { };
