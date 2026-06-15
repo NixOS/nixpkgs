@@ -5132,8 +5132,6 @@ with pkgs;
 
   apacheKafka = apacheKafka_4_2;
 
-  asn2quickder = callPackage ../development/tools/asn2quickder { };
-
   libastyle = astyle.override { asLibrary = true; };
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
