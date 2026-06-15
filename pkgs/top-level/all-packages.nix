@@ -1970,8 +1970,6 @@ with pkgs;
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
-  bluetooth_battery = callPackage ../applications/misc/bluetooth_battery { };
-
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
