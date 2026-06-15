@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "xstatic" ];
 
   meta = {
-    homepage = "https://bitbucket.org/thomaswaldmann/xstatic";
+    homepage = "https://github.com/xstatic-py/xstatic";
     description = "Base packaged static files for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
