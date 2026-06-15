@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixbang";
   version = "0.1.2";
   pyproject = true;
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "madjar";
