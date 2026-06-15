@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytest,
   which,
   lrzsz,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "xmodem";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tehmaze";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     tag = version;
     sha256 = "sha256-kwPA/lYiv6IJSKGRuH13tBofZwp19vebwQniHK7A/i8=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest
