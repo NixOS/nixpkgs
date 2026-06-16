@@ -20,6 +20,8 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-dmK6SeiG+QgpA8IVZ6xiRoIRF1Zair3XeBOQCvjhwAE=";
 
+  __structuredAttrs = true;
+
   dontNpmBuild = true;
 
   doCheck = true;
@@ -52,6 +54,6 @@ buildNpmPackage rec {
     description = "Draw SVG digital circuits schematics from yosys JSON netlists";
     homepage = "https://github.com/ajsb85/netlist2svg";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
