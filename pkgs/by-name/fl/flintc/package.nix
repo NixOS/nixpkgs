@@ -24,14 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 $flintcSrc $out/bin/flintc
-    install -Dm755 $flsSrc $out/bin/fls
-
-    runHook postInstall
-  '';
 
   meta = with lib; {
     description = "Flint programming language compiler and language server";
