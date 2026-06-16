@@ -1,9 +1,13 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitLab,
+  lib,
+
+  # build system
   setuptools,
-  kafka-python-ng,
+
+  # dependencies
+  kafka-python,
   port-for,
   pytest,
 }:
@@ -23,7 +27,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    kafka-python-ng
+    kafka-python
     port-for
     pytest
   ];
