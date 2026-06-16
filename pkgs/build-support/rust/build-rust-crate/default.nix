@@ -588,6 +588,7 @@ lib.makeOverridable
         buildPhase = buildCrate {
           inherit
             crateName
+            version
             dependencies
             crateFeatures
             crateRenames
