@@ -22,11 +22,12 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/workhorse";
 
-  vendorHash = "sha256-X1+neA2g61BR1VRKXzeqNath0+SYXRbU4vzEg1KD2sY=";
+  vendorHash = "sha256-6/50YxOW3NK5qzy0ALERCMK3JpLJflnw8ePAvNXANxQ=";
+
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
   doCheck = false;
-  prodyVendor = true;
+  proxyVendor = true;
 
   meta = {
     homepage = "http://www.gitlab.com/";
