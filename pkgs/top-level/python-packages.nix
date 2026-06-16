@@ -11834,6 +11834,10 @@ self: super: with self; {
     }
   );
 
+  openinference-instrumentation =
+    callPackage ../development/python-modules/openinference-instrumentation
+      { };
+
   openinference-semantic-conventions =
     callPackage ../development/python-modules/openinference-semantic-conventions
       { };
