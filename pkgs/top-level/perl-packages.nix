@@ -6027,10 +6027,10 @@ with self;
 
   ConfigIniFiles = buildPerlPackage {
     pname = "Config-IniFiles";
-    version = "3.000003";
+    version = "3.002000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Config-IniFiles-3.000003.tar.gz";
-      hash = "sha256-PEV7ZdmOX/QL25z4FLDVmD6wxT+4aWvaO6A1rSrNaAI=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Config-IniFiles-3.002000.tar.gz";
+      hash = "sha256-Bmke17QZl+hQxOfGs05cOWFF4M0FCvGUSiDQaMOlpAs=";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
