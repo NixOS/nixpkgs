@@ -6,11 +6,12 @@ let
   };
 
   vmTest = runTest {
-    name = "e57inspector-vm";
+    name = "cloudcompare-vm";
     meta.maintainers = with pkgs.lib.maintainers; [
       nh2
-      chpatrick
     ];
+
+    enableOCR = true;
 
     nodes.machine =
       { ... }:
@@ -21,17 +22,19 @@ let
 
         services.xserver.enable = true;
         environment.systemPackages = [
-          pkgs.e57inspector
+          pkgs.cloudcompare
         ];
       };
-    enableOCR = true;
 
     testScript = ''
       start_all()
       machine.wait_for_x()
 
-      machine.execute("e57inspector ${testFile} >&2 &")
-      machine.wait_for_text("File")  # menu visible
+      machine.execute("CloudCompare ${testFile} >&2 &")
+      machine.wait_for_window("CloudCompare")
+
+      # Wait for the file to be loaded; CloudCompare shows "loaded successfully" in its log panel at the bottom.
+      machine.wait_for_text("loaded successfully")
 
       machine.screenshot("screen.png")
     '';
@@ -41,13 +44,12 @@ in
   vm = vmTest;
 
   screenshot-analysis = pkgs.callPackage ./vlm-screenshot-question.nix {
-    name = "e57inspector-screenshot-analysis";
+    name = "cloudcompare-screenshot-analysis";
     screenshot = "${vmTest}/screen.png";
     question = ''
       Look at this screenshot of a desktop application.
-      Answer: Does the application show that a file was loaded into it successfully?
-      For this, only scans matter, as there are no images in the file.
-      The inspector on the left should show child elements below 'Data 3D'.
+      Answer: Does the application show a 3D point cloud viewer (CloudCompare) that has successfully loaded and is displaying a coloured point cloud?
+      Evidence of success: a 3D viewport with coloured points is visible AND there are no error dialogs or error messages.
     '';
   };
 }
