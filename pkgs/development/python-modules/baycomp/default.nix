@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Library for Bayesian comparison of classifiers";
     homepage = "https://github.com/janezd/baycomp";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

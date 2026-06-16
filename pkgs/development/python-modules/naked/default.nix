@@ -109,6 +109,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/chrissimpkins/naked";
     downloadPage = "https://github.com/chrissimpkins/naked/tags";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }
