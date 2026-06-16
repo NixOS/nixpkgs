@@ -3,12 +3,7 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchurl,
   fetchpatch,
-  runCommand,
-  unzip,
-  bchunk,
-  p7zip,
   cmake,
   pkg-config,
   makeWrapper,
@@ -16,35 +11,12 @@
   bzip2,
   libpng,
   ffmpeg,
+  innoextract,
+  cdparanoia,
+  kdePackages,
 }:
-
 let
   stratagus = callPackage ./stratagus.nix { };
-
-  dataDownload = fetchurl {
-    url = "https://archive.org/download/warcraft-ii-tides-of-darkness_202105/Warcess.zip";
-    sha256 = "0yxgvf8xpv1w2bjmny4a38pa3xcdgqckk9abj21ilkc5zqzqmm9b";
-  };
-
-  data =
-    runCommand "warcraft2"
-      {
-        buildInputs = [
-          unzip
-          bchunk
-          p7zip
-        ];
-        meta.license = lib.licenses.unfree;
-      }
-      ''
-        unzip ${dataDownload} "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue}
-        bchunk "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue} WC2BTDP
-        rm -r Warcraft.II.Tides.of.Darkness
-        7z x WC2BTDP01.iso
-        rm WC2BTDP*.{iso,cdr}
-        cp -r DATA $out
-      '';
-
 in
 stdenv.mkDerivation rec {
   pname = "wargus";
@@ -68,25 +40,31 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
-    ffmpeg
   ];
+
   buildInputs = [
     zlib
     bzip2
     libpng
   ];
+
   cmakeFlags = [
     "-DSTRATAGUS=${stratagus}/games/stratagus"
-    "-DSTRATAGUS_INCLUDE_DIR=${stratagus.src}/gameheaders"
+    "-DSTRATAGUS_INCLUDE_DIR=${stratagus}/include/stratagus/gameheaders"
   ];
   postInstall = ''
     makeWrapper $out/games/wargus $out/bin/wargus \
-      --prefix PATH : ${lib.makeBinPath [ "$out" ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          "$out"
+          cdparanoia
+          ffmpeg
+          innoextract
+          kdePackages.kdialog
+        ]
+      }
     substituteInPlace $out/share/applications/wargus.desktop \
       --replace $out/games/wargus $out/bin/wargus
-
-    $out/bin/wartool -v -r ${data} $out/share/games/stratagus/wargus
-    ln -s $out/share/games/stratagus/wargus/{contrib/black_title.png,graphics/ui/black_title.png}
   '';
 
   meta = {
