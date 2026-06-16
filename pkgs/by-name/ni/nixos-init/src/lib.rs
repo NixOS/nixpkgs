@@ -27,16 +27,6 @@ pub use crate::{
 
 pub const SYSROOT_PATH: &str = "/sysroot";
 
-/// Find the path to the toplevel closure of the system in a prefix.
-///
-/// Uses the `init=` parameter on the kernel command-line.
-///
-/// Returns the relative path of the init to the prefix, e.g. without the `/sysroot` prefix.
-pub fn find_toplevel_in_prefix(prefix: &str) -> Result<PathBuf> {
-    let init_in_sysroot = find_init_in_prefix(prefix)?;
-    verify_init_is_nixos(prefix, init_in_sysroot)
-}
-
 /// Verify that an init path is inside a `NixOS` toplevel directory.
 ///
 /// If the path is verified, returns the path to the toplevel.
