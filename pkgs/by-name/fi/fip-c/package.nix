@@ -18,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  dontUnpack = true;
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
   strictDeps = true;
   __structuredAttrs = true;
 
