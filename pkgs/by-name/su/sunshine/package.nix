@@ -55,6 +55,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   apple-sdk_15,
+  qt6,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
@@ -62,13 +63,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2025.924.154138";
+  version = "2026.516.143833";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QrPfZqd9pgufohUjxlTpO6V0v7B41UrXHZaESsFjZ48=";
+    hash = "sha256-nkO0gBtn4Ck7pGGXjrPOYYxHiMdRkVAVGEVJc6CU3kA=";
     fetchSubmodules = true;
   };
 
@@ -76,12 +77,10 @@ stdenv'.mkDerivation (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-miRw5JGZ8L+CKnoZkCuVW+ptzFV3Dg21zuS9lqNeHro=";
-
-    # use generated package-lock.json as upstream does not provide one
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-    '';
+    # FIXME: recompute against upstream's package-lock.json for this release.
+    # e.g.: nix run nixpkgs#prefetch-npm-deps -- package-lock.json
+    # (or build once with lib.fakeHash and copy the hash nix reports)
+    npmDepsHash = "sha256-k2uvsTGPXDeqyv/Av+9eKQJYFJLi7LAt9s7DmpPTcYk=";
 
     installPhase = ''
       runHook preInstall
@@ -102,7 +101,7 @@ stdenv'.mkDerivation (finalAttrs: {
   # FETCH_CONTENT_BOOST_USED prevents Simple-Web-Server from re-finding boost
   + ''
     substituteInPlace cmake/dependencies/Boost_Sunshine.cmake \
-      --replace-fail 'set(BOOST_VERSION "1.87.0")' 'set(BOOST_VERSION "${boost.version}")'
+      --replace-fail 'set(BOOST_VERSION "1.89.0")' 'set(BOOST_VERSION "${boost.version}")'
     echo 'set(FETCH_CONTENT_BOOST_USED TRUE)' >> cmake/dependencies/Boost_Sunshine.cmake
   ''
   # remove upstream dependency on systemd and udev
@@ -116,9 +115,9 @@ stdenv'.mkDerivation (finalAttrs: {
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
       --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+      --replace-fail '/usr/bin/env systemctl start --u app-@PROJECT_FQDN@' 'sunshine'
 
-    substituteInPlace packaging/linux/sunshine.service.in \
+    substituteInPlace packaging/linux/app-dev.lizardbyte.app.Sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
@@ -129,6 +128,7 @@ stdenv'.mkDerivation (finalAttrs: {
     pkg-config
     python3
     makeWrapper
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals isLinux [
     wayland-scanner
@@ -148,6 +148,8 @@ stdenv'.mkDerivation (finalAttrs: {
     nlohmann_json
     openssl
     libopus
+    qt6.qtbase
+    qt6.qtsvg
   ]
   ++ lib.optionals isLinux [
     avahi
