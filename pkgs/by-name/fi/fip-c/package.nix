@@ -39,4 +39,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ zweiler1 ];
     mainProgram = "fip-c";
   };
-}
+})
