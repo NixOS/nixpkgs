@@ -1,0 +1,5 @@
+{
+  inspircd,
+}:
+
+inspircd.override { extraModules = [ ]; }
