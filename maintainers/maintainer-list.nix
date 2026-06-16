@@ -27438,6 +27438,13 @@
     github = "thattemperature";
     githubId = 125476238;
   };
+  thbemme = {
+    name = "Thomas Bemme";
+    email = "thomas.bemme@gmail.com";
+    matrix = "@riza:chaos.jetzt";
+    github = "thbemme";
+    githubId = 14074615;
+  };
   thblt = {
     name = "Thibault Polge";
     email = "thibault@thb.lt";
