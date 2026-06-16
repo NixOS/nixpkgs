@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterlab";
   version = "4.5.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
