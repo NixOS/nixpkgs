@@ -324,7 +324,7 @@ let
   # The latest major version is always available under `pkgs.pnpm`
   # Optionally override pnpm to use a custom nodejs version
   # Make sure that the same nodejs version is referenced in nativeBuildInputs
-  # pnpm = pnpm_11.override { nodejs = nodejs_24; };
+  # pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
   pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
