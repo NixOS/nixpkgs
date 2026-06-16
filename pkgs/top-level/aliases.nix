@@ -327,6 +327,7 @@ mapAliases {
   argo = throw "'argo' has been renamed to/replaced by 'argo-workflows'"; # Converted to throw 2025-10-27
   aria = throw "'aria' has been renamed to/replaced by 'aria2'"; # Converted to throw 2025-10-27
   arrayfire = throw "arrayfire was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
+  artha = throw "'artha' has been removed, as the packaged GTK 2 application is unmaintained upstream. Consider using 'wordnet' instead."; # Added 2026-05-22
   artichoke = throw "artichoke has been removed due to being archived upstream."; # Added 2025-11-04
   artim-dark = aritim-dark; # Added 2025-07-27
   artyFX = openav-artyfx; # Added 2026-02-08
@@ -474,6 +475,7 @@ mapAliases {
   check_systemd = throw "'check_systemd' has been renamed to/replaced by 'nagiosPlugins.check_systemd'"; # Converted to throw 2025-10-27
   check_zfs = throw "'check_zfs' has been renamed to/replaced by 'nagiosPlugins.check_zfs'"; # Converted to throw 2025-10-27
   checkSSLCert = throw "'checkSSLCert' has been renamed to/replaced by 'nagiosPlugins.check_ssl_cert'"; # Converted to throw 2025-10-27
+  chemtool = throw "'chemtool' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'avogadro2' instead."; # Added 2026-05-22
   chiaki4deck = throw "'chiaki4deck' has been renamed to/replaced by 'chiaki-ng'"; # Converted to throw 2025-10-27
   chit = throw "'chit' has been removed from nixpkgs because it was unmaintained upstream and used insecure dependencies"; # Added 2025-11-28
   chkrootkit = throw "chkrootkit has been removed as it is unmaintained and archived upstream and didn't even work on NixOS"; # Added 2025-09-12
@@ -825,6 +827,7 @@ mapAliases {
   ); # Converted to warning 2025-10-28
   forge = throw "forge was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
+  fped = throw "'fped' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'kicad' instead."; # Added 2026-05-22
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
   framac = frama-c; # Added 2026-04-24
   framework-system-tools = throw "'framework-system-tools' has been renamed to/replaced by 'framework-tool'"; # Converted to throw 2025-10-27
@@ -857,6 +860,7 @@ mapAliases {
   garage_1_x = warnAlias "'garage_1_x' has been renamed to 'garage_1'" garage_1; # Added 2025-06-23
   garage_2_0_0 = throw "'garage_2_0_0' has been removed. Use 'garage_2' instead."; # Added 2025-09-16
   gavrasm = throw "'gavrasm' has been removed. Use 'avra' instead."; # Added 2025-12-21
+  gbdfed = throw "'gbdfed' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'fontforge' instead."; # Added 2026-05-22
   gcc9 = throw "gcc9 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcc9Stdenv = throw "gcc9Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gcc10 = throw "gcc10 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
@@ -969,9 +973,11 @@ mapAliases {
   gscrabble = throw "'gscrabble' has been removed, as it is unmaintained upstream, and broken in nixpkgs"; # Added 2026-01-03
   gsettings-qt = lomiri.gsettings-qt; # Added 2025-12-06
   gssdp = throw "'gssdp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using `gssdp_1_6` instead"; # Added 2026-06-07
+  gtdialog = throw "'gtdialog' has been removed, as it depended on GTK 2. Consider using 'yad' or 'zenity' instead."; # Added 2026-05-22
   gtkcord4 = throw "'gtkcord4' has been renamed to/replaced by 'dissent'"; # Converted to throw 2025-10-27
   gtkextra = throw "'gtkextra' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   gtkgnutella = gtk-gnutella; # Added 2026-05-21
+  gtklp = throw "'gtklp' has been removed, as it depended on GTK 2. Consider using 'system-config-printer' instead."; # Added 2026-05-22
   gtuber = throw "'gtuber' has been removed due to being discontinued by upstream."; # Added 2025-12-12
   gui-for-clash = throw "'gui-for-clash' has been removed, as it is unmaintained"; # Added 2026-05-28
   guile-disarchive = throw "'guile-disarchive' has been renamed to/replaced by 'disarchive'"; # Converted to throw 2025-10-27
@@ -982,6 +988,7 @@ mapAliases {
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
   hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # Added 2025-09-26
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
+  hasmail = throw "'hasmail' has been removed, as the GTK 2 project is no longer maintained upstream."; # Added 2026-05-22
   haxe_4_0 = throw "'haxe_4_0' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxe_4_1 = throw "'haxe_4_1' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxor-news = throw "'haxor-news' has been removed as it is unmaintained"; # Added 2026-06-16
@@ -2712,6 +2719,7 @@ mapAliases {
   xulrunner = throw "'xulrunner' has been renamed to/replaced by 'firefox-unwrapped'"; # Converted to throw 2025-10-27
   xxgdb = throw "'xxgdb' seems inactive and doesn't compile with glibc 2.42"; # Added 2025-09-28
   xxHash = warnAlias "'xxHash' has been renamed to 'xxhash'" xxhash; # Added 2026-02-12
+  xzgv = throw "'xzgv' has been removed, as it depended on GTK 2. Consider using 'geeqie' or 'gthumb' instead."; # Added 2026-05-22
   yabar = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
   yabar-unstable = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
   yacas-gui = throw "'yacas-gui' has been removed, as it depended on qt5 webengine. Upstream is considering deprecation of the gui entirely, see https://github.com/grzegorzmazur/yacas/issues/361."; # Added 2026-02-11
