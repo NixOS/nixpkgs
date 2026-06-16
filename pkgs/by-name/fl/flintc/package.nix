@@ -9,13 +9,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flintc";
   version = "0.3.5";
 
-  flintcSrc = fetchurl {
-    url = "https://github.com/flint-lang/flintc/releases/download/v${version}-core/flintc";
-    sha256 = "9d6ac80c28a03caf9ce46a83601c1313b3b3adedc1e61997f30918470182a1b0";
-  };
-
-  flsSrc = fetchurl {
-    url = "https://github.com/flint-lang/flintc/releases/download/v${version}-core/fls";
+  src = fetchFromGitHub {
+    owner = "flint-lang";
+    repo = "flintc";
+    tag = "v${finalAttrs.version}";
     sha256 = "75fcedf31ccacd26733ed5a5ae19b6ab410ce3aa256bcf79ed8678d8362897a4";
   };
 
