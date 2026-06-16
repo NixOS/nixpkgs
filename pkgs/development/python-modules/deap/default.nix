@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.3";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "deap";
