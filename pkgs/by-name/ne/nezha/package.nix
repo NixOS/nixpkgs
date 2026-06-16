@@ -101,6 +101,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # TestOptionalAuth_PATWithoutScopeIsDenied
   checkFlags = "-skip=^TestSplitDomainSOA$";
 
   postInstall = ''
