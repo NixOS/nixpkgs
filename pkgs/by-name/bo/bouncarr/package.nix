@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  passthru.tests = {
+    inherit (nixosTests) bouncarr;
+  };
 
   meta = {
     description = "Authentication proxy for the *arr stack using Jellyfin SSO";
