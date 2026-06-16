@@ -168,7 +168,8 @@ stdenv.mkDerivation {
       It supports PIC, AVR, Arduino and other MCUs and MPUs.
     '';
     homepage = "https://simulide.com/";
-    license = lib.licenses.gpl3Only;
+    license =
+      if lib.versionAtLeast versionNum "1.1.0" then lib.licenses.agpl3Only else lib.licenses.gpl3Only;
     mainProgram = "simulide";
     maintainers = with lib.maintainers; [
       carloscraveiro
