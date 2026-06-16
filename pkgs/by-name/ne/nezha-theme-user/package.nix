@@ -2,9 +2,15 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-user";
   version = "2.2.1";
@@ -16,10 +22,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-X7NRpDeZqLijgbUQOEdML00TPRM2D55zlJkzWB2TKfM=";
   };
 
-  # TODO: Switch to the bun build function once available in nixpkgs
   postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-
     # We cannot directly get the git commit hash from the tarball
     substituteInPlace vite.config.ts \
       --replace-fail 'git rev-parse --short HEAD' 'echo refs/tags/v${finalAttrs.version}'
@@ -27,11 +30,16 @@ buildNpmPackage (finalAttrs: {
       --replace-fail '/commit/' '/tree/'
   '';
 
-  npmDepsHash = "sha256-hjVvp2dWBHqXrq/7+kLDmcUUrV15ln/8tNNqDmJ/Sh4=";
+  nativeBuildInputs = [ pnpm ];
 
-  npmPackFlags = [ "--ignore-scripts" ];
-
-  npmFlags = [ "--legacy-peer-deps" ];
+  npmDeps = null;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-4Zfiw//9w16I2CXOEy/ocAI5frK5w4g3b8pxguGWOdA=";
+  };
+  npmConfigHook = pnpmConfigHook;
 
   dontNpmInstall = true;
   installPhase = ''
@@ -42,7 +50,7 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Nezha monitoring user frontend based on next.js";
