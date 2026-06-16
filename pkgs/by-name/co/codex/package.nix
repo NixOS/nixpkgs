@@ -26,18 +26,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.139.0";
+  version = "0.140.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-XjzlkBUkBey+P3tFLDYB3ae5oseUfW5tmzhLzqlqj2E=";
+    hash = "sha256-VuvNXgyftiQke8qLA7HEySkP4S2TvMR++rrVJAfVc4Y=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-8mN4OTRJvt2mBYHQXZS55PSOChLqEIiXwPu2y+2MZ9o=";
+  cargoHash = "sha256-8nvIfbq2EKqbF4fyzB5wakQilV4NU5S2wSXJk1KGnB0=";
 
   __structuredAttrs = true;
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "thin"' "" \
-      --replace-fail 'codegen-units = 1' ""
+      --replace-fail 'codegen-units = 4' ""
   '';
 
   nativeBuildInputs = [
