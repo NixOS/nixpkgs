@@ -15,9 +15,6 @@
   zlib,
   bzip2,
   libpng,
-  dialog,
-  python3,
-  cdparanoia,
   ffmpeg,
 }:
 
