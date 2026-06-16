@@ -14,12 +14,12 @@
 }:
 let
 
-  version = "1.3.3";
+  version = "1.3.5";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-Xh3YcVz5OLQ596uWUEac87CKi62xgr63dYiYb6U6qXQ=";
+    hash = "sha256-SxJc09zy7aKW+PVl4My3jzwsktkbsvNnyXMTMs/NzUA=";
     postCheckout = ''
       git -C $out rev-parse HEAD > $out/commit_hash.txt
       git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
