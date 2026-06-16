@@ -70,14 +70,16 @@ let
     hash = "sha256-wyMZ/MKGe+/o/zria006WDeMOpwb/vkCnJlpMhw7xuw=";
   };
 
-  ffmpegPrepared = runCommand "sunshine-ffmpeg" {} ''
+  ffmpegPrepared = runCommand "sunshine-ffmpeg" { } ''
     mkdir -p $out
     tar -xzf ${ffmpegBundle} -C $out
   '';
-  gladPython = python3.withPackages (ps: with ps; [
-    jinja2
-    setuptools
-  ]);
+  gladPython = python3.withPackages (
+    ps: with ps; [
+      jinja2
+      setuptools
+    ]
+  );
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
