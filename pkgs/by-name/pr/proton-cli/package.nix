@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "proton-cli";
-  version = "1.4.0";
+  version = "1.5.0";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ buildGoModule (finalAttrs: {
     owner = "roman-16";
     repo = "proton-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JZ6Lr7mcL8sHeiptdB1CPv5zPaLsMKfUXd/KCf1tTDM=";
+    hash = "sha256-RJBC5oxTv27SrEfBd5DqlR3FcD56BkIf+046Jwfctzo=";
   };
 
-  vendorHash = "sha256-1p63FiV9lFquADaV0/mhxdWhefBRY1IT91t7OdEH9BM=";
+  vendorHash = "sha256-SlvrTjL8CMWSvoIU4rp4hP4dtDVGH7HAs3xyycfrKQA=";
 
   subPackages = [ "." ];
 
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/roman-16/proton-cli/cmd.version=${finalAttrs.version}"
+    "-X=github.com/roman-16/proton-cli/internal/cli.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
