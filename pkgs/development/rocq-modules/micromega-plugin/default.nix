@@ -19,7 +19,7 @@ mkRocqDerivation {
     ] null;
 
   release = {
-    "1.1.0".sha256 = "sha256-OszFXGLnm0rGAZVRCq/riQUK1DuhPyfv49GBePkQWAI=";
+    "1.1.0".hash = "sha256-CWMbGErC5bu20Yu9eskgslLkzmSof6klNlOYEkQjUjc=";
   };
   releaseRev = v: "v${v}";
 

@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "fceumm";
-  version = "0-unstable-2026-05-06";
+  version = "0-unstable-2026-06-15";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-fceumm";
-    rev = "3a84a6fd0ba20dd4877c06b1d58741172148395f";
-    hash = "sha256-4+kEoN0+SWl284n7tIR76aysf0GlLdxELDXfpEK6mi8=";
+    rev = "c0c52ad0eb36cdbfc66e9bdb72efc83103e85e22";
+    hash = "sha256-e81kpVUTz3l9wqCwN9Zf4LrnskPRW7Ewy78/1BApZlg=";
   };
 
   meta = {

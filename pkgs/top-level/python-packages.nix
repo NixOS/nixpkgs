@@ -1549,6 +1549,10 @@ self: super: with self; {
 
   azure-mgmt-dns = callPackage ../development/python-modules/azure-mgmt-dns { };
 
+  azure-mgmt-domainregistration =
+    callPackage ../development/python-modules/azure-mgmt-domainregistration
+      { };
+
   azure-mgmt-eventgrid = callPackage ../development/python-modules/azure-mgmt-eventgrid { };
 
   azure-mgmt-eventhub = callPackage ../development/python-modules/azure-mgmt-eventhub { };
