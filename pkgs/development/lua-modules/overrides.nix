@@ -1261,6 +1261,13 @@ in
     ];
   });
 
+  tree-sitter-kulala_http = prev.tree-sitter-kulala_http.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = lua.luaversion != "5.1";
