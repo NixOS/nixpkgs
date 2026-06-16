@@ -3,14 +3,14 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  matplotlib,
+  moocore,
   numpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "deap";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "deap";
-    hash = "sha256-fJcIj7BYNb3CVb7EdcsOd43itD5Ey++/K81lWu7IZf0=";
+    hash = "sha256-UNS9kk/KWhaj26i/2xFApV6cJM5QgWq09Wg9LzHC1zQ=";
   };
 
   build-system = [
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    matplotlib
+    moocore
     numpy
   ];
 
