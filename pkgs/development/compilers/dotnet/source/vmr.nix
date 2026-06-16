@@ -186,6 +186,16 @@ stdenv.mkDerivation {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1603' \
       src/nuget-client/src/NuGet.Core/NuGet.CommandLine.XPlat/NuGet.CommandLine.XPlat.csproj
+
+    # AD0001 crashes intermittently in source-build-reference-packages with
+    # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
+    # https://github.com/dotnet/roslyn/issues/81645
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
+      src/source-build-assets/src/referencePackages/Directory.Build.props
+
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
