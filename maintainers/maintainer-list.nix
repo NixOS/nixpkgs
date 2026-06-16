@@ -9876,6 +9876,12 @@
     githubId = 3217744;
     name = "Peter Ferenczy";
   };
+  ghastrum = {
+    name = "Dennis Malmin";
+    email = "dennis.malmin@tuta.com";
+    github = "Ghastrum";
+    githubId = 276720856;
+  };
   ghostbuster91 = {
     name = "Kasper Kondzielski";
     email = "kghost0@gmail.com";
