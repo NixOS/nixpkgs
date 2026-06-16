@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
     substituteInPlace $out/lib/systemd/user/gpu-screen-recorder.service \
-      --replace "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
+      --replace-warn "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
   '';
 
   passthru.updateScript = gitUpdater { };
