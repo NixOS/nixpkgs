@@ -5,7 +5,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fip-c";
   version = "0.3.2";
 
