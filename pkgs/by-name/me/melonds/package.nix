@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonds";
-  version = "1.1-unstable-2026-05-27";
+  version = "1.1-unstable-2026-06-07";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "c69c1ceb1176a03782f13bb8ae54883a44cb2d5d";
-    hash = "sha256-d/9tlGAo66v0C2/erdoDyLXqoxqaTExztlxbFE4V7d8=";
+    rev = "10a173b5536fc75cd93f8a3868349dad963542ef";
+    hash = "sha256-YsVCU40BZgYoxyuscbD0Ab613eUIgYlXJkm0KJQg+yY=";
   };
 
   nativeBuildInputs = [
