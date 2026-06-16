@@ -1656,7 +1656,8 @@ assertNoAdditions {
     ];
     checkInputs = with self; [
       luasnip
-      null-ls-nvim
+      none-ls-nvim
+      plenary-nvim
     ];
     nvimSkipModules = [
       "init"
@@ -2012,9 +2013,8 @@ assertNoAdditions {
     let
       kulala-http-grammar = neovimUtils.grammarToPlugin (
         tree-sitter.buildGrammar {
-          inherit (old) version src meta;
           language = "kulala_http";
-          location = "lua/tree-sitter";
+          inherit (luaPackages.tree-sitter-kulala_http) version src meta;
           generate = false;
         }
       );
@@ -2036,6 +2036,7 @@ assertNoAdditions {
         "cli.kulala_cli"
         # Upstream test harnesses are not require-safe modules
         "minit"
+        "minit-userscript"
         "minitest"
         "test"
         # Legacy parser module; active parsing is handled by kulala-core
@@ -2481,7 +2482,8 @@ assertNoAdditions {
   mason-null-ls-nvim = super.mason-null-ls-nvim.overrideAttrs {
     dependencies = with self; [
       mason-nvim
-      null-ls-nvim
+      none-ls-nvim
+      plenary-nvim
     ];
   };
 
@@ -3093,13 +3095,6 @@ assertNoAdditions {
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
   };
-
-  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    dependencies = [ self.plenary-nvim ];
-    meta = old.meta // {
-      license = lib.licenses.unlicense;
-    };
-  });
 
   nvchad = super.nvchad.overrideAttrs {
     # You've signed up for a distro, providing dependencies.
@@ -4630,17 +4625,6 @@ assertNoAdditions {
 
   tv-nvim = super.tv-nvim.overrideAttrs {
     runtimeDeps = [ television ];
-  };
-
-  typescript-nvim = super.typescript-nvim.overrideAttrs {
-    checkInputs = [
-      # Optional null-ls integration
-      self.none-ls-nvim
-    ];
-    dependencies = with self; [
-      nvim-lspconfig
-      plenary-nvim
-    ];
   };
 
   typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
