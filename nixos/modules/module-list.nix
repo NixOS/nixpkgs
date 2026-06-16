@@ -1270,6 +1270,7 @@
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
+  ./services/networking/liberaforms.nix
   ./services/networking/libreswan.nix
   ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
