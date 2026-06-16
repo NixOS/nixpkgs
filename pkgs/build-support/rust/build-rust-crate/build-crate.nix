@@ -25,6 +25,7 @@
   buildTests,
   codegenUnits,
   capLints,
+  useClippy,
 }:
 
 let
@@ -94,6 +95,7 @@ in
   runHook preBuild
 
   # configure & source common build functions
+  RUSTC_DRIVER="${if useClippy then "clippy-driver" else "rustc"}"
   LIB_RUSTC_OPTS="${libRustcOpts}"
   BIN_RUSTC_OPTS="${binRustcOpts}"
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
