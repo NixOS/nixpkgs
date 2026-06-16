@@ -73,5 +73,8 @@ stdenv.mkDerivation {
       license
       ;
     inherit (ioquake3.meta) platforms;
+    # Surface any content pack's problems (e.g. quake3arena's missing pak0.pk3)
+    # on the wrapper too, so building it shows the same actionable message.
+    problems = lib.mergeAttrsList (map (pak: pak.meta.problems or { }) paks);
   };
 }
