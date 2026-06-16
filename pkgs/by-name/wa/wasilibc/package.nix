@@ -1,23 +1,42 @@
 {
   stdenvNoLibc,
+  cmake,
   fetchFromGitHub,
   lib,
+  lld,
+  llvmPackages,
+  wasm-component-ld,
+  wasm-tools,
+  wit-bindgen,
+  wkg,
   firefox-unwrapped,
   firefox-esr-unwrapped,
-  enablePosixThreads ? false,
 }:
 
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
-  version = "27";
+  version = "32";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
     tag = "wasi-sdk-${finalAttrs.version}";
-    hash = "sha256-RIjph1XdYc1aGywKks5JApcLajbNFEuWm+Wy/GMHddg=";
+    hash = "sha256-iP/SFYvO8zQMwwbY4VvIboO+Kx195L9brpMq8cbsA7c=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./0000-relax-version-bounds.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    lld
+    wasm-component-ld
+    wasm-tools
+    wit-bindgen
+    wkg
+  ];
 
   # These flags break pkgsCross.wasi32.llvmPackages.libcxx
   hardeningDisable = [
@@ -28,45 +47,36 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-    "share"
   ];
 
-  # clang-13: error: argument unused during compilation: '-rtlib=compiler-rt' [-Werror,-Wunused-command-line-argument]
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "-Werror" ""
-    patchShebangs scripts/
-  '';
-
-  preBuild = ''
-    export SYSROOT_LIB=${placeholder "out"}/lib
-    export SYSROOT_INC=${placeholder "dev"}/include
-    export SYSROOT_SHARE=${placeholder "share"}/share
-    mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
-    makeFlagsArray+=(
-      "SYSROOT_LIB:=$SYSROOT_LIB"
-      "SYSROOT_INC:=$SYSROOT_INC"
-      "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      "TARGET_TRIPLE:=${stdenvNoLibc.system}"
-      ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
-    )
-  '';
+  cmakeFlags = [
+    "-DBUILTINS_LIB=${llvmPackages.compiler-rt}/lib/wasi/libclang_rt.builtins-wasm32.a"
+    # CMake probes cc to try and detect brokenness, but it tries ordinary compilation that
+    # depends on having a libc... which isn't there, as we're building the libc that's to
+    # be used by the platform. Just skipping these checks makes the right thing happen.
+    "-DCMAKE_C_COMPILER_FORCED=TRUE"
+    "-DTARGET_TRIPLE=${stdenvNoLibc.system}"
+  ];
 
   enableParallelBuilding = true;
 
-  # We just build right into the install paths, per the `preBuild`.
-  dontInstall = true;
+  preFixup =
+    lib.optionalString (stdenvNoLibc.system != stdenvNoLibc.targetPlatform.rust.rustcTargetSpec)
+      ''
+        ln -s $out/lib/${stdenvNoLibc.system} $out/lib/${stdenvNoLibc.targetPlatform.rust.rustcTargetSpec}
+      '';
 
-  preFixup = ''
-    ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
-    ln -s $out/lib $out/lib/${stdenvNoLibc.system}
-  ''
-  + lib.optionalString (stdenvNoLibc.system != stdenvNoLibc.targetPlatform.rust.rustcTargetSpec) ''
-    ln -s $out/lib $out/lib/${stdenvNoLibc.targetPlatform.rust.rustcTargetSpec}
-  '';
+  # TODO: run wasilibc tests. Nixpkgs never runs the check phase during cross compiles
+  # (sensibly), but this package is always cross compiled due to its nature, and the tests
+  # expect to be run in a cross-compilation environment. There are instructions on how to run
+  # them but I don't understand enough about Nixpkgs' CMake set-up to work out how to apply them.
 
-  passthru.tests = {
-    inherit firefox-unwrapped firefox-esr-unwrapped;
+  passthru = {
+    incdir = "/include/${stdenvNoLibc.system}";
+    libdir = "/lib/${stdenvNoLibc.system}";
+    tests = {
+      inherit firefox-unwrapped firefox-esr-unwrapped;
+    };
   };
 
   meta = {
