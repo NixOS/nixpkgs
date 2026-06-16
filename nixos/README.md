@@ -15,7 +15,7 @@ And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> -
 - Format the commit messages in the following way:
 
   ```
-  nixos/(module): (init module | add setting | refactor | etc)
+  nixos/(module): (init module | drop | add setting | refactor | `your message`)
 
   (Motivation for change. Link to release notes. Additional information.)
   ```
@@ -28,6 +28,9 @@ And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> -
   * nixos/nginx: refactor config generation
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
+  * nixos/matrix: drop
+
+    Unmaintained upstream since 2022, package fails to build with gcc 15
 
 ## Reviewing contributions
 
