@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   matplotlib,
   numpy,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "deap";
   version = "1.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -20,10 +21,15 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-fJcIj7BYNb3CVb7EdcsOd43itD5Ey++/K81lWu7IZf0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     matplotlib
     numpy
   ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
