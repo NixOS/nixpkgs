@@ -8633,8 +8633,6 @@ with pkgs;
 
   espeak = espeak-ng;
 
-  espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
-
   evolution-data-server-gtk4 = evolution-data-server.override {
     withGtk3 = false;
     withGtk4 = true;
