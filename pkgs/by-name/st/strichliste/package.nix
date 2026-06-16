@@ -28,6 +28,10 @@ php.buildComposerProject2 (finalAttrs: {
       --replace-fail "strichliste.yaml" "/etc/strichliste.yaml"
   '';
 
+  postBuild = ''
+    composer dump-autoload --optimize --no-dev --no-scripts --no-interaction --no-cache
+  '';
+
   postInstall = ''
     mkdir $out/bin
     ln -s $out/share/php/strichliste-backend/bin/console $out/bin/strichliste-console
