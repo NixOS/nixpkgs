@@ -111,7 +111,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ];
     in
     lib.concatMap (
-      p: if p == null || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
+      p: if !p ? "pname" || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
     ) finalAttrs.passthru.dependencies;
 
   dependencies =
