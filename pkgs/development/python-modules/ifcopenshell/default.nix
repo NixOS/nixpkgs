@@ -208,6 +208,6 @@ buildPythonPackage rec {
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ autra ];
+    teams = [ lib.teams.geospatial ];
   };
 }
