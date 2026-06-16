@@ -122,6 +122,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       adriangl
+      jk
     ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;
