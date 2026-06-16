@@ -24262,6 +24262,7 @@
   };
   ryand56 = {
     email = "git@ryand.ca";
+    matrix = "@ryan:ryand.ca";
     github = "ryand56";
     githubId = 22267679;
     name = "Ryan Omasta";
@@ -30729,6 +30730,12 @@
     github = "YvesStraten";
     githubId = 65394961;
     name = "Yves Straten";
+  };
+  yvnth = {
+    email = "yashupress@gmail.com";
+    github = "yvnth";
+    githubId = 201552597;
+    name = "Yashwanth Prasannakumar";
   };
   yzx9 = {
     email = "yuan.zx@outlook.com";

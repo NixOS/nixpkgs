@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   replaceVars,
+  flatpak,
   fontconfig,
   libxtst,
   libxft,
@@ -89,6 +90,7 @@ mkKdeDerivation {
     libxtst
     libxft
 
+    flatpak
     gpsd
   ];
 

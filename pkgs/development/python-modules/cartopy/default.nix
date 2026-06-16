@@ -138,6 +138,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/SciTools/cartopy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "feature_download";
   };
 })
