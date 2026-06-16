@@ -1228,7 +1228,7 @@ in
           ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"))
-          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"))
           ++ (lib.optional (lib.versionOlder cfg.package.version "34") (upgradeWarning 33 "26.11"));
 
         services.nextcloud.package = lib.mkDefault (
