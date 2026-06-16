@@ -152,8 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxkb_bin_dir=${xkbcomp}/bin"
     "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
     "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+
     "-Dxcsecurity=true"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
