@@ -333,9 +333,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Stats is an app bundle with nested frameworks, so sign the bundle to generate
+  # sealed resources instead of signing only the Mach-O files.
   postFixup = ''
-    # Stats is an app bundle with nested frameworks, so sign the bundle to
-    # generate sealed resources instead of signing only the Mach-O files
     ${lib.getExe rcodesign} sign "$out/Applications/Stats.app"
   '';
 
