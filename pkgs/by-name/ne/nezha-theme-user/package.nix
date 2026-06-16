@@ -17,7 +17,7 @@ buildNpmPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "hamster1963";
-    repo = "nezha-dash-v1";
+    repo = "nezha-dash-v2";
     tag = "v${finalAttrs.version}";
     hash = "sha256-X7NRpDeZqLijgbUQOEdML00TPRM2D55zlJkzWB2TKfM=";
   };
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     # We cannot directly get the git commit hash from the tarball
     substituteInPlace vite.config.ts \
-      --replace-fail 'git rev-parse --short HEAD' 'echo refs/tags/v${finalAttrs.version}'
+      --replace-fail 'git rev-parse --short HEAD' 'echo ${finalAttrs.src.rev}'
     substituteInPlace src/components/Footer.tsx \
       --replace-fail '/commit/' '/tree/'
   '';
@@ -54,8 +54,8 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Nezha monitoring user frontend based on next.js";
-    changelog = "https://github.com/hamster1963/nezha-dash-v1/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/hamster1963/nezha-dash-v1";
+    changelog = "https://github.com/hamster1963/nezha-dash-v2/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/hamster1963/nezha-dash-v2";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
