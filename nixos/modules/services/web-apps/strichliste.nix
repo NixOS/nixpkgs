@@ -478,20 +478,15 @@ in
         inherit (cfg) environment;
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;
           User = "strichliste";
           Group = "strichliste";
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = map toString [
-            [
-              (lib.getExe cfg.packages.backend)
-              "cache:clear"
-            ]
-            [
-              (lib.getExe cfg.packages.backend)
-              "doctrine:migrations:migrate"
-              "--allow-no-migration"
-              "--no-interaction"
-            ]
+          ExecStart = toString [
+            (lib.getExe cfg.packages.backend)
+            "doctrine:migrations:migrate"
+            "--allow-no-migration"
+            "--no-interaction"
           ];
         };
       };
@@ -499,6 +494,11 @@ in
       systemd.services.phpfpm-strichliste = {
         inherit (cfg) environment;
         serviceConfig.EnvironmentFile = cfg.environmentFiles;
+        restartTriggers = [ settingsFile ];
+        preStart = toString [
+          (lib.getExe cfg.packages.backend)
+          "cache:clear"
+        ];
       };
 
       services.phpfpm.pools.strichliste = {
