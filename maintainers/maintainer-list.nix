@@ -10466,6 +10466,12 @@
     github = "hacker1024";
     githubId = 20849728;
   };
+  hadal84 = {
+    name = "hadal84";
+    email = "business.masses555@passinbox.com";
+    github = "hadal84";
+    githubId = 143954694;
+  };
   hadilq = {
     name = "Hadi Lashkari Ghouchani";
     email = "hadilq.dev@gmail.com";
