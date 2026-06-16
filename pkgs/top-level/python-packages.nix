@@ -11842,6 +11842,10 @@ self: super: with self; {
     callPackage ../development/python-modules/openinference-instrumentation-claude-agent-sdk
       { };
 
+  openinference-instrumentation-openai =
+    callPackage ../development/python-modules/openinference-instrumentation-openai
+      { };
+
   openinference-semantic-conventions =
     callPackage ../development/python-modules/openinference-semantic-conventions
       { };
