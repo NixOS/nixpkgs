@@ -878,13 +878,13 @@
     "vendorHash": "sha256-vcuUt3WIo1TnLApch410JgtyCzliQRYMQQQ2Z9diDZ8="
   },
   "lxc_incus": {
-    "hash": "sha256-m3xUqIUvowu+SZ7TxXYKjOv0Th/Pah0MXVAdaaSPeCo=",
+    "hash": "sha256-Jabbg13UetT4B+kGNP2DDEXFALR8apqjPB5xWkHF5UA=",
     "homepage": "https://registry.terraform.io/providers/lxc/incus",
     "owner": "lxc",
     "repo": "terraform-provider-incus",
-    "rev": "v1.1.0",
+    "rev": "v1.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vTJXA7vHVE/m68gr1nHInGs/2T/4OzwS6T3BAAJ+ATo="
+    "vendorHash": "sha256-nRkttehaieVOcTBJ3rIU/JHtv/q4fU18z8MUo3xtE28="
   },
   "marcofranssen_dexidp": {
     "hash": "sha256-Aby3FNEA6LgsGM/N10LNu9sCv3f2N8WIrmWoqEqTa8E=",
