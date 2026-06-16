@@ -17,6 +17,10 @@ let
 
   inherit (lib.strings) toJSON;
 
+  inherit (lib.trivial)
+    oldestSupportedReleaseIsAtLeast
+    ;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
@@ -690,9 +694,12 @@ let
         };
       };
     in
-    # TODO: Remove in 27.05.
+    # Platforms elaborated by pre-26.11 Nixpkgs will include the `linux-kernel` attr,
+    # so we can't assert its absence until 26.11 is the oldest supported release.
+    # Assertion will activate during the 27.05 cycle, when 26.05 support ends.
+    # TODO: Remove assertion in the 27.11 cycle.
     assert
-      args ? linux-kernel
+      oldestSupportedReleaseIsAtLeast 2611 && args ? linux-kernel
       -> throw "lib.systems.elaborate: linux-kernel has been removed; see the 26.11 release notes";
 
     assert final.useAndroidPrebuilt -> final.isAndroid;
