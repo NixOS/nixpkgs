@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-UH/T3eqFy0KrG/ouEzifJeWXXwe5cUPYG7DpIO0GsYc=";
+  vendorHash = "sha256-iuSu5MvNRt+eCZ9wxUwMo6X0joos7q9WPyXBwhn/0yE=";
 
   nativeBuildInputs = [
     nodejs
@@ -42,15 +42,6 @@ buildGoModule (finalAttrs: {
   };
 
   postPatch = ''
-    # required until libheif gets bumped
-    substituteInPlace ./go.mod \
-      --replace-fail 'github.com/strukturag/libheif v1.23.0' 'github.com/strukturag/libheif v1.21.2'
-
-    substituteInPlace ./go.sum \
-      --replace-fail 'github.com/strukturag/libheif v1.23.0 h1:G9Fjf/b8dvTgLIk148tUKp7Z7rgu88FC+Mc8o92U98k=' 'github.com/strukturag/libheif v1.21.2 h1:YFD3crf+d33cFVQh3aTkkVGwJFyWpfqVT4XhzHWU6mA=' \
-      --replace-fail 'github.com/strukturag/libheif v1.23.0/go.mod h1:E/PNRlmVtrtj9j2AvBZlrO4dsBDu6KfwDZn7X1Ce8Ks=' 'github.com/strukturag/libheif v1.21.2/go.mod h1:E/PNRlmVtrtj9j2AvBZlrO4dsBDu6KfwDZn7X1Ce8Ks='
-
-
     substituteInPlace ./web/build-wasm.sh \
       --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=${finalAttrs.src.tag}" \
       --replace-fail 'go.mau.fi/gomuks/version.Commit=$(git rev-parse HEAD)' "go.mau.fi/gomuks/version.Commit=unknown"
