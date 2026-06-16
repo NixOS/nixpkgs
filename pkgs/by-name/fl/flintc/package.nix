@@ -5,7 +5,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flintc";
   version = "0.3.5";
 
