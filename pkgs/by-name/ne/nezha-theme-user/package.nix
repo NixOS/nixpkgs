@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
     description = "Nezha monitoring user frontend based on next.js";
     changelog = "https://github.com/hamster1963/nezha-dash-v2/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/hamster1963/nezha-dash-v2";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
 })
