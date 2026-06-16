@@ -1,6 +1,7 @@
 {
   lib,
   gccMultiStdenv,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   bash,
@@ -17,8 +18,10 @@
   zlib,
   zstd,
 }:
-
-gccMultiStdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.hostPlatform.isx86_64 then gccMultiStdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   version = "5.9.0";
   pname = "rr";
 
@@ -77,7 +80,7 @@ gccMultiStdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "disable32bit" false)
+    (lib.cmakeBool "disable32bit" (!stdenv.hostPlatform.isx86_64))
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 

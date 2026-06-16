@@ -20,13 +20,13 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml-f";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QRghnzsLGuQ5MHoVVTDg6ACtwVIkIRexNx/zrrQ0Icc=";
+    hash = "sha256-lReez2rSAJVnLFngjUYgGkm+HUDH8VsCC2m9zYOOr4A=";
   };
 
   patches = [

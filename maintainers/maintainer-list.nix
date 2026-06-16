@@ -10455,6 +10455,11 @@
     githubId = 14929991;
     keys = [ { fingerprint = "F7D3 7890 228A 9074 40E1  FD48 46B9 228E 814A 2AAC"; } ];
   };
+  haansn08 = {
+    name = "Stefan Haan";
+    github = "haansn08";
+    githubId = 6215916;
+  };
   hacker1024 = {
     name = "hacker1024";
     email = "hacker1024@users.sourceforge.net";
@@ -13044,6 +13049,13 @@
     githubId = 151087767;
     name = "João Moreira";
     keys = [ { fingerprint = "F457 0A3A 5F89 22F8 F572  E075 EF8B F2C8 C5F4 097D"; } ];
+  };
+  joaosreis = {
+    email = "joaosreis@outlook.pt";
+    github = "joaosreis";
+    githubId = 3420596;
+    name = "João Santos Reis";
+    keys = [ { fingerprint = "9BEB F137 4CAC 96D6 A4ED  EC49 BA2E 05BD B7F8 C0EE"; } ];
   };
   joaquintrinanes = {
     email = "hi@joaquint.io";
@@ -18343,6 +18355,13 @@
     github = "mkleczek";
     githubId = 11559480;
   };
+  mkoppmann = {
+    email = "dev@mkoppmann.at";
+    github = "mkoppmann";
+    githubId = 21209717;
+    matrix = "@shibayashi:ncrypt.at";
+    name = "Michael Koppmann";
+  };
   mksafavi = {
     name = "MK Safavi";
     email = "mksafavi@gmail.com";
@@ -20628,12 +20647,6 @@
     githubId = 64069240;
     matrix = "@olduser101:matrix.org";
     name = "Nathan Gill";
-  };
-  olebedev = {
-    email = "ole6edev@gmail.com";
-    github = "olebedev";
-    githubId = 848535;
-    name = "Oleg Lebedev";
   };
   oleina = {
     email = "antholeinik@gmail.com";

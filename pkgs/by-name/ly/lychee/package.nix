@@ -16,7 +16,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
       rm -rf $out/.git
     '';
-    hash = "sha256-lknj0uTIWYwDm3PA/Q8paVxRn+B9qvfllYUjnp7I4jI=";
+    hash = "sha256-fXuLeLwrE/CINQKqk87o0Dp+8nGOqCyUkS5gTr9YOXY=";
   };
 
-  cargoHash = "sha256-ivLx48qbagjw5zGkYC+ygK83p8q110iEn2YEfUjTFHs=";
+  cargoHash = "sha256-21J6eH2xSLK2VWnsrMk9WaKjPJiNP2UQGJuYkZUqsnM=";
 
   nativeBuildInputs = [
     installShellFiles

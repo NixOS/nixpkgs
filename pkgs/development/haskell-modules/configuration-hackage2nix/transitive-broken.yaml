@@ -744,6 +744,7 @@ dont-distribute-packages:
  - dhscanner-kbgen
  - dia-functions
  - diagrams-html5
+ - diagrams-reflex
  - diagrams-wx
  - dialog
  - difference-monoid
@@ -1128,6 +1129,7 @@ dont-distribute-packages:
  - ghc-plugs-out
  - ghc-session
  - ghci-pretty
+ - ghcjs-dom-hello
  - ghcjs-dom-webkit
  - ghcjs-hplay
  - ght
@@ -1135,6 +1137,7 @@ dont-distribute-packages:
  - gi-ges
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
+ - gi-webkit2
  - git-config
  - git-fmt
  - git-gpush
@@ -1895,6 +1898,8 @@ dont-distribute-packages:
  - jordan-servant-client
  - jordan-servant-openapi
  - jordan-servant-server
+ - jsaddle-hello
+ - jsaddle-webkit2gtk
  - jsaddle-webkitgtk
  - jsc
  - JsContracts
@@ -2048,6 +2053,7 @@ dont-distribute-packages:
  - legion-discovery
  - legion-discovery-client
  - legion-extra
+ - leksah
  - leksah-server
  - lens-utils
  - lenz
@@ -2905,9 +2911,12 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
+ - reflex-dom
+ - reflex-dom-colonnade
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
+ - reflex-localize-dom
  - reflex-monad-auth
  - refractor
  - refurb
@@ -3467,6 +3476,7 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
+ - templates
  - temporal-sdk
  - ten-lens
  - ten-unordered-containers
@@ -3545,6 +3555,7 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
+ - trasa-reflex
  - trasa-server
  - trasa-th
  - TreeCounter
