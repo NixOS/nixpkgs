@@ -128,21 +128,23 @@ in
           };
 
           account = {
-            lower = mkOption {
-              type = types.int;
-              default = -200000;
-              example = 0;
-              description = ''
-                The credit limit for user accounts.
-              '';
-            };
+            boundary = {
+              lower = mkOption {
+                type = types.int;
+                default = -200000;
+                example = 0;
+                description = ''
+                  The credit limit for user accounts.
+                '';
+              };
 
-            upper = mkOption {
-              type = types.ints.positive;
-              default = 200000;
-              description = ''
-                The maximum balance on a user account.
-              '';
+              upper = mkOption {
+                type = types.ints.positive;
+                default = 200000;
+                description = ''
+                  The maximum balance on a user account.
+                '';
+              };
             };
           };
 
@@ -256,7 +258,7 @@ in
               };
             };
 
-            transaction = {
+            transactions = {
               enabled = mkOption {
                 type = types.bool;
                 default = true;
