@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_10,
   nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
@@ -14,7 +14,12 @@
   version ? "2026.6.6",
 }:
 let
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  # Lockfile predates pnpm 11's stricter overrides/patchedDependencies
+  # validation; strip patchedDependencies from both files for frozen install.
+  stripPatchedDeps = ''
+    sed -i '/^patchedDependencies:/,/^[^ ]/{/^patchedDependencies:/d;/^  /d;}' pnpm-lock.yaml pnpm-workspace.yaml
+  '';
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -27,13 +32,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-sgLyNHQNnuEWZBaIxqJUz9o0x+P1EgNuLlUfy1iRunk=";
   };
 
-  pnpmDepsHash = "sha256-eADEHT4CW8ffCKwEfQjjrQ63oZQUYmRYymYQpMT8/gY=";
+  pnpmDepsHash = "sha256-VrDxGDh/AHqVzQBfUAZP1KaC1M5YBYKI+wPSyPOf65M=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
+    fetcherVersion = 3;
     hash = finalAttrs.pnpmDepsHash;
+    prePnpmInstall = stripPatchedDeps;
   };
 
   buildInputs = [ rolldown ];
@@ -45,6 +51,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     installShellFiles
   ];
+
+  postPatch = stripPatchedDeps;
 
   buildPhase = ''
     runHook preBuild
