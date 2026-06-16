@@ -42,6 +42,8 @@ else:
     settings = {}
 
 required_settings = {"SKIP_HOST_UPDATE": True}
+if sys.platform == "darwin":
+    required_settings["USE_NEW_UPDATER"] = False
 if "@skipModuleUpdate@" == "true":
     required_settings["SKIP_MODULE_UPDATE"] = True
 

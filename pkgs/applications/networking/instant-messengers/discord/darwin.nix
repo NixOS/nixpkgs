@@ -79,7 +79,7 @@ let
       {
         pythonInterpreter = "${python3.interpreter}";
         configDirName = lib.toLower binaryName;
-        skipModuleUpdate = lib.boolToString withOpenASAR;
+        skipModuleUpdate = "true";
         meta.mainProgram = "disable-breaking-updates.py";
       }
       ''
