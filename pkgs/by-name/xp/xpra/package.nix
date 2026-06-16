@@ -304,7 +304,6 @@ effectiveBuildPythonApplication rec {
     maintainers = with lib.maintainers; [
       numinit
       mvnetbiz
-      lucasew
     ];
   };
 }

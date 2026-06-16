@@ -4270,11 +4270,20 @@ with pkgs;
       );
     in
     callPackage ../build-support/rust/build-rust-crate (
-      { }
-      // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
+      lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
         stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
       }
-      // lib.optionalAttrs targetAlreadyIncluded { inherit (pkgsBuildBuild) rustc cargo; } # Optimization.
+      // (
+        if targetAlreadyIncluded then
+          # Optimization
+          {
+            inherit (pkgsBuildBuild) rustc cargo;
+          }
+        else
+          {
+            inherit (pkgsBuildHost) rustc cargo;
+          }
+      )
     );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
@@ -4558,26 +4567,8 @@ with pkgs;
     wxSupport = false;
   };
 
-  inherit (beam.interpreters)
-    erlang
-    erlang_28
-    erlang_27
-    ;
-
-  inherit (beam.packages.erlang_28.beamPackages)
-    elixir_1_19
-    ;
-
-  inherit (beam.packages.erlang_27.beamPackages)
-    elixir
-    elixir_1_18
-    elixir_1_17
+  inherit (beamPackages)
     elixir-ls
-    ex_doc
-    lfe
-    ;
-
-  inherit (beam.packages.erlang)
     erlfmt
     elvis-erlang
     rebar
@@ -7485,9 +7476,7 @@ with pkgs;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
-  couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    erlang = beamMinimalPackages.erlang;
-  };
+  couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
 
   dict = callPackage ../servers/dict {
     flex = flex_2_5_35;
