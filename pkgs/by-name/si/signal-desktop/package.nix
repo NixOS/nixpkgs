@@ -6,12 +6,12 @@
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_41,
+  pnpmBuildHook,
+  electron_42,
   python3,
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   jq,
   makeDesktopItem,
@@ -32,7 +32,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2;
-  electron = electron_41;
+  electron = electron_42;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -40,13 +40,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.13.0";
+  version = "8.14.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-gOYnjNCjI1eNVzcb7sx0XDXbhrAdvlgsZQaRuyBXpwI=";
+    hash = "sha256-U5xJumoKWc1hGZ7OML05U7U3DFdrnRHUlfIU3qYph6w=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -68,22 +68,17 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-CPZkybD/rCBMBK9qUSweBdLr9hXu0Ztn8fekqrRzUR4=";
+      fetcherVersion = 4;
+      hash = "sha256-WmDSa4PrASaqs8X68LYaPBeE+i+Jh3FfWF30SseN74Y=";
     };
 
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm
     ];
-
-    buildPhase = ''
-      runHook preBuild
-      pnpm run build
-      runHook postBuild
-    '';
 
     installPhase = ''
       runHook preInstall
@@ -101,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     makeWrapper
     python3
@@ -173,14 +169,14 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-3EEeHmtOAdcm2Q3eNUEl2RbTFRB4YBKcZLFtEmwbVOk=";
+    fetcherVersion = 4;
+    hash = "sha256-YQY+ohfLcaR2jzB9bzWpNQImuLja2DQ9iwDKhoH8kiU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1780508208;
+    SOURCE_DATE_EPOCH = 1781124627;
   };
 
   preBuild = ''
@@ -234,17 +230,15 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
-  '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist
+  '';
 
-    pnpm run generate
+  pnpmBuildScript = "generate";
+
+  postBuild = ''
     pnpm exec electron-builder \
       ${
         if stdenv.hostPlatform.isDarwin then "--mac" else "--linux"
@@ -254,8 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
-
-    runHook postBuild
   '';
 
   installPhase = ''
