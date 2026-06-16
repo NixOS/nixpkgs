@@ -56,10 +56,26 @@
   cudaPackages ? { },
   apple-sdk_15,
   qt6,
+  fetchurl,
+  runCommand,
+  python3Packages,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  ffmpegBundle = fetchurl {
+    url = "https://github.com/LizardByte/build-deps/releases/download/v2026.516.30821/Linux-x86_64-ffmpeg.tar.gz";
+    hash = "sha256-wyMZ/MKGe+/o/zria006WDeMOpwb/vkCnJlpMhw7xuw=";
+  };
+
+  ffmpegPrepared = runCommand "sunshine-ffmpeg" {} ''
+    mkdir -p $out
+    tar -xzf ${ffmpegBundle} -C $out
+  '';
+  gladPython = python3.withPackages (ps: with ps; [
+    jinja2
+    setuptools
+  ]);
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
@@ -126,7 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
+    gladPython
     makeWrapper
     qt6.wrapQtAppsHook
   ]
@@ -208,6 +224,9 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+    (lib.cmakeFeature "FFMPEG_PREPARED_BINARIES" "${ffmpegPrepared}/ffmpeg")
+    (lib.cmakeBool "GLAD_SKIP_PIP_INSTALL" true)
+    (lib.cmakeFeature "Python_EXECUTABLE" "${gladPython}/bin/python3")
   ]
   # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
   ++ lib.optionals isLinux [
