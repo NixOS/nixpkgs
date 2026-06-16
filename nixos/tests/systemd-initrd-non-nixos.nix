@@ -10,11 +10,8 @@ let
     echo "${marker}" > /dev/console
     exec ${pkgs.coreutils}/bin/sleep infinity
   '';
-in
-{
-  name = "systemd-initrd-non-nixos";
 
-  nodes.machine = {
+  common = {
     boot.initrd.systemd.enable = true;
 
     virtualisation = {
@@ -35,6 +32,20 @@ in
       argument = "ID=test-non-nixos";
     };
   };
+in
+{
+  name = "systemd-initrd-non-nixos";
+
+  nodes = {
+    bashActivation = common;
+
+    nixosInit = {
+      imports = [ common ];
+      system.nixos-init.enable = true;
+      system.etc.overlay.enable = true;
+      services.userborn.enable = true;
+    };
+  };
 
   testScript = ''
     import os
@@ -43,11 +54,15 @@ in
     # the default one, so this boots our non-NixOS init.
     os.environ["QEMU_KERNEL_PARAMS"] = "init=${lib.getExe nonNixosInit}"
 
-    machine.start()
+    start_all()
 
-    # If activation does not skip the non-NixOS init, switch-root is blocked and
-    # the machine drops to emergency mode: the marker never appears and this
+    # If a code path does not skip the non-NixOS init, switch-root is blocked and
+    # the machine drops to emergency mode: the marker never appears and the wait
     # times out.
-    machine.wait_for_console_text("${marker}", timeout=300)
+    with subtest("bash initrd-nixos-activation skips a non-NixOS init"):
+        bashActivation.wait_for_console_text("${marker}", timeout=300)
+
+    with subtest("nixos-init switches to a non-NixOS init directly"):
+        nixosInit.wait_for_console_text("${marker}", timeout=300)
   '';
 }
