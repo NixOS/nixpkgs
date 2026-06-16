@@ -42,7 +42,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-652-92dc726";
+  version = "master-707-5a34bc7";
 
   outputs = [
     "out"
