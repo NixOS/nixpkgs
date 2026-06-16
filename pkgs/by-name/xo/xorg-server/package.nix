@@ -176,6 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
   '';
 
+  # avoid linux rebuilds
+  ${if stdenv.hostPlatform.isDarwin then "hardeningDisable" else null} = [ "strictflexarrays1" ];
+
   # default X install symlinks this to Xorg, we want XQuartz
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -sf $out/bin/Xquartz $out/bin/X
