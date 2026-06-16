@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependenciesk = [ bottle ];
+  dependencies = [ bottle ]; # needed for webstatus sub-command
 
   nativeCheckInputs = [
     numpy
