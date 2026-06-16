@@ -25,6 +25,8 @@ let
       FilePath
       GetoptLong
       HTTPMessage
+      IOCompress
+      IOCompressBrotli
       JSON
       JSONXS
       LWPProtocolHttps
@@ -43,13 +45,13 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
-    rev = version;
-    hash = "sha256-ZcO07zDMXSFOWIC0XHqeqjgPJXzWWh8G2szTkvF8OjM=";
+    tag = version;
+    hash = "sha256-24y/4NfGAyGkn9kUnuEoibkzUPBkgabE/Jp7NUNIHco=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
@@ -81,6 +83,7 @@ buildPerlModule rec {
 
   postFixup = ''
     wrapProgram "$out/bin/pipe-viewer" \
+      --prefix PERL5LIB : "$PERL5LIB" \
       --prefix PATH : "${
         lib.makeBinPath [
           ffmpeg
@@ -93,6 +96,7 @@ buildPerlModule rec {
   + lib.optionalString withGtk3 ''
     # make xdg-open overrideable at runtime
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
+      --prefix PERL5LIB : "$PERL5LIB" \
       --prefix PATH : "${
         lib.makeBinPath [
           ffmpeg
