@@ -11834,6 +11834,10 @@ self: super: with self; {
     }
   );
 
+  openinference-semantic-conventions =
+    callPackage ../development/python-modules/openinference-semantic-conventions
+      { };
+
   openmm = toPythonModule (
     pkgs.openmm.override {
       python3Packages = self;
