@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rebar3,
-  erlang,
+  beamPackages,
   opencl-headers,
   ocl-icd,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    erlang
+    beamPackages.erlang
     rebar3
     opencl-headers
     ocl-icd
