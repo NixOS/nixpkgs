@@ -32,7 +32,7 @@
   kernel ? linux,
   # Name of the kernel image file inside the `kernel` output.
   kernelImage ?
-    kernel.target or (throw ''
+    stdenv.hostPlatform.linux-kernel.target or kernel.target or (throw ''
       vmTools: the `kernel` argument (${kernel.name or "<unknown>"}) has no
       `target` attribute, so the kernel image filename cannot be determined.
 

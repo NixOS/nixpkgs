@@ -123,8 +123,7 @@ in
   options = {
     hardware.deviceTree = {
       enable = lib.mkOption {
-        default = config.boot.kernelPackages.kernel.buildDTBs;
-        defaultText = lib.literalExpression "config.boot.kernelPackages.kernel.buildDTBs";
+        default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
         type = lib.types.bool;
         description = ''
           Build device tree files. These are used to describe the
