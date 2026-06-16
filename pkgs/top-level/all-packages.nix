@@ -298,8 +298,6 @@ with pkgs;
 
   appimageTools = callPackage ../build-support/appimage { };
 
-  appimageupdate-qt = appimageupdate.override { withQtUI = true; };
-
   stripJavaArchivesHook = makeSetupHook {
     name = "strip-java-archives-hook";
     propagatedBuildInputs = [ strip-nondeterminism ];
@@ -369,10 +367,6 @@ with pkgs;
 
   buildLakePackage = callPackage ../build-support/lake { };
 
-  cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
-
-  cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
-
   cgal_5 = callPackage ../by-name/cg/cgal/5.nix { };
 
   checkpointBuildTools = callPackage ../build-support/checkpoint-build.nix { };
@@ -408,8 +402,6 @@ with pkgs;
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
   inherit (gridlock) nyarr;
-
-  lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
 
@@ -1031,13 +1023,9 @@ with pkgs;
 
   ### TOOLS
 
-  _7zz-rar = _7zz.override { enableUnfree = true; };
-
   acquire = with python3Packages; toPythonApplication acquire;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
-
-  opnplug = adlplug.override { type = "OPN"; };
 
   aflplusplus = callPackage ../tools/security/aflplusplus { wine = null; };
 
@@ -1049,9 +1037,6 @@ with pkgs;
     akku
     akkuPackages
     ;
-
-  alice-tools-qt5 = alice-tools.override { withQt5 = true; };
-  alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
@@ -1076,18 +1061,10 @@ with pkgs;
     crate = "api";
   };
 
-  htop-vim = htop.override { withVimKeys = true; };
-
   inherit (callPackages ../tools/networking/iroh/default.nix { })
     iroh-relay
     iroh-dns-server
     ;
-
-  kanata-with-cmd = kanata.override { withCmd = true; };
-
-  linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
-
-  mkosi-full = mkosi.override { withQemu = true; };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
@@ -1122,8 +1099,6 @@ with pkgs;
   };
 
   vprof = with python3Packages; toPythonApplication vprof;
-
-  waydroid-nftables = waydroid.override { withNftables = true; };
 
   winbox = winbox4;
 
@@ -1231,9 +1206,6 @@ with pkgs;
       pkgsCross.riscv32.callPackage ../applications/emulators/box86 args
     else
       throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
-
-  fceux-qt5 = fceux.override { ___qtVersion = "5"; };
-  fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
@@ -1367,10 +1339,6 @@ with pkgs;
     };
   };
 
-  arduino = arduino-core.override { withGui = true; };
-
-  arpack-mpi = arpack.override { useMpi = true; };
-
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
@@ -1394,8 +1362,6 @@ with pkgs;
       callPackage ../stdenv/freebsd/make-bootstrap-tools.nix { }
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
-
-  crystfel-headless = crystfel.override { withGui = false; };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
@@ -1440,8 +1406,6 @@ with pkgs;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
 
-  fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
-
   gams = callPackage ../tools/misc/gams (config.gams or { });
 
   gancioPlugins = recurseIntoAttrs (callPackage ../by-name/ga/gancio/plugins.nix { });
@@ -1451,8 +1415,6 @@ with pkgs;
   gistyc = with python3Packages; toPythonApplication gistyc;
 
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
-
-  go2tv-lite = go2tv.override { withGui = false; };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -1533,11 +1495,6 @@ with pkgs;
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
-
-  bogofilter-sqlite = bogofilter.override { database = sqlite; };
-  bogofilter-db = bogofilter.override { database = db; };
-
-  bozohttpd-minimal = bozohttpd.override { minimal = true; };
 
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
@@ -1659,8 +1616,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  dblatexFull = dblatex.override { enableAllFeatures = true; };
-
   latex2mathml = with python3Packages; toPythonApplication latex2mathml;
 
   pgf = pgf2;
@@ -1767,10 +1722,6 @@ with pkgs;
 
   nltk-data = recurseIntoAttrs (callPackage ../tools/text/nltk-data { });
 
-  seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
-  seabios-csm = seabios.override { ___build-type = "csm"; };
-  seabios-qemu = seabios.override { ___build-type = "qemu"; };
-
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
@@ -1837,8 +1788,6 @@ with pkgs;
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
-  davix-copy = davix.override { enableThirdPartyCopy = true; };
-
   libceph = ceph.lib;
   ceph-client = ceph.client;
   ceph-dev = ceph;
@@ -1848,8 +1797,6 @@ with pkgs;
     citrix_workspace_25_08_10
     ;
   citrix_workspace = citrix_workspace_26_01_0;
-
-  colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
   connmanFull = connman.override {
     # TODO: Why is this in `connmanFull` and not the default build? See TODO in
@@ -2065,8 +2012,6 @@ with pkgs;
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
-  uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
-
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
@@ -2155,8 +2100,6 @@ with pkgs;
     extensions = gawkextlib.full;
   };
   gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix { };
-
-  gawkInteractive = gawk.override { interactive = true; };
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
@@ -2256,8 +2199,6 @@ with pkgs;
 
   google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
 
-  gparted-full = gparted.override { withAllTools = true; };
-
   gdown = with python3Packages; toPythonApplication gdown;
 
   gpt4all-cuda = gpt4all.override {
@@ -2314,10 +2255,6 @@ with pkgs;
     mpiSupport = true;
     cppSupport = false;
   };
-
-  hdf5-cpp = hdf5.override { cppSupport = true; };
-
-  hdf5-fortran = hdf5.override { fortranSupport = true; };
 
   hdf5-fortran-mpi = hdf5.override {
     fortranSupport = true;
@@ -2451,8 +2388,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  limine-full = limine.override { enableAll = true; };
-
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
@@ -2465,8 +2400,6 @@ with pkgs;
   logstash = logstash7;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
-
-  lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
@@ -2606,11 +2539,6 @@ with pkgs;
     eri3PureSh = false;
   };
 
-  libportal-gtk3 = libportal.override { variant = "gtk3"; };
-  libportal-gtk4 = libportal.override { variant = "gtk4"; };
-  libportal-qt5 = libportal.override { variant = "qt5"; };
-  libportal-qt6 = libportal.override { variant = "qt6"; };
-
   licensee = callPackage ../tools/package-management/licensee { };
 
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
@@ -2626,8 +2554,6 @@ with pkgs;
   marimo = with python3Packages; toPythonApplication marimo;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
-
-  miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
     pythonPackages = python3Packages;
@@ -2648,8 +2574,6 @@ with pkgs;
   };
 
   metasploit = callPackage ../tools/security/metasploit { };
-
-  mtr-gui = mtr.override { withGtk = true; };
 
   multitran = recurseIntoAttrs (
     let
@@ -2696,8 +2620,6 @@ with pkgs;
     };
   });
 
-  libnma-gtk4 = libnma.override { withGtk4 = true; };
-
   inherit (callPackages ../servers/nextcloud { })
     nextcloud32
     nextcloud33
@@ -2740,8 +2662,6 @@ with pkgs;
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
-
-  ophcrack-cli = ophcrack.override { enableGui = false; };
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
 
@@ -2855,8 +2775,6 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
-  pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
-
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
@@ -2957,8 +2875,6 @@ with pkgs;
     opensslSupport = false;
   };
 
-  recoll-nox = recoll.override { withGui = false; };
-
   reptor = with python3.pkgs; toPythonApplication reptor;
 
   inherit (callPackage ../development/misc/resholve { })
@@ -3041,10 +2957,6 @@ with pkgs;
 
   stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
 
-  strongswanTNC = strongswan.override { enableTNC = true; };
-  strongswanTPM = strongswan.override { enableTPM2 = true; };
-  strongswanNM = strongswan.override { enableNetworkManager = true; };
-
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
   su = shadow.su;
@@ -3081,12 +2993,6 @@ with pkgs;
     withPlymouth = true;
   };
 
-  trackma-curses = trackma.override { withCurses = true; };
-
-  trackma-gtk = trackma.override { withGTK = true; };
-
-  trackma-qt = trackma.override { withQT = true; };
-
   trezorctl =
     with python3Packages;
     toPythonApplication (
@@ -3104,8 +3010,6 @@ with pkgs;
   translatepy = with python3.pkgs; toPythonApplication translatepy;
 
   trytond = with python3Packages; toPythonApplication trytond;
-
-  ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   uftraceFull = uftrace.override {
     withLuaJIT = true;
@@ -3138,11 +3042,7 @@ with pkgs;
 
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
-  testdisk-qt = testdisk.override { enableQt = true; };
-
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
-
-  truecrack-cuda = truecrack.override { cudaSupport = true; };
 
   unbound-with-systemd = unbound.override {
     withSystemd = true;
@@ -3207,11 +3107,9 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
-  yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
   yarn-berry_4-fetcher = callPackage ../by-name/ya/yarn-berry/fetcher {
     yarn-berry = yarn-berry_4;
   };
-  yarn-berry_3 = yarn-berry.override { berryVersion = 3; };
   yarn-berry_3-fetcher = callPackage ../by-name/ya/yarn-berry/fetcher {
     yarn-berry = yarn-berry_3;
   };
@@ -3291,9 +3189,6 @@ with pkgs;
   semeru-bin = semeru-bin-21;
   semeru-jre-bin = semeru-jre-bin-21;
 
-  adaptivecppWithCuda = adaptivecpp.override { cudaSupport = true; };
-  adaptivecppWithRocm = adaptivecpp.override { rocmSupport = true; };
-
   binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
@@ -3302,11 +3197,6 @@ with pkgs;
   codon = callPackage ../development/compilers/codon {
     inherit (llvmPackages) lld stdenv;
   };
-
-  colmapWithCuda = colmap.override { cudaSupport = true; };
-
-  opensplatWithRocm = opensplat.override { rocmSupport = true; };
-  opensplatWithCuda = opensplat.override { cudaSupport = true; };
 
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
   chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
@@ -3788,12 +3678,6 @@ with pkgs;
       meta.broken = stdenv.hostPlatform.isDarwin;
     }
   );
-
-  ghdl-mcode = ghdl.override { backend = "mcode"; };
-
-  ghdl-gcc = ghdl.override { backend = "gcc"; };
-
-  ghdl-llvm = ghdl.override { backend = "llvm"; };
 
   gcc-arm-embedded = gcc-arm-embedded-15;
 
@@ -4335,8 +4219,6 @@ with pkgs;
     swiftpm2nix
     ;
 
-  swi-prolog-gui = swi-prolog.override { withGui = true; };
-
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
     stdenv = gcc14Stdenv;
@@ -4451,8 +4333,6 @@ with pkgs;
   zulu = zulu21;
 
   ### DEVELOPMENT / INTERPRETERS
-
-  acl2-minimal = acl2.override { certifyBooks = false; };
 
   uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { uiua_versionType = "unstable"; };
 
@@ -4857,8 +4737,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  supercollider_scel = supercollider.override { useSCEL = true; };
-
   supercolliderPlugins = recurseIntoAttrs {
     sc3-plugins = callPackage ../development/interpreters/supercollider/plugins/sc3-plugins.nix {
       fftw = fftwSinglePrec;
@@ -4979,8 +4857,6 @@ with pkgs;
     ;
 
   apacheKafka = apacheKafka_4_2;
-
-  libastyle = astyle.override { asLibrary = true; };
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
@@ -5566,7 +5442,6 @@ with pkgs;
     texinfo7
     ;
   texinfo = texinfo7;
-  texinfoInteractive = texinfo.override { interactive = true; };
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
@@ -5577,15 +5452,11 @@ with pkgs;
     enablePythonApi = false;
   };
 
-  gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
-
   valgrind-light = (valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
     meta = oldAttrs.meta // {
       description = "${oldAttrs.meta.description} (without GDB)";
     };
   });
-
-  vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
   wild =
     let
@@ -5688,8 +5559,6 @@ with pkgs;
 
   boost = boost189;
 
-  botanEsdm = botan3.override { withEsdm = true; };
-
   c-aresMinimal = callPackage ../by-name/c-/c-ares/package.nix { withCMake = false; };
 
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
@@ -5791,15 +5660,12 @@ with pkgs;
     ffmpeg-full
     ;
 
-  fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
-  fftwLongDouble = fftw.override { precision = "long-double"; };
   # Need gcc >= 4.6.0 to build with FFTW with quad precision, but Darwin defaults to Clang
   fftwQuad = fftw.override {
     precision = "quad-precision";
     stdenv = gccStdenv;
   };
-  fftwMpi = fftw.override { enableMpi = true; };
 
   fltk_1_3-minimal = fltk_1_3.override {
     withGL = false;
@@ -5833,8 +5699,6 @@ with pkgs;
   makeFontsCache = callPackage ../development/libraries/fontconfig/make-fonts-cache.nix { };
 
   gamt = callPackage ../by-name/am/amtterm/package.nix { withGamt = true; };
-
-  geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
   geoipWithDatabase = makeOverridable (callPackage ../by-name/ge/geoip/package.nix) {
     drvName = "geoip-tools";
@@ -5871,8 +5735,6 @@ with pkgs;
         stdenv = gccStdenv; # doesn't compile without gcc
       }
   );
-
-  jsoncppSecureMemory = jsoncpp.override { secureMemory = true; };
 
   mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
 
@@ -5997,7 +5859,6 @@ with pkgs;
 
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
   gmp = gmp6;
-  gmpxx = gmp.override { cxx = true; };
 
   #GMP ex-satellite, so better keep it near gmp
   # A GMP fork
@@ -6062,8 +5923,6 @@ with pkgs;
     withGraphite2 = true;
     withIcu = true;
   };
-
-  highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../by-name/hu/hunspell/dictionaries.nix { });
 
@@ -6145,8 +6004,6 @@ with pkgs;
 
   itk = itk_5;
 
-  rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
-
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
   libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
@@ -6156,9 +6013,6 @@ with pkgs;
   };
 
   lcms = lcms2;
-
-  libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
-  libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
@@ -6187,9 +6041,6 @@ with pkgs;
     withSqlite = false;
   };
 
-  libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
-  libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
-
   dwarfdump = libdwarf.bin;
 
   libfm-extra = libfm.override {
@@ -6207,8 +6058,6 @@ with pkgs;
     genPosixLockObjOnly = true;
   };
 
-  libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
-  libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
@@ -6281,7 +6130,6 @@ with pkgs;
 
   # also known as libturbojpeg
   libjpeg = libjpeg_turbo;
-  libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
@@ -6316,8 +6164,6 @@ with pkgs;
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
-  libubox-nossl = libubox.override { with_ustream_ssl = false; };
-
   libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
 
   libubox-mbedtls = libubox.override {
@@ -6350,7 +6196,6 @@ with pkgs;
   );
 
   libva-minimal = callPackage ../development/libraries/libva { minimal = true; };
-  libva = libva-minimal.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libwnck = callPackage ../development/libraries/libwnck { };
@@ -6367,7 +6212,6 @@ with pkgs;
       fetchurl = stdenv.fetchurlBoot;
     };
   };
-  libxcrypt-legacy = libxcrypt.override { enableHashes = "all"; };
 
   libxkbcommon = libxkbcommon_8;
 
@@ -6412,8 +6256,6 @@ with pkgs;
   };
 
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
-
-  luabind_luajit = luabind.override { lua = luajit; };
 
   luksmeta = callPackage ../development/libraries/luksmeta {
     asciidoc = asciidoc-full;
@@ -6551,11 +6393,6 @@ with pkgs;
       _: dicts
     );
 
-  nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
-  nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
-  nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
-  nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
-
   nvidiaCtkPackages = recurseIntoAttrs (
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { }
   );
@@ -6667,7 +6504,6 @@ with pkgs;
     ;
 
   # pcre32 seems unused
-  pcre-cpp = pcre.override { variant = "cpp"; };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
@@ -7022,8 +6858,6 @@ with pkgs;
     pythonSupport = true;
   };
 
-  vtkWithQt6 = vtk.override { withQt6 = true; };
-
   wayland = callPackage ../development/libraries/wayland { };
   wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };
 
@@ -7057,8 +6891,6 @@ with pkgs;
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
   };
-
-  xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
   zlib = callPackage ../development/libraries/zlib {
     stdenv =
@@ -7096,8 +6928,6 @@ with pkgs;
 
   # This should be kept updated to ensure the default zls version matches the default zig version.
   zls = zls_0_16;
-
-  libzint = zint-qt.override { withGUI = false; };
 
   aroccPackages = recurseIntoAttrs (callPackage ../development/compilers/arocc { });
   arocc = aroccPackages.latest;
@@ -7398,8 +7228,6 @@ with pkgs;
     packages = [ ];
   };
 
-  rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
-
   rPackages =
     recurseIntoAttrsWith
       {
@@ -7576,8 +7404,6 @@ with pkgs;
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
-  inspircdMinimal = inspircd.override { extraModules = [ ]; };
-
   inherit (callPackages ../servers/http/jetty { })
     jetty_11
     jetty_12
@@ -7738,7 +7564,6 @@ with pkgs;
     mariadb_118
     ;
   mariadb = mariadb_114;
-  mariadb-embedded = mariadb.override { withEmbedded = true; };
 
   mongodb = hiPrio mongodb-7_0;
 
@@ -7985,11 +7810,6 @@ with pkgs;
       fusePackages.fuse_3
   );
 
-  gpm-ncurses = gpm.override { withNcurses = true; };
-
-  btop-cuda = btop.override { cudaSupport = true; };
-  btop-rocm = btop.override { rocmSupport = true; };
-
   ipu6ep-camera-hal = ipu6-camera-hal.override {
     ipuVersion = "ipu6ep";
   };
@@ -8004,11 +7824,6 @@ with pkgs;
   iptables-nftables-compat = iptables;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
-
-  libkrun-sev = libkrun.override { variant = "sev"; };
-  libkrun-tdx = libkrun.override { variant = "tdx"; };
-
-  lklWithFirewall = lkl.override { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
     linuxHeaders
@@ -8166,8 +7981,6 @@ with pkgs;
       unixtools.net-tools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
-
-  open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
   pam =
     if stdenv.hostPlatform.isLinux then
@@ -8405,8 +8218,6 @@ with pkgs;
 
   ### DATA
 
-  adwaita-qt6 = adwaita-qt.override { useQt6 = true; };
-
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
 
   docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
@@ -8454,9 +8265,6 @@ with pkgs;
   oceanic-theme = callPackage ../data/themes/gtk-theme-framework { theme = "oceanic"; };
 
   spacx-gtk-theme = callPackage ../data/themes/gtk-theme-framework { theme = "spacx"; };
-
-  gruppled-white-cursors = gruppled-black-cursors.override { theme = "white"; };
-  gruppled-white-lite-cursors = gruppled-black-lite-cursors.override { theme = "white"; };
 
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix { });
 
@@ -8616,10 +8424,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  audacious = audacious-bare.override { withPlugins = true; };
-
-  bambootracker-qt6 = bambootracker.override { withQt6 = true; };
-
   awesome = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     inherit (texFunctions) fontsConf;
@@ -8676,8 +8480,6 @@ with pkgs;
   cni = callPackage ../applications/networking/cluster/cni { };
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
 
-  codeblocksFull = codeblocks.override { contribPlugins = true; };
-
   cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
   cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
   cudatext = cudatext-qt;
@@ -8715,15 +8517,12 @@ with pkgs;
 
   djview4 = djview;
 
-  dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
-
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
     docker_29
     ;
 
   docker = docker_29;
-  docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
   docker-machine-hyperkit =
@@ -8806,8 +8605,6 @@ with pkgs;
         ];
       };
 
-  firewalld-gui = firewalld.override { withGui = true; };
-
   fossil = callPackage ../applications/version-management/fossil {
     sqlite = sqlite.override { enableDeserialize = true; };
   };
@@ -8841,7 +8638,6 @@ with pkgs;
   };
 
   tshark = wireshark-cli;
-  wireshark-cli = wireshark.override { withQt = false; };
 
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
@@ -9014,7 +8810,6 @@ with pkgs;
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
-  graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   gpsbabel-gui = gpsbabel.override {
@@ -9141,8 +8936,6 @@ with pkgs;
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
 
-  jackmix_jack1 = jackmix.override { jack = jack1; };
-
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_33
     k3s_1_34
@@ -9248,8 +9041,6 @@ with pkgs;
 
   mendeley = callPackage ../applications/office/mendeley { };
 
-  mercurialFull = mercurial.override { fullBuild = true; };
-
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
   };
@@ -9332,8 +9123,6 @@ with pkgs;
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
-
-  pinegrow6 = pinegrow.override { pinegrowVersion = "6"; };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
@@ -9447,10 +9236,6 @@ with pkgs;
   puredata-with-plugins =
     plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
 
-  qbittorrent-nox = qbittorrent.override { guiSupport = false; };
-
-  qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
-
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
@@ -9468,9 +9253,6 @@ with pkgs;
   };
 
   wrapQemuBinfmtP = callPackage ../by-name/qe/qemu/binfmt-p-wrapper.nix { };
-
-  qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
-  qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
   quasselClient = quassel.override {
     monolithic = false;
@@ -9544,8 +9326,6 @@ with pkgs;
     backend = "wayland";
   };
 
-  rstudio-server = rstudio.override { server = true; };
-
   foks-server = foks.server;
 
   inherit (callPackages ../applications/radio/rtl-sdr { })
@@ -9555,8 +9335,6 @@ with pkgs;
     ;
 
   rtl-sdr = rtl-sdr-blog;
-
-  rusty-psn-gui = rusty-psn.override { withGui = true; };
 
   scantailor-advanced = callPackage ../applications/graphics/scantailor/advanced.nix { };
 
@@ -9572,8 +9350,6 @@ with pkgs;
   maestral = with python3Packages; toPythonApplication maestral;
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
-
-  lightdm_qt = lightdm.override { withQt5 = true; };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
@@ -9637,8 +9413,6 @@ with pkgs;
   supersonic-wayland = supersonic.override {
     waylandSupport = true;
   };
-
-  synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
@@ -9865,8 +9639,6 @@ with pkgs;
     }
   );
 
-  vlc-bin-universal = vlc-bin.override { variant = "universal"; };
-
   libvlc = vlc.override {
     withQt5 = false;
     onlyLibVLC = true;
@@ -10056,8 +9828,6 @@ with pkgs;
   zathuraPkgs = recurseIntoAttrs (callPackage ../applications/misc/zathura { });
   zathura = zathuraPkgs.zathuraWrapper;
 
-  zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
-
   zed-editor-fhs = zed-editor.fhs;
 
   zynaddsubfx-fltk = zynaddsubfx.override {
@@ -10085,8 +9855,6 @@ with pkgs;
   elementsd = elements.override {
     withGui = false;
   };
-
-  gridcoin-researchd = gridcoin-research.override { withGui = false; };
 
   groestlcoind = groestlcoin.override {
     withGui = false;
@@ -10130,10 +9898,6 @@ with pkgs;
     fteqcc
     ;
 
-  pmars-x11 = pmars.override { enableXwinGraphics = true; };
-
-  vanillara = vanillatd.override { appName = "vanillara"; };
-
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
@@ -10166,8 +9930,6 @@ with pkgs;
     ncurses = null;
   };
 
-  ddnet-server = ddnet.override { buildClient = false; };
-
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
   inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
@@ -10189,21 +9951,15 @@ with pkgs;
     experimental = true;
   };
 
-  factorio-headless = factorio.override { releaseType = "headless"; };
-
   factorio-headless-experimental = factorio.override {
     releaseType = "headless";
     experimental = true;
   };
 
-  factorio-demo = factorio.override { releaseType = "demo"; };
-
   factorio-demo-experimental = factorio.override {
     releaseType = "demo";
     experimental = true;
   };
-
-  factorio-space-age = factorio.override { releaseType = "expansion"; };
 
   factorio-space-age-experimental = factorio.override {
     releaseType = "expansion";
@@ -10266,9 +10022,6 @@ with pkgs;
 
   minecraftServers = callPackage ../by-name/mi/minecraft-server/versions.nix { };
 
-  luanti-client = luanti.override { buildServer = false; };
-  luanti-server = luanti.override { buildClient = false; };
-
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
@@ -10287,8 +10040,6 @@ with pkgs;
   papermcServers = callPackages ../games/papermc { };
 
   papermc = papermcServers.papermc;
-
-  pokerth-server = pokerth.override { target = "server"; };
 
   inherit (import ../games/quake3 pkgs.callPackage)
     quake3wrapper
@@ -10333,8 +10084,6 @@ with pkgs;
   steam-run-free = steam.run-free;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
-
-  teeworlds-server = teeworlds.override { buildClient = false; };
 
   tengine = callPackage ../servers/http/tengine {
     modules = with nginxModules; [
@@ -10522,10 +10271,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  nest-mpi = nest.override { withMpi = true; };
-
-  neuron-mpi = neuron.override { useMpi = true; };
-
   neuron-full = neuron-mpi.override {
     useCore = true;
     useRx3d = true;
@@ -10535,17 +10280,11 @@ with pkgs;
     inherit (perlPackages) perl TextFormat;
   };
 
-  raxml-mpi = raxml.override { useMpi = true; };
-
   ### SCIENCE/MACHINE LEARNING
 
   streamlit = with python3Packages; toPythonApplication streamlit;
 
   ### SCIENCE/MATH
-
-  blas-ilp64 = blas.override { isILP64 = true; };
-
-  lapack-ilp64 = lapack.override { isILP64 = true; };
 
   liblapack = lapack-reference;
 
@@ -10557,7 +10296,6 @@ with pkgs;
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
-  openblasCompat = openblas.override { blas64 = false; };
 
   magma-cuda = magma.override {
     cudaSupport = true;
@@ -10586,16 +10324,10 @@ with pkgs;
     cudaSupport = true;
   };
 
-  p4est-sc-dbg = p4est-sc.override { debug = true; };
-
-  p4est-dbg = p4est.override { debug = true; };
-
   scalapack-ilp64 = scalapack.override {
     blas = blas-ilp64;
     lapack = lapack-ilp64;
   };
-
-  trilinos-mpi = trilinos.override { withMPI = true; };
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
 
@@ -10737,10 +10469,6 @@ with pkgs;
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
-  eprover-ho = eprover.override { enableHO = true; };
-
-  giac-with-xcas = giac.override { enableGUI = true; };
-
   glucose-syrup = glucose.override {
     enableUnfree = true;
   };
@@ -10837,8 +10565,6 @@ with pkgs;
 
   ### SCIENCE / MISC
 
-  boinc-headless = boinc.override { headless = true; };
-
   celestia = callPackage ../applications/science/astronomy/celestia {
     inherit (gnome2) gtkglext;
   };
@@ -10915,11 +10641,7 @@ with pkgs;
     inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
   };
 
-  hplipWithPlugin = hplip.override { withPlugin = true; };
-
   hjson = with python3Packages; toPythonApplication hjson;
-
-  libjack2 = jack2.override { prefix = "lib"; };
 
   jack_autoconnect = jack-autoconnect;
 
@@ -11096,7 +10818,6 @@ with pkgs;
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-info = callPackage ../tools/nix/info { };
-  nix-info-tested = nix-info.override { doCheck = true; };
 
   nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
 
@@ -11133,8 +10854,6 @@ with pkgs;
       inherit (python3Packages) supervisor;
     }
   );
-
-  pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
   philipstv = with python3Packages; toPythonApplication philipstv;
 
@@ -11196,8 +10915,6 @@ with pkgs;
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vaultwarden-sqlite = vaultwarden;
-  vaultwarden-mysql = vaultwarden.override { dbBackend = "mysql"; };
-  vaultwarden-postgresql = vaultwarden.override { dbBackend = "postgresql"; };
   vaultwarden-webvault = vaultwarden.webvault;
 
   vimUtils = callPackage ../applications/editors/vim/plugins/utils/vim-utils.nix { };
@@ -11249,8 +10966,6 @@ with pkgs;
   );
 
   yamale = with python3Packages; toPythonApplication yamale;
-
-  zap-chip-gui = zap-chip.override { withGui = true; };
 
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
