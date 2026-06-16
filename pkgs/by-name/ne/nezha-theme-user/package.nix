@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-user";
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "hamster1963";
     repo = "nezha-dash-v1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3zaA3T4zW18caOQe5DBF8Zsms3cjks3Ywyfkyk6N2N0=";
+    hash = "sha256-X7NRpDeZqLijgbUQOEdML00TPRM2D55zlJkzWB2TKfM=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
