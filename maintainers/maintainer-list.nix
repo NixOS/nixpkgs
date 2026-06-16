@@ -3614,6 +3614,12 @@
     github = "bitbloxhub";
     githubId = 45184892;
   };
+  bitSheriff = {
+    email = "root@bitsheriff.dev";
+    github = "bitSheriff";
+    githubId = 44727821;
+    name = "bitSheriff";
+  };
   bizmyth = {
     email = "andrew.p.council@gmail.com";
     github = "bizmythy";
