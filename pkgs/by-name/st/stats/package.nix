@@ -2,11 +2,11 @@
   lib,
   swiftPackages,
   fetchFromGitHub,
-  darwin,
   leveldb,
   perl,
   actool,
   makeWrapper,
+  rcodesign,
   nix-update-script,
 }:
 
@@ -24,6 +24,7 @@ let
     "Bluetooth"
     "Sensors"
     "Clock"
+    "Remote"
   ];
   modules = lib.tail frameworks;
 
@@ -53,7 +54,7 @@ let
       # CFBundleVersion is extracted from upstream's Info.plist at build time
       Description = "Simple macOS system monitor in your menu bar";
       LSApplicationCategoryType = "public.app-category.utilities";
-      LSMinimumSystemVersion = "11.0";
+      LSMinimumSystemVersion = "12.0";
       LSUIElement = true;
       NSAppTransportSecurity = {
         NSAllowsArbitraryLoads = true;
@@ -67,21 +68,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.12.7";
+  version = "3.0.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "exelban";
     repo = "Stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qx4FI+MnFknIrTOPP+8wyy1wqFMWyaunmags023ay6A=";
+    hash = "sha256-HYuS0mFzzln+EjYUmQgjCPFsF4aGP+4QWalDL0vt3OA=";
   };
 
   nativeBuildInputs = [
     swift
     perl
     actool
-    darwin.autoSignDarwinBinariesHook
     makeWrapper
+    rcodesign
   ];
 
   buildInputs = [ leveldb ];
@@ -204,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     buildFramework CPU "Modules/CPU/bridge.h" \
       -lKit -framework IOKit
 
-    buildFramework GPU "" \
+    buildFramework GPU "Modules/GPU/bridge.h" \
       -lKit -framework IOKit -framework Metal
 
     buildFramework RAM "" \
@@ -256,6 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
       -o "$buildDir/libSensors.dylib"
 
     buildFramework Clock "" \
+      -lKit
+
+    buildFramework Remote "" \
       -lKit
 
     echo "=== Building Stats app ==="
@@ -312,12 +319,6 @@ stdenv.mkDerivation (finalAttrs: {
       --app-icon AppIcon \
       "Stats/Supporting Files/Assets.xcassets"
 
-    actool \
-      --compile "$app/Contents/Frameworks/Kit.framework/Resources" \
-      --platform macosx \
-      --minimum-deployment-target 14.0 \
-      "Kit/Supporting Files/Assets.xcassets"
-
     # Copy localization files
     find "Stats/Supporting Files" -name '*.lproj' -type d -exec cp -r {} "$app/Contents/Resources/" \;
 
@@ -331,6 +332,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$app/Contents/MacOS/Stats" "$out/bin/stats"
 
     runHook postInstall
+  '';
+
+  # Stats is an app bundle with nested frameworks, so sign the bundle to generate
+  # sealed resources instead of signing only the Mach-O files.
+  postFixup = ''
+    ${lib.getExe rcodesign} sign "$out/Applications/Stats.app"
   '';
 
   passthru.updateScript = nix-update-script { };
