@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -72,7 +73,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "50.1";
+  version = "50.2";
 
   outputs = [
     "out"
@@ -83,8 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-k0RQLORz94h5Xya0X4uP9TwKNrhnRw1wWhGj7gkRAh4=";
+    hash = "sha256-/ejfinRlAMUfHJJbUeV8PdhwByM771Yweegx9Tv6O1Y=";
   };
+
+  patches = [
+    # mutter 50.2 spams logs, clutter_input_focus_set_cursor_location
+    # https://gitlab.gnome.org/GNOME/mutter/-/work_items/4840
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/f1570318ec3e9a38615eb91708bb71628ab8bcfd.patch";
+      hash = "sha256-73GI2DTgoEBUQGa7nTUIur/ZuDHgDu4SwjUWHBRCyuo=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"

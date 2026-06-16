@@ -6231,6 +6231,36 @@ final: prev: {
     }
   ) { };
 
+  tree-sitter-kulala_http = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-kulala_http";
+      version = "0.2.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-kulala_http-0.2.0-1.rockspec";
+          sha256 = "19zl90z7jm3qz62f4q4hp95a0z78k3db1lrb6bhhn27kwiy4ww5z";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/mistweaverco/tree-sitter-kulala-http/archive/v0.2.0.zip";
+        sha256 = "0cc0ff8py1mqdxscp3q6zvpiryanc8fjx2y60csng00bzx4g42mj";
+      };
+
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://kulala.app";
+        license = lib.licenses.mit;
+        description = "Tree-sitter grammar for http (kulala-flavour).";
+      };
+    }
+  ) { };
+
   tree-sitter-norg = callPackage (
     {
       buildLuarocksPackage,

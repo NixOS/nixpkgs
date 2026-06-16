@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-custom-objects";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "netboxlabs";
     repo = "netbox-custom-objects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8PEqt6TpoQ8ncyZPesRos0BQHF3cKIzgoFr56v8UTTY=";
+    hash = "sha256-bFPcv7eEUFfLB7XfxOnJR+pBSXUVKsAupcid2dxjtho=";
   };
 
   build-system = [ setuptools ];

@@ -10,10 +10,10 @@ index 5f37046..c60c474 100644
    return vim.treesitter.language.add(parser_name) == true
  end
  
-@@ -48,7 +47,6 @@ M.register_parser = function()
-   -- queries/kulala_http/*.scm live under lua/tree-sitter/queries/
-   vim.opt.rtp:prepend(parser_source_path)
-   ensure_site_rtp()
+@@ -48,7 +47,3 @@ M.register_parser = function()
+-  -- kulala_http/*.scm live under tree-sitter-kulala-http/queries/
+-  vim.opt.rtp:prepend(parser_source_path)
+-  ensure_site_rtp()
 -  sync_queries()
    vim.treesitter.language.register(parser_name, filetypes)
    vim.treesitter.language.register("markdown", "kulala_ui")
