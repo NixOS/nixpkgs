@@ -228,6 +228,8 @@ in
           "AF_INET"
           "AF_INET6"
         ]
+        # AF_UNIX to be able to connect to e.g. /dev/log
+        ++ lib.optionals (cfg.settings.log.file or "" == "syslog") [ "AF_UNIX" ]
         ++ lib.optionals cfg.allowDHCP [ "AF_PACKET" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
