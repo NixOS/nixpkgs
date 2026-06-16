@@ -139,7 +139,7 @@ let
       )
     );
 
-    # Recursively find all packages in `pkgs` with updateScript by given team.
+  # Recursively find all packages in `pkgs` with updateScript by given team.
   packagesWithUpdateScriptAndTeam =
     team':
     let
@@ -154,10 +154,7 @@ let
       (
         if builtins.hasAttr "teams" pkg.meta then
           (
-            if builtins.isList pkg.meta.teams then
-              builtins.elem team pkg.meta.teams
-            else
-              team == pkg.meta.teams
+            if builtins.isList pkg.meta.teams then builtins.elem team pkg.meta.teams else team == pkg.meta.teams
           )
         else
           false
@@ -242,6 +239,10 @@ let
     Note that sorting requires instantiating each package and then querying Nix store for requisites so it will be pretty slow with large number of packages.
   '';
 
+  checkPhaseHooks =
+    pre: post: package:
+    lib.hasInfix "runHook ${pre}" package && lib.hasInfix "runHook ${post}" package;
+
   # Transform a matched package into an object for update.py.
   packageData =
     { package, attrPath }:
@@ -253,42 +254,84 @@ let
       pname = lib.getName package;
       version = lib.getVersion package;
       outputs = package.outputs;
-      strictDeps = package.strictDeps;
-      __structuredAttrs = package.__structuredAttrs;
-      # https://github.com/NixOS/nixpkgs/issues/325892
-      srihash = !(lib.hasInfix ":" package.src.hash);
-      ${if package.src ? gitRepoUrl && package.src.gitRepoUrl ? tag then "gittag" else null} = package.src.tag != null;
 
-      # ${ if ? then } syntax over // optionalAttrs for perf benefits
       # see https://github.com/NixOS/nixpkgs/pull/506793
       # premature optimization can be fun :)
-      languageAttrs = {
-        ## python
-        ${if package ? pyproject then "pyproject" else null} =
-          package.pyproject != null && package.pyproject != false;
+      # ${ if ? then } syntax over // optionalAttrs for perf benefits
+      attributes = {
+        src = {
+          ${if package ? src.gitRepoUrl then "tag" else null} = package.src.tag != null;
+          # https://github.com/NixOS/nixpkgs/issues/325892
+          srihash = !(lib.hasInfix ":" package.src.hash);
+        };
 
-        # checks pyproject because its in all python builders
-        ${if package ? pyproject then "pythonImportsCheck" else null} = package ? pythonImportsCheck;
+        common = {
+          strictDeps = package.strictDeps;
+          __structuredAttrs = package.__structuredAttrs;
 
-        ## node/npm
-        # https://github.com/NixOS/nixpkgs/issues/529285
-        ${if package ? pnpmDeps && package.pnpmDeps ? version then "pnpm" else null} =
-          package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
-        ${if package ? pnpmDeps then "pnpmfetcher" else null} = package.pnpmDeps.fetcherVersion;
-        # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
-        ${
-          if package ? postPatch && lib.hasInfix "package-lock.json" package.postPatch then
-            "lockFile"
-          else
-            null
-        } =
-          true;
+          # list found from `rg runHook (pre|post)` and stdenv.chapter.md
+          # not comprehensive by any means, but these are the most common
+          usesRunHooks = {
+            ${if package ? unpackPhase then "unpackPhase" else null} =
+              checkPhaseHooks "preUnpack" "postUnpack"
+                package.unpackPhase;
+            ${if package ? patchPhase then "patchPhase" else null} =
+              checkPhaseHooks "prePatch" "postPatch"
+                package.patchPhase;
+            ${if package ? configurePhase then "configurePhase" else null} =
+              checkPhaseHooks "preConfigure" "postConfigure"
+                package.configurePhase;
+            ${if package ? buildPhase then "buildPhase" else null} =
+              checkPhaseHooks "preBuild" "postBuild"
+                package.buildPhase;
+            ${if package ? installPhase then "installPhase" else null} =
+              checkPhaseHooks "preInstall" "postInstal"
+                package.installPhase;
+            ${if package ? checkPhase then "checkPhase" else null} =
+              checkPhaseHooks "preCheck" "postCheck"
+                package.checkPhase;
+            ${if package ? installCheckPhase then "installCheckPhase" else null} =
+              checkPhaseHooks "preInstallCheck" "postInstallCheck"
+                package.installCheckPhase;
+            ${if package ? fixupPhase then "fixupPhase" else null} =
+              checkPhaseHooks "preFixup" "postFixup"
+                package.fixupPhase;
+          };
+        };
 
-        ## rust
-        # https://github.com/NixOS/nixpkgs/issues/327064
-        ${if package ? cargoDeps && package.cargoDeps ? lockFile then "lockFile" else null} = true; # want to get rid of these
+        python = {
+          ${if package ? pyproject then "pyproject" else null} =
+            package.pyproject != null && package.pyproject != false;
 
+          # checks pyproject because its in all python builders
+          ${if package ? pyproject then "pythonImportsCheck" else null} = package ? pythonImportsCheck;
+        };
+
+        node = {
+          # https://github.com/NixOS/nixpkgs/issues/529285
+          ${if package ? pnpmDeps && package.pnpmDeps ? version then "pnpm" else null} =
+            package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
+          ${if package ? pnpmDeps then "pnpmfetcher" else null} = package.pnpmDeps.fetcherVersion;
+          # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
+          ${
+            if package ? postPatch && lib.hasInfix "package-lock.json" package.postPatch then
+              "lockFile"
+            else
+              null
+          } =
+            true;
+        };
+
+        rust = {
+          # https://github.com/NixOS/nixpkgs/issues/327064
+          ${if package ? cargoDeps && package.cargoDeps ? lockFile then "lockFile" else null} = true; # want to get rid of these
+        };
+
+        go = {
+          ${if package ? ldflags then "ldflags" else null} = package.ldflags;
+        };
       };
+
     };
 
   # JSON file with data for update.py.
