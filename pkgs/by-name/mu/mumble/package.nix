@@ -52,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = type;
   version = "1.5.901";
 
-  
-    src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "mumble-voip";
     repo = "mumble";
     tag = "v${finalAttrs.version}";
@@ -105,22 +104,22 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals isServer ([ libcap ] ++ lib.optional iceSupport zeroc-ice);
 
   cmakeFlags = [
-    "-D g15=OFF"
-    "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
-    "-D BUILD_NUMBER=${lib.versions.patch finalAttrs.version}"
-    "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
-    "-D bundled-gsl=OFF"
-    "-D bundled-json=OFF"
-    "-D bundled-speex=OFF"
-    "-D bundle-qt-translations=OFF"
-    "-D update=OFF"
-    "-D use-timestamps=OFF"
-    "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102 and `std::wstring_convert` deprecation workaround
+    (lib.cmakeBool "g15" false)
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # protobuf >22 requires C++ 17
+    (lib.cmakeFeature "BUILD_NUMBER" (lib.versions.patch finalAttrs.version))
+    (lib.cmakeBool "CMAKE_UNITY_BUILD" true) # Upstream uses this in their build pipeline to speed up builds
+    (lib.cmakeBool "bundled-gsl" false)
+    (lib.cmakeBool "bundled-json" false)
+    (lib.cmakeBool "bundled-speex" false)
+    (lib.cmakeBool "bundle-qt-translations" false)
+    (lib.cmakeBool "update" false)
+    (lib.cmakeBool "use-timestamps" false)
+    (lib.cmakeBool "warnings-as-errors" false) # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102 and `std::wstring_convert` deprecation workaround
   ]
   ++ lib.optionals isClient [
-    "-D server=OFF"
-    "-D overlay-xcompile=OFF"
-    "-D oss=OFF"
+    (lib.cmakeBool "server" false)
+    (lib.cmakeBool "overlay-xcompile" false)
+    (lib.cmakeBool "oss" false)
     # building the overlay on darwin does not work in nipxkgs (yet)
     # also see the patch below to disable scripts the build option misses
     # see https://github.com/mumble-voip/mumble/issues/6816
@@ -133,18 +132,18 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals isServer (
     [
-      "-D client=OFF"
+      (lib.cmakeBool "client" false)
       (lib.cmakeBool "ice" iceSupport)
     ]
     ++ lib.optionals iceSupport [
-      "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-      "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+      (lib.cmakeFeature "Ice_HOME" "${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}")
+      (lib.cmakeFeature "Ice_SLICE_DIR" "${lib.getDev zeroc-ice}/share/ice/slice")
     ]
   )
   ++ lib.optionals isOverlay [
-    "-D server=OFF"
-    "-D client=OFF"
-    "-D overlay=ON"
+    (lib.cmakeBool "server" false)
+    (lib.cmakeBool "client" false)
+    (lib.cmakeBool "overlay" true)
   ];
 
   preConfigure = ''
@@ -172,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/Mumble.app $out/Applications/Mumble.app
 
     # ensure that the app can be started from the shell
-    makeBinaryWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+    ln -s $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
   '';
 
   postFixup = lib.optionalString (isClient && stdenv.hostPlatform.isLinux) ''
