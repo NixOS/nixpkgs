@@ -7,13 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deap";
   version = "1.4.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) version;
+    pname = "deap";
     hash = "sha256-fJcIj7BYNb3CVb7EdcsOd43itD5Ey++/K81lWu7IZf0=";
   };
 
@@ -32,4 +33,4 @@ buildPythonPackage rec {
       psyanticy
     ];
   };
-}
+})
