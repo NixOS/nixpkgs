@@ -59,6 +59,8 @@
   fetchurl,
   runCommand,
   python3Packages,
+  shaderc,
+  pipewire,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
@@ -85,7 +87,7 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nkO0gBtn4Ck7pGGXjrPOYYxHiMdRkVAVGEVJc6CU3kA=";
+    hash = "sha256-3yuhOyW1Rqz4ddZ40z2ZzpAReZQFva0SL595XrnFB60=";
     fetchSubmodules = true;
   };
 
@@ -96,7 +98,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # FIXME: recompute against upstream's package-lock.json for this release.
     # e.g.: nix run nixpkgs#prefetch-npm-deps -- package-lock.json
     # (or build once with lib.fakeHash and copy the hash nix reports)
-    npmDepsHash = "sha256-k2uvsTGPXDeqyv/Av+9eKQJYFJLi7LAt9s7DmpPTcYk=";
+    npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
 
     installPhase = ''
       runHook preInstall
@@ -145,6 +147,7 @@ stdenv'.mkDerivation (finalAttrs: {
     gladPython
     makeWrapper
     qt6.wrapQtAppsHook
+    shaderc
   ]
   ++ lib.optionals isLinux [
     wayland-scanner
@@ -166,6 +169,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libopus
     qt6.qtbase
     qt6.qtsvg
+    pipewire
   ]
   ++ lib.optionals isLinux [
     avahi
