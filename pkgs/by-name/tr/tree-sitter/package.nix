@@ -152,7 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch =
     lib.optionalString webUISupport ''
-      substituteInPlace cli/loader/src/lib.rs \
+      substituteInPlace crates/xtask/src/build_wasm.rs \
           --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
     ''
     # when building on static platforms:
