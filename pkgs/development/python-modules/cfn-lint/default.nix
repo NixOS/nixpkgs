@@ -67,6 +67,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires git directory
     "test_update_docs"
+    # do not work with regex-2026.4.4
+    "test_templates"
+    "test_module_integration"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];
