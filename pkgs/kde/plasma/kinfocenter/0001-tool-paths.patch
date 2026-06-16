@@ -257,7 +257,7 @@ index a49284d3..77818fe2 100644
          const QString executable = QStandardPaths::locate(QStandardPaths::GenericDataLocation, u"kinfocenter/network/ip.sh"_s, QStandardPaths::LocateFile);
          const QString darkness = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark ? u"1"_s : u"0"_s;
 -        m_outputContext = new CommandOutputContext({u"ip"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
-+        m_outputContext = new CommandOutputContext({u"@ip@"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
++        m_outputContext = new CommandOutputContext({u"@ip@"_s, u"@aha@"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
      }
      CommandOutputContext *outputContext() const
      {
