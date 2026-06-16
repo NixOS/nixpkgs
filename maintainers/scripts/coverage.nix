@@ -31,6 +31,7 @@ let
       config.allowAliases = false;
       # allow maintainers to run this script on multiple platforms
       config.allowUnsupportedSystem = true;
+      config.allowUnfree = true;
     }
   );
 
@@ -241,7 +242,7 @@ let
 
   checkPhaseHooks =
     pre: post: package:
-    lib.hasInfix "runHook ${pre}" package && lib.hasInfix "runHook ${post}" package;
+    package != null && lib.hasInfix "runHook ${pre}" package && lib.hasInfix "runHook ${post}" package;
 
   # Transform a matched package into an object for update.py.
   packageData =
@@ -260,14 +261,25 @@ let
       # ${ if ? then } syntax over // optionalAttrs for perf benefits
       attributes = {
         src = {
-          ${if package ? src.gitRepoUrl then "tag" else null} = package.src.tag != null;
+          # currently fetchFromSourcehut doesn't support tag which breaks eval here
+          # ${if package ? src.gitRepoUrl then "tag" else null} = package.src.tag != null;
+
           # https://github.com/NixOS/nixpkgs/issues/325892
-          srihash = !(lib.hasInfix ":" package.src.hash);
+          ${if package ? src.hash then "srihash" else null} = !(lib.hasInfix ":" package.src.hash);
         };
 
         common = {
+          # https://github.com/NixOS/nixpkgs/issues/178468
           strictDeps = package.strictDeps;
+          # https://github.com/NixOS/nixpkgs/issues/205690
           __structuredAttrs = package.__structuredAttrs;
+
+          # https://github.com/NixOS/nixpkgs/issues/205690#issuecomment-4710988930
+          parallel = {
+            enableParallelBuilding = package ? enableParallelBuilding && package.enableParallelBuilding;
+            enableParallelChecking = package ? enableParallelChecking && package.enableParallelChecking;
+            enableParallelInstalling = package ? enableParallelInstalling && package.enableParallelInstalling;
+          };
 
           # list found from `rg runHook (pre|post)` and stdenv.chapter.md
           # not comprehensive by any means, but these are the most common
@@ -275,31 +287,45 @@ let
             ${if package ? unpackPhase then "unpackPhase" else null} =
               checkPhaseHooks "preUnpack" "postUnpack"
                 package.unpackPhase;
+
             ${if package ? patchPhase then "patchPhase" else null} =
               checkPhaseHooks "prePatch" "postPatch"
                 package.patchPhase;
+
             ${if package ? configurePhase then "configurePhase" else null} =
               checkPhaseHooks "preConfigure" "postConfigure"
                 package.configurePhase;
+
             ${if package ? buildPhase then "buildPhase" else null} =
               checkPhaseHooks "preBuild" "postBuild"
                 package.buildPhase;
+
             ${if package ? installPhase then "installPhase" else null} =
               checkPhaseHooks "preInstall" "postInstal"
                 package.installPhase;
+
             ${if package ? checkPhase then "checkPhase" else null} =
               checkPhaseHooks "preCheck" "postCheck"
                 package.checkPhase;
+
             ${if package ? installCheckPhase then "installCheckPhase" else null} =
               checkPhaseHooks "preInstallCheck" "postInstallCheck"
                 package.installCheckPhase;
+
             ${if package ? fixupPhase then "fixupPhase" else null} =
               checkPhaseHooks "preFixup" "postFixup"
                 package.fixupPhase;
           };
         };
 
+        # https://github.com/NixOS/nixpkgs/issues/79303
+        stdenv = {
+          NIX_CFLAGS_COMPILE = package ? env.NIX_CFLAGS_COMPILE || package ? NIX_CFLAGS_COMPILE;
+        };
+
         python = {
+          # https://github.com/NixOS/nixpkgs/issues/515974
+          # https://github.com/NixOS/nixpkgs/issues/253154
           ${if package ? pyproject then "pyproject" else null} =
             package.pyproject != null && package.pyproject != false;
 
@@ -309,12 +335,16 @@ let
 
         node = {
           # https://github.com/NixOS/nixpkgs/issues/529285
-          ${if package ? pnpmDeps && package.pnpmDeps ? version then "pnpm" else null} =
-            package.pnpmDeps.pnpm.version or (lib.getVersion package.pnpmDeps.pnpm);
+          ${if package ? pnpmDeps.pnpm.version then "pnpm" else null} = package.pnpmDeps.pnpm.version;
+
           ${if package ? pnpmDeps then "pnpmfetcher" else null} = package.pnpmDeps.fetcherVersion;
           # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
           ${
-            if package ? postPatch && lib.hasInfix "package-lock.json" package.postPatch then
+            if
+              package ? postPatch
+              && builtins.typeOf package.postPatch == "string"
+              && lib.hasInfix "package-lock.json" package.postPatch
+            then
               "lockFile"
             else
               null
