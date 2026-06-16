@@ -21,7 +21,7 @@ php.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-PLq+XiZIJyyzVq+87timGO/jbPB4ZYQqSZilZMIE4Cw=";
   composerNoDev = true;
   composerNoPlugins = false;
-  composerStrictValidation = false;
+  composerStrictValidation = true;
 
   postPatch = ''
     substituteInPlace config/services.yaml \
