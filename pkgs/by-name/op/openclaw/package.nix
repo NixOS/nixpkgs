@@ -15,8 +15,7 @@
 }:
 let
   pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
-  # Lockfile predates pnpm 11's stricter overrides/patchedDependencies
-  # validation; strip patchedDependencies from both files for frozen install.
+  # Keep fetchPnpmDeps and frozen offline install aligned on patchedDependencies.
   stripPatchedDeps = ''
     sed -i '/^patchedDependencies:/,/^[^ ]/{/^patchedDependencies:/d;/^  /d;}' pnpm-lock.yaml pnpm-workspace.yaml
   '';
