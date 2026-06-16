@@ -131,6 +131,8 @@ optionalAttrs allowAliases aliases
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
 
+  configobj = (import ./formats/configobj/default.nix { inherit lib pkgs; }).format;
+
   json =
     { }:
     {
