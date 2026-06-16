@@ -97,6 +97,7 @@ jobs:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
+      baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       systems: ${{ needs.prepare.outputs.systems }}
 
   build:
