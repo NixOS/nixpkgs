@@ -151,6 +151,8 @@ For instance:
 ```
 To update these packages, you should use the lua updater rather than vim's.
 
+To add a lua package to the `vimPlugins` set, add it to the `luarocksPackageNames` list in [luaPackagePlugins.nix](https://github.com/nixos/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/luaPackagePlugins.nix).
+
 ## Treesitter {#neovim-plugin-treesitter}
 
 [Treesitter](https://tree-sitter.github.io/) provides syntax parsing for Neovim, enabling features like:
