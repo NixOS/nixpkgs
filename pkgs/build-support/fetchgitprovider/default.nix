@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchgit,
   fetchzip,
-  enableUseFetchGitOverriding ? false,
+  enableUseFetchGitOverriding ? true,
 }@args:
 let
   # Here defines fetchFromGitProvider arguments that determines useFetchGit,
