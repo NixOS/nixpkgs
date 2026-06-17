@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flint-lang";
     repo = "flintc";
-    tag = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}-core";
     sha256 = "75fcedf31ccacd26733ed5a5ae19b6ab410ce3aa256bcf79ed8678d8362897a4";
   };
 
