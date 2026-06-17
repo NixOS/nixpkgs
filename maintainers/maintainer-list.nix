@@ -19830,12 +19830,6 @@
     githubId = 70602908;
     github = "nikolaizombie1";
   };
-  niksingh710 = {
-    email = "nik.singh710@gmail.com";
-    name = "Nikhil Singh";
-    github = "niksingh710";
-    githubId = 60490474;
-  };
   nikstur = {
     email = "nikstur@outlook.com";
     name = "nikstur";
@@ -25007,6 +25001,12 @@
     github = "sellout";
     githubId = 33031;
     name = "Greg Pfeil";
+  };
+  semi710 = {
+    email = "nik.singh710@gmail.com";
+    name = "Nikhil Singh";
+    github = "semi710";
+    githubId = 60490474;
   };
   sempiternal-aurora = {
     email = "myrialsarvay@gmail.com";
