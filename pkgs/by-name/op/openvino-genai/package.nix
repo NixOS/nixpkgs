@@ -42,6 +42,14 @@ let
   };
 
   python = python3Packages.python.withPackages (ps: [ ps.pybind11 ]);
+
+  # How the build system calls the different platforms
+  archName =
+    {
+      "aarch64-linux" = "aarch64";
+      "x86_64-linux" = "intel64";
+    }
+    .${stdenv.hostPlatform.system};
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -147,7 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
         "\''${_IMPORT_PREFIX}/runtime/include" "$dev/include"
     substituteInPlace $dev/lib/cmake/OpenVINOGenAITargets-release.cmake \
       --replace-fail \
-        "\''${_IMPORT_PREFIX}/runtime/lib/intel64/" "$out/lib/"
+        "\''${_IMPORT_PREFIX}/runtime/lib/${archName}/" "$out/lib/"
+  '';
+
+  preFixup = ''
+    addAutoPatchelfSearchPath ${lib.getLib openvino}/runtime/lib/${archName}
   '';
 
   postFixup = ''
