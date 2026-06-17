@@ -1,8 +1,10 @@
 {
   lib,
   repoRevToNameMaybe,
+  stdenvNoCC,
   fetchgit,
   fetchzip,
+  enableUseFetchGitOverriding ? false,
 }@args:
 let
   # Here defines fetchFromGitProvider arguments that determines useFetchGit,
@@ -34,28 +36,65 @@ let
 
   faUseFetchGit = lib.mapAttrs (_: _: true) useFetchGitArgsDefault;
 
-  # fetchzip may not be overridable when using external tools, for example nix-prefetch
-  fetchzip =
-    if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
+  accumulateConstructorMetadata =
+    constructDrv:
+    let
+      f =
+        constructDrvCfg:
+        {
+          excludeDrvArgNames,
+          extendDrvArgs,
+          transformDrv,
+          ...
+        }@cfgAccumulated:
+        if constructDrvCfg ? extendDrvArgs then
+          f constructDrvCfg.constructDrv (
+            cfgAccumulated
+            // {
+              excludeDrvArgNames = excludeDrvArgNames ++ constructDrvCfg.excludeDrvArgNames;
+              extendDrvArgs =
+                finalAttrs: args:
+                let
+                  args' = extendDrvArgs finalAttrs args;
+                in
+                # Let the accumulated extendDrvArgs also do the work of excludeDrvArgNames
+                removeAttrs args' constructDrvCfg.excludeDrvArgNames
+                // constructDrvCfg.extendDrvArgs finalAttrs args';
+              transformDrv = drv: transformDrv (constructDrvCfg.transformDrv drv);
+            }
+          )
+        else
+          cfgAccumulated // { constructDrv = constructDrvCfg; };
+    in
+    f constructDrv (
+      constructDrv
+      // {
+        excludeDrvArgNames = [ ];
+        extendDrvArgs = finalAttrs: args: args;
+        transformDrv = lib.id;
+      }
+    );
 
-  nullIfNot = condition: if condition then v: v else v: null;
-in
-lib.extendMkDerivation rec {
-  constructDrv = {
-    __functor =
-      self: fpArgsExtended:
-      let
-        blankArgs = lib.mapAttrs (n: v: null) (lib.filterAttrs (n: v: !v) (lib.functionArgs extendDrvArgs));
-        inherit (fpArgsExtended blankArgs) useFetchGit;
-        # We prefer fetchzip in cases we don't need submodules as the hash
-        # is more stable in that case.
-        fetcher = if useFetchGit then fetchgit else fetchzip;
-      in
-      fetcher (finalAttrs: lib.removeAttrs (fpArgsExtended finalAttrs) [ "useFetchGit" ]);
-    __functionArgs = lib.functionArgs fetchzip // lib.functionArgs fetchgit // faUseFetchGit;
-  };
+  fetchgitAccumulated = accumulateConstructorMetadata fetchgit;
+  fetchzipAccumulated = accumulateConstructorMetadata fetchzip;
 
-  excludeDrvArgNames = [
+  excludeDrvArgNamesFetcherUnion = lib.unique (
+    fetchgitAccumulated.excludeDrvArgNames ++ fetchzipAccumulated.excludeDrvArgNames
+  );
+
+  getBlankDerivationArgs =
+    constructDrv:
+    let
+      blankArgs = lib.mapAttrs (n: v: null) (lib.filterAttrs (n: v: !v) (lib.functionArgs constructDrv));
+      computedDrvArgs = constructDrv.extendDrvArgs { } blankArgs;
+    in
+    lib.mapAttrs (n: v: if n == "env" then { } else null) computedDrvArgs;
+
+  blankDerivationArgsFetchGit = getBlankDerivationArgs fetchgitAccumulated;
+  blankDerivationArgsFetchZip = getBlankDerivationArgs fetchzipAccumulated;
+  blankDerivationArgsUnion = blankDerivationArgsFetchGit // blankDerivationArgsFetchZip;
+
+  excludeDrvArgNamesDirect = [
     "owner"
     "repo"
     "tag"
@@ -73,6 +112,39 @@ lib.extendMkDerivation rec {
     "derivationArgs"
   ]
   ++ (lib.attrNames faUseFetchGit);
+
+  # fetchzip may not be overridable when using external tools, for example nix-prefetch
+  fetchzip =
+    if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
+
+  nullIfNot = condition: if condition then v: v else v: null;
+in
+lib.extendMkDerivation {
+  constructDrv = {
+    __functor =
+      self:
+      if enableUseFetchGitOverriding then
+        stdenvNoCC.mkDerivation
+      else
+        fpArgsExtended:
+        let
+          inherit (fpArgsExtended { }) useFetchGit;
+          # We prefer fetchzip in cases we don't need submodules as the hash
+          # is more stable in that case.
+          fetcher = if useFetchGit then fetchgit else fetchzip;
+        in
+        fetcher (
+          finalAttrs:
+          lib.removeAttrs (fpArgsExtended finalAttrs) [
+            "useFetchGit"
+          ]
+        );
+    __functionArgs = lib.functionArgs fetchzip // lib.functionArgs fetchgit // faUseFetchGit;
+  };
+
+  excludeDrvArgNames =
+    excludeDrvArgNamesDirect
+    ++ lib.optionals enableUseFetchGitOverriding excludeDrvArgNamesFetcherUnion;
 
   extendDrvArgs =
     finalAttrs:
@@ -233,7 +305,27 @@ lib.extendMkDerivation rec {
       };
 
     in
-    fetcherArgs // { inherit useFetchGit; };
+    if enableUseFetchGitOverriding then
+      let
+        argsPassing = removeAttrs args excludeDrvArgNamesDirect;
+        # fetcherAccumulated = if finalAttrs.useFetchGit then fetchgitAccumulated else fetchzipAccumulated;
+        # computedDerivationArgs = fetcherAccumulated.extendDrvArgs finalAttrs (argsPassing // fetcherArgs);
+        fetchgitDerivationArgs = fetchgitAccumulated.extendDrvArgs finalAttrs (argsPassing // fetchgitArgs);
+        fetchzipDerivationArgs = fetchzipAccumulated.extendDrvArgs finalAttrs (argsPassing // fetchzipArgs);
+        computedDerivationArgs =
+          if finalAttrs.useFetchGit then fetchgitDerivationArgs else fetchzipDerivationArgs;
+      in
+      lib.mapAttrs (n: v: computedDerivationArgs.${n} or v) (
+        blankDerivationArgsUnion // derivationArgsCommon // derivationArgs
+      )
+      // {
+        inherit useFetchGit;
+      }
+    else
+      fetcherArgs
+      // {
+        inherit useFetchGit;
+      };
 
   transformDrv =
     drv:
@@ -243,4 +335,12 @@ lib.extendMkDerivation rec {
         passthru = removeAttrs previousAttrs.passthru [ "__handleRevWithTag" ];
       }
     );
+}
+// {
+  inherit
+    accumulateConstructorMetadata
+    blankDerivationArgsFetchGit
+    blankDerivationArgsFetchZip
+    blankDerivationArgsUnion
+    ;
 }
