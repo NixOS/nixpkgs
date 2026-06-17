@@ -76,10 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "AI-native system for spec-driven development";
     homepage = "https://github.com/Fission-AI/OpenSpec";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kalbasit
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.all;
     mainProgram = "openspec";
   };
