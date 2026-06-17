@@ -373,13 +373,13 @@
     "vendorHash": "sha256-RtS88NqkO1nG/8znM0sQqsAIfDc+sOMy8N4T4hmvaVA="
   },
   "e-breuninger_netbox": {
-    "hash": "sha256-04k9lKwoczptgoMW5C8EitP/u/Joi4/OCd3+I+nr5pc=",
+    "hash": "sha256-e9244MaxEcmtYHT9zN4Nct2xpgBv8JOMe1VOW5y/2OQ=",
     "homepage": "https://registry.terraform.io/providers/e-breuninger/netbox",
     "owner": "e-breuninger",
     "repo": "terraform-provider-netbox",
-    "rev": "v5.4.0",
+    "rev": "v5.6.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-RWoe4QQE55lW+B20uDJt0qX3Om/oc3em3LXhN+cBoUY="
+    "vendorHash": "sha256-WaeRXTqXakFTYMHio+VLIKS4kS5wHQdY5zdJYwrlVjE="
   },
   "equinix_equinix": {
     "hash": "sha256-Tn8CnLx2ibkj7qlzpYCX7Cm+yoTcZujVELMJSbG+/ec=",
