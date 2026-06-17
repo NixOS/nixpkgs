@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       mnacamura
       DeeUnderscore
+      philocalyst
     ];
     platforms = lib.platforms.unix;
   };
