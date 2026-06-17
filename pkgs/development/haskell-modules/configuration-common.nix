@@ -2428,6 +2428,10 @@ with haskellLib;
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
+  # 2026-06-17: wai-app-static >=3.1.7.1 && <3.2
+  # https://github.com/diogob/postgres-websockets/issues/115
+  postgres-websockets = doJailbreak super.postgres-websockets;
+
   postgrest =
     lib.pipe
       (super.postgrest.overrideScope (
