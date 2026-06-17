@@ -6,12 +6,12 @@
 
   pnpmConfigHook,
   fetchPnpmDeps,
-  pnpm_10,
-  nodejs-slim, # don't need npm
+  pnpm_11,
+  nodejs-slim_26, # don't need npm
 }:
 buildPythonPackage rec {
   pname = "comfyui-frontend-package";
-  version = "1.42.2";
+  version = "1.47.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Comfy-Org";
     repo = "ComfyUI_frontend";
     rev = "v${version}";
-    hash = "sha256-2aPnZf9sCx1oi/kiN4XPretV8Zhz2KJFw5vvXnBpUv4=";
+    hash = "sha256-P+TA9NYi5vZK4NGdBmzpWQJcNffb3KCVIZGcQLlUpvk=";
   };
 
   # used by setup.py
@@ -33,23 +33,23 @@ buildPythonPackage rec {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-jt7uv86j7KGpS8IqZz/T6HFLzvcNh9aOvVoSHxRR91M=";
+    fetcherVersion = 3;
+    hash = "sha256-r1QnfLcVGFSC+YRyfbNmj9dVfX8X7aBo6Uhxh/jGIdY=";
   };
 
   nativeBuildInputs = [
-    nodejs-slim
-    pnpm_10
+    nodejs-slim_26
+    pnpm_11
     pnpmConfigHook
   ];
 
   # bypass useless nx
   # also switch to a non-interactive reporter to avoid logging spam
-  postPatch = ''
-    substituteInPlace ./package.json \
-      --replace-fail "nx build" "vite build" \
-      --replace-fail "nx run test" "vitest run --reporter=basic"
-  '';
+  # postPatch = ''
+  #   substituteInPlace ./package.json \
+  #     --replace-fail "nx build" "vite build" \
+  #     --replace-fail "nx run test" "vitest run --reporter=basic"
+  # '';
 
   preBuild = ''
     pnpm run build
