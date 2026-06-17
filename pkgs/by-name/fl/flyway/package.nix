@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "12.0.0";
+  version = "12.8.1";
   src = fetchurl {
     url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-aBAbpNL+wJ+XOS7g8Af94iCylJTE7DmlbViVxA/yV1M=";
+    sha256 = "sha256-cJLyBFM4Q1WsvB7YP0uCt/IjLK7T2b326IvFW7ePVEA=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
-      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*'" \
+      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*:$out/share/flyway/drivers/aws/*:$out/share/flyway/drivers/gcp/*:$out/share/flyway/drivers/cassandra/*:$out/share/flyway/drivers/couchbase/*:$out/share/flyway/drivers/mongo/*'" \
       --add-flags "org.flywaydb.commandline.Main"
   '';
   passthru.tests = {
