@@ -3,6 +3,8 @@
   fetchFromGitHub,
   autoPatchelfHook,
   lib,
+  lld,
+  zig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
