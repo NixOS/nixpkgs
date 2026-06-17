@@ -20,14 +20,11 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-
-  # passthru
-  unstableGitUpdater,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "exa-py";
-  version = "2.13.1-unstable-2026-06-03";
+  version = "2.14.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,8 +32,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "exa-labs";
     repo = "exa-py";
-    rev = "42fde906ecd069c15ad4888e1585b395a0db7edf";
-    hash = "sha256-6o4SKAeP5q+57LCbbw5vP7r/dEA1HiQNa9CkopbTlxg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pL5d79KdKlfv4l/M7PF8fs0gUEk4DYEKPm8PJ+pwFMc=";
   };
 
   build-system = [
@@ -66,11 +63,10 @@ buildPythonPackage (finalAttrs: {
 
   pytestFlags = [ "tests/" ];
 
-  passthru.updateScript = unstableGitUpdater { };
-
   meta = {
     description = "Official Python SDK for Exa, the web search API for AI";
     homepage = "https://github.com/exa-labs/exa-py/";
+    changelog = "https://github.com/exa-labs/exa-py/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.mit;
   };
