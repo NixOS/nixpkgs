@@ -8313,6 +8313,8 @@ self: super: with self; {
 
   jupyterlite-core = callPackage ../development/python-modules/jupyterlite-core { };
 
+  jupyterlite-sphinx = callPackage ../development/python-modules/jupyterlite-sphinx { };
+
   jupytext = callPackage ../development/python-modules/jupytext { };
 
   justbackoff = callPackage ../development/python-modules/justbackoff { };
