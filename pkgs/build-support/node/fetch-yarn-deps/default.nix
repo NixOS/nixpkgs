@@ -104,6 +104,7 @@ in
           src ? null,
           hash ? "",
           sha256 ? "",
+          mirrorUrl ? null,
           ...
         }@args:
         let
@@ -146,7 +147,9 @@ in
 
               yarnLock=''${yarnLock:=$PWD/yarn.lock}
               mkdir -p $out
-              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock ${
+                lib.optionalString (mirrorUrl != null) "--mirrorUrl ${lib.escapeShellArg mirrorUrl}"
+              })
 
               runHook postBuild
             '';
@@ -159,6 +162,7 @@ in
               "name"
               "hash"
               "sha256"
+              "mirrorUrl"
             ]
             ++ (lib.optional (src == null) "src")
           ))
