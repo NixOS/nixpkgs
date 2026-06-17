@@ -931,6 +931,26 @@ let
         '';
       };
 
+    mastodon = { ... }: {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.mastodon = {
+          enable = true;
+          localDomain = "example.org";
+          streamingProcesses = 2;
+          smtp.fromAddress = "from@example.org";
+          extraConfig.MASTODON_PROMETHEUS_EXPORTER_ENABLED = "true";
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mastodon-exporter.service")
+        wait_for_open_port(9394)
+        wait_until_succeeds("curl -sSf http://localhost:9394/metrics | grep 'mastodon_collector_working 1'")
+      '';
+    };
+
     mikrotik =
       { ... }:
       {
