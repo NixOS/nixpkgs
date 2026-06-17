@@ -63,12 +63,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "est" "\"$out\""
   '';
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   installPhase = ''
     mkdir -p "$out"/{bin,include,lib}
     for d in bin include lib; do
       for i in ./$d/*; do
         test "$(basename "$i")" = "Makefile" ||
           cp -r "$(readlink -f $i)" "$out/$d"
+      done
+    done
+
+    mkdir -p "$dev"/{config,base_class}
+    for d in config base_class; do
+      for i in ./$d/*; do
+        test "$(basename "$i")" = "Makefile" ||
+          cp -r "$(readlink -f $i)" "$dev/$d"
       done
     done
   '';
