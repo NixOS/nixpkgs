@@ -16,7 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = ""sha256-R4AFvjn3qjg9+p4uJ343GPjix+UwkyWDNy2Eit+BOOs=;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    lld
+    zig
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
