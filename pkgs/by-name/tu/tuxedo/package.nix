@@ -23,15 +23,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  passthru.updateScript = nix-update-script { };
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [
     # Failure
     "--skip=insert_dialog_after_nl_parse"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "fast, keyboard-driven terminal UI for todo.txt";
