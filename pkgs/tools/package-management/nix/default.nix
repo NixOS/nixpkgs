@@ -5,7 +5,6 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
-  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -167,16 +166,6 @@ let
       test = "shebang.sh";
     }
   ];
-
-  # Lowdown 3.0 compatibility patch for nix 2.31–2.33; fetched from the
-  # upstream backport (same diff on every maintenance branch after
-  # fetchpatch strips metadata).  Nix 2.34.4+ and the git snapshot
-  # already include the fix in their tagged source.
-  lowdown30Patch = pkgs.fetchpatch {
-    name = "nix-lowdown-3.0-support.patch";
-    url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
-    hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
-  };
 
   # Lowdown 3.0 compatibility patch for nix 2.28 and 2.30, which have a
   # different markdown.cc layout (no LOWDOWN_TERM_NORELLINK branch) and
