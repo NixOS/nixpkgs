@@ -79,6 +79,33 @@ in
 
       openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Samba";
 
+      prometheusExporter = {
+        enable = lib.mkEnableOption "Samba Prometheus metrics exporter";
+
+        listenAddress = lib.mkOption {
+          type = lib.types.str;
+          default = "127.0.0.1";
+          example = "0.0.0.0";
+          description = "Address the Samba Prometheus metrics exporter listens on.";
+        };
+
+        port = lib.mkOption {
+          type = lib.types.port;
+          default = 9922;
+          example = 9000;
+          description = "Port the Samba Prometheus metrics exporter listens on.";
+        };
+
+        profileTdb = lib.mkOption {
+          type = lib.types.str;
+          default = "/var/cache/samba/smbprofile.tdb";
+          example = "/var/lock/samba/smbprofile.tdb";
+          description = "Path to Samba's profiling database.";
+        };
+
+        openFirewall = lib.mkEnableOption "opening the Samba Prometheus metrics exporter port in the firewall";
+      };
+
       smbd = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -216,6 +243,10 @@ in
           assertion = cfg.nsswins -> cfg.winbindd.enable;
           message = "If services.samba.nsswins is enabled, then services.samba.winbindd.enable must also be enabled";
         }
+        {
+          assertion = cfg.prometheusExporter.enable -> cfg.smbd.enable;
+          message = "If services.samba.prometheusExporter is enabled, then services.samba.smbd.enable must also be enabled";
+        }
       ];
     }
 
@@ -262,6 +293,29 @@ in
       networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [
         137
         138
+      ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.prometheusExporter.enable) {
+      services.samba.settings.global."smbd profiling level" = lib.mkDefault "on";
+
+      systemd.services.samba-prometheus-exporter = {
+        description = "Samba Prometheus Metrics Exporter";
+        documentation = [ "man:smb_prometheus_endpoint(8)" ];
+
+        after = [ "samba-smbd.service" ];
+        partOf = [ "samba.target" ];
+        wantedBy = [ "samba.target" ];
+
+        serviceConfig = {
+          ExecStart = "${lib.getExe' cfg.package "smb_prometheus_endpoint"} -a ${lib.escapeShellArg cfg.prometheusExporter.listenAddress} -p ${toString cfg.prometheusExporter.port} ${lib.escapeShellArg cfg.prometheusExporter.profileTdb}";
+          Restart = "on-failure";
+          Slice = "system-samba.slice";
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.prometheusExporter.openFirewall [
+        cfg.prometheusExporter.port
       ];
     })
 

@@ -1,4 +1,7 @@
-{ lib, ... }:
+{ config, lib, ... }:
+let
+  pkgs = config.node.pkgs;
+in
 {
   name = "samba";
 
@@ -23,6 +26,7 @@
         services.samba = {
           enable = true;
           openFirewall = true;
+          prometheusExporter.enable = true;
           settings = {
             "public" = {
               "path" = "/public";
@@ -39,10 +43,14 @@
   testScript = ''
     server.start()
     server.wait_for_unit("samba.target")
+    server.wait_for_unit("samba-prometheus-exporter.service")
     server.succeed("mkdir -p /public; echo bar > /public/foo")
 
     client.start()
     client.wait_for_unit("remote-fs.target")
     client.succeed("[[ $(cat /public/foo) = bar ]]")
+
+    server.wait_until_succeeds("test -e /var/cache/samba/smbprofile.tdb")
+    server.wait_until_succeeds("${lib.getExe pkgs.curl} -fsS http://127.0.0.1:9922/metrics | grep -q smb_worker_smbd_num")
   '';
 }

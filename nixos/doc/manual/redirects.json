@@ -1307,6 +1307,9 @@
   "module-services-samba-configuring-file-share": [
     "index.html#module-services-samba-configuring-file-share"
   ],
+  "module-services-samba-prometheus-exporter": [
+    "index.html#module-services-samba-prometheus-exporter"
+  ],
   "module-services-tandoor-recipes": [
     "index.html#module-services-tandoor-recipes"
   ],

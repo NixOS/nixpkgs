@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPackages,
+  runCommand,
   fetchurl,
   fetchpatch,
   wafHook,
@@ -18,6 +19,7 @@
   dbus,
   libbsd,
   libarchive,
+  libevent,
   zlib,
   liburing,
   gnutls,
@@ -46,6 +48,7 @@
   enablePrinting ? false,
   cups,
   enableProfiling ? true,
+  enablePrometheusExporter ? true,
   enableMDNS ? false,
   avahi,
   enableDomainController ? false,
@@ -64,6 +67,10 @@
   enablePam ? (!stdenv.hostPlatform.isDarwin),
   pam,
 }:
+
+assert lib.assertMsg (
+  enablePrometheusExporter -> enableProfiling
+) "samba: enablePrometheusExporter requires enableProfiling";
 
 let
   inherit (lib) optional optionals;
@@ -181,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional enablePrinting cups
   ++ optional enableMDNS avahi
+  ++ optional enablePrometheusExporter libevent
   ++ optionals enableDomainController [
     gpgme
     python3Packages.dnspython
@@ -258,6 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional enableLibunwind "--with-libunwind"
   ++ optional enableProfiling "--with-profiling-data"
+  ++ optional enablePrometheusExporter "--with-prometheus-exporter"
   ++ optional (!enableAcl) "--without-acl-support"
   ++ optional (!enablePam) "--without-pam"
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -330,7 +339,7 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     EOF
     find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
-    find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
+    find $out/bin $out/sbin -type f -exec $SHELL -c "$SCRIPT" \;
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
@@ -351,6 +360,20 @@ stdenv.mkDerivation (finalAttrs: {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
     };
+  }
+  // lib.optionalAttrs enablePrometheusExporter {
+    prometheus-exporter = runCommand "samba-prometheus-exporter-test" { } ''
+      test -x ${lib.getExe' finalAttrs.finalPackage "smb_prometheus_endpoint"}
+      test -f ${lib.getOutput "man" finalAttrs.finalPackage}/share/man/man8/smb_prometheus_endpoint.8.gz
+
+      if ${lib.getExe' finalAttrs.finalPackage "smb_prometheus_endpoint"} 2>stderr; then
+        echo "smb_prometheus_endpoint unexpectedly succeeded without a tdb filename" >&2
+        exit 1
+      fi
+
+      grep -q "Missing tdb filename" stderr
+      touch $out
+    '';
   }
   // lib.optionalAttrs enableDomainController {
     versionSambaTool = testers.testVersion {

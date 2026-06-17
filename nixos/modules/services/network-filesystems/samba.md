@@ -37,3 +37,20 @@ which is read-only and accessible without authentication:
   };
 }
 ```
+
+### Prometheus metrics exporter {#module-services-samba-prometheus-exporter}
+
+Samba can expose profiling metrics in Prometheus format using the
+`smb_prometheus_endpoint` utility:
+
+```nix
+{
+  services.samba = {
+    enable = true;
+    prometheusExporter.enable = true;
+  };
+}
+```
+
+The exporter listens on `127.0.0.1:9922` by default and serves metrics at
+`/metrics`.
