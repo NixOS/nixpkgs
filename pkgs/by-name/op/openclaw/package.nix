@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
@@ -14,7 +14,7 @@
   version ? "2026.6.6",
 }:
 let
-  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
   # Keep fetchPnpmDeps and frozen offline install aligned on patchedDependencies.
   stripPatchedDeps = ''
     sed -i '/^patchedDependencies:/,/^[^ ]/{/^patchedDependencies:/d;/^  /d;}' pnpm-lock.yaml pnpm-workspace.yaml
@@ -31,12 +31,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-sgLyNHQNnuEWZBaIxqJUz9o0x+P1EgNuLlUfy1iRunk=";
   };
 
-  pnpmDepsHash = "sha256-VrDxGDh/AHqVzQBfUAZP1KaC1M5YBYKI+wPSyPOf65M=";
+  pnpmDepsHash = "sha256-eADEHT4CW8ffCKwEfQjjrQ63oZQUYmRYymYQpMT8/gY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = finalAttrs.pnpmDepsHash;
     prePnpmInstall = stripPatchedDeps;
   };
