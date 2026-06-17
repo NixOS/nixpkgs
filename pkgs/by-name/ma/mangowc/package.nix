@@ -74,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight and feature-rich Wayland compositor based on dwl";
     homepage = "https://mangowm.github.io";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hustlerone ];
+    maintainers = with lib.maintainers; [
+      hustlerone
+      yvnth
+    ];
     platforms = lib.platforms.linux;
   };
 })
