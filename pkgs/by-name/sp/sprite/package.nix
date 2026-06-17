@@ -5,6 +5,7 @@
   versionCheckHook,
   autoPatchelfHook,
   writableTmpDirAsHomeHook,
+  makeWrapper,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sprite";
@@ -26,11 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase = ''
     mkdir -p $out/bin
     install -m 755 sprite $out/bin/
+    wrapProgram $out/bin/sprite --set UPGRADE_CHECK false
   '';
 
   passthru.updateScript = ./update.sh;
