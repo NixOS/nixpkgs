@@ -1,0 +1,12 @@
+set rust crate lto to thin to not use fatlto for gkrust which fails sometimes
+--- a/config/makefiles/rust.mk
++++ b/config/makefiles/rust.mk
+@@ -92,7 +92,7 @@
+ # Never enable when coverage is enabled to work around https://github.com/rust-lang/rust/issues/90045.
+ ifndef MOZ_CODE_COVERAGE
+ ifeq (,$(findstring gkrust_gtest,$(RUST_LIBRARY_FILE)))
+-cargo_rustc_flags += -Clto$(if $(filter full,$(MOZ_LTO_RUST_CROSS)),=fat)
++cargo_rustc_flags += -Clto=thin
+ endif
+ # We need -Cembed-bitcode=yes for all crates when using -Clto.
+ RUSTFLAGS += -Cembed-bitcode=yes

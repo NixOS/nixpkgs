@@ -1,0 +1,11 @@
+--- a/python/mozbuild/mozbuild/action/dump_env.py
++++ b/python/mozbuild/mozbuild/action/dump_env.py
+@@ -8,7 +8,7 @@
+ import os
+ import sys
+ 
+-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
++sys.path.append(os.path.join(os.path.dirname(__file__), "../../../../testing/mozbase/mozshellutil"))
+ 
+ from mozshellutil import quote
+ 
