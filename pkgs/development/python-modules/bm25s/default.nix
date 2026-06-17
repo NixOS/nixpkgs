@@ -14,6 +14,7 @@ buildPythonPackage (finalAttrs: {
   pname = "bm25s";
   version = "0.3.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xhluca";
