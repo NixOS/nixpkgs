@@ -32,6 +32,7 @@ in
       dwrege
       fpletz
       hythera
+      mBornand
       thbemme
     ];
     platforms = lib.platforms.unix;

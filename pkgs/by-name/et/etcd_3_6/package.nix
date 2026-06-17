@@ -31,10 +31,7 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [
-      dtomvan
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ dtomvan ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
