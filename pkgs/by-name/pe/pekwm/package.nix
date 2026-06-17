@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pekwm";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-rwvecE9T+/zZg0rRUDl/DEMGH9ZmuvYj/Rz6vzmMv1I=";
+    hash = "sha256-yepdtR4w4vMMQz76oSqIl6nYSNJaCR6mGe7DKliDYo8=";
   };
 
   nativeBuildInputs = [
