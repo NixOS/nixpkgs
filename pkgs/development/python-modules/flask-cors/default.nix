@@ -24,6 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-9WlD5Qd0WiBDrVHf5nT1qAK2gtYavlPnY7qFkiAgxws=";
   };
 
+  # actually use the current version value
+  # taken from .github/workflows/on-release-main.yml
+  postPatch = ''
+    sed -i "s/^version = \".*\"/version = \"$version\"/" pyproject.toml
+    sed -i "s/__version__ .*/__version__ = \"$version\"/" flask_cors/version.py
+  '';
+
   build-system = [
     setuptools
   ];
