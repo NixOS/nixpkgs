@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./utils.patch
-    ++ [
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
       (fetchpatch {
         url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/42da4cdf2d9161fea8f7cdfc19aefda7707fadf4/audio/cdparanoia/files/patch-interface_low__interface.h";
         hash = "sha256-bXrcRFCbU7/7/N+J8VGKGSxIB1m8XwoAlc/KTnt9wN0=";
@@ -170,6 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
+    ];
+    maintainers = with lib.maintainers; [
+      olduser101
     ];
     platforms = lib.platforms.unix;
     mainProgram = "cdparanoia";
