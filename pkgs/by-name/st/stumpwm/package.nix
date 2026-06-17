@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   autoreconfHook,
@@ -7,20 +7,30 @@
   texinfo,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  sbclWithPkgs = sbcl.withPackages (
+    ps: with ps; [
+      alexandria
+      cl-ppcre
+      clx
+      fiasco
+    ]
+  );
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stumpwm";
   version = "24.11";
 
   src = fetchFromGitHub {
     owner = "stumpwm";
     repo = "stumpwm";
-    rev = "${finalAttrs.version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-Ba2HcAmNcZvnqU0jpLTxsBe8L+4aHbO/oM4Bp/IYEC0=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    sbcl
+    sbclWithPkgs
     texinfo
   ];
 
