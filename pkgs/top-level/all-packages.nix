@@ -11137,8 +11137,6 @@ with pkgs;
 
   yamale = with python3Packages; toPythonApplication yamale;
 
-  zap-chip-gui = zap-chip.override { withGui = true; };
-
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
   };
