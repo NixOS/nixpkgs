@@ -2,10 +2,7 @@
 {
   name = "plausible";
   meta = {
-    maintainers = with lib.maintainers; [
-      e1mo
-      xanderio
-    ];
+    maintainers = [ ];
   };
 
   nodes.machine =
