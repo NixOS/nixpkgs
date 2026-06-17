@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.2.0.0";
+  version = "2026.2.1.0";
 
   __structuredAttrs = true;
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino.genai";
       tag = finalAttrs.version;
-      hash = "sha256-C60e4F+NuUPA4pQ/o2+EekOmp47QH1fTGDyXYqPJ57s=";
+      hash = "sha256-M8xxOsNvtIYIKvkrmOUnKv6gL/RAGuBfTBu3OPm3zRk=";
     };
 
   outputs = [
