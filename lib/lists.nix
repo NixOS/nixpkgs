@@ -143,13 +143,9 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons.
-
-    ::: {.warning}
-    This function will be removed in 26.05.
-    :::
+    `fold` was an alias of `foldr` for historic reasons.
   */
-  fold = warn "fold has been deprecated, use foldr instead" foldr;
+  fold = throw "fold is a removed alias of foldr, use it instead"; # TODO: Remove in 26.11
 
   /**
     “left fold”, like `foldr`, but from the left:
