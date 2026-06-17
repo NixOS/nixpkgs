@@ -8458,20 +8458,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  kulala-nvim = buildVimPlugin {
-    pname = "kulala.nvim";
-    version = "6.11.1";
-    src = fetchFromGitHub {
-      owner = "mistweaverco";
-      repo = "kulala.nvim";
-      tag = "v6.11.1";
-      hash = "sha256-w3psD4EYntFeX7otMPXN3altJf3UPjcaS2XLlqSnH4k=";
-    };
-    meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
-    meta.license = getLicenseFromSpdxId "MIT";
-    meta.hydraPlatforms = [ ];
-  };
-
   lackluster-nvim = buildVimPlugin {
     pname = "lackluster.nvim";
     version = "0-unstable-2025-10-06";
