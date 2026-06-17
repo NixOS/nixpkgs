@@ -206,20 +206,20 @@ let
   helpText = ''
     Please run:
 
-        % nix-shell maintainers/scripts/update.nix --argstr maintainer garbas
+        % nix-shell maintainers/scripts/coverage.nix --argstr maintainer garbas
 
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package nautilus
+        % nix-shell maintainers/scripts/coverage.nix --argstr package nautilus
 
     to run update script for specific package, or
 
-        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
+        % nix-shell maintainers/scripts/coverage.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
 
     to run update script for all packages matching given predicate, or
 
-        % nix-shell maintainers/scripts/update.nix --argstr path gnome
+        % nix-shell maintainers/scripts/coverage.nix --argstr path gnome
 
     to run update script for all package under an attribute path.
 
@@ -247,10 +247,8 @@ let
   # Transform a matched package into an object for update.py.
   packageData =
     { package, attrPath }:
-    let
-      updateScript = get-script package;
-    in
     lib.filterAttrsRecursive (_: v: v != { }) {
+      package = attrPath;
       name = package.name;
       pname = lib.getName package;
       version = lib.getVersion package;
