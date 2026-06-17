@@ -10,13 +10,13 @@ mkCoqDerivation {
   owner = "coq-community";
   releaseRev = v: "v${v}";
 
-  release."8.14.0".sha256 = "sha256-TB12C3hX9XucbsXr+UL+8jM19NOFXASW/lcytwy6uVE=";
-  release."8.13.0".sha256 = "sha256-8bDr/Ovl6s8BFaRcHeS5H33/K/pYdeKfSN+krVuKulQ=";
-  release."8.11.1".sha256 = "sha256-jTPgcXSNn1G2mMDC7ocFcmqs8svB7Yo1emXP15iuxiU=";
-  release."8.9.0".sha256 = "sha256-UBsvzlDEZsZsVkbUI0GbFEhpxnnLCiaqlqDyWVC5I6s=";
-  release."8.8.0".sha256 = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
-  release."8.7.0".sha256 = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
-  release."8.6.0".sha256 = "sha256-GltkGQ3tJqUPAbdDkqqvKLLhMOap50XvGaCkjshiNdY=";
+  release."8.14.0".hash = "sha256-TB12C3hX9XucbsXr+UL+8jM19NOFXASW/lcytwy6uVE=";
+  release."8.13.0".hash = "sha256-8bDr/Ovl6s8BFaRcHeS5H33/K/pYdeKfSN+krVuKulQ=";
+  release."8.11.1".hash = "sha256-jTPgcXSNn1G2mMDC7ocFcmqs8svB7Yo1emXP15iuxiU=";
+  release."8.9.0".hash = "sha256-UBsvzlDEZsZsVkbUI0GbFEhpxnnLCiaqlqDyWVC5I6s=";
+  release."8.8.0".hash = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
+  release."8.7.0".hash = "sha256-k2nQyNw9KT3wY7bGy8KGILF44sLxkBYqdFpzFE9fgyw=";
+  release."8.6.0".hash = "sha256-GltkGQ3tJqUPAbdDkqqvKLLhMOap50XvGaCkjshiNdY=";
 
   inherit version;
   defaultVersion =
