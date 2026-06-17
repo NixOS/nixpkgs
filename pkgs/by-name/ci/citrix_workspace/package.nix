@@ -80,10 +80,6 @@
   x264,
   zlib,
 
-  homepage,
-  version,
-  hash,
-
   extraCerts ? [ ],
 }:
 
@@ -122,17 +118,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "citrix-workspace";
-  inherit version;
+  version = "26.04.0.73";
 
   src = requireFile rec {
     name = "linuxx64-${version}.tar.gz";
-    sha256 = hash;
+    sha256 = "1hp6ax0ix3id94njd43a35af3ydlb6sqwvbbabd5xp8d511m695f";
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
       the 64-bit binaries, .tar.gz from:
 
-      ${homepage}
+      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html
 
       (if you do not find version ${version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
@@ -433,6 +429,6 @@ stdenv.mkDerivation rec {
       khaneliman
       flacks
     ];
-    inherit homepage;
+    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html";
   };
 }
