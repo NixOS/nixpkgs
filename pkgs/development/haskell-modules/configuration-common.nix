@@ -287,9 +287,6 @@ with haskellLib;
   }) (doJailbreak super.language-haskell-extract);
 
   vector = overrideCabal (old: {
-    # 2026-05-16: allow QuickCheck 2.16
-    # https://github.com/haskell/vector/issues/562
-    jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTargets = [
       "vector-tests-O0"
