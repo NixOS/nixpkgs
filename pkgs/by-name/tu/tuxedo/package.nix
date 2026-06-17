@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   versionCheckHook,
 }:
@@ -20,18 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-PIhtD0/0hxFOn51PwOWCtz82a2dvhS+2jbd8Wvr/JUM=";
 
-  preCheck = ''
-    export HOME="$TMPDIR/home"
-    export XDG_CONFIG_HOME="$TMPDIR/config"
-    export XDG_CACHE_HOME="$TMPDIR/cache"
-    export XDG_STATE_HOME="$TMPDIR/state"
-
-    mkdir -p \
-      "$HOME" \
-      "$XDG_CONFIG_HOME" \
-      "$XDG_CACHE_HOME" \
-      "$XDG_STATE_HOME"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -42,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Failure
     "--skip=insert_dialog_after_nl_parse"
   ];
+
   meta = {
     description = "fast, keyboard-driven terminal UI for todo.txt";
     homepage = "https://github.com/webstonehq/tuxedo";
