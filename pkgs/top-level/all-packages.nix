@@ -9475,18 +9475,6 @@ with pkgs;
 
   inherit (ocaml-ng.ocamlPackages) stog;
 
-  stumpwm = callPackage ../applications/window-managers/stumpwm {
-    stdenv = stdenvNoCC;
-    sbcl = sbcl.withPackages (
-      ps: with ps; [
-        alexandria
-        cl-ppcre
-        clx
-        fiasco
-      ]
-    );
-  };
-
   stumpwm-unwrapped = sbcl.pkgs.stumpwm;
 
   sublime3Packages = recurseIntoAttrs (

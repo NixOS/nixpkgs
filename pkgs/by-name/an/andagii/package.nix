@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,14 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-U7wC55G8jIvMMyPcEiJQ700A7nkWdgWK1LM0F/wgDCg=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp -v ANDAGII_.TTF $out/share/fonts/truetype/andagii.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "http://www.i18nguy.com/unicode/unicode-font.html";
