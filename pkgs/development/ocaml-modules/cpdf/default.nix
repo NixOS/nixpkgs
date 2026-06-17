@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-cpdf";
-  version = "2.9";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "cpdf-source";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b6fGKFM9Q2YxW8FoyewGNTkF9XBtjdq0Bur6KgVi5T4=";
+    hash = "sha256-P3CQwYp23URVBDcdnrRAg7gAsOMIifwraIcFSJh8pd0=";
   };
 
   nativeBuildInputs = [
