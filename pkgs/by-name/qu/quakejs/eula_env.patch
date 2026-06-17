@@ -1,0 +1,15 @@
+diff --git a/build/ioq3ded.js b/build/ioq3ded.js
+index 61c2ab7..727b327 100644
+--- a/build/ioq3ded.js
++++ b/build/ioq3ded.js
+@@ -9637,6 +9637,10 @@ function copyTempDouble(ptr) {
+   		},LoadingProgress:function (frac) {
+   			console.log('loaded ' + (frac*100).toFixed(2) + '%');
+   		},PromptEULA:function (callback) {
++        if (process.env.QUAKEJS_ACCEPT_EULA === 'true') {
++  				return callback();
++        }
++
+   			var readline = require('readline');
+   			var lines = SYSC.eula.split('\n');
+   
