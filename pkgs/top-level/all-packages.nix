@@ -6804,6 +6804,14 @@ with pkgs;
     libsOnly = true;
   };
 
+  festival = callPackage ../applications/audio/festival/package.nix {
+    inherit (pkgs)
+      speech-tools
+      ncurses
+      alsa-lib
+      ;
+  };
+
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
   };
