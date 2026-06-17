@@ -1,16 +1,14 @@
 {
   lib,
-  buildNpmPackage,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  stdenv,
   fetchFromGitHub,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   unstableGitUpdater,
 }:
-let
-  pnpm = pnpm_10;
-in
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piped";
   version = "0-unstable-2026-06-16";
 
@@ -21,23 +19,36 @@ buildNpmPackage rec {
     hash = "sha256-IC2nTB4iue+hQ00WOKh/BC7LXsIhdTKYPmn3RYpZk7c=";
   };
 
-  nativeBuildInputs = [ pnpm ];
-  npmConfigHook = pnpmConfigHook;
+  nativeBuildInputs = [
+    nodejs
+    pnpm_10
+    pnpmConfigHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    cp dist $out -r
+
+    cp -r dist "$out"
+
     runHook postInstall
   '';
 
-  npmDeps = pnpmDeps;
+  strictDeps = true;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
-      pnpm
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 4;
     hash = "sha256-55nG7tfXtxnyfZop+8Wg8rSFOHQi0TjRc0QT16erX1E=";
   };
@@ -51,4 +62,4 @@ buildNpmPackage rec {
     license = [ lib.licenses.agpl3Plus ];
   };
 
-}
+})
