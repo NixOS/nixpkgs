@@ -38,7 +38,14 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-jtOfMrC5kFKQN4eFEZeawo0blWHbpMu+peM3XtTSf5w=";
   };
 
-  # Fix CMake 4 compatibility
+  patches = [
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/NixOS/nixpkgs/issues/450258
+    # Inspired by: https://github.com/OpenNMT/CTranslate2/pull/1907
+    ./cmake-3.10.patch
+  ];
+
+  # Fix CMake 4 compatibility in vendored dependencies (submodules)
   postPatch = ''
     substituteInPlace third_party/cpu_features/CMakeLists.txt \
       --replace-fail \
