@@ -6,16 +6,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "stackblur-go";
-  version = "1.1.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "esimov";
     repo = "stackblur-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PGYMqpk98bGJSZbyYBcZBqaPS3syfYSOymq33C+DxNM=";
+    hash = "sha256-y1Fov81mholhz+bLRYl+G7jhzcsFS5TUjQ3SUntD8E0=";
   };
 
   vendorHash = null;
+
+  postInstall = ''
+    mv $out/bin/cmd $out/bin/stackblur
+  '';
 
   ldflags = [
     "-s"

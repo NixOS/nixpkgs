@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     changelog = "https://github.com/trag1c/outspin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Conveniently read single char inputs in the console";
-    homepage = "https://github.com/trag1c/outspin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

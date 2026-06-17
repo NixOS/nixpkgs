@@ -1,9 +1,10 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
   fetchpatch,
+  buildPythonApplication,
   appstream-glib,
+  dbus-python,
   desktop-file-utils,
   gettext,
   glib,
@@ -13,11 +14,14 @@
   libappindicator,
   libhandy,
   meson,
+  ninja,
   pkg-config,
+  pygobject3,
+  pyxdg,
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "cpupower-gui";
   version = "1.0.0";
 
@@ -53,13 +57,15 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # need for gtk namespace to be available
     hicolor-icon-theme # needed for postinstall script
     meson
-    python3Packages.ninja # TODO: maybe swap out for the non-python package
+    ninja
     pkg-config
     wrapGAppsHook3
-    python3Packages.dbus-python
+
+    # Python packages
+    dbus-python
     libappindicator
-    python3Packages.pygobject3
-    python3Packages.pyxdg
+    pygobject3
+    pyxdg
   ];
 
   buildInputs = [
@@ -69,10 +75,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    python3Packages.dbus-python
+    dbus-python
     libappindicator
-    python3Packages.pygobject3
-    python3Packages.pyxdg
+    pygobject3
+    pyxdg
   ];
 
   mesonFlags = [

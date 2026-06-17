@@ -19,7 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Report when files are changed";
-    homepage = "https://github.com/leahneukirchen/rwc";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ somasis ];

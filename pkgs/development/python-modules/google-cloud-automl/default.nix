@@ -15,20 +15,22 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.20.0";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_automl";
-    inherit (finalAttrs) version;
-    hash = "sha256-3BaZODxm3KaDecL6iM0JQz9mOwaOvOTnb1HJ8sCOzEA=";
+    inherit version;
+    hash = "sha256-xyZ7Wafv97FSB/5oaJ67P7kian4nL/E78nUL9ocUWM4=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -73,8 +75,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
-    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${finalAttrs.version}/packages/google-cloud-automl";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-})
+}

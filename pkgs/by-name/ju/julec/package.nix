@@ -22,22 +22,23 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.2.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-m+IJiTNOrOzx/3e67r/yWOjGRRyOy5TWHhjFZXaMOsc=";
+    hash = "sha256-zfFsWP1nFvyzIqtf/nG4itpKxy6ZZjb3gGC3LwLVGPk=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
-    tag = "jule${finalAttrs.version}";
+    # revision determined by the upstream commit hash
+    rev = "5de197f9041dbc61b1d97ed4e3b84c0f667014f8";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-UclKaxIBW1dqCz2Rk0If7EV3P7XrtUpKuR4ROPWw2Ao=";
+    hash = "sha256-PMAFXLXa3wS0+TWEU2bjlw5UzOmAx8ittQzuExhrWDM=";
   };
 
   dontConfigure = true;

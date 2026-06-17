@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,10 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Abq0/hU/BXJMxQxzhZG1SEGIZYt+qofuXwy5/A9byQ8=";
   };
 
-  nativeBuildInputs = [ installFonts ];
-
-  preInstall = ''
-    rm -r old
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype
+    cp fonts/ttf/VT323-Regular.ttf $out/share/fonts/truetype
   '';
 
   meta = {

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   attrs,
   pillow,
   toml,
@@ -13,21 +12,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "clickgen";
   version = "2.2.5";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-yFEkE1VyeHBuebpsumc6CTvv2kpAw7XAWlyUlXibqz0=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
     numpy
     pillow
@@ -57,4 +54,4 @@ buildPythonPackage (finalAttrs: {
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;
   };
-})
+}

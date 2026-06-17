@@ -45,7 +45,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     changelog = "https://github.com/henningkerstan/enocean-async/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Async implementation of the EnOcean Serial Protocol Version 3";
-    homepage = "https://github.com/henningkerstan/enocean-async";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };

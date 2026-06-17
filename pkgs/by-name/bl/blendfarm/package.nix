@@ -5,7 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   xz,
-  pcre2,
+  pcre,
   autoPatchelfHook,
   bintools,
   fixDarwinDylibNames,
@@ -86,7 +86,7 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     xz
-    pcre2
+    pcre
     libgdiplus
     glib
     libxrandr
@@ -116,7 +116,7 @@ buildDotnetModule rec {
 
   # add libraries not found by autopatchelf
   libPath = lib.makeLibraryPath [
-    pcre2
+    pcre
     xz
   ];
   makeWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${libPath}" ];

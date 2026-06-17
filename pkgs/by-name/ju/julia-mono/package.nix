@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,7 +14,14 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-f9hjo3B4q2WBl0j86fHny8bYUqldYSC0pP4uoWOI8Zk=";
   };
 
-  nativeBuildInputs = [ installFonts ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    mv *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Monospaced font for scientific and technical computing";

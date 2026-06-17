@@ -7,7 +7,7 @@
   libGL,
   openssl,
   pkg-config,
-  sdl12-compat,
+  SDL_compat,
   SDL_image,
   SDL_mixer,
   SDL_gfx,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     boost
     libGL
     libGLU
-    sdl12-compat
+    SDL_compat
     SDL_gfx
     SDL_image
     SDL_mixer

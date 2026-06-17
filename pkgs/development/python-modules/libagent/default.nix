@@ -6,10 +6,9 @@
   buildPythonPackage,
   setuptools,
   cryptography,
-  docutils,
+  ed25519,
   ecdsa,
   gnupg,
-  pinentry-curses,
   semver,
   mnemonic,
   unidecode,
@@ -19,29 +18,27 @@
   python-daemon,
   pymsgbox,
   pynacl,
-  nix-update-script,
 }:
 
-# When changing this package, please test packages {onlykey,trezor}-agent
+# When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "libagent";
-  version = "0.16.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    tag = "libagent/${finalAttrs.version}";
-    hash = "sha256-JFHBE2o5VSJaz5yeCiXmBchm4/1gA+dZ/PRt3+WENdA=";
+    tag = "v${version}";
+    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
-  # hardcode the path to gpgconf and pinentry in the libagent library
+  # hardcode the path to gpgconf in the libagent library
   postPatch = ''
     substituteInPlace libagent/gpg/keyring.py \
       --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'" \
-      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'" \
-      --replace "get_gnupg_components(sp=sp)['pinentry']" "'${(lib.getExe pinentry-curses)}'"
+      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
 
   build-system = [ setuptools ];
@@ -56,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     python-daemon
     pymsgbox
     ecdsa
-    docutils
+    ed25519
     mnemonic
     semver
     pynacl
@@ -76,14 +73,10 @@ buildPythonPackage (finalAttrs: {
     "test_get_agent_sock_path"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=libagent/(.*)" ];
-  };
-
   meta = {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ np ];
   };
-})
+}

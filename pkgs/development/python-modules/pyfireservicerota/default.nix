@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyfireservicerota";
-  version = "0.0.49";
+  version = "0.0.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-fireservicerota";
     tag = version;
-    hash = "sha256-EVMxAOP6haS+jkLD6pOZnu0yhhNMR+gCud2qXsycNbc=";
+    hash = "sha256-wHcIzhSofp8dwlPy35gOJwIM0wtWPqUx7/kg6NjfNhc=";
   };
 
   build-system = [ pdm-backend ];

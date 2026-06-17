@@ -48,8 +48,6 @@ let
     optionalString
     removePrefix
     stringLength
-    all
-    seq
     ;
 
   leftPadName =
@@ -265,10 +263,10 @@ lib.extendMkDerivation {
 
           checkDrv =
             attrName: drv:
-            if isPythonModule drv && isMismatchedPython drv then throwMismatch attrName drv else true;
+            if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
 
         in
-        attrName: inputs: seq (all (checkDrv attrName) inputs) inputs;
+        attrName: map (checkDrv attrName);
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 

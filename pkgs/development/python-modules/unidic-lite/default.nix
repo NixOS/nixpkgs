@@ -2,20 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "unidic-lite";
   version = "1.0.8";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     sha256 = "0idj4yp0sl27ylr2wzkybbh0wj7c843lp7cljw5d1m7xv5r4b7fv";
   };
-
-  build-system = [ setuptools ];
 
   # no tests
   doCheck = false;
@@ -28,4 +25,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-})
+}

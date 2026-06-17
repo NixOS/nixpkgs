@@ -3,8 +3,7 @@
   lib,
   stdenv,
   libiconv,
-  libxslt,
-  texliveBasic,
+  texliveFull,
   xercesc,
 }:
 
@@ -22,13 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     lib.optionalString stdenv.cc.isClang ''
       substituteInPlace makefile \
-        --replace-fail "\$(CXX)" "\$(CXX) -std=c++98"
+        --replace "\$(CXX)" "\$(CXX) -std=c++98"
     ''
     +
     # fix the doc build on TeX Live 2023
     ''
       substituteInPlace Documentation/manual.tex \
-        --replace-fail '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+        --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
     '';
 
   outputs = [
@@ -36,13 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    libxslt
-    (texliveBasic.withPackages (ps: [
-      ps.cm-super
-      ps.ucs
-    ]))
-  ];
+  nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildFlags = [

@@ -13,7 +13,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python314,
+  python312,
   openssl,
   jq,
   callPackage,
@@ -25,7 +25,7 @@
 }:
 
 let
-  python3 = python314;
+  python3 = python312;
 
   pythonEnv = python3.withPackages (
     p:
@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
     if [ -d platform/bundledpythonunix ]; then
       rm -r platform/bundledpythonunix
     fi
-    rm -f .install/bundled-python*
     cp -R * .install $out/google-cloud-sdk/
 
     # Resolve readlink noise in shell initialization
@@ -200,9 +199,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
-    tests.gke-gcloud-auth-plugin = withExtraComponents [
-      components.gke-gcloud-auth-plugin
-    ];
     updateScript = ./update.sh;
   };
 

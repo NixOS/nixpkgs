@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "doggo";
-  version = "1.1.7";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = "doggo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Q4a859MoVSZ4hjXwaIekL1En6xpd4bZPQ9NGAkxSPto=";
+    hash = "sha256-NPbBQ11QuNKDtNnh8OoVpSsnC62078HYtE4E6esf6Hs=";
   };
 
   vendorHash = "sha256-JMyGYG3cLOZmH9EcLPe+5+ViHv7Z7brLj5uqJrPYm7A=";

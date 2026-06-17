@@ -27,7 +27,6 @@
   symlinkJoin,
   udev,
   vulkan-loader,
-  wrapGAppsHook3,
   xrandr,
 
   additionalLibs ? [ ],
@@ -62,10 +61,7 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
 
   buildInputs = [
     kdePackages.qtbase
@@ -75,10 +71,6 @@ symlinkJoin {
   ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
-    # Required for org.gtk.Settings.FileChooser
-    gappsWrapperArgsHook
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-
     wrapQtAppsHook
   '';
 

@@ -8,7 +8,6 @@
   makeWrapper,
   rresult,
   bos,
-  fmt,
   pcre2,
   re,
   camlp-streams,
@@ -22,7 +21,7 @@ stdenv.mkDerivation (
   in
   {
 
-    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.05.01" else "7.14";
+    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.05.00" else "7.14";
 
     pname = "ocaml${ocaml.version}-camlp5";
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation (
           "rel${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
       hash =
         {
-          "8.05.01" = "sha256-ym1cZIoAIwMnkGiygZf+TZxjhyO6WHYItWRXobdcKm0=";
+          "8.05.00" = "sha256-Y7d72gAxtyAQOIvLGua6Pib+FCoeMlbRYa9vzc+9hRo=";
           "8.03.2" = "sha256-nz+VfGR/6FdBvMzPPpVpviAXXBWNqM3Ora96Yzx964o=";
           "7.14" = "sha256-/ORtS0uc/GN+g3y6N5ftjL4OBSqV6iswLRbfpeNCprU=";
         }
@@ -53,15 +52,12 @@ stdenv.mkDerivation (
 
     buildInputs = lib.optionals recent [
       bos
+      pcre2
       re
       rresult
     ];
 
-    propagatedBuildInputs = lib.optionals recent [
-      camlp-streams
-      pcre2
-      fmt
-    ];
+    propagatedBuildInputs = lib.optional recent camlp-streams;
 
     strictDeps = true;
 
@@ -84,7 +80,8 @@ stdenv.mkDerivation (
     dontStrip = true;
 
     meta = {
-      broken = lib.versionAtLeast ocaml.version "5.4" && !lib.versionAtLeast finalAttrs.version "8.04.00";
+      broken =
+        lib.versionAtLeast ocaml.version "5.04" && !lib.versionAtLeast finalAttrs.version "8.05.00";
       description = "Preprocessor-pretty-printer for OCaml";
       longDescription = ''
         Camlp5 is a preprocessor and pretty-printer for OCaml programs.

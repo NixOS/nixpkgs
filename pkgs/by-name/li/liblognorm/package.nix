@@ -1,48 +1,34 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
+  fetchurl,
   pkg-config,
   libestr,
   json_c,
-  pcre2,
+  pcre,
   libfastjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
-  version = "2.1.0";
+  version = "2.0.9";
 
-  src = fetchFromGitHub {
-    owner = "rsyslog";
-    repo = "liblognorm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XHfTSLYjfGRNmPUQrLWK+Co4v4cCmtfhZ0wruAC0RNI=";
+  src = fetchurl {
+    url = "https://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dsfMLLdqPVjncy4M/yORgPg/O2NQAriqBIZciBKFd5M=";
   };
 
-  postPatch = ''
-    patchShebangs tests/*.sh
-  '';
-
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libestr
     json_c
-    pcre2
+    pcre
     libfastjson
   ];
 
   configureFlags = [ "--enable-regexp" ];
 
-  doCheck = true;
-
   meta = {
-    changelog = "https://github.com/rsyslog/liblognorm/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     homepage = "https://www.liblognorm.com/";
     license = lib.licenses.lgpl21;

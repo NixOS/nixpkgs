@@ -29,7 +29,7 @@
   libzmf,
   pixman,
   pkg-config,
-  podofo,
+  podofo_0_10,
   poppler,
   poppler_data,
   python3,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libzmf
     pixman
-    podofo
+    podofo_0_10
     poppler
     poppler_data
     (python3.withPackages (

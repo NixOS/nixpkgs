@@ -3,6 +3,7 @@
   aiofiles,
   aiohttp,
   aioresponses,
+  aiounittest,
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "9.2.7";
+  version = "9.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-HZN3ot5z/JbWZaWLffyTWLneD1gG3tTdYLKevXYnJnw=";
+    hash = "sha256-t7C2x3aH3ltDthBlt+ghSj9SEfZ4jm4Fgs0KAIm7cBA=";
   };
 
   build-system = [ poetry-core ];
@@ -53,6 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    aiounittest
     pytest-asyncio
     pytest-cov-stub
     pytest-freezegun

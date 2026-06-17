@@ -100,13 +100,7 @@ sub runConfig {
             elsif ($line =~ /choice\[(.*)\]: ###$/) {
                 my $answer = "";
                 foreach my $name (keys %choices) {
-                    if (($answers{$name} || "") eq "y") {
-                        if ($answer eq "") {
-                            $answer = $choices{$name};
-                        } else {
-                            die "conflicting answers!"
-                        }
-                    }
+                    $answer = $choices{$name} if ($answers{$name} || "") eq "y";
                 }
                 print STDERR "CHOICE: $1, ANSWER: $answer\n" if $debug;
                 print OUT "$answer\n" if $1 =~ /-/;

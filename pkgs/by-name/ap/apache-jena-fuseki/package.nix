@@ -10,19 +10,16 @@
   pkgs,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "apache-jena-fuseki";
   version = "5.1.0";
-
   src = fetchurl {
-    url = "mirror://apache/jena/binaries/apache-jena-fuseki-${finalAttrs.version}.tar.gz";
+    url = "mirror://apache/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
     hash = "sha256-GcwXcLVM2txPC+kkHjEIpqK9dTkQEN9Jkka0EaJRO7Q=";
   };
-
   nativeBuildInputs = [
     makeWrapper
   ];
-
   installPhase = ''
     cp -r . "$out"
     chmod +x $out/fuseki
@@ -37,13 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
         ;
     done
   '';
-
   passthru = {
     tests = {
       basic-test = pkgs.callPackage ./basic-test.nix { };
     };
   };
-
   meta = {
     description = "SPARQL server";
     license = lib.licenses.asl20;
@@ -57,4 +52,4 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     mainProgram = "fuseki";
   };
-})
+}

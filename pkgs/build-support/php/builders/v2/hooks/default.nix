@@ -26,7 +26,6 @@ in
     substitutions = {
       phpScriptUtils = lib.getExe php-script-utils;
     };
-    meta.license = lib.licenses.mit;
   } ./composer-vendor-hook.sh;
 
   composerInstallHook = makeSetupHook {
@@ -43,6 +42,5 @@ in
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
       phpScriptUtils = lib.getExe php-script-utils;
     };
-    meta.license = lib.licenses.mit;
   } ./composer-install-hook.sh;
 }

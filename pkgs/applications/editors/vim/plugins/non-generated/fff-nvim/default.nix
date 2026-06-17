@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.9.3";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
     tag = "v${version}";
-    hash = "sha256-9k1XWnHzBjy7dABCzZ0yxCHqgX1bsWkkxksLVLDqdmc=";
+    hash = "sha256-JbV2dTQhTyZgDZYvFoR1mz9CeM2IPv59Qmp2iiJC8a0=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-R/w3Km9LTqWQ2NFbwYbTCld72av26BdXtxC/K0sqdlQ=";
+    cargoHash = "sha256-L/Ens/wzw/jKaa1T3A2pLIBKs09saPEk/0bRhgRezPQ=";
 
     cargoBuildFlags = [
       "-p"
@@ -65,12 +65,9 @@ let
       openssl
     ];
 
+    # This test requires curl and GitHub access
     checkFlags = [
-      # This test requires curl and GitHub access
       "--skip=update_check::tests::test_update_check_end_to_end"
-
-      # This test depends on catching a race window and is not deterministic
-      "--skip=drop_during_post_scan_does_not_crash"
     ];
 
     env = {
@@ -92,7 +89,7 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModules = [
+  nvimSkipModule = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];

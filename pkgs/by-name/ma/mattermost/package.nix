@@ -13,8 +13,6 @@
   nixosTests,
 
   latestVersionInfo ? null,
-  removeUserLimit ? false,
-  removeFreeBadge ? false,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -27,10 +25,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.3";
-    srcHash = "sha256-73WGxvdsDZ3v4UJGDDy+nAkT9DFMsGk29ruThwxoclw=";
-    vendorHash = "sha256-XaXqQN20c3DhW2/L0zhTA8dLeRp4MyBxUKpiMVwp/7s=";
-    npmDepsHash = "sha256-MRH7canRhFtFppKi1eKMqr8JnWenw29689l2GSpXyFU=";
+    version = "11.7.1";
+    srcHash = "sha256-9eI9tX6qHEEzm7aro7ky2JORfAmqbjmrmxABFVTZzW8=";
+    vendorHash = "sha256-xu399pAtIJUIns+GhKFlDR0crWV+8HiN9Wf38EMu5q8=";
+    npmDepsHash = "sha256-M+yoCLR4yT30n3rhqZu1z8zeWas+5VniP4aaIJPz6VU=";
   },
   ...
 }:
@@ -138,10 +136,6 @@ buildMattermost rec {
     '';
   };
 
-  patches = lib.optionals removeUserLimit [
-    ./mattermost-remove-user-limit.patch
-  ];
-
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
@@ -243,10 +237,6 @@ buildMattermost rec {
       inherit version src;
 
       sourceRoot = "${src.name}/webapp";
-
-      patches = lib.optionals removeFreeBadge [
-        ./mattermost-remove-free-banner.patch
-      ];
 
       # Remove deprecated image-webpack-loader causing build failures
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated

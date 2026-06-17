@@ -12,16 +12,16 @@
   usb-devices,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.6.4";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fb83M2V4q4ncmIIMM6BhNDBg8DSjBmYNE+4Qj22wTEE=";
+    tag = "v${version}";
+    hash = "sha256-xnEEq3NVScMbMjZWb4lI+kpy2zr6WlXx3XcBhzN1rZ4=";
   };
 
   build-system = [ poetry-core ];
@@ -44,8 +44,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library for recovering Bluetooth adapters";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
-    changelog = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

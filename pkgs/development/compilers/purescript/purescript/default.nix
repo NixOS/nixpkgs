@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       justinwoo
+      mbbx6spp
       cdepillabout
     ];
     platforms = [

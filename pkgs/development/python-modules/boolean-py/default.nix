@@ -2,25 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "boolean-py";
   version = "5.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bastikr";
     repo = "boolean.py";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-h5iHcdN77ZRGMJnSJLoYkRTY1TeJ3yQ1eF193HKsNqU=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-})
+}

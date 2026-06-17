@@ -11,20 +11,19 @@
   wayland,
   udev,
   vulkan-loader,
-  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ashell";
-  version = "0.9.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = finalAttrs.version;
-    hash = "sha256-QRNEc2HNqA1tZk/jW/MXDwXda58yNlkw86SCTjH1/1w=";
+    hash = "sha256-X9TU866PAzaf52qKsCpeJvwE0suu1lJndHNQdPg51HM=";
   };
 
-  cargoHash = "sha256-bLZcRASBGV9Y/QlDVBdOl2ElZDLI1KUAh5MlOsjmlKs=";
+  cargoHash = "sha256-nhYbehlgB8pzMoj39G0BHRca9mIT+0QjUaebCx+DDE0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,12 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ finalAttrs.runtimeDependencies;
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Ready to go Wayland status bar for Hyprland";
     homepage = "https://github.com/MalpenZibo/ashell";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     mainProgram = "ashell";
     maintainers = with lib.maintainers; [ justdeeevin ];
     platforms = lib.platforms.linux;

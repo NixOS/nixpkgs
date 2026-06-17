@@ -4,6 +4,7 @@
   click,
   fetchPypi,
   flask,
+  isPy27,
   nixosTests,
   prometheus-client,
   py-air-control,
@@ -14,6 +15,7 @@ buildPythonPackage rec {
   pname = "py-air-control-exporter";
   version = "0.3.1";
   format = "setuptools";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

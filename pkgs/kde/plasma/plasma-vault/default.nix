@@ -4,6 +4,8 @@
   replaceVars,
   pkg-config,
   cryfs,
+  encfs,
+  fuse,
   gocryptfs,
   lsof,
 }:
@@ -13,6 +15,8 @@ mkKdeDerivation {
   patches = [
     (replaceVars ./hardcode-paths.patch {
       cryfs = lib.getExe' cryfs "cryfs";
+      encfs = lib.getExe' encfs "encfs";
+      encfsctl = lib.getExe' encfs "encfsctl";
       gocryptfs = lib.getExe' gocryptfs "gocryptfs";
       lsof = lib.getExe lsof;
     })

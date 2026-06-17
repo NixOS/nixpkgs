@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromCodeberg,
+  fetchFromGitea,
   uv-build,
   dramatiq,
   pytestCheckHook,
@@ -13,7 +13,8 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "yaal";
     repo = "dramatiq-eager-broker";
     tag = version;

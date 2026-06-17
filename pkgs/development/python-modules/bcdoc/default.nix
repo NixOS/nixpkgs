@@ -2,24 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   docutils,
   six,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bcdoc";
   version = "0.16.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-9WjBguBog77PcZbyJwUkNc/9RWBHAMgjYsp300J7YgI=";
+    inherit pname version;
+    sha256 = "f568c182e06883becf7196f227052435cffd45604700c82362ca77d3427b6202";
   };
-
-  build-system = [ setuptools ];
 
   buildInputs = [
     docutils
@@ -29,11 +24,9 @@ buildPythonPackage (finalAttrs: {
   # Tests fail due to nix file timestamp normalization.
   doCheck = false;
 
-  pythonImportsCheck = [ "bcdoc" ];
-
   meta = {
     homepage = "https://github.com/boto/bcdoc";
     license = lib.licenses.asl20;
     description = "ReST document generation tools for botocore";
   };
-})
+}

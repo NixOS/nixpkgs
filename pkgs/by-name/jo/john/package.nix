@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "1.9.0-Jumbo-1-unstable-2026-06-07";
+  version = "1.9.0-Jumbo-1-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "309326510e585c7a1340dab2e475c2ebfa6295aa";
-    hash = "sha256-9bk5Icnm7PgQdSVrAKWHaKN0POctVKbofR7Aa9T2fXE=";
+    rev = "f514ece8ec4ae5e38ad75aaa322eac86d73dcd76";
+    hash = "sha256-zO1/KUJe3LvYCGlwVpNg5uDwPRD0ql/7anErb7tywC0=";
   };
 
   patches = lib.optionals withOpenCL [

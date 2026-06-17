@@ -13,9 +13,6 @@
   pillow,
   pydot,
   pygments,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-django,
   python,
   python-dateutil,
   pytz,
@@ -27,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.5.0";
+  version = "5.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     tag = version;
-    hash = "sha256-F9IHxp2dx0hzu9iOaborJjLyzZjs86rccczhc5GPbtY=";
+    hash = "sha256-VVgH4h2OeOu/NKGMSOHo2tg8Owj1t+HhEN8xWGrj3m8=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
@@ -70,17 +67,18 @@ buildPythonPackage rec {
     networkx
     pydot
     factory-boy
-    pytestCheckHook
-    pytest-cov-stub
-    pytest-django
   ];
 
   pythonImportsCheck = [ "silk" ];
 
-  preCheck = ''
-    export DB_ENGINE=sqlite3 DB_NAME=':memory:'
+  checkPhase = ''
+    runHook preCheck
 
-    cd project
+    pushd project
+    DB_ENGINE=sqlite3 DB_NAME=':memory:' ${python.interpreter} manage.py test
+    popd # project
+
+    runHook postCheck
   '';
 
   meta = {

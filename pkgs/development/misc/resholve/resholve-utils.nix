@@ -287,7 +287,8 @@ rec {
 
         postFixup = unresholved.postResholve;
 
-        inherit (unresholved) meta strictDeps __structuredAttrs;
+        # don't break the metadata...
+        meta = unresholved.meta;
       };
   };
 }

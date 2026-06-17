@@ -112,7 +112,6 @@ lib.extendMkDerivation {
     in
     {
       strictDeps = true;
-      __structuredAttrs = true;
 
       nativeBuildInputs = nativeBuildInputs ++ [
         lean4
@@ -190,12 +189,6 @@ lib.extendMkDerivation {
               if [ -d "$out/.lake/config/[anonymous]" ]; then
                 mv "$out/.lake/config/[anonymous]" "$out/.lake/config/${leanPackageName}"
               fi
-
-              if [ -d "$out/.lake/build/ir" ]; then
-                find "$out/.lake/build/ir" -name '*.setup.json' -delete
-              fi
-
-              rm -rf "$out/.lake/config"
 
               # Setup hook propagates LEAN_PATH to downstream packages.
               mkdir -p "$out/nix-support"

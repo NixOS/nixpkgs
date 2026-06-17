@@ -12,7 +12,7 @@
   lib,
   libGLU,
   libpsl,
-  qt5,
+  libsForQt5,
   libredirect,
   libx11,
   lz4,
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
     gtk3
     nghttp2
     libpsl
-    qt5.qtbase
-    qt5.qtwayland
+    libsForQt5.qtbase
+    libsForQt5.qt5.qtwayland
   ];
 
   installPhase = ''

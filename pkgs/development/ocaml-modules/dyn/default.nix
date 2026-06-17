@@ -1,13 +1,14 @@
 {
   buildDunePackage,
-  dune,
+  dune_3,
   ordering,
   pp,
 }:
 
 buildDunePackage {
   pname = "dyn";
-  inherit (dune) version src;
+  inherit (dune_3) version src;
+  duneVersion = "3";
 
   dontAddPrefix = true;
 
@@ -16,7 +17,7 @@ buildDunePackage {
     pp
   ];
 
-  meta = dune.meta // {
+  meta = dune_3.meta // {
     description = "Dynamic type";
   };
 }

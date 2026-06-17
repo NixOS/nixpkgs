@@ -55,9 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     mainProgram = "xinput";
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

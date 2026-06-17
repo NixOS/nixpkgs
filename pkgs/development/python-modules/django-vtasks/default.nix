@@ -4,7 +4,6 @@
   croniter,
   dj-database-url,
   django-valkey,
-  django-vcache,
   django,
   fetchFromGitLab,
   hatchling,
@@ -17,20 +16,21 @@
   pytest-django,
   pytestCheckHook,
   pythonOlder,
-  pyzstd,
   redisTestHook,
+  valkey,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "django-vtasks";
-  version = "2.1.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-vtasks";
     tag = "v${version}";
-    hash = "sha256-f9x6atPMYgQQ/jpCJdDj33l+mhyei+6IWi4bqqVWxU8=";
+    hash = "sha256-75W63HsLBT4EPQCiAXjd9qr6n07/2e5GCUNWeDzXUq0=";
   };
 
   postPatch = ''
@@ -47,11 +47,12 @@ buildPythonPackage rec {
     django
     orjson
     croniter
-  ];
+  ]
+  ++ lib.optional (pythonOlder "3.14") zstandard;
 
   optional-dependencies = {
     metrics = [ prometheus-client ];
-    valkey = [ django-vcache ] ++ lib.optional (pythonOlder "3.14") pyzstd;
+    valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
   };
 
   pythonImportsCheck = [ "django_vtasks" ];
@@ -66,7 +67,6 @@ buildPythonPackage rec {
 
     dj-database-url
     django-valkey
-    django-vcache
     postgresql
     postgresqlTestHook
     psycopg

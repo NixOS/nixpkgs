@@ -1,11 +1,22 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
+  buildPythonApplication,
   cacert,
+  setuptools,
+  matrix-nio,
+  python-magic,
+  markdown,
+  pillow,
+  aiofiles,
+  notify2,
+  dbus-python,
+  pyxdg,
+  python-olm,
+  emoji,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "matrix-commander";
   version = "8.0.5";
 
@@ -30,8 +41,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     cacert
-  ]
-  ++ (with python3Packages; [
     setuptools
     (matrix-nio.override { withOlm = true; })
     python-magic
@@ -43,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     python-olm
     emoji
-  ]);
+  ];
 
   meta = {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";

@@ -7,22 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.22.3.20260518";
+  version = "0.22.3.20260223";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_docutils";
     inherit version;
-    hash = "sha256-LEW6Y6msZCRjNTWbaP6cJ2ApJkmcm2fK7DeAdF9qre4=";
+    hash = "sha256-6Q6Gjagt9hXqIhfPNt/zHwlmDaoV/A+VavU/icE2RQE=";
   };
 
   build-system = [ setuptools ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "'docutils-stubs' = [" "'*' = [" \
-      --replace-fail "setuptools>=82.0.1" "setuptools"
-  '';
 
   # Module doesn't have tests
   doCheck = false;

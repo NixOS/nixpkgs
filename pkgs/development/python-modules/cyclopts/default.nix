@@ -1,41 +1,35 @@
 {
   lib,
-  stdenv,
   attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  bash,
-  fish,
   hatch-vcs,
   hatchling,
   markdown,
   mkdocs,
-  pexpect,
   pydantic,
   pymdown-extensions,
-  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
-  rich,
   rich-rst,
+  rich,
   sphinx,
   syrupy,
   trio,
-  zsh,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.18.0";
+  version = "4.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gg1FrEXmx90U5vO6u0ttue+niswIuWrKYFpscAoaaKY=";
+    hash = "sha256-vlsjhBfI08QMQ8FzM+BogAXbukHhnr4aD8ZmZVicCv0=";
   };
 
   build-system = [
@@ -53,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    docs = [ sphinx ];
     mkdocs = [
       mkdocs
       markdown
@@ -61,28 +56,25 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    pexpect
     pydantic
-    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     syrupy
-
-    # integrations
-    sphinx
-    bash
-    fish
-    zsh
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
+    # Test requires bash
+    "test_positional_not_treated_as_command"
     # Building docs
     "build_succeeds"
-    # timeouts under heavy concurrency
-    "test_requires_equals_eq_form_value_completion"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires sphinx
+    "tests/test_sphinx_ext.py"
   ];
 
   meta = {
@@ -90,9 +82,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/BrianPugh/cyclopts";
     changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      fab
-      PerchunPak
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 })

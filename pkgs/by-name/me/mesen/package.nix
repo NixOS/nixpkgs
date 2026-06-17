@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "mesen";
-  version = "2.2.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner = "nesdev-org";
-    repo = "MesenCE";
+    owner = "SourMesen";
+    repo = "Mesen2";
     tag = version;
-    hash = "sha256-IH8Or+UVapQW0PXPanMVaOIQVT85TEYU2utKBbvuW6c=";
+    hash = "sha256-vBwAPAnp6HIgI49vAZIqnzw8xHQ7ZMuALjf7G+acCXg=";
   };
 
   patches = [

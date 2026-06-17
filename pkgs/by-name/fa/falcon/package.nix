@@ -37,7 +37,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Programming language with macros and syntax at once";
-    homepage = "https://github.com/falconpl/falcon";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;

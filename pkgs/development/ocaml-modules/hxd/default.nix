@@ -10,11 +10,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "hxd";
-  version = "0.5.0";
+  version = "0.4.0";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/hxd/releases/download/v${finalAttrs.version}/hxd-${finalAttrs.version}.tbz";
-    hash = "sha256-RTw5TsFWeMXObvEjVuTVgGoCYRdmAPrMp2XexBZx+qk=";
+    sha256 = "sha256-EAMLciahdQRHGAmtWvwMIAchJkxcbdPVldJIBApxgFg=";
   };
 
   propagatedBuildInputs = lib.optional withLwt lwt;

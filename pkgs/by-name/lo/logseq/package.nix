@@ -14,6 +14,7 @@
   darwin,
   makeDesktopItem,
   makeWrapper,
+  nodejs,
   nodejs-slim,
   removeReferencesTo,
   yarnBuildHook,
@@ -150,8 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       copyDesktopItems
       fakeGit
       makeWrapper
-      nodejs-slim
-      nodejs-slim.npm
+      nodejs
       (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
       removeReferencesTo
       yarnBuildHook
@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline --cwd tldraw postinstall
 
-    export npm_config_nodedir=${nodejs-slim}
+    export npm_config_nodedir=${nodejs}
     pushd packages/amplify
     npm rebuild --verbose
     popd
@@ -247,7 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # remove references to nodejs
-    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs-slim} '{}' \;
+    find static/out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"

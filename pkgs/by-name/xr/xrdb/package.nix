@@ -52,9 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       mitOpenGroup
     ];
     mainProgram = "xrdb";
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

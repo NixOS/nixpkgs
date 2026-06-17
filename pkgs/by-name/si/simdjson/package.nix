@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://simdjson.org/";
-    changelog = "https://github.com/simdjson/simdjson/releases/tag/${finalAttrs.src.tag}";
     description = "Parsing gigabytes of JSON per second";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

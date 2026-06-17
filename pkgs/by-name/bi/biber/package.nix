@@ -73,7 +73,7 @@ perlPackages.buildPerlModule {
     description = "Backend for BibLaTeX";
     license = biberSource.meta.license;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.ttuegel ];
     mainProgram = "biber";
   };
 }

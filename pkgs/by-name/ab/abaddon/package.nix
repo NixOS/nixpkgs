@@ -21,14 +21,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "abaddon";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-fSNXMbyYmUOA4x911/an02fhhhWe6a4xlLVb2DIqIOE=";
     fetchSubmodules = true;
   };
@@ -74,11 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      name = pname;
+      exec = pname;
       desktopName = "Abaddon";
-      genericName = finalAttrs.meta.description;
-      startupWMClass = finalAttrs.pname;
+      genericName = meta.description;
+      startupWMClass = pname;
       categories = [
         "Network"
         "InstantMessaging"
@@ -95,4 +95,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.linux;
   };
-})
+}

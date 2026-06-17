@@ -9,6 +9,7 @@
   nix-prefetch-git,
   fetchurl,
   jq,
+  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
@@ -179,7 +180,6 @@ in
     };
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
-      license = lib.licenses.mit;
     };
   } ./yarn-config-hook.sh;
 
@@ -187,7 +187,6 @@ in
     name = "yarn-build-hook";
     meta = {
       description = "Run yarn build in buildPhase";
-      license = lib.licenses.mit;
     };
   } ./yarn-build-hook.sh;
 
@@ -203,7 +202,6 @@ in
     };
     meta = {
       description = "Prune yarn dependencies and install files for packages using Yarn 1";
-      license = lib.licenses.mit;
     };
   } ./yarn-install-hook.sh;
 }

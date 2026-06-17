@@ -29,6 +29,7 @@
   gtk3-x11,
   harfbuzz,
   imagemagick,
+  jansson,
   libxaw,
   libxcursor,
   libxft,
@@ -65,7 +66,7 @@
   # Boolean flags
   withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
-  srcRepo ? true,
+  srcRepo ? false,
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
@@ -79,6 +80,8 @@
   withGpm ? stdenv.hostPlatform.isLinux,
   # https://github.com/emacs-mirror/emacs/blob/emacs-27.2/etc/NEWS#L118-L120
   withImageMagick ? false,
+  # Emacs 30+ has native JSON support
+  withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
@@ -238,8 +241,6 @@ stdenv.mkDerivation (finalAttrs: {
     ""
   ];
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -248,12 +249,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals srcRepo [
     autoreconfHook
   ]
-  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
   buildInputs = [
+    gettext
     gnutls
     (lib.getDev harfbuzz)
+  ]
+  ++ lib.optionals withJansson [
+    jansson
   ]
   ++ [
     libxml2
@@ -341,6 +345,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withWebkitgtk [
     webkitgtk_4_1
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    sigtool
+  ]
   ++ lib.optionals withNS [
     librsvg
   ]
@@ -407,8 +414,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withDbus "dbus")
     (lib.withFeature withSelinux "selinux")
   ];
-
-  __structuredAttrs = true;
 
   env =
     lib.optionalAttrs withNativeCompilation {

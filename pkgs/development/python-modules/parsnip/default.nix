@@ -3,32 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  wheel,
   more-itertools,
   numpy,
-  ase,
-  gemmi,
-  pycifrw,
-  pytest-doctestplus,
-  pytestCheckHook,
-  sympy,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "parsnip";
-  version = "0.6.0";
+  version = "0.5.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "parsnip";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-A1YoTBRN3ukcueUso5P2zPZ/pxu25k9h6aI7+AQvr1Q=";
+    rev = "v${version}";
+    hash = "sha256-BCEQnClT/dI+t8RwMEQkzbFVCmDThiS9m8ZBCIEFrlg=";
   };
 
   build-system = [
     setuptools
+    wheel
   ];
 
   dependencies = [
@@ -36,29 +30,15 @@ buildPythonPackage (finalAttrs: {
     numpy
   ];
 
-  nativeCheckInputs = [
-    ase
-    gemmi
-    pycifrw
-    pytest-doctestplus
-    pytestCheckHook
-    sympy
-  ];
-
   pythonImportsCheck = [
     "parsnip"
-  ];
-
-  disabledTestPaths = [
-    # Don't test docs
-    "doc/source/"
   ];
 
   meta = {
     description = "Lightweight, performant library for parsing CIF files in Python";
     homepage = "https://github.com/glotzerlab/parsnip";
-    changelog = "https://github.com/glotzerlab/parsnip/blob/${finalAttrs.src.tag}/changelog.rst";
+    changelog = "https://github.com/glotzerlab/parsnip/blob/${src.rev}/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-})
+}

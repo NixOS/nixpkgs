@@ -1,13 +1,12 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
   cmake,
   gfortran,
   fftwSinglePrec,
   doxygen,
   swig,
-  graphviz,
   enablePython ? false,
   python3Packages,
   enableOpencl ? true,
@@ -16,27 +15,18 @@
   config,
   enableCuda ? config.cudaSupport,
   cudaPackages,
-  autoAddDriverRunpath,
-
-  # passthru
-  nix-update-script,
+  addDriverRunpath,
 }:
 
-let
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else stdenv;
-in
-effectiveStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openmm";
-  version = "8.5.2";
-
-  __structuredAttrs = true;
-  strictDeps = true;
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "openmm";
-    tag = finalAttrs.version;
-    hash = "sha256-9mOgnMgRU7zE9UWJ03VNoOTt76nPTHXZ4xkSKtOTwng=";
+    rev = finalAttrs.version;
+    hash = "sha256-YGoQGOP6Use4ivhxlWfKMpEjpm5ovFH1Qf0yVK5jr48=";
   };
 
   # "This test is stochastic and may occasionally fail". It does.
@@ -52,7 +42,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     gfortran
     swig
     doxygen
-    graphviz # doxygen missing components: dot
     python3Packages.python
   ]
   ++ lib.optionals enablePython [
@@ -60,10 +49,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     python3Packages.installer
     python3Packages.wheel
   ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
+  ++ lib.optional enableCuda addDriverRunpath;
 
   buildInputs = [
     fftwSinglePrec
@@ -72,12 +58,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ocl-icd
     opencl-headers
   ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_cudart # CUDA::cuda_driver (driver stub)
-    cudaPackages.cuda_nvrtc # runtime kernel compilation
-    cudaPackages.cuda_profiler_api # cudaProfiler.h
-    cudaPackages.libcufft # CUDA::cufft
-  ];
+  ++ lib.optional enableCuda cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals enablePython (
     with python3Packages;
@@ -90,29 +71,31 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" true)
-    (lib.cmakeBool "OPENMM_BUILD_AMOEBA_PLUGIN" true)
-    (lib.cmakeBool "OPENMM_BUILD_CPU_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_C_AND_FORTRAN_WRAPPERS" true)
-    (lib.cmakeBool "OPENMM_BUILD_DRUDE_PLUGIN" true)
-    (lib.cmakeBool "OPENMM_BUILD_PME_PLUGIN" true)
-    (lib.cmakeBool "OPENMM_BUILD_RPMD_PLUGIN" true)
-    (lib.cmakeBool "OPENMM_BUILD_SHARED_LIB" true)
+    "-DBUILD_TESTING=ON"
+    "-DOPENMM_BUILD_AMOEBA_PLUGIN=ON"
+    "-DOPENMM_BUILD_CPU_LIB=ON"
+    "-DOPENMM_BUILD_C_AND_FORTRAN_WRAPPERS=ON"
+    "-DOPENMM_BUILD_DRUDE_PLUGIN=ON"
+    "-DOPENMM_BUILD_PME_PLUGIN=ON"
+    "-DOPENMM_BUILD_RPMD_PLUGIN=ON"
+    "-DOPENMM_BUILD_SHARED_LIB=ON"
   ]
   ++ lib.optionals enablePython [
-    (lib.cmakeBool "OPENMM_BUILD_PYTHON_WRAPPERS" true)
+    "-DOPENMM_BUILD_PYTHON_WRAPPERS=ON"
   ]
   ++ lib.optionals enableOpencl [
-    (lib.cmakeBool "OPENMM_BUILD_AMOEBA_OPENCL_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_DRUDE_OPENCL_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_OPENCL_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_RPMD_OPENCL_LIB" true)
+    "-DOPENMM_BUILD_OPENCL_LIB=ON"
+    "-DOPENMM_BUILD_AMOEBA_OPENCL_LIB=ON"
+    "-DOPENMM_BUILD_DRUDE_OPENCL_LIB=ON"
+    "-DOPENMM_BUILD_RPMD_OPENCL_LIB=ON"
   ]
   ++ lib.optionals enableCuda [
-    (lib.cmakeBool "OPENMM_BUILD_AMOEBA_CUDA_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_CUDA_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_DRUDE_CUDA_LIB" true)
-    (lib.cmakeBool "OPENMM_BUILD_RPMD_CUDA_LIB" true)
+    "-DCUDA_SDK_ROOT_DIR=${cudaPackages.cudatoolkit}"
+    "-DOPENMM_BUILD_AMOEBA_CUDA_LIB=ON"
+    "-DOPENMM_BUILD_CUDA_LIB=ON"
+    "-DOPENMM_BUILD_DRUDE_CUDA_LIB=ON"
+    "-DOPENMM_BUILD_RPMD_CUDA_LIB=ON"
+    "-DCMAKE_LIBRARY_PATH=${cudaPackages.cudatoolkit}/lib64/stubs"
   ];
 
   postInstall = lib.strings.optionalString enablePython ''
@@ -123,12 +106,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ${python3Packages.python.pythonOnBuildForHost.interpreter} -m installer --prefix $out dist/*.whl
   '';
 
+  postFixup = ''
+    for lib in $out/lib/plugins/*CUDA.so $out/lib/plugins/*Cuda*.so; do
+      addDriverRunpath "$lib"
+    done
+  '';
+
   # Couldn't get CUDA to run properly in the sandbox
   doCheck = !enableCuda && !enableOpencl;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Toolkit for molecular simulation using high performance GPU code";

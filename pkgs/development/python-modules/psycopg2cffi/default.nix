@@ -7,7 +7,6 @@
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
   six,
   stdenv,
@@ -55,11 +54,6 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: '{}' != []
     "testEmptyArray"
-  ];
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
-    # testutils.script_to_py3 imports lib2to3, removed in 3.13
-    "psycopg2cffi/tests/psycopg2_tests/test_notify.py"
   ];
 
   env = {

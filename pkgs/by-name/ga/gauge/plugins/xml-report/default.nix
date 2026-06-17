@@ -13,7 +13,7 @@ makeGaugePlugin {
     description = "XML report generation plugin for Gauge";
     homepage = "https://github.com/getgauge/xml-report/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ marie ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     platforms = [
       "x86_64-darwin"

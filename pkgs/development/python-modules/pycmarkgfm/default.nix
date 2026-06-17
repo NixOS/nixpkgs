@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  isPy27,
   cffi,
   pytest,
 }:
@@ -10,6 +11,7 @@ buildPythonPackage rec {
   pname = "pycmarkgfm";
   version = "1.2.1";
   format = "setuptools";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

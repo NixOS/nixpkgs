@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "19.0.0";
+  version = "18.11.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uScTzj4pSRtSFCMxoOR5KqipCbPknwnydPYG6xU5dOo=";
+    hash = "sha256-TWpIu6LxFX5ssijlYQA/dmAiPrB0nrHtlS2MWEk6C30=";
   };
 
-  vendorHash = "sha256-QqqTkIgR9ca1dYQ32SG7C+SpEIA07Hlf8x3lVhZ5vRQ=";
+  vendorHash = "sha256-xEvvYAVIwHwQDd38P2i6GcgFqf8FPnflWh5IEqmWQdE=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -123,7 +123,6 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
     homepage = "https://docs.gitlab.com/runner";
-    changelog = "https://gitlab.com/gitlab-org/gitlab-runner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
     maintainers = with lib.maintainers; [ zimbatm ];

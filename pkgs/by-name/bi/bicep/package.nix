@@ -1,24 +1,26 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  mono,
   jq,
 }:
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.39.26";
+  version = "0.36.177";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-CfoC9/Qe2OdPNnAa7e0BFgbPEbVrDfl9u3hM6y8msGQ=";
+    hash = "sha256-ah8g1mU2etQ/zoXcGbS+xRkTb4DjPmofe2ubZSNRhNU=";
   };
 
   patches = [
-    ./0001-Pin-Grpc.Tools-To-2.68.1.patch
+    ./0001-Revert-Bump-Grpc.Tools-from-2.68.1-to-2.69.0-16097.patch
   ];
 
   postPatch = ''
@@ -41,9 +43,9 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ jq ];
 
-  doCheck = true;
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 
-  dotnetTestFlags = "-p:UseAppHost=false";
+  nativeCheckInputs = [ mono ];
 
   testProjectFile = "src/Bicep.Cli.UnitTests/Bicep.Cli.UnitTests.csproj";
 

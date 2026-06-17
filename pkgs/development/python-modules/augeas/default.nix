@@ -7,21 +7,18 @@
   augeas,
   cffi,
   pkgs, # for libxml2
-  setuptools,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "augeas";
   version = "1.2.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "python-augeas";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-Lq8ckra3sqN38zo1d5JsEq6U5TtLKRmqysoWNwR9J9A=";
   };
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,17 +27,17 @@ buildPythonPackage (finalAttrs: {
     pkgs.libxml2
   ];
 
-  dependencies = [ cffi ];
+  propagatedBuildInputs = [ cffi ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "augeas" ];
 
   meta = {
-    changelog = "https://github.com/hercules-team/python-augeas/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/hercules-team/python-augeas/releases/tag/v${version}";
     description = "Pure python bindings for augeas";
     homepage = "https://github.com/hercules-team/python-augeas";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-})
+}

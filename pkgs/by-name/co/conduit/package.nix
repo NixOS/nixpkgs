@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conduit";
-  version = "0.9.7";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DmnHGj6Q/i+wVNIbaTGrFX9f0Kry2X5bC7zahXv29I4=";
+    hash = "sha256-mX7/5C4wd70Kx1rQyo2BcZMwDRqvxo4fBdz3pq7PuvM=";
   };
 
   nativeBuildInputs = [
@@ -41,24 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MPI" mpiSupport)
   ];
 
-  installCheckPhase =
-    let
-      excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        # SIGTRAP***Exception
-        "t_conduit_fixed_size_vector"
-      ];
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-      excludedTestsString = lib.optionalString (
-        excludedTests != [ ]
-      ) "-E '^(${builtins.concatStringsSep "|" excludedTests})$'";
-    in
-    ''
-      runHook preInstallCheck
+    make test
 
-      ctest --output-on-failure ${excludedTestsString}
-
-      runHook postInstallCheck
-    '';
+    runHook postInstallCheck
+  '';
   doInstallCheck = true;
 
   passthru = {

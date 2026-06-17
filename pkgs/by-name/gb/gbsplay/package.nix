@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Gameboy sound player";
-    homepage = "https://github.com/mmitch/gbsplay";
     license = lib.licenses.gpl1Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sigmanificient ];

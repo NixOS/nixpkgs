@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
@@ -12,13 +12,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shadcn";
-  version = "4.11.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "shadcn-ui";
     repo = "ui";
     rev = "shadcn@${finalAttrs.version}";
-    hash = "sha256-jwZBYQKixm3YAC8uLSeQMwTFoOrw4EgkvgC1FWShxy0=";
+    hash = "sha256-9dlSAEkl6NgZGT2noVEfstt8TbIy0Fz+/s5L+MWpblg=";
   };
 
   pnpmWorkspaces = [ "shadcn" ];
@@ -29,16 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 4;
-    hash = "sha256-XqdSa9ONpJ/QOu7njPMhG0xyTLEN9nt/dm3E0ivDaEs=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-OESxer0YIbWql3NgdhvUhgMW4wc0nIyUYRESjmM1A1s=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_9
   ];
 
   buildPhase = ''

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyutil";
-  version = "3.4.1";
+  version = "3.3.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8RHsCEieQ3/uHPkNai+sUBR2hDJAVrYy5DMlp6YRw6c=";
+    hash = "sha256-XcPWu5xbq6u10Ldz4JQEXXVxLos0ry0psOKGAmaCZ8A=";
   };
 
   prePatch = lib.optionalString isPyPy ''

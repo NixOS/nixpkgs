@@ -15,6 +15,4 @@ makeSetupHook {
   passthru.tests = {
     simple = callPackage ./test.nix { };
   };
-
-  meta.license = lib.licenses.mit;
 } ./memcached-test-hook.sh

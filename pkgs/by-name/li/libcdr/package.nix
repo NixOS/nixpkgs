@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcdr";
-  version = "0.1.9";
+  version = "0.1.8";
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/libcdr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-97tqvdfyJoIPKIqT3Y0HdZgzwCUNniAq+Q+bMSxGZaM=";
+    hash = "sha256-ztZ3yDALKckdMAS7Hd3wuZdhv1VEmRwmwu6PQn6HGTw=";
   };
 
   strictDeps = true;

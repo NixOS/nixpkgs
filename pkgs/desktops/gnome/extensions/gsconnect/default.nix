@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-gsconnect";
-  version = "72";
+  version = "71";
 
   outputs = [
     "out"
@@ -33,15 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-w9MQVEUQUcO1lqftBi76w5xSTlryKuZJxE6Ogg1J+ho=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OgASLH/mPmRmT8RcXOAZLzDhhidLnlZNcgpAQNbO30Q=";
   };
 
   patches = [
     # Make typelibs available in the extension
     (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
-      gjs = "${gjs}/bin/gjs";
       # Replaced in postPatch
       typelibPath = null;
     })
@@ -121,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
-    changelog = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     teams = [ lib.teams.gnome ];

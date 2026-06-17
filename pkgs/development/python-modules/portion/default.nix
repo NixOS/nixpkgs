@@ -2,29 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   hatchling,
-
-  # dependencies
   sortedcontainers,
-
-  # tests
-  pytest-benchmark,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "portion";
-  version = "2.6.2";
+  version = "2.6.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AlexandreDecan";
     repo = "portion";
-    tag = finalAttrs.version;
-    hash = "sha256-ns9kUoSufegx0I3ag/KVl68ZviEIRx+zPA+BSWq3k80=";
+    tag = version;
+    hash = "sha256-K4mZn8Fm96ZBBdLTMfM9f1GKDdIrRwDRzk6ObaXSFG4=";
   };
 
   build-system = [ hatchling ];
@@ -33,16 +25,13 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "portion" ];
 
-  nativeCheckInputs = [
-    pytest-benchmark
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "Python library providing data structure and operations for intervals";
+    description = "Portion, a Python library providing data structure and operations for intervals";
     homepage = "https://github.com/AlexandreDecan/portion";
-    changelog = "https://github.com/AlexandreDecan/portion/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/AlexandreDecan/portion/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-})
+}

@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqxp";
-  version = "0.0.3";
+  version = "0.0.2";
 
   src = fetchzip {
     url = "https://dev-www.libreoffice.org/src/libqxp/libqxp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cdf9URJUXANhTIbpmeBycaicmNb6YS4sOZc2u1lshUc=";
+    hash = "sha256-5AcZDdmowFbsl9xJ/CPXAUL5zSNu90HgX3V0V8Pt/Rw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  dune,
+  dune_3,
   dune-glob,
   dune-private-libs,
   dune-rpc,
@@ -9,7 +9,9 @@
 
 buildDunePackage {
   pname = "dune-action-plugin";
-  inherit (dune) src version;
+  inherit (dune_3) src version;
+
+  duneVersion = "3";
 
   dontAddPrefix = true;
 
@@ -20,7 +22,7 @@ buildDunePackage {
   ];
 
   meta = {
-    inherit (dune.meta) homepage;
+    inherit (dune_3.meta) homepage;
     description = "API for writing dynamic Dune actions";
     maintainers = [ ];
     license = lib.licenses.mit;

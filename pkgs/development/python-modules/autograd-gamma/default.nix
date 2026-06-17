@@ -5,24 +5,21 @@
   pytestCheckHook,
   autograd,
   scipy,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "autograd-gamma";
   version = "0.4.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "autograd-gamma";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4uMdBYnKGCfwhEc0nMhUMY+aADH8flLWh0GNWTx9A2w=";
+    rev = "v${version}";
+    sha256 = "0v03gly5k3a1hzb54zpw6409m3riak49qd27hkq2f66ai42ivqz2";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     autograd
     scipy
   ];
@@ -37,4 +34,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ swflint ];
   };
-})
+}

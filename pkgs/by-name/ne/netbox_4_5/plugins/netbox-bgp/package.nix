@@ -8,17 +8,16 @@
   python,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "netbox-bgp";
-  version = "0.19.0";
+  version = "0.18.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-bgp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6LZLsUPC9L9L19KeXJilJvmZYcl6YwqysGO8nFAUmcI=";
+    tag = "v${version}";
+    hash = "sha256-CLvtu4Xhja1hU48uAF1aEMNInc3FiworYvgGykQtWV4=";
   };
 
   build-system = [ setuptools ];
@@ -36,8 +35,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "NetBox plugin for BGP related objects documentation";
     homepage = "https://github.com/netbox-community/netbox-bgp";
-    changelog = "https://github.com/netbox-community/netbox-bgp/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-bgp/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-})
+}

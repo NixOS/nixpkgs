@@ -1,23 +1,21 @@
 {
   lib,
   buildPythonPackage,
+  isPy27,
   fetchPypi,
-  setuptools,
   pytest,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
-  pname = "ci-info";
+buildPythonPackage rec {
   version = "0.3.0";
-  pyproject = true;
+  format = "setuptools";
+  pname = "ci-info";
 
-  __structuredAttrs = true;
-
-  build-system = [ setuptools ];
+  disabled = isPy27;
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-H9UMvUAfKa3/7rGLBIniMtFqwadFisa8MW3qtq5TX7A=";
   };
 
@@ -36,4 +34,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-})
+}

@@ -71,12 +71,10 @@ in
       };
     };
 
-    systemd.tmpfiles.settings."10-cde" = {
-      "/var/dt".d.mode = "0755";
-      "/var/dt/tmp".d.mode = "1777";
-      "/var/dt/appconfig".d.mode = "0755";
-      "/var/dt/appconfig/appmanager".d.mode = "1777";
-    };
+    system.activationScripts.setup-cde = ''
+      mkdir -p /var/dt/{tmp,appconfig/appmanager}
+      chmod a+w+t /var/dt/{tmp,appconfig/appmanager}
+    '';
 
     services.xserver.desktopManager.session = [
       {

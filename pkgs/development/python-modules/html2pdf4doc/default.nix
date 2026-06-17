@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "html2pdf4doc";
-  version = "0.0.33";
+  version = "0.0.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mettta";
     repo = "html2pdf4doc_python";
     tag = version;
-    hash = "sha256-d5Y1llC7Yb1Vw2tvxAhgIw7wk18mFJ+sm8Rrr+UwxUI=";
+    hash = "sha256-ailiZfqO2NacJmCbWWtZ2bnerjc9mdJZKDVWNUTMEAg=";
   };
 
   build-system = [

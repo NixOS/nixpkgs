@@ -4,38 +4,37 @@
   name = "pretalx";
   meta.maintainers = pkgs.pretalx.meta.maintainers;
 
-  containers.pretalx =
-    { config, ... }:
-    {
-      networking.extraHosts = ''
-        127.0.0.1 talks.local
-      '';
+  nodes = {
+    pretalx =
+      { config, ... }:
+      {
+        networking.extraHosts = ''
+          127.0.0.1 talks.local
+        '';
 
-      services.pretalx = {
-        enable = true;
-        plugins = with config.services.pretalx.package.plugins; [
-          pages
-        ];
-        nginx.domain = "talks.local";
-        settings = {
-          site.url = "http://talks.local";
+        services.pretalx = {
+          enable = true;
+          plugins = with config.services.pretalx.package.plugins; [
+            pages
+          ];
+          nginx.domain = "talks.local";
+          settings = {
+            site.url = "http://talks.local";
+          };
         };
       };
-    };
+  };
 
-  testScript =
-    # python
-    ''
-      start_all()
+  testScript = ''
+    start_all()
 
-      pretalx.wait_for_unit("pretalx-web.service")
-      pretalx.wait_for_unit("pretalx-worker.service")
+    pretalx.wait_for_unit("pretalx-web.service")
+    pretalx.wait_for_unit("pretalx-worker.service")
 
-      pretalx.wait_until_succeeds("curl -q --fail http://talks.local/orga/")
+    pretalx.wait_until_succeeds("curl -q --fail http://talks.local/orga/")
 
-      pretalx.log(pretalx.succeed("id"))
-      pretalx.succeed("pretalx-manage --help | grep -q 'createsuperuser'")
+    pretalx.succeed("pretalx-manage --help")
 
-      pretalx.log(pretalx.succeed("systemd-analyze security pretalx-web.service"))
-    '';
+    pretalx.log(pretalx.succeed("systemd-analyze security pretalx-web.service"))
+  '';
 }

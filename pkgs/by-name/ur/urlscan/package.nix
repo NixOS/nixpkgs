@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "urlscan";
-  version = "1.0.9";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "urlscan";
     tag = finalAttrs.version;
-    hash = "sha256-WWnWQRDo2Q023qLvR5gExE0uptYRGErnFmd7dZNJQ+k=";
+    hash = "sha256-7Sq+5dWbrPofRP54xr/UTfjAxJ7EVXQyGz3zzHLZd2Y=";
   };
 
   build-system = with python3.pkgs; [

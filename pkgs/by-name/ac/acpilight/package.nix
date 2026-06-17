@@ -7,14 +7,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "acpilight";
   version = "1.2";
 
   src = fetchgit {
     url = "https://gitlab.com/wavexx/acpilight.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-PNjW/04hndcdmsY1ej1TriUblPogsm2ounObbrodGeQ=";
+    tag = "v${version}";
+    sha256 = "1r0r3nx6x6vkpal6vci0zaa1n9dfacypldf6k8fxg7919vzxdn1w";
   };
 
   pyenv = python3.withPackages (
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace-fail udevadm true
   '';
 
-  buildInputs = [ finalAttrs.pyenv ];
+  buildInputs = [ pyenv ];
 
   makeFlags = [ "DESTDIR=$(out) prefix=" ];
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "xbacklight";
   };
-})
+}

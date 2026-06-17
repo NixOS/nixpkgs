@@ -9,17 +9,22 @@
   coreutils,
   desktopToDarwinBundle,
   gnutar,
-  qt6,
+  libsForQt5,
   makeDesktopItem,
   net-tools,
   protobuf,
-  python3Packages,
+  python312Packages,
   system-config-printer,
   wget,
 }:
+
+let
+  # shiboken2 is broken on Python > 3.12
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "5.1.0";
+  version = "4.0.34";
 
   pyproject = false;
 
@@ -27,12 +32,8 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-s5cqUu2hJEHpLVUwTbNYLQCNXMjv0vFGzQb041+XEqA=";
+        hash = "sha256-9YhhsLqAcevjJmENWVWfA1ursPz3mgFz8mzLLSNlXVM=";
         url = "https://www.davisr.me/projects/rcu/";
-        meta = {
-          # `requireFile` sets `lib.licenses.unfree` by default
-          inherit (meta) license;
-        };
       };
     in
     runCommand "${src-tarball.name}-unpacked" { } ''
@@ -64,16 +65,15 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     protobuf
-    qt6.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtwayland
-    qt6.qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -84,7 +84,7 @@ python3Packages.buildPythonApplication rec {
     pikepdf
     pillow
     python3Packages.protobuf # otherwise it picks up protobuf from function args
-    pyside6
+    pyside2
   ];
 
   desktopItems = [

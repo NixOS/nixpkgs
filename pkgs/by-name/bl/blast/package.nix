@@ -11,7 +11,6 @@
   coreutils,
   curl,
   sqlite,
-  llvmPackages,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blast";
@@ -104,9 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     bzip2
     sqlite
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
   ];
 
   strictDeps = true;
@@ -132,7 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = lib.licenses.publicDomain;
 
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    # Version 2.10.0 fails on Darwin
+    # See https://github.com/NixOS/nixpkgs/pull/61430
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       luispedro
       mulatta

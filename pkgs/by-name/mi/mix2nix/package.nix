@@ -24,7 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Generate nix expressions from mix.lock file";
-    homepage = "https://github.com/ydlr/mix2nix";
     mainProgram = "mix2nix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ydlr ];

@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "smug";
-  version = "0.3.18";
+  version = "0.3.17";
 
   subPackages = [ "." ];
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "ivaaaan";
     repo = "smug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+A+FKHmJcStoumw/aDeSHG8nZ8hJbiizViC1MpbzT7g=";
+    hash = "sha256-wp7JkppWsGMN9/5QcoisXlqMhG/5N1EFvP6OMeRmPEE=";
   };
 
-  vendorHash = "sha256-0PWAY2CeBtaRqkN93ZWeVSynaMW8E9zJwUxI5CzC1mE=";
+  vendorHash = "sha256-N6btfKjhJ0MkXAL4enyNfnJk8vUeUDCRus5Fb7hNtug=";
 
   nativeBuildInputs = [ installShellFiles ];
 

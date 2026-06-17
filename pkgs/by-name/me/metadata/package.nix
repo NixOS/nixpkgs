@@ -20,12 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-gDOYqPwrWUfUTCx+p+ZpwsP8XxUufDCGem/WzW5cQPc=";
   };
 
-  cargoPatches = [
-    # bump ffmpeg-next 8.0.0 -> 8.1.0 for ffmpeg 8.1 enum variants
-    ./ffmpeg-next-8.1.patch
-  ];
-
-  cargoHash = "sha256-TgF88oaf6567Xk20TkqbtE+H+nEKTiUSyswvxvCNFVI=";
+  cargoHash = "sha256-tUVaseaavm746sxaA2A3ua4ZxzoKSnRQ4rJRBeO9t1U=";
 
   nativeBuildInputs = [
     pkg-config

@@ -2,10 +2,9 @@
   stdenvNoCC,
   lib,
   opencloud,
-  pnpm_11,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpmBuildHook,
   nodejs,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,30 +16,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_11;
+    pnpm = pnpm_9;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    fetcherVersion = 4;
-    hash = "sha256-NN5MmWYQgaG4s8+mnLWo8EzOobACOnYhdwt4+/4kz9o=";
+    fetcherVersion = 3;
+    hash = "sha256-E0bP15T2Ekj992Y1xFXL/4rko34AY+I5Lbn+blJhXYg=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpmBuildHook
-    pnpm_11
+    pnpm_9
   ];
 
-  postBuild = ''
-    mkdir -p services/idp/assets/identifier/static
-    cp -v services/idp/src/images/favicon.svg services/idp/assets/identifier/static/favicon.svg
-    cp -v services/idp/src/images/icon-lilac.svg services/idp/assets/identifier/static/icon-lilac.svg
+  buildPhase = ''
+    runHook preBuild
+
+    cd $pnpmRoot
+    pnpm build
+    mkdir -p assets/identifier/static
+    cp -v src/images/favicon.svg assets/identifier/static/favicon.svg
+    cp -v src/images/icon-lilac.svg assets/identifier/static/icon-lilac.svg
+
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp -r services/idp/assets $out
+    cp -r assets $out
 
     runHook postInstall
   '';

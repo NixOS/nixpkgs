@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)

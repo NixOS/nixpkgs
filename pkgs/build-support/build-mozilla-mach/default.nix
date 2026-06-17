@@ -332,14 +332,6 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "144") [
-      # Versions before 144 vendor bindgen 0.69. On Darwin, libc++ 21 changed
-      # basic_string::__self_view from a typedef to an attributed using alias;
-      # bindgen then emits it without its template parameter, producing invalid
-      # Rust. Vendored bindgen was updated in:
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
-      ./140-bindgen-string-view.patch
-    ]
     ++ extraPatches;
 
   postPatch = ''
@@ -595,7 +587,7 @@ buildStdenv.mkDerivation {
 
   profilingPhase = lib.optionalString pgoSupport ''
     # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=TAR
+    export MOZ_PKG_FORMAT=tar
 
     # Package up Firefox for profiling
     ./mach package

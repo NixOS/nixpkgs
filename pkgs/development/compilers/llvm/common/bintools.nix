@@ -23,9 +23,6 @@ runCommand "${pname}-${version}"
       inherit targetPrefix;
       inherit llvm lld;
     };
-    meta = {
-      inherit (llvm.meta) teams;
-    };
   }
   ''
     mkdir -p $out/bin

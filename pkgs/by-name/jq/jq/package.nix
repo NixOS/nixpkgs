@@ -139,9 +139,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "jq";
-    identifiers.purlParts = {
-      type = "github";
-      spec = "jqlang/jq@jq-${finalAttrs.version}";
-    };
   };
 })

@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   meta = {
     description = "Stream parser of Apple's pbzx compression format";
-    homepage = "https://github.com/NiklasRosenstein/pbzx";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = [ ];

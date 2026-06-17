@@ -13,17 +13,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.4.1";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-1+kliU3TfXhAz/vRh/UamTdcv8UIXrcF1q+Qy1jsjD4=";
+    rev = "c0868d6fe1d155de183a89729b5f3f0ede7be4a2"; # TODO: return to tagged release
+    hash = "sha256-QlSXZ2Wk1OXzAY2x6YjtW+xNchY+Ghb/6AsJgjfgoFE=";
   };
 
-  cargoHash = "sha256-FQCYCSKk8SLO2ddM6hklUuTvSK7+4dElaNQ3ZNnci3M=";
+  cargoHash = "sha256-FYd7I93MAAzD6y0VMd9kMU7DAgS6v5CKt2KjrskaKeo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -66,10 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     inherit (callPackage ./plugins { }) mkReactionPlugin plugins;
     updateScript = nix-update-script { };
-    tests = {
-      inherit (nixosTests) reaction;
-    }
-    // finalAttrs.passthru.plugins;
+    tests = nixosTests.reaction;
   };
 
   meta = {

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   libqalculate,
@@ -14,14 +15,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.11.0";
+  version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EVDbpE/T5EvKK/fTNSDbMFMQR+uamiXo7yjv9Se09w4=";
+    hash = "sha256-JZfolSRLRLtv529f25lEPYOlz+y+EdRqKA0Y5d1dK3s=";
   };
+
+  patches = [
+    # Is meaningfull only for Darwin but is better applying unconditionally.
+    # Can be removed in 5.11 probably, see:
+    # https://github.com/Qalculate/qalculate-gtk/pull/705
+    (fetchpatch {
+      url = "https://github.com/Qalculate/qalculate-gtk/commit/2f1b6a32d98f122d44d158c20f79a5b9aaf9669f.patch";
+      hash = "sha256-v9T8wWvqlI9l6BUszf/575qmoFvh88Cdj/m2XqV8Q4k=";
+    })
+  ];
 
   hardeningDisable = [ "format" ];
 

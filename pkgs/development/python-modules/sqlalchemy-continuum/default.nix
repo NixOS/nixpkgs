@@ -6,38 +6,40 @@
   flask,
   flask-login,
   flask-sqlalchemy,
-  packaging,
   psycopg2,
   pymysql,
   pytestCheckHook,
   sqlalchemy,
+  sqlalchemy-i18n,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.6.0";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sqlalchemy_continuum";
     inherit version;
-    hash = "sha256-S+K2bFuVH9zPONpbRcVvZPRbdlb+afVjEL9yNUj2Evw=";
+    hash = "sha256-JXHW62FWvIVir7OS/d3rS7MeRKH9HzeIy2Je/i9pbGM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     sqlalchemy
+    sqlalchemy-utils
   ];
 
   optional-dependencies = {
     flask = [ flask ];
     flask-login = [ flask-login ];
     flask-sqlalchemy = [ flask-sqlalchemy ];
+    i18n = [ sqlalchemy-i18n ];
   };
 
   nativeCheckInputs = [
-    packaging
     psycopg2
     pymysql
     pytestCheckHook
@@ -45,6 +47,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.flask
   ++ optional-dependencies.flask-login
   ++ optional-dependencies.flask-sqlalchemy;
+
+  disabledTestPaths = [
+    # requires sqlalchemy-i18n, which is incompatible with sqlalchemy>=2
+    "tests/test_i18n.py"
+  ];
 
   preCheck = ''
     # Indicate tests that we don't have a database server at hand

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-asyncmdnsresolver";
-  version = "0.2.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-asyncmdnsresolver";
     rev = "v${version}";
-    hash = "sha256-wqeWK7IoX2o+4Cmjq9nKh3rod0Y2C5dxP0Cju9Uk6hE=";
+    hash = "sha256-gtB5vnlOVeAFACnhR5DIS5p3caZkOXrollXFINl/7hQ=";
   };
 
   build-system = [ setuptools ];

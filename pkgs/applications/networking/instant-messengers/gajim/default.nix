@@ -31,7 +31,7 @@
   enableRST ? true,
   docutils,
   enableSpelling ? true,
-  libspelling,
+  gspell,
   enableUPnP ? true,
   gupnp-igd,
   enableAppIndicator ? true,
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     libnice
   ]
   ++ lib.optional enableSecrets libsecret
-  ++ lib.optional enableSpelling libspelling
+  ++ lib.optional enableSpelling gspell
   ++ lib.optional enableUPnP gupnp-igd
   ++ lib.optional enableAppIndicator libappindicator-gtk3
   ++ lib.optional enableSoundNotifications gsound;

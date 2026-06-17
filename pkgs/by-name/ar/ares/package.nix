@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "148";
+  version = "147";
 
   src = fetchzip {
     url = "https://github.com/ares-emulator/ares/releases/download/v${finalAttrs.version}/ares-source.tar.gz";
-    hash = "sha256-LXLt4hYjpnLrzu+0dLfXr4lEF7drZwSRjgaCAaD79+g=";
+    hash = "sha256-KkcrcFshNesnSp5fl+as3HFXjytgODvMv8m73Ni2euw=";
     stripRoot = false;
   };
 

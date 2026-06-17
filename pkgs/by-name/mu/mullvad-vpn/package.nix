@@ -40,7 +40,6 @@
   makeWrapper,
   coreutils,
   gnugrep,
-  iproute2,
 
   versionCheckHook,
 }:
@@ -120,7 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     (lib.getLib systemd)
-    iproute2
     libGL
     libnotify
     libappindicator

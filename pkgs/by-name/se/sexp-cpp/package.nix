@@ -38,7 +38,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "S-Expression parser for C++";
-    homepage = "https://github.com/lispparser/sexp-cpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;

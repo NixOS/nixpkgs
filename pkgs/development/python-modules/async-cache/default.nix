@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage {
   pname = "async-cache";
-  version = "2.0.3";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iamsinghrajat";
     repo = "async-cache";
-    tag = finalAttrs.version;
-    hash = "sha256-3SPepAlXJxufTgNqwxh/c2jhL/j9/omqOZElHhDiIIw=";
+    rev = "9925f07920e6b585dc6345f49b7f477b3e1b8c2c"; # doesn't tag releases :(
+    hash = "sha256-AVSdtWPs1c8AE5PNOq+BdXzBXkI0aeFVzxxPl/ATyU0=";
   };
 
   build-system = [ setuptools ];
@@ -30,4 +30,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lukegb ];
   };
-})
+}

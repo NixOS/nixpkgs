@@ -13,7 +13,7 @@
   json-glib,
   keyutils,
   libadwaita,
-  librest,
+  librest_1_0,
   libxml2,
   libsecret,
   gobject-introspection,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     gvfs # OwnCloud, Google Drive
     json-glib
     libkrb5
-    librest
+    librest_1_0
     libxml2
     libsecret
     libsoup_3

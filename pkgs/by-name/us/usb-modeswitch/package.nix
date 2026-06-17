@@ -20,10 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-96vTN3hKnRvTnLilh1GK/28qQ9kWFF6v2Asbi3FG22Y=";
   };
 
-  patches = [
-    ./configurable-usb-modeswitch.patch
-    ./pkg-config.patch
-  ];
+  patches = [ ./pkg-config.patch ];
 
   # Remove attempts to write to /etc and /var/lib.
   postPatch = ''

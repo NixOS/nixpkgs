@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   setuptools,
+  isPy27,
   fetchPypi,
   pkg-config,
   dbus,
@@ -28,6 +29,8 @@ buildPythonPackage rec {
   pname = "pyqt5";
   version = "5.15.10";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchPypi {
     pname = "PyQt5";

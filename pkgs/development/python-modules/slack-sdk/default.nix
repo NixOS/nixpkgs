@@ -16,30 +16,30 @@
   websockets,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.42.0";
+  version = "3.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-d0XuzBhn2Ex57xjeAF1q5RcwoWVsFWnlsWUufB3Um4g=";
+    tag = "v${version}";
+    hash = "sha256-TH4wWQ1rCmlWgDtqX04FJKL95YgOKc543yJN/FLtKeA=";
   };
 
   build-system = [ setuptools ];
 
-  optional-dependencies = {
-    optional = [
-      aiodns
-      aiohttp
-      boto3
-      sqlalchemy
-      websocket-client
-      websockets
-    ];
-  };
+  optional-dependencies.optional = [
+    aiodns
+    aiohttp
+    boto3
+    sqlalchemy
+    websocket-client
+    websockets
+  ];
+
+  pythonImportsCheck = [ "slack_sdk" ];
 
   nativeCheckInputs = [
     aiosqlite
@@ -47,9 +47,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
-
-  pythonImportsCheck = [ "slack_sdk" ];
+  ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)
@@ -77,8 +75,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
-    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

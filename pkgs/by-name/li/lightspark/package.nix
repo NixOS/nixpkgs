@@ -8,6 +8,7 @@
   zlib,
   ffmpeg,
   glew,
+  pcre,
   rtmpdump,
   cairo,
   boost,
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
   };
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     ffmpeg
     glew
+    pcre
     rtmpdump
     cairo
     boost

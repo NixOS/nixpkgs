@@ -4,31 +4,31 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_11,
+  pnpm_9,
   pnpmConfigHook,
   nix-update-script,
 }:
 
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_9;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atomic-calendar-revive";
-  version = "10.3.0";
+  version = "10.2.2";
 
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "atomic-calendar-revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VgXLQXxA7QIUvVXRUvVmdKIZbyMIAbIn9adZIjEf2Yk=";
+    hash = "sha256-FiER75oDc9fbdZlh/dLPKmuA11i/UWy2uoX/aPW2m1s=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-qJIFvn8/p2wEkH4r1XGKWfwHdHPtU0AYLjWcy40kFTw=";
+    hash = "sha256-DoMzpXCkK60o1YPpStCNCdpj0I+4OqXr7PcX3hjVhSg=";
   };
 
   nativeBuildInputs = [

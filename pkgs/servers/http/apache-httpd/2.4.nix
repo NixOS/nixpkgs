@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.68";
+  version = "2.4.67";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    hash = "sha256-aMdNTfOMJr7U372487rx61MvOHI1e+zBu6XRNva2PAY=";
+    hash = "sha256-Zs0gZjew1cRG+n2r51/gNSXaj7VYVYdsRiiM2IsTaqQ=";
   };
 
   patches = [
@@ -164,6 +164,6 @@ stdenv.mkDerivation rec {
     homepage = "https://httpd.apache.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ arcayr ];
+    maintainers = [ ];
   };
 }

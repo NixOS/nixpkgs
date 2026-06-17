@@ -3,22 +3,19 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "aiobroadlink";
   version = "0.1.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-uTUtDhL9VtWZE+Y6ZJY4prmlE+Yh2UrCg5+eSyAQzMk=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ cryptography ];
+  propagatedBuildInputs = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
@@ -32,4 +29,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

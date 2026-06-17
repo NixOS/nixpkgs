@@ -3,25 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   azure-mgmt-nspkg,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-mgmt-datalake-nspkg";
   version = "3.0.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-3rGSukIviz7Ccs5OiHNnlvIW8o6lsD8oMx14S3o/SIA=";
+    sha256 = "deb192ba422f8b3ec272ce4e88736796f216f28ea5b03f28331d784b7a3f4880";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ azure-mgmt-nspkg ];
+  propagatedBuildInputs = [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;
@@ -32,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

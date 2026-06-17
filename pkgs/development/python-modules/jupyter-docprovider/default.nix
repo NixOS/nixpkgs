@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-docprovider";
-  version = "2.4.1";
+  version = "2.4.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";
     inherit (finalAttrs) version;
-    hash = "sha256-DOMsS+96PQZfZ36D9lBlAq1oaD2PpzIBJaMWzviSx0s=";
+    hash = "sha256-e5AfudgAWZ4qtoVX/WORECpoiIRShsT3y7brK7owlOA=";
   };
 
   postPatch = ''

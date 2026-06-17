@@ -29,7 +29,9 @@ let
       };
 
       freeform = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.str // {
+          merge = mergeEqualOption;
+        };
         default = null;
         example = ''MMC_BLOCK_MINORS.freeform = "32";'';
         description = ''

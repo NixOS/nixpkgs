@@ -10,7 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "anyconfig";
   version = "0.14.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ssato";
@@ -23,9 +23,7 @@ buildPythonPackage (finalAttrs: {
     sed -i '/addopts =/d' setup.cfg
   '';
 
-  build-system = [ setuptools ];
-
-  dependencies = [ setuptools ];
+  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -42,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # NameError: name 'TT' is not defined
     "tests/schema/test_jsonschema.py"
+    "tests/backend/loaders/pickle/test_pickle_stdlib.py"
   ];
 
   pythonImportsCheck = [ "anyconfig" ];
@@ -50,7 +49,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python library provides common APIs to load and dump configuration files in various formats";
     mainProgram = "anyconfig_cli";
     homepage = "https://github.com/ssato/python-anyconfig";
-    changelog = "https://github.com/ssato/python-anyconfig/releases/tag/RELEASE_${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tboerger ];
   };

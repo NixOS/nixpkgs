@@ -160,9 +160,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # AssertionError: No valid profiler activities found
-    "test_with_runner"
-
     # Require network access
     "test_fileclient"
     "test_http_backend"

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/jdebp/redo";
     description = "System for building target files from source files";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "redo";
     platforms = lib.platforms.unix;
   };

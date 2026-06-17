@@ -119,10 +119,11 @@ $ pkgs/os-specific/linux/kernel/update.sh
 The change gets submitted like this:
 
 * File a PR against `staging-nixos`.
-  * Add a `backport staging-nixos-XX.XX` label for an automated backport.
+  * Add a `backport release-XX.XX` label for an automated backport.
+    We don't expect many other changes on that branch to require a backport, hence there's no such branch for stable.
     By using an additional PR, we get the automatic backport against stable without manual cherry-picks.
-* Merge into `staging-nixos` or `staging-nixos-XX.XX`.
-* File as PR from `staging-nixos` against `master` or `staging-nixos-XX.XX` against `release-xx.xx`.
+* Merge into `staging-nixos`.
+* File as PR from `staging-nixos` against `master`.
 * When all status checks are green, merge.
 
 ### Add a new (major) version of the Linux kernel {#sec-linux-add-new-kernel-version}

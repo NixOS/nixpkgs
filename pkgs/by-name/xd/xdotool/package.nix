@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdotool";
-  version = "4.20260303.1";
+  version = "3.20211022.1";
 
   src = fetchFromGitHub {
     owner = "jordansissel";
     repo = "xdotool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cgCZuvcxD1qQPpzSmYQZJj9TH8Vq9xTZLU8Rg7sUrvI=";
+    sha256 = "sha256-XFiaiHHtUSNFw+xhUR29+2RUHOa+Eyj1HHfjCUjwd9k=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
   ];
 
-  strictDeps = true;
-
   preBuild = ''
     mkdir -p $out/lib
   '';
@@ -50,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.semicomplete.com/projects/xdotool/";
     description = "Fake keyboard/mouse input, window management, and more";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
     mainProgram = "xdotool";
   };

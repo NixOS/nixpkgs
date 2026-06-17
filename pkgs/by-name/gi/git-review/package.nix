@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-review";
   version = "2.5.0";
-  pyproject = true;
+  format = "setuptools";
 
   # Manually set version because pbr wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -26,8 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "man"
   ];
 
-  build-system = with python3Packages; [
-    setuptools
+  nativeBuildInputs = with python3Packages; [
     pbr
   ];
 

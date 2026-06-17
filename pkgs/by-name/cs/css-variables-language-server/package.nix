@@ -20,21 +20,15 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-NdacBF8sUOij6k4AkMim93LrBJi8JL43q/N8GryTXHA=";
   };
 
-  npmDepsHash = "sha256-9iPS7/fiJFBFlqt71q5i9rY0lc3tqYeAddb+oB1uxZc=";
-  npmDepsFetcherVersion = 2;
-  npmWorkspace = "packages/css-variables-language-server";
-
-  npmPruneFlags = [
-    "--include-workspace-root=false"
-  ];
-
-  npmInstallFlags = [
-    "--workspace=packages/css-variables-language-server"
-    "--include-workspace-root=false"
-  ];
+  npmDepsHash = "sha256-cgX/M05UGsx87QO/Ge0VCD2hQ9MkfJarJVNCj/IcnM0=";
 
   nativeBuildInputs = [
+    pkg-config
     makeWrapper
+  ];
+
+  buildInputs = [
+    libsecret
   ];
 
   preBuild = ''
@@ -45,11 +39,12 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib $out/bin
-
     cp -r node_modules $out/lib
     cp -r packages $out/lib
 
-    makeWrapper ${nodejs}/bin/node $out/bin/css-variables-language-server --add-flags "$out/lib/packages/css-variables-language-server/dist/index.js"
+    makeWrapper ${nodejs}/bin/node $out/bin/index.js --add-flags "$out/lib/packages/css-variables-language-server/dist/index.js"
+
+    mv $out/bin/index.js $out/bin/css-variables-language-server
 
     runHook postInstall
   '';

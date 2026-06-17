@@ -6,23 +6,20 @@
   fetchPypi,
   msal,
   requests,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-datalake-store";
   version = "1.0.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "azure_datalake_store";
-    inherit (finalAttrs) version;
+    inherit version;
     hash = "sha256-U2TURFqrFUocfLECFWKcPORs5ceqrxYHGJDAP65ToDU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     adal
     azure-common
     msal
@@ -38,4 +35,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

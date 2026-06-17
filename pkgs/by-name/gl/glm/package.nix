@@ -4,12 +4,12 @@
 }:
 
 callPackage ./generic.nix rec {
-  version = "1.0.3";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "g-truc";
     repo = "glm";
-    tag = version;
-    hash = "sha256-6WnVvFiTe1/OYj/oTGpCjZKNFurR9MxJ4zf0nDg0Alk=";
+    rev = version;
+    sha256 = "sha256-2xKv1nO+OdwA0r+I9OZ+OCL9dJFg/LJsQfIvIF76vc0=";
   };
 }

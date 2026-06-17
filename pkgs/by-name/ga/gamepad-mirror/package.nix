@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromCodeberg,
+  fetchFromGitea,
   appstream,
   cmake,
   desktop-file-utils,
@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gamepad-mirror";
   version = "0.3-unstable-2025-10-18";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "vendillah";
     repo = "GamepadMirror";
     rev = "aa86d55f21b4d206eab61d0bf7cd9ccafc8aa607";

@@ -17,6 +17,7 @@
   fribidi,
   dbus,
   libpng,
+  pcre,
   openssl,
   icu,
   lua5_4,
@@ -38,7 +39,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.24" else "1.18.7";
+  version = if enableDevel then "1.19.23" else "1.18.7";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-q6gdzHDPkG/RqpJxIHqWsxD0n8dzKajDhAT49bjmq78="
+        "sha256-iqL7sXcvAeyewB0nSFvXETgODaHtB2IaP26Yx1x1i6I="
       else
         "sha256-fODkyn4tyWL3PUVjXS4d7OW7VnQSL+fPaytvS8iigXg=";
   };
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     dbus
     libpng
+    pcre
     openssl
     icu
     lua

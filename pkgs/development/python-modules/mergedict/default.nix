@@ -3,24 +3,17 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "mergedict";
   version = "1.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-4ZkrNqVCKQFPvLx6nIwo0fSuEx6h2NNFyTlz+fDcb9w=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -29,8 +22,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python dict with a merge() method";
     homepage = "https://github.com/schettino72/mergedict";
-    changelog = "https://github.com/schettino72/mergedict/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-})
+}

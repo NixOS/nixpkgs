@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  qt5,
+  libsForQt5,
 }:
 stdenv.mkDerivation {
   pname = "dsremote";
@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    qt5.qmake
-    qt5.wrapQtAppsHook
-    qt5.qtbase
+    libsForQt5.qmake
+    libsForQt5.qt5.wrapQtAppsHook
+    libsForQt5.qt5.qtbase
   ];
 
   hardeningDisable = [ "fortify" ];

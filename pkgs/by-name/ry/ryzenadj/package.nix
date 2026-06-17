@@ -4,22 +4,20 @@
   fetchFromGitHub,
   pciutils,
   cmake,
-  pkg-config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ryzenadj";
-  version = "0.19.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "FlyGoat";
     repo = "RyzenAdj";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SNtCKZ3bugawzD8R3DjwPs/ls3kyTw1LdIcXuR6fumc=";
+    sha256 = "sha256-28ld8htm3DewTSV3WTG4dFOcX4JAEUMK9rq4AAm1/zY=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkg-config
   ];
 
   buildInputs = [

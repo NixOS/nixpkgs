@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+      sjmackenzie
       bertof
     ];
   };

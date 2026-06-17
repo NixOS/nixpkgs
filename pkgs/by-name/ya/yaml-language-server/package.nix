@@ -24,8 +24,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/redhat-developer/yaml-language-server";
     license = lib.licenses.mit;
     mainProgram = "yaml-language-server";
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
   };
 })

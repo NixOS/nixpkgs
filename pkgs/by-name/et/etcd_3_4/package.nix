@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "etcd";
-  version = "3.4.45";
+  version = "3.4.44";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GvhejN7+woYK7UBNguzEaO6rqAbT7Vbwl5nFmI/F6Sc=";
+    hash = "sha256-56V9cAlFiCdDm3X8lBJmjwj1HVRNihrCzIV0r0XEMHk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-0xIK71sAwMzzSaN2lFKKdGtDKWYtL25x5GDoO6bO0wI=";
+  vendorHash = "sha256-DqKVZ4Z2RMRwi4Z/6Rh3SE6NSyuHePSYrIM7sPyPC74=";
 
   preBuild = ''
     go mod tidy

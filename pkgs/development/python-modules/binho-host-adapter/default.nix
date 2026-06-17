@@ -2,25 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   pyserial,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "binho-host-adapter";
   version = "0.1.6";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Hm2nqE4gjBO19IkGbwV3S/8dWT0PW/HKFJwrjoPq6FY=";
+    inherit pname version;
+    sha256 = "0mp8xa1qwaww2k5g2nqg7mcivzsbfw2ny1l9yjsi73109slafv8y";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyserial ];
+  propagatedBuildInputs = [ pyserial ];
 
   # Project has no tests
   doCheck = false;
@@ -32,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

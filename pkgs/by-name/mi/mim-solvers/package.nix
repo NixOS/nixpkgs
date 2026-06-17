@@ -28,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optional (
-    stdenv.hostPlatform.isDarwin && crocoddyl.withMultithread
-  ) llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = [
     crocoddyl
@@ -40,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
-    (lib.cmakeBool "BUILD_WITH_MULTITHREADS" crocoddyl.withMultithread)
   ];
 
   nativeCheckInputs = [

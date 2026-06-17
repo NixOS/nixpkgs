@@ -6,33 +6,26 @@
   dominate,
   beautifulsoup4,
   docutils,
-  myst-parser,
-  setuptools,
   sphinx,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "alectryon";
-  version = "2.0.0";
-  pyproject = true;
+  version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    sha256 = "sha256-ouuCwipCQKSlH8NpF5QZd4jx4mEYooyIcnRhtDRWOnU=";
+    inherit pname version;
+    sha256 = "00cxzfifvgcf3d3s8lsj1yxcwyf3a1964p86fj7b42q8pa0b4r3i";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pygments
     dominate
     beautifulsoup4
     docutils
-    myst-parser
     sphinx
   ];
-
-  pythonImportsCheck = [ "alectryon" ];
 
   doCheck = false;
 
@@ -43,4 +36,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Zimmi48 ];
   };
-})
+}

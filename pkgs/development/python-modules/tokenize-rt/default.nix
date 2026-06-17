@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+  isPy27,
   setuptools,
   pytestCheckHook,
 }:
@@ -10,6 +11,8 @@ buildPythonPackage rec {
   pname = "tokenize-rt";
   version = "6.2.0";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "asottile";

@@ -7,13 +7,10 @@
   ffmpeg,
   ipopt,
   lapack,
-  llvmPackages,
   lib,
   pinocchio,
   pkg-config,
   stdenv,
-
-  withMultithread ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
-    llvmPackages.openmp
-  ];
-
   checkInputs = [
     ffmpeg
   ];
@@ -60,10 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
-    (lib.cmakeBool "BUILD_WITH_MULTITHREADS" withMultithread)
   ];
-
-  passthru = { inherit withMultithread; };
 
   prePatch = ''
     substituteInPlace \

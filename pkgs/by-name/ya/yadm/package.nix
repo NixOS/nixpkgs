@@ -26,25 +26,11 @@
   installShellFiles,
   runCommand,
   yadm,
-
-  # Templates:
-  withAwk ? true,
-  withEsh ? true,
-  withJ2 ? true,
-
-  # Encryption:
-  withGpg ? true,
-  withOpenssl ? true,
 }:
-let
-  withTar = withGpg || withOpenssl;
-in
+
 resholve.mkDerivation (finalAttrs: {
   pname = "yadm";
   version = "3.5.0";
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -76,32 +62,32 @@ resholve.mkDerivation (finalAttrs: {
       scripts = [ "bin/yadm" ];
       interpreter = "${bash}/bin/sh";
       inputs = [
-        bash
-        coreutils
         git
+        gnupg
+        openssl
+        gawk
         # see head comment
         # git-crypt
         # transcrypt
-      ]
-      ++ lib.optional withGpg gnupg
-      ++ lib.optional withOpenssl openssl
-      ++ lib.optional withAwk gawk
-      ++ lib.optional withJ2 j2cli
-      ++ lib.optional withEsh esh
-      ++ lib.optional withTar gnutar;
+        j2cli
+        esh
+        bash
+        coreutils
+        gnutar
+      ];
       fake = {
-        external = lib.optional (!stdenv.hostPlatform.isCygwin) "cygpath" ++ lib.optional (!withTar) "tar";
+        external = if stdenv.hostPlatform.isCygwin then [ ] else [ "cygpath" ];
       };
       fix = {
+        "$GPG_PROGRAM" = [ "gpg" ];
+        "$OPENSSL_PROGRAM" = [ "openssl" ];
         "$GIT_PROGRAM" = [ "git" ];
-        "$GPG_PROGRAM" = lib.optional withGpg "gpg";
-        "$OPENSSL_PROGRAM" = lib.optional withOpenssl "openssl";
-        "$AWK_PROGRAM" = lib.optional withAwk "awk";
+        "$AWK_PROGRAM" = [ "awk" ];
         # see head comment
         # "$GIT_CRYPT_PROGRAM" = [ "git-crypt" ];
         # "$TRANSCRYPT_PROGRAM" = [ "transcrypt" ];
-        "$J2CLI_PROGRAM" = lib.optional withJ2 "j2";
-        "$ESH_PROGRAM" = lib.optional withEsh "esh";
+        "$J2CLI_PROGRAM" = [ "j2" ];
+        "$ESH_PROGRAM" = [ "esh" ];
         # not in nixpkgs (yet)
         # "$ENVTPL_PROGRAM" = [ "envtpl" ];
         # "$LSB_RELEASE_PROGRAM" = [ "lsb_release" ];
@@ -113,12 +99,6 @@ resholve.mkDerivation (finalAttrs: {
         "$SHELL" = true; # probably user env? unsure
         "$hook_command" = true; # ~git hooks?
         "exec" = [ "$YADM_BOOTSTRAP" ]; # yadm bootstrap script
-
-        "$GPG_PROGRAM" = !withGpg;
-        "$OPENSSL_PROGRAM" = !withOpenssl;
-        "$AWK_PROGRAM" = !withAwk;
-        "$J2CLI_PROGRAM" = !withJ2;
-        "$ESH_PROGRAM" = !withEsh;
 
         # not in nixpkgs
         "$ENVTPL_PROGRAM" = true;
@@ -155,10 +135,7 @@ resholve.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/yadm-dev/yadm/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      abathur
-      sandarukasa
-    ];
+    maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.unix;
     mainProgram = "yadm";
   };

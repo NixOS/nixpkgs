@@ -16,17 +16,21 @@
 let
   mcpp' = mcpp.overrideAttrs (prevAttrs: rec {
     pname = "mcpp-zeroc-ice";
-    version = "2.7.2.20";
+    version = "2.7.3";
 
     src = fetchFromGitHub {
       owner = "zeroc-ice";
       repo = "mcpp";
       rev = "v${version}";
-      hash = "sha256-FlzHpfYoHzbz5DfXgkr6Hf96xejRKd0Rr1TmzE5GyGg=";
+      hash = "sha256-hZGU5mqMRTTHV2bR9uzM6ALj1sypjPxO5Ajg8aKzLxc=";
     };
 
     # zeroc-ice's fork diverges quite a bit from upstream mcpp, so prevAttrs.patches is not used here
-    patches = [ ];
+    patches = [
+      # See https://github.com/zeroc-ice/mcpp/pull/12
+      ./fix-mb_init.patch
+      ./fix-reserved-keywords.patch
+    ];
 
     installFlags = prevAttrs.installFlags or [ ] ++ [ "PREFIX=$(out)" ];
   });

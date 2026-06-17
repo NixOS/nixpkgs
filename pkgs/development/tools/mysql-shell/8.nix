@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator -Wno-error=nonnull";
+      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator";
     }
     // lib.optionalAttrs stdenv.cc.isGNU {
       NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";

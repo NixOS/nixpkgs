@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.9.7";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
-    tag = finalAttrs.version;
-    hash = "sha256-k9imUrGn6VyQVvHU8Ef9wvBIOEHA3SSmEwIui3fW9JI=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-eu2yNRESypXWCn8INTjGwwRXTWdGYvah/hc2iqFKQmw=";
   };
 
   nativeBuildInputs = [

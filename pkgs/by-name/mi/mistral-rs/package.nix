@@ -20,6 +20,7 @@
 
   versionCheckHook,
 
+  testers,
   mistral-rs,
   nix-update-script,
 
@@ -73,14 +74,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.3";
-  __structuredAttrs = true;
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ohkr45VXuXB7Ms8igZxQ7shrJa3+WBVT1fNYlc6JvZQ=";
+    hash = "sha256-WuDvD2ifk0AtB4fpgLqQSiXVfb/50M9oIuz738pdsis=";
   };
 
   patches = [
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "lto = false"
     '';
 
-  cargoHash = "sha256-ZwUCzbRpDgT7KwsT9kPGsGp4iU/0I+lrMFqM3UCwkYw=";
+  cargoHash = "sha256-MzGU62v6ZvVzTN7Ra+zz1uNlk4ul09YG5Hbj2A7hZbY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -185,17 +185,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
     "--skip=utils::tiktoken::tests::test_tiktoken_conversion"
-
-    # Spawn a nested sandbox (bubblewrap-like) which fails inside the nix build sandbox
-    "--skip=callbacks_outlive_manager_executor_tempdir"
-    "--skip=sandboxed_session_can_execute_python"
-    "--skip=sandboxed_session_default_policy_can_execute_python"
-
-    # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
-    "--skip=network_none_blocks_socket"
-    "--skip=rlimit_nproc_caps_processes"
-    "--skip=seccomp_blocks_ptrace"
-    "--skip=unshare_is_denied_inside_child"
   ];
 
   nativeInstallCheckInputs = [

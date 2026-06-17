@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openfpgaloader";
-  version = "1.1.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "trabucayre";
     repo = "openFPGALoader";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VQM3swGAvuLnqKjjUEXJlQp1nGH9M1ydEKQUV/5xiwM=";
+    hash = "sha256-GPYYvsMSzgZCU4qaANaP3nTa6ooJ7pjJDIzW0H4juQM=";
   };
 
   nativeBuildInputs = [

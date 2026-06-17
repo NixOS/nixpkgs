@@ -4,26 +4,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "cart";
   version = "1.2.3";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
     repo = "cart";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-oeWeay1Pr9T4oR3XSrwv9hRr/sLTel1Bt6BG6jHXxIA=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pycryptodome ];
+  propagatedBuildInputs = [ pycryptodome ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -35,8 +30,8 @@ buildPythonPackage (finalAttrs: {
     description = "Python module for the CaRT Neutering format";
     mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
-    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

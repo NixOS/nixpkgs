@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  installFonts,
   unzip,
 }:
 
@@ -15,17 +14,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "07qkz8s1wjh5xwqlq1b4lpihr1zah3kh6bnqvfwvncld8l9wjqfk";
   };
 
+  nativeBuildInputs = [ unzip ];
+
   sourceRoot = "${finalAttrs.version}/fonts";
 
-  outputs = [
-    "out"
-    "webfont"
-  ];
-
-  nativeBuildInputs = [
-    unzip
-    installFonts
-  ];
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/woff
+    mkdir -p $out/share/fonts/woff2
+    cp *.ttf $out/share/fonts/truetype
+    cp *.woff $out/share/fonts/woff
+    cp *.woff2 $out/share/fonts/woff2
+  '';
 
   meta = {
     description = "Replace Font Awesome with modern line icons";

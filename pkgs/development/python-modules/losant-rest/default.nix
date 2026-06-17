@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "losant-rest";
-  version = "2.2.0";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Losant";
     repo = "losant-rest-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nAc+zTqgIdLw/NVWoprP+Kqkbu17N1DMgzo2iu7w8aM=";
+    hash = "sha256-51HzUrKBUwgXDSCV+iAtEBLLMl0yV5KVHYHTy+u5TAI=";
   };
 
   build-system = [ setuptools ];

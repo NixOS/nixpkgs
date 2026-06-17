@@ -14,7 +14,6 @@ let
     optional
     ;
   inherit (lib.types)
-    nullOr
     bool
     port
     str
@@ -44,10 +43,10 @@ in
             type = submodule {
               inherit freeformType;
               options = {
-                local_address = mkOption {
+                port = mkOption {
                   type = str;
                   default = ":3333";
-                  description = "HTTP server listen address";
+                  description = "HTTP server listen port";
                 };
               };
             };
@@ -95,20 +94,6 @@ in
               };
             };
           };
-          tmdb = mkOption {
-            default = { };
-            description = "TMDB api settings";
-            type = submodule {
-              inherit freeformType;
-              options = {
-                api_key = mkOption {
-                  type = nullOr str;
-                  default = null;
-                  description = "TMDB api key, to avoid api limits. Leave null to use the default shared key.";
-                };
-              };
-            };
-          };
         };
       };
     };
@@ -144,7 +129,6 @@ in
       ]
       ++ optional cfg.useLocalPostgresDB "postgresql.target";
       requires = optional cfg.useLocalPostgresDB "postgresql.target";
-      restartTriggers = [ config.environment.etc."xdg/bitmagnet/config.yml".source ];
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -154,7 +138,6 @@ in
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/bitmagnet";
         StateDirectory = "bitmagnet";
-        BindReadOnlyPaths = [ "/etc/xdg/bitmagnet/config.yml" ];
 
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";

@@ -18,14 +18,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare-cli";
-  version = "2.6.4";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VkfS9coUIejRAcu+/e6jjh+eknd56fA3NpFwikd5n9c=";
+    hash = "sha256-DY5rSHkmiqLIa49gcbq7VfcMM1AMFTJ5FPQtS2kR2Zs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
@@ -48,10 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = true;
-
-  pythonRemoveDeps = [
-    "pkgconfig"
-  ];
 
   dependencies =
     with python3Packages;

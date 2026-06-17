@@ -70,10 +70,6 @@ buildPythonPackage (finalAttrs: {
   # Segfaults?!
   disabledTestPaths = [ "test/gui_qt/test_dictionaries_widget.py" ];
 
-  postInstall = ''
-    install -Dm 444 linux/plover.desktop $out/share/applications/plover.desktop
-  '';
-
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';

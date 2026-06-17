@@ -95,6 +95,7 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       mt-caret
+      momeemt
     ];
     platforms = lib.platforms.all;
     mainProgram = "satysfi";

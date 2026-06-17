@@ -9,17 +9,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jaq";
-  version = "3.1.0";
-  __structuredAttrs = true;
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwHYsLp9uBb3/etH0bGYzNLOJJypeE4qED7jTBESHiE=";
+    hash = "sha256-FhmnJm/MV4WfvhF7DWW6t2D876SIzzq7ODlY2Wmo9mM=";
   };
 
-  cargoHash = "sha256-9vLD5aYcnbdjQC+5FsTglLFYhbv/1lSqsfkD8oclwBs=";
+  strictDeps = true;
+
+  cargoHash = "sha256-37yS5xUj04ZjXvVlji7XNTXbt3avQKmkqUMfovhUrtU=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -70,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
-    changelog = "https://github.com/01mf02/jaq/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/01mf02/jaq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [

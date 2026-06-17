@@ -1,95 +1,66 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
-  fetchFromGitHub,
+  fetchurl,
   makeWrapper,
-  gradle_9,
   openjdk25_headless,
   libmatthew_java,
   dbus,
   dbus_java,
-  callPackage,
   versionCheckHook,
-  signal-cli,
 }:
 
-let
-  gradle = gradle_9;
-  libsignal-jni = callPackage ./libsignal-jni.nix { jdk = openjdk25_headless; };
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.14.3";
+  version = "0.14.2";
 
-  src = fetchFromGitHub {
-    owner = "AsamK";
-    repo = "signal-cli";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-qUCLubP3/JxDoLYbWhH/MRWq29H6tj3UuGr5iBfJ3jM=";
+  # Building from source would be preferred, but is much more involved.
+  src = fetchurl {
+    url = "https://github.com/AsamK/signal-cli/releases/download/v${finalAttrs.version}/signal-cli-${finalAttrs.version}.tar.gz";
+    hash = "sha256-riu8b8ZomoqyPVfmN9fpzbtDQpN72xtU1M9rVkDfHg0=";
   };
 
-  nativeBuildInputs = [
-    gradle
-    makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     libmatthew_java
     dbus
     dbus_java
   ];
-
-  mitmCache = gradle.fetchDeps {
-    pkg = signal-cli;
-    data = ./deps.json;
-  };
-
-  __darwinAllowLocalNetworking = true;
-
-  # Use the JDK for building
-  gradleFlags = [
-    "-Dfile.encoding=utf-8"
-    "-Dorg.gradle.java.home=${openjdk25_headless}"
-  ];
-
-  gradleBuildTask = "installDist";
-
-  preGradleUpdate = ''
-    gradle assemble
-  '';
-
-  # Tests require network access and a running signal server
-  doCheck = false;
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/lib $out/bin
-
-    cp build/install/signal-cli/lib/* $out/lib/
-    cp ${libsignal-jni}/lib/* $out/lib/
+    mkdir -p $out
+    cp -r lib $out/
+    install -Dm755 bin/signal-cli -t $out/bin
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
-      --set JAVA_HOME "${openjdk25_headless}" \
-      --add-flags "--enable-native-access=ALL-UNNAMED" \
-      --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
-      --add-flags "-Djava.library.path=$out/lib:${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus" \
-      --add-flags "org.asamk.signal.Main"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
-      --set JAVA_HOME "${openjdk25_headless}" \
-      --add-flags "--enable-native-access=ALL-UNNAMED" \
-      --add-flags "-classpath '$out/lib/*'" \
-      --add-flags "-Djava.library.path=$out/lib" \
-      --add-flags "org.asamk.signal.Main"
-  ''
+  + (
+    if stdenvNoCC.hostPlatform.isLinux then
+      ''
+        makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
+          --set JAVA_HOME "${openjdk25_headless}" \
+          --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
+          --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
+          --add-flags "org.asamk.signal.Main"
+      ''
+    else
+      ''
+        wrapProgram $out/bin/signal-cli \
+          --prefix PATH : ${lib.makeBinPath [ openjdk25_headless ]} \
+          --set JAVA_HOME ${openjdk25_headless}
+      ''
+  )
   + ''
     runHook postInstall
   '';
 
-  doInstallCheck = true;
+  # Execution in the macOS (10.13) sandbox fails with
+  # dyld: Library not loaded: /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+  #   Referenced from: /nix/store/5ghc2l65p8jcjh0bsmhahd5m9k5p8kx0-zulu1.8.0_121-8.20.0.5/bin/java
+  #   Reason: no suitable image found.  Did find:
+  #         /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa: file system sandbox blocked stat()
+  #         /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa: file system sandbox blocked stat()
+  # /nix/store/in41dz8byyyz4c0w132l7mqi43liv4yr-stdenv-darwin/setup: line 1310:  2231 Abort trap: 6           signal-cli --version
+  doInstallCheck = stdenvNoCC.hostPlatform.isLinux;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -98,15 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
     mainProgram = "signal-cli";
     changelog = "https://github.com/AsamK/signal-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryBytecode
-    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
-    maintainers = [
-      lib.maintainers.klea
-      lib.maintainers.akosseres
-    ];
-    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.klea ];
+    platforms = lib.platforms.all;
   };
 })

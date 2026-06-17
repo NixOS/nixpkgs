@@ -41,7 +41,6 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://gitlab.freedesktop.org/xorg/app/quartz-wm";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.booxter ];

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "c2FmZQ";
-  version = "0.5.6";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "c2FmZQ";
     repo = "c2FmZQ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qIJnrMqsaa7GcsJpyWHhi6nea72XCQy5BaGWBtQKzFo=";
+    hash = "sha256-O4/V8fFiTfqTiJWPwEsdigdeKBmwGGo43ZvJXPcVRlE=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/c2FmZQ";
 
-  vendorHash = "sha256-hJHnbG/NlhibY8e59hk0u5vi50x4s4mH/awPdCRkDFk=";
+  vendorHash = "sha256-B1kHtDHnviU60WEfmASMX69nyEepeeBdMZVtbcmZ9z4=";
 
   subPackages = [
     "c2FmZQ-client"

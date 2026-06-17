@@ -5,16 +5,11 @@
   ...
 }:
 let
-  inherit (lib)
-    mkOption
-    types
-    literalExpression
-    literalMD
-    ;
+  inherit (lib) mkOption types literalMD;
 
   inherit (config) sshBackdoor;
 
-  inherit (hostPkgs.stdenv.hostPlatform) isLinux isAarch64;
+  inherit (hostPkgs.stdenv.hostPlatform) isLinux;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -122,10 +117,9 @@ in
 {
   options = {
     pythonTestDriverPackage = mkOption {
-      description = "Package containing the python NixOS test driver implementation";
+      description = "Package containing the python NixOS test driver implemetnation";
       type = types.package;
       default = hostPkgs.nixos-test-driver;
-      defaultText = literalExpression "hostPkgs.nixos-test-driver";
       readOnly = true;
     };
 
@@ -256,10 +250,6 @@ in
         #
         # If needed, this can still be turned off.
         virtualisation.qemu.enableSharedMemory = lib.mkDefault isLinux;
-        # Needed for screenshots to work (in e.g `nixosTests.login`)
-        virtualisation.qemu.options = lib.optionals (isLinux && isAarch64) [
-          "-device virtio-gpu-pci"
-        ];
 
         assertions = [
           {

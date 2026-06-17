@@ -1,30 +1,34 @@
 {
   lib,
-  buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
   semgrep-core,
+  buildPythonPackage,
 
-  # check tools
-  git,
   pytestCheckHook,
+  git,
 
-  # python runtime dependencies
+  # python packages
   attrs,
   boltons,
   click,
   click-option-group,
   colorama,
   defusedxml,
+  flaky,
   glom,
   jsonschema,
-  mcp,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
   opentelemetry-instrumentation-threading,
   opentelemetry-sdk,
+  mcp,
   packaging,
   peewee,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-snapshot,
   python-lsp-jsonrpc,
   requests,
   rich,
@@ -32,18 +36,10 @@
   semantic-version,
   tomli,
   tqdm,
+  types-freezegun,
   typing-extensions,
   urllib3,
   wcmatch,
-
-  # python check dependencies
-  flaky,
-  pytest-asyncio,
-  pytest-freezegun,
-  pytest-mock,
-  pytest-snapshot,
-  requests-mock,
-  types-freezegun,
 }:
 
 # testing locally post build:
@@ -93,30 +89,30 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     boltons
+    colorama
     click
     click-option-group
-    colorama
-    defusedxml
     glom
-    jsonschema
-    mcp
-    opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-instrumentation-requests
-    opentelemetry-instrumentation-threading
-    opentelemetry-sdk
-    packaging
-    peewee
-    python-lsp-jsonrpc
     requests
     rich
     ruamel-yaml
     semantic-version
-    tomli
     tqdm
-    typing-extensions
-    urllib3
+    packaging
+    jsonschema
     wcmatch
+    mcp
+    peewee
+    defusedxml
+    urllib3
+    typing-extensions
+    python-lsp-jsonrpc
+    tomli
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-threading
   ];
 
   doCheck = true;
@@ -124,34 +120,31 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     pytestCheckHook
-
     flaky
-    pytest-asyncio
-    pytest-freezegun
-    pytest-mock
     pytest-snapshot
-    requests-mock
+    pytest-mock
+    pytest-freezegun
     types-freezegun
   ];
 
   disabledTestPaths = [
     "tests/default/e2e"
-    "tests/default/e2e-other"
     "tests/default/e2e-pysemgrep"
+    "tests/default/e2e-other"
     "tests/default/mcp"
   ];
 
   disabledTests = [
-    # requires .git directory
-    "clean_project_url"
-    # doesn't start flaky plugin correctly
-    "test_debug_performance"
-    # requires networking
-    "test_parse_exclude_rules_auto"
     # requires networking
     "test_send"
+    # requires networking
+    "test_parse_exclude_rules_auto"
     # many child tests require networking to download files
     "TestConfigLoaderForProducts"
+    # doesn't start flaky plugin correctly
+    "test_debug_performance"
+    # requires .git directory
+    "clean_project_url"
   ];
 
   preCheck = ''

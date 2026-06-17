@@ -24,6 +24,8 @@ let
     environment.systemPackages = [ pkgs.efibootmgr ];
   };
   standard = {
+    boot.bootspec.enable = true;
+
     imports = [
       baseline
       systemd-boot
@@ -51,6 +53,8 @@ in
     meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
 
     nodes.machine = {
+      boot.bootspec.enable = true;
+
       imports = [
         baseline
         grub
@@ -71,6 +75,8 @@ in
     meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
 
     nodes.machine = {
+      boot.bootspec.enable = true;
+
       imports = [
         baseline
         grub

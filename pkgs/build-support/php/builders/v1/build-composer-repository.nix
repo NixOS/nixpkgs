@@ -24,20 +24,24 @@ let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer-local-repo-plugin;
     in
-    assert previousAttrs ? src || throw "mkComposerRepository expects src argument.";
-    assert previousAttrs ? vendorHash || throw "mkComposerRepository expects vendorHash argument.";
-    assert previousAttrs ? version || throw "mkComposerRepository expects version argument.";
-    assert previousAttrs ? pname || throw "mkComposerRepository expects pname argument.";
+    assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
     assert (
-      previousAttrs ? composerNoDev || throw "mkComposerRepository expects composerNoDev argument."
+      lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument."
+    );
+    assert (lib.assertMsg (previousAttrs ? version) "mkComposerRepository expects version argument.");
+    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerRepository expects pname argument.");
+    assert (
+      lib.assertMsg (previousAttrs ? composerNoDev) "mkComposerRepository expects composerNoDev argument."
     );
     assert (
-      previousAttrs ? composerNoPlugins
-      || throw "mkComposerRepository expects composerNoPlugins argument."
+      lib.assertMsg (
+        previousAttrs ? composerNoPlugins
+      ) "mkComposerRepository expects composerNoPlugins argument."
     );
     assert (
-      previousAttrs ? composerNoScripts
-      || throw "mkComposerRepository expects composerNoScripts argument."
+      lib.assertMsg (
+        previousAttrs ? composerNoScripts
+      ) "mkComposerRepository expects composerNoScripts argument."
     );
     {
       composerNoDev = previousAttrs.composerNoDev or true;

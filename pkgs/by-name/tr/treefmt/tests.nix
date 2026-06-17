@@ -1,7 +1,6 @@
 {
   lib,
   runCommand,
-  runCommandLocal,
   testers,
   treefmt,
   nixfmt,
@@ -32,28 +31,6 @@ let
     settings = nixfmtExampleConfig;
     runtimeInputs = [ nixfmt ];
   };
-
-  wellFormattedTree = runCommandLocal "well-formatted-project" { } ''
-    mkdir "$out"
-    cat > "$out/file.nix" <<EOF
-    {
-      foo = "bar";
-      attrs = { };
-      list = [ ];
-    }
-    EOF
-  '';
-
-  unformattedTree = runCommandLocal "unformatted-project" { } ''
-    mkdir "$out"
-    cat > "$out/file.nix" <<EOF
-    {
-      foo="bar";
-      attrs={};
-      list=[];
-    }
-    EOF
-  '';
 in
 {
   buildConfigEmpty = testEqualContents {
@@ -89,22 +66,6 @@ in
       command = "nixfmt"
       includes = ["*.nix"]
     '';
-  };
-
-  nixfmtExampleCheckPasses = nixfmtExamplePackage.check wellFormattedTree;
-
-  nixfmtExampleCheckFails = testers.testBuildFailure' {
-    drv = nixfmtExamplePackage.check unformattedTree;
-    expectedBuilderExitCode = 1;
-    expectedBuilderLogEntries = [
-      "diff --git a/file.nix b/file.nix"
-      "-  foo=\"bar\";"
-      "+  foo = \"bar\";"
-      "-  attrs={};"
-      "+  attrs = { };"
-      "-  list=[];"
-      "+  list = [ ];"
-    ];
   };
 
   runNixfmtExample =

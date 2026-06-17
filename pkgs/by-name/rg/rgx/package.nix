@@ -8,29 +8,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgx";
-  version = "0.14.1";
-
-  __structuredAttrs = true;
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "brevity1swos";
     repo = "rgx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4ubPvcxRjwIbPsnxEu6QXPflPUJRnij8WIKeFT+Jxkg=";
+    hash = "sha256-05WEJ3gefPjBHuMXWhr135VtYnbteZapiAtNKwm4wxU=";
   };
 
-  cargoHash = "sha256-u0qCt/XwCayAOKDwD+nQiy41F/x6HORZmqzgpTsBdzM=";
+  cargoHash = "sha256-CSGuf2jOjyLBfD0Fv3G01FioiyiXX8Bx/IiCkIBWbsQ=";
 
   buildInputs = [ pcre2 ];
 
   buildFeatures = [ "pcre2-engine" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v(\\d+\\.\\d+\\.\\d+)$"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/brevity1swos/rgx";
@@ -40,10 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [
-      Cameo007
-      kybe236
-    ];
+    maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "rgx";
   };
 })

@@ -2,30 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   aiohttp,
   aioresponses,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bond-api";
   version = "0.1.18";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-+87/j94eHyW3EMMBK+aXaNTVoNxsixeLusyBsPWa9yM=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     aioresponses
@@ -41,4 +36,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-})
+}

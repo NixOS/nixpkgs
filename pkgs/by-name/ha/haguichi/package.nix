@@ -11,6 +11,7 @@
   meson,
   ninja,
   pkg-config,
+  python3,
   vala,
   wrapGAppsHook4,
 }:
@@ -26,12 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BKpHAlhxd8Zy/ZpPkLhXqlgZsil9JEZmVmHis1gte4Q=";
   };
 
+  postPatch = ''
+    patchShebangs meson_post_install.py
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    python3
     vala
     wrapGAppsHook4
     desktop-file-utils # for update-desktop-database
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://haguichi.net/";
     changelog = "https://haguichi.net/news/release${
       lib.strings.replaceStrings [ "." ] [ "" ] finalAttrs.version
-    }/";
+    }";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ OPNA2608 ];

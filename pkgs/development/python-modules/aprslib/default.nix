@@ -4,18 +4,17 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "aprslib";
   version = "0.7.2";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
     repo = "aprs-python";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-2bYTnbJ8wF/smTpZ2tV+3ZRae7FpbNBtXoaR2Sc9Pek=";
   };
 
@@ -26,9 +25,7 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  build-system = [ setuptools ];
-
-  doCheck = false; # mox3 is not packaged
+  doCheck = false; # mox3 is disabled on python311
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,8 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module for accessing APRS-IS and parsing APRS packets";
     homepage = "https://github.com/rossengeorgiev/aprs-python";
-    changelog = "https://github.com/rossengeorgiev/aprs-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-})
+}

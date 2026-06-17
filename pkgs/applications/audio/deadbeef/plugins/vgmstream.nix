@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef-vgmstream-plugin";
-  version = "2026-05-24";
+  version = "2026-05-09.1";
 
   src = fetchFromGitHub {
     owner = "jchv";
     repo = "deadbeef-vgmstream";
     rev = finalAttrs.version;
-    hash = "sha256-wuyqAAcNQZH7HeDve4ZXXK5q28lFfSYracCVuGjxfbw=";
+    hash = "sha256-dR1TEx61jnprEQokHRX/mi3WvbS+CVp4VIMlutX6uS8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -11,22 +10,18 @@
   isPy3k,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-mgmt-hanaonazure";
   version = "1.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-8vg0L7/e2L5BZfsNbwELaN8HSIaBHbPiyaULNg7i3To=";
+    sha256 = "f2f8342fbfded8be4165fb0d6f010b68df074886811db3e2c9a50b360ee2dd3a";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
@@ -37,12 +32,10 @@ buildPythonPackage (finalAttrs: {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.hanaonazure" ];
-
   meta = {
     description = "This is the Microsoft Azure SAP Hana on Azure Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

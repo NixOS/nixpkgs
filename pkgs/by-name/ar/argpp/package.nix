@@ -31,7 +31,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Argument Parser for C++";
-    homepage = "https://github.com/Grumbel/argpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;

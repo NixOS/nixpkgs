@@ -5,7 +5,7 @@
   zlib,
   libtiff,
   libxml2,
-  sdl12-compat,
+  SDL_compat,
   libx11,
   libxi,
   libxmu,
@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    sdl12-compat
+    SDL_compat
     libxml2
   ];
   buildInputs = [
     zlib
     libtiff
     libxml2
-    sdl12-compat
+    SDL_compat
     libx11
     libxi
     libxmu

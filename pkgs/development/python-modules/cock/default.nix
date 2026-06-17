@@ -2,37 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   click,
   sortedcontainers,
   pyyaml,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "cock";
   version = "0.11.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-Hi8aFxATsYcEO6qNzZnF73V8WLTQjb6Dw2xF4VgT2o4=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     click
     sortedcontainers
     pyyaml
   ];
-
-  pythonImportsCheck = [ "cock" ];
 
   meta = {
     homepage = "https://github.com/pohmelie/cock";
     description = "Configuration file with click";
     license = lib.licenses.mit;
   };
-})
+}

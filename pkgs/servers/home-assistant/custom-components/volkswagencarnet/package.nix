@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "robinostlund";
   domain = "volkswagencarnet";
-  version = "5.4.11";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "homeassistant-volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-soSTa6FYnNpzsl5goKS9xcSnubiXXUUGOJ3tDgbFDc8=";
+    hash = "sha256-Ye++ialp9ryC6J+ZXrRqLkuLct6sbk3+NknZo4sx4hc=";
   };
 
   postPatch = ''
@@ -29,6 +29,9 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant-custom-component
     pytestCheckHook
   ];
+
+  # https://github.com/robinostlund/homeassistant-volkswagencarnet/issues/651
+  doCheck = false;
 
   meta = {
     changelog = "https://github.com/robinostlund/homeassistant-volkswagencarnet/releases/tag/${src.tag}";

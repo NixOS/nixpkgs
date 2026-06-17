@@ -2,21 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  djhtml,
   libclang,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "style50";
-  version = "3.0.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "style50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D2ucfVVGZFzmcAUyOfu97QJ8x9pzRo1hYrwZlV8MRN8=";
+    hash = "sha256-THmxq69peJwT3XQKEpT+ooBYaDDkn1HHGVH5rvM/FF8=";
   };
 
   build-system = [
@@ -25,14 +24,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     autopep8
-    cssbeautifier
-    djhtml
     icdiff
     jinja2
     jsbeautifier
     pycodestyle
     python-magic
-    sqlparse
     termcolor
   ];
 
@@ -54,10 +50,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "style50" ];
 
-  nativeCheckInputs = [
-    python3Packages.pytestCheckHook
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ versionCheckHook ];
+
+  # no python tests
 
   meta = {
     description = "Tool for checking code against the CS50 style guide";

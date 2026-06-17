@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Utility to mount a Zookeeper instance as a file-system";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ztzg ];
     license = lib.licenses.asl20;

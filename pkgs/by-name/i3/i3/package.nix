@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i3";
-  version = "4.25.1";
+  version = "4.24";
 
   src = fetchFromGitHub {
     owner = "i3";
     repo = "i3";
     tag = finalAttrs.version;
-    hash = "sha256-gXm0jzRAHXnjEfmUtlB+Pr/ZNNuZVRk6KWBCxRNDneU=";
+    hash = "sha256-2tuhfB/SMN+osCBfZtw/yDPhNNEhBH4Qo6dexpqVWYk=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+
+    # This testcase generates a Perl executable file with a shebang, and
+    # patchShebangs can't replace a shebang in the middle of a file.
+    if [ -f testcases/t/318-i3-dmenu-desktop.t ]; then
+      substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
+        --replace-fail "#!/usr/bin/env perl" "#!${lib.getExe perl}"
+    fi
   '';
 
   # xvfb-run is available only on Linux

@@ -6,12 +6,9 @@
   setuptools,
   click,
   watchdog,
-  pympler,
   portalocker,
   pytestCheckHook,
   pytest-cov-stub,
-  pytest-asyncio,
-  aiosqlite,
   sqlalchemy,
   pymongo,
   dnspython,
@@ -22,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "4.2.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-cachier";
     repo = "cachier";
     tag = "v${version}";
-    hash = "sha256-hiyevLMtKV8M8znB2mznHLRM+pVN6uCxZZVf3H0gjTI=";
+    hash = "sha256-FmrwH5Ksmgt0HA5eUN5LU36P5sY4PymRKsUWVkQlvBo=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -40,7 +37,6 @@ buildPythonPackage rec {
 
   dependencies = [
     watchdog
-    pympler
     portalocker
     # not listed as dep, but needed to run main script entrypoint
     click
@@ -49,8 +45,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-    pytest-asyncio
-    aiosqlite
     sqlalchemy
     pymongo
     dnspython
@@ -89,7 +83,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Keeps breaking due to concurrent access or failing to close the db between tests.
-    "tests/sql_tests/test_sql_core.py"
+    "tests/test_sql_core.py"
   ];
 
   preBuild = ''

@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${if enableLomiriFeatures then "lomiri" else "ayatana"}-indicator-datetime";
-  version = "26.6.0";
+  version = "25.4.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
     tag = finalAttrs.version;
-    hash = "sha256-zjAQjd5kFho8YfcoWRGbQbzzAJT0id5nh7zQoZXB1Uk=";
+    hash = "sha256-8E9ucy8I0w9DDzsLtzJgICz/e0TNqOHgls9LrgA5nk4=";
   };
 
   postPatch = ''
@@ -131,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" enableLomiriFeatures)
-    (lib.cmakeBool "ENABLE_MKCAL" enableLomiriFeatures)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optionals enableLomiriFeatures [

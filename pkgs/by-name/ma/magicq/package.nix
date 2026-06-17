@@ -12,6 +12,7 @@
   libGLU,
   libarchive,
   libgcc,
+  libsForQt5,
   qt5,
   libusb-compat-0_1,
   libusb1,
@@ -44,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libarchive
     libgcc
-    qt5.qtbase
-    qt5.qtmultimedia
+    libsForQt5.qt5.qtbase
+    libsForQt5.qt5.qtmultimedia
     qt5.qtbase
     libusb-compat-0_1
     libusb1

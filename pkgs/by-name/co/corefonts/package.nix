@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   cabextract,
-  installFonts,
 }:
 
 let
@@ -77,10 +76,7 @@ stdenv.mkDerivation {
     ) fonts
   );
 
-  nativeBuildInputs = [
-    cabextract
-    installFonts
-  ];
+  nativeBuildInputs = [ cabextract ];
 
   buildCommand = ''
     for i in $exes; do
@@ -128,9 +124,7 @@ stdenv.mkDerivation {
     mv webdings.ttf  Webdings.ttf.tmp
     mv Webdings.ttf.tmp  Webdings.ttf
 
-    # using buildCommand means no phases are run
-    # so we run the function ourselves
-    installFonts
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
 
     # Also put the EULA there to be on the safe side.
     cp ${eula} $out/share/fonts/truetype/eula.html

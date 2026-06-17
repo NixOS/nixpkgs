@@ -7,6 +7,7 @@
   python3,
   fontforge,
   potrace,
+  texlive,
   fetchpatch2,
 }:
 
@@ -58,11 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
-  # for use with texlive.withPackages
-  passthru.tlDeps = ps: [
-    ps.kpathsea
-    ps.t1utils
-    ps.metafont
+  # experimental texlive.combine support
+  # (note that only the bin/ folder will be combined into texlive)
+  passthru.tlDeps = with texlive; [
+    kpathsea
+    t1utils
+    metafont
   ];
 
   meta = {

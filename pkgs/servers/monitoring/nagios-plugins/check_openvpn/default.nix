@@ -21,7 +21,6 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Nagios/icinga/sensu check plugin for OpenVPN";
-    homepage = "https://github.com/liquidat/nagios-icinga-openvpn";
     license = lib.licenses.mit;
     mainProgram = "check_openvpn";
     maintainers = with lib.maintainers; [ peterhoeg ];

@@ -6,25 +6,24 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wlr-layout-ui";
-  version = "2.0.0";
+  version = "1.6.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
     tag = finalAttrs.version;
-    hash = "sha256-vniBlKWxDjcHQTgvqaMHKTyCVDVqbD5VCvNPTgUp00w=";
+    hash = "sha256-CghOj5fQnuHd6PMeLOX4NKdVw7+pueZXahzYcAMwNOA=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.hatchling
+    python3.pkgs.poetry-core
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pyglet
     tomli
     tomli-w
-    jeepney
   ];
 
   postInstall = ''

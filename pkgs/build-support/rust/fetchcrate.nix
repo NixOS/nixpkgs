@@ -9,7 +9,7 @@
   pname ? null,
   # The `dl` field of the registry's index configuration
   # https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-  registryDl ? "https://static.crates.io/crates",
+  registryDl ? "https://crates.io/api/v1/crates",
   version,
   unpack ? true,
   ...

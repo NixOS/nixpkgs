@@ -4,7 +4,7 @@
 
   nodes = {
     server =
-      { pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         services.pixelfed = {
           enable = true;
@@ -19,25 +19,16 @@
           );
           settings."FORCE_HTTPS_URLS" = false;
         };
-
-        # to prevent getting killed by oom
-        virtualisation.memorySize = 2048;
-        virtualisation.emptyDiskImages = [ 4096 ];
-        swapDevices = [ { device = "/dev/vdb"; } ];
-
-        # allows running nixos test on qemu without kvm, eg. github actions on aarch64-linux
-        systemd.settings.Manager.DefaultDeviceTimeoutSec = lib.mkForce 1800;
-        boot.initrd.kernelModules = [ "virtio_console" ];
       };
   };
 
   testScript = ''
     # Wait for Pixelfed PHP pool
-    server.wait_for_unit("phpfpm-pixelfed.service", timeout=1800)
+    server.wait_for_unit("phpfpm-pixelfed.service")
     # Wait for NGINX
-    server.wait_for_unit("nginx.service", timeout=1800)
+    server.wait_for_unit("nginx.service")
     # Wait for HTTP port
-    server.wait_for_open_port(80, timeout=1800)
+    server.wait_for_open_port(80)
     # Access the homepage.
     server.succeed("curl -H 'Host: pixelfed.local' http://localhost")
     # Create an account

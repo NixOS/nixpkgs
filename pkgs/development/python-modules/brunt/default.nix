@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
   aiohttp,
   requests,
   pytest-cov-stub,
@@ -14,21 +12,14 @@ buildPythonPackage (finalAttrs: {
   pname = "brunt";
   version = "1.2.0";
 
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-5wRifce5wKUMZ66Q8dMgsU+Z8rL8m/HvBGGxQdzxvOk=";
+    sha256 = "e704627dc7b9c0a50c67ae90f1d320b14f99f2b2fc9bf1ef0461b141dcf1bce9";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     requests
   ];

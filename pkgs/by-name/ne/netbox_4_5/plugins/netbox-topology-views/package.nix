@@ -8,18 +8,17 @@
   netaddr,
   python,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "netbox-topology-views";
   version = "4.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-topology-views";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-uKxIu8IPeEwBdRbtQaLWGwLnxvFyJ5FrScsU/ufyTuM=";
   };
 
@@ -40,9 +39,9 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Netbox plugin for generate topology views/maps from your devices";
     homepage = "https://github.com/netbox-community/netbox-topology-views";
-    changelog = "https://github.com/netbox-community/netbox-topology-views/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-topology-views/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-})
+}

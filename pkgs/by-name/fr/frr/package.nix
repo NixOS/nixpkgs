@@ -46,7 +46,6 @@
   cumulusSupport ? false,
   irdpSupport ? true,
   mgmtdSupport ? true,
-  scriptingSupport ? true,
   # Experimental as of 10.1, reconsider if upstream changes defaults
   grpcSupport ? false,
 
@@ -121,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     readline
     rtrlib
+    lua53Packages.lua
     sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -135,17 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals grpcSupport [
     grpc
     protobuf
-  ]
-  ++ lib.optionals scriptingSupport [
-    lua53Packages.lua
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
   depsBuildBuild = [
     buildPackages.python3
-  ]
-  ++ lib.optionals scriptingSupport [
-    buildPackages.lua53Packages.lua
   ];
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
@@ -163,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-logfile-mask=0640"
     "--enable-multipath=${toString numMultipath}"
     "--enable-config-rollbacks"
+    "--enable-scripting"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/var"
@@ -176,7 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature irdpSupport "irdp")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
     (lib.strings.enableFeature grpcSupport "grpc")
-    (lib.strings.enableFeature scriptingSupport "scripting")
 
     # routing protocols
     (lib.strings.enableFeature bgpdSupport "bgpd")

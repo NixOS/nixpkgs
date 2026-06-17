@@ -1,31 +1,26 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchgit,
   libmowgli,
   pkg-config,
   git,
   gettext,
-  pcre2,
+  pcre,
   libidn,
   libxcrypt,
   cracklib,
   openssl,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atheme";
-  version = "7.2.12-unstable-2026-06-06";
+  version = "7.2.12";
 
-  src = fetchFromGitHub {
-    owner = "atheme";
-    repo = "atheme";
-    rev = "b8b23c51cda120f2cfc5af9ac639cd257575f2ce";
-    hash = "sha256-+hOJH9tK78fNrxKyergHqMWaY0yBiFEWssS/r9IOQT0=";
-    # for modules and pinned libmowgli
-    fetchSubmodules = true;
-    # configure checks for git tree
+  src = fetchgit {
+    url = "https://github.com/atheme/atheme.git";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KAC1ZPNo4TqfVryKOYYef8cRWRgFmyEdvl1bgvpGNiM=";
     leaveDotGit = true;
   };
 
@@ -34,10 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     git
     gettext
   ];
-
   buildInputs = [
     libmowgli
-    pcre2
+    pcre
     libidn
     libxcrypt
     cracklib
@@ -52,14 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-contrib"
     "--enable-reproducible-builds"
   ];
-
-  enableParallelBuilding = true;
-
-  doCheck = true;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
 
   meta = {
     description = "Set of services for IRC networks";

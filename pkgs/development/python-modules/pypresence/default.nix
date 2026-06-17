@@ -4,19 +4,17 @@
   fetchFromGitHub,
   setuptools,
 }:
-let
-  version = "4.6.1";
-in
+
 buildPythonPackage {
   pname = "pypresence";
-  inherit version;
+  version = "4.3.0-unstable-2025-03-27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qwertyquerty";
     repo = "pypresence";
-    tag = "v${version}";
-    hash = "sha256-VvVHJ3S+Yusq4cK4KyDQlnL3VwAyrZqNKYzEgJPU8Vk=";
+    rev = "4e882c36d0f800c016c15977243ac9a49177095a";
+    hash = "sha256-DjwDmQMbI9tV40TTe1CthhphoysKSFICrRhqijJjIAE=";
   };
 
   build-system = [ setuptools ];

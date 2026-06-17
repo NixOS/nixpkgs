@@ -3,23 +3,20 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "advantage-air";
   version = "0.4.4";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "advantage_air";
-    inherit (finalAttrs) version;
+    inherit version;
     hash = "sha256-4rRR9IxzH5EiYfWzWYeyCwoLB2LetBVyH7L3nkvp+gA=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # No tests
   doCheck = false;
@@ -32,4 +29,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-})
+}

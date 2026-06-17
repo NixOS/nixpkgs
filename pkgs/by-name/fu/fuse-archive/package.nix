@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fuse3,
+  fuse,
   libarchive,
   pkg-config,
   boost,
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-archive";
-  version = "1.22";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fuse-archive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uE+22ONNnPqAi8zBV0v3qu3um2gNoX4/jNUA7E+UQOE=";
+    hash = "sha256-Fta/IYKWsB4ZuPOWtGO6p6l03eoRXaO0lIGaCU3SRag=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    fuse3
+    fuse
     libarchive
     boost
   ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = {
-    inherit (fuse3.meta) platforms;
+    inherit (fuse.meta) platforms;
     description = "Serve an archive or a compressed file as a read-only FUSE file system";
     homepage = "https://github.com/google/fuse-archive";
     changelog = "https://github.com/google/fuse-archive/releases/tag/v${finalAttrs.version}";

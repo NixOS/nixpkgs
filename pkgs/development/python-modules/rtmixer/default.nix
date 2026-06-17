@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   buildPythonPackage,
+  isPy27,
   setuptools,
   cython,
   portaudio,
@@ -14,6 +15,7 @@ buildPythonPackage rec {
   pname = "rtmixer";
   version = "0.1.7";
   pyproject = true;
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "spatialaudio";

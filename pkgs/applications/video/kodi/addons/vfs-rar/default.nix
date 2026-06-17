@@ -21,7 +21,6 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "RAR archive Virtual Filesystem add-on for Kodi";
-    homepage = "https://github.com/xbmc/vfs.rar";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];

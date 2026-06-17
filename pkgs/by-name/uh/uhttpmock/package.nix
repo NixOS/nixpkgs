@@ -11,12 +11,12 @@
   gtk-doc,
   docbook-xsl-nons,
   glib,
-  libsoup_3,
+  libsoup_2_4,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "uhttpmock";
-  version = "0.11.0";
+  version = "0.5.5";
 
   outputs = [
     "out"
@@ -28,12 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = "uhttpmock";
-    rev = finalAttrs.version;
-    hash = "sha256-itJhiPpAF5dwLrVF2vuNznABqTwEjVj6W8mbv1aEmE4=";
+    rev = version;
+    sha256 = "NuxiVVowZ8ilP9rcgapCe9OzFCpoOfZxZiSyjTeOrts=";
   };
 
   strictDeps = true;
-
   nativeBuildInputs = [
     meson
     ninja
@@ -47,16 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     mesonEmulatorHook
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     glib
-    libsoup_3
+    libsoup_2_4
   ];
 
   meta = {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
     homepage = "https://gitlab.freedesktop.org/pwithnall/uhttpmock/";
     license = lib.licenses.lgpl21Plus;
-    teams = [ lib.teams.gnome ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-})
+}

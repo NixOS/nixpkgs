@@ -80,7 +80,8 @@ buildGoModule (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      RossSmyth
     ];
   };
 })

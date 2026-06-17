@@ -2,33 +2,30 @@
   fetchFromGitHub,
   lib,
   buildPythonPackage,
-  nix-update-script,
   setuptools,
-  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "uefi-firmware-parser";
-  version = "1.16";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theopolis";
     repo = "uefi-firmware-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2vYTOC7cOiQXPMhYM+hqmFyCJeXCkx6RSxgaTIZqbds=";
+    hash = "sha256-Yiw9idmvSpx4CcVrXHznR8vK/xl7DTL+L7k4Nvql2B8=";
   };
 
   build-system = [
     setuptools
-    setuptools-scm
+    wheel
   ];
 
   pythonRemoveDeps = [ "future" ];
 
   pythonImportsCheck = [ "uefi_firmware" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for parsing, extracting, and recreating UEFI firmware volumes";
@@ -36,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/theopolis/uefi-firmware-parser/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "uefi-firmware-parser";
-    maintainers = [ lib.maintainers.elliotberman ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

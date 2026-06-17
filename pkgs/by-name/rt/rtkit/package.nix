@@ -9,7 +9,7 @@
   dbus,
   libcap,
   polkit,
-  systemdLibs,
+  systemd,
   fetchpatch,
   nix-update-script,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libcap
     polkit
-    systemdLibs
+    systemd
   ];
 
   mesonFlags = [

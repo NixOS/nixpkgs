@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
-  version = "2.1.9";
+  version = "2.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "LedFx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h3bevsvgRILzAnQKSJj8X5AixB8qsyhf2+SkolSEdbk=";
+    hash = "sha256-le3SEGI9uis7wx9+SFpn0BJbpCybSecXEcxxAkC910U=";
   };
 
   postPatch = ''

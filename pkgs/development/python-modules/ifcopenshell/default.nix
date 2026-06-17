@@ -24,6 +24,7 @@
   mpfr,
   nlohmann_json,
   opencascade-occt_7_6,
+  pcre,
   zlib,
 
   # python deps
@@ -100,6 +101,7 @@ buildPythonPackage rec {
     mpfr
     nlohmann_json
     opencascade-occt
+    pcre
   ];
 
   propagatedBuildInputs = [

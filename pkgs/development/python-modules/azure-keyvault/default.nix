@@ -2,28 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   azure-keyvault-certificates,
   azure-keyvault-keys,
   azure-keyvault-secrets,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-keyvault";
   version = "4.2.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
     hash = "sha256-cxrdEIo+KatP1QGjxHclbChsNNCZazg/tqOUVGKTN2E=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-keyvault-certificates
     azure-keyvault-keys
     azure-keyvault-secrets
@@ -44,4 +39,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

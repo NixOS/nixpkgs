@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kristall";
-  version = "0.4";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "MasterQ32";
     repo = "kristall";
     rev = "V${version}";
-    hash = "sha256-zTO55xTc7hXlqVUVlx921+LalKj/yQwjEgXW2YUdG70=";
+    sha256 = "07nf7w6ilzs5g6isnvsmhh4qa1zsprgjyf0zy7rhpx4ikkj8c8zq";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
     libsForQt5.qmake
-    libsForQt5.qttools
   ];
 
   buildInputs = [ libsForQt5.qtmultimedia ];

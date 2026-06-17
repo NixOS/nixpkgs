@@ -53,13 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://www.alsa-project.org/";
+    homepage = "http://www.alsa-project.org/";
     description = "Soundcard firmwares from the alsa project";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [
       binaryFirmware
       fromSource

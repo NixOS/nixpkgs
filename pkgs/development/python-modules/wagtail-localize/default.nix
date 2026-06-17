@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  buildNpmPackage,
 
   # build-system
   flit-core,
@@ -23,10 +22,11 @@
   freezegun,
   python,
 }:
-let
-  pname = "wagtail-localize";
 
+buildPythonPackage rec {
+  pname = "wagtail-localize";
   version = "1.13.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
@@ -34,33 +34,6 @@ let
     tag = "v${version}";
     hash = "sha256-iJwX/N8/aaAjinU1htVasp88fuuZCOomVPgJ1Ymxre4=";
   };
-
-  assets = buildNpmPackage {
-    pname = "${pname}-assets";
-    npmDepsHash = "sha256-mLZaa3BBvbbgaSgZhsdUVPRXR6X5xy/sWRiOXnzV2cQ=";
-
-    NODE_OPTIONS = "--openssl-legacy-provider";
-
-    inherit version src;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-
-      for static_dir in wagtail_localize/static; do
-        cp --parents -r $static_dir $out
-      done
-
-      runHook postInstall
-    '';
-  };
-in
-
-buildPythonPackage rec {
-  inherit pname version src;
-
-  pyproject = true;
 
   build-system = [ flit-core ];
 
@@ -82,10 +55,6 @@ buildPythonPackage rec {
     freezegun
     google-cloud-translate
   ];
-
-  preBuild = ''
-    cp -r ${assets}/wagtail_localize .
-  '';
 
   # See https://github.com/wagtail/wagtail-localize/issues/922
   patches = [ ./failing-test.patch ];

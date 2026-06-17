@@ -142,14 +142,10 @@ in
         # so we can warn the user about the change.
         legacyOptionsUsed = lib.lists.filter (opt: lib.strings.hasInfix opt scudoOpts) legacyOptionNames;
       in
-      lib.optional
-        (
-          config.environment.variables ? SCUDO_OPTIONS && cfg.provider == "scudo" && legacyOptionsUsed != [ ]
-        )
-        ''
-          environment.variables.SCUDO_OPTIONS: ${lib.concatStringsSep ", " legacyOptionsUsed} is/are no longer valid Scudo options.
-          Use snake_case instead of CamelCase: https://llvm.org/docs/ScudoHardenedAllocator.html#options
-        '';
+      lib.optional (cfg.provider == "scudo" && legacyOptionsUsed != [ ]) ''
+        environment.variables.SCUDO_OPTIONS: ${lib.concatStringsSep ", " legacyOptionsUsed} is/are no longer valid Scudo options.
+        Use snake_case instead of CamelCase: https://llvm.org/docs/ScudoHardenedAllocator.html#options
+      '';
 
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}

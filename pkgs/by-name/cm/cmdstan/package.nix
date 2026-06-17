@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cmdstan";
-  version = "2.39.0";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstan";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7vGEqIJOFWeESq4xL2z2ZjNaVWEqqzPmGT6tpWBzrU0=";
+    hash = "sha256-4Mx4LvXW2lYOSSOgNT0f+unry6mBobgGTDLwtiypHBU=";
   };
 
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
-      --replace-fail "/usr/bin/env bash" "bash"
+      --replace "/usr/bin/env bash" "bash"
   '';
 
   nativeBuildInputs = [

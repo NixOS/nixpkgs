@@ -8,21 +8,19 @@
   roadtx,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "roadtools";
   version = "0.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-RxRbcT9uhQBYRDqq1asYDIwqrji14zi7dwRuQLXJiyQ=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     roadrecon
     roadlib
     roadtx
@@ -35,6 +33,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/dirkjanm/ROADtools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "roadtools";
   };
-})
+}

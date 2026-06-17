@@ -25,7 +25,6 @@ recurseIntoAttrs {
   symlinkJoin = recurseIntoAttrs (callPackage ./symlink-join.nix { });
   overriding = callPackage ../test-overriding.nix { };
   inherit references;
-  requireFile = callPackage ./requireFile.nix { };
   writeCBin = callPackage ./writeCBin.nix { };
   writeClosure-union = callPackage ./writeClosure-union.nix {
     inherit (references) samples;

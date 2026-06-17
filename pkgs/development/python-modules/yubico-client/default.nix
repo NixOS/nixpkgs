@@ -2,34 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   requests,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "yubico-client";
   version = "1.13.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-47hs0qEjEF7frK1AVRx7JunBGT2B/+Fo7nBOv9PREWI=";
+    inherit pname version;
+    sha256 = "e3b86cd2a123105edfacad40551c7b26e9c1193d81ffe168ee704ebfd3d11162";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   # pypi package missing test_utils and github releases is behind
   doCheck = false;
-
-  pythonImportsCheck = [ "yubico_client" ];
 
   meta = {
     description = "Verifying Yubico OTPs based on the validation protocol version 2.0";
     homepage = "https://github.com/Kami/python-yubico-client/";
     license = lib.licenses.bsd3;
   };
-})
+}

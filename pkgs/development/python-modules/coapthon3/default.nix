@@ -2,6 +2,7 @@
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
+  isPy27,
   lib,
 }:
 
@@ -9,6 +10,7 @@ buildPythonPackage rec {
   pname = "coapthon3";
   version = "1.0.2";
   format = "setuptools";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Tanganelli";

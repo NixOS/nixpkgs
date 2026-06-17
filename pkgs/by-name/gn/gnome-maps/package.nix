@@ -12,7 +12,7 @@
   gtk4,
   gobject-introspection,
   gdk-pixbuf,
-  librest,
+  librest_1_0,
   libgweather,
   geoclue2,
   wrapGAppsHook4,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libshumate
     libgweather
     libadwaita
-    librest
+    librest_1_0
     libsecret
     libsoup_3
   ];

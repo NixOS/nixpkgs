@@ -14,6 +14,7 @@
   libsigsegv,
   gettext,
   ncurses,
+  pcre,
   zlib,
   readline,
   libffi,
@@ -31,6 +32,7 @@
   dllSupport ? true,
   withModules ? [
     "asdf"
+    "pcre"
     "rawsock"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -78,6 +80,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (gettext != null) gettext
   ++ lib.optional (ncurses != null) ncurses
+  ++ lib.optional (pcre != null) pcre
   ++ lib.optional (zlib != null) zlib
   ++ lib.optional (readline != null) readline
   ++ lib.optional (ffcallAvailable && (libffi != null)) libffi

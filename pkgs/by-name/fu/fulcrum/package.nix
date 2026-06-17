@@ -4,22 +4,21 @@
   fetchFromGitHub,
   pkg-config,
   python3,
-  rocksdb_9_10,
+  rocksdb_7_10,
   zeromq,
-  libsForQt5,
   nix-update-script,
-  testers,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fulcrum";
-  version = "2.1.1";
+  version = "1.12.0.1";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ygUzDhqUDeoNgNNXjuIfcy1b5B1KxDGBV4dMdn83GR8=";
+    hash = "sha256-/RlvbZ6/f0Jxj6oCeHjGWqlktvtNUNczOXi2/wYw2LQ=";
   };
 
   nativeBuildInputs = [
@@ -30,16 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     python3
     libsForQt5.qtbase
-    rocksdb_9_10
+    rocksdb_7_10
     zeromq
   ];
 
   dontWrapQtApps = true; # no GUI
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";
@@ -47,6 +43,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ prusnak ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "Fulcrum";
   };
 })

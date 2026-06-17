@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   git,
   gitpython,
   krb5-c, # C krb5 library, not PyPI krb5
@@ -10,24 +9,20 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "cccolutils";
   version = "1.5";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "CCColUtils";
-    inherit (finalAttrs) version;
+    inherit version;
     hash = "sha256-YzKjG43biRbTZKtzSUHHhtzOfcZfzISHDFolqzrBjL8=";
   };
 
-  build-system = [ setuptools ];
-
   buildInputs = [ krb5-c ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     git
     gitpython
     mock
@@ -42,4 +37,4 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://pagure.io/cccolutils";
     license = lib.licenses.gpl2Plus;
   };
-})
+}

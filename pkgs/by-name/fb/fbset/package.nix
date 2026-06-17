@@ -23,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-
   installFlags = [ "DESTDIR=$(out)" ];
 
   passthru = {

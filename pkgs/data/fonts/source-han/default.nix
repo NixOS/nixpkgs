@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  installFonts,
   unzip,
 }:
 
@@ -19,19 +18,16 @@ let
     let
       Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
     in
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation rec {
       pname = "source-han-${family}";
       version = lib.removeSuffix "R" rev;
-
-      __structuredAttrs = true;
-      strictDeps = true;
 
       src = fetchurl {
         url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/${prefix}SourceHan${Family}.ttc${zip}";
         inherit hash;
       };
 
-      nativeBuildInputs = [ installFonts ] ++ lib.optionals (zip == ".zip") [ unzip ];
+      nativeBuildInputs = lib.optionals (zip == ".zip") [ unzip ];
 
       unpackPhase =
         lib.optionalString (zip == "") ''
@@ -40,6 +36,14 @@ let
         + lib.optionalString (zip == ".zip") ''
           unzip $src
         '';
+
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm444 *.ttc -t $out/share/fonts/opentype/${pname}
+
+        runHook postInstall
+      '';
 
       meta = {
         description = "Open source Pan-CJK ${description} typeface";

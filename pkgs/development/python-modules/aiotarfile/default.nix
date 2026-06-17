@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   unittestCheckHook,
   cargo,
   rustc,
@@ -36,9 +35,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "tests/" ]; # Not sure why it isn't autodiscovered
-
-  # pyo3-asyncio 0.20 segfaults on the python 3.14 interpreter state.
-  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "aiotarfile" ];
 

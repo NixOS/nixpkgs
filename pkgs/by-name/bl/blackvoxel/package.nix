@@ -5,7 +5,7 @@
   makeDesktopItem,
   imagemagick,
   glew_1_10,
-  sdl12-compat,
+  SDL_compat,
   nix-update-script,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glew_1_10
-    sdl12-compat
+    SDL_compat
   ];
 
   enableParallelBuilding = true;

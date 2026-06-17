@@ -6,7 +6,7 @@
   openssl,
   re2,
   libevent,
-  gitMinimal,
+  git,
   versionCheckHook,
   zlib,
   expat,
@@ -16,32 +16,30 @@
 }:
 let
   pname = "fah-client";
-  version = "8.5.6";
+  version = "8.5.3";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     tag = "bastet-v${version}";
-    hash = "sha256-oh3q/gmAKx8BHoaw6Dxkd0GoxYyJ6is8uCKcivQVv2g=";
+    hash = "sha256-RU13qT9UQ1uNsRNBaEGSWTgNmE3f72veabl2OmKK6Z0=";
   };
 
   fah-client = stdenv.mkDerivation {
     inherit pname version;
-    __structuredAttrs = true;
-    strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       tag = "v${version}";
-      hash = "sha256-B5h2eXSCvYG5juNkBRBh+KUsm26O9JTI1S7yKkHgZ7c=";
+      hash = "sha256-PBguylWnYU5iTzrjWA1B5Iwb57JpoWGPSpjgNJP3aoI=";
     };
 
     nativeBuildInputs = [
-      gitMinimal
-      libevent
-      re2
       scons
+      re2
+      libevent
+      git
     ];
 
     buildInputs = [ openssl ];

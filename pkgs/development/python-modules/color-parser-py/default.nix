@@ -6,21 +6,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "color-parser-py";
-  version = "0.1.7";
+  version = "0.1.6";
   pyproject = true;
 
   # PyPI has Cargo.lock
   src = fetchPypi {
     pname = "color_parser_py";
-    inherit (finalAttrs) version;
-    hash = "sha256-C3Q9vaOa/SE0PtQu5Gw/sk1JMRIlhgbA5VTW+2aC5dU=";
+    inherit version;
+    hash = "sha256-m1qhVAwQNtCwz+DLSAdfKhzkohMLMjvPHxynKhlJfN8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-nyl0Nmf0DNLH3j2XrTTO1u3erBCbRyp/xO0w/USjDHE=";
+    inherit pname version src;
+    hash = "sha256-tKXA6sd5gLCJUaqxzFcZ3lePK41Wk2TbLp0HXBacOyo=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python bindings for color parsing and conversion";
     homepage = "https://github.com/rusiaaman/color-parser-py";
-    changelog = "https://github.com/rusiaaman/color-parser-py/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-})
+}

@@ -7,14 +7,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "tempo";
-  version = "3.0.1";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-KYb3QJ4jdPsEmxVCezpakRRDtdyeGc4JUgeCHkZTG50=";
+    hash = "sha256-1eacaqyKyHF/uS0Ja7oq+YKn/3K2QpDmd6jysGVBOjg=";
   };
 
   vendorHash = null;

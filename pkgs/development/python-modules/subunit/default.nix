@@ -11,7 +11,6 @@
   hypothesis,
   iso8601,
   pytestCheckHook,
-  pyyaml,
   setuptools,
   testscenarios,
   testtools,
@@ -51,15 +50,14 @@ buildPythonPackage {
     hypothesis
     fixtures
     pytestCheckHook
-    pyyaml
   ];
 
-  enabledTestPaths = [ "python/tests" ];
+  enabledTestPaths = [ "python/subunit" ];
 
   disabledTestPaths = [
     # these tests require testtools and don't work with pytest
-    "python/tests/test_output_filter.py"
-    "python/tests/test_test_protocol.py"
-    "python/tests/test_test_protocol2.py"
+    "python/subunit/tests/test_output_filter.py"
+    "python/subunit/tests/test_test_protocol.py"
+    "python/subunit/tests/test_test_protocol2.py"
   ];
 }

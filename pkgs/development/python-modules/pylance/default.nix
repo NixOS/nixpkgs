@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "7.0.0";
+  version = "6.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wOFfG2CPt292WkdLUM+5Rl0OKej9b8WzV9LRpCoao3M=";
+    hash = "sha256-n9x4Q1UlIuVWcDTdJd72JyQk/nuFMsWfzK2OmoO9wbU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-8ngtq1AlOj0ZgiAwsibz1MGxSJ8kfIbXCafsIneOMqA=";
+    hash = "sha256-b2O38ZKks6oiBAtUx0fTtFSy5nbsZCZD/BmeJY5zda8=";
   };
 
   nativeBuildInputs = [
@@ -135,7 +135,6 @@ buildPythonPackage (finalAttrs: {
     "test_lance_log_file"
     "test_lance_log_file_invalid_path"
     "test_lance_log_file_with_directory_creation"
-    "test_lance_log_filters_trace_event_targets"
     "test_timestamp_precision"
     "test_tracing"
 

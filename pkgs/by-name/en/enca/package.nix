@@ -1,20 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   libiconv,
   recode,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enca";
-  version = "1.22";
+  version = "1.19";
 
-  src = fetchFromGitHub {
-    owner = "Project-OSS-Revival";
-    repo = "enca";
-    tag = finalAttrs.version;
-    hash = "sha256-TMWAGT3iY/ND8pB4THU4PbBGpb8EfT6z+peT8T6mp4o=";
+  src = fetchurl {
+    url = "https://dl.cihar.com/enca/enca-${finalAttrs.version}.tar.xz";
+    sha256 = "1f78jmrggv3jymql8imm5m9yc8nqjw5l99mpwki2245l8357wj1s";
   };
 
   buildInputs = [
@@ -23,9 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/Project-OSS-Revival/enca/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Detects the encoding of text files and reencodes them";
-    homepage = "https://cihar.com/software/enca/";
+
     longDescription = ''
       Enca detects the encoding of text files, on the basis of knowledge
       of their language. It can also convert them to other encodings,

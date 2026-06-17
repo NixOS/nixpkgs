@@ -330,6 +330,9 @@ in
     ];
   };
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [
+    e1mo
+    xanderio
+  ];
   meta.doc = ./plausible.md;
 }

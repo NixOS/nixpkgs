@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   flac,
-  fuse3,
+  fuse,
   lame,
   libid3tag,
   libvorbis,
@@ -16,23 +15,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mp3fs";
-  version = "1.1.1-unstable-2023-01-29";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "khenriks";
     repo = "mp3fs";
-    rev = "cd2ca80eb3912ff8385e6d537df10d9a768a3a96";
-    hash = "sha256-lueF8fEV+0LQOxf2MhK9dPWkfsTF4nP3PijqjJvDPzo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "Enable fuse3 support.patch";
-      # https://github.com/khenriks/mp3fs/pull/81
-      url = "https://github.com/khenriks/mp3fs/commit/6e1326de4a19b236eef88b89599755adf394526f.patch?full_index=1";
-      hash = "sha256-V2HZy0jiXAHGAjre+QtCdGev7maWJ8hW3F2e/87CEKA=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace src/mp3fs.cc \
+      --replace-fail "#include <fuse_darwin.h>" "" \
+      --replace-fail "osxfuse_version()" "fuse_version()"
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     flac
-    fuse3
+    fuse
     lame
     libid3tag
     libvorbis

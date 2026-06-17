@@ -140,7 +140,6 @@ let
           propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
           meta = {
             inherit (meta) maintainers platforms;
-            license = lib.licenses.mit;
           };
         } ./tcl-package-hook.sh
       ) { };
@@ -151,7 +150,6 @@ let
           propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
           meta = {
             inherit (meta) maintainers platforms;
-            license = lib.licenses.mit;
           };
         } ./tcl-requires-check-hook.sh
       ) { };

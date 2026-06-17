@@ -145,19 +145,8 @@ stdenv.mkDerivation {
     # Use SDL_GetPrefPath since this takes XDG_DATA_HOME into account (which is correct).
     ++ optional (versionAtLeast version "52.02-r2") ./use-df-linux-dir.patch;
 
-  env = {
-    # gcc 11 fix
-    CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
-
-    NIX_CFLAGS_COMPILE = toString (
-      [
-        "-Wno-error=deprecated-enum-enum-conversion"
-      ]
-      ++ optionals (versionOlder version "0.47") [
-        "-fpermissive"
-      ]
-    );
-  };
+  # gcc 11 fix
+  CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
 
   nativeBuildInputs = [
     cmake
@@ -210,6 +199,11 @@ stdenv.mkDerivation {
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${fetchOverrides}"
   ];
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=deprecated-enum-enum-conversion"
+  ]
+  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.

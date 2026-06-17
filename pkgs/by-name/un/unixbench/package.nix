@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unixbench";
-  version = "6.0.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "kdlucas";
     repo = "byte-unixbench";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzhyOMN2brH8mP2PQ85Ud0kSoXu8826TdQz7h9hUR7k=";
+    hash = "sha256-GQYejkIf7g2abHafJJQTl0nWqRGsg9VDtYQgyBY/jOg=";
   };
 
   patches = [

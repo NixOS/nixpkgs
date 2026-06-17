@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_textsearch";
-  version = "1.3.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "pg_textsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVBUbt/iDLeuDDD6fuTRvTFFDqyA6IEK15qcww0GijA=";
+    hash = "sha256-aFuaz/gd72rdMdQKI12ENF+CrKPaiqxysHUYidkLsHc=";
   };
 
   passthru.tests.extension = postgresqlTestExtension {
@@ -31,11 +31,10 @@ postgresqlBuildExtension (finalAttrs: {
         ('PostgreSQL is a powerful, open source object-relational database system');
       CREATE INDEX documents_content_bm25_idx ON documents USING bm25(content) WITH (text_config='english');
     '';
-
     asserts = [
       {
-        query = "SELECT content FROM documents ORDER BY content <@> 'NixOS' LIMIT 1";
-        expected = "'NixOS provides declarative configuration and reproducible system builds with the Nix package manager'";
+        query = "SELECT count(*) FROM documents ORDER BY content <@> 'nix' LIMIT 10";
+        expected = "2";
         description = "BM25 index can be queried successfully.";
       }
     ];

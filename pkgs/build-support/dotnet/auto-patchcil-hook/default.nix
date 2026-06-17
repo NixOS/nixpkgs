@@ -11,5 +11,4 @@ makeSetupHook {
     shell = lib.getExe bash;
     patchcil = lib.getExe patchcil;
   };
-  meta.license = lib.licenses.mit;
 } ./auto-patchcil.sh

@@ -56,6 +56,6 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     tests.nscd = nixosTests.nscd;
-    updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9][0-9.]+)$" ]; };
+    updateScript = nix-update-script { };
   };
 }

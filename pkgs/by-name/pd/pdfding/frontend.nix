@@ -28,13 +28,13 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "pdfding-frontend";
+  pname = "${pdfding.pname}-frontend";
   inherit (pdfding) src version;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "pdfding-${finalAttrs.version}-npm-deps";
-    hash = "sha256-fxhDP/kyDfL1uiZCUNr2Cd6vDnyb9V+gTSNPyjSIm18=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    hash = "sha256-HOGnzDKg1ca/27u1oQEtOkOl6Cg/7k+aLJEJhbypUhE=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     # it is in package.json and thus node_modules but no cli executable
     tailwindcss_4
   ];
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   # keeping the file structure same as upstream to minimise confusion
   buildPhase = ''

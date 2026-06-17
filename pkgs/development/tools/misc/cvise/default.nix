@@ -1,18 +1,23 @@
 {
   lib,
-  python3Packages,
+  buildPythonApplication,
   fetchFromGitHub,
   clang-tools,
+  cmake,
   colordiff,
   flex,
   libclang,
   llvm,
   unifdef,
+  chardet,
+  pebble,
+  psutil,
+  pytestCheckHook,
   testers,
   cvise,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "cvise";
   version = "2.12.0";
   pyproject = false;
@@ -41,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    python3Packages.cmake # TODO: swap this out for the non-python cmake
+    cmake
     flex
     llvm.dev
   ];
@@ -53,14 +58,14 @@ python3Packages.buildPythonApplication rec {
     unifdef
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     chardet
     pebble
     psutil
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
+    pytestCheckHook
     unifdef
   ];
 

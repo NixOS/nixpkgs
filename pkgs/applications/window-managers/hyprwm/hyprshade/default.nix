@@ -1,12 +1,15 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  more-itertools,
+  click,
   hyprland,
   makeWrapper,
 }:
 
-python3Packages.buildPythonPackage (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "hyprshade";
   version = "4.0.1";
   pyproject = true;
@@ -19,11 +22,11 @@ python3Packages.buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    python3Packages.hatchling
+    hatchling
     makeWrapper
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     more-itertools
     click
   ];

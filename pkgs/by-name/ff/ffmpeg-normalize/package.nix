@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.37.8";
+  version = "1.37.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ffmpeg_normalize";
-    hash = "sha256-9pSVrYTTaxjGCty2pHPtaaSSwCkGDLoNK2wltTwOL3c=";
+    hash = "sha256-8V9C5auAvrmvq5aeaRjCy9y2/c7wm4/7Yb73dBgvj5s=";
   };
 
   build-system = with python3Packages; [ uv-build ];

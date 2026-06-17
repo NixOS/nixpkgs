@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "1.2.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthewwardrop";
     repo = "formulaic";
     tag = "v${version}";
-    hash = "sha256-C4IUuyxBbW2DUxF4at8/736ZMmVZrFRRp+RxrJfmLkY=";
+    hash = "sha256-mZt+cwk/AaUmmeCj7aLu1QEBqlPUVUqQbYdgETMj/vY=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

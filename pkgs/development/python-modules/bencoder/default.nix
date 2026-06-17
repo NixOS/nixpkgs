@@ -2,21 +2,16 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bencoder";
   version = "0.2.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-rENvM/3X51stkFdJHSq+77VjHvsTyBNAPbCtsRq1L8I=";
   };
-
-  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "bencoder" ];
 
@@ -29,4 +24,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ somasis ];
   };
-})
+}

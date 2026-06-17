@@ -47,7 +47,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for FTGL (FreeType for OpenGL)";
-    homepage = "https://github.com/umlaeute/pyftgl";
     license = lib.licenses.gpl2Plus;
   };
 }

@@ -26,26 +26,26 @@
   sqlite,
   xdg-desktop-portal,
   libseccomp,
-  libglycin-gtk4,
+  libglycin,
   glycin-loaders,
   libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "14";
+  version = "13";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-pgu+O9fRyZiRYkxRTlPgnd5jaGPL1nN0agMR+x6+oGg=";
+    hash = "sha256-zIB04OIhMSm6OWHalnLO9Ng87dsvsmYurrro3hKwoYU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-Fsw0hIAYiF+31PNuC5a9SatRatY7A8OwABhlyHIl1Lc=";
+    hash = "sha256-5wI74sKytewbRs0T/IQZFEaRTgJcF6HyDEK0mpjy0LU=";
   };
 
   patches = [
@@ -58,14 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/meson.build --replace-fail \
       "target_dir / rust_target / meson.project_name()" \
       "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
-
-    patchShebangs ./build-aux/compile-blueprints.sh
   '';
 
   nativeBuildInputs = [
     glib
     grass-sass
     gtk4
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -81,12 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    libglycin.setupHook
     glycin-loaders
     gtk4
     gtksourceview5
     lcms2
     libadwaita
-    libglycin-gtk4
     openssl
     pipewire
     libshumate

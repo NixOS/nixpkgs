@@ -35,7 +35,6 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     pygobject3
     stem
-    pycountry
   ];
 
   postInstall = ''

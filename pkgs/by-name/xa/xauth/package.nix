@@ -51,9 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xauth";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xauth";
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

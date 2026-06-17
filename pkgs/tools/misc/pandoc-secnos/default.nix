@@ -1,10 +1,12 @@
 {
-  lib,
-  python3Packages,
+  buildPythonApplication,
   fetchFromGitHub,
+  lib,
+  pandoc-xnos,
+  setuptools,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "pandoc-secnos";
   version = "2.2.2";
   pyproject = true;
@@ -16,11 +18,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-J9KLZvioYM3Pl2UXjrEgd4PuLTwCLYy9SsJIzgw5/jU=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [ pandoc-xnos ];
+  propagatedBuildInputs = [ pandoc-xnos ];
 
   patches = [
     ./patch/fix-manifest.patch

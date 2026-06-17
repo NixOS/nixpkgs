@@ -20,22 +20,22 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gscreenshot";
   version = "3.11.1";
-  pyproject = true;
-
-  build-system = with python3Packages; [ setuptools ];
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "gscreenshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-24eo4ihWM/sJXj7Dp3hSp0FEP1uYzvCON2emuMiONSc=";
+    sha256 = "sha256-24eo4ihWM/sJXj7Dp3hSp0FEP1uYzvCON2emuMiONSc=";
   };
 
   # needed for wrapGAppsHook3 to function
   strictDeps = false;
+  # tests require a display and fail
+  doCheck = false;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
-  dependencies = [
+  propagatedBuildInputs = [
     gettext
     gobject-introspection
     gtk3
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ (with python3Packages; [
     pillow
     pygobject3
+    setuptools
   ]);
 
   patches = [ ./0001-Changing-paths-to-be-nix-compatible.patch ];

@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchPypi,
   azure-nspkg,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-cosmosdb-nspkg";
   version = "2.0.2";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-rPaR5pKBjZplxlPHo0heuONcC9xJa7plLl6jkFugnNg=";
+    inherit pname version;
+    sha256 = "acf691e692818d9a65c653c7a3485eb8e35c0bdc496bba652e5ea3905ba09cd8";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ azure-nspkg ];
+  propagatedBuildInputs = [ azure-nspkg ];
 
   # has no tests
   doCheck = false;
@@ -29,4 +26,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

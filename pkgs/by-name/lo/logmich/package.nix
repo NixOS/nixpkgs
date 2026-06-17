@@ -24,7 +24,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A trivial logging library";
-    homepage = "https://github.com/logmich/logmich";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;

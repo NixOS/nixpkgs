@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
@@ -52,9 +51,7 @@ buildPythonPackage (finalAttrs: {
     xrootd
   ];
 
-  # When doCheck is disabled, nnativeCheckInputs are not available and the package fails to import:
-  #   ModuleNotFoundError: No module named 'snakemake'
-  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "snakemake_storage_plugin_xrootd" ];
+  pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -62,16 +59,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   enabledTestPaths = [ "tests/tests.py" ];
-
-  # Tests fail on darwin even with:
-  # - __darwinAllowLocalNetworking = true;
-  # - sandbox = false
-  # - writableTmpDirAsHomeHook
-  #
-  # Failed: XRootD server terminated unexpectedly.
-  # 260604 22:16:56 259 XrdConfig: Unable to set permission for admin path /tmp/.xrd/; operation not permitted
-  # ------ xrootd anon@91-224-148-58.tetaneutral.net:32293 initialization failed.
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Snakemake storage plugin for handling input and output via XRootD";

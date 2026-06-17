@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "qtwirediff";
-  version = "0-unstable-2026-06-10";
+  version = "unstable-2023-03-07";
 
   src = fetchFromGitHub {
     owner = "aaptel";
     repo = "qtwirediff";
-    rev = "61d7a7013a74ab4ad5fb2c1041d1f2559bd70644";
-    hash = "sha256-mE8AiY1KVVLDJyz4yRoVqW2Gae021Ww7u9Qb4EGXetA=";
+    rev = "e0a38180cdf9d94b7535c441487dcefb3a8ec72e";
+    hash = "sha256-QS4PslSHe2qhxayF7IHvtFASgd4A7vVtSY8tFQ6dqXM=";
   };
 
   nativeBuildInputs = [
@@ -52,5 +52,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aaptel/qtwirediff";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    # error: assignment of member 'trivial' in read-only object
+    broken = true;
   };
 }

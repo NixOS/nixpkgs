@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools-scm,
   python-vagrant,
   docker,
@@ -9,14 +9,12 @@
 
 buildPythonPackage rec {
   pname = "molecule-plugins";
-  version = "25.8.12";
+  version = "23.5.3";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ansible-community";
-    repo = "molecule-plugins";
-    tag = "v${version}";
-    hash = "sha256-wTvJ+cjZMTOyaqqDZsA1wsKCpu2FEi69IBlSTxNs3/M=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-orFDfVMtc24/vG23pp7FM+IzSyEV/5JFoLJ3LtlzjSM=";
   };
 
   # reverse the dependency

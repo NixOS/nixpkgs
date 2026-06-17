@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   jamo,
   nltk,
 }:
@@ -10,20 +9,14 @@
 buildPythonPackage (finalAttrs: {
   pname = "g2pkk";
   version = "0.1.2";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-YarV1Btn1x3Sm4Vw/JDSyJy3ZJMXAQHZJJJklSG0R+Q=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     jamo
     nltk
   ];

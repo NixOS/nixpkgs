@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -10,22 +9,18 @@
   azure-mgmt-nspkg,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-mgmt-notificationhubs";
   version = "8.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-Tdkk9HBJk+Pr8dQuK+HL4LDZCOaVhX+gjENprhHQ6zY=";
+    sha256 = "4dd924f4704993e3ebf1d42e2be1cbe0b0d908e695857fa08c4369ae11d0eb36";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
@@ -36,12 +31,10 @@ buildPythonPackage (finalAttrs: {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.notificationhubs" ];
-
   meta = {
     description = "This is the Microsoft Azure Notification Hubs Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

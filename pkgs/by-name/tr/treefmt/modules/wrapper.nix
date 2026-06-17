@@ -15,7 +15,7 @@
     internal = true;
   };
 
-  config.result = pkgs.symlinkJoin (finalAttrs: {
+  config.result = pkgs.symlinkJoin {
     pname = config.name;
     inherit (config.package) meta version;
     nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
@@ -27,14 +27,11 @@
     passthru = {
       inherit (config) runtimeInputs;
       inherit config options;
-      check = pkgs.callPackage ../check-wrapper.nix {
-        wrapper = finalAttrs.finalPackage;
-      };
     };
     postBuild = ''
       wrapProgram "$out/bin/treefmt" \
         --prefix PATH : "$binPath" \
         --add-flags "--config-file $configFile"
     '';
-  });
+  };
 }

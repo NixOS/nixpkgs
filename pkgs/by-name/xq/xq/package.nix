@@ -6,14 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xq";
-  version = "0.5.0";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-kgOwTQ+t5dhhb+MrilBZ5E7Ge3U6dllUpJ2I1fCX+jc=";
+    hash = "sha256-Qe+crretlKJRoNPO2+aHxCmMO9MecqGjOuvdhr4a0NU=";
   };
 
-  cargoHash = "sha256-xQ650Yx+lk+UKIHrad48eWUB/TUHeutL6tSrYwV0Eeg=";
+  cargoPatches = [
+    ./0000-update-onig.patch
+  ];
+  cargoHash = "sha256-ACWbgGkKIn/+wPHx0dP+B0r2KDuKI4hunPwQavl6Xdo=";
 
   meta = {
     description = "Pure rust implementation of jq";

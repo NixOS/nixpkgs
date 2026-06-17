@@ -1,5 +1,4 @@
 {
-  lib,
   makeSetupHook,
   writeText,
   stat,
@@ -11,13 +10,8 @@
 # NetBSD's build system and NetBSD stat without including it in
 # PATH.
 
-makeSetupHook
-  {
-    name = "netbsd-stat-hook";
-    meta.license = lib.licenses.mit;
-  }
-  (
-    writeText "netbsd-stat-hook-impl" ''
-      makeFlagsArray+=(TOOL_STAT=${stat}/bin/stat)
-    ''
-  )
+makeSetupHook { name = "netbsd-stat-hook"; } (
+  writeText "netbsd-stat-hook-impl" ''
+    makeFlagsArray+=(TOOL_STAT=${stat}/bin/stat)
+  ''
+)

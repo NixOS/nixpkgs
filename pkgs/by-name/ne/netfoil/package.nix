@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "netfoil";
-  version = "0.4.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "tinfoil-factory";
     repo = "netfoil";
     tag = "v${version}";
-    hash = "sha256-HWAw3CxuVOinYhcJS5KjkscFURSamsiu4oLNU+z16zc=";
+    hash = "sha256-1JpnVaU17uxQu0O8R0kfl7lCE3YMd/XFmbq9KUMAKqY=";
   };
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-L+E6pLDi68TpXxzSwWlbwMLbnkJHvQY1kRwTtk6pWYM=";
+  vendorHash = "sha256-xtc1zCSLuez9POx/jEjre0uVmvWvCW0TpXPFVi2p+CY=";
 
   passthru.updateScript = nix-update-script { };
 

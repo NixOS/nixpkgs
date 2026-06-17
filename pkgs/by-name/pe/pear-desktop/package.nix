@@ -47,17 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  postBuild = ''
-    pnpm build
-
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
-
-    ./node_modules/.bin/electron-builder \
-      --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
-  '';
+  postBuild =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      cp -R ${electron.dist}/Electron.app Electron.app
+      chmod -R u+w Electron.app
+    ''
+    + ''
+      pnpm build
+      ./node_modules/.bin/electron-builder \
+        --dir \
+        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
+        -c.electronVersion=${electron.version}
+    '';
 
   desktopItems = [
     (makeDesktopItem {

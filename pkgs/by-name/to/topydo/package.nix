@@ -1,14 +1,14 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   glibcLocales,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "topydo";
   version = "0.16";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "topydo";
@@ -17,17 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-f31tp4VBMv1usViYN50IaGeyQpo3oRSf/WDz99UEpss=";
   };
 
-  postPatch = ''
-    # Strip deprecated pytest-runner from pyproject.toml build requirements
-    substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["setuptools", "wheel", "pytest-runner"]' 'requires = ["setuptools", "wheel"]'
-  '';
-
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     arrow
     glibcLocales
     icalendar
@@ -36,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     watchdog
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     unittestCheckHook
   ];
@@ -53,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Cli todo application compatible with the todo.txt format";
     mainProgram = "topydo";
     homepage = "https://github.com/topydo/topydo";
-    changelog = "https://github.com/topydo/topydo/blob/${finalAttrs.src.tag}/CHANGES.md";
+    changelog = "https://github.com/topydo/topydo/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };

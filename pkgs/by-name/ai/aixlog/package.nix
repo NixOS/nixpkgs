@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "aixlog";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "aixlog";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-Xhle7SODRZlHT3798mYIzBi1Mqjz8ai74/UnbVWetiY=";
   };
 
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Header-only C++ logging library";
     homepage = "https://github.com/badaix/aixlog";
-    changelog = "https://github.com/badaix/aixlog/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/badaix/aixlog/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

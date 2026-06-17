@@ -10,14 +10,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "arc-icon-theme";
   version = "20161122";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-icon-theme";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-TfYtzwo69AC5hHbzEqB4r5Muqvn/eghCGSlmjMCFA7I=";
   };
 
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
-})
+}

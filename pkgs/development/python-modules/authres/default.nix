@@ -3,20 +3,17 @@
   fetchPypi,
   buildPythonPackage,
   python,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "authres";
   version = "1.2.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-k9G5la184h5i22SfNhBIEl3WAiVjoK6KI5CUZfH9Jbc=";
+    inherit pname version;
+    sha256 = "1dr5zpqnb54h4f5ax8334l1dcp8j9083d7v4vdi1xqkwmnavklck";
   };
-
-  build-system = [ setuptools ];
 
   checkPhase = ''
     # run doctests
@@ -31,7 +28,6 @@ buildPythonPackage (finalAttrs: {
       Python/Python3.
     '';
     homepage = "https://launchpad.net/authentication-results-python";
-    changelog = "https://git.launchpad.net/authentication-results-python/tree/CHANGES";
     license = lib.licenses.bsd3;
   };
-})
+}

@@ -77,8 +77,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # darwin has difficulty communicating with server, fails some integration tests
-  # Tests are incompatible with pytest>=8 and Python 3.13
-  doCheck = !stdenv.hostPlatform.isDarwin && python3Packages.pythonOlder "3.13";
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installManPage docs/man/*.[1-9]

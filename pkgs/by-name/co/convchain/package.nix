@@ -37,7 +37,6 @@ stdenv.mkDerivation {
   buildInputs = [ mono ];
   meta = {
     description = "Bitmap generation from a single example with convolutions and MCMC";
-    homepage = "https://github.com/mxgmn/ConvChain";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

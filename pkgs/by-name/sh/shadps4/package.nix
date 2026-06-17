@@ -1,28 +1,28 @@
 {
   lib,
-  clangStdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
-  makeWrapper,
 
   nixosTests,
   alsa-lib,
   boost,
-  cli11,
   cmake,
   cryptopp,
+  game-music-emu,
+  glslang,
   ffmpeg,
+  flac,
+  fluidsynth,
   fmt,
   half,
   jack2,
   libdecor,
-  libpng,
+  libGL,
   libpulseaudio,
   libunwind,
   libusb1,
-  magic-enum,
-  minimp3,
-  miniz,
-  nlohmann_json,
+  libvorbis,
+  libxmp,
   libgbm,
   libx11,
   libxcb,
@@ -32,14 +32,14 @@
   libxrandr,
   libxscrnsaver,
   libxtst,
+  magic-enum,
+  mpg123,
   pipewire,
   pkg-config,
   pugixml,
   rapidjson,
   renderdoc,
   robin-map,
-  sdl3,
-  sdl3-mixer,
   sndio,
   stb,
   toml11,
@@ -49,41 +49,29 @@
   vulkan-memory-allocator,
   xbyak,
   xxhash,
-  zlib,
+  zlib-ng,
+  zydis,
   nix-update-script,
 }:
 
-clangStdenv.mkDerivation (finalAttrs: {
+# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.16.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-SavSUHtnJeRi2mzIyUhLfLk37Y/PSuI3bbbqWA7qVbg=";
+    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
+    fetchSubmodules = true;
 
-    postCheckout = ''
+    leaveDotGit = true;
+    postFetch = ''
       cd "$out"
-
       git rev-parse --short=8 HEAD > $out/COMMIT
       date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-
-      git -C externals submodule update --init --recursive \
-        glslang \
-        zydis \
-        sirit \
-        tracy \
-        libusb \
-        discord-rpc \
-        hwinfo \
-        openal-soft \
-        dear_imgui \
-        LibAtrac9 \
-        aacdec/fdk-aac \
-        spdlog \
-        libressl \
-        ImGuiFileDialog
+      find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
 
@@ -99,17 +87,22 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     boost
-    cli11
     cryptopp
+    game-music-emu
+    glslang
     ffmpeg
+    flac
+    fluidsynth
     fmt
     half
     jack2
     libdecor
-    libpng
+    libGL
     libpulseaudio
     libunwind
     libusb1
+    libvorbis
+    libxmp
     libx11
     libxcb
     libxcursor
@@ -118,18 +111,14 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxscrnsaver
     libxtst
-    magic-enum
-    minimp3
-    miniz
     libgbm
-    nlohmann_json
+    magic-enum
+    mpg123
     pipewire
     pugixml
     rapidjson
     renderdoc
     robin-map
-    sdl3
-    sdl3-mixer
     sndio
     stb
     toml11
@@ -139,13 +128,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
     xbyak
     xxhash
-    zlib
+    zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ];
 
   cmakeFlags = [
@@ -156,14 +145,15 @@ clangStdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebugInfo";
   dontStrip = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/shadps4 \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libpulseaudio
-          pipewire
-        ]
-      }
+  installPhase = ''
+    runHook preInstall
+
+    install -D -t $out/bin shadps4
+    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
+    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
+    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [

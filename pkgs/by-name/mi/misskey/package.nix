@@ -5,29 +5,25 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_11,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
   python3,
-  dart-sass,
   bash,
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
 }:
-let
-  pnpm = pnpm_11;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2026.5.4";
+  version = "2025.12.2";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-ENq5V1lIFGKIr1xZccy1LFRYVqZVEhDzBhAbDNcG5sM=";
+    hash = "sha256-7S6m97wHFeITABLcnQiPVGLg6d1xcPCHCp7/7d/w48E=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace packages/backend/src/config.ts \
       --replace-fail \
-        "resolve(projectBuiltDir, '.config.json')" \
+        "resolve(_dirname, '../../../built/.config.json')" \
         "resolve('/run/misskey/default.json')"
     substituteInPlace {.,packages/backend}/package.json \
       --replace-fail "pnpm compile-config && " ""
@@ -48,21 +44,21 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm
+    pnpm_9
     makeWrapper
     python3
-    dart-sass
   ];
 
+  # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
-    inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-wEbYkfp+zfytOPBjEcyTHCaoohGRNRjG5oTUefI5BVw=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-iMS+sFDnGShOQfFQjGtj4+7McqMQvfE8KK1MV/jPC2s=";
   };
 
   buildPhase = ''
@@ -78,16 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs}
     (
       cd node_modules/.pnpm/node_modules/re2
-      pnpm run rebuild --nodedir=${nodejs}
+      pnpm run rebuild
     )
     (
       cd node_modules/.pnpm/node_modules/sharp
       pnpm run install
     )
-
-    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries.
-    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     pnpm build
 
@@ -108,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       mkdir -p $out/data
-      sed -i '/"packageManager":/d' package.json
       cp -r . $out/data
 
       # Set up symlink for use at runtime
@@ -117,17 +108,15 @@ stdenv.mkDerivation (finalAttrs: {
       # Otherwise, maybe somehow bindmount a writable directory into <package>/data/files.
       ln -s /var/lib/misskey $out/data/files
 
-      makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
+      makeWrapper ${pnpm_9}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
-        --add-flag "--config.store-dir=/tmp/pnpm-store" \
-        --add-flag "--config.verify-deps-before-run=false" \
-        --add-flag run \
+        --add-flags run \
         --set-default NODE_ENV production \
         --prefix PATH : ${
           lib.makeBinPath [
             nodejs
-            pnpm
+            pnpm_9
             bash
           ]
         } \

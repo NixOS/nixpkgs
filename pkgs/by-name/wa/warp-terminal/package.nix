@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  _7zz,
+  undmg,
   zstd,
   alsa-lib,
   curl,
@@ -107,8 +107,7 @@ let
 
     sourceRoot = ".";
 
-    # Warp.dmg is APFS formatted, which is unsupported by undmg
-    nativeBuildInputs = [ _7zz ];
+    nativeBuildInputs = [ undmg ];
 
     installPhase = ''
       runHook preInstall
@@ -126,6 +125,7 @@ let
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
+      imadnyc
       FlameFlag
       johnrtitor
       logger

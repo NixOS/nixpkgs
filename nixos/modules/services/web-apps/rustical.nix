@@ -55,18 +55,26 @@ in
           };
 
           http = {
-            bind = mkOption {
+            host = mkOption {
               type = types.str;
-              default = "unix:/run/rustical/sock";
-              example = "[::]:4000";
+              default = "[::1]";
+              example = "[::]";
               description = ''
-                Address and port or UNIX socket path to bind the HTTP service to.
+                Host address to bind the HTTP service to.
 
                 :::{.note}
                 Rustical expects to be hosted behind a reverse proxy that
                 provides HTTPS. Without HTTPS, the web frontend and some clients
                 (e.g. Apple Calendar) may not work.
                 :::
+              '';
+            };
+
+            port = mkOption {
+              type = types.port;
+              default = 4000;
+              description = ''
+                Port to bind the HTTP service to.
               '';
             };
           };
@@ -118,19 +126,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = lib.optionals (cfg.settings.http ? host || cfg.settings.http ? port) [
-      ''
-        Rustical 0.13 deprecations
-
-        The following options are now deprecated and will be removed in a
-        future release:
-        - `services.rustical.settings.http.host`
-        - `services.rustical.settings.http.port`
-
-        Migrate to `services.rustical.settings.http.bind` instead.
-      ''
-    ];
-
     # install the config at a path where the cli will find it
     environment.etc."rustical/config.toml".source = configFile;
 

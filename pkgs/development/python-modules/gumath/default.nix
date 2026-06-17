@@ -10,11 +10,13 @@
   libndtypes,
   libxnd,
   libgumath,
+  isPy27,
 }:
 
 buildPythonPackage {
   pname = "gumath";
   format = "setuptools";
+  disabled = isPy27;
   inherit (libgumath) src version meta;
 
   patches = [

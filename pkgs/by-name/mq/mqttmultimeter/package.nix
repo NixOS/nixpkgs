@@ -60,7 +60,6 @@ buildDotnetModule rec {
   meta = {
     mainProgram = builtins.head executables;
     description = "MQTT traffic monitor";
-    homepage = "https://github.com/chkr1011/mqttMultimeter";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.linux;

@@ -12,7 +12,6 @@ in
     name = "patch-rc-path-bash";
     meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Bash/Ksh/Zsh script";
-      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
@@ -26,7 +25,6 @@ in
     };
     meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Csh script";
-      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
@@ -37,7 +35,6 @@ in
     name = "patch-rc-path-fish";
     meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Fish script";
-      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
@@ -51,7 +48,6 @@ in
     };
     meta = {
       description = "Setup-hook to inject source-time PATH prefix to a POSIX shell script";
-      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {

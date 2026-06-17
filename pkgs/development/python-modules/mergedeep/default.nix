@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  isPy27,
   fetchFromGitHub,
   pytest,
 }:
@@ -9,6 +10,7 @@ buildPythonPackage rec {
   pname = "mergedeep";
   version = "1.3.4";
   format = "setuptools";
+  disabled = isPy27;
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {

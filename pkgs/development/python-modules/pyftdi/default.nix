@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.57.2";
+  version = "0.57.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eblot";
     repo = "pyftdi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-v6WcDwKVnLB2SwWiKG0VYg1VTyaSDz0QvG3hAQs7YHI=";
+    tag = "v${version}";
+    hash = "sha256-RkZXcGvCZXmFrLvj7YqHc6FeZskEqMSQcYgizBSuwIk=";
   };
 
   build-system = [ setuptools ];
@@ -39,8 +39,8 @@ buildPythonPackage (finalAttrs: {
       bridges.
     '';
     homepage = "https://github.com/eblot/pyftdi";
-    changelog = "https://github.com/eblot/pyftdi/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/eblot/pyftdi/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromCodeberg,
+  fetchFromGitea,
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -8,16 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
-  version = "1.2.1";
+  version = "1.1.2";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5YR1Cn9/psNswLVYtDZGmvoP9AwBANa0sPHN4eqcRhQ=";
+    hash = "sha256-zALlwEEzk6IapnLbqn9v/HV5QC9dvJi7VzEWgCQJT2s=";
   };
 
-  cargoHash = "sha256-FA9C7Li4wtXvI8+jDTmdFjqsop6cvGNPByRpOfvQPzw=";
+  cargoHash = "sha256-l1vbNnKqFFOUUPQJZgNajNNGYAHtd7nozF7+YQmLN/k=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.

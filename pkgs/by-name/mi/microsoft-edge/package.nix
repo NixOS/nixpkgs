@@ -90,6 +90,12 @@
   libsecret,
   # Edge Specific
   libuuid,
+
+  # Fonts (See issue #463615)
+  makeFontsConf,
+  noto-fonts-cjk-sans,
+  noto-fonts-cjk-serif,
+
   # Create a symlink at $out/bin/microsoft-edge-stable
   withSymlink ? true,
 }:
@@ -164,11 +170,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "149.0.4022.69";
+  version = "148.0.3967.70";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-0Ur+0KKJQ7VTr7IMax5BIgwSf6jNhr0Aiz+So7Hj/OE=";
+    hash = "sha256-rwG3zPxMHjC00P591/CZIWRIHb4td4q3Rfz4fvf89k0=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -193,6 +199,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binpath = lib.makeBinPath deps;
+
+  fontsConf = makeFontsConf {
+    fontDirectories = [
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+    ];
+  };
 
   installPhase = ''
     runHook preInstall
@@ -241,6 +254,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+      --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
@@ -278,6 +292,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
+      bricklou
       jonhermansen
       iedame
     ];

@@ -1,13 +1,15 @@
 {
   lib,
   buildDunePackage,
-  dune,
+  dune_3,
   dune-private-libs,
 }:
 
 buildDunePackage {
   pname = "dune-site";
-  inherit (dune) src version;
+  inherit (dune_3) src version;
+
+  duneVersion = "3";
 
   dontAddPrefix = true;
 
@@ -15,7 +17,7 @@ buildDunePackage {
 
   meta = {
     description = "Library for embedding location information inside executable and libraries";
-    inherit (dune.meta) homepage;
+    inherit (dune_3.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.mit;
   };

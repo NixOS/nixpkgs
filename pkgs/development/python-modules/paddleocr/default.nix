@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  aiohttp,
   attrdict,
   beautifulsoup4,
   cython,
@@ -33,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "paddleocr";
-  version = "3.7.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     tag = "v${version}";
-    hash = "sha256-uOtxJmhhPkl1l9R4Qzx8wuMEVXKTUt5YDK4WHozlmMc=";
+    hash = "sha256-bcunbaocltKGeIeLG8447y6wMFXL08XF7pEhHgoqmrY=";
   };
 
   patches = [
@@ -66,7 +65,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    aiohttp
     attrdict
     beautifulsoup4
     cython

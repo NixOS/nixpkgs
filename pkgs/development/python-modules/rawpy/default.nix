@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.27.0";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zM6S1oCOy6AWpaGgdgAqOUGW3rQ0Q9CxKMJoQTJPJIA=";
+    hash = "sha256-/pD3t6sP/SctjzjiOo2e937NEetvkcC5wB/RWi8UXI0=";
   };
 
   build-system = [
@@ -55,12 +55,6 @@ buildPythonPackage (finalAttrs: {
   env = {
     RAWPY_USE_SYSTEM_LIBRAW = 1;
   };
-
-  # cmake is only needed to build libraw when `RAWPY_USE_SYSTEM_LIBRAW` is disabled
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"cmake",' ""
-  '';
 
   pythonImportsCheck = [
     "rawpy"

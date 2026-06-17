@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "junitparser";
-  version = "5.0.0";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "weiwei";
     repo = "junitparser";
     tag = version;
-    hash = "sha256-I/bQQPT6b6PTZ9bIlWCQmN/gUWnVIO42xtJh/g7L79A=";
+    hash = "sha256-+81n5xW9SEE+NZbYKxXu6xupoq4/haUZokVardh43iM=";
   };
 
   build-system = [ setuptools ];

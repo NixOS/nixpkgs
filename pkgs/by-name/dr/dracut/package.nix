@@ -5,7 +5,7 @@
   gitUpdater,
   makeBinaryWrapper,
   pkg-config,
-  asciidoctor,
+  asciidoc,
   libxslt,
   docbook_xsl,
   bash,
@@ -29,17 +29,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
-  version = "111";
+  version = "059";
 
   src = fetchFromGitHub {
-    owner = "dracut-ng";
-    repo = "dracut-ng";
-    tag = finalAttrs.version;
-    hash = "sha256-2jdS7/LGuLSBBXv1R/o8yjgwdXl2l2wNbZWxq01wSb0";
+    owner = "dracutdevs";
+    repo = "dracut";
+    rev = finalAttrs.version;
+    hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
   };
 
   strictDeps = true;
-  __structuredAttrs = true;
 
   buildInputs = [
     bash
@@ -49,17 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
-    asciidoctor
+    asciidoc
     libxslt
     docbook_xsl
   ];
 
   postPatch = ''
     substituteInPlace dracut.sh \
-      --replace-fail "dracutbasedir=\"$""{dracutsysrootdir-}\"/usr/lib/dracut" \
-        "if [ -n \"$""{dracutsysrootdir:-}\" ]; then dracutbasedir=\"$""{dracutsysrootdir}/usr/lib/dracut\" ; else dracutbasedir=\"$out/lib/dracut\" ; fi"
+      --replace 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
     substituteInPlace lsinitrd.sh \
-      --replace-fail 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
+      --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
 
     echo 'DRACUT_VERSION=${finalAttrs.version}' >dracut-version.sh
   '';
@@ -112,11 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    homepage = "https://dracut-ng.github.io/";
-    changelog = "https://github.com/dracut-ng/dracut/blob/${finalAttrs.src.tag}/NEWS.md";
+    homepage = "https://github.com/dracutdevs/dracut/wiki";
     description = "Event driven initramfs infrastructure";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ tbutter ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

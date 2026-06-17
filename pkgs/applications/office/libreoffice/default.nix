@@ -111,7 +111,6 @@
   gpgmepp,
   libwebp,
   abseil-cpp,
-  libfreehand,
   libepubgen,
   libetonyek,
   libpng,
@@ -519,7 +518,6 @@ stdenv.mkDerivation (finalAttrs: {
       libatomic_ops
       libcdr
       libcmis
-      libfreehand
       libe-book
       libepoxy
       libepubgen
@@ -664,7 +662,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
-    "--with-system-libfreehand"
     "--with-system-libepubgen"
     "--with-system-libetonyek"
     "--with-system-liblangtag"
@@ -682,6 +679,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
     "--without-system-libeot"
+    "--without-system-libfreehand"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
     "--without-system-libpagemaker"

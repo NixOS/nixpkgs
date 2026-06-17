@@ -1,5 +1,4 @@
 {
-  lib,
   makeSetupHook,
   installShellFiles,
   jq,
@@ -11,5 +10,4 @@ makeSetupHook {
   substitutions = {
     jq = "${jq}/bin/jq";
   };
-  meta.license = lib.licenses.mit;
 } ./hook.sh

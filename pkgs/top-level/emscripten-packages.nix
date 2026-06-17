@@ -155,10 +155,6 @@ rec {
       cp README.md $doc/share/${pname}
     '';
     checkPhase = "";
-
-    meta = {
-      homepage = "https://gitlab.com/odfplugfest/xmlmirror";
-    };
   };
 
   zlib =

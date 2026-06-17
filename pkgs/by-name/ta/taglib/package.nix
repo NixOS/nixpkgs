@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Only
       mpl11
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     pkgConfigModules = [
       "taglib"
       "taglib_c"

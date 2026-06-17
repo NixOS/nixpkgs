@@ -6,6 +6,7 @@
   crossSystem,
   config,
   overlays,
+  crossOverlays ? [ ],
   bootstrapFiles ?
     let
       table = {
@@ -20,8 +21,6 @@
 
 assert crossSystem == localSystem;
 let
-  genericStdenv = import ../generic { defaultConfig = config; };
-
   inherit (localSystem) system;
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
@@ -384,8 +383,9 @@ let
         bsdcp
       ];
       shell = "${prevStage.bashNonInteractive}/bin/bash";
-      stdenvNoCC = genericStdenv {
+      stdenvNoCC = import ../generic {
         inherit
+          config
           initialPath
           shell
           fetchurlBoot
@@ -401,8 +401,9 @@ let
         inherit (prevStage) curl;
         inherit (config) hashedMirrors rewriteURL;
       };
-      stdenv = genericStdenv {
+      stdenv = import ../generic {
         inherit
+          config
           initialPath
           shell
           fetchurlBoot

@@ -3,25 +3,18 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   keystone,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "keystone-engine";
   version = "0.9.2";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     sha256 = "1xahdr6bh3dw5swrc2r8kqa8ljhqlb7k2kxv5mrw5rhcmcnzcyig";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
@@ -44,4 +37,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.gpl2Only;
   };
-})
+}

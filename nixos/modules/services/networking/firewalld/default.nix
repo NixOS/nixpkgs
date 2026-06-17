@@ -57,19 +57,7 @@ in
     systemd.services.firewalld = {
       aliases = [ "dbus-org.fedoraproject.FirewallD1.service" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecReload = [
-        ""
-        "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID"
-      ];
-      reloadTriggers = [
-        config.environment.etc."firewalld/firewalld.conf".source
-      ]
-      ++ lib.mapAttrsToList (
-        name: _: config.environment.etc."firewalld/zones/${name}.xml".source
-      ) config.services.firewalld.zones
-      ++ lib.mapAttrsToList (
-        name: _: config.environment.etc."firewalld/services/${name}.xml".source
-      ) config.services.firewalld.services;
+      serviceConfig.ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
       environment.NIX_FIREWALLD_CONFIG_PATH = "${paths}/lib/firewalld";
     };
   };

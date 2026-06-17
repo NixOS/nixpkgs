@@ -473,7 +473,6 @@
       "kerberos"
       "marshmallow"
       "msgpack"
-      "pyjwt"
       "werkzeug"
       "wtforms"
     ];
@@ -645,10 +644,7 @@
   };
 
   jdbc = {
-    deps = [
-      "jaydebeapi"
-      "jpype1"
-    ];
+    deps = [ "jaydebeapi" ];
     imports = [
       "airflow.providers.jdbc"
       "airflow.providers.jdbc.get_provider_info"
@@ -758,7 +754,6 @@
     deps = [
       "aiomysql"
       "mysqlclient"
-      "pymysql"
     ];
     imports = [
       "airflow.providers.mysql"

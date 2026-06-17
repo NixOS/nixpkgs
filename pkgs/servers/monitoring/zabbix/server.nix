@@ -9,6 +9,7 @@
   libiconv,
   libxml2,
   openssl,
+  pcre,
   pcre2,
   zlib,
   jabberSupport ? true,
@@ -60,7 +61,7 @@ import ./versions.nix (
       libiconv
       libxml2
       openssl
-      pcre2
+      (if lib.versionAtLeast version "7.4" then pcre2 else pcre)
       zlib
     ]
     ++ optional odbcSupport unixodbc
@@ -78,7 +79,7 @@ import ./versions.nix (
       "--with-iconv"
       "--with-libcurl"
       "--with-libevent"
-      "--with-libpcre2"
+      "--with-libpcre"
       "--with-libxml2"
       "--with-openssl=${openssl.dev}"
       "--with-zlib=${zlib}"
@@ -114,9 +115,6 @@ import ./versions.nix (
     + optionalString postgresqlSupport ''
       mkdir -p $out/share/zabbix/database/postgresql
       cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
-
-      mkdir -p $out/share/zabbix/database/postgresql/timescaledb
-      cp -prvd database/postgresql/timescaledb/schema.sql $out/share/zabbix/database/postgresql/timescaledb/schema.sql
     '';
 
     meta = {

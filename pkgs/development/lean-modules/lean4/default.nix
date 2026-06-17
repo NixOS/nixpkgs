@@ -4,25 +4,20 @@
   stdenv,
   symlinkJoin,
   cmake,
-  cctools,
   fetchFromGitHub,
   git,
   gmp,
   cadical,
-  cadical' ? cadical.override { version = "2.1.3"; },
-  leangz,
   pkg-config,
   libuv,
   perl,
-  runCommand,
-  writeText,
   testers,
 }:
 
 let
   lean4 = stdenv.mkDerivation (finalAttrs: {
     pname = "lean4";
-    version = "4.30.0";
+    version = "4.29.0";
 
     mimalloc-src = fetchFromGitHub {
       owner = "microsoft";
@@ -35,7 +30,7 @@ let
       owner = "leanprover";
       repo = "lean4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
+      hash = "sha256-0v4OTrCLdHBbWJUq7hIjJonqget9SvsG3izGlOwhwyU=";
     };
 
     # Vendor mimalloc. Upstream has since partially adopted FetchContent:
@@ -74,15 +69,13 @@ let
 
     nativeBuildInputs = [
       cmake
-      leangz
       pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+    ];
 
     buildInputs = [
       gmp
       libuv
-      cadical'
+      cadical
     ];
 
     nativeCheckInputs = [
@@ -94,7 +87,6 @@ let
       "-DUSE_GITHASH=OFF"
       "-DINSTALL_LICENSE=OFF"
       "-DINSTALL_CADICAL=OFF"
-      "-DINSTALL_LEANTAR=OFF"
       "-DUSE_MIMALLOC=ON"
     ];
 
@@ -117,48 +109,31 @@ let
   });
 
   oldStorePath = builtins.substring 0 43 (toString lean4);
-
-  # Binary-patched for correct runtime discovery in wrapped environments.
-  wrapped = symlinkJoin {
-    inherit (lean4) name pname;
-    paths = [
-      lean4
-      cadical'
-      leangz
-    ];
-    nativeBuildInputs = [ perl ];
-    postBuild = ''
-      newStorePath=$(echo "$out" | head -c 43)
-
-      for bin in ${lean4}/bin/*; do
-        test -f "$bin" || continue
-        install -m755 "$bin" "$out/bin/"
-        perl -pi -e "s|\Q${oldStorePath}\E|$newStorePath|g" "$out/bin/$(basename "$bin")"
-      done
-    '';
-
-    inherit (lean4) version src meta;
-    passthru = {
-      inherit (lean4) version src;
-      tests =
-        let
-          src = writeText "smoke.lean" ''
-            import Std
-            example : 1 + 1 = 2 := by decide
-            example : ∀ (x y : BitVec 8), x &&& y = y &&& x := by bv_decide
-          '';
-        in
-        {
-          version = testers.testVersion {
-            package = wrapped;
-            version = "v${lean4.version}";
-          };
-          smoke = runCommand "lean4-test-smoke" { } ''
-            ${wrapped}/bin/lean ${src}
-            touch $out
-          '';
-        };
-    };
-  };
 in
-wrapped
+# Binary-patched for correct runtime discovery in wrapped environments.
+symlinkJoin {
+  inherit (lean4) name pname;
+  paths = [ lean4 ];
+  nativeBuildInputs = [ perl ];
+  postBuild = ''
+    newStorePath=$(echo "$out" | head -c 43)
+
+    # Copy (not symlink) — IO.appPath resolves through symlinks.
+    rm $out/bin/lean $out/bin/lake
+    cp ${lean4}/bin/lean $out/bin/lean
+    cp ${lean4}/bin/lake $out/bin/lake
+
+    for bin in $out/bin/lean $out/bin/lake; do
+      cat "$bin" \
+        | perl -pe "s|\Q${oldStorePath}\E|$newStorePath|g" \
+        > "$bin.tmp"
+      chmod +x "$bin.tmp"
+      mv "$bin.tmp" "$bin"
+    done
+  '';
+
+  inherit (lean4) version src meta;
+  passthru = {
+    inherit (lean4) version src;
+  };
+}

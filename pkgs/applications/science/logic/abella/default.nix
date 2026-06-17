@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://abella-prover.org";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.bcdarwin ];
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      ciil
+    ];
     platforms = lib.platforms.unix;
   };
 })

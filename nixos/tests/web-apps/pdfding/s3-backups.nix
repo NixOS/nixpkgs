@@ -92,10 +92,6 @@ in
           minio-client
           sqlite
         ];
-
-        # allows running nixos test on qemu without kvm, eg. github actions on aarch64-linux
-        systemd.settings.Manager.DefaultDeviceTimeoutSec = lib.mkForce 1800;
-        boot.initrd.kernelModules = [ "virtio_console" ];
       };
   };
 
@@ -176,7 +172,7 @@ in
   # Debug interactively with:
   # - nix run .#nixosTests.pdfding.s3.driverInteractive -L
   # - start_all() / run_tests()
-  interactive.sshBackdoor.enable = true;
+  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
   interactive.nodes.machine =
     { config, ... }:
     let

@@ -52,7 +52,6 @@
   jsonschema,
   kubernetes,
   kubernetes-asyncio,
-  looptime,
   matplotlib,
   moviepy,
   pandas,
@@ -77,12 +76,12 @@
 }:
 
 let
-  version = "0.27.2";
+  version = "0.27.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-guNepG8h8Pl8SaJqImS5UsWNFmPyrWidsXh+q9Es73I=";
+    hash = "sha256-A/tEyY47BDgahOhQWlmeF2koEDpIsV9QVoYMIBEbKqA=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -144,7 +143,7 @@ let
       ''
         substituteInPlace go.mod \
           --replace-fail \
-            "go 1.26.4" \
+            "go 1.26.3" \
             "go 1.26.2"
       ''
       # hardcode the `wandb-xpu` binary path.
@@ -270,7 +269,6 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     kubernetes
     kubernetes-asyncio
-    looptime
     matplotlib
     moviepy
     pandas
@@ -445,7 +443,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/raw/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     broken = wandb-xpu.meta.broken || wandb-core.meta.broken;

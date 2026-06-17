@@ -1,7 +1,9 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  isPy27,
   lib,
+  mock,
   numpy,
   pytestCheckHook,
 }:
@@ -18,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "17r37pbxiv5dw857bmg990x836gq6sgww069w3q5jjg9m3xdm7dh";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [ numpy ] ++ lib.optional isPy27 mock;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

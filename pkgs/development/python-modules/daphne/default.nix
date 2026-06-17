@@ -13,16 +13,16 @@
   twisted,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "daphne";
-  version = "4.2.2";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "daphne";
-    tag = finalAttrs.version;
-    hash = "sha256-i0BwZCpMZW6WXK94FSvlEheXHUzXviCBEew6AbkLkpk=";
+    tag = version;
+    hash = "sha256-MPlvXcg7bBF1yaphjjMtnGsGpp6ca5GsgmXONw/V9Do=";
   };
 
   build-system = [ setuptools ];
@@ -49,9 +49,9 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Django ASGI (HTTP/WebSocket) server";
     homepage = "https://github.com/django/daphne";
-    changelog = "https://github.com/django/daphne/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
+    changelog = "https://github.com/django/daphne/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "daphne";
   };
-})
+}

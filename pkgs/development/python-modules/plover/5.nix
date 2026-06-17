@@ -124,10 +124,6 @@ buildPythonPackage (finalAttrs: {
     "test/gui_qt/test_i18n_files.py" # babel errors
   ];
 
-  postInstall = ''
-    install -Dm 444 linux/plover.desktop $out/share/applications/plover.desktop
-  '';
-
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';

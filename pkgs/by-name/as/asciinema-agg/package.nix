@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agg";
-  version = "1.9.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "agg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuAVckgTsKvngrR/blgpLgONaWxfrn8o7hCKqCGPNeM=";
+    hash = "sha256-64VyCTGjzey6AHEAfk5V/Qoffe5+sDaDNve54M7tmf4=";
   };
 
   strictDeps = true;
 
-  cargoHash = "sha256-VcdHlQOplki31uLOutVx7HH7rjH9a5fEZhlxtLvuS9E=";
+  cargoHash = "sha256-/WS5nAFKnP/CsU5+Pf5rtNN4LWaXVjlidLzH7DWYds0=";
 
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/Fonts"

@@ -54,17 +54,11 @@
   # modelhub
   huggingface-hub,
   # rag
-  faiss,
-  json-repair,
-  langgraph,
-  openai,
   # pcst-fast,
-  pyyaml,
   datasets,
   transformers,
   sentencepiece,
   accelerate,
-  peft,
   # test
   onnx,
   onnxruntime,
@@ -79,15 +73,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torch-geometric";
-  version = "2.8.0";
+  version = "2.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
     tag = finalAttrs.version;
-    hash = "sha256-O2W/68DtVimDR4wQb5UVJcqzuZv7GG+CxCj7rqNu9iE=";
+    hash = "sha256-xlOzpoYRoEfIRWSQoZbEPvUW43AMr3rCgIYnxwG/z3A=";
   };
 
   build-system = [
@@ -155,19 +148,13 @@ buildPythonPackage (finalAttrs: {
       huggingface-hub
     ];
     rag = [
-      faiss
-      json-repair
-      langgraph
-      openai
       # pcst-fast (unpackaged)
-      pyyaml
       datasets
       transformers
       pandas
       sentencepiece
       accelerate
       torchmetrics
-      peft
     ];
     test = [
       onnx

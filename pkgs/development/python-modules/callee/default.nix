@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "callee";
   version = "0.3.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xion";
     repo = "callee";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-dsXMY3bW/70CmTfCuy5KjxPa+NLCzxzWv5e1aV2NEWE=";
   };
-
-  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "callee" ];
 
@@ -35,4 +32,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-})
+}

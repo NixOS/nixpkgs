@@ -3,21 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "ansicolors";
   version = "1.1.8";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-mflPXjNIoLzUPILl/EQUATzMGdcL2TmtceATPOnDcuA=";
+    sha256 = "99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytest ];
 
@@ -25,13 +22,10 @@ buildPythonPackage (finalAttrs: {
     py.test
   '';
 
-  pythonImportsCheck = [ "colors" ];
-
   meta = {
     homepage = "https://github.com/verigak/colors/";
-    changelog = "https://pypi.org/project/ansicolors/${finalAttrs.version}/";
     description = "ANSI colors for Python";
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-})
+}

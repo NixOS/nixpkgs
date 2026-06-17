@@ -1,27 +1,23 @@
 {
   lib,
   nix-update-script,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonApplication,
   setuptools,
-  pytestCheckHook,
   click,
   fonttools,
   uharfbuzz,
   pyyaml,
   colorlog,
-  packaging,
 }:
 buildPythonApplication rec {
   pname = "hyperglot";
-  version = "0.8.1";
+  version = "0.7.3";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "rosettatype";
-    repo = "hyperglot";
-    tag = version;
-    hash = "sha256-fiiDYggMBwd7nTHeQLWnSc3BNDyU+JUgAIk8pHLntUY=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Pd9Yxmv9a1T2xV03q2U1m1laHE3WifHwmnGBfTTCSxM=";
   };
 
   dependencies = [
@@ -30,12 +26,10 @@ buildPythonApplication rec {
     uharfbuzz
     pyyaml
     colorlog
-    packaging
   ];
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "hyperglot" ];
 
   passthru.updateScript = nix-update-script { };
@@ -44,7 +38,7 @@ buildPythonApplication rec {
     description = "Database and tools for detecting language support in fonts";
     homepage = "https://hyperglot.rosettatype.com";
     changelog = "https://github.com/rosettatype/hyperglot/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ imatpot ];
     mainProgram = "hyperglot";
   };

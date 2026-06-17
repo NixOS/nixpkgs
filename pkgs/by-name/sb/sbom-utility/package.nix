@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.19.1";
+  version = "0.19.0";
 in
 buildGoModule {
   pname = "sbom-utility";
@@ -19,7 +19,7 @@ buildGoModule {
     owner = "CycloneDX";
     repo = "sbom-utility";
     tag = "v${version}";
-    hash = "sha256-AEy29ZL2KfWuHzVohUF5xWI34QgvtIDQfH6AlVfFkAY=";
+    hash = "sha256-G+0gQrQIWAgYsojFuvXU1IhMS2p3fHCejJLjZNaAU1I=";
   };
 
   vendorHash = "sha256-vyYSir5u6d5nv+2ScrHpasQGER4VFSoLb1FDUDIrtDM=";

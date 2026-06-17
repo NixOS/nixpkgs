@@ -56,6 +56,12 @@ stdenv.mkDerivation rec {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  # disable code signing on macos
+  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
@@ -80,9 +86,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs {node_modules,app/node_modules,backend/node_modules}
 
-    electron_dist="$(mktemp -d)"
-    cp -r ${electron.dist}/. "$electron_dist"
-    chmod -R u+w "$electron_dist"
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
     runHook postConfigure
   '';
@@ -93,10 +98,8 @@ stdenv.mkDerivation rec {
     tsc && cd app && yarn --offline run build && cd ..
 
     yarn --offline run electron-builder --dir \
-      -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version} \
-      -c.mac.identity=null
-    # ^ disable code signing on macos
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -140,7 +143,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
+    export ELECTRON_OVERRIDE_DIST_PATH=electron-dist/
 
     yarn test:app --offline
     yarn test:backend --offline

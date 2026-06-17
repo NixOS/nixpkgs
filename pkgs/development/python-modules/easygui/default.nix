@@ -2,25 +2,20 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
   tkinter,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "easygui";
   version = "0.98.3";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-1lP/ee4fQvY7WgkPL5jOAjNdhq2JY7POJmGAXK/pmgQ=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ tkinter ];
+  propagatedBuildInputs = [ tkinter ];
 
   doCheck = false; # No tests available
 
@@ -32,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-})
+}

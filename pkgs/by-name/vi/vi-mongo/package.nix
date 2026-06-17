@@ -2,30 +2,29 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "vi-mongo";
-  version = "0.2.2";
+  version = "0.1.30";
 
   src = fetchFromGitHub {
     owner = "kopecmaciej";
     repo = "vi-mongo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0TMrQ1dbAP7HOjrVVcnoHPchf7e14Qzcl5lAD0rHTDs=";
+    hash = "sha256-gNOKWgGRuWUNqBAu5gWx/HFiNfx+HOdi5tYVyXP3dcI=";
   };
 
-  vendorHash = "sha256-CuFoH6crS6BOsSj2hNGw7loi4RixHbyJGySfxglUUmg=";
+  vendorHash = "sha256-QoYjNzWWNrEDS4Xq1NF77iqX5WTNxnVV1UJiYq2slhw=";
 
   ldflags = [
     "-s"
-    "-X=github.com/kopecmaciej/vi-mongo/internal/build.Version=${finalAttrs.version}"
+    "-w"
+    "-X=github.com/kopecmaciej/vi-mongo/cmd.version=${finalAttrs.version}"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

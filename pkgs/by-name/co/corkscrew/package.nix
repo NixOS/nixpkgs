@@ -17,8 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env.NIX_CFLAGS_COMPILE = "-DANSI_FUNC";
-
   meta = {
     homepage = "https://github.com/bryanpkc/corkscrew";
     description = "Tool for tunneling SSH through HTTP proxies";

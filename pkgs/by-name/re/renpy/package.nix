@@ -70,7 +70,6 @@ let
       sphinx
       sphinx-rtd-theme
       sphinx-rtd-dark-mode
-      sphinx-tabs
     ]
   );
   pythonRunTime = python312.withPackages (
@@ -86,14 +85,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  # 8.5.3 tag is on fix branch, but we need new dependency lookup behavior (currently only on master branch)
-  version = "8.5.3.26051504-unstable-2026-05-17";
+  # unstable version drops dependency on insecure package ecdsa
+  version = "8.5.2.26010301-unstable-2026-03-27";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
-    rev = "cb1a79e8d2e02936baaf9d3c6ec9ac28d68b9014";
-    hash = "sha256-gm+E5/fEgNFl+UU382QZpBAcOmUDhFbxj3XW/e21vxQ=";
+    rev = "09eb6986ea9e5dbe64c9096ed48a638e593ea0ef";
+    hash = "sha256-w7tQbZCH7F0Npu8rD2UADxe/KzsTUdtIhJY6GH4YFAs=";
   };
 
   __structuredAttrs = true;
@@ -129,6 +128,14 @@ stdenv.mkDerivation (finalAttrs: {
     # do not try to compile renpy files installed in nix store because we already compiled them at build phase
     ./dont-compile-system.patch
 
+    # catch error instead of crashing when trying to write steam_appid.txt to nix store
+    # https://github.com/renpy/renpy/pull/6976
+    ./steam-preinit-catch.patch
+
+    # fix write_target looking for wrong file locations when launcher creates new project
+    # https://github.com/renpy/renpy/pull/6978
+    ./new-project-prefix.patch
+
     # the distributed libs are not compatible with renpy built from source,
     # so patch the launcher to look for renpy files in renpy-dist (where bin distribution from upstream is copied to) instead of renpy
     ./distribute.patch
@@ -149,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = "We Can Go to the Moon"
+    version_name = "In Good Health"
     EOF
   '';
 
@@ -254,12 +261,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     binSrc = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdk.tar.bz2";
-      hash = "sha256-l91zD0n/c5E80YfgZ/m5AbIj/RKL5OFosfwz7RHu7aQ=";
+      hash = "sha256-wF6Z/lA8CyaCEZg1IqpZ4mG8CF8JgNHBf5KjKIOoKVI=";
     };
 
     binSrcArm = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdkarm.tar.bz2";
-      hash = "sha256-51+swtUfDK0on9wVVXOyzJKxHtV6m4u9X1wvpp85stI=";
+      hash = "sha256-DKXghs1XIRrtAGTifMx+7XAbxiqH7qYQiaKhBaO7PBA=";
     };
 
     distributedRenpy =

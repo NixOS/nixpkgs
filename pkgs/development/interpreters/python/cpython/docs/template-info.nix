@@ -1,10 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{
-  stdenv,
-  fetchurl,
-  lib,
-}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "pythonMAJORMINOR-docs-TYPE";
@@ -19,8 +15,6 @@ stdenv.mkDerivation {
     cp ./python.info $out/share/info
   '';
   meta = {
-    maintainers = with lib.maintainers; [
-      panicgh
-    ];
+    maintainers = [ ];
   };
 }

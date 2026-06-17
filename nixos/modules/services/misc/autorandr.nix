@@ -32,14 +32,9 @@ let
         );
       getSubModules = elemType.getSubModules;
       substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-      functor = (
-        lib.types.elemTypeFunctor "attrsWith" {
-          inherit
-            elemType
-            name
-            ;
-        }
-      );
+      functor = (lib.defaultFunctor name) // {
+        wrapped = elemType;
+      };
     };
 
   profileModule = lib.types.submodule {

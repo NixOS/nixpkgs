@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.23.8";
+  version = "4.23.5";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-l2EphHRW3Ft4wA+P+3ncYFxJ1qrKiyqncv0i27afrgE=";
+    hash = "sha256-WTpD3dDVeQIjffp2iI97Ast/x3RxETacsx4SbbSDa58=";
   };
 
   outputs = [
@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-no-persistent-install-dynconfig.patch
+    ./4.x-fix-makeflags-parsing.patch
     ./4.x-fix-systemd-detection.patch
     (fetchpatch {
       # workaround for https://bugzilla.samba.org/show_bug.cgi?id=14164
@@ -285,9 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.dnspython
     python3Packages.markdown
     tdb
-  ]
-  ++ lib.optionals enableDomainController [
-    python3Packages.cryptography
   ];
 
   strictDeps = true;
@@ -350,13 +348,6 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
-    };
-  }
-  // lib.optionalAttrs enableDomainController {
-    versionSambaTool = testers.testVersion {
-      command = "${lib.getExe' finalAttrs.finalPackage "samba-tool"} --version";
-      package = finalAttrs.finalPackage;
-      version = finalAttrs.version;
     };
   };
 

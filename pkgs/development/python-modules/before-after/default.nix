@@ -2,21 +2,18 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  setuptools,
   pytestCheckHook,
   lib,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "before-after";
   version = "1.0.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "before_after";
-    inherit (finalAttrs) version;
+    inherit version;
     hash = "sha256-x9T5uLi7UgldoUxLnFnqaz9bnqn9zop7/HLsrg9aP4U=";
   };
 
@@ -32,8 +29,6 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  build-system = [ setuptools ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "before_after" ];
@@ -44,4 +39,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
   };
-})
+}

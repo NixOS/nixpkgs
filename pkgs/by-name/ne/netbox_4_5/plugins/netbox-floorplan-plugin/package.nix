@@ -8,18 +8,17 @@
   netaddr,
   python,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
   version = "0.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-floorplan-plugin";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-0EeE5NrImbCs6xqrSTGupXOuv455EfNXgcLVix2HTPs=";
   };
 
@@ -40,8 +39,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Netbox plugin providing floorplan mapping capability for locations and sites";
     homepage = "https://github.com/netbox-community/netbox-floorplan-plugin";
-    changelog = "https://github.com/netbox-community/netbox-floorplan-plugin/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-floorplan-plugin/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ cobalt ];
   };
-})
+}

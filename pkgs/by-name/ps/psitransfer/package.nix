@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "psitransfer";
-  version = "2.4.4";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A26Mse69+ChyqUKhx5TlIdZYVC5e5bOPQ4DX8eVKcHw=";
+    hash = "sha256-lULgdzObjPXe+SmAY+s1MmuTnQpKEKlWPLsy1HMUKiw=";
   };
 
-  npmDepsHash = "sha256-IgPqX6nxxTWA6gLr2NP42vnGS+e98mWUWBIMSsIriRY=";
+  npmDepsHash = "sha256-hKthHajNO6PK7KHwNwZ9ZEHkaXqi73zP+7colV3TyVs=";
 
   app = buildNpmPackage {
     pname = "psitransfer-app";

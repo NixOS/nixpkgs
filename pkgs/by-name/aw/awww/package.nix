@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromCodeberg,
+  fetchFromGitea,
   rustPlatform,
   pkg-config,
   lz4,
@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awww";
   version = "0.12.1";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "LGFae";
     repo = "awww";
     tag = "v${finalAttrs.version}";

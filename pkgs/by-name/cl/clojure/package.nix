@@ -10,17 +10,15 @@
   rlwrap,
   makeWrapper,
   writeScript,
-  versionCheckHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.5.1654";
+  version = "1.12.5.1645";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3IbMVrw3L87we9h/RGk+60thz19ENHiDh4Nk0Dtfs0I=";
+    hash = "sha256-SoYS5/1yXsjkU/hwsi1bwaaO7/d0w9eTKamF81HAuDs=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  __structuredAttrs = true;
 
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
@@ -72,17 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   installCheckPhase = ''
-    runHook preInstallCheck
-
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${finalAttrs.version}.jar
-
-    runHook postInstallCheck
   '';
 
   passthru.updateScript = writeScript "update-clojure" ''
@@ -108,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://clojure.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
-    mainProgram = "clojure";
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,

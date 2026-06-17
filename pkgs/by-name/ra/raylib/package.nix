@@ -11,13 +11,11 @@
   raylib-games,
   libGLU,
   libx11,
-  libxrandr,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
   sharedLib ? true,
   includeEverything ? true,
-  customFrameControlSupport ? false,
 }:
 let
   inherit (lib) optional;
@@ -38,13 +36,13 @@ lib.checkListOfEnum "raylib: platform"
       __structuredAttrs = true;
 
       pname = "raylib";
-      version = "6.0";
+      version = "5.5-unstable-2026-01-20";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
-        rev = finalAttrs.version;
-        hash = "sha256-8+6MDTMc7Spix4ndAUzp51Q5iWcl7pQmyXuV2RutnOk=";
+        rev = "c610d228a244f930ad53492604640f39584c66da";
+        hash = "sha256-7Lhgqb7QJwz94M1ZxWgueTwIgSVclGCvHklZXGzoJgQ=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths
@@ -58,22 +56,16 @@ lib.checkListOfEnum "raylib: platform"
       propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         libGLU
         libx11
-        libxrandr
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
       cmakeFlags = [
-        (lib.cmakeBool "CUSTOMIZE_BUILD" true)
-        # The above also enables `SUPPORT_CUSTOM_FRAME_CONTROL` (otherwise off)
-        # That skips `SwapScreenBuffer` and `PollInputEvents` from `EndDrawing`
-        # In turn, normal `raylib-games` demos start but never present a window
-        # Keep the default game loop behavior unless explicitly requested
-        (lib.cmakeBool "SUPPORT_CUSTOM_FRAME_CONTROL" customFrameControlSupport)
-        (lib.cmakeFeature "PLATFORM" platform)
+        "-DCUSTOMIZE_BUILD=ON"
+        "-DPLATFORM=${platform}"
       ]
-      ++ optional (platform == "Desktop") (lib.cmakeFeature "USE_EXTERNAL_GLFW" "ON")
-      ++ optional includeEverything (lib.cmakeBool "INCLUDE_EVERYTHING" true)
-      ++ optional sharedLib (lib.cmakeBool "BUILD_SHARED_LIBS" true);
+      ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
+      ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+      ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
       appendRunpaths = optional stdenv.hostPlatform.isLinux (
         lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)

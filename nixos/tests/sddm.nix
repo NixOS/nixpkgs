@@ -34,8 +34,8 @@
     { lib, ... }:
     {
       name = "sddm-autologin";
-      meta = {
-        maintainers = [ ];
+      meta = with lib.maintainers; {
+        maintainers = [ ttuegel ];
       };
 
       nodes.machine = {

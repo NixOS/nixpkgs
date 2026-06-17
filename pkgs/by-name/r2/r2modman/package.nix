@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.17";
+  version = "3.2.16";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DXGgTezCcMl37Vu7R+2dwWJmuqsXXtlWRYMX9gqm7+w=";
+    hash = "sha256-ya7VPb+bmOvtXNex9R80N6rZLSCVoyntqCzaHXIwb1M=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -35,9 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove after upstream updates to Yarn 4.14
     # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
     ./yarn-4.14-support.patch
-
-    # Fix copying of wrapper files to game directory
-    ./wrapper-fix.patch
   ];
 
   __darwinAllowLocalNetworking = true;

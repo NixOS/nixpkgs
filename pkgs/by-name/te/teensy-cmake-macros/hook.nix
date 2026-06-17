@@ -1,5 +1,4 @@
 {
-  lib,
   makeSetupHook,
   teensy-cmake-macros,
 }:
@@ -14,6 +13,5 @@ makeSetupHook {
   meta = {
     description = "Setup hook for teensy-cmake-macros";
     inherit (teensy-cmake-macros.meta) maintainers platforms broken;
-    license = lib.licenses.mit;
   };
 } ./setup-hook.sh

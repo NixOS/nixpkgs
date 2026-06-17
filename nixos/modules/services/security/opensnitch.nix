@@ -13,7 +13,6 @@ let
       file = pkgs.writeText "rule" (builtins.toJSON cfg);
     }
   );
-  stateDir = lib.strings.match "/var/lib/([^/]+)/.+" cfg.settings.Rules.Path;
 in
 {
   options = {
@@ -106,9 +105,10 @@ in
                 "iptables"
                 "nftables"
               ];
-              default = "nftables";
+              default = if config.networking.nftables.enable then "nftables" else "iptables";
+              defaultText = lib.literalExpression ''if config.networking.nftables.enable then "nftables" else "iptables"'';
               description = ''
-                Which firewall backend to use. `nftables` ruleset can be used for `iptables` firewall too, if `iptables` is built with nftables compatibility.
+                Which firewall backend to use.
               '';
             };
             Ebpf.ModulesPath = lib.mkOption {
@@ -139,10 +139,7 @@ in
             };
 
             Rules.Path = lib.mkOption {
-              type = lib.types.pathWith {
-                inStore = false;
-                absolute = true;
-              };
+              type = lib.types.path;
               default = "/var/lib/opensnitch/rules";
               description = ''
                 Path to the directory where firewall rules can be found and will
@@ -161,12 +158,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = stateDir != null;
-        message = "`config.services.opensnitch.settings.Rules.Path` must be a sub-directory of /var/lib/, currently is ${cfg.settings.Rules.Path}";
-      }
-    ];
 
     security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
       enable = true;
@@ -183,14 +174,8 @@ in
             ""
             "${lib.getExe' cfg.package "opensnitchd"} --config-file ${cfg.configFile}"
           ];
-          StateDirectory = builtins.head stateDir; # match produces a list. Null case covered by assertion.
         };
-        preStart = ''
-          # assert rules directory exists before service starts
-          # will be in StateDirectory due to assertion
-          mkdir -p ${cfg.settings.Rules.Path}
-        ''
-        + lib.optionalString (cfg.rules != { }) (
+        preStart = lib.mkIf (cfg.rules != { }) (
           let
             rules = lib.flip lib.mapAttrsToList predefinedRules (
               file: content: {
@@ -220,12 +205,12 @@ in
           ''
         );
       };
+      tmpfiles.rules = [
+        "d ${cfg.settings.Rules.Path} 0750 root root - -"
+        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
+      ];
     };
 
-    environment.etc."opensnitchd/network_aliases.json".source =
-      "${cfg.package}/etc/opensnitchd/network_aliases.json";
-    environment.etc."opensnitchd/system-fw.json".source =
-      "${cfg.package}/etc/opensnitchd/system-fw.json";
   };
 
   meta.maintainers = with lib.maintainers; [

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   mouseinfo,
   pygetwindow,
   pymsgbox,
@@ -14,10 +13,10 @@
   xvfb-run,
   scrot,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage {
   pname = "pyautogui";
   version = "0.9.53";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "asweigart";
@@ -26,16 +25,22 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
+  nativeCheckInputs = [
+    xvfb-run
+    scrot
+  ];
+  checkPhase = ''
+    xvfb-run python -c 'import pyautogui'
+    # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
+    # xvfb-run python -m unittest tests.test_pyautogui
+  '';
+
   patches = [
     # https://github.com/asweigart/pyautogui/issues/598
     ./fix-locateOnWindow-and-xlib.patch
   ];
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     mouseinfo
     pygetwindow
     pymsgbox
@@ -46,22 +51,10 @@ buildPythonPackage (finalAttrs: {
     pytweening
   ];
 
-  nativeCheckInputs = [
-    xvfb-run
-    scrot
-  ];
-
-  checkPhase = ''
-    xvfb-run python -c 'import pyautogui'
-    # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
-    # xvfb-run python -m unittest tests.test_pyautogui
-  '';
-
   meta = {
     description = "PyAutoGUI lets Python control the mouse and keyboard, and other GUI automation tasks";
     homepage = "https://github.com/asweigart/pyautogui";
-    changelog = "https://github.com/asweigart/pyautogui/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lucasew ];
   };
-})
+}

@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "atomicwrites";
   version = "1.4.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-gbLJBxpJNnp/dwFw5e7Iy2ZWfPu8jHPSDOXKSo1xzxE=";
   };
-
-  build-system = [ setuptools ];
 
   # Tests depend on pytest but atomicwrites is a dependency of pytest
   doCheck = false;
@@ -28,4 +25,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     license = lib.licenses.mit;
   };
-})
+}

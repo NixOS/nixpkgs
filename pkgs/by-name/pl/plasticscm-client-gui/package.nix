@@ -33,7 +33,7 @@ buildFHSEnv {
     [
       # Dependencies from the Debian package
       glibc.out
-      libgcc
+      libgcc.lib
       krb5.lib
       lttng-ust.out
       openssl_3.out

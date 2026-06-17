@@ -21,15 +21,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "remarshal";
   version = "1.3.0"; # test with `nix-build pkgs/pkgs-lib/format`
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "remarshal-project";
+    owner = "dbohdan";
     repo = "remarshal";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-/K8x6ij23pk5O1+XJdFHaGbZ47nFMbXzp+4UMO5dGp4=";
   };
 
@@ -50,11 +50,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${src.tag}";
     description = "Convert between TOML, YAML and JSON";
     license = lib.licenses.mit;
-    homepage = "https://github.com/remarshal-project/remarshal";
+    homepage = "https://github.com/dbohdan/remarshal";
     maintainers = [ ];
     mainProgram = "remarshal";
   };
-})
+}

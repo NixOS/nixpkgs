@@ -29,10 +29,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Only run the real unit-test module; the over-broad glob also collected
-  # md_toc/tests/fuzzer.py, which imports the unpackaged `atheris` engine.
-  # https://github.com/frnmst/md-toc/blob/9.0.0/md_toc/tests/fuzzer.py#L22
-  enabledTestPaths = [ "md_toc/tests/tests.py" ];
+  enabledTestPaths = [ "md_toc/tests/*.py" ];
 
   pythonImportsCheck = [ "md_toc" ];
 

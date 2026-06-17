@@ -5,6 +5,12 @@ requirement.
 ---
 --- a/package.json
 +++ b/package.json
-@@ -40 +40 @@
+@@ -32,7 +32,7 @@
+     "turbo": "^2.1.2"
+   },
+   "prettier": "@karakeep/prettier-config",
 -  "packageManager": "pnpm@9.15.9",
 +  "packageManager": "pnpm",
+   "pnpm": {
+     "patchedDependencies": {
+       "xcode@3.0.1": "patches/xcode@3.0.1.patch"

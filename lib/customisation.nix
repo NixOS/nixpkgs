@@ -400,25 +400,7 @@ rec {
     condition: passthru: drv:
     let
       commonAttrs =
-        drv
-        // listToAttrs (
-          outputsList
-          ++ [
-            {
-              name = "all";
-              value = map (x: x.value) outputsList;
-            }
-          ]
-        )
-        // passthru
-        // {
-          drvPath =
-            assert condition;
-            drv.drvPath;
-          outPath =
-            assert condition;
-            drv.outPath;
-        };
+        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
       outputsList = map (outputName: {
         name = outputName;
@@ -440,7 +422,15 @@ rec {
         };
       }) (drv.outputs or [ "out" ]);
     in
-    commonAttrs;
+    commonAttrs
+    // {
+      drvPath =
+        assert condition;
+        drv.drvPath;
+      outPath =
+        assert condition;
+        drv.outPath;
+    };
 
   /**
     Strip a derivation of all non-essential attributes, returning

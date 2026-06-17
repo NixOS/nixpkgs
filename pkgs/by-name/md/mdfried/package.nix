@@ -2,37 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  chafa,
-  glib,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.22.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zJSh5g1FkR/nqk2qj22Xo8qIOjwyF346PM4KOUOCBBo=";
+    hash = "sha256-V++xkJBnTlqzcsw6BDkrqScIV+phzxyDqQXcV34L4ps=";
   };
 
-  cargoHash = "sha256-2wwaEKknnxX6QuE+6udHL2GTOuPpS1oqRI+b3aP0e1I=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    chafa
-    glib
-  ];
+  cargoHash = "sha256-qnsJkwAmBcakYcoqGdYRqfN6e46PG5IH6SAXLvy3mM8=";
 
   doCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Markdown viewer TUI for the terminal, with big text and image rendering";

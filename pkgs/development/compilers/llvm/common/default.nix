@@ -71,7 +71,7 @@ let
       ;
     src = monorepoSrc;
     versionDir =
-      ../. + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
+      (toString ../.) + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
     getVersionFile =
       p:
       builtins.path {
@@ -95,12 +95,15 @@ let
               matchBefore && matchAfter;
 
             patchDir =
-              if constraints == null then
-                metadata.versionDir
-              else
-                (lib.findFirst matchConstraint { path = metadata.versionDir; } constraints).path;
+              toString
+                (
+                  if constraints == null then
+                    { path = metadata.versionDir; }
+                  else
+                    (lib.findFirst matchConstraint { path = metadata.versionDir; } constraints)
+                ).path;
           in
-          patchDir + ("/" + p);
+          "${patchDir}/${p}";
       };
   };
 

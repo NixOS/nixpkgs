@@ -2,12 +2,7 @@
 {
   name = "containers";
   meta.maintainers = with pkgs.lib.maintainers; [ jfly ];
-  # Relies upon /dev/net/tun, which is currently disabled in hydra due to
-  # security concerns [0].
-  # There is a PR [1] that will remove the requirement on /dev/net/tun. When/if
-  # that lands, we can run this test in hydra.
-  # [0]: https://github.com/NixOS/infra/issues/987#issuecomment-4261612652
-  # [1]: https://github.com/NixOS/nixpkgs/pull/512268
+  # https://github.com/NixOS/infra/issues/987
   meta.hydraPlatforms = [ ];
 
   nodes = {

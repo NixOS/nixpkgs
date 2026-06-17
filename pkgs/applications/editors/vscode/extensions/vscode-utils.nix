@@ -18,7 +18,6 @@ let
     substitutions = {
       unzip = "${buildPackages.unzip}/bin/unzip";
     };
-    meta.license = lib.licenses.mit;
   } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;

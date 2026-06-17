@@ -17,19 +17,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "satty";
-  version = "0.21.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pD91+MbieZ5/YoUR0lcKnJ9bA1fn7I97NbnIwm/kL7E=";
+    hash = "sha256-pR3Mc5Eue4YcIMcrzkyDhZPpovRFa8TW1PjL/ysH/7s=";
   };
 
-  cargoHash = "sha256-Oavfb2Jp9WO0eaT5TqRwSxU3+rm9lBxwuWTWnc2CnZ0=";
-
-  # Generate shell completions and man file
-  buildFeatures = [ "ci-release" ];
+  cargoHash = "sha256-/WewpLpBmD4XnjwY7NmzbglYGNKmgMLjg1pvUdqEIwo=";
 
   nativeBuildInputs = [
     copyDesktopItems

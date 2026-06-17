@@ -15,11 +15,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-z5By57VbmIt4sgRgvECnLbZklnDDWUA6fyvWVyXUzsI=";
   };
 
-  postPatch = ''
-    substituteInPlace utility/port.h \
-      --replace-fail "VOID_HACK srandom();" "VOID_HACK srandom(unsigned int __seed);"
-  '';
-
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;

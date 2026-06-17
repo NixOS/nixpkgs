@@ -6,7 +6,7 @@
   SDL2_ttf,
   libpcap,
   vde2,
-  pcre2,
+  pcre,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     SDL2_ttf
     libpcap
     vde2
-    pcre2
+    pcre
   ];
 
   dontConfigure = true;

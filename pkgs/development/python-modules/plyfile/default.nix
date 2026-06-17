@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plyfile";
-  version = "1.1.4";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dranjan";
     repo = "python-plyfile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uV5gwRb3LKPF+pPQt/m85mwgVGTaEwusJZVUbmxQrJg=";
+    hash = "sha256-bSevEk8ZtJybv6FYsUYKdDJJWyPK7Kstc4NNISdHV2o=";
   };
 
   build-system = [ pdm-backend ];

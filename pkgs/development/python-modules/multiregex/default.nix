@@ -8,16 +8,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "multiregex";
-  version = "2.0.4";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantco";
     repo = "multiregex";
-    tag = finalAttrs.version;
-    hash = "sha256-BWADzarhnzcz2ZvD33XcQpQIIJ0hmhUT33HyUbB1wH0=";
+    tag = version;
+    hash = "sha256-S10FJwtFNK4CarE2YAcUM38hRYTDL0Vp4B8NqGvJs5M=";
   };
 
   build-system = [
@@ -34,8 +34,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Quickly match many regexes against a string";
     homepage = "https://github.com/quantco/multiregex";
-    changelog = "https://github.com/quantco/multiregex/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/quantco/multiregex/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

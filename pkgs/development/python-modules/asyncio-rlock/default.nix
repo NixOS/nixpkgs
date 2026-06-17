@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "asyncio-rlock";
   version = "0.1.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "asyncio_rlock";
-    inherit (finalAttrs) version;
-    hash = "sha256-fimCQzFhmHPhDV2Z3MRte48ZbEoRsgP07szAwJEDnUM=";
+    inherit version;
+    sha256 = "7e29824331619873e10d5d99dcc46d7b8f196c4a11b203f4eeccc0c091039d43";
   };
-
-  build-system = [ setuptools ];
 
   # no tests on PyPI, no tags on GitLab
   doCheck = false;
@@ -29,4 +26,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-})
+}

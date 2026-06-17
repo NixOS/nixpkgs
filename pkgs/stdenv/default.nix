@@ -12,41 +12,32 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays,
-}:
+  crossOverlays ? [ ],
+}@args:
 
 let
-  commonArgs = {
-    inherit
-      lib
-      localSystem
-      crossSystem
-      config
-      overlays
-      ;
-  };
   # The native (i.e., impure) build environment.  This one uses the
   # tools installed on the system outside of the Nix environment,
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stagesNative = import ./native commonArgs;
+  stagesNative = import ./native args;
 
   # The Nix build environment.
-  stagesNix = import ./nix (commonArgs // { bootStages = stagesNative; });
+  stagesNix = import ./nix (args // { bootStages = stagesNative; });
 
-  stagesFreeBSD = import ./freebsd commonArgs;
+  stagesFreeBSD = import ./freebsd args;
 
   # On Linux systems, the standard build environment consists of Nix-built
   # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
   # the GNU C compiler, and so on.
-  stagesLinux = import ./linux commonArgs;
+  stagesLinux = import ./linux args;
 
-  stagesDarwin = import ./darwin commonArgs;
+  stagesDarwin = import ./darwin args;
 
-  stagesCross = import ./cross (commonArgs // { inherit crossOverlays; });
+  stagesCross = import ./cross args;
 
-  stagesCustom = import ./custom commonArgs;
+  stagesCustom = import ./custom args;
 
 in
 # Select the appropriate stages for the platform `system'.

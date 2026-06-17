@@ -6,9 +6,7 @@
   pnpmConfigHook,
   fetchurl,
   installShellFiles,
-  #FIXME: remove this arg in a future version.
-  nodejs, # Should be null, unless overridden.
-  nodejs-slim,
+  nodejs,
   testers,
   buildPackages,
   bashNonInteractive,
@@ -20,12 +18,6 @@
 }:
 let
   majorVersion = lib.versions.major version;
-  nodejs-slim' =
-    #FIXME: remove this hack in a future version.
-    if nodejs == null then
-      nodejs-slim
-    else
-      lib.warn "pnpm: Override nodejs-slim instead of nodejs" nodejs;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
@@ -38,13 +30,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    nodejs-slim'
+    nodejs
   ];
 
   buildInputs = [
     bashNonInteractive # needed for node-gyp wrapper script
   ]
-  ++ lib.optionals withNode [ nodejs-slim' ];
+  ++ lib.optionals withNode [ nodejs ];
 
   # Remove binary files from src, we don't need them, and this way we make sure
   # our distribution is free of binaryNativeCode
@@ -117,10 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               ];
             })
           );
-      nodejs-slim = nodejs-slim';
-      #FIXME: remove this in a future version.
-      nodejs = lib.warn "pnpm.nodejs: Use pnpm.nodejs-slim instead of pnpm.nodejs" nodejs-slim';
-      inherit majorVersion;
+      inherit nodejs majorVersion;
 
       tests = {
         inherit (tests) pnpm;

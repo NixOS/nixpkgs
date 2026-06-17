@@ -29,7 +29,7 @@
 args:
 
 let
-  name = args.name or (baseNameOf args.src);
+  name = if args ? name then args.name else baseNameOf (toString args.src);
   deprecationReplacement = lib.pipe args.replacements [
     lib.toList
     (map (lib.splitString " "))
@@ -54,9 +54,8 @@ optionalDeprecationWarning stdenvNoCC.mkDerivation (
   // args
   // lib.optionalAttrs (args ? substitutions) {
     substitutions =
-      assert
-        lib.isList args.substitutions
-        || throw ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
+      assert lib.assertMsg (lib.isList args.substitutions)
+        ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
       lib.escapeShellArgs args.substitutions;
   }
 )

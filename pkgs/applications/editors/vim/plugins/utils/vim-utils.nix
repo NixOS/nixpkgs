@@ -4,7 +4,6 @@
   stdenv,
   vim,
   vimPlugins,
-  neovim-unwrapped,
   buildEnv,
   symlinkJoin,
   writeText,
@@ -447,7 +446,6 @@ rec {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
       };
-      meta.license = lib.licenses.mit;
     } ../hooks/vim-gen-doc-hook.sh
   ) { };
 
@@ -460,7 +458,6 @@ rec {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
-      meta.license = lib.licenses.mit;
     } ../hooks/vim-command-check-hook.sh
   ) { };
 
@@ -473,7 +470,6 @@ rec {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
-      meta.license = lib.licenses.mit;
     } ../hooks/neovim-require-check-hook.sh
   ) { };
 
@@ -517,47 +513,35 @@ rec {
     drv:
     let
       drv-name = drv.name or "${drv.pname}-${drv.version}";
-      lua = neovim-unwrapped.lua;
     in
-    drv.overrideAttrs (
-      finalAttrs: oldAttrs:
-      let
-        getRequiredLuaModules = attrs: attrs.requiredLuaModules or attrs.passthru.requiredLuaModules or [ ];
-        modules = getRequiredLuaModules finalAttrs;
-        luaEnv = lua.withPackages (_: modules);
-      in
-      {
-        name = "vimplugin-${drv-name}";
-        # dont move the "doc" folder since vim expects it
-        forceShare = [
-          "man"
-          "info"
+    drv.overrideAttrs (oldAttrs: {
+      name = "vimplugin-${drv-name}";
+      # dont move the "doc" folder since vim expects it
+      forceShare = [
+        "man"
+        "info"
+      ];
+
+      nativeBuildInputs =
+        oldAttrs.nativeBuildInputs or [ ]
+        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          vimGenDocHook
         ];
 
-        nativeBuildInputs =
-          oldAttrs.nativeBuildInputs or [ ]
-          ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-            vimGenDocHook
-          ];
+      doCheck = oldAttrs.doCheck or true;
 
-        doCheck = oldAttrs.doCheck or true;
+      nativeCheckInputs =
+        oldAttrs.nativeCheckInputs or [ ]
+        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          vimCommandCheckHook
+          # many neovim plugins keep using buildVimPlugin
+          neovimRequireCheckHook
+        ];
 
-        nativeCheckInputs =
-          oldAttrs.nativeCheckInputs or [ ]
-          ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-            vimCommandCheckHook
-            # many neovim plugins keep using buildVimPlugin
-            neovimRequireCheckHook
-          ];
-
-        nvimRequireCheckLuaPath = lib.optionalString (modules != [ ]) (lua.pkgs.getLuaPath luaEnv);
-        nvimRequireCheckLuaCPath = lib.optionalString (modules != [ ]) (lua.pkgs.getLuaCPath luaEnv);
-
-        passthru = (oldAttrs.passthru or { }) // {
-          vimPlugin = true;
-        };
-      }
-    );
+      passthru = (oldAttrs.passthru or { }) // {
+        vimPlugin = true;
+      };
+    });
 }
 // lib.optionalAttrs config.allowAliases {
   vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";

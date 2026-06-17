@@ -75,15 +75,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.13.1";
+  version = "0.11.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xnQLwOofHwdRvrOMNJpAEiOT7BEfxoPmrcxw2H3CTvI=";
+    hash = "sha256-1S/A9zb6hlRYIV8Jf1lQ31TzxuA16lDiQHTu+Y6WSQk=";
   };
 
   postPatch = ''

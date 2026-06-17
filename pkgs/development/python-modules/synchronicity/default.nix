@@ -3,55 +3,38 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
+  gevent,
   hatchling,
-
-  # dependencies
-  typing-extensions,
-
-  # optional-dependencies
-  sigtools,
-
-  # tests
   mypy,
   pytest-asyncio,
   pytest-markdown-docs,
   pytestCheckHook,
   pythonOlder,
-  gevent,
+  sigtools,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "synchronicity";
-  version = "0.12.3";
+  version = "0.12.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "synchronicity";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zqZaW/CX7PELh+PzC/2ofNUiWP2Enm/kg2uELQUSmk0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RJyqQX1leo3Qx6dyp8lMGaWxaML7zFvKjG6fE13t8do=";
   };
 
-  build-system = [
-    hatchling
-  ];
-
-  dependencies = [
-    typing-extensions
-  ];
-
-  optional-dependencies = {
-    compile = [ sigtools ];
-  };
+  build-system = [ hatchling ];
+  dependencies = [ typing-extensions ];
+  optional-dependencies.compile = [ sigtools ];
 
   nativeCheckInputs = [
     mypy
+    pytestCheckHook
     pytest-asyncio
     pytest-markdown-docs
-    pytestCheckHook
     sigtools
   ]
   ++ lib.optionals (pythonOlder "3.13") [

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   hatchling,
-  pythonOlder,
 
   # propagated
   backports-zstd,
@@ -48,8 +47,8 @@ buildPythonPackage rec {
     lz4 = [ lz4 ];
     msgpack = [ msgpack ];
     msgspec = [ msgspec ];
-    pyzstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
-    zstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
+    pyzstd = [ backports-zstd ];
+    zstd = [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "django_valkey" ];
@@ -83,11 +82,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = with lib; {
     description = "Valkey backend for django";
     homepage = "https://github.com/django-commons/django-valkey";
     changelog = "https://github.com/django-commons/django-valkey/releases/tag/${version}";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
   };
 }

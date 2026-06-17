@@ -1,14 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq curl gawk
+#!nix-shell -i bash -p jq curl
 #shellcheck shell=bash
 set -euo pipefail
 
-# For Linux version checks we query upstream's APT repository.
-#
-# Repository only offers amd64 packages for the desktop app.
-# We assume updates are always for both architectures.
-OP_APT_REPO_DIST_BASE="https://downloads.1password.com/linux/debian/amd64/dists"
-OP_APT_REPO_COMPONENT_INDEX="main/binary-amd64/Packages"
+# For Linux version checks we rely on Repology API to check 1Password managed Arch User Repository.
+REPOLOGY_PROJECT_URI="https://repology.org/api/v1/project/1password"
 
 # For Darwin version checks we query the same endpoint 1Password 8 for Mac queries.
 # This is the base URI. For stable channel an additional path of "N", for beta channel, "Y" is required.
@@ -21,7 +17,11 @@ CURL=(
   "-H" "user-agent: nixpkgs#_1password-gui update.sh" # repology requires a descriptive user-agent
 )
 
-JQ=("jq" "--raw-output")
+JQ=(
+  "jq"
+  "--raw-output"
+  "--exit-status" # exit non-zero if no output is produced
+)
 
 
 read_local_versions() {
@@ -37,56 +37,36 @@ read_local_versions() {
 
 read_remote_versions() {
   local channel="$1"
-  local apt_index="${OP_APT_REPO_DIST_BASE}/${channel}/${OP_APT_REPO_COMPONENT_INDEX}"
-  local apt_awk_prog=$'
-    /^Package: 1password$/ { pkg_is_1password_gui=1 }
-    /^Version/ && pkg_is_1password_gui { print $2; exit }
-  '
-  local chan_os ver
+  local darwin_beta_maybe
 
   if [[ ${channel} == "stable" ]]; then
-    chan_os="${channel}/linux"
-    ver=$("${CURL[@]}" "${apt_index}" | awk "${apt_awk_prog}")
-    if [[ -n ${ver} ]]; then
-      remote_versions["${chan_os}"]="${ver}"
-    else
-      echo "No remote version for ${chan_os}" >&2
-    fi
+    remote_versions["stable/linux"]=$(
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
+        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password" and .status == "newest") | .version'
+    )
 
-    chan_os="${channel}/darwin"
-    ver=$(
+    remote_versions["stable/darwin"]=$(
       "${CURL[@]}" "${APP_UPDATES_URI_BASE}/N" \
         | "${JQ[@]}" 'select(.available == "1") | .version'
     )
-    if [[ -n ${ver} ]]; then
-      remote_versions["${chan_os}"]="${ver}"
-    else
-      echo "No remote version for ${chan_os}" >&2
-    fi
   else
-    chan_os="${channel}/linux"
-    ver=$(
-      # Deb package version string uses tilde instead of dashes for betas.
-      "${CURL[@]}" "${apt_index}" | awk "${apt_awk_prog}" | sed 's/~/-/'
+    remote_versions["beta/linux"]=$(
+      # AUR version string uses underscores instead of dashes for betas.
+      # We fix that with a `sub` in jq query.
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
+        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password-beta") | .version | sub("_"; "-")'
     )
-    if [[ -n ${ver} ]]; then
-      remote_versions["${chan_os}"]="${ver}"
-    else
-      echo "No remote version for ${chan_os}" >&2
-    fi
 
     # Handle macOS Beta app-update feed quirk.
     # If there is a newer release in the stable channel, queries for beta
     # channel will return the stable channel version; masking the current beta.
-    chan_os="${channel}/darwin"
-    ver=$(
+    darwin_beta_maybe=$(
       "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" \
-        | "${JQ[@]}" 'select(.available == "1" and (.version | endswith(".BETA"))) | .version'
+        | "${JQ[@]}" 'select(.available == "1") | .version'
     )
-    if [[ -n ${ver} ]]; then
-      remote_versions["${chan_os}"]="${ver}"
-    else
-      echo "No remote version for ${chan_os}" >&2
+    # Only consider versions that end with '.BETA'
+    if [[ ${darwin_beta_maybe} =~ \.BETA$ ]]; then
+      remote_versions["beta/darwin"]=${darwin_beta_maybe}
     fi
   fi
 }

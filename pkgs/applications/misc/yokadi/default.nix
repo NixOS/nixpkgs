@@ -1,10 +1,15 @@
 {
   lib,
-  python3Packages,
   fetchurl,
+  buildPythonApplication,
+  python-dateutil,
+  sqlalchemy,
+  setproctitle,
+  icalendar,
+  colorama,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "yokadi";
   version = "1.3.0";
   format = "setuptools";
@@ -14,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-zF2ffHeU+i7wzu1u4DhQ5zJXr8AjXboiyFAisXNX6TM=";
   };
 
-  dependencies = with python3Packages; [
+  dependencies = [
     python-dateutil
     sqlalchemy
     setproctitle

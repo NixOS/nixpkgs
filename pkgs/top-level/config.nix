@@ -422,7 +422,7 @@ let
     };
 
     rewriteURL = mkOption {
-      type = types.nullOr (types.functionTo (types.nullOr types.str));
+      type = types.functionTo (types.nullOr types.str);
       description = ''
         A hook to rewrite/filter URLs before they are fetched.
 
@@ -432,7 +432,8 @@ let
 
         The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
       '';
-      default = null;
+      default = lib.id;
+      defaultText = literalExpression "(url: url)";
       example = literalExpression ''
         {
           # Use Nix like it's 2024! ;-)

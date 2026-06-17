@@ -99,8 +99,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_xcrun"
     "test_xcrun_in_required_by_tool_requires"
     "test_xcrun_in_tool_requires"
-    # Requires gcc to run
-    "test_qbsprofile_rcflags"
   ];
 
   disabledTestPaths = [

@@ -35,7 +35,6 @@ buildPythonPackage rec {
       Features custom indents for nested lists and fix for messy linebreaks and
       paragraphs between lists.
     '';
-    homepage = "https://github.com/radude/mdx_truly_sane_lists";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };

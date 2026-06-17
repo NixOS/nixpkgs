@@ -6,32 +6,33 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_10,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
   xdg-utils,
-  darwin,
 }:
 
 let
-  inherit (stdenv.hostPlatform) isLinux isDarwin system;
-
-  pnpm = pnpm_10;
-
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
-    "x86_64-darwin" = "darwin";
-    "aarch64-darwin" = "darwin-arm64";
   };
 
-  platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
+  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+
+  desktopEntry = makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
@@ -68,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
       "-s"
-      "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
+      "-w"
+      "-X"
+      "github.com/siyuan-note/siyuan/kernel/util.Mode=prod"
     ];
     tags = [ "fts5" ];
   };
@@ -82,15 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm
-  ]
-  ++ lib.optionals isLinux [
-    pnpmBuildHook
+    pnpm_9
     makeWrapper
     copyDesktopItems
-  ]
-  ++ lib.optionals isDarwin [
-    darwin.autoSignDarwinBinariesHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -101,9 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       postPatch
       ;
-    inherit pnpm;
+    pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-M2Fdie0XK2Pck/fP7Djxb7XNAQXpJO2i2kSJrDj1G0E=";
+    hash = "sha256-GAbP9H+c+JXymH0/vpeYOJrkkFJGVyKcpJYFeyRLSKc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -117,40 +114,26 @@ stdenv.mkDerivation (finalAttrs: {
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
-
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
   '';
 
-  postBuild = ''
-    electronBuilderArgs=(
-      --dir
-      --config electron-builder-${platformId}.yml
-      -c.electronDist=electron-dist
-      -c.electronVersion=${electron.version}
-      -c.mac.identity=null
-    )
+  buildPhase = ''
+    runHook preBuild
 
-    npm exec electron-builder -- "''${electronBuilderArgs[@]}"
+    pnpm build
+
+    npm exec electron-builder -- \
+        --dir \
+        --config electron-builder-${platformId}.yml \
+        -c.electronDist=${electron.dist} \
+        -c.electronVersion=${electron.version}
+
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-  ''
-  + lib.optionalString isDarwin ''
-    mkdir -p $out/Applications $out/bin
 
-    cp -R build/mac*/*.app $out/Applications/SiYuan.app
-
-    cat > $out/bin/siyuan << EOF
-    #!${stdenv.shell}
-    exec open -na "$out/Applications/SiYuan.app" --args "\$@"
-    EOF
-    chmod +x $out/bin/siyuan
-  ''
-  + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
-
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
@@ -162,26 +145,20 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
-  ''
-  + ''
+
     runHook postInstall
   '';
 
-  desktopItems = lib.optional isLinux (makeDesktopItem {
-    name = "siyuan";
-    desktopName = "SiYuan";
-    comment = "Refactor your thinking";
-    icon = "siyuan";
-    exec = "siyuan %U";
-    categories = [ "Utility" ];
-  });
+  desktopItems = [ desktopEntry ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v(\\d+\\.\\d+\\.\\d+)$"
-      "--subpackage=kernel"
-    ];
+  passthru = {
+    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {

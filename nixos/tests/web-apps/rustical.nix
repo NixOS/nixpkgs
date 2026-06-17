@@ -3,35 +3,28 @@
   lib,
   ...
 }:
-
-let
-  port = "4000";
-in
-
 {
   name = "rustical";
 
   meta.maintainers = pkgs.rustical.meta.maintainers;
 
-  containers.machine =
+  nodes.machine =
     {
       pkgs,
       ...
     }:
     {
-      services.rustical = {
-        enable = true;
-        settings.http.bind = "[::]:${port}";
-      };
+      services.rustical.enable = true;
       environment.systemPackages = with pkgs; [ calendar-cli ];
     };
 
   testScript =
     {
-      containers,
+      nodes,
       ...
     }:
     let
+      port = toString nodes.machine.services.rustical.settings.http.port;
       url = "http://localhost:${toString port}";
 
       createPrincipalScript = pkgs.writeScript "rustical-create-principal" ''

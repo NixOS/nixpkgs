@@ -61,13 +61,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.2.4";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hhQVfUXjobQmrSYFquxbkIuCdBYaExAtjtwbyVqyVUg=";
+    hash = "sha256-rdg7XvrJU7HH9aGd/TwMqqexmFeLOMBldh1XQakQSeM=";
   };
 
   nativeBuildInputs = [
@@ -114,10 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp'
     onetbb
     webrtc-audio-processing
-    zita-convolver
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86 [
     x42-plugins
+    zita-convolver
   ];
 
   preFixup =
@@ -126,10 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
         calf # compressor exciter, bass enhancer and others
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
-        zam-plugins # maximizer
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isx86 [
         x42-plugins # autotune
+        zam-plugins # maximizer
       ];
 
       ladspaPlugins = [

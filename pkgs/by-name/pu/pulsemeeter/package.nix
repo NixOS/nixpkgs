@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pulsemeeter";
-  version = "2.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theRealCarneiro";
     repo = "pulsemeeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m64frtEVqwJEc0rfKoPIbTJtASE+aPAdBBSrPNHIXRY=";
+    hash = "sha256-hmQI+E6WmYOK7oN7zTmshFZgJ0UiN2KdZ6ZiXwxRpNs=";
   };
 
   build-system = with python3Packages; [

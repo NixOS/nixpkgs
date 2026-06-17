@@ -2,25 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   pycryptodome,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "brelpy";
   version = "0.0.3";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-MYWSKYd7emHZfY+W/UweQtTg62GSUMybpecL9BR8dhg=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pycryptodome ];
+  propagatedBuildInputs = [ pycryptodome ];
 
   # Source not tagged and PyPI releases don't contain tests
   doCheck = false;
@@ -33,4 +28,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

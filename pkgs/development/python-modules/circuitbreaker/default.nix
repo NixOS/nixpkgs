@@ -2,27 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "circuitbreaker";
   version = "2.1.3";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fabfuel";
     repo = "circuitbreaker";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-7BpYGhha0PTYzsE9CsN4KxfJW/wm2i6V+uAeamBREBQ=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,4 +33,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

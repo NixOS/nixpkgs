@@ -2,15 +2,10 @@
 let
   p = import ../../stdenv/generic/problems.nix { inherit lib; };
 
-  genConstraintsTest = problems: expected: {
-    expr = (p.genHandlerSwitch { inherit problems; }).definedConstraints;
-    inherit expected;
-  };
-
   genHandlerTest =
     let
       slowReference =
-        config: kind: name: package:
+        config: package: name: kind:
         # Try to find an explicit handler
         (config.problems.handlers.${package} or { }).${name}
           # Fall back, iterating through the matchers
@@ -36,7 +31,7 @@ let
             map
               (
                 name:
-                map (kind: f kind name package) [
+                map (kind: f package name kind) [
                   "k1"
                   "k2"
                   "k3"
@@ -155,84 +150,4 @@ lib.runTests {
     ];
     handlers = { };
   };
-
-  testDefinedConstraintsEmpty =
-    genConstraintsTest
-      {
-        matchers = [ ];
-        handlers = { };
-      }
-      {
-        kinds = [ ];
-        names = [ ];
-        packages = [ ];
-      };
-
-  testDefinedConstraintsMatchers =
-    genConstraintsTest
-      {
-        handlers = { };
-        matchers = [
-          {
-            package = null;
-            name = null;
-            kind = "k1";
-            handler = "warn";
-          }
-          {
-            package = null;
-            name = null;
-            kind = "k2";
-            handler = "error";
-          }
-          {
-            package = null;
-            name = null;
-            kind = "k3";
-            handler = "ignore";
-          }
-          {
-            package = "p1";
-            name = "n1";
-            kind = null;
-            handler = "error";
-          }
-          {
-            package = "p2";
-            name = "n1";
-            kind = null;
-            handler = "warn";
-          }
-        ];
-      }
-      {
-        kinds = [
-          "k1"
-          "k2"
-        ];
-        names = [ "n1" ];
-        packages = [
-          "p1"
-          "p2"
-        ];
-      };
-
-  testDefinedConstraintsHandlers =
-    genConstraintsTest
-      {
-        matchers = [ ];
-        handlers.p1.n1 = "warn";
-        handlers.p1.n2 = "error";
-        handlers.p2.n3 = "ignore";
-      }
-      {
-        kinds = [ ];
-        names = [
-          "n1"
-          "n2"
-        ];
-        packages = [
-          "p1"
-        ];
-      };
 }

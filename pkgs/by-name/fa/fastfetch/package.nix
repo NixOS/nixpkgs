@@ -21,8 +21,6 @@
   libsepol,
   libsysprof-capture,
   libxcb,
-  libva,
-  libvdpau,
   makeBinaryWrapper,
   moltenvk,
   nix-update-script,
@@ -50,12 +48,10 @@
   # Feature flags
   audioSupport ? true,
   brightnessSupport ? true,
-  codecSupport ? true,
   dbusSupport ? true,
   flashfetchSupport ? false,
   terminalSupport ? true,
-  # NOTE: disabled by default until lib dependency closure is minimal
-  enlightenmentSupport ? false,
+  enlightenmentSupport ? true,
   gnomeSupport ? true,
   imageSupport ? true,
   openclSupport ? true,
@@ -70,7 +66,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.64.2";
+  version = "2.63.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -79,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-isSVcmtNglHy7+F3yemGyY8Jnsy3h5mjOnl159CyJ2Q=";
+    hash = "sha256-6c3vA8AFSfew1TdSeUmJ4mIbFyDaJPVWUc93iZyqRY0=";
   };
 
   outputs = [
@@ -96,7 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     let
-      commonDeps = [ yyjson ];
+      commonDeps = [
+        yyjson
+      ];
 
       # Cross-platform optional dependencies
       imageDeps = lib.optionals imageSupport [
@@ -113,7 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       linuxCoreDeps = lib.optionals stdenv.hostPlatform.isLinux (
-        [ hwdata ]
+        [
+          hwdata
+        ]
         # Fallback if both `wayland` and `x11` are not available. AMD GPU properties detection
         ++ lib.optional (!x11Support && !waylandSupport) libdrm
       );
@@ -126,11 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals brightnessSupport [
           # Brightness detection of external displays
           ddcutil
-        ]
-        ++ lib.optionals codecSupport [
-          # Hardware-accelerated video codec detection
-          libva
-          libvdpau
         ]
         ++ lib.optionals dbusSupport [
           # Bluetooth, wifi, player & media detection
@@ -228,9 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.cmakeBool "ENABLE_PULSE" audioSupport)
 
-    (lib.cmakeBool "ENABLE_VA" codecSupport)
-    (lib.cmakeBool "ENABLE_VDPAU" codecSupport)
-
     (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
 
     (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
@@ -289,7 +281,6 @@ stdenv.mkDerivation (finalAttrs: {
     minimal = fastfetch.override {
       audioSupport = false;
       brightnessSupport = false;
-      codecSupport = false;
       dbusSupport = false;
       enlightenmentSupport = false;
       flashfetchSupport = false;
@@ -325,7 +316,6 @@ stdenv.mkDerivation (finalAttrs: {
       Feature flags (all default to 'true' except rpmSupport, flashfetchSupport and zfsSupport):
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
-      * codecSupport: Hardware-accelerated video codec detection
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
       * enlightenmentSupport: Enlightenment configuration detection via EFL's Eet
       * flashfetchSupport: Build the flashfetch utility (default: false)

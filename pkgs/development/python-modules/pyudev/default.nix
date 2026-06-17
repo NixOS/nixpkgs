@@ -9,16 +9,15 @@
   hypothesis,
   docutils,
   stdenvNoCC,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pyudev";
   version = "0.24.4";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-54i7mDcAsahO/C6IhisKUa8qmV1bhryZl1RlBc97Nrw=";
   };
 
@@ -27,9 +26,13 @@ buildPythonPackage (finalAttrs: {
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
   '';
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
+  nativeCheckInputs = [
+    pytest
+    mock
+    hypothesis
+    docutils
+  ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     py.test
@@ -39,18 +42,10 @@ buildPythonPackage (finalAttrs: {
   # https://github.com/pyudev/pyudev/issues/187
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytest
-    mock
-    hypothesis
-    docutils
-  ];
-
   meta = {
     homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
-    changelog = "https://github.com/pyudev/pyudev/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ frogamic ];
   };
-})
+}

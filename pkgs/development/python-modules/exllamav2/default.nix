@@ -1,18 +1,16 @@
 {
-  lib,
-  buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  torch,
-
+  lib,
   cudaPackages,
+  buildPythonPackage,
+  nix-update-script,
 
-  # nativeBuildInputs
+  setuptools,
+
   pybind11,
 
-  # dependencies
+  which,
+
   fastparquet,
   flash-attn,
   ninja,
@@ -24,13 +22,13 @@
   rich,
   safetensors,
   tokenizers,
+  torch,
   websockets,
 }:
-buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "exllamav2";
   version = "0.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
@@ -41,33 +39,32 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   build-system = [
     setuptools
-    torch
   ];
-
-  nativeBuildInputs = [
-    ninja
-  ];
-
-  preConfigure = ''
-    export MAX_JOBS="$NIX_BUILD_CORES"
-    export NVCC_THREADS=2
-  '';
 
   buildInputs = [
     pybind11
   ]
   ++ lib.optionals torch.cudaSupport [
-    cudaPackages.cuda_cudart # cuda_runtime.h
-    cudaPackages.libcublas # cublas_v2.h
-    cudaPackages.libcurand # curand_kernel.h
-    cudaPackages.libcusolver # cusolverDn.h
     cudaPackages.libcusparse # cusparse.h
+    cudaPackages.libcublas # cublas_v2.h
+    cudaPackages.libcusolver # cusolverDn.h
+    cudaPackages.libcurand # curand_kernel.h
+    cudaPackages.cuda_cudart # cuda_runtime.h
   ];
 
   env = lib.optionalAttrs torch.cudaSupport {
     CUDA_HOME = lib.getDev cudaPackages.cuda_nvcc;
     TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
   };
+
+  nativeBuildInputs = [
+    ninja
+    which
+  ];
+
+  pythonRelaxDeps = [
+    "numpy" # Wants numpy 1.26.4
+  ];
 
   dependencies = [
     fastparquet
@@ -89,6 +86,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   # Tests require GPU hardware and external model files
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/turboderp-org/exllamav2";

@@ -33,10 +33,7 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  pythonRelaxDeps = [
-    "globus-sdk"
-    "jmespath"
-  ];
+  pythonRelaxDeps = [ "globus-sdk" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

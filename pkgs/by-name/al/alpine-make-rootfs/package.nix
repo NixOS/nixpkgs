@@ -14,14 +14,14 @@
   util-linux,
   wget,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-rootfs";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-ktGJXPJK94RbdqcgsA3fA8+MO0inaRcwaDLx18KFo1w=";
   };
 
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-})
+}

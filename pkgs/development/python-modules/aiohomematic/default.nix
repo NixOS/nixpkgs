@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
-  openccu-data,
   orjson,
   pydantic,
   pydevccu,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2026.5.11";
+  version = "2026.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -28,14 +27,13 @@ buildPythonPackage rec {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-Ua7/sLhL0mbZvJwx+TNfXoP+z+jE2TyCO3DqsFpPe6A=";
+    hash = "sha256-R7hQprIAK7Xs+XpmMecAGGrAYzfBk+fQo17tkByC0Kc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    openccu-data
     orjson
     pydantic
     python-slugify

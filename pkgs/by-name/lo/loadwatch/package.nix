@@ -19,7 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Run a program using only idle cycles";
-    homepage = "https://git.sr.ht/~woffs/loadwatch";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ woffs ];
     platforms = lib.platforms.all;

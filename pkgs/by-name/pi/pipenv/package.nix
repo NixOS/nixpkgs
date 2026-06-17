@@ -108,7 +108,6 @@ buildPythonApplication rec {
 
   meta = {
     description = "Python Development Workflow for Humans";
-    homepage = "https://github.com/pypa/pipenv";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "pipenv";

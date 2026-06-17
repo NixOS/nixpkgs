@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tgpt";
-  version = "2.11.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FsLJXJBPg9Lz5iOcoIMkcs8zH4hkSWKjlIU0MLjL4k0=";
+    hash = "sha256-mEzTvurjG/58qgNtJie7Iy6rSkiu2VbDIu1MiyrcEyo=";
   };
 
-  vendorHash = "sha256-MV86fp6684lBhFrqYXJCf1OguftncVVb/1wEPgvaOYc=";
+  vendorHash = "sha256-Xilu4wzDkwf15LmVH0Pkk91/nDisUu66aPP0JvT4ldo=";
 
   buildInputs = [ libx11 ];
 
@@ -28,6 +28,7 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Remove test which need network access
     rm src/providers/koboldai/koboldai_test.go
+    rm src/providers/phind/phind_test.go
   '';
 
   meta = {

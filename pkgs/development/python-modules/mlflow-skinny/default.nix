@@ -1,7 +1,5 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
   mlflow,
 
   # build-system
@@ -32,16 +30,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow-skinny";
-  inherit (mlflow) version;
+  inherit (mlflow) version src;
   pyproject = true;
   __structuredAttrs = true;
-
-  src = fetchFromGitHub {
-    owner = "mlflow";
-    repo = "mlflow";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-OxhM+KCem0sb9cwtyzrUD/MGfoiiCfgU47qipYRDaFk=";
-  };
 
   sourceRoot = "${finalAttrs.src.name}/libs/skinny";
 
@@ -78,6 +69,5 @@ buildPythonPackage (finalAttrs: {
   meta = mlflow.meta // {
     description = "Lightweight version of MLflow that is designed to minimize package size";
     homepage = "https://github.com/mlflow/mlflow/tree/master/libs/skinny";
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

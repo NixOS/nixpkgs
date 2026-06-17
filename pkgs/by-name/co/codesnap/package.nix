@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codesnap";
-  version = "0.13.4";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "codesnap-rs";
     repo = "codesnap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cMxXzLvnqsloKT7ixMlQnAq+ZempLeEzkWyWxG4jt9Y=";
+    hash = "sha256-baTIxqfxxoHl7h81pboFlze5m/EMiEx9YOMfV0UPESI=";
   };
 
-  cargoHash = "sha256-QMpncisumxF02lFQ8xsZiR5AYZVSHWlAuuFDg0ZoPtI=";
+  cargoHash = "sha256-bi5vvUDMI4WxIpv0sHESmLg3vwAIbNQ11pbJDuSe8z4=";
 
   nativeBuildInputs = [ pkg-config ];
 

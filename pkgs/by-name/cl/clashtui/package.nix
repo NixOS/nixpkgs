@@ -8,25 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clashtui";
-  version = "0.2.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "JohanChane";
     repo = "clashtui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2iQVYZrqo55EO0ZGn6ktP/3Py5v+LiVgrSYTtaxYXyQ=";
+    hash = "sha256-roP252d0lO7eN2KCHiuPPI5o8QqtPWJvmeex8sAmKww=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/clashtui";
-
-  cargoHash = "sha256-8oDnumyn0Ry1AIWNLO2+1HSPsxkVLRLItgEVEXqSRFI=";
-
-  cargoBuildFlags = [ "--all-features" ];
-
-  checkFlags = [
-    # need fhs
-    "--skip=utils::config::test::test_save_and_load"
-  ];
+  cargoHash = "sha256-7y31iZoSJ98XDiC+Akahgfp/lI5haaek6UpFtaCtGW8=";
 
   doInstallCheck = true;
 
@@ -37,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Mihomo (Clash.Meta) TUI Client";
+    description = "Mihomo (Clash.Meta) / sing-box TUI Client";
     homepage = "https://github.com/JohanChane/clashtui";
     changelog = "https://github.com/JohanChane/clashtui/releases/tag/v${finalAttrs.version}";
     mainProgram = "clashtui";

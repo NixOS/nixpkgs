@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitea,
-  cctools,
   yarn-berry_3,
   nodejs,
   python311,
@@ -43,10 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python311
     libsass
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
-    cctools.libtool
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildPhase = ''
     runHook preBuild

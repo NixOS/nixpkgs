@@ -15,7 +15,6 @@
   cryptography,
   noiseprotocol,
   protobuf,
-  tzdata,
   tzlocal,
   zeroconf,
 
@@ -27,20 +26,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "45.3.1"; # must track the major version that home-assistant pins
+  version = "45.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+8P6OL+4Y+qrKLYqXtjBL2ylcamsF24Ccn00Vt9ohD0=";
+    hash = "sha256-ajucVk5yF0akOIfBX28sjOndpmHQumJBUp5jnq//B+M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=82.0.1" setuptools \
-      --replace-fail "Cython>=3.2.5" Cython
+      --replace-fail "setuptools>=82.0.1" setuptools
   '';
 
   build-system = [
@@ -48,10 +46,7 @@ buildPythonPackage (finalAttrs: {
     cython
   ];
 
-  pythonRelaxDeps = [
-    "aiohappyeyeballs"
-    "cryptography"
-  ];
+  pythonRelaxDeps = [ "cryptography" ];
 
   dependencies = [
     aiohappyeyeballs
@@ -60,7 +55,6 @@ buildPythonPackage (finalAttrs: {
     cryptography
     noiseprotocol
     protobuf
-    tzdata
     tzlocal
     zeroconf
   ];

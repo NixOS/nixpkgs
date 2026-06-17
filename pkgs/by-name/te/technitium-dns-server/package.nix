@@ -41,12 +41,6 @@ buildDotnetModule rec {
     libmsquic
   ];
 
-  # Confirmed correct by upstream, remove when fixed in a release:
-  # https://github.com/TechnitiumSoftware/DnsServer/issues/1967
-  patches = [
-    ./dnssec-do-bit-fix.patch
-  ];
-
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;
   };

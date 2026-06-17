@@ -361,7 +361,6 @@ stdenv.mkDerivation {
             qtQmlPrefix
             ;
         };
-        meta.license = lib.licenses.mit;
       } ../../hooks/qtbase-setup-hook.sh;
     in
     "${hook}/nix-support/setup-hook";

@@ -83,16 +83,12 @@ let
     else
       [ ];
 in
-assert
-  (config != { } -> backend == "transmission")
-  || throw ''
-    json config for configuring fetchtorrent only works with the transmission backend
-  '';
-assert
-  (backend == "transmission" -> flatten')
-  || throw ''
-    `flatten = false` is only supported by the rqbit backend for fetchtorrent
-  '';
+assert lib.assertMsg (config != { } -> backend == "transmission") ''
+  json config for configuring fetchtorrent only works with the transmission backend
+'';
+assert lib.assertMsg (backend == "transmission" -> flatten') ''
+  `flatten = false` is only supported by the rqbit backend for fetchtorrent
+'';
 runCommand name
   {
     inherit meta;

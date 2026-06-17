@@ -7,7 +7,6 @@
   pkg-config,
   sqlite,
   pcre2,
-  installShellFiles,
 }:
 
 let
@@ -29,10 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-biVR932wHiUG56mvXoKWFzrzpkclbW9RWM4vY1+OMZ0=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     fuse
     pcre2
@@ -46,8 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${finalAttrs.version}'
 
     for path in Tupfile build.sh src/tup/server/Tupfile ; do
@@ -67,8 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     CONFIG_AR=${stdenv.cc.targetPrefix}ar
     CONFIG_TUP_USE_SYSTEM_SQLITE=y
     EOF
-
-    runHook postConfigure
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
@@ -85,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    installBin tup
-    installManPage tup.1
+    install -D tup -t $bin/bin/
+    install -D tup.1 -t $man/share/man/man1/
     runHook postInstall
   '';
 
@@ -104,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       your project rather than on your build system.
     '';
     homepage = "https://gittup.org/tup/";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -6,23 +6,20 @@
   msrest,
   msrestazure,
   isodate,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-containerregistry";
   version = "1.2.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-Ss0ygh0IZVPqvV3f7Lsh+5FbXRPvg3XRWvyyyAvclqM=";
     extension = "zip";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-core
     msrest
     msrestazure
@@ -43,4 +40,4 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/containerregistry/azure-containerregistry";
     license = lib.licenses.mit;
   };
-})
+}

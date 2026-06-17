@@ -11,6 +11,4 @@ makeSetupHook {
     # hardware drivers installed by NixOS
     driverLink = "/run/opengl-driver" + lib.optionalString stdenv.hostPlatform.isi686 "-32";
   };
-
-  meta.license = lib.licenses.mit;
 } ./setup-hook.sh

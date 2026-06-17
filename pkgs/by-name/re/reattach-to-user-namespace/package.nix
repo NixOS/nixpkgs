@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Wrapper that provides access to the Mac OS X pasteboard service";
-    homepage = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lnl7 ];
     platforms = lib.platforms.darwin;
   };
 }

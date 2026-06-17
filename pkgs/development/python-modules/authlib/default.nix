@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.7.2";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FLSe9piZoFlOAutzoMcgygbsJsR8uSlZWqdNBU6D+aE=";
+    hash = "sha256-vy1IOhwLkETSLSSHCWEgDOq79eZW+qEU9CJOHFMrBWE=";
   };
 
   build-system = [ setuptools ];

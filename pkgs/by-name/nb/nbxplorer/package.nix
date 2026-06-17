@@ -10,7 +10,7 @@ buildDotnetModule rec {
   version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner = "btcpayserver";
+    owner = "dgarage";
     repo = "NBXplorer";
     tag = "v${version}";
     hash = "sha256-X1+UdsKVOC3QpES22p0MG1Rz1oresilBM+b/4I1nCyI=";
@@ -29,7 +29,6 @@ buildDotnetModule rec {
 
   meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    homepage = "https://github.com/btcpayserver/NBXplorer";
     maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt

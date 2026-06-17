@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchPypi,
-
-  autoPatchelfHook,
   unzip,
+  autoPatchelfHook,
 }:
 
 let

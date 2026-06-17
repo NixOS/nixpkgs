@@ -5,26 +5,21 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bc-jsonpath-ng";
   version = "1.6.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "jsonpath-ng";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-FWP4tzlacAWVXG3YnPwl5MKc12geaCxZ2xyKx9PSarU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     decorator
     ply
   ];
@@ -45,4 +40,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

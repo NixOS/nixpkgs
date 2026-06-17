@@ -7,31 +7,33 @@
 }:
 
 let
-  version = "2026.5.26-6";
+  version = "2026.5.6-10";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-unknown-linux.tar.gz";
-      hash = "sha256-8jEq0X2owEnOdSWzEhDOYahAdq/3G/JIUZShHbYrR2c=";
+      hash = "sha256-X3Pua8lBRojFgB5uAQ4Px/cVq79saQV7b2JN8NBvXLE=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-unknown-linux.tar.gz";
-      hash = "sha256-i8m05WrmO/KQCt/4jVFkRxz9nIXZEDi8idVhXkXxDig=";
+      hash = "sha256-wWY07anOf1e64XyxuPxWO1Qf6sVW7JHDIeJw/o59GSE=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-apple-darwin.tar.gz";
-      hash = "sha256-WPL1kPMSmqh9/n2m9CvNnUcyLfjHz3PC9tAjGrjaZfw=";
+      hash = "sha256-5vlVs1AQ/ZbhF25hkKqBSTjAwYA/uOJY+S+jyMEgjRk=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-apple-darwin.tar.gz";
-      hash = "sha256-HtB5iCT3d3AprPM+1uNkPkX0v4wSerTJlEu5F4P6pp0=";
+      hash = "sha256-T/0apTBEdpOnT/W13zB1Nis1kRghODHiR5yOj8gQuuY=";
     };
   };
+
+  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -47,14 +49,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;
+  inherit src;
 
   sourceRoot = ".";
 
   nativeBuildInputs = [ installShellFiles ];
 
   dontConfigure = true;
+  dontStrip = true;
   dontBuild = true;
+
+  doCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -76,9 +81,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cognition's Devin Agent CLI";
-    homepage = "https://devin.ai/cli";
+    homepage = "https://devin.ai/";
     license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       nhshah15

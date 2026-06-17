@@ -7,18 +7,21 @@
   hatchling,
   mashumaro,
   prometheus-client,
+  pythonOlder,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pythonkuma";
-  version = "0.5.1";
+  version = "0.5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pythonkuma";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-jQapfwdDuHb5Ha25cUQycfRb/A07pRtm92Iy8bbYfqI=";
+    tag = "v${version}";
+    hash = "sha256-7c2TYGRlHn9stAd5Xe1aZP08WyKTtKKfKPGT7OoNmSQ=";
   };
 
   build-system = [
@@ -35,13 +38,15 @@ buildPythonPackage (finalAttrs: {
   # Tests are minimal and don't test functionality
   doCheck = false;
 
-  pythonImportsCheck = [ "pythonkuma" ];
+  pythonImportsCheck = [
+    "pythonkuma"
+  ];
 
   meta = {
     description = "Simple Python wrapper for Uptime Kuma";
     homepage = "https://github.com/tr4nt0r/pythonkuma";
-    changelog = "https://github.com/tr4nt0r/pythonkuma/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/tr4nt0r/pythonkuma/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-})
+}

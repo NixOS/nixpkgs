@@ -7,25 +7,25 @@
   curl,
   openssl,
   libxml2,
-  fuse3,
+  fuse,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s3fs-fuse";
-  version = "1.97";
+  version = "1.95";
 
   src = fetchFromGitHub {
     owner = "s3fs-fuse";
     repo = "s3fs-fuse";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-iggSIrmxnhINdzJm60yTWkmDwUWJRNNVqwHGd2Lb7lw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-wHszw3S+fuZRwTvJy+FkxQTR2BAvr8H924Wd4/C5heE=";
   };
 
   buildInputs = [
     curl
     openssl
     libxml2
-    fuse3
+    fuse
   ];
   nativeBuildInputs = [
     autoreconfHook

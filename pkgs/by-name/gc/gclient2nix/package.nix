@@ -46,7 +46,6 @@ let
       substitutions = {
         jq = lib.getExe buildPackages.jq;
       };
-      meta.license = lib.licenses.mit;
     } ./gclient-unpack-hook.sh
   ) { };
 

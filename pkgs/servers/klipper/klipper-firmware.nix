@@ -72,7 +72,6 @@ stdenv.mkDerivation {
     cp ./.config $out/config
     cp out/klipper.bin $out/ || true
     cp out/klipper.elf $out/ || true
-    cp out/klipper.elf.hex $out/ || true
     cp out/klipper.uf2 $out/ || true
 
     mkdir -p $out/lib/
@@ -96,11 +95,7 @@ stdenv.mkDerivation {
 
   passthru = {
     makeFlasher =
-      {
-        flashDevice ? null,
-        canbusNetwork ? null,
-        canbusDevice ? null,
-      }:
+      { flashDevice }:
       klipper-flash.override {
         klipper-firmware = klipper-firmware.override args;
         inherit
@@ -108,8 +103,6 @@ stdenv.mkDerivation {
           firmwareConfig
           mcu
           flashDevice
-          canbusNetwork
-          canbusDevice
           ;
       };
   };

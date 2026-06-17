@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.8-DEV2605";
+  version = "3.8-DEV2603";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-umy1EcLSoSDO5XFiGxfunniDr8RruyPvRTbypMbl7xU=";
+    hash = "sha256-FxQ18KJfR+fegQ5Qu4vI3vqckj4mB8s9VtSdRtIQISg=";
   };
 
   buildInputs =
@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
-    homepage = "https://github.com/GoldenCheetah/GoldenCheetah";
     mainProgram = "GoldenCheetah";
     platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ adamcstephens ];

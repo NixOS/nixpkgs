@@ -5,7 +5,6 @@
   libfaketime,
   mkfontscale,
   fonttosfnt,
-  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    installFonts
     libfaketime
     fonttosfnt
     mkfontscale
@@ -40,8 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  postInstall = ''
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
     mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = {

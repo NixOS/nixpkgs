@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromCodeberg,
+  fetchFromGitea,
   python3,
   sqlite,
 }:
@@ -10,7 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hittekaart";
   version = "0.2.0";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "dunj3";
     repo = "hittekaart";
     tag = "v${finalAttrs.version}";

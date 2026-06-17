@@ -1,10 +1,13 @@
 {
   lib,
-  python3Packages,
+  buildPythonApplication,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
+  pandocfilters,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "pandoc-plantuml-filter";
   version = "0.1.5";
   pyproject = true;
@@ -14,12 +17,12 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-9qXeIZuCu44m9EoPCPL7MgEboEwN91OylLfbkwhkZYQ=";
   };
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = with python3Packages; [ pandocfilters ];
+  dependencies = [ pandocfilters ];
 
   meta = {
     homepage = "https://github.com/timofurrer/pandoc-plantuml-filter";

@@ -3,11 +3,12 @@
   lib,
   fetchurl,
   coreutils,
-  groff,
   ncurses,
   gzip,
+  gccStdenv,
+  flex,
+  bison,
   less,
-  bash,
   buildPackages,
   x11Mode ? false,
   qtMode ? false,
@@ -16,9 +17,6 @@
   libxpm,
   bdftopcf,
   mkfontdir,
-  xset,
-  font-misc-misc,
-  font-adobe-75dpi,
   pkg-config,
   qt5,
   copyDesktopItems,
@@ -26,11 +24,23 @@
 }:
 
 let
-  hint =
-    if stdenv.hostPlatform.isLinux then
-      "linux.500"
-    else if stdenv.hostPlatform.isDarwin then
-      "macos.500"
+  stdenvUsed = if qtMode then gccStdenv else stdenv;
+
+  platform =
+    if stdenvUsed.hostPlatform.isUnix then
+      "unix"
+    else
+      throw "Unknown platform for NetHack: ${stdenvUsed.hostPlatform.system}";
+  unixHint =
+    if x11Mode then
+      "linux-x11"
+    else if qtMode then
+      "linux-qt4"
+    else if stdenvUsed.hostPlatform.isLinux then
+      "linux"
+    else if stdenvUsed.hostPlatform.isDarwin then
+      "macosx10.14"
+    # We probably want something different for Darwin
     else
       "unix";
   userDir = "~/.config/nethack";
@@ -39,19 +49,9 @@ let
     less
   ];
 
-  # The X11 interface loads core X bitmap fonts by XLFD: the "fixed" font for
-  # the map and menus (the iso10646-1 variant is used for ENHANCED_SYMBOLS) and
-  # adobe "times" for the tombstone. NixOS's X server doesn't have these on its
-  # font path by default, so we make the launcher add them at startup, the same
-  # way upstream's nethack.sh does for its own bundled font.
-  x11FontPath = lib.concatStringsSep "," [
-    "${font-misc-misc}/share/fonts/X11/misc"
-    "${font-adobe-75dpi}/share/fonts/X11/75dpi"
-  ];
 in
-
-stdenv.mkDerivation (finalAttrs: {
-  version = "5.0.0";
+stdenvUsed.mkDerivation (finalAttrs: {
+  version = "3.6.7";
   pname =
     if x11Mode then
       "nethack-x11"
@@ -64,20 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://nethack.org/download/${finalAttrs.version}/nethack-${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }-src.tgz";
-    sha256 = "sha256-KVm3iGqsdhhbkK6gyfgNFDQ/YE3grpaz3Sp2D3qzvek=";
+    hash = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
-  postUnpack =
-    let
-      lua548 = fetchurl {
-        url = "https://www.lua.org/ftp/lua-5.4.8.tar.gz";
-        hash = "sha256-TxjdrhVOeT5G7qtyfFnvHAwMK3ROe5QhlxDXb1MGKa4=";
-      };
-    in
-    ''
-      mkdir -p NetHack-${finalAttrs.version}/lib
-      tar zxf ${lua548} -C NetHack-${finalAttrs.version}/lib
-    '';
+  patches = [
+    # Newer GCC rejects function declarations without explicit parameters.
+    ./function-parameters.patch
+  ];
 
   buildInputs = [
     ncurses
@@ -94,15 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    flex
+    bison
     copyDesktopItems
-    groff
-    pkg-config
   ]
   ++ lib.optionals x11Mode [
     mkfontdir
     bdftopcf
   ]
   ++ lib.optionals qtMode [
+    pkg-config
     mkfontdir
     qt5.qtbase.dev
     qt5.qtmultimedia.dev
@@ -110,85 +104,63 @@ stdenv.mkDerivation (finalAttrs: {
     bdftopcf
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "WANT_WIN_TTY=1"
-    "WANT_WIN_CURSES=1"
-    "WANT_DEFAULT=curses"
-  ]
-  ++ lib.optionals x11Mode [
-    "WANT_WIN_X11=1"
-    "WANT_DEFAULT=X11"
-  ]
-  ++ lib.optionals qtMode [
-    "WANT_WIN_QT=1"
-    "WANT_DEFAULT=Qt"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postPatch = ''
     sed -e '/^ *cd /d' -i sys/unix/nethack.sh
-    sed -e '/rm -f $(MAKEDEFS)/d' -i sys/unix/Makefile.src
+    sed \
+      -e 's/^YACC *=.*/YACC = bison -y/' \
+      -e 's/^LEX *=.*/LEX = flex/' \
+      -i sys/unix/Makefile.utl
+    sed \
+      -e 's,^WINQT4LIB =.*,WINQT4LIB = `pkg-config Qt5Gui --libs` \\\
+            `pkg-config Qt5Widgets --libs` \\\
+            `pkg-config Qt5Multimedia --libs`,' \
+      -i sys/unix/Makefile.src
     sed \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
       -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
-      -e 's,NHCFLAGS+=-DCOMPRESS[^ ]*,NHCFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
-        -DCOMPRESS_EXTENSION=\\".gz\\",' \
-      -i sys/unix/hints/linux.500
+      -i sys/unix/hints/linux
     sed \
-      -E 's/^(GDBPATH|GREPPATH)/#\1/' \
-      -i sys/unix/sysconf
-    sed \
+      -e 's,^#WANT_WIN_CURSES=1$,WANT_WIN_CURSES=1,' \
+      -e 's,^CC=.*$,CC=${stdenvUsed.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
-      -e 's,^CFLAGS+=-DCRASHREPORT,#CFLAGS+=-DCRASHREPORT,' \
-      -e 's,^NHCFLAGS+=-DGREPPATH,#NHCFLAGS+=-DGREPPATH,' \
+      -e 's,^CFLAGS=-g,CFLAGS=,' \
       -e 's,/usr/bin/true,${coreutils}/bin/true,g' \
-      -e 's,NHCFLAGS+=-DCOMPRESS[^ ]*,NHCFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
-        -DCOMPRESS_EXTENSION=\\".gz\\",' \
-      -i sys/unix/hints/macOS.500
-    sed -e '/define CHDIR/d' \
-        -i include/config.h
-    sed \
-      -e 's,AR=.*,AR := $(AR) rcu,' \
-      -e 's,RANLIB=.*,RANLIB := $(RANLIB),' \
-      -i lib/lua-5.4.8/src/Makefile
-    sed \
-      -e 's,AR =.*,AR := $(AR),' \
-      -i sys/unix/Makefile.src
+      -i sys/unix/hints/macosx10.14
+    sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
       sed \
         -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
-        -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
-      -i sys/unix/hints/linux.500
-      sed \
-        -e 's,^endif   # QTDIR,endif   # QTDIR \
-              QTDIR=${qt5.qtbase.dev},' \
-        -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
-        -i sys/unix/hints/macOS.500
+        -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
+        -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
+          -DCOMPRESS_EXTENSION=\\".gz\\",' \
+        -e 's,moc-qt4,moc,' \
+        -i sys/unix/hints/linux-qt4
     ''}
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    ${lib.optionalString (stdenvUsed.buildPlatform != stdenvUsed.hostPlatform)
       # If we're cross-compiling, replace the paths to the data generation tools
       # with the ones from the build platform's nethack package, since we can't
       # run the ones we've built here.
       ''
-        sed \
-          -e 's, ../util/makedefs,,' \
-          -e 's,\t../util/makedefs,\t${buildPackages.nethack}/libexec/nethack/makedefs,' \
-          -e 's,\t../util/dlb,\t${buildPackages.nethack}/libexec/nethack/dlb,' \
-          -e 's,../util/dlb cf nhdat,${buildPackages.nethack}/libexec/nethack/dlb cf nhdat,' \
-          -e 's,pkg-config,$(PKG_CONFIG),' \
+        ${buildPackages.perl}/bin/perl -p \
+          -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
           -i sys/unix/Makefile.*
-        sed \
-          -e 's,pkg-config,$(PKG_CONFIG),' \
-          -i sys/unix/hints/linux.500
       ''
     }
+    sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
+    # Fix building on darwin where otherwise __has_attribute fails with an empty parameter
+    sed -e 's/define __warn_unused_result__ .*/define __warn_unused_result__ __unused__/' -i include/tradstdc.h
+    sed -e 's/define warn_unused_result .*/define warn_unused_result __unused__/' -i include/tradstdc.h
   '';
 
   configurePhase = ''
-    pushd sys/unix
-    sh setup.sh hints/${hint}
+    pushd sys/${platform}
+    ${lib.optionalString (platform == "unix") ''
+      sh setup.sh hints/${unixHint}
+    ''}
     popd
   '';
 
@@ -207,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
-    #! ${lib.getExe bash} -e
+    #! ${stdenvUsed.shell} -e
     PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
@@ -219,15 +191,10 @@ stdenv.mkDerivation (finalAttrs: {
     RUNDIR=\$(mktemp -d)
 
     cleanup() {
-      rm -rf \$RUNDIR${lib.optionalString x11Mode ''
-
-        ${xset}/bin/xset -fp ${x11FontPath} >/dev/null 2>&1 || true''}
+      rm -rf \$RUNDIR
     }
     trap cleanup EXIT
-    ${lib.optionalString x11Mode ''
-      ${xset}/bin/xset +fp ${x11FontPath} >/dev/null 2>&1 || true
-      ${xset}/bin/xset fp rehash >/dev/null 2>&1 || true
-    ''}
+
     cd \$RUNDIR
     for i in ${userDir}/*; do
       ln -s \$i \$(basename \$i)
@@ -245,13 +212,11 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
-    ${lib.optionalString (!x11Mode && !qtMode && (stdenv.buildPlatform == stdenv.hostPlatform)) ''
-      install -Dm 555 util/makedefs -t $out/libexec/nethack/
-      install -Dm 555 util/dlb -t $out/libexec/nethack/
-    ''}
+    install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
+    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
-  desktopItems = lib.optionals (x11Mode || qtMode) [
+  desktopItems = [
     (makeDesktopItem {
       name = "NetHack";
       exec =
@@ -275,14 +240,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = lib.licenses.ngpl;
-    platforms = lib.platforms.unix;
+    platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
     maintainers = with lib.maintainers; [ olduser101 ];
-    mainProgram =
-      if x11Mode then
-        "nethack-x11"
-      else if qtMode then
-        "nethack-qt"
-      else
-        "nethack";
+    mainProgram = "nethack";
+    broken = if qtMode then stdenv.hostPlatform.isDarwin else false;
   };
 })

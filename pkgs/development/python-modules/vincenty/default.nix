@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "vincenty";
   version = "0.1.4";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "maurycyp";
     repo = "vincenty";
-    tag = finalAttrs.version;
-    hash = "sha256-gzdaAtRjkhn0N/Dmk1tZc2GKRp1eveVbX+2G9cF+KNI=";
+    rev = version;
+    sha256 = "1li8gv0zb1pdbxdybgaykm38lqbkb5dr7rph6zs1k4k3sh15ldw3";
   };
-
-  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
@@ -30,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-})
+}

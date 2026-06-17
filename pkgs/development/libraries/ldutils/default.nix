@@ -2,8 +2,7 @@
   mkDerivation,
   lib,
   fetchFromGitLab,
-  qtcharts,
-  qtsvg,
+  libsForQt5,
   cmake,
 }:
 mkDerivation {
@@ -18,7 +17,7 @@ mkDerivation {
     hash = "sha256-UMDayvz9RlcR4HVJNn7tN4FKbiKAFRSPaK0osA6OGTI=";
   };
 
-  buildInputs = [
+  buildInputs = with libsForQt5.qt5; [
     qtcharts
     qtsvg
   ];

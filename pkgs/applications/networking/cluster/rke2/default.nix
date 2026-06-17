@@ -11,9 +11,7 @@ rec {
 
   rke2_1_35 = common (import ./1_35/versions.nix) extraArgs;
 
-  rke2_1_36 = common (import ./1_36/versions.nix) extraArgs;
-
   # Automatically set by update script, changes shouldn't be backported
-  rke2_stable = rke2_1_35;
-  rke2_latest = rke2_1_36;
+  rke2_stable = rke2_1_34;
+  rke2_latest = rke2_1_35;
 }

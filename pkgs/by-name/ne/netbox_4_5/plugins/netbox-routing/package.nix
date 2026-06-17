@@ -9,16 +9,15 @@
   django-polymorphic,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "netbox-routing";
   version = "0.4.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-routing";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-3biANhaAi3uRtaXnAw4i6nWnHkARkkBVqyBHLXIMOdA=";
   };
 
@@ -39,8 +38,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "NetBox plugin for tracking all kinds of routing information";
     homepage = "https://github.com/DanSheps/netbox-routing";
-    changelog = "https://github.com/DanSheps/netbox-routing/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/DanSheps/netbox-routing/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benley ];
   };
-})
+}

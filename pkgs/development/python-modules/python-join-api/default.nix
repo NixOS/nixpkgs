@@ -1,23 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   flask,
   requests,
-  yarl,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "python-join-api";
-  version = "0.1.1";
+  version = "0.0.9";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "nkgilley";
-    repo = "python-join-api";
-    tag = finalAttrs.version;
-    hash = "sha256-sT/IS7UshXSVaonegvcn4u2a8CNCRiiovcQ8uAyfU1Q=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-FGqOqOd9VVH9hxMqYH7M10W+g5tpImxs+K4AHJJZRaE=";
   };
 
   build-system = [ setuptools ];
@@ -25,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     flask
     requests
-    yarl
   ];
 
   pythonImportsCheck = [ "pyjoin" ];
@@ -34,10 +30,9 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/nkgilley/python-join-api/releases/tag/${finalAttrs.src.tag}";
     description = "Python API for interacting with Join by joaoapps";
     homepage = "https://github.com/nkgilley/python-join-api";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-})
+}

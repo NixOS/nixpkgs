@@ -5,12 +5,14 @@
   requests,
   pytest,
   flask,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   version = "4.1";
   format = "setuptools";
   pname = "roku";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jcarbaugh";

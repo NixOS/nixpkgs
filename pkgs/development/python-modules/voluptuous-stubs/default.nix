@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   mypy,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "voluptuous-stubs";
   version = "0.1.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-cPscCIJC8g4RAjJStWSM13+DH2ks2RDI+XE8wTXPjMg=";
   };
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = [ mypy ];
 
@@ -30,4 +27,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-})
+}

@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hyponcloud";
-  version = "0.9.4";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jcisio";
     repo = "hyponcloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eehYzPv527zfWAL1vyb6R6iRZW7sYcaOzJBetCHL8jE=";
+    hash = "sha256-qPELNzaVQtlQQ8u1IvJNkEzywuVHol79Tv3w9Sfaar0=";
   };
 
   build-system = [

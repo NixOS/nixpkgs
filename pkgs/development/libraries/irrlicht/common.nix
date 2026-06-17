@@ -2,10 +2,10 @@
 
 rec {
   pname = "irrlicht";
-  version = "1.8.5";
+  version = "1.8.4";
 
   src = fetchzip {
     url = "mirror://sourceforge/irrlicht/${pname}-${version}.zip";
-    hash = "sha256-cTkzxquMLl84/cSDZnSSQsmXRX/htV8M5NUTbnQuHoM=";
+    sha256 = "02sq067fn4xpf0lcyb4vqxmm43qg2nxx770bgrl799yymqbvih5f";
   };
 }

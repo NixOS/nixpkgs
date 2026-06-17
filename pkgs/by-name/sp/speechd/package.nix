@@ -157,7 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [
+      berce
+      jtojnar
+    ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
     platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";

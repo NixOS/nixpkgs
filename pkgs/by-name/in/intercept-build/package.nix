@@ -33,6 +33,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ RossSmyth ];
   };
 })

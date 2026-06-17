@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Collection of point, size and rect classes";
-    homepage = "https://github.com/Grumbel/geomcpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;

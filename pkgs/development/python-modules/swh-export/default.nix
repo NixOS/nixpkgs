@@ -6,7 +6,6 @@
   setuptools-scm,
   boto3,
   click,
-  luigi,
   tqdm,
   pyorc,
   plyvel,
@@ -17,7 +16,6 @@
   swh-model,
   swh-storage,
   pytestCheckHook,
-  pytest-click,
   pytest-kafka,
   pytest-mock,
   tzdata,
@@ -26,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-export";
-  version = "1.11.7";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -35,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-export";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDIGbkyRMNoQOdlXwqfLyRqDfK6jNFMVFJv67OY1SCg=";
+    hash = "sha256-n97MMYn7EmTrv411YSxUD1+zfbFB8KOSns44N3NqqV8=";
   };
 
   build-system = [
@@ -46,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     boto3
     click
-    luigi
     tqdm
     pyorc
     plyvel
@@ -66,7 +63,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-click
     pytest-kafka
     pytest-mock
     pkgs.zstd

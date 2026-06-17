@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sbom4python";
-  version = "0.12.6";
+  version = "0.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "sbom4python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-205QuBzO5ABxAh4p+yIs5mLbQENIr1K3GohTlYqReuQ=";
+    hash = "sha256-0+7NsnM2ovYKX5ngFKrQ5lGj9gTrK87B81XSVEnmBWA=";
   };
 
   build-system = with python3Packages; [

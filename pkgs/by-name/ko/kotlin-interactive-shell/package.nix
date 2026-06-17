@@ -6,14 +6,14 @@
   jre,
 }:
 
-maven.buildMavenPackage (finalAttrs: {
+maven.buildMavenPackage rec {
   pname = "kotlin-interactive-shell";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Kotlin";
     repo = "kotlin-interactive-shell";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 
@@ -50,4 +50,4 @@ maven.buildMavenPackage (finalAttrs: {
     platforms = jre.meta.platforms;
     mainProgram = "ki";
   };
-})
+}

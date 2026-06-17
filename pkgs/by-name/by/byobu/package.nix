@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "6.15";
+  version = "6.13";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
     repo = "byobu";
-    tag = finalAttrs.version;
-    hash = "sha256-QovoXH8cm8CZMSYGjI7FgynHtJjahpe9R2s62F7aZvo=";
+    rev = finalAttrs.version;
+    hash = "sha256-h+3BEMfBRozmpqFNRyfKzjKgevaYm8v7DsJMwkhiCQ4=";
   };
 
   nativeBuildInputs = [
@@ -103,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
       distributions.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "byobu";
-    maintainers = with lib.maintainers; [ cbrxyz ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

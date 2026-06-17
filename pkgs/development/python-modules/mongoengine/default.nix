@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pymongo,
+  isPy27,
   six,
   blinker,
   pytestCheckHook,
@@ -14,6 +15,7 @@ buildPythonPackage rec {
   pname = "mongoengine";
   version = "0.29.1";
   format = "setuptools";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";

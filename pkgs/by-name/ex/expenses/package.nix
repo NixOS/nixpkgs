@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Interactive command line expense logger";
-    homepage = "https://github.com/manojkarthick/expenses";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.manojkarthick ];
     mainProgram = "expenses";

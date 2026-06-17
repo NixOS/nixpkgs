@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  isPy27,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -11,6 +12,8 @@ buildPythonPackage rec {
   pname = "venusian";
   version = "3.1.1";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

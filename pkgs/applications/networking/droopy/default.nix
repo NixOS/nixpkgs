@@ -1,9 +1,9 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
+  wrapPython,
   fetchpatch,
-  python3Packages,
 }:
 
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  nativeBuildInputs = [ wrapPython ];
 
   installPhase = ''
     install -vD droopy $out/bin/droopy
@@ -43,4 +43,5 @@ stdenv.mkDerivation {
     maintainers = [ ];
     mainProgram = "droopy";
   };
+
 }

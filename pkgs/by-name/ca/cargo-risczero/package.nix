@@ -49,6 +49,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";
     license = with lib.licenses; [ asl20 ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ cameronfyfe ];
   };
 }

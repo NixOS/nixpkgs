@@ -21,7 +21,6 @@ buildFishPlugin {
 
   meta = {
     description = "Grc Colourizer for some commands on Fish shell";
-    homepage = "https://github.com/oh-my-fish/plugin-grc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     platforms = with lib.platforms; unix;

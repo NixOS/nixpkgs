@@ -60,15 +60,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sunpy";
-  version = "7.1.2";
+  version = "7.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "sunpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-saq3vYJMKogXSBxKn/tqlSnE96K10EM27femC+Qx0Gw=";
+    hash = "sha256-FeKmg3dZfbbjt1lDliF4uXf8PvM3J5HWtYqKRriJ4l0=";
   };
 
   build-system = [
@@ -180,10 +179,6 @@ buildPythonPackage (finalAttrs: {
     "test_main_submodule_map"
     "test_tai_seconds"
     "test_utime"
-
-    # AssertionError: assert 2 == 1
-    # where 2 = len(WarningsChecker(record=True))
-    "test_sunpy_warnings_logging"
   ];
 
   disabledTestPaths = [

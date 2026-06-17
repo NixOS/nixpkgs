@@ -56,7 +56,6 @@
   gnome-settings-daemon,
   xorg-server,
   python3,
-  python3Packages,
   wayland-scanner,
   wrapGAppsHook4,
   gi-docgen,
@@ -118,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    python3Packages.argcomplete # for register-python-argcomplete
+    python3.pkgs.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen

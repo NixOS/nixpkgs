@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,7 +14,13 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ installFonts ];
+  installPhase = ''
+    runHook preInstall
+
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Narrow monospaced font, designed to fit a fifteen pixel bitmap";

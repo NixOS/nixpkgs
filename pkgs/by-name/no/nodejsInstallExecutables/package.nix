@@ -1,5 +1,4 @@
 {
-  lib,
   makeSetupHook,
   installShellFiles,
   makeWrapper,
@@ -17,5 +16,4 @@ makeSetupHook {
     hostNode = "${nodejs}/bin/node";
     jq = "${jq}/bin/jq";
   };
-  meta.license = lib.licenses.mit;
 } ./hook.sh

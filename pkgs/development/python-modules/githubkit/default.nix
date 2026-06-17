@@ -71,7 +71,6 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = true;
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
     changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";

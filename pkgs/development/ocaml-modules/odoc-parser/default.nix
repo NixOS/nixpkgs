@@ -6,15 +6,12 @@
   astring,
   result,
   camlp-streams,
-  version ? "3.2.1",
+  version ? if lib.versionAtLeast ocaml.version "4.08" then "3.1.0" else "2.4.4",
 }:
 
 let
   param =
     {
-      "3.2.1" = {
-        sha256 = "sha256-1F6xJVFIOf2awncCu0k40bTztpeOmxarlnPqBnJFr/w=";
-      };
       "3.1.0" = {
         sha256 = "sha256-NVs8//STSQPLrti1HONeMz6GCZMtIwKUIAqfLUL/qRQ=";
       };
@@ -65,7 +62,7 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
     meta = {
       description = "Parser for Ocaml documentation comments";
       license = lib.licenses.isc;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ momeemt ];
       homepage = "https://github.com/ocaml-doc/odoc-parser";
       changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
     };

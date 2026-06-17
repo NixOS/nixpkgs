@@ -25,7 +25,6 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "Binary addon for raw joystick input";
-    homepage = "https://github.com/xbmc/peripheral.joystick";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];

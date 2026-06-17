@@ -16,9 +16,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menulibre";
   version = "2.4.0";
-  pyproject = true;
-
-  build-system = with python3Packages; [ setuptools ];
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bluesabre";
@@ -27,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pygobject3
     gnome-menus
     psutil

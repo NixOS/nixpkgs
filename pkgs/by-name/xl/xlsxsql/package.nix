@@ -10,16 +10,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "xlsxsql";
-  version = "0.5.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "xlsxsql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-07Gnw1Y8TyxoOMMevnx4tGyk6k7n4o3gDaOPshsmcSE=";
+    hash = "sha256-OmNYrohWs4l7cReTBB6Ha9VuKPit1+P7a4QKhYwK5g8=";
   };
 
-  vendorHash = "sha256-3r7KY6boNYd2tJjMExiTZD1ZxQhm2UlP/Gyic8XMGrw=";
+  vendorHash = "sha256-Zrt4NMoQePvipFyYpN+Ipgl2D6j/thCPhrQy4AbXOfQ=";
 
   ldflags = [
     "-X main.version=v${finalAttrs.version}"

@@ -52,6 +52,7 @@
   cmake,
   libssh2,
   openssl,
+  openssl_1_1,
   libmysqlclient,
   git,
   perl,
@@ -809,15 +810,10 @@ in
       }
     );
 
-  openssl =
-    attrs:
+  openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
-    assert
-      lib.versionAtLeast attrs.version "3.0.0"
-      || throw "OpenSSL 1.1 is EOL and the corresponding Ruby gem was removed.";
-    {
-      buildInputs = [ openssl ];
-    };
+    buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
+  };
 
   opus-ruby = attrs: {
     dontBuild = false;
@@ -894,11 +890,6 @@ in
       imlib2.dev
     ];
     buildFlags = [ "--without-imlib2-config" ];
-  };
-
-  prawn-gmagick = attrs: {
-    buildInputs = [ graphicsmagick ];
-    nativeBuildInputs = [ pkg-config ];
   };
 
   psych = attrs: {

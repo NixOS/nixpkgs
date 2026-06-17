@@ -2,30 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   google-api-core,
   grpcio,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "chirpstack-api";
   version = "3.12.5";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "brocaar";
     repo = "chirpstack-api";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-TDwvUNnGAbt10lLg6U7q+JMg7uu8TLySYqNyt/uk8UY=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/python/src";
+  sourceRoot = "${src.name}/python/src";
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     google-api-core
     grpcio
   ];
@@ -41,4 +36,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

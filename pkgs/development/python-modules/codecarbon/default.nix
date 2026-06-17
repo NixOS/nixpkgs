@@ -48,7 +48,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "codecarbon";
-  version = "3.2.8";
+  version = "3.2.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlco2";
     repo = "codecarbon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3EowSWIWMEBF8lEDtT/cof+qvu9uPbpFT6yZbb9nvXQ=";
+    hash = "sha256-9eec43jszRCiA6oD3T8YTXXRkrq0ESLhSwmxL4Pg9fc=";
   };
 
   build-system = [

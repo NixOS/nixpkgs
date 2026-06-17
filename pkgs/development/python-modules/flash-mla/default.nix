@@ -28,18 +28,17 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-mla";
-  version = "0-unstable-2026-04-29";
+  version = "0-unstable-2026-03-31";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepseek-ai";
     repo = "FlashMLA";
-    rev = "9241ae3ef9bac614dd25e45e507e089f888280e0";
+    rev = "71c737929f2567bd0a094ae140f8f60f390b1232";
     # Using the cutlass git subodules is necessary to get cutlass/util/command_line.h which is not
     # shipped in cudaPackages.cutlass
     fetchSubmodules = true;
-    hash = "sha256-rHHoDGEbBIvLRT0ZYOWQHrqyPBWtCpmF/AIcqFieomE=";
+    hash = "sha256-d8Hh+1QFwD6cl9fE8/XSYdWiJJjY9bSRk5h4N2sEV2U=";
   };
 
   patches = [

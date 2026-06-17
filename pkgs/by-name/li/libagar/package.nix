@@ -4,36 +4,54 @@
   fetchurl,
   pkg-config,
   libtool,
+  perl,
+  bsdbuild,
   gettext,
+  mandoc,
   libpng,
   libjpeg,
   libxinerama,
   freetype,
   SDL,
   libGL,
+  libsndfile,
+  portaudio,
   libmysqlclient,
   fontconfig,
-  perl,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "libagar";
-  version = "1.7.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0euZTIJizXDfHU2UYsVFMInbXcgV0BtXZ1CMKSOlllw=";
+    sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
   };
 
+  patches = [
+    ./fix-conflicting-types.patch
+  ];
+
   preConfigure = ''
-    substituteInPlace configure \
-      --replace-fail '_BSD_SOURCE' '_DEFAULT_SOURCE'
+    substituteInPlace configure.in \
+      --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
+    cat configure.in | ${bsdbuild}/bin/mkconfigure > configure
   '';
 
   configureFlags = [
-    "--enable-nls=no"
+    "--with-libtool=${libtool}/bin/libtool"
+    "--enable-nls=yes"
+    "--with-gettext=${gettext}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-gl=${libGL}"
     "--with-mysql=${libmysqlclient}"
+    "--with-manpages=yes"
+  ];
+
+  outputs = [
+    "out"
+    "devdoc"
   ];
 
   nativeBuildInputs = [
@@ -43,22 +61,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bsdbuild
     perl
     libxinerama
     SDL
     libGL
     libmysqlclient
-    freetype
+    mandoc
+    freetype.dev
     libpng
-    libjpeg
+    libjpeg.dev
     fontconfig
+    portaudio
+    libsndfile
   ];
 
   meta = {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ ramkromberg ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux;
   };
 })

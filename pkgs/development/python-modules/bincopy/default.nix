@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   argparse-addons,
   humanfriendly,
   pyelftools,
@@ -10,19 +9,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bincopy";
-  version = "20.1.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  version = "20.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-6UpJi5pKvnZwPDdyqtRm8VY7T8mAnaeWXxG8dwlAk7k=";
+    hash = "sha256-2KToy4Ltr7vjZ0FTN9GSbH2MRVYX5DvUsUVlN3K5uWU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     argparse-addons
     humanfriendly
     pyelftools
@@ -35,7 +30,8 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
     license = lib.licenses.mit;
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      frogamic
     ];
   };
 })

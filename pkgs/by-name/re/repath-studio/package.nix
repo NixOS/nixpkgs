@@ -7,41 +7,50 @@
   pkg-config,
   electron,
   chromium,
-  cacert,
   clojure,
-  git,
   vips,
 
   writeShellScriptBin,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
+  replaceVars,
+
+  vulkan-loader,
 
   nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.15";
+  version = "0.4.14";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fnu7tZ8chvnDMuMw4QD1NuQgaFOBzHfzl2ePQ5iwnao=";
+    hash = "sha256-El3gXpfNofHev84tpa0v16y2Sjdo6kmlm44hgHcinCk=";
   };
 
   patches = [
-    # outputHash of clojureHome changes each time `clojure` is updated
+    (replaceVars ./hardcode-git-paths.patch {
+      clj-kdtree_src = fetchFromGitHub {
+        owner = "abscondment";
+        repo = "clj-kdtree";
+        rev = "5ec321c5e8006db00fa8b45a8ed9eb0b8f3dd56d";
+        hash = "sha256-ZOv+9TxBsOnSSbfM7kJLP3cQH9FpgA15aETszg7YSes=";
+      };
+    })
+    # outputHash of manvenDeps changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-0dSFEZ02D83yplqT3GV9TyUwJ3lDjxM47pGYwUXzatw=";
+  npmDepsHash = "sha256-gOk/hHWGLwAxPIBqasoUzfszPv911afb/VLn7w7g5KE=";
 
   nativeBuildInputs = [
-    finalAttrs.passthru.clojureWithHome
+    finalAttrs.passthru.clojureWithCache
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
@@ -63,13 +72,19 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    electron_dist="$(mktemp -d)"
-    cp -r ${electron.dist}/. "$electron_dist"
-    chmod -R u+w "$electron_dist"
-
+    # electronDist needs to be modifiable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  ''
+  # Electron builder complains about symlink in electron-dist
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm electron-dist/libvulkan.so.1
+    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
+  ''
+  + ''
     npm run build
     npm exec electron-builder -- --dir \
-      -c.electronDist="$electron_dist" \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -108,7 +123,7 @@ buildNpmPackage (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
-    export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
+    export ELECTRON_OVERRIDE_DIST_PATH=electron-dist/
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
     export CHROME_BIN=${chromium}/bin/chromium
     npm run test
@@ -131,72 +146,48 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     # this was taken and adapted from "logseq" package's nixpkgs derivation
-    clojureHome = stdenv.mkDerivation {
-      name = "repath-studio-${finalAttrs.version}-clojure-home";
+    mavenRepo = stdenv.mkDerivation {
+      name = "repath-studio-${finalAttrs.version}-maven-deps";
       inherit (finalAttrs) src patches;
 
-      nativeBuildInputs = [
-        cacert
-        clojure
-        git
-      ];
+      nativeBuildInputs = [ clojure ];
 
       buildPhase = ''
         runHook preBuild
 
+        export HOME="$(mktemp -d)"
         mkdir -p "$out"
-        export HOME="$out"
-        export JAVA_TOOL_OPTIONS="-Duser.home=$out"
 
         # -P       -> resolve all normal deps
         # -M:alias -> resolve extra-deps of the listed aliases
-        clojure -P -M:dev:cljs
+        clj -Sdeps "{:mvn/local-repo \"$out\"}" -P -M:dev:cljs
 
         runHook postBuild
       '';
 
+      # copied from buildMavenPackage
+      # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
       installPhase = ''
         runHook preInstall
 
-        # copied from buildMavenPackage
-        # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-        find "$out/.m2/repository" -type f \( \
+        find $out -type f \( \
           -name \*.lastUpdated \
           -o -name resolver-status.properties \
           -o -name _remote.repositories \) \
           -delete
-
-        # remove .git pointers to the bare repos in _repos
-        find "$out/.gitlibs/libs" -type f -name .git -delete
-
-        # keep only the bare repo config files so the clojure CLI doesn't want to fetch the repos again
-        # but make them be empty for reproducibility
-        find "$out/.gitlibs/_repos" -type f -name "config" -print0 | while read -d "" f; do
-          rm -rf "$(dirname "$f")"
-          mkdir "$(dirname "$f")"
-          touch "$f"
-        done
-
-        # recreate .clojure with empty settings
-        rm -r "$out/.clojure"
-        mkdir -p "$out/.clojure/tools"
-        echo "{}" > "$out/.clojure/deps.edn"
-        echo "{}" > "$out/.clojure/tools/tools.edn"
 
         runHook postInstall
       '';
 
       dontFixup = true;
 
-      outputHash = "sha256-2ijBbKXKiXStWAyeLoRv8OSMoCfB2xA1TVw6xtlBPes=";
+      outputHash = "sha256-fwKeKfOIAWj9HQdXpEafZuJz5jwXNKpkS0JmuP3FXo0=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
 
-    clojureWithHome = writeShellScriptBin "clojure" ''
-      export HOME="${finalAttrs.passthru.clojureHome}"
-      export JAVA_TOOL_OPTIONS="-Duser.home=${finalAttrs.passthru.clojureHome}"
-      exec ${lib.getExe' clojure "clojure"} "$@"
+    clojureWithCache = writeShellScriptBin "clojure" ''
+      exec ${lib.getExe' clojure "clojure"} -Sdeps '{:mvn/local-repo "${finalAttrs.passthru.mavenRepo}"}' "$@"
     '';
 
     updateScript = ./update.sh;

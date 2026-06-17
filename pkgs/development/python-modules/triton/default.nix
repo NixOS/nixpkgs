@@ -42,21 +42,17 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-let
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
-in
-buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "triton";
-  version = "3.7.0";
+  version = "3.6.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
+    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
   };
 
   patches = [
@@ -67,9 +63,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
-
-    # Use our `cmakeFlags` instead and avoid downloading dependencies.
-    ./inject-nix-cmakeFlags.patch
+    # Backport of https://github.com/triton-lang/triton/pull/9628 (does not apply cleanly)
+    ./0005-add-gcn5-gfx906-target.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
@@ -95,20 +90,18 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
         --replace-fail "curr_version.group(1) != version" "False"
     ''
+    # Use our `cmakeFlags` instead and avoid downloading dependencies
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "cmake_args.extend(thirdparty_cmake_args)" \
+          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
+    ''
     # Don't fetch googletest
     + ''
       substituteInPlace cmake/AddTritonUnitTest.cmake \
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-    ''
-
-    # Hardcode the CC path so Triton's runtime JIT compilation doesn't break
-    # in environments without a compiler in PATH.
-    + ''
-      substituteInPlace python/triton/runtime/build.py \
-        --replace-fail \
-          'cc = os.environ.get("CC")' \
-          'cc = os.environ.get("CC", "${lib.getExe' effectiveStdenv.cc "cc"}")'
     ''
 
     # triton will try dlopening libcublas.so at runtime
@@ -142,7 +135,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
-    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}/lib/cmake/lld")
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
   ];
 
   buildInputs = [
@@ -166,19 +159,14 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       export MAX_JOBS="$NIX_BUILD_CORES"
     '';
 
-  # `examples/plugins` (an MLIR example dialect plugin and a unit-test helper lib) is built
-  # unconditionally with the Python module and shipped into `triton/plugins/`.
-  # It is unused at runtime and keeps a forbidden RPATH reference to the build directory, which
-  # fails the fixup phase.
-  postInstall = ''
-    rm -rf "$out/${python.sitePackages}/triton/plugins"
-  '';
-
   env = {
     TRITON_BUILD_PROTON = "OFF";
     TRITON_OFFLINE_BUILD = true;
   }
   // lib.optionalAttrs cudaSupport {
+    CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
+    CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
+
     NIX_CFLAGS_COMPILE = toString [
       # Pybind11 started generating strange errors since python 3.12. Observed only in the CUDA branch.
       # https://gist.github.com/SomeoneSerge/7d390b2b1313957c378e99ed57168219#file-gistfile0-txt-L1042
@@ -218,7 +206,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ];
 
   passthru = {
-    gpuCheck = effectiveStdenv.mkDerivation {
+    gpuCheck = stdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;
 
@@ -382,7 +370,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
               if os.environ.get("HOME", None) == "/homeless-shelter":
                 os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
               if "CC" not in os.environ:
-                os.environ["CC"] = "${lib.getExe' effectiveStdenv.cc "cc"}"
+                os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
               torch.manual_seed(0)
               size = 12345
               x = torch.rand(size, device='cuda')

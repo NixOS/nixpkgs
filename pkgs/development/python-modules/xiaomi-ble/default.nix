@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xiaomi-ble";
-  version = "1.14.3";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MUAowfbJ3vktUUDNLR5UWrbYq/xXmODwVIxv7GeB1EM=";
+    hash = "sha256-iixyZm/PjWBsaxNCZZa5TJA4eNVVhr42OV4MHHzWt7g=";
   };
 
   build-system = [ poetry-core ];

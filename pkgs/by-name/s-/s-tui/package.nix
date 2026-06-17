@@ -11,19 +11,17 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "s-tui";
-  version = "1.4.0";
-  pyproject = true;
-
-  build-system = with python3Packages; [ setuptools ];
+  version = "1.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "amanusk";
     repo = "s-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PDDT37W0x7VJ6OnkbwvPXttphD+vHDul0zmA3VY/Sao=";
+    hash = "sha256-B5KQz+/RG+IROJah0jq+2e94DtnILwY2aH9qulWzHns=";
   };
 
-  dependencies = [
+  propagatedBuildInputs = [
     python3Packages.urwid
     python3Packages.psutil
     stress

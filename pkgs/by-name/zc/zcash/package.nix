@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = "https://z.cash/";
     maintainers = with lib.maintainers; [
+      rht
       tkerber
       centromere
     ];

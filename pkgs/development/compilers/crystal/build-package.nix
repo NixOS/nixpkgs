@@ -198,16 +198,12 @@ stdenv.mkDerivation (
 
     installCheckPhase =
       args.installCheckPhase or ''
-        runHook preInstallCheck
-
         for f in $out/bin/*; do
-          if [[ $f == *.dwarf ]]; then
+          if [ $f == $out/bin/*.dwarf ]; then
             continue
           fi
           $f --help > /dev/null
         done
-
-        runHook postInstallCheck
       '';
 
     meta = {

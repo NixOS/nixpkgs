@@ -662,6 +662,7 @@ with lib.maintainers;
   python = {
     members = [
       hexa
+      natsukium
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";

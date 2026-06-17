@@ -22,7 +22,7 @@
   fetchpatch,
   buildPackages,
   nixosTests,
-  fuse3, # only needed for grub-mount
+  fuse, # only needed for grub-mount
   runtimeShell,
   zfs ? null,
   efiSupport ? false,
@@ -616,7 +616,7 @@ stdenv.mkDerivation rec {
     libusb-compat-0_1
     freetype
     lvm2
-    fuse3
+    fuse
     libtool
     bash
   ]

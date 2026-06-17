@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "2.2.3";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "pycapnp";
     tag = "v${version}";
-    hash = "sha256-WM0DR1lTlgsKpTU8QlquL0RhrqPU/cUQav6p8EP7x9o=";
+    hash = "sha256-oRgO/FuNxNMSUla+jIypD/dAvFi27TkEfCHbqovhq9I=";
   };
 
   patches = [

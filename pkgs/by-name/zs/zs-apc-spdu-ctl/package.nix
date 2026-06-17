@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "APC SPDU control utility";
-    homepage = "https://github.com/fogti/zs-apc-spdu-ctl";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;

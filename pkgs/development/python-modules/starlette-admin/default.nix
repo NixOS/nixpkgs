@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.16.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
     tag = version;
-    hash = "sha256-K6FHC7nzOjRh7O47QHveMPwspfvPChHzB6Tpyfsx02U=";
+    hash = "sha256-JVvrfbyKillkx6fOx4DEbHZoHIPxF1Gn3HzkxyJc66o=";
   };
 
   patches = [

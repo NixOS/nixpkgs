@@ -43,12 +43,10 @@ buildPythonPackage rec {
     homepage = "https://vlaci.github.io/pyperscan/";
     changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
     platforms = lib.platforms.unix;
-    license =
-      with lib.licenses;
-      OR [
-        asl20
-        mit
-      ];
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with lib.maintainers; [
       tnias
       vlaci

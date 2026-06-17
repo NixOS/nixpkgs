@@ -14,7 +14,6 @@
       canonicalizeSymlinksScript = ./canonicalize-symlinks.js;
       storePrefix = builtins.storeDir;
     };
-    meta.license = lib.licenses.mit;
   } ./npm-config-hook.sh;
 
   linkNodeModulesHook = makeSetupHook {
@@ -24,6 +23,5 @@
       script = ./link-node-modules.js;
       storePrefix = builtins.storeDir;
     };
-    meta.license = lib.licenses.mit;
   } ./link-node-modules-hook.sh;
 }

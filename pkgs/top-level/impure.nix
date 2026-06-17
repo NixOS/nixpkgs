@@ -44,6 +44,8 @@ in
   # fix-point made by Nixpkgs.
   overlays ? import ./impure-overlays.nix,
 
+  crossOverlays ? [ ],
+
   ...
 }@args:
 

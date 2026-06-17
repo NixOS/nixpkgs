@@ -122,7 +122,7 @@ in
             ];
           };
           remote-from-file-backup = {
-            inherit passwordFile pruneOpts;
+            inherit passwordFile exclude pruneOpts;
             initialize = true;
             repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
             paths = [
@@ -130,8 +130,7 @@ in
               "/opt/a_dir/a_file_2"
             ];
             dynamicFilesFrom = ''
-              # all files in /opt except for a_dir and excluded_file_*
-              find /opt -mindepth 1 -maxdepth 1 ! -name a_dir ! -name excluded_file_*
+              find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
             '';
           };
           remote-from-command-backup = {

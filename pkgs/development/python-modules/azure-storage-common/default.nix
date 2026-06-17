@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   azure-common,
   cryptography,
   python-dateutil,
@@ -11,21 +10,17 @@
   azure-storage-nspkg,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-storage-common";
   version = "2.1.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-zO3vXGcie8TWZw/9N87Bj7UpobfDpeU+QJbrDPI9xz8=";
+    inherit pname version;
+    sha256 = "ccedef5c67227bc4d6670ffd37cec18fb529a1b7c3a5e53e4096eb0cf23dc73f";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-common
     cryptography
     python-dateutil
@@ -36,12 +31,10 @@ buildPythonPackage (finalAttrs: {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.storage.common" ];
-
   meta = {
     description = "Client library for Microsoft Azure Storage services containing common code shared by blob, file and queue";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
-})
+}

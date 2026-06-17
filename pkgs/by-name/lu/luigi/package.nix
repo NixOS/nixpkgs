@@ -1,33 +1,28 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchPypi,
 }:
 
-python3Packages.python.pkgs.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "luigi";
-  version = "3.8.1";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "luigi";
-    inherit (finalAttrs) version;
-    hash = "sha256-L6XrXTR05JXeCb2WT1ApNsCPix624PPKPIppEWw40MM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-QbFIUCI8YZ2QBrMKzacz51a4g/x+YIFCBVdmRxkMluM=";
   };
 
-  build-system = with python3Packages; [
-    hatchling
-    hatch-fancy-pypi-readme
-  ];
+  build-system = [ python3.pkgs.setuptools ];
 
   pythonRelaxDeps = [ "tenacity" ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python3.pkgs; [
     python-dateutil
     tornado
     python-daemon
     tenacity
-    typing-extensions
   ];
 
   pythonImportsCheck = [ "luigi" ];

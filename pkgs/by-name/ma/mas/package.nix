@@ -5,13 +5,12 @@
   installShellFiles,
   libarchive,
   p7zip,
-  versionCheckHook,
+  testers,
+  mas,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
   version = "6.0.1";
-
-  __structuredAttrs = true;
 
   src =
     let
@@ -66,8 +65,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = mas;
+      command = "mas version";
+    };
+  };
 
   meta = {
     description = "Mac App Store command line interface";

@@ -3,14 +3,14 @@
   fetchFromGitHub,
   maven,
 }:
-maven.buildMavenPackage (finalAttrs: {
+maven.buildMavenPackage rec {
   pname = "binary-file-toolkit";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "binary-file-toolkit";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-HMzRh/Q06Ik33mEkmh5U6qLiWk7ZCEstYq3Ll/pFhXM=";
   };
 
@@ -32,4 +32,4 @@ maven.buildMavenPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ timschumi ];
   };
-})
+}

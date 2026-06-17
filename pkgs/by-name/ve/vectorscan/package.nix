@@ -9,6 +9,7 @@
   python3,
   boost,
   sqlite,
+  pcre,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     sqlite
+    pcre
   ];
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
@@ -116,13 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.vectorcamp.gr/vectorscan/";
     changelog = "https://github.com/VectorCamp/vectorscan/blob/${finalAttrs.src.rev}/CHANGELOG-vectorscan.md";
     platforms = lib.platforms.unix;
-    license =
-      with lib.licenses;
-      AND [
-        bsd3
-        bsd2
-        lib.licenses.boost
-      ];
+    license = with lib.licenses; [
+      bsd3 # and
+      bsd2 # and
+      lib.licenses.boost
+    ];
     maintainers = with lib.maintainers; [
       tnias
       vlaci

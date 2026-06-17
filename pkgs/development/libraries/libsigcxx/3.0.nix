@@ -1,22 +1,20 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchurl,
   pkg-config,
   meson,
   ninja,
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libsigc++";
-  version = "3.8.1";
+  version = "3.6.0";
 
-  src = fetchFromGitHub {
-    owner = "libsigcplusplus";
-    repo = "libsigcplusplus";
-    tag = finalAttrs.version;
-    hash = "sha256-ZV1gcq/efFaf4MkkDZP9Z1isNqwnvUWWouVwtTnpyhc=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/libsigc++/${lib.versions.majorMinor version}/libsigc++-${version}.tar.xz";
+    sha256 = "w9I7N9/W458uCfCRt3sVQfv6F8Twtr9cibrvcikIDhc=";
   };
 
   outputs = [
@@ -42,10 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
-    changelog = "https://github.com/libsigcplusplus/libsigcplusplus/blob/${finalAttrs.src.tag}/NEWS";
     description = "Typesafe callback system for standard C++";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.all;
   };
-})
+}

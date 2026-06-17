@@ -39,9 +39,7 @@ let
     coreutils
   ];
   hardeningDisable = [ "format" ];
-  env = {
-    NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
-  };
+  NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
   zod_engine = stdenv.mkDerivation {
     inherit
       version
@@ -50,7 +48,7 @@ let
       nativeBuildInputs
       buildInputs
       hardeningDisable
-      env
+      NIX_LDFLAGS
       ;
     pname = "zod-engine-engine";
     enableParallelBuilding = true;
@@ -69,7 +67,7 @@ let
       nativeBuildInputs
       buildInputs
       hardeningDisable
-      env
+      NIX_LDFLAGS
       ;
     pname = "zod-engine-map_editor";
     enableParallelBuilding = true;

@@ -1,56 +1,83 @@
 {
   lib,
+  attrs,
+  boto3,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-fancy-pypi-readme,
-  httpx,
-  pydantic,
-  typing-extensions,
-  anyio,
-  distro,
-  sniffio,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "gradient";
-  version = "3.12.1";
-  pyproject = true;
+  version = "3.10.1";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "digitalocean";
-    repo = "gradient-python";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-4BJMUxNryePXIAG92JOX7pTbDN6FQzmYRu1+2bKEwX0=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-TL9Jbo9UvQhgG9aT3wjLD8DvTY48Os04DdaUfNAwcu4=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.26.3" "hatchling"
+    substituteInPlace setup.py \
+      --replace 'attrs<=' 'attrs>=' \
+      --replace 'colorama==' 'colorama>=' \
+      --replace 'gql[requests]==3.0.0a6' 'gql' \
+      --replace 'PyYAML==5.*' 'PyYAML' \
+      --replace 'marshmallow<' 'marshmallow>=' \
+      --replace 'websocket-client==0.57.*' 'websocket-client'
   '';
 
-  nativeBuildInputs = [
-    hatchling
-    hatch-fancy-pypi-readme
+  propagatedBuildInputs = [
+    attrs
+    boto3
+    click-completion
+    click-didyoumean
+    click-help-colors
+    colorama
+    gql
+    gradient-statsd
+    gradient-utils
+    halo
+    marshmallow
+    progressbar2
+    pyopenssl
+    pyyaml
+    requests
+    requests-toolbelt
+    terminaltables
+    websocket-client
   ];
 
-  dependencies = [
-    httpx
-    pydantic
-    typing-extensions
-    anyio
-    distro
-    sniffio
-  ];
+  # Tries to use /homeless-shelter to mimic container usage, etc
+  doCheck = false;
 
-  pythonImportsCheck = [ "gradient" ];
+  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
+  # Support for marshmallow > 3
+  # pythonImportsCheck = [
+  #   "gradient"
+  # ];
 
   meta = {
-    description = "Python API library for Gradient";
+    description = "Command line interface for Gradient";
     mainProgram = "gradient";
-    homepage = "https://github.com/digitalocean/gradient-python";
-    license = lib.licenses.asl20;
+    homepage = "https://github.com/Paperspace/gradient-cli";
+    license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-})
+}

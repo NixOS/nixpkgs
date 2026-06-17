@@ -26,9 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [ gtest ];
-
-  strictDeps = true;
+  nativeCheckInputs = [ gtest ];
 
   meta = {
     changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${finalAttrs.version}/ChangeLog";

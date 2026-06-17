@@ -1,115 +1,57 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  nodejs,
-  node-gyp,
-  python3,
-  bun,
+  buildNpmPackage,
+  nodejs_22,
   pkg-config,
   anytype-heart,
   libsecret,
   electron,
   go,
   lsof,
-  protobuf,
   makeDesktopItem,
   copyDesktopItems,
-  writableTmpDirAsHomeHook,
   commandLineArgs ? "",
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.55.5";
-
-  strictDeps = true;
+  version = "0.54.11";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9myOd7LTH/NoRY4SjU7+FSSNIhDMGKRPTBOQOURk/Hs=";
+    hash = "sha256-HF7bP3Ry3djNQnFDl0v6x9hzMpSLMXyI6UBItgGT+DI=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "b96bf7b76f10e764e7a60c7f284854aaabedcec6";
-    hash = "sha256-+vkProHi25CWxG74QB5eo0Pnwj0u5vXoZeeCoXyMOv4=";
+    rev = "afa12aeb0cea6c77ce38c3e3bfd082d532948a1c";
+    hash = "sha256-YpOkmm7vW97t19twfLNExRHQvLVcrC+oDtHjwJL9dx8=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
-    inherit (finalAttrs) version src;
+  npmDepsHash = "sha256-/QWHJ2grw34LOEIDn93WDTEpQH001vVtuQgncR2SRYQ=";
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-      # https://bun.com/docs/pm/cli/install#configuring-with-environment-variables
-
-      # Bun always tries to use the fastest available installation method for the target platform. On macOS, that’s clonefile and on Linux, that’s hardlink.
-      bun install \
-        --backend=copyfile \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    dontFixup = true;
-
-    outputHash = "sha256-6IHFidjVDDzUOCRXVwjvzcLGKV6dWWS7k2jwrOuJ748=";
-    outputHashMode = "recursive";
-  };
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
   nativeBuildInputs = [
-    bun
-    nodejs
     pkg-config
     go
-    protobuf
     copyDesktopItems
-    makeWrapper
-    node-gyp
-    stdenv.cc
-    python3
   ];
+  buildInputs = [ libsecret ];
 
-  buildInputs = [
-    libsecret
+  npmFlags = [
+    # keytar needs to be built against electron's ABI
+    "--nodedir=${electron.headers}"
   ];
 
   patches = [
@@ -118,54 +60,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./0003-remove-desktop-entry.patch
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -R ${finalAttrs.node_modules}/. .
-    patchShebangs node_modules
-
-    runHook postConfigure
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    # Building keytar against electron's ABI
-    # Trying to build in temp dir, will not work due to the keytar calling the node -p require('node-addon-api').include_dir
-    # but building inside the node_modules/keytar will find the ../node-addon-api automatically
-    chmod -R u+w node_modules/keytar node_modules/node-addon-api
-    pushd node_modules/keytar
-    HOME=$(mktemp -d) node-gyp rebuild --nodedir=${electron.headers}
-    popd
-
-    substituteInPlace scripts/generate-protos.sh \
-      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
-
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
-
-    # Without this, build fails when trying to copy/write into that directory during the js bundle step
-    chmod -R u+w dist/
-
-    bash ./scripts/generate-protos.sh --from-dist
-
-    bun run build
 
     for lang in ${finalAttrs.locales}/locales/*; do
       cp "$lang" "dist/lib/json/lang/$(basename $lang)"
     done
 
-    # $HOME/.cache/go-build.
-    export GOCACHE=$(mktemp -d)
-    # Runs "go build -o dist/nativeMessagingHost ./go/nativeMessagingHost.go"
-    bun run build:nmh
+    npm run build
+    npm run build:nmh
 
     runHook postBuild
   '';
 
   # remove unnecessary files
   preInstall = ''
-    chmod u+w -R dist node_modules
+    npm prune --omit=dev
+    chmod u+w -R dist
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
   '';
 
@@ -189,7 +103,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     wrapProgram $out/lib/anytype/dist/nativeMessagingHost \
-      --prefix PATH : ${lib.makeBinPath [ lsof ]}
+       --prefix PATH : ${lib.makeBinPath [ lsof ]}
 
     runHook postInstall
   '';

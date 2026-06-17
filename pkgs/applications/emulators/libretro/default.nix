@@ -141,8 +141,6 @@ lib.makeScope newScope (self: {
 
   picodrive = self.callPackage ./cores/picodrive.nix { };
 
-  pokemini = self.callPackage ./cores/pokemini.nix { };
-
   play = self.callPackage ./cores/play.nix { };
 
   ppsspp = self.callPackage ./cores/ppsspp.nix { };

@@ -5,6 +5,7 @@
   alsa-lib,
   autoPatchelfHook,
   copyDesktopItems,
+  dbus-glib,
   # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
   # https://repo.palemoon.org/MoonchildProductions/UXP/issues/2523
   ffmpeg_6,
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "34.3.0";
+  version = "34.2.2";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    dbus-glib
     gtk2-x11
     libxt
     (lib.getLib stdenv.cc.cc)
@@ -171,11 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-yoZqZJLxgDIxIeyrn6VW6c6iKpU84ZDsJbCz3yf4gdU=";
+          hash = "sha256-KUlok5T+gf1qgRdivCx2uLijyO0bfurLHfrIgELK//A=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-QhrW1ZD1ouPvWJLvnIEMHgTViGNBshFlT6Ax0l0xGv8=";
+          hash = "sha256-iSQDrlLkTxHNFFZC5X/OKMem2Zk213it1Ki7ADw+Opg=";
         };
       };
 

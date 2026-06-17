@@ -4,7 +4,6 @@
   fetchFromGitHub,
   packaging,
   pybrowsers,
-  pytest-cov-stub,
   pytestCheckHook,
   python-dotenv,
   requests,
@@ -12,16 +11,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "webdriver-manager";
-  version = "4.1.2";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-UQeiBtql0+IEG0iY0XoY+iqKqMB9Wmt+NxH7coxrJCw=";
+    tag = "v${version}";
+    hash = "sha256-ZmrQa/2vPwYgSvY3ZUvilg4RizVXpu5hvJJBQVXkK8E=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -36,7 +35,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pybrowsers
-    pytest-cov-stub
     pytestCheckHook
     selenium
   ];
@@ -64,9 +62,9 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module to manage the binary drivers for different browsers";
     homepage = "https://github.com/SergeyPirogov/webdriver_manager/";
-    changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-})
+}

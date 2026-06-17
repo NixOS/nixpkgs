@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "socid-extractor";
-  version = "0.1.0";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = "socid-extractor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZYLoHFyRnSHP3Od/cMOx690KFbJoEYK3cICjzbSfLm0=";
+    hash = "sha256-eLdJw2teMG/DlG8F8p3nm+L2+iY1zD2QbNHjWAyjtPY=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];

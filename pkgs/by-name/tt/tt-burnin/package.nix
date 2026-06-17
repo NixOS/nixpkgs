@@ -6,15 +6,20 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-burnin";
-  version = "0.4.0";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-burnin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NI32BerBCuMMulB2fsseeoWI50iklpNqMyTs4BArl2A=";
+    hash = "sha256-/tnCLhA6zeUkVYhDtdohrZODwHxNTZbnsWgY2Gt16DQ=";
   };
+
+  # Remove when https://github.com/NixOS/nixpkgs/pull/444714 is merged
+  pythonRelaxDeps = [
+    "pyluwen"
+  ];
 
   build-system = with python3Packages; [
     setuptools

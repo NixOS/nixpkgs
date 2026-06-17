@@ -2,21 +2,26 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  installFonts,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-
+stdenvNoCC.mkDerivation rec {
   pname = "mononoki";
   version = "1.6";
 
   src = fetchzip {
-    url = "https://github.com/madmalik/mononoki/releases/download/${finalAttrs.version}/mononoki.zip";
+    url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
     stripRoot = false;
     hash = "sha256-HQM9rzIJXLOScPEXZu0MzRlblLfbVVNJ+YvpONxXuwQ=";
   };
 
-  nativeBuildInputs = [ installFonts ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/mononoki
+    cp * $out/share/fonts/mononoki
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://github.com/madmalik/mononoki";
@@ -24,4 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-})
+}

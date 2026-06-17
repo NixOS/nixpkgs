@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     libxmlxx3
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   buildFlags = [ "gtk3" ];
 

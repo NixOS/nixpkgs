@@ -7,18 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "braintree";
-  version = "4.44.0";
+  version = "4.41.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "braintree";
     repo = "braintree_python";
-    tag = finalAttrs.version;
-    hash = "sha256-Dsmfqy/thftJe3ovh/Y71gIz7w+mv/lDUhlsb1CsjtA=";
+    rev = version;
+    hash = "sha256-5rTYRzlx/XueL6vF0/kM73bgN/QjvM55ZSLIWNI8YiQ=";
   };
 
   build-system = [ setuptools ];
@@ -29,8 +27,9 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "braintree" ];
 
-  # Most integration tests require a running Braintree gateway.
   enabledTestPaths = [
+    "tests/"
+    "tests/fixtures"
     "tests/unit"
     "tests/integration/test_credentials_parser.py"
   ];
@@ -41,4 +40,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

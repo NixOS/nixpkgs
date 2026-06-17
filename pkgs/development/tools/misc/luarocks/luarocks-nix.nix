@@ -41,7 +41,6 @@ luarocks_bootstrap.overrideAttrs (old: {
       maintainers
       platforms
       ;
-    homepage = "https://github.com/nix-community/luarocks-nix";
     mainProgram = "luarocks";
   };
 })

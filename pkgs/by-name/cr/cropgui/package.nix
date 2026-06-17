@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromCodeberg,
+  fetchFromGitea,
   makeWrapper,
   libjpeg,
   exiftool,
@@ -11,7 +11,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cropgui";
   version = "0.9";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "jepler";
     repo = "cropgui";
     tag = "v${finalAttrs.version}";

@@ -146,5 +146,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ martinetd ];
+  meta.maintainers = with lib.maintainers; [ euxane ];
 }

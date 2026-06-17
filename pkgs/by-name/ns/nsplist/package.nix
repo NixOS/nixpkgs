@@ -35,7 +35,6 @@ stdenv.mkDerivation {
   meta = {
     maintainers = [ ];
     description = "Parses .plist files";
-    homepage = "https://github.com/matthewbauer/NSPlist";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

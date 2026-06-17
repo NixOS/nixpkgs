@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qt5,
+  libsForQt5,
   readline,
   tcl,
   python3,
@@ -25,20 +25,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
-    qt5.qmake
-    qt5.qttools
-    qt5.wrapQtAppsHook
-  ];
+  ]
+  ++ (with libsForQt5.qt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
   buildInputs = [
     readline
     tcl
     python3
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtdeclarative
-    qt5.qtscript
-  ];
+  ]
+  ++ (with libsForQt5.qt5; [
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtscript
+  ]);
 
   qmakeFlags = [
     "./SQLiteStudio3"

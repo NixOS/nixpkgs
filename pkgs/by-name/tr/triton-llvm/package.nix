@@ -68,9 +68,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "23.0.0-unstable-2026-01-29"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
-
-  __structuredAttrs = true;
+  version = "22.0.0-unstable-2025-09-26"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   outputs = [
     "out"
@@ -86,8 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "ac5dc54d509169d387fcfd495d71853d81c46484";
-    hash = "sha256-tA1KcZqyPsgfxQs9tbNhX11oFcNGJefxWmfCpYqdI9M=";
+    rev = "f6ded0be897e2878612dd903f7e8bb85448269e5";
+    hash = "sha256-T76zHZZ2bp3Ye9GTV+MgbKqMbtmMGElMFsWuCkiWqrM=";
   };
 
   nativeBuildInputs = [

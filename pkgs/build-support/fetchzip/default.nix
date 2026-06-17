@@ -106,11 +106,9 @@ lib.extendMkDerivation {
       )
       + ''
         ${postFetch}
-        ${
-          if extraPostFetch != "" then
-            lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." extraPostFetch
-          else
-            extraPostFetch
+        ${lib.warnIf (extraPostFetch != "")
+          "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'."
+          extraPostFetch
         }
         chmod 755 "$out"
       '';

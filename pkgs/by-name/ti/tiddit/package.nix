@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tiddit";
-  version = "3.9.5";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SciLifeLab";
     repo = "TIDDIT";
     tag = "TIDDIT-${finalAttrs.version}";
-    hash = "sha256-6uJZzetqRS0czX4qjjPgiSaPun7BkrPYllDdFWNK84k=";
+    hash = "sha256-OeqVQJDw0fmSDWIGab2qtTJCzZxqLY2XzRqaTRuPIdI=";
   };
 
   build-system = with python3Packages; [

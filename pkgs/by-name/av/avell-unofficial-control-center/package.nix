@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "avell-unofficial-control-center";
   version = "1.0.4";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rodgomesc";
@@ -17,15 +17,13 @@ python3Packages.buildPythonApplication {
     sha256 = "1qz1kv7p09nxffndzz9jlkzpfx26ppz66f8603zyamjq9dqdmdin";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  # No tests included
+  doCheck = false;
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
     pyusb
     elevate
   ];
-
-  # No tests included
-  doCheck = false;
 
   meta = {
     homepage = "https://github.com/rodgomesc/avell-unofficial-control-center";

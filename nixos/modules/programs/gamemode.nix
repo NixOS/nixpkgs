@@ -15,8 +15,6 @@ in
     programs.gamemode = {
       enable = lib.mkEnableOption "GameMode to optimise system performance on demand";
 
-      package = lib.mkPackageOption pkgs "gamemode" { };
-
       enableRenice =
         lib.mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness"
         // {
@@ -55,27 +53,24 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ cfg.package ];
+      systemPackages = [ pkgs.gamemode ];
       etc."gamemode.ini".source = configFile;
     };
 
     security = {
-      polkit = {
-        enable = true;
-        enablePkexecWrapper = lib.mkDefault true;
-      };
+      polkit.enable = true;
       wrappers = lib.mkIf cfg.enableRenice {
         gamemoded = {
           owner = "root";
           group = "root";
-          source = "${cfg.package}/bin/gamemoded";
+          source = "${pkgs.gamemode}/bin/gamemoded";
           capabilities = "cap_sys_nice+ep";
         };
       };
     };
 
     systemd = {
-      packages = [ cfg.package ];
+      packages = [ pkgs.gamemode ];
       user.services.gamemoded = {
         # Use pkexec from the security wrappers to allow users to
         # run libexec/cpugovctl & libexec/gpuclockctl as root with

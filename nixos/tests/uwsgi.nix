@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "uwsgi";
-  meta = {
-    maintainers = [ ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ lnl7 ];
   };
 
   nodes.machine =

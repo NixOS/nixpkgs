@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   perl,
+  expat,
   fontconfig,
   freetype,
   libxrender,
@@ -10,7 +11,6 @@
   libx11,
   libsm,
   libice,
-  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,12 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8pZ/HAVV341K6QRDUC0UzzO2rGW2AvSZ++Pp445V27w=";
   };
 
-  nativeBuildInputs = [
-    perl
-    which
-  ];
-
   buildInputs = [
+    perl
+    expat
     fontconfig
     freetype
     libice
@@ -37,11 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrender
   ];
 
-  strictDeps = true;
-  __structuredAttrs = true;
-  enableParallelBuilding = true;
-
-  env.CFLAGS = "-fgnu89-inline";
+  env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
   meta = {
     homepage = "https://www.logicalshift.co.uk/unix/zoom/";
@@ -56,6 +49,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     mainProgram = "zoom";
-    broken = true;
   };
 })

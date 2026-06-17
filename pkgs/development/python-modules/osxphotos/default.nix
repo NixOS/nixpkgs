@@ -17,7 +17,6 @@
   pathvalidate,
   pip,
   ptpython,
-  psutil,
   pytimeparse2,
   pyyaml,
   requests,
@@ -42,29 +41,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "osxphotos";
-  version = "0.75.9";
+  version = "0.75.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9oQ9yLNHACLgOegNRcuysGIo8cbYLhlkNa41Y+YHFTM=";
+    hash = "sha256-aX+4wgjqWxoIez/pJ7ioes5OTHFijztSFTvTxdND6Eo=";
   };
 
-  pythonRelaxDeps = [
-    "bitmath"
-    "mako"
-    "more-itertools"
-    "objexplore"
-    "rich"
-    "textx"
-    "tenacity"
-    "whenever"
-  ];
-
   build-system = [ setuptools ];
-
   dependencies = [
     beautifulsoup4
     bitmath
@@ -77,13 +64,12 @@ buildPythonPackage (finalAttrs: {
     packaging
     pathvalidate
     pip
-    psutil
     ptpython
     pytimeparse2
     pyyaml
     requests
-    rich
     rich-theme-manager
+    rich
     shortuuid
     strpdatetime
     tenacity
@@ -97,8 +83,16 @@ buildPythonPackage (finalAttrs: {
     xdg-base-dirs
   ];
 
-  pythonImportsCheck = [ "osxphotos" ];
+  pythonRelaxDeps = [
+    "mako"
+    "more-itertools"
+    "objexplore"
+    "rich"
+    "textx"
+    "tenacity"
+  ];
 
+  pythonImportsCheck = [ "osxphotos" ];
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock

@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bmm";
-  version = "0.3.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dhth";
     repo = "bmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SASf13BFNz4ZlKJJk6O/Euv+wA26ov0QKsaEKRc24d0=";
+    hash = "sha256-sfAUvvZ/LKOXfnA0PB3LRbPHYoA+FJV4frYU+BpC6WI=";
   };
 
-  cargoHash = "sha256-AOGNMFAr32WZnyw5nNQa6svLpSc3UQonZ7RjZ5zap1I=";
+  cargoHash = "sha256-+o8bYi4Pe9zwiDBUMllpF+my7gp3iLX0+DntFtN7PoI=";
 
   doInstallCheck = true;
 

@@ -59,14 +59,14 @@
   xmltodict,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "scancode-toolkit";
   version = "32.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scancode_toolkit";
-    inherit (finalAttrs) version;
+    inherit version;
     hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
@@ -146,12 +146,11 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
-    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20
       cc-by-40
     ];
-    maintainers = with lib.maintainers; [ eljamm ];
-    teams = with lib.teams; [ ngi ];
+    maintainers = [ ];
   };
-})
+}

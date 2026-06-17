@@ -51,6 +51,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "gshogi";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.ciil ];
   };
 })

@@ -1,7 +1,9 @@
 {
-  lib,
-  python3Packages,
+  buildPythonApplication,
   fetchPypi,
+  pandocfilters,
+  panflute,
+  lib,
   pandoc,
   pandoc-acro,
   texliveTeTeX,
@@ -17,11 +19,11 @@ let
     hash = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
   };
 in
-python3Packages.buildPythonApplication {
+buildPythonApplication {
   format = "setuptools";
   inherit pname version src;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pandocfilters
     panflute
   ];

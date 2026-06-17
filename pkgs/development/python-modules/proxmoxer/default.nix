@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "proxmoxer";
   version = "2.3.0";
   pyproject = true;
@@ -18,8 +18,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "proxmoxer";
     repo = "proxmoxer";
-    tag = finalAttrs.version;
-    hash = "sha256-v/QqNCzkcYk2pqr9tTeyvEEeXt4nzqooHAQEIiJitZ4=";
+    rev = "cf1bcde696537c74ef00d8e71fb86735fb4c2c79";
+    hash = "sha256-h5Sla7/4XiZSGwKstyiqs/T2Qgi13jI9YMVPqDcF3sA=";
   };
 
   build-system = [ setuptools ];
@@ -53,8 +53,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python wrapper for Proxmox API v2";
     homepage = "https://github.com/proxmoxer/proxmoxer";
-    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.bsd3;
+    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${version}";
+    license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -5,12 +5,12 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs-slim_22,
+  nodejs_22,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs-slim_22
+    nodejs_22
     pnpmConfigHook
     pnpm'
   ];
 
   buildInputs = [
-    nodejs-slim_22
+    nodejs_22
   ];
 
   patchPhase = ''

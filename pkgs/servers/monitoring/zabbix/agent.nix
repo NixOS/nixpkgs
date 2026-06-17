@@ -5,6 +5,7 @@
   pkg-config,
   libiconv,
   openssl,
+  pcre,
   pcre2,
 }:
 
@@ -25,14 +26,14 @@ import ./versions.nix (
     buildInputs = [
       libiconv
       openssl
-      pcre2
+      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
     ];
 
     configureFlags = [
       "--enable-agent"
       "--enable-ipv6"
       "--with-iconv"
-      "--with-libpcre2"
+      "--with-libpcre"
       "--with-openssl=${openssl.dev}"
     ];
     makeFlags = [

@@ -1,13 +1,19 @@
 {
   lib,
   stdenv,
-  python3Packages,
   fetchpatch,
   fetchFromGitHub,
+  buildPythonApplication,
+  click,
+  pydantic,
+  toml,
+  watchdog,
+  pytestCheckHook,
+  pytest-cov-stub,
   rsync,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "remote-exec";
   version = "1.13.3";
   format = "setuptools";
@@ -34,7 +40,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '"mremote' '#"mremote'
   '';
 
-  dependencies = with python3Packages; [
+  dependencies = [
     click
     pydantic
     toml
@@ -47,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     rsync
   ];
 
-  checkInputs = with python3Packages; [
+  checkInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];

@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-attachments";
   version = "11.2.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 

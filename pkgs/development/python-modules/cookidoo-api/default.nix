@@ -12,16 +12,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "cookidoo-api";
-  version = "0.17.2";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "cookidoo-api";
-    tag = finalAttrs.version;
-    hash = "sha256-3o+UZmS2Mfymqgl7qa1MSani2O/fiEfvQ0GQp7MBOOg=";
+    tag = version;
+    hash = "sha256-oMosKW6MjeKPqSjF0+dc7CrNp4/5qlRoEY01HZ4sqog=";
   };
 
   build-system = [ setuptools ];
@@ -42,10 +42,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/miaucl/cookidoo-api/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/miaucl/cookidoo-api/releases/tag/${src.tag}";
     description = "Unofficial package to access Cookidoo";
     homepage = "https://github.com/miaucl/cookidoo-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-})
+}

@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     teams = [ lib.teams.freedesktop ];
     pkgConfigModules = [
       "poppler"

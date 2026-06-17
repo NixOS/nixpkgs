@@ -27,9 +27,6 @@ assert enableCuda -> singlePrec;
 let
   inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 
-  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else stdenv;
-  inherit (effectiveStdenv) hostPlatform;
-
   # Select reasonable defaults for all major platforms
   # The possible values are defined in CMakeLists.txt:
   # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
@@ -38,15 +35,15 @@ let
     x:
     if (cpuAcceleration != null) then
       x
-    else if hostPlatform.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
       "SSE2"
-    else if hostPlatform.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "SSE4.1"
-    else if hostPlatform.system == "x86_64-darwin" then
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
-    else if hostPlatform.system == "aarch64-darwin" then
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
       "ARM_NEON_ASIMD"
-    else if hostPlatform.system == "aarch64-linux" then
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
       "None";
@@ -59,17 +56,17 @@ let
       }
     else
       {
-        version = "2026.2";
-        hash = "sha256-0n5EVegkYXeVI2Z5hjGg2tny4fVnQApsuFShaNzAUN0=";
+        version = "2026.1";
+        hash = "sha256-2VoxP1bbfgXuOiHlD1gv3uUXbC9guQC6skYf2Vxegb4=";
       };
 
 in
-effectiveStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gromacs";
   version = source.version;
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${finalAttrs.version}.tar.gz";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
     inherit (source) hash;
   };
 
@@ -77,13 +74,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Fix pkg-config paths for the version-specific gromacs variant.
     (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch)
   ]
-  ++ lib.optionals enablePlumed [
+  ++ lib.optional enablePlumed (
     # Backport gcc 15 cstdint include fix.
-    (fetchpatch2 {
+    fetchpatch2 {
       url = "https://gitlab.com/gromacs/gromacs/-/commit/e0180bc37f3111d7dcaffca3854c088ed910c3b4.diff";
       hash = "sha256-TvTzfb/RETAzFpYfFFr6/L5GV1Pile16gVJhNigwAB4=";
-    })
-  ];
+    }
+  );
 
   postPatch = lib.optionalString enablePlumed ''
     plumed patch -p -e gromacs-${source.version}
@@ -98,7 +95,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ]
-  ++ lib.optionals enablePlumed [ plumed ]
+  ++ lib.optional enablePlumed plumed
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
@@ -108,34 +105,48 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     blas
     lapack
   ]
-  ++ lib.optionals enableMpi [ mpi ]
+  ++ lib.optional enableMpi mpi
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
   ]
-  ++ lib.optionals hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  propagatedBuildInputs = lib.optionals enableMpi [ mpi ];
-  propagatedUserEnvPkgs = lib.optionals enableMpi [ mpi ];
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
   cmakeFlags = [
     (lib.cmakeBool "GMX_HWLOC" true)
-    (lib.cmakeFeature "GMX_SIMD" (SIMD cpuAcceleration))
-    (lib.cmakeBool "GMX_OPENMP" true)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-
-    (lib.cmakeBool "GMX_DOUBLE" (!singlePrec))
-    (lib.cmakeBool "GMX_DEFAULT_SUFFIX" singlePrec)
-
-    (lib.cmakeBool "GMX_MPI" enableMpi)
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
   ]
-  ++ lib.optionals enableMpi [
-    (lib.cmakeBool "GMX_THREAD_MPI" false)
-  ]
+  ++ (
+    if singlePrec then
+      [
+        "-DGMX_DOUBLE=OFF"
+      ]
+    else
+      [
+        "-DGMX_DOUBLE=ON"
+        "-DGMX_DEFAULT_SUFFIX=OFF"
+      ]
+  )
+  ++ (
+    if enableMpi then
+      [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+    else
+      [
+        "-DGMX_MPI:BOOL=FALSE"
+      ]
+  )
   ++ lib.optionals enableCuda [
-    (lib.cmakeFeature "GMX_GPU" "CUDA")
+    "-DGMX_GPU=CUDA"
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
     # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
@@ -175,4 +186,4 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       markuskowa
     ];
   };
-})
+}

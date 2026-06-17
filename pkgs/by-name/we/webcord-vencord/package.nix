@@ -21,7 +21,6 @@
     inherit (old.meta) license mainProgram platforms;
 
     description = "Webcord with Vencord web extension";
-    homepage = "https://github.com/SpacingBat3/WebCord";
     maintainers = with lib.maintainers; [
       FlafyDev
       NotAShelf

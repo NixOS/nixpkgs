@@ -7,13 +7,13 @@
 
 buildGo126Module (finalAttrs: {
   pname = "thruster";
-  version = "0.1.21";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "basecamp";
     repo = "thruster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gFYVbvcXpy03rddB3MbYeT6V1Iex2TtdpC2VeUhO6vo=";
+    hash = "sha256-ze2jNN+JnXrpRKrh/oskO2n6dmj6F6czU2d62NrOJEY=";
   };
 
   vendorHash = "sha256-i5u1quR5V0ceFwRDW0Vym+9/dFUwzp9Wc1JrM0KGgY8=";

@@ -1,48 +1,43 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   python3,
   yubikey-manager,
-  nix-update-script,
+  gitUpdater,
   cacert,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gam";
-  version = "7.43.04";
+  version = "7.21.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "GAM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-toAYDYkgBuhHaUbMnhSWPRDkhB5C/a0xQVMPTZj9xXM=";
+    hash = "sha256-Xj9GTNVuRddu3YQtXD/+yM/MNMxXUkfprtIFAm9SnA4=";
   };
 
   build-system = [ python3.pkgs.hatchling ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      arrow
-      chardet
-      cryptography
-      filelock
-      google-api-python-client
-      google-auth
-      google-auth-httplib2
-      google-auth-oauthlib
-      httplib2
-      lxml
-      passlib
-      pathvalidate
-      pysocks
-      yubikey-manager
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      distro
-    ];
+  dependencies = with python3.pkgs; [
+    arrow
+    chardet
+    cryptography
+    distro
+    filelock
+    google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
+    httplib2
+    lxml
+    passlib
+    pathvalidate
+    python-dateutil
+    yubikey-manager
+  ];
 
   # Use XDG-ish dirs for configuration. These would otherwise be in the gam
   # package.
@@ -63,7 +58,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "gam" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Command line management for Google Workspace";

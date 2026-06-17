@@ -238,11 +238,11 @@ in
     '';
 
     systemd.settings.Manager = managerSettings;
-    systemd.user.settings.Manager = {
+    systemd.user.extraConfig = ''
       # Allow very slow start
-      DefaultTimeoutStartSec = 300;
-      DefaultDeviceTimeoutSec = 300;
-    };
+      DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 

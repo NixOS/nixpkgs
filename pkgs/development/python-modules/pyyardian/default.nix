@@ -7,21 +7,24 @@
   wheel,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pyyardian";
-  version = "1.4.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h3l1o5";
     repo = "pyyardian";
-    tag = finalAttrs.version;
-    hash = "sha256-UKQajfgCA2wJhsc9Nu7kdi0X2LjptdXg/ZvDna6yFYw=";
+    tag = version;
+    hash = "sha256-JBb62pFDuVcXIGRc6UOp5/ciUtbGm4XnKZjt1icF/jQ=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
-  dependencies = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require network access
   doCheck = false;
@@ -31,8 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module for interacting with the Yardian irrigation controller";
     homepage = "https://github.com/h3l1o5/pyyardian";
-    changelog = "https://github.com/aeon-matrix/pyyardian/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

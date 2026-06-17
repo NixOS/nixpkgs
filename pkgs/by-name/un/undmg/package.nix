@@ -41,7 +41,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/matthewbauer/undmg";
     license = lib.licenses.gpl3;
     mainProgram = "undmg";
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      lnl7
     ];
     platforms = lib.platforms.all;
   };

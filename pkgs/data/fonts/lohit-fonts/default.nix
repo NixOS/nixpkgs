@@ -131,6 +131,7 @@ let
         homepage = "https://pagure.io/lohit";
         maintainers = [
           lib.maintainers.mathnerd314
+          lib.maintainers.ttuegel
         ];
         # Set a non-zero priority to allow easy overriding of the
         # fontconfig configuration files.

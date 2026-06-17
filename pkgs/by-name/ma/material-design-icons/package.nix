@@ -3,27 +3,31 @@
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
-  installFonts,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
   version = "7.4.47";
-
-  outputs = [
-    "out"
-    "webfont"
-  ];
 
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };
 
-  nativeBuildInputs = [ installFonts ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/fonts/"{eot,truetype,woff,woff2}
+    cp fonts/*.eot "$out/share/fonts/eot/"
+    cp fonts/*.ttf "$out/share/fonts/truetype/"
+    cp fonts/*.woff "$out/share/fonts/woff/"
+    cp fonts/*.woff2 "$out/share/fonts/woff2/"
+
+    runHook postInstall
+  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -42,4 +46,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       dixslyf
     ];
   };
-})
+}

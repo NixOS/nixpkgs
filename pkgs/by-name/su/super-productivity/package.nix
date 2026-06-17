@@ -78,6 +78,7 @@ buildNpmPackage rec {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     multitrandata
   ];
 
-  env.NIX_LDFLAGS = "-lbtree";
+  NIX_LDFLAGS = "-lbtree";
 
   patchPhase = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \

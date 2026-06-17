@@ -1,10 +1,14 @@
 {
   lib,
-  python3Packages,
+  buildPythonApplication,
   fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pynput,
+  xdg-base-dirs,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+buildPythonApplication (finalAttrs: {
   pname = "bitwarden-menu";
   version = "0.4.5";
   pyproject = true;
@@ -15,12 +19,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-vUlNqSVdGhfN5WjDjf1ub32Y2WoBndIdFzfCNwo5+Vg=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pynput
     xdg-base-dirs
   ];

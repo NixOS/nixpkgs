@@ -5,7 +5,7 @@
   lynx,
   makeBinaryWrapper,
   ncurses,
-  pcre2,
+  pcre,
   perl,
   perlPackages,
   stdenv,
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wml";
-  version = "2.32.0-unstable-2026-05-08";
+  version = "2.32.0-unstable-2025-12-23";
 
   src = fetchFromGitHub {
     owner = "thewml";
     repo = "website-meta-language";
-    rev = "673e78b37887f4d40c422759d634913c52e7334d";
-    hash = "sha256-rAxVha2Y16tEF+rLqebbAgBVPNrxYhNhvXnQ6/Oq1bg=";
+    rev = "de200ecef0b2a64553799b1d83dfa65580d0bc16";
+    hash = "sha256-okeDaCX4Pp5qVFfHmaz+keagX6vgzFTtGoiim/pW6IA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = perlDeps ++ [
     ncurses
-    pcre2
+    pcre
     perl
   ];
 

@@ -39,7 +39,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Fontconfig bindings for OCaml";
-    homepage = "https://github.com/flh/ocaml-fontconfig";
     license = lib.licenses.gpl2Plus;
     platforms = ocaml.meta.platforms;
     maintainers = with lib.maintainers; [ vbgl ];

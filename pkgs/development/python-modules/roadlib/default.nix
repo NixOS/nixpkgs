@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  cbor2,
   cryptography,
   buildPythonPackage,
   fetchPypi,
@@ -11,22 +10,19 @@
   sqlalchemy,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "roadlib";
-  version = "1.7.0";
+  version = "1.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-al1FnLcKAFWRY43weXtsS8DN5pXCO1qFUw1vwLfZvGM=";
+    inherit pname version;
+    hash = "sha256-WKlbYTIw7A5d4UCxeFgtQ1/dTecqQVzSheImnrb2Hmw=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    cbor2
     cryptography
     pyjwt
     requests
@@ -48,4 +44,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     runHook postPatch
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
-
   nativeBuildInputs = [
     makeWrapper
   ];

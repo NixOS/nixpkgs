@@ -13,10 +13,12 @@ let
     stdenv
     fetchurl
     fetchpatch
+    fetchpatch2
     pkg-config
     intltool
     glib
     fetchFromGitHub
+    fetchFromGitLab
     ;
 
   # We cannot use gimp from the arguments directly, or it would be shadowed by the one
@@ -142,7 +144,7 @@ lib.makeScope pkgs.newScope (
       installTargets = [ "install-admin" ];
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
+        broken = gimp.majorVersion != "2.0";
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
         license = lib.licenses.gpl2Plus;
@@ -166,7 +168,7 @@ lib.makeScope pkgs.newScope (
       '';
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
+        broken = gimp.majorVersion != "2.0";
         description = "Gimp plug-in for the farbfeld image format";
         homepage = "https://github.com/ids1024/gimp-farbfeld";
         license = lib.licenses.mit;
@@ -206,7 +208,7 @@ lib.makeScope pkgs.newScope (
       '';
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
+        broken = gimp.majorVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
         license = with lib.licenses; [ gpl3Plus ];
@@ -263,8 +265,7 @@ lib.makeScope pkgs.newScope (
       ];
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
-        homepage = "https://github.com/lmanul/gimp-texturize";
+        broken = gimp.majorVersion != "2.0";
       };
     };
 
@@ -292,7 +293,7 @@ lib.makeScope pkgs.newScope (
       installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
+        broken = gimp.majorVersion != "2.0";
       };
     };
 
@@ -321,8 +322,7 @@ lib.makeScope pkgs.newScope (
       ];
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
-        homepage = "https://github.com/carlobaldassi/gimp-lqr-plugin";
+        broken = gimp.majorVersion != "2.0";
       };
     };
 
@@ -356,7 +356,7 @@ lib.makeScope pkgs.newScope (
     ";
 
       meta = {
-        broken = gimp.apiVersion != "2.0";
+        broken = gimp.majorVersion != "2.0";
         description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
         homepage = "http://lensfun.sebastiankraft.net/";
@@ -369,8 +369,7 @@ lib.makeScope pkgs.newScope (
     # =============== simple script files ====================
 
     lightning = scriptDerivation {
-      pname = "Lightning";
-      version = "0-unstable-2017-08-25";
+      name = "Lightning";
       src = fetchurl {
         url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
         sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";

@@ -1,24 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  curl-cffi,
   fetchFromGitHub,
   garth,
   pdm-backend,
   requests,
-  ua-generator,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "garminconnect";
-  version = "0.3.5";
+  version = "0.2.40";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     tag = finalAttrs.version;
-    hash = "sha256-ncQuZq9W94SGoxoLHhyuEW8qMOPqvCCTIi+56k7vOG8=";
+    hash = "sha256-EAmKrOmnJFn+vTfmAprd5onqW/uyOe/shSB1u0HVrIE=";
   };
 
   pythonRelaxDeps = [ "garth" ];
@@ -26,10 +24,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ pdm-backend ];
 
   dependencies = [
-    curl-cffi
     garth
     requests
-    ua-generator
   ];
 
   # Tests require a token

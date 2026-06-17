@@ -6,21 +6,23 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "sonos-websocket";
-  version = "0.2.0";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "sonos-websocket";
-    tag = finalAttrs.version;
-    hash = "sha256-Yf6osDW7+PYalj3bK7+wF2RotCVlcLJD1ulqLcxrdMU=";
+    tag = version;
+    hash = "sha256-1sgYLwIW7VWnHJGsfIQ95AGZ5j/DPMKQr5n7F+/MsuY=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+  ];
 
   # Module has no tests
   doCheck = false;
@@ -30,8 +32,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library to communicate with Sonos devices over websockets";
     homepage = "https://github.com/jjlawren/sonos-websocket";
-    changelog = "https://github.com/jjlawren/sonos-websocket/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/jjlawren/sonos-websocket/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

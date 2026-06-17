@@ -14,22 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fence";
-  version = "0.1.60";
+  version = "0.1.58";
 
   src = fetchFromGitHub {
-    owner = "fencesandbox";
+    owner = "Use-Tusk";
     repo = "fence";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4yRfU6fCTGOcA9IeFs9Sk9n1PqXi7E++reVDPlCwS1k=";
+    hash = "sha256-ACe3N4bXYJW6QDQHtRChFWOTXTZTbEUbZ4d8cuFRqMY=";
   };
 
-  vendorHash = "sha256-rZ+ArTdr5GbW+nRzglNgxzsXjuTlTA0uInNWXgAVurM=";
-
-  __structuredAttrs = true;
-
-  subPackages = [
-    "cmd/fence"
-  ];
+  vendorHash = "sha256-sEGLnYC4gMo5jPCZxBXra3pmRigaq4bDcVFd52ru7rQ=";
 
   ldflags = [
     "-s"
@@ -76,8 +70,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Lightweight, container-free sandbox for running commands with network and filesystem restrictions";
-    homepage = "https://fencesandbox.com";
-    changelog = "https://github.com/jy-tan/fence/releases";
+    homepage = "https://github.com/Use-Tusk/fence";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dwt ];
     mainProgram = "fence";

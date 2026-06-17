@@ -2,26 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   requests,
   python,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "ciscomobilityexpress";
   version = "1.0.2";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-2HhyRVmOg3GoO6pNsd+UnYqULEPxNFT6Ju47CcPMr8A=";
+    inherit pname version;
+    sha256 = "d8787245598e8371a83baa4db1df949d8a942c43f13454fa26ee3b09c3ccafc0";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   # tests directory is set up, but has no tests
   checkPhase = ''
@@ -36,4 +31,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
   };
-})
+}

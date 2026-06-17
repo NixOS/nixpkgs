@@ -2,6 +2,7 @@
   deno,
   runCommand,
   lib,
+  testers,
 }:
 let
   testDenoRun =

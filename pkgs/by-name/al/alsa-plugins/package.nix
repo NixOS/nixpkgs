@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Various plugins for ALSA";
-    homepage = "https://alsa-project.org/";
+    homepage = "http://alsa-project.org/";
 
     license = with lib.licenses; [
       lgpl21Plus
@@ -46,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus # attributes.m4 & usb_stream.h
     ];
 
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -2,28 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pyparsing,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bibtexparser";
   version = "1.4.4";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
-    repo = "python-${finalAttrs.pname}";
-    tag = "v${finalAttrs.version}";
+    repo = "python-${pname}";
+    tag = "v${version}";
     hash = "sha256-9zLJZAk2IBYTL7lACh6erY7A44XFZGJCr8dcpYlwKRI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyparsing ];
+  propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,4 +32,4 @@ buildPythonPackage (finalAttrs: {
       bsd3
     ];
   };
-})
+}

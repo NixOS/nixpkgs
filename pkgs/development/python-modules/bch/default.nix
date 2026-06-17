@@ -2,30 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   click,
   click-log,
   paho-mqtt,
   pyaml,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bch";
   version = "1.2.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-control-tool";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/C+NbJ0RrWZ/scv/FiRBTh4h7u0xS4mHVDWQ0WwmlEY=";
+    rev = "v${version}";
+    sha256 = "/C+NbJ0RrWZ/scv/FiRBTh4h7u0xS4mHVDWQ0WwmlEY=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     click
     click-log
     paho-mqtt
@@ -33,8 +28,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace bch/cli.py setup.py \
-      --replace-fail "@@VERSION@@" "${finalAttrs.version}"
+    sed -ri 's/@@VERSION@@/${version}/g' \
+      bch/cli.py setup.py
   '';
 
   pythonImportsCheck = [ "bch" ];
@@ -47,4 +42,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-})
+}

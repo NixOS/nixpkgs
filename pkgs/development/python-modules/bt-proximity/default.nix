@@ -2,26 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   pybluez,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "bt-proximity";
   version = "0.2.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "bt_proximity";
-    inherit (finalAttrs) version;
-    hash = "sha256-+F2Ydjz/VxnYEuXfggnNUDFaLXLSh1GKAX/RtUNykXY=";
+    inherit version;
+    sha256 = "0xlif91vblbz065531yjf8nmlcahrl4q5pz52bc1jmzz7iv9hpgq";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pybluez ];
+  propagatedBuildInputs = [ pybluez ];
 
   # there are no tests
   doCheck = false;
@@ -34,4 +29,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.asl20;
   };
-})
+}

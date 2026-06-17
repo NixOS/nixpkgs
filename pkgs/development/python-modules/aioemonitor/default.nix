@@ -7,25 +7,22 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
-  setuptools,
   xmltodict,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "aioemonitor";
   version = "1.0.5";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aioemonitor";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "0h8zqqy8v8r1fl9bp3m8icr2sy44p0mbfl1hbb0zni17r9r50dhn";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     xmltodict
   ];
@@ -50,4 +47,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -33,6 +33,7 @@
   libopus,
   ffmpeg_7,
   soundtouch,
+  pcre,
   portaudio,
   linuxHeaders,
   at-spi2-core,
@@ -149,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     lilv
     lv2
+    pcre
     portaudio
     serd
     sord

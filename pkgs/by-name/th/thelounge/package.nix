@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  nodejs,
   nodejs-slim,
   yarn,
   fixup-yarn-lock,
+  python3,
   npmHooks,
   sqlite,
   srcOnly,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
-  version = "4.5.0";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "thelounge";
     repo = "thelounge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-I+ITSEm/FCI4omeBM8BCowI6hXBYriJfZ0vP27771Ms=";
+    hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
   };
 
   # Allow setting package path for the NixOS module.
@@ -35,16 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-wgG5AGZvMzdw4QnTNOzAfQGB//VWlV403AgWv4TceGQ=";
+    hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
   };
 
   nativeBuildInputs = [
-    nodejs-slim
-    nodejs-slim.npm
+    nodejs
     yarn
     fixup-yarn-lock
+    python3
+    python3.pkgs.distutils
     npmHooks.npmInstallHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  buildInputs = [ sqlite ];
 
   configurePhase = ''
     runHook preConfigure
@@ -71,6 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive --production
     patchShebangs node_modules
+
+    # Build the sqlite3 package.
+    npm_config_nodedir="${srcOnly nodejs}" npm_config_node_gyp="${buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" npm rebuild --verbose --sqlite=${sqlite.dev}
+  '';
+
+  postInstall = ''
+    rm -rf node_modules/sqlite3/build-tmp-napi-v6/{Release/obj.target,node_sqlite3.target.mk}
   '';
 
   disallowedReferences = [ nodejs-slim.src ];
@@ -91,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       raitobezarius
     ];
     license = lib.licenses.mit;
-    inherit (nodejs-slim.meta) platforms;
+    inherit (nodejs.meta) platforms;
     mainProgram = "thelounge";
   };
 })

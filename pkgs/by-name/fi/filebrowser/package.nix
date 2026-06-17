@@ -2,41 +2,38 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpmBuildHook,
-  nodejs-slim,
+  nodejs_24,
   pnpm_10,
   nix-update-script,
   nixosTests,
 }:
 
 let
-  version = "2.63.14";
+  version = "2.63.5";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    tag = "v${version}";
-    hash = "sha256-9CXHoQWr1RpTwFR8JRR72oQZxHrndTrnxYa6/0Z3Mk0=";
+    rev = "v${version}";
+    hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
-  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
+  frontend = buildNpmPackage rec {
     pname = "filebrowser-frontend";
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    nativeBuildInputs = [
-      nodejs-slim
-      pnpmConfigHook
-      pnpmBuildHook
-      pnpm_10
-    ];
+    nativeBuildInputs = [ pnpm_10 ];
+    npmConfigHook = pnpmConfigHook;
+    npmDeps = pnpmDeps;
+    nodejs = nodejs_24;
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
+      inherit
         pname
         version
         src
@@ -55,7 +52,7 @@ let
 
       runHook postInstall
     '';
-  });
+  };
 
 in
 buildGoModule {
@@ -90,7 +87,6 @@ buildGoModule {
   meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    changelog = "https://github.com/filebrowser/filebrowser/releases/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";

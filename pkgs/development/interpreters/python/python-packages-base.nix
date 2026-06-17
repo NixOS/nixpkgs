@@ -102,11 +102,7 @@ let
     );
 
   mkPythonDerivation =
-    if python.isPy3k then
-      ./mk-python-derivation.nix
-    else
-      # Python 2 build infrastructure lives with its only consumers (resholve, pypy27).
-      ../../misc/resholve/python2/mk-python-derivation.nix;
+    if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (
     overrideStdenvCompat (
@@ -190,6 +186,7 @@ in
 {
   inherit lib pkgs stdenv;
   inherit (python.passthru)
+    isPy27
     isPy311
     isPy312
     isPy313

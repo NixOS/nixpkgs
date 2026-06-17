@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "qemu-qmp";
-  version = "0.0.6";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "qemu-project";
     repo = "python-qemu-qmp";
     tag = "v${version}";
-    hash = "sha256-iuYiYjUfAxXzG7w7s8I2l5oXROyTjswn++vYs9lauGA=";
+    hash = "sha256-Mpay8JIau3cuUDxtEVn78prilr+YncmtbVX5LkBDrvk=";
   };
 
   build-system = [

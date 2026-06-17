@@ -34,7 +34,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "HFS/HFS+ user space utils";
-    homepage = "https://github.com/glaubitz/hfs";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.linux;
   };

@@ -8,19 +8,18 @@
   twisted,
   pytest-benchmark,
   pytestCheckHook,
-  nix-update-script,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.25.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vue/5ulOnKkYjiHYWgT6HZ5mhV2vqAstm44+zwm+po0=";
+    tag = "v${version}";
+    hash = "sha256-4swqhoCVrD7GflFbQX+QH9yGVDjbfwXvd7trs30STQQ=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     pytest-benchmark
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [ "--benchmark-disable" ];
 
@@ -46,13 +45,11 @@ buildPythonPackage (finalAttrs: {
     "test_instance_ip_grouping_key"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
-    changelog = "https://github.com/prometheus/client_python/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/prometheus/client_python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-})
+}

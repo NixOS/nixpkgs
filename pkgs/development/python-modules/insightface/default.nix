@@ -3,6 +3,7 @@
   albumentations,
   buildPythonPackage,
   cython,
+  easydict,
   fetchPypi,
   insightface,
   matplotlib,
@@ -10,10 +11,9 @@
   numpy,
   onnx,
   onnxruntime,
-  opencv-python,
+  opencv4,
   pillow,
-  pyside6,
-  reportlab,
+  prettytable,
   requests,
   setuptools,
   scipy,
@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "insightface";
-  version = "1.0.1";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J68kiRu7pHDLNXOzZqD8yomJ/IUDyfjygejLpv1xYHU=";
+    hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
 
   build-system = [
@@ -40,29 +40,22 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    albumentations
+    easydict
+    matplotlib
     mxnet # used in insightface/commands/rec_add_mask_param.py
     numpy
     onnx
     onnxruntime
-    opencv-python
+    opencv4
+    pillow
+    prettytable
     requests
+    scikit-learn
     scikit-image
     scipy
     tqdm
   ];
-
-  optional-dependencies = {
-    gui = [
-      pillow
-      pyside6
-      reportlab
-      scikit-learn
-    ];
-    face3d = [
-      albumentations
-      matplotlib
-    ];
-  };
 
   # aarch64-linux tries to get cpu information from /sys, which isn't available
   # inside the nix build sandbox.

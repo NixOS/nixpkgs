@@ -18,7 +18,7 @@
   polkit,
   nss,
   pam,
-  systemdLibs,
+  systemd,
   libfprint,
   python3,
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     nss
     pam
-    systemdLibs
+    systemd
     libfprint
   ];
 

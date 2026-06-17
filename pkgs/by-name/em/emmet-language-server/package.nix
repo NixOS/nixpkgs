@@ -1,19 +1,13 @@
 {
   lib,
   stdenvNoCC,
-  nodejs-slim,
-  pnpm_11,
+  nodejs,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpmBuildHook,
   fetchFromGitHub,
   nix-update-script,
-  runCommand,
-  emmet-language-server,
 }:
-let
-  pnpm = pnpm_11;
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
   version = "2.8.0";
@@ -27,17 +21,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-FbwciSGn/W8xQhTU2rHdYIX01wUAqcgY67za8n5AMcM=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-livnY/iwd7gqy6SKFBMF2MSIs7LVFec4BFqMBVasGWE=";
   };
 
   nativeBuildInputs = [
-    nodejs-slim
+    nodejs
     pnpmConfigHook
-    pnpmBuildHook
-    pnpm
+    pnpm_9
   ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
+    pnpm build
+
+    runHook postBuild
+  '';
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
@@ -62,24 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-
-    tests.smoke = runCommand "emmet-language-server-smoke-test" { } ''
-      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
-      CONTENT_LENGTH=''${#INIT_REQUEST}
-
-      RESPONSE=$(
-        {
-          printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
-          sleep 1
-        } | timeout 3  ${lib.getExe emmet-language-server} --stdio 2>&1 | head -c 1000
-      ) || true
-
-      echo "$RESPONSE" | grep -q '"capabilities"'
-      touch $out
-    '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for emmet.io";

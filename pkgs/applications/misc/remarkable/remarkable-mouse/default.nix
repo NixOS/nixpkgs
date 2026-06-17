@@ -1,10 +1,16 @@
 {
   lib,
-  python3Packages,
+  buildPythonApplication,
   fetchFromGitHub,
+  libevdev,
+  paramiko,
+  pynput,
+  setuptools,
+  screeninfo,
+  tkinter,
 }:
 
-python3Packages.buildPythonApplication {
+buildPythonApplication {
   pname = "remarkable-mouse";
   version = "unstable-2024-02-23";
 
@@ -16,9 +22,9 @@ python3Packages.buildPythonApplication {
   };
 
   pyproject = true;
-  build-system = with python3Packages; [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     screeninfo
     paramiko
     pynput

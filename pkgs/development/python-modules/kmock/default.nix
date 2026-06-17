@@ -71,7 +71,6 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "HTTP/API/Kubernetes Mock Server in Python";
-    homepage = "https://github.com/nolar/kmock";
     changelog = "https://github.com/nolar/kmock/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];

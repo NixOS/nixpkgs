@@ -8,7 +8,7 @@
   catch2_3,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "mcl-cpp-utility-lib";
+  pname = "mcl";
   version = "0.1.14";
 
   src = fetchFromGitHub {

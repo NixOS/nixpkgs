@@ -60,9 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.freedesktop.org/xorg/driver/xf86-input-libinput";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     pkgConfigModules = [ "xorg-libinput" ];
     platforms = lib.platforms.unix;
   };

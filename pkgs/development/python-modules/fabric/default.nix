@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fabric";
-  version = "3.2.3";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabric";
     repo = "fabric";
     tag = version;
-    hash = "sha256-GbZQ6rFKQyJZXYfe9b4j6yjKgAB0ct8AD1xYG0yGZl8=";
+    hash = "sha256-7qC2UuI0RP5xlKIYSz1sLyK/nQYegXOou1mlJYFk7M0=";
   };
 
   build-system = [ setuptools ];

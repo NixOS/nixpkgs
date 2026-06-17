@@ -5,12 +5,15 @@
   setuptools,
   pytestCheckHook,
   pytest-asyncio,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "aiocontextvars";
   version = "0.2.2";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "fantix";

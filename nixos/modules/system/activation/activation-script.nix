@@ -322,9 +322,6 @@ in
         description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;
         unitConfig.ConditionUser = "!@system";
-        # switch-to-configuration restarts this explicitly on every switch.
-        restartIfChanged = false;
-        serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
         wantedBy = [ "default.target" ];
       };

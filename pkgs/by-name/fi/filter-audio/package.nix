@@ -21,7 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight audio filtering library made from webrtc code";
-    homepage = "https://github.com/irungentoo/filter_audio";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;

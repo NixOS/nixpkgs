@@ -35,14 +35,14 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.3.0";
+  version = "3.2.529";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-1hm3ZNvrO+U3PWb5gBSwKSXgOHQLU4avncSZOH/ijCM=";
+    hash = "sha256-sfbwmeASE0gwN/jg+6l84G60tIZRbZc417QK0lqwr/s=";
   };
 
   pythonRelaxDeps = [
@@ -96,7 +96,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     docker
     dockerfile-parse
     dpath
-    ecdsa
     flake8
     gitpython
     igraph

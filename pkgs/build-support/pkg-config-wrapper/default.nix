@@ -107,7 +107,6 @@ stdenv.mkDerivation {
             wrapperName
             ;
         };
-        meta.license = lib.licenses.mit;
       } ../setup-hooks/role.bash;
       setupHook = makeSetupHook {
         name = "pkgs-config-setup-hook";
@@ -117,7 +116,6 @@ stdenv.mkDerivation {
             baseBinName
             ;
         };
-        meta.license = lib.licenses.mit;
       } ./setup-hook.sh;
     in
     [

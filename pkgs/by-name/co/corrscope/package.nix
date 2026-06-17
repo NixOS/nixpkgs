@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
   ffmpeg,
   python3Packages,
   qt6Packages,
@@ -75,18 +74,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = corrscope;
-      # Tries writing to
-      # - $HOME/.local/share/corrscope on Linux
-      # - $HOME/Library/Application Support/corrscope on Darwin
-      command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
-    };
-
-    updateScript = gitUpdater {
-      allowedVersions = "^[0-9.]+$";
-    };
+  passthru.tests.version = testers.testVersion {
+    package = corrscope;
+    # Tries writing to
+    # - $HOME/.local/share/corrscope on Linux
+    # - $HOME/Library/Application Support/corrscope on Darwin
+    command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
   };
 
   meta = {

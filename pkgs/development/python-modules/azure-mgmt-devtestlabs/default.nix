@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPy3k,
-  setuptools,
   msrest,
   msrestazure,
   azure-common,
@@ -11,22 +10,18 @@
   azure-mgmt-nspkg,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-mgmt-devtestlabs";
   version = "9.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-2BYNk/09lH5WE8aRkXaw7fcslKxpZ56juSzyf/c5jmQ=";
+    sha256 = "d8160d93fd3d947e5613c6919176b0edf72c94ac69679ea3b92cf27ff7398e64";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
@@ -35,8 +30,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   pythonNamespaces = [ "azure.mgmt" ];
-
-  pythonImportsCheck = [ "azure.mgmt.devtestlabs" ];
 
   # has no tests
   doCheck = false;
@@ -49,4 +42,4 @@ buildPythonPackage (finalAttrs: {
       maxwilson
     ];
   };
-})
+}

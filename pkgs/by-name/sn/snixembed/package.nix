@@ -3,11 +3,9 @@
   gtk3,
   lib,
   libdbusmenu-gtk3,
-  nix-update-script,
   pkg-config,
   stdenv,
   vala,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~steef";
     repo = "snixembed";
     rev = finalAttrs.version;
-    hash = "sha256-co32Xlklg6KVyi+xEoDJ6TeN28V+wCSx73phwnl/05E=";
+    sha256 = "sha256-co32Xlklg6KVyi+xEoDJ6TeN28V+wCSx73phwnl/05E=";
   };
 
   nativeBuildInputs = [
@@ -26,18 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     vala
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   buildInputs = [
     gtk3
     libdbusmenu-gtk3
   ];
 
-  doInstallCheck = true;
-
   makeFlags = [ "PREFIX=$(out)" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Proxy StatusNotifierItems as XEmbedded systemtray-spec icons";
@@ -45,9 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~steef/snixembed/refs/${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     mainProgram = "snixembed";
   };
 })

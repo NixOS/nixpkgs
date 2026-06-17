@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Qt library for OAuth authentication";
-    homepage = "https://github.com/ayoy/qoauth";
     inherit (qtbase.meta) platforms;
     license = lib.licenses.lgpl21;
   };

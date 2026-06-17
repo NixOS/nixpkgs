@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-verge-service-ipc";
-  version = "2.3.0";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service-ipc";
     # upstream uses branch
-    rev = "21e661fa141e5ad3c705ee4cdb86efff8df6f769";
-    hash = "sha256-XavlZWxuZKCTyIYpuXRvXpXCdakWhbLhOMmOrGBgDRo=";
+    rev = "a486e7df6ac3d641014085f43bd08e99ff09b5a2";
+    hash = "sha256-WmQ3s6uED4Q1E2ORtjDqdxaUaPD+RIB5x8bYPOuGUSk=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patch-service-directory.patch
   ];
 
-  cargoHash = "sha256-WhH2o5wN5vYW8jZl+hWbnk1xqHu61ibAr4+/CI3YKHg=";
+  cargoHash = "sha256-xE8ihRlox7qrmLHEGQ76pbisFj+1bqjwr+tllxLRDoA=";
 
   buildFeatures = [
     "standalone"
@@ -34,9 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     procps
   ];
-  # build test helper binaries for tests
+  # build mock_binary for tests
   preCheck = ''
-    cargo build --features=standalone,test
+    cargo build --features=test
   '';
   checkFeatures = [
     "standalone"

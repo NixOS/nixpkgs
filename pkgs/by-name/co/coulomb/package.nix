@@ -16,8 +16,6 @@
   gdk-pixbuf,
   atk,
   cairo,
-  adwaita-icon-theme,
-  librsvg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     atk
     cairo
-    adwaita-icon-theme
-    librsvg
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -79,14 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r app/build/resources/main/icons/vector/* $out/share/icons/
     cp app/build/resources/main/icons/vector/light/coulomb.svg $out/share/icons/hicolor/scalable/apps/io.github.hamza_algohary.Coulomb.svg
 
-    runHook postInstall
-  '';
-  postFixup = ''
     makeWrapper ${jdk21_headless}/bin/java $out/bin/coulomb \
-    --add-flags "-Djava.library.path=${lib.makeLibraryPath finalAttrs.buildInputs}" \
-    --add-flags "-jar $out/share/coulomb/app-all.jar" \
-    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
-    ''${gappsWrapperArgs[@]}
+      --add-flags "-Djava.library.path=${lib.makeLibraryPath finalAttrs.buildInputs}" \
+      --add-flags "-jar $out/share/coulomb/app-all.jar" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
+      ''${gappsWrapperArgs[@]}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -95,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple and beautiful circuit simulator app";
     homepage = "https://github.com/hamza-algohary/Coulomb";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      thtrf
-      _0xSA7
-    ];
+    maintainers = with lib.maintainers; [ thtrf ];
     platforms = lib.platforms.linux;
     mainProgram = "coulomb";
   };

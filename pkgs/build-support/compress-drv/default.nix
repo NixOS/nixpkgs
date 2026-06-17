@@ -64,7 +64,9 @@ let
     let
       matches = (builtins.length (builtins.split "\\{}" prog) - 1) / 2;
     in
-    matches == 1 || throw "compressor ${ext} needs to have exactly one '{}', found ${toString matches}";
+    lib.assertMsg (
+      matches == 1
+    ) "compressor ${ext} needs to have exactly one '{}', found ${toString matches}";
   mkCmd =
     ext: prog:
     assert validProg ext prog;

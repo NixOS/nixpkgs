@@ -144,6 +144,8 @@ let
   grammarPlugins = lib.mapAttrs (_: grammarToPlugin) parsersWithMeta;
 in
 {
+  nvimSkipModules = [ "nvim-treesitter._meta.parsers" ];
+
   passthru = super.nvim-treesitter.passthru or { } // {
     inherit
       buildQueries

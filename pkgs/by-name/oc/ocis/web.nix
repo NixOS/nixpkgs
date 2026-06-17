@@ -5,7 +5,6 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpmBuildHook,
   fetchFromGitHub,
 }:
 stdenvNoCC.mkDerivation rec {
@@ -22,9 +21,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpmBuildHook
     pnpm_9
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    pnpm build
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

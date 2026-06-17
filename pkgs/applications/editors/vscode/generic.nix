@@ -188,7 +188,6 @@ stdenv.mkDerivation (
     passthru = {
       inherit
         executableName
-        iconName
         longName
         tests
         updateScript
@@ -339,10 +338,8 @@ stdenv.mkDerivation (
         # Remove native encryption code, as it derives the key from the executable path which does not work for us.
         # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
         # in the first place.
-        # Also remove prebuilt Copilot binaries that seemingly have been added by accident.
         + ''
           rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
-          rm -rf $out/lib/${libraryName}/resources/app/node_modules/@github/copilot-linuxmusl*
         ''
     )
     + ''
@@ -376,7 +373,7 @@ stdenv.mkDerivation (
           )
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
-        --append-flags ${lib.escapeShellArg commandLineArgs}
+        --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
 
@@ -410,38 +407,14 @@ stdenv.mkDerivation (
       )
       + (
         let
-          nodeModulesPath =
+          vscodeRipgrep =
             if stdenv.hostPlatform.isDarwin then
               if lib.versionAtLeast vscodeVersion "1.94.0" then
-                "Contents/Resources/app/node_modules"
+                "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
               else
-                "Contents/Resources/app/node_modules.asar.unpacked"
+                "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
             else
-              "resources/app/node_modules";
-
-          # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
-          ripgrepSystem =
-            {
-              x86_64-darwin = "darwin-x64";
-              aarch64-darwin = "darwin-arm64";
-              armv7l-linux = "linux-arm";
-              aarch64-linux = "linux-arm64";
-              i686-linux = "linux-ia32";
-              powerpc64-linux = "linux-ppc64";
-              riscv64-linux = "linux-riscv64";
-              s390x-linux = "linux-s390x";
-              x86_64-linux = "linux-x64";
-            }
-            .${stdenv.hostPlatform.system}
-              or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
-
-          ripgrepPath =
-            if lib.versionAtLeast vscodeVersion "1.122.0" then
-              "@vscode/ripgrep-universal/bin/${ripgrepSystem}/rg"
-            else
-              "@vscode/ripgrep/bin/rg";
-
-          vscodeRipgrep = "${nodeModulesPath}/${ripgrepPath}";
+              "resources/app/node_modules/@vscode/ripgrep/bin/rg";
         in
         if !useVSCodeRipgrep then
           ''

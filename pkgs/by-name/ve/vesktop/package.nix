@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
+  # electron builds must be writable
   preBuild = ''
     # Validate electron version matches upstream package.json
     if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
@@ -94,8 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
       echo "ERROR: electron version mismatch between package.json and nixpkgs"
       exit 1
     fi
-
-    # electron builds must be writable
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -r ${electron.dist}/Electron.app .
+    chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
   '';
@@ -107,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=electron-dist \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
       -c.electronVersion=${electron.version} \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"} # disable code signing on macos, https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
 

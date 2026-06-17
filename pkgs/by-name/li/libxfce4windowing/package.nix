@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfce4windowing";
-  version = "4.20.6";
+  version = "4.20.5";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xfce";
     repo = "libxfce4windowing";
     tag = "libxfce4windowing-${finalAttrs.version}";
-    hash = "sha256-lTOCvxUSo0CCok5nPCX7B6RqVoNMYcSb97alR+htBtY=";
+    hash = "sha256-TVu6S/Cip9IqniAvrTU5uSs7Dgm0WZNxjgB4vjHvBNU=";
   };
 
   patches = [

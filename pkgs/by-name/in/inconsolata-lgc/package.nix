@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MihailJP/Inconsolata-LGC";
     maintainers = with lib.maintainers; [
       avnik
+      rht
     ];
   };
 }

@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      lnl7
     ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

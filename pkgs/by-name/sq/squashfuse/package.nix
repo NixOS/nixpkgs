@@ -16,13 +16,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "squashfuse";
-  version = "0.6.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "vasi";
     repo = "squashfuse";
     rev = finalAttrs.version;
-    sha256 = "sha256-hlWmHMqWl8rApogsR9uG7ZaM5dUDoTBSjSjXCKd+FIA=";
+    sha256 = "sha256-HuDVCO+hKdUKz0TMfHquI0eqFNAoNhPfY2VBM2kXupk=";
   };
 
   nativeBuildInputs = [

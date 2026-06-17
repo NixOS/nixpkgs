@@ -12,7 +12,7 @@
   libgcrypt,
   xkeyboard_config,
   libthai,
-  qt5,
+  libsForQt5,
 }:
 
 let
@@ -36,7 +36,7 @@ let
     nativeBuildInputs = [
       dpkg
       autoPatchelfHook
-      qt5.wrapQtAppsHook
+      libsForQt5.qt5.wrapQtAppsHook
     ];
 
     buildInputs = [
@@ -46,7 +46,7 @@ let
       libgcrypt
       libthai
     ]
-    ++ [ qt5.qtvirtualkeyboard ];
+    ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
 
     installPhase = ''
       runHook preInstall

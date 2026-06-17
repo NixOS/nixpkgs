@@ -19,7 +19,6 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Simple Minio tool to generate self-signed certificates, and provides SAN certificates with DNS and IP entries";
-    homepage = "https://github.com/minio/certgen";
     downloadPage = "https://github.com/minio/certgen";
     license = lib.licenses.bsd3;
     maintainers = [ ];

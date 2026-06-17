@@ -19,12 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "15.1.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     hash = "sha256-0gjwYMUlXYnmIWQS1SVzF1yQw1lpveRLw5qp049lc3I=";
   };
 

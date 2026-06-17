@@ -281,18 +281,18 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
         export HOME="$(mktemp -dt dwarf-fortress.XXXXXX)"
       ''
       + lib.optionalString enableDFHack ''
-        expect ${dfHackExpectScript} | tr -d '\r'
+        expect ${dfHackExpectScript}
         df_home="$(find ~ -name "df_*" | head -n1)"
         test -f "$df_home/dfhack"
       ''
       + lib.optionalString isAtLeast50 ''
-        expect ${vanillaExpectScript true} | tr -d '\r'
+        expect ${vanillaExpectScript true}
         df_home="$(find ~ -name "df_*" | head -n1)"
         test ! -f "$df_home/dfhack"
         test -f "$df_home/libfmod_plugin.so"
       ''
       + ''
-        expect ${vanillaExpectScript false} | tr -d '\r'
+        expect ${vanillaExpectScript false}
         df_home="$(find ~ -name "df_*" | head -n1)"
         test ! -f "$df_home/dfhack"
         test ! -f "$df_home/libfmod_plugin.so"

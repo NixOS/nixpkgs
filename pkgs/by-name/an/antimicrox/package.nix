@@ -12,14 +12,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "antimicrox";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "AntiMicroX";
-    repo = "antimicrox";
-    rev = finalAttrs.version;
+    repo = pname;
+    rev = version;
     sha256 = "sha256-ZIHhgyOpabWkdFZoha/Hj/1d8/b6qVolE6dn0xAFZVw=";
   };
 
@@ -31,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
     libsForQt5.wrapQtAppsHook
   ];
-
   buildInputs = [
     SDL2
     libsForQt5.qttools
@@ -47,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
-    inherit (finalAttrs.src.meta) homepage;
+    inherit (src.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux;
     mainProgram = "antimicrox";
   };
-})
+}

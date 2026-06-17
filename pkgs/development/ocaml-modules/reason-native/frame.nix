@@ -24,7 +24,6 @@ buildDunePackage {
 
   meta = {
     description = "Reason Native text layout library";
-    homepage = "https://github.com/reasonml/reason-native";
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/frame";
     license = lib.licenses.mit;
     maintainers = [ ];

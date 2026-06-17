@@ -47,7 +47,7 @@ let
       checkMeta = testPkgs.callPackage ./check-meta.nix { };
       tryEval = expression: builtins.tryEval (builtins.deepSeq expression expression);
       actual = tryEval (
-        checkMeta.assertValidity pkgs.stdenv.hostPlatform {
+        checkMeta.assertValidity {
           meta = pkg.meta;
           attrs = pkg;
         }

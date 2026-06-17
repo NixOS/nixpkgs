@@ -30,12 +30,10 @@
   curl,
   texinfo,
   texliveSmall,
-  vulkan-headers,
-  glfw,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.12";
+  version = "3.11";
   pname = "asymptote";
 
   outputs = [
@@ -48,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-6uwel0Y+8hOjk8OI1GanNHiwgY+UA8liuRJAZZybjxs=";
+    hash = "sha256-U36fImIb+E8J7g1E3EVcTqkboZODDx12JKB9RxDX59E=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
@@ -113,8 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
         pyqt5
       ]
     ))
-    vulkan-headers
-    glfw
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 

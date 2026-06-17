@@ -2,25 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  olm,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "picoclaw";
-  version = "0.2.9";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "sipeed";
     repo = "picoclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oMees7EKANS5dkMHIqAHfGcumrNMtTEEA+dmpl8/dLE=";
+    hash = "sha256-JvcvpaGPPBiABK28rQhe63chYm7MRdfU6uflZosNRKg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-LjTLLeK2M8W34z1M11wKuBAoDI6ciCG3f4FRWAre/sY=";
-
-  buildInputs = [ olm ];
+  vendorHash = "sha256-K9LssS1Hff19dv6oa8EaFOUZIRnOtAqC5jgnY5HuWTk=";
 
   preBuild = ''
     go generate ./...
@@ -29,7 +26,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sipeed/picoclaw/pkg/config.Version=${finalAttrs.version}"
+    "-X github.com/sipeed/picoclaw/cmd/picoclaw/internal.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -43,8 +40,6 @@ buildGoModule (finalAttrs: {
         "TestCodexCliProvider_MockCLI_Success"
         "TestCodexCliProvider_MockCLI_Error"
         "TestCodexCliProvider_MockCLI_WithModel"
-        "TestGatewayStopRefusesNonGatewayAttachedProcess"
-        "TestGatewayStatusIgnoresAndRemovesPidFileForNonGatewayProcess"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

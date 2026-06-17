@@ -51,7 +51,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Crossover between Super Mario Bros. and Portal";
-    homepage = "https://github.com/Stabyourself/mari0";
     mainProgram = "mari0";
     platforms = love.meta.platforms;
     license = lib.licenses.mit;

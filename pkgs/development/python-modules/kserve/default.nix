@@ -24,7 +24,6 @@
   prometheus-client,
   protobuf,
   psutil,
-  pyasn1,
   pydantic,
   python-dateutil,
   python-multipart,
@@ -60,7 +59,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.19.0";
+  version = "0.18.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +67,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i8eFdXwNLPTdEj2MnNAMbefxQGkMLHNwZXxg8+zv6v0=";
+    hash = "sha256-qmv6DzYA/c/uGS4LNTdn3PnzhtLrhprF6r9ccngsUTU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
@@ -107,7 +106,6 @@ buildPythonPackage (finalAttrs: {
     prometheus-client
     protobuf
     psutil
-    pyasn1
     pydantic
     python-dateutil
     python-multipart

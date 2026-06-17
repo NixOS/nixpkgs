@@ -11,5 +11,4 @@ makeSetupHook {
     gitMinimal = lib.getExe gitMinimal;
   };
 
-  meta.license = lib.licenses.mit;
 } ./gitSetupHook.sh

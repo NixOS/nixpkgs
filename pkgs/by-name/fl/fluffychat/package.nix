@@ -25,26 +25,27 @@ let
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   libwebrtc = fetchzip {
-    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.4.0/libwebrtc.zip";
-    sha256 = "sha256-OvqUF6RuytDorJE+C58EnIxPHfcphs8iPiPjt7SDrU0=";
+    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.3.0/libwebrtc.zip";
+    sha256 = "sha256-lGvWAicdKbNdMZAQS9Qyxv737G/sBI/hKbge/Xw5bDM=";
   };
 in
 flutter341.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.6.0";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-iAHJjpDd2RNYPtEqyotFNvW/nybW1ozNtvMTT+wQVVY=";
+      hash = "sha256-8iMSfF5K/9bQot7Tzc2XuuiQnquLZmS0ucC5t2T/HEA=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
-      webcrypto = "sha256-yPhL0LoSIaJ9e9wrLtdPuTBRvXft1DQM9KR7WdNcj68=";
+      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
+      flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
     };
 
     inherit targetFlutterPlatform;

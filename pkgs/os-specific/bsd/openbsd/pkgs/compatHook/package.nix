@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   makeSetupHook,
   compat,
@@ -11,5 +10,4 @@ makeSetupHook {
     inherit compat;
     inherit (stdenv.cc) suffixSalt;
   };
-  meta.license = lib.licenses.mit;
 } ./setup-hook.sh

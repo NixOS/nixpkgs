@@ -12,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayshot";
-  version = "1.5.0";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "wayshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sbY3h3FoWxDmxSng9YvYpt3kyasVJGsykYC/7tblFn8=";
+    hash = "sha256-RaOe00+Dy+zgdEkfF5hJrJ/lSA2vrsZWVoDsTc3uwpw=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     wayland
   ];
-  cargoHash = "sha256-J7ZKWx258bBCNBd061aCeKgTdcWMUF4yzAiIa9l8ZRA=";
+  cargoHash = "sha256-zuRl0WxS9MyyRsCpbFlVKN+5FasIbfkXutaM3Gmic04=";
 
   passthru.updateScript = nix-update-script { };
 

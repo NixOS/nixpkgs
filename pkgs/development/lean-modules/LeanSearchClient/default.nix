@@ -6,8 +6,8 @@
 
 buildLakePackage {
   pname = "lean4-LeanSearchClient";
-  # nixpkgs-update: no auto update
-  version = "4.12.0-unstable-2026-02-12";
+  # No lockstep tags; version pinned by mathlib's lake-manifest.json.
+  version = "0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";

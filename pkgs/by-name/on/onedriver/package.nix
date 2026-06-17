@@ -5,7 +5,7 @@
   pkg-config,
   webkitgtk_4_1,
   glib,
-  fuse3,
+  fuse,
   installShellFiles,
   wrapGAppsHook3,
   glib-networking,
@@ -34,7 +34,7 @@ buildGoModule {
   buildInputs = [
     webkitgtk_4_1
     glib
-    fuse3
+    fuse
     glib-networking
   ];
 
@@ -63,7 +63,7 @@ buildGoModule {
 
     substituteInPlace $out/lib/systemd/user/onedriver@.service \
       --replace-fail "/usr/bin/onedriver" "$out/bin/onedriver" \
-      --replace-fail "/usr/bin/fusermount3" "${wrapperDir}/fusermount3"
+      --replace-fail "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
   meta = {

@@ -47,7 +47,6 @@ let
   ];
   mkdirp = makeSetupHook {
     name = "openra-mkdirp-hook";
-    meta.license = lib.licenses.mit;
   } ./mkdirp.sh;
 
 in

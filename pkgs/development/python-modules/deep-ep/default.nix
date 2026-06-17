@@ -4,9 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  ninja,
-  setuptools,
   torch,
+  setuptools,
 
   # env
   cudaPackages,
@@ -51,7 +50,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   };
 
   build-system = [
-    ninja
     setuptools
     torch
   ];

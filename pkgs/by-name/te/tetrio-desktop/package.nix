@@ -75,8 +75,7 @@ stdenv.mkDerivation {
         cp ${asarPath} $out/share/TETR.IO/app.asar
 
         substituteInPlace $out/share/applications/TETR.IO.desktop \
-          --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio" \
-          --replace-fail "StartupWMClass=TETR.IO" "StartupWMClass=tetrio-desktop"
+          --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio"
 
         runHook postInstall
       '';

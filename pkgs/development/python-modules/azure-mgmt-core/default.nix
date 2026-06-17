@@ -2,28 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   azure-core,
   typing-extensions,
 }:
 
-buildPythonPackage (finalAttrs: {
-  pname = "azure-mgmt-core";
+buildPythonPackage rec {
   version = "1.6.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
+  pname = "azure-mgmt-core";
 
   src = fetchPypi {
     pname = "azure_mgmt_core";
-    inherit (finalAttrs) version;
+    inherit version;
     extension = "tar.gz";
     hash = "sha256-smIyr4V7Ah5h2BPZ9K5TBGUlXLELPd6UWtN0P3pY55w=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-core
     typing-extensions
   ];
@@ -44,4 +39,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

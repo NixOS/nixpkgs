@@ -8,21 +8,6 @@
   ...
 }:
 let
-  inherit (lib)
-    attrNames
-    catAttrs
-    concatLines
-    concatMap
-    filter
-    unique
-    flip
-    elem
-    attrValues
-    concatMapStrings
-    hasPrefix
-    concatStringsSep
-    sort
-    ;
 
   moduleSettingsType =
     with lib.types;
@@ -896,30 +881,41 @@ let
 
         text =
           let
+            ensureUniqueOrder =
+              type: rules:
+              let
+                checkPair =
+                  a: b:
+                  assert lib.assertMsg (a.order != b.order)
+                    "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})";
+                  b;
+                checked = lib.zipListsWith checkPair rules (lib.drop 1 rules);
+              in
+              lib.take 1 rules ++ checked;
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
               token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
-
             formatRules =
               type:
-              concatStringsSep "\n" (
-                map
-                  (
-                    rule:
-                    "${type} ${rule.control} ${rule.modulePath}${
-                      if rule.args == [ ] then "" else " " + concatStringsSep " " (map formatModuleArgument rule.args)
-                    } # ${rule.name} (order ${toString rule.order})"
+              lib.pipe cfg.rules.${type} [
+                lib.attrValues
+                (lib.filter (rule: rule.enable))
+                (lib.sort (a: b: a.order < b.order))
+                (ensureUniqueOrder type)
+                (map (
+                  rule:
+                  lib.concatStringsSep " " (
+                    [
+                      type
+                      rule.control
+                      rule.modulePath
+                    ]
+                    ++ map formatModuleArgument rule.args
+                    ++ [ "# ${rule.name} (order ${toString rule.order})" ]
                   )
-                  (
-                    sort (
-                      a: b:
-                      if a.order != b.order then
-                        a.order < b.order
-                      else
-                        throw "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"
-                    ) (filter (rule: rule.enable) (attrValues cfg.rules.${type}))
-                  )
-              );
+                ))
+                (lib.concatStringsSep "\n")
+              ];
           in
           lib.mkDefault ''
             # Account management.
@@ -2641,29 +2637,35 @@ in
     };
 
     security.apparmor.includes."abstractions/pam" =
-      concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        attrNames enabledServices
+      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
+        lib.attrNames enabledServices
       )
       + (
-        let
-          types = concatMap attrValues (catAttrs "rules" (attrValues enabledServices));
-          rules = concatMap attrValues types;
-
-          isDirect = flip elem [
-            "include"
-            "substack"
-          ];
-          activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
-
-          modulePaths = concatMap (
+        with lib;
+        pipe enabledServices [
+          lib.attrValues
+          (catAttrs "rules")
+          (lib.concatMap lib.attrValues)
+          (lib.concatMap lib.attrValues)
+          (lib.filter (rule: rule.enable))
+          (lib.filter (
             rule:
-            if (!hasPrefix "/" rule.modulePath) then
-              throw ''non-absolute PAM modulePath "${rule.modulePath}" is unsupported by apparmor''
-            else
-              [ rule.modulePath ]
-          ) activeRules;
-        in
-        concatLines (map (module: "mr ${module},") (unique modulePaths))
+            !builtins.elem rule.control [
+              "include"
+              "substack"
+            ]
+          ))
+          (lib.catAttrs "modulePath")
+          (map (
+            modulePath:
+            lib.throwIfNot (lib.hasPrefix "/" modulePath)
+              ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
+              modulePath
+          ))
+          lib.unique
+          (map (module: "mr ${module},"))
+          concatLines
+        ]
       );
 
     security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;

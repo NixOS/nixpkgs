@@ -7,7 +7,7 @@
   perl,
   freetype,
   harfbuzz,
-  qt5,
+  libsForQt5,
   enableGUI ? true,
 }:
 
@@ -33,16 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoreconfHook ]
-  ++ lib.optionals enableGUI [ qt5.wrapQtAppsHook ];
+  ++ lib.optionals enableGUI [ libsForQt5.qt5.wrapQtAppsHook ];
 
   buildInputs = [
     freetype
     harfbuzz
   ]
-  ++ lib.optionals enableGUI [ qt5.qtbase ];
+  ++ lib.optionals enableGUI [ libsForQt5.qt5.qtbase ];
 
   configureFlags = [
-    "--with-qt=${if enableGUI then "${qt5.qtbase}/lib" else "no"}"
+    "--with-qt=${if enableGUI then "${libsForQt5.qt5.qtbase}/lib" else "no"}"
   ]
   ++ lib.optionals (!enableGUI) [ "--without-doc" ];
 

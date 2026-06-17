@@ -10,8 +10,6 @@
   doxygen,
   cmake,
   graphviz,
-
-  withDoc ? true, # upstream disable for cross, even if it seems to build fine
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,25 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ]
-  ++ lib.optional withDoc "doc";
+    "doc"
+  ];
 
   nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals withDoc [
     doxygen
+    cmake
     graphviz
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "EIGEN_BUILD_DOC" withDoc)
-  ];
-
-  postInstall = lib.optionalString withDoc ''
-    # Fontconfig error: No writable cache directories
-    export XDG_CACHE_HOME="$(mktemp -d)"
-
+  postInstall = ''
     cmake --build . -t install-doc
   '';
 

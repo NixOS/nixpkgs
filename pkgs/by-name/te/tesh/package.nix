@@ -29,7 +29,6 @@ python3Packages.buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/OceanSprint/tesh";
     license = lib.licenses.mit;
   };
 }

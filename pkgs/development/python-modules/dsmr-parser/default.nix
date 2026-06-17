@@ -3,23 +3,25 @@
   buildPythonPackage,
   dlms-cosem,
   fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio-fast,
   pytestCheckHook,
   pythonAtLeast,
-  serialx,
+  pytz,
   setuptools,
   tailer,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dsmr-parser";
-  version = "1.8.0";
+  version = "1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ndokter";
     repo = "dsmr_parser";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-h7huLTdyDon2l2dUXwqilrM0tr6Tkk6918KLK/c2S9s=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-+dv9V06o1kI6pX/Bq05JmUUvW+KoqauLaWqY6xhs6PE=";
   };
 
   pythonRelaxDeps = [ "dlms_cosem" ];
@@ -28,11 +30,15 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     dlms-cosem
-    serialx
+    pyserial
+    pyserial-asyncio-fast
+    pytz
     tailer
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_receive_packet" ];
 
   pythonImportsCheck = [ "dsmr_parser" ];
 

@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       external notification services.
     '';
     homepage = "https://github.com/infothrill/python-dyndnsc";
-    changelog = "https://github.com/infothrill/python-dyndnsc/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/infothrill/python-dyndnsc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dyndnsc";

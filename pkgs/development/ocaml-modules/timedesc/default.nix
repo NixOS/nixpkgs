@@ -9,13 +9,13 @@
   timedesc-tzlocal,
 }:
 
-buildDunePackage (finalAttrs: {
+buildDunePackage rec {
   pname = "timedesc";
-  version = "3.1.2";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/daypack-dev/timere/releases/download/timedesc-${finalAttrs.version}/timedesc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hXdijGY0qu+pLR2XtK/KL9gXvCstbZedo1379lqA1r0=";
+    url = "https://github.com/daypack-dev/timere/releases/download/timedesc-${version}/timedesc-${version}.tar.gz";
+    hash = "sha256-nEachJymJC8TP/Ha2rOFU3n09rxVlIZYmgQnYiNCiHE=";
   };
 
   sourceRoot = ".";
@@ -34,4 +34,4 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-})
+}

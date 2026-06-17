@@ -4,22 +4,21 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
-  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "jfrog-cli";
-  version = "2.108.0";
+  version = "2.103.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0n0CZZKj7C3KmNMVTAW4I8Ns9nrjrZQnQ58P+jbUw3U=";
+    hash = "sha256-7IJ76xpaM3V964dYOu4mZCxbx66e5976QYNddNoyiJk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-4Tia59lRE27rsJC5j/jykb9d88byOcPyDcnkSOwR6h8=";
+  vendorHash = "sha256-vtLsjbj1cb6AmV8EM+9cghlcL9nVDMeC8Au3sMuT91c=";
 
   checkFlags = "-skip=^(TestReleaseBundle|TestVisibilitySendUsage_RtCurl_E2E)";
 
@@ -28,14 +27,12 @@ buildGoModule (finalAttrs: {
     mv $out/bin/jfrog-cli $out/bin/jf
   '';
 
-  nativeCheckInputs = [
-    nodejs
-    writableTmpDirAsHomeHook
-  ];
+  # Some of the tests require a writable $HOME
+  preCheck = "export HOME=$TMPDIR";
+
+  nativeCheckInputs = [ nodejs ];
 
   passthru.updateScript = nix-update-script { };
-
-  __darwinAllowLocalNetworking = true;
 
   meta = {
     homepage = "https://github.com/jfrog/jfrog-cli";

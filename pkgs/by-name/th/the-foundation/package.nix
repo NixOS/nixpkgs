@@ -7,7 +7,7 @@
   curl,
   libunistring,
   openssl,
-  pcre2,
+  pcre,
   zlib,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libunistring
     openssl
-    pcre2
+    pcre
     zlib
   ];
 

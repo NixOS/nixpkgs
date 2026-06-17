@@ -38,7 +38,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/requests/requests-ntlm";
     changelog = "https://github.com/requests/requests-ntlm/releases/tag/v${version}";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ elasticdog ];
     platforms = lib.platforms.all;
   };
 }

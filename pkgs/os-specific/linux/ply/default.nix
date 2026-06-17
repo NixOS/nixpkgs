@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = [ lib.licenses.gpl2Only ];
     maintainers = with lib.maintainers; [
       mic92
+      mbbx6spp
       snu
     ];
     platforms = lib.platforms.linux;

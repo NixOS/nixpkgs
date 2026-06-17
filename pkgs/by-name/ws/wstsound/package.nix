@@ -57,7 +57,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Windstille Sound Library";
-    homepage = "https://github.com/WindstilleTeam/wstsound";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;

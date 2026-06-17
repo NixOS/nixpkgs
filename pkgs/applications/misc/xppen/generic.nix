@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     mainProgram = "PenTablet";
     maintainers = with lib.maintainers; [
       gepbird
+      nasrally
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

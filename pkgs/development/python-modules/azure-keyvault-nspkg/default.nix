@@ -2,28 +2,23 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
 
   # pythonPackages
   azure-nspkg,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-keyvault-nspkg";
   version = "1.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     extension = "zip";
-    hash = "sha256-rGi4iqucbK9Uoj2iodHHGNdSC65a3/BN0KdDIoJptkE=";
+    sha256 = "0hdnd6124hx7s16z1pssmq5m5mqqqz8s38ixl9aayv4wmf5bhs5c";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ azure-nspkg ];
+  propagatedBuildInputs = [ azure-nspkg ];
 
   # Just a namespace package, no tests exist:
   #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/keyvault/tests.yml
@@ -35,4 +30,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };
-})
+}

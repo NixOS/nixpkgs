@@ -2,28 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   wcwidth,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "beautifultable";
   version = "1.1.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pri22296";
     repo = "beautifultable";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-/SReCEvSwiNjBoz/3tGJ9zUNBAag4mLsHlUXwm47zCw=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ wcwidth ];
+  propagatedBuildInputs = [ wcwidth ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,4 +32,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoconf,
   automake,
   docbook_xml_dtd_42,
@@ -12,12 +13,14 @@
   intltool,
   ipset,
   iptables,
+  kdePackages,
   kmod,
   libnotify,
   librsvg,
   libxml2,
   libxslt,
   networkmanager,
+  networkmanagerapplet,
   pkg-config,
   python3,
   qt6,
@@ -43,16 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.4.2";
-
-  __structuredAttrs = true;
-  strictDeps = true;
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-RUDDUvpGfWEKI+VtC4SBMLKsAHkStV1qAYpHLQbN5HM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-P48qdgvcF3BQZ5h+HaylHb70ECa2bmEvYiAi9CeH0qs=";
   };
 
   patches = [
@@ -61,17 +61,28 @@ stdenv.mkDerivation (finalAttrs: {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
-  ]
-  ++ lib.optional withGui ./nm-connection-editor.patch;
+
+    # CVE-2026-4948: https://github.com/NixOS/nixpkgs/issues/505280
+    (fetchpatch2 {
+      url = "https://github.com/Prince213/firewalld/commit/e621b4b54be7cd8d77ce549ec17c6f814f9bd337.patch?full_index=1";
+      hash = "sha256-8auXNPVYnNk1UI0jM82IEQrMBhG189/I+DbaXt0VEhc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace config/xmlschema/check.sh \
       --replace-fail /usr/bin/ ""
 
-    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in}; do
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
+      config/firewall-{applet,config}.desktop.in; do
         substituteInPlace $file \
           --replace-fail /usr "$out"
     done
+  ''
+  + lib.optionalString withGui ''
+    substituteInPlace src/firewall-applet.in \
+      --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
+      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
@@ -151,7 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) firewalld firewall-firewalld;
+    firewalld = nixosTests.firewalld;
+    firewall-firewalld = nixosTests.firewall-firewalld;
   };
 
   meta = {

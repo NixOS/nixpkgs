@@ -16,18 +16,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.10";
+  version = "2.09";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
     tag = finalAttrs.version;
-    hash = "sha256-Rp7BgtJnV3fPed/QlWSxH8nL7cCTgMDpRGcgX5VI2l0=";
+    hash = "sha256-s+93NoJ1O6/Af33pUobSA0kAhpw7W0IdA9H6CVxShQY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-yAM1jzebUlNkVWiY8lPtlelfqpFQonNcAqNmmghCdPU=";
+  vendorHash = "sha256-2c8Q7+97jSGo8lwWOYBg76K04+TFXG1DdQzVMR8G7ik=";
 
   ldflags = [
     "-s"
@@ -49,9 +49,6 @@ buildGoModule (finalAttrs: {
     wrapGAppsHook3
     writableTmpDirAsHomeHook
   ];
-
-  # git ls-files doesn't work as source is not a git repo
-  checkFlags = [ "-skip=^TestOldVersionLiteralsAreAllowlisted$" ];
 
   env.CGO_ENABLED = 1;
 
@@ -76,10 +73,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Picocrypt-NG/Picocrypt-NG";
     changelog = "https://github.com/Picocrypt-NG/Picocrypt-NG/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      tbutter
-      ryand56
-    ];
+    maintainers = with lib.maintainers; [ tbutter ];
     mainProgram = "picocrypt-ng-gui";
   };
 })

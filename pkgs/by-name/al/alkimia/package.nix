@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library used by KDE finance applications";
-    homepage = "https://invent.kde.org/office/alkimia";
     mainProgram = "onlinequoteseditor5";
     longDescription = ''
       Alkimia is the infrastructure for common storage and business

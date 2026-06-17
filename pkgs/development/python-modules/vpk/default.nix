@@ -24,6 +24,6 @@ buildPythonPackage rec {
     mainProgram = "vpk";
     homepage = "https://github.com/ValvePython/vpk";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ joshuafern ];
   };
 }

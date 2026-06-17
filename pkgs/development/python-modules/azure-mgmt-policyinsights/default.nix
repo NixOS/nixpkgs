@@ -1,44 +1,42 @@
 {
   lib,
-  azure-common,
-  azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isodate,
-  setuptools,
-  typing-extensions,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  isPy3k,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "azure-mgmt-policyinsights";
-  version = "1.0.1";
-  pyproject = true;
+  version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "azure_mgmt_policyinsights";
-    inherit (finalAttrs) version;
-    hash = "sha256-rsmIKwVcRrWUxDjJf1Cj4YczEooRUwRpzgl6fFmaDl0=";
+    inherit pname version;
+    extension = "zip";
+    sha256 = "75103fb4541aeae30bb687dee1fedd9ca65530e6b97b2d9ea87f74816905202a";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    isodate
-    typing-extensions
-  ];
+    msrest
+    msrestazure
+  ]
+  ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;
-
   pythonImportsCheck = [ "azure.mgmt.policyinsights" ];
 
   meta = {
-    description = "Microsoft Azure Policy Insights Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/policyinsights/azure-mgmt-policyinsights";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-policyinsights_${finalAttrs.version}/sdk/policyinsights/azure-mgmt-policyinsights/CHANGELOG.md";
+    description = "This is the Microsoft Azure Policy Insights Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-})
+}

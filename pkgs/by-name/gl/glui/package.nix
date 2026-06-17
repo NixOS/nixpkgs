@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "User interface library using OpenGL";
-    homepage = "https://github.com/libglui/glui";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

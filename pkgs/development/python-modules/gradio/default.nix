@@ -15,7 +15,7 @@
 
   # web assets
   zip,
-  nodejs-slim,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -33,7 +33,6 @@
   huggingface-hub,
   jinja2,
   markupsafe,
-  matplotlib,
   numpy,
   orjson,
   packaging,
@@ -78,7 +77,8 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  pnpm = pnpm_10;
+  nodejs = nodejs_24;
+  pnpm = pnpm_10.override { inherit nodejs; };
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
@@ -109,7 +109,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     zip
-    nodejs-slim
+    nodejs
     pnpm
     pnpmConfigHook
     writableTmpDirAsHomeHook
@@ -125,7 +125,6 @@ buildPythonPackage (finalAttrs: {
     "aiofiles"
     "tomlkit"
   ];
-
   dependencies = [
     aiofiles
     anyio
@@ -138,7 +137,6 @@ buildPythonPackage (finalAttrs: {
     huggingface-hub
     jinja2
     markupsafe
-    matplotlib
     numpy
     orjson
     packaging

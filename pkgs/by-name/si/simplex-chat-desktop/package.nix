@@ -2,21 +2,22 @@
   lib,
   appimageTools,
   fetchurl,
+  gitUpdater,
   stdenv,
 }:
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.5.4";
+  version = "6.5.2";
 
   sources = {
     "aarch64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-aarch64.AppImage";
-      hash = "sha256-/tlCdCyy7FRlDMFWsx1S4JbIJqombk23LPum/tH6psU=";
+      hash = "sha256-CvHwYKbieRYbBKUCoKAa11rTy5Opdfb7FKS4poantKs=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-      hash = "sha256-iQdy8nxakCv0XxpN04W50X3OWibcMn1ZnT+qYvkyfXg=";
+      hash = "sha256-caRL09PKJ33XHRReZ5qSpfgKH0wpJxGSHXfA83sz5UE=";
     };
   };
 
@@ -45,9 +46,11 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  passthru = {
-    inherit sources;
-    updateScript = ./update.sh;
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/simplex-chat/simplex-chat";
+    rev-prefix = "v";
+    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
+    ignoredVersions = "-";
   };
 
   meta = {

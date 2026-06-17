@@ -1,14 +1,18 @@
 {
   lib,
   buildDunePackage,
-  dune,
+  dune_3,
   stdune,
 }:
 
 buildDunePackage {
   pname = "dune-private-libs";
 
-  inherit (dune) src version;
+  duneVersion = "3";
+
+  inherit (dune_3) src version;
+
+  minimalOCamlVersion = "4.08";
 
   dontAddPrefix = true;
 

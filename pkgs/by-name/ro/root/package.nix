@@ -51,7 +51,6 @@
   patchRcPathPosix,
   onetbb,
   xrootd,
-  freetype,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -118,10 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk.privateFrameworksHook
-    freetype
-  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
     libGL
@@ -141,6 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
     patchShebangs cmake/unix/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Eliminate impure reference to /System/Library/PrivateFrameworks
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
   ''
   +
     lib.optionalString

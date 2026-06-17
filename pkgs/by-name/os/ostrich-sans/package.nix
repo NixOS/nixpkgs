@@ -2,17 +2,11 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "ostrich-sans";
   version = "2014-04-18";
-
-  outputs = [
-    "out"
-    "webfont"
-  ];
 
   src = fetchFromGitHub {
     owner = "theleagueof";
@@ -21,7 +15,13 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-vvTNtl+fO2zWooH1EvCmO/dPYYgCkj8Ckg5xfg1gtnw=";
   };
 
-  nativeBuildInputs = [ installFonts ];
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Gorgeous modern sans-serif with a very long neck";

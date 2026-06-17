@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "3.3.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     tag = "v${version}";
-    hash = "sha256-tehmtySHiwXQBFZDcj87DAP0WMyp3kDXW0LZApkHZwY=";
+    hash = "sha256-w1L4W99OaNknFtdsdkjJXsdOCmjtYvOG7Iy9z9EXFf0=";
   };
 
   postPatch = ''

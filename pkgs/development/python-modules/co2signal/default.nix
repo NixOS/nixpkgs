@@ -2,26 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   requests,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "co2signal";
   version = "0.4.2";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) version;
+    inherit version;
     pname = "CO2Signal";
     hash = "sha256-8YdYbknLICRrZloGUZuscv5e1LIDZBcCPKZs6EMaNuo=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
   # Modules has no tests
   doCheck = false;
 
@@ -33,4 +28,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ plabadens ];
   };
-})
+}

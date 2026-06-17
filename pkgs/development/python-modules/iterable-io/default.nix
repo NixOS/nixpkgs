@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "iterable-io";
-  version = "1.0.4";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "iterable-io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6qhizeRZONxEthkk468U6Lh7ES7kgWDBfwsdZm5tuX8=";
+    hash = "sha256-mS8x3M0DNnwW6Ov3TG8b2J702rjOnZT9r38fsIUXkro=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "iterableio" ];
 

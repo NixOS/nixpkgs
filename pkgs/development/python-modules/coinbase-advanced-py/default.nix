@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "coinbase-advanced-py";
-  version = "1.8.3";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coinbase";
     repo = "coinbase-advanced-py";
     tag = "v${version}";
-    hash = "sha256-iGSe0OSCrmglaVzzJOIWwoz9DXLIE82EqK9R2QiTEUw=";
+    hash = "sha256-1XJ4QnFJVSbSCfkB16+UTARXqhlsy36Db3S6ju6nJUY=";
   };
 
   build-system = [

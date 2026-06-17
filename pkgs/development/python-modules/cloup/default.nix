@@ -7,19 +7,19 @@
   setuptools-scm,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "cloup";
-  version = "3.1.0";
+  version = "3.0.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Y3weYo/pjz8gpeRNpZGnK0K/VNfUUnGQvzntX2SvdYU=";
+    inherit pname version;
+    hash = "sha256-UZ9STTxkBA5JoIZrX8C/1q8+rA09aksrULM6sCR9stc=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -28,12 +28,11 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/janLuke/cloup";
     description = "Click extended with option groups, constraints, aliases, help themes";
-    changelog = "https://github.com/janluke/cloup/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/janluke/cloup/releases/tag/v${version}";
     longDescription = ''
-      Enriches Click with option groups, constraints, command aliases, help sections for
-      subcommands, themes for --help and other stuff.
+      Enriches Click with option groups, constraints, command aliases, help sections for subcommands, themes for --help and other stuff.
     '';
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-})
+}

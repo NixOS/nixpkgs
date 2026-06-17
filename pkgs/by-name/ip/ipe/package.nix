@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     platforms = lib.platforms.linux;
   };
 })

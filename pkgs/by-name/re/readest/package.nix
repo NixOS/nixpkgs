@@ -1,7 +1,7 @@
 {
   stdenv,
   rustPlatform,
-  pnpm_11,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   cargo-tauri,
@@ -23,13 +23,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.11.4";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tudx4LLRZXjA5wgfnA7+pBgBIUv1ZOYl2DZbsx7sWr0=";
+    hash = "sha256-VS1YpSy9dw0Z6hOZRKhq/3Yl2+x+jxQf7VWXeDs2HIg=";
     fetchSubmodules = true;
   };
 
@@ -44,13 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_11;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-K6KQfXKBopTFJ4LKbFYSe0wVtwWkkhj40nMzYosBeGw=";
+    hash = "sha256-AnCxGeYaA5pY3tXA8e03fAXvU/mj4mBP0ZA3MUkodNo=";
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-HQ7nQvxpfGTudOTGVaXRPqaxFrAOA2HnIcgFpmJsgDI=";
+  cargoHash = "sha256-BGI1C8SSDjkqhkBhos1GVXMaIUpYmSmPgb6lTuZJSQs=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -63,8 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
 
-    jq '.version = "${finalAttrs.version}"' package.json | sponge package.json
-
     mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
     cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
     jq '.scripts.build = "true"' \
@@ -76,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_10
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -117,9 +115,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pname = "tauri-plugin-turso";
     version = finalAttrs.version;
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
-    pnpm = pnpm_11;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-RIoTkX0ivaM9EJt3fsLpZhHd2lE4ZtDnAi9syONXUus=";
+    hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
   };
 
   passthru.tursoPlugin = stdenv.mkDerivation {
@@ -128,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
 
     nativeBuildInputs = [
-      pnpm_11
+      pnpm_10
       pnpmConfigHook
       nodejs
     ];

@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "exa-py";
-  version = "2.13.1-unstable-2026-06-03";
+  version = "2.12.0-unstable-2026-04-15";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,9 +35,17 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "exa-labs";
     repo = "exa-py";
-    rev = "42fde906ecd069c15ad4888e1585b395a0db7edf";
-    hash = "sha256-6o4SKAeP5q+57LCbbw5vP7r/dEA1HiQNa9CkopbTlxg=";
+    rev = "af7f88999763f1cb7e3c4a67f4aa24cef5f6eb11";
+    hash = "sha256-7rLEvjngSRObFdT1DcrZfqWBCsvWVxdNIgxBNhNNk+4=";
   };
+
+  # https://github.com/pytest-dev/pytest-asyncio/issues/658
+  # default behaviour changes with new python version.
+  # planning on trying to vendor upstream
+  postPatch = ''
+    substituteInPlace tests/unit/test_search_monitors.py --replace-fail \
+      'get_event_loop().run_until_complete' 'run'
+  '';
 
   build-system = [
     poetry-core

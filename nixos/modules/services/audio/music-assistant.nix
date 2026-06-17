@@ -83,18 +83,7 @@ in
         lib.optional cfg.enable 8097 # Music Assistant stream port
         ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
-        ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
-        ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
-          # https://lyrion.org/reference/slimproto-protocol/
-          3483 # Slimproto control
-          # https://lyrion.org/reference/cli/using-the-cli/
-          9000 # Slimproto JSON-RPC
-          9090 # Slimproto CLI
-        ];
-      allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
-        # https://lyrion.org/reference/slimproto-protocol/
-        3483 # Slimproto discovery
-      ];
+        ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780;
       # The information published by Apple 1 seem to not apply to libraop.
       # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
       # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
@@ -166,8 +155,7 @@ in
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        # breaks pyopenssl's cffi calls, used in remote access feature
-        MemoryDenyWriteExecute = false;
+        MemoryDenyWriteExecute = !useYTMusic;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;

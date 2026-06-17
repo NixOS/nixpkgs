@@ -131,14 +131,12 @@ rec {
           preferLocalBuild
           ;
         destination =
-          assert
-            (destination != "" -> (lib.hasPrefix "/" destination && destination != "/"))
-            || throw ''
-              destination must be an absolute path, relative to the derivation's out path,
-              got '${destination}' instead.
+          assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+            destination must be an absolute path, relative to the derivation's out path,
+            got '${destination}' instead.
 
-              Ensure that the path starts with a / and specifies at least the filename.
-            '';
+            Ensure that the path starts with a / and specifies at least the filename.
+          '';
           destination;
         passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
@@ -186,9 +184,8 @@ rec {
   writeText =
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
-    assert
-      lib.strings.isConvertibleWithToString text
-      || throw "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
+    assert lib.assertMsg (lib.strings.isConvertibleWithToString text)
+      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
     lib.warnIf (!lib.isString text)
       "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
@@ -537,9 +534,9 @@ rec {
       finalAttrs:
       args@{
         name ?
-          assert
-            (finalAttrs ? pname && finalAttrs ? version)
-            || throw "symlinkJoin requires either a `name` OR `pname` and `version`";
+          assert lib.assertMsg (
+            finalAttrs ? pname && finalAttrs ? version
+          ) "symlinkJoin requires either a `name` OR `pname` and `version`";
           "${finalAttrs.pname}-${finalAttrs.version}",
         paths,
         stripPrefix ? "",
@@ -549,13 +546,11 @@ rec {
         failOnMissing ? stripPrefix == "",
         ...
       }:
-      assert
-        (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/"))
-        || throw ''
-          stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+        stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
 
-          Ensure that the path starts with / and specifies path to the subdirectory.
-        '';
+        Ensure that the path starts with / and specifies path to the subdirectory.
+      '';
       let
         mapPaths =
           f:
@@ -723,7 +718,6 @@ rec {
       meta ? { },
       passthru ? { },
       substitutions ? { },
-      __structuredAttrs ? false,
     }@args:
     script:
     runCommand name
@@ -736,7 +730,7 @@ rec {
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
-          inherit __structuredAttrs;
+          __structuredAttrs = false;
           pname = name;
           version = "26.05pre-git";
           inherit meta;
@@ -893,7 +887,7 @@ rec {
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile = lib.extendMkDerivation {
-    constructDrv = stdenvNoCC.mkDerivation;
+    constructDrv = stdenv.mkDerivation;
 
     excludeDrvArgNames = [
       "hash"
@@ -914,7 +908,6 @@ rec {
         url ? null,
         message ? null,
         hashMode ? "flat",
-        meta ? { },
       }@args:
       assert (message != null) || (url != null);
       assert (sha256 != null) || (sha1 != null) || (hash != null);
@@ -958,10 +951,6 @@ rec {
           printf '%s' ${lib.escapeShellArg msg}
           exit 1
         '';
-        meta = {
-          license = lib.licenses.unfree;
-        }
-        // meta;
       }
       // (lib.optionalAttrs (name == null) {
         # The case of providing `url`, but not `name`. This has
@@ -1018,9 +1007,12 @@ rec {
         src,
         ...
       }@args:
-      assert !args ? meta || throw "applyPatches will not merge 'meta', change it in 'src' instead";
-      assert
-        !args ? passthru || throw "applyPatches will not merge 'passthru', change it in 'src' instead";
+      assert lib.assertMsg (
+        !args ? meta
+      ) "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert lib.assertMsg (
+        !args ? passthru
+      ) "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace

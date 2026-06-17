@@ -44,7 +44,7 @@ let
   ];
 
   deps = [
-    libgcc
+    libgcc.lib
     glib
     nss
     nspr

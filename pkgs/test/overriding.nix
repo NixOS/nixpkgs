@@ -8,7 +8,6 @@ let
   tests =
     tests-stdenv
     // test-extendMkDerivation
-    // tests-fetchgit
     // tests-fetchhg
     // tests-fetchurl
     // tests-go
@@ -148,41 +147,11 @@ let
       };
     };
 
-  /**
-    Take two positional arguments `fakeHash` and `partialHash`,
-    and return a modified version of fakeHash whose hash body is partially substituted by `partialHash` from the beginning,
-    used to assert a specific fake hash variant is used by an overridden FOD.
-
-    # Inputs
-
-    `fakeHash`
-
-    : The specified zero fake hash
-
-    `partialHash`
-
-    : A trimmed non-zero hash body, to substitute the beginning of the zero hash body.
-  */
-  genNonzeroFakeHash =
-    fakeHash:
-    let
-      isSRIHash = lib.hasInfix "-" fakeHash;
-      defaultHashAlgo = lib.optionalString isSRIHash lib.head (lib.splitString "-" lib.fakeHash);
-      defaultHashPrefix = lib.optionalString isSRIHash (defaultHashAlgo + "-");
-      defaultHashBody = lib.removePrefix defaultHashPrefix fakeHash;
-    in
-    partialHash:
-    defaultHashPrefix
-    + partialHash
-    + (lib.substring (lib.stringLength partialHash) (lib.stringLength defaultHashBody) defaultHashBody);
-
   tests-fetchgit =
     let
-      fakeSha256-1 = genNonzeroFakeHash lib.fakeSha256 "1";
-      fakeHash-2 = genNonzeroFakeHash lib.fakeHash "B";
       src-with-sha256 = pkgs.fetchgit {
         url = "https://example.com/source.git";
-        sha256 = fakeSha256-1;
+        sha256 = lib.fakeSha256;
       };
     in
     {
@@ -194,19 +163,19 @@ let
             ;
         };
         expected = {
-          outputHash = fakeSha256-1;
+          outputHash = lib.fakeSha256;
           outputHashAlgo = "sha256";
         };
       };
       test-fetchgit-overrideAttrs-hash = {
         expr = {
-          inherit (src-with-sha256.overrideAttrs { hash = fakeHash-2; })
+          inherit (src-with-sha256.overrideAttrs { hash = pkgs.nix.src.hash; })
             outputHash
             outputHashAlgo
             ;
         };
         expected = {
-          outputHash = fakeHash-2;
+          outputHash = pkgs.nix.src.hash;
           outputHashAlgo = null;
         };
       };
@@ -226,11 +195,9 @@ let
 
   tests-fetchurl =
     let
-      fakeSha256-1 = genNonzeroFakeHash lib.fakeSha256 "1";
-      fakeHash-2 = genNonzeroFakeHash lib.fakeHash "B";
       src-with-sha256 = pkgs.fetchurl {
         url = "https://example.com/source.tar.gz";
-        sha256 = fakeSha256-1;
+        sha256 = lib.fakeSha256;
       };
     in
     {
@@ -242,19 +209,19 @@ let
             ;
         };
         expected = {
-          outputHash = fakeSha256-1;
+          outputHash = lib.fakeSha256;
           outputHashAlgo = "sha256";
         };
       };
       test-fetchurl-overrideAttrs-hash = {
         expr = {
-          inherit (src-with-sha256.overrideAttrs { hash = fakeHash-2; })
+          inherit (src-with-sha256.overrideAttrs { hash = pkgs.hello.src.hash; })
             outputHash
             outputHashAlgo
             ;
         };
         expected = {
-          outputHash = fakeHash-2;
+          outputHash = pkgs.hello.src.hash;
           outputHashAlgo = null;
         };
       };

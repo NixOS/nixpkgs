@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "flask-jwt-extended";
-  version = "4.7.4";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_jwt_extended";
     inherit version;
-    hash = "sha256-eP0PRgMX+s86AISmRX/68vHdqe771Xb5TOo1sOrdVTE=";
+    hash = "sha256-gIXWdXUFtvMpGiY4yE0gfo8K0N5mLR9Gqi935ligyXY=";
   };
 
   build-system = [ setuptools ];

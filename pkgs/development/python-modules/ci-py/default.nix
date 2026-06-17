@@ -2,27 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "ci-py";
   version = "1.0.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-R/6bLsXOKGxiJDZUvvOuvLp3usEhfg698qvvgOwBXYk=";
   };
 
-  build-system = [ setuptools ];
-
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "'pytest-runner', " ""
+      --replace "'pytest-runner', " ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -36,4 +31,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-})
+}

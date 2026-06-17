@@ -51,6 +51,8 @@ in
     maintainers = [
       lib.maintainers.kmein
     ];
+    # https://github.com/NixOS/infra/issues/987
+    hydraPlatforms = [ ];
   };
 
   containers = {

@@ -10,24 +10,22 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
+  vulkan-loader,
   which,
 }:
 
-let
-  electron = electron_41;
-in
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.11.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-XEu0x9g2mEsmY+vZtazTOzW6KNMRbrxlPck/kPNehmo=";
+    hash = "sha256-/e/NpyfcrHsgMf8tJ8VgUyCOrdfAaRH0/+kUqItd1+s=";
   };
 
-  npmDepsHash = "sha256-urLRj7668NX7CaDWAVxAoOg+c1TmMyvf23Je+RmFwHE=";
+  npmDepsHash = "sha256-RvIjGXhjNqxey3zhACGj7Zd0dnmLb1IqIg/PnfEdjz0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -37,23 +35,33 @@ buildNpmPackage rec {
 
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    # disable code signing on Darwin
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  };
 
   makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
 
-    electron_dist="$(mktemp -d)"
-    cp -r ${electron.dist}/. "$electron_dist"
-    chmod -R u+w "$electron_dist"
+    cp -r ${electron_41.dist} electron-dist
+    chmod -R u+w electron-dist
+  ''
+  # Electron builder complains about symlink in electron-dist
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm electron-dist/libvulkan.so.1
+    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
+  ''
+  + ''
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist="$electron_dist" \
-        -c.electronVersion=${electron.version} \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -75,7 +83,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils

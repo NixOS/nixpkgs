@@ -3,19 +3,16 @@
   asynctest,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
   zigpy,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "zigpy-cc";
   version = "0.5.2";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
@@ -24,13 +21,11 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cc";
-    tag = finalAttrs.version;
-    hash = "sha256-U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
+    rev = version;
+    sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pyserial-asyncio
     zigpy
   ];
@@ -60,4 +55,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-})
+}

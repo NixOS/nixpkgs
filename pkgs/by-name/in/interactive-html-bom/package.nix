@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "interactive-html-bom";
-  version = "2.11.2";
+  version = "2.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openscopeproject";
     repo = "InteractiveHtmlBom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MNwQJAibnAAMvsoTWtFiIhM6TGVUs7B2w6sA4ruXFbc=";
+    hash = "sha256-j8ORSHMZ3aWtWNA5UaHeL+OXh4D1wdek5JjinmqpOfI=";
   };
 
   build-system = [ python3Packages.hatchling ];

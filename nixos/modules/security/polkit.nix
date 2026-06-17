@@ -6,52 +6,27 @@
 }:
 let
 
-  inherit (lib)
-    mkEnableOption
-    mkOption
-    mkIf
-    mkPackageOption
-    mkRemovedOptionModule
-    types
-    ;
-
   cfg = config.security.polkit;
+
 in
 
 {
-  imports = [
-    (mkRemovedOptionModule [ "security" "polkit" "debug" ] "Use security.polkit.extraArgs instead")
-  ];
 
-  options.security.polkit = {
-    enable = mkEnableOption "polkit";
+  options = {
 
-    enablePkexecWrapper = mkEnableOption "the setuid pkexec wrapper";
+    security.polkit.enable = lib.mkEnableOption "polkit";
 
-    package = mkPackageOption pkgs "polkit" { };
+    security.polkit.package = lib.mkPackageOption pkgs "polkit" { };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
-      default = [
-        "--no-debug"
-        "--log-level=notice"
-      ];
-      description = ''
-        List of arguments to pass to the polkitd executable.
+    security.polkit.debug = lib.mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
 
-        ::: {.note}
-        To see debug logs you need to negate the default `--no-debug` setting.
-        :::
-      '';
-    };
-
-    extraConfig = mkOption {
-      type = types.lines;
+    security.polkit.extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         /* Log authorization checks. */
         polkit.addRule(function(action, subject) {
-          // Make sure to negate --no-debug in services.polkit.extraArgs: { security.polkit.extraArgs = [ "--log-level=notice" ]; }
+          // Make sure to set { security.polkit.debug = true; } in configuration.nix
           polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
         });
 
@@ -66,8 +41,8 @@ in
       '';
     };
 
-    adminIdentities = mkOption {
-      type = with types; listOf str;
+    security.polkit.adminIdentities = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "unix-group:wheel" ];
       example = [
         "unix-user:alice"
@@ -83,34 +58,25 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [
       cfg.package.bin
       cfg.package.out
     ];
 
-    services.dbus.packages = [ cfg.package.out ];
-
     systemd.packages = [ cfg.package.out ];
 
-    systemd.services.polkit = {
-      restartTriggers = [ config.system.path ];
-      reloadTriggers = [
-        config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
-      ];
-      serviceConfig.ExecStart = [
-        # nuke default ExecStart
-        ""
-        # provide our own instead
-        (toString (
-          [
-            "${lib.getLib cfg.package}/lib/polkit-1/polkitd"
-          ]
-          ++ cfg.extraArgs
-        ))
-      ];
-    };
+    systemd.services.polkit.serviceConfig.ExecStart = [
+      ""
+      "${cfg.package.out}/lib/polkit-1/polkitd ${lib.optionalString (!cfg.debug) "--no-debug"}"
+    ];
+
+    systemd.services.polkit.restartTriggers = [ config.system.path ];
+    systemd.services.polkit.reloadTriggers = [
+      config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
+    ];
+    systemd.services.polkit.stopIfChanged = false;
 
     systemd.sockets."polkit-agent-helper".wantedBy = [ "sockets.target" ];
 
@@ -123,7 +89,7 @@ in
       # The upstream unit uses PrivateDevices=yes and ProtectHome=yes,
       # which prevents PAM modules from accessing hardware (e.g. FIDO
       # tokens via /dev/hidraw*) or reading key files from home directories.
-      (mkIf config.security.pam.u2f.enable {
+      (lib.mkIf config.security.pam.u2f.enable {
         # Override upstream PrivateDevices=yes to allow access to /dev/hidraw*
         PrivateDevices = false;
         DeviceAllow = [
@@ -134,7 +100,7 @@ in
         # ~/.config/Yubico/u2f_keys (the default key file location)
         ProtectHome = "read-only";
       })
-      (mkIf config.security.pam.zfs.enable {
+      (lib.mkIf config.security.pam.zfs.enable {
         PrivateDevices = false;
         DeviceAllow = [
           "/dev/zfs rw"
@@ -154,15 +120,22 @@ in
       ${cfg.extraConfig}
     ''; # TODO: validation on compilation (at least against typos)
 
+    services.dbus.packages = [ cfg.package.out ];
+
     security.pam.services.polkit-1 = { };
 
     security.wrappers.pkexec = {
-      enable = cfg.enablePkexecWrapper;
       setuid = true;
       owner = "root";
       group = "root";
-      source = lib.getExe' cfg.package "pkexec";
+      source = "${cfg.package.bin}/bin/pkexec";
     };
+
+    systemd.tmpfiles.rules = [
+      # Probably no more needed, clean up
+      "R /var/lib/polkit-1"
+      "R /var/lib/PolicyKit"
+    ];
 
     users.users.polkituser = {
       description = "PolKit daemon";

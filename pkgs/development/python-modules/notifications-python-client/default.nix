@@ -13,16 +13,16 @@
   setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "12.1.0";
+  version = "10.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = "notifications-python-client";
-    tag = finalAttrs.version;
-    hash = "sha256-jaNALtQQBxBE2ofBw9ZXC4z5VCnclAAHYvPMTBK74tY=";
+    tag = version;
+    hash = "sha256-k4q6FS3wjolt4+qtDQlunBLmCCPgLgrhr8zgOMEX4QU=";
   };
 
   postPatch = ''
@@ -51,8 +51,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
-    changelog = "https://github.com/alphagov/notifications-python-client/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

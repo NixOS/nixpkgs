@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-gccStdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation rec {
   pname = "altermime";
   version = "0.3.11";
 
   src = fetchurl {
-    url = "https://pldaniels.com/altermime/altermime-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R17ScQWH0k8R0A2vpcP234rHnhO4xdVNLqNVdrV5/Zc=";
+    url = "https://pldaniels.com/altermime/altermime-${version}.tar.gz";
+    sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -36,4 +36,4 @@ gccStdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };
-})
+}

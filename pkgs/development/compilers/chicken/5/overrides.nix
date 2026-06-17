@@ -331,7 +331,6 @@ in
   hypergiant = broken;
   iup = broken;
   kiwi = broken;
-  libyaml = broken;
   lmdb-ht = broken;
   mpi = broken;
   oauthtoothy = broken;

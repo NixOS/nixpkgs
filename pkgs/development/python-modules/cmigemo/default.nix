@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   six,
   cmigemo,
   pytestCheckHook,
@@ -12,18 +11,14 @@
 buildPythonPackage (finalAttrs: {
   pname = "cmigemo";
   version = "0.1.6";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-cxOqMAf2dgCwZuBKSAXkRFY9FRNB3rMwE1tNzfZERiY=";
+    sha256 = "09j68kvcskav2cqb7pj12caksmj4wh2lhjp0csq00xpn0wqal4vk";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
+  propagatedBuildInputs = [ six ];
 
   preConfigure = ''
     export LDFLAGS="-L${cmigemo}/lib"

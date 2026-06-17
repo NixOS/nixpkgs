@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Edit metadata found in PDFs";
-    homepage = "https://github.com/arrufat/pdftag";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     mainProgram = "pdftag";

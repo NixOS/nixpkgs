@@ -37,7 +37,7 @@
   libkate,
   librsvg,
   libxpm,
-  qt5,
+  libsForQt5,
   libupnp,
   aalib,
   libcaca,
@@ -175,9 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     libkate
     librsvg
     libxpm
-    qt5.qtsvg
-    qt5.qtbase
-    qt5.qtx11extras
+    libsForQt5.qt5.qtsvg
+    libsForQt5.qt5.qtbase
+    libsForQt5.qt5.qtx11extras
     libupnp
     aalib
     libcaca

@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_18_0,
+  cargo-pgrx_0_17_0,
   fetchFromGitHub,
   fetchurl,
   lib,
@@ -11,16 +11,16 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.24.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w/MRK3NUqBXQig9VgtbbDvVkgYXDUH6ZhmiJqPKJgQk=";
+    hash = "sha256-CLzr62ALQIwKfWlYBTDich6xptwHgljybRUaZFNNH6s=";
   };
 
-  cargoHash = "sha256-aH2Uivowht2AN3Tx6PTwp0+8yoVaZn8Yn8QMmUr43k8=";
+  cargoHash = "sha256-0BodKlduhK1s7Carnt0ZU9+XuLrFNaGlzS1WZNts9MA=";
 
   inherit postgresql;
 
@@ -74,7 +74,7 @@ buildPgrxExtension (finalAttrs: {
   # To determinate which version of cargo-pgrx to use, consult the project's main Cargo.toml:
   # https://github.com/paradedb/paradedb/tree/${version}/Cargo.toml
   # In that file, check the version of pgrx and pgrx-tests under workspace.dependencies
-  cargo-pgrx = cargo-pgrx_0_18_0;
+  cargo-pgrx = cargo-pgrx_0_17_0;
 
   cargoPgrxFlags = [
     "--package"

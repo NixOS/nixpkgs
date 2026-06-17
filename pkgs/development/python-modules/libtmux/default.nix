@@ -7,24 +7,21 @@
   ncurses,
   procps,
   pytest-rerunfailures,
-  pytest-xdist,
   pytestCheckHook,
   tmux,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.58.0";
+  version = "0.55.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w5WutYesmIIBhWtcT5Qahyx7NffRBM+MPE7KOGF3fkU=";
+    hash = "sha256-A8mi0Q9ScbHmFRSvcF+wbn+lAO8B3/rU/+HvTXvxWPE=";
   };
-
-  patches = [ ./0001-fix-test_control_mode_stdout_preserves_non_ascii_out.patch ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -34,33 +31,34 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   nativeCheckInputs = [
-    ncurses
     procps
-    pytestCheckHook
-    pytest-rerunfailures
-    pytest-xdist
     tmux
+    ncurses
+    pytest-rerunfailures
+    pytestCheckHook
   ];
 
   enabledTestPaths = [ "tests" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
     "test_new_session_width_height"
-    # AssertionError: assert '' == '$'
-    "test_capture_pane"
-    # AssertionError: assert '' == '$'
+    # Assertion error
     "test_capture_pane_start"
-    # AssertionError: assert '' == '$'
-    "test_capture_pane_end"
-    # IndexError: list index out of range
-    "test_new_window_with_environment"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # tests/test_pane.py:113: AssertionError
+    "test_capture_pane_start"
+    # assert (1740973920.500444 - 1740973919.015309) <= 1.1
+    "test_retry_three_times"
+    "test_function_times_out_no_raise"
+    # assert False
+    "test_retry_three_times_no_raise_assert"
   ];
 
-  pythonImportsCheck = [ "libtmux" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
 
-  __darwinAllowLocalNetworking = true;
+  pythonImportsCheck = [ "libtmux" ];
 
   meta = {
     description = "Typed scripting library / ORM / API wrapper for tmux";

@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "vine";
   version = "5.1.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-i2LpgdNcQQSSEc9ioKEkLYwe6b0Vuxls44rv1nmeYeA=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -32,8 +29,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python promises";
     homepage = "https://github.com/celery/vine";
-    changelog = "https://github.com/celery/vine/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/celery/vine/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

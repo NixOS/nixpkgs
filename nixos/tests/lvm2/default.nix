@@ -1,6 +1,8 @@
 {
-  pkgs,
-  runTest,
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../../.. { inherit system config; },
+  lib ? pkgs.lib,
   kernelVersionsToTest ? [
     "5.10"
     "5.15"
@@ -13,36 +15,38 @@
 
 # For quickly running a test, the nixosTests.lvm2.lvm-thinpool-linux-latest attribute is recommended
 let
-  inherit (pkgs) lib;
+  tests =
+    let
+      callTest = p: lib.flip (import p) { inherit system pkgs; };
+    in
+    {
+      thinpool = {
+        test = callTest ./thinpool.nix;
+        kernelFilter = lib.id;
+      };
+      # we would like to test all versions, but the kernel module currently does not compile against the other versions
+      vdo = {
+        test = callTest ./vdo.nix;
+        kernelFilter = lib.filter (v: v == "latest");
+      };
 
-  tests = {
-    thinpool = {
-      test = ./thinpool.nix;
-      kernelFilter = lib.id;
+      # systemd in stage 1
+      raid-sd-stage-1 = {
+        test = callTest ./systemd-stage-1.nix;
+        kernelFilter = lib.filter (v: v != "5.15");
+        flavour = "raid";
+      };
+      thinpool-sd-stage-1 = {
+        test = callTest ./systemd-stage-1.nix;
+        kernelFilter = lib.id;
+        flavour = "thinpool";
+      };
+      vdo-sd-stage-1 = {
+        test = callTest ./systemd-stage-1.nix;
+        kernelFilter = lib.filter (v: v == "latest");
+        flavour = "vdo";
+      };
     };
-    # we would like to test all versions, but the kernel module currently does not compile against the other versions
-    vdo = {
-      test = ./vdo.nix;
-      kernelFilter = lib.filter (v: v == "latest");
-    };
-
-    # systemd in stage 1
-    raid-sd-stage-1 = {
-      test = ./systemd-stage-1.nix;
-      kernelFilter = lib.filter (v: v != "5.15");
-      flavour = "raid";
-    };
-    thinpool-sd-stage-1 = {
-      test = ./systemd-stage-1.nix;
-      kernelFilter = lib.id;
-      flavour = "thinpool";
-    };
-    vdo-sd-stage-1 = {
-      test = ./systemd-stage-1.nix;
-      kernelFilter = lib.filter (v: v == "latest");
-      flavour = "vdo";
-    };
-  };
 in
 lib.listToAttrs (
   lib.filter (x: x.value != { }) (
@@ -57,17 +61,18 @@ lib.listToAttrs (
       lib.flip lib.mapAttrsToList tests (
         name: t:
         lib.nameValuePair "lvm-${name}-linux-${v'}" (
-          lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (runTest {
-            imports = [ t.test ];
-            _module.args = {
-              kernelPackages = pkgs."linuxPackages_${v'}";
-              inherit mkXfsFlags;
-            }
-            // removeAttrs t [
-              "test"
-              "kernelFilter"
-            ];
-          })
+          lib.optionalAttrs (builtins.elem version (t.kernelFilter kernelVersionsToTest)) (
+            t.test (
+              {
+                kernelPackages = pkgs."linuxPackages_${v'}";
+                inherit mkXfsFlags;
+              }
+              // removeAttrs t [
+                "test"
+                "kernelFilter"
+              ]
+            )
+          )
         )
       )
     )

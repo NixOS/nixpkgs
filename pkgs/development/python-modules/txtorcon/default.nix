@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "26.6.0";
+  version = "24.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BAjwY6n8uN9Snayle7c3PqD1tOuv/NUQN1S3xWF3P2g=";
+    hash = "sha256-vv4ZE42cjFMHtu5tT+RG0MIB/9HMQErrJl7ZAwmXitA=";
   };
 
   build-system = [ setuptools ];

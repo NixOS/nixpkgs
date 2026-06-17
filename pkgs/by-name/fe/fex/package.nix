@@ -99,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2605";
+  version = "2604";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-N4iiDa9DbET/8wzFmp9FoFQfm0ZmtUT76sipmi8LE/0=";
+    hash = "sha256-VPlw15vM3wowgba9Z95F/vRYJLaevtt8lJEgw4hYS8w=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -172,7 +172,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
     # Temporarily disable failing tests. TODO: investigate the root cause of these failures
     rm \
-      unittests/ASM/FEX_bugs/SegmentAddressOverride.asm \
       unittests/ASM/Primary/Primary_63_2.asm \
       unittests/32Bit_ASM/Secondary/07_XX_04.asm \
       unittests/ASM/Secondary/07_XX_04.asm

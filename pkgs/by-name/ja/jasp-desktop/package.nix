@@ -16,7 +16,6 @@
   freexl,
   libarchive,
   librdata,
-  libsodium,
   qt6,
   R,
   readstat,
@@ -25,17 +24,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasp-desktop";
-  version = "0.97.1";
+  version = "0.96.0";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4K6ReOJJF8Pt/RdNSp2ZVH/d64ZMCFlX1RIXDAWWWBE=";
+    hash = "sha256-5yvnlhPHssWfO9xxgBRULAMe6e5EyAWr8JVY0BQxKog=";
   };
 
   patches = [
-    ./boost.patch # link boost dynamically
+    ./boost.patch # link boost dynamically, don't try to find removed system stub library
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
     ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
@@ -62,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     freexl
     libarchive
     librdata
-    libsodium
     readstat
 
     qt6.qtbase
@@ -89,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit
       (import ./modules.nix {
-        inherit lib fetchFromGitHub rPackages;
+        inherit fetchFromGitHub rPackages;
         jasp-src = finalAttrs.src;
         jasp-version = finalAttrs.version;
       })
-      customRPackages
-      jaspModules
+      jaspBase
+      modules
       ;
 
     # Merges ${R}/lib/R with all used R packages (even propagated ones)
@@ -103,16 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
       paths = [
         "${R}/lib/R"
         rPackages.RInside
-        finalAttrs.passthru.customRPackages.jaspBase # Should already be propagated from modules, but include it again, just in case
+        finalAttrs.passthru.jaspBase # Should already be propagated from modules, but include it again, just in case
       ]
-      ++ lib.attrValues finalAttrs.passthru.jaspModules;
+      ++ lib.attrValues finalAttrs.passthru.modules;
     };
 
     moduleLibs = linkFarm "jasp-desktop-${finalAttrs.version}-module-libs" (
       lib.mapAttrsToList (name: drv: {
         name = name;
         path = "${drv}/library";
-      }) finalAttrs.passthru.jaspModules
+      }) finalAttrs.passthru.modules
     );
 
     moduleManifests = linkFarm "jasp-desktop-${finalAttrs.version}-module-manifests" (
@@ -122,10 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
           name = name;
           version = drv.version;
         };
-      }) finalAttrs.passthru.jaspModules
+      }) finalAttrs.passthru.modules
     );
-
-    updateScript = ./update.sh;
   };
 
   meta = {

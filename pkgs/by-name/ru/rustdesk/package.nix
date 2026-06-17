@@ -38,18 +38,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.7";
-  __structuredAttrs = true;
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-k4hJjr6xN1EOPfxRoTZMAUXZCFrwod3c+jVtBbqqO0U=";
+    hash = "sha256-2MZOM+SHDrjFhCIHcFB7zABpwC7hNtS0XNFx2FpaqIE=";
   };
 
-  cargoHash = "sha256-vK0Z/BUlsmAIfbG8utHKNVDM3ZHPzHML+4l2tE6aU78=";
+  cargoHash = "sha256-BYVqeuARE+B1AZLH0s5KlYz2/4qTB18LzzgiGBLXRYg=";
 
   patches = [
     ./make-build-reproducible.patch

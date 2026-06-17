@@ -18,7 +18,6 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Share files with an expiration date";
-    homepage = "https://github.com/lukaswrz/hiraeth";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.lukaswrz ];
     mainProgram = "hiraeth";

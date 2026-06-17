@@ -705,6 +705,9 @@ in
         "~@privileged" = true;
         "~@resources" = true;
       })
+      (mkIf (any extensionInstalled [ "plv8" ]) {
+        "@pkey" = true;
+      })
       (mkIf (any extensionInstalled [ "citus" ]) {
         "getpriority" = true;
         "setpriority" = true;
@@ -804,7 +807,9 @@ in
           PrivateTmp = true;
           ProtectHome = true;
           ProtectSystem = "strict";
-          MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off");
+          MemoryDenyWriteExecute = lib.mkDefault (
+            cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ])
+          );
           NoNewPrivileges = true;
           LockPersonality = true;
           PrivateDevices = true;

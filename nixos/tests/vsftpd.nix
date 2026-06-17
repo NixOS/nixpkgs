@@ -4,8 +4,6 @@
 
   nodes = {
     server = {
-      security.pam.services.vsftpd.enable = true;
-
       services.vsftpd = {
         enable = true;
         userlistDeny = false;

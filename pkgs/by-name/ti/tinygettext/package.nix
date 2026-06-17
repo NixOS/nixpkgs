@@ -24,7 +24,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A simple gettext replacement that works directly on .po files";
-    homepage = "https://github.com/tinygettext/tinygettext";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;

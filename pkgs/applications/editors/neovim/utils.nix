@@ -288,7 +288,6 @@ let
 
         toNvimTreesitterGrammar = makeSetupHook {
           name = "to-nvim-treesitter-grammar";
-          meta.license = lib.licenses.mit;
         } ./to-nvim-treesitter-grammar.sh;
       in
 

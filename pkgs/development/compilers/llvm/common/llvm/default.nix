@@ -626,7 +626,6 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man pages for LLVM ${version}";
-      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

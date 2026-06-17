@@ -123,6 +123,12 @@ let
       };
     }
   );
+
+  policiesJson = writeText "policies.json" (
+    builtins.toJSON {
+      policies.DisableAppUpdate = true;
+    }
+  );
 in
 stdenv.mkDerivation rec {
   pname = "mullvad-browser";
@@ -194,7 +200,7 @@ stdenv.mkDerivation rec {
     mv mullvadbrowser.real mullvadbrowser
 
     # store state at `~/.mullvad` instead of relative to executable
-    touch "$MB_IN_STORE/is-packaged-app"
+    touch "$MB_IN_STORE/system-install"
 
     # Add bundled libraries to libPath.
     libPath=${libPath}:$MB_IN_STORE
@@ -276,6 +282,7 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/mullvad-browser/distribution/distribution.ini
+    install -Dvm644 ${policiesJson} $out/share/mullvad-browser/distribution/policies.json
 
     runHook postInstall
   '';

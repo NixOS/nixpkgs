@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchgit,
-  qt5,
+  libsForQt5,
 }:
 
 let
@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     cp -r ${qtil_src.name}/* $sourceRoot/lib/qtil/
   '';
 
-  buildInputs = [
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtquickcontrols
-    qt5.qmake
-    qt5.wrapQtAppsHook
+  buildInputs = with libsForQt5.qt5; [
+    qtbase
+    qtsvg
+    qtquickcontrols
+    qmake
+    wrapQtAppsHook
   ];
 
   meta = {

@@ -1,14 +1,16 @@
 {
   lib,
   buildDunePackage,
-  dune,
+  dune_3,
   csexp,
 }:
 
 buildDunePackage {
   pname = "dune-configurator";
 
-  inherit (dune) src version;
+  inherit (dune_3) src version patches;
+
+  minimalOCamlVersion = "4.05";
 
   dontAddPrefix = true;
 

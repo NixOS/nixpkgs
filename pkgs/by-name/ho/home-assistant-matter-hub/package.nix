@@ -8,18 +8,16 @@
   fetchPnpmDeps,
   makeWrapper,
 }:
-let
-  pnpm = pnpm_10;
-in
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-assistant-matter-hub";
-  version = "2.0.46";
+  version = "2.0.43";
 
   src = fetchFromGitHub {
     owner = "RiDDiX";
     repo = "home-assistant-matter-hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lVsLvniPU7VAgxrUMZsGh9/cWgqap6iyX44r+Ap2Tjk=";
+    hash = "sha256-Dls5TglEIFvVGpg8ENTb6IhCwJermmREHuJnalF4kJ4=";
   };
 
   # The bundled cli.js imports transitive dependencies (e.g. @noble/curves)
@@ -35,9 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmInstallFlags
       pnpmWorkspaces
       ;
-    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-CuO+DTLPBr1WMyUMPKKzwYUrdWJLdWfj0IqmOyysaFo=";
+    hash = "sha256-1DaR4q1QH07UR+EchfDI92bTdRY4C2IaGIRj426DURI=";
   };
 
   __structuredAttrs = true;
@@ -50,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm
+    pnpm_10
     pnpmConfigHook
     makeWrapper
   ];

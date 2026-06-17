@@ -2,22 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "types-urllib3";
   version = "1.26.25.14";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-Ipt/V3yVG4wbksG8Ky/bC0mEe9KvbRzCouPdNA872o8=";
   };
-
-  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
@@ -30,4 +25,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

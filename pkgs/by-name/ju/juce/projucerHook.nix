@@ -6,8 +6,5 @@
 makeSetupHook {
   name = "projucer-hook";
   propagatedBuildInputs = [ (callPackage ./package.nix { }) ];
-  meta = {
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-  };
+  meta.platforms = lib.platforms.linux;
 } ./projucer-hook.sh

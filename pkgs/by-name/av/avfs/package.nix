@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  fuse3,
+  fuse,
   xz,
   zlib,
 }:
@@ -19,14 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    fuse3
+    fuse
     xz
     zlib
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
-  };
 
   configureFlags = [
     "--enable-library"

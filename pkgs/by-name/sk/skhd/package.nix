@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "skhd";
     maintainers = with lib.maintainers; [
       cmacrae
+      lnl7
       khaneliman
     ];
     platforms = lib.platforms.darwin;

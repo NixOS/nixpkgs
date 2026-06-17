@@ -20,7 +20,6 @@ let
       darwinSuffixSalt = stdenv.cc.suffixSalt;
       avrSuffixSalt = avrgcc.suffixSalt;
     };
-    meta.license = lib.licenses.mit;
   } ./setup-hook-darwin.sh;
 
 in

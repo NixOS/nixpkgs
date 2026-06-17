@@ -2,30 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "base36";
   version = "0.1.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tonyseek";
     repo = "python-base36";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Jd9bQxTlb2ZsWmtHmCtx8FdWZMRqfvyFfnV+oNOs1hw=";
+    rev = "v${version}";
+    sha256 = "076nmk9s0zkmgs2zqzkaqij5cmzhf4mrhivbb9n6cvz52i1mppr5";
   };
-
-  build-system = [ setuptools ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace-fail "[pytest]" "[tool:pytest]" \
-      --replace-fail "--pep8 --cov" ""
+      --replace "[pytest]" "[tool:pytest]" \
+      --replace "--pep8 --cov" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -39,4 +34,4 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

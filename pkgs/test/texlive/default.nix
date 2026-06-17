@@ -239,7 +239,11 @@ rec {
     runCommand "texlive-test-texdoc"
       {
         nativeBuildInputs = [
-          ((texlive.withPackages (ps: [ ps.texdoc ])).overrideAttrs { withDocs = true; })
+          (texlive.withPackages (ps: [
+            ps.luatex
+            ps.texdoc
+            ps.texdoc.texdoc
+          ]))
         ];
       }
       ''
@@ -947,7 +951,7 @@ rec {
         scheme:
         builtins.foldl' (
           acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [ ]))
-        ) [ ] scheme.passthru.includedTeXPackages;
+        ) [ ] scheme.passthru.requiredTeXPackages;
       correctLicensesAttrNames = scheme: lib.sort lt (map licenseToAttrName (correctLicenses scheme));
 
       hasLicenseMismatch =

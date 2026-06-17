@@ -1,7 +1,7 @@
-diff --git a/src/libponyc/codegen/genexe.cc b/src/libponyc/codegen/genexe.cc
+diff --git a/src/libponyc/codegen/genexe.c b/src/libponyc/codegen/genexe.c
 index 3f0348eaa1..76b03030bf 100644
---- a/src/libponyc/codegen/genexe.cc
-+++ b/src/libponyc/codegen/genexe.cc
+--- a/src/libponyc/codegen/genexe.c
++++ b/src/libponyc/codegen/genexe.c
 @@ -308,7 +308,7 @@
    snprintf(ld_cmd, ld_len,
      "%s -execute -arch %.*s "

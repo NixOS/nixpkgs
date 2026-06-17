@@ -3,29 +3,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools,
   six,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pyscss";
   version = "1.4.0";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "pyScss";
     owner = "Kronuz";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
-
   nativeCheckInputs = [ pytestCheckHook ];
+
+  propagatedBuildInputs = [ six ];
 
   # Test suite is broken.
   # See https://github.com/Kronuz/pyScss/issues/415
@@ -37,4 +32,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

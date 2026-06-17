@@ -6,13 +6,14 @@
   nodejs,
   jitsi-meet,
   fetchPnpmDeps,
-  pnpm_11,
+  pnpm_10,
   pnpmConfigHook,
   faketty,
 }:
 
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_10;
+
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -25,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.21";
+  version = "1.12.18";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wtMmfNZptCMPp3j6dicEM/80otz20UBQw+HXb8EXJl0=";
+    hash = "sha256-G2HEOv1fHVgbT79bo8ibp9VmtQ8o5vA6/i6Q5TUKqdw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-OPpJ5XJ0YeidvlT88JwQIKXxbQ40l0xdVH/9uT3La2M=";
+    hash = "sha256-0iGzjwT+99tvRuxYD+1+SrYrCYAI1dcjhXT3x6E/wHg=";
   };
 
   nativeBuildInputs = [

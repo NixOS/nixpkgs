@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
+  fetchurl,
   pkg-config,
   gettext,
   itstool,
@@ -12,10 +10,8 @@
   gtk3,
   hicolor-icon-theme,
   json-glib,
-  mate-common,
   mate-desktop,
   wrapGAppsHook3,
-  yelp-tools,
   gitUpdater,
   # can be defaulted to true once switch to meson
   withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -24,26 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "engrampa";
-  version = "1.28.3";
+  version = "1.28.2";
 
-  src = fetchFromGitHub {
-    owner = "mate-desktop";
-    repo = "engrampa";
-    tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-bmqCsbGz49wda1sMiAvG3XTGpFEwMvDx8ojuzxZ9MAI=";
+  src = fetchurl {
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/engrampa-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Hpl3wjdFv4hDo38xUXHZr5eBSglxrqw9d08BdlCsCe8=";
   };
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
     pkg-config
     gettext
     itstool
     libxml2 # for xmllint
-    mate-common # mate-common.m4 macros
     wrapGAppsHook3
-    yelp-tools
   ];
 
   buildInputs = [
@@ -67,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/engrampa";
     odd-unstable = true;
     rev-prefix = "v";
   };

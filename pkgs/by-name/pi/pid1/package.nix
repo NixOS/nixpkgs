@@ -6,26 +6,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pid1";
-  version = "0.1.6";
-
-  __structuredAttrs = true;
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "pid1-rs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-edxDCVEVg4s2RF3wjiUjQ4wfusFM3COUTl5nsCH4ScE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2dnQj3AQxedyq1YvHKt+lVXNEtuB5sMRSCqX9YeifzI=";
   };
 
-  cargoHash = "sha256-mXZszLmIOEq3ZL6cJhrhBCi0bHNgbKG6gr6Rf4iFvEM=";
-
-  # all tests require docker env
-  doCheck = false;
+  cargoHash = "sha256-ldHtmbLoSFVxb0B3Oj21UOFNSXwu8xAPhpE8jBqOwr4=";
 
   meta = {
     description = "Signal handling and zombie reaping for PID1 process";
     homepage = "https://github.com/fpco/pid1-rs";
-    changelog = "https://github.com/fpco/pid1-rs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "pid1";

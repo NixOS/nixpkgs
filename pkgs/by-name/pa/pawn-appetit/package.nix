@@ -27,13 +27,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pawn-appetit";
-  version = "0.12.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Pawn-Appetit";
     repo = "pawn-appetit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kpExWdZh4Y0ZwBttpqE/nALyUJNWSEOy8HLcfauReY=";
+    hash = "sha256-9D8zeo62+xb5EsVQ39nPcwCx1w/47oY0NNFQyrSpFGQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
 
-  cargoHash = "sha256-b+v16vF5Puyp23r32Y1HtOvkboA2R2HRs1ktyDBQd84=";
+  cargoHash = "sha256-bglNpRsHUZoHE7/KGAc9UHWI6Dtg7foA7/8NZ7qtfqw=";
 
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

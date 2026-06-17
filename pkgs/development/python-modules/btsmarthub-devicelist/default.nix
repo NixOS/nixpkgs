@@ -5,23 +5,20 @@
   pytestCheckHook,
   requests,
   responses,
-  setuptools,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "btsmarthub-devicelist";
   version = "0.2.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
     repo = "btsmarthub_devicelist";
-    tag = finalAttrs.version;
+    rev = version;
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     responses
@@ -37,4 +34,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-})
+}

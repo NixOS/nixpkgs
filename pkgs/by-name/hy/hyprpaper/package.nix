@@ -27,6 +27,7 @@
   libwebp,
   libxdmcp,
   pango,
+  pcre,
   pcre2,
   wayland,
   wayland-protocols,
@@ -79,6 +80,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxdmcp
     pango
+    pcre
     pcre2
     wayland
     wayland-protocols

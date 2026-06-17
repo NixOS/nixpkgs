@@ -64,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariant
       mit
     ];
-    maintainers = with lib.maintainers; [
-      nick-linux
-    ];
+    maintainers = [ ];
     pkgConfigModules = [ "xorg-evdev" ];
     platforms = lib.platforms.unix;
   };

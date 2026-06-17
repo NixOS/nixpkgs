@@ -16,13 +16,13 @@
 
 flutter341.buildFlutterApplication (finalAttrs: {
   pname = "interstellar";
-  version = "0.11.4";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-76YMlcB0Go4EYFb4z7UEOUF+UkVsjxg04Ak06sIpkeQ=";
+    hash = "sha256-WprvuIN7yS5yLR4eUF/M9yG25ZU1Sf1I1myujclF4oM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

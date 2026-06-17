@@ -8,7 +8,6 @@
   ethernet,
   ipaddr,
   logs,
-  lru,
   lwt,
   macaddr,
   mirage-sleep,
@@ -19,12 +18,14 @@
 
 buildDunePackage (finalAttrs: {
   pname = "arp";
-  version = "4.1.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/arp/releases/download/v${finalAttrs.version}/arp-${finalAttrs.version}.tbz";
-    hash = "sha256-AvjxveUgSRBNhZQvCp1oa+JfEXSIronECk4nNos8hl0=";
+    hash = "sha256-C2Bh/2NwZqCJEidCnkhwRMoW3AsbQtvwdFh9IiJkDaU=";
   };
+
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     cstruct
@@ -32,7 +33,6 @@ buildDunePackage (finalAttrs: {
     ethernet
     ipaddr
     logs
-    lru
     lwt
     macaddr
     mirage-sleep

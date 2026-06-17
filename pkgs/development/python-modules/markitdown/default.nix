@@ -8,20 +8,21 @@
   hatchling,
 
   # dependencies
-  azure-ai-documentintelligence,
-  azure-identity,
   beautifulsoup4,
-  charset-normalizer,
   defusedxml,
+  ffmpeg-headless,
   lxml,
   magika,
   mammoth,
   markdownify,
+  numpy,
   olefile,
+  openai,
   openpyxl,
   pandas,
+  pathvalidate,
   pdfminer-six,
-  pdfplumber,
+  puremagic,
   pydub,
   python-pptx,
   requests,
@@ -41,14 +42,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "markitdown";
-  version = "0.1.6";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLL44w2jVj5X5/TmPqSveQe/9WLj0ddDUYPoSQlz+9E=";
+    hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/markitdown";
@@ -57,24 +58,23 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "magika"
-    "mammoth"
-    "youtube-transcript-api"
   ];
   dependencies = [
-    azure-ai-documentintelligence
-    azure-identity
     beautifulsoup4
-    charset-normalizer
     defusedxml
+    ffmpeg-headless
     lxml
     magika
     mammoth
     markdownify
+    numpy
     olefile
+    openai
     openpyxl
     pandas
+    pathvalidate
     pdfminer-six
-    pdfplumber
+    puremagic
     pydub
     python-pptx
     requests
@@ -98,19 +98,9 @@ buildPythonPackage (finalAttrs: {
     "test_module_vectors"
     "test_cli_vectors"
     "test_module_misc"
-
-    # Require optional azure-ai-contentunderstanding, unavailable in nixpkgs.
-    # The fallback stubs hit `UserAgentPolicy() takes no arguments`.
-    "test_nonexistent_analyzer_raises_value_error"
-    "test_cu_registered_before_docintel"
   ];
 
-  passthru.updateScript = gitUpdater {
-    # Drop the "v" tag prefix before version comparison.
-    rev-prefix = "v";
-    # Skip PEP 440 pre-release tags.
-    ignoredVersions = "(a|b|rc)[0-9]+$";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";

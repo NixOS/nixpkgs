@@ -1,6 +1,5 @@
 {
   config,
-  options,
   lib,
   pkgs,
   ...
@@ -8,9 +7,6 @@
 
 let
   cfg = config.services.displayManager;
-  opts = options.services.displayManager;
-
-  toPretty = lib.generators.toPretty { };
 
   installedSessions =
     pkgs.runCommand "desktops"
@@ -83,7 +79,7 @@ in
                 default = config.user != null;
                 defaultText = lib.literalExpression "config.${options.user} != null";
                 description = ''
-                  Automatically log in as {option}`${options.user}`.
+                  Automatically log in as {option}`autoLogin.user`.
                 '';
               };
 
@@ -105,7 +101,16 @@ in
       };
 
       defaultSession = lib.mkOption {
-        type = lib.types.nullOr (lib.types.str // { description = "session name"; });
+        type = lib.types.nullOr lib.types.str // {
+          description = "session name";
+          check =
+            d:
+            lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d cfg.sessionData.sessionNames)) ''
+              Default graphical session, '${d}', not found.
+              Valid names for 'services.displayManager.defaultSession' are:
+                ${lib.concatStringsSep "\n  " cfg.sessionData.sessionNames}
+            '';
+        };
         default = null;
         example = "gnome";
         description = ''
@@ -125,12 +130,26 @@ in
 
       sessionPackages = lib.mkOption {
         type = lib.types.listOf (
-          lib.types.addCheck lib.types.package (
-            p: p ? providedSessions && p.providedSessions != [ ] && lib.all lib.isString p.providedSessions
-          )
+          lib.types.package
           // {
             description = "package with provided sessions";
-            descriptionClass = "composite";
+            check =
+              p:
+              lib.assertMsg
+                (
+                  lib.types.package.check p
+                  && p ? providedSessions
+                  && p.providedSessions != [ ]
+                  && lib.all lib.isString p.providedSessions
+                )
+                ''
+                  Package, '${p.name}', did not specify any session names, as strings, in
+                  'passthru.providedSessions'. This is required when used as a session package.
+
+                  The session names can be looked up in:
+                    ${p}/share/xsessions
+                    ${p}/share/wayland-sessions
+                '';
           }
         );
         default = [ ];
@@ -189,15 +208,7 @@ in
       {
         assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
-          `${opts.autoLogin}.enable` requires `${opts.autoLogin}.user` to be set
-        '';
-      }
-      {
-        assertion = cfg.defaultSession == null || lib.elem cfg.defaultSession cfg.sessionData.sessionNames;
-        message = ''
-          Default graphical session, ${toPretty cfg.defaultSession}, not found. Definitions:${lib.options.showDefs opts.defaultSession.definitionsWithLocations}.
-          Valid names for `${opts.defaultSession}` are:
-              ${lib.concatMapStringsSep "\n    " toPretty cfg.sessionData.sessionNames}
+          services.displayManager.autoLogin.enable requires services.displayManager.autoLogin.user to be set
         '';
       }
     ];

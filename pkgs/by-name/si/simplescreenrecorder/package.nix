@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2026-05-23";
+  version = "0.4.4-unstable-2025-12-28";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = "ad99c7e855794888101aea2f119cdab1d4aa3073";
-    hash = "sha256-Slfte4K1VEUWIWFp7D49SRNEMZY+VVHTWzf966MUR4E=";
+    rev = "d790385b49de937976165d6feb39414c75ad6a3d";
+    hash = "sha256-QfFK43iwtwZvTRbxNXiphcsxhn/ofllGX993XppiRBw=";
   };
 
   cmakeFlags = [

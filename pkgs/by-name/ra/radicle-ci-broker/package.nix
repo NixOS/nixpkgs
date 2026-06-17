@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-ci-broker";
-  version = "0.28.1";
+  version = "0.28.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "zwTxygwuz5LDGBq255RA2CbNGrz8";
     node = "z6MkgEMYod7Hxfy9qCvDv5hYHkZ4ciWmLFgfvm3Wn1b2w2FV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6jCMphwVhRgtLpUWBLwsODgR41wl27hyzbMdDjMISfM=";
+    hash = "sha256-p+fOCS9Z5x8pwwgtz08wj6noY1CIGkeqQ4TKgPeBPWA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-fZwvjpTWWbHDSSI1tXF1JhyvZnIfP4p601GoVBJwR8k=";
+  cargoHash = "sha256-J0tUgtK1mj/su/IxKDdWXoWpWZBOUHLr4n9gbLWc8bU=";
 
   postPatch = ''
     substituteInPlace build.rs \

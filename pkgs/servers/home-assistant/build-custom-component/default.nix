@@ -6,15 +6,14 @@
 }:
 
 let
-  inherit (home-assistant) python3Packages;
-
   manifestRequirementsCheckHook = import ./manifest-requirements-check-hook.nix {
-    inherit lib makeSetupHook python3Packages;
+    inherit makeSetupHook;
+    inherit (home-assistant) python;
   };
 in
 
 lib.extendMkDerivation {
-  constructDrv = python3Packages.buildPythonPackage;
+  constructDrv = home-assistant.python.pkgs.buildPythonPackage;
   excludeDrvArgNames = [
     "meta"
     "nativeBuildInputs"
@@ -26,12 +25,12 @@ lib.extendMkDerivation {
       owner,
       domain,
       version,
+      format ? "other",
       ...
     }@args:
     {
       pname = "${owner}/${domain}";
-      inherit version;
-      pyproject = false;
+      inherit version format;
 
       installPhase = ''
         runHook preInstall
@@ -53,7 +52,7 @@ lib.extendMkDerivation {
       '';
 
       nativeBuildInputs =
-        with home-assistant.python3Packages;
+        with home-assistant.python.pkgs;
         [
           manifestRequirementsCheckHook
           packaging

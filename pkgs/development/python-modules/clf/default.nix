@@ -2,31 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   docopt,
   requests,
   pygments,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "clf";
   version = "0.5.7";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-q8kZoemWZ/Mv3eFd+0vFJ9viLPhqF6y3ikSdfy3+k34=";
+    inherit pname version;
+    sha256 = "abc919a1e99667f32fdde15dfb4bc527dbe22cf86a17acb78a449d7f2dfe937e";
   };
-
-  build-system = [ setuptools ];
 
   patchPhase = ''
     sed -i 's/==/>=/' requirements.txt
   '';
 
-  dependencies = [
+  propagatedBuildInputs = [
     docopt
     requests
     pygments
@@ -36,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   # No local packages or download links found for requests
   doCheck = false;
 
-  pythonImportsCheck = [ "clf" ];
-
   meta = {
     homepage = "https://github.com/ncrocfer/clf";
     description = "Command line tool to search snippets on Commandlinefu.com";
@@ -45,4 +38,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-})
+}

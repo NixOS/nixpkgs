@@ -2,21 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   pytest,
+  glibcLocales,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "whichcraft";
   version = "0.6.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     sha256 = "11yfkzyplizdgndy34vyd5qlmr1n5mxis3a3svxmx8fnccdvknxc";
   };
 
-  build-system = [ setuptools ];
+  env.LC_ALL = "en_US.utf-8";
+  buildInputs = [ glibcLocales ];
 
   nativeCheckInputs = [ pytest ];
 
@@ -27,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
-    changelog = "https://github.com/cookiecutter/whichcraft/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.bsd3;
   };
-})
+}

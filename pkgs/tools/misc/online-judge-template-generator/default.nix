@@ -1,10 +1,21 @@
 {
   lib,
-  python3Packages,
+  buildPythonApplication,
+  appdirs,
+  beautifulsoup4,
+  colorlog,
   fetchFromGitHub,
+  mako,
+  online-judge-api-client,
+  online-judge-tools,
+  ply,
+  pyyaml,
+  requests,
+  setuptools,
+  toml,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "online-judge-template-generator";
   version = "4.8.1";
   format = "setuptools";
@@ -16,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-cS1ED1a92fEFqy6ht8UFjxocWIm35IA/VuaPSLsdlqg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     appdirs
     beautifulsoup4
     colorlog

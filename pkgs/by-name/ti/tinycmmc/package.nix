@@ -20,7 +20,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tiny CMake Module Collections";
-    homepage = "https://github.com/Grumbel/tinycmmc";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;

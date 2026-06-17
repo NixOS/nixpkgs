@@ -32,10 +32,7 @@
   enablePython ? false,
   python3,
   swig,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
-  qtsvg ? null,
-  qt5compat ? null,
+  qt ? null,
   enableSDL2 ? true,
   SDL2,
   gitUpdater,
@@ -62,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     which
     makeWrapper
-    wrapQtAppsHook
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -70,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enablePython [
     python3
     swig
+  ]
+  ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -97,10 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     ladspa-sdk
     ladspaPlugins
   ]
-  ++ lib.optionals (qtbase != null) [
-    qtbase
-    qtsvg
-    qt5compat
+  ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
     libarchive
   ]
   ++ lib.optionals enableSDL2 [
@@ -115,20 +114,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
-    (lib.cmakeBool "MOD_OPENCV" true)
-    (lib.cmakeBool "MOD_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
-    (lib.cmakeBool "MOD_GLAXNIMATE_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
   ]
   ++ lib.optionals enablePython [
-    (lib.cmakeBool "SWIG_PYTHON" true)
+    "-DSWIG_PYTHON=ON"
+  ]
+  ++ lib.optionals (qt == null) [
+    "-DMOD_QT6=OFF"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "5") [
+    "-DMOD_QT=ON"
+    "-DMOD_QT6=OFF"
+    "-DMOD_GLAXNIMATE=ON"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "6") [
+    "-DMOD_QT6=ON"
+    "-DMOD_QT=OFF"
+    "-DMOD_GLAXNIMATE_QT6=ON"
   ];
 
   preFixup = ''
     wrapProgram $out/bin/melt \
       --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
-      ${lib.optionalString (qtbase != null) "\${qtWrapperArgs[@]}"}
+      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
 
   '';
 

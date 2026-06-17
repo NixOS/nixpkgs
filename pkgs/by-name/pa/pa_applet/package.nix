@@ -49,7 +49,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "";
-    homepage = "https://github.com/fernandotcl/pa-applet";
     mainProgram = "pa-applet";
     license = lib.licenses.bsd2;
     maintainers = [ ];

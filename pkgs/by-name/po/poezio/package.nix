@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "poezio";
-  version = "0.18";
+  version = "0.16";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "poezio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/QGxJrWK8Sl+t8SBsU8ZAMU/5pR+daf7Q43jczzENmw=";
+    hash = "sha256-bpudgf9oZ+7w7izAuWYKFVO9CIHraHaGvRKLDuSIF7c=";
   };
 
   nativeBuildInputs = [ pkg-config ];

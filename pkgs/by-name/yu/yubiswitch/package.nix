@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The macOS status bar application to enable/disable Yubikeys.";
+    description = "macOS status bar application to enable/disable a Yubikey Nano";
     homepage = "https://github.com/pallotron/yubiswitch";
     changelog = "https://github.com/pallotron/yubiswitch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

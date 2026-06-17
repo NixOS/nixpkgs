@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Binds some API from GTK that isn't in GTK# 2.12.x";
-    homepage = "https://github.com/mono/gtk-sharp-beans";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
   };

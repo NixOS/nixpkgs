@@ -25,7 +25,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable
-from urllib.parse import unquote, urljoin, urlparse, urlsplit
+from urllib.parse import urljoin, urlparse, urlsplit
 
 import git
 from packaging.version import InvalidVersion, parse as parse_version
@@ -40,7 +40,7 @@ AUTO_BRANCH = ""
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
 NON_RELEASE_TAG_PREFIXES = ("pre-",)
-RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@+-]*)$")
+RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@-]*)$")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
@@ -127,30 +127,10 @@ def select_latest_tag(
 
 def first_release_tag(tags: list[str]) -> str | None:
     for tag in tags:
-        normalized_tag = normalize_release_version(tag)
-        if normalized_tag is None:
-            continue
-
-        try:
-            version = parse_version(normalized_tag)
-            if version.is_prerelease or version.is_devrelease:
-                continue
-        except InvalidVersion:
-            pass
-
-        return tag
+        if normalize_release_version(tag) is not None:
+            return tag
 
     return None
-
-
-def tag_from_github_atom_href(href: str) -> str | None:
-    path = urlparse(href).path
-    marker = "/releases/tag/"
-    if marker in path:
-        return unquote(path.split(marker, 1)[1])
-
-    tag_name = Path(path).name
-    return unquote(tag_name) if tag_name else None
 
 
 class Repo:
@@ -247,7 +227,7 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: str, has_submodules: bool | None = None) -> str:
+    def prefetch(self, ref: str) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
@@ -369,7 +349,7 @@ class RepoGitHub(Repo):
             if not href:
                 continue
 
-            tag_name = tag_from_github_atom_href(href)
+            tag_name = Path(urlparse(href).path).name
             if tag_name:
                 tags.append(tag_name)
 
@@ -439,7 +419,7 @@ class RepoGitHub(Repo):
 
             recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
             if not recent_tags:
-                return self._get_latest_tag_from_fallbacks()
+                return None
 
             latest_tag = first_release_tag(recent_tags)
             return latest_tag if latest_tag is not None else recent_tags[0]
@@ -469,11 +449,8 @@ class RepoGitHub(Repo):
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
 
-    def prefetch(self, commit: str, has_submodules: bool | None = None) -> str:
-        if has_submodules is None:
-            has_submodules = self.has_submodules()
-
-        if has_submodules:
+    def prefetch(self, commit: str) -> str:
+        if self.has_submodules():
             sha256 = super().prefetch(commit)
         else:
             sha256 = self.prefetch_github(commit)
@@ -657,29 +634,6 @@ def make_unstable_version(date: datetime, last_tag: str | None) -> str:
     return f"{tag_part}-unstable-{date_str}"
 
 
-def newer_version_tag(first_tag: str | None, second_tag: str | None) -> str | None:
-    if first_tag is None:
-        return second_tag
-    if second_tag is None:
-        return first_tag
-
-    first_version = normalize_release_version(first_tag)
-    second_version = normalize_release_version(second_tag)
-    if first_version is None:
-        return second_tag
-    if second_version is None:
-        return first_tag
-
-    try:
-        return (
-            first_tag
-            if parse_version(first_version) >= parse_version(second_version)
-            else second_tag
-        )
-    except InvalidVersion:
-        return first_tag if first_version >= second_version else second_tag
-
-
 def get_commit_target(
     repo: Repo,
     branch: str,
@@ -719,7 +673,6 @@ def select_plugin_target(
             and current_plugin.tag is None
             and current_plugin.date.date() > release_date.date()
         ):
-            latest_tag = newer_version_tag(current_plugin.last_tag, latest_tag)
             return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
 
     return release_commit, release_date, release_version, latest_tag
@@ -974,7 +927,9 @@ class Editor:
                 cache.store()
 
             print(f"{len(results)} of {len(current_plugins)} were checked")
-            results = self.merge_results(current_plugins, results)
+            # Do only partial update of out file
+            if len(results) != len(current_plugins):
+                results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
             # Track version changes for commit message generation
@@ -1014,11 +969,9 @@ class Editor:
             if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
-                log.warning(
-                    "Keeping current plugin data after error fetching %s: %r",
-                    plugin_desc.name,
-                    plugin,
-                )
+                # For exceptions, we can't determine the normalized_name
+                # Just log the error and continue
+                log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
             else:
                 # For unexpected types, log the issue
                 log.error(
@@ -1221,9 +1174,9 @@ def prefetch_plugin(
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
     sha256 = (
-        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}", has_submodules=has_submodules)
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}")
         if source_tag
-        else p.repo.prefetch(commit, has_submodules=has_submodules)
+        else p.repo.prefetch(commit)
     )
     license_spdx_id = (
         current_plugin.license

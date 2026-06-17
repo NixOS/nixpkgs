@@ -2,25 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 }:
 
-buildPythonPackage (finalAtrrs: {
+buildPythonPackage rec {
   pname = "easyprocess";
   version = "1.1";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "EasyProcess";
-    inherit (finalAtrrs) version;
+    inherit version;
     hash = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   # No tests
   doCheck = false;
@@ -31,4 +24,4 @@ buildPythonPackage (finalAtrrs: {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ layus ];
   };
-})
+}

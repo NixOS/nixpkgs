@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   typing-extensions,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "treelog";
   version = "1.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     sha256 = "0hnivz4p4llky6djxgcsr9r3j4vr46mkjvp0ksybhpx0fsnhdi81";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ typing-extensions ];
-
   pythonImportsCheck = [ "treelog" ];
+
+  propagatedBuildInputs = [ typing-extensions ];
 
   meta = {
     description = "Logging framework that organizes messages in a tree structure";
@@ -28,4 +25,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

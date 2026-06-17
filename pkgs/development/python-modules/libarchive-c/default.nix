@@ -8,19 +8,18 @@
   glibcLocales,
   mock,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "libarchive-c";
   version = "5.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Changaco";
-    repo = "python-libarchive-c";
-    tag = finalAttrs.version;
-    hash = "sha256-JqXTV1aD3k88OlW+8rT3xsDuW34+1xErG7hkupvL7Uo=";
+    repo = "python-${pname}";
+    tag = version;
+    sha256 = "sha256-JqXTV1aD3k88OlW+8rT3xsDuW34+1xErG7hkupvL7Uo=";
   };
 
   patches = [
@@ -38,8 +37,6 @@ buildPythonPackage (finalAttrs: {
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  build-system = [ setuptools ];
-
   pythonImportsCheck = [ "libarchive" ];
 
   nativeCheckInputs = [
@@ -53,4 +50,4 @@ buildPythonPackage (finalAttrs: {
     description = "Python interface to libarchive";
     license = lib.licenses.cc0;
   };
-})
+}

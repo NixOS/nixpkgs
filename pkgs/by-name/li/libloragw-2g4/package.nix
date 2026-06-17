@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "LoRa 2.4Ghz Gateway - Linux host Hardware Abstraction Layer, and tools (Packet Forwarder...)";
-    homepage = "https://github.com/Lora-net/gateway_2g4_hal";
     license = [
       lib.licenses.bsd3
       lib.licenses.mit

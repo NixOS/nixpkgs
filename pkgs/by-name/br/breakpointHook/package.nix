@@ -22,10 +22,7 @@ in
 
 makeSetupHook {
   name = "breakpoint-hook";
-  meta = {
-    broken = !stdenv.buildPlatform.isLinux;
-    license = lib.licenses.mit;
-  };
+  meta.broken = !stdenv.buildPlatform.isLinux;
   substitutions = {
     attach = "${attach}/bin/attach";
     # The default interactive shell in case $debugShell is not set in the derivation.

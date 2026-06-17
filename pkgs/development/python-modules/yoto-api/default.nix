@@ -3,27 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  aiohttp,
-  aiomqtt,
+  pytz,
+  requests,
+  paho-mqtt,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "yoto-api";
-  version = "3.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdnninja";
     repo = "yoto_api";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-pzU+qResc+fqC1nhwbCYNNXKrD1aAjXZujjgL/5AGkc=";
+    tag = "v${version}";
+    hash = "sha256-kL3Ry3sRyDTKlhVUQ8rOCm2G8JkFZCmTwoInR6og73s=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aiohttp
-    aiomqtt
+    pytz
+    requests
+    paho-mqtt
   ];
 
   # All tests require access to and authentication with the Yoto API (api.yotoplay.com).
@@ -32,11 +34,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "yoto_api" ];
 
   meta = {
-    changelog = "https://github.com/cdnninja/yoto_api/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/cdnninja/yoto_api/releases/tag/${src.tag}";
     homepage = "https://github.com/cdnninja/yoto_api";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ seberm ];
     license = lib.licenses.mit;
     description = "Python package that makes it a bit easier to work with the yoto play API";
   };
-})
+}

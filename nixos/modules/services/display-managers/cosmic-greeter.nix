@@ -26,7 +26,6 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.cosmic-comp
-      pkgs.cosmic-icons
       cfg.package
     ];
 

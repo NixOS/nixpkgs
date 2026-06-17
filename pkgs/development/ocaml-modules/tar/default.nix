@@ -2,18 +2,22 @@
   lib,
   fetchurl,
   buildDunePackage,
+  camlp-streams,
   decompress,
 }:
 
-buildDunePackage (finalAttrs: {
+buildDunePackage rec {
   pname = "tar";
-  version = "3.5.0";
+  version = "3.3.0";
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-tar/releases/download/v${finalAttrs.version}/tar-${finalAttrs.version}.tbz";
-    hash = "sha256-haKmHTDu+B5L+B4LQp0hPOtd1urtzWDJeeHLuRFJ+Qw=";
+    url = "https://github.com/mirage/ocaml-tar/releases/download/v${version}/tar-${version}.tbz";
+    hash = "sha256-89aw1nf9QP0euAvMxgu2EyIDWL5Y9mxfqL8CV/Pl65Y=";
   };
 
+  minimalOCamlVersion = "4.08";
+
   propagatedBuildInputs = [
+    camlp-streams
     decompress
   ];
 
@@ -25,4 +29,4 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-})
+}

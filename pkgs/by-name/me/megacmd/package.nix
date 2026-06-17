@@ -7,7 +7,7 @@
   fetchFromGitHub,
   file,
   ffmpeg,
-  fuse3,
+  fuse,
   icu,
   libmediainfo,
   libsodium,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     cryptopp
     curl
     ffmpeg
-    fuse3
+    fuse
     icu
     libmediainfo
     libsodium

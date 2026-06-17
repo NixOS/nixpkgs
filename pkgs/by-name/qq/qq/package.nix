@@ -21,6 +21,7 @@
   systemd,
   stdenv,
   undmg,
+  vips,
   at-spi2-core,
   autoPatchelfHook,
   writeShellScript,
@@ -111,6 +112,7 @@ else
       libkrb5
       libgbm
       nss
+      vips
       libxdamage
     ];
 
@@ -198,6 +200,9 @@ else
             --set INTERNAL_VERSION "$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' $out/opt/QQ/resources/app/package.json)" \
             --run '${versionConfigScript} || true'
           ''}
+
+        # Remove bundled libraries
+        rm -r $out/opt/QQ/resources/app/sharp-lib
 
         # https://aur.archlinux.org/cgit/aur.git/commit/?h=linuxqq&id=f7644776ee62fa20e5eb30d0b1ba832513c77793
         rm -r $out/opt/QQ/resources/app/libssh2.so.1

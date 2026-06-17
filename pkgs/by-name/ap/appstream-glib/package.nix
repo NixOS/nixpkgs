@@ -24,12 +24,9 @@
   pkg-config,
   pngquant,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "appstream-glib";
-  version = "0.8.3";
-
-  strictDeps = true;
-  __structuredAttrs = true;
+  version = "0.8.2";
 
   outputs = [
     "out"
@@ -42,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    tag = "appstream_glib_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-GjXrYV+EBduhG88LaxQWICKuUDJeeotcZgqgaG0/dqo=";
+    rev = "${lib.replaceStrings [ "-" ] [ "_" ] pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Drpm=false"
+    "-Dstemmer=false"
     "-Ddep11=false"
   ];
 
@@ -94,11 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/hughsie/appstream-glib/blob/${finalAttrs.src.tag}/NEWS";
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-})
+}

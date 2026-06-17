@@ -3,34 +3,33 @@
   stdenv,
   fetchFromGitHub,
   meson,
+  pkg-config,
   ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aml";
-  version = "1.0.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "aml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-10gm6YphZrpLShj3NUj/AG24dSVLZAZbbnXr7GiF4DI=";
+    sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
   nativeBuildInputs = [
     meson
+    pkg-config
     ninja
   ];
 
-  strictDeps = true;
-
-  __structuredAttrs = true;
-
   meta = {
-    description = "Andri's Main Loop";
-    homepage = "https://github.com/any1/aml";
+    description = "Another main loop";
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.isc;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

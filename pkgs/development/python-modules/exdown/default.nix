@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  isPy27,
   fetchPypi,
   setuptools,
   pytestCheckHook,
@@ -10,6 +11,8 @@ buildPythonPackage rec {
   pname = "exdown";
   version = "0.9.0";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

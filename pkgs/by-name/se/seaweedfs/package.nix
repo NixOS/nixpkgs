@@ -1,15 +1,17 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
   installShellFiles,
   lib,
+  libredirect,
   nix-update-script,
   stdenv,
   versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.31";
+  version = "4.19";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
@@ -22,12 +24,22 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-jhhLOjA+CXhtNyVHePT7dN3T5u5K3dHJj1gmxOh+RJU=";
+    hash = "sha256-xMfV3WE10iP8MqxYd5w8JRUL5O7vO6ATN1ZEHB8MRxg=";
   };
 
-  vendorHash = "sha256-eB5fkFDGOqw4q2iHe4acLfIx2/a1Ys1EmARGX/vIN84=";
+  postPatch = ''
+    # Remove unmaintained code that's not used and generates various issues.
+    rm -rf unmaintained
+  '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  vendorHash = "sha256-mGiA91y6ebbbdAu0+ZDylUDuZb8vcNaqeGv70/IFx9k=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libredirect.hook
+  ];
 
   subPackages = [ "weed" ];
 
@@ -55,11 +67,26 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X \"github.com/seaweedfs/seaweedfs/weed/util/version.COMMIT=$(<COMMIT)\""
   '';
 
-  # Tests frequently break (mostly because of sandboxing) and keeping track of
-  # changes every release is becoming too much of a hassle resulting in Nixpkgs
-  # versions lagging behind which is not ideal for a package with a rapid
-  # release cycle.
-  doCheck = false;
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Remove tests that require specialized environment or additional setup
+    # that's not possible to achieve inside a sandbox.
+    for i in test/{fuse_integration,kafka,s3,sftp,volume_server}; do
+      find "$i" -name '*_test.go' -delete
+    done
+
+    # Required for reusing build artifacts in tests.
+    export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+  ''
+  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
+    # Depends on CGO.
+    rm -rf weed/mq/offset/{benchmark,end_to_end,sql_storage}_test.go
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
@@ -74,6 +101,8 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Simple and highly scalable distributed file system";
@@ -93,6 +122,5 @@ buildGoModule (finalAttrs: {
       wozeparrot
     ];
     mainProgram = "weed";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

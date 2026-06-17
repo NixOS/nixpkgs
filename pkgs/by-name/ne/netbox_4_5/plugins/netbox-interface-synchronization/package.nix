@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-interface-synchronization";
   version = "4.5.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NetTech2001";

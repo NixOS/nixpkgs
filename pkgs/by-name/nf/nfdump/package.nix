@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfdump";
-  version = "1.7.8";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7e3gV/yibVU76BUeGAlwVbOUgDmj63eh1p9g4MM8YoM=";
+    hash = "sha256-2CQ57OEKCOaRvuBX4GN2Gz/S7B6CUTpvArD84QqLZEw=";
   };
 
   nativeBuildInputs = [

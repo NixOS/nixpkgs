@@ -11,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "2.0.3";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-yDEgVNaSqZ1AJivpkpinZznKlPEXH6mjXBe5aVp/3hQ=";
+    tag = "v${version}";
+    hash = "sha256-wfiOI23LzdoTYl5/Wr/+3qvcJ3ce9ZrfETQXX1g6eIU=";
   };
 
   build-system = [
@@ -42,8 +42,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Fast version of fnv1a";
     homepage = "https://github.com/bdraco/fnv-hash-fast";
-    changelog = "https://github.com/Bluetooth-Devices/fnv-hash-fast/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-})
+}

@@ -3,23 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  django,
   prometheus-client,
-  psycopg,
   pytest-django,
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "django-prometheus";
-  version = "2.5.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-prometheus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ghY8eznPbkK7/jaeTAG3v5CD4ZZbFNNWSfjBNfuHBTo=";
+    tag = "v${version}";
+    hash = "sha256-Bf1JSh9ibiPOa252IPld1FvHTPbCsB/amtlQdRQwoWY=";
   };
 
   postPatch = ''
@@ -36,24 +34,20 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    django
-    prometheus-client
-  ];
+  dependencies = [ prometheus-client ];
 
   pythonImportsCheck = [ "django_prometheus" ];
 
   nativeCheckInputs = [
-    psycopg
-    pytestCheckHook
     pytest-django
+    pytestCheckHook
   ];
 
   meta = {
-    changelog = "https://github.com/django-commons/django-prometheus/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/django-commons/django-prometheus/releases/tag/v${version}";
     description = "Django middlewares to monitor your application with Prometheus.io";
     homepage = "https://github.com/django-commons/django-prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-})
+}

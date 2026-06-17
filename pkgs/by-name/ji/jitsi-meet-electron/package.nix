@@ -1,36 +1,28 @@
 {
   lib,
   stdenv,
-
   buildNpmPackage,
   fetchFromGitHub,
-  makeDesktopItem,
-
   copyDesktopItems,
+  makeDesktopItem,
   makeWrapper,
-  xcbuild,
-
   libpng,
   libx11,
   libxi,
   libxtst,
   zlib,
-
-  electron_41,
+  electron,
 }:
 
-let
-  electron = electron_41;
-in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2026.5.0";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-yeYDft2d2RHNXYrmnHlBzsZ43bvBgwwsqxQr/Q+/AuQ=";
+    hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +30,6 @@ buildNpmPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
   ];
 
   # robotjs node-gyp dependencies
@@ -52,12 +41,14 @@ buildNpmPackage rec {
     zlib
   ];
 
-  npmDepsHash = "sha256-5y7q6SnA9s85+HFOhqif1N8XRO7ekGJ4nfVbWZ/diuI=";
+  npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
 
   makeCacheWritable = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    # disable code signing on Darwin
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 
@@ -75,8 +66,6 @@ buildNpmPackage rec {
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
-    export npm_config_nodedir=${electron.headers}
-
     # npmRebuild is needed because robotjs won't be built on darwin otherwise
     # asarUnpack makes sure to unwrap binaries so that nix can see the RPATH
     npm exec electron-builder -- \
@@ -84,8 +73,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version} \
-        -c.mac.identity=null
+        -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''

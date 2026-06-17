@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rl_json";
-  version = "0.17.6";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "RubyLane";
     repo = "rl_json";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-18WMNHzGn0Hio07zuuaINN85b82pNEIgeLjsRy9jQEs=";
+    tag = finalAttrs.version;
+    hash = "sha256-rXr7x9Cr+gD938+NEPguvYVWH5s9bKccMobuZsb0IQY=";
     fetchSubmodules = true;
   };
 

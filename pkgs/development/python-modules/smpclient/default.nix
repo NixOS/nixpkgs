@@ -26,7 +26,6 @@ buildPythonPackage rec {
   };
 
   env.HATCH_BUILD_HOOK_VCS_VERSION = version;
-  __darwinAllowLocalNetworking = true;
 
   build-system = [
     hatchling

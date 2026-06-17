@@ -6,21 +6,25 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "luwen";
-  version = "0.8.5";
-  __structuredAttrs = true;
+  version = "0.7.14";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lY7cZ+8C0UEGGYxufl4Vi8g0L4AJFXaGqn7XE2ivTcQ=";
+    hash = "sha256-KhkABISkR37MjEwgroVtywYNCxgfwXyM5LG2CIJhu3M=";
   };
+
+  postUnpack = ''
+    cp ${./Cargo.lock} $sourceRoot/Cargo.lock
+  '';
 
   nativeBuildInputs = [
     protobuf
   ];
 
-  cargoHash = "sha256-QBGXbRiBk4WIQFopq1OccmUHgx5GzR/PKhMH4Ie+fyg=";
+  # Vendor a lockfile until upstream manages to consistently have checksums in their's.
+  cargoLock.lockFile = ./Cargo.lock;
 
   meta = {
     description = "Tenstorrent system interface tools";

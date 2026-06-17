@@ -33,7 +33,6 @@
   libsndfile,
   libtiff,
   libxcb,
-  libxcursor,
   mkfontdir,
   pcre2,
   perl,
@@ -42,13 +41,13 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "4.0.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     tag = finalAttrs.version;
-    hash = "sha256-4+nW8JJ3CDEPOZZ4p0EZM86h+rAifTuGDZxoFMUI7K0=";
+    hash = "sha256-CbIQICov0h3lBDT54dEODkINNXou6CUEhRQAPZwfYK0=";
   };
 
   strictDeps = true;
@@ -91,7 +90,6 @@ gccStdenv.mkDerivation (finalAttrs: {
     libsndfile
     libtiff
     libxcb
-    libxcursor
     mkfontdir
     pcre2
   ];
@@ -111,7 +109,6 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://ice-wm.org/";
-    changelog = "https://github.com/ice-wm/icewm/releases/tag/${finalAttrs.src.tag}";
     description = "Simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is

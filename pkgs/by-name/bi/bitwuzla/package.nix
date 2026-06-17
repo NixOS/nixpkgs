@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.9.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     tag = finalAttrs.version;
-    hash = "sha256-3uStLdDFhXVgqzremUPRbxPUcl0IqVg5MRLltgm8rCA=";
+    hash = "sha256-3ThDKoXzCqDtiX3JXshqRtwri8V7lOFxmr+4IqQbUAQ=";
   };
 
   strictDeps = true;

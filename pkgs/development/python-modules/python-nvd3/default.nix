@@ -36,7 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/areski/python-nvd3";
     changelog = "https://github.com/areski/python-nvd3/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
     mainProgram = "nvd3";
   };
 }

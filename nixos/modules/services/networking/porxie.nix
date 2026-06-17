@@ -62,9 +62,9 @@ in
             description = ''
               Admin password for authenticating privileged requests.
 
-              Authenticated requests always expect the username `admin` as per specification.
+              When unset, all authenticated endpoints will reject requests with HTTP 401.
 
-              When not set, authenticated endpoints will be unavailable.
+              Authenticated requests always expect the username `admin` as per specification.
 
               Should be set via {option}`environmentFiles` rather than directly.
             '';
@@ -90,17 +90,20 @@ in
             description = ''
               Maximum blob size that can be served.
 
-              This value cannot be set higher than the system's total memory.
+              Blobs that exceed this limit will return HTTP 413.
+
+              The minimum value is 512kb and the maximum is the system's total memory.
             '';
           };
           PORXIE_BLOB_CACHE_HEADER = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
-              The Cache-Control header value to send alongside blob responses.
+              The `Cache-Control` header value to send alongside blob responses.
 
-              This does not affect internal cache lifetimes, only how downstream clients such as CDNs
-              and browsers are instructed to cache responses.
+              This does not affect internal cache lifetimes, only how downstream clients such as
+              CDNs and browsers are instructed to cache responses. Intermediary caches may need
+              to be cleared manually for changes to take effect quickly.
             '';
           };
           PORXIE_BLOB_PROCESSING_TIMEOUT = lib.mkOption {
@@ -113,12 +116,39 @@ in
             default = null;
             description = "Maximum duration before blob fetch requests are timed out.";
           };
+          PORXIE_BLOB_HTTP_CONNECT_TIMEOUT = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              Maximum duration before an attempted connection to a blob upstream is aborted.
+
+              This value should be lower than {option}`settings.PORXIE_BLOB_HTTP_TIMEOUT`.
+            '';
+          };
 
           # Identity.
           PORXIE_IDENTITY_PLC_URL = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = "URL of the PLC instance used for `did:plc` lookups.";
+            description = ''
+              URL of the PLC instance used for `did:plc` lookups.
+
+              Can typically be left as default unless using a custom or local development setup.
+            '';
+          };
+          PORXIE_IDENTITY_HTTP_TIMEOUT = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Maximum duration before identity resolution requests are timed out.";
+          };
+          PORXIE_IDENTITY_HTTP_CONNECT_TIMEOUT = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              Maximum duration before a connection attempt to an identity upstream is aborted.
+
+              This value should be lower than {option}`settings.PORXIE_IDENTITY_HTTP_TIMEOUT`.
+            '';
           };
 
           # Cache.
@@ -128,7 +158,8 @@ in
             description = ''
               Total memory allocation for the internal cache.
 
-              Blobs are cached using an LFU policy. The most frequently requested blobs are kept longest when the cache reaches maximum size.
+              Blobs are cached using an LFU policy. The most frequently requested blobs are kept
+              longest when the cache approaches its limit.
 
               For production deployments, a CDN or caching layer in front of this server is
               recommended for lower latency and better global availability.
@@ -164,7 +195,7 @@ in
             description = ''
               Policy service URL that DID+CID pairs will be checked against.
 
-              Requests are sent via XRPC to `<url>/xrpc/dev.blooym.porxie.getBlobPolicy`.
+              Requests are sent via XRPC to `<url>/xrpc/dev.blooym.porxie.getBlobPolicy?did=<did>&cid=<cid>`.
             '';
           };
           PORXIE_POLICY_REQUEST_HEADERS = lib.mkOption {
@@ -172,11 +203,10 @@ in
             default = null;
             apply = v: if v != null then lib.concatStringsSep "|" v else null;
             description = ''
-              Headers sent alongside requests to the policy service.
-
+              Headers sent alongside all requests to the policy service.
               Each header must be in the format `Name: value`.
 
-              As pipes are used as a delimiter, they cannot be contained in headers.
+              As pipes are used as a delimiter, they cannot be contained in header values.
 
               Should be set via {option}`environmentFiles` for sensitive values such as API keys.
             '';
@@ -186,10 +216,24 @@ in
             default = null;
             apply = v: if v != null then lib.boolToString v else null;
             description = ''
-              Allow requests to proceed even if the policy service is unavailable.
+              Allow requests to proceed if the policy service is unavailable.
 
-              Warning: enabling this means restricted blobs may be served when the policy service
-              is unavailable.
+              Warning: enabling this means restricted blobs may be served when the policy
+              service is unreachable.
+            '';
+          };
+          PORXIE_POLICY_HTTP_TIMEOUT = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Maximum duration before policy service requests are timed out.";
+          };
+          PORXIE_POLICY_HTTP_CONNECT_TIMEOUT = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              Maximum duration before an attempted connection to the policy service is aborted.
+
+              This value should be lower than {option}`settings.PORXIE_POLICY_HTTP_TIMEOUT`.
             '';
           };
         };

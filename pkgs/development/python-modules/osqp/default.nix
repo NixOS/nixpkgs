@@ -49,15 +49,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "osqp";
-  version = "1.1.3";
+  version = "1.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "osqp";
     repo = "osqp-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xK7ljAwVwsmj84s5yxeU64nwT6N/Ec58aYjiUUOr4Ig=";
+    hash = "sha256-v7Kyiu5L9/GvnJFx2e6G38hkQvFQeecZNy09NJRjuA0=";
   };
 
   patches = [

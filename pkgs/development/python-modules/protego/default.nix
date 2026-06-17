@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "protego";
-  version = "0.6.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "protego";
     tag = finalAttrs.version;
-    hash = "sha256-Me+bSJnHHJH0ryPoSS7EN2Px5FNElCWQzvKrmWll4mQ=";
+    hash = "sha256-qyOY35gNFojewFMFVT58k1s5uM4j9IZzEURnPh+3htE=";
   };
 
   build-system = [ hatchling ];

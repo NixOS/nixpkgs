@@ -11,14 +11,19 @@ in
 
 haskellPackages.mkDerivation {
   pname = "hooky";
-  version = "1.0.4";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "brandonchinn178";
     repo = "hooky";
-    rev = "281ec8b52f92bdbdad567d673cd5bb581dc6991b";
-    hash = "sha256-Salq9DuFc+V88tRhLN62GGKIhCCSznUsnr3TD5ivN/I=";
+    rev = "5ce665f376bc80948f45764bf3f2e0d590245938";
+    hash = "sha256-w4sWD5dZTNKwrYhrJw9RcwGoeNxpJnm/6RRqYjiIiBg=";
   };
+
+  postPatch = ''
+    substituteInPlace src/Hooky/Config.hs \
+      --replace-fail 'KDL.text' 'KDL.string'
+  '';
 
   isLibrary = true;
   isExecutable = true;

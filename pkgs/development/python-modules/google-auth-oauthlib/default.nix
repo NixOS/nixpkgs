@@ -8,19 +8,19 @@
   requests-oauthlib,
   click,
   pytestCheckHook,
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "1.4.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-auth-oauthlib-v${finalAttrs.version}";
-    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
+    hash = "sha256-lfB544cDaywiGTV0KlecU7oEl2Gbb4Ou8UCp+YjGtOA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-auth-oauthlib";
@@ -54,14 +54,8 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  # The ATOM feed loses this update most of the time due to a high update volume,
-  # so query github directly.
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-auth-oauthlib-v([0-9.]+)"
-      "--use-github-releases"
-    ];
+  passthru.updateScript = {
+    rev-prefix = "google-auth-oauthlib-v";
   };
 
   meta = {

@@ -6,12 +6,7 @@
   kaem,
   mescc-tools-extra,
   checkMeta,
-  hostPlatform,
 }:
-let
-  assertValidity = checkMeta.assertValidity hostPlatform;
-  commonMeta = checkMeta.commonMeta hostPlatform;
-in
 rec {
   maybeContentAddressed = lib.optionalAttrs config.contentAddressedByDefault {
     __contentAddressed = true;
@@ -23,8 +18,8 @@ rec {
     attrs:
     let
       passthru = attrs.passthru or { };
-      validity = assertValidity { inherit meta attrs; };
-      meta = commonMeta { inherit validity attrs; };
+      validity = checkMeta.assertValidity { inherit meta attrs; };
+      meta = checkMeta.commonMeta { inherit validity attrs; };
       baseDrv = derivation (
         {
           inherit (buildPlatform) system;

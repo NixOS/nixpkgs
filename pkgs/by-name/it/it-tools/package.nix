@@ -3,36 +3,36 @@
   lib,
   fetchFromGitHub,
   nodejs,
-  pnpm_11,
+  pnpm_8,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "it-tools";
-  version = "0-unstable-2026-02-12";
+  version = "2024.10.22-7ca5933";
 
   src = fetchFromGitHub {
     owner = "CorentinTh";
     repo = "it-tools";
-    rev = "d505845f918e946ec300af7b36efc107e2f66e9e";
-    hash = "sha256-dWVRiLbJ1X4yHT5yRcq+KaHmjjtc24yQg0jQvWTPNwU=";
+    rev = "v${version}";
+    hash = "sha256-SQAZv+9tINRH10lewcuv8G2qwfulLOP8sGjX47LxeUk=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_8
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
+    inherit
       pname
       version
       src
       ;
-    pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-ju8YO0IHIGJtCi5TnxvfLUXcTqKWnTBKAGFBhzQJTok=";
+    pnpm = pnpm_8;
+    fetcherVersion = 3;
+    hash = "sha256-dsjf2TyLAqPzR8OXJgNcoOdDZj2t+H+tLfRhfPsu1G8=";
   };
 
   buildPhase = ''
@@ -58,4 +58,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ akotro ];
   };
-})
+}

@@ -4,6 +4,7 @@
   aspellDicts,
   buildPythonPackage,
   fetchPypi,
+  isPy27,
   pytestCheckHook,
   setuptools,
 }:
@@ -12,6 +13,8 @@ buildPythonPackage rec {
   pname = "aspell-python";
   version = "1.15";
   pyproject = true;
+
+  disabled = isPy27;
 
   src = fetchPypi {
     pname = "aspell-python-py3";

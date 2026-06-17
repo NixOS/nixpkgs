@@ -1,5 +1,4 @@
 {
-  lib,
   makeSetupHook,
   yarn-berry-offline,
   srcOnly,
@@ -21,6 +20,5 @@ makeSetupHook {
   };
   meta = {
     description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
-    license = lib.licenses.mit;
   };
 } ./yarn-berry-config-hook.sh

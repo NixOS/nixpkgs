@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipcl";
-  version = "7";
+  version = "4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ArtifexSoftware";
     repo = "pipcl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z7tDWRxEsA0CREP2bjeNYkoS9pgpHL0Cr3wcCyMPIeg=";
+    hash = "sha256-1dTjxMuOFWeK4L+m4dbllNVwV36MmhsICTplfEKIOxk=";
   };
 
   build-system = [

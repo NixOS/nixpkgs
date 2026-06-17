@@ -1612,15 +1612,13 @@ rec {
       binaryMerge =
         start: end:
         # assert start < end; # Invariant
-        if end - start == 1 then
-          # Base case - there will be exactly 1 element due to the invariant, in
-          # which case we just return it directly
-          elemAt list start
-        else
+        if end - start >= 2 then
           # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
-          # Relies on floor for odd results
           # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start ((start + end) / 2) // binaryMerge ((start + end) / 2) end;
+          binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
+        else
+          # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
+          elemAt list start;
     in
     if list == [ ] then
       # Calling binaryMerge as below would not satisfy its invariant

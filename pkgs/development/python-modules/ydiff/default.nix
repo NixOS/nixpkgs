@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pygments,
   gitMinimal,
   mercurial,
@@ -11,17 +10,15 @@
   less,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "ydiff";
   version = "1.5";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ymattw";
     repo = "ydiff";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-9a7M6+CqGRvO1yainImN2RQVH3XMxE9PTLXJGKekXLg=";
   };
 
@@ -39,8 +36,6 @@ buildPythonPackage (finalAttrs: {
     patchShebangs tests/*.sh
   '';
 
-  build-system = [ setuptools ];
-
   nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
@@ -48,8 +43,6 @@ buildPythonPackage (finalAttrs: {
     make reg # We don't want the linter or coverage check.
     runHook postCheck
   '';
-
-  pythonImportsCheck = [ "ydiff" ];
 
   meta = {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
@@ -67,4 +60,4 @@ buildPythonPackage (finalAttrs: {
       despsyched
     ];
   };
-})
+}

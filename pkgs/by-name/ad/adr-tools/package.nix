@@ -20,14 +20,14 @@
   runCommand,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "adr-tools";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "npryce";
     repo = "adr-tools";
-    tag = finalAttrs.version;
+    tag = version;
     hash = "sha256-JEwLn+SY6XcaQ9VhN8ARQaZc1zolgAJKfIqPggzV+sU=";
   };
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "adr";
     platforms = lib.platforms.all;
   };
-})
+}

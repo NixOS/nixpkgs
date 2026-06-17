@@ -9,18 +9,17 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "strichliste-backend";
-  version = "2.1.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "strichliste";
     repo = "strichliste-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ps0IJBXVchPaW2Tx4rfD02EFYiv3oTyaNB6/V7txeM0=";
+    hash = "sha256-yI20cUp19ehtOnWdu+MItwgOlNDnt1VK3giInaTQQ4Y=";
   };
 
-  vendorHash = "sha256-PLq+XiZIJyyzVq+87timGO/jbPB4ZYQqSZilZMIE4Cw=";
+  vendorHash = "sha256-vYPjUaNIf62GoKXopC4nGqIa+Z3C8Q5dnX9FPvM1Ers=";
   composerNoDev = true;
-  composerNoPlugins = false;
   composerStrictValidation = false;
 
   postPatch = ''
@@ -46,7 +45,6 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/strichliste/strichliste/releases/tag/${finalAttrs.src.tag}";
     description = "strichliste is a tool to replace a tally sheet.";
     homepage = "https://www.strichliste.org/";
     license = lib.licenses.mit;

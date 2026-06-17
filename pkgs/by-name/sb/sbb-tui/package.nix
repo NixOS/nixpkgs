@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sbb-tui";
-  version = "1.15.0";
+  version = "1.14.2";
   __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "Necrom4";
     repo = "sbb-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bYIIMFUogowywYmXNWRobmo7etbHqwOV8eHmaxz1AUg=";
+    hash = "sha256-kmT8wVkmAmVQLtSkRRIGInCjXiLfsYd9OrixYcDofS4=";
   };
 
   vendorHash = "sha256-K4DOu3rfSlKAa5JNKCzWWpnWZlXXxtN5Po7p1Spqe1w=";
@@ -25,9 +25,9 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  doInstallCheck = true;
+  doCheck = true;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

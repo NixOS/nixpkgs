@@ -8,7 +8,7 @@
   wrapGAppsHook4,
   enchant,
   gtkmm4,
-  libchamplain_libsoup3,
+  libchamplain,
   libgcrypt,
   shared-mime-info,
   libshumate,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     enchant
     gtkmm4
-    libchamplain_libsoup3
+    (libchamplain.override { withLibsoup3 = true; })
     libshumate
   ];
 

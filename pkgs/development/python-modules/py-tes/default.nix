@@ -3,6 +3,7 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
+  future,
   python-dateutil,
   pytestCheckHook,
   requests,
@@ -11,22 +12,23 @@
   sphinx-rtd-theme,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "py-tes";
-  version = "1.1.4";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ohsu-comp-bio";
     repo = "py-tes";
-    tag = finalAttrs.version;
-    hash = "sha256-/xgycSDFp17rPzC6ICf4e+vrIKWYPftDngx/u1/KHWk=";
+    tag = version;
+    hash = "sha256-hZF4koc/nZ8rBYKfhIQCLtn4DKiljJrSBgkKX8bMoQ0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     attrs
+    future
     python-dateutil
     requests
     sphinx-rtd-theme
@@ -47,8 +49,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python SDK for the GA4GH Task Execution API";
     homepage = "https://github.com/ohsu-comp-bio/py-tes";
-    changelog = "https://github.com/ohsu-comp-bio/py-tes/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/ohsu-comp-bio/py-tes/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "3.3.5";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RzuyUx0WEG8j8HwV5cepVJIeqYzJpNemFNtB+9NETto=";
+    hash = "sha256-lkSQXiplkY5sBpHsAhW4odWe+MCalAo100EL7h4VKbg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -66,10 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
     cp -r dist $out
     cp -r prebuilds $out
-    cp package.json $out
 
     runHook postInstall
   '';

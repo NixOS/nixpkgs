@@ -38,7 +38,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-stats";
-  version = "1.2.0";
+  version = "1.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     owner = "arviz-devs";
     repo = "arviz-stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KA36JGqgsYs5fF1AndsTBkXQ6U/duoebDQ1TOEmaCSc=";
+    hash = "sha256-81duRavbPUKsqTWaeD0G6ieWLtyoZm7sRk06QkG5dKQ=";
   };
 
   build-system = [

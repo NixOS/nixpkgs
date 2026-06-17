@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tool to convert filename encoding inside a ZIP archive";
-    homepage = "https://github.com/vlm/zip-fix-filename-encoding";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     # runzip vendors libzip 0.7.1.

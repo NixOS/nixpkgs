@@ -55,11 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     export USER=nonexistent-but-specified-user
   '';
 
-  installFlags = [ "INSTALLDIR=$(out)/bin" ];
+  installPhase = ''
+    mkdir -p $out/bin
+    INSTALLDIR=$out/bin make install
 
-  postInstall = ''
     installManPage fossil.1
-    installShellCompletion --cmd fossil tools/fossil-autocomplete.{bash,zsh}
+    installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
   meta = {

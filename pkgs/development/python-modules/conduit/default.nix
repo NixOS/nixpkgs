@@ -3,18 +3,9 @@
   stdenv,
   pkgs,
   buildPythonPackage,
-
-  # build-system
-  cmake,
-  ninja,
-  pip,
   setuptools,
-
-  # nativeBuildInputs
-  openmpi,
-
-  # dependencies
   numpy,
+  pip,
 
   mpiSupport ? false,
 }:
@@ -26,36 +17,32 @@ buildPythonPackage {
     pname
     version
     src
-    # nativeBuildInputs
+    nativeBuildInputs
     buildInputs
     ;
   pyproject = true;
-  __structuredAttrs = true;
 
-  postPatch = (conduit.postPatch or "") + ''
-    substituteInPlace pyproject.toml \
+  # Needed for cmake to find openmpi
+  strictDeps = false;
+
+  postPatch = ''
+    substituteInPlace setup.py \
       --replace-fail \
-        "cmake<=3.30.0" \
-        "cmake"
+        "'-j2'" \
+        "f'-j{os.environ.get(\"NIX_BUILD_CORES\")}'"
   '';
+
+  dontUseCmakeConfigure = true;
 
   env.ENABLE_MPI = mpiSupport;
 
   build-system = [
-    cmake
-    ninja
-    pip
     setuptools
-  ];
-  dontUseCmakeConfigure = true;
-
-  nativeBuildInputs = conduit.nativeBuildInputs ++ [
-    # openmpi needs to be in nativeBuildInputs, otherwise cmake can't find it
-    openmpi
   ];
 
   dependencies = [
     numpy
+    pip
   ];
 
   pythonImportsCheck = [ "conduit" ];

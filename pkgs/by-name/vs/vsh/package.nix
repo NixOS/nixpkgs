@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vsh";
-  version = "1.0.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5mQ2FlNUyvp0acdYicuVgdjkEeLxaINtZAoCwf2njzA=";
+    sha256 = "sha256-rYltOLDmrRc3KsxR5MmpZqf+loAs1KEdPndpnhqkBDM=";
   };
 
   # vendor directory is part of repository

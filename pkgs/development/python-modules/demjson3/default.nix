@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
-  setuptools,
+  python,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "demjson3";
   version = "3.0.6";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    inherit pname version;
     hash = "sha256-N8g7DG6wjSXe/IjfCipIddWKeAmpZQvW7uev2AU826w=";
   };
 
-  build-system = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  checkPhase = ''
+    ${python.interpreter} test/test_demjson3.py
+  '';
 
   pythonImportsCheck = [ "demjson3" ];
 
@@ -31,4 +28,4 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-})
+}

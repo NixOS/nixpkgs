@@ -39,9 +39,9 @@ rec {
       src,
       ...
     }:
-    assert
+    assert lib.assertMsg (
       name == null
-      || throw "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    ) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
     pkgs.runCommand "${pname}-${version}-extracted"
       {
         nativeBuildInputs = [ appimage-exec ];

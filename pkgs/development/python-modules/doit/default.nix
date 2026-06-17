@@ -15,20 +15,19 @@
   pyflakes,
   configclass,
   mergedict,
-  setuptools,
 }:
 
 let
   doit = buildPythonPackage rec {
     pname = "doit";
-    version = "0.37.0";
-    pyproject = true;
+    version = "0.36.0";
+    format = "setuptools";
 
     disabled = !isPy3k;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-08cuDkao+h3avqj4MHYkAt7gkMrzPDDCKVrHAQ248Jw=";
+      hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
     };
 
     propagatedBuildInputs = [
@@ -38,10 +37,6 @@ let
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux pyinotify
     ++ lib.optional stdenv.hostPlatform.isDarwin macfsevents;
-
-    build-system = [
-      setuptools
-    ];
 
     nativeCheckInputs = [
       configclass

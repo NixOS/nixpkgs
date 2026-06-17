@@ -5,11 +5,7 @@
   buildFHSEnv,
   webkitgtk_4_1,
   ffmpeg_7,
-  gtk4,
-  libepoxy,
-  wayland,
-  libxcb,
-  libxi,
+  gtk3,
   pango,
   atk,
   cairo,
@@ -52,10 +48,7 @@ buildFHSEnv {
     workspacesclient
     custom_lsb_release
     webkitgtk_4_1
-    gtk4
-    libepoxy
-    libxcb
-    libxi
+    gtk3
     ffmpeg_7
     pango
     atk
@@ -63,7 +56,6 @@ buildFHSEnv {
     gdk-pixbuf
     protobufc
     cyrus_sasl
-    wayland
   ];
 
   extraBwrapArgs = [

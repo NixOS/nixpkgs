@@ -1,31 +1,30 @@
 {
   lib,
   buildPythonPackage,
+  runCommand,
   fetchFromGitHub,
   rustPlatform,
-
   maturin,
   protobuf_30,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "pyluwen";
-  version = "0.8.5";
+  version = "0.7.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lY7cZ+8C0UEGGYxufl4Vi8g0L4AJFXaGqn7XE2ivTcQ=";
+    tag = "v${version}";
+    hash = "sha256-eQpKEeuy0mVrmu8ssAOWBcXi7zutStu+RbZOEF/IJ98=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-QBGXbRiBk4WIQFopq1OccmUHgx5GzR/PKhMH4Ie+fyg=";
+    inherit src;
+    hash = "sha256-INzF8ORkrmPQMJbGSNm5QkfMOgE+HJ3taU1EZ9i+HJg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/bind/pyluwen";
+  sourceRoot = "${src.name}/crates/${pname}";
 
   prePatch = ''
     chmod -R u+w ../../
@@ -35,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     cd ../$sourceRoot
     cp --no-preserve=ownership,mode ../../Cargo.lock .
-    sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
+    sed -i '0,/version = /{s/version = "*.*.*"/version = "${version}"/g}' Cargo.toml
   '';
 
   nativeBuildInputs = with rustPlatform; [
@@ -49,8 +48,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Tenstorrent system interface library";
     homepage = "https://github.com/tenstorrent/luwen";
-    changelog = "https://github.com/tenstorrent/luwen/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
-})
+}

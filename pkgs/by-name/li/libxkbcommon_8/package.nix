@@ -96,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.mit;
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      ttuegel
     ];
     mainProgram = "xkbcli";
     platforms = with lib.platforms; unix;

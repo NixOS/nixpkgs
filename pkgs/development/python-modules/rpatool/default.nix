@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromCodeberg,
+  fetchFromGitea,
   buildPythonPackage,
   setuptools,
 }:
@@ -9,7 +9,8 @@ buildPythonPackage rec {
   pname = "rpatool";
   version = "1.0.0";
 
-  src = fetchFromCodeberg {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "shiz";
     repo = "rpatool";
     tag = "v${version}";

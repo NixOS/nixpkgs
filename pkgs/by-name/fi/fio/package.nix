@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   libaio,
   pkg-config,
@@ -16,14 +17,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fio";
-  version = "3.42";
+  version = "3.41";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
     tag = "fio-${finalAttrs.version}";
-    hash = "sha256-v2A2mY0Lvoje632761urfR7h1KHVcGnVDaKOMjexqis=";
+    hash = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
   };
+
+  patches = [
+    # https://github.com/axboe/fio/pull/2029
+    (fetchpatch {
+      url = "https://github.com/axboe/fio/commit/ccce76d2850d6e52da3d7986c950af068fbfe0fd.patch";
+      hash = "sha256-0jN3q1vTiU6YkdXrcTAOzqRqgu8sW8AWO4KkANi0XKo=";
+    })
+  ];
 
   buildInputs = [
     cunit
@@ -80,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/axboe/fio/releases/tag/${finalAttrs.src.tag}";
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = lib.licenses.gpl2Plus;

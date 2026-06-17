@@ -249,8 +249,8 @@ in
         setopt ${builtins.concatStringsSep " " cfg.setOptions}
       ''}
 
-      # Determine current fqdn hostname
-      HOST=$(hostname --fqdn)
+      # Alternative method of determining short and full hostname.
+      HOST=${config.networking.fqdnOrHostName}
 
       # Setup command line history.
       # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.

@@ -8,12 +8,6 @@ let
   variant = if stdenv.hostPlatform.isMusl then "alpine-linux" else "linux";
   sources = (lib.importJSON ./sources.json).hotspot.${variant};
   common = opts: callPackage (import ./jdk-linux-base.nix opts) { };
-  withModernDrvAttrs =
-    drv:
-    drv.overrideAttrs (_: {
-      __structuredAttrs = true;
-      strictDeps = true;
-    });
 
 in
 # EOL = [ "This JDK version has reached End of Life." ];
@@ -32,11 +26,4 @@ in
 
   jdk-25 = common { sourcePerArch = sources.jdk.openjdk25; };
   jre-25 = common { sourcePerArch = sources.jre.openjdk25; };
-
-  jdk-26 = withModernDrvAttrs (common {
-    sourcePerArch = sources.jdk.openjdk26;
-  });
-  jre-26 = withModernDrvAttrs (common {
-    sourcePerArch = sources.jre.openjdk26;
-  });
 }

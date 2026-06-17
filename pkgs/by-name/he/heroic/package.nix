@@ -3,7 +3,6 @@
   heroic-unwrapped,
   extraPkgs ? pkgs: [ ],
   extraLibraries ? pkgs: [ ],
-  extraEnv ? { },
 }:
 
 steam.buildRuntimeEnv {
@@ -13,7 +12,7 @@ steam.buildRuntimeEnv {
   runScript = "heroic";
 
   extraPkgs = pkgs: [ heroic-unwrapped ] ++ extraPkgs pkgs;
-  inherit extraLibraries extraEnv;
+  inherit extraLibraries;
 
   extraInstallCommands = ''
     mkdir -p $out/share

@@ -95,7 +95,6 @@ python.pkgs.buildPythonApplication rec {
     "django-csp"
     "django-filter"
     "django-formset-js-improved"
-    "django-formtools"
     "django-i18nfield"
     "djangorestframework"
     "markdown"

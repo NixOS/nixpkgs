@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   pkg-config,
@@ -19,23 +18,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.7.37";
+  version = "0.7.36";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = finalAttrs.version;
-    hash = "sha256-hiumMnTJ3eP+acH2V0eNTM71Fw//IWQPechCA0+kH1s=";
+    hash = "sha256-7a/vAdgW7ma2GHqv1LaQNFA7w1Hmzm6Q/HriNN6hlpE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2026-9149";
-      url = "https://github.com/openSUSE/libsolv/commit/210386037c892a720972ad35a3d8f7073b4d763b.patch";
-      hash = "sha256-ju3xn78UGMR5usq1e1ovFTWnKW1TPDA77sNGx8yc8Z8=";
-    })
-  ];
 
   cmakeFlags = [
     "-DENABLE_COMPLEX_DEPS=true"

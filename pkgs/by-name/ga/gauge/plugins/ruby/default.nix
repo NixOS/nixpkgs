@@ -13,7 +13,7 @@ makeGaugePlugin {
     description = "Gauge plugin that lets you write tests in Ruby";
     homepage = "https://github.com/getgauge/gauge-ruby/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ marie ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"

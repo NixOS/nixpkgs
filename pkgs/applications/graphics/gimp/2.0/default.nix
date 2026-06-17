@@ -264,16 +264,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    apiVersion = "${
-      toString (
-        lib.toInt (lib.versions.major finalAttrs.version)
-        + (if lib.versions.minor finalAttrs.version == "99" then 1 else 0)
-      )
-    }.0";
-    appVersion = lib.versions.majorMinor finalAttrs.version;
-    majorVersion = lib.warn "gimp2.majorVersion is deprecated in favour of gimp2.apiVersion and gimp2.appVersion" finalAttrs.passthru.apiVersion;
-    targetLibDir = "lib/gimp/${finalAttrs.passthru.apiVersion}";
-    targetDataDir = "share/gimp/${finalAttrs.passthru.apiVersion}";
+    majorVersion = "${lib.versions.major finalAttrs.version}.0";
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 

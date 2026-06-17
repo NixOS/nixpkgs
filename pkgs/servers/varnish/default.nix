@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   buildPackages,
+  pcre,
   pcre2,
   jemalloc,
   libunwind,
@@ -49,8 +51,9 @@ let
         readline
         libedit
         python3
-        pcre2
       ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
       ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
       ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
@@ -64,9 +67,33 @@ let
 
       buildFlags = [ "localstatedir=/var/run" ];
 
-      postPatch = ''
-        substituteInPlace bin/varnishtest/vtest2/src/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
-      '';
+      patches =
+        lib.optionals
+          (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "7.7" && lib.versionOlder version "8.0")
+          [
+            # Fix VMOD section attribute on macOS
+            # Unreleased commit on master
+            (fetchpatch2 {
+              url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+              hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+            })
+            # Fix endian.h compatibility on macOS
+            # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+            ./patches/0001-fix-endian-h-compatibility-on-macos.patch
+          ]
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder version "7.6") [
+          # Fix duplicate OS_CODE definitions on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4347
+          ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
+        ];
+
+      postPatch =
+        lib.optionalString (lib.versionOlder version "8.0") ''
+          substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+        ''
+        + lib.optionalString (lib.versionAtLeast version "8.0") ''
+          substituteInPlace bin/varnishtest/vtest2/src/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+        '';
 
       postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         # prevent cache invalidation
@@ -125,6 +152,11 @@ let
     };
 in
 {
+  # EOL (LTS) TBA
+  varnish60 = common {
+    version = "6.0.18";
+    hash = "sha256-AULWbT0Mz/12TOcsa6vkiJGmwNIb+lxKJMyyvqo1x/A=";
+  };
   # EOL 2026-09-15
   varnish80 = common {
     version = "8.0.2";

@@ -4,13 +4,12 @@
   crossSystem,
   config,
   overlays,
+  crossOverlays ? [ ],
 }:
 
 assert crossSystem == localSystem;
 
 let
-  genericStdenv = import ../generic { defaultConfig = config; };
-
   inherit (localSystem) system;
 
   shell =
@@ -106,7 +105,7 @@ let
       extraNativeBuildInputs ? [ ],
     }:
 
-    genericStdenv {
+    import ../generic {
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
@@ -146,6 +145,7 @@ let
         shell
         cc
         overrides
+        config
         ;
     };
 

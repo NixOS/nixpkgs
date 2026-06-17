@@ -16,7 +16,6 @@
   libxkbfile,
   libxcb-util,
   cairo,
-  versionCheckHook,
 }:
 let
   cairo' = cairo.override {
@@ -26,9 +25,6 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i3lock";
   version = "2.15";
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "i3";
@@ -56,9 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     libxcb-util
   ];
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
 
   meta = {
     description = "Simple screen locker like slock";

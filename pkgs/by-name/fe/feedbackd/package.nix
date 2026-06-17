@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  testers,
   docbook-xsl-nons,
   docutils,
   gi-docgen,
@@ -28,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.9";
+  version = "0.8.5";
 
   outputs = [
     "out"
@@ -38,18 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "feedbackd";
+    owner = "agx";
     repo = "feedbackd";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4cbH5jzbLROs/FtbiktlyZPGPYiIo3wgqgOCzyzNzzs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-m8jDn7gDrZOsdFl17IsIINgcpuHmmtNOCEEdQFwVj6g=";
   };
-
-  postPatch = ''
-    patchShebangs run.in
-
-    substituteInPlace data/72-feedbackd.rules \
-      --replace-fail '/usr/libexec/' "$out/libexec/"
-  '';
 
   depsBuildBuild = [
     pkg-config
@@ -81,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dman=true"
-    "-Dmedia-roles=true"
     # Make compiling work when doCheck = false
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
@@ -92,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d
+    sed "s|/usr/libexec/|$out/libexec/|" < $src/data/90-feedbackd.rules > $out/lib/udev/rules.d/90-feedbackd.rules
+  '';
 
   postFixup = ''
     # Move developer documentation to devdoc output.
@@ -107,10 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      versionCheck = true;
-    };
     updateScript = nix-update-script { };
   };
 
@@ -118,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Theme based Haptic, Visual and Audio Feedback";
-    homepage = "https://gitlab.freedesktop.org/feedbackd/feedbackd/";
+    homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
     license = with lib.licenses; [
       # feedbackd
       gpl3Plus
@@ -130,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
       pacman99
       Luflosi
     ];
-    pkgConfigModules = [ "libfeedback-0.0" ];
     platforms = lib.platforms.linux;
   };
 })

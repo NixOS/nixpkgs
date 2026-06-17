@@ -1,12 +1,10 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
   jsonFormat = pkgs.formats.json { };
-  cfg = config.tests.incus;
 in
 {
   options.tests.incus = {
@@ -76,11 +74,7 @@ in
             config =
               let
                 releases = import ../../release.nix {
-                  configuration = lib.recursiveUpdate config.nixosConfig {
-                    virtualisation.incus = {
-                      inherit (cfg) package;
-                    };
-                  };
+                  configuration = config.nixosConfig;
                 };
 
                 images = {

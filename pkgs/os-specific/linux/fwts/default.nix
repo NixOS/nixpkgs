@@ -14,7 +14,6 @@
   dmidecode,
   acpica-tools,
   libbsd,
-  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     dmidecode
     acpica-tools
     libbsd
-    zlib
   ];
 
   postPatch = ''
@@ -57,10 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/lib/src/fwts_devicetree.c \
                       src/devicetree/dt_base/dt_base.c \
       --replace-fail "dtc -I" "${dtc}/bin/dtc -I"
-
-    # libfwts uses gzopen/gzclose/gzgets but does not link zlib.
-    substituteInPlace src/lib/src/Makefile.am \
-      --replace-fail "-lm -lpthread -lbsd" "-lm -lpthread -lbsd -lz"
   '';
 
   enableParallelBuilding = true;

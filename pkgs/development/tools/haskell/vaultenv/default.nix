@@ -86,6 +86,7 @@ mkDerivation rec {
   homepage = "https://github.com/channable/vaultenv#readme";
   description = "Runs processes with secrets from HashiCorp Vault";
   license = lib.licenses.bsd3;
-  maintainers = [
+  maintainers = with lib.maintainers; [
+    lnl7
   ];
 }

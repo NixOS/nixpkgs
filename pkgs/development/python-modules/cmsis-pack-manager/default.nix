@@ -67,7 +67,8 @@ buildPythonPackage rec {
     description = "Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
     license = lib.licenses.asl20;
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      frogamic
     ];
   };
 }

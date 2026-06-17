@@ -1,5 +1,4 @@
 {
-  lib,
   callPackages,
   isDeclaredArray,
   isDeclaredMap,
@@ -14,8 +13,5 @@ makeSetupHook {
     sortArray
   ];
   passthru.tests = callPackages ./tests.nix { };
-  meta = {
-    description = "Gets the sorted indices of an associative array";
-    license = lib.licenses.mit;
-  };
+  meta.description = "Gets the sorted indices of an associative array";
 } ./getSortedMapKeys.bash

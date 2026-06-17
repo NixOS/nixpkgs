@@ -18,19 +18,16 @@
   pydantic,
   pytest-asyncio,
   pytest-httpserver,
-  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   requests,
-  stdenv,
   setuptools-scm,
   validators,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.21.3";
+  version = "4.20.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -39,7 +36,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-1c1jjikWLD1o1bqUosEZFUi8/r7y+VBuafjXv5PXaic=";
+    hash = "sha256-3CJLD/bew9qx2aDrIwcaMlgwCe8E4bj3ZDh5t0v8Pf8=";
   };
 
   pythonRelaxDeps = [
@@ -72,14 +69,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytest-httpserver
-    pytest-xdist
+    pytest-asyncio
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     sed -i '/raw.githubusercontent.com/,+1d' test/test_util.py
     substituteInPlace pytest.ini \
       --replace-fail "--benchmark-skip" ""
@@ -101,10 +97,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "test"
-  ];
-
-  disabledTestPaths = [
-    "mock_tests" # mock gRPC/HTTP servers fail to bind ports
+    "mock_tests"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -117,5 +110,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+    badPlatforms = [
+      # weaviate.exceptions.WeaviateGRPCUnavailableError
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

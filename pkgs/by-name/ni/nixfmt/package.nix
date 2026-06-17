@@ -2,32 +2,27 @@
   haskell,
   haskellPackages,
   lib,
-  stdenv,
-  versionCheckHook,
+  runCommand,
+  nixfmt,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
 
-  cabalOverrides = drv: {
+  overrides = {
     passthru.updateScript = ./update.sh;
+
     teams = [ lib.teams.formatter ];
-    changelog = "https://github.com/NixOS/nixfmt/releases/tag/v${drv.version}";
-  };
 
-  # haskellPackages.mkDerivation and haskell.lib.compose.overrideCabal
-  # do not allow access to `doInstallCheck` or `nativeInstallCheckInputs`,
-  # so we override directly with `.overrideAttrs`.
-  lateOverrides = finalAttrs: prevAttrs: {
-    doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-    nativeInstallCheckInputs = prevAttrs.nativeInstallCheckInputs or [ ] ++ [
-      versionCheckHook
-    ];
+    # These tests can be run with the following command.
+    #
+    # $ nix-build -A nixfmt.tests
+    passthru.tests = runCommand "nixfmt-tests" { nativeBuildInputs = [ nixfmt ]; } ''
+      nixfmt --version > $out
+    '';
   };
-
   raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
 in
 lib.pipe raw-pkg [
-  (overrideCabal cabalOverrides)
+  (overrideCabal overrides)
   justStaticExecutables
-  (drv: drv.overrideAttrs lateOverrides)
 ]

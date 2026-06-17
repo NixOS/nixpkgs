@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   requests,
   isodate,
   docstring-parser,
@@ -11,21 +10,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "chat-downloader";
   version = "0.2.8";
-  pyproject = true;
-
-  __structuredAttrs = true;
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit (finalAttrs) version pname;
+    inherit version pname;
     hash = "sha256-WBasBhefgRkOdMdz2K/agvS+cY6m3/33wiu+Jl4d1Cg=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     requests
     isodate
     docstring-parser
@@ -44,8 +39,8 @@ buildPythonPackage (finalAttrs: {
     description = "Simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
     mainProgram = "chat_downloader";
     homepage = "https://github.com/xenova/chat-downloader";
-    changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-})
+}

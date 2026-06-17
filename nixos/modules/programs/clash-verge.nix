@@ -81,7 +81,6 @@
           LockPersonality = true;
           RestrictRealtime = true;
           RuntimeDirectory = "clash-verge-rev";
-          StateDirectory = "clash-verge-service";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
