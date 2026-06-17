@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtier-benchmark";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "memtier_benchmark";
     tag = finalAttrs.version;
-    hash = "sha256-pvi5p/0HZIiZYi5+eqcAu4MMrF0Hh42ByPEHuA9jcug=";
+    hash = "sha256-0whioOhzs5aLu/fjRJvybZ8UYE5Lv1VnQDmgikC3tEA=";
   };
 
   nativeBuildInputs = [

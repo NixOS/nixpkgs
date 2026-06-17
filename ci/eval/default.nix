@@ -288,6 +288,9 @@ let
       #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
       # ```
       touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
+      # The branch the local comparison is made against; matches the `master`
+      # used in the touched-files expression above.
+      baseBranch ? "master",
     }:
     let
       diffs = symlinkJoin {
@@ -305,7 +308,7 @@ let
       };
       comparisonReport = compare {
         combinedDir = combine { diffDir = diffs; };
-        inherit touchedFilesJson;
+        inherit touchedFilesJson baseBranch;
       };
     in
     comparisonReport;
