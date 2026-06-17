@@ -14,7 +14,7 @@
   glibmm,
   python3,
   bluez,
-  pcre,
+  pcre2,
   libsForQt5,
   desktopToDarwinBundle,
   qt5,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     hidapi
     glibmm
     python3
-    pcre
+    pcre2
     libsForQt5.qwt
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
