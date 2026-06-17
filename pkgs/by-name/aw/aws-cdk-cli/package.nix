@@ -2,40 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   nodejs,
-  yarnBuildHook,
-  yarnConfigHook,
-  yarnInstallHook,
+  yarn-berry_4,
   diffutils,
   zip,
   jq,
+  python3,
   unzip,
   testers,
   nix-update-script,
 }:
 
+let
+  yarn-berry = yarn-berry_4;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1116.0";
+  version = "2.1127.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-mRr5G42RrO87AdJOTLaM+EPprTFCI7eVxzUhafrGOxA=";
+    hash = "sha256-d55JNmWi4oTNorunkDwpdfcxHE9UC2fufKDahKgoLvk=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-cjJBaq65sNWOFMFB1HAgGScxJlBZKnwkGipDd4aXhDE=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-eGj2Gx46lyypNz5e0U1AD1dVwOgJK4hkwXp03lR+6sc=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
     nodejs
+    python3
     zip
     jq
     # tests
@@ -49,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     NX_VERBOSE_LOGGING = "true";
     # Needed to properly embed version info
     CODEBUILD_RESOLVED_SOURCE_VERSION = finalAttrs.version;
+    YARN_LOCKFILE_VERSION_OVERRIDE = "8";
   };
 
   # Regular "build" is very heavy and does things we don't need.
@@ -62,6 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       echo '${cliVersionJson}' > packages/@aws-cdk/cloud-assembly-schema/cli-version.json
+      cat >> .yarnrc.yml <<'EOF'
+      approvedGitRepositories:
+        - "**"
+      enableScripts: true
+      enableNetwork: false
+      enableHardenedMode: false
+      EOF
     '';
 
   preBuild = ''
@@ -76,10 +86,27 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    yarn "$yarnBuildScript"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/aws-cdk-cli
+    cp -r . $out/lib/node_modules/aws-cdk-cli
+
+    runHook postInstall
+  '';
+
   postInstall = ''
     # Manually bundle non-bundled dependencies
-    cp -r packages/@aws-cdk/cloud-assembly-schema/node_modules/jsonschema $out/lib/node_modules/aws-cdk-cli/node_modules/jsonschema
-    cp -r packages/aws-cdk/node_modules/decamelize $out/lib/node_modules/aws-cdk-cli/node_modules/decamelize
+    cp -r node_modules/jsonschema $out/lib/node_modules/aws-cdk-cli/node_modules/jsonschema
+    cp -r node_modules/decamelize $out/lib/node_modules/aws-cdk-cli/node_modules/decamelize
 
     patchShebangs "$out/lib/node_modules/aws-cdk-cli/node_modules/aws-cdk/bin"
     ln -s "$out/lib/node_modules/aws-cdk-cli/node_modules/aws-cdk/bin" "$out/bin"
