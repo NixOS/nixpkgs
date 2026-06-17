@@ -86,6 +86,7 @@ let
         "lnd"
         "mail"
         "mailman3"
+        "mastodon"
         "mikrotik"
         "modemmanager"
         "mongodb"
