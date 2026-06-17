@@ -7,7 +7,7 @@
   zig,
   cmake,
   ninja,
-  python3
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
