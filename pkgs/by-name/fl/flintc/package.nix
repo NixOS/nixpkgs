@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flint-lang";
     repo = "flintc";
     tag = "v${finalAttrs.version}-core";
-    sha256 = "75fcedf31ccacd26733ed5a5ae19b6ab410ce3aa256bcf79ed8678d8362897a4";
+    sha256 = ""sha256-R4AFvjn3qjg9+p4uJ343GPjix+UwkyWDNy2Eit+BOOs=;
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
