@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  git,
   python3Packages,
 }:
 
@@ -45,6 +46,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
       watchfiles
     ];
   };
+
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-cov
+  ]);
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # Downloads a tree-sitter JSON5 grammar at runtime (requires network)
+    "tests/test_installer.py"
+  ];
 
   pythonImportsCheck = [ "semble" ];
 
