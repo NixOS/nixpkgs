@@ -10,6 +10,8 @@
   libgbm,
   makeWrapper,
   playwright-driver,
+  tala,
+  withTala ? false,
 }:
 
 buildGoModule (finalAttrs: {
@@ -48,10 +50,17 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     installManPage ci/release/template/man/d2.1
   ''
-  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-  + lib.optionalString (finalAttrs.buildInputs != [ ]) ''
-    wrapProgram $out/bin/d2 \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
+  + lib.optionalString (libdrm.meta.available || withTala) ''
+    makeWrapperArgs=(
+      ${lib.optionalString libdrm.meta.available "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libgbm
+          playwright-driver.browsers
+        ]
+      }"}
+      ${lib.optionalString withTala "--prefix PATH : ${lib.makeBinPath [ tala ]}"}
+    )
+    wrapProgram $out/bin/d2 "''${makeWrapperArgs[@]}"
   '';
 
   preCheck = ''
