@@ -6713,6 +6713,8 @@ with pkgs;
     libsOnly = true;
   };
 
+  festivalVoices = recurseIntoAttrs (callPackage ../by-name/fe/festival/voices { });
+
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
   };
