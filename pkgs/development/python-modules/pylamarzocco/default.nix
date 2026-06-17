@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "2.2.5";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-Pcuhg48j/sbGKzk5sbMAFY9I3NDkKNt2nNn+O4dMjvw=";
+    hash = "sha256-DNlUdnJjaYUfz8X8UmzqjHwj+WGmRQZQGDkHUjrAJ7E=";
   };
 
   build-system = [ setuptools ];
