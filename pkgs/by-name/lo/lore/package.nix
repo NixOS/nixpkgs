@@ -6,6 +6,7 @@
   versionCheckHook,
   nix-update-script,
   stdenv,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -67,7 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv "$out/lib" "$lib/lib"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      server-test = nixosTests.loreserver;
+    };
+  };
 
   meta = {
     description = "Next-generation open source version control system";
