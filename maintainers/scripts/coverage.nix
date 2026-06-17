@@ -247,6 +247,9 @@ let
   # Transform a matched package into an object for update.py.
   packageData =
     { package, attrPath }:
+    let
+      inherit (lib) optionalAttrs;
+    in
     lib.filterAttrsRecursive (_: v: v != { }) {
       package = attrPath;
       name = package.name;
@@ -254,17 +257,13 @@ let
       version = lib.getVersion package;
       outputs = package.outputs;
 
-      # see https://github.com/NixOS/nixpkgs/pull/506793
-      # premature optimization can be fun :)
-      # ${ if ? then } syntax over // optionalAttrs for perf benefits
       attributes = {
-        src = {
-          # currently fetchFromSourcehut doesn't support tag which breaks eval here
-          # ${if package ? src.gitRepoUrl then "tag" else null} = package.src.tag != null;
-
+        src = { }
           # https://github.com/NixOS/nixpkgs/issues/325892
-          ${if package ? src.hash then "srihash" else null} = !(lib.hasInfix ":" package.src.hash);
-        };
+          // optionalAttrs (package ? src.hash) { srihash = !(lib.hasInfix ":" package.src.hash); };
+
+          # currently fetchFromSourcehut doesn't support tag which breaks eval here
+          # // optionalAttrs (package ? src.gitRepoUrl) { tag = package.src.tag != null; };
 
         common = {
           # https://github.com/NixOS/nixpkgs/issues/178468
@@ -281,83 +280,41 @@ let
 
           # list found from `rg runHook (pre|post)` and stdenv.chapter.md
           # not comprehensive by any means, but these are the most common
-          usesRunHooks = {
-            ${if package ? unpackPhase then "unpackPhase" else null} =
-              checkPhaseHooks "preUnpack" "postUnpack"
-                package.unpackPhase;
-
-            ${if package ? patchPhase then "patchPhase" else null} =
-              checkPhaseHooks "prePatch" "postPatch"
-                package.patchPhase;
-
-            ${if package ? configurePhase then "configurePhase" else null} =
-              checkPhaseHooks "preConfigure" "postConfigure"
-                package.configurePhase;
-
-            ${if package ? buildPhase then "buildPhase" else null} =
-              checkPhaseHooks "preBuild" "postBuild"
-                package.buildPhase;
-
-            ${if package ? installPhase then "installPhase" else null} =
-              checkPhaseHooks "preInstall" "postInstal"
-                package.installPhase;
-
-            ${if package ? checkPhase then "checkPhase" else null} =
-              checkPhaseHooks "preCheck" "postCheck"
-                package.checkPhase;
-
-            ${if package ? installCheckPhase then "installCheckPhase" else null} =
-              checkPhaseHooks "preInstallCheck" "postInstallCheck"
-                package.installCheckPhase;
-
-            ${if package ? fixupPhase then "fixupPhase" else null} =
-              checkPhaseHooks "preFixup" "postFixup"
-                package.fixupPhase;
-          };
+          usesRunHooks = { }
+            // optionalAttrs (package ? unpackPhase) { unpackPhase = checkPhaseHooks "preUnpack" "postUnpack" package.unpackPhase; }
+            // optionalAttrs (package ? patchPhase) { patchPhase = checkPhaseHooks "prePatch" "postPatch" package.patchPhase; }
+            // optionalAttrs (package ? configurePhase) { configurePhase = checkPhaseHooks "preConfigure" "postConfigure" package.configurePhase; }
+            // optionalAttrs (package ? buildPhase) { buildPhase = checkPhaseHooks "preBuild" "postBuild" package.buildPhase; }
+            // optionalAttrs (package ? installPhase) { installPhase = checkPhaseHooks "preInstall" "postInstall" package.installPhase; }
+            // optionalAttrs (package ? checkPhase) { checkPhase = checkPhaseHooks "preCheck" "postCheck" package.checkPhase; }
+            // optionalAttrs (package ? installCheckPhase) { installCheckPhase = checkPhaseHooks "preInstallCheck" "postInstallCheck" package.installCheckPhase; }
+            // optionalAttrs (package ? fixupPhase) { fixupPhase = checkPhaseHooks "preFixup" "postFixup" package.fixupPhase; };
         };
 
-        # https://github.com/NixOS/nixpkgs/issues/79303
-        stdenv = {
-          NIX_CFLAGS_COMPILE = package ? env.NIX_CFLAGS_COMPILE || package ? NIX_CFLAGS_COMPILE;
-        };
+        stdenv = { }
+          # https://github.com/NixOS/nixpkgs/issues/79303
+          // optionalAttrs (package ? env.NIX_CFLAGS_COMPILE || package ? NIX_CFLAGS_COMPILE) { NIX_CFLAGS_COMPILE = true; };
 
-        python = {
+        python = { }
           # https://github.com/NixOS/nixpkgs/issues/515974
           # https://github.com/NixOS/nixpkgs/issues/253154
-          ${if package ? pyproject then "pyproject" else null} =
-            package.pyproject != null && package.pyproject != false;
-
+          // optionalAttrs (package ? pyproject) { pyproject = package.pyproject != false; }
           # checks pyproject because its in all python builders
-          ${if package ? pyproject then "pythonImportsCheck" else null} = package ? pythonImportsCheck;
-        };
+          // optionalAttrs (package ? pyproject) { pythonImportsCheck = package ? pythonImportsCheck; };
 
-        node = {
+        node = { }
           # https://github.com/NixOS/nixpkgs/issues/529285
-          ${if package ? pnpmDeps.pnpm.version then "pnpm" else null} = package.pnpmDeps.pnpm.version;
-
-          ${if package ? pnpmDeps then "pnpmfetcher" else null} = package.pnpmDeps.fetcherVersion;
+          // optionalAttrs (package ? pnpmDeps.pnpm.version) { pnpm = package.pnpmDeps.pnpm.version; }
+          // optionalAttrs (package ? pnpmDeps) { pnpmfetcher = package.pnpmDeps.fetcherVersion; }
           # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
-          ${
-            if
-              package ? postPatch
-              && builtins.typeOf package.postPatch == "string"
-              && lib.hasInfix "package-lock.json" package.postPatch
-            then
-              "lockFile"
-            else
-              null
-          } =
-            true;
-        };
+          // optionalAttrs (package ? postPatch && builtins.typeOf package.postPatch == "string" && lib.hasInfix "package-lock.json" package.postPatch) { lockFile = true; };
 
-        rust = {
+        rust = { }
           # https://github.com/NixOS/nixpkgs/issues/327064
-          ${if package ? cargoDeps && package.cargoDeps ? lockFile then "lockFile" else null} = true; # want to get rid of these
-        };
+         // optionalAttrs (package ? cargoDeps.lockFile) { lockFile = true; };
 
-        go = {
-          ${if package ? ldflags then "ldflags" else null} = package.ldflags;
-        };
+        go = { }
+          // optionalAttrs (package ? ldflags) { ldflags = package.ldflags; };
       };
 
     };
