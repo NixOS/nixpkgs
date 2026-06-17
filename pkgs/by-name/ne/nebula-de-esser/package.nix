@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nebula-de-esser";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "subhankardas15071992-cloud";
     repo = "Nebula-De-Esser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N+tVlhGTBRXZDKGRYo2WUamiekTe1FXvpqm34lwu2Z8=";
+    hash = "sha256-vV7Qc5WxGvb6h3o1CXTLYZzpWSc3ASt8cq3opI3qjEg=";
   };
 
-  cargoHash = "sha256-+z6oFjmPr2bLf81F4Q3dJC+x+RWeZnnnMHrWLphTsq0=";
+  cargoHash = "sha256-swhj9JQsDCFYzB/+qKffcdcIOAZ1HXmrgZ/Iy/rxG1M=";
 
   __structuredAttrs = true;
   strictDeps = true;
