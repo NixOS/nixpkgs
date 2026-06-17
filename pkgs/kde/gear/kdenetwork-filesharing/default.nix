@@ -17,6 +17,8 @@ mkKdeDerivation {
 
     # Provide a more NixOS specific Samba hint
     ./samba-hint.patch
+    # Add samba-smbd.service to systemd unit candidates
+    ./samba-service.patch
   ];
 
   extraBuildInputs = [

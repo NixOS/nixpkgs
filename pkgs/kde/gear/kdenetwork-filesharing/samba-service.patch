@@ -1,0 +1,26 @@
+diff --git a/samba/filepropertiesplugin/kauth/authhelper.cpp b/samba/filepropertiesplugin/kauth/authhelper.cpp
+index 9192d51..10e4196 100644
+--- a/samba/filepropertiesplugin/kauth/authhelper.cpp
++++ b/samba/filepropertiesplugin/kauth/authhelper.cpp
+@@ -27,7 +27,7 @@ static QString findAvailableService()
+     // The smb service can be named "smbd.service" on some systems, e.g. Debian.
+     // Ensure the correct service name is used.
+     OrgFreedesktopSystemd1ManagerInterface manager(DBUS_SYSTEMD_SERVICE, DBUS_SYSTEMD_PATH, QDBusConnection::systemBus());
+-    auto candidates = {QStringLiteral("smb.service"), QStringLiteral("smbd.service")};
++    auto candidates = {QStringLiteral("smb.service"), QStringLiteral("smbd.service"), QStringLiteral("samba-smbd.service")};
+ 
+     for (const QString &candidate : candidates) {
+         // If this call doesn't return an error, it means the unit file exists, even if it's disabled.
+diff --git a/samba/filepropertiesplugin/servicehelper.cpp b/samba/filepropertiesplugin/servicehelper.cpp
+index d8ea4ea..8d50e67 100644
+--- a/samba/filepropertiesplugin/servicehelper.cpp
++++ b/samba/filepropertiesplugin/servicehelper.cpp
+@@ -33,7 +33,7 @@ QCoro::Task<QString> findAvailableService()
+     // The smb service can be named "smbd.service" on some systems, e.g. Debian.
+     // Ensure the correct service name is used.
+     OrgFreedesktopSystemd1ManagerInterface manager(DBUS_SYSTEMD_SERVICE, DBUS_SYSTEMD_PATH, QDBusConnection::systemBus());
+-    auto candidates = {QStringLiteral("smb.service"), QStringLiteral("smbd.service")};
++    auto candidates = {QStringLiteral("smb.service"), QStringLiteral("smbd.service"), QStringLiteral("samba-smbd.service")};
+ 
+     for (const QString &candidate : candidates) {
+         // If this call doesn't return an error, it means the unit file exists, even if it's disabled.
