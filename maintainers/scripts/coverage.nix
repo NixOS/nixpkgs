@@ -250,7 +250,7 @@ let
     let
       updateScript = get-script package;
     in
-    {
+    lib.filterAttrsRecursive (_: v: v != { }) {
       name = package.name;
       pname = lib.getName package;
       version = lib.getVersion package;
