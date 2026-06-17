@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "comfy-aimdo";
-  version = "0.2.9";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-aimdo";
     tag = "v${version}";
-    hash = "sha256-MO0YRaCZugGKqsfZs01XFjklXWjQrsSHDzFt5f2J/tQ=";
+    hash = "sha256-57z8NrEabc0RrTJavbdbpOZSLkNarPA2D+hZ+WUS4r4=";
   };
   build-system = [
     setuptools
