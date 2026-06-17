@@ -261,10 +261,11 @@ let
         src =
           { }
           # https://github.com/NixOS/nixpkgs/issues/325892
-          // optionalAttrs (package ? src.hash) { srihash = !(lib.hasInfix ":" package.src.hash); };
+          # checking if outputHashAlgo != null may be better here? basically the same thing tho
+          // optionalAttrs (package ? src.hash) { srihash = !(lib.hasInfix ":" package.src.hash); }
 
-        # currently fetchFromSourcehut doesn't support tag which breaks eval here
-        # // optionalAttrs (package ? src.gitRepoUrl) { tag = package.src.tag != null; };
+          # currently fetchFromSourcehut doesn't support tag which breaks eval here
+          // optionalAttrs (package ? src.gitRepoUrl) { tag = package.src.tag != null; };
 
         common = {
           # https://github.com/NixOS/nixpkgs/issues/178468
