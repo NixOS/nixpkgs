@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication rec {
   version = "1.6.8";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "1axaic8053xh1a0fya0y24f8knrwxx2lz6pnqk570cb071pcr4dm";
