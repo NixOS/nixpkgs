@@ -24262,6 +24262,7 @@
   };
   ryand56 = {
     email = "git@ryand.ca";
+    matrix = "@ryan:ryand.ca";
     github = "ryand56";
     githubId = 22267679;
     name = "Ryan Omasta";
@@ -27437,6 +27438,13 @@
     github = "thattemperature";
     githubId = 125476238;
   };
+  thbemme = {
+    name = "Thomas Bemme";
+    email = "thomas.bemme@gmail.com";
+    matrix = "@riza:chaos.jetzt";
+    github = "thbemme";
+    githubId = 14074615;
+  };
   thblt = {
     name = "Thibault Polge";
     email = "thibault@thb.lt";
@@ -28778,6 +28786,12 @@
     github = "ursi";
     githubId = 17836748;
     name = "Mason Mackaman";
+  };
+  username-generic = {
+    name = "username-generic";
+    email = "username-generic@tuta.io";
+    github = "username-generic";
+    githubId = 202454830;
   };
   usertam = {
     name = "Samuel Tam";
@@ -30729,6 +30743,12 @@
     github = "YvesStraten";
     githubId = 65394961;
     name = "Yves Straten";
+  };
+  yvnth = {
+    email = "yashupress@gmail.com";
+    github = "yvnth";
+    githubId = 201552597;
+    name = "Yashwanth Prasannakumar";
   };
   yzx9 = {
     email = "yuan.zx@outlook.com";

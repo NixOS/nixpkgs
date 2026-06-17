@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spotipyfree";
-  version = "1.9.5";
+  version = "1.9.12";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-1QvcyQcQsLXsEzk6fbNw9lga4KCcoPpxJGorJoacHto=";
+    hash = "sha256-66SITvhrKd1dJucd626Qy9jW9qZYgH/PWYyto3F4Big=";
   };
 
   build-system = [ setuptools ];

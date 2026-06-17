@@ -6,7 +6,7 @@
   fetchFromGitHub,
   git,
   pkg-config,
-  erlang,
+  beamPackages,
   nodejs,
   bun,
   deno,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    erlang
+    beamPackages.erlang
   ];
 
   nativeCheckInputs = [

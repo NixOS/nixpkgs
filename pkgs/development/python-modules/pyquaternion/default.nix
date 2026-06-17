@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Library for representing and using quaternions";
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

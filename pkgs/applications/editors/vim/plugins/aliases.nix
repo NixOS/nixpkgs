@@ -55,7 +55,9 @@ mapAliases (
     mind-nvim = throw "'vimPlugins.mind-nvim' has been removed: the upstream repository got deleted"; # Added 2026-05-03
     minsnip-nvim = throw "'vimPlugins.minsnip-nvim' has been removed: the upstream repository got deleted"; # Added 2025-08-30
     neuron-nvim = throw "'vimPlugins.neuron-nvim' has been removed: archived repository 2023-02-19"; # Added 2025-09-10
+    null-ls-nvim = throw "'vimPlugins.null-ls-nvim' has been removed: upstream deleted repository. Use none-ls-nvim instead."; # Added 2026-06-15
     nvim-gps = throw "'vimPlugins.nvim-gps' has been archived since 2022. Use nvim-navic instead."; # Added 2025-12-18
+    nvim-lsp-ts-utils = throw "'vimPlugins.nvim-lsp-ts-utils' has been removed: upstream deleted repository"; # Added 2026-06-15
     nvim-ts-rainbow = throw "'vimPlugins.nvim-ts-rainbow' has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     nvim-ts-rainbow2 = throw "'vimPlugins.nvim-ts-rainbow2' has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     peskcolor-vim = throw "'vimPlugins.peskcolor-vim' has been removed: abandoned by upstream"; # Added 2024-08-23
@@ -69,6 +71,7 @@ mapAliases (
     sparkup = throw "'vimPlugins.sparkup' was removed: the upstream repository got deleted"; # Added 2025-08-06
     syntax-tree-surfer = throw "'vimPlugins.syntax-tree-surfer' has been archived"; # Added 2025-12-18
     todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
+    typescript-nvim = throw "'vimPlugins.typescript-nvim' has been removed: upstream deleted repository"; # Added 2026-06-15
     vim-csharp = throw "'vimPlugins.vim-csharp' has been removed: repository deleted"; # Added 2026-05-12
     vim-sourcetrail = throw "'vimPlugins.vim-sourcetrail' has been removed: abandoned by upstream"; # Added 2022-08-14
     # keep-sorted end

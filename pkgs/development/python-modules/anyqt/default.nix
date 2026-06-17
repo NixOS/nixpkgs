@@ -56,6 +56,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ales-erjavec/anyqt";
     changelog = "https://github.com/ales-erjavec/anyqt/releases/tag/${finalAttrs.version}";
     license = [ lib.licenses.gpl3Only ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 })

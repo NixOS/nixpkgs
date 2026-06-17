@@ -196,7 +196,6 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       gepbird
       kashw2
-      lucasew
       mattpolzin
       redyf
       water-sucks

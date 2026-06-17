@@ -12,10 +12,10 @@ index f425eb3..5b8cd43 100644
  
  } // namespace PlasmaVault
 diff --git a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
-index b992f6f..eb828dd 100644
+index 8636e4e..4f4ba0d 100644
 --- a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
 +++ b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
-@@ -202,7 +202,7 @@ QProcess *GocryptfsBackend::gocryptfs(const QStringList &arguments) const
+@@ -204,7 +204,7 @@ QProcess *GocryptfsBackend::gocryptfs(const QStringList &arguments) const
      auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
      KConfigGroup backendConfig(config, "GocryptfsBackend");
  
@@ -25,19 +25,19 @@ index b992f6f..eb828dd 100644
  
  QString GocryptfsBackend::getConfigFilePath(const Device &device) const
 diff --git a/kded/engine/vault.cpp b/kded/engine/vault.cpp
-index c101079..67c8a83 100644
+index f488d00..6b76565 100644
 --- a/kded/engine/vault.cpp
 +++ b/kded/engine/vault.cpp
-@@ -485,7 +485,7 @@ FutureResult<> Vault::close()
+@@ -480,7 +480,7 @@ FutureResult<> Vault::close()
              } else {
                  // We want to check whether there is an application
                  // that is accessing the vault
--                AsynQt::Process::getOutput(QStringLiteral("lsof"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this] {
-+                AsynQt::Process::getOutput(QStringLiteral("@lsof@"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this] {
-                     d->updateMessage(i18n("Unable to lock the vault because an application is using it"));
-                 }) | onSuccess([this](const QString &result) {
-                     // based on ksolidnotify.cpp
-@@ -538,7 +538,7 @@ FutureResult<> Vault::forceClose()
+-                AsynQt::Process::getOutput(QStringLiteral("lsof"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this, result] {
++                AsynQt::Process::getOutput(QStringLiteral("@lsof@"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this, result] {
+                     // no application seems to be accessing the vault, bubble
+                     // through the original unmount error
+                     d->updateMessage(result.error().message());
+@@ -534,7 +534,7 @@ FutureResult<> Vault::forceClose()
      using namespace AsynQt::operators;
  
      AsynQt::await(

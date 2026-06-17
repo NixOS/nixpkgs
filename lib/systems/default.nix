@@ -23,6 +23,7 @@ let
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  rustc-target-env = import ./rustc-target-env.nix;
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -448,6 +449,16 @@ let
                   "powerpc64" # never add "le" suffix
                 else
                   final.parsed.cpu.name;
+
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_env
+              # Accomodate system definitions written before Nixpkgs learned about target_env.
+              env =
+                if rust ? platform.env then
+                  rust.platform.env
+                else if rustc-target-env ? ${final.rust.rustcTargetSpec} then
+                  rustc-target-env.${final.rust.rustcTargetSpec}
+                else
+                  "";
 
               # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
               os =
