@@ -19,6 +19,7 @@ buildPythonPackage (finalAttrs: {
   pname = "vicinity";
   version = "0.4.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MinishLab";
