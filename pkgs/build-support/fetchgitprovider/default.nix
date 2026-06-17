@@ -183,54 +183,55 @@ lib.extendMkDerivation rec {
           ;
       };
 
-      fetcherArgs =
-        let
-          handleRevWithTag = lib.throwIfNot (lib.xor (finalAttrs.tag == null) (
-            finalAttrs.revCustom == null
-          )) "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
-        in
-        (
-          if useFetchGit then
-            useFetchGitArgsWDPassing
-            // {
-              inherit tag rev;
-              url = gitRepoUrl;
-              passthru = passthru // {
-                __handleRevWithTag = handleRevWithTag;
-              };
-              derivationArgs = derivationArgsCommon // derivationArgs;
-            }
-          else
-            {
-              url = archiveUrl;
-              extension = "tar.gz";
-              derivationArgs =
-                derivationArgsCommon
-                // {
-                  inherit
-                    tag
-                    ;
+      handleRevWithTag = lib.throwIfNot (lib.xor (finalAttrs.tag == null) (
+        finalAttrs.revCustom == null
+      )) "${functionName} requires one of either `rev` or `tag` to be provided (not both).";
 
-                  rev = handleRevWithTag (
-                    fetchgit.getRevWithTag {
-                      inherit (finalAttrs) tag;
-                      rev = finalAttrs.revCustom;
-                    }
-                  );
-                  revCustom = rev;
-                }
-                // derivationArgs;
-              passthru = {
-                inherit gitRepoUrl;
-              }
-              // passthru;
-            }
-        )
-        // privateAttrs
+      fetcherArgs = if useFetchGit then fetchgitArgs else fetchzipArgs;
+
+      fetchgitArgs =
+        useFetchGitArgsWDPassing
         // {
-          inherit name;
-          meta = newMeta;
-        };
+          inherit tag rev;
+          url = gitRepoUrl;
+          passthru = passthru // {
+            __handleRevWithTag = handleRevWithTag;
+          };
+          derivationArgs = derivationArgsCommon // derivationArgs;
+        }
+        // fetcherArgsCommonSuffix;
+
+      fetchzipArgs = {
+        url = archiveUrl;
+        extension = "tar.gz";
+        derivationArgs =
+          derivationArgsCommon
+          // {
+            inherit
+              tag
+              ;
+
+            rev = handleRevWithTag (
+              fetchgit.getRevWithTag {
+                inherit (finalAttrs) tag;
+                rev = finalAttrs.revCustom;
+              }
+            );
+            revCustom = rev;
+          }
+          // derivationArgs;
+        passthru = {
+          inherit gitRepoUrl;
+        }
+        // passthru;
+      }
+      // fetcherArgsCommonSuffix;
+
+      fetcherArgsCommonSuffix = privateAttrs // {
+        inherit name;
+        meta = newMeta;
+      };
+
     in
     fetcherArgs // { inherit useFetchGit; };
 
