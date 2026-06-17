@@ -7743,6 +7743,8 @@ self: super: with self; {
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
 
+  intersphinx-registry = callPackage ../development/python-modules/intersphinx-registry { };
+
   intervals = callPackage ../development/python-modules/intervals { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
