@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage rec {
   pname = "comfy-kitchen";
-  version = "0.2.7";
+  version = "0.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-kitchen";
     tag = "v${version}";
-    hash = "sha256-v0xNWBn/FiRsPYe1ayVI8jRouhrEcITxMTJYJ773+/s=";
+    hash = "sha256-sMuA6EiB+kwbThpcdmfRA23DKRw5WMV57MD2ThEK4sk=";
   };
   build-system = [
     setuptools
