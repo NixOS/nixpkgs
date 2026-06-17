@@ -327,6 +327,17 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
+    # Revert WebAuthn PRF support for security keys, which uses
+    # AuthenticationServices declarations first available in SDK 26.4.
+    ++
+      lib.optionals (lib.versionAtLeast version "152" && lib.versionOlder apple-sdk_26.version "26.4")
+        [
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/f93c08b69a84009d794c20ce648605b70beef389.patch";
+            hash = "sha256-/m/y+m/eOe17XRqCIfsFHz3Sp1GT0e/xeKgfBCwlcQo=";
+            revert = true;
+          })
+        ]
     # Revert apple sdk bump to 26.1, 26.2 and 26.4
     ++
       lib.optionals (lib.versionAtLeast version "151" && lib.versionOlder apple-sdk_26.version "26.4")
