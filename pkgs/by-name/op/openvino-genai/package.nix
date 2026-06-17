@@ -164,7 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ openvino-tokenizers ];
 
-  doCheck = true;
+  # C++ exception with description "Exception from src/inference/src/cpp/core.cpp:272:
+  # Exception from src/inference/src/dev/core_impl.cpp:706:
+  # Device with "CPU" name is not registered in the OpenVINO Runtime
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     mkdir -p tests/cpp/data
