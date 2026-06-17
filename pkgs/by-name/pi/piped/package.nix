@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.SchweGELBin ];
     license = lib.licenses.agpl3Plus;
   };
 
