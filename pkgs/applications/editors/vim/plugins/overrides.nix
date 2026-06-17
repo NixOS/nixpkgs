@@ -2020,10 +2020,6 @@ assertNoAdditions {
       );
     in
     {
-      patches = (old.patches or [ ]) ++ [
-        ./patches/kulala-nvim/use-packaged-tree-sitter-parser.patch
-      ];
-
       dependencies = [ kulala-http-grammar ];
 
       postPatch = ''

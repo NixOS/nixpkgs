@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxedo";
-  version = "2026.5.12";
+  version = "2026.6.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "webstonehq";
     repo = "tuxedo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4GIHq4kjj+FiNBJJjWeXmg4f40ARUILzwsEl0CDV1o=";
+    hash = "sha256-0ulyr7AbB6KZbAAvxc/s0NJTPBYS42UCbEXYREJTWMo=";
   };
 
-  cargoHash = "sha256-rIdjrwNuY0DySdk4jc880JrFgoIuKTYEcx6XoSfllp4=";
+  cargoHash = "sha256-Sd3O/bw3/FZeas2eWAvSV3HWcDQg8Cla2hagWVYRKsc=";
 
   preCheck = ''
     export HOME="$TMPDIR/home"
