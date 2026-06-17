@@ -768,7 +768,6 @@ let
           maintainers = with lib.maintainers; [
             corngood
             shiryel
-            superherointj
           ];
           mainProgram = "godot${suffix}";
         };

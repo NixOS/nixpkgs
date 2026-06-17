@@ -289,6 +289,14 @@
     githubId = 92977828;
     name = "Mori Zen";
   };
+  _74k1 = {
+    email = "git.t@betsumei.com";
+    github = "74k1";
+    githubId = 49000471;
+    keys = [ { fingerprint = "46F3 422F 63A3 1369 7EAB  83D5 1CF1 55F7 6F21 3503"; } ];
+    matrix = "@74k1:matrix.org";
+    name = "Tim";
+  };
   _7591yj = {
     email = "yeongjin.kim@proton.me";
     github = "7591yj";
@@ -26675,13 +26683,6 @@
     github = "0Supa";
     githubId = 36031171;
     name = "Supa";
-  };
-  superherointj = {
-    email = "sergiomarcelo@yandex.com";
-    github = "superherointj";
-    githubId = 5861043;
-    matrix = "@superherointj:matrix.org";
-    name = "Sérgio Marcelo";
   };
   supermarin = {
     email = "git+nixpkgs@mar.in";
