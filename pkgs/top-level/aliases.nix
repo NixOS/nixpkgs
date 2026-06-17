@@ -1808,7 +1808,6 @@ mapAliases {
   podofo_0_10 = warnAlias "'podofo_0_10' has been renamed to 'podofo0'" podofo0; # Added 2026-05-08
   podofo_1_0 = throw "'podofo_1_0' has been deprecated in favour of 'podofo'"; # Added 2026-05-08
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
-  polonium = throw "'polonium' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
   polyml56 = throw "'polyml56' has been deprecated in favor of polyml"; # Added 2026-06-01
   polyml57 = throw "'polyml57' has been deprecated in favor of polyml"; # Added 2026-06-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
@@ -2171,6 +2170,7 @@ mapAliases {
   teamspeak3 = throw "'teamspeak3' has been removed as it depended on qt5 webengine which is EOL"; # Added 2026-04-25
   teamspeak5_client = throw "'teamspeak5_client' has been renamed to/replaced by 'teamspeak6-client'"; # Converted to throw 2025-10-27
   teamspeak_client = throw "'teamspeak_client' has been renamed to/replaced by 'teamspeak3'"; # Converted to throw 2025-10-27
+  ted = throw "'ted' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-17
   tegaki-zinnia-japanese = throw "'tegaki-zinnia-japanese' has been removed due to lack of maintenance"; # Added 2025-09-10
   telepathy-haze = throw "'telepathy-haze' has been removed due to being unmaintained and broken since 2023"; # Added 2025-11-04
   teleport_16 = throw "teleport 16 has been removed as it is EOL. Please upgrade to Teleport 17 or later"; # Added 2025-11-10
@@ -2289,6 +2289,7 @@ mapAliases {
   ViennaRNA = throw "'ViennaRNA' has been renamed to/replaced by 'viennarna'"; # Converted to throw 2025-10-27
   vim_configurable = throw "'vim_configurable' has been renamed to/replaced by 'vim-full'"; # Converted to throw 2025-10-27
   vimHugeX = throw "'vimHugeX' has been renamed to/replaced by 'vim-full'"; # Converted to throw 2025-10-27
+  vimpc = throw "'vimpc' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-06
   virt-manager-qt = throw "'virt-manager-qt' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
   virtkey = throw "'virtkey' has been removed, as it was unmaintained, abandoned upstream, and relied on gtk2."; # Added 2025-10-12
   vistafonts = throw "'vistafonts' has been renamed to/replaced by 'vista-fonts'"; # Converted to throw 2025-10-27
