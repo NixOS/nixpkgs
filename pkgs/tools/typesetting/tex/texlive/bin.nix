@@ -143,7 +143,10 @@ let
   common = {
     # initial TeX Live 2025 release
     # src = fetchurl {
-    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
+    #   urls = [
+    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #   ];
     #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     # };
 
