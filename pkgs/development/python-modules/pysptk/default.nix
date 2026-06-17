@@ -6,14 +6,13 @@
   fetchPypi,
   numpy,
   scipy,
-  setuptools,
-  six,
+  setuptools_80,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pysptk";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -23,16 +22,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-eLHJM4v3laQc3D/wP81GmcQBwyP1RjC7caGXEAeNCz8=";
   };
 
-  env.PYSPTK_BUILD_VERSION = 0;
+  build-system = [
+    cython
+  ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     numpy
     scipy
-    setuptools
-    six
+    # setuptools is a runtime dependency because util.py imports pkg_resources
+    setuptools_80
   ];
 
   # Tests are not part of the PyPI releases
