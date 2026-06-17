@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -37,6 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Bumps the gupnp_igd_dep version requested to 1.6
     # https://gitlab.freedesktop.org/libnice/libnice/-/merge_requests/255
     ./gupnp-igd-bump.patch
+
+    (fetchpatch {
+      name = "freebsd.patch";
+      url = "https://gitlab.freedesktop.org/libnice/libnice/-/commit/479f0813a571ff035bf00de679db452a0441125b.patch";
+      hash = "sha256-rr8pAb8TjU85jYWUjsMMKkLxxXVE3B+IjfAyOw9suo0=";
+    })
+
+    # https://gitlab.freedesktop.org/libnice/libnice/-/merge_requests/353
+    ./musl.patch
   ];
 
   nativeBuildInputs = [
