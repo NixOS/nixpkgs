@@ -11,12 +11,12 @@
 
 let
   pname = "pgrok";
-  version = "1.5.0";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     tag = "v${version}";
-    hash = "sha256-arPFccclBie3XOBt0q6UC96fPaPc7NmgQDMsd2H2bhI=";
+    hash = "sha256-uMHeVxAGmAEIOfCK9SEFsL7GZZIUNMYdoV8XeHjXmWc=";
   };
 in
 
@@ -34,6 +34,18 @@ buildGoModule {
     pnpm_9
   ];
 
+  postPatch = ''
+    # Rename directories to avoid binary naming conflicts (both would be named "cli")
+    mv pgrok/cli pgrok/pgrok
+    mv pgrokd/cli pgrokd/pgrokd
+
+    # Update references in Go code and web app package.json to match renamed directory
+    substituteInPlace pgrokd/pgrokd/main.go \
+      --replace-fail "github.com/pgrok/pgrok/pgrokd/cli/internal/web" "github.com/pgrok/pgrok/pgrokd/pgrokd/internal/web"
+    substituteInPlace pgrokd/web/package.json \
+      --replace-fail "../cli/internal/web/dist" "../pgrokd/internal/web/dist"
+  '';
+
   env.pnpmDeps = fetchPnpmDeps {
     inherit
       pname
@@ -42,10 +54,10 @@ buildGoModule {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-D8UZoN0ZnjB8CXQiHmBZwBEt57XGb5SDLg61xxSqNus=";
+    hash = "sha256-O3bDxnxeRO20FsRNpgXfz4UweYJmeU6zgrrPJ05fgWo=";
   };
 
-  vendorHash = "sha256-ob8s1jYL2+JGaqjCsM10jgirPiEyTY4U3IVVlHVdoGQ=";
+  vendorHash = "sha256-fhyyyXHUJsIWiCZbqtLZZRuIG9hb0LAkSo7lKW0i8Sk";
 
   ldflags = [
     "-s"
@@ -66,10 +78,6 @@ buildGoModule {
     pnpm run build
 
     popd
-
-    # rename packages due to naming conflict
-    mv pgrok/cli/ pgrok/pgrok/
-    mv pgrokd/cli/ pgrokd/pgrokd/
   '';
 
   postInstall = ''
