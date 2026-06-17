@@ -25,7 +25,7 @@ let
       ] null;
     releaseRev = v: "V${v}";
 
-    release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
+    release."9.0.0".hash = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
 
     configurePhase = ''
       echo no configuration
