@@ -2,7 +2,6 @@
   buildOctavePackage,
   lib,
   fetchurl,
-  mesa,
   gnuplot,
   makeFontsConf,
   writableTmpDirAsHomeHook,
@@ -18,7 +17,6 @@ buildOctavePackage rec {
   };
 
   nativeOctavePkgTestInputs = [
-    mesa
     gnuplot
     writableTmpDirAsHomeHook
   ];
