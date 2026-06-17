@@ -429,7 +429,10 @@ stdenv.mkDerivation rec {
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ flacks ];
+    maintainers = with lib.maintainers; [
+      khaneliman
+      flacks
+    ];
     inherit homepage;
   };
 }
