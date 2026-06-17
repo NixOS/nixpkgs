@@ -149,6 +149,8 @@ in
         EnvironmentFile = cfg.environmentFiles;
         Restart = "on-failure";
         StateDirectory = "rustical";
+        RuntimeDirectory = "rustical";
+        RuntimeDirectoryMode = "0750";
 
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
@@ -172,6 +174,7 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -181,7 +184,7 @@ in
           "~@privileged @resources"
         ];
         SystemCallErrorNumber = "EPERM";
-        UMask = "0077";
+        UMask = "0007";
       };
     };
   };

@@ -32,6 +32,7 @@ in
       dwrege
       fpletz
       hythera
+      thbemme
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
