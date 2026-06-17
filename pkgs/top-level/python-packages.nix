@@ -8344,8 +8344,6 @@ self: super: with self; {
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
-  kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
-
   kaggle = callPackage ../development/python-modules/kaggle { };
 
   kagglehub = callPackage ../development/python-modules/kagglehub { };
@@ -18052,6 +18050,8 @@ self: super: with self; {
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
+
+  silero-vad = callPackage ../development/python-modules/silero-vad { };
 
   silver-platter = callPackage ../development/python-modules/silver-platter { };
 

@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  carla,
   cmake,
   dbus,
   fftwFloat,
@@ -37,6 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
+
+    substituteInPlace plugins/Cardinal/src/Carla.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
+
+    substituteInPlace plugins/Cardinal/src/Ildaeil.cpp \
+      --replace-fail "/usr/lib/carla" "${carla}/bin" \
+      --replace-fail "/usr/share/carla/resources" "${carla}/share"
   '';
 
   dontUseCmakeConfigure = true;
