@@ -258,12 +258,13 @@ let
       outputs = package.outputs;
 
       attributes = {
-        src = { }
+        src =
+          { }
           # https://github.com/NixOS/nixpkgs/issues/325892
           // optionalAttrs (package ? src.hash) { srihash = !(lib.hasInfix ":" package.src.hash); };
 
-          # currently fetchFromSourcehut doesn't support tag which breaks eval here
-          # // optionalAttrs (package ? src.gitRepoUrl) { tag = package.src.tag != null; };
+        # currently fetchFromSourcehut doesn't support tag which breaks eval here
+        # // optionalAttrs (package ? src.gitRepoUrl) { tag = package.src.tag != null; };
 
         common = {
           # https://github.com/NixOS/nixpkgs/issues/178468
@@ -280,41 +281,67 @@ let
 
           # list found from `rg runHook (pre|post)` and stdenv.chapter.md
           # not comprehensive by any means, but these are the most common
-          usesRunHooks = { }
-            // optionalAttrs (package ? unpackPhase) { unpackPhase = checkPhaseHooks "preUnpack" "postUnpack" package.unpackPhase; }
-            // optionalAttrs (package ? patchPhase) { patchPhase = checkPhaseHooks "prePatch" "postPatch" package.patchPhase; }
-            // optionalAttrs (package ? configurePhase) { configurePhase = checkPhaseHooks "preConfigure" "postConfigure" package.configurePhase; }
-            // optionalAttrs (package ? buildPhase) { buildPhase = checkPhaseHooks "preBuild" "postBuild" package.buildPhase; }
-            // optionalAttrs (package ? installPhase) { installPhase = checkPhaseHooks "preInstall" "postInstall" package.installPhase; }
-            // optionalAttrs (package ? checkPhase) { checkPhase = checkPhaseHooks "preCheck" "postCheck" package.checkPhase; }
-            // optionalAttrs (package ? installCheckPhase) { installCheckPhase = checkPhaseHooks "preInstallCheck" "postInstallCheck" package.installCheckPhase; }
-            // optionalAttrs (package ? fixupPhase) { fixupPhase = checkPhaseHooks "preFixup" "postFixup" package.fixupPhase; };
+          usesRunHooks =
+            { }
+            // optionalAttrs (package ? unpackPhase) {
+              unpackPhase = checkPhaseHooks "preUnpack" "postUnpack" package.unpackPhase;
+            }
+            // optionalAttrs (package ? patchPhase) {
+              patchPhase = checkPhaseHooks "prePatch" "postPatch" package.patchPhase;
+            }
+            // optionalAttrs (package ? configurePhase) {
+              configurePhase = checkPhaseHooks "preConfigure" "postConfigure" package.configurePhase;
+            }
+            // optionalAttrs (package ? buildPhase) {
+              buildPhase = checkPhaseHooks "preBuild" "postBuild" package.buildPhase;
+            }
+            // optionalAttrs (package ? installPhase) {
+              installPhase = checkPhaseHooks "preInstall" "postInstall" package.installPhase;
+            }
+            // optionalAttrs (package ? checkPhase) {
+              checkPhase = checkPhaseHooks "preCheck" "postCheck" package.checkPhase;
+            }
+            // optionalAttrs (package ? installCheckPhase) {
+              installCheckPhase = checkPhaseHooks "preInstallCheck" "postInstallCheck" package.installCheckPhase;
+            }
+            // optionalAttrs (package ? fixupPhase) {
+              fixupPhase = checkPhaseHooks "preFixup" "postFixup" package.fixupPhase;
+            };
         };
 
-        stdenv = { }
+        stdenv =
+          { }
           # https://github.com/NixOS/nixpkgs/issues/79303
-          // optionalAttrs (package ? env.NIX_CFLAGS_COMPILE || package ? NIX_CFLAGS_COMPILE) { NIX_CFLAGS_COMPILE = true; };
+          // optionalAttrs (package ? env.NIX_CFLAGS_COMPILE || package ? NIX_CFLAGS_COMPILE) {
+            NIX_CFLAGS_COMPILE = true;
+          };
 
-        python = { }
+        python =
+          { }
           # https://github.com/NixOS/nixpkgs/issues/515974
           # https://github.com/NixOS/nixpkgs/issues/253154
           // optionalAttrs (package ? pyproject) { pyproject = package.pyproject != false; }
           # checks pyproject because its in all python builders
           // optionalAttrs (package ? pyproject) { pythonImportsCheck = package ? pythonImportsCheck; };
 
-        node = { }
+        node =
+          { }
           # https://github.com/NixOS/nixpkgs/issues/529285
           // optionalAttrs (package ? pnpmDeps.pnpm.version) { pnpm = package.pnpmDeps.pnpm.version; }
           // optionalAttrs (package ? pnpmDeps) { pnpmfetcher = package.pnpmDeps.fetcherVersion; }
           # kinda hacky but seems mostly consistent across the repo?.. tested on mdx-language-server
-          // optionalAttrs (package ? postPatch && builtins.typeOf package.postPatch == "string" && lib.hasInfix "package-lock.json" package.postPatch) { lockFile = true; };
+          // optionalAttrs (
+            package ? postPatch
+            && builtins.typeOf package.postPatch == "string"
+            && lib.hasInfix "package-lock.json" package.postPatch
+          ) { lockFile = true; };
 
-        rust = { }
+        rust =
+          { }
           # https://github.com/NixOS/nixpkgs/issues/327064
-         // optionalAttrs (package ? cargoDeps.lockFile) { lockFile = true; };
+          // optionalAttrs (package ? cargoDeps.lockFile) { lockFile = true; };
 
-        go = { }
-          // optionalAttrs (package ? ldflags) { ldflags = package.ldflags; };
+        go = { } // optionalAttrs (package ? ldflags) { ldflags = package.ldflags; };
       };
 
     };
