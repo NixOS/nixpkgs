@@ -343,6 +343,20 @@ in
     } ./python-imports-check-hook.sh
   ) { };
 
+  pythonMetadataCheckHook = callPackage (
+    { buildPackages, makePythonHook }:
+    makePythonHook {
+      name = "python-metadata-check-hook.sh";
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        pythonWithPackaging = lib.getExe (pythonOnBuildForHost.withPackages (ps: [ ps.packaging ]));
+      };
+      meta = {
+        maintainers = [ lib.maintainers.dotlambda ];
+      };
+    } ./python-metadata-check-hook.sh
+  ) { };
+
   pythonNamespacesHook = callPackage (
     { makePythonHook, buildPackages }:
     makePythonHook {
