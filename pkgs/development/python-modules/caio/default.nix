@@ -20,6 +20,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-IeyksrYpLMc9PJjpYeaOgLx26CeVMoR/3r2RX66ucDs=";
   };
 
+  postPatch = ''
+    substituteInPlace caio/version.py \
+      --replace-fail 'version_info = (0, 9, 25)' 'version_info = (${
+        lib.replaceString "." ", " finalAttrs.version
+      })'
+  '';
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
