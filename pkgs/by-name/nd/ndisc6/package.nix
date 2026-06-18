@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndisc6";
-  version = "1.0.4";
+  version = "1.0.8";
 
   src = fetchurl {
-    url = "https://www.remlab.net/files/ndisc6/archive/ndisc6-${finalAttrs.version}.tar.bz2";
-    sha256 = "07swyar1hl83zxmd7fqwb2q0c0slvrswkcfp3nz5lknrk15dmcdb";
+    url = "https://www.remlab.net/files/ndisc6/ndisc6-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-Hy+y3BFydwqloJ05c4pE2LdTzF4uJeMGynhoL5/qC08=";
   };
 
   buildInputs = [ perl ];
