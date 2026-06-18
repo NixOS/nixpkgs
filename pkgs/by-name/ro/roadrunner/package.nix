@@ -9,18 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "roadrunner";
-  version = "2025.1.6";
+  version = "2025.1.14";
 
   src = fetchFromGitHub {
-    repo = "roadrunner";
     owner = "roadrunner-server";
+    repo = "roadrunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qoPQxJbZ1BH9Gy06qmp9LGWF6YPJL0gRZX3+S5ej6XY=";
+    hash = "sha256-0Mfu/De28tWCygJ5/QJnOzxk88aajx4Oq/Xm0TOXR0M=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  vendorHash = "sha256-KuATz7rVsDuGiyILvILaEpznI63sCHx0G+9D2vR+dx0=";
+  env.GOWORK = "off";
+
+  subPackages = [ "cmd/rr" ];
 
   # Flags as provided by the build automation of the project:
   # https://github.com/roadrunner-server/roadrunner/blob/3853ad693522e82d53d62950e5f1315402c910f2/.github/workflows/release.yml#L82
@@ -28,6 +29,10 @@ buildGoModule (finalAttrs: {
     "-s"
     "-X=github.com/roadrunner-server/roadrunner/v${lib.versions.major finalAttrs.version}/internal/meta.version=${finalAttrs.version}"
     "-X=github.com/roadrunner-server/roadrunner/v${lib.versions.major finalAttrs.version}/internal/meta.buildTime=1970-01-01T00:00:00Z"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -49,8 +54,6 @@ buildGoModule (finalAttrs: {
   '';
 
   __darwinAllowLocalNetworking = true;
-
-  vendorHash = "sha256-LSeQACVgBywJqHfRE2q6HxL1ADKZtrJP83U3Zd1oIDw=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
