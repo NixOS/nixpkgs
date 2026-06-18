@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.8";
+  virtualboxVersion = "7.2.10";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
+  virtualboxSha256 = "203a02e3c33ed02fdd75211a58bc9e77c9a8042ad4fa91ddc2914afbd2d67125";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
