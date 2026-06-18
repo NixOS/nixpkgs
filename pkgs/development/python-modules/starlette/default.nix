@@ -15,7 +15,7 @@
   jinja2,
   python-multipart,
   pyyaml,
-  httpx,
+  httpx2,
 
   # tests
   pytestCheckHook,
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-9iQXlpA1VDGw1c7X1zJPmJ3Dub46PwqrVIX1+fWOZ7M=";
+    hash = "sha256-0eby4cDIU2bPUv+1qSTnZtfo4kkgMDIDYnZ9wp2wtoI=";
   };
 
   build-system = [ hatchling ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     jinja2
     python-multipart
     pyyaml
-    httpx
+    httpx2
   ];
 
   nativeCheckInputs = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
     downloadPage = "https://github.com/Kludex/starlette";
-    homepage = "https://www.starlette.io/";
+    homepage = "https://www.starlette.dev/";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wd15 ];
