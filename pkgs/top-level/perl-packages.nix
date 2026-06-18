@@ -18908,10 +18908,10 @@ with self;
 
   libwwwperl = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.72";
+    version = "6.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.72.tar.gz";
-      hash = "sha256-6bg1T9XiC+IHr+I93VhPzVm/gpmNwHfez2hLodrloF0=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.83.tar.gz";
+      hash = "sha256-518PqdPG8Nr1pacvqfixycDSPjqEqFIsy0+DUjK5VQU=";
     };
     buildInputs = [
       HTTPDaemon
@@ -20165,10 +20165,10 @@ with self;
 
   LWP = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.72";
+    version = "6.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.72.tar.gz";
-      hash = "sha256-6bg1T9XiC+IHr+I93VhPzVm/gpmNwHfez2hLodrloF0=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.83.tar.gz";
+      hash = "sha256-518PqdPG8Nr1pacvqfixycDSPjqEqFIsy0+DUjK5VQU=";
     };
     propagatedBuildInputs = [
       FileListing
