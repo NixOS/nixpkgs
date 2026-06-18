@@ -33,6 +33,8 @@ buildPythonPackage rec {
   postPatch = ''
     test -f setup.py || mv setup/setup.approvaltests.py setup.py
 
+    python3 setup/set_version.py '${version}'
+
     patchShebangs internal_documentation/scripts
   '';
 
