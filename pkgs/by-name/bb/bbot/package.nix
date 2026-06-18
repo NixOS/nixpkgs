@@ -6,20 +6,23 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
-  version = "2.7.2";
+  version = "2.8.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-vpKezG1nJVxQE4Qijf8feeRFD4hjy98HznVDXL+MBkE=";
+    hash = "sha256-u8F995BD1l6nPWYckMIYSgErSO3fBcU2IyBFU1WZjF8=";
   };
 
   pythonRelaxDeps = [
     "dnspython"
+    "idna"
+    "lxml"
     "radixtarget"
     "regex"
     "tabulate"
     "websockets"
+    "yara-python"
   ];
 
   build-system = with python3.pkgs; [
@@ -60,7 +63,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     xmltojson
     xxhash
     yara-python
-
   ];
 
   # Project has no tests
