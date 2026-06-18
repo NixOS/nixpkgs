@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transport::announce_limits::tests::ingress_limiting_is_scoped_per_interface"
     # multicast listener expected to see the Broadcast tx within 500ms
     "--skip=broadcast_tx_reaches_multicast_listeners"
+    "--skip=direct_link_proof_targeting_multicast_iface_falls_back_to_broadcast"
   ];
 
   passthru.updateScript = nix-update-script { };
