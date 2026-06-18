@@ -45,6 +45,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/ValvePython/steam";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
   };
 }
