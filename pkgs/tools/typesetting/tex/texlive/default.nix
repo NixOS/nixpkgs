@@ -156,8 +156,7 @@ let
         [
           # tlnet-final snapshot; used when texlive.tlpdb is frozen
           # the TeX Live yearly freeze typically happens in mid-March
-          "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
-          "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
+          "mirror://texhistoric/systems/texlive/${toString version.texliveYear}/tlnet-final"
         ]
       else
         [

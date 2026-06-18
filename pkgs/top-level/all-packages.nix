@@ -310,7 +310,6 @@ with pkgs;
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
-  buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
   buildLakePackage = callPackage ../build-support/lake { };
@@ -1756,12 +1755,6 @@ with pkgs;
   libceph = ceph.lib;
   ceph-client = ceph.client;
   ceph-dev = ceph;
-
-  inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_26_01_0
-    citrix_workspace_25_08_10
-    ;
-  citrix_workspace = citrix_workspace_26_01_0;
 
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
@@ -9486,18 +9479,6 @@ with pkgs;
 
   inherit (ocaml-ng.ocamlPackages) stog;
 
-  stumpwm = callPackage ../applications/window-managers/stumpwm {
-    stdenv = stdenvNoCC;
-    sbcl = sbcl.withPackages (
-      ps: with ps; [
-        alexandria
-        cl-ppcre
-        clx
-        fiasco
-      ]
-    );
-  };
-
   stumpwm-unwrapped = sbcl.pkgs.stumpwm;
 
   sublime3Packages = recurseIntoAttrs (
@@ -11146,8 +11127,6 @@ with pkgs;
   );
 
   yamale = with python3Packages; toPythonApplication yamale;
-
-  zap-chip-gui = zap-chip.override { withGui = true; };
 
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;

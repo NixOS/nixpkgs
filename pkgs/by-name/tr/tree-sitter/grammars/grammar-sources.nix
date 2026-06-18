@@ -213,10 +213,10 @@
   };
 
   cairo = {
-    version = "0-unstable-2025-09-14";
+    version = "0-unstable-2026-06-14";
     url = "github:starkware-libs/tree-sitter-cairo";
-    rev = "8dcd77dbe7f68b2cc661031dff224dfc17bdbaf4";
-    hash = "sha256-RzxmMV0Uo4N25QuhMaTJHCA0sLE/51cfhd25LYFlFog=";
+    rev = "b04ffb8c10a1a9faaea71a6757753fed4e1fcbfb";
+    hash = "sha256-XMv3E/QVL3JroaHUc+ao7bfINB+q1J78hfttXk3GtS4=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -2529,9 +2529,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.5.28";
+    version = "2026.6.4";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-Zj3aUcqYPYMTv/87bJXKOSOy8H3JFZxcfXcUumyMzUg=";
+    hash = "sha256-jluMtWRFuyG8WGiVn1ge2NfSdRIq8zqS1R12AG/Imtc=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
