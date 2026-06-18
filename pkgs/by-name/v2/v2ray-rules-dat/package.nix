@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "v2ray-rules-dat";
-  version = "202606122311";
+  version = "202606172318";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     geositeDat = fetchurl {
       url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geosite.dat";
-      hash = "sha256-/c/3OjfALveNnHS9NxonTeOiZyud6U/X4WHrGZSOs7Q=";
+      hash = "sha256-DEhEZP7ijNudb6qhIArpRhUqzEzmG0OxJaoBuMFVacM=";
     };
     updateScript = ./update.sh;
   };
