@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gfortran,
-  buildType ? "cmake",
+  buildType ? "meson",
   cmake,
   meson,
   ninja,
