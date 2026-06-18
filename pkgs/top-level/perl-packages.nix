@@ -11004,6 +11004,31 @@ with self;
     };
   };
 
+  DistBuild = buildPerlModule {
+    pname = "Dist-Build";
+    version = "0.028";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Dist-Build-0.028.tar.gz";
+      hash = "sha256-JPFLFA4Tq3x1PU25bI0zbQnepcb1H+1IvA92Khyhgx8=";
+    };
+    propagatedBuildInputs = [
+      ExtUtilsBuilder
+      ExtUtilsBuilderCompiler
+      ExtUtilsConfig
+      ExtUtilsHelpers
+      ExtUtilsInstallPaths
+    ];
+    meta = {
+      changelog = "https://github.com/Leont/dist-build/blob/v0.028/Changes";
+      description = "Modern module builder, author tools not included";
+      homepage = "https://github.com/Leont/dist-build";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   DistributionMetadata = buildPerlModule {
     pname = "Distribution-Metadata";
     version = "0.10";
