@@ -354,8 +354,6 @@ with pkgs;
 
   inherit (gridlock) nyarr;
 
-  lshw-gui = lshw.override { withGUI = true; };
-
   kdePackages = callPackage ../kde { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
