@@ -1247,27 +1247,33 @@ rec {
     :::
   */
   toposort =
-    before: list:
+    before:
     let
-      dfsthis = listDfs true before list;
-      toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
+      dfs = listDfs true before;
+      recurse =
+        list:
+        let
+          dfsthis = dfs list;
+          toporest = recurse (dfsthis.visited ++ dfsthis.rest);
+        in
+        if length list < 2 then
+          # finish
+          { result = list; }
+        else if dfsthis ? cycle then
+          # there's a cycle, starting from the current vertex, return it
+          {
+            cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
+            inherit (dfsthis) loops;
+          }
+        else if toporest ? cycle then
+          # there's a cycle somewhere else in the graph, return it
+          toporest
+        # Slow, but short. Can be made a bit faster with an explicit stack.
+        else
+          # there are no cycles
+          { result = [ dfsthis.minimal ] ++ toporest.result; };
     in
-    if length list < 2 then
-      # finish
-      { result = list; }
-    else if dfsthis ? cycle then
-      # there's a cycle, starting from the current vertex, return it
-      {
-        cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
-        inherit (dfsthis) loops;
-      }
-    else if toporest ? cycle then
-      # there's a cycle somewhere else in the graph, return it
-      toporest
-    # Slow, but short. Can be made a bit faster with an explicit stack.
-    else
-      # there are no cycles
-      { result = [ dfsthis.minimal ] ++ toporest.result; };
+    recurse;
 
   /**
     Sort a list based on a comparator function which compares two
