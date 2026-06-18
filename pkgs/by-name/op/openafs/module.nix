@@ -28,6 +28,16 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
+    # Linux: pagevec.h renamed to folio_batch.h
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/d47c438aec49e417066a7bef00bd82078014f5ea.patch";
+      hash = "sha256-LPURZovpl6KbigzP4mNjgHvPlXYKY5Pxh8sj9RT2W08=";
+    })
+    # Linux: Add comment for d_alias configure test
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/fd157926f08d10afe981d85654395bbf083ea7a3.patch";
+      hash = "sha256-gJ+ylIEZwJcpTWc5hmIXS/QcxtICqjaEzZsl2QegjhY=";
+    })
   ];
 
   nativeBuildInputs = [
