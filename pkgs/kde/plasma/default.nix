@@ -1,4 +1,7 @@
-{ callPackage }:
+final: prev:
+let
+  inherit (final) callPackage;
+in
 {
   aurorae = callPackage ./aurorae { };
   bluedevil = callPackage ./bluedevil { };

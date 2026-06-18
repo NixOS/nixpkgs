@@ -1,4 +1,7 @@
-{ callPackage }:
+final: prev:
+let
+  inherit (final) callPackage;
+in
 {
   accessibility-inspector = callPackage ./accessibility-inspector { };
   akonadi = callPackage ./akonadi { };
