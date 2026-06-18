@@ -1184,13 +1184,13 @@ rec {
           c = filter (x: before x us) visited;
           b = partition (x: before x us) rest;
         in
-        if stopOnCycles && (length c > 0) then
+        if stopOnCycles && c != [ ] then
           {
             cycle = us;
             loops = c;
             inherit visited rest;
           }
-        else if length b.right == 0 then
+        else if b.right == [ ] then
           # nothing is before us
           {
             minimal = us;
