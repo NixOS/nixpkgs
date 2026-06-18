@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage {
     mainProgram = "cargo-unused-workspace-deps";
     homepage = "https://github.com/JarredAllen/cargo-unused-workspace-deps";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      arizzo35
+    ];
   };
 }
