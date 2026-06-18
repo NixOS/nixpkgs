@@ -7016,6 +7016,23 @@ with self;
     };
   };
 
+  CryptDESEDE3 = buildPerlPackage {
+    pname = "Crypt-DES_EDE3";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-DES_EDE3-0.03.tar.gz";
+      hash = "sha256-KFktt7njR0WqkfPhnl27uDqvRyop5we5eR0NArPiJ/U=";
+    };
+    propagatedBuildInputs = [ CryptDES ];
+    meta = {
+      description = "Triple-DES EDE encryption/decryption";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CryptDH = buildPerlPackage {
     pname = "Crypt-DH";
     version = "0.07";
