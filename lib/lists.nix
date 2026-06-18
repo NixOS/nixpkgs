@@ -1262,7 +1262,7 @@ rec {
         else if dfsthis ? cycle then
           # there's a cycle, starting from the current vertex, return it
           {
-            cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
+            cycle = reverseList dfsthis.visited ++ [ dfsthis.cycle ];
             inherit (dfsthis) loops;
           }
         else if toporest ? cycle then
