@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mixing-station";
-  version = "2.9.3";
+  version = "3.0.1";
 
   src = fetchzip {
     url = "https://mixingstation.app/backend/api/web/download/archive/mixing-station-pc/update/${finalAttrs.version}";
     name = "mixing-station-${finalAttrs.version}.zip";
     extension = "zip";
-    hash = "sha256-efY+zvX2cN+yFm1xxpvsZAiMhtNW/S9g2hgLnYUYd4I=";
+    hash = "sha256-WpjBqiYVuqIuDiigX2lg81I02qad/vZudqdWUe2h5Sw=";
     stripRoot = false;
   };
 
