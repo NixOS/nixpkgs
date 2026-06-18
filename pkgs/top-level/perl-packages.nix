@@ -6395,6 +6395,29 @@ with self;
     };
   };
 
+  ConvertPEM = buildPerlPackage {
+    pname = "Convert-PEM";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-PEM-0.13.tar.gz";
+      hash = "sha256-eZ+jLCcAgfTmKSsN31GAlScQqKS+Ey6Qe9oxdqe9HCM=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      ClassErrorHandler
+      ConvertASN1
+      CryptDESEDE3
+      CryptX
+    ];
+    meta = {
+      description = "Read/write encrypted ASN.1 PEM files";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ConvertUU = buildPerlPackage {
     pname = "Convert-UU";
     version = "0.5201";
