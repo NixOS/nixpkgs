@@ -77,7 +77,7 @@ python3Packages.buildPythonPackage {
 
   doCheck = python3Packages.stdenv.hostPlatform.isLinux; # maybe in future
   nativeCheckInputs = with python3Packages; [
-    augeas
+    python-augeas
     dnspython
     lief
     pytestCheckHook
