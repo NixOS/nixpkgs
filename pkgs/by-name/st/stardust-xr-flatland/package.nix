@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-flatland";
-  version = "0-unstable-2024-04-13";
+  version = "0.50.1-unstable-2026-03-01";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "flatland";
-    rev = "b3b0f29c4ea1b82c96cf9de507837bf15a5e4c0e";
-    hash = "sha256-m7c6XpmpTM1URuqMG2KqtaWbL2Vt8vJFJtmvq123BmY=";
+    rev = "599c7b11eae996ae02a4706bd281bde19254dfd2";
+    hash = "sha256-CkohNzi3zXG5yW5c++GDZtrUqqpjEQskL8gpOTKNMZc=";
   };
 
   env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
+  cargoHash = "sha256-QBhIb5RxZh80gY3gj/+6ul3h0Qkptt53Q41+mn81ciY=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
