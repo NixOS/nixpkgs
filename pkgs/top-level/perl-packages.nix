@@ -14767,10 +14767,10 @@ with self;
 
   GD = buildPerlPackage {
     pname = "GD";
-    version = "2.78";
+    version = "2.86";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.78.tar.gz";
-      hash = "sha256-aDEFS/VCS09cI9NifT0UhEgPb5wsZmMiIpFfKFG+buQ=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.86.tar.gz";
+      hash = "sha256-bWTTvhQpzB606IqPICL+yRDqPgeS2k/ljT7fdpXEbKI=";
     };
 
     nativeBuildInputs = [
@@ -14785,6 +14785,7 @@ with self;
       pkgs.fontconfig
       pkgs.libxpm
       ExtUtilsPkgConfig
+      FileWhich
       TestFork
       TestNoWarnings
     ];
