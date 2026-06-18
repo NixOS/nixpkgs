@@ -5269,13 +5269,6 @@
     githubId = 3392199;
     name = "Calum MacRae";
   };
-  cmars = {
-    email = "nix@cmars.tech";
-    github = "cmars";
-    githubId = 23741;
-    name = "Casey Marshall";
-    keys = [ { fingerprint = "6B78 7E5F B493 FA4F D009  5D10 6DEC 2758 ACD5 A973"; } ];
-  };
   cmcdragonkai = {
     email = "roger.qiu@matrix.ai";
     github = "CMCDragonkai";
@@ -6219,7 +6212,7 @@
     name = "Daniel Șerbănescu";
   };
   daskladas = {
-    email = "xvzrsm@tutanota.de";
+    email = "mail@daskladas.de";
     github = "daskladas";
     githubId = 155686186;
     name = "Eric Heinemann";
@@ -28261,12 +28254,6 @@
     name = "Timo Arlt";
     github = "toXel";
     githubId = 2300709;
-  };
-  ToxicFrog = {
-    email = "toxicfrog@ancilla.ca";
-    github = "ToxicFrog";
-    githubId = 90456;
-    name = "Rebecca (Bex) Kelly";
   };
   toyboot4e = {
     email = "toyboot4e@gmail.com";
