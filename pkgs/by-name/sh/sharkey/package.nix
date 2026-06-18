@@ -11,7 +11,7 @@
   jemalloc,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs-slim_22,
   pango,
   pixman,
   pkg-config,
@@ -24,7 +24,7 @@
 }:
 
 let
-  pnpm = pnpm_10.override { nodejs = nodejs_22; };
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs_22
+    nodejs-slim_22
     pkg-config
     pnpmConfigHook
     pnpm
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # rebuild some node modules that have native dependencies
-    export npm_config_nodedir=${nodejs_22}
+    export npm_config_nodedir=${nodejs-slim_22}
 
     pushd node_modules/.pnpm/node_modules/re2
     pnpm rebuild
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       binPath = lib.makeBinPath [
         bash
-        nodejs_22
+        nodejs-slim_22
         pnpm
       ];
       libPath = lib.makeLibraryPath [

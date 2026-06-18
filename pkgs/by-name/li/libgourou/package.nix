@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgourou";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitea {
     domain = "forge.soutade.fr";
     owner = "soutade";
     repo = "libgourou";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WQOlanavMy1z3ze+c8d1a7ZkAU60/GjEFS5JJfyNHMg=";
+    hash = "sha256-KwDpyWtEsXacCcCbj0QlNucOy/S62NiPocf+G7YINwU=";
   };
 
   postPatch = ''

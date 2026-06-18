@@ -739,6 +739,22 @@ in
             '';
           };
 
+          # As above, but with reloadIfChanged: pass 2 must reload, not
+          # restart.
+          userServiceMigratedToNixosReloadOnly.configuration = {
+            imports = [ userServiceMigratedToNixosNoStop.configuration ];
+            systemd.user.services.migrated = {
+              reloadIfChanged = true;
+              serviceConfig.ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+
+          # As above, but with restartIfChanged = false: pass 2 must skip it.
+          userServiceMigratedToNixosNoRestart.configuration = {
+            imports = [ userServiceMigratedToNixosNoStop.configuration ];
+            systemd.user.services.migrated.restartIfChanged = false;
+          };
+
           no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
 
           inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
@@ -771,6 +787,11 @@ in
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false
+      '';
+      specialisation.failingMidCheck.configuration.system.preSwitchChecks.failsInTheMiddle = ''
+        echo before
+        nonexistent-command
+        echo after
       '';
     };
   };
@@ -809,6 +830,15 @@ in
         Type=oneshot
         RemainAfterExit=true
         ExecStart=${pkgs.runtimeShell} -c 'echo home > %t/migrated-owner'
+      '';
+
+      # Unit file placed in ~/.local/share/systemd/user (lower priority than
+      # /etc) to simulate a package-shipped unit.
+      dataMigratedUnit = pkgs.writeText "migrated.service" ''
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo data > %t/migrated-owner'
       '';
     in
     # python
@@ -863,6 +893,11 @@ in
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
+          # errexit must be honoured inside the check body
+          out = switch_to_specialisation("${otherSystem}", "failingMidCheck", action="check", fail=True)
+          assert_contains(out, "before")
+          assert_contains(out, "Pre-switch check 'failsInTheMiddle' failed")
+          assert_lacks(out, "after")
 
       with subtest("switch inhibitors"):
           # Start without any inhibitors
@@ -1729,9 +1764,10 @@ in
           out = switch_to_specialisation("${machine}", "simpleUserService")
           user_systemctl("is-active usertest.service")
 
-          # No-op switch does nothing
+          # No-op switch leaves the test unit alone.
           out = switch_to_specialisation("${machine}", "simpleUserService")
-          assert_lacks(out, "user units:")
+          assert_lacks(out, "usertest.service")
+          assert_contains(out, "restarting the following user units: nixos-activation.service")
 
           # Modifying the unit stop-starts it (default stopIfChanged=true)
           out = switch_to_specialisation("${machine}", "simpleUserServiceModified")
@@ -1748,7 +1784,7 @@ in
           # reloadIfChanged=true reloads instead
           out = switch_to_specialisation("${machine}", "simpleUserServiceReload")
           assert_lacks(out, "stopping the following user units:")
-          assert_lacks(out, "restarting the following user units:")
+          assert_lacks(out, "restarting the following user units: usertest.service")
           assert_contains(out, "reloading the following user units: usertest.service")
           user_systemctl("is-active usertest.service")
 
@@ -1817,6 +1853,59 @@ in
           assert_contains(out, "/etc/systemd/user/migrated.service")
           out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
           assert_contains(out, "nixos")
+
+          # Pass 2 must honour reloadIfChanged.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixosReloadOnly")
+          assert_lacks(out, "restarting (post-activation) the following user units: migrated.service")
+          assert_contains(out, "reloading (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          # Reloaded only, so the home ExecStart never re-ran.
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "home")
+
+          # Pass 2 must honour restartIfChanged = false.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixosNoRestart")
+          assert_lacks(out, "\nrestarting (post-activation) the following user units: migrated.service")
+          assert_contains(out, "NOT restarting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "home")
+
+          # Migration from a lower-priority search-path entry ($XDG_DATA_HOME
+          # here, standing in for ~/.nix-profile/share etc.). /etc outranks
+          # these, so pass 2 must restart onto the /etc definition.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          machine.succeed(
+              "sudo -u usertest mkdir -p ~usertest/.local/share/systemd/user",
+              "sudo -u usertest cp ${dataMigratedUnit} ~usertest/.local/share/systemd/user/migrated.service",
+          )
+          user_systemctl("daemon-reload")
+          user_systemctl("start migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "data")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/.local/share/systemd/user/migrated.service")
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_contains(out, "restarting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+          # Switching again must NOT touch it: /etc already had it, so it is
+          # not a candidate even though the lower-priority copy is still there.
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_lacks(out, "migrated.service")
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.local/share/systemd")
+          user_systemctl("daemon-reload")
 
           # Units that remain shadowed by ~/.config must be left alone in both
           # passes even though /etc now also defines them.

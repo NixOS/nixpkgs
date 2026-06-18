@@ -20,13 +20,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "0.1-unstable-2026-03-28";
+  version = "0.1-unstable-2026-05-29";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "b3c2a094163cad4aac7af09333fddf2c9838c348";
-    hash = "sha256-xr3Ih1HrAIlO9GGrmnVrmRh50GSPMWI4QWmbEwlbYq8=";
+    rev = "bf1a7cdb086587e6bed6e8ecd285a81c01a11c54";
+    hash = "sha256-epTJKmTCNL1Hm6/YdEWAgiOMVBSzC9/v/rjyOieP3yA=";
   };
 
   strictDeps = true;
@@ -66,6 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Helper for screenshots within Hyprland, based on grimshot";
+    homepage = "https://github.com/hyprwm/contrib";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.hyprland ];

@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.21.0";
+  version = "9.22.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+EO+BTMkui0mJvEf0TOaCRBH8MzLsit8xK+71gujHt0=";
+    hash = "sha256-x9kz1GZJqrdknO1KK2MiSsFMTO3IstDy9uCBbhmBuxg=";
   };
 
   postPatch = ''

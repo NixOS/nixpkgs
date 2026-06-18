@@ -6,12 +6,12 @@
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_41,
+  pnpmBuildHook,
+  electron_42,
   python3,
   makeWrapper,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   jq,
   makeDesktopItem,
@@ -32,7 +32,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2;
-  electron = electron_41;
+  electron = electron_42;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -40,13 +40,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.9.1";
+  version = "8.14.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-HXxIjCVGh3JFAj0UUEAvmVnm7jMZdxRqWDILRDFCGw4=";
+    hash = "sha256-U5xJumoKWc1hGZ7OML05U7U3DFdrnRHUlfIU3qYph6w=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -68,22 +68,17 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-CPZkybD/rCBMBK9qUSweBdLr9hXu0Ztn8fekqrRzUR4=";
+      fetcherVersion = 4;
+      hash = "sha256-WmDSa4PrASaqs8X68LYaPBeE+i+Jh3FfWF30SseN74Y=";
     };
 
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm
     ];
-
-    buildPhase = ''
-      runHook preBuild
-      pnpm run build
-      runHook postBuild
-    '';
 
     installPhase = ''
       runHook preInstall
@@ -101,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     makeWrapper
     python3
@@ -114,16 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Custom fonts currently don't work on windows other than the main one,
-    # which causes some of the text to look messed up. We want to include
-    # this patch since we are overriding the emoji font by default.
-    # Upstream PR: https://github.com/signalapp/Signal-Desktop/pull/7864
-    # This patch can be removed after `v8.11.0`.
-    (fetchpatch {
-      url = "https://github.com/signalapp/Signal-Desktop/commit/52ecd0d931e6071da79b016d2af1f508167b2a98.patch";
-      hash = "sha256-dtc0bwv9aLz92j5Zfm/SREWtQ43ljXN9Vm2VkeDbAx8=";
-    })
     ./force-90-days-expiration.patch
+
+    # Drop once https://github.com/NixOS/nixpkgs/pull/520553 and https://github.com/NixOS/nixpkgs/pull/525241 land.
+    ./dont-assert-unicode-17-emoji.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
     # Signal ships the Apple emoji set without a licence and upstream
@@ -179,18 +169,14 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-ls7DYPI5Dq06KI7WCdEkKHPsHTMJ3kO0qJDZsHZQHBQ=";
+    fetcherVersion = 4;
+    hash = "sha256-YQY+ohfLcaR2jzB9bzWpNQImuLja2DQ9iwDKhoH8kiU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1778260300;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Disable code signing during local macOS builds.
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
+    SOURCE_DATE_EPOCH = 1781124627;
   };
 
   preBuild = ''
@@ -244,17 +230,15 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
-  '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    export npm_config_nodedir=${electron.headers}
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     cp -r ${sticker-creator} sticker-creator/dist
+  '';
 
-    pnpm run generate
+  pnpmBuildScript = "generate";
+
+  postBuild = ''
     pnpm exec electron-builder \
       ${
         if stdenv.hostPlatform.isDarwin then "--mac" else "--linux"
@@ -264,8 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false \
       ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
-
-    runHook postBuild
   '';
 
   installPhase = ''

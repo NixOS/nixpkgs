@@ -5,11 +5,11 @@
 }:
 
 let
-  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python3Packages;
   inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
-  extraCheckInputs = with home-assistant.python.pkgs; {
+  extraCheckInputs = with home-assistant.python3Packages; {
     alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
@@ -126,49 +126,26 @@ let
       # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
-    ecovacs = [
-      # Translation not found for vacuum
-      "test_raise_segment_changed_issue"
-    ];
-    homeassistant_sky_connect = [
-      # 2026.5.0: after reload device is in loaded state instead of retry state
-      "test_usb_device_reactivity"
-    ];
     homeassistant_connect_zbt2 = [
-      # 2026.5.0: after reload device is in loaded state instead of retry state
+      # [2026.6.1] AssertionError: assert <ConfigEntryState.LOADED: 'loaded'> is <ConfigEntryState.SETUP_RETRY: 'setup_retry'>
       "test_usb_device_reactivity"
     ];
-    honeywell_string_lights = [
-      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.honeywell_string_lights.config.abort.no_compatible_transmitters"
-      "test_no_compatible_transmitters"
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
     ];
-    lutron_caseta = [
-      # [2026.5.4] creates binary_sensor.basement_bedroom_left_shade_battery
-      #            expects binary_sensor.basement_bedroom_basement_bedroom_left_shade_battery
-      "test_battery_sensor_handles_bridge_response_error"
+    opendisplay = [
+      # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
+      # https://github.com/home-assistant/core/pull/172909
+      "test_upload_image_device_not_in_range"
     ];
-    novy_cooker_hood = [
-      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
-      "test_no_compatible_transmitters"
-    ];
-    tractive = [
-      # [2026.5.3] Entity does not get set up
-      "test_binary_sensor"
-      "test_sensor"
-      "test_switch"
-      "test_switch_on"
-      "test_switch_off"
-      "test_switch_on_with_exception"
-      "test_switch_off_with_exception"
-      "test_switch_unavailable"
+    yardian = [
+      # [2026.6.1] failing snapshot
+      "test_all_entities"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
-    ];
-    zha = [
-      # [2026.5.2] assert <HardwareType.OTHER: 'other'> == <HardwareType... 'skyconnect'>
-      "test_detect_radio_hardware"
     ];
   };
 in
@@ -185,7 +162,7 @@ lib.listToAttrs (
 
         nativeCheckInputs =
           old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ home-assistant.getPackages component home-assistant.python3Packages
           ++ extraCheckInputs.${component} or [ ];
 
         disabledTests = extraDisabledTests.${component} or [ ];

@@ -47,11 +47,13 @@ stdenv.mkDerivation {
     NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
-  # Fixes gprbuild being linked statically always. Based on the AUR's patch:
-  # https://aur.archlinux.org/cgit/aur.git/plain/0001-Makefile-build-relocatable-instead-of-static-binary.patch?h=gprbuild&id=bac524c76cd59c68fb91ef4dfcbe427357b9f850
-  patches = lib.optionals (!stdenv.hostPlatform.isStatic) [
-    ./gprbuild-relocatable-build.patch
-  ];
+  patches =
+    gprbuild-boot.patches
+    # Fixes gprbuild being linked statically always. Based on the AUR's patch:
+    # https://aur.archlinux.org/cgit/aur.git/plain/0001-Makefile-build-relocatable-instead-of-static-binary.patch?h=gprbuild&id=bac524c76cd59c68fb91ef4dfcbe427357b9f850
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      ./gprbuild-relocatable-build.patch
+    ];
 
   buildFlags = [
     "all"

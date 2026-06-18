@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    homepage = "https://github.com/Mystro256/xsensors";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];

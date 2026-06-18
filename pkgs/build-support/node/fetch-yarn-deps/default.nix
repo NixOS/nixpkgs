@@ -9,7 +9,6 @@
   nix-prefetch-git,
   fetchurl,
   jq,
-  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,

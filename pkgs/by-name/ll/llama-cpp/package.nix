@@ -30,7 +30,7 @@
   blas,
 
   fetchNpmDeps,
-  nodejs,
+  nodejs_latest,
   npmHooks,
 
   pkg-config,
@@ -81,7 +81,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "9190";
+  version = "9608";
 
   outputs = [
     "out"
@@ -92,7 +92,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-zajArFzrLUUVsfG1xBttwzwaT9QNlKzDbvSxvof+FMQ=";
+    hash = "sha256-nNQzEfSqVwusixHdiZCyAOtrQTQ7aAdV+S9qZywWWx0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -106,7 +106,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     installShellFiles
     ninja
-    nodejs
+    nodejs_latest
     npmHooks.npmConfigHook
     pkg-config
     spirv-headers
@@ -125,7 +125,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ [ openssl ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-WaEePrEZ7O/7deP2KJhe0AwiSKYA8HOqETmMHUkmBe0=";
+  npmDepsHash = "sha256-pjdbI6NcZRlJVd62xhgbLhWrwFYwgsIwjORqvo1+VD8=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;

@@ -7,6 +7,8 @@
 beamModuleInstallHook() {
   echo "Executing beamModuleInstallHook"
 
+  runHook preInstall
+
   mkdir -p "$out/lib/erlang/lib/${beamModuleName}-${version}"
 
   # default to rebar3
@@ -24,6 +26,8 @@ beamModuleInstallHook() {
       cp -vHrt "$out/lib/erlang/lib/${beamModuleName}-${version}" "$reldir"
     fi
   done
+
+  runHook postInstall
 
   echo "Finished beamModuleInstallHook"
 }

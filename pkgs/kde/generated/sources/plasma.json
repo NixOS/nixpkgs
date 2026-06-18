@@ -1,367 +1,377 @@
 {
   "aurorae": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/aurorae-6.6.5.tar.xz",
-    "hash": "sha256-58PecQp1+Z34xPgKdB49HpDlxcra5Eo9GAhh0PXJ3Pk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/aurorae-6.7.0.tar.xz",
+    "hash": "sha256-U4Ij6+dSEwXSmHPCePheeRDreBCjHSppaY7edqXA2jw="
   },
   "bluedevil": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/bluedevil-6.6.5.tar.xz",
-    "hash": "sha256-Q5ZEeoO12rXEhnaQgkGAw29POSIQdGNyL+1CIC2KRf8="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/bluedevil-6.7.0.tar.xz",
+    "hash": "sha256-P9q0pyS6JGoQ8mNwdspTMniP/1w8YZPM806wMeiXPp0="
   },
   "breeze": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/breeze-6.6.5.tar.xz",
-    "hash": "sha256-BsTD5GbNA6jB5BGjiwR1a24UWHmlYFNLL8RGZtQTMPQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/breeze-6.7.0.tar.xz",
+    "hash": "sha256-zzdbuqpF9bobPfA2vwxAt+39eJ6yb25G+d0dMldpy9U="
   },
   "breeze-grub": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/breeze-grub-6.6.5.tar.xz",
-    "hash": "sha256-Ww6HUYdDOwyBDFb732sTpeYPcXdBIqYZNwmc63MPpUY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/breeze-grub-6.7.0.tar.xz",
+    "hash": "sha256-x+atJoKHKWS9cJucyrD8uTKKz1YpQHwji3XvfYA8+iE="
   },
   "breeze-gtk": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/breeze-gtk-6.6.5.tar.xz",
-    "hash": "sha256-dsqtTKLjzosCrh6+DAaBAbsH21HaR/iPo6QM3OOTq/Y="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/breeze-gtk-6.7.0.tar.xz",
+    "hash": "sha256-KFmeF3tBZqezMvg0pyaWz4gs+fap7hknCKJ/R0wQJ8A="
   },
   "breeze-plymouth": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/breeze-plymouth-6.6.5.tar.xz",
-    "hash": "sha256-0QLuiuPG/pNTVTqPxPxfFSwSh+UEws6XXCxyHzwsiBo="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/breeze-plymouth-6.7.0.tar.xz",
+    "hash": "sha256-2gNHVU33S38RsXA71s3eF2kXQuMqXMzfyTJaGzJhBqU="
   },
   "discover": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/discover-6.6.5.tar.xz",
-    "hash": "sha256-DRRxrfSws7+SrJMiXi5IYEk2d/P7mgLb9EsZOufBU1c="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/discover-6.7.0.tar.xz",
+    "hash": "sha256-A9SisXVxdla/7pB/T7lBILhs3MhmPZTnkkrG8nelWyc="
   },
   "drkonqi": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/drkonqi-6.6.5.tar.xz",
-    "hash": "sha256-srEE1fMCJLyogoAkbKmQrDFNgcsb8NOFdhP/aD25LYI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/drkonqi-6.7.0.tar.xz",
+    "hash": "sha256-VeZibrxQCJmKInVcjNJx8jNYcqUM3fZfFY/dXNI319M="
   },
   "flatpak-kcm": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/flatpak-kcm-6.6.5.tar.xz",
-    "hash": "sha256-BhN3wGTCrAb3fShQ5xGGfpF2jDyDM9/7jysLohgDsBo="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/flatpak-kcm-6.7.0.tar.xz",
+    "hash": "sha256-SmSQaW60yGQ4sE6X3BY75QsM17t+rPuyBGkglP9gt2s="
   },
   "kactivitymanagerd": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kactivitymanagerd-6.6.5.tar.xz",
-    "hash": "sha256-hZu456bvtCEKglEqvsTXtuqaxviDorHbTT3lyhFFIiQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kactivitymanagerd-6.7.0.tar.xz",
+    "hash": "sha256-7QZcLXbIXPjhDdcv+PiechNvxMhVYabJheuX3FGERqE="
   },
   "kde-cli-tools": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kde-cli-tools-6.6.5.tar.xz",
-    "hash": "sha256-F+ygLPPVDSZshfREv+87fBwHpZss3r9sok5v2BuA0SI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kde-cli-tools-6.7.0.tar.xz",
+    "hash": "sha256-JyD/fvv5e+9GmwL1RInz2bKguYyHGu25Fazbr5nzGZg="
   },
   "kde-gtk-config": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kde-gtk-config-6.6.5.tar.xz",
-    "hash": "sha256-KQKgErqF0tIB+HnRfwtPUZEOQ6HLDXYXiLBjsMF9exA="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kde-gtk-config-6.7.0.tar.xz",
+    "hash": "sha256-2W5YIUxmMrSR0yyqSusVrihPg+inXTu5SFl49Cr0q9k="
   },
   "kdecoration": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kdecoration-6.6.5.tar.xz",
-    "hash": "sha256-BujtBLjzzc0wV6ni0jKR70Gjl2+W/Iz5F0eSGIcaqf0="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kdecoration-6.7.0.tar.xz",
+    "hash": "sha256-rP5WV9iJvw3VuLUBMrvpxi9ItQdPy6gmWhy4TWwie10="
   },
   "kdeplasma-addons": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kdeplasma-addons-6.6.5.tar.xz",
-    "hash": "sha256-SP2ufPqiYEKlkCf76N+DeJsXJFi8KvCiOgFaBLgHGvk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kdeplasma-addons-6.7.0.tar.xz",
+    "hash": "sha256-i4awt5sK8toJfYHc4JmRPUNXTgjEQop5JYcGkheLQpg="
   },
   "kgamma": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kgamma-6.6.5.tar.xz",
-    "hash": "sha256-+rcERciMmM6QfoltjHHL93cQRIgLXvEW/ulphj5TNgo="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kgamma-6.7.0.tar.xz",
+    "hash": "sha256-6MM9ukfaPqD4kFPpQCmCqx+9tpwlm/CLEEegUEsH3ZI="
   },
   "kglobalacceld": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kglobalacceld-6.6.5.tar.xz",
-    "hash": "sha256-M8lft7PN2rV2bgywY6chr195ayhBEUGDpiRuDvVX7cM="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kglobalacceld-6.7.0.tar.xz",
+    "hash": "sha256-/1423Ly4GC8baVBimTqeosxz0mdTay9ZJt4Dn6dzLGU="
   },
   "kinfocenter": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kinfocenter-6.6.5.tar.xz",
-    "hash": "sha256-m3d/hw8SCTnjdCFc4s7TiVcdS9609vAJLJCLjC4ML9Y="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kinfocenter-6.7.0.tar.xz",
+    "hash": "sha256-303tKcuH12W31fSxYcKaQlWGOES+5kJH5vDT8Miz5aM="
   },
   "kmenuedit": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kmenuedit-6.6.5.tar.xz",
-    "hash": "sha256-HCTxXhPRatnAZD6ioISUIDKf0Qti/SYrSM2t5ngnSCg="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kmenuedit-6.7.0.tar.xz",
+    "hash": "sha256-8n/tXImJrQCtxxS8fzd638qXQsTM06//lHjVAu6v/6s="
   },
   "knighttime": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/knighttime-6.6.5.tar.xz",
-    "hash": "sha256-XyZpKoZFQLmTNREG9Uaf0Xk5vVXnn5Mcj5c5XZxagJ0="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/knighttime-6.7.0.tar.xz",
+    "hash": "sha256-wvx1Kc7zs6gL5HFShtAn/IkI7w/oBArqEGgxpSZfwRM="
   },
   "kpipewire": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kpipewire-6.6.5.tar.xz",
-    "hash": "sha256-eu1/chxboF8ggS6ozeBH3MbjN1ulIbvd2CwlkVq/M00="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kpipewire-6.7.0.tar.xz",
+    "hash": "sha256-2/g5t3nFCMICC9+dZCdiOHy6hQWSkd6rOOigwVIjuts="
   },
   "krdp": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/krdp-6.6.5.tar.xz",
-    "hash": "sha256-heNRMfZAwmn422svhY+wQ/b2JmsfZQMBKdEQwK3LgGE="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/krdp-6.7.0.tar.xz",
+    "hash": "sha256-5lylbPL5ZplFENzOzVOJKSLiYa19upkR0vN0BgKTxts="
   },
   "kscreen": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kscreen-6.6.5.tar.xz",
-    "hash": "sha256-dT68AM91NZwue6OquyD/NZbQ+74vC20+1gmNJygqMnY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kscreen-6.7.0.tar.xz",
+    "hash": "sha256-rVekMmpkl5poqlBopxUXAtmwLbByBnDkvj4XiQW+2lY="
   },
   "kscreenlocker": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kscreenlocker-6.6.5.tar.xz",
-    "hash": "sha256-m6Cu4yNkBR7rIT1I3TwgiuDOcGIZCjD4VXNbpO/jicw="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kscreenlocker-6.7.0.tar.xz",
+    "hash": "sha256-wxVLaKiF7VXUzVd/gT9VU+oLMdvdMbMrN0SQVVD+w9E="
   },
   "ksshaskpass": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/ksshaskpass-6.6.5.tar.xz",
-    "hash": "sha256-sOiKJUajmiaVeO7e9eooFJpxmnrJdXAZ6f8/klTXWkI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/ksshaskpass-6.7.0.tar.xz",
+    "hash": "sha256-TY7lYdv64xjil4QR2z1/3wkmY/XUXTafHjqSNNhyzuA="
   },
   "ksystemstats": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/ksystemstats-6.6.5.tar.xz",
-    "hash": "sha256-a14vKmqq6XSJ51gY5/g8JYZXgCJ2CCHGd83rzvpULjY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/ksystemstats-6.7.0.tar.xz",
+    "hash": "sha256-IiTOQeQudYRaqIbhkueDPOY4uGqjHKDk48sx7zbkBms="
   },
   "kwallet-pam": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwallet-pam-6.6.5.tar.xz",
-    "hash": "sha256-VDSlD0IYZ/wRGQOJvevENAS2TK3MfYex8I/5XvGZhT4="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwallet-pam-6.7.0.tar.xz",
+    "hash": "sha256-cdvV1qtSQ+eMUjzjgtU70Uw1cxrwlJf76Sm8pBtprtk="
   },
   "kwayland": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwayland-6.6.5.tar.xz",
-    "hash": "sha256-r7zVPKil+1AQOEFfFHPD0RVW61btj2U+zgP3fXmcrQE="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwayland-6.7.0.tar.xz",
+    "hash": "sha256-hiHRfpEAvmDqNAI1II0ET9ApMdvvdqMtmkd94xyOM/Q="
   },
   "kwayland-integration": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwayland-integration-6.6.5.tar.xz",
-    "hash": "sha256-JyB2THOWP+Br144uyjKeumH7Yl3/bT3PSmjsFndmzm4="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwayland-integration-6.7.0.tar.xz",
+    "hash": "sha256-IRld2c69WlxzhmOybw4dFaspj1ncqvkkNethi540JcM="
   },
   "kwin": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwin-6.6.5.tar.xz",
-    "hash": "sha256-bBh856VQYJC0OO+QAQODb6BTdnTd6LMeW0l+8yFkPLQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwin-6.7.0.tar.xz",
+    "hash": "sha256-0gt5gJSp9Y5X3lXso9WLHNy32yk564v3ORjE+rbZrsU="
   },
   "kwin-x11": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwin-x11-6.6.5.tar.xz",
-    "hash": "sha256-1RcnctW53W7w8yMMtfinjfkUjdBwGdjygqCTHK2UayQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwin-x11-6.7.0.tar.xz",
+    "hash": "sha256-msC4W1kBbfuRWH+MGXD71cbyFdEsmkGazQv30PBJNgY="
   },
   "kwrited": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/kwrited-6.6.5.tar.xz",
-    "hash": "sha256-ud9jS+KqFELYJH1iUKh9ffsczW+bzQHA5iEC1atpNqc="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/kwrited-6.7.0.tar.xz",
+    "hash": "sha256-dUOaklYfbDMoBNHSfa4VvFdVuMmvKNp50WwDLVCQOxA="
   },
   "layer-shell-qt": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/layer-shell-qt-6.6.5.tar.xz",
-    "hash": "sha256-6MFFVFrEnVMl8W/3ELUh3qtuW5dF/MGKtDElIiSo+YI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/layer-shell-qt-6.7.0.tar.xz",
+    "hash": "sha256-5vSLbr4sPKqjwu9thHBVCQTQMK00lrwQpUCYddstqrA="
   },
   "libkscreen": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/libkscreen-6.6.5.tar.xz",
-    "hash": "sha256-8v0R8vZf+cpP87ULmVMBipKbG/MmOzLsFxxCmORmIUk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/libkscreen-6.7.0.tar.xz",
+    "hash": "sha256-bvulgFeiY12m8YVbprCOV+Y2yXZCG6Xj9fZn5qV7DOE="
   },
   "libksysguard": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/libksysguard-6.6.5.tar.xz",
-    "hash": "sha256-8IiFSgIQKLew9qc1yJ6apTvRPpA68R7RaknJROM7AN8="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/libksysguard-6.7.0.tar.xz",
+    "hash": "sha256-40wBQ4OZ/CMJDN5NRyJbzY9giZ0TjsrpnMWZZZU2rOM="
   },
   "libplasma": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/libplasma-6.6.5.tar.xz",
-    "hash": "sha256-guArIJj0uskPKM3U+dOk2kVXRA7INHIg2P7ik8H5jYs="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/libplasma-6.7.0.tar.xz",
+    "hash": "sha256-ioXkyessPAC1aDzOOqLJSdBrlWyIeJwbHBELarriAxI="
   },
   "milou": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/milou-6.6.5.tar.xz",
-    "hash": "sha256-P2KF5ftqncdjQ1K7Ov+ALcORBA6SzTx/G5YB3Z1cVNA="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/milou-6.7.0.tar.xz",
+    "hash": "sha256-jJSkw875vGJbVByz1MLwqVv6E9MfPBgGM/fvnScB2x4="
   },
   "ocean-sound-theme": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/ocean-sound-theme-6.6.5.tar.xz",
-    "hash": "sha256-RrdhYOaZjgOzmQxmnW2hZr14XaNWhBGT61SLNYEdxt8="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/ocean-sound-theme-6.7.0.tar.xz",
+    "hash": "sha256-ELK6ypKrcZirzCDVjdrTGRDIxr7uRxH8KkohUFRG8TU="
   },
   "oxygen": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/oxygen-6.6.5.tar.xz",
-    "hash": "sha256-QDSMe+uRHsYcuWxMu16i5hHhifr05MnSspgTvCj3K0o="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/oxygen-6.7.0.tar.xz",
+    "hash": "sha256-ER+2K8PZ86lZ53/TX+VWLKNK14PLzcDBZFh/Vklc/ww="
   },
   "oxygen-sounds": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/oxygen-sounds-6.6.5.tar.xz",
-    "hash": "sha256-TGSFVf58y5vPRvsLRFLahcWCEgFEXrcuxFtdleV5QvY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/oxygen-sounds-6.7.0.tar.xz",
+    "hash": "sha256-YqPdeoilcNacNwpxomHI3QTZLa+QJQyiqdI8KeZ+HIo="
   },
   "plasma-activities": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-activities-6.6.5.tar.xz",
-    "hash": "sha256-VNBqIqV2WqHpKDSIXQKrx84b+Na9qVM7s0ctT+9XVWI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-activities-6.7.0.tar.xz",
+    "hash": "sha256-OP+VeZagnBUjbpOwNboSNICliv90iUtht98QIOxEK1k="
   },
   "plasma-activities-stats": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-activities-stats-6.6.5.tar.xz",
-    "hash": "sha256-k6929cQXHQic2aT1ArumOmXyo3GqGoPAxs+wAhpe+6Y="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-activities-stats-6.7.0.tar.xz",
+    "hash": "sha256-K0qu2cRoW8LAVqDLqE1CfvLx63pPhB1Yd9A0e1sRzBM="
+  },
+  "plasma-bigscreen": {
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-bigscreen-6.7.0.tar.xz",
+    "hash": "sha256-IS6811bk2oY4UsvKj9qPE+h/6IDSKSy9S+iPJs8k9IY="
   },
   "plasma-browser-integration": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-browser-integration-6.6.5.tar.xz",
-    "hash": "sha256-PFS/Fc1wxI8mu2Xm14egE6hvI3XY/v0sCsq2ULN4Rvk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-browser-integration-6.7.0.tar.xz",
+    "hash": "sha256-zVtIPuKJHea7Bi3q62r+DAop6VHgclEMASwVtJsblUs="
   },
   "plasma-desktop": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-desktop-6.6.5.tar.xz",
-    "hash": "sha256-HXWN/8xC4dP7v+oFAACdPceVzxMTuTtXTag2JBdwhfM="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-desktop-6.7.0.tar.xz",
+    "hash": "sha256-Y1E7VPb2CzzX7DXKLwlivfJWaXKTiOhRWsHTuIme5H8="
   },
   "plasma-dialer": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-dialer-6.6.5.tar.xz",
-    "hash": "sha256-LfdMa2g78IA06CyvYLquTV26VB9U2Lp/44r8eomprK0="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-dialer-6.7.0.tar.xz",
+    "hash": "sha256-CKULmVTY8yxCgJknsUz7Kg/GaKc1XhdWGbsNL86izUc="
   },
   "plasma-disks": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-disks-6.6.5.tar.xz",
-    "hash": "sha256-ZgYJofSJwZfTVBmurLwI7HJMXhNTinNus9gawzG59jk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-disks-6.7.0.tar.xz",
+    "hash": "sha256-mYiOJyaPD1q9+9hd42KxjxymxnDps5LnbaMPUafVzc8="
   },
   "plasma-firewall": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-firewall-6.6.5.tar.xz",
-    "hash": "sha256-1KytApwk6qqY8wfl/zmQOqanLzc8gPOjwX7e36RQ+Ow="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-firewall-6.7.0.tar.xz",
+    "hash": "sha256-eHwVBebooyw/hVu2X0YVY3fuItbcMhpyB5sWB68N8n0="
   },
   "plasma-integration": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-integration-6.6.5.tar.xz",
-    "hash": "sha256-woSC3I0zh7mncP3Jmd0TSAsUcUVoOVyNhr1WiwGBkgo="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-integration-6.7.0.tar.xz",
+    "hash": "sha256-U3sFzUurGwcG+zH5gj+GZt9yleZH51YU8Ctr8UWO/x0="
   },
   "plasma-keyboard": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-keyboard-6.6.5.tar.xz",
-    "hash": "sha256-O7i+EJzESa9U0D8ozBwank1BUMsBua+RalUW7WR0BnE="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-keyboard-6.7.0.tar.xz",
+    "hash": "sha256-gxGV8wjQgRuNeLTIRYFdyhZIuz/sg8nsY30b4ltTq3Q="
   },
   "plasma-login-manager": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-login-manager-6.6.5.tar.xz",
-    "hash": "sha256-F1jwAAMTMmXUljravgaPVXAotTWPQx/ESPWL7txND38="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-login-manager-6.7.0.tar.xz",
+    "hash": "sha256-A8WFlhQcwSYsKxxXSdm2TW5yJclyjUIcblr7ZJNWbuE="
   },
   "plasma-mobile": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-mobile-6.6.5.tar.xz",
-    "hash": "sha256-FkOApuHXXcb7ByCQyqPE5fuAu7PxiNMFvOdnyQueRgA="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-mobile-6.7.0.tar.xz",
+    "hash": "sha256-NCaqC2KblFsHbqzhMMSrvG//b2xd0cK/9/8Ney1HfkI="
   },
   "plasma-nano": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-nano-6.6.5.tar.xz",
-    "hash": "sha256-5RQ97bvNDXW73ktEJ4DMfzeSRw7ngvxFX8sVGQpXllg="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-nano-6.7.0.tar.xz",
+    "hash": "sha256-xOL0nSQVfO62vCWYHi1xYA3SEXJJ6CsMwE+klAEZMYE="
   },
   "plasma-nm": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-nm-6.6.5.tar.xz",
-    "hash": "sha256-yS0J0peNu+a1yJe+rIIs0FPBdHPx1hUG4VK/y0a3C5s="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-nm-6.7.0.tar.xz",
+    "hash": "sha256-spaAzBfEu+UuO5iNW+Q37EtSS1VPoYDq0TvIkQFEz5g="
   },
   "plasma-pa": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-pa-6.6.5.tar.xz",
-    "hash": "sha256-tjwBmB6g0yn9CAE+/ySyR7YJIqvhSXvgEjRmDBXLOCY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-pa-6.7.0.tar.xz",
+    "hash": "sha256-utzogREH7ldyBxYnWsX8EhFmibw0zkk8q+cijhtlj1E="
   },
   "plasma-sdk": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-sdk-6.6.5.tar.xz",
-    "hash": "sha256-7VQKi9oaYziB/KQfff6WrhfJplS3E3SnnobPVH78yVk="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-sdk-6.7.0.tar.xz",
+    "hash": "sha256-1G1SKRVGImSuXUl7rBb3U7DQtrW1uZtG/fiCP0xWLtM="
   },
   "plasma-setup": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-setup-6.6.5.tar.xz",
-    "hash": "sha256-z756OF13wLUHaJXJ/N3BPHFYBebvEWxzkRNlQGTXxe8="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-setup-6.7.0.tar.xz",
+    "hash": "sha256-3I+l3XRXBW3hwtAEPw83zTBhAg/s0hmMq/83i9XJVx4="
   },
   "plasma-systemmonitor": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-systemmonitor-6.6.5.tar.xz",
-    "hash": "sha256-tuv3web3pCyRoLURlx/WcEHU2bYX7cOk/AsIr0oOx48="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-systemmonitor-6.7.0.tar.xz",
+    "hash": "sha256-9lthyXWIbtxXSZVnAKWkxAWeeRXEl4aFeI/oGKFxS0I="
   },
   "plasma-thunderbolt": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-thunderbolt-6.6.5.tar.xz",
-    "hash": "sha256-VuOigzCWJ5w6nsHbtLU6X6S8NrNWnj9+wZHwAvQL9x8="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-thunderbolt-6.7.0.tar.xz",
+    "hash": "sha256-Pepo91aAHJVHM2ykFVJnLDaTCRwpu/iWjuAf8pKHk6A="
   },
   "plasma-vault": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-vault-6.6.5.tar.xz",
-    "hash": "sha256-aKTjzRYNsVZGiCxaQK7Dqj63CXAaO0J00Ctjk/6rsmg="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-vault-6.7.0.tar.xz",
+    "hash": "sha256-i9cLPTeHidOWpm5pOoCd1rIe3EgWYnWTL399AgdPzhw="
   },
   "plasma-welcome": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-welcome-6.6.5.tar.xz",
-    "hash": "sha256-vJQn1znNyLp/Sf5i0CpxY1Gnct8bK2lsbB8IaVxBJqI="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-welcome-6.7.0.tar.xz",
+    "hash": "sha256-SD8WkxtswsVmaPVCBBjnsvja1XarqgG8dVRsE2HyGQM="
   },
   "plasma-workspace": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-workspace-6.6.5.tar.xz",
-    "hash": "sha256-ZNdTyty5zeasCe7t9rAuxczfvQFyLF6fJTP9CZOw2FQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-workspace-6.7.0.tar.xz",
+    "hash": "sha256-mn8qBOikS/JNpNKUu6JwmEoJDvF6CCzR6yXLgYJlHTw="
   },
   "plasma-workspace-wallpapers": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma-workspace-wallpapers-6.6.5.tar.xz",
-    "hash": "sha256-SgIdvadh2nqvcZLo0DiqHyMFpXalfyOE9UvI7ZBzFBg="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma-workspace-wallpapers-6.7.0.tar.xz",
+    "hash": "sha256-DpIiDArgt8QmROvtb+FZ+wCXqJLmQMsSQgR8kpkx6go="
   },
   "plasma5support": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plasma5support-6.6.5.tar.xz",
-    "hash": "sha256-X0Vofi0oHN/AZmoK13et/Lu7JTQoTKZFDTqn1wC592M="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plasma5support-6.7.0.tar.xz",
+    "hash": "sha256-5g4eR6Pe6TUYZH1mOTwh4kBvd3np6eQ4LXzqaM67+3s="
   },
   "plymouth-kcm": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/plymouth-kcm-6.6.5.tar.xz",
-    "hash": "sha256-eUbJGS4+/JCLtHH+ZCSHgNyBQk2Fs3N60q9o+l5Br6o="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/plymouth-kcm-6.7.0.tar.xz",
+    "hash": "sha256-KrVY7wsm/U4C+iZ4ZBL28be8UHZAe7nuR6fByffgJUc="
   },
   "polkit-kde-agent-1": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/polkit-kde-agent-1-6.6.5.tar.xz",
-    "hash": "sha256-kZkLnNE/IFqZY/iP5gWUK56LbunpEDQxIWv1EZRM4Sc="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/polkit-kde-agent-1-6.7.0.tar.xz",
+    "hash": "sha256-Dyf/KqNhBBhiDEKAS5w9wi9peeXAOCL5OXnUT77R2r8="
   },
   "powerdevil": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/powerdevil-6.6.5.tar.xz",
-    "hash": "sha256-sSX2TnPMjc+ePn4/FU9P67RAZCZZfK1uu+jEgzLjXns="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/powerdevil-6.7.0.tar.xz",
+    "hash": "sha256-djXv/9UD542SvMAwM9VoHlFXfskrxtpy8qsoKLsKNNs="
   },
   "print-manager": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/print-manager-6.6.5.tar.xz",
-    "hash": "sha256-ZeHm9VlBGZXGhRb0XF57f8JCv6K2hxHmIEsxmYGjrm0="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/print-manager-6.7.0.tar.xz",
+    "hash": "sha256-v3tqkw7cG4Ped65YV0O9pOGjpYKt5tICovuiYWrcpbM="
   },
   "qqc2-breeze-style": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/qqc2-breeze-style-6.6.5.tar.xz",
-    "hash": "sha256-jSeflmkDIZchlB6p9BaBYw3BT6RXadnGcsV0k/bJlgM="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/qqc2-breeze-style-6.7.0.tar.xz",
+    "hash": "sha256-gfsPQ/4VwrzRxi50LKuoTWCk65OAwLzsRHtbdyjin7s="
   },
   "sddm-kcm": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/sddm-kcm-6.6.5.tar.xz",
-    "hash": "sha256-RJgRgj8faK3ZZC6uISfiqh8HYc+M48N9t8J+YW6L/9g="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/sddm-kcm-6.7.0.tar.xz",
+    "hash": "sha256-A7Heo6c4BIoGRjO57bgCcWAE9GMLP2p/Bo/QdNcZ700="
   },
   "spacebar": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/spacebar-6.6.5.tar.xz",
-    "hash": "sha256-wULqeA4Qp0QjK2dKAlFvJ4KJ2SBON3VxJgmNKBio4fQ="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/spacebar-6.7.0.tar.xz",
+    "hash": "sha256-XwtcSkDFHaPKxaXWg6uDq/2KNX5FkXYmjs7RWPAxSIU="
   },
   "spectacle": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/spectacle-6.6.5.tar.xz",
-    "hash": "sha256-o333cxpryJvCOsCK0fmVzp8e+zMPPrrZv5Jtym67X8c="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/spectacle-6.7.0.tar.xz",
+    "hash": "sha256-Sw5J3iGyGP9fEwLQzebgZyC8RSQ5bIUA02zWRMnVDGQ="
   },
   "systemsettings": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/systemsettings-6.6.5.tar.xz",
-    "hash": "sha256-YTNO/2RWetIJ4nn2DG0asTtnD5owD96UgP6TWWIyqYY="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/systemsettings-6.7.0.tar.xz",
+    "hash": "sha256-WfJKRQRrZp0awW+A7ngyPrbxchMKusMcbWXPYfBfp58="
+  },
+  "union": {
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/union-6.7.0.tar.xz",
+    "hash": "sha256-0JJd9wpnQiRuadl3btE508UuPDzNtoaT66vKLE6M9Fk="
   },
   "wacomtablet": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/wacomtablet-6.6.5.tar.xz",
-    "hash": "sha256-RLZfANmwMjbTm64P5BPZ9TE32cuWrpabRxDg+xFKDx4="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/wacomtablet-6.7.0.tar.xz",
+    "hash": "sha256-4lBGcIom7JKbkTYcPYZAgu3m/toDgrcSntOKl1SiwKw="
   },
   "xdg-desktop-portal-kde": {
-    "version": "6.6.5",
-    "url": "mirror://kde/stable/plasma/6.6.5/xdg-desktop-portal-kde-6.6.5.tar.xz",
-    "hash": "sha256-IdaZWFKUBk/OfHTe5oXCCT73PdCVeXkT5o7xR4CFayc="
+    "version": "6.7.0",
+    "url": "mirror://kde/stable/plasma/6.7.0/xdg-desktop-portal-kde-6.7.0.tar.xz",
+    "hash": "sha256-9a/Ab5SLc7KgED2e5uV3RKmISj8uCBCAd3bsS/cQKto="
   }
 }

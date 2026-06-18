@@ -40,6 +40,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Terminal Benchmarking as CLI and library";
+    homepage = "https://github.com/contour-terminal/termbench-pro";
     mainProgram = "tb";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

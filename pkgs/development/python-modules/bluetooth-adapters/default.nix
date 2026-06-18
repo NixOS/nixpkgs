@@ -19,16 +19,16 @@
   usb-devices,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bluetooth-adapters";
-  version = "2.1.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
-    tag = "v${version}";
-    hash = "sha256-M9Me+fTaw//wGVd9Ss9iYB7RMgfkxJZz2lT60lHe3Vg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r/qDwlIVa7VBkhepmuFqwtlJ7WYUTiYRKikhURTgLH8=";
   };
 
   outputs = [
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-adapters";
-    changelog = "https://github.com/Bluetooth-Devices/bluetooth-adapters/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-adapters/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

@@ -25,7 +25,7 @@ jobs:
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: |
@@ -97,6 +97,7 @@ jobs:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
+      baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       systems: ${{ needs.prepare.outputs.systems }}
 
   build:

@@ -9,13 +9,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ipp-usb";
-  version = "0.9.33";
+  version = "0.9.34";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
     rev = finalAttrs.version;
-    sha256 = "sha256-G8eCRzfwF7fFROFgDPuiSVH2NAvKefGJfzLU6yW23z4=";
+    sha256 = "sha256-4xZf8Q1MfQcB13vHRdb8dQyZWrwnJzubdi+zln1lRc8=";
   };
 
   postPatch = ''

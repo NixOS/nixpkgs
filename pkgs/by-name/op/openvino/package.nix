@@ -34,6 +34,7 @@
 let
   inherit (lib)
     cmakeBool
+    cmakeFeature
     getLib
     ;
 
@@ -55,14 +56,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino";
-  version = "2026.1.2";
+  version = "2026.2.1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-1lheHc0uajmUb1EW8q02bHX9PrCp4YoyT0l8dTyb4jM=";
+    hash = "sha256-66g+v+L0BPNW6HvmWMHAHoNEFn9SUPrmZDyDjES6K1I=";
   };
 
   outputs = [
@@ -97,6 +98,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOpenCV_DIR=${getLib opencv}/lib/cmake/opencv4/"
     "-DProtobuf_LIBRARIES=${getLib protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
+
+    # OV_CPACK_* variables are normally set by packaging macros that only run
+    # when CPACK_GENERATOR matches a known type to upstream.
+    # Without one, all vars remain undefined and install() destinations are empty,
+    # putting files in $out/ root or producing absolute paths. Set them directly
+    # here so the build produces a standard layout.
+    (cmakeFeature "OV_CPACK_LIBRARYDIR" "lib")
+    (cmakeFeature "OV_CPACK_RUNTIMEDIR" "lib")
+    (cmakeFeature "OV_CPACK_ARCHIVEDIR" "lib")
+    (cmakeFeature "OV_CPACK_INCLUDEDIR" "include")
+    (cmakeFeature "OV_CPACK_OPENVINO_CMAKEDIR" "lib/cmake/OpenVINO")
+    (cmakeFeature "OV_CPACK_PYTHONDIR" "python")
+    (cmakeFeature "OV_CPACK_PLUGINSDIR" "lib")
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (cmakeBool "NCC_SYLE" false)

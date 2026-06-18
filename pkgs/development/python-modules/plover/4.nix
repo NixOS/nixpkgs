@@ -56,6 +56,11 @@ buildPythonPackage (finalAttrs: {
     wcwidth
     xlib
   ];
+  optional-dependencies = {
+    gui-qt = [
+      pyqt5
+    ];
+  };
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
@@ -69,6 +74,10 @@ buildPythonPackage (finalAttrs: {
 
   # Segfaults?!
   disabledTestPaths = [ "test/gui_qt/test_dictionaries_widget.py" ];
+
+  postInstall = ''
+    install -Dm 444 linux/plover.desktop $out/share/applications/plover.desktop
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

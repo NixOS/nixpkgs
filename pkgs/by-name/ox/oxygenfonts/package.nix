@@ -51,6 +51,7 @@ stdenvNoCC.mkDerivation {
       See: http://sansoxygen.com/
     '';
 
+    homepage = "https://github.com/vernnobile/oxygenFont";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };

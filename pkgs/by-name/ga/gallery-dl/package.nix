@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       dawidsowa
       FlameFlag
-      lucasew
     ];
   };
 })

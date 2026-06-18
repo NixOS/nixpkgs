@@ -9,19 +9,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombi";
-  version = "0.11.6";
+  version = "1.1.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tombi-toml";
     repo = "tombi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m9ppr3P4HIzIzNYbLukbcCoYwRdcTWIpMmcmteIfo84=";
+    hash = "sha256-zkvg82Fl8bFr5U0015z+5mQpZGw8hOQxO/7llFBpGAA=";
   };
 
   # Tests relies on the presence of network
   doCheck = false;
-  cargoBuildFlags = [ "--package tombi-cli" ];
-  cargoHash = "sha256-f67OkZEB98KCtvkjszrcPLoC2QWl/5rd/qvb8jmonxc=";
+  cargoBuildFlags = [
+    "--package"
+    "tombi-cli"
+  ];
+  cargoHash = "sha256-IgtFNjp8fql01KGCR6h4+QtEm3AxJxsq900ZEwhRWhg=";
 
   postPatch = ''
     substituteInPlace Cargo.toml \
@@ -47,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "TOML Formatter / Linter / Language Server";
     homepage = "https://github.com/tombi-toml/tombi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ psibi ];
+    maintainers = with lib.maintainers; [
+      faukah
+      psibi
+      yvnth
+    ];
     mainProgram = "tombi";
   };
 })

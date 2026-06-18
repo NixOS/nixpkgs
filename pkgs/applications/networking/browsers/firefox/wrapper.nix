@@ -166,36 +166,34 @@ let
           ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
-        policies = {
-          DisableAppUpdate = true;
-        }
-        // lib.optionalAttrs usesNixExtensions {
-          ExtensionSettings = {
-            "*" = {
-              blocked_install_message = "You can't have manual extension mixed with nix extensions";
-              installation_mode = "blocked";
-            };
-          }
-          // lib.foldr (
-            e: ret:
-            ret
-            // {
-              "${e.extid}" = {
-                installation_mode = "allowed";
+        policies =
+          lib.optionalAttrs usesNixExtensions {
+            ExtensionSettings = {
+              "*" = {
+                blocked_install_message = "You can't have manual extension mixed with nix extensions";
+                installation_mode = "blocked";
               };
             }
-          ) { } extensions;
+            // lib.foldr (
+              e: ret:
+              ret
+              // {
+                "${e.extid}" = {
+                  installation_mode = "allowed";
+                };
+              }
+            ) { } extensions;
 
-          Extensions = {
-            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
-          };
-        }
-        // lib.optionalAttrs smartcardSupport {
-          SecurityDevices = {
-            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
-          };
-        }
-        // extraPolicies;
+            Extensions = {
+              Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
+            };
+          }
+          // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+            };
+          }
+          // extraPolicies;
       };
 
       mozillaCfg = ''
@@ -230,7 +228,7 @@ let
           terminal = false;
         }
         // (
-          if libName == "thunderbird" then
+          if lib.strings.hasPrefix "thunderbird" libName then
             {
               genericName = "Email Client";
               comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
@@ -413,6 +411,9 @@ let
             target=''${target/#"${browser}"/"$out"}
             ln -sfT "$target" "$out/$l"
           done
+
+          # Disable update checks
+          touch "$out/${libDir}/is-packaged-app"
 
           cd "$out"
 

@@ -8,14 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flashlabel-yxwl";
-  version = "1.2.1";
+  version = "1.2.3";
 
-  # The source URL currently redirects through “pCloud”, a file storage service
-  # that resists direct downloads.
+  # The source URL redirects to Google Drive, which resists direct downloads.
   src = requireFile {
     name = "A4_Linux_Driver_Ver${version}.run";
     url = "https://flashlabel.net/YXWL-A4driver-linux";
-    hash = "sha256-qkc3NJ1dK0nJf+Q7xL7f1/+X0COWSWMEbH4luzaFARc=";
+    hash = "sha256-LqVQKkh6B+zGl5swknHefaB0EfHYVXXEEqDb6NUaxqc=";
   };
 
   # The driver is distributed as a self-extracting executable consisting of a
@@ -73,6 +72,14 @@ stdenv.mkDerivation rec {
         - C80Y1
         - D80
         - D80 Pro
+        - K80
+        - S8
+        - ST80
+        - ST80K
+        - ST81
+        - ST82
+        - ST83
+        - T8810
         - Y8
         - Y8 Pro
         - Y80

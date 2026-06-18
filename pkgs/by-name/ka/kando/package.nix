@@ -26,20 +26,20 @@ let
 in
 buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-eCR+CL3EMV3eLXzpzKFGuec3YBWDnFjNyTEHpG51PLQ=";
+    hash = "sha256-vmdDcXpSm2O9MkOGfM3+VUrRSvUot1GB0TkxjNSN4r8=";
   };
 
   patches = [
     ./add-deep-link-note.patch
   ];
 
-  npmDepsHash = "sha256-VsWmM+CSAv3yFVelFNb3kUAeh4t+k04NFXVRz4AwFkI=";
+  npmDepsHash = "sha256-2J74igNLl5CwXm9WtHzxqTVt7+S113qcioxJja6uUOE=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -69,8 +69,6 @@ buildNpmPackage.override { inherit nodejs; } rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     # use our own node headers since we skip downloading them
     NIX_CFLAGS_COMPILE = "-I${nodejs}/include/node";
-    # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.hostPlatform.isDarwin "false";
   };
 
   postConfigure = ''

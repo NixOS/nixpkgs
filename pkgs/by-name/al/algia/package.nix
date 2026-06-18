@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "algia";
-  version = "0.0.120";
+  version = "0.0.122";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "algia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pKoBPPvNtgRPwsJMSy8GViIB1Gcl780vsTPDjnhsB0Q=";
+    hash = "sha256-G6FEmLmZRUYVpj1ipNtMNi166GKUapIl/hAkPyvFLN0=";
   };
 
   vendorHash = "sha256-JTTWVs0KwceiLy6tpyd48zORiXLc18zwgG1c+ceivKU=";

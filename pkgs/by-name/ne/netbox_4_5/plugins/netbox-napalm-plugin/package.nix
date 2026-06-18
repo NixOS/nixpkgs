@@ -12,6 +12,7 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-napalm-plugin";
   version = "0.3.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 

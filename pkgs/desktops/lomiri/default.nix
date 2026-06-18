@@ -38,6 +38,7 @@ let
       };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
+      qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
       #### Services
       biometryd = callPackage ./services/biometryd { };
@@ -90,7 +91,6 @@ let
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
-      qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
       #### Services
       hfd-service = callPackage ./services/hfd-service { };

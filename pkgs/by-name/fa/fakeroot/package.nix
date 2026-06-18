@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.37.2";
+  version = "1.38.1";
   pname = "fakeroot";
 
   src = fetchFromGitLab {
@@ -22,10 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "fakeroot";
     rev = "upstream/${finalAttrs.version}";
     domain = "salsa.debian.org";
-    hash = "sha256-TU/9oltd+2wYums8EEDUhaIVzwPeQvW13laCrJqb5A4=";
+    hash = "sha256-sAzXeONjDT753lbu7amQY6yXpaTNCa4wFOzB01SRbCs=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
+    ./add-missing-wrapawk.patch
     ./einval.patch
   ];
 

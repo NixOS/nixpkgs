@@ -20,7 +20,7 @@
           "git": {
             "url": "https://github.com/DFHack/dfhack.git",
             "revision": "53.14-r2",
-            "outputHash": "sha256-UOmp84VoY/pam99T2ktAYH3N3cFMSIb9v8KOTZCof8U="
+            "outputHash": "sha256-8OvJ8NULgfR+S0kzOSmQvplhPT7wcxw02sRkG450ptE="
           },
           "xmlRev": "01aae95cacd98850e4f477c45a4b75f800bacecc"
         }

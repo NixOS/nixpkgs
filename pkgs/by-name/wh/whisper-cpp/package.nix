@@ -31,7 +31,7 @@
 
   withSDL ? true,
 
-  withFFmpegSupport ? false,
+  withFFmpegSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
@@ -81,13 +81,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.4";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YCuWKDKlrhbx+t3t2kDpAwuKt4rkipDsOXO6uqIU/W0=";
+    hash = "sha256-hzgO2IqV1+JQjiYBBmFSOLfp1BgH0DgU0TZyO7OzFHE=";
   };
 
   # The upstream download script tries to download the models to the
@@ -135,7 +135,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" (!isStatic))
   ]
   ++ optionals isLinux [
-    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
+    (cmakeBool "WHISPER_COMMON_FFMPEG" withFFmpegSupport)
   ]
   ++ optionals (isx86 && !isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
@@ -186,6 +186,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook preInstallCheck
     "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/lib/pkgconfig/whisper.pc \
+      --replace-fail '//' '/'
   '';
 
   passthru.updateScript = nix-update-script { };

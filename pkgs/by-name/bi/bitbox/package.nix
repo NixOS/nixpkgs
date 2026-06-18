@@ -6,7 +6,7 @@
   buildNpmPackage,
   clang,
   go,
-  libsForQt5,
+  qt5,
   qt6,
   udevCheckHook,
 }:
@@ -16,7 +16,7 @@ let
   # it from Qt 5.
   rcc = runCommand "rcc" { } ''
     mkdir -p $out/bin
-    cp ${lib.getExe' libsForQt5.qt5.qtbase.dev "rcc"} $out/bin
+    cp ${lib.getExe' qt5.qtbase.dev "rcc"} $out/bin
   '';
 in
 stdenv.mkDerivation rec {

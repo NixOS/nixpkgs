@@ -85,6 +85,6 @@ python3Packages.buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ keysmashes ];
+    maintainers = [ ];
   };
 }

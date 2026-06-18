@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "render-cli";
-  version = "2.18.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "render-oss";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-S3XWxK40jIX5l1o4km5CJLcPqEp10hjKYb+iWZSNKck=";
+    hash = "sha256-2pKZQsL/MffTaz4ZPj2IPjNFgObPPotJOTNB+VsHxns=";
   };
 
-  vendorHash = "sha256-0cOW8g9rhUbcBF/JfsYu8OJJhaDXAd37341GZeoCAVQ=";
+  vendorHash = "sha256-F7wI/u1LgBJkcOAJe/Xcgf3v5H6qfRn3fFLdj9Jlftc=";
 
   # Tests require network access
   doCheck = false;

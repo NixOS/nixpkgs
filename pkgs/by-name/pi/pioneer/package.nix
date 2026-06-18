@@ -22,20 +22,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioneer";
-  version = "20250501";
+  version = "20260203";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = finalAttrs.version;
-    hash = "sha256-bQ1JGndHbBM28SuAUybo9msC/nBXu6el1UY41BKJN5A=";
+    hash = "sha256-rffm5i8yHy8WXij8PGbBegA6uJ5B3ACpT7Wf9cWHfs4=";
   };
 
   postPatch = ''
     substituteInPlace contrib/lz4/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.4)' 'cmake_minimum_required(VERSION 3.13)'
+      --replace-fail 'cmake_minimum_required(VERSION 3.5)' 'cmake_minimum_required(VERSION 3.13)'
     substituteInPlace contrib/nanosockets/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.13)'
+      --replace-fail 'cmake_minimum_required(VERSION 3.5)' 'cmake_minimum_required(VERSION 3.13)'
   '';
 
   nativeBuildInputs = [

@@ -3,6 +3,8 @@
   lib,
   vscode-utils,
   vscode-extension-update-script,
+  stdenv,
+  autoPatchelfHook,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -35,6 +37,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
+
   passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
@@ -48,6 +57,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sandarukasa ];
   };
 }

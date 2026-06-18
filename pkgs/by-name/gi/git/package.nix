@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace contrib/credential/libsecret/Makefile \
         --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString doInstallCheck ''
+  + lib.optionalString finalAttrs.doInstallCheck ''
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
   ''
@@ -210,6 +210,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     glib
     libsecret
+  ];
+
+  # This is required for building the rust build.rs script when cross compiling
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
   ];
 
   env = {

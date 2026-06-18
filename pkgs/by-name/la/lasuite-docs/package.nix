@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "5.1.0";
+  version = "5.2.1";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-Ptg3C+5DbUiWVS8nMCmqmSFMmNI4NW8NYBF+G5xOqSg=";
+    hash = "sha256-FRN4rcS2aYoYjFY05nYV9pYz0Es8X3EWsD/oPdp4kpI=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-CKKGY87C5ifv0sHm9ExCzaGM3mV4C0NsWLCbw+ALqGc=";
+      hash = "sha256-MYzADDcXHGieGkygmlbZQbYcS68NdKWyHYGgoSaqDO8=";
     };
 
     nativeBuildInputs = [
@@ -52,13 +52,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
-
-    # Fix creation of unsafe C function in postgresql migrations
-    ./postgresql_fix.patch
-
-    # Fix installing all modules with uv_build
-    # https://github.com/suitenumerique/docs/pull/2295
-    ./uv.patch
   ];
 
   # They use a old version of mistralai which exported a class
@@ -91,6 +84,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       boto3
       celery
       emoji
+      dj-database-url
       django
       django-configurations
       django-cors-headers
@@ -120,6 +114,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mozilla-django-oidc
       nested-multipart-parser
       openai
+      posthog
       psycopg
       pycrdt
       pydantic-ai-slim

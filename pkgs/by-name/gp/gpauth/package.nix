@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.5.1";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rux2rToqs5GZEDTryPAkm62yGdhWfEqapTMQOGyqCRI=";
+    hash = "sha256-RDfxhf0t70Ex6MfgHAX2AaWcPAwTCvjm1bQkek+92zc=";
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-xza7AfuOcSUkDyliGHUx9bEd+M94d23xVrVVvZo2nas=";
+  cargoHash = "sha256-SY0PS5GxvVO1jaCNyLa3/l/v8/JT2R+4lM3W9kA7fVM=";
 
   nativeBuildInputs = [
     perl

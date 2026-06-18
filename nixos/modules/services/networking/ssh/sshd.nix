@@ -26,6 +26,8 @@ let
           toString v
         else if lib.isString v then
           v
+        else if lib.isPath v then
+          v
         else if true == v then
           "yes"
         else if false == v then

@@ -10,8 +10,8 @@
   # - Open a browser or something that plays sound. Ex: chromium
 
   name = "xrdp-with-audio-pulseaudio";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lucasew ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

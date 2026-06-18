@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ acidbong ];
     platforms = lib.platforms.unix;
     mainProgram = "mpDris2";
   };

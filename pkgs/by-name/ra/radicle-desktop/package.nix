@@ -26,13 +26,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-LKV69Yr06KI46GNl+Xk3sb9sn9Yr6A3i0+WuPsbvW7g=";
+    hash = "sha256-lbLBtLOBLf+w2Oq56JwXtouDykNrRZyrMxYX9131lf8=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head

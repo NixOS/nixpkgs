@@ -39,6 +39,7 @@ stdenv.mkDerivation {
       more ports than they normally would or to prevent them from
       auto-connecting to certain things.
     '';
+    homepage = "https://github.com/guysherman/jack-passthrough";
     # license unknown: https://github.com/guysherman/jack-passthrough/issues/2
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.PowerUser64 ];

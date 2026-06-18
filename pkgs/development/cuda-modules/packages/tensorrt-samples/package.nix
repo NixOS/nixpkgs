@@ -117,6 +117,10 @@ backendStdenv.mkDerivation (finalAttrs: {
         tag = "v10.14";
         hash = "sha256-pWvXpXiUriLDYHqro3HWAmO/9wbGznyUrc9qxq/t0/U=";
       };
+      "10.16.1" = {
+        tag = "v10.16";
+        hash = "sha256-Wm5oOXxAIpIlwiJKhH0WjgUAuTB9H2xFEVpM/sO36qk=";
+      };
     }
   );
 

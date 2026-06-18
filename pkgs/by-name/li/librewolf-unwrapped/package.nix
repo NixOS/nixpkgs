@@ -32,6 +32,8 @@ in
       dwrege
       fpletz
       hythera
+      mBornand
+      thbemme
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
@@ -40,6 +42,9 @@ in
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "librewolf";
+    knownVulnerabilities = [
+      "librewolf lacks an active committer in nixpkgs, consider using an alternative"
+    ];
   };
   tests = { inherit (nixosTests) librewolf; };
   updateScript = callPackage ./update.nix {

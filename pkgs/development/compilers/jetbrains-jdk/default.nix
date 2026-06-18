@@ -21,28 +21,29 @@ let
       url = "https://raw.githubusercontent.com/GNOME/gtk/${rev}/gdk/wayland/protocol/gtk-shell.xml";
       hash = hash;
     };
+  # To get the new tag:
+  # git clone https://github.com/jetbrains/jetbrainsruntime
+  # cd jetbrainsruntime
+  # git tag --points-at [revision]
+  # Look for the line that starts with jbr-
+  javaVersion = "25.0.2";
+  build = "432.48";
 in
 callPackage ./common.nix
   {
     inherit jdk debugBuild withJcef;
   }
   {
-    # To get the new tag:
-    # git clone https://github.com/jetbrains/jetbrainsruntime
-    # cd jetbrainsruntime
-    # git tag --points-at [revision]
-    # Look for the line that starts with jbr-
-    javaVersion = "25.0.2";
-    build = "329.72";
+    inherit javaVersion build;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    sourceDateEpoch = 1769205294;
-    srcHash = "sha256-K4Izbij+1YO4UERHS0mwGKZX/VtIaxyNPZD068Vf99Q=";
+    sourceDateEpoch = 1777242155;
+    srcHash = "sha256-BKyvBUKtg+JbZNuH/RZY87eJng6Eyd6L3cOwcOgOx/Y=";
     homePath = "${jetbrains.jdk}/lib/openjdk";
     jcefPackage = jetbrains.jcef;
     extraBuildPhase = ''
       cp -r ${gtk-protocols.out} gtk-shell.xml
     '';
-    vendorVersionString = "nix/JBR-25.0.2-b329.72${if withJcef then "-jcef" else ""}";
+    vendorVersionString = "nix/JBR-${javaVersion}-b${build}${if withJcef then "-jcef" else ""}";
     extraConfigureFlags = [
       "--with-wayland-protocols=${wayland-protocols.out}/share/wayland-protocols"
     ];

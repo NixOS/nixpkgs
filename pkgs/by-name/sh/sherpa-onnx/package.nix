@@ -10,7 +10,7 @@
 
   # dependencies
   alsa-lib,
-  eigen,
+  eigen_5,
   gtest,
   kissfft,
   nlohmann_json,
@@ -111,13 +111,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.12.38";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lzcquKwP68KOem50b4X0+nZ3s2IthiYB76IxfvmJo54=";
+    hash = "sha256-3SbJd9PHOjy5km6uxFqVZljn39cs/o7RLxxUivqx5VM=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SHERPA_ONNX_ENABLE_GPU" cudaSupport)
     # Use nixpkgs sources instead of vendored downloads where possible.
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "${eigen.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "${eigen_5.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_KISSFFT" "${kissfft.src}")
     "-Wno-dev"
@@ -191,10 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_FALLBACK_LIBRARY_PATH=${lib.getLib onnxruntime}/lib
-  '';
-
   # Use ctest directly because the default `make check` target includes clang-tidy.
   checkPhase = ''
     runHook preCheck
@@ -206,10 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $python
     cp -r ../sherpa-onnx/python/sherpa_onnx $python/
     rm $out/lib/_sherpa_onnx*.so
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -add_rpath ${lib.getLib onnxruntime}/lib \
-        $python/sherpa_onnx/lib/_sherpa_onnx*.so
-    ''}
   '';
 
   passthru = {

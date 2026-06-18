@@ -147,7 +147,6 @@ buildNpmPackage rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      ttuegel
       lunik1
     ];
   };

@@ -2,11 +2,9 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
   bun,
   gh,
   git,
-  nodejs,
   nix-update-script,
   runtimeShell,
   versionCheckHook,
@@ -25,32 +23,18 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-jMi2Pc2VTpj0cZ2zXqtunG0FxcglCNEt9WzWnwxq+Js=";
   };
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    fetcherVersion = finalAttrs.npmDepsFetcherVersion;
-    hash = "sha256-GYGegGw80M5T2wETreP95OrCn7F7XxlZcZWy9TjbCHY=";
-    nativeBuildInputs = [ nodejs ];
-    prePatch = ''
-      export HOME=$TMPDIR
-      npm pkg set 'dependencies.@ghui/keymap=file:packages/keymap'
-      npm pkg delete 'devDependencies.@ghui/keymap'
-      npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-    '';
-  };
-
-  prePatch = ''
-    export HOME=$TMPDIR
-    # prefetch-npm-deps --map-cache reads npmDeps from the process environment.
-    export npmDeps
-    npm pkg set 'dependencies.@ghui/keymap=file:packages/keymap'
-    npm pkg delete 'devDependencies.@ghui/keymap'
-    cp ${finalAttrs.npmDeps}/package-lock.json package-lock.json
+  # Upstream ghui is a Bun project and ships only `bun.lock`. We vendor an
+  # npm `package-lock.json` next to this file so `buildNpmPackage` has a
+  # deterministic, cross-OS-stable FOD input; `passthru.updateScript` below
+  # keeps it in sync via `nix-update --generate-lockfile`.
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
   '';
 
-  nativeBuildInputs = [ bun ];
-
+  npmDepsHash = "sha256-pg+USHnvcxaXG/floNItLXNFJOPvuDltQCcN1qT/nng=";
   npmDepsFetcherVersion = 3;
+
+  nativeBuildInputs = [ bun ];
 
   npmFlags = [
     "--no-audit"
@@ -81,6 +65,12 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     npm prune --omit=dev --no-save --no-audit --no-fund
+    # `@ghui/keymap` is declared as a `workspace:*` devDependency upstream but
+    # imported at runtime (see postInstallCheck). `npm prune --omit=dev` may
+    # strip the `node_modules/@ghui/keymap` workspace symlink; restore it
+    # idempotently so the Bun runtime can resolve it after install. `ln -sf`
+    # is safe whether or not prune actually removed the link.
+    ln -sf ../../packages/keymap node_modules/@ghui/keymap
 
     mkdir -p $out/lib/ghui $out/bin
     cp -r dist node_modules packages package.json README.md LICENSE .env.example $out/lib/ghui/
@@ -127,7 +117,9 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = {
     description = "Terminal UI for GitHub pull requests";

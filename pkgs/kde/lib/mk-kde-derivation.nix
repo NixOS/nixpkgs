@@ -189,6 +189,7 @@ let
   meta = {
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
+    donationPage = "https://kde.org/donate/";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.

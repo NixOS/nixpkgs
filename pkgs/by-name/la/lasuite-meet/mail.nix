@@ -11,24 +11,18 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src/mail";
 
-  # TODO: Remove package-lock.json patch when
-  # https://github.com/suitenumerique/meet/pull/1321 is merged.
   postPatch = ''
     substituteInPlace bin/html-to-plain-text bin/mjml-to-html \
       --replace-fail \
         '../backend/core/templates/mail' \
         '${placeholder "out"}'
-
-    cp ${./package-lock.json} package-lock.json
   '';
 
   npmDeps = fetchNpmDeps {
     pname = "${finalAttrs.pname}-npm-deps";
     inherit version src;
     inherit (finalAttrs) sourceRoot;
-    hash = "sha256-jjLzgGqCsMu6Smyfaam6coqOM9UW2zG88adSPVrWPEE=";
-
-    postPatch = "cp ${./package-lock.json} package-lock.json";
+    hash = "sha256-yq88kbrKn9HMwvxcWNXm7zonAqTs8T2i7iQAsD0TtnU=";
   };
   npmBuildScript = "build";
 

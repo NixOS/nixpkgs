@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "C++ library for interacting with JSON";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

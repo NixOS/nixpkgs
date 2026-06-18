@@ -114,9 +114,10 @@ rustPlatform.buildRustPackage {
     description = "Handy way to save and run project-specific commands";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
-      xrelkd
       jk
       ryan4yin
+      xrelkd
+      yvnth
     ];
     mainProgram = "just";
   };

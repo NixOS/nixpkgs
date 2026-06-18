@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.50.0rc3";
+  version = "0.50.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-caQmd7zoDzyd4YT9c5J/7oz2eEbhWpirgZHcnOTwz7k=";
+    hash = "sha256-7gCWNwlCh58UWQM2CRmZIpjVE36vHu/eluMaDpUy6UI=";
   };
 
   build-system = [

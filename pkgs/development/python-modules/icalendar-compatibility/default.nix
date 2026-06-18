@@ -39,6 +39,11 @@ buildPythonPackage rec {
     git
   ];
 
+  disabledTests = [
+    # https://github.com/niccokunzmann/icalendar_compatibility/issues/5
+    "test_geo_location_is_also_escaped"
+  ];
+
   pythonImportsCheck = [ "icalendar_compatibility" ];
 
   # env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

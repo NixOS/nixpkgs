@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyinfra";
-  version = "3.8.0";
+  version = "3.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Fizzadar";
     repo = "pyinfra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0DIG1Msttg7tqLbCZKi07uWTg3KYgH9rVlWPeJs4wwA=";
+    hash = "sha256-5qgPfBtPqysEtNCLFAgGAxlVK/CRH9VYmiC/98VWomI=";
   };
 
   build-system = [

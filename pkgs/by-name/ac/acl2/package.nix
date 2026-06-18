@@ -32,15 +32,15 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acl2";
   version = "8.6";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = version;
-    sha256 = "sha256-fF9bbEacwCHP1m/eVgFrTD4Ne7L2mzq0K9vJ1tiy9go=";
+    tag = finalAttrs.version;
+    hash = "sha256-fF9bbEacwCHP1m/eVgFrTD4Ne7L2mzq0K9vJ1tiy9go=";
   };
 
   # You can swap this out with any other IPASIR implementation at
@@ -58,10 +58,17 @@ stdenv.mkDerivation rec {
     })
 
     (replaceVars ./0001-path-changes-for-nix.patch {
-      libipasir = "${libipasir}/lib/${libipasir.libname}";
+      libipasir = "${finalAttrs.libipasir}/lib/${finalAttrs.libipasir.libname}";
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
       libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # ACL2 8.6 assumes SBCL can enable floating-point traps. On
+    # aarch64-linux, SBCL can leave :TRAPS NIL after enabling them, so use
+    # ACL2's existing exceptional-float checking path instead. See:
+    # https://github.com/acl2-devel/acl2-devel/commit/0632b37adffb6b5fd71d8438d519133281f837ec
+    ./0002-sbcl-fp-trap-fallback.patch
   ];
 
   # We need the timestamps on the source tree to be stable for certification to
@@ -85,7 +92,7 @@ stdenv.mkDerivation rec {
     glucose
     minisat
     abc-verifier
-    libipasir
+    finalAttrs.libipasir
     z3
     (python3.withPackages (ps: [ ps.z3-solver ]))
   ];
@@ -108,10 +115,10 @@ stdenv.mkDerivation rec {
     # ACL2 and its books need to be built in place in the out directory because
     # the proof artifacts are not relocatable. Since ACL2 mostly expects
     # everything to exist in the original source tree layout, we put it in
-    # $out/share/${pname} and create symlinks in $out/bin as necessary.
-    mkdir -p $out/share/${pname}
-    cp -pR . $out/share/${pname}
-    cd $out/share/${pname}
+    # $out/share/acl2 and create symlinks in $out/bin as necessary.
+    mkdir -p $out/share/acl2
+    cp -pR . $out/share/acl2
+    cd $out/share/acl2
   '';
 
   preBuild = "mkdir -p $HOME";
@@ -125,19 +132,19 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
+    ln -s $out/share/acl2/saved_acl2           $out/bin/acl2
   ''
   + lib.optionalString certifyBooks ''
-    ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
-    ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
+    ln -s $out/share/acl2/books/build/cert.pl  $out/bin/acl2-cert
+    ln -s $out/share/acl2/books/build/clean.pl $out/bin/acl2-clean
   '';
 
   preDistPhases = [ (if certifyBooks then "certifyBooksPhase" else "removeBooksPhase") ];
 
   certifyBooksPhase = ''
     # Certify the community books
-    pushd $out/share/${pname}/books
-    makeFlags="ACL2=$out/share/${pname}/saved_acl2"
+    pushd $out/share/acl2/books
+    makeFlags="ACL2=$out/share/acl2/saved_acl2"
     buildFlags="all"
     buildPhase
 
@@ -150,7 +157,7 @@ stdenv.mkDerivation rec {
 
   removeBooksPhase = ''
     # Delete the community books
-    rm -rf $out/share/${pname}/books
+    rm -rf $out/share/acl2/books
   '';
 
   meta = {
@@ -165,9 +172,9 @@ stdenv.mkDerivation rec {
       ACL2 is part of the Boyer-Moore family of provers, for which its authors
       have received the 2005 ACM Software System Award.
 
-      This package installs the main ACL2 executable ${pname}, as well as the
-      build tools cert.pl and clean.pl, renamed to ${pname}-cert and
-      ${pname}-clean.
+      This package installs the main ACL2 executable acl2, as well as the
+      build tools cert.pl and clean.pl, renamed to acl2-cert and
+      acl2-clean.
 
     ''
     + (
@@ -205,4 +212,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

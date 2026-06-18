@@ -157,10 +157,17 @@ buildGoModule (finalAttrs: {
     pkg-config
   ];
 
-  patches = extPatches ++ [
-    ./0001-fix-add-nix-path-to-exec-env.patch
-    ./rdpclient.patch
-  ];
+  patches =
+    extPatches
+    ++ [
+      ./rdpclient.patch
+    ]
+    ++ lib.optional (lib.versionOlder version "18.8.0") [
+      ./0001-fix-add-nix-path-to-exec-env.patch
+    ]
+    ++ lib.optional (lib.versionAtLeast version "18.8.0") [
+      ./0001-fix-add-nix-path-to-exec-env-reexec.patch
+    ];
 
   # Reduce closure size for client machines
   outputs = [

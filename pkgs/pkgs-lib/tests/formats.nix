@@ -229,6 +229,110 @@ runBuildTests {
     '';
   };
 
+  configobjAtoms = shouldPass {
+    format = formats.configobj { };
+    input = {
+      bool = true;
+      int = 10;
+      float = 3.141;
+      str = "string";
+    };
+    expected = ''
+      bool = True
+      float = 3.141
+      int = 10
+      str = string
+    '';
+  };
+
+  configobjListWithoutListToValue = shouldPass {
+    format = formats.configobj { };
+    input = {
+      items = [
+        1
+        true
+        "x"
+      ];
+    };
+    expected = ''
+      items = 1, True, x
+    '';
+  };
+
+  configobjNestedAttrsets = shouldPass {
+    format = formats.configobj { };
+    input = {
+      server = {
+        host = "127.0.0.1";
+        port = 8080;
+        enabled = true;
+        tags = [
+          "web"
+          "nix"
+          42
+        ];
+      };
+
+      logging = {
+        level = "info";
+        rotate = true;
+      };
+
+      interfaces = {
+        local = {
+          address = "123";
+          coin = {
+            foo = "bar";
+          };
+        };
+        remote = {
+          address = "456";
+        };
+      };
+    };
+    expected = ''
+      [interfaces]
+      [[local]]
+      address = 123
+      [[[coin]]]
+      foo = bar
+      [[remote]]
+      address = 456
+      [logging]
+      level = info
+      rotate = True
+      [server]
+      enabled = True
+      host = 127.0.0.1
+      port = 8080
+      tags = web, nix, 42
+    '';
+  };
+
+  configobjNullableValues = shouldPass {
+    format = formats.configobj { };
+    input = {
+      nullable = null;
+      nested = {
+        keep = "ok";
+        missing = null;
+      };
+    };
+    expected = ''
+      nullable = None
+      [nested]
+      keep = ok
+      missing = None
+    '';
+  };
+
+  configobjInvalidAtom = shouldFail {
+    format = formats.configobj { };
+    input = {
+      function = _: 1;
+    };
+  };
+
   iniInvalidAtom = shouldFail {
     format = formats.ini { };
     input = {
@@ -723,7 +827,7 @@ runBuildTests {
       ];
     };
     expected = ''
-      language-server = ["bash-language-server", {except-features = ["diagnostics"], name = "typescript-language-server"}]
+      language-server = ["bash-language-server", { except-features = ["diagnostics"], name = "typescript-language-server" }]
     '';
   };
 

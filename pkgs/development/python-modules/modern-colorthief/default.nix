@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "modern-colorthief";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baseplate-admin";
     repo = "modern_colorthief";
     tag = version;
-    hash = "sha256-pBCL4ejBcqTWRxb5t/L4fiJLj8Jm8diwXE91RoQ/NSU=";
+    hash = "sha256-oQ0ZAL8GyzKfFoSBJS2LIck2Z1IzZCYrkOc9nXfqyyg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-x9TxXE0BGXnTFCTbbctAKWlT37NE18IpevvTFzfb/G0=";
+    hash = "sha256-csGUiJKAZn8OF3lxfw5VPwZxWDXHpFC0rczkD1+P8Sk=";
   };
 
   nativeBuildInputs = [

@@ -111,7 +111,10 @@ in
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
       hardware.bluetooth.enable = mkDefault true;
-      security.polkit.enable = true;
+      security.polkit = {
+        enable = true;
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [

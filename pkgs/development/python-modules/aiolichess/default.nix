@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiolichess";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aryanhasgithub";
     repo = "aiolichess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WCrvDNlq0i2FBD6Ouiue3BQcTuIV80Z8MT/5mOjTr3w=";
+    hash = "sha256-cJuaEjapvmmRypJHvkveBxjAvGpkq0tjguXJLktnb74=";
   };
 
   build-system = [ hatchling ];

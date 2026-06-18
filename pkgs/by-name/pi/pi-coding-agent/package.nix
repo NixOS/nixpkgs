@@ -12,16 +12,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.75.4";
+  version = "0.79.1";
 
   src = fetchFromGitHub {
     owner = "earendil-works";
     repo = "pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zyIgs2N7uVz+7E+NqxH78baRw0OwXvlrjZiDIP/v0M4=";
+    hash = "sha256-MvH8e21GVfzRQ9vsxFNC1GHJfB9GZpqY1Z2t8GCUaiQ=";
   };
 
-  npmDepsHash = "sha256-5Vl+0BBUS7Rtb6XqpGKbbNMyh+9UX2aAsgtn60QLX7A=";
+  npmDepsHash = "sha256-ZWdfDDs+Hv+GWTmsNmpWNlUDBOMALw7H4lwo7CJHVCM=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -71,8 +71,6 @@ buildNpmPackage (finalAttrs: {
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
     # RPATHs with patchelf
-    find "$nm/koffi/build/koffi" -mindepth 1 -maxdepth 1 -type d \
-      ! -name 'darwin_*' -exec rm -r {} +
     rm -rf \
       "$nm/@anthropic-ai/sandbox-runtime/dist/vendor/seccomp" \
       "$nm/@anthropic-ai/sandbox-runtime/vendor/seccomp"

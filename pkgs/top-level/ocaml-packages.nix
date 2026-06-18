@@ -22,6 +22,8 @@ let
 
         afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
+        aeneas = callPackage ../development/ocaml-modules/aeneas { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
@@ -246,6 +248,8 @@ let
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
+        charon = callPackage ../development/ocaml-modules/charon { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
@@ -540,6 +544,8 @@ let
         earlybird = callPackage ../development/ocaml-modules/earlybird { };
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
+
+        easy_logging = callPackage ../development/ocaml-modules/easy_logging { };
 
         eigen = callPackage ../development/ocaml-modules/eigen {
           stdenv = pkgs.gcc14Stdenv;
@@ -1421,6 +1427,8 @@ let
 
         ### N ###
 
+        name_matcher_parser = callPackage ../development/ocaml-modules/name_matcher_parser { };
+
         nbd = pkgs.libnbd.override {
           ocamlPackages = self;
           buildOcamlBindings = true;
@@ -2093,9 +2101,7 @@ let
           inherit (pkgs) git;
         };
 
-        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
-          inherit (pkgs) git;
-        };
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix { };
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
@@ -2338,17 +2344,6 @@ let
 
         google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-        hol_light = callPackage ../applications/science/logic/hol_light {
-          camlp5 =
-            if lib.versionAtLeast camlp5.version "8.04.00" then
-              camlp5.overrideAttrs {
-                version = "8.03.2";
-                __intentionallyOverridingVersion = true;
-              }
-            else
-              camlp5;
-        };
-
         ### End ###
 
       }
@@ -2359,6 +2354,7 @@ let
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        hol_light = pkgs.hol_light; # Added 2026-06-02
         notty = throw "2026-05-05: notty is no longer maintained, use notty-community instead";
         ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";

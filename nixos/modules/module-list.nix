@@ -245,6 +245,7 @@
   ./programs/iio-hyprland.nix
   ./programs/immersed.nix
   ./programs/iotop.nix
+  ./programs/jai-jail.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
@@ -394,7 +395,6 @@
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
   ./security/default.nix
-  ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
   ./security/google_oslogin.nix
@@ -669,6 +669,7 @@
   ./services/hardware/dell-bios-fan-control.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
+  ./services/hardware/framework-control.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
   ./services/hardware/g810-led.nix
@@ -733,6 +734,7 @@
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/homebridge.nix
   ./services/home-automation/matter-server.nix
+  ./services/home-automation/matterjs-server.nix
   ./services/home-automation/openthread-border-router.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix
@@ -887,6 +889,7 @@
   ./services/misc/ihaskell.nix
   ./services/misc/iio-niri.nix
   ./services/misc/input-remapper.nix
+  ./services/misc/inventree.nix
   ./services/misc/invidious-router.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
@@ -1017,6 +1020,7 @@
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
   ./services/monitoring/do-agent.nix
+  ./services/monitoring/flap-alerted.nix
   ./services/monitoring/fluent-bit.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/gatus.nix
@@ -1030,6 +1034,7 @@
   ./services/monitoring/grafana-to-ntfy.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
+  ./services/monitoring/gs1200-exporter.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix
@@ -1047,6 +1052,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
   ./services/monitoring/nezha-agent.nix
+  ./services/monitoring/nezha.nix
   ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
@@ -1482,6 +1488,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/scheduling/prefect.nix
+  ./services/scheduling/scx-loader.nix
   ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
@@ -1792,6 +1799,7 @@
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/tabbyapi.nix
+  ./services/web-apps/tranquil-pds.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/tuliprox.nix
@@ -1954,6 +1962,7 @@
   ./system/boot/systemd/userdbd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
+  ./system/boot/tzpfms.nix
   ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix

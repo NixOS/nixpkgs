@@ -43,4 +43,8 @@ stdenvNoLibc.mkDerivation {
     incdir = "/${stdenv.targetPlatform.config}/include";
     libdir = "/${stdenv.targetPlatform.config}/lib";
   };
+
+  meta = {
+    homepage = "https://github.com/openrisc/newlib";
+  };
 }

@@ -29,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
@@ -503,7 +503,9 @@ in
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          for efi in "''${fwupd_efi[@]}"; do
+            ${lib.getExe cfg.secureBoot.sbctl} sign -o "/run/fwupd-efi/$(basename "$efi").signed" "$efi"
+          done
         '';
       };
 

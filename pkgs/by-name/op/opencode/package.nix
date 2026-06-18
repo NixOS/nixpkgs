@@ -16,13 +16,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.15.10";
+  version = "1.17.8";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qp67k8Z+VA81uukZYuu3yqqmg/L8pkxYZQrJBoE25tU=";
+    hash = "sha256-iReCFIJeJIOIs95v0ReVR/X1PnT5dSnR9O0TniyvPR8=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -75,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-r3S0HHNk4TeTHEd8vbvgF+AXl5lJAyrTq+u2T3W0PdA=";
+    outputHash = "sha256-ERywlcNEF9EUW3JDGH8987g+GAj76RylUtegqMvStyg=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -134,7 +137,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
            sysctl
          ]
        )
-     }
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
 
     install -Dm644 config.json $out/share/opencode/config.json
     install -Dm644 tui.json $out/share/opencode/tui.json
@@ -180,7 +184,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       delafthi
       DuskyElf
       graham33
-      superherointj
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [

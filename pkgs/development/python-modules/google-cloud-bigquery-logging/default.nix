@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-logging";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_logging";
     inherit (finalAttrs) version;
-    hash = "sha256-jgXYORisIBuJxLVgyd0Dig1aFR8CYWfjuBWsi+VgDew=";
+    hash = "sha256-/uWxsAr51ZW68LWrAXcaTAWwO5zuRo0eA77GLJacWa8=";
   };
 
   build-system = [ setuptools ];

@@ -40,7 +40,7 @@
   wayland-scanner,
   zenity,
   # for passthru.tests
-  SDL_compat,
+  sdl12-compat,
   sdl2-compat,
   sdl3-image,
   sdl3-ttf,
@@ -238,11 +238,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      SDL_compat.tests
+      sdl12-compat.tests
       // sdl2-compat.tests
       // {
         inherit
-          SDL_compat
+          sdl12-compat
           sdl2-compat
           sdl3-image
           sdl3-ttf

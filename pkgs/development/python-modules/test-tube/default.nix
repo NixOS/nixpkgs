@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   future,
   imageio,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "test-tube";
   version = "0.628";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "williamFalcon";

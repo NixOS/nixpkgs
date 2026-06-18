@@ -111,7 +111,6 @@
     "screenshot"
     "vram-report-limit"
   ],
-  mesa,
   mesa-gl-headers,
   makeSetupHook,
 }:
@@ -143,7 +142,7 @@ let
 
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit (common)
     pname
     version
@@ -395,20 +394,20 @@ stdenv.mkDerivation {
       ;
 
     # for compatibility
-    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" mesa;
+    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" finalAttrs.finalPackage;
 
     tests.outDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-does-not-depend-on-llvm";
       buildCommand = ''
-        echo ${mesa} >>$out
+        echo ${finalAttrs.finalPackage} >>$out
       '';
       disallowedRequisites = [ llvmPackages.llvm ];
     };
 
     llvmpipeHook = makeSetupHook {
       name = "llvmpipe-hook";
-      substitutions.mesa = mesa;
+      substitutions.mesa = finalAttrs.finalPackage;
       meta.license = lib.licenses.mit;
     } ./llvmpipe-hook.sh;
   };
-}
+})

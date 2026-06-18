@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nunicode";
-  version = "1.11";
+  version = "1.11.1";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alekseyt";
     repo = "nunicode";
     tag = finalAttrs.version;
-    hash = "sha256-6255YdX7eYSAj0EAE4RgX1m4XDNIF/Nc4ZCvXzTxpag=";
+    hash = "sha256-73jkbWbQGSya4hf+/5c2bpJsRmncgjA2m+6bud2UN0A=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, small and portable Unicode library with SQLite extension";
     homepage = "https://bitbucket.org/alekseyt/nunicode";
-    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.version}/CHANGELOG";
+    changelog = "https://bitbucket.org/alekseyt/nunicode/src/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     platforms = lib.platforms.unix;

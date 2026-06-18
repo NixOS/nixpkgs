@@ -6,31 +6,35 @@
 
 python3Packages.buildPythonApplication {
   pname = "joycond-cemuhook";
-  version = "0-unstable-2023-08-09";
+  version = "0-unstable-2024-12-27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joaorb64";
     repo = "joycond-cemuhook";
-    rev = "3c0e07374ff431a0f8ae70dbb0b5a62fb3de06ee";
-    hash = "sha256-K24CEmYWhgkvVX4geg2bylH8TSvHIpsWjsPwY5BpquI=";
+    rev = "fc2f29e22640b6615a32941cbdc03d41e3ee6f26";
+    hash = "sha256-ud9X+GfVzoPQM4bSDzczgrn8rJRmXy7tT6mBY3BNnFA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools-git-versioning<2' 'setuptools-git-versioning'
+      --replace-fail 'setuptools-git-versioning<2' "setuptools-git-versioning"
   '';
 
   build-system = with python3Packages; [
     setuptools
+    wheel
     setuptools-git-versioning
   ];
 
   dependencies = with python3Packages; [
-    dbus-python
     evdev
     pyudev
+    dbus-python
     termcolor
+    pygobject-stubs
+    # Not explicitly stated, but required
+    pygobject3
   ];
 
   meta = {

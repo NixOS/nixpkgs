@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "gridcoin-research" else "gridcoin-researchd";
-  version = "5.5.0.0";
+  version = "5.5.1.0";
 
   src = fetchFromGitHub {
     owner = "gridcoin-community";
     repo = "Gridcoin-Research";
     tag = "${finalAttrs.version}";
-    hash = "sha256-PN0yDVHlty+4CcRfMWe4LG6wHXaTOyLo7lxtrVCSLHA=";
+    hash = "sha256-J9/RigGEjd5lAJeWTOFlOE50Ak0/YS/I3Agd3XNA3uw=";
   };
 
   strictDeps = true;

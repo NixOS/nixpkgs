@@ -2,7 +2,6 @@
   fetchPypi,
   buildPythonPackage,
   setuptools,
-  future,
   packbits,
   pillow,
   pyusb,
@@ -14,24 +13,26 @@
 
 buildPythonPackage rec {
   pname = "brother-ql";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "brother_ql_next";
     inherit version;
-    hash = "sha256-3rTf+4W5KK7zSGIE3bBHXHE0hjyvpjB0IiEtbax6mkU=";
+    hash = "sha256-NTw5hlMJRoABvbteyCYF0Kopc9AjNyuwLSB+zS3RYRQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
     setuptools
-    future
+  ];
+
+  dependencies = [
+    attrs
+    click
+    jsons
     packbits
     pillow
     pyusb
-    click
-    attrs
-    jsons
   ];
 
   meta = {

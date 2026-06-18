@@ -69,14 +69,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.60.0";
+  version = "2.61.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = finalAttrs.version;
-    hash = "sha256-ny1MDl0J/TeYtlzpIuNUy9FR/+pEDF0+AOZNU4nJey4=";
+    hash = "sha256-+F2obD5Yu2ASE8vJTDMzo/ObgH+GHhYBuvjYFAOQ/QM=";
   };
 
   postPatch = ''
@@ -223,7 +223,7 @@ buildPythonPackage (finalAttrs: {
     "test_span_templates_ai_dicts"
     "test_span_templates_ai_objects"
   ]
-  ++ lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (pythonAtLeast "3.13" && stdenv.hostPlatform.isDarwin) [
     # profiler_id not populated on darwin
     "test_profile_stops_when_segment_ends"
     "test_segment_span_has_profiler_id"

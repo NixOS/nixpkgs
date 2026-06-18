@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pls";
-  version = "0.0.1-beta.9";
+  version = "0.0.1-beta.10";
 
   src = fetchFromGitHub {
     owner = "pls-rs";
     repo = "pls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ofwdhGpqYlADDY2BLe0SkoHWqSeRNtQaXK61zWVFXzw=";
+    hash = "sha256-j0bYikR0DoHRcArNnHsuYxdYqT9YjsH1g+T3s16UmcI=";
   };
 
-  cargoHash = "sha256-P+4jRuakDUPaICJPsNJ6nXfhm09K/GC/VA9bsTXIMvc=";
+  cargoHash = "sha256-eh0beK1UYf/Xe30wGxli6dfPKh875yTnOn7CCN2XTtI=";
 
   meta = {
     changelog = "https://github.com/pls-rs/pls/releases/tag/${finalAttrs.src.tag}";

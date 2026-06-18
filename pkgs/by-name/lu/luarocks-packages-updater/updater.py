@@ -76,6 +76,7 @@ LICENSE_NORMALIZATION = {
     "BSD-3-Clause": "lib.licenses.bsd3",
     "GPL-2+": "lib.licenses.gpl2Plus",
     "GPL-2.0": "lib.licenses.gpl2Only",
+    "GPL-2.0+": "lib.licenses.gpl2Plus",
     "GPL-2.0-only": "lib.licenses.gpl2Only",
     "GPL-2.0-or-later": "lib.licenses.gpl2Plus",
     "GPL-3.0": "lib.licenses.gpl3Only",
@@ -170,7 +171,7 @@ def commit_files(repo, message: str, files: list[Path]) -> None:
 class LuaEditor(nixpkgs_plugin_update.Editor):
     def create_parser(self):
         parser = super().create_parser()
-        parser.set_defaults(proc=1)
+        parser.set_defaults(proc=1, update_only=None)
         return parser
 
     def get_current_plugins(self, _config: FetchConfig, _nixpkgs: str):

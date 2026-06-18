@@ -20,8 +20,8 @@ let
       plasma = import ./plasma { inherit (self) callPackage; };
 
       sets = [
-        "gear"
         "frameworks"
+        "gear"
         "plasma"
       ];
 
@@ -69,6 +69,7 @@ let
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
+        cxx-rust-cssparser = self.callPackage ./misc/cxx-rust-cssparser { };
         glaxnimate = self.callPackage ./misc/glaxnimate { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
@@ -81,7 +82,6 @@ let
         kup = self.callPackage ./misc/kup { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };
-        oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
         plasma-pass = self.callPackage ./misc/plasma-pass { };

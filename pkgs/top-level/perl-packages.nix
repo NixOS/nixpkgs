@@ -1785,10 +1785,10 @@ with self;
 
   ArchiveTar = buildPerlPackage {
     pname = "Archive-Tar";
-    version = "3.02";
+    version = "3.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.02.tar.gz";
-      hash = "sha256-gWM8h/c3hGGD01wPTJ1ALalHqEa0iBswzObZ6+PInRk=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.12.tar.gz";
+      hash = "sha256-ARTvObZfSfiWgoOrR3Gdfoj5jXNg/jZJvjMcf1PVgyw=";
     };
     meta = {
       description = "Manipulates TAR archives";
@@ -3702,12 +3702,17 @@ with self;
 
   CatalystPluginAuthentication = buildPerlPackage {
     pname = "Catalyst-Plugin-Authentication";
-    version = "0.10023";
+    version = "0.10_027";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Authentication-0.10023.tar.gz";
-      hash = "sha256-NgOaq9rLB+Zoek16i/rHj+nQ+7BM2o1tlm1sHjJZ0Gw=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Plugin-Authentication-0.10_027.tar.gz";
+      hash = "sha256-XSnccFKKKnFGYChaHjQh8VSur4hNCXjVPyR6pKugq6w=";
     };
-    buildInputs = [ TestException ];
+    buildInputs = [
+      TestException
+      TestFatal
+      CatalystPluginSessionStateCookie
+    ];
+    doCheck = false; # t/live_app.t fails on crypted password tests with Perl 5.42
     propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
       description = "Infrastructure plugin for the Catalyst authentication framework";
@@ -7965,10 +7970,10 @@ with self;
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.088";
+    version = "0.089";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.088.tar.gz";
-      hash = "sha256-kUn4t0JjRWbpgbmUn7fZs/Qa7zbvBOziG1HPNRU8SUA=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.089.tar.gz";
+      hash = "sha256-8Od8few5ZxqFnzjfJdK/8wARvPVfLZ0PIMJrekR8n7Q=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -9726,11 +9731,18 @@ with self;
 
   DBDCSV = buildPerlPackage {
     pname = "DBD-CSV";
-    version = "0.60";
+    version = "0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.60.tgz";
-      hash = "sha256-AYuDow95mXm8jDwwRMixyAAc32C9w+dGhIgYGVJUtOc=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.62.tgz";
+      hash = "sha256-0/EVD+IGfA49FJWHZeqNQZWDSY+WMTawQC2qkwvJMOM=";
     };
+    patches = [
+      (fetchpatch2 {
+        url = "https://github.com/perl5-dbi/DBD-CSV/commit/ae091790398088a66b22fa572856bfeb4db4c78a.patch?full_index=1";
+        excludes = [ "ChangeLog" ];
+        hash = "sha256-eZdCNSi3YJrZdZcK/8nFx5Q4rB89b0ynKemupvKrfys=";
+      })
+    ];
     propagatedBuildInputs = [
       DBI
       SQLStatement
@@ -9997,11 +10009,11 @@ with self;
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.644";
+    version = "1.648";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.644.tar.gz";
-      hash = "sha256-Ipe5neCeZwhmQLWQaZ4OmC+0adpjqT/ijcFHgtt6U8g=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.648.tgz";
+      hash = "sha256-7yZqrWAQzi6rt+Rl69c8owILxYFQ9pib2Jwrj5usaoY=";
     };
 
     env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -17146,12 +17158,12 @@ with self;
     };
   };
 
-  Imager = buildPerlPackage {
+  Imager = buildPerlPackage rec {
     pname = "Imager";
-    version = "1.025";
+    version = "1.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.025.tar.gz";
-      hash = "sha256-TwJ1y7HgEdfz/sYE3GtgwaxvAt78KYs9A31ur3vqcFg=";
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-${version}.tar.gz";
+      hash = "sha256-kL59G9/F7bfxfPgreeamYUxbAuv+Mm67b2afzaeRNAE=";
     };
     buildInputs = [
       pkgs.freetype
@@ -17168,6 +17180,7 @@ with self;
       "${pkgs.libpng.out}/lib"
     ];
     meta = {
+      changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
       homepage = "http://imager.perl.org";
       license = with lib.licenses; [
@@ -21537,6 +21550,23 @@ with self;
       description = "Mail-to-HTML converter";
       mainProgram = "mhonarc";
       license = with lib.licenses; [ gpl2Only ];
+    };
+  };
+
+  MIMEBase32 = buildPerlPackage {
+    pname = "MIME-Base32";
+    version = "1.303";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/MIME-Base32-1.303.tar.gz";
+      hash = "sha256-qyH6mRMOM6Cv9s21lvZH5eVl0gfWNLou8Gvb71BCTpk=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/MIME-Base32";
+      description = "Base32 encoder and decoder";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -32585,12 +32615,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "12.1.0";
+    version = "12.4.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-WjTDvmnj1i1hoC6dska1VEJOiKi+obPjGlO7T2Now+U=";
+      hash = "sha256-GMZvSRZnxrPvhhLOJoFnNas7+ccsGXsL6s16EAeeFJQ=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
@@ -39504,15 +39534,23 @@ with self;
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "6.000003";
+    version = "8.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v6.0.3.tar.gz";
-      hash = "sha256-oYDBYVygvPUZ9vrGX/y5A0MAQ6zgSsrf6AtUdFcZG4Q=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v8.0.1.tar.gz";
+      hash = "sha256-QLUza9M72r/q1W+uhG5pn6YWz7dDJQ0rIq3NyDVUtjU=";
     };
+    buildInputs = [
+      JSONValidator
+      TestDifferences
+      TestException
+      TestNoWarnings
+    ];
     propagatedBuildInputs = [
       JSONXS
       MooseXGetopt
+      NetIPXS
       TextReflow
+      TryTiny
       ZonemasterEngine
       ZonemasterLDNS
       libintl-perl
@@ -39531,13 +39569,15 @@ with self;
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.6.1";
+    version = "8.1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
-      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v8.1.1.tar.gz";
+      hash = "sha256-QlQQ+saL++8A1MW9dqMRzDNH6cydyQl9HB3cXanudGI=";
     };
     buildInputs = [
+      LocalePO
       PodCoverage
+      SubOverride
       TestDifferences
       TestException
       TestFatal
@@ -39551,15 +39591,17 @@ with self;
       FileShareDir
       FileSlurp
       IOSocketINET6
+      ListCompare
       ListMoreUtils
+      LogAny
+      MailSPF
       ModuleFind
-      Moose
-      MooseXSingleton
-      NetIP
+      NetDNS
       NetIPXS
       Readonly
       TextCSV
       ZonemasterLDNS
+      YAMLLibYAML
       libintl-perl
     ];
 
@@ -39571,10 +39613,10 @@ with self;
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "3.2.0";
+    version = "5.0.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.2.0.tar.gz";
-      hash = "sha256-BpsWQRcpX6gtJSlAocqLMIrYsfPocjvk6CaqqX9wbWw=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-5.0.2.tar.gz";
+      hash = "sha256-IP1f+7SgnQ1vv9BjkBoSsa7rv9k3KoXOLUVcmkwJqYY=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
@@ -39584,10 +39626,13 @@ with self;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
       DevelChecklib
+      ExtUtilsPkgConfig
+      MIMEBase32
       ModuleInstall
       ModuleInstallXSUtil
       TestFatal
       TestDifferences
+      TestException
       pkgs.ldns
       pkgs.libidn2
       pkgs.openssl

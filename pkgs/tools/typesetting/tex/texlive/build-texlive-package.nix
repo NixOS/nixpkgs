@@ -106,11 +106,8 @@ let
     lib.optional hasBinfiles "out"
     ++ lib.optional hasRunfiles "tex"
     ++ lib.optional hasDocfiles "texdoc"
-    ++
-      # omit building sources, since as far as we know, installing them is not common
-      # the sources will still be available under drv.texsource
-      # lib.optional hasSource "texsource" ++
-      lib.optional hasTlpkg "tlpkg"
+    ++ lib.optional hasSource "texsource"
+    ++ lib.optional hasTlpkg "tlpkg"
     ++ lib.optional hasManpages "man"
     ++ lib.optional hasInfo "info";
   outputDrvs = lib.getAttrs outputs containers;

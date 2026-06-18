@@ -15,7 +15,7 @@
   mp4v2,
   libmysqlclient,
   mariadb,
-  pcre,
+  pcre2,
   perl,
   perlPackages,
   polkit,
@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     mp4v2
     libmysqlclient
     mariadb
-    pcre
+    pcre2
     perl
     polkit
     x264

@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "AlexxIT";
   domain = "yandex_station";
-  version = "3.21.1";
+  version = "3.21.2";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "YandexStation";
     tag = "v${version}";
-    hash = "sha256-5a+631Gu7xaPq8EF+34bybm40YVTXPA/ylq6k8LPBNU=";
+    hash = "sha256-TjrBb7MatydixSEEAcM7ezQ8hDGKxTapD2h40c/0AxQ=";
   };
 
   dependencies = [
@@ -36,7 +36,7 @@ buildHomeAssistantComponent rec {
     home-assistant
     pytestCheckHook
   ]
-  ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ++ (home-assistant.getPackages "stream" home-assistant.python3Packages);
 
   meta = {
     changelog = "https://github.com/AlexxIT/YandexStation/releases/tag/${src.tag}";

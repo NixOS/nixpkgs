@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.12.0";
+  version = "5.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v4hONQ3EmpenjnAVKm8YMrynVyxtduefN5oqGW9MoE0=";
+    hash = "sha256-SqFU7hhcykP/VSSiPLQPi62iAkgcSw6vwmXq+FpIt9w=";
   };
 
   pythonRelaxDeps = [

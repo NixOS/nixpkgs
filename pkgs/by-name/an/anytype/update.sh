@@ -57,5 +57,6 @@ tantivy_go_version=${tantivy_go_version//v}
 
 nix-update tantivy-go --version "$tantivy_go_version" --generate-lockfile
 nix-update anytype-heart --version "$middleware_version"
-update-source-version anytype --ignore-same-version --source-key=locales --rev="$locales_rev"
+update-source-version anytype --source-key=locales --rev="$locales_rev" --ignore-same-version
 nix-update anytype --version "$anytype_version"
+update-source-version anytype --source-key=node_modules --ignore-same-version --ignore-same-hash

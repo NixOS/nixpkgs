@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-Wls7dJkuV/RXnMizwrYOJOKopWEf1r21FKoKHjmpEQ0=";
   };
 
+  patches = [
+    # Fix measure_kickback lambda return type deduction under pybind11 3.0.
+    ./fix-measure-kickback-lambda-return-type.patch
+  ];
+
   postPatch = ''
     # asked to relax this in https://github.com/quantumlib/Stim/issues/623
     substituteInPlace pyproject.toml \

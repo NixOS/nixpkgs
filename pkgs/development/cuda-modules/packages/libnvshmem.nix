@@ -32,7 +32,7 @@
   withIbgda ? true,
   withLibfabric ? true,
   withMpi ? true,
-  withNccl ? true,
+  withNccl ? nccl.meta.available,
   withPmix ? true,
   withUcx ? true,
 }:

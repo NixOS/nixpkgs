@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-data-flows";
   version = "1.5.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Alef-Burzmali";
     repo = "netbox-data-flows";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fry8AK0qgPs+QC5L2oilGSY68m1Y9KHWQ/QOzQ7B2+k=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin to document data flows between systems and applications";
     homepage = "https://github.com/Alef-Burzmali/netbox-data-flows";
-    changelog = "https://github.com/Alef-Burzmali/netbox-data-flows/releases/tag/${src.tag}";
+    changelog = "https://github.com/Alef-Burzmali/netbox-data-flows/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

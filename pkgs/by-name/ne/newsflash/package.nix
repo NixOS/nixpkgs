@@ -13,9 +13,11 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   clapper-unwrapped,
+  glycin-loaders,
   gtk4,
   gtksourceview5,
   libadwaita,
+  libglycin,
   libseccomp,
   libxml2,
   openssl,
@@ -57,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     cargo
     desktop-file-utils
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -71,9 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     clapper-unwrapped
+    glycin-loaders
     gtk4
     gtksourceview5
     libadwaita
+    libglycin
     libseccomp
     libxml2
     openssl

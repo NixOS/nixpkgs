@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kubazip";
-  version = "0.3.8";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "kuba--";
     repo = "zip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iVxUxF1zF5cEUyENRZKMCw6MRd0hrsokY+UD6jwbBTA=";
+    hash = "sha256-TybHYS8QYpGXzmtLygbUp29AX/dgf/I3yQ0Teny7Cg4=";
   };
 
   postPatch = ''

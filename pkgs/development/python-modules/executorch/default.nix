@@ -54,7 +54,7 @@
 }:
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +68,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-Rkw6+keOygQaf6iOCpGoW9JgXiCimgx8gsxLEH3bxME=";
+    hash = "sha256-UyMPY+qYTHYZDeftj4YVqzO2ibTswzd+HWW5JeXHW0Q=";
   };
 
   postPatch =
@@ -76,8 +76,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ''
       substituteInPlace exir/_serialize/_flatbuffer.py \
         --replace-fail \
-          'flatc_path = "flatc"' \
-          'flatc_path = "${lib.getExe pkgs.flatbuffers}"'
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "flatc")' \
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "${lib.getExe pkgs.flatbuffers}")'
     ''
     # Relax build-system dependencies
     + ''

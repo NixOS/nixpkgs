@@ -19,20 +19,20 @@
 }:
 buildDotnetModule rec {
   pname = "undercut-f1";
-  version = "3.4.32";
+  version = "4.0.73";
   src = fetchFromGitHub {
     owner = "JustAman62";
     repo = "undercut-f1";
     tag = "v${version}";
-    hash = "sha256-A4IZNiVhUZNSBlFvIqAEJGf48uVrjIhe2w5YabtCPEc=";
+    hash = "sha256-EZnJDkgQK5je/xrw3+hDK3jqzKDaRbSmNPIVIL5F/8I=";
   };
 
   projectFile = "UndercutF1.Console/UndercutF1.Console.csproj";
 
   executables = [ "undercutf1" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -52,7 +52,11 @@ buildDotnetModule rec {
   ];
 
   postPatch = ''
-    rm -f .config/dotnet-tools.json
+      rm -f .config/dotnet-tools.json
+      substituteInPlace UndercutF1.Console/UndercutF1.Console.csproj --replace-fail \
+        "<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>" \
+        "<EnableCompressionInSingleFile>false</EnableCompressionInSingleFile><DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>"
   '';
 
   postFixup = ''
@@ -66,9 +70,11 @@ buildDotnetModule rec {
   '';
 
   dotnetBuildFlags = [
-    "-p:PublishSingleFile=true"
+    "-p:DebugType=None"
     "-p:IncludeNativeLibrariesForSelfExtract=true"
+    "-p:IncludeAllContentForSelfExtract=true"
     "-p:OverridePackageVersion=${version}"
+    "-p:PublicRelease=true"
   ];
 
   dotnetPublishFlags = [

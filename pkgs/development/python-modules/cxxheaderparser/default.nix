@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cxxheaderparser";
-  version = "1.7.0";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robotpy";
     repo = "cxxheaderparser";
     tag = version;
-    hash = "sha256-Go5oIYwB2DONPbgajQuXfgpUCiGZvgcTZuFJ5z5qC3U=";
+    hash = "sha256-1i8HbVq1dEXktKCZg/ZGX0n5J8LrZx64flMCP/c6ltI=";
   };
 
   postPatch = ''

@@ -11,7 +11,7 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace vite.config.ts \
-      --replace-fail "../proxy/ui_dist" "${placeholder "out"}/ui_dist"
+      --replace-fail "../internal/server/ui_dist" "${placeholder "out"}/ui_dist"
   '';
 
   sourceRoot = "${finalAttrs.src.name}/ui-svelte";

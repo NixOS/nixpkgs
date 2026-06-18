@@ -5,7 +5,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "buildkite-agent-metrics";
-  version = "5.12.2";
+  version = "5.12.3";
 
   __darwinAllowLocalNetworking = true;
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O/6YGxX7sJEaqmMMzOPxkiIWJs1VRa+tgZ2w8UjfoKk=";
+    hash = "sha256-h6RPAqRNCcsT49d+D+q3FShoPZK4z7e8JCkB1FOHgNY=";
   };
 
   vendorHash = "sha256-2os2V1iyw1k6XwX2wLz0abMnu+X5p+Aqau7ajC3JIRc=";
@@ -35,5 +35,6 @@ buildGoModule (finalAttrs: {
     description = "Command-line tool (and Lambda) for collecting Buildkite agent metrics";
     homepage = "https://github.com/buildkite/buildkite-agent-metrics";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cbrxyz ];
   };
 })

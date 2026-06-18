@@ -5,7 +5,6 @@
   fetchFromGitHub,
   makeWrapper,
   electron_40,
-  vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -22,16 +21,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.27.2";
+  version = "1.27.3";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VaHIDhTYcGT4J7ken/Cz0QwSlL42RMcP4lqFR4P7/SM=";
+    hash = "sha256-25Iu/bKUCotJdQESxPPOiYehwn+D3RYnZiJfMWJ4cn0=";
   };
 
-  npmDepsHash = "sha256-2NeiCpcX1j7z+PtIF3euQamVTa+6G4SEHPGk8IVC1Dw=";
+  npmDepsHash = "sha256-gWI21dPha7yX367r50U3C9wpX5/6oBzHGJNtFmG/GQ8=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -67,16 +66,11 @@ buildNpmPackage (finalAttrs: {
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-  ''
-  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
-  # See: https://github.com/electron-userland/electron-builder/pull/9007
-  + ''
+
     npm run electron:pack
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
 
     ./node_modules/.bin/electron-builder \
         --dir \

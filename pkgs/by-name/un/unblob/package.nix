@@ -46,21 +46,21 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "26.3.30";
+  version = "26.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-wYWuKvxAagctlmdO5Fi9/WzfJ4zkDgfXejgDTJPHsTI=";
+    hash = "sha256-NV4xnTejDW8mTxv0BGB4n+M/bxTMd4GWQQPXhqw5f2Y=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-wjN4QPOUYFWWYMWL9aAgGqEucM7q+H6YyoS9Mv2dpp4=";
+    hash = "sha256-lEpnpvPwred1KRXxuM1KPxKbIIJUGvR0tmj16QyL5UQ=";
   };
 
   strictDeps = true;

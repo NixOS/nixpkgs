@@ -43,7 +43,7 @@ buildHomeAssistantComponent rec {
     aioresponses
     pytest-freezegun
   ]
-  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
+  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
   preCheck = ''
     patchShebangs --build tests/setup.sh

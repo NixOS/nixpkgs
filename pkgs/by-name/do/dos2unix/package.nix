@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dos2unix";
-  version = "7.5.4";
+  version = "7.5.5";
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/dos2unix-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+BGiueSgyTbGHvfBcymT0YIOXPAR9Nk4YYhcy4EByiE=";
+    hash = "sha256-dfaSuEhMjCRXmi/9h98WuclCjtlUl+M5OiHRugaXrDM=";
   };
 
   nativeBuildInputs = [

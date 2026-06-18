@@ -71,7 +71,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

@@ -5,8 +5,10 @@
   fetchurl,
   cmake,
   pkg-config,
+  installShellFiles,
   libusb1,
   openssl,
+  stdenv,
 }:
 
 let
@@ -36,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -45,6 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd probe-rs \
+      --bash <(SHELL=bash $out/bin/probe-rs complete install -m) \
+      --fish <(SHELL=fish $out/bin/probe-rs complete install -m) \
+      --zsh <(SHELL=zsh $out/bin/probe-rs complete install -m)
   '';
 
   checkFlags = [

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotty";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "sorenisanerd";
     repo = "gotty";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zdVwK/+vJmPAgvgQZB63t1M7DbaCvgln7m95u98D9ds=";
+    sha256 = "sha256-+ZcFKMx9wfty3DIgN9lb9N9CZaZfO76VwvuzWR9yrvo=";
   };
 
   vendorHash = "sha256-MvNCq1kWhfVJz4h6G0yAwJd8Z4xRtcu2WjeEhoTW5L8=";

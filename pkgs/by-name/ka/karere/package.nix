@@ -2,57 +2,72 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rustPlatform,
+  cargo,
   meson,
   ninja,
   pkg-config,
-  cargo,
+  rustPlatform,
   rustc,
   wrapGAppsHook4,
   blueprint-compiler,
   desktop-file-utils,
-  appstream,
-  gtk4,
   libadwaita,
   webkitgtk_6_0,
   glib-networking,
+  gst_all_1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karere";
-  version = "2.5.5";
+  version = "3.1.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "tobagin";
     repo = "karere";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cR4+nZvz7ELy9/POX9yZiryVcCcpC63mFhZ6kvR33i8=";
+    hash = "sha256-VJGTpkMkYKvU/I/DoyBMD9deciLzmrs48If1wQutvnE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-h51B8iGiMWHbHogJSAKdm27QDBPzlrkCxlYOj9T4SuI=";
+    hash = "sha256-48ai2Jf/Uo+sXsT78v4usVEAn1zV/YVz4FZZs2ZZDa8=";
   };
 
   nativeBuildInputs = [
+    cargo
     meson
     ninja
     pkg-config
-    cargo
-    rustc
     rustPlatform.cargoSetupHook
+    rustc
     wrapGAppsHook4
     blueprint-compiler
     desktop-file-utils
-    appstream
   ];
 
   buildInputs = [
-    gtk4
     libadwaita
     webkitgtk_6_0
     glib-networking
-  ];
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-libav
+  ]);
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set FLATPAK_ID io.github.tobagin.karere
+    )
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Gtk4 Whatsapp client";
