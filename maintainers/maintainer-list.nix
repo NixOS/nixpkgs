@@ -6647,6 +6647,12 @@
     githubId = 8864716;
     name = "Duarte David";
   };
+  demic-dev = {
+    email = "git@demic.dev";
+    github = "demic-dev";
+    githubId = 59309595;
+    name = "Michele De Cillis";
+  };
   demin-dmitriy = {
     email = "demindf@gmail.com";
     github = "demin-dmitriy";
