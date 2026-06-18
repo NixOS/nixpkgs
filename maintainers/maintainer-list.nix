@@ -27917,6 +27917,12 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+  verantor = {
+    email = "verantor@protonmail.com";
+    github = "Verantor";
+    githubId = 56546640;
+    name = "Verantor";
+  };
   versality = {
     email = "artyom@pertsovsky.com";
     github = "versality";
