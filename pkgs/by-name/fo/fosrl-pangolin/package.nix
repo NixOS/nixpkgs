@@ -35,32 +35,38 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.18.4";
+  version = "1.19.4";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-b8fXjjsPAN8KI0jxshGJGJSLcRTG5x8bBwlZjxKOdP0=";
+    hash = "sha256-Joo7N92ZbKybD15ojIIoEtjLjzcho5PqAzuGlj17zag=";
   };
 
-  npmDepsHash = "sha256-+qsHvytwAIbbNYpgNT6I7lekpxY0mUWcWGA9dT6rbtc=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-XOuP3WgV9Xt2uRhHVmnjjf46RV+Pv1pl8a71yTizn10=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # dependency resolution is borked
-  npmFlags = [ "--legacy-peer-deps" ];
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
+  '';
 
   # upstream inconsistently updates this
   # so leaving this here in case it's needed
-  # postPatch = ''
-  #   substituteInPlace server/lib/consts.ts --replace-fail \
-  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
-  #     'export const APP_VERSION = "${finalAttrs.version}";'
-  # '';
+  postPatch = ''
+    substituteInPlace server/lib/consts.ts --replace-fail \
+      'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+      'export const APP_VERSION = "${finalAttrs.version}";'
+  '';
 
   preBuild = ''
     npm run set:${db false}
