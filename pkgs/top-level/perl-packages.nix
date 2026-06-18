@@ -17004,10 +17004,10 @@ with self;
 
   HTTPMessage = buildPerlPackage {
     pname = "HTTP-Message";
-    version = "6.45";
+    version = "7.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.45.tar.gz";
-      hash = "sha256-AcuEBmEqP3OIQtHpcxOuTYdIcNG41tZjMfFgAJQ9TL4=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-7.02.tar.gz";
+      hash = "sha256-eKvvHYMxRrSNF9shmxsD1Ty743oozNrQ79zFgzylxgw=";
     };
     buildInputs = [
       TestNeeds
@@ -17015,8 +17015,11 @@ with self;
     ];
     propagatedBuildInputs = [
       Clone
+      CompressRawBzip2
+      CompressRawZlib
       EncodeLocale
       HTTPDate
+      IOCompress
       IOHTML
       LWPMediaTypes
       URI
