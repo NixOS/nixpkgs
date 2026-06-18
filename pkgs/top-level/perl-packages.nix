@@ -12573,6 +12573,27 @@ with self;
     };
   };
 
+  ExtUtilsBuilderCompiler = buildPerlPackage {
+    pname = "ExtUtils-Builder-Compiler";
+    version = "0.037";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-Compiler-0.037.tar.gz";
+      hash = "sha256-s5VNaI45gDkoUnkWfG6+7nVX8Q6VYBzj/baBkyY2h7g=";
+    };
+    propagatedBuildInputs = [
+      ExtUtilsBuilder
+      ExtUtilsConfig
+    ];
+    meta = {
+      description = "Interface around different compilers";
+      homepage = "https://github.com/Leont/extutils-builder-compiler";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ExtUtilsCChecker = buildPerlModule {
     pname = "ExtUtils-CChecker";
     version = "0.11";
