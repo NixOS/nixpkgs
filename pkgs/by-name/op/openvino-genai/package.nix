@@ -42,11 +42,19 @@ let
   };
 
   python = python3Packages.python.withPackages (ps: [ ps.pybind11 ]);
+
+  # How the build system calls the different platforms
+  archName =
+    {
+      "aarch64-linux" = "aarch64";
+      "x86_64-linux" = "intel64";
+    }
+    .${stdenv.hostPlatform.system};
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.2.0.0";
+  version = "2026.2.1.0";
 
   __structuredAttrs = true;
 
@@ -56,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino.genai";
       tag = finalAttrs.version;
-      hash = "sha256-C60e4F+NuUPA4pQ/o2+EekOmp47QH1fTGDyXYqPJ57s=";
+      hash = "sha256-M8xxOsNvtIYIKvkrmOUnKv6gL/RAGuBfTBu3OPm3zRk=";
     };
 
   outputs = [
@@ -147,7 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
         "\''${_IMPORT_PREFIX}/runtime/include" "$dev/include"
     substituteInPlace $dev/lib/cmake/OpenVINOGenAITargets-release.cmake \
       --replace-fail \
-        "\''${_IMPORT_PREFIX}/runtime/lib/intel64/" "$out/lib/"
+        "\''${_IMPORT_PREFIX}/runtime/lib/${archName}/" "$out/lib/"
+  '';
+
+  preFixup = ''
+    addAutoPatchelfSearchPath ${lib.getLib openvino}/runtime/lib/${archName}
   '';
 
   postFixup = ''
@@ -164,7 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ openvino-tokenizers ];
 
-  doCheck = true;
+  # C++ exception with description "Exception from src/inference/src/cpp/core.cpp:272:
+  # Exception from src/inference/src/dev/core_impl.cpp:706:
+  # Device with "CPU" name is not registered in the OpenVINO Runtime
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     mkdir -p tests/cpp/data
