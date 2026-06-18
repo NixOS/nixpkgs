@@ -74,6 +74,8 @@ buildPythonPackage {
     ];
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
   };
 }
