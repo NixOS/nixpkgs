@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://drobilla.net/software/lilv";
+    changelog = "https://gitlab.com/lv2/lilv/-/blob/v${version}/NEWS";
     description = "C library to make the use of LV2 plugins";
     license = lib.licenses.mit;
     maintainers = [ ];
