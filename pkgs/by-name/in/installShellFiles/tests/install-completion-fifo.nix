@@ -14,10 +14,12 @@ runCommandLocal "install-shell-files--install-completion-fifo"
       --bash --name foo.bash <(echo foo) \
       --zsh --name _foo <(echo bar) \
       --fish --name foo.fish <(echo baz) \
-      --nushell --name foo.nu <(echo bucks)
+      --nushell --name foo.nu <(echo bucks) \
+      --elvish --name foo.elv <(echo qux)
 
     [[ $(<$out/share/bash-completion/completions/foo.bash) == foo ]] || { echo "foo.bash comparison failed"; exit 1; }
     [[ $(<$out/share/zsh/site-functions/_foo) == bar ]] || { echo "_foo comparison failed"; exit 1; }
     [[ $(<$out/share/fish/vendor_completions.d/foo.fish) == baz ]] || { echo "foo.fish comparison failed"; exit 1; }
     [[ $(<$out/share/nushell/vendor/autoload/foo.nu) == bucks ]] || { echo "foo.nu comparison failed"; exit 1; }
+    [[ $(<$out/share/elvish/completions/foo.elv) == qux ]] || { echo "foo.elv comparison failed"; exit 1; }
   ''
