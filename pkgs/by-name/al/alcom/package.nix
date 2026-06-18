@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${subdir}";
     hash = "sha256-VyA2c2659Kg1DjLmmtvSAivltdraSBNArIu1XGENGmQ=";
