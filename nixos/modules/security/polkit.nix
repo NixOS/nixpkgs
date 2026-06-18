@@ -173,4 +173,7 @@ in
     users.groups.polkituser = { };
   };
 
+  meta = {
+    maintainers = with lib.maintainers; [ zimward ];
+  };
 }
