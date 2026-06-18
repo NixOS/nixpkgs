@@ -15,6 +15,9 @@ on:
       targetSha:
         required: true
         type: string
+      baseBranch:
+        required: true
+        type: string
       systems:
         required: true
         type: string
@@ -291,6 +294,7 @@ jobs:
       - name: Compare against the target branch
         env:
           TARGET_SHA: ${{ inputs.mergedSha }}
+          BASE_BRANCH: ${{ fromJSON(inputs.baseBranch).branch }}
         run: |
           git -C nixpkgs/trusted diff --name-only "$TARGET_SHA" \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
@@ -299,6 +303,7 @@ jobs:
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.compare \
             --arg combinedDir ./combined \
             --arg touchedFilesJson ./touched-files.json \
+            --argstr baseBranch "$BASE_BRANCH" \
             --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
