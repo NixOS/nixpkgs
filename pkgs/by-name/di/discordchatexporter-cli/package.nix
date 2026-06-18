@@ -9,19 +9,19 @@
 
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";
-  version = "2.43.3";
+  version = "2.47.2";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    hash = "sha256-r9bvTgqKQY605BoUlysSz4WJMxn2ibNh3EhoMYCfV3c=";
+    hash = "sha256-2Sft+8K74vVTpNEgAJ0Y13pn+KiTUdd/5prR1aT6ET4=";
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetBuildFlags = [
     # workaround for https://github.com/belav/csharpier/pull/1696
