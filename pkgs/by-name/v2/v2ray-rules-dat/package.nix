@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Enhanced edition of V2Ray rules dat files";
     homepage = "https://github.com/Loyalsoldier/v2ray-rules-dat";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nix-julia ];
   };
 }
