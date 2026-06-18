@@ -4084,6 +4084,20 @@ assertNoAdditions {
     };
   });
 
+  slimline-nvim = super.slimline-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Component modules read the user-supplied slimline.config at require time.
+      "slimline.components.diagnostics"
+      "slimline.components.filetype_lsp"
+      "slimline.components.mode"
+      "slimline.components.path"
+      "slimline.components.progress"
+      "slimline.components.recording"
+      "slimline.components.searchcount"
+      "slimline.components.selectioncount"
+    ];
+  };
+
   smart-open-nvim = super.smart-open-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
