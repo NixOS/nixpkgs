@@ -459,8 +459,8 @@ in
       "sha256-02BUkAFhr9sT8ohkJJFPYNni0O9/UI/G0GUee/Kx5Dw=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.43.27"
-      "sha256-wdq6dIF6tbjhIBVRUY8GKbOwkJVyKNFGPniisK7uzVU=";
+    buildMypyBoto3Package "ecs" "1.43.32"
+      "sha256-pMGBaM4f26LMyu+uU4/TA7B9Mfh2PDSrH0RmKturmf8=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.43.23"
@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.29"
-      "sha256-y9RO80gAmBTVUy/QHeWfGcIVMsoZjC6UuZPA3Br1n/I=";
+    buildMypyBoto3Package "glue" "1.43.32"
+      "sha256-wV0hi33q2UoKY4LiXQmplnsMuJzf2QGhj1m77Lir08U=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
