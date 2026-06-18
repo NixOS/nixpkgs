@@ -206,7 +206,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       adda
-      weirdrock
     ];
     mainProgram = "rimsort";
     # steamworksSrc is x86_64-linux only
