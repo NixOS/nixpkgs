@@ -39503,11 +39503,12 @@ with self;
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.89";
+    version = "0.907.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.89.tar.gz";
-      hash = "sha256-FVq4NnU0XFCt0DMRrPndkVlVcH+Qmiq9ixfXeShZsuw=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-v0.907.0.tar.gz";
+      hash = "sha256-a6CHIkkROJ52+hmLFJzsg/BlsKx13cUmGPNJCULNlQY=";
     };
+    buildInputs = [ TestWarnings ];
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";
       license = with lib.licenses; [
