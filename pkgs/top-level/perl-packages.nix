@@ -22810,10 +22810,10 @@ with self;
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.39";
+    version = "9.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.39.tar.gz";
-      hash = "sha256-EwpJDXfXYTn3NM4biU1Fm64DgF+x89/dWPxE/oKvPP0=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.46.tar.gz";
+      hash = "sha256-/kc9LK5tLe/pUBgCggc2VoJa0F20TwvIxIQhXi1xaqw=";
     };
     meta = {
       description = "Real-time web framework";
