@@ -1155,6 +1155,8 @@ let
         };
       };
 
+      danielatanasov.todo = callPackage ./danielatanasov.todo { };
+
       danielgavin.ols = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "DanielGavin";
