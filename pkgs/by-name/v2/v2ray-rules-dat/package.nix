@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geosite.dat";
       hash = "sha256-/c/3OjfALveNnHS9NxonTeOiZyud6U/X4WHrGZSOs7Q=";
     };
+    updateScript = ./update.sh;
   };
 
   meta = {
