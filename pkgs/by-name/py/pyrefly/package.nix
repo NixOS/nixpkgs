@@ -10,22 +10,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-S3phcTwZlG9VBHdYzcbsLzj0uqBUDy4Xfy/tlp3AQZg=";
+    hash = "sha256-GHH+oG3oUEmGNEmtrmra321UIgRD04Eq1Ct0H7VsjxU=";
   };
 
   buildAndTestSubdir = "pyrefly";
 
-  cargoPatches = [
-    # https://github.com/facebook/pyrefly/issues/3383
-    ./fix-cargo-lock.patch
-  ];
-  cargoHash = "sha256-OfbPPANsAhrp2MbzDEHGRLWWmUkbMMGKR5B4R6lXdE4=";
+  cargoHash = "sha256-vOHcmYVKlsxueWjvCCDWwSfJt+2/71b5+NdQyW3jYH4=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
@@ -41,9 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preCheck = ''
     export TMPDIR=$(mktemp -d)
   '';
-
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
 
   passthru.updateScript = nix-update-script { };
 
