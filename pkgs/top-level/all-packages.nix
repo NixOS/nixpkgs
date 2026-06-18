@@ -2267,6 +2267,7 @@ with pkgs;
     godotPackages_4_4
     godotPackages_4_5
     godotPackages_4_6
+    godotPackages_4_7
     godotPackages_4
     godotPackages
     godot_4_3
@@ -2281,6 +2282,9 @@ with pkgs;
     godot_4_6
     godot_4_6-mono
     godot_4_6-export-templates-bin
+    godot_4_7
+    godot_4_7-mono
+    godot_4_7-export-templates-bin
     godot_4
     godot_4-mono
     godot_4-export-templates-bin
