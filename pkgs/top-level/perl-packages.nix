@@ -7540,12 +7540,15 @@ with self;
 
   CryptScryptKDF = buildPerlModule {
     pname = "Crypt-ScryptKDF";
-    version = "0.010";
+    version = "0.011";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-ScryptKDF-0.010.tar.gz";
-      hash = "sha256-fRbulczj61TBdGc6cpn0wIb7o6yF+EfQ4TT+7V93YBc=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-ScryptKDF-0.011.tar.gz";
+      hash = "sha256-IZLJ8E8rX/cHN/XNrz9PZ6VXE8MeoIVAOMvzXjttFrQ=";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRandom ];
+    propagatedBuildInputs = [
+      CryptOpenSSLRandom
+      CryptX
+    ];
     meta = {
       description = "Scrypt password based key derivation function";
       homepage = "https://github.com/DCIT/perl-Crypt-ScryptKDF";
