@@ -26365,10 +26365,10 @@ with self;
 
   NetStatsd = buildPerlPackage {
     pname = "Net-Statsd";
-    version = "0.12";
+    version = "0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/COSIMO/Net-Statsd-0.12.tar.gz";
-      hash = "sha256-Y+RTYD2hZbxtHEygtV7aPSIE8EDFkwSkd4LFqniGVlw=";
+      url = "mirror://cpan/authors/id/C/CO/COSIMO/Net-Statsd-0.13.tar.gz";
+      hash = "sha256-xKYP9dP002ompqR3YxGI7HnNzp4wUMZ6NOm1rikgoQA=";
     };
     meta = {
       description = "Perl client for Etsy's statsd daemon";
