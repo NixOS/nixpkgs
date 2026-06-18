@@ -14,7 +14,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylamarzocco";
   version = "2.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DNlUdnJjaYUfz8X8UmzqjHwj+WGmRQZQGDkHUjrAJ7E=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interface with La Marzocco's cloud";
     homepage = "https://github.com/zweckj/pylamarzocco";
-    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/${src.tag}";
+    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
