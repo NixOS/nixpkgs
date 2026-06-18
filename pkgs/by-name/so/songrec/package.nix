@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "songrec";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
     tag = finalAttrs.version;
-    hash = "sha256-6DT5KY6Y3CPTFLNG+EostAlMgZ35SLv8r9EXtRadC2U=";
+    hash = "sha256-U7THM8fagZREkleH6DWiusP3KcAtu/OrAg9USdCGRec=";
   };
 
-  cargoHash = "sha256-9R7HwTwjeCBIxX2xHs++9Zl0SMRmHPHDD1OHNa4q+jI=";
+  cargoHash = "sha256-O0YjeZCOe+cXjxUAgMT1l621rid4pexMZ3MbLDGxQsM=";
 
   nativeBuildInputs = [
     pkg-config
