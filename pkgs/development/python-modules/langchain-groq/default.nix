@@ -18,19 +18,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-groq";
   version = "1.1.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-groq==${version}";
+    tag = "langchain-groq==${finalAttrs.version}";
     hash = "sha256-OS9i4o8UhEmRFgZEKB5owWx2hJuVBRV5XvQLCQnBi9g=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/groq";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/groq";
 
   build-system = [ hatchling ];
 
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting Groq and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/groq";
     license = lib.licenses.mit;
@@ -79,4 +80,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})
