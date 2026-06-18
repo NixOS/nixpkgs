@@ -1301,13 +1301,13 @@
     "vendorHash": "sha256-rD4W2PkRrIQfACm8UWdF0yfZ+Qc5hTjH1lA6U7GJxpE="
   },
   "telmate_proxmox": {
-    "hash": "sha256-1aKKlOIk1mH4yx66eD635d1IaUWXIiBGHEt4A2F2mGM=",
+    "hash": "sha256-38q64EwxcdFzmlkL/jA0bTAF0WKXHEBIO0yS/44PizA=",
     "homepage": "https://registry.terraform.io/providers/Telmate/proxmox",
     "owner": "Telmate",
     "repo": "terraform-provider-proxmox",
-    "rev": "v3.0.2-rc04",
+    "rev": "v3.0.2-rc07",
     "spdx": "MIT",
-    "vendorHash": "sha256-Hzq97ElAjs7Y4tmJ2x7+g4j74MEdEvI2bD8pkvi5ZXg="
+    "vendorHash": "sha256-ZuH+uIv+iRQgUooyXsryICItSRglk1AGGWMVb+o1ILs="
   },
   "temporalio_temporalcloud": {
     "hash": "sha256-gWboOWDlfoMIlfmeGOom83T/ymMW8leqO0tzrG5xhmk=",
