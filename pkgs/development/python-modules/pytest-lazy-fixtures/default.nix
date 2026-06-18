@@ -21,6 +21,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+
     # Prevent double registration here and in the pyproject.toml entrypoint
     # ValueError: Plugin already registered under a different name:
     substituteInPlace tests/conftest.py \
