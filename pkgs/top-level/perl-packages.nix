@@ -17667,10 +17667,10 @@ with self;
 
   IOCompress = buildPerlPackage {
     pname = "IO-Compress";
-    version = "2.220";
+    version = "2.221";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.220.tar.gz";
-      hash = "sha256-nZbqKR8sVO82fHOWuFfZO6GsHEsvG84T7Yo+Xz7rtic=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.221.tar.gz";
+      hash = "sha256-r0LJyRBK3313LSVcDZpASjRi6kXnvELQbaCgtR3j0K4=";
     };
     propagatedBuildInputs = [
       CompressRawBzip2
