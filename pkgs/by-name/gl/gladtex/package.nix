@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage {
   pname = "gladtex";
-  version = "unstable-2023-01-22";
+  version = "4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
