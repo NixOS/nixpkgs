@@ -28675,12 +28675,13 @@ with self;
 
   PlackMiddlewareSession = buildPerlModule {
     pname = "Plack-Middleware-Session";
-    version = "0.33";
+    version = "0.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Session-0.33.tar.gz";
-      hash = "sha256-T/miydGK2ASbRd/ze5vdQSIeLC8eFrr7gb/tyIxRpO4=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Session-0.36.tar.gz";
+      hash = "sha256-kqWDFliBDSNzLm47rnpEofpafYpqbm3NdbkcapwktGY=";
     };
     propagatedBuildInputs = [
+      CryptSysRandom
       DigestHMAC
       Plack
     ];
