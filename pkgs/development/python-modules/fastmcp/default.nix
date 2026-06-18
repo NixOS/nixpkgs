@@ -59,6 +59,7 @@ buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
   version = "3.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
