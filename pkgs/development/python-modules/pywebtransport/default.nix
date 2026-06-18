@@ -3,7 +3,6 @@
   buildPythonPackage,
   clang,
   fetchFromGitHub,
-  libclang,
   llvmPackages,
   msgpack,
   pkg-config,
@@ -42,13 +41,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    clang
+    llvmPackages.clang
     llvmPackages.libclang.lib
     pkg-config
   ];
 
   env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  env.LD_LIBRARY_PATH = "${llvmPackages.libclang.lib}/lib:${lib.getLib libclang}/lib";
+  env.LD_LIBRARY_PATH = "${llvmPackages.libclang.lib}/lib:${lib.getLib clang}/lib";
 
   prePatch = ''
     # maturin can't find the file
