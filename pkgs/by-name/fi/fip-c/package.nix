@@ -3,6 +3,11 @@
   fetchFromGitHub,
   autoPatchelfHook,
   lib,
+  lld,
+  zig,
+  cmake,
+  ninja,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,20 +17,36 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flint-lang";
     repo = "fip";
-    tag = "v${finalAttrs.version}";
-    sha256 = "587441dcba543e44ed01c3435f8b7c7f6b5e07e438a73ceab0a331e140f67faa";
+    # For the 0.4.0 release the rev can be changed to the tag again
+    # tag = "v${finalAttrs.version}";
+    rev = "a00cbc1762265239694668baeb8c3a70f11ef9f1";
+    sha256 = "sha256-2e9mHgBQLnOKrfMxhk9rzvoiJgOivhH3tdnFzvjI1z8=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  llvm-src = fetchFromGitHub {
+    owner = "llvm";
+    repo = "llvm-project";
+    tag = "llvmorg-21.1.8";
+    hash = "sha256-pgd8g9Yfvp7abjCCKSmIn1smAROjqtfZaJkaUkBSKW0=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    lld
+    zig
+    cmake
+    ninja
+    python3
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 $fipCSrc $out/bin/fip-c
-    runHook postInstall
-  '';
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "--release=small"
+    "-Dllvm-dir=${finalAttrs."llvm-src"}"
+  ];
 
   meta = with lib; {
     description = "C Interop Module utilizing the Flint Interop Protocol";
