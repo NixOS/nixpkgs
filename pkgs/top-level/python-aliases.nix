@@ -93,6 +93,7 @@ mapAliases {
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
   asmog = throw "'asmog' has been removed because the service it polled is offline and the library has been unmaintained since 2019"; # Added 2026-06-04
+  aspell-python = aspell-python-py3; # added 2026-06-18
   aspy-refactor-imports = throw "'aspy-refactor-imports' has been renamed to/replaced by 'classify-imports'"; # Added 2026-05-22
   aspy-yaml = throw "'aspy-yaml' has been removed because the upstream repository was archived in 2020"; # Added 2026-06-04
   astropy-extension-helpers = extension-helpers; # Added 2025-10-15
