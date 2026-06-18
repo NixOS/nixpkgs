@@ -119,25 +119,21 @@ in
 
       systemd.services = lib.attrsets.mapAttrs' (name: cfg: {
         name = "uhub-${name}";
-        value =
-          let
-            pkg = pkgs.uhub.override { tlsSupport = cfg.enableTLS; };
-          in
-          {
-            description = "high performance peer-to-peer hub for the ADC network";
-            after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
-            reloadIfChanged = true;
-            serviceConfig = {
-              Type = "notify";
-              ExecStart = "${pkg}/bin/uhub -c /etc/uhub/${name}.conf -L";
-              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-              DynamicUser = true;
+        value = {
+          description = "high performance peer-to-peer hub for the ADC network";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          reloadIfChanged = true;
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = "${lib.getExe pkgs.uhub} -c /etc/uhub/${name}.conf -L";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            DynamicUser = true;
 
-              AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-              CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-            };
+            AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+            CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
           };
+        };
       }) hubs;
     };
 

@@ -7,20 +7,19 @@
   sqlite,
   pkg-config,
   systemd,
-  tlsSupport ? false,
+  versionCheckHook,
+
 }:
 
-assert tlsSupport -> openssl != null;
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhub";
-  version = "unstable-2019-12-13";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "janvidar";
     repo = "uhub";
-    rev = "35d8088b447527f56609b85b444bd0b10cd67b5c";
-    hash = "sha256-CdTTf82opnpjd7I9TTY+JDEZSfdGFPE0bq/xsafwm/w=";
+    rev = finalAttrs.version;
+    hash = "sha256-/o6i9/7PEWzgB9NhZMCWvmVV33kkympJPGXK1FdIWPc=";
   };
 
   nativeBuildInputs = [
@@ -28,27 +27,31 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
+    openssl
     sqlite
     systemd
-  ]
-  ++ lib.optional tlsSupport openssl;
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/lib/uhub/" "$out/plugins" \
-      --replace-fail "/etc/uhub" "$TMPDIR" \
-      --replace-fail "cmake_minimum_required (VERSION 2.8.2)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "/etc/uhub" "$out/share/doc/uhub"
   '';
 
   cmakeFlags = [
     "-DSYSTEMD_SUPPORT=ON"
-    "-DSSL_SUPPORT=${if tlsSupport then "ON" else "OFF"}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   meta = {
     description = "High performance peer-to-peer hub for the ADC network";
     homepage = "https://www.uhub.org/";
+    changelog = "https://github.com/janvidar/uhub/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+    mainProgram = "uhub";
   };
-}
+})
