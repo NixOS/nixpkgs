@@ -53,6 +53,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     done
   '';
 
+  postPatch = ''
+    # Fix startup with Python 3.13: cgitb was removed and this import is unused.
+    substituteInPlace src/patchbay/patchcanvas/portgroup_widget.py \
+      --replace-fail 'from cgitb import text' ""
+  '';
+
   meta = {
     homepage = "https://github.com/Houston4444/Patchance";
     description = "JACK Patchbay GUI";
