@@ -449,6 +449,7 @@ in
   dawarich = runTest ./web-apps/dawarich.nix;
   db-rest = runTest ./db-rest.nix;
   dconf = runTest ./dconf.nix;
+  ddns-go = runTest ./ddns-go.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;
   deluge = runTest ./deluge.nix;
