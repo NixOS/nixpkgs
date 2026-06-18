@@ -8,17 +8,13 @@
   lib,
   config,
   __splicedPackages,
-  pkgsHostTarget,
   kdePackages, # TODO why tf. are we using its callPackage here??
   ... # FIXME
 }:
 
 let
-  pkgs = __splicedPackages;
-  # qt6 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
-  # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.qt6Packages.qtbase' should not have a `__spliced` but if qt6 is pre-spliced then it will have one.
-  # pkgsHostTarget == pkgs
-  qt6 = pkgsHostTarget.qt6;
+  pkgs = __splicedPackages; # TODO still necessary?
+  inherit (pkgs) qt6;
 in
 
 qt6.overrideScope (
