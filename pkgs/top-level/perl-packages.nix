@@ -7302,11 +7302,12 @@ with self;
 
   CryptPasswdMD5 = buildPerlPackage {
     pname = "Crypt-PasswdMD5";
-    version = "1.42";
+    version = "1.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.42.tgz";
-      hash = "sha256-/Tlubn9E7rkj6TyZOUC49nqa7Vb8dKrK8Dj8QFPvO1k=";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.43.tgz";
+      hash = "sha256-Qr+Sk0UQlYXUlWkCVX7ONdBh7aQ454lPhucHV0EoB1k=";
     };
+    propagatedBuildInputs = [ CryptURandom ];
     meta = {
       description = "Provide interoperable MD5-based crypt() functions";
       license = with lib.licenses; [
