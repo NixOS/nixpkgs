@@ -38886,10 +38886,10 @@ with self;
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0210";
+    version = "2.0213";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0210.tar.gz";
-      hash = "sha256-opvz8Aq5ye4EIYFU4K/I95m/I2dOuZwantTeH0BZpI0=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/XML-LibXML-2.0213.tar.gz";
+      hash = "sha256-KvIcXWGsNOompfq/FbpaWEHmSPcYnbPjO28otUiYAqs=";
     };
     env.SKIP_SAX_INSTALL = 1;
     buildInputs = [
@@ -38903,10 +38903,6 @@ with self;
         zlib
       ]
     );
-    patches = [
-      # https://github.com/shlomif/perl-XML-LibXML/pull/87
-      ../development/perl-modules/XML-LibXML-fix-tests-libxml-2.13.0.patch
-    ];
     propagatedBuildInputs = [ XMLSAX ];
     meta = {
       description = "Perl Binding for libxml2";
