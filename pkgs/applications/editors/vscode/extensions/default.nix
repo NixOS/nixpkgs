@@ -3840,6 +3840,8 @@ let
         };
       };
 
+      prateekmahendrakar.prettyxml = callPackage ./prateekmahendrakar.prettyxml { };
+
       pylyzer.pylyzer = callPackage ./pylyzer.pylyzer { };
 
       pythagoratechnologies.gpt-pilot-vs-code = buildVscodeMarketplaceExtension {
