@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "python-decouple";
   version = "3.8";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -19,6 +20,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-F9Gu7Y/dJhwOJi/ZaoVclF3+4U/N5JdvpXwgGB3SF3Q=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     mock
