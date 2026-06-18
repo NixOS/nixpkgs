@@ -3660,6 +3660,8 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
+  datalab-platform = callPackage ../development/python-modules/datalab-platform { };
+
   datalad = callPackage ../development/python-modules/datalad { };
 
   datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
