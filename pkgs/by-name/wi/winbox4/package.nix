@@ -17,6 +17,7 @@ let
     maintainers = with lib.maintainers; [
       yrd
       savalet
+      martinkontsek
     ];
   };
   x86_64-zip = callPackage ./build-from-zip.nix {

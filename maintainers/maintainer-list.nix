@@ -17063,6 +17063,12 @@
     githubId = 110860;
     name = "Martin Jesper Low Madsen";
   };
+  martinkontsek = {
+    email = "martinkontsek@gmail.com";
+    github = "martinkontsek";
+    githubId = 9106867;
+    name = "Martin Kontšek";
+  };
   martinramm = {
     email = "martin-ramm@gmx.de";
     github = "MartinRamm";
