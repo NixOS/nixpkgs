@@ -17,20 +17,17 @@
   webkitgtk_4_1,
 }:
 let
+  subdir = "vrc-get-gui";
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alcom";
   version = "1.1.6";
-
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    tag = "gui-v${version}";
+    tag = "gui-v${finalAttrs.version}";
     hash = "sha256-TpVHE3e3dMdBOtPVKomKvg5tQf42QWik18k5oVD2Hms=";
   };
-
-  subdir = "vrc-get-gui";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version src;
 
   nativeBuildInputs = [
     cargo-about
@@ -56,8 +53,8 @@ rustPlatform.buildRustPackage {
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/${subdir}";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${subdir}";
     hash = "sha256-VyA2c2659Kg1DjLmmtvSAivltdraSBNArIu1XGENGmQ=";
   };
   npmRoot = subdir;
@@ -70,4 +67,4 @@ rustPlatform.buildRustPackage {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "ALCOM";
   };
-}
+})
