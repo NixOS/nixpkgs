@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   mlflow,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -30,9 +31,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow-skinny";
-  inherit (mlflow) version src;
+  inherit (mlflow) version;
   pyproject = true;
   __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "mlflow";
+    repo = "mlflow";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e11ZncpvThb1Nt6OH+O6Do74N3dphxBiK/HIeLQMxAw=";
+  };
 
   sourceRoot = "${finalAttrs.src.name}/libs/skinny";
 

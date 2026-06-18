@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   mlflow,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -25,7 +26,12 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  inherit (mlflow) src;
+  src = fetchFromGitHub {
+    owner = "mlflow";
+    repo = "mlflow";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e11ZncpvThb1Nt6OH+O6Do74N3dphxBiK/HIeLQMxAw=";
+  };
 
   sourceRoot = "${finalAttrs.src.name}/libs/tracing";
 
