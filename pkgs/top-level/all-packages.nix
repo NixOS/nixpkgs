@@ -310,7 +310,6 @@ with pkgs;
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
-  buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
   buildLakePackage = callPackage ../build-support/lake { };
@@ -1756,12 +1755,6 @@ with pkgs;
   libceph = ceph.lib;
   ceph-client = ceph.client;
   ceph-dev = ceph;
-
-  inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_26_01_0
-    citrix_workspace_25_08_10
-    ;
-  citrix_workspace = citrix_workspace_26_01_0;
 
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 

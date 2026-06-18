@@ -18,7 +18,6 @@
   swh-storage,
   pytestCheckHook,
   pytest-click,
-  pytest-kafka,
   pytest-mock,
   tzdata,
   pkgs,
@@ -67,7 +66,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-click
-    pytest-kafka
     pytest-mock
     pkgs.zstd
     pkgs.pv

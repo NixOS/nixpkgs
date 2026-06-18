@@ -23,17 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kafka-python";
-  version = "2.3.2";
+  version = "3.0.0";
   pyproject = true;
   __structuredAttrs = true;
-
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "dpkp";
     repo = "kafka-python";
     tag = finalAttrs.version;
-    hash = "sha256-FC5ntcRy2iF2sqYVxWg11EcGA5ncpuUuQHOkBG0paog=";
+    hash = "sha256-eQGQWLXCtj9A5Gb7inyKPdVD+1Pxh8yPFdNEBkkk58c=";
   };
 
   build-system = [ setuptools ];
@@ -54,11 +52,11 @@ buildPythonPackage (finalAttrs: {
     "kafka.consumer"
     "kafka.coordinator"
     "kafka.metrics"
+    "kafka.net"
     "kafka.partitioner"
     "kafka.producer"
     "kafka.protocol"
     "kafka.record"
-    "kafka.sasl"
     "kafka.serializer"
     "kafka.vendor"
   ];
