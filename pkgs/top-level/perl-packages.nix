@@ -30674,10 +30674,10 @@ with self;
 
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
-    version = "5.004";
+    version = "5.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-5.004.tar.gz";
-      hash = "sha256-aO8DFNh9Gm5guw9m/PQ+ssrN6xdUQy9eJeeE450+Z4Q=";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-5.006.tar.gz";
+      hash = "sha256-eZGFXpGBo3nJsBIv6PwvaONEnJFhaow1eSbxFh9oR2g=";
     };
     buildInputs = [
       TestDeep
@@ -30699,10 +30699,10 @@ with self;
 
   SerealEncoder = buildPerlPackage {
     pname = "Sereal-Encoder";
-    version = "5.004";
+    version = "5.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-5.004.tar.gz";
-      hash = "sha256-XlqGzNMtrjTtgJMuy+XGjil1K13g6bCnk6t+sspVyxs=";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-5.006.tar.gz";
+      hash = "sha256-kLQsyHdZgq4MdJno9ZLOeu+ug0M1g+EKWtVxKBHRcK0=";
     };
     buildInputs = [
       SerealDecoder
@@ -30724,10 +30724,10 @@ with self;
 
   Sereal = buildPerlPackage {
     pname = "Sereal";
-    version = "5.004";
+    version = "5.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-5.004.tar.gz";
-      hash = "sha256-nCW7euS9c20ksa0dk9dzlbDGXKh0HiZr/Ay+VCJh128=";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-5.006.tar.gz";
+      hash = "sha256-uwXnY+1ry+pEx5IX/vCy05GKwVRxlHIwOMbER+5vWd4=";
     };
     buildInputs = [
       TestDeep
