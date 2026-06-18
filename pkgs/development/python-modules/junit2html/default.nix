@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "junit2html";
-  version = "31.1.3";
+  version = "31.1.4";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "inorton";
     repo = "junit2html";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TF+ifAFPn3PQwYQFruP++bWo6/6J8LEmDJYXDYSwcq0=";
+    hash = "sha256-GUlRGv4+tRslrvSWvb3Fe5DcMFeYgL7HCyAHzrksJeQ=";
   };
 
   build-system = [ setuptools ];
