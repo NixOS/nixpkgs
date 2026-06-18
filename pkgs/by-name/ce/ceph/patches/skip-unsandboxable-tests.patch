@@ -1,0 +1,39 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 46a0efc680d..28076431d58 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -860,9 +860,18 @@ add_custom_target(tests
+   COMMENT "Building tests")
+ enable_testing()
+ set(CMAKE_CTEST_COMMAND ctest)
++# The following tests cannot run in a network- and privilege-isolated build
++# sandbox (e.g. nix): the run-tox-*/*-venv-for-* and run-cli-tests targets need
++# to pip-install from PyPI / clone from GitHub; unittest_mon_monmap performs DNS
++# resolution; and unittest_rgw_posix_driver requires user extended attributes on
++# the filesystem. Exclude them by name so `make check` stays green in the sandbox.
++# VERBATIM is required so the '|' regex characters are passed to ctest as a
++# single argument rather than being interpreted as shell pipes.
+ add_custom_target(check
+-  COMMAND ${CMAKE_CTEST_COMMAND}
+-  DEPENDS tests)
++  COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
++    -E "run-tox-|-venv-for-|run-cli-tests|unittest_mon_monmap|unittest_rgw_posix_driver"
++  DEPENDS tests
++  VERBATIM)
+ 
+ option(WITH_SYSTEMD "build with systemd support" ON)
+ 
+diff --git a/src/test/run-rbd-unit-tests.sh b/src/test/run-rbd-unit-tests.sh
+index af33e058347..8840fd56e66 100755
+--- a/src/test/run-rbd-unit-tests.sh
++++ b/src/test/run-rbd-unit-tests.sh
+@@ -14,6 +14,9 @@ GTEST_FILTER+=":TestLibRBD.QuiesceWatchError"
+ GTEST_FILTER+=":TestLibRBD.ConcurrentOperations"
+ # https://tracker.ceph.com/issues/70847
+ GTEST_FILTER+=":TestMigration.Stress*"
++# requires a working DNS resolver (expects EAI_NONAME); fails in network-isolated
++# build sandboxes (e.g. nix) where resolution yields EAI_AGAIN instead
++GTEST_FILTER+=":TestMockMigrationHttpClient.OpenResolveFail"
+ 
+ # exclude tests that are prone to sporadic failures
+ export GTEST_FILTER
