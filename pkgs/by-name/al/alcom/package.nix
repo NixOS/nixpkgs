@@ -64,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Experimental GUI application to manage VRChat Unity Projects";
     homepage = "https://github.com/vrc-get/vrc-get";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      ImSapphire
+    ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "ALCOM";
   };
