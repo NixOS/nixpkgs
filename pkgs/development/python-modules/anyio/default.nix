@@ -20,6 +20,7 @@
   hypothesis,
   psutil,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   trustme,
@@ -31,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.13.0";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-W2uR1VwI9u4QIPmbcYp8jDatEdya97NaJwAABlaRHzM=";
+    hash = "sha256-g+2d/j3ke+RjwIYq0JyFfYxg80QXrura9Dsx7cQyMIQ=";
   };
 
   build-system = [ setuptools-scm ];
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     hypothesis
     psutil
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     trustme
@@ -98,6 +100,9 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+
+    # fails to monkeypatch __file__.__main__
+    "test_entrypoint_main_module"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
