@@ -1150,7 +1150,7 @@ self: super: with self; {
 
   aspectlib = callPackage ../development/python-modules/aspectlib { };
 
-  aspell-python = callPackage ../development/python-modules/aspell-python { };
+  aspell-python-py3 = callPackage ../development/python-modules/aspell-python-py3 { };
 
   assay = callPackage ../development/python-modules/assay { };
 
