@@ -76,6 +76,7 @@ rec {
     maintainerless = {
       manualAllowed = false;
       isUnique = false;
+      nixpkgsInternalUseAllowed = true;
       automatic = {
         condition =
           # To get usable output, we want to avoid flagging "internal" derivations.
@@ -98,6 +99,7 @@ rec {
     broken = {
       manualAllowed = true;
       isUnique = false;
+      nixpkgsInternalUseAllowed = true;
       automatic = {
         condition =
           config:
@@ -122,11 +124,13 @@ rec {
     removal = {
       manualAllowed = true;
       isUnique = true;
+      nixpkgsInternalUseAllowed = false;
       automatic = null;
     };
     deprecated = {
       manualAllowed = true;
       isUnique = false;
+      nixpkgsInternalUseAllowed = false;
       automatic = null;
     };
   };
@@ -135,6 +139,10 @@ rec {
   manualKinds = lib.filterAttrs (name: value: value.manualAllowed) kinds;
   # Problem kinds that are currently only allowed to be specified once
   uniqueKinds = lib.filterAttrs (name: value: value.isUnique) kinds;
+
+  disallowNixpkgsInternalUseKinds = lib.filterAttrs (
+    name: value: !value.nixpkgsInternalUseAllowed
+  ) kinds;
 
   automaticProblems = lib.mapAttrsToList (name: value: value.automatic // { kindName = name; }) (
     lib.filterAttrs (name: value: value.automatic != null) kinds
