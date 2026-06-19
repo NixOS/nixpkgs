@@ -4737,12 +4737,6 @@
     githubId = 32384814;
     name = "Nikita Mitasov";
   };
-  chaduffy = {
-    email = "charles@dyfis.net";
-    github = "charles-dyfis-net";
-    githubId = 22370;
-    name = "Charles Duffy";
-  };
   changlinli = {
     email = "mail@changlinli.com";
     github = "changlinli";
