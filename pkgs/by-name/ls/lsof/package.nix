@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = version;
+    tag = version;
     hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
