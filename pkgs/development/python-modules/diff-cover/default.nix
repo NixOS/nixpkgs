@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "10.2.0";
+  version = "10.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-Yb+DAl8QUQx272pYIGgM9hubl06Pgd5wxXrJJvpjhyo=";
+    hash = "sha256-R028Y+gV+7dWfXt8pbEEEj6WEp8lQm69vJob27k1ssY=";
   };
 
   build-system = [ poetry-core ];
