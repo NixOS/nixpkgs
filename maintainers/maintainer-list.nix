@@ -29398,12 +29398,6 @@
     name = "Vince Rose";
     githubId = 9831420;
   };
-  vrthra = {
-    email = "rahul@gopinath.org";
-    github = "vrthra";
-    githubId = 70410;
-    name = "Rahul Gopinath";
-  };
   vsharathchandra = {
     email = "chandrasharath.v@gmail.com";
     github = "vsharathchandra";
