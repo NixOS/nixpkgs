@@ -3,7 +3,7 @@
 
   outputs = inputs: {
     nixosConfigurations.example = inputs.nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      system = "aarch64-linux";
 
       modules = [
         ../../src/nix/module.nix
@@ -11,9 +11,9 @@
       ];
     };
 
-    varsConfigurations.differentTargetArch = import ../../src/nix/jsonify.nix {
+    varsConfigurations.differentArch = import ../../src/nix/jsonify.nix {
       config = inputs.self.nixosConfigurations.example;
-      pkgsTarget = inputs.nixpks.legacyPackages.aarch64-linux;
+      pkgsHost = inputs.nixpkgs.legacyPackages.x86_64-linux;
     };
   };
 }
