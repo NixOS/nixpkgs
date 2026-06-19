@@ -4148,6 +4148,8 @@ self: super: with self; {
 
   django-autoslug = callPackage ../development/python-modules/django-autoslug { };
 
+  django-avatar = callPackage ../development/python-modules/django-avatar { };
+
   django-axes = callPackage ../development/python-modules/django-axes { };
 
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
