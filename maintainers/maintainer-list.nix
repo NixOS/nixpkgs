@@ -17118,6 +17118,12 @@
     github = "matrss";
     githubId = 9308656;
   };
+  matshch = {
+    name = "Artem Leshchev";
+    github = "matshch";
+    githubId = 2412121;
+    email = "matshch@gmail.com";
+  };
   matt-snider = {
     email = "matt.snider@protonmail.com";
     github = "matt-snider";
