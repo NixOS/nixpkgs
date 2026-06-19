@@ -20,7 +20,7 @@ let
       default = null;
     };
 
-  backendModule = lib.types.submodule (
+  generatorBackendModule = lib.types.submodule (
     { name, ... }:
     {
       options = {
@@ -189,7 +189,7 @@ let
           default = name;
         };
 
-        run = delayedPackage ''
+        script = delayedPackage ''
           Given $1=prompt_type and $2=prompt_text, the script runs the prompt
           by the user, then saves respective value to $out.
         '';
@@ -248,7 +248,7 @@ in
         A set of backends that handle storing and retrieving generated files.
       '';
       default = { };
-      type = lib.types.attrsOf backendModule;
+      type = lib.types.attrsOf generatorBackendModule;
     };
 
     generators = lib.mkOption {

@@ -11,5 +11,14 @@ in
       deploy = noop;
       fixup = noop; # This one's optional, but I wanted to make sure that works
     };
+
+    generators.example = {
+      files.example = { };
+      script =
+        pkgs:
+        pkgs.writeShellScript "gen-example" ''
+          echo "Hewwo!" > $out/example
+        '';
+    };
   };
 }
