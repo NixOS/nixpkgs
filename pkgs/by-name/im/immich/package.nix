@@ -171,9 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
-    rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
-
     pnpm --filter immich build
 
     runHook postBuild
@@ -202,6 +199,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
+
+    # make exiftool-vendored to use exiftool from the PATH
+    find "$packageOut/node_modules" -type l -name "exiftool-vendored.pl" -delete
+    find "$packageOut/node_modules" -type d -name "exiftool-vendored.pl@*" -exec rm -rf {} +
+    find "$packageOut/node_modules" -type f -path "*/node_modules/.bin/exiftool" -delete
 
     makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
       --add-flags "$packageOut/dist/main" \
