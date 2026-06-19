@@ -1,35 +1,38 @@
 import json
 import subprocess
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any
 from .error import VarsError
 from .args import VarsArgs
+from .config import VarsConfig
 
 
 def evaluate_config(args: VarsArgs) -> None:
 	if args.file is None and args.flake is None:
 		raise VarsError("Neither --file nor --flake was specified")
-	if args.flake is not None:
-		raise VarsError("Flake support is not yet implemented")
 	jsonify = Path(__file__).parent / "nix" / "jsonify.nix"
-	expr = f"""
+	if args.flake is not None:
+		expr = f"config: import {jsonify} {{ inherit config; }}"
+		# Currently passing --impure since `jsonify` is an absolute path...
+		evalCommand = [args.flake, "--impure", "--apply", expr]
+	else:
+		expr = f"""
 import {jsonify} {{
 	config = (import {args.file}){"" if args.attr is None else f".{args.attr}"};
-	pkgs = import {"<nixpkgs>" if args.nixpkgs is None else args.nixpkgs} {{}};
+	pkgsHost = import {"<nixpkgs>" if args.nixpkgs is None else args.nixpkgs} {{}};
 }}
 """
-
-	print(expr)
+		evalCommand = ["--impure", "-E", expr]
 
 	try:
 		result = subprocess.run(
-			["nix-instantiate", "--eval", "--json", "--strict", "-E", expr],
+			["nix", "eval", "--json", *evalCommand],
 			capture_output=True,
 			text=True,
 			check=True,
 		)
 		data: Any = json.loads(result.stdout)
-		print(data)
+		print(VarsConfig.fromJSON(data))
 	except subprocess.CalledProcessError as e:
 		raise VarsError(f"Error evaluating nix expression:\n{e.stderr}")
 	pass

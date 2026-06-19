@@ -2,7 +2,6 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Optional
 from .error import VarsError
 from .eval import evaluate_config
 from .args import VarsArgs
