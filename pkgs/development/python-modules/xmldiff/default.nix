@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xmldiff";
-  version = "2.7.0";
+  version = "3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wJELH4ADZt1+xikj5dBuiwahvZEgVpocJ/TyRGucaKI=";
+    hash = "sha256-OA7E0FzvM/W3Bs94mrzISNJ3MNZ+AtwLTxEH4Wzpqq0=";
   };
 
   build-system = [ setuptools ];
