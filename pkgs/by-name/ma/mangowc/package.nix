@@ -20,16 +20,17 @@
   scenefx,
   wlroots_0_19,
   libGL,
+  cjson,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.12.8";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-k9qFn9I+eeAq1kBfw6QRLRMDb6sIV+pgd5zpKNoc1ck=";
+    hash = "sha256-/sKbjzbftTgjvTmlPx5navYSPYcxyD4Pao0Ef1RJD54=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     wlroots_0_19
     scenefx
     libGL
+    cjson
   ]
   ++ lib.optionals enableXWayland [
     libx11
