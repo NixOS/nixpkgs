@@ -763,12 +763,21 @@ in
           ];
         };
         serviceConfig.Type = "oneshot";
+        serviceConfig.EnvironmentFile = "-/etc/switch-root.conf";
         description = "NixOS Activation";
 
         script = # bash
           ''
             set -uo pipefail
             export PATH="/bin:${cfg.package.util-linux}/bin"
+
+            # A non-NixOS closure (e.g. init=/bin/sh) has no prepare-root;
+            # initrd-find-nixos-closure records this as a non-empty NEW_INIT.
+            # Skip activation and let initrd-switch-root hand over to it directly.
+            if [ -n "''${NEW_INIT:-}" ]; then
+              echo "$NEW_INIT is not a NixOS system - not activating"
+              exit 0
+            fi
 
             closure="$(realpath /nixos-closure)"
 
