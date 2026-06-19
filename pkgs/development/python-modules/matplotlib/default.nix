@@ -13,8 +13,6 @@
   setuptools-scm,
   pytestCheckHook,
   python,
-  matplotlib,
-  fetchurl,
 
   # native libraries
   ffmpeg-headless,
