@@ -2,13 +2,12 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fiduswriter";
   version = "4.1.10";
-  format = "setuptools"; # TODO: switch to pyproject when setuptools>=82.0.1
+  pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -18,9 +17,39 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-NkFJehSgwYwYUZaznZW63KEXR1wTf+Hpa+8ZM71aZ84=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=82.0.1" "setuptools"
+  '';
+
   build-system = with python3Packages; [
     babel
     setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    bleach
+    channels
+    granian
+    servestatic
+    django_5
+    django-allauth
+    django-axes
+    # django-avatar
+    django-otp
+    pyotp
+    qrcode
+    # django-js-error-hook
+    # django-npm-mjs
+    # django-loginas
+    httpx
+    httpx-ws
+    pillow
+    python-magic
+    prosemirror
+    # prosemirror-rs
+    watchdog
+    autobahn
   ];
 
   optional-dependencies = with python3Packages; {
@@ -68,14 +97,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
   };
 
+  pythonRelaxDeps = [
+    "granian"
+    "pyotp"
+    "httpx-ws"
+  ];
+
   pythonImportsCheck = [
     "fiduswriter"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "Fidus Writer is an online collaborative editor for academics";
+    description = "Online collaborative editor for academics";
     homepage = "https://github.com/fiduswriter/fiduswriter";
     changelog = "https://github.com/fiduswriter/fiduswriter/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "fiduswriter";
