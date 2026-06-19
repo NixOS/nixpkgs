@@ -38,6 +38,16 @@ let
             # Silence the `x86_64-darwin` deprecation warning.
             allowDeprecatedx86_64Darwin = true;
 
+            # List of problems that should fail the CI
+            problems.matchers = lib.mkForce (
+              lib.optionals (!includeBroken) [
+                {
+                  kind = "broken";
+                  handler = "error";
+                }
+              ]
+            );
+
             handleEvalIssue =
               reason: errormsg:
               let
