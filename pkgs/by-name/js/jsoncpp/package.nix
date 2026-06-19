@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/open-source-parsers/jsoncpp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "C++ library for interacting with JSON";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
