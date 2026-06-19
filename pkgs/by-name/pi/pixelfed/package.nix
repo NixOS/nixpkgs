@@ -8,9 +8,27 @@
   runtimeDir ? "/run/pixelfed",
 }:
 let
-  php' = php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ffi ]));
+  # Ensure php extensions
+  # https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L135-L147
+  phpPackage = php.buildEnv {
+    extensions =
+      { enabled, all }:
+      enabled
+      ++ (with all; [
+        bcmath
+        ctype
+        curl
+        mbstring
+        gd
+        intl
+        zip
+        redis
+        imagick
+        ffi
+      ]);
+  };
 in
-php'.buildComposerProject2 (finalAttrs: {
+phpPackage.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
   version = "0.12.7";
 
@@ -38,6 +56,7 @@ php'.buildComposerProject2 (finalAttrs: {
   '';
 
   passthru = {
+    inherit phpPackage;
     tests = { inherit (nixosTests.pixelfed) standard; };
     updateScript = nix-update-script { };
   };
