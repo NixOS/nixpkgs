@@ -1,9 +1,10 @@
-# Takes an evaluated configuration and prepares it to be consumed by the Python
-# side.
-#
-# The given package set needs to be the one of the current host, not the one of
-# the target host! (the one of the target host is the one the config has been
-# built with!)
+# Takes a configuration and prepares it to be consumed by the Python side.
+# There's three kinds of supported configurations:
+# - unevaluated NixOS configurations (will be evaluated with the target Nixpkgs
+#   instance
+# - evaluated NixOS configurations (the options will be extracted from the
+#   respective NixOS module)
+# - evaluated vars configurations (the script will then be a NOOP)
 #
 # Note that this is *not* a NixOS module! This will be evaluated by the vars
 # CLI.
@@ -13,27 +14,20 @@
   pkgsTarget ? null,
 }:
 let
-  pkgsHost' =
-    if pkgsHost != null then
-      pkgsHost
+  pkgsTarget' =
+    if pkgsTarget != null then
+      pkgsTarget
     else if config._type or null == "configuration" then
       config.pkgs
     else
-      import <nixpkgs>;
+      import <nixpkgs> { };
 
-  pkgsTarget' = if pkgsTarget != null then pkgsTarget else pkgsHost';
+  pkgsHost' = if pkgsHost != null then pkgsHost else pkgsTarget';
 
   inherit (pkgsHost') lib;
 
   # If the configuration has been evaluated already, simply keep it that way.
-  # Otherwise, evaluate it. The thing is, we need a target-host-compatible copy
-  # of nixpkgs, and I'm not sure where to get one... (the current code reading
-  # it from the nix path is a stub)
-  #
-  # We might additionally also want to support passing already-jsonified
-  # configs, so advanced flakes/npins users can do it at their own pace
-  # (nixos-rebuild supports this!). That's an easy change though, so it's not
-  # worth thinking about just yet.
+  # Otherwise, evaluate it.
   cfg =
     if config._type or null == "configuration" then
       config.config.vars
@@ -45,7 +39,7 @@ let
         ];
       }).config.vars;
 
-  evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgsTarget').drvPath;
+  evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgsHost').drvPath;
 in
 # Make this call idempotent
 if config._type or null == "vars-configuration" then
