@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bGg2ZrIsEYJYZCLsIh4FZROhpyLSBO0Lar1mSoz66wI=";
   };
 
   strictDeps = true;
