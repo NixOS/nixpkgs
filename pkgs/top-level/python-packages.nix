@@ -5916,6 +5916,8 @@ self: super: with self; {
 
   flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 
+  flask-static-digest = callPackage ../development/python-modules/flask-static-digest { };
+
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
   flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
