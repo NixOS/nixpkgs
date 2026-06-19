@@ -1,5 +1,4 @@
 {
-  _cuda,
   addDriverRunpath,
   backendStdenv,
   cmake,
@@ -24,10 +23,9 @@
   gitUpdater,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBadPlatforms;
   inherit (lib) licenses maintainers teams;
   inherit (lib.asserts) assertMsg;
-  inherit (lib.attrsets) getBin;
+  inherit (lib.attrsets) getBin optionalAttrs;
   inherit (lib.lists) all optionals;
   inherit (lib.strings)
     cmakeBool
@@ -206,15 +204,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
     # TODO:
     # tests.test = cutlass.overrideAttrs { doCheck = true; };
-
-    # Include required architectures in compatibility check.
-    # https://github.com/NVIDIA/cutlass/tree/main?tab=readme-ov-file#compatibility
-    platformAssertions = [
-      {
-        message = "all capabilities are >= 7.0 (${builtins.toJSON flags.cudaCapabilities})";
-        assertion = all (flip versionAtLeast "7.0") flags.cudaCapabilities;
-      }
-    ];
   };
 
   meta = {
@@ -225,7 +214,14 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    badPlatforms = _mkMetaBadPlatforms finalAttrs;
+    # Include required architectures in compatibility check.
+    # https://github.com/NVIDIA/cutlass/tree/main?tab=readme-ov-file#compatibility
+    problems = optionalAttrs (!(all (flip versionAtLeast "7.0") flags.cudaCapabilities)) {
+      capabilityBelow70 = {
+        kind = "unsupported";
+        message = "all capabilities must be >= 7.0 (${builtins.toJSON flags.cudaCapabilities}).";
+      };
+    };
     maintainers = [ maintainers.connorbaker ];
     teams = [ teams.cuda ];
   };
