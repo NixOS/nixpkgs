@@ -5,7 +5,7 @@
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
-  version = "1.5.0";
+  version = "1.6.0";
   pname = "podman-compose";
   pyproject = true;
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     repo = "podman-compose";
     owner = "containers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEnq0wsDHaCxefaEX4lB+pCAIKzN0oyaBNm7t7tK/yI=";
+    hash = "sha256-zkXLZfYWpIaQYoUU7GcGnkuTBmhzpJkyojbzFuTR5FI=";
   };
 
   build-system = [
