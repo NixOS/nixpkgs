@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   nodejs,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wox-plugin-host-nodejs";
@@ -23,15 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-cbuVQV8ih8rztERFLUHGnK63MBz8+QVmzeegYLDwcj4=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-6zQDbNUxysqwrRaEMp8Sb5Vcf2HdkkdrdCpJwG8pHSs=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildPhase = ''

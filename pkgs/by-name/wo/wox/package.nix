@@ -2,63 +2,70 @@
   lib,
   fetchFromGitHub,
   callPackage,
-  nodejs,
   buildGoModule,
-  pkg-config,
+  replaceVars,
+
+  # build-time
   autoPatchelfHook,
-  libxtst,
+  copyDesktopItems,
+  desktop-file-utils,
+  makeDesktopItem,
+  pkg-config,
+  xdg-utils,
+
+  # run-time
+  gtk3,
+  libayatana-appindicator,
   libx11,
   libxkbcommon,
-  libayatana-appindicator,
-  gtk3,
-  desktop-file-utils,
-  xdg-utils,
-  copyDesktopItems,
-  makeDesktopItem,
+  libxtst,
+  nodejs,
 }:
 buildGoModule (finalAttrs: {
   pname = "wox";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jiid8emFUN7554ijyL5jTvaQPNz+1rO6IwBMrqdkm4I=";
+    hash = "sha256-FbOnENSko/BYtTI7z2Ep+IIYufgZpNWcz6d0mqhTL5g=";
   };
+
+  vendorHash = "sha256-IDcIEZVCJp1ls5c2fblgX+I+MhfRDXqFbf0GhgcFiTo=";
 
   sourceRoot = "${finalAttrs.src.name}/wox.core";
 
+  patches = [
+    (replaceVars ./plugin-host-python.patch {
+      plugin-host-python = "${finalAttrs.passthru.plugin-host-python}/bin/run";
+    })
+    (replaceVars ./plugin-host-nodejs.patch {
+      nodejs-path = "${lib.getExe nodejs}";
+      plugin-host-nodejs = "${finalAttrs.passthru.plugin-host-python}/node-host.js";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace plugin/host/host_python.go \
-      --replace-fail \
-        'pythonPath, path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' \
-        '"env", "${finalAttrs.passthru.plugin-host-python}/bin/run"'
-    substituteInPlace plugin/host/host_nodejs.go \
-      --replace-fail "/usr/bin/node" "${lib.getExe nodejs}"
     substituteInPlace util/deeplink.go \
       --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
-      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \
-      --replace-fail "Exec=%s" "Exec=wox"
-    sed -i '/^	"path"$/d' plugin/host/host_python.go
+      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime"
   '';
-
-  vendorHash = "sha256-IDcIEZVCJp1ls5c2fblgX+I+MhfRDXqFbf0GhgcFiTo=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [
-    pkg-config
     autoPatchelfHook
     copyDesktopItems
+    pkg-config
   ];
 
   buildInputs = [
-    libx11
-    libxtst
-    libxkbcommon
-    libayatana-appindicator
     gtk3
+    libayatana-appindicator
+    libx11
+    libxkbcommon
+    libxtst
   ];
 
   env.CGO_ENABLED = 1;
@@ -101,9 +108,10 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Cross-platform launcher that simply works";
     homepage = "https://github.com/Wox-launcher/Wox";
+    changelog = "https://github.com/Wox-launcher/Wox/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     mainProgram = "wox";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 })
