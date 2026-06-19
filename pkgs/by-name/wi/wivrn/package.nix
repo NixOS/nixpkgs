@@ -11,8 +11,6 @@
   boost,
   cli11,
   cmake,
-  cudaPackages ? { },
-  cudaSupport ? config.cudaSupport,
   eigen,
   ffmpeg,
   freetype,
@@ -37,7 +35,6 @@
   nlohmann_json,
   opencomposite,
   openxr-loader,
-  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   pipewire,
   pkg-config,
   python3,
@@ -50,6 +47,9 @@
   vulkan-loader,
   x264,
   xrizer,
+  cudaSupport ? config.cudaSupport,
+  # WiVRn defaults to the first path but the others can be manually selected
+  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
   # Only build the OpenXR client library. Useful for building the client library for a different architecture,
   # e.g. 32-bit library while running 64-bit service on host, so 32-bit apps can connect to the runtime
   clientLibOnly ? false,
@@ -150,9 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qttools
     x264
-  ]
-  ++ lib.optionals (cudaSupport && !clientLibOnly) [
-    cudaPackages.cudatoolkit
   ];
 
   cmakeFlags = [
@@ -177,9 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
-  ]
-  ++ lib.optionals (cudaSupport && !clientLibOnly) [
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
   ];
 
   dontWrapQtApps = true;
