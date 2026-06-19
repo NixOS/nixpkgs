@@ -224,6 +224,10 @@ in
         multi on
       '';
 
+      "resolv.conf".text = lib.optionalString (cfg.useNetworkd && !config.services.resolved) ''
+        ${lib.concatStringsSep "\n" (map (ns: "nameserver ${ns}") cfg.nameservers)}
+      '';
+
     }
     // lib.optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
       # /etc/rpc: RPC program numbers.
