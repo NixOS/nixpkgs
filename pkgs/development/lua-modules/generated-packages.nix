@@ -1322,22 +1322,22 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "kulala.nvim";
-      version = "6.14.0-1";
+      version = "6.15.3-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/kulala.nvim-6.14.0-1.rockspec";
-          sha256 = "05nj8yy1cqs2ybpx53zg06a4cisz5xwp8nir6p1vamnmmsj8xq06";
+          url = "mirror://luarocks/kulala.nvim-6.15.3-1.rockspec";
+          sha256 = "00ghq3ph0vykphhiilj2k8643hdm5glz3h9iwpnsbahpgwpwppzy";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mistweaverco/kulala.nvim/archive/v6.14.0.zip";
-        sha256 = "1y8bbc3v9508pg500gx5vip5pd416zx4kkmsqfjjcnq86x8wsl7q";
+        url = "https://github.com/mistweaverco/kulala.nvim/archive/v6.15.3.zip";
+        sha256 = "1friyckh8bxsixsql1r3h1ljfr3a13w061hnw5z7rj92inyx5536";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [ tree-sitter-kulala_http ];
 
       meta = {
-        homepage = "https://kulala.app/usage";
+        homepage = "https://kulala.app";
         license = lib.licenses.mit;
         description = "A fully-featured 🤏 HTTP/GraphQL/gRPC/Websocket-client 🐼 interface 🖥️ for Neovim ❤️, that supports the Jetbrains .http spec (with full scripting support).";
       };
