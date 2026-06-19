@@ -7,13 +7,13 @@
 
 buildDotnetModule rec {
   pname = "gh-gei";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-gei";
     rev = "v${version}";
-    hash = "sha256-dmou1CGsx7QLlDI3W1x0Sen35okUNQ4ofe8RMLQDP34=";
+    hash = "sha256-eccHFngmP0uUsbtlFSIT1agRMx3OCNyqPMHG8/mj5P8=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx;

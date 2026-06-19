@@ -108,14 +108,12 @@ stdenv.mkDerivation {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       azahi
+      eclairevoyant
       dwrege
     ];
     platforms = builtins.attrNames mozillaPlatforms;
     mainProgram = "librewolf";
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [
-      "librewolf-bin lacks maintenance in nixpkgs, consider using an alternative"
-    ];
   };
 }
