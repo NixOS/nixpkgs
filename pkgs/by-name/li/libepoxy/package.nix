@@ -75,6 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Headers depend on EGL but it is Requires.private which is not output as
+  # cflags using nixpkgs patched version of pkg-config.
+  postInstall = lib.optionalString (x11Support && !stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace $out/lib/pkgconfig/epoxy.pc \
+      --replace-fail 'Requires.private:' 'Requires:'
+  '';
+
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
