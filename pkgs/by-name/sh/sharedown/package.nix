@@ -21,7 +21,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "Sharedown";
-  version = "5.3.6-unstable-2025-12-16";
+  version = "rolling-unstable-2026-02-22";
 
   src = fetchFromGitHub {
     owner = "kylon";
