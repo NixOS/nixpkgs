@@ -2,7 +2,7 @@
   lib,
   callPackage,
   stdenvNoCC,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchpatch,
   buildNpmPackage,
@@ -26,10 +26,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.18";
-    srcHash = "sha256-oHBuC31mvWiPbL6iOBg7yTxCXQbXmnfsCvSTGdmz+xk=";
+    version = "10.11.20";
+    srcHash = "sha256-t4mdb1agOl5k+IaHXy1hnpBsp/OfKwrJSuWZR9atnrY=";
     vendorHash = "sha256-zngDxO3UCuB53PMpaE+ga8v2FL5l78BD2NmJsu+zZ00=";
-    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
+    npmDepsHash = "sha256-CBv8LQtuSxxySM5A+FubEFbGSMQqdkD09pCcXS+Nx1s=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
@@ -82,7 +82,7 @@ let
         };
       finalPassthru =
         let
-          withoutTestsUnwrapped = buildGoModule (args // { passthru = finalPassthru; });
+          withoutTestsUnwrapped = buildGo126Module (args // { passthru = finalPassthru; });
           withTestsUnwrapped = callPackage ./tests.nix { mattermost = withoutTestsUnwrapped; };
         in
         lib.recursiveUpdate passthru rec {
@@ -270,7 +270,7 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        for ws in platform/{types,client,components,shared} channels; do
+        for ws in platform/{types,client,shared,components} channels; do
           if [ -d "$ws" ]; then
             npm run build --workspace="$ws"
           fi
