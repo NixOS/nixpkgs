@@ -15,10 +15,10 @@ mattermost.override (
       # and make sure the version regex is up to date here.
       # Ensure you also check ../mattermost/package.nix for ESR releases.
       regex = "^v(11\\.[0-9]+\\.[0-9]+)$";
-      version = "11.7.1";
-      srcHash = "sha256-9eI9tX6qHEEzm7aro7ky2JORfAmqbjmrmxABFVTZzW8=";
-      vendorHash = "sha256-xu399pAtIJUIns+GhKFlDR0crWV+8HiN9Wf38EMu5q8=";
-      npmDepsHash = "sha256-M+yoCLR4yT30n3rhqZu1z8zeWas+5VniP4aaIJPz6VU=";
+      version = "11.8.1";
+      srcHash = "sha256-9EIbTwnEeZQKg5uixkMp3sp/n+9I2N9W7hxsW5juF3M=";
+      vendorHash = "sha256-F2QMrLbio7812ZTGQZZPTqHWtIXbwbDmjUhtvv0DJ9s=";
+      npmDepsHash = "sha256-9GRM0VXrh1eR16ocSGEV/F2eflOflzkhrhRRnm9uB6s=";
       autoUpdate = ./package.nix;
     };
   }
