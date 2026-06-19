@@ -1,5 +1,4 @@
 {
-  _cuda,
   addDriverRunpath,
   backendStdenv,
   catch2_3,
@@ -80,17 +79,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
 
     updateScript = unstableGitUpdater { branch = "dev"; };
-    platformAssertions = [
-      {
-        message = "cuCollections requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion})";
-        assertion = cudaAtLeast "13.4";
-      }
-      # https://github.com/NVIDIA/cuCollections#requirements
-      {
-        message = "cuCollections supports CUDA compute capabilities 7.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-        assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
-      }
-    ];
   };
 
   meta = {
@@ -101,7 +89,20 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    badPlatforms = _cuda.lib._mkMetaBadPlatforms finalAttrs;
+    problems =
+      lib.optionalAttrs (!(cudaAtLeast "13.4")) {
+        cudaTooOld = {
+          kind = "unsupported";
+          message = "cuCollections requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion}).";
+        };
+      }
+      # https://github.com/NVIDIA/cuCollections#requirements
+      // lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities) {
+        capabilityBelow70 = {
+          kind = "unsupported";
+          message = "cuCollections requires CUDA compute capabilities 7.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+        };
+      };
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     teams = [ lib.teams.cuda ];
   };

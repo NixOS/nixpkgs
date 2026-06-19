@@ -81,6 +81,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/nccl/blob/master/contrib/nccl_ep/README.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thefossguy ];
-    inherit (nccl.meta) platforms badPlatforms;
+    inherit (nccl.meta) platforms problems;
   };
 })

@@ -18,16 +18,6 @@ buildRedist (finalAttrs: {
     "static"
   ];
 
-  # https://docs.nvidia.com/cuda/nvcomp/installation.html
-  platformAssertions = [
-    {
-      message =
-        "nvCOMP supports CUDA compute capabilities 7.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
-    }
-  ];
-
   # Compresses and decompresses a batch with the LZ4 C API on the GPU and checks the result.
   passthru.gpuCheck = backendStdenv.mkDerivation {
     __structuredAttrs = true;
@@ -68,7 +58,7 @@ buildRedist (finalAttrs: {
     requiredSystemFeatures = [ "cuda" ];
 
     meta = {
-      inherit (finalAttrs.finalPackage.meta) badPlatforms platforms teams;
+      inherit (finalAttrs.finalPackage.meta) platforms problems teams;
     };
   };
 
@@ -79,5 +69,16 @@ buildRedist (finalAttrs: {
     '';
     homepage = "https://developer.nvidia.com/nvcomp";
     changelog = "https://docs.nvidia.com/cuda/nvcomp/release_notes.html";
+    # https://docs.nvidia.com/cuda/nvcomp/installation.html
+    problems =
+      lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities)
+        {
+          capabilityBelow70 = {
+            kind = "unsupported";
+            message =
+              "nvCOMP requires CUDA compute capabilities 7.0 and newer"
+              + " (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+          };
+        };
   };
 })

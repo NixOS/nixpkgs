@@ -53,17 +53,33 @@ let
   );
 
   inherit (release-lib)
+    getPlatforms
     linux
     mapTestOn
-    packagePlatforms
     pkgs
+    recursiveMapPackages
     ;
+
+  # Like `release-lib.getPlatforms`, but also excludes the system `pkgs` is evaluated for when the derivation has an
+  # `unsupported` problem: `release-lib` evaluates `pkgs` with `allowUnsupportedSystem`, which silences such problems.
+  getPlatforms' =
+    drv:
+    let
+      hasUnsupportedProblem = lib.any (problem: problem.kind or null == "unsupported") (
+        lib.attrValues (drv.meta.problems or { })
+      );
+    in
+    lib.subtractLists (lib.optionals hasUnsupportedProblem [ pkgs.stdenv.hostPlatform.system ]) (
+      getPlatforms drv
+    );
 
   # Package sets to evaluate whole
   # Derivations from these package sets are selected based on the value
-  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
+  # of their meta.{hydraPlatforms,platforms,badPlatforms,problems} attributes
   autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
+  autoPackagePlatforms = lib.genAttrs autoPackageSets (
+    pset: recursiveMapPackages getPlatforms' pkgs.${pset}
+  );
 
   # Explicitly select additional packages to also evaluate
   # The desired platforms must be set explicitly here

@@ -30,27 +30,6 @@ buildRedist (finalAttrs: {
   # We do not assert on this, as it would make cuSPARSELt unavailable with the default CUDA capabilities (which include
   # 7.5); consumers built for older capabilities still work, but cannot use cuSPARSELt on those devices.
 
-  # NOTE: From 0.9.0, cuSPARSELt only provides builds for CUDA 13.
-  # https://docs.nvidia.com/cuda/cusparselt/release_notes.html
-  platformAssertions =
-    let
-      cusparseltAtLeast = lib.versionAtLeast finalAttrs.version;
-    in
-    [
-      {
-        message =
-          "cuSPARSELt releases since 0.7.0 (found ${finalAttrs.version})"
-          + " support CUDA 12.8 and newer (found ${cudaMajorMinorVersion})";
-        assertion = cusparseltAtLeast "0.7" -> cudaAtLeast "12.8";
-      }
-      {
-        message =
-          "cuSPARSELt releases since 0.8.0 (found ${finalAttrs.version})"
-          + " support CUDA 12.9 and newer (found ${cudaMajorMinorVersion})";
-        assertion = cusparseltAtLeast "0.8" -> cudaAtLeast "12.9";
-      }
-    ];
-
   meta = {
     description = "High-performance CUDA library dedicated to general matrix-matrix operations in which at least one operand is a structured sparse matrix with 50% sparsity ratio";
     longDescription = ''
@@ -62,5 +41,28 @@ buildRedist (finalAttrs: {
 
     maintainers = [ lib.maintainers.sepiabrown ];
     license = lib.licenses.nvidiaCusparse_lt;
+
+    # NOTE: From 0.9.0, cuSPARSELt only provides builds for CUDA 13.
+    # https://docs.nvidia.com/cuda/cusparselt/release_notes.html
+    problems =
+      let
+        cusparseltAtLeast = lib.versionAtLeast finalAttrs.version;
+      in
+      lib.optionalAttrs (cusparseltAtLeast "0.7" && !(cudaAtLeast "12.8")) {
+        cusparselt07CudaTooOld = {
+          kind = "unsupported";
+          message =
+            "cuSPARSELt releases since 0.7.0 (found ${finalAttrs.version})"
+            + " require CUDA 12.8 and newer (found ${cudaMajorMinorVersion}).";
+        };
+      }
+      // lib.optionalAttrs (cusparseltAtLeast "0.8" && !(cudaAtLeast "12.9")) {
+        cusparselt08CudaTooOld = {
+          kind = "unsupported";
+          message =
+            "cuSPARSELt releases since 0.8.0 (found ${finalAttrs.version})"
+            + " require CUDA 12.9 and newer (found ${cudaMajorMinorVersion}).";
+        };
+      };
   };
 })

@@ -15,16 +15,6 @@ buildRedist {
     "static"
   ];
 
-  # https://docs.nvidia.com/cuda/nvjpeg2000/index.html
-  platformAssertions = [
-    {
-      message =
-        "nvJPEG2000 supports CUDA compute capabilities 6.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities;
-    }
-  ];
-
   meta = {
     description = "Accelerates the decoding and encoding of JPEG2000 images on NVIDIA GPUs";
     longDescription = ''
@@ -32,5 +22,16 @@ buildRedist {
     '';
     homepage = "https://docs.nvidia.com/cuda/nvjpeg2000";
     changelog = "https://docs.nvidia.com/cuda/nvjpeg2000/releasenotes.html";
+    # https://docs.nvidia.com/cuda/nvjpeg2000/index.html
+    problems =
+      lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities)
+        {
+          capabilityBelow60 = {
+            kind = "unsupported";
+            message =
+              "nvJPEG2000 requires CUDA compute capabilities 6.0 and newer"
+              + " (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+          };
+        };
   };
 }

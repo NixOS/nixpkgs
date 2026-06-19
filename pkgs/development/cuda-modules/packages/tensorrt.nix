@@ -11,6 +11,7 @@
 }:
 let
   inherit (backendStdenv) cudaCapabilities hasJetsonCudaCapability hostRedistSystem;
+  inherit (lib.attrsets) optionalAttrs;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep optionalString;
 in
@@ -184,49 +185,6 @@ buildRedist (
         "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets-*.cmake
     '';
 
-    # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
-    # NOTE: The support matrix lists only CUDA 13.4 Update 1 for the linux-sbsa release of 11.4.0 (built with CUDA 13.4
-    # Update 1), while stating that its packages require CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
-    # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
-    # supports Jetson Orin (8.7) and Thor (11.0).
-    # NOTE: The support matrix lists CUDA 13.3 for the linux-sbsa release of 11.1.0 (built with CUDA 13.3) and CUDA 13.2
-    # for its JetPack release, which uses the same archive and supports Jetson Orin (8.7) and Thor (11.0).
-    # https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html
-    platformAssertions = [
-      {
-        message =
-          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
-          + " support CUDA compute capabilities 7.0 and newer (found ${cudaCapabilitiesJSON})";
-        assertion = tensorrtAtLeast100 -> allCCNewerThan70;
-      }
-      {
-        message =
-          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
-          + " support only CUDA compute capability 8.7 (Jetson Orin) for pre-Thor Jetson devices"
-          + " (found ${cudaCapabilitiesJSON})";
-        assertion =
-          tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaCapabilities == [ "8.7" ];
-      }
-      {
-        message =
-          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
-          + " support CUDA 12.4 and newer for pre-Thor Jetson devices (found ${cudaMajorMinorVersion})";
-        assertion = tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaAtLeast "12.4";
-      }
-      {
-        message =
-          "tensorrt releases since 10.5.0 (found ${finalAttrs.version})"
-          + " support CUDA compute capabilities 7.5 and newer (found ${cudaCapabilitiesJSON})";
-        assertion = tensorrtAtLeast105 -> allCCNewerThan75;
-      }
-      {
-        message =
-          "tensorrt releases since 11.2.1 (found ${finalAttrs.version})"
-          + " do not support Jetson devices (found ${cudaCapabilitiesJSON})";
-        assertion = tensorrtAtLeast "11.2.1" -> !hasJetsonCudaCapability;
-      }
-    ];
-
     meta = {
       description = "SDK that facilitates high-performance machine learning inference";
       longDescription = ''
@@ -240,6 +198,62 @@ buildRedist (
       downloadPage = "https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt";
       changelog = "https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/release-notes.html#release-notes";
       license = lib.licenses.nvidiaTensorrt;
+
+      # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
+      # NOTE: The support matrix lists only CUDA 13.4 Update 1 for the linux-sbsa release of 11.4.0 (built with CUDA 13.4
+      # Update 1), while stating that its packages require CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
+      # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
+      # supports Jetson Orin (8.7) and Thor (11.0).
+      # NOTE: The support matrix lists CUDA 13.3 for the linux-sbsa release of 11.1.0 (built with CUDA 13.3) and CUDA 13.2
+      # for its JetPack release, which uses the same archive and supports Jetson Orin (8.7) and Thor (11.0).
+      # https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html
+      problems =
+        optionalAttrs (tensorrtAtLeast100 && !allCCNewerThan70) {
+          tensorrt100CapabilityTooOld = {
+            kind = "unsupported";
+            message =
+              "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+              + " require CUDA compute capabilities 7.0 and newer (found ${cudaCapabilitiesJSON}).";
+          };
+        }
+        //
+          optionalAttrs
+            (tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" && cudaCapabilities != [ "8.7" ])
+            {
+              tensorrt100JetsonUnsupportedCapability = {
+                kind = "unsupported";
+                message =
+                  "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+                  + " require CUDA compute capability 8.7 (Jetson Orin) on pre-Thor Jetson devices"
+                  + " (found ${cudaCapabilitiesJSON}).";
+              };
+            }
+        //
+          optionalAttrs (tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" && !(cudaAtLeast "12.4"))
+            {
+              tensorrt100JetsonCudaTooOld = {
+                kind = "unsupported";
+                message =
+                  "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+                  + " require CUDA 12.4 and newer on pre-Thor Jetson devices (found ${cudaMajorMinorVersion}).";
+              };
+            }
+        // optionalAttrs (tensorrtAtLeast105 && !allCCNewerThan75) {
+          tensorrt105CapabilityTooOld = {
+            kind = "unsupported";
+            message =
+              "tensorrt releases since 10.5.0 (found ${finalAttrs.version})"
+              + " require CUDA compute capabilities 7.5 and newer (found ${cudaCapabilitiesJSON}).";
+          };
+        }
+        // optionalAttrs (tensorrtAtLeast "11.2.1" && hasJetsonCudaCapability) {
+          tensorrt1121JetsonUnsupported = {
+            kind = "unsupported";
+            message =
+              "tensorrt releases since 11.2.1 (found ${finalAttrs.version})"
+              + " do not support Jetson devices (found ${cudaCapabilitiesJSON}).";
+          };
+        };
 
       knownVulnerabilities =
         # https://github.com/NixOS/nixpkgs/issues/522570

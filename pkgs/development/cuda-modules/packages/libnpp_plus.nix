@@ -16,18 +16,6 @@ buildRedist (finalAttrs: {
     "stubs"
   ];
 
-  # https://docs.nvidia.com/cuda/nppplus/releasenotes.html
-  platformAssertions = [
-    {
-      message =
-        "NPP+ releases since 0.10.0 (found ${finalAttrs.version})"
-        + " support CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion =
-        lib.versionAtLeast finalAttrs.version "0.10"
-        -> lib.all (lib.flip lib.versionAtLeast "7.5") backendStdenv.cudaCapabilities;
-    }
-  ];
-
   meta = {
     description = "C++ support for interfacing with the NVIDIA Performance Primitives (NPP) library";
     longDescription = ''
@@ -36,5 +24,20 @@ buildRedist (finalAttrs: {
     '';
     homepage = "https://developer.nvidia.com/npp";
     changelog = "https://docs.nvidia.com/cuda/nppplus/releasenotes.html";
+    # https://docs.nvidia.com/cuda/nppplus/releasenotes.html
+    problems =
+      lib.optionalAttrs
+        (
+          lib.versionAtLeast finalAttrs.version "0.10"
+          && !lib.all (lib.flip lib.versionAtLeast "7.5") backendStdenv.cudaCapabilities
+        )
+        {
+          nppPlus010CapabilityTooOld = {
+            kind = "unsupported";
+            message =
+              "NPP+ releases since 0.10.0 (found ${finalAttrs.version})"
+              + " require CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+          };
+        };
   };
 })
