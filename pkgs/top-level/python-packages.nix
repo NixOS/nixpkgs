@@ -3660,6 +3660,8 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
+  datalab-platform = callPackage ../development/python-modules/datalab-platform { };
+
   datalad = callPackage ../development/python-modules/datalad { };
 
   datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
@@ -5989,6 +5991,8 @@ self: super: with self; {
 
   fortune = callPackage ../development/python-modules/fortune { };
 
+  foss-flame = callPackage ../development/python-modules/foss-flame { };
+
   foundationdb = callPackage ../development/python-modules/foundationdb {
     inherit (pkgs) foundationdb;
   };
@@ -7745,6 +7749,8 @@ self: super: with self; {
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
 
+  intersphinx-registry = callPackage ../development/python-modules/intersphinx-registry { };
+
   intervals = callPackage ../development/python-modules/intervals { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
@@ -8312,6 +8318,10 @@ self: super: with self; {
   jupyterlab-vim = callPackage ../development/python-modules/jupyterlab-vim { };
 
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
+
+  jupyterlite-core = callPackage ../development/python-modules/jupyterlite-core { };
+
+  jupyterlite-sphinx = callPackage ../development/python-modules/jupyterlite-sphinx { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
@@ -9095,6 +9105,26 @@ self: super: with self; {
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
+
+  licomp = callPackage ../development/python-modules/licomp { };
+
+  licomp-doubleopen = callPackage ../development/python-modules/licomp-doubleopen { };
+
+  licomp-dwheeler = callPackage ../development/python-modules/licomp-dwheeler { };
+
+  licomp-gnuguide = callPackage ../development/python-modules/licomp-gnuguide { };
+
+  licomp-hermione = callPackage ../development/python-modules/licomp-hermione { };
+
+  licomp-osadl = callPackage ../development/python-modules/licomp-osadl { };
+
+  licomp-oslc-handbook = callPackage ../development/python-modules/licomp-oslc-handbook { };
+
+  licomp-proprietary = callPackage ../development/python-modules/licomp-proprietary { };
+
+  licomp-reclicense = callPackage ../development/python-modules/licomp-reclicense { };
+
+  licomp-toolkit = callPackage ../development/python-modules/licomp-toolkit { };
 
   lida = callPackage ../development/python-modules/lida { };
 
@@ -12127,6 +12157,8 @@ self: super: with self; {
   os-client-config = callPackage ../development/python-modules/os-client-config { };
 
   os-service-types = callPackage ../development/python-modules/os-service-types { };
+
+  osadl-matrix = callPackage ../development/python-modules/osadl-matrix/default.nix { };
 
   osc = callPackage ../development/python-modules/osc { };
 
@@ -18029,6 +18061,8 @@ self: super: with self; {
 
   sievelib = callPackage ../development/python-modules/sievelib { };
 
+  sigima = callPackage ../development/python-modules/sigima { };
+
   signalrcore = callPackage ../development/python-modules/signalrcore { };
 
   signalslot = callPackage ../development/python-modules/signalslot { };
@@ -18523,6 +18557,8 @@ self: super: with self; {
 
   spdx = callPackage ../development/python-modules/spdx { };
 
+  spdx-license-list = callPackage ../development/python-modules/spdx-license-list { };
+
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speak2mary = callPackage ../development/python-modules/speak2mary { };
@@ -18588,6 +18624,8 @@ self: super: with self; {
   sphinx-favicon = callPackage ../development/python-modules/sphinx-favicon { };
 
   sphinx-fortran = callPackage ../development/python-modules/sphinx-fortran { };
+
+  sphinx-gallery = callPackage ../development/python-modules/sphinx-gallery { };
 
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
 
