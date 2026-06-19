@@ -40,6 +40,9 @@
   libxkbcommon,
   libxkbfile,
   libxml2,
+  libxshmfence,
+  libxcb-cursor,
+  libxcb-util,
   libxslt,
   mtdev,
   nspr,
@@ -96,6 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  buildInputs = [
+    libxml2.dev
+  ];
+
   libPath = lib.makeLibraryPath [
     alsa-lib
     brotli
@@ -135,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxkbfile
     libxml2
+    libxshmfence
+    libxcb-cursor
+    libxcb-util
     libxslt
     mtdev
     nspr
@@ -185,6 +195,32 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-rpath ${finalAttrs.libPath}:$out/opt/viber/lib $file || true
     done
 
+    # Build a shim that re-exports valuePush/valuePop with the old LIBXML2_2.4.30
+    # version tag. Qt6WebEngine in Viber was compiled against libxml2 < 2.13 where
+    # these were public API; 2.13+ renamed them to xmlXPathValuePush/Pop and dropped
+    # the old versioned exports.
+    cat > libxml2-compat.c << 'EOF'
+#include <libxml/xpathInternals.h>
+#undef valuePush
+#undef valuePop
+int valuePush(xmlXPathParserContextPtr ctxt, xmlXPathObjectPtr value) {
+    return xmlXPathValuePush(ctxt, value);
+}
+xmlXPathObjectPtr valuePop(xmlXPathParserContextPtr ctxt) {
+    return xmlXPathValuePop(ctxt);
+}
+EOF
+    cat > libxml2-compat.map << 'EOF'
+LIBXML2_2.4.30 {
+  global: valuePush; valuePop;
+  local: *;
+};
+EOF
+    $CC -shared -fPIC -o $out/opt/viber/lib/libxml2-compat.so libxml2-compat.c \
+      -I${libxml2.dev}/include/libxml2 \
+      -L${lib.getLib libxml2}/lib -lxml2 \
+      -Wl,--version-script=libxml2-compat.map
+
     mkdir $out/bin
     # qt.conf is not working, so override everything using environment variables
     makeWrapper $out/opt/viber/Viber $out/bin/viber \
@@ -192,7 +228,8 @@ stdenv.mkDerivation (finalAttrs: {
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
       --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
-      --set QML2_IMPORT_PATH "$out/opt/viber/qml"
+      --set QML2_IMPORT_PATH "$out/opt/viber/qml" \
+      --prefix LD_PRELOAD : "$out/opt/viber/lib/libxml2-compat.so"
 
     mv $out/usr/share $out/share
     rm -rf $out/usr
