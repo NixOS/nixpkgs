@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  makeWrapper,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -21,6 +22,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=82.0.1" "setuptools"
   '';
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   build-system = with python3Packages; [
     babel
@@ -106,9 +111,37 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pyotp"
   ];
 
+  preBuild = ''
+    python fiduswriter/manage.py collectstatic
+  '';
+
+  env.FIDUS_OUT_DIR = "${placeholder "out"}/${python3Packages.python.sitePackages}/fiduswriter";
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${finalAttrs.passthru.pythonPath}:${finalAttrs.env.FIDUS_OUT_DIR}"
+  ];
+
+  postFixup = ''
+    mkdir -p $out/bin
+
+    makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
+      "''${makeWrapperArgs[@]}"
+
+    makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/fiduswriter-start \
+      --add-flags '--bind ''${HOST_IP:-0.0.0.0}:''${HOST_PORT:-8000} fiduswriter.wsgi:application' \
+      "''${makeWrapperArgs[@]}"
+  '';
+
   pythonImportsCheck = [
     "fiduswriter"
   ];
+
+  passthru = {
+    pythonPath = python3Packages.makePythonPath finalAttrs.passthru.dependencies;
+  };
 
   meta = {
     description = "Online collaborative editor for academics";
