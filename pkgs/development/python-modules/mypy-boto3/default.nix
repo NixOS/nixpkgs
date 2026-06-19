@@ -1342,8 +1342,8 @@ in
       "sha256-EGelGYE1b7seBg7WHOnY1Vumlw8iMqBAMIuUpPmIUIA=";
 
   mypy-boto3-synthetics =
-    buildMypyBoto3Package "synthetics" "1.43.0"
-      "sha256-UmRSnFX0xy8YlB/RVAxSeRLwNSUE4rqkkXI1lf6MqvQ=";
+    buildMypyBoto3Package "synthetics" "1.43.33"
+      "sha256-vfHbGu/CUJKHLc7G5FVwvedPdsQ6d0ft5vlU25khVdQ=";
 
   mypy-boto3-textract =
     buildMypyBoto3Package "textract" "1.43.0"
