@@ -14237,6 +14237,12 @@
     githubId = 8211181;
     name = "Kevin Kandlbinder";
   };
+  kexi = {
+    email = "kei.of.nakayama@gmail.com";
+    github = "kexi";
+    githubId = 350671;
+    name = "Kei Nakayama";
+  };
   keyruu = {
     name = "Lucas";
     email = "me@keyruu.de";
