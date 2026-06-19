@@ -33,6 +33,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nettle
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
