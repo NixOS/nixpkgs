@@ -20,6 +20,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes.extended_text_field = "sha256-GOvaWGklfmJKRWYbVTvpZfKj9QMxxlaqrJkfDKR2T0o=";
+  gitHashes.windows_gpu_recovery = "sha256-+LQV2wgbQ0ADM2KeRfgbvCHPODBBsq5XrPulXl6GWG8=";
 
   nativeBuildInputs = [
     autoPatchelfHook
