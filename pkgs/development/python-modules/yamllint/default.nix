@@ -50,7 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/adrienverge/yamllint";
     changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mikefaille ];
+    maintainers = [ ];
     mainProgram = "yamllint";
   };
 }
