@@ -6,6 +6,7 @@
   werkzeug,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 
   # for passthru.tests
   aiobotocore,
@@ -14,24 +15,27 @@
 
 buildPythonPackage rec {
   pname = "flask-cors";
-  version = "6.0.2";
+  version = "6.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
     tag = version;
-    hash = "sha256-9WlD5Qd0WiBDrVHf5nT1qAK2gtYavlPnY7qFkiAgxws=";
+    hash = "sha256-fngKJm7/7BMcWPPFncTCWw2sL1UJ0t4ICpXr95yNpbg=";
   };
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
     flask
     werkzeug
   ];
+
+  pythonImportsCheck = [ "flask_cors" ];
 
   nativeCheckInputs = [
     pytestCheckHook
