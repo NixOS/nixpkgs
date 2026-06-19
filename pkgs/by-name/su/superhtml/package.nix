@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "superhtml";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kristoff-it";
     repo = "superhtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z8Tc869VTLQSQgfz291i/XgK7STxpZA9cuBdqbVgIsY=";
+    hash = "sha256-bbRqwIdSNgHTNsPZzn+pf/9ix02rT3BXRB6uszaPdi4=";
   };
 
   nativeBuildInputs = [
