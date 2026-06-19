@@ -146,14 +146,9 @@ in
     pname = "emacs-mac";
     version = "30.2.50";
     variant = "macport";
-    rev = "emacs-mac-30.2";
-    hash = "sha256-i/W2Xa6Vk1+T1fs6fa4wJVMLLB6BK8QAPcdmPrU8NwM=";
+    rev = "emacs-mac-30.2.1";
+    hash = "sha256-KFgQZBW0QRX0k4k8gkVuGhNTfxArOH1+rwUzsmyEuss=";
     patches = fetchpatch: [
-      (fetchpatch {
-        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
-        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
-        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
-      })
       (fetchpatch {
         # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/970856
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/01_all_treesit-0.26.patch?id=d0f47979806d9be5a190fdb4ffa1bde439b2d616";
