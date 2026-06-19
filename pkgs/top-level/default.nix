@@ -217,6 +217,7 @@ let
   fixedPoint = boot stages;
 
   pkgs =
+    # Generally only set by CI, don't want to cause a performance hit for users
     if config.attrPathsDisallowedForInternalUse == [ ] then
       fixedPoint
     else

@@ -321,6 +321,7 @@ let
   # See also ./default.nix, where these attributes are added back again so they're still checked by CI
   internallyDisallowedAttrPathsOverlay =
     final: prev:
+    # Generally only set by CI, don't want to cause a performance hit for users
     if config.attrPathsDisallowedForInternalUse == [ ] then
       { }
     else
