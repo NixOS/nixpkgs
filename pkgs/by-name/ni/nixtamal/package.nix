@@ -6,6 +6,8 @@
   ocamlPackages,
   darwin,
   makeBinaryWrapper,
+  removeReferencesTo,
+  installShellFiles,
   coreutils,
   curl,
   gawk,
@@ -13,14 +15,13 @@
   nix-prefetch-fossil,
   nix-prefetch-git,
   nix-prefetch-pijul,
-  removeReferencesTo,
   testers,
   nixtamal,
 }:
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.6.0";
+  version = "1.7.1";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -29,19 +30,20 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-OOAulI6ZJGbbUMi68jnJQ+cJpZVQYL5F5HUfdOZ3wEs=";
+    hash = "sha256-C6d6Ra9w0NG78QSVFS4Glj3HoNRugXjowjFOoJbzHT0=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     removeReferencesTo
+    installShellFiles
+    # Completions
+    ocamlPackages.cmdliner
     # For manpages
     python3Packages.docutils
     python3Packages.pygments
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
 
   buildInputs = with ocamlPackages; [
     cmdliner
@@ -104,9 +106,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
        --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
        nixtamal
 
-    for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"
-    do
-        remove-references-to -t "$dep" "$bin/bin/nixtamal"
+    for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"; do
+       remove-references-to -t "$dep" "$bin/bin/nixtamal"
     done
 
     wrapProgram "$bin/bin/nixtamal" --prefix PATH : ${
@@ -120,6 +121,17 @@ ocamlPackages.buildDunePackage (finalAttrs: {
         nix-prefetch-pijul
       ]
     }
+
+    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) /* sh */ ''
+      mkdir -p "$TMPDIR"
+      cmdliner tool-completion --standalone-completion bash nixtamal >"$TMPDIR/completion.bash"
+      cmdliner tool-completion --standalone-completion zsh nixtamal >"$TMPDIR/completion.zsh"
+      substituteInPlace "$TMPDIR/completion.zsh" --replace-fail "_nixtamal_cmdliner" "_nixtamal"
+
+      installShellCompletion --bash --cmd nixtamal "$TMPDIR/completion.bash"
+      installShellCompletion --fish --cmd nixtamal "script/completion.fish"
+      installShellCompletion --zsh --cmd nixtamal "$TMPDIR/completion.zsh"
+    ''}
 
     runHook postInstall
   '';
@@ -143,14 +155,14 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     changelog = "https://nixtamal.toast.al/changelog/";
     description = "Fulfilling input pinning for Nix";
     longDescription = ''
-      Nixtamal’s keys features
-
-      • Automate the manual work of input pinning, allowing to lock & refresh inputs
-      • Declarative KDL manifest file over imperative CLI flags
+      • Automate the manual work of input pinning for dependency management
+      • Allow easy ways to lock & refresh those inputs
+      • Declarative manifest file over imperative CLI flags
       • diff/grep-friendly lockfile
-      • Host, forge, VCS-agnostic
-      • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching Darcs, Pijul, & Fossil
-      • Supports mirrors
+      • Declarative patch/diff management for inputs
+      • Host-, forge-, VCS-agnostic
+      • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching now-supported Darcs, Pijul, & Fossil
+      • Supports mirrors, failing over when a server is down
       • Override hash algorithm on a per-project & per-input basis — including BLAKE3 support
       • Custom freshness commands
       • No experimental Nix features required

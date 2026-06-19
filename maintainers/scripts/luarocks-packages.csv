@@ -35,6 +35,7 @@ haskell-tools.nvim,,,,,5.1,mrcjkb
 http,,,,0.4-0,,vcunat
 inspect,,,,,,
 jsregexp,,,,0.0.7-2,,
+kulala.nvim,,,,,,
 ldbus,,,https://luarocks.org/dev,,,
 ldoc,,,,,,
 lgi,,,,,,
@@ -172,6 +173,7 @@ toml-edit,,,,,5.1,mrcjkb
 tomlua,,,,,,birdee
 tree-sitter-cli,,,,,,
 tree-sitter-http,,,,0.0.33-1,,
+tree-sitter-kulala_http,,,,,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-norg-meta,,,,,,
 tree-sitter-orgmode,,,,,5.1,

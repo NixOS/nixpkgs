@@ -81,7 +81,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       onny
-      lucasew
       ungeskriptet
     ];
     mainProgram = "pmbootstrap";

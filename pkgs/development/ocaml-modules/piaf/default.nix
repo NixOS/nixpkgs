@@ -58,6 +58,6 @@ buildDunePackage (finalAttrs: {
     description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    maintainers = [ ];
   };
 })

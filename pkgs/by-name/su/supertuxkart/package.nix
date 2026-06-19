@@ -24,6 +24,8 @@
   sqlite,
   libsamplerate,
   shaderc,
+  serverOnly ? false,
+  nameSuffix ? "",
 }:
 let
   assets = fetchsvn {
@@ -66,7 +68,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
 
-  pname = "supertuxkart";
+  pname = "supertuxkart${nameSuffix}";
   version = "1.5";
 
   src = fetchFromGitHub {
@@ -93,29 +95,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    shaderc
-    SDL2
-    glew
-    libvorbis
-    libogg
-    freetype
     curl
-    libjpeg
-    libpng
-    libx11
-    harfbuzz
     mcpp
-    wiiuse
     angelscript
     sqlite
   ]
-  ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
-  ++ lib.optional stdenv.hostPlatform.isLinux openal
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libsamplerate
-  ];
+  ++ lib.optionals (!serverOnly) (
+    [
+      shaderc
+      SDL2
+      glew
+      libvorbis
+      libogg
+      freetype
+      libjpeg
+      libpng
+      libx11
+      harfbuzz
+      wiiuse
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
+    ++ lib.optional stdenv.hostPlatform.isLinux openal
+    ++ lib.optional stdenv.hostPlatform.isDarwin libsamplerate
+  );
 
   cmakeFlags = [
+    "-DSERVER_ONLY=${if serverOnly then "ON" else "OFF"}"
     "-DBUILD_RECORDER=${
       if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"
     }"

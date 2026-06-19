@@ -192,7 +192,12 @@ let
               ++ optional (config.cacert != null) "cacert:${config.cacert}";
           };
           script = concatStringsSep " " (
-            [ "${mainCfg.package}/bin/ghostunnel" ]
+            [
+              "${mainCfg.package}/bin/ghostunnel"
+              # ghostunnel's landlock rules don't like reading the CA certs from /etc
+              # because they are links to /nix/store, which isn't part of its rules
+              "--disable-landlock"
+            ]
             ++ optional (config.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
             ++ optional (config.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
             ++ optional (config.key != null) "--key=$CREDENTIALS_DIRECTORY/key"

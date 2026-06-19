@@ -6,12 +6,17 @@
   vala,
   glib,
   libsndfile,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
   zlib,
   bzip2,
   xz,
   libsamplerate,
+  libgcrypt,
+  libgpg-error,
   intltool,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
@@ -22,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmirage";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/libmirage-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mstOGdmKJXRUrQA5F1DZGqVuY+f25Q5ZpdOXPx4MZRI=";
+    hash = "sha256-wMAzJpEue1QnDllWheFk3ZX+8pSkYw13s+GU0G/AOfs=";
   };
 
   env = {
@@ -37,10 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     libsndfile
+    flac
+    libogg
+    libvorbis
     zlib
     bzip2
     xz
     libsamplerate
+    libgcrypt
+    libgpg-error
   ];
 
   nativeBuildInputs = [
@@ -52,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    pcre
     util-linux
     libselinux
     libsepol

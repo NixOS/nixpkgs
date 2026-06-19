@@ -48,6 +48,10 @@ let
         }
       } -- ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
     '';
+    excludeShellChecks = [
+      # Not following: /run/agenix/pretalx-env was not specified as input
+      "SC1091"
+    ];
   };
 in
 

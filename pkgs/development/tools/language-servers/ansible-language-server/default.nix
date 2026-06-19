@@ -2,70 +2,63 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry_4,
-  nodejs,
+  fetchPnpmDeps,
   makeWrapper,
+  nodejs,
+  pnpm_11,
+  pnpmConfigHook,
   python3,
-  writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ansible-language-server";
-  version = "1.2.4"; # Language server version from the repo at packages/ansible-language-server/package.json
-  vscodeAnsibleVersion = "26.1.3"; # vscode-ansible version
+  version = finalAttrs.vscodeAnsibleVersion; # Language server version from the repo at packages/ansible-language-server/package.json is stuck at 0.0.0
+  vscodeAnsibleVersion = "26.6.0"; # vscode-ansible version
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "vscode-ansible";
     tag = "v${finalAttrs.vscodeAnsibleVersion}";
-    hash = "sha256-DsEW3xP8Fa9nwPuyEFVqG6rvAZgr4TDB6jhyixdvqt8=";
-  };
-  patches = [
-    # Remove when updating, the project migrated to pnpm in https://github.com/ansible/vscode-ansible/commit/afa700ff78ad0839df446d18cb26e71b28559af4
-    ./yarn-4.14-support.patch
-  ];
-
-  missingHashes = ./missing-hashes.json;
-
-  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-Lm3cz+ydOee34J2tnlMQuSTzBzFKFpQTXcMreMS3ZiU=";
+    hash = "sha256-GmeEVZumm+dfQFYLL8+Lf5usPw17a0vOZIe7ApTzFGI=";
   };
 
   nativeBuildInputs = [
-    nodejs
-    yarn-berry_4
-    yarn-berry_4.yarnBerryConfigHook
     makeWrapper
-    writableTmpDirAsHomeHook
+    nodejs
+    pnpmConfigHook
+    pnpm_11
   ];
 
-  # Prevent native module builds (e.g. keytar from the VS Code extension workspace)
-  # The language server only needs TypeScript compilation, done manually in buildPhase
-  env.YARN_ENABLE_SCRIPTS = "0";
+  pnpmWorkspaces = [ "@ansible/ansible-language-server" ];
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pnpmWorkspaces
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 3;
+    hash = "sha256-z41U5Yr7e6SgIyFTfwx6TNcVnJIxGcYUWnLlIoDIgo0=";
+  };
 
   buildPhase = ''
     runHook preBuild
-    cd packages/ansible-language-server
-    rm -rf test
-    yarn run compile
+    pnpm --filter=@ansible/ansible-language-server run build:dist
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/lib/node_modules/ansible-language-server
-    cp -r out package.json $out/lib/node_modules/ansible-language-server/
-
-    cd ../..
-    cp -rL node_modules $out/lib/node_modules/ansible-language-server/
-
-    mkdir -p $out/lib/node_modules/ansible-language-server/bin
-    cp packages/ansible-language-server/bin/ansible-language-server $out/lib/node_modules/ansible-language-server/bin/
-
     mkdir -p $out/bin
-    makeWrapper ${nodejs}/bin/node $out/bin/ansible-language-server \
+
+    mv packages/ansible-language-server/dist/* $out/lib/node_modules/ansible-language-server/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/ansible-language-server \
       --prefix PATH : ${python3}/bin \
-      --add-flags "$out/lib/node_modules/ansible-language-server/out/server/src/server.js"
+      --add-flags "$out/lib/node_modules/ansible-language-server/server.cjs" \
+      --set NODE_PATH "$out/lib/node_modules/"
     runHook postInstall
   '';
 

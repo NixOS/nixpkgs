@@ -54,27 +54,6 @@ let
               ${system} = hydraJob test;
             }
         );
-    }
-    // {
-      # for typechecking of the scripts and evaluation of
-      # the nodes, without running VMs.
-      allDrivers = import ./tests/all-tests.nix {
-        inherit system;
-        pkgs = import ./.. { inherit system; };
-        callTest =
-          config:
-          let
-            inherit (config) driver;
-          in
-          lib.optionalAttrs (builtins.elem system (getPlatforms driver)) (
-            if attrNamesOnly then
-              hydraJob driver
-            else
-              {
-                ${system} = hydraJob driver;
-              }
-          );
-      };
     };
 
   allTests = foldAttrs recursiveUpdate { } (
