@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-KWJy2TQ1mRMI63NgdgDANLVYgHoH6CnnURQuZcz6nQg=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./force_mp_set_double.patch
+  ];
+
   postPatch = ''
     substituteInPlace makefile.shared \
       --replace-fail glibtool libtool \

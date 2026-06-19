@@ -1,0 +1,26 @@
+diff --git a/bn_mp_set_double.c b/bn_mp_set_double.c
+index a42fc70..4a13539 100644
+--- a/bn_mp_set_double.c
++++ b/bn_mp_set_double.c
+@@ -3,7 +3,6 @@
+ /* LibTomMath, multiple-precision integer library -- Tom St Denis */
+ /* SPDX-License-Identifier: Unlicense */
+ 
+-#if defined(__STDC_IEC_559__) || defined(__GCC_IEC_559)
+ mp_err mp_set_double(mp_int *a, double b)
+ {
+    uint64_t frac;
+@@ -36,12 +35,4 @@ mp_err mp_set_double(mp_int *a, double b)
+ 
+    return MP_OKAY;
+ }
+-#else
+-/* pragma message() not supported by several compilers (in mostly older but still used versions) */
+-#  ifdef _MSC_VER
+-#    pragma message("mp_set_double implementation is only available on platforms with IEEE754 floating point format")
+-#  else
+-#    warning "mp_set_double implementation is only available on platforms with IEEE754 floating point format"
+-#  endif
+-#endif
+ #endif
+
