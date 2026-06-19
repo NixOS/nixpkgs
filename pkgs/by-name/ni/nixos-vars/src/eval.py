@@ -34,16 +34,14 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
 				return json.loads(f.read())
 		except json.decoder.JSONDecodeError as e:
 			raise VarsError(f"Error parsing JSON: {e}")
-
-	if args.flake is not None:
+	elif args.flake is not None:
 		expr = f"config: import {jsonify} {{ inherit config; }}"
 		# Currently passing --impure since `jsonify` is an absolute path...
 		evalCommand = [args.flake, "--impure", "--apply", expr]
-	else:
+	elif args.file is not None:
 		expr = f"""
 import {jsonify} {{
 	config = (import {args.file}){"" if args.attr is None else f".{args.attr}"};
-	pkgsHost = import {"<nixpkgs>" if args.nixpkgs is None else args.nixpkgs} {{}};
 }}
 """
 		evalCommand = ["--impure", "-E", expr]

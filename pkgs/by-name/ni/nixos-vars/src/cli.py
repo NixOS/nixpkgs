@@ -47,14 +47,6 @@ def main() -> None:
 	)
 
 	parser.add_argument(
-		"--nixpkgs",
-		type=str,
-		required="NIX_PATH" not in os.environ,
-		metavar="<path>",
-		help="Path to nixpkgs tree (default: import from NIX_PATH)",
-	)
-
-	parser.add_argument(
 		"--dry-run",
 		action="store_true",
 		help="Print what would be done without executing",
