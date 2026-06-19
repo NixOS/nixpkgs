@@ -32,22 +32,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
     channels
     granian
     servestatic
-    django_5
+    django
     django-allauth
     django-axes
-    # django-avatar
+    django-avatar
     django-otp
     pyotp
     qrcode
-    # django-js-error-hook
-    # django-npm-mjs
-    # django-loginas
+    django-js-error-hook
+    django-npm-mjs
+    django-loginas
     httpx
     httpx-ws
     pillow
     python-magic
     prosemirror
-    # prosemirror-rs
+    prosemirror-rs
     watchdog
     autobahn
   ];
@@ -98,9 +98,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "django"
+    "django-avatar"
+    "django-loginas"
     "granian"
-    "pyotp"
     "httpx-ws"
+    "pyotp"
   ];
 
   pythonImportsCheck = [
