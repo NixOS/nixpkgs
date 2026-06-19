@@ -13415,8 +13415,6 @@ self: super: with self; {
 
   py-datastruct = callPackage ../development/python-modules/py-datastruct { };
 
-  py-deprecate = callPackage ../development/python-modules/py-deprecate { };
-
   py-desmume = callPackage ../development/python-modules/py-desmume {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
@@ -13913,6 +13911,8 @@ self: super: with self; {
   pydemumble = callPackage ../development/python-modules/pydemumble { };
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
+
+  pydeprecate = callPackage ../development/python-modules/pydeprecate { };
 
   pydeps = callPackage ../development/python-modules/pydeps { inherit (pkgs) graphviz; };
 
