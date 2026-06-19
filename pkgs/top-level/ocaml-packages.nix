@@ -2261,6 +2261,8 @@ let
 
         webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
+        windtrap = callPackage ../development/ocaml-modules/windtrap { };
+
         wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
         ### X ###
