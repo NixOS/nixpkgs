@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://lynx.invisible-island.net/lynx${finalAttrs.version}/CHANGES.html";
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
