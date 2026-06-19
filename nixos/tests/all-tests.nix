@@ -1643,6 +1643,7 @@ in
     "i686-linux"
   ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
+  systemd-initrd-non-nixos = runTest ./systemd-initrd-non-nixos.nix;
   systemd-initrd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];
     _module.args.systemdStage1 = true;
