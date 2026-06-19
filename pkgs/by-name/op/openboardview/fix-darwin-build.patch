@@ -1,0 +1,24 @@
+From 7a7ca124d10b1a3230a8e65da6d0113226b46d89 Mon Sep 17 00:00:00 2001
+From: Mario Hros <966992+k3a@users.noreply.github.com>
+Date: Fri, 17 Oct 2025 17:48:21 +0200
+Subject: [PATCH] Bump MacOS deplyment target to fix compilation error.
+
+This fixes filesystem:path errors on recent MacOS:
+platform.h:26:19: error: 'path' is unavailable: introduced in macOS 10.15
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 147bd4af..563514cc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.11)
+ 
+ # Set OSX target version, before calling project() (inside version.cmake). FORCE is needed when project() is called within an included file
+-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version" FORCE)
++set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version" FORCE)
+ 
+ # Set a default build type like suggested in official blog https://www.kitware.com/cmake-and-the-default-build-type/
+ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
