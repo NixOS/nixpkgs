@@ -75,6 +75,15 @@ static int make_caps_ambient(const char *self_path) {
             // no capabilities set
             return 0;
         }
+        if (errno == ENOTSUP || errno == ENOSYS) {
+            // The filesystem does not support the `security.capability`
+            // xattr -- e.g. the noacl tmpfs of an unprivileged build sandbox,
+            // where the wrapper is deliberately built cap-less. Warn rather
+            // than abort, so the reduced-fidelity environment is never silent.
+            fprintf(stderr, "warning: cannot read capabilities for %s (%s); "
+                    "assuming none are set\n", self_path, strerror(errno));
+            return 0;
+        }
         fprintf(stderr, "cannot get capabilities for %s: %s", self_path, strerror(errno));
         return 1;
     }

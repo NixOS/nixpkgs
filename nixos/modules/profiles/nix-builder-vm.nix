@@ -44,6 +44,10 @@ in
         default = false;
         internal = true;
       };
+      options.boot.sandboxedActivation = lib.mkOption {
+        default = false;
+        internal = true;
+      };
     }
   ];
 

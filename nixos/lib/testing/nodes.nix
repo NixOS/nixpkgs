@@ -91,6 +91,12 @@ let
       {
         key = "base-nspawn";
 
+        # Activation runs in an unprivileged build sandbox here, so let
+        # switch-to-configuration skip root-only ops (setcap, setuid, setfacl)
+        # and run to completion. The resulting wrappers are non-setuid/cap-less;
+        # tests needing real privilege escalation must use the QEMU driver.
+        boot.sandboxedActivation = true;
+
         # PAM requires setuid and doesn't work in the build sandbox.
         # https://github.com/NixOS/nix/blob/959c244a1265f4048390f3ad21679219d7b27a99/src/libstore/unix/build/linux-derivation-builder.cc#L63
         services.openssh.settings.UsePAM = false;

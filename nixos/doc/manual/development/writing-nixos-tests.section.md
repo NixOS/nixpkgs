@@ -185,6 +185,13 @@ Use the Nix option
 and/or the module [`programs.nix-required-mounts`](#opt-programs.nix-required-mounts.enable) on the host
 to add additional paths to the sandbox.
 
+Activating a deployment (running `switch-to-configuration`) and switching into a
+`specialisation` work in tests run in nspawn as well. However, activation runs
+in an unprivileged build sandbox, so root-only operations are skipped: the
+`security.wrappers` it creates are non-setuid and cap-less, and no ACLs are set.
+Tests that assert *real* privilege escalation -- `setuid` binaries, `sudo`,
+file capabilities, or ACLs -- must use the QEMU driver.
+
 #### Configuring QEMU virtual machines {#ssec-nixos-test-qemu-vms}
 
 Some options are specific to QEMU virtual machines:

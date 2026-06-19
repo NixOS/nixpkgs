@@ -137,10 +137,17 @@ let
       chmod 0000 "$wrapperDir/${program}"
       chown ${owner}:${group} "$wrapperDir/${program}"
 
-      # Set desired capabilities on the file plus cap_setpcap so
-      # the wrapper program can elevate the capabilities set on
-      # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+      ${
+        if config.boot.sandboxedActivation then
+          ''echo "warning: skipping setcap on ${program}: unprivileged build sandbox; wrapper will be cap-less" >&2''
+        else
+          ''
+            # Set desired capabilities on the file plus cap_setpcap so
+            # the wrapper program can elevate the capabilities set on
+            # its file into the Ambient set.
+            ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+          ''
+      }
 
       # Set the executable bit
       chmod ${permissions} "$wrapperDir/${program}"
@@ -165,7 +172,15 @@ let
       chmod 0000 "$wrapperDir/${program}"
       chown ${owner}:${group} "$wrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
+      ${
+        if config.boot.sandboxedActivation then
+          ''
+            echo "warning: skipping S_ISUID/S_ISGID on ${program}: unprivileged build sandbox; wrapper will lack `setuid`" >&2
+            chmod "${permissions}" "$wrapperDir/${program}"
+          ''
+        else
+          ''chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"''
+      }
     '';
 
   mkWrappedPrograms = map (

@@ -200,11 +200,18 @@ in
           ${lib.getExe cfg.package} -u
           chgrp resolvconf ${lib.escapeShellArgs cfg.subscriberFiles}
           chmod g=u ${lib.escapeShellArgs cfg.subscriberFiles}
-          ${lib.getExe' pkgs.acl "setfacl"} -R \
-            -m group:resolvconf:rwx \
-            -m default:group:resolvconf:rwx \
-            /run/resolvconf
-        '';
+        ''
+        + (
+          if config.boot.sandboxedActivation then
+            ''echo "warning: skipping setfacl in resolvconf for unprivileged build sandbox" >&2''
+          else
+            ''
+              ${lib.getExe' pkgs.acl "setfacl"} -R \
+                -m group:resolvconf:rwx \
+                -m default:group:resolvconf:rwx \
+                /run/resolvconf
+            ''
+        );
       };
 
     })

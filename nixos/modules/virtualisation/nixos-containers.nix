@@ -563,6 +563,25 @@ in
       '';
     };
 
+    boot.sandboxedActivation = mkOption {
+      type = types.bool;
+      default = false;
+      internal = true;
+      description = ''
+        Whether activation runs in an unprivileged build sandbox (as it does
+        in tests run in nspawn). When set, `switch-to-configuration`
+        skips operations that require real root -- `setcap`, `S_ISUID`/`S_ISGID`,
+        and `setfacl` -- so activation can run to completion, at the cost of
+        reduced fidelity: the resulting wrappers are non-setuid and cap-less.
+        Each skipped operation emits a warning to stderr, so the divergence is
+        visible in the activation log.
+
+        This is not set for real nspawn deployments, which keep full privileges.
+        Tests asserting real privilege escalation (setuid, file capabilities,
+        ACLs) must use the QEMU driver.
+      '';
+    };
+
     boot.enableContainers = mkOption {
       type = types.bool;
       default = config.containers != { };
