@@ -29680,6 +29680,12 @@
     githubId = 42812654;
     name = "William Underwood";
   };
+  wheelibin = {
+    email = "wheelibin@gmail.com";
+    github = "wheelibin";
+    githubId = 135223;
+    name = "Jon Wheeler";
+  };
   wheelsandmetal = {
     email = "jakob@schmutz.co.uk";
     github = "wheelsandmetal";
