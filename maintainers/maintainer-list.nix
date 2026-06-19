@@ -14041,6 +14041,12 @@
     email = "nixos@karpfen.dev";
     matrix = "@karpfen:matrix.org";
   };
+  karui = {
+    name = "Karui Hoshimiya";
+    email = "git@second2050.me";
+    github = "second2050";
+    githubId = 37344371;
+  };
   kashw2 = {
     email = "supra4keanu@hotmail.com";
     github = "kashw2";
