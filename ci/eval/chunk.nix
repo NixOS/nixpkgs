@@ -18,6 +18,7 @@ let
   unfiltered = import ./outpaths.nix {
     inherit path;
     inherit includeBroken systems;
+    inherit (preEvalResult) attrPathsDisallowedForInternalUse;
     extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
   };
 
