@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl-lsp";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-V6MrDpdh4jnSiXWD0UbF/XXpLa95smCbdj9/jT0Xb3w=";
+    hash = "sha256-XFZ4w67ackToWFjL9g0FEltJogeR1qhHFhlsWRbykYU=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
