@@ -13912,6 +13912,8 @@ self: super: with self; {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydeprecate = callPackage ../development/python-modules/pydeprecate { };
+
   pydeps = callPackage ../development/python-modules/pydeps { inherit (pkgs) graphviz; };
 
   pydes = callPackage ../development/python-modules/pydes { };
