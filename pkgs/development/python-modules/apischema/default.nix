@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   graphql-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest8_3CheckHook,
   pythonAtLeast,
@@ -31,6 +32,10 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   optional-dependencies = {
     graphql = [ graphql-core ];
