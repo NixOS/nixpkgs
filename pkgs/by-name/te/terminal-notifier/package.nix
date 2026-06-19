@@ -9,7 +9,6 @@
 
 stdenv.mkDerivation rec {
   pname = "terminal-notifier";
-
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -39,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     maintainers = [ ];
     homepage = "https://github.com/julienXX/terminal-notifier";
+    description = "Send User Notifications on macOS from the command-line";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     mainProgram = "terminal-notifier";
