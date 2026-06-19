@@ -6,11 +6,35 @@ from .error import VarsError
 from .args import VarsArgs
 from .config import VarsConfig
 
+jsonify = Path(__file__).parent / "nix" / "jsonify.nix"
 
-def evaluate_config(args: VarsArgs) -> None:
-	if args.file is None and args.flake is None:
-		raise VarsError("Neither --file nor --flake was specified")
-	jsonify = Path(__file__).parent / "nix" / "jsonify.nix"
+
+def evaluate_config(args: VarsArgs) -> VarsConfig:
+	return VarsConfig.fromJSON(evaluate_config_raw(args))
+
+
+def evaluate_config_raw(args: VarsArgs) -> Any:
+	configSources = []
+
+	if args.file is not None:
+		configSources.append(args.file)
+	if args.flake is not None:
+		configSources.append(args.flake)
+	if args.json is not None:
+		configSources.append(args.json)
+
+	if len(configSources) != 1:
+		raise VarsError(
+			"Precisely one of the --file, --flake, or --json flags must be given"
+		)
+
+	if args.json is not None:
+		try:
+			with open(args.json) as f:
+				return json.loads(f.read())
+		except json.decoder.JSONDecodeError as e:
+			raise VarsError(f"Error parsing JSON: {e}")
+
 	if args.flake is not None:
 		expr = f"config: import {jsonify} {{ inherit config; }}"
 		# Currently passing --impure since `jsonify` is an absolute path...
@@ -31,25 +55,7 @@ import {jsonify} {{
 			text=True,
 			check=True,
 		)
-		data: Any = json.loads(result.stdout)
-		print(VarsConfig.fromJSON(data))
+
+		return json.loads(result.stdout)
 	except subprocess.CalledProcessError as e:
 		raise VarsError(f"Error evaluating nix expression:\n{e.stderr}")
-	pass
-
-
-#
-# 	gen_to_backend: dict[str, str] = {}
-# 	backend_objects: dict[str, Backend] = {}
-# 	for backend_name, backend_config in data.get("backends", {}).items():
-# 		gen_keys = list(backend_config.get("generators", {}).keys())
-# 		for gen in gen_keys:
-# 			gen_to_backend[gen] = backend_name
-# 		backend_config["generators"] = set(gen_keys)
-# 		backend_objects[backend_name] = Backend(backend_name, backend_config)
-#
-# 	return VarsConfig(
-# 		generators=data.get("generators", {}),
-# 		backends=backend_objects,
-# 		gen_to_backend=gen_to_backend,
-# 	)

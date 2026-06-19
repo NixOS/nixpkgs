@@ -7,6 +7,7 @@ from typing import Optional
 class VarsArgs:
 	file: Optional[Path]
 	flake: Optional[str]
+	json: Optional[str]
 	nixpkgs: Optional[Path]
 	attr: Optional[str]
 	dry_run: bool
