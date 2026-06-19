@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
     docbook-xsl-nons
     glib
+    gobject-introspection
     intltool
     libxml2
     libxslt
@@ -94,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gobject-introspection
     ipset
     iptables
     kmod
