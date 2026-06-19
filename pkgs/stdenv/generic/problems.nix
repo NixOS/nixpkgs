@@ -255,7 +255,8 @@ rec {
         record
         enum
         ;
-      kindType = enum (attrNames manualKinds);
+      # While we should only allow manual kinds, we need to allow `meta.problems = otherPackage.meta.problems`, which includes automatic ones as well
+      kindType = enum (attrNames kinds);
       subRecord = record {
         kind = kindType;
         message = str;
@@ -275,7 +276,7 @@ rec {
             let
               kindGroups = groupBy (kind: kind) (mapAttrsToList (name: problem: problem.kind or name) v);
             in
-            all (kind: manualKinds ? ${kind} && (uniqueKinds ? ${kind} -> length kindGroups.${kind} == 1)) (
+            all (kind: kinds ? ${kind} && (uniqueKinds ? ${kind} -> length kindGroups.${kind} == 1)) (
               attrNames kindGroups
             )
           );
@@ -299,7 +300,7 @@ rec {
           ++ concatLists (
             mapAttrsToList (
               kind: kindGroup:
-              optionals (!manualKinds ? ${kind}) (
+              optionals (!kinds ? ${kind}) (
                 map (
                   el:
                   "${ctx}.${el.name}: Problem kind ${kind}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${el.name}.kind`"
@@ -514,6 +515,12 @@ rec {
         );
       in
       processProblems pname problemsToHandle;
+
+  completeMetaProblems =
+    config: attrs:
+    mapAttrs (name: problem: { kind = name; } // problem) (
+      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+    );
 
   processProblems =
     pname: problemsToHandle:
