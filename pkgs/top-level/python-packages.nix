@@ -4284,6 +4284,8 @@ self: super: with self; {
 
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
 
+  django-js-error-hook = callPackage ../development/python-modules/django-js-error-hook { };
+
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
