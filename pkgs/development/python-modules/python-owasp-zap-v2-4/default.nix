@@ -10,7 +10,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-owasp-zap-v2-4";
   version = "0.6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zap-api-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-a0F6asx8Dl1T/OqNhHukHRbq+LUqsl3im+y1k096pfE=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
