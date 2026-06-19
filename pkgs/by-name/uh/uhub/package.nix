@@ -8,6 +8,7 @@
   pkg-config,
   systemd,
   versionCheckHook,
+  nixosTests,
 
 }:
 
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-V";
   doInstallCheck = true;
+
+  passthru.tests = { inherit (nixosTests) uhub; };
 
   meta = {
     description = "High performance peer-to-peer hub for the ADC network";
