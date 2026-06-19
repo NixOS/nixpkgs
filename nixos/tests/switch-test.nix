@@ -541,6 +541,12 @@ in
             systemd.services."accept-socket@".serviceConfig.X-Test = "test";
           };
 
+          socket-activated-without-socket.configuration = {
+            imports = [ simple-socket.configuration ];
+            systemd.sockets.socket-activated.enable = false;
+            systemd.services.socket-activated.wantedBy = [ "multi-user.target" ];
+          };
+
           mount.configuration = {
             systemd.mounts = [
               {
@@ -1619,6 +1625,18 @@ in
           # Socket-activation of the unit still works
           if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
               raise Exception("Socket was not properly activated after the service was restarted")
+
+          # A service transitioning to socket activation is not started directly,
+          # it's left for the newly started socket to activate on demand
+          switch_to_specialisation("${machine}", "socket-activated-without-socket")
+          machine.succeed("systemctl is-active socket-activated.service")
+          out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed")
+          assert_contains(out, "stopping the following units: socket-activated.service\n")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: socket-activated.socket\n")
+          machine.succeed("[ -S /run/test.sock ]")
+          if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+              raise Exception("Socket was not properly activated after the transition")
 
       with subtest("socket-activated services with Accept=yes"):
           # Socket-activated services don't get started, just the socket
