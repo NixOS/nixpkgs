@@ -6,6 +6,7 @@
   setuptools,
   # dependencies
   emoji,
+  huggingface-hub,
   networkx,
   numpy,
   peft,
@@ -20,20 +21,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.12.2";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hUI8sZDwBK8ZRS9asyDiTqpoIGnGbHeH/Q9i/gasut0=";
+    hash = "sha256-+quLNaxaGCUpsg3PH11nEMeKjIoHsKaBqK4FdIHlaMM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     emoji
+    huggingface-hub
     networkx
     numpy
     peft
