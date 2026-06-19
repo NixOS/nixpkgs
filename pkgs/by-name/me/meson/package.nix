@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.10.2";
+  version = "1.11.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-3Zeavn6aW6920gM7yE73Ms1RPCP2GjX9IUL9YGmISfY=";
+    hash = "sha256-xEVD0J2zQxyjRTXwwEZ8we10yJfUdo8vdNK3apSp+eE=";
   };
 
   patches = [
@@ -176,6 +176,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://mesonbuild.com";
+    changelog = "https://github.com/mesonbuild/meson/blob/master/docs/markdown/Release-notes-for-${lib.versions.majorMinor version}.0.md";
     description = "Open source, fast and friendly build system made in Python";
     mainProgram = "meson";
     longDescription = ''
