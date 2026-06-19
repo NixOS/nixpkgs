@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizign";
-  version = "0.1.7";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "zig-minisign";
     tag = finalAttrs.version;
-    hash = "sha256-W1rfIZqEGaBkLE2Goug4ANBWj6mc4hurVhsJ0NWH4nY=";
+    hash = "sha256-b32qMmXlsgP3UsDefYo0H1YIKa8B2XiNJP3qbfEuxkA=";
   };
 
   nativeBuildInputs = [
