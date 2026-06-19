@@ -30,6 +30,15 @@ def main() -> None:
 	)
 
 	parser.add_argument(
+		"-j",
+		"--json",
+		type=str,
+		default=None,
+		metavar="<file>",
+		help="Parse the vars configuration from the given JSON file",
+	)
+
+	parser.add_argument(
 		"-A",
 		"--attr",
 		type=str,
@@ -74,7 +83,8 @@ def main() -> None:
 
 	try:
 		if args.command == "evaluate":
-			evaluate_config(args)
+			config = evaluate_config(args)
+			print(config)
 		else:
 			raise VarsError(f"Command '{args.command}' is not implemented :(")
 	except VarsError as e:
