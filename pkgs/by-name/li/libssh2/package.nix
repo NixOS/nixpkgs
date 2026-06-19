@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./CVE-2026-7598.patch # https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
     ./CVE-2026-55199.patch # https://github.com/libssh2/libssh2/commit/17626857d20b3c9a1addfa45979dadcee1cd84a4
+    ./CVE-2026-55200.patch # https://github.com/libssh2/libssh2/commit/97acf3dfda80c91c3a8c9f2372546301d4a1a7a8
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
