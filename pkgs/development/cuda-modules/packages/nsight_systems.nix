@@ -149,22 +149,6 @@ buildRedist (
       "libnvidia-ml.so.1"
     ];
 
-    brokenAssertions = [
-      {
-        # Boost 1.70 has been deprecated in Nixpkgs; releases older than the one for CUDA 11.8 are not supported.
-        message = "Boost 1.70 is required and available";
-        assertion = lib.versionAtLeast finalAttrs.version "2022.4.2.1";
-      }
-      {
-        message = "Qt 5 is required and available";
-        assertion = lib.versionOlder finalAttrs.version "2022.4.2.1" -> qt5 != null;
-      }
-      {
-        message = "Qt 6 is required and available";
-        assertion = lib.versionAtLeast finalAttrs.version "2022.4.2.1" -> qt6 != null;
-      }
-    ];
-
     meta = {
       description = "System-wide performance analysis and visualization tool";
       longDescription = ''
@@ -174,6 +158,27 @@ buildRedist (
       '';
       homepage = "https://developer.nvidia.com/nsight-systems";
       changelog = "https://docs.nvidia.com/nsight-systems/ReleaseNotes";
+
+      problems =
+        # Boost 1.70 has been deprecated in Nixpkgs; releases older than the one for CUDA 11.8 are not supported.
+        lib.optionalAttrs (lib.versionOlder finalAttrs.version "2022.4.2.1") {
+          boost170Missing = {
+            kind = "broken";
+            message = "Boost 1.70 is required but no longer available.";
+          };
+        }
+        // lib.optionalAttrs (lib.versionOlder finalAttrs.version "2022.4.2.1" && qt5 == null) {
+          qt5Missing = {
+            kind = "broken";
+            message = "Qt 5 is required but unavailable.";
+          };
+        }
+        // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "2022.4.2.1" && qt6 == null) {
+          qt6Missing = {
+            kind = "broken";
+            message = "Qt 6 is required but unavailable.";
+          };
+        };
     };
   }
 )
