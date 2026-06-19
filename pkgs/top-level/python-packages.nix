@@ -4342,6 +4342,8 @@ self: super: with self; {
     callPackage ../development/python-modules/django-ninja-cursor-pagination
       { };
 
+  django-npm-mjs = callPackage ../development/python-modules/django-npm-mjs { };
+
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
   django-organizations = callPackage ../development/python-modules/django-organizations { };
