@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
 }:
-assert version == "2.12.0";
+assert version == "2.12.1";
 rec {
   src_aiter = fetchFromGitHub {
     owner = "ROCm";
@@ -399,8 +399,8 @@ rec {
   src_pytorch = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
-    rev = "v2.12.0";
-    hash = "sha256-IyQs9CQbbpZYpd+8YhIj/ULjsIWu6gjkGrGSeMWqKvw=";
+    rev = "v2.12.1";
+    hash = "sha256-oZHmKgo1BndY201PbawMQEkP3HAhBaFhmTrcXyGSNWE=";
   };
   src_sleef = fetchFromGitHub {
     owner = "shibatch";
