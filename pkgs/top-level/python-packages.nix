@@ -13209,6 +13209,8 @@ self: super: with self; {
 
   prosemirror = callPackage ../development/python-modules/prosemirror { };
 
+  prosemirror-rs = callPackage ../development/python-modules/prosemirror-rs { };
+
   protego = callPackage ../development/python-modules/protego { };
 
   proto-plus = callPackage ../development/python-modules/proto-plus { };
