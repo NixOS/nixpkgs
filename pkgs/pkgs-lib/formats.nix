@@ -609,6 +609,8 @@ optionalAttrs allowAliases aliases
           elixirMap value
         else if _elixirType == "tuple" then
           tuple value
+        else if _elixirType == "charlist" then
+          charlist value
         else
           abort "formats.elixirConf: should never happen (_elixirType = ${_elixirType})";
 
@@ -621,6 +623,8 @@ optionalAttrs allowAliases aliases
         "%{${entries}}";
 
       tuple = values: "{${listContent values}}";
+
+      charlist = value: "~c\"${value}\"";
 
       toConf =
         let
@@ -689,6 +693,12 @@ optionalAttrs allowAliases aliases
             _elixirType = "atom";
           };
 
+          # Make an Elixir charlist out of a string.
+          mkCharlist = value: {
+            inherit value;
+            _elixirType = "charlist";
+          };
+
           # Make an Elixir tuple out of a list.
           mkTuple = value: {
             inherit value;
@@ -727,6 +737,12 @@ optionalAttrs allowAliases aliases
                 name = "elixirAtom";
                 description = "elixir atom";
                 check = isElixirType "atom";
+              });
+
+              charlist = elixirOr (mkOptionType {
+                name = "elixirCharlist";
+                description = "elixir charlist";
+                check = isElixirType "charlist";
               });
 
               tuple = elixirOr (mkOptionType {

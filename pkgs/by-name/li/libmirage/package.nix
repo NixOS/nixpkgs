@@ -6,12 +6,17 @@
   vala,
   glib,
   libsndfile,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
   zlib,
   bzip2,
   xz,
   libsamplerate,
+  libgcrypt,
+  libgpg-error,
   intltool,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
@@ -37,10 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     libsndfile
+    flac
+    libogg
+    libvorbis
     zlib
     bzip2
     xz
     libsamplerate
+    libgcrypt
+    libgpg-error
   ];
 
   nativeBuildInputs = [
@@ -52,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    pcre
     util-linux
     libselinux
     libsepol
