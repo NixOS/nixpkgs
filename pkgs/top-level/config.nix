@@ -514,7 +514,8 @@ in
     problems.matchers = [
       {
         kind = "broken";
-        handler = "error";
+        handler =
+          if config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1" then "ignore" else "error";
       }
       # Be loud and clear about package removals
       {
