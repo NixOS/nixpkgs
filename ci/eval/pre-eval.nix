@@ -1,6 +1,5 @@
-# This expression will, as efficiently as possible, dump a
-# *superset* of all attrpaths of derivations which might be
-# part of a release on *any* platform.
+# This file does a fast pre-evaluation of Nixpkgs to determine:
+# - paths: A *superset* of all attrpaths of derivations which might be part of a release on *any* platform.
 #
 # This expression runs single-threaded under all current Nix
 # implementations, but much faster and with much less memory
@@ -10,9 +9,9 @@
 # $NUM_CORES batches and evaluate the outpaths separately for each
 # batch, in parallel.
 #
-# To dump the attrnames:
+# To dump the result:
 #
-#   nix-instantiate --eval --strict --json ci/eval/attrpaths.nix -A names
+#   nix-instantiate --eval --strict --json ci/eval/pre-eval.nix -A result
 #
 {
   lib ? import (path + "/lib"),
@@ -81,5 +80,9 @@ let
 
 in
 {
+  # TODO: Do we still need these? Probably not
   inherit paths names;
+  result = {
+    inherit paths;
+  };
 }

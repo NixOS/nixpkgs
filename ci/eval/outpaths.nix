@@ -6,7 +6,7 @@
   includeBroken ? true, # set this to false to exclude meta.broken packages from the output
   path ? ./../..,
 
-  # used by ./attrpaths.nix
+  # used by ./pre-eval.nix
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
