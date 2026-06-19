@@ -5530,6 +5530,8 @@ let
         };
       };
 
+      zhiyuan-lin.simple-perl = callPackage ./zhiyuan-lin.simple-perl { };
+
       zhuangtongfa.material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "material-theme";
