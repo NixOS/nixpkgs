@@ -2976,9 +2976,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    extraFonts = true;
-  };
+  texmacs = callPackage ../applications/editors/texmacs { };
 
   tldr-hs = haskellPackages.tldr;
 

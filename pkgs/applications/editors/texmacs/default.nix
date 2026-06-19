@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchurl,
   gnutls,
   guile_1_8,
@@ -19,37 +18,75 @@
   xdg-utils,
   qt6,
   ghostscriptX ? null,
-  extraFonts ? false,
+  extraFonts ? true,
   chineseFonts ? false,
   japaneseFonts ? false,
   koreanFonts ? false,
 }:
 
 let
+  extraFontsSrc = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
+    hash = "sha256-ZxobwAjIuZpxF7v3QsLa4UTA5+Sq0rWg8smX1Kp81EM=";
+  };
+
+  fullFontsSrc = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-windows-fonts-1.0-noarch.tar.gz";
+    hash = "sha256-Tui4RR7Hd7MxQTvYFcEKBGro6L+uyuIp6HueevGVv/s=";
+  };
+
+  chineseFontsSrc = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-chinese-fonts.tar.gz";
+    hash = "sha256-1wnVlFpFjJAjGlVaEm7/TTGO+6isFlFyV9rV0rXE+Xo=";
+  };
+
+  japaneseFontsSrc = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-japanese-fonts.tar.gz";
+    hash = "sha256-VgbBe+wwVrgCLzcj8qepeSx11bqcxR5MS2W+o/T+xrY=";
+  };
+
+  koreanFontsSrc = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-korean-fonts.tar.gz";
+    hash = "sha256-EBZ3BCOcTufzvfJzptLupkCRBwSdK0qqXXJUXE95XR0=";
+  };
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "texmacs";
   version = "2.1.5";
-  common = callPackage ./common.nix {
-    inherit
-      extraFonts
-      chineseFonts
-      japaneseFonts
-      koreanFonts
-      ;
-    tex = texliveSmall;
-  };
-in
-stdenv.mkDerivation {
-  inherit pname version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
+    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-s6EnvbqOeQELI5KRQVy+NDEzNSHiRHeoFLWG4bQCc2A=";
   };
 
-  postPatch = common.postPatch + ''
-    substituteInPlace configure \
-      --replace-fail "-mfpmath=sse -msse2" ""
-  '';
+  postPatch =
+    (
+      if texliveSmall == null then
+        ''
+          gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
+        ''
+      else
+        lib.optionalString extraFonts ''
+          gunzip < ${extraFontsSrc} | (cd TeXmacs && tar xvf -)
+        ''
+    )
+    + (lib.optionalString chineseFonts ''
+      gunzip < ${chineseFontsSrc} | (cd TeXmacs && tar xvf -)
+    '')
+    + (lib.optionalString japaneseFonts ''
+      gunzip < ${japaneseFontsSrc} | (cd TeXmacs && tar xvf -)
+    '')
+    + (lib.optionalString koreanFonts ''
+      gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
+    '')
+    + ''
+      substituteInPlace configure \
+        --replace-fail "-mfpmath=sse -msse2" ""
+    '';
 
   nativeBuildInputs = [
     guile_1_8
@@ -65,12 +102,9 @@ stdenv.mkDerivation {
     qt6.qtbase
     qt6.qtsvg
     qt6.qt5compat
-    ghostscriptX
     freetype
     libjpeg
     sqlite
-    git
-    python3
   ];
 
   cmakeFlags = [
@@ -112,8 +146,30 @@ stdenv.mkDerivation {
     wrapQtApp $out/bin/texmacs
   '';
 
-  meta = common.meta // {
+  meta = {
+    description = "WYSIWYW editing platform with special features for scientists";
+    longDescription = ''
+      GNU TeXmacs is a free wysiwyw (what you see is what you want)
+      editing platform with special features for scientists.  The software
+      aims to provide a unified and user friendly framework for editing
+      structured documents with different types of content (text,
+      graphics, mathematics, interactive content, etc.).  The rendering
+      engine uses high-quality typesetting algorithms so as to produce
+      professionally looking documents, which can either be printed out or
+      presented from a laptop.
+
+      The software includes a text editor with support for mathematical
+      formulas, a small technical picture editor and a tool for making
+      presentations from a laptop.  Moreover, TeXmacs can be used as an
+      interface for many external systems for computer algebra, numerical
+      analysis, statistics, etc.  New presentation styles can be written
+      by the user and new features can be added to the editor using the
+      Scheme extension language.  A native spreadsheet and tools for
+      collaborative authoring are planned for later.
+    '';
+    homepage = "http://texmacs.org/";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.roconnor ];
     platforms = lib.platforms.all;
   };
-}
+})
