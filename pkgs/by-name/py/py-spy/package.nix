@@ -5,36 +5,42 @@
   libunwind,
   python3,
   rustPlatform,
+  xz,
 }:
 
+let
+  # https://github.com/benfred/py-spy/blob/v0.4.2/build.rs#L6-L8
+  supportsUnwind =
+    stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86_64);
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "py-spy";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-T96F8xgB9HRwuvDLXi6+lfi8za/iNn1NAbG4AIpE0V0=";
+    hash = "sha256-5T6R2Neslw8rNYWJbXncLH78kH1o42fR6kidhip6/Bg=";
   };
 
-  cargoHash = "sha256-velwX7lcNQvwg3VAUTbgsOPLlA5fAcPiPvczrBBsMvs=";
+  cargoHash = "sha256-ZhtQjX15pZe3CM898LBj/79kXa6ESgPOSFkNghq0Ywo=";
 
-  buildFeatures = lib.optional stdenv.hostPlatform.isLinux "unwind";
+  buildFeatures = lib.optional supportsUnwind "unwind";
+
+  # https://github.com/benfred/remoteprocess/blob/v0.5.2/build.rs
+  buildInputs = lib.optionals (supportsUnwind && stdenv.hostPlatform.isLinux) [
+    libunwind
+    (lib.getLib xz)
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
   nativeCheckInputs = [
-    python3
-  ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-L${libunwind}/lib";
-
-  checkFlags = [
-    # assertion `left == right` failed
-    "--skip=test_negative_linenumber_increment"
+    (python3.withPackages (ps: [ ps.numpy ]))
   ];
 
   meta = {
@@ -44,8 +50,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # https://github.com/benfred/py-spy/pull/330
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })

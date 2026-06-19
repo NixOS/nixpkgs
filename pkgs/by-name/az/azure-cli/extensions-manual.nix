@@ -313,9 +313,9 @@
 
   ssh = mkAzExtension rec {
     pname = "ssh";
-    version = "2.0.8";
+    version = "2.0.9";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
-    hash = "sha256-eX42Pr1rTPWqUna4nvNMv7sWtIGcXyc/CbmhwRjQxoM=";
+    hash = "sha256-OdE4FZckAeM0eFI5/QPBtLJnCIs7fQF/M47B7ULqxFY=";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
     propagatedBuildInputs = with python3Packages; [
       oras
@@ -389,5 +389,6 @@
   sap-hana = throw "The 'sap-hana' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8904
   spring = throw "The 'spring' extension for azure-cli was deprecated upstream"; # Added 2025-05-07, https://github.com/Azure/azure-cli-extensions/pull/8652
   spring-cloud = throw "The 'spring-cloud' extension for azure-cli was deprecated upstream"; # Added 2025-07-01 https://github.com/Azure/azure-cli-extensions/pull/8897
-  weights-and-biases = throw "The 'weights-and-biases' was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8764
+  weights-and-biases = throw "The 'weights-and-biases' extension for azure-cli was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8764
+  fileshares = throw "The 'fileshares' extensions for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9910
 }

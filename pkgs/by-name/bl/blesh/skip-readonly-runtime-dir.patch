@@ -1,0 +1,10 @@
+--- a/ble.pp
++++ b/ble.pp
+@@ -1934,6 +1934,7 @@
+ function ble/base/initialize-runtime-directory/.base {
+   local tmp_dir=$_ble_base/run
+   if [[ ! -d $tmp_dir ]]; then
++    [[ -w $_ble_base ]] || return 1
+     ble/bin/mkdir -p "$tmp_dir" || return 1
+     ble/bin/chmod a+rwxt "$tmp_dir" || return 1
+   fi

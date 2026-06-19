@@ -838,6 +838,7 @@
   ./services/misc/blenderfarm.nix
   ./services/misc/calibre-server.nix
   ./services/misc/canto-daemon.nix
+  ./services/misc/castsponsorskip.nix
   ./services/misc/cfdyndns.nix
   ./services/misc/cgminer.nix
   ./services/misc/clipcat.nix
@@ -1052,6 +1053,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
   ./services/monitoring/nezha-agent.nix
+  ./services/monitoring/nezha.nix
   ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
@@ -1961,6 +1963,7 @@
   ./system/boot/systemd/userdbd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
+  ./system/boot/tzpfms.nix
   ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix

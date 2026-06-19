@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "traefik-certs-dumper";
-  version = "2.11.2";
+  version = "2.11.3";
 
   src = fetchFromGitHub {
     owner = "ldez";
     repo = "traefik-certs-dumper";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4s4IN/aDGP/9mFEf3Sl8/R9GtQlYSSXjxPrSA2CYuWE=";
+    sha256 = "sha256-8x/3g2/6XVoR4EVR83aUDh16LSiG8r3buny+4F0qNH4=";
   };
 
-  vendorHash = "sha256-VKtYOc1PbR0UZ9mJZ5houzVEPN+j+OnTw42eFr1aQgg=";
+  vendorHash = "sha256-DR1Bo4MwoJy7AZyuLsjkqbUHj12fN01mnyDVXcvmjMI=";
   excludedPackages = "integrationtest";
 
   meta = {

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/chipsenkbeil/choose/blob/${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       heywoodlh
-      niksingh710
+      semi710
     ];
     mainProgram = "choose";
   };

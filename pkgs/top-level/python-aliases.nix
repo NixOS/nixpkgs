@@ -301,7 +301,7 @@ mapAliases {
   jupyter_core = throw "'jupyter_core' has been renamed to/replaced by 'jupyter-core'"; # Converted to throw 2025-10-29
   jupyter_server = throw "'jupyter_server' has been renamed to/replaced by 'jupyter-server'"; # Converted to throw 2025-10-29
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
-  kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
+  kafka-python-ng = throw "'kafka-python-ng' has been replaced by 'kafka-python'"; # added 2026-06-13
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
   keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
@@ -487,6 +487,7 @@ mapAliases {
   pysuez = throw "'pysuez' has been renamed to/replaced by 'pysuezv2'"; # Converted to throw 2025-10-29
   pytado = throw "'pytado' has been renamed to/replaced by 'python-tado'"; # Converted to throw 2025-10-29
   pytedee-async = aiotedee; # added 2025-07-06
+  pytest-kafka = throw "'pytest-kafka' was removed because it is no longer used"; # added 2026-06-17
   pytest-pep8 = throw "'pytest-pep8' has been renamed to/replaced by 'pytestpep8'"; # Converted to throw 2025-10-29
   pytest-subtests = throw "'pytest-subtests' has been integrated into pytest 9."; # Added 2026-01-21
   pytest_6 = throw "'pytest_6' has been renamed to/replaced by 'pytest'"; # Converted to throw 2025-10-29
@@ -519,6 +520,7 @@ mapAliases {
   pytorchWithCuda = throw "'pytorchWithCuda' has been renamed to/replaced by 'torchWithCuda'"; # Converted to throw 2025-10-29
   pytorchWithoutCuda = throw "'pytorchWithoutCuda' has been renamed to/replaced by 'torchWithoutCuda'"; # Converted to throw 2025-10-29
   pytwitchapi = throw "'pytwitchapi' has been renamed to/replaced by 'twitchapi'"; # Converted to throw 2025-10-29
+  pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11

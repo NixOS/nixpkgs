@@ -9,6 +9,7 @@
   nix-update,
   curl,
   writeShellApplication,
+  installShellFiles,
   llvmPackages_21,
   libffi,
   libxml2,
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    installShellFiles
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -142,9 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
       V8_LIB_DIR = "${v8Prebuilt}/lib";
     };
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install -Dm755 target/release/libwasmer.dylib $out/lib/libwasmer.dylib
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install -Dm755 target/release/libwasmer.dylib $out/lib/libwasmer.dylib
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      # gen-completions uses argv[0] as the command name, so invoke wasmer with
+      # `exec -a wasmer` to avoid baking the absolute store path into the output
+      # (which produces invalid fish function names that fail to load).
+      installShellCompletion --cmd wasmer \
+        --bash <(exec -a wasmer $out/bin/wasmer gen-completions bash) \
+        --fish <(exec -a wasmer $out/bin/wasmer gen-completions fish) \
+        --zsh <(exec -a wasmer $out/bin/wasmer gen-completions zsh)
+    '';
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "update-wasmer";

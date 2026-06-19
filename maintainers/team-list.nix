@@ -70,7 +70,6 @@ with lib.maintainers;
     members = [
       mboes
       cbley
-      olebedev
       groodt
       aherrmann
       ylecornec
@@ -567,7 +566,6 @@ with lib.maintainers;
       ethancedwards8
       phanirithvij
       prince213
-      wegank
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";

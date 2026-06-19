@@ -128,7 +128,6 @@
       "Pandapip1": 45835846,
       "a-kenji": 65275785,
       "drakon64": 6444703,
-      "michaelBelsanti": 62124625,
       "thefossguy": 44400303
     },
     "name": "COSMIC"
@@ -846,6 +845,18 @@
       "matthiasbeyer": 427866
     },
     "name": "Radicle"
+  },
+  "redis": {
+    "description": "Maintain Redis, related packages, module, and tests.",
+    "id": 17932473,
+    "maintainers": {
+      "Hythera": 87016780,
+      "MiniHarinn": 52773156,
+      "debtquity": 225436867,
+      "kybe236": 118068228
+    },
+    "members": {},
+    "name": "Redis"
   },
   "reproducible": {
     "description": "Team that is interested in reproducible builds",

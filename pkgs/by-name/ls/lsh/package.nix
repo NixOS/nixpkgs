@@ -5,14 +5,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lsh";
-  version = "1.5.8";
+  version = "1.6.1";
   src = fetchFromGitHub {
     owner = "latitudesh";
     repo = "lsh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-BFhVCrl2LS5s38WBtkTjZ+IYCO9VQgIVmel3xwzaBI8=";
+    sha256 = "sha256-Pyl8DSXMV13GYJn2kwCyr2Ds7+PaGiTnTyvdAxtCg2Y=";
   };
-  vendorHash = "sha256-vAZYd4fbXsZRqDvSQ1Y+lk3RVY06PqxdJF9DofTa6sQ=";
+  vendorHash = "sha256-WAgD6vZ9xK+vvpchbcNq5Eqe4po1YJJ8jIAf2Q9HhCY=";
   subPackages = [ "." ];
   meta = {
     changelog = "https://github.com/latitudesh/lsh/releases/tag/v${finalAttrs.version}";

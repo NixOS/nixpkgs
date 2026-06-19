@@ -49,6 +49,8 @@ buildPythonPackage {
     "frida._frida"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
@@ -56,7 +58,10 @@ buildPythonPackage {
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with lib.maintainers; [ s1341 ];
+    maintainers = with lib.maintainers; [
+      s1341
+      eyjhb
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

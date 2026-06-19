@@ -481,8 +481,8 @@ let
         mktplcRef = {
           publisher = "ban";
           name = "spellright";
-          version = "3.0.148";
-          hash = "sha256-h1xKEpKg4j7mGw3EQQDPZBDBDY/xjk2lsGk0ktd2ems=";
+          version = "3.0.154";
+          hash = "sha256-vGzmzY78FOS8ZsrT1YpTNOUJprW4rZHVuM83cZz6V+Q=";
         };
         meta = {
           description = "Visual Studio Code extension for Spellchecker";
@@ -1007,8 +1007,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.14.6";
-          hash = "sha256-dABM44pSD0srzNl6J+1OsqugWb++soVFmtEIzliByDs=";
+          version = "1.15.0";
+          hash = "sha256-Nw1aXRIJI6kBJl3yp2hripZLf+wIecb8gmIjT5zVBjk=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1204,8 +1204,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.136.0";
-          hash = "sha256-XPajPR0MX6TiUfaCw/+WYyc453cZOMaK1Uen6ND+RKY=";
+          version = "3.136.1";
+          hash = "sha256-z9DPxEtQwjx9xk5ucHKfX2BYRij5UA253oPuHpD0jdU=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.6.1780508121";
-          hash = "sha256-4kb7Nk+gctECMQM/cko+q1Bta1EKPXPEqyCQLBMkbEo=";
+          version = "2026.6.1780853884";
+          hash = "sha256-4nxH5qW3u3/9Vqf+QFs7l5BDusE5wcxxHiJFcPq/2EE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -2346,8 +2346,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.78";
-          hash = "sha256-w0i0Gmqj2atCtEYW+0XvZech37qQaTjkt8MJRdHamxs=";
+          version = "1.1.79";
+          hash = "sha256-Yja0W+wIizOOyF9um8t1V7g0DMdv9fVlR4uJCE/pbjk=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -4164,8 +4164,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.66.0";
-          hash = "sha256-hC2YR67hRfk9QuKVbmK1IzHIGyQ3XTBNvaCP66eC/no=";
+          version = "1.67.0";
+          hash = "sha256-THrd3Yix0gohTo/cshy9ZYZysA+xCGLx4KJHFk4zmCM=";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -5156,8 +5156,8 @@ let
         mktplcRef = {
           name = "vscode-java-pack";
           publisher = "vscjava";
-          version = "0.31.0";
-          hash = "sha256-E0GJoITZIh2XemVpyPh3gAEtlvM2PZHgNzZDctSpwIA=";
+          version = "0.31.1";
+          hash = "sha256-SfrsL27uQyrtsNyqZe0q5Fv5sHMwRvBZ+iS6/JIpFVo=";
         };
         meta = {
           description = "Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more";

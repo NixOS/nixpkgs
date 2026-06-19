@@ -172,6 +172,9 @@ in
           # touch keyboard
           plasma-keyboard
           qtvirtualkeyboard # used by plasma-keyboard KCM
+
+          # experimental(?) Union theme
+          union
         ]
         ++ lib.optional config.networking.networkmanager.enable qrca
         ++ lib.optionals config.hardware.sensor.iio.enable [

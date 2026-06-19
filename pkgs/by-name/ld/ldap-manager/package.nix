@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  templ,
   versionCheckHook,
   nix-update-script,
 }:
@@ -20,17 +19,13 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-sE8XGlQg6FLDfgYdioa5i5Gv8LyQo16p0oIaiyMOzZ4=";
 
-  nativeBuildInputs = [
-    templ
-  ];
-
   excludedPackages = [
     "internal/e2e"
     "internal/integration"
   ];
 
   preBuild = ''
-    templ generate
+    go tool templ generate
   '';
 
   ldflags = [
