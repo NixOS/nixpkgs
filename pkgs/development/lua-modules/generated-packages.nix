@@ -5140,21 +5140,23 @@ final: prev: {
       fetchurl,
       fetchzip,
       luaOlder,
+      tree-sitter-orgmode,
     }:
     buildLuarocksPackage {
       pname = "orgmode";
-      version = "0.7.3-1";
+      version = "0.7.5-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/orgmode-0.7.3-1.rockspec";
-          sha256 = "1zvyidy23am6qkya8yc6pxxhc5nf42y8c9djfmlx67z89gxfxm9n";
+          url = "mirror://luarocks/orgmode-0.7.5-1.rockspec";
+          sha256 = "03spnsdpl34qkh14gniac15k4rncai2239wnv90p7z9wvkr2y0s1";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-orgmode/orgmode/archive/0.7.3.zip";
-        sha256 = "16glwzys6pcq8pi96jkdc93fasqgf0d8yqncxaw3741906mni9ym";
+        url = "https://github.com/nvim-orgmode/orgmode/archive/0.7.5.zip";
+        sha256 = "00x1spp077bgm180pr0pnwa6hk34isjizf2zxcmlaq06rk548i7i";
       };
 
       disabled = luaOlder "5.1";
+      propagatedBuildInputs = [ tree-sitter-orgmode ];
 
       meta = {
         homepage = "https://nvim-orgmode.github.io";
