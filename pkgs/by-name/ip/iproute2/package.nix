@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "7.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${version}.tar.xz";
     hash = "sha256-/Z+huVgJQXFXyoPdcpV+MmG9vOiWNTy5NvgK8LM6S1w=";
   };
 
