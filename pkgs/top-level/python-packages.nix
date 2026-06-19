@@ -17902,6 +17902,8 @@ self: super: with self; {
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
+  servestatic = callPackage ../development/python-modules/servestatic { };
+
   service-identity = callPackage ../development/python-modules/service-identity { };
 
   session-info2 = callPackage ../development/python-modules/session-info2 { };
