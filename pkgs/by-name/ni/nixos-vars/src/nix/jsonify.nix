@@ -7,9 +7,23 @@
 #
 # Note that this is *not* a NixOS module! This will be evaluated by the vars
 # CLI.
-{ config, pkgs }:
+{
+  config,
+  pkgsHost ? null,
+  pkgsTarget ? null,
+}:
 let
-  inherit (pkgs) lib;
+  pkgsHost' =
+    if pkgsHost != null then
+      pkgsHost
+    else if config._type or null == "configuration" then
+      config.pkgs
+    else
+      import <nixpkgs>;
+
+  pkgsTarget' = if pkgsTarget != null then pkgsTarget else pkgsHost';
+
+  inherit (pkgsHost') lib;
 
   # If the configuration has been evaluated already, simply keep it that way.
   # Otherwise, evaluate it. The thing is, we need a target-host-compatible copy
@@ -24,29 +38,31 @@ let
     if config._type or null == "configuration" then
       config.config.vars
     else
-      # TODO: where can we get the target nixpkgs from????
-      (import <nixpkgs/nixos/lib/eval-config.nix> {
+      (import (pkgsTarget'.path + "/nixos/lib/eval-config.nix") {
         modules = [
           ./module.nix
           config
         ];
       }).config.vars;
 
-  evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgs).drvPath;
+  evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgsTarget').drvPath;
 in
-{
-  prompts = {
-    backends = lib.mapAttrs (_: backend: {
-      run = evalDeferredPackage backend.run;
+# Make this call idempotent
+if config._type or null == "vars-configuration" then
+  config
+else
+  {
+    _type = "vars-configuration";
+
+    promptBackends = lib.mapAttrs (_: backend: {
+      script = evalDeferredPackage backend.script;
     }) cfg.promptBackends;
 
     prompts = lib.mapAttrs (_: prompt: {
       inherit (prompt) description type backend;
     }) cfg.prompts;
-  };
 
-  generators = {
-    backends = lib.mapAttrs (_: backend: {
+    generatorBackends = lib.mapAttrs (_: backend: {
       get = evalDeferredPackage backend.get;
       set = evalDeferredPackage backend.set;
       exists = evalDeferredPackage backend.exists;
@@ -58,10 +74,9 @@ in
 
     generators = lib.mapAttrs (_: generator: {
       inherit (generator) prompts dependencies backend;
-      script = evalDeferredPackage generator.run;
+      script = evalDeferredPackage generator.script;
       files = lib.mapAttrs (_: file: {
-        inherit (file) deploy secret;
+        inherit (file) name deploy secret;
       }) generator.files;
     }) cfg.generators;
-  };
-}
+  }

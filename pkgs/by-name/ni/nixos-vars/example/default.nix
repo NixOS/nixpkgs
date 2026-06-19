@@ -13,6 +13,6 @@ let
   };
 in
 import ../src/nix/jsonify.nix {
-  inherit (config) config;
-  inherit pkgs;
+  inherit config;
+  pkgsHost = pkgs;
 }
