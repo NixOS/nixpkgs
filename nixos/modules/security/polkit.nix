@@ -16,6 +16,8 @@ let
     ;
 
   cfg = config.security.polkit;
+
+  iniFmt = pkgs.formats.ini { };
 in
 
 {
@@ -29,6 +31,21 @@ in
     enablePkexecWrapper = mkEnableOption "the setuid pkexec wrapper";
 
     package = mkPackageOption pkgs "polkit" { };
+
+    settings = mkOption {
+      description = ''
+        Options for polkitd.
+        See {manpage}`polkitd.conf(5)` for available options.
+      '';
+      type = types.submodule {
+        freeformType = iniFmt.type;
+        options.Polkitd.ExpirationSeconds = lib.mkOption {
+          description = "Expiration timeout of authenticated sesssions.";
+          type = types.ints.positive;
+          default = 300; # current polkit upstream default
+        };
+      };
+    };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
@@ -154,6 +171,7 @@ in
       ${cfg.extraConfig}
     ''; # TODO: validation on compilation (at least against typos)
 
+    environment.etc."polkit-1/polkitd.conf".source = iniFmt.generate "polkitd.conf" cfg.settings;
     security.pam.services.polkit-1 = { };
 
     security.wrappers.pkexec = {
@@ -173,4 +191,7 @@ in
     users.groups.polkituser = { };
   };
 
+  meta = {
+    maintainers = with lib.maintainers; [ zimward ];
+  };
 }
