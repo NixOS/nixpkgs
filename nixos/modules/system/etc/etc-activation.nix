@@ -71,6 +71,10 @@
               RequiresMountsFor = [
                 "/sysroot/nix/store"
               ];
+              # find-etc only creates this symlink for a NixOS init. For a
+              # non-NixOS init= (e.g. init=/bin/sh) it is absent, so skip the
+              # mount instead of failing the whole initrd.
+              ConditionPathExists = "/etc-metadata-image";
             };
             requires = [
               config.boot.initrd.systemd.services.initrd-find-etc.name
@@ -123,6 +127,8 @@
                 "/run/nixos-etc-metadata"
               ];
               DefaultDependencies = false;
+              # Skip for a non-NixOS init=, see the metadata mount above.
+              ConditionPathExists = "/etc-basedir";
             };
           }
         ];
@@ -140,6 +146,8 @@
                   # before the overlay is mounted.
                   "/run/nixos-etc-metadata"
                 ];
+                # Skip for a non-NixOS init=, see the metadata mount above.
+                ConditionPathExists = "/etc-metadata-image";
               };
               serviceConfig = {
                 Type = "oneshot";

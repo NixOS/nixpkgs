@@ -35,6 +35,7 @@ in
       hythera
       mBornand
       thbemme
+      wolfgangwalther
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
