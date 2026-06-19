@@ -1916,6 +1916,22 @@ let
 
         randomconv = callPackage ../development/ocaml-modules/randomconv { };
 
+        raven = callPackage ../development/ocaml-modules/raven { };
+
+        raven-fehu = callPackage ../development/ocaml-modules/raven/fehu.nix { };
+
+        raven-hugin = callPackage ../development/ocaml-modules/raven/hugin.nix { };
+
+        raven-kaun = callPackage ../development/ocaml-modules/raven/kaun.nix { };
+
+        raven-nx = callPackage ../development/ocaml-modules/raven/nx.nix { };
+
+        raven-rune = callPackage ../development/ocaml-modules/raven/rune.nix { };
+
+        raven-sowilo = callPackage ../development/ocaml-modules/raven/sowilo.nix { };
+
+        raven-talon = callPackage ../development/ocaml-modules/raven/talon.nix { };
+
         raylib = callPackage ../development/ocaml-modules/raylib { };
 
         raygui = callPackage ../development/ocaml-modules/raylib/raygui.nix { };
