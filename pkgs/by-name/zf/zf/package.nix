@@ -10,14 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  upstreamVersion = "0.10.3";
-  version = "${finalAttrs.upstreamVersion}-unstable-2025-10-14";
-  rev = "3c52637b7e937c5ae61fd679717da3e276765b23";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
-    rev = finalAttrs.rev;
+    tag = finalAttrs.version;
     hash = "sha256-BfAZILill3I/nBf1oWwol77N34Jcpm4hudC+XSeMgZY=";
   };
 
@@ -53,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
-    version = finalAttrs.upstreamVersion;
+    version = finalAttrs.version;
   };
 
   meta = {
