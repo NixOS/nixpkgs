@@ -205,7 +205,11 @@ buildPythonPackage (finalAttrs: {
 
   postInstall = ''
     install resources/qtile.desktop -Dt $out/share/xsessions
+    substituteInPlace $out/share/xsessions/qtile.desktop \
+      --replace-quiet /usr/bin/qtile $out/bin/qtile
     install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
+    substituteInPlace $out/share/wayland-sessions/qtile-wayland.desktop \
+      --replace-quiet /usr/bin/qtile $out/bin/qtile
   '';
 
   meta = {
