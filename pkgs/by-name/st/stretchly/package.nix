@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stretchly";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${finalAttrs.version}/stretchly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-llcKbzlqGMxwrqH1qvQo4fHxO0C1itVZ5wlkwL1IOOU=";
+    hash = "sha256-9O6rb8d95wnFNtk1xafObJrjVIGn4mBzOKGPGrlzZj0=";
   };
 
   icon = fetchurl {
