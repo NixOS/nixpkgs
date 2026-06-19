@@ -62,6 +62,7 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
         "fail2ban"
         "fastly"
         "flow"
