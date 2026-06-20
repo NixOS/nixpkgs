@@ -8,26 +8,29 @@
   copyDesktopItems,
   makeWrapper,
   ffmpeg,
-  alsa-lib,
   SDL2,
-  lttng-ust,
-  numactl,
   libglvnd,
-  libxi,
-  udev,
   vulkan-loader,
   nix-update-script,
+  icnsify,
   nativeWayland ? false,
+
+  # Linux-only dependencies
+  lttng-ust,
+  alsa-lib,
+  numactl,
+  libxi,
+  udev,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
   version = "2026.518.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = "${version}-lazer";
+    tag = "${finalAttrs.version}-lazer";
     hash = "sha256-ELtK5itKM7QIdVWzy3bHurp76AJvXA1a15OkYJgFcvU=";
   };
 
@@ -38,16 +41,23 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nativeBuildInputs = [
-    copyDesktopItems
     makeWrapper
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    icnsify
   ];
 
   runtimeDeps = [
     ffmpeg
-    alsa-lib
     SDL2
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     lttng-ust
     numactl
+    alsa-lib
 
     # needed to avoid:
     # Failed to create SDL window. SDL Error: Could not initialize OpenGL / GLES library
@@ -70,15 +80,41 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
+    # OSU_EXTERNAL_UPDATE_PROVIDER prevents osu from rewriting itself on update (nix manages upgrades)
     wrapProgram $out/bin/osu! \
-      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
+      ${
+        lib.optionalString (
+          nativeWayland && stdenvNoCC.hostPlatform.isLinux
+        ) "--set SDL_VIDEODRIVER wayland"
+      } \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
-    for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
-    done
+    ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      for i in 16 32 48 64 96 128 256 512 1024; do
+        install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
+      done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+      ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ''}
+
+    ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      OSU_CONTENTS="$out/Applications/osu!.app/Contents"
+      mkdir -p "$OSU_CONTENTS/MacOS" "$OSU_CONTENTS/Resources"
+
+      # Move game in but keep a symlink so $out/bin/osu! still resolves
+      mv "$out/lib/osu-lazer" "$OSU_CONTENTS/Frameworks"
+      ln -s "$OSU_CONTENTS/Frameworks" "$out/lib/osu-lazer"
+
+      install -Dm644 osu.iOS/Info.plist "$OSU_CONTENTS/Info.plist"
+      substituteInPlace "$OSU_CONTENTS/Info.plist" \
+        --replace-fail "sh.ppy.osulazer" "sh.ppy.osu.lazer" \
+        --replace-fail "<key>CFBundleIdentifier</key>" "<key>CFBundleIconFile</key><string>AppIcon.icns</string><key>CFBundleExecutable</key><string>osu!</string><key>NSHighResolutionCapable</key><true/><key>CFBundleIdentifier</key>"
+
+      icnsify ./assets/lazer.png --output "$OSU_CONTENTS/Resources/AppIcon.icns"
+
+      # Symlink into the bundle so the app uses the same wrapper as $out/bin/osu!,
+      ln -s "$out/bin/osu!" "$OSU_CONTENTS/MacOS/osu!"
+    ''}
 
     runHook postFixup
   '';
@@ -104,6 +140,7 @@ buildDotnetModule rec {
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
@@ -113,8 +150,9 @@ buildDotnetModule rec {
       gepbird
       thiagokokada
       Guanran928
+      philocalyst
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "osu!";
   };
-}
+})
