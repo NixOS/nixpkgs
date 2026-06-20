@@ -3,6 +3,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -27,6 +28,8 @@ buildDotnetModule rec {
   ];
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Vehicle service records and maintainence tracker";
