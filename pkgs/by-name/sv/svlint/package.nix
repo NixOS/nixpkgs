@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/dalance/svlint";
     changelog = "https://github.com/dalance/svlint/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
   };
 })
