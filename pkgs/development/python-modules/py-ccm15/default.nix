@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-ccm15";
-  version = "0.1.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     # Therefore it should not be marked unstable
     # upstream issue: https://github.com/ocalvo/py-ccm15/issues/10
     tag = "v${version}";
-    hash = "sha256-QfitJzCFk0gnlcCvvKzuI4fS1lVm79q4xaDZFKKt458=";
+    hash = "sha256-8z8MY8Mjly1bSWWTx0Kd2lPppoJQNsZwMtnt4DPvy8Q=";
   };
 
   build-system = [ setuptools ];
