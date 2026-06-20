@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.9.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${version}";
-    hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
+    hash = "sha256-oq65VhC13Tx76754kd/1a4LicVJm9Pq5YfBkOwGJ2+Q=";
   };
 
   build-system = [ setuptools ];
