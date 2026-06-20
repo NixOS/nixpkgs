@@ -209,6 +209,11 @@ let
     "dbus-org.freedesktop.portable1.service"
     "systemd-portabled.service"
   ]
+  ++ optionals cfg.package.withRepart [
+    # Varlink APIs
+    "systemd-repart@.service"
+    "systemd-repart.socket"
+  ]
   ++ [
     "systemd-exit.service"
     "systemd-update-done.service"

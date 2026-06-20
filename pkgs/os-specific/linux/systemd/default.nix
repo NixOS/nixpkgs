@@ -703,6 +703,7 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withNspawn
+      withRepart
       withPortabled
       withSysupdate
       withTimedated
