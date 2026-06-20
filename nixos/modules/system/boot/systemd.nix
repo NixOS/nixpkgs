@@ -195,6 +195,9 @@ let
     # Misc.
     "systemd-sysctl.service"
     "systemd-machine-id-commit.service"
+
+    "systemd-mute-console@.service"
+    "systemd-mute-console.socket"
   ]
   ++ optionals cfg.package.withTimedated [
     "dbus-org.freedesktop.timedate1.service"
