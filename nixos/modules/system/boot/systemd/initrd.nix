@@ -124,6 +124,16 @@ let
   jobScripts = concatLists (
     mapAttrsToList (_: unit: unit.jobScripts or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
   );
+  unitEnv = pkgs.buildEnv {
+    name = "initrd-unit-env";
+    paths = concatLists (
+      mapAttrsToList (_: unit: unit.path or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
+    );
+    pathsToLink = [
+      "/bin"
+      "/sbin"
+    ];
+  };
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -636,6 +646,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
+      ++ [ unitEnv ]
       ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
