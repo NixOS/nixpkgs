@@ -1,5 +1,4 @@
 {
-  apple-sdk,
   fetchFromGitHub,
   ibtool,
   lib,
@@ -30,10 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcbuildHook
     # TODO: Clean up on `staging`
     llvmPackages.lld
-  ];
-
-  buildInputs = [
-    apple-sdk
   ];
 
   xcbuildFlags = [
