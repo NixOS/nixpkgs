@@ -14804,6 +14804,10 @@ self: super: with self; {
 
   pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
 
+  pyobjc-framework-ApplicationServices =
+    callPackage ../development/python-modules/pyobjc-framework-ApplicationServices
+      { };
+
   pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
 
   pyobjc-framework-CoreAudio =
@@ -14813,6 +14817,8 @@ self: super: with self; {
   pyobjc-framework-CoreBluetooth =
     callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
       { };
+
+  pyobjc-framework-CoreText = callPackage ../development/python-modules/pyobjc-framework-CoreText { };
 
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
