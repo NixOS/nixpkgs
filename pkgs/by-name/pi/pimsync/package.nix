@@ -63,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.qxrein ];
+    maintainers = [
+      lib.maintainers.qxrein
+      lib.maintainers.antonmosich
+    ];
     mainProgram = "pimsync";
   };
 })
