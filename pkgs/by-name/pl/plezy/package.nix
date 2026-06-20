@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -27,13 +27,13 @@
 
 let
   pname = "plezy";
-  version = "2.1.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-l09xiSTyV8MNE9ZI69nM+DTpumQ0ZOaRjhLlq4rXX0w=";
+    hash = "sha256-lzq0a7zxKpRwLM6T2VeD4A+qbW55bkwmtBN0bc6Lq4g=";
   };
 
   simdutf = fetchurl {
@@ -65,7 +65,7 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter344.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -152,7 +152,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-khmDHKsW8zs7ehIj86EgqortRKKDUoOfPsX7VpvnfNY=";
+      hash = "sha256-tkkZWwMK3SHzkB2r/JDj+JPggXHFGSinMn8ZtKyRUMU=";
     };
 
     nativeBuildInputs = [
