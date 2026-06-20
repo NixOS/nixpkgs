@@ -1,14 +1,25 @@
 #!/usr/bin/env -S nix-instantiate --eval --strict --json --arg unused true
 # Unused argument to trigger nix-instantiate calling this function with the default arguments.
 {
-  pinnedJson ? ./pinned.json,
+  # ci/inputs.nix was added 2026-06-13, so pinnedJson support can be removed ~2026-12-25 🎅
+  pinnedJson ? null,
+  inputs ? (
+    if pinnedJson == null then
+      import ./inputs.nix
+    else
+      let
+        pinned = builtins.fromJSON (builtins.readFile pinnedJson);
+      in
+      {
+        nixpkgs = fetchTarball {
+          inherit (pinned.pins.nixpkgs) url;
+          sha256 = pinned.pins.nixpkgs.hash;
+        };
+      }
+  ),
+  nixpkgs ? inputs.nixpkgs,
 }:
 let
-  pinned = (builtins.fromJSON (builtins.readFile pinnedJson)).pins;
-  nixpkgs = fetchTarball {
-    inherit (pinned.nixpkgs) url;
-    sha256 = pinned.nixpkgs.hash;
-  };
   pkgs = import nixpkgs {
     config.allowAliases = false;
   };

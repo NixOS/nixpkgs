@@ -8,7 +8,7 @@ inputs:
   target-as-trusted-at:
     description: "Whether and which SHA to checkout for the target commit in the ./nixpkgs/trusted folder."
   untrusted-pin-bump:
-    description: "Commit that bumps ci/pinned.json; when set, ./nixpkgs/untrusted and ./nixpkgs/untrusted-pinned are derived from this commit."
+    description: "Commit that bumps ci lockfile; when set, ./nixpkgs/untrusted and ./nixpkgs/untrusted-pinned are derived from this commit."
 
 runs:
   using: composite
@@ -47,12 +47,28 @@ runs:
           // same time no matter whether its 1, 2 or 3 commits at once.
           async function getPinnedSha(ref) {
             if (!ref) return undefined
-            const { content, encoding } = (await github.rest.repos.getContent({
-              ...context.repo,
-              path: 'ci/pinned.json',
-              ref,
-            })).data
-            const pinned = JSON.parse(Buffer.from(content, encoding).toString())
+
+            async function fetchJson(path) {
+              const { content, encoding } = (await github.rest.repos.getContent({
+                ...context.repo,
+                path,
+                ref,
+              })).data
+
+              return JSON.parse(Buffer.from(content, encoding).toString())
+            }
+
+            try {
+              const lock = await fetchJson('ci/flake.lock')
+              const node = lock.nodes[lock.nodes[lock.root].inputs.nixpkgs]
+              return node.locked.rev
+            } catch (err) {
+              if (err.status !== 404) throw err
+            }
+
+            // ci/flake.lock was added 2026-06-13, we can remove the 404-fallback ~2026-12-25 🎅
+            core.warning(`ci/flake.lock not found at ${ref}; falling back to ci/pinned.json`)
+            const pinned = await fetchJson('ci/pinned.json')
             return pinned.pins.nixpkgs.revision
           }
 
@@ -114,15 +130,15 @@ runs:
 
           // Apply pin bump to untrusted worktree
           if (pin_bump_sha) {
-            console.log('Fetching ci/pinned.json bump commit:', pin_bump_sha)
+            console.log('Fetching ci lockfile bump commit:', pin_bump_sha)
             await writeFile('pin-bump.patch', await getPinBumpDiff(pin_bump_sha))
 
-            console.log('Applying untrusted ci/pinned.json bump to ./nixpkgs/untrusted')
+            console.log('Applying untrusted ci lockfile bump to ./nixpkgs/untrusted')
             try {
               await run('git', '-C', join('nixpkgs', 'untrusted'), 'apply', '--3way', join('..', '..', 'pin-bump.patch'))
             } catch {
               core.setFailed([
-                `Failed to apply ci/pinned.json bump commit ${pin_bump_sha}.`,
+                `Failed to apply ci lockfile bump commit ${pin_bump_sha}.`,
                 `This commit does not apply cleanly onto the untrusted base ${process.env.MERGED_SHA}.`,
                 `Please rebase the PR or ensure the pin bump is standalone.`
               ].join(' '))
