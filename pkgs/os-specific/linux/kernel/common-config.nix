@@ -1610,6 +1610,9 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+
+        # Enable the x32 subarchitecture for compatible programs
+        X86_X32_ABI = yes;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.isPower64) {
         # avoid driver/FS trouble arising from unusual page size
