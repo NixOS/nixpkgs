@@ -180,6 +180,7 @@ let
   ]
   ++ optionals cfg.package.withImportd [
     "systemd-importd.service"
+    "systemd-importd.socket"
   ]
   ++ optionals cfg.package.withMachined [
     "machine.slice"
