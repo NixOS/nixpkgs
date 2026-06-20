@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "OAuth2 goodies for the Djangonauts";
     homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jazzband/django-oauth-toolkit/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
