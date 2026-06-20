@@ -258,11 +258,10 @@ python.pkgs.buildPythonApplication rec {
         h5py
         pdfminer-six
         r2pipe
-        # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # Causes an eval failure
       # See https://github.com/NixOS/nixpkgs/issues/463873
-      ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isAarch64) [
         aapt
         apktool
       ]
