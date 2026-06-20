@@ -5,6 +5,7 @@
   rustPlatform,
   perl,
   tomlq,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Test relies on .env
   doCheck = false;
+
+  passthru.tests.oxibooru = nixosTests.oxibooru;
 
   meta = {
     description = "Server of Oxibooru, an image board engine based on Szurubooru";
