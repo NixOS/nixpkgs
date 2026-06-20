@@ -376,6 +376,8 @@ self: super: with self; {
 
   aioimmich = callPackage ../development/python-modules/aioimmich { };
 
+  aiointercept = callPackage ../development/python-modules/aiointercept { };
+
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };

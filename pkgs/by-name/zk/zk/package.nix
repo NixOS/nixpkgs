@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ pinpox ];
     license = lib.licenses.gpl3;
     description = "Zettelkasten plain text note-taking assistant";
-    homepage = "https://github.com/mickael-menu/zk";
+    homepage = "https://github.com/zk-org/zk";
     mainProgram = "zk";
   };
 })
