@@ -5888,6 +5888,8 @@ with pkgs;
     openssl_4_1
     ;
 
+  oxibooru = callPackage ../servers/web-apps/oxibooru { };
+
   inherit
     (callPackage ../development/libraries/physfs {
     })
