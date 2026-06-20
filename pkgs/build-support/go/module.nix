@@ -216,14 +216,18 @@ lib.extendMkDerivation {
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
-      env = args.env or { } // {
+      env = {
         inherit (go) GOOS GOARCH;
 
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
         CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
-
+      }
+      // (args.env or { })
+      // {
+        # Merge this after called-provided args.env since
+        # we take this from the arguments anyway, and just add the warnings
         GOFLAGS = toString (
           GOFLAGS
           ++
