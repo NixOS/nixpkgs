@@ -28818,6 +28818,12 @@
     github = "username-generic";
     githubId = 202454830;
   };
+  Username404-59 = {
+    name = "Charlie Quinet";
+    email = "charlie.quinet@gmail.com";
+    github = "Username404-59";
+    githubId = 53659497;
+  };
   usertam = {
     name = "Samuel Tam";
     email = "code@usertam.dev";
