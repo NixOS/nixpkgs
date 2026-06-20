@@ -12,7 +12,7 @@
   re-plistbuddy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pinentry-mac";
 
   # NOTE: Don't update manually. Use passthru.updateScript on a Mac with XCode
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GPGTools";
     repo = "pinentry";
-    rev = "v${version}";
-    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
   patches = [
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
     makeBinaryWrapper
@@ -104,4 +106,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin;
     mainProgram = "pinentry-mac";
   };
-}
+})

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   pkg-config,
   autoreconfHook,
@@ -16,6 +17,11 @@
   gcr,
   withLibsecret ? true,
   libsecret,
+  makeBinaryWrapper,
+  texinfo,
+  common-updater-scripts,
+  writers,
+  re-plistbuddy,
 }:
 
 let
@@ -65,14 +71,17 @@ let
       enableFeaturePinentry =
         f: lib.enableFeature (lib.elem f buildFlavors) ("pinentry-" + flavorInfo.${f}.flag);
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "pinentry-${pinentryExtraPname}";
       version = "1.3.2";
 
       src = fetchurl {
-        url = "mirror://gnupg/pinentry/pinentry-${version}.tar.bz2";
+        url = "mirror://gnupg/pinentry/pinentry-${finalAttrs.version}.tar.bz2";
         hash = "sha256-jphu2IVhtNpunv4MVPpMqJIwNcmSZN8LBGRJfF+5Tp4=";
       };
+
+      strictDeps = true;
+      __structuredAttrs = true;
 
       nativeBuildInputs = [
         pkg-config
@@ -97,7 +106,7 @@ let
       ++ lib.optionals (lib.elem "gtk2" buildFlavors) [
         (fetchpatch {
           url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
-          sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
+          hash = "sha256-zUHrYpy68Fo74arWSLwUHb+zYz39l8fT/7S54VdXIZc=";
         })
       ];
 
@@ -142,9 +151,25 @@ let
         maintainers = with lib.maintainers; [ fpletz ];
         mainProgram = "pinentry";
       };
-    };
+    });
+
+  pinentry_mac = import ./mac.nix {
+    inherit
+      lib
+      stdenv
+      fetchFromGitHub
+      autoreconfHook
+      libassuan
+      libgpg-error
+      makeBinaryWrapper
+      texinfo
+      common-updater-scripts
+      writers
+      re-plistbuddy
+      ;
+  };
 in
-{
+rec {
   pinentry-curses = buildPinentry "curses" [
     "curses"
     "tty"
@@ -183,4 +208,8 @@ in
     "qt"
     "emacs"
   ];
+
+  inherit pinentry_mac;
+
+  pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
 }

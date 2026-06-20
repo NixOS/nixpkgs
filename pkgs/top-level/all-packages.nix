@@ -2106,7 +2106,7 @@ with pkgs;
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
+    pinentry = (callPackages ../tools/security/pinentry { }).pinentry;
   };
   gnupg = gnupg24;
   gnupgMinimal = gnupg.override {
@@ -2783,9 +2783,8 @@ with pkgs;
     pinentry-qt
     pinentry-tty
     pinentry-all
+    pinentry_mac
     ;
-
-  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix { };
 
   plan9port = callPackage ../tools/system/plan9port {
     inherit (darwin) DarwinTools;
