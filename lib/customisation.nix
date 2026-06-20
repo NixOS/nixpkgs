@@ -373,8 +373,102 @@ rec {
       mapAttrs mkAttrOverridable pkgs;
 
   /**
+    Instantiate a derivation and check a given condition when evaluating. This
+    is not intended to be called by individual derivations, and is instead
+    called by functions like `stdenv.mkDerivation`.
+
+    Unlike `lib.extendDerivation`, this calls `builtins.derivationStrict`
+    directly, which is more performant than extending immediately after calling
+    `builtins.derivation`. For this reason, it's recommended to use this
+    function for new instantiations.
+
+    # Inputs
+
+    `condition`
+
+    : 1\. Function argument
+
+    `passthru`
+
+    : 2\. Function argument
+
+    `drvAttrs`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    checkedDerivation :: Bool -> Any -> AttrSet -> Derivation
+    ```
+  */
+  checkedDerivation =
+    let
+      defaultOutputs = [ "out" ];
+    in
+    condition: passthru:
+    drvAttrs@{
+      outputs ? defaultOutputs,
+      ...
+    }:
+    let
+      strict = derivationStrict drvAttrs;
+      commonAttrs =
+        drvAttrs
+        // (
+          if !drvAttrs ? outputs || outputs == defaultOutputs then
+            {
+              out = mkOutput "out";
+            }
+          else
+            listToAttrs (
+              map (name: {
+                inherit name;
+                value = mkOutput name;
+              }) outputs
+            )
+        )
+        // passthru
+        // {
+          type = "derivation";
+          inherit drvAttrs;
+          outputName = head outputs;
+          all = map mkOutput outputs;
+          drvPath =
+            assert condition;
+            strict.drvPath;
+          outPath =
+            assert condition;
+            strict.${head outputs};
+        };
+
+      mkOutput =
+        outputName:
+        commonAttrs
+        // {
+          inherit outputName;
+          outputSpecified = true;
+          outPath =
+            assert condition;
+            strict.${outputName};
+          # TODO: give the derivation control over the outputs.
+          #       `overrideAttrs` may not be the only attribute that needs
+          #       updating when switching outputs.
+          # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+          ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
+            f: (passthru.overrideAttrs f).${outputName};
+        };
+    in
+    commonAttrs;
+
+  /**
     Add attributes to each output of a derivation without changing
     the derivation itself and check a given condition when evaluating.
+
+    This function should only be used when extending a previously-instantiated
+    derivation. To instantiate a new derivation with a condition, use
+    `lib.checkedDerivation`. In the future, this function may be deprecated in
+    favor of using `meta.problems`.
 
     # Inputs
 
