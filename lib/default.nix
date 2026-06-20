@@ -409,6 +409,7 @@ let
         makeOverridable
         callPackageWith
         callPackagesWith
+        checkedDerivation
         extendDerivation
         hydraJob
         makeScope
