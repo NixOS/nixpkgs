@@ -47,7 +47,7 @@
   svt-av1,
   shaderc,
   vulkan-loader,
-  libappindicator,
+  qt6,
   libnotify,
   pipewire,
   miniupnpc,
@@ -98,13 +98,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2026.516.143833";
+  version = "2026.619.155209";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3yuhOyW1Rqz4ddZ40z2ZzpAReZQFva0SL595XrnFB60=";
+    hash = "sha256-7c5dCSlfLP1TINVmbgNQXFVqE4vBSVqygqDmizBee80=";
     fetchSubmodules = true;
   };
 
@@ -112,7 +112,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
+    npmDepsHash = "sha256-1bmTo7SRDWj0J2e7IccLNQqmY1kWCc4A/DOK9zPmn5Y=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -172,6 +172,8 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals isLinux [
     wayland-scanner
     shaderc # provides glslc, needed at configure time for shader compilation
+    # provides qtWrapperArgs for the Qt-based tray; wrapping done in postFixup
+    qt6.wrapQtAppsHook
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
   ]
@@ -222,7 +224,8 @@ stdenv'.mkDerivation (finalAttrs: {
     svt-av1
     vulkan-loader
     pipewire
-    libappindicator
+    qt6.qtbase
+    qt6.qtsvg
     libnotify
   ]
   ++ lib.optionals cudaSupport [
@@ -300,10 +303,14 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # allow Sunshine to find libvulkan
-  postFixup = lib.optionalString cudaSupport ''
+  # wrapQtAppsHook would wrap sunshine on its own; opt out so we add the Qt env
+  # and the cuda vulkan path in a single wrapper pass
+  dontWrapQtApps = true;
+
+  postFixup = lib.optionalString isLinux ''
     wrapProgram $out/bin/sunshine \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+      "''${qtWrapperArgs[@]}" \
+      ${lib.optionalString cudaSupport "--set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}"}
   '';
 
   doInstallCheck = isLinux;
