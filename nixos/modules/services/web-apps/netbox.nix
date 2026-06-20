@@ -10,6 +10,7 @@ let
     any
     attrValues
     mkChangedOptionModule
+    mkEnableOption
     mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
@@ -130,8 +131,9 @@ in
       description = ''
         Whether to enable Netbox, a DCIM and IPAM source of truth.
 
-        This module requires setting up a reverse proxy. The NetBox project has
-        example configurations for [nginx] and the [Apache httpd] server.
+        This module requires setting up a reverse proxy and has native support
+        for nginx. Additionally , the NetBox project has example configurations
+        for [nginx] and the [Apache httpd] server.
 
         The important change to make is to serve `/static` from
         `''${config.services.netbox.settings.STATIC_ROOT}`.
@@ -390,6 +392,23 @@ in
       '';
     };
 
+    nginx = {
+      enable = mkEnableOption "nginx and configure a virtual host";
+
+      hostname = mkOption {
+        type = types.str;
+        example = "netbox.example.com";
+        description = ''
+          The hostname for which an nginx virtual host should be created.
+
+          ::: {.tip}
+          Customize the virtual host through
+          `services.nginx.virtualHosts.''${config.services.netbox.nginx.hostname}`.
+          :::
+        '';
+      };
+    };
+
     redis.createLocally = mkOption {
       type = types.bool;
       default = true;
@@ -537,139 +556,164 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
-
-    services.redis.servers.netbox.enable = cfg.redis.createLocally;
-
-    services.postgresql = lib.mkIf cfg.postgresql.createLocally {
-      enable = true;
-      ensureDatabases = [ "netbox" ];
-      ensureUsers = [
-        {
-          name = "netbox";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
-
-    environment.systemPackages = [ netboxManageScript ];
-
-    systemd.slices.system-netbox = {
-      description = "Netbox DCIM/IPAM";
-    };
-
-    systemd.targets.netbox = {
-      description = "Target for all NetBox services";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [
-        "network-online.target"
-        "redis-netbox.service"
-      ];
-    };
-
-    systemd.services =
-      let
-        defaultUnitConfig = {
-          documentation = [ "https://netboxlabs.com/docs/netbox/" ];
-          environment.PYTHONPATH = finalPackage.pythonPath;
-        };
-        defaultServiceConfig = {
-          WorkingDirectory = "${cfg.dataDir}";
-          User = "netbox";
-          Group = "netbox";
-          StateDirectory = "netbox";
-          StateDirectoryMode = "0750";
-          Restart = "on-failure";
-          RestartSec = 30;
-          Slice = "system-netbox.slice";
-          EnvironmentFile = cfg.environmentFiles;
-        };
-      in
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
       {
-        netbox = defaultUnitConfig // {
-          description = "NetBox WSGI Service";
+        services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
 
-          wantedBy = [ "netbox.target" ];
+        services.redis.servers.netbox.enable = cfg.redis.createLocally;
 
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-
-          preStart = ''
-            # Generate random default secrets, if the user didn't supply any.
-            ${optionalString (cfg.secretKeyFile == null) ''
-              if [ ! -e "${secretKeyFile}" ]; then
-                ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${secretKeyFile}"
-              fi
-            ''}
-            ${optionalString
-              (any (path: path == "${cfg.dataDir}/pepper.1") (attrValues cfg.apiTokenPepperFiles))
-              ''
-                if [ ! -e "${cfg.dataDir}/pepper.1" ]; then
-                  ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${cfg.dataDir}/pepper.1"
-                fi
-              ''
+        services.postgresql = lib.mkIf cfg.postgresql.createLocally {
+          enable = true;
+          ensureDatabases = [ "netbox" ];
+          ensureUsers = [
+            {
+              name = "netbox";
+              ensureDBOwnership = true;
             }
+          ];
+        };
 
-            # On the first run, or on upgrade / downgrade, run migrations and related.
-            # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
-            versionFile="${cfg.dataDir}/version"
+        environment.systemPackages = [ netboxManageScript ];
 
-            if [[ -h "$versionFile" && "$(readlink -- "$versionFile")" == "${cfg.package}" ]]; then
-              exit 0
-            fi
+        systemd.slices.system-netbox = {
+          description = "Netbox DCIM/IPAM";
+        };
 
-            ${lib.getExe finalPackage} migrate
-            ${lib.getExe finalPackage} trace_paths --no-input
-            ${lib.getExe finalPackage} collectstatic --clear --no-input
-            ${lib.getExe finalPackage} remove_stale_contenttypes --no-input
-            ${lib.getExe finalPackage} reindex --lazy
-            ${lib.getExe finalPackage} clearsessions
+        systemd.targets.netbox = {
+          description = "Target for all NetBox services";
+          wantedBy = [ "multi-user.target" ];
+          wants = [ "network-online.target" ];
+          after = [
+            "network-online.target"
+            "redis-netbox.service"
+          ];
+        };
 
-            ln -sfn "${cfg.package}" "$versionFile"
-          '';
+        systemd.services =
+          let
+            defaultUnitConfig = {
+              documentation = [ "https://netboxlabs.com/docs/netbox/" ];
+              environment.PYTHONPATH = finalPackage.pythonPath;
+            };
+            defaultServiceConfig = {
+              WorkingDirectory = "${cfg.dataDir}";
+              User = "netbox";
+              Group = "netbox";
+              StateDirectory = "netbox";
+              StateDirectoryMode = "0750";
+              Restart = "on-failure";
+              RestartSec = 30;
+              Slice = "system-netbox.slice";
+              EnvironmentFile = cfg.environmentFiles;
+            };
+          in
+          {
+            netbox = defaultUnitConfig // {
+              description = "NetBox WSGI Service";
 
-          serviceConfig = defaultServiceConfig // {
-            ExecStart = toString (
-              [
-                (lib.getExe finalPackage.gunicorn)
-                "netbox.wsgi"
-              ]
-              ++ lib.cli.toCommandLineGNU { } (
-                {
-                  inherit (cfg) bind;
-                  pythonpath = "${finalPackage}/opt/netbox/netbox";
+              wantedBy = [ "netbox.target" ];
+
+              after = [ "network-online.target" ];
+              wants = [ "network-online.target" ];
+
+              preStart = ''
+                # Generate random default secrets, if the user didn't supply any.
+                ${optionalString (cfg.secretKeyFile == null) ''
+                  if [ ! -e "${secretKeyFile}" ]; then
+                    ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${secretKeyFile}"
+                  fi
+                ''}
+                ${optionalString
+                  (any (path: path == "${cfg.dataDir}/pepper.1") (attrValues cfg.apiTokenPepperFiles))
+                  ''
+                    if [ ! -e "${cfg.dataDir}/pepper.1" ]; then
+                      ${finalPackage}/opt/netbox/netbox/generate_secret_key.py > "${cfg.dataDir}/pepper.1"
+                    fi
+                  ''
                 }
-                // cfg.gunicorn.extraArgs
-              )
-            );
-            PrivateTmp = true;
-            RuntimeDirectory = "netbox";
-            TimeoutStartSec = lib.mkDefault "10min";
+
+                # On the first run, or on upgrade / downgrade, run migrations and related.
+                # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
+                versionFile="${cfg.dataDir}/version"
+
+                if [[ -h "$versionFile" && "$(readlink -- "$versionFile")" == "${cfg.package}" ]]; then
+                  exit 0
+                fi
+
+                ${lib.getExe finalPackage} migrate
+                ${lib.getExe finalPackage} trace_paths --no-input
+                ${lib.getExe finalPackage} collectstatic --clear --no-input
+                ${lib.getExe finalPackage} remove_stale_contenttypes --no-input
+                ${lib.getExe finalPackage} reindex --lazy
+                ${lib.getExe finalPackage} clearsessions
+
+                ln -sfn "${cfg.package}" "$versionFile"
+              '';
+
+              serviceConfig = defaultServiceConfig // {
+                ExecStart = toString (
+                  [
+                    (lib.getExe finalPackage.gunicorn)
+                    "netbox.wsgi"
+                  ]
+                  ++ lib.cli.toCommandLineGNU { } (
+                    {
+                      inherit (cfg) bind;
+                      pythonpath = "${finalPackage}/opt/netbox/netbox";
+                    }
+                    // cfg.gunicorn.extraArgs
+                  )
+                );
+                PrivateTmp = true;
+                RuntimeDirectory = "netbox";
+                RuntimeDirectoryMode = "0750";
+                TimeoutStartSec = lib.mkDefault "10min";
+              };
+            };
+
+            netbox-rq = defaultUnitConfig // {
+              description = "NetBox Request Queue Worker";
+
+              wantedBy = [ "netbox.target" ];
+              after = [ "netbox.service" ];
+
+              serviceConfig = defaultServiceConfig // {
+                ExecStart = toString [
+                  (lib.getExe finalPackage)
+                  "rqworker"
+                  "high"
+                  "default"
+                  "low"
+                ];
+                PrivateTmp = true;
+              };
+            };
+
+            netbox-housekeeping = defaultUnitConfig // {
+              description = "NetBox housekeeping job";
+
+              wantedBy = [ "multi-user.target" ];
+
+              after = [
+                "network-online.target"
+                "netbox.service"
+              ];
+              wants = [ "network-online.target" ];
+
+              serviceConfig = defaultServiceConfig // {
+                Type = "oneshot";
+                ExecStart = toString [
+                  (lib.getExe finalPackage)
+                  "housekeeping"
+                ];
+              };
+            };
           };
-        };
 
-        netbox-rq = defaultUnitConfig // {
-          description = "NetBox Request Queue Worker";
-
-          wantedBy = [ "netbox.target" ];
-          after = [ "netbox.service" ];
-
-          serviceConfig = defaultServiceConfig // {
-            ExecStart = toString [
-              (lib.getExe finalPackage)
-              "rqworker"
-              "high"
-              "default"
-              "low"
-            ];
-            PrivateTmp = true;
-          };
-        };
-
-        netbox-housekeeping = defaultUnitConfig // {
-          description = "NetBox housekeeping job";
+        systemd.timers.netbox-housekeeping = {
+          description = "Run NetBox housekeeping job";
+          documentation = [ "https://netboxlabs.com/docs/netbox/" ];
 
           wantedBy = [ "multi-user.target" ];
 
@@ -679,41 +723,36 @@ in
           ];
           wants = [ "network-online.target" ];
 
-          serviceConfig = defaultServiceConfig // {
-            Type = "oneshot";
-            ExecStart = toString [
-              (lib.getExe finalPackage)
-              "housekeeping"
-            ];
+          timerConfig = {
+            OnCalendar = "daily";
+            AccuracySec = "1h";
+            Persistent = true;
           };
         };
-      };
 
-    systemd.timers.netbox-housekeeping = {
-      description = "Run NetBox housekeeping job";
-      documentation = [ "https://netboxlabs.com/docs/netbox/" ];
+        users.users.netbox = {
+          home = "${cfg.dataDir}";
+          isSystemUser = true;
+          group = "netbox";
+        };
+        users.groups.netbox = { };
+        users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
+      }
 
-      wantedBy = [ "multi-user.target" ];
+      (lib.mkIf cfg.nginx.enable {
+        # Access to STATIC_ROOT and the UNIX domain socket
+        systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "netbox" ];
 
-      after = [
-        "network-online.target"
-        "netbox.service"
-      ];
-      wants = [ "network-online.target" ];
+        services.nginx = {
+          enable = true;
+          recommendedProxySettings = true;
 
-      timerConfig = {
-        OnCalendar = "daily";
-        AccuracySec = "1h";
-        Persistent = true;
-      };
-    };
-
-    users.users.netbox = {
-      home = "${cfg.dataDir}";
-      isSystemUser = true;
-      group = "netbox";
-    };
-    users.groups.netbox = { };
-    users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
-  };
+          virtualHosts.${cfg.nginx.hostname} = {
+            locations."/".proxyPass = "http://${toString config.services.netbox.bind}";
+            locations."/static/".alias = cfg.settings.STATIC_ROOT;
+          };
+        };
+      })
+    ]
+  );
 }

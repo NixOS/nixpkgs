@@ -34,17 +34,10 @@ in
         # Pick the NetBox package from this config's "pkgs" argument,
         # so that `nixpkgs.config.permittedInsecurePackages` works
         package = pkgs.${oldNetbox};
-      };
 
-      services.nginx = {
-        enable = true;
-
-        recommendedProxySettings = true;
-
-        virtualHosts.netbox = {
-          default = true;
-          locations."/".proxyPass = "http://${config.services.netbox.bind}";
-          locations."/static/".alias = "/var/lib/netbox/static/";
+        nginx = {
+          enable = true;
+          hostname = "localhost";
         };
       };
 

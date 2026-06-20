@@ -34,6 +34,11 @@ import ../../make-test-python.nix (
           enable = true;
           package = netbox;
 
+          nginx = {
+            enable = true;
+            hostname = "localhost";
+          };
+
           ldapConfigFile = pkgs.writeText "ldap_config.py" ''
             import ldap
             from django_auth_ldap.config import LDAPSearch, PosixGroupType
@@ -59,18 +64,6 @@ import ../../make-test-python.nix (
             # For more granular permissions, we can map LDAP groups to Django groups.
             AUTH_LDAP_FIND_GROUP_PERMS = True
           '';
-        };
-
-        services.nginx = {
-          enable = true;
-
-          recommendedProxySettings = true;
-
-          virtualHosts.netbox = {
-            default = true;
-            locations."/".proxyPass = "http://${toString config.services.netbox.bind}";
-            locations."/static/".alias = "/var/lib/netbox/static/";
-          };
         };
 
         # Adapted from the sssd-ldap NixOS test
