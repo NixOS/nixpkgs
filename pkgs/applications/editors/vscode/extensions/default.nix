@@ -2670,8 +2670,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.215.2";
-          hash = "sha256-/3ULGcywO6SHvABRxaLXJQpjcrVs/vZxUGpG+NaSx3s=";
+          version = "1.219.2";
+          hash = "sha256-LQ7UL+/FtzRxn/M85fv3oh8g622KEPS35lque3kqby8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
