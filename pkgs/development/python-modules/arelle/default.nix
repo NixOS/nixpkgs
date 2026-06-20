@@ -52,14 +52,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.38.7";
+  version = "2.38.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = finalAttrs.version;
-    hash = "sha256-9ARMEXqoiBuAnj8hRrA1PqArmTMmRMP1BwASekOTQoc=";
+    hash = "sha256-Y259DHwQetVXiJA3iPGe8pB1g/JrZ01kW4kI8hxtMNg=";
   };
 
   outputs = [
