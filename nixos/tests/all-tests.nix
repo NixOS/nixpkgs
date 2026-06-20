@@ -1476,6 +1476,7 @@ in
   };
   rkvm = handleTest ./rkvm { };
   rmfakecloud = runTest ./rmfakecloud.nix;
+  robloxapid = runTest ./robloxapid.nix;
   robustirc-bridge = runTest ./robustirc-bridge.nix;
   rosenpass = runTest ./rosenpass.nix;
   roundcube = runTest ./roundcube.nix;
