@@ -6,6 +6,7 @@
   alsa-utils,
   copyDesktopItems,
   electron_41,
+  libicns,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -18,22 +19,23 @@ let
 in
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-XEu0x9g2mEsmY+vZtazTOzW6KNMRbrxlPck/kPNehmo=";
+    hash = "sha256-n9Ibno6NqiZ9W5KpPPZKD5/MTO8CKYdf/fXDf0cGsi4=";
   };
 
-  npmDepsHash = "sha256-urLRj7668NX7CaDWAVxAoOg+c1TmMyvf23Je+RmFwHE=";
+  npmDepsHash = "sha256-euf/6RtAO84ZtbdhglBd6gRCcg2m6a+fhthNvFzMlho=";
 
   nativeBuildInputs = [
     makeWrapper
     versionCheckHook
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libicns ];
 
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
@@ -48,13 +50,29 @@ buildNpmPackage rec {
     cp -r ${electron.dist}/. "$electron_dist"
     chmod -R u+w "$electron_dist"
 
-    npm exec electron-builder -- \
-        --dir \
-        -c.npmRebuild=true \
-        -c.asarUnpack="**/*.node" \
-        -c.electronDist="$electron_dist" \
-        -c.electronVersion=${electron.version} \
-        -c.mac.identity=null
+    electron_builder_args=(
+      --dir
+      -c.npmRebuild=true
+      -c.asarUnpack="**/*.node"
+      -c.electronDist="$electron_dist"
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    png2icns build/icon.icns \
+      build/icons/16x16.png \
+      build/icons/32x32.png \
+      build/icons/128x128.png \
+      build/icons/256x256.png \
+      build/icons/512x512.png \
+      build/icons/1024x1024.png
+    electron_builder_args+=(-c.mac.icon=build/icon.icns)
+  ''
+  + ''
+
+    npm exec electron-builder -- "''${electron_builder_args[@]}"
 
     runHook postBuild
   '';
