@@ -14,6 +14,7 @@ let
     postgresql_16 = ./16.nix;
     postgresql_17 = ./17.nix;
     postgresql_18 = ./18.nix;
+    postgresql_19 = ./19.nix;
   };
 
   mkAttributes =

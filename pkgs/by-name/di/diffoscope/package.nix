@@ -202,7 +202,7 @@ python.pkgs.buildPythonApplication rec {
       jsbeautifier
       jsondiff
       libarchive-c
-      progressbar33
+      progressbar
       pypdf
       python-magic
       pyxattr
@@ -272,6 +272,20 @@ python.pkgs.buildPythonApplication rec {
     # Always show more information when tests fail
     "-vv"
   ];
+
+  preCheck = lib.optionalString (enableBloat && stdenv.hostPlatform.isDarwin) ''
+    # h5dump is in hdf5's bin output, but its dylibs are in the out output.
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ hdf5 ]}''${DYLD_LIBRARY_PATH:+:''${DYLD_LIBRARY_PATH}}"
+  '';
+
+  makeWrapperArgs = lib.optionals enableBloat (
+    [
+      "--prefix PATH : ${lib.makeBinPath [ hdf5 ]}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ hdf5 ]}"
+    ]
+  );
 
   postInstall = ''
     make -C doc

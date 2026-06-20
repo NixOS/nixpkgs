@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-vcache";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-vcache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7KeSnOJQOb766kYFh6+qeL3csPNuhk63C6NBsoS1dvc=";
+    hash = "sha256-/LyNJlz3Tx6tgQAwY4vIIsDlL2nCvKM6bna2bXyP5So=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rQ5nCzWw6AUU9KimNJX3pdnRE4kg86kDTZq0TCBEp8s=";
+    hash = "sha256-a9+3k6YTotmj+LBO6OyVd2NUh3hpLwpKXJsX7pBxXNE=";
   };
 
   build-system = [ hatchling ];

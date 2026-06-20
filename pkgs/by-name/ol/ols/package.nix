@@ -39,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 ols odinfmt -t $out/bin/
-    wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
+    wrapProgram $out/bin/ols \
+      --set-default ODIN_ROOT ${odin}/share \
+      --set-default OLS_BUILTIN_FOLDER ${odin}/share/base/builtin
 
     runHook postInstall
   '';
