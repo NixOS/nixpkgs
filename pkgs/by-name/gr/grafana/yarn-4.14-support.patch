@@ -1,0 +1,23 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -25,6 +25,7 @@ plugins:
+     path: .yarn/plugins/@yarnpkg/plugin-licenses.cjs
+     spec: "https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.15.0/bundles/@yarnpkg/plugin-licenses.js"
+ 
+-yarnPath: .yarn/releases/yarn-4.11.0.cjs
++approvedGitRepositories:
++  - "**"
+ 
+ enableScripts: false
+diff --git a/yarn.lock b/yarn.lock
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,6 +2,6 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10
+ 

@@ -1,0 +1,57 @@
+From 299f2c770ff0abf07b8f394f154168d2aa78aa60 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Sun, 21 Dec 2025 08:23:01 -0800
+Subject: [PATCH] fix(rdc): use pkg-config to find libcap
+
+If libcap isn't available in system wide FHS include paths building would fail.
+Fix this by using pkg-config to find libcap which provides both the library
+to link and include dirs.
+---
+ CMakeLists.txt              | 6 +++---
+ rdc_libs/rdc/CMakeLists.txt | 2 +-
+ server/CMakeLists.txt       | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 907c9fbff42..00e0a9dd87d 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -192,9 +192,9 @@ mark_as_advanced(
+     CPACK_GENERATOR
+ )
+ 
+-# check if libcap exists
+-# needed for sys/capabilities.h
+-find_library(LIB_CAP NAMES cap REQUIRED)
++# needed for sys/capability.h
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(LIBCAP REQUIRED IMPORTED_TARGET libcap)
+ 
+ if(BUILD_STANDALONE AND GRPC_ROOT STREQUAL GRPC_ROOT_DEFAULT)
+     message(
+diff --git a/rdc_libs/rdc/CMakeLists.txt b/rdc_libs/rdc/CMakeLists.txt
+index d4e368edca5..f9a3ac4c487 100644
+--- a/rdc_libs/rdc/CMakeLists.txt
++++ b/rdc_libs/rdc/CMakeLists.txt
+@@ -71,7 +71,7 @@ set(RDC_LIB_INC_LIST
+ message("RDC_LIB_INC_LIST=${RDC_LIB_INC_LIST}")
+ 
+ add_library(${RDC_LIB} SHARED ${RDC_LIB_SRC_LIST} ${RDC_LIB_INC_LIST})
+-target_link_libraries(${RDC_LIB} ${BOOTSTRAP_LIB} pthread amd_smi cap)
++target_link_libraries(${RDC_LIB} ${BOOTSTRAP_LIB} pthread amd_smi PkgConfig::LIBCAP)
+ target_include_directories(
+     ${RDC_LIB}
+     PRIVATE "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/include" "${AMD_SMI_INCLUDE_DIR}"
+diff --git a/server/CMakeLists.txt b/server/CMakeLists.txt
+index baf0d851c86..0a6e71dda1c 100755
+--- a/server/CMakeLists.txt
++++ b/server/CMakeLists.txt
+@@ -97,7 +97,7 @@ target_link_libraries(
+     pthread
+     rt
+     gRPC::grpc++
+-    cap
++    PkgConfig::LIBCAP
+     dl
+     amd_smi
+     rdc_bootstrap

@@ -1,0 +1,4 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:12 because it has an invalid meta attrset:
+  - a.meta.problems: Problem kind removal should be unique, but is used for these problems: removal, removal2

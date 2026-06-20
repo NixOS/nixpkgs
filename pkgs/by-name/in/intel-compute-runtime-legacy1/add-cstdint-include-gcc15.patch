@@ -1,0 +1,25 @@
+From 38fdd9d36c5e8a471f38d3f131c2fdf6720e2577 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Charlotte=20=F0=9F=A6=9D=20Dele=C5=84kec?= <lotte@chir.rs>
+Date: Wed, 31 Dec 2025 16:32:36 +0100
+Subject: [PATCH] fix: Add another missing include for GCC 15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Charlotte Deleńkec <lotte@chir.rs>
+---
+ shared/source/os_interface/linux/local/dg1/drm_tip_helper.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/shared/source/os_interface/linux/local/dg1/drm_tip_helper.cpp b/shared/source/os_interface/linux/local/dg1/drm_tip_helper.cpp
+index 99f771c98457e..e78c638c35532 100644
+--- a/shared/source/os_interface/linux/local/dg1/drm_tip_helper.cpp
++++ b/shared/source/os_interface/linux/local/dg1/drm_tip_helper.cpp
+@@ -7,6 +7,7 @@
+ 
+ #include "shared/source/os_interface/linux/i915.h"
+ 
++#include <cstdint>
+ #include <memory>
+ #include <vector>
+ 

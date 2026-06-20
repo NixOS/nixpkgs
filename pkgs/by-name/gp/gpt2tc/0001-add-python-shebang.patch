@@ -1,0 +1,10 @@
+diff --git a/gpt2convert.py b/gpt2convert.py
+index 34ca909..6e6cac5 100644
+--- a/gpt2convert.py
++++ b/gpt2convert.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python3
++
+ import sys
+ import tensorflow as tf
+ import numpy as np

@@ -1,0 +1,12 @@
+--- a/library/forms/swig/CMakeLists.txt
++++ b/library/forms/swig/CMakeLists.txt
+@@ -57,7 +57,7 @@
+ 
+ set(CMAKE_SWIG_FLAGS -w312)
+ set_source_files_properties(cairo.i PROPERTIES CPLUSPLUS ON)
+-set_property(SOURCE cairo.i PROPERTY SWIG_FLAGS -DCAIRO_HAS_PNG_FUNCTIONS=1 -fcompact -DSWIG_PYTHON_LEGACY_BOOL -I/usr/include)
++set_property(SOURCE cairo.i PROPERTY SWIG_FLAGS -DCAIRO_HAS_PNG_FUNCTIONS=1 -fcompact -DSWIG_PYTHON_LEGACY_BOOL -I@cairoDev@/include)
+ if(CMAKE_VERSION VERSION_LESS 3.8)
+   swig_add_module(cairo python cairo.i)
+ else()
+

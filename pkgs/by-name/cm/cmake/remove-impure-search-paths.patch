@@ -1,0 +1,1968 @@
+diff --git a/Modules/CMakeDetermineJavaCompiler.cmake b/Modules/CMakeDetermineJavaCompiler.cmake
+index b20a255621..bc67fdf4aa 100644
+--- a/Modules/CMakeDetermineJavaCompiler.cmake
++++ b/Modules/CMakeDetermineJavaCompiler.cmake
+@@ -42,19 +42,6 @@
+     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.4;JavaHome]/bin"
+     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.3;JavaHome]/bin"
+     $ENV{JAVA_HOME}/bin
+-    /usr/bin
+-    /usr/lib/java/bin
+-    /usr/share/java/bin
+-    /usr/local/bin
+-    /usr/local/java/bin
+-    /usr/local/java/share/bin
+-    /usr/java/j2sdk1.4.2_04
+-    /usr/lib/j2sdk1.4-sun/bin
+-    /usr/java/j2sdk1.4.2_09/bin
+-    /usr/lib/j2sdk1.5-sun/bin
+-    /opt/sun-jdk-1.5.0.04/bin
+-    /usr/local/jdk-1.7.0/bin
+-    /usr/local/jdk-1.6.0/bin
+     )
+   # if no compiler has been specified yet, then look for one
+   if(CMAKE_Java_COMPILER_INIT)
+diff --git a/Modules/CMakeDetermineSystem.cmake b/Modules/CMakeDetermineSystem.cmake
+index dd8d30e3d9..d500364ba5 100644
+--- a/Modules/CMakeDetermineSystem.cmake
++++ b/Modules/CMakeDetermineSystem.cmake
+@@ -9,7 +9,7 @@
+ 
+ # find out on which system cmake runs
+ if(CMAKE_HOST_UNIX)
+-  find_program(CMAKE_UNAME NAMES uname PATHS /bin /usr/bin /usr/local/bin)
++  find_program(CMAKE_UNAME NAMES uname)
+   if(CMAKE_UNAME)
+     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "AIX")
+       execute_process(COMMAND ${CMAKE_UNAME} -v
+diff --git a/Modules/CMakeFindFrameworks.cmake b/Modules/CMakeFindFrameworks.cmake
+index 87ad38b46b..95f226be40 100644
+--- a/Modules/CMakeFindFrameworks.cmake
++++ b/Modules/CMakeFindFrameworks.cmake
+@@ -39,22 +39,10 @@
+   macro(CMAKE_FIND_FRAMEWORKS fwk)
+     set(${fwk}_FRAMEWORKS)
+     if(APPLE)
+-      # 'Frameworks' directory from Brew (Apple Silicon and Intel)
+-      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+-        set(_brew_framework_path /opt/homebrew/Frameworks)
+-      else()
+-        set(_brew_framework_path /usr/local/Frameworks)
+-      endif()
+-
+       file(TO_CMAKE_PATH "$ENV{CMAKE_FRAMEWORK_PATH}" _cmff_CMAKE_FRAMEWORK_PATH)
+       set(_cmff_search_paths
+             ${CMAKE_FRAMEWORK_PATH}
+             ${_cmff_CMAKE_FRAMEWORK_PATH}
+-            ~/Library/Frameworks
+-            ${_brew_framework_path}
+-            /Library/Frameworks
+-            /System/Library/Frameworks
+-            /Network/Library/Frameworks
+             ${CMAKE_SYSTEM_FRAMEWORK_PATH})
+ 
+       # For backwards compatibility reasons,
+diff --git a/Modules/CMakeFindJavaCommon.cmake b/Modules/CMakeFindJavaCommon.cmake
+index 95ca9b57b6..616295e031 100644
+--- a/Modules/CMakeFindJavaCommon.cmake
++++ b/Modules/CMakeFindJavaCommon.cmake
+@@ -15,20 +15,6 @@
+   if(_ENV_JAVA_HOME AND IS_DIRECTORY "${_ENV_JAVA_HOME}")
+     set(_JAVA_HOME "${_ENV_JAVA_HOME}")
+     set(_JAVA_HOME_EXPLICIT 1)
+-  else()
+-    set(_CMD_JAVA_HOME "")
+-    if(APPLE AND EXISTS /usr/libexec/java_home)
+-      execute_process(COMMAND /usr/libexec/java_home
+-        OUTPUT_VARIABLE _CMD_JAVA_HOME
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-        ERROR_QUIET
+-      )
+-    endif()
+-    if(_CMD_JAVA_HOME AND IS_DIRECTORY "${_CMD_JAVA_HOME}")
+-      set(_JAVA_HOME "${_CMD_JAVA_HOME}")
+-      set(_JAVA_HOME_EXPLICIT 0)
+-    endif()
+-    unset(_CMD_JAVA_HOME)
+   endif()
+   unset(_ENV_JAVA_HOME)
+ endif()
+diff --git a/Modules/CMakeFindPackageMode.cmake b/Modules/CMakeFindPackageMode.cmake
+index 6e2762cf41..f88cf2f7c1 100644
+--- a/Modules/CMakeFindPackageMode.cmake
++++ b/Modules/CMakeFindPackageMode.cmake
+@@ -64,7 +64,7 @@
+   # from the outside
+   if(NOT CMAKE_SIZEOF_VOID_P)
+     set(CMAKE_SIZEOF_VOID_P 4)
+-    if(EXISTS ${CMAKE_SYSROOT}/usr/lib64)
++    if(FALSE)
+       set(CMAKE_SIZEOF_VOID_P 8)
+     else()
+       # use the file utility to check whether itself is 64 bit:
+@@ -79,22 +79,6 @@
+     endif()
+   endif()
+ 
+-  # guess Debian multiarch if it has not been set:
+-  if(EXISTS /etc/debian_version)
+-    if(NOT CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE )
+-      file(GLOB filesInLib RELATIVE /lib /lib/*-linux-gnu* )
+-      foreach(file ${filesInLib})
+-        if("${file}" MATCHES "${CMAKE_LIBRARY_ARCHITECTURE_REGEX}")
+-          set(CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE ${file})
+-          break()
+-        endif()
+-      endforeach()
+-    endif()
+-    if(NOT CMAKE_LIBRARY_ARCHITECTURE)
+-      set(CMAKE_LIBRARY_ARCHITECTURE ${CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE})
+-    endif()
+-  endif()
+-
+ endif()
+ 
+ set(CMAKE_${LANGUAGE}_COMPILER "dummy")
+diff --git a/Modules/CMakeFindSublimeText2.cmake b/Modules/CMakeFindSublimeText2.cmake
+index fc0ec313b8..46d8418d2c 100644
+--- a/Modules/CMakeFindSublimeText2.cmake
++++ b/Modules/CMakeFindSublimeText2.cmake
+@@ -7,15 +7,6 @@
+ 
+ find_program(CMAKE_SUBLIMETEXT_EXECUTABLE
+     NAMES subl3 subl sublime_text
+-    PATHS
+-        "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+-        "/Applications/Sublime Text 3.app/Contents/SharedSupport/bin"
+-        "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text 3.app/Contents/SharedSupport/bin"
+-        "$ENV{HOME}/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
+-        "/opt/sublime_text"
+-        "/opt/sublime_text_3"
+     DOC "The Sublime Text executable")
+ 
+ if(CMAKE_SUBLIMETEXT_EXECUTABLE)
+diff --git a/Modules/CPackIFW.cmake b/Modules/CPackIFW.cmake
+index 2a2f478fd7..f22281bdca 100644
+--- a/Modules/CPackIFW.cmake
++++ b/Modules/CPackIFW.cmake
+@@ -426,7 +426,7 @@
+ else()
+   list(APPEND _CPACK_IFW_PATHS
+     "$ENV{HOME}/Qt"
+-    "/opt/Qt")
++    )
+ endif()
+ list(REMOVE_DUPLICATES _CPACK_IFW_PATHS)
+ 
+diff --git a/Modules/FindBLAS.cmake b/Modules/FindBLAS.cmake
+index b45a279b94..884ccc0e32 100644
+--- a/Modules/FindBLAS.cmake
++++ b/Modules/FindBLAS.cmake
+@@ -1098,16 +1098,8 @@
+     ((BLA_VENDOR STREQUAL "ACML_GPU") AND (NOT BLAS_ACML_GPU_LIB_DIRS))
+     )
+   # try to find acml in "standard" paths
+-  if(WIN32)
+-    file(GLOB _ACML_ROOT "C:/AMD/acml*/ACML-EULA.txt")
+-  else()
+-    file(GLOB _ACML_ROOT "/opt/acml*/ACML-EULA.txt")
+-  endif()
+-  if(WIN32)
+-    file(GLOB _ACML_GPU_ROOT "C:/AMD/acml*/GPGPUexamples")
+-  else()
+-    file(GLOB _ACML_GPU_ROOT "/opt/acml*/GPGPUexamples")
+-  endif()
++  set(_ACML_ROOT)
++  set(_ACML_GPU_ROOT)
+   list(GET _ACML_ROOT 0 _ACML_ROOT)
+   list(GET _ACML_GPU_ROOT 0 _ACML_GPU_ROOT)
+   if(_ACML_ROOT)
+diff --git a/Modules/FindCUDA.cmake b/Modules/FindCUDA.cmake
+index bceb615ca0..2350b15655 100644
+--- a/Modules/FindCUDA.cmake
++++ b/Modules/FindCUDA.cmake
+@@ -854,7 +854,6 @@
+   # Now search default paths
+   find_program(CUDA_TOOLKIT_ROOT_DIR_NVCC
+     NAMES nvcc nvcc.exe
+-    PATHS /opt/cuda/bin
+     PATH_SUFFIXES cuda/bin
+     DOC "Toolkit location."
+     )
+@@ -1014,7 +1013,6 @@
+     # Search default search paths, after we search our own set of paths.
+     find_library(${_var}
+       NAMES ${_names}
+-      PATHS "/usr/lib/nvidia-current"
+       DOC ${_doc}
+       )
+   endif()
+@@ -1114,11 +1112,6 @@
+   if (CUDA_rt_LIBRARY)
+     list(APPEND CUDA_LIBRARIES ${CUDA_rt_LIBRARY})
+   endif()
+-  if(APPLE)
+-    # We need to add the default path to the driver (libcuda.dylib) as an rpath, so that
+-    # the static cuda runtime can find it at runtime.
+-    list(APPEND CUDA_LIBRARIES -Wl,-rpath,/usr/local/cuda/lib)
+-  endif()
+ else()
+   list(APPEND CUDA_LIBRARIES ${CUDA_CUDART_LIBRARY})
+ endif()
+@@ -1223,8 +1216,6 @@
+   "$ENV{NVSDKCOMPUTE_ROOT}/C"
+   ENV NVSDKCUDA_ROOT
+   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NVIDIA Corporation\\Installed Products\\NVIDIA SDK 10\\Compute;InstallDir]"
+- PATHS
+-  "/Developer/GPU\ Computing/C"
+   )
+ 
+ # Keep the CUDA_SDK_ROOT_DIR first in order to be able to override the
+@@ -1236,7 +1227,6 @@
+   "${CUDA_TOOLKIT_ROOT_DIR}/NV_CUDA_SDK"
+   "$ENV{HOME}/NVIDIA_CUDA_SDK"
+   "$ENV{HOME}/NVIDIA_CUDA_SDK_MACOSX"
+-  "/Developer/CUDA"
+   )
+ 
+ # Example of how to find an include file from the CUDA_SDK_ROOT_DIR
+diff --git a/Modules/FindCUDAToolkit.cmake b/Modules/FindCUDAToolkit.cmake
+index b00cd26b7e..f5f74ebe1d 100644
+--- a/Modules/FindCUDAToolkit.cmake
++++ b/Modules/FindCUDAToolkit.cmake
+@@ -776,12 +776,6 @@
+       elseif(CUDAToolkit_ROOT_DIR AND EXISTS "${CUDAToolkit_ROOT_DIR}/${vf}")
+         set(${result_variable} "${CUDAToolkit_ROOT_DIR}/${vf}" PARENT_SCOPE)
+         break()
+-      elseif(CMAKE_SYSROOT_LINK AND EXISTS "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}")
+-        set(${result_variable} "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/${vf}" PARENT_SCOPE)
+-        break()
+-      elseif(EXISTS "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}")
+-        set(${result_variable} "${CMAKE_SYSROOT}/usr/lib/cuda/${vf}" PARENT_SCOPE)
+-        break()
+       endif()
+     endforeach()
+   endfunction()
+@@ -864,18 +858,8 @@
+   # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
+   # directory is the desired location.
+   if(NOT CUDAToolkit_ROOT_DIR)
+-    if(UNIX)
+-      if(NOT APPLE)
+-        set(platform_base "/usr/local/cuda-")
+-      else()
+-        set(platform_base "/Developer/NVIDIA/CUDA-")
+-      endif()
+-    else()
+-      set(platform_base "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v")
+-    endif()
+-
+     # Build out a descending list of possible cuda installations, e.g.
+-    file(GLOB possible_paths "${platform_base}*")
++    set(possible_paths)
+     # Iterate the glob results and create a descending list.
+     set(versions)
+     foreach(p ${possible_paths})
+@@ -891,14 +875,6 @@
+ 
+     # With a descending list of versions, populate possible paths to search.
+     set(search_paths)
+-    foreach(v ${versions})
+-      list(APPEND search_paths "${platform_base}${v}")
+-    endforeach()
+-
+-    # Force the global default /usr/local/cuda to the front on Unix.
+-    if(UNIX)
+-      list(INSERT search_paths 0 "/usr/local/cuda")
+-    endif()
+ 
+     # Now search for the toolkit again using the platform default search paths.
+     _CUDAToolkit_find_root_dir(SEARCH_PATHS "${search_paths}" FIND_FLAGS PATH_SUFFIXES bin)
+diff --git a/Modules/FindCoin3D.cmake b/Modules/FindCoin3D.cmake
+index 1d89c604e0..5b70e71a87 100644
+--- a/Modules/FindCoin3D.cmake
++++ b/Modules/FindCoin3D.cmake
+@@ -76,10 +76,8 @@
+ else ()
+   if(APPLE)
+     find_path(COIN3D_INCLUDE_DIRS Inventor/So.h
+-     /Library/Frameworks/Inventor.framework/Headers
+     )
+     find_library(COIN3D_LIBRARIES Coin
+-      /Library/Frameworks/Inventor.framework/Libraries
+     )
+     set(COIN3D_LIBRARIES "-framework Coin3d" CACHE STRING "Coin3D library for OSX")
+   else()
+diff --git a/Modules/FindCurses.cmake b/Modules/FindCurses.cmake
+index 64600c6c64..de6af241a1 100644
+--- a/Modules/FindCurses.cmake
++++ b/Modules/FindCurses.cmake
+@@ -136,15 +136,7 @@
+ # message.  Cygwin is an ncurses package, so force ncurses on
+ # cygwin if the curses.h is missing
+ if(CURSES_NCURSES_LIBRARY AND CYGWIN)
+-  if (CURSES_NEED_WIDE)
+-    if(NOT EXISTS /usr/include/ncursesw/curses.h)
+-      set(CURSES_USE_NCURSES TRUE)
+-    endif()
+-  else()
+-    if(NOT EXISTS /usr/include/curses.h)
+-      set(CURSES_USE_NCURSES TRUE)
+-    endif()
+-  endif()
++  set(CURSES_USE_NCURSES TRUE)
+ endif()
+ 
+ 
+diff --git a/Modules/FindDCMTK.cmake b/Modules/FindDCMTK.cmake
+index 4e0ff47f52..6db26cb855 100644
+--- a/Modules/FindDCMTK.cmake
++++ b/Modules/FindDCMTK.cmake
+@@ -88,14 +88,7 @@
+ 
+ set(_dcmtk_dir_description "The directory of DCMTK build or install tree.")
+ 
+-# Ensure that DCMTK_DIR is set to a reasonable default value
+-# so that DCMTK libraries can be found on a standard Unix distribution.
+-# It also overwrite the value of DCMTK_DIR after this one has been
+-# set by a successful discovery of DCMTK by the unpatched FindDCMTK.cmake module
+-# distributed with CMake (as of 0167cea)
+-if(NOT DCMTK_DIR OR DCMTK_DIR STREQUAL "/usr/include/dcmtk")
+-  set(DCMTK_DIR "/usr" CACHE PATH ${_dcmtk_dir_description} FORCE)
+-endif()
++set(DCMTK_DIR CACHE PATH ${_dcmtk_dir_description})
+ 
+ set(_SAVED_DCMTK_DIR ${DCMTK_DIR})
+ 
+diff --git a/Modules/FindDart.cmake b/Modules/FindDart.cmake
+index 96cce45590..245dffaf21 100644
+--- a/Modules/FindDart.cmake
++++ b/Modules/FindDart.cmake
+@@ -24,7 +24,6 @@
+       ENV DART_ROOT
+     PATHS
+       ${PROJECT_SOURCE_DIR}
+-      /usr/share
+       C:/
+       "C:/Program Files"
+       ${PROJECT_SOURCE_DIR}/..
+diff --git a/Modules/FindDoxygen.cmake b/Modules/FindDoxygen.cmake
+index 2d430994e8..335c733150 100644
+--- a/Modules/FindDoxygen.cmake
++++ b/Modules/FindDoxygen.cmake
+@@ -755,10 +755,6 @@
+         NAMES doxygen
+         PATHS
+             "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\doxygen_is1;Inno Setup: App Path]/bin"
+-            /Applications/Doxygen.app/Contents/Resources
+-            /Applications/Doxygen.app/Contents/MacOS
+-            /Applications/Utilities/Doxygen.app/Contents/Resources
+-            /Applications/Utilities/Doxygen.app/Contents/MacOS
+         DOC "Doxygen documentation generation tool (https://www.doxygen.nl)"
+         VALIDATOR _Doxygen_version_validator
+     )
+@@ -845,12 +841,6 @@
+             "$ENV{ProgramFiles}/ATT/Graphviz/bin"
+             "C:/Program Files/ATT/Graphviz/bin"
+             [HKEY_LOCAL_MACHINE\\SOFTWARE\\ATT\\Graphviz;InstallPath]/bin
+-            /Applications/Graphviz.app/Contents/MacOS
+-            /Applications/Utilities/Graphviz.app/Contents/MacOS
+-            /Applications/Doxygen.app/Contents/Resources
+-            /Applications/Doxygen.app/Contents/MacOS
+-            /Applications/Utilities/Doxygen.app/Contents/Resources
+-            /Applications/Utilities/Doxygen.app/Contents/MacOS
+         DOC "Dot tool for use with Doxygen"
+     )
+     mark_as_advanced(DOXYGEN_DOT_EXECUTABLE)
+diff --git a/Modules/FindFontconfig.cmake b/Modules/FindFontconfig.cmake
+index 218ad2fbfa..94e6052564 100644
+--- a/Modules/FindFontconfig.cmake
++++ b/Modules/FindFontconfig.cmake
+@@ -64,7 +64,6 @@
+     fontconfig/fontconfig.h
+   HINTS
+     ${PKG_FONTCONFIG_INCLUDE_DIRS}
+-    /usr/X11/include
+ )
+ 
+ find_library( Fontconfig_LIBRARY
+diff --git a/Modules/FindGLUT.cmake b/Modules/FindGLUT.cmake
+index e29758dc1c..d6255f98c2 100644
+--- a/Modules/FindGLUT.cmake
++++ b/Modules/FindGLUT.cmake
+@@ -120,12 +120,10 @@
+     set(_GLUT_glut_LIB_DIR /boot/develop/lib/x86)
+   else()
+     find_library( GLUT_Xi_LIBRARY Xi
+-      /usr/openwin/lib
+       )
+     mark_as_advanced(GLUT_Xi_LIBRARY)
+ 
+     find_library( GLUT_Xmu_LIBRARY Xmu
+-      /usr/openwin/lib
+       )
+     mark_as_advanced(GLUT_Xmu_LIBRARY)
+ 
+@@ -145,11 +143,6 @@
+ 
+   find_path( GLUT_INCLUDE_DIR GL/glut.h
+     PATHS
+-    /usr/include/GL
+-    /usr/openwin/share/include
+-    /usr/openwin/include
+-    /opt/graphics/OpenGL/include
+-    /opt/graphics/OpenGL/contrib/libglut
+     ${_GLUT_INC_DIR}
+     HINTS
+     ${PC_GLUT_INCLUDE_DIRS}
+@@ -158,7 +151,6 @@
+ 
+   find_library( GLUT_glut_LIBRARY glut
+     PATHS
+-    /usr/openwin/lib
+     ${_GLUT_glut_LIB_DIR}
+     HINTS
+     ${PC_GLUT_LIBRARY_DIRS}
+diff --git a/Modules/FindGTK.cmake b/Modules/FindGTK.cmake
+index 6e39f5a989..df231de76e 100644
+--- a/Modules/FindGTK.cmake
++++ b/Modules/FindGTK.cmake
+@@ -71,9 +71,6 @@
+   find_path( GTK_gtk_INCLUDE_PATH NAMES gtk/gtk.h
+     PATH_SUFFIXES gtk-1.2 gtk12
+     PATHS
+-    /usr/openwin/share/include
+-    /usr/openwin/include
+-    /opt/gnome/include
+   )
+ 
+   # Some Linux distributions (e.g. Red Hat) have glibconfig.h
+@@ -84,26 +81,17 @@
+   find_path( GTK_glibconfig_INCLUDE_PATH NAMES glibconfig.h
+     PATH_SUFFIXES glib/include lib/glib/include include/glib12
+     PATHS
+-    /usr/openwin/share/include
+-    /opt/gnome/include
+-    /opt/gnome/lib/glib/include
+   )
+ 
+   find_path( GTK_glib_INCLUDE_PATH NAMES glib.h
+     PATH_SUFFIXES gtk-1.2 glib-1.2 glib12 glib/include lib/glib/include
+     PATHS
+-    /usr/openwin/share/include
+-    /opt/gnome/include
+   )
+ 
+   find_path( GTK_gtkgl_INCLUDE_PATH NAMES gtkgl/gtkglarea.h
+-    PATHS /usr/openwin/share/include
+-          /opt/gnome/include
+   )
+ 
+   find_library( GTK_gtkgl_LIBRARY gtkgl
+-    /usr/openwin/lib
+-    /opt/gnome/lib
+   )
+ 
+   #
+@@ -112,38 +100,26 @@
+ 
+   find_library( GTK_gtk_LIBRARY
+     NAMES  gtk gtk12
+-    PATHS /usr/openwin/lib
+-          /opt/gnome/lib
+   )
+ 
+   find_library( GTK_gdk_LIBRARY
+     NAMES  gdk gdk12
+-    PATHS  /usr/openwin/lib
+-           /opt/gnome/lib
+   )
+ 
+   find_library( GTK_gmodule_LIBRARY
+     NAMES  gmodule gmodule12
+-    PATHS  /usr/openwin/lib
+-           /opt/gnome/lib
+   )
+ 
+   find_library( GTK_glib_LIBRARY
+     NAMES  glib glib12
+-    PATHS  /usr/openwin/lib
+-           /opt/gnome/lib
+   )
+ 
+   find_library( GTK_Xi_LIBRARY
+     NAMES Xi
+-    PATHS /usr/openwin/lib
+-          /opt/gnome/lib
+     )
+ 
+   find_library( GTK_gthread_LIBRARY
+     NAMES  gthread gthread12
+-    PATHS  /usr/openwin/lib
+-           /opt/gnome/lib
+   )
+ 
+   if(GTK_gtk_INCLUDE_PATH
+diff --git a/Modules/FindGTK2.cmake b/Modules/FindGTK2.cmake
+index 9c5bc63272..87f8f81149 100644
+--- a/Modules/FindGTK2.cmake
++++ b/Modules/FindGTK2.cmake
+@@ -377,34 +377,12 @@
+                        "include suffixes = ${_suffixes}")
+     endif()
+ 
+-    if(CMAKE_LIBRARY_ARCHITECTURE)
+-      set(_gtk2_arch_dir /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE})
+-      if(GTK2_DEBUG)
+-        message(STATUS "Adding ${_gtk2_arch_dir} to search path for multiarch support")
+-      endif()
+-    endif()
+     find_path(GTK2_${_var}_INCLUDE_DIR ${_hdr}
+         PATHS
+             ${PC_GLIB2_INCLUDEDIR}
+             ${PC_GLIB2_LIBDIR}
+             ${PC_GTK2_INCLUDEDIR}
+             ${PC_GTK2_LIBDIR}
+-            ${_gtk2_arch_dir}
+-            /usr/local/libx32
+-            /usr/local/lib64
+-            /usr/local/lib
+-            /usr/libx32
+-            /usr/lib64
+-            /usr/lib
+-            /opt/gnome/include
+-            /opt/gnome/lib
+-            /opt/openwin/include
+-            /usr/openwin/lib
+-            /sw/lib
+-            /opt/local/lib
+-            /opt/homebrew/lib
+-            /usr/pkg/lib
+-            /usr/pkg/include/glib
+             $ENV{GTKMM_BASEPATH}/include
+             $ENV{GTKMM_BASEPATH}/lib
+             [HKEY_CURRENT_USER\\SOFTWARE\\gtkmm\\2.4;Path]/include
+@@ -509,8 +487,6 @@
+     find_library(GTK2_${_var}_LIBRARY_RELEASE
+         NAMES ${_lib_list}
+         PATHS
+-            /opt/gnome/lib
+-            /usr/openwin/lib
+             $ENV{GTKMM_BASEPATH}/lib
+             [HKEY_CURRENT_USER\\SOFTWARE\\gtkmm\\2.4;Path]/lib
+             [HKEY_LOCAL_MACHINE\\SOFTWARE\\gtkmm\\2.4;Path]/lib
+diff --git a/Modules/FindIce.cmake b/Modules/FindIce.cmake
+index 82156747d3..cc3f2a64af 100644
+--- a/Modules/FindIce.cmake
++++ b/Modules/FindIce.cmake
+@@ -629,11 +629,6 @@
+         list(APPEND ice_roots "${ice_location}")
+       endif()
+     endforeach()
+-  else()
+-    foreach(ice_version ${ice_versions})
+-      # Prefer 64-bit variants if present (and using a 64-bit compiler)
+-      list(APPEND ice_roots "/opt/Ice-${ice_version}")
+-    endforeach()
+   endif()
+ 
+   # Find all Ice programs
+@@ -689,7 +684,7 @@
+   # In common use on Linux, MacOS X (homebrew) and FreeBSD; prefer
+   # version-specific dir
+   list(APPEND ice_slice_paths
+-       /usr/local/share /usr/share)
++       )
+   list(APPEND ice_slice_suffixes
+        "Ice-${Ice_VERSION_SLICE2CPP_FULL}/slice"
+        "Ice-${Ice_VERSION_SLICE2CPP_SHORT}/slice"
+diff --git a/Modules/FindJNI.cmake b/Modules/FindJNI.cmake
+index 10dcc51776..e272bd9583 100644
+--- a/Modules/FindJNI.cmake
++++ b/Modules/FindJNI.cmake
+@@ -363,51 +363,6 @@
+ endif()
+ 
+ set(_JNI_JAVA_DIRECTORIES_BASE
+-  /usr/lib/jvm/java
+-  /usr/lib/java
+-  /usr/lib/jvm
+-  /usr/local/lib/java
+-  /usr/local/share/java
+-  /usr/lib/j2sdk1.4-sun
+-  /usr/lib/j2sdk1.5-sun
+-  /opt/sun-jdk-1.5.0.04
+-  /usr/lib/jvm/java-6-sun
+-  /usr/lib/jvm/java-1.5.0-sun
+-  /usr/lib/jvm/java-6-sun-1.6.0.00       # can this one be removed according to #8821 ? Alex
+-  /usr/lib/jvm/java-6-openjdk
+-  /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0        # fedora
+-  # Debian specific paths for default JVM
+-  /usr/lib/jvm/default-java
+-  # Arch Linux specific paths for default JVM
+-  /usr/lib/jvm/default
+-  # Ubuntu specific paths for default JVM
+-  /usr/lib/jvm/java-21-openjdk-{libarch}    # Ubuntu 23.04
+-  /usr/lib/jvm/java-20-openjdk-{libarch}    # Ubuntu 22.10
+-  /usr/lib/jvm/java-19-openjdk-{libarch}    # Ubuntu 22.04 LTS
+-  /usr/lib/jvm/java-18-openjdk-{libarch}    # Ubuntu 22.04 LTS
+-  /usr/lib/jvm/java-17-openjdk-{libarch}    # Ubuntu 18.04 LTS
+-  /usr/lib/jvm/java-16-openjdk-{libarch}    # Ubuntu 20.04 LTS
+-  /usr/lib/jvm/java-13-openjdk-{libarch}    # Ubuntu 20.04 LTS
+-  /usr/lib/jvm/java-11-openjdk-{libarch}    # Ubuntu 18.04 LTS
+-  /usr/lib/jvm/java-8-openjdk-{libarch}     # Ubuntu 15.10
+-  /usr/lib/jvm/java-7-openjdk-{libarch}     # Ubuntu 15.10
+-  /usr/lib/jvm/java-6-openjdk-{libarch}     # Ubuntu 15.10
+-  # OpenBSD specific paths for default JVM
+-  /usr/local/jdk-1.7.0
+-  /usr/local/jre-1.7.0
+-  /usr/local/jdk-1.6.0
+-  /usr/local/jre-1.6.0
+-  # FreeBSD specific paths for default JVM
+-  /usr/local/openjdk15
+-  /usr/local/openjdk14
+-  /usr/local/openjdk13
+-  /usr/local/openjdk12
+-  /usr/local/openjdk11
+-  /usr/local/openjdk8
+-  /usr/local/openjdk7
+-  # SuSE specific paths for default JVM
+-  /usr/lib64/jvm/java
+-  /usr/lib64/jvm/jre
+   )
+ 
+ set(_JNI_JAVA_AWT_LIBRARY_TRIES)
+diff --git a/Modules/FindJava.cmake b/Modules/FindJava.cmake
+index 1587ce648b..e92213cba7 100644
+--- a/Modules/FindJava.cmake
++++ b/Modules/FindJava.cmake
+@@ -199,17 +199,6 @@
+ # Hard-coded guesses should still go in PATHS. This ensures that the user
+ # environment can always override hard guesses.
+ set(_JAVA_PATHS
+-  /usr/lib/java/bin
+-  /usr/share/java/bin
+-  /usr/local/java/bin
+-  /usr/local/java/share/bin
+-  /usr/java/j2sdk1.4.2_04
+-  /usr/lib/j2sdk1.4-sun/bin
+-  /usr/java/j2sdk1.4.2_09/bin
+-  /usr/lib/j2sdk1.5-sun/bin
+-  /opt/sun-jdk-1.5.0.04/bin
+-  /usr/local/jdk-1.7.0/bin
+-  /usr/local/jdk-1.6.0/bin
+   )
+ find_program(Java_JAVA_EXECUTABLE
+   NAMES java
+diff --git a/Modules/FindKDE3.cmake b/Modules/FindKDE3.cmake
+index ccfad5e7fb..265e99eb1a 100644
+--- a/Modules/FindKDE3.cmake
++++ b/Modules/FindKDE3.cmake
+@@ -234,9 +234,6 @@
+ find_program(KDECONFIG_EXECUTABLE NAMES kde-config
+   HINTS
+     $ENV{KDEDIR}/bin
+-  PATHS
+-    /opt/kde3/bin
+-    /opt/kde/bin
+   )
+ 
+ set(KDE3PREFIX)
+@@ -261,9 +258,6 @@
+   HINTS
+     $ENV{KDEDIR}/include
+     ${KDE3PREFIX}/include
+-  PATHS
+-    /opt/kde3/include
+-    /opt/kde/include
+   PATH_SUFFIXES include/kde
+   )
+ 
+@@ -272,9 +266,6 @@
+   HINTS
+     $ENV{KDEDIR}/lib
+     ${KDE3PREFIX}/lib
+-  PATHS
+-    /opt/kde3/lib
+-    /opt/kde/lib
+ )
+ 
+ set(QT_AND_KDECORE_LIBS ${QT_LIBRARIES} ${KDE3_KDECORE_LIBRARY})
+@@ -296,27 +287,18 @@
+   HINTS
+     $ENV{KDEDIR}/bin
+     ${KDE3PREFIX}/bin
+-  PATHS
+-    /opt/kde3/bin
+-    /opt/kde/bin
+   )
+ 
+ find_program(KDE3_DCOPIDL2CPP_EXECUTABLE NAMES dcopidl2cpp
+   HINTS
+     $ENV{KDEDIR}/bin
+     ${KDE3PREFIX}/bin
+-  PATHS
+-    /opt/kde3/bin
+-    /opt/kde/bin
+   )
+ 
+ find_program(KDE3_KCFGC_EXECUTABLE NAMES kconfig_compiler
+   HINTS
+     $ENV{KDEDIR}/bin
+     ${KDE3PREFIX}/bin
+-  PATHS
+-    /opt/kde3/bin
+-    /opt/kde/bin
+   )
+ 
+ 
+diff --git a/Modules/FindKDE4.cmake b/Modules/FindKDE4.cmake
+index 220906b2de..7eb7b692d8 100644
+--- a/Modules/FindKDE4.cmake
++++ b/Modules/FindKDE4.cmake
+@@ -52,7 +52,6 @@
+    HINTS
+    ${CMAKE_INSTALL_PREFIX}
+    ${_KDEDIRS}
+-   /opt/kde4
+    ONLY_CMAKE_FIND_ROOT_PATH
+    )
+ 
+diff --git a/Modules/FindLATEX.cmake b/Modules/FindLATEX.cmake
+index e272770af3..9f702c3f6d 100644
+--- a/Modules/FindLATEX.cmake
++++ b/Modules/FindLATEX.cmake
+@@ -203,14 +203,12 @@
+ find_program(LATEX_COMPILER
+   NAMES latex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ 
+ # find pdflatex
+ find_program(PDFLATEX_COMPILER
+   NAMES pdflatex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (PDFLATEX_COMPILER)
+   set(LATEX_PDFLATEX_FOUND TRUE)
+@@ -222,7 +220,6 @@
+ find_program(XELATEX_COMPILER
+   NAMES xelatex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (XELATEX_COMPILER)
+   set(LATEX_XELATEX_FOUND TRUE)
+@@ -234,7 +231,6 @@
+ find_program(LUALATEX_COMPILER
+   NAMES lualatex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (LUALATEX_COMPILER)
+   set(LATEX_LUALATEX_FOUND TRUE)
+@@ -246,7 +242,6 @@
+ find_program(BIBTEX_COMPILER
+   NAMES bibtex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (BIBTEX_COMPILER)
+   set(LATEX_BIBTEX_FOUND TRUE)
+@@ -258,7 +253,6 @@
+ find_program(BIBER_COMPILER
+   NAMES biber
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (BIBER_COMPILER)
+   set(LATEX_BIBER_FOUND TRUE)
+@@ -270,7 +264,6 @@
+ find_program(MAKEINDEX_COMPILER
+   NAMES makeindex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (MAKEINDEX_COMPILER)
+   set(LATEX_MAKEINDEX_FOUND TRUE)
+@@ -282,7 +275,6 @@
+ find_program(XINDY_COMPILER
+   NAMES xindy
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (XINDY_COMPILER)
+   set(LATEX_XINDY_FOUND TRUE)
+@@ -294,7 +286,6 @@
+ find_program(DVIPS_CONVERTER
+   NAMES dvips
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (DVIPS_CONVERTER)
+   set(LATEX_DVIPS_FOUND TRUE)
+@@ -306,7 +297,6 @@
+ find_program(DVIPDF_CONVERTER
+   NAMES dvipdfm dvipdft dvipdf
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (DVIPDF_CONVERTER)
+   set(LATEX_DVIPDF_FOUND TRUE)
+@@ -336,7 +326,6 @@
+ find_program(PDFTOPS_CONVERTER
+   NAMES pdftops
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (PDFTOPS_CONVERTER)
+   set(LATEX_PDFTOPS_FOUND TRUE)
+@@ -348,7 +337,6 @@
+ find_program(LATEX2HTML_CONVERTER
+   NAMES latex2html
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (LATEX2HTML_CONVERTER)
+   set(LATEX_LATEX2HTML_FOUND TRUE)
+@@ -360,7 +348,6 @@
+ find_program(HTLATEX_COMPILER
+   NAMES htlatex
+   PATHS ${MIKTEX_BINARY_PATH}
+-        /usr/bin
+ )
+ if (HTLATEX_COMPILER)
+   set(LATEX_HTLATEX_FOUND TRUE)
+diff --git a/Modules/FindLua50.cmake b/Modules/FindLua50.cmake
+index ac36c86640..fe5d2147e8 100644
+--- a/Modules/FindLua50.cmake
++++ b/Modules/FindLua50.cmake
+@@ -84,10 +84,6 @@
+   HINTS
+     ENV LUA_DIR
+   PATH_SUFFIXES lua50 lua5.0 lua5 lua
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ find_library(LUA_LIBRARY_lua
+@@ -95,10 +91,6 @@
+   HINTS
+     ENV LUA_DIR
+   PATH_SUFFIXES lib
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ # In an OS X framework, lualib is usually included as part of the framework
+@@ -113,7 +105,6 @@
+       ENV LUA_DIR
+     PATH_SUFFIXES lib
+     PATHS
+-    /opt
+   )
+   if(LUA_LIBRARY_lualib AND LUA_LIBRARY_lua)
+     # include the math library for Unix
+diff --git a/Modules/FindLua51.cmake b/Modules/FindLua51.cmake
+index cba30e4b58..21a95cb89f 100644
+--- a/Modules/FindLua51.cmake
++++ b/Modules/FindLua51.cmake
+@@ -87,10 +87,6 @@
+   HINTS
+     ENV LUA_DIR
+   PATH_SUFFIXES lua51 lua5.1 lua-5.1 lua
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ find_library(LUA_LIBRARY
+@@ -98,10 +94,6 @@
+   HINTS
+     ENV LUA_DIR
+   PATH_SUFFIXES lib
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ if(LUA_LIBRARY)
+diff --git a/Modules/FindMPI.cmake b/Modules/FindMPI.cmake
+index 78b1c5c915..741f86aaef 100644
+--- a/Modules/FindMPI.cmake
++++ b/Modules/FindMPI.cmake
+@@ -1349,15 +1349,6 @@
+ endmacro()
+ 
+ set(MPI_HINT_DIRS ${MPI_HOME} $ENV{MPI_HOME} $ENV{I_MPI_ROOT})
+-if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+-  # SUSE Linux Enterprise Server stores its MPI implementations under /usr/lib64/mpi/gcc/<name>
+-  # We enumerate the subfolders and append each as a prefix
+-  MPI_search_mpi_prefix_folder("/usr/lib64/mpi/gcc")
+-elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "FreeBSD")
+-  # FreeBSD ships mpich under the normal system paths - but available openmpi implementations
+-  # will be found in /usr/local/mpi/<name>
+-  MPI_search_mpi_prefix_folder("/usr/local/mpi")
+-endif()
+ 
+ # Most MPI distributions have some form of mpiexec or mpirun which gives us something we can look for.
+ # The MPI standard does not mandate the existence of either, but instead only makes requirements if a distribution
+diff --git a/Modules/FindMatlab.cmake b/Modules/FindMatlab.cmake
+index 8a7bd80957..74009fbebc 100644
+--- a/Modules/FindMatlab.cmake
++++ b/Modules/FindMatlab.cmake
+@@ -1529,7 +1529,7 @@
+   endif()
+ 
+   foreach(_matlab_current_release IN LISTS _matlab_releases)
+-    foreach(_macos_app_base IN ITEMS "$ENV{HOME}/Applications" "/Applications")
++    foreach(_macos_app_base IN ITEMS)
+       matlab_get_version_from_release_name("${_matlab_current_release}" _matlab_current_version)
+       string(REPLACE "." "" _matlab_current_version_without_dot "${_matlab_current_version}")
+       set(_matlab_base_path "${_macos_app_base}/MATLAB_${_matlab_current_release}.app")
+diff --git a/Modules/FindMotif.cmake b/Modules/FindMotif.cmake
+index d72b19309e..5753e5c3dc 100644
+--- a/Modules/FindMotif.cmake
++++ b/Modules/FindMotif.cmake
+@@ -39,12 +39,10 @@
+ if(UNIX)
+   find_path(MOTIF_INCLUDE_DIR
+     Xm/Xm.h
+-    /usr/openwin/include
+     )
+ 
+   find_library(MOTIF_LIBRARIES
+     Xm
+-    /usr/openwin/lib
+     )
+ 
+ endif()
+diff --git a/Modules/FindOpenAL.cmake b/Modules/FindOpenAL.cmake
+index dad9ada128..32d02db7c3 100644
+--- a/Modules/FindOpenAL.cmake
++++ b/Modules/FindOpenAL.cmake
+@@ -95,9 +95,6 @@
+   HINTS
+     ENV OPENALDIR
+   PATHS
+-    ~/Library/Frameworks
+-    /Library/Frameworks
+-    /opt
+     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Creative\ Labs\\OpenAL\ 1.1\ Software\ Development\ Kit\\1.00.0000;InstallDir]
+   PATH_SUFFIXES include/AL include/OpenAL include AL OpenAL
+   )
+@@ -113,9 +110,6 @@
+   HINTS
+     ENV OPENALDIR
+   PATHS
+-    ~/Library/Frameworks
+-    /Library/Frameworks
+-    /opt
+     [HKEY_LOCAL_MACHINE\\SOFTWARE\\Creative\ Labs\\OpenAL\ 1.1\ Software\ Development\ Kit\\1.00.0000;InstallDir]
+   PATH_SUFFIXES libx32 lib64 lib libs64 libs ${_OpenAL_ARCH_DIR}
+   )
+diff --git a/Modules/FindOpenCL.cmake b/Modules/FindOpenCL.cmake
+index 3be945ba1b..4086ebe2f2 100644
+--- a/Modules/FindOpenCL.cmake
++++ b/Modules/FindOpenCL.cmake
+@@ -113,8 +113,6 @@
+     ENV CUDA_PATH
+     ENV ATISTREAMSDKROOT
+     ENV OCL_ROOT
+-    /usr/local/cuda
+-    /opt/cuda
+   PATH_SUFFIXES
+     include
+     OpenCL/common/inc
+@@ -170,8 +168,6 @@
+       PATHS
+         ENV AMDAPPSDKROOT
+         ENV CUDA_PATH
+-        /usr/local/cuda
+-        /opt/cuda
+       PATH_SUFFIXES
+         lib/x86
+         lib)
+@@ -181,8 +177,6 @@
+       PATHS
+         ENV AMDAPPSDKROOT
+         ENV CUDA_PATH
+-        /usr/local/cuda
+-        /opt/cuda
+       PATH_SUFFIXES
+         lib/x86_64
+         lib/x64
+diff --git a/Modules/FindOpenGL.cmake b/Modules/FindOpenGL.cmake
+index a842756fcf..a02a66eb60 100644
+--- a/Modules/FindOpenGL.cmake
++++ b/Modules/FindOpenGL.cmake
+@@ -271,12 +271,7 @@
+     set(_OPENGL_INCLUDE_PATH
+       /boot/develop/headers/os/opengl)
+   elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    # CMake doesn't support arbitrary globs in search paths.
+-    file(GLOB _OPENGL_LIB_PATH
+-      # The NVidia driver installation tool on Linux installs libraries to a
+-      # `nvidia-<version>` subdirectory.
+-      "/usr/lib/nvidia-*"
+-      "/usr/lib32/nvidia-*")
++    set(_OPENGL_LIB_PATH)
+   endif()
+ 
+   # The first line below is to make sure that the proper headers
+@@ -287,9 +282,6 @@
+   # Make sure the NVIDIA directory comes BEFORE the others.
+   #  - Atanas Georgiev <atanas@cs.columbia.edu>
+   find_path(OPENGL_INCLUDE_DIR GL/gl.h
+-    /usr/share/doc/NVIDIA_GLX-1.0/include
+-    /usr/openwin/share/include
+-    /opt/graphics/OpenGL/include
+     ${_OPENGL_INCLUDE_PATH}
+   )
+   find_path(OPENGL_GLX_INCLUDE_DIR GL/glx.h ${_OPENGL_INCLUDE_PATH})
+@@ -297,9 +289,6 @@
+   find_path(OPENGL_GLES2_INCLUDE_DIR GLES2/gl2.h ${_OPENGL_INCLUDE_PATH})
+   find_path(OPENGL_GLES3_INCLUDE_DIR GLES3/gl3.h ${_OPENGL_INCLUDE_PATH})
+   find_path(OPENGL_xmesa_INCLUDE_DIR GL/xmesa.h
+-    /usr/share/doc/NVIDIA_GLX-1.0/include
+-    /usr/openwin/share/include
+-    /opt/graphics/OpenGL/include
+   )
+ 
+   find_path(OPENGL_GLU_INCLUDE_DIR GL/glu.h ${_OPENGL_INCLUDE_PATH})
+@@ -347,9 +336,6 @@
+   find_library(OPENGL_glu_LIBRARY
+     NAMES GLU MesaGLU
+     PATHS ${OPENGL_gl_LIBRARY}
+-          /opt/graphics/OpenGL/lib
+-          /usr/openwin/lib
+-          /usr/shlib
+   )
+ 
+   list(APPEND _OpenGL_CACHE_VARS
+@@ -401,10 +387,7 @@
+     # Search for the legacy GL library.
+     find_library(OPENGL_gl_LIBRARY
+       NAMES GL MesaGL
+-      PATHS /opt/graphics/OpenGL/lib
+-            /usr/openwin/lib
+-            /usr/shlib
+-            ${_OPENGL_LIB_PATH}
++      PATHS ${_OPENGL_LIB_PATH}
+       PATH_SUFFIXES libglvnd
+       )
+     list(APPEND _OpenGL_CACHE_VARS OPENGL_gl_LIBRARY)
+@@ -513,9 +496,6 @@
+   find_library(OPENGL_glu_LIBRARY
+     NAMES GLU MesaGLU
+     PATHS ${OPENGL_gl_LIBRARY}
+-          /opt/graphics/OpenGL/lib
+-          /usr/openwin/lib
+-          /usr/shlib
+   )
+ endif ()
+ 
+diff --git a/Modules/FindPHP4.cmake b/Modules/FindPHP4.cmake
+index edef791cb8..5515f44710 100644
+--- a/Modules/FindPHP4.cmake
++++ b/Modules/FindPHP4.cmake
+@@ -36,15 +36,9 @@
+ #]=======================================================================]
+ 
+ set(PHP4_POSSIBLE_INCLUDE_PATHS
+-  /usr/include/php4
+-  /usr/local/include/php4
+-  /usr/include/php
+-  /usr/local/include/php
+-  /usr/local/apache/php
+   )
+ 
+ set(PHP4_POSSIBLE_LIB_PATHS
+-  /usr/lib
+   )
+ 
+ find_path(PHP4_FOUND_INCLUDE_PATH main/php.h
+diff --git a/Modules/FindPerlLibs.cmake b/Modules/FindPerlLibs.cmake
+index 330700e183..7fc89df6eb 100644
+--- a/Modules/FindPerlLibs.cmake
++++ b/Modules/FindPerlLibs.cmake
+@@ -141,10 +141,6 @@
+     PATHS
+       "${PERL_UPDATE_ARCHLIB}/CORE"
+       "${PERL_ARCHLIB}/CORE"
+-      /usr/lib/perl5/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl5/${PERL_VERSION_STRING}/CORE
+-      /usr/lib/perl/${PERL_VERSION_STRING}/CORE
+   )
+ 
+   ### PERL_LIBRARY
+@@ -154,10 +150,6 @@
+     PATHS
+       "${PERL_UPDATE_ARCHLIB}/CORE"
+       "${PERL_ARCHLIB}/CORE"
+-      /usr/lib/perl5/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl/${PERL_VERSION_STRING}/${PERL_ARCHNAME}/CORE
+-      /usr/lib/perl5/${PERL_VERSION_STRING}/CORE
+-      /usr/lib/perl/${PERL_VERSION_STRING}/CORE
+   )
+ 
+ endif ()
+diff --git a/Modules/FindPhysFS.cmake b/Modules/FindPhysFS.cmake
+index 1894498d9d..03c6e61853 100644
+--- a/Modules/FindPhysFS.cmake
++++ b/Modules/FindPhysFS.cmake
+@@ -52,10 +52,6 @@
+   HINTS
+     ENV PHYSFSDIR
+   PATH_SUFFIXES include/physfs include
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ find_library(PHYSFS_LIBRARY
+@@ -63,10 +59,6 @@
+   HINTS
+     ENV PHYSFSDIR
+   PATH_SUFFIXES lib
+-  PATHS
+-  ~/Library/Frameworks
+-  /Library/Frameworks
+-  /opt
+ )
+ 
+ include(FindPackageHandleStandardArgs)
+diff --git a/Modules/FindPkgConfig.cmake b/Modules/FindPkgConfig.cmake
+index b230eb5ef5..bf7b204406 100644
+--- a/Modules/FindPkgConfig.cmake
++++ b/Modules/FindPkgConfig.cmake
+@@ -391,7 +391,7 @@
+     if(NOT DEFINED CMAKE_SYSTEM_NAME
+         OR (CMAKE_SYSTEM_NAME MATCHES "^(Linux|GNU)$"
+             AND NOT CMAKE_CROSSCOMPILING))
+-      if(EXISTS "/etc/debian_version") # is this a debian system ?
++      if(FALSE) # is this a debian system ?
+         if(CMAKE_LIBRARY_ARCHITECTURE)
+           list(APPEND _lib_dirs "lib/${CMAKE_LIBRARY_ARCHITECTURE}/pkgconfig")
+         endif()
+diff --git a/Modules/FindProducer.cmake b/Modules/FindProducer.cmake
+index 1d034bc207..d176655f46 100644
+--- a/Modules/FindProducer.cmake
++++ b/Modules/FindProducer.cmake
+@@ -100,9 +100,6 @@
+     ENV OSGDIR
+   PATH_SUFFIXES include
+   PATHS
+-    ~/Library/Frameworks
+-    /Library/Frameworks
+-    /opt
+     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]
+     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]
+ )
+@@ -114,8 +111,6 @@
+     ENV OSG_DIR
+     ENV OSGDIR
+   PATH_SUFFIXES lib
+-  PATHS
+-  /opt
+ )
+ 
+ include(FindPackageHandleStandardArgs)
+diff --git a/Modules/FindPython/Support.cmake b/Modules/FindPython/Support.cmake
+index a9441646d1..28ba743f60 100644
+--- a/Modules/FindPython/Support.cmake
++++ b/Modules/FindPython/Support.cmake
+@@ -162,9 +162,6 @@
+     file(TO_CMAKE_PATH "$ENV{CMAKE_FRAMEWORK_PATH}" _pff_CMAKE_FRAMEWORK_PATH)
+     set (_pff_frameworks ${CMAKE_FRAMEWORK_PATH}
+                          ${_pff_CMAKE_FRAMEWORK_PATH}
+-                         ~/Library/Frameworks
+-                         /usr/local/Frameworks
+-                         /opt/homebrew/Frameworks
+                          ${CMAKE_SYSTEM_FRAMEWORK_PATH})
+     list (REMOVE_DUPLICATES _pff_frameworks)
+     foreach (_pff_implementation IN LISTS _${_PYTHON_PREFIX}_FIND_IMPLEMENTATIONS)
+diff --git a/Modules/FindQt.cmake b/Modules/FindQt.cmake
+index 98cd1e2abf..90ad88365d 100644
+--- a/Modules/FindQt.cmake
++++ b/Modules/FindQt.cmake
+@@ -63,44 +63,6 @@
+   return()
+ endif()
+ 
+-# look for signs of qt3 installations
+-file(GLOB GLOB_TEMP_VAR /usr/lib*/qt-3*/bin/qmake /usr/lib*/qt3*/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT3_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+-file(GLOB GLOB_TEMP_VAR /usr/local/qt-x11-commercial-3*/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT3_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+-file(GLOB GLOB_TEMP_VAR /usr/local/lib/qt3/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT3_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+-# look for qt4 installations
+-file(GLOB GLOB_TEMP_VAR /usr/local/qt-x11-commercial-4*/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT4_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+-file(GLOB GLOB_TEMP_VAR /usr/local/Trolltech/Qt-4*/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT4_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+-file(GLOB GLOB_TEMP_VAR /usr/local/lib/qt4/bin/qmake)
+-if(GLOB_TEMP_VAR)
+-  set(QT4_INSTALLED TRUE)
+-endif()
+-set(GLOB_TEMP_VAR)
+-
+ if (Qt_FIND_VERSION)
+   if (Qt_FIND_VERSION MATCHES "^([34])(\\.[0-9]+.*)?$")
+     set(DESIRED_QT_VERSION ${CMAKE_MATCH_1})
+@@ -135,9 +97,6 @@
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Versions\\4.0.0;InstallDir]/include/Qt"
+   ${qt_headers}/Qt
+   $ENV{QTDIR}/include/Qt
+-  /usr/lib/qt/include/Qt
+-  /usr/share/qt4/include/Qt
+-  /usr/local/include/X11/qt4/Qt
+   C:/Progra~1/qt/include/Qt
+   PATH_SUFFIXES qt/include/Qt include/Qt)
+ 
+@@ -152,9 +111,6 @@
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]/include/Qt"
+   C:/Qt/3.3.3Educational/include
+   $ENV{QTDIR}/include
+-  /usr/include/qt3/Qt
+-  /usr/share/qt3/include
+-  /usr/local/include/X11/qt3
+   C:/Progra~1/qt/include
+   PATH_SUFFIXES qt/include include/qt3)
+ 
+diff --git a/Modules/FindQt3.cmake b/Modules/FindQt3.cmake
+index 2c62a5f17f..772a8d88f6 100644
+--- a/Modules/FindQt3.cmake
++++ b/Modules/FindQt3.cmake
+@@ -101,10 +101,6 @@
+ endif()
+ 
+ 
+-file(GLOB GLOB_PATHS /usr/lib/qt-3*)
+-foreach(GLOB_PATH ${GLOB_PATHS})
+-  list(APPEND GLOB_PATHS_BIN "${GLOB_PATH}/bin")
+-endforeach()
+ find_path(QT_INCLUDE_DIR
+   NAMES qt.h
+   PATHS
+@@ -112,10 +108,7 @@
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]/include/Qt"
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]/include/Qt"
+   $ENV{QTDIR}/include
+-  ${GLOB_PATHS}
+-  /usr/share/qt3/include
+   C:/Progra~1/qt/include
+-  /usr/local/include/X11/qt3
+   PATH_SUFFIXES lib/qt/include lib/qt3/include include/qt include/qt3 qt/include qt3/include
+   )
+ 
+@@ -137,7 +130,6 @@
+   set(QT_VERSION_STRING "${qt_version_str}")
+ endif()
+ 
+-file(GLOB GLOB_PATHS_LIB /usr/lib/qt-3*/lib/)
+ if (QT_MT_REQUIRED)
+   find_library(QT_QT_LIBRARY
+     NAMES
+@@ -148,8 +140,6 @@
+       "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]"
+       "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]"
+       ENV QTDIR
+-      ${GLOB_PATHS_LIB}
+-      /usr/share/qt3
+       C:/Progra~1/qt
+     PATH_SUFFIXES
+       lib lib/qt lib/qt3 qt qt3 qt/lib qt3/lib
+@@ -166,8 +156,6 @@
+       "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]"
+       "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]"
+       ENV QTDIR
+-      ${GLOB_PATHS_LIB}
+-      /usr/share/qt3
+       C:/Progra~1/qt/lib
+     PATH_SUFFIXES
+       lib lib/qt lib/qt3 qt qt3 qt/lib qt3/lib
+@@ -182,8 +170,6 @@
+     "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]"
+     "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]"
+     ENV QTDIR
+-    ${GLOB_PATHS_LIB}
+-    /usr/share/qt3
+     C:/Progra~1/qt
+   PATH_SUFFIXES
+     lib lib/qt lib/qt3 qt qt3 qt/lib qt3/lib
+@@ -198,8 +184,6 @@
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.1;InstallDir]/include/Qt"
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]/include/Qt"
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]/include/Qt"
+-  ${GLOB_PATHS_BIN}
+-    /usr/share/qt3
+     C:/Progra~1/qt
+   PATH_SUFFIXES
+     bin lib/qt lib/qt3 qt qt3 qt/bin qt3/bin lib/qt/bin lib/qt3/bin
+@@ -218,8 +202,6 @@
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.1;InstallDir]/include/Qt"
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.2.0;InstallDir]/include/Qt"
+   "[HKEY_CURRENT_USER\\Software\\Trolltech\\Qt3Versions\\3.1.0;InstallDir]/include/Qt"
+-  ${GLOB_PATHS_BIN}
+-    /usr/share/qt3
+     C:/Progra~1/qt
+   PATH_SUFFIXES
+     bin lib/qt lib/qt3 qt qt3 qt/bin qt3/bin lib/qt/bin lib/qt3/bin
+diff --git a/Modules/FindRuby.cmake b/Modules/FindRuby.cmake
+index 18b9e35855..dba9976565 100644
+--- a/Modules/FindRuby.cmake
++++ b/Modules/FindRuby.cmake
+@@ -367,7 +367,6 @@
+           HINTS
+           ${Ruby_HDR_DIR}
+           ${Ruby_ARCH_DIR}
+-          /usr/lib/ruby/${_Ruby_VERSION_SHORT}/i586-linux-gnu/
+ )
+ 
+ set(Ruby_INCLUDE_DIRS ${Ruby_INCLUDE_DIR})
+diff --git a/Modules/FindSDL.cmake b/Modules/FindSDL.cmake
+index a720dcc3df..73e222a27c 100644
+--- a/Modules/FindSDL.cmake
++++ b/Modules/FindSDL.cmake
+@@ -214,8 +214,6 @@
+       HINTS
+         ENV SDLDIR
+       PATH_SUFFIXES lib ${VC_LIB_PATH_SUFFIX}
+-      PATHS
+-      /opt
+     )
+   endif()
+ endif()
+diff --git a/Modules/FindSDL_sound.cmake b/Modules/FindSDL_sound.cmake
+index 954303f3d3..26a5781e2a 100644
+--- a/Modules/FindSDL_sound.cmake
++++ b/Modules/FindSDL_sound.cmake
+@@ -292,7 +292,6 @@
+           ENV MIKMODDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+       )
+@@ -309,7 +308,6 @@
+           ENV MODPLUGDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+       )
+@@ -328,7 +326,6 @@
+           ENV OGGDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+         )
+@@ -343,7 +340,6 @@
+           ENV VORBISDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+          )
+@@ -361,7 +357,6 @@
+           ENV SMPEGDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+         )
+@@ -379,7 +374,6 @@
+           ENV FLACDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+         )
+@@ -400,7 +394,6 @@
+           ENV SPEEXDIR
+           ENV SDLSOUNDDIR
+           ENV SDLDIR
+-          /opt
+         PATH_SUFFIXES
+           lib
+         )
+@@ -419,7 +412,6 @@
+             ENV SPEEXDIR
+             ENV SDLSOUNDDIR
+             ENV SDLDIR
+-            /opt
+           PATH_SUFFIXES lib
+           )
+         if(OGG_LIBRARY)
+diff --git a/Modules/FindX11.cmake b/Modules/FindX11.cmake
+index b2f23bd1dd..9a94529589 100644
+--- a/Modules/FindX11.cmake
++++ b/Modules/FindX11.cmake
+@@ -138,22 +138,9 @@
+   set(CMAKE_REQUIRED_QUIET_SAVE ${CMAKE_REQUIRED_QUIET})
+   set(CMAKE_REQUIRED_QUIET ${X11_FIND_QUIETLY})
+   set(X11_INC_SEARCH_PATH
+-    /usr/pkg/xorg/include
+-    /usr/X11R6/include
+-    /usr/X11R7/include
+-    /usr/include/X11
+-    /usr/openwin/include
+-    /usr/openwin/share/include
+-    /opt/graphics/OpenGL/include
+-    /opt/X11/include
+   )
+ 
+   set(X11_LIB_SEARCH_PATH
+-    /usr/pkg/xorg/lib
+-    /usr/X11R6/lib
+-    /usr/X11R7/lib
+-    /usr/openwin/lib
+-    /opt/X11/lib
+   )
+ 
+   find_path(X11_X11_INCLUDE_PATH X11/X.h                             ${X11_INC_SEARCH_PATH})
+diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
+index ff9c11a9d7..706b34b087 100644
+--- a/Modules/GNUInstallDirs.cmake
++++ b/Modules/GNUInstallDirs.cmake
+@@ -336,17 +336,6 @@
+       set(${out_var} "conda")
+     endif()
+   endif()
+-  # If we didn't detect conda from the previous step, check
+-  # for the linux variant
+-  if(NOT ${out_var})
+-    if (EXISTS "/etc/alpine-release")
+-      set(${out_var} "alpine")
+-    elseif (EXISTS "/etc/arch-release")
+-      set(${out_var} "arch linux")
+-    elseif (EXISTS "/etc/debian_version")
+-      set(${out_var} "debian")
+-    endif()
+-  endif()
+   return(PROPAGATE ${out_var})
+ endfunction()
+ 
+diff --git a/Modules/GetPrerequisites.cmake b/Modules/GetPrerequisites.cmake
+index f1f5db7b7b..9b4bdddb36 100644
+--- a/Modules/GetPrerequisites.cmake
++++ b/Modules/GetPrerequisites.cmake
+@@ -458,11 +458,9 @@
+   if(NOT resolved)
+     set(ri "ri-NOTFOUND")
+     find_file(ri "${item}" ${exepath} ${dirs} NO_DEFAULT_PATH)
+-    find_file(ri "${item}" ${exepath} ${dirs} /usr/lib)
+ 
+     get_filename_component(basename_item "${item}" NAME)
+     find_file(ri "${basename_item}" PATHS ${exepath} ${dirs} NO_DEFAULT_PATH)
+-    find_file(ri "${basename_item}" PATHS /usr/lib)
+ 
+     if(ri)
+       #message(STATUS "info: 'find_file' in exepath/dirs (${ri})")
+@@ -472,23 +470,6 @@
+     endif()
+   endif()
+ 
+-  if(NOT resolved)
+-    if(item MATCHES "[^/]+\\.framework/")
+-      set(fw "fw-NOTFOUND")
+-      find_file(fw "${item}"
+-        "~/Library/Frameworks"
+-        "/Library/Frameworks"
+-        "/System/Library/Frameworks"
+-      )
+-      if(fw)
+-        #message(STATUS "info: 'find_file' found framework (${fw})")
+-        set(resolved 1)
+-        set(resolved_item "${fw}")
+-        set(fw "fw-NOTFOUND")
+-      endif()
+-    endif()
+-  endif()
+-
+   # Using find_program on Windows will find dll files that are in the PATH.
+   # (Converting simple file names into full path names if found.)
+   #
+diff --git a/Modules/Internal/CMakeCUDAFindToolkit.cmake b/Modules/Internal/CMakeCUDAFindToolkit.cmake
+index 8fd408994f..61894813a2 100644
+--- a/Modules/Internal/CMakeCUDAFindToolkit.cmake
++++ b/Modules/Internal/CMakeCUDAFindToolkit.cmake
+@@ -50,18 +50,8 @@
+     # if CUDAToolkit_ROOT is not specified, it is assumed that the symlinked
+     # directory is the desired location.
+     if(NOT _CUDA_NVCC_EXECUTABLE)
+-      if(UNIX)
+-        if(NOT APPLE)
+-          set(platform_base "/usr/local/cuda-")
+-        else()
+-          set(platform_base "/Developer/NVIDIA/CUDA-")
+-        endif()
+-      else()
+-        set(platform_base "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v")
+-      endif()
+-
+       # Build out a descending list of possible cuda installations, e.g.
+-      file(GLOB possible_paths "${platform_base}*")
++      set(possible_paths)
+       # Iterate the glob results and create a descending list.
+       set(versions)
+       foreach(p ${possible_paths})
+@@ -77,14 +67,6 @@
+ 
+       # With a descending list of versions, populate possible paths to search.
+       set(search_paths)
+-      foreach(v ${versions})
+-        list(APPEND search_paths "${platform_base}${v}")
+-      endforeach()
+-
+-      # Force the global default /usr/local/cuda to the front on Unix.
+-      if(UNIX)
+-        list(INSERT search_paths 0 "/usr/local/cuda")
+-      endif()
+ 
+       # Now search for nvcc again using the platform default search paths.
+       find_program(_CUDA_NVCC_EXECUTABLE
+@@ -140,23 +122,13 @@
+     set(${lang_var_}LIBRARY_ROOT "${_CUDA_COMPILER_LIBRARY_ROOT_FROM_NVVMIR_LIBRARY_DIR}")
+   elseif(EXISTS "${${lang_var_}TOOLKIT_ROOT}/nvvm/libdevice")
+     set(${lang_var_}LIBRARY_ROOT "${${lang_var_}TOOLKIT_ROOT}")
+-  elseif(CMAKE_SYSROOT_LINK AND EXISTS "${CMAKE_SYSROOT_LINK}/usr/lib/cuda/nvvm/libdevice")
+-    set(${lang_var_}LIBRARY_ROOT "${CMAKE_SYSROOT_LINK}/usr/lib/cuda")
+-  elseif(EXISTS "${CMAKE_SYSROOT}/usr/lib/cuda/nvvm/libdevice")
+-    set(${lang_var_}LIBRARY_ROOT "${CMAKE_SYSROOT}/usr/lib/cuda")
+   else()
+     message(FATAL_ERROR "Couldn't find CUDA library root.")
+   endif()
+   unset(_CUDA_COMPILER_LIBRARY_ROOT_FROM_NVVMIR_LIBRARY_DIR)
+ 
+   # ${lang_var_}TOOLKIT_LIBRARY_ROOT contains the linking stubs necessary for device linking and other low-level library files.
+-  if(CMAKE_SYSROOT_LINK AND EXISTS "${CMAKE_SYSROOT_LINK}/usr/lib/nvidia-cuda-toolkit/bin/crt/link.stub")
+-    set(${lang_var_}TOOLKIT_LIBRARY_ROOT "${CMAKE_SYSROOT_LINK}/usr/lib/nvidia-cuda-toolkit")
+-  elseif(EXISTS "${CMAKE_SYSROOT}/usr/lib/nvidia-cuda-toolkit/bin/crt/link.stub")
+-    set(${lang_var_}TOOLKIT_LIBRARY_ROOT "${CMAKE_SYSROOT}/usr/lib/nvidia-cuda-toolkit")
+-  else()
+-    set(${lang_var_}TOOLKIT_LIBRARY_ROOT "${${lang_var_}TOOLKIT_ROOT}")
+-  endif()
++  set(${lang_var_}TOOLKIT_LIBRARY_ROOT "${${lang_var_}TOOLKIT_ROOT}")
+ 
+   # For regular nvcc we the toolkit version is the same as the compiler version and we can parse it from the vendor test output.
+   # For Clang we need to invoke nvcc to get version output.
+diff --git a/Modules/Internal/CPack/CPackRPM.cmake b/Modules/Internal/CPack/CPackRPM.cmake
+index b733cfe964..90709f48e8 100644
+--- a/Modules/Internal/CPack/CPackRPM.cmake
++++ b/Modules/Internal/CPack/CPackRPM.cmake
+@@ -640,7 +640,7 @@
+   endif()
+ 
+   # With debugedit we prepare source files list
+-  find_program(DEBUGEDIT_EXECUTABLE debugedit "/usr/lib/rpm/")
++  find_program(DEBUGEDIT_EXECUTABLE debugedit)
+   if(NOT DEBUGEDIT_EXECUTABLE)
+     message(FATAL_ERROR "CPackRPM: debugedit binary could not be found!"
+       " Required for debuginfo packaging. See documentation of"
+diff --git a/Modules/Platform/CYGWIN.cmake b/Modules/Platform/CYGWIN.cmake
+index cf5e732833..1bbbfeca54 100644
+--- a/Modules/Platform/CYGWIN.cmake
++++ b/Modules/Platform/CYGWIN.cmake
+@@ -15,13 +15,3 @@
+ set(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
+ 
+ include(Platform/UnixPaths)
+-
+-# Windows API on Cygwin
+-list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-  /usr/include/w32api
+-  )
+-
+-# Windows API on Cygwin
+-list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-  /usr/lib/w32api
+-  )
+diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
+index 7c4f123a1d..4cfd53de9f 100644
+--- a/Modules/Platform/Darwin-Initialize.cmake
++++ b/Modules/Platform/Darwin-Initialize.cmake
+@@ -1,19 +1,7 @@
+ set(APPLE 1)
+ set(UNIX 1)
+ 
+-# Ask xcode-select where to find /Developer or fall back to ancient location.
+-execute_process(COMMAND xcode-select -print-path
+-  OUTPUT_VARIABLE _stdout
+-  OUTPUT_STRIP_TRAILING_WHITESPACE
+-  ERROR_VARIABLE _stderr
+-  RESULT_VARIABLE _failed)
+-if(NOT _failed AND IS_DIRECTORY ${_stdout})
+-  set(OSX_DEVELOPER_ROOT ${_stdout})
+-elseif(IS_DIRECTORY "/Developer")
+-  set(OSX_DEVELOPER_ROOT "/Developer")
+-else()
+-  set(OSX_DEVELOPER_ROOT "")
+-endif()
++set(OSX_DEVELOPER_ROOT "")
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+   execute_process(COMMAND @sw_vers@ -productVersion
+diff --git a/Modules/Platform/Darwin.cmake b/Modules/Platform/Darwin.cmake
+index 42c6b35424..f2985f3765 100644
+--- a/Modules/Platform/Darwin.cmake
++++ b/Modules/Platform/Darwin.cmake
+@@ -166,7 +166,6 @@
+ 
+ # set up the default search directories for frameworks
+ set(CMAKE_SYSTEM_FRAMEWORK_PATH
+-  ~/Library/Frameworks
+   )
+ if(_CMAKE_OSX_SYSROOT_PATH)
+   list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+@@ -201,10 +200,6 @@
+   list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+     ${OSX_DEVELOPER_ROOT}/Library/Frameworks)
+ endif()
+-list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH
+-  /Library/Frameworks
+-  /Network/Library/Frameworks
+-  /System/Library/Frameworks)
+ 
+ # Warn about known system misconfiguration case.
+ if(CMAKE_OSX_SYSROOT)
+@@ -230,10 +225,6 @@
+ # set up the default search directories for application bundles
+ set(_apps_paths)
+ foreach(_path
+-  "~/Applications"
+-  "/Applications"
+-  "${OSX_DEVELOPER_ROOT}/../Applications" # Xcode 4.3+
+-  "${OSX_DEVELOPER_ROOT}/Applications"    # pre-4.3
+   )
+   get_filename_component(_apps "${_path}" ABSOLUTE)
+   if(EXISTS "${_apps}")
+@@ -249,28 +240,6 @@
+ 
+ include(Platform/UnixPaths)
+ 
+-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+-  execute_process(
+-    COMMAND brew --prefix
+-    OUTPUT_VARIABLE _cmake_homebrew_prefix
+-    RESULT_VARIABLE _brew_result
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
+-  if (_brew_result EQUAL 0 AND IS_DIRECTORY "${_cmake_homebrew_prefix}")
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH "${_cmake_homebrew_prefix}")
+-  elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
+-      /opt/homebrew # Brew on Apple Silicon
+-      )
+-  else()
+-    list(PREPEND CMAKE_SYSTEM_PREFIX_PATH
+-      /usr/local # Brew on Intel
+-      )
+-  endif()
+-  unset(_cmake_homebrew_prefix)
+-  unset(_brew_result)
+-endif()
+-
+ if(_CMAKE_OSX_SYSROOT_PATH)
+   if(EXISTS ${_CMAKE_OSX_SYSROOT_PATH}/usr/include)
+     list(INSERT CMAKE_SYSTEM_PREFIX_PATH 0 ${_CMAKE_OSX_SYSROOT_PATH}/usr)
+@@ -285,7 +254,3 @@
+     endforeach()
+   endif()
+ endif()
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /sw        # Fink
+-  /opt/local # MacPorts
+-  )
+diff --git a/Modules/Platform/GNU.cmake b/Modules/Platform/GNU.cmake
+index 6a25b00b81..2430bdb7e4 100644
+--- a/Modules/Platform/GNU.cmake
++++ b/Modules/Platform/GNU.cmake
+@@ -48,13 +48,8 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ include(Platform/UnixPaths)
+diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
+index 5b61dd6b61..d324b903ed 100644
+--- a/Modules/Platform/Linux.cmake
++++ b/Modules/Platform/Linux.cmake
+@@ -45,25 +45,8 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ include(Platform/UnixPaths)
+-
+-# Debian has lib32 and lib64 paths only for compatibility so they should not be
+-# searched.
+-if(NOT CMAKE_CROSSCOMPILING AND NOT CMAKE_COMPILER_SYSROOT)
+-  if (EXISTS "/etc/debian_version")
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-  endif()
+-  if (EXISTS "/etc/arch-release")
+-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-  endif()
+-endif()
+diff --git a/Modules/Platform/OpenBSD.cmake b/Modules/Platform/OpenBSD.cmake
+index 97e2a6a83e..02c607618c 100644
+--- a/Modules/Platform/OpenBSD.cmake
++++ b/Modules/Platform/OpenBSD.cmake
+@@ -31,13 +31,9 @@
+ 
+ if($ENV{LOCALBASE})
+   set(OPENBSD_LOCALBASE $ENV{LOCALBASE})
+-else()
+-  set(OPENBSD_LOCALBASE /usr/local)
+ endif()
+ if($ENV{X11BASE})
+   set(OPENBSD_X11BASE $ENV{X11BASE})
+-else()
+-  set(OPENBSD_X11BASE /usr/X11R6)
+ endif()
+ 
+ list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${OPENBSD_LOCALBASE})
+diff --git a/Modules/Platform/SunOS.cmake b/Modules/Platform/SunOS.cmake
+index e01e892283..d044d81c88 100644
+--- a/Modules/Platform/SunOS.cmake
++++ b/Modules/Platform/SunOS.cmake
+@@ -19,11 +19,6 @@
+ 
+ include(Platform/UnixPaths)
+ 
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /opt/csw
+-  /opt/openwin
+-  )
+-
+ # The Sun linker needs to find transitive shared library dependencies
+ # in the -L path.
+ set(CMAKE_LINK_DEPENDENT_LIBRARY_DIRS 1)
+diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+index bdf4155232..588064821d 100644
+--- a/Modules/Platform/UnixPaths.cmake
++++ b/Modules/Platform/UnixPaths.cmake
+@@ -29,9 +29,6 @@
+ # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
+ # synchronized
+ list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  # Standard
+-  /usr/local /usr /
+-
+   # CMake install location
+   "${_CMAKE_INSTALL_DIR}"
+   )
+@@ -49,28 +46,6 @@
+ endif()
+ _cmake_record_install_prefix()
+ 
+-# Non "standard" but common install prefixes
+-list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /usr/X11R6
+-  /usr/pkg
+-  /opt
+-  )
+-
+-# List common include file locations not under the common prefixes.
+-list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-  # X11
+-  /usr/include/X11
+-  )
+-
+-list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-  # X11
+-  /usr/lib/X11
+-  )
+-
+-list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
+-  )
+-
+ # Add the Nix C library paths.
+ if(DEFINED ENV{NIX_CC}
+   AND IS_DIRECTORY "$ENV{NIX_CC}"
+diff --git a/Modules/Platform/WindowsPaths.cmake b/Modules/Platform/WindowsPaths.cmake
+index c56dfaf9ac..4e0b250c1a 100644
+--- a/Modules/Platform/WindowsPaths.cmake
++++ b/Modules/Platform/WindowsPaths.cmake
+@@ -69,11 +69,6 @@
+ endif()
+ _cmake_record_install_prefix()
+ 
+-if(CMAKE_CROSSCOMPILING AND NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+-  # MinGW (useful when cross compiling from linux with CMAKE_FIND_ROOT_PATH set)
+-  list(APPEND CMAKE_SYSTEM_PREFIX_PATH /)
+-endif()
+-
+ list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+   )
+ 
+diff --git a/Modules/ProcessorCount.cmake b/Modules/ProcessorCount.cmake
+index ffb8fcd8d2..6b8fcf87dc 100644
+--- a/Modules/ProcessorCount.cmake
++++ b/Modules/ProcessorCount.cmake
+@@ -128,7 +128,7 @@
+   if(NOT count)
+     # HPUX (systems with machinfo):
+     find_program(ProcessorCount_cmd_machinfo machinfo
+-      PATHS /usr/contrib/bin)
++      )
+     mark_as_advanced(ProcessorCount_cmd_machinfo)
+     if(ProcessorCount_cmd_machinfo)
+       execute_process(COMMAND ${ProcessorCount_cmd_machinfo}
+@@ -160,7 +160,7 @@
+   if(NOT count)
+     # AIX (systems with lsconf):
+     find_program(ProcessorCount_cmd_lsconf lsconf
+-      PATHS /usr/sbin)
++      )
+     mark_as_advanced(ProcessorCount_cmd_lsconf)
+     if(ProcessorCount_cmd_lsconf)
+       execute_process(COMMAND ${ProcessorCount_cmd_lsconf}
+@@ -190,7 +190,7 @@
+ 
+   if(NOT count)
+     # Sun (systems where psrinfo tool is available)
+-    find_program(ProcessorCount_cmd_psrinfo psrinfo PATHS /usr/sbin /sbin)
++    find_program(ProcessorCount_cmd_psrinfo psrinfo)
+     mark_as_advanced(ProcessorCount_cmd_psrinfo)
+     if (ProcessorCount_cmd_psrinfo)
+       execute_process(COMMAND ${ProcessorCount_cmd_psrinfo} -p -v
+diff --git a/Modules/UseJava.cmake b/Modules/UseJava.cmake
+index b977d955ca..5ff835298d 100644
+--- a/Modules/UseJava.cmake
++++ b/Modules/UseJava.cmake
+@@ -1125,8 +1125,6 @@
+     set(_jar_files)
+     set(_jar_versions)
+     set(_jar_paths
+-        /usr/share/java/
+-        /usr/local/share/java/
+         ${Java_JAR_PATHS})
+     set(_jar_doc "NOTSET")
+ 
+diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
+index 8ff651fd90..9659deedf5 100644
+--- a/Utilities/cmcurl/CMakeLists.txt
++++ b/Utilities/cmcurl/CMakeLists.txt
+@@ -1826,43 +1826,6 @@
+   endif()
+   mark_as_advanced(CURL_CA_PATH_SET)
+ 
+-  if(CURL_CA_BUNDLE_SET AND _curl_ca_path_autodetect)
+-    # Skip auto-detection of unset CA path because CA bundle is set explicitly
+-  elseif(CURL_CA_PATH_SET AND _curl_ca_bundle_autodetect)
+-    # Skip auto-detection of unset CA bundle because CA path is set explicitly
+-  elseif(_curl_ca_bundle_autodetect OR _curl_ca_path_autodetect)
+-    # First try auto-detecting a CA bundle, then a CA path
+-
+-    if(_curl_ca_bundle_autodetect)
+-      foreach(_search_ca_bundle_path IN ITEMS
+-          "/etc/ssl/certs/ca-certificates.crt"
+-          "/etc/pki/tls/certs/ca-bundle.crt"
+-          "/usr/share/ssl/certs/ca-bundle.crt"
+-          "/usr/local/share/certs/ca-root-nss.crt"
+-          "/etc/ssl/cert.pem")
+-        if(EXISTS "${_search_ca_bundle_path}")
+-          message(STATUS "Found CA bundle: ${_search_ca_bundle_path}")
+-          set(CURL_CA_BUNDLE "${_search_ca_bundle_path}" CACHE
+-            STRING "Path to the CA bundle. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
+-          set(CURL_CA_BUNDLE_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-          break()
+-        endif()
+-      endforeach()
+-    endif()
+-
+-    if(_curl_ca_path_autodetect AND NOT CURL_CA_PATH_SET)
+-      set(_search_ca_path "/etc/ssl/certs")
+-      file(GLOB _curl_ca_files_found "${_search_ca_path}/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].0")
+-      if(_curl_ca_files_found)
+-        unset(_curl_ca_files_found)
+-        message(STATUS "Found CA path: ${_search_ca_path}")
+-        set(CURL_CA_PATH "${_search_ca_path}" CACHE
+-          STRING "Location of default CA path. Set 'none' to disable or 'auto' for auto-detection. Defaults to 'auto'.")
+-        set(CURL_CA_PATH_SET TRUE CACHE BOOL "Path to the CA bundle has been set")
+-      endif()
+-    endif()
+-  endif()
+-
+   set(CURL_CA_EMBED_SET FALSE)
+   if(BUILD_CURL_EXE AND NOT CURL_CA_EMBED STREQUAL "")
+     if(EXISTS "${CURL_CA_EMBED}")
+diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
+index e6ab5de99b..158a407c3e 100644
+--- a/Utilities/cmlibarchive/CMakeLists.txt
++++ b/Utilities/cmlibarchive/CMakeLists.txt
+@@ -39,9 +39,6 @@
+        MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO|MINSIZEREL|NONE)\$")
+ ENDIF()
+ 
+-# On MacOS, prefer MacPorts libraries to system libraries.
+-# I haven't come up with a compelling argument for this to be conditional.
+-list(APPEND CMAKE_PREFIX_PATH /opt/local)
+ # Enable @rpath in the install name.
+ # detail in "cmake  --help-policy CMP0042"
+ SET(CMAKE_MACOSX_RPATH ON)

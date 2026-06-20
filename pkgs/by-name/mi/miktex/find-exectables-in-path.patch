@@ -1,0 +1,20 @@
+diff --git a/Libraries/MiKTeX/Core/Session/filetypes.cpp b/Libraries/MiKTeX/Core/Session/filetypes.cpp
+index 82e55382f..84ac206e9 100644
+--- a/Libraries/MiKTeX/Core/Session/filetypes.cpp
++++ b/Libraries/MiKTeX/Core/Session/filetypes.cpp
+@@ -198,6 +198,15 @@ void SessionImpl::RegisterFileType(FileType fileType)
+       searchPath.push_back(myPrefixBinCanon.ToString());
+     }
+ #endif
++    if (Utils::GetEnvironmentString("PATH", str))
++    {
++      PathName binDir(str);
++      binDir.Canonicalize();
++      if (std::find(searchPath.begin(), searchPath.end(), binDir.ToString()) == searchPath.end())
++      {
++        searchPath.push_back(binDir.ToString());
++      }
++    }
+     break;
+   }
+   case FileType::OTF:

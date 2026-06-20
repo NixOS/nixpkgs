@@ -1,0 +1,11 @@
+diff -Naur teapot-2.3.0-old/scanner.c teapot-2.3.0-new/scanner.c
+--- teapot-2.3.0-old/scanner.c	1969-12-31 21:00:01.000000000 -0300
++++ teapot-2.3.0-new/scanner.c	2021-11-25 17:46:49.936673391 -0300
+@@ -25,6 +25,7 @@
+ #include "main.h"
+ #include "misc.h"
+ #include "scanner.h"
++#include "utf8.h"
+ /*}}}*/
+ 
+ /* identcode  -- return number of identifier */ /*{{{*/

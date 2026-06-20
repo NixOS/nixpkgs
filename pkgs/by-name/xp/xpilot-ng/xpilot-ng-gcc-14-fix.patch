@@ -1,0 +1,168 @@
+diff -r -U3 -x '.*.sw?' xpilot-ng-4.7.3/src/mapedit/proto.h xpilot-ng-4.7.3-fixed/src/mapedit/proto.h
+--- xpilot-ng-4.7.3/src/mapedit/proto.h	2010-03-05 02:03:49.000000000 +0100
++++ xpilot-ng-4.7.3-fixed/src/mapedit/proto.h	2024-12-31 14:25:55.790083767 +0100
+@@ -73,15 +73,15 @@
+ int ResizeWidth(HandlerInfo_t info);
+ int ResizeHeight(HandlerInfo_t info);
+ int OpenPreferencesPopup(HandlerInfo_t info);
+-int OpenMapInfoPopup(void);
+-int OpenRobotsPopup(void);
+-int OpenVisibilityPopup(void);
+-int OpenCannonsPopup(void);
+-int OpenRoundsPopup(void);
+-int OpenInitItemsPopup(void);
+-int OpenMaxItemsPopup(void);
+-int OpenProbsPopup(void);
+-int OpenScoringPopup(void);
++int OpenMapInfoPopup(HandlerInfo_t info);
++int OpenRobotsPopup(HandlerInfo_t info);
++int OpenVisibilityPopup(HandlerInfo_t info);
++int OpenCannonsPopup(HandlerInfo_t info);
++int OpenRoundsPopup(HandlerInfo_t info);
++int OpenInitItemsPopup(HandlerInfo_t info);
++int OpenMaxItemsPopup(HandlerInfo_t info);
++int OpenProbsPopup(HandlerInfo_t info);
++int OpenScoringPopup(HandlerInfo_t info);
+ int ValidateCoordHandler(HandlerInfo_t info);
+ int ShowHoles(HandlerInfo_t info);
+ char MapData(int x, int y);
+diff -r -U3 -x '.*.sw?' xpilot-ng-4.7.3/src/mapedit/tools.c xpilot-ng-4.7.3-fixed/src/mapedit/tools.c
+--- xpilot-ng-4.7.3/src/mapedit/tools.c	2010-03-05 02:03:49.000000000 +0100
++++ xpilot-ng-4.7.3-fixed/src/mapedit/tools.c	2024-12-31 14:26:29.168082279 +0100
+@@ -747,7 +747,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenMapInfoPopup()
++int OpenMapInfoPopup(HandlerInfo_t info)
+ {
+     Window *temp;
+ 
+@@ -790,7 +790,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenRobotsPopup()
++int OpenRobotsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, robots);
+     return 0;
+@@ -801,7 +801,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenVisibilityPopup()
++int OpenVisibilityPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, visibility);
+     return 0;
+@@ -812,7 +812,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenCannonsPopup()
++int OpenCannonsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, cannons);
+     return 0;
+@@ -823,7 +823,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenRoundsPopup()
++int OpenRoundsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, rounds);
+     return 0;
+@@ -834,7 +834,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenInitItemsPopup()
++int OpenInitItemsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, inititems);
+     return 0;
+@@ -845,7 +845,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenMaxItemsPopup()
++int OpenMaxItemsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, maxitems);
+     return 0;
+@@ -856,7 +856,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenProbsPopup()
++int OpenProbsPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, probs);
+     return 0;
+@@ -867,7 +867,7 @@
+ /* Arguments :                                                             */
+ /* Purpose :                                                               */
+ /***************************************************************************/
+-int OpenScoringPopup()
++int OpenScoringPopup(HandlerInfo_t info)
+ {
+     XMapWindow(display, scoring);
+     return 0;
+diff -r -U3 -x '.*.sw?' xpilot-ng-4.7.3/src/server/suibotdef.c xpilot-ng-4.7.3-fixed/src/server/suibotdef.c
+--- xpilot-ng-4.7.3/src/server/suibotdef.c	2010-03-05 02:03:49.000000000 +0100
++++ xpilot-ng-4.7.3-fixed/src/server/suibotdef.c	2024-12-31 14:07:28.316133143 +0100
+@@ -338,12 +338,6 @@
+ 
+ /* } */
+ 
+-struct collans {
+-    int line;
+-    int point;
+-    clvec_t moved;
+-};
+-
+ static bool Wall_in_between_points(int cx1, int cy1, int cx2, int cy2);
+ static bool Wall_in_between_points(int cx1, int cy1, int cx2, int cy2){ /* Wall between two given points?*/
+   
+@@ -405,7 +399,7 @@
+   /* ignore if there is enough time to deal with this object  later */
+   if((time_until_closest < 0) || (time_until_closest > maxtime))
+     /*option instead of fixed value: options.dodgetime))*/
+-    return;
++    return false;
+ 
+   /* get the square of the distance */
+   sqdistance =
+diff -r -U3 -x '.*.sw?' xpilot-ng-4.7.3/src/server/walls.c xpilot-ng-4.7.3-fixed/src/server/walls.c
+--- xpilot-ng-4.7.3/src/server/walls.c	2010-03-05 02:03:49.000000000 +0100
++++ xpilot-ng-4.7.3-fixed/src/server/walls.c	2024-12-31 14:09:46.086127001 +0100
+@@ -54,12 +54,6 @@
+ #error "This code assumes that negative numbers round upwards."
+ #endif
+ 
+-struct collans {
+-    int line;
+-    int point;
+-    clvec_t moved;
+-};
+-
+ struct tl2 {
+     int base;
+     int x;
+diff -r -U3 -x '.*.sw?' xpilot-ng-4.7.3/src/server/walls.h xpilot-ng-4.7.3-fixed/src/server/walls.h
+--- xpilot-ng-4.7.3/src/server/walls.h	2010-03-05 02:03:49.000000000 +0100
++++ xpilot-ng-4.7.3-fixed/src/server/walls.h	2024-12-31 14:04:50.198140193 +0100
+@@ -187,4 +187,11 @@
+ 
+ extern int num_polys, num_pstyles, num_estyles, num_bstyles;
+ 
++struct collans {
++    int line;
++    int point;
++    clvec_t moved;
++};
++
++extern void Move_point(const move_t *move, struct collans *answer);
+ #endif

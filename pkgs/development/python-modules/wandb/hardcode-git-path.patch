@@ -1,0 +1,31 @@
+diff --git a/wandb/cli/cli.py b/wandb/cli/cli.py
+index 2623a3d75..ea78e52b8 100644
+--- a/wandb/cli/cli.py
++++ b/wandb/cli/cli.py
+@@ -3264,7 +3264,7 @@ def restore(ctx, run, no_git, branch, project, entity):
+     commit, json_config, patch_content, metadata = api.run_config(
+         project, run=run, entity=entity
+     )
+-    repo = metadata.get("git", {}).get("repo")
++    repo = metadata.get("@git@", {}).get("repo")
+     image = metadata.get("docker")
+     restore_message = f"""`wandb restore` needs to be run from the same git repository as the original run.
+ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+@@ -3283,7 +3283,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+ 
+     if commit and git.enabled:
+         wandb.termlog(f"Fetching origin and finding commit: {commit}")
+-        subprocess.check_call(["git", "fetch", "--all"])
++        subprocess.check_call(["@git@", "fetch", "--all"])
+         try:
+             git.repo.commit(commit)
+         except ValueError:
+@@ -3336,7 +3336,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+             # --reject is necessary or else this fails any time a binary file
+             # occurs in the diff
+             exit_code = subprocess.call(
+-                ["git", "apply", "--reject", patch_rel_path], cwd=root
++                ["@git@", "apply", "--reject", patch_rel_path], cwd=root
+             )
+             if exit_code == 0:
+                 wandb.termlog("Applied patch")

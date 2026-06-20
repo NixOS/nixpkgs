@@ -1,0 +1,22 @@
+--- a/src/RuntimeSystem/scon.c
++++ b/src/RuntimeSystem/scon.c
+@@ -858,6 +858,8 @@
+ int execution_aborted;
+ int return_code;
+ 
++extern void abc_main (void);
++
+ int main (int argc,char **argv)
+ {
+ 	int arg_n;
+
+--- a/src/clm/cachingcompiler.h
++++ b/src/clm/cachingcompiler.h
+@@ -1,6 +1,7 @@
+ Clean (:: *Thread :== Int)
+ int start_caching_compiler (CleanCharArray compiler_path);
+ Clean (start_caching_compiler :: {#Char} Thread -> (Int, Thread))
++int start_caching_compiler_with_args (CleanCharArray coc_path, char** cocl_argv, int cocl_argv_size);
+ int call_caching_compiler (CleanCharArray args);
+ Clean (call_caching_compiler :: {#Char} Thread -> (Int, Thread))
+ int stop_caching_compiler (void);

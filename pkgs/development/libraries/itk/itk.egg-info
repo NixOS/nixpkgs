@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: itk
+Version: @ITK_VER@
+Summary: Insight Segmentation and Registration Toolkit
+Platform: UNKNOWN

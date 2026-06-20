@@ -1,0 +1,2671 @@
+From 6b3ab4a94e4d498cdabd5aac6b749031abd785c8 Mon Sep 17 00:00:00 2001
+From: Ralph Meijer <ralphm@ik.nu>
+Date: Thu, 18 Jul 2024 19:04:47 +0200
+Subject: [PATCH] Remove py2 compat
+
+Co-authored-by: OPNA2608 <opna2608@protonmail.com>
+---
+ setup.py                      |  11 ++-
+ wokkel/component.py           |  13 ++-
+ wokkel/data_form.py           |  70 ++++++----------
+ wokkel/delay.py               |   2 +-
+ wokkel/disco.py               |  51 ++++++------
+ wokkel/formats.py             |  20 ++---
+ wokkel/generic.py             |  19 +----
+ wokkel/iwokkel.py             | 150 +++++++++++++++++-----------------
+ wokkel/muc.py                 |  67 ++++++++-------
+ wokkel/pubsub.py              |  55 ++++++-------
+ wokkel/server.py              |  17 ++--
+ wokkel/shim.py                |   5 +-
+ wokkel/subprotocols.py        |  13 ++-
+ wokkel/test/helpers.py        |   5 +-
+ wokkel/test/test_client.py    |   3 +-
+ wokkel/test/test_data_form.py |  89 +++++---------------
+ wokkel/test/test_generic.py   |  75 +----------------
+ wokkel/test/test_muc.py       |  13 ++-
+ wokkel/test/test_server.py    |   6 +-
+ wokkel/test/test_shim.py      |   5 +-
+ wokkel/test/test_xmppim.py    |  19 ++---
+ wokkel/xmppim.py              |  89 ++++++++++----------
+ 22 files changed, 318 insertions(+), 479 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 8804fd9..f7f1e33 100755
+--- a/setup.py
++++ b/setup.py
+@@ -40,11 +40,11 @@ setup(name='wokkel',
+       license='MIT',
+       platforms='any',
+       classifiers=[
+-          'Programming Language :: Python :: 2.7',
+           'Programming Language :: Python :: 3',
+-          'Programming Language :: Python :: 3.4',
+-          'Programming Language :: Python :: 3.5',
+           'Programming Language :: Python :: 3.6',
++          'Programming Language :: Python :: 3.7',
++          'Programming Language :: Python :: 3.8',
++          'Programming Language :: Python :: 3.9',
+       ],
+       packages=[
+           'wokkel',
+@@ -60,16 +60,15 @@ setup(name='wokkel',
+       install_requires=[
+           'incremental>=16.9.0',
+           'python-dateutil',
++          'Twisted[tls]>=16.4.0',
+       ],
+       extras_require={
+-          ":python_version<'3'": 'Twisted[tls]>=15.5.0',
+-          ":python_version>'3'": 'Twisted[tls]>=16.4.0',
+           "dev": [
+               "pyflakes",
+               "coverage",
++              "pydoctor",
+               "sphinx",
+               "towncrier",
+           ],
+-          "dev:python_version<'3'": "pydoctor",
+       },
+ )
+diff --git a/wokkel/component.py b/wokkel/component.py
+index da48230..9410837 100644
+--- a/wokkel/component.py
++++ b/wokkel/component.py
+@@ -12,7 +12,6 @@ from __future__ import division, absolute_import
+ from twisted.application import service
+ from twisted.internet import reactor
+ from twisted.python import log
+-from twisted.python.compat import unicode
+ from twisted.words.protocols.jabber.jid import internJID as JID
+ from twisted.words.protocols.jabber import component, error, xmlstream
+ from twisted.words.xish import domish
+@@ -105,7 +104,7 @@ class InternalComponent(xmlstream.XMPPHandlerCollection, service.Service):
+     components of this type connect to a router in the same process. This
+     allows for one-process XMPP servers.
+ 
+-    @ivar domains: Domains (as L{unicode}) this component will handle traffic
++    @ivar domains: Domains (as L{str}) this component will handle traffic
+         for.
+     @type domains: L{set}
+     """
+@@ -177,7 +176,7 @@ class ListenComponentAuthenticator(xmlstream.ListenAuthenticator):
+     Authenticator for accepting components.
+ 
+     @ivar secret: The shared used to authorized incoming component connections.
+-    @type secret: L{unicode}.
++    @type secret: L{str}.
+     """
+ 
+     namespace = NS_COMPONENT_ACCEPT
+@@ -241,7 +240,7 @@ class ListenComponentAuthenticator(xmlstream.ListenAuthenticator):
+         L{onHandshake}.
+         """
+         if (element.uri, element.name) == (self.namespace, 'handshake'):
+-            self.onHandshake(unicode(element))
++            self.onHandshake(str(element))
+         else:
+             exc = error.StreamError('not-authorized')
+             self.xmlstream.sendStreamError(exc)
+@@ -257,7 +256,7 @@ class ListenComponentAuthenticator(xmlstream.ListenAuthenticator):
+         be exchanged.
+         """
+         calculatedHash = xmlstream.hashPassword(self.xmlstream.sid,
+-                                                unicode(self.secret))
++                                                str(self.secret))
+         if handshake != calculatedHash:
+             exc = error.StreamError('not-authorized', text='Invalid hash')
+             self.xmlstream.sendStreamError(exc)
+@@ -301,7 +300,7 @@ class Router(object):
+ 
+         @param destination: Destination of the route to be added as a host name
+                             or L{None} for the default route.
+-        @type destination: L{unicode} or L{NoneType}
++        @type destination: L{str} or L{NoneType}
+ 
+         @param xs: XML Stream to register the route for.
+         @type xs:
+@@ -316,7 +315,7 @@ class Router(object):
+         Remove a route.
+ 
+         @param destination: Destination of the route that should be removed.
+-        @type destination: L{unicode}
++        @type destination: L{str}
+ 
+         @param xs: XML Stream to remove the route for.
+         @type xs:
+diff --git a/wokkel/data_form.py b/wokkel/data_form.py
+index ed9c5fc..7f1c34c 100644
+--- a/wokkel/data_form.py
++++ b/wokkel/data_form.py
+@@ -17,7 +17,6 @@ from __future__ import division, absolute_import
+ from zope.interface import implementer
+ from zope.interface.common import mapping
+ 
+-from twisted.python.compat import iteritems, unicode, _PY3
+ from twisted.words.protocols.jabber.jid import JID
+ from twisted.words.xish import domish
+ 
+@@ -51,9 +50,9 @@ class Option(object):
+     Data Forms field option.
+ 
+     @ivar value: Value of this option.
+-    @type value: L{unicode}
++    @type value: L{str}
+     @ivar label: Optional label for this option.
+-    @type label: L{unicode} or L{NoneType}
++    @type label: L{str} or L{NoneType}
+     """
+ 
+     def __init__(self, value, label=None):
+@@ -91,7 +90,7 @@ class Option(object):
+             raise Error("Option has no value")
+ 
+         label = element.getAttribute('label')
+-        return Option(unicode(valueElements[0]), label)
++        return Option(str(valueElements[0]), label)
+ 
+ 
+ class Field(object):
+@@ -108,15 +107,15 @@ class Field(object):
+     @ivar var: Field name. Optional if C{fieldType} is C{'fixed'}.
+     @type var: L{str}
+     @ivar label: Human readable label for this field.
+-    @type label: L{unicode}
++    @type label: L{str}
+     @ivar values: The values for this field, for multi-valued field
+-                  types, as a list of L{bool}, L{unicode} or L{JID}.
++                  types, as a list of L{bool}, L{str} or L{JID}.
+     @type values: L{list}
+     @ivar options: List of possible values to choose from in a response
+                    to this form as a list of L{Option}s.
+     @type options: L{list}
+     @ivar desc: Human readable description for this field.
+-    @type desc: L{unicode}
++    @type desc: L{str}
+     @ivar required: Whether the field is required to be provided in a
+                     response to this form.
+     @type required: L{bool}
+@@ -147,7 +146,7 @@ class Field(object):
+         try:
+             self.options = [Option(optionValue, optionLabel)
+                             for optionValue, optionLabel
+-                            in iteritems(options)]
++                            in options.items()]
+         except AttributeError:
+             self.options = options or []
+ 
+@@ -185,7 +184,7 @@ class Field(object):
+ 
+         Sets C{value} as the only element of L{values}.
+ 
+-        @type value: L{bool}, L{unicode} or L{JID}
++        @type value: L{bool}, L{str} or L{JID}
+         """
+         self.values = [value]
+ 
+@@ -229,7 +228,7 @@ class Field(object):
+             newValues = []
+             for value in self.values:
+                 if self.fieldType == 'boolean':
+-                    if isinstance(value, (str, unicode)):
++                    if isinstance(value, str):
+                         checkValue = value.lower()
+                         if not checkValue in ('0', '1', 'false', 'true'):
+                             raise ValueError("Not a boolean")
+@@ -263,9 +262,9 @@ class Field(object):
+ 
+         for value in self.values:
+             if isinstance(value, bool):
+-                value = unicode(value).lower()
++                value = str(value).lower()
+             else:
+-                value = unicode(value)
++                value = str(value)
+ 
+             field.addElement('value', content=value)
+ 
+@@ -288,7 +287,7 @@ class Field(object):
+ 
+     @staticmethod
+     def _parse_desc(field, element):
+-        desc = unicode(element)
++        desc = str(element)
+         if desc:
+             field.desc = desc
+ 
+@@ -305,7 +304,7 @@ class Field(object):
+ 
+     @staticmethod
+     def _parse_value(field, element):
+-        value = unicode(element)
++        value = str(element)
+         field.values.append(value)
+ 
+ 
+@@ -313,9 +312,9 @@ class Field(object):
+     def fromElement(element):
+         field = Field(None)
+ 
+-        for eAttr, fAttr in iteritems({'type': 'fieldType',
+-                                       'var': 'var',
+-                                       'label': 'label'}):
++        for eAttr, fAttr in {'type': 'fieldType',
++                             'var': 'var',
++                             'label': 'label'}.items():
+             value = element.getAttribute(eAttr)
+             if value:
+                 setattr(field, fAttr, value)
+@@ -350,7 +349,7 @@ class Field(object):
+ 
+         if 'options' in fieldDict:
+             options = []
+-            for value, label in iteritems(fieldDict['options']):
++            for value, label in fieldDict['options'].items():
+                 options.append(Option(value, label))
+             kwargs['options'] = options
+ 
+@@ -385,9 +384,9 @@ class Form(object):
+     @type formType: L{str}
+ 
+     @ivar title: Natural language title of the form.
+-    @type title: L{unicode}
++    @type title: L{str}
+ 
+-    @ivar instructions: Natural language instructions as a list of L{unicode}
++    @ivar instructions: Natural language instructions as a list of L{str}
+         strings without line breaks.
+     @type instructions: L{list}
+ 
+@@ -497,7 +496,7 @@ class Form(object):
+             C{fieldDefs}.
+         @type filterUnknown: L{bool}
+         """
+-        for name, value in iteritems(values):
++        for name, value in values.items():
+             fieldDict = {'var': name,
+                          'type': None}
+ 
+@@ -542,14 +541,14 @@ class Form(object):
+ 
+     @staticmethod
+     def _parse_title(form, element):
+-        title = unicode(element)
++        title = str(element)
+         if title:
+             form.title = title
+ 
+ 
+     @staticmethod
+     def _parse_instructions(form, element):
+-        instructions = unicode(element)
++        instructions = str(element)
+         if instructions:
+             form.instructions.append(instructions)
+ 
+@@ -624,36 +623,19 @@ class Form(object):
+         return key in self.fields
+ 
+ 
+-    def iterkeys(self):
++    def keys(self):
+         return iter(self)
+ 
+ 
+-    def itervalues(self):
++    def values(self):
+         for key in self:
+             yield self[key]
+ 
+ 
+-    def iteritems(self):
++    def items(self):
+         for key in self:
+             yield (key, self[key])
+ 
+-    if _PY3:
+-        keys = iterkeys
+-        values = itervalues
+-        items = iteritems
+-    else:
+-        def keys(self):
+-            return list(self)
+-
+-
+-        def values(self):
+-            return list(self.itervalues())
+-
+-
+-        def items(self):
+-            return list(self.iteritems())
+-
+-
+     def getValues(self):
+         """
+         Extract values from the named form fields.
+@@ -701,7 +683,7 @@ class Form(object):
+ 
+         filtered = []
+ 
+-        for name, field in iteritems(self.fields):
++        for name, field in self.fields.items():
+             if name in fieldDefs:
+                 fieldDef = fieldDefs[name]
+                 if 'type' not in fieldDef:
+diff --git a/wokkel/delay.py b/wokkel/delay.py
+index be06cb3..1dd1703 100644
+--- a/wokkel/delay.py
++++ b/wokkel/delay.py
+@@ -46,7 +46,7 @@ class Delay(object):
+         Render this instance into a domish Element.
+ 
+         @param legacy: If C{True}, use the legacy XEP-0091 format.
+-        @type legacy: C{bool}
++        @type legacy: L{bool}
+         """
+         if not self.stamp:
+             raise ValueError("stamp is required")
+diff --git a/wokkel/disco.py b/wokkel/disco.py
+index 9ea43ef..227789d 100644
+--- a/wokkel/disco.py
++++ b/wokkel/disco.py
+@@ -13,7 +13,6 @@ U{XEP-0030<http://xmpp.org/extensions/xep-0030.html>}.
+ from __future__ import division, absolute_import
+ 
+ from twisted.internet import defer
+-from twisted.python.compat import iteritems, unicode
+ from twisted.words.protocols.jabber import error, jid
+ from twisted.words.xish import domish
+ 
+@@ -29,11 +28,11 @@ IQ_GET = '/iq[@type="get"]'
+ DISCO_INFO = IQ_GET + '/query[@xmlns="' + NS_DISCO_INFO + '"]'
+ DISCO_ITEMS = IQ_GET + '/query[@xmlns="' + NS_DISCO_ITEMS + '"]'
+ 
+-class DiscoFeature(unicode):
++class DiscoFeature(str):
+     """
+     XMPP service discovery feature.
+ 
+-    This extends C{unicode} to convert to and from L{domish.Element}, but
++    This extends L{str} to convert to and from L{domish.Element}, but
+     further behaves identically.
+     """
+ 
+@@ -44,7 +43,7 @@ class DiscoFeature(unicode):
+         @rtype: L{domish.Element}.
+         """
+         element = domish.Element((NS_DISCO_INFO, 'feature'))
+-        element['var'] = unicode(self)
++        element['var'] = str(self)
+         return element
+ 
+ 
+@@ -68,11 +67,11 @@ class DiscoIdentity(object):
+     XMPP service discovery identity.
+ 
+     @ivar category: The identity category.
+-    @type category: C{unicode}
++    @type category: L{str}
+     @ivar type: The identity type.
+-    @type type: C{unicode}
++    @type type: L{str}
+     @ivar name: The optional natural language name for this entity.
+-    @type name: C{unicode}
++    @type name: L{str}
+     """
+ 
+     def __init__(self, category, idType, name=None):
+@@ -119,21 +118,21 @@ class DiscoInfo(object):
+     XMPP service discovery info.
+ 
+     @ivar nodeIdentifier: The optional node this info applies to.
+-    @type nodeIdentifier: C{unicode}
++    @type nodeIdentifier: L{str}
+     @ivar features: Features as L{DiscoFeature}.
+-    @type features: C{set}
++    @type features: L{set}
+     @ivar identities: Identities as a mapping from (category, type) to name,
+-                      all C{unicode}.
+-    @type identities: C{dict}
++                      all L{str}.
++    @type identities: L{dict}
+     @ivar extensions: Service discovery extensions as a mapping from the
+-                      extension form's C{FORM_TYPE} (C{unicode}) to
++                      extension form's C{FORM_TYPE} (L{str}) to
+                       L{data_form.Form}. Forms with no C{FORM_TYPE} field
+                       are mapped as C{None}. Note that multiple forms
+                       with the same C{FORM_TYPE} have the last in sequence
+                       prevail.
+-    @type extensions: C{dict}
++    @type extensions: L{dict}
+     @ivar _items: Sequence of added items.
+-    @type _items: C{list}
++    @type _items: L{list}
+     """
+ 
+     def __init__(self):
+@@ -226,9 +225,9 @@ class DiscoItem(object):
+     @ivar entity: The entity holding the item.
+     @type entity: L{jid.JID}
+     @ivar nodeIdentifier: The optional node identifier for the item.
+-    @type nodeIdentifier: C{unicode}
++    @type nodeIdentifier: L{str}
+     @ivar name: The optional natural language name for this entity.
+-    @type name: C{unicode}
++    @type name: L{str}
+     """
+ 
+     def __init__(self, entity, nodeIdentifier='', name=None):
+@@ -278,9 +277,9 @@ class DiscoItems(object):
+     XMPP service discovery items.
+ 
+     @ivar nodeIdentifier: The optional node this info applies to.
+-    @type nodeIdentifier: C{unicode}
++    @type nodeIdentifier: L{str}
+     @ivar _items: Sequence of added items.
+-    @type _items: C{list}
++    @type _items: L{list}
+     """
+ 
+     def __init__(self):
+@@ -353,9 +352,9 @@ class _DiscoRequest(generic.Request):
+     A Service Discovery request.
+ 
+     @ivar verb: Type of request: C{'info'} or C{'items'}.
+-    @type verb: C{str}
++    @type verb: L{str}
+     @ivar nodeIdentifier: Optional node to request info for.
+-    @type nodeIdentifier: C{unicode}
++    @type nodeIdentifier: L{str}
+     """
+ 
+     verb = None
+@@ -366,7 +365,7 @@ class _DiscoRequest(generic.Request):
+             NS_DISCO_ITEMS: 'items',
+             }
+ 
+-    _verbRequestMap = dict(((v, k) for k, v in iteritems(_requestVerbMap)))
++    _verbRequestMap = dict(((v, k) for k, v in _requestVerbMap.items()))
+ 
+     def __init__(self, verb=None, nodeIdentifier='',
+                        recipient=None, sender=None):
+@@ -415,7 +414,7 @@ class DiscoClientProtocol(XMPPHandler):
+         @type entity: L{jid.JID}
+ 
+         @param nodeIdentifier: Optional node to request info from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param sender: Optional sender address.
+         @type sender: L{jid.JID}
+@@ -438,7 +437,7 @@ class DiscoClientProtocol(XMPPHandler):
+         @type entity: L{jid.JID}
+ 
+         @param nodeIdentifier: Optional node to request info from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param sender: Optional sender address.
+         @type sender: L{jid.JID}
+@@ -534,7 +533,7 @@ class DiscoHandler(XMPPHandler, IQHandlerMixin):
+ 
+         @param deferredList: List of deferreds for which the results should be
+                              gathered.
+-        @type deferredList: C{list}
++        @type deferredList: L{list}
+         @return: Deferred that fires with a list of gathered results.
+         @rtype: L{defer.Deferred}
+         """
+@@ -566,7 +565,7 @@ class DiscoHandler(XMPPHandler, IQHandlerMixin):
+         @param target: The entity the request was sent to.
+         @type target: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The optional node being queried, or C{''}.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: Deferred with the gathered results from sibling handlers.
+         @rtype: L{defer.Deferred}
+         """
+@@ -589,7 +588,7 @@ class DiscoHandler(XMPPHandler, IQHandlerMixin):
+         @param target: The entity the request was sent to.
+         @type target: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The optional node being queried, or C{''}.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: Deferred with the gathered results from sibling handlers.
+         @rtype: L{defer.Deferred}
+         """
+diff --git a/wokkel/formats.py b/wokkel/formats.py
+index 0eb0be6..972cc7e 100644
+--- a/wokkel/formats.py
++++ b/wokkel/formats.py
+@@ -9,8 +9,6 @@ Generic payload formats.
+ 
+ from __future__ import division, absolute_import
+ 
+-from twisted.python.compat import unicode
+-
+ NS_MOOD = 'http://jabber.org/protocol/mood'
+ NS_TUNE = 'http://jabber.org/protocol/tune'
+ 
+@@ -55,7 +53,7 @@ class Mood:
+                 continue
+ 
+             if child.name == 'text':
+-                text = unicode(child)
++                text = str(child)
+             else:
+                 value = child.name
+ 
+@@ -76,19 +74,19 @@ class Tune:
+     U{XEP-0118<http://xmpp.org/extensions/xep-0118.html>}.
+ 
+     @ivar artist: The artist or performer of the song or piece.
+-    @type artist: C{unicode}
++    @type artist: L{str}
+     @ivar length: The duration of the song or piece in seconds.
+-    @type length: C{int}
++    @type length: L{int}
+     @ivar source: The collection (e.g. album) or other source.
+-    @type source: C{unicode}
++    @type source: L{str}
+     @ivar title: The title of the song or piece
+-    @type title: C{unicode}
++    @type title: L{str}
+     @ivar track: A unique identifier for the tune; e.g. the track number within
+                  the collection or the specific URI for the object.
+-    @type track: C{unicode}
++    @type track: L{str}
+     @ivar uri: A URI pointing to information about the song, collection, or
+                artist.
+-    @type uri: C{str}
++    @type uri: L{str}
+ 
+     """
+ 
+@@ -122,10 +120,10 @@ class Tune:
+                 continue
+ 
+             if child.name in ('artist', 'source', 'title', 'track', 'uri'):
+-                setattr(tune, child.name, unicode(child))
++                setattr(tune, child.name, str(child))
+             elif child.name == 'length':
+                 try:
+-                    tune.length = int(unicode(child))
++                    tune.length = int(str(child))
+                 except ValueError:
+                     pass
+ 
+diff --git a/wokkel/generic.py b/wokkel/generic.py
+index 2e975f6..becff8f 100644
+--- a/wokkel/generic.py
++++ b/wokkel/generic.py
+@@ -13,14 +13,11 @@ from zope.interface import implementer
+ 
+ from twisted.internet import defer, protocol
+ from twisted.python import reflect
+-from twisted.python.deprecate import deprecated
+ from twisted.words.protocols.jabber import error, jid, xmlstream
+ from twisted.words.protocols.jabber.xmlstream import toResponse
+ from twisted.words.xish import domish, utility
+ from twisted.words.xish.xmlstream import BootstrapMixin
+ 
+-from incremental import Version
+-
+ from wokkel.iwokkel import IDisco
+ from wokkel.subprotocols import XMPPHandler
+ 
+@@ -35,7 +32,7 @@ def parseXml(string):
+     Parse serialized XML into a DOM structure.
+ 
+     @param string: The serialized XML to be parsed, UTF-8 encoded.
+-    @type string: C{str}.
++    @type string: L{str}.
+     @return: The DOM structure, or C{None} on empty or incomplete input.
+     @rtype: L{domish.Element}
+     """
+@@ -332,17 +329,3 @@ class DeferredXmlStreamFactory(BootstrapMixin, protocol.ClientFactory):
+ 
+     def clientConnectionFailed(self, connector, reason):
+         self.deferred.errback(reason)
+-
+-
+-
+-@deprecated(Version("wokkel", 18, 0, 0), "unicode.encode('idna')")
+-def prepareIDNName(name):
+-    """
+-    Encode a unicode IDN Domain Name into its ACE equivalent.
+-
+-    This will encode the domain labels, separated by allowed dot code points,
+-    to their ASCII Compatible Encoding (ACE) equivalent, using punycode. The
+-    result is an ASCII byte string of the encoded labels, separated by the
+-    standard full stop.
+-    """
+-    return name.encode('idna')
+diff --git a/wokkel/iwokkel.py b/wokkel/iwokkel.py
+index 30a1057..35383b5 100644
+--- a/wokkel/iwokkel.py
++++ b/wokkel/iwokkel.py
+@@ -46,7 +46,7 @@ class IDisco(Interface):
+         @param nodeIdentifier: The optional identifier of the node at this
+             entity to retrieve the identify and features of.  The default is
+             C{''}, meaning the root node.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+     def getDiscoItems(requestor, target, nodeIdentifier=''):
+@@ -60,7 +60,7 @@ class IDisco(Interface):
+         @param nodeIdentifier: The optional identifier of the node at this
+                                entity to retrieve the identify and features of.
+                                The default is C{''}, meaning the root node.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+ 
+@@ -109,7 +109,7 @@ class IPubSubClient(Interface):
+         @param nodeIdentifier: Optional suggestion for the new node's
+                                identifier. If omitted, the creation of an
+                                instant node will be attempted.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: a deferred that fires with the identifier of the newly created
+                  node. Note that this can differ from the suggested identifier
+                  if the publish subscribe service chooses to modify or ignore
+@@ -124,7 +124,7 @@ class IPubSubClient(Interface):
+         @param service: The publish-subscribe service entity.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to be deleted.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -135,7 +135,7 @@ class IPubSubClient(Interface):
+         @param service: The publish-subscribe service entity.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to subscribe to.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param subscriber: JID to subscribe to the node.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+@@ -148,7 +148,7 @@ class IPubSubClient(Interface):
+         @param service: The publish-subscribe service entity.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to unsubscribe from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param subscriber: JID to unsubscribe from the node.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+@@ -165,9 +165,9 @@ class IPubSubClient(Interface):
+         @param service: The publish-subscribe service entity.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to publish to.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param items: List of item elements.
+-        @type items: C{list} of L{Item}
++        @type items: L{list} of L{Item}
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -191,12 +191,12 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node that was published
+             to.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param notifications: The notifications as tuples of subscriber, the
+             list of subscriptions and the list of items to be notified.
+-        @type notifications: C{list} of
+-            (L{JID<twisted.words.protocols.jabber.jid.JID>}, C{list} of
+-            L{Subscription<wokkel.pubsub.Subscription>}, C{list} of
++        @type notifications: L{list} of
++            (L{JID<twisted.words.protocols.jabber.jid.JID>}, L{list} of
++            L{Subscription<wokkel.pubsub.Subscription>}, L{list} of
+             L{Element<twisted.words.xish.domish.Element>})
+         """
+ 
+@@ -209,14 +209,14 @@ class IPubSubService(Interface):
+         @param service: The entity the notifications will originate from.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node that was deleted.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param subscribers: The subscribers for which a notification should be
+             sent out.
+-        @type subscribers: C{list} of
++        @type subscribers: L{list} of
+             L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param redirectURI: Optional XMPP URI of another node that subscribers
+             are redirected to.
+-        @type redirectURI: C{str}
++        @type redirectURI: L{str}
+         """
+ 
+     def publish(requestor, service, nodeIdentifier, items):
+@@ -228,9 +228,9 @@ class IPubSubService(Interface):
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to publish to.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param items: The items to be published as elements.
+-        @type items: C{list} of C{Element<twisted.words.xish.domish.Element>}
++        @type items: L{list} of C{Element<twisted.words.xish.domish.Element>}
+         @return: deferred that fires on success.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -244,7 +244,7 @@ class IPubSubService(Interface):
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to subscribe to.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param subscriber: The entity to be subscribed.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @return: A deferred that fires with a
+@@ -261,7 +261,7 @@ class IPubSubService(Interface):
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to unsubscribe from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @param subscriber: The entity to be unsubscribed.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @return: A deferred that fires with C{None} when unsubscription has
+@@ -277,7 +277,7 @@ class IPubSubService(Interface):
+         @type requestor: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+-        @return: A deferred that fires with a C{list} of subscriptions as
++        @return: A deferred that fires with a L{list} of subscriptions as
+                  L{Subscription<wokkel.pubsub.Subscription>}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -290,9 +290,9 @@ class IPubSubService(Interface):
+         @type requestor: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+-        @return: A deferred that fires with a C{list} of affiliations as
+-            C{tuple}s of (node identifier as C{unicode}, affiliation state as
+-            C{str}). The affiliation can be C{'owner'}, C{'publisher'}, or
++        @return: A deferred that fires with a L{list} of affiliations as
++            C{tuple}s of (node identifier as L{str}, affiliation state as
++            L{str}). The affiliation can be C{'owner'}, C{'publisher'}, or
+             C{'outcast'}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -308,8 +308,8 @@ class IPubSubService(Interface):
+         @param nodeIdentifier: The suggestion for the identifier of the node
+             to be created. If the request did not include a suggestion for the
+             node identifier, the value is C{None}.
+-        @type nodeIdentifier: C{unicode} or C{NoneType}
+-        @return: A deferred that fires with a C{unicode} that represents
++        @type nodeIdentifier: L{str} or C{NoneType}
++        @return: A deferred that fires with a L{str} that represents
+                  the identifier of the new node.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -322,10 +322,10 @@ class IPubSubService(Interface):
+         by option name. The value of each entry represents the specifics for
+         that option in a dictionary:
+ 
+-         - C{'type'} (C{str}): The option's type (see
++         - C{'type'} (L{str}): The option's type (see
+            L{Field<wokkel.data_form.Field>}'s doc string for possible values).
+-         - C{'label'} (C{unicode}): A human readable label for this option.
+-         - C{'options'} (C{dict}): Optional list of possible values for this
++         - C{'label'} (L{str}): A human readable label for this option.
++         - C{'options'} (L{dict}): Optional list of possible values for this
+            option.
+ 
+         Example::
+@@ -346,7 +346,7 @@ class IPubSubService(Interface):
+                 }
+             }
+ 
+-        @rtype: C{dict}.
++        @rtype: L{dict}.
+         """
+ 
+     def getDefaultConfiguration(requestor, service, nodeType):
+@@ -359,11 +359,11 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeType: The type of node for which the configuration is
+                          retrieved, C{'leaf'} or C{'collection'}.
+-        @type nodeType: C{str}
+-        @return: A deferred that fires with a C{dict} representing the default
+-                 node configuration. Keys are C{str}s that represent the
+-                 field name. Values can be of types C{unicode}, C{int} or
+-                 C{bool}.
++        @type nodeType: L{str}
++        @return: A deferred that fires with a L{dict} representing the default
++                 node configuration. Keys are L{str}s that represent the
++                 field name. Values can be of types L{str}, L{int} or
++                 L{bool}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -377,10 +377,10 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to retrieve the
+                                configuration from.
+-        @type nodeIdentifier: C{unicode}
+-        @return: A deferred that fires with a C{dict} representing the node
+-            configuration. Keys are C{str}s that represent the field name.
+-            Values can be of types C{unicode}, C{int} or C{bool}.
++        @type nodeIdentifier: L{str}
++        @return: A deferred that fires with a L{dict} representing the node
++            configuration. Keys are L{str}s that represent the field name.
++            Values can be of types L{str}, L{int} or L{bool}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -394,7 +394,7 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to change the
+                                configuration of.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: A deferred that fires with C{None} when the node's
+                  configuration has been changed.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+@@ -410,7 +410,7 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to retrieve items
+                                from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+     def retract(requestor, service, nodeIdentifier, itemIdentifiers):
+@@ -423,7 +423,7 @@ class IPubSubService(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to retract items
+                                from.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+     def purge(requestor, service, nodeIdentifier):
+@@ -435,7 +435,7 @@ class IPubSubService(Interface):
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to be purged.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+     def delete(requestor, service, nodeIdentifier):
+@@ -447,7 +447,7 @@ class IPubSubService(Interface):
+         @param service: The entity the request was addressed to.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node to be delete.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         """
+ 
+ 
+@@ -472,7 +472,7 @@ class IPubSubResource(Interface):
+         @param service: The publish-subscribe service entity.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to request the info for.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: A deferred that fires with a dictionary. If not empty,
+                  it must have the keys C{'type'} and C{'meta-data'} to keep
+                  respectively the node type and a dictionary with the meta
+@@ -491,7 +491,7 @@ class IPubSubResource(Interface):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Identifier of the node to request the childs
+             for.
+-        @type nodeIdentifier: C{unicode}
++        @type nodeIdentifier: L{str}
+         @return: A deferred that fires with a list of child node identifiers.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -505,10 +505,10 @@ class IPubSubResource(Interface):
+         by option name. The value of each entry represents the specifics for
+         that option in a dictionary:
+ 
+-         - C{'type'} (C{str}): The option's type (see
++         - C{'type'} (L{str}): The option's type (see
+            L{Field<wokkel.data_form.Field>}'s doc string for possible values).
+-         - C{'label'} (C{unicode}): A human readable label for this option.
+-         - C{'options'} (C{dict}): Optional list of possible values for this
++         - C{'label'} (L{str}): A human readable label for this option.
++         - C{'options'} (L{dict}): Optional list of possible values for this
+            option.
+ 
+         Example::
+@@ -529,7 +529,7 @@ class IPubSubResource(Interface):
+                 }
+             }
+ 
+-        @rtype: C{dict}.
++        @rtype: L{dict}.
+         """
+ 
+ 
+@@ -574,7 +574,7 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{list} of subscriptions as
++        @return: A deferred that fires with a L{list} of subscriptions as
+                  L{Subscription<wokkel.pubsub.Subscription>}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -586,9 +586,9 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{list} of affiliations as
+-            C{tuple}s of (node identifier as C{unicode}, affiliation state as
+-            C{str}). The affiliation can be C{'owner'}, C{'publisher'}, or
++        @return: A deferred that fires with a L{list} of affiliations as
++            C{tuple}s of (node identifier as L{str}, affiliation state as
++            L{str}). The affiliation can be C{'owner'}, C{'publisher'}, or
+             C{'outcast'}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -600,7 +600,7 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{unicode} that represents
++        @return: A deferred that fires with a L{str} that represents
+                  the identifier of the new node.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+@@ -612,10 +612,10 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{dict} representing the default
+-                 node configuration. Keys are C{str}s that represent the
+-                 field name. Values can be of types C{unicode}, C{int} or
+-                 C{bool}.
++        @return: A deferred that fires with a L{dict} representing the default
++                 node configuration. Keys are L{str}s that represent the
++                 field name. Values can be of types L{str}, L{int} or
++                 L{bool}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -626,9 +626,9 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{dict} representing the node
+-            configuration. Keys are C{str}s that represent the field name.
+-            Values can be of types C{unicode}, C{int} or C{bool}.
++        @return: A deferred that fires with a L{dict} representing the node
++            configuration. Keys are L{str}s that represent the field name.
++            Values can be of types L{str}, L{int} or L{bool}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -651,7 +651,7 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{list} of L{pubsub.Item}.
++        @return: A deferred that fires with a L{list} of L{pubsub.Item}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+         """
+ 
+@@ -698,9 +698,9 @@ class IPubSubResource(Interface):
+ 
+         @param request: The publish-subscribe request.
+         @type request: L{wokkel.pubsub.PubSubRequest}
+-        @return: A deferred that fires with a C{dict} of affiliations with the
++        @return: A deferred that fires with a L{dict} of affiliations with the
+             entity as key (L{JID<twisted.words.protocols.jabber.jid.JID>}) and
+-            the affiliation state as value (C{unicode}).  The affiliation can
++            the affiliation state as value (L{str}).  The affiliation can
+             be C{u'owner'}, C{u'publisher'}, or C{u'outcast'}.
+         @rtype: L{Deferred<twisted.internet.defer.Deferred>}
+ 
+@@ -748,7 +748,7 @@ class IMUCClient(Interface):
+         @type  user: L{muc.User}
+ 
+         @param subject: The subject of the given room.
+-        @type subject: C{unicode}
++        @type subject: L{str}
+         """
+ 
+ 
+@@ -769,7 +769,7 @@ class IMUCClient(Interface):
+ 
+         @param options: A mapping of field names to values, or C{None} to
+             cancel.
+-        @type options: C{dict}
++        @type options: L{dict}
+         """
+ 
+ 
+@@ -796,14 +796,14 @@ class IMUCClient(Interface):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the entitity joining the room.
+-        @type nick: C{unicode}
++        @type nick: L{str}
+ 
+         @param historyOptions: Options for conversation history sent by the
+             room upon joining.
+         @type historyOptions: L{HistoryOptions}
+ 
+         @param password: Optional password for the room.
+-        @type password: C{unicode}
++        @type password: L{str}
+ 
+         @return: A deferred that fires when the entity is in the room or an
+                  error has occurred.
+@@ -820,7 +820,7 @@ class IMUCClient(Interface):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The new nick name within the room.
+-        @type nick: C{unicode}
++        @type nick: L{str}
+         """
+ 
+ 
+@@ -876,7 +876,7 @@ class IMUCClient(Interface):
+ 
+         @param options: A mapping of field names to values, or C{None} to
+             cancel.
+-        @type options: C{dict}
++        @type options: L{dict}
+         """
+ 
+ 
+@@ -890,7 +890,7 @@ class IMUCClient(Interface):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param subject: The subject you want to set.
+-        @type subject: C{unicode}
++        @type subject: L{str}
+         """
+ 
+ 
+@@ -917,7 +917,7 @@ class IMUCClient(Interface):
+             holding the original stanza a
+             L{Element<twisted.words.xish.domish.Element>}, and C{'timestamp'}
+             with the timestamp.
+-        @type messages: C{list} of
++        @type messages: L{list} of
+             L{Element<twisted.words.xish.domish.Element>}
+         """
+ 
+@@ -933,7 +933,7 @@ class IMUCClient(Interface):
+         @type entity: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param reason: The reason for banning the entity.
+-        @type reason: C{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -949,10 +949,10 @@ class IMUCClient(Interface):
+ 
+         @param nick: The occupant to be banned.
+         @type nick: L{JID<twisted.words.protocols.jabber.jid.JID>} or
+-            C{unicode}
++            L{str}
+ 
+         @param reason: The reason given for the kick.
+-        @type reason: C{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+diff --git a/wokkel/muc.py b/wokkel/muc.py
+index 330664b..4c826f2 100644
+--- a/wokkel/muc.py
++++ b/wokkel/muc.py
+@@ -17,7 +17,6 @@ from dateutil.tz import tzutc
+ from zope.interface import implementer
+ 
+ from twisted.internet import defer
+-from twisted.python.compat import unicode
+ from twisted.python.constants import Values, ValueConstant
+ from twisted.words.protocols.jabber import jid, error, xmlstream
+ from twisted.words.xish import domish
+@@ -192,7 +191,7 @@ class AdminItem(object):
+         item.role = element.getAttribute('role')
+ 
+         for child in element.elements(NS_MUC_ADMIN, 'reason'):
+-            item.reason = unicode(child)
++            item.reason = str(child)
+ 
+         return item
+ 
+@@ -228,13 +227,13 @@ class DestructionRequest(generic.Request):
+     Room destruction request.
+ 
+     @param reason: Optional reason for the destruction of this room.
+-    @type reason: L{unicode}.
++    @type reason: L{str}.
+ 
+     @param alternate: Optional room JID of an alternate venue.
+     @type alternate: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+     @param password: Optional password for entering the alternate venue.
+-    @type password: L{unicode}
++    @type password: L{str}
+     """
+ 
+     stanzaType = 'set'
+@@ -395,10 +394,10 @@ class UserPresence(xmppim.AvailabilityPresence):
+     Availability presence sent from MUC service to client.
+ 
+     @ivar affiliation: Affiliation of the entity to the room.
+-    @type affiliation: L{unicode}
++    @type affiliation: L{str}
+ 
+     @ivar role: Role of the entity in the room.
+-    @type role: L{unicode}
++    @type role: L{str}
+ 
+     @ivar entity: The real JID of the entity this presence is from.
+     @type entity: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -408,7 +407,7 @@ class UserPresence(xmppim.AvailabilityPresence):
+     @type mucStatuses: L{Statuses}
+ 
+     @ivar nick: The nick name of the entity in the room.
+-    @type nick: L{unicode}
++    @type nick: L{str}
+     """
+ 
+     affiliation = None
+@@ -451,7 +450,7 @@ class UserPresence(xmppim.AvailabilityPresence):
+                 self.role = child.getAttribute('role')
+ 
+                 for reason in child.elements(NS_MUC_ADMIN, 'reason'):
+-                    self.reason = unicode(reason)
++                    self.reason = str(reason)
+ 
+             # TODO: destroy
+ 
+@@ -595,14 +594,14 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the entitity joining the room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param historyOptions: Options for conversation history sent by the
+             room upon joining.
+         @type historyOptions: L{HistoryOptions}
+ 
+         @param password: Optional password for the room.
+-        @type password: L{unicode}
++        @type password: L{str}
+ 
+         @return: A deferred that fires when the entity is in the room or an
+                  error has occurred.
+@@ -628,7 +627,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The new nick name within the room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+         """
+         occupantJID = jid.JID(tuple=(roomJID.user, roomJID.host, nick))
+         presence = BasicPresence(recipient=occupantJID)
+@@ -646,10 +645,10 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+ 
+         @param show: The availability of the entity. Common values are xa,
+             available, etc
+-        @type show: L{unicode}
++        @type show: L{str}
+ 
+         @param status: The current status of the entity.
+-        @type status: L{unicode}
++        @type status: L{str}
+         """
+         occupantJID = self._roomOccupantMap[roomJID]
+         presence = BasicPresence(recipient=occupantJID, show=show,
+@@ -704,7 +703,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param subject: The subject you want to set.
+-        @type subject: L{unicode}
++        @type subject: L{str}
+         """
+         message = GroupChat(roomJID.userhostJID(), subject=subject)
+         self.send(message.toElement())
+@@ -723,7 +722,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type invitee: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param reason: The reason for the invite.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+         """
+         message = InviteMessage(recipient=roomJID, invitee=invitee,
+                                 reason=reason)
+@@ -970,7 +969,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+             L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param affiliation: The affilation to the entities will acquire.
+-        @type affiliation: L{unicode}
++        @type affiliation: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -992,10 +991,10 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the user in this room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param reason: The reason for granting voice to the entity.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1015,10 +1014,10 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the user in this room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param reason: The reason for revoking voice from the entity.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1035,10 +1034,10 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the user in this room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param reason: The reason for granting moderation to the entity.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1058,7 +1057,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type entity: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param reason: The reason for banning the entity.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1075,10 +1074,10 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The occupant to be banned.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param reason: The reason given for the kick.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param sender: The entity sending the request.
+         @type sender: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1095,7 +1094,7 @@ class MUCClientProtocol(xmppim.BasePresenceProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param reason: The reason for the destruction of the room.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param alternate: The JID of the room suggested as an alternate venue.
+         @type alternate: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1135,7 +1134,7 @@ class Room(object):
+     @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+     @ivar nick: The nick name for the client in this room.
+-    @type nick: L{unicode}
++    @type nick: L{str}
+ 
+     @ivar occupantJID: The JID of the occupant in the room. Generated from
+         roomJID and nick.
+@@ -1190,7 +1189,7 @@ class Room(object):
+         Get a user from the room's roster.
+ 
+         @param nick: The nick for the user in the MUC room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+         """
+         return self.roster.get(nick)
+ 
+@@ -1444,14 +1443,14 @@ class MUCClient(MUCClientProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The nick name for the entitity joining the room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+ 
+         @param historyOptions: Options for conversation history sent by the
+             room upon joining.
+         @type historyOptions: L{HistoryOptions}
+ 
+         @param password: Optional password for the room.
+-        @type password: L{unicode}
++        @type password: L{str}
+ 
+         @return: A deferred that fires with the room when the entity is in the
+             room, or with a failure if an error has occurred.
+@@ -1488,7 +1487,7 @@ class MUCClient(MUCClientProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nick: The new nick name within the room.
+-        @type nick: L{unicode}
++        @type nick: L{str}
+         """
+         def cb(presence):
+             # Presence confirmation, change the nickname.
+@@ -1530,10 +1529,10 @@ class MUCClient(MUCClientProtocol):
+ 
+         @param show: The availability of the entity. Common values are xa,
+             available, etc
+-        @type show: L{unicode}
++        @type show: L{str}
+ 
+         @param status: The current status of the entity.
+-        @type status: L{unicode}
++        @type status: L{str}
+         """
+         room = self._getRoom(roomJID)
+         d = MUCClientProtocol.status(self, roomJID, show, status)
+@@ -1549,7 +1548,7 @@ class MUCClient(MUCClientProtocol):
+         @type roomJID: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param reason: The reason for the destruction of the room.
+-        @type reason: L{unicode}
++        @type reason: L{str}
+ 
+         @param alternate: The JID of the room suggested as an alternate venue.
+         @type alternate: L{JID<twisted.words.protocols.jabber.jid.JID>}
+diff --git a/wokkel/pubsub.py b/wokkel/pubsub.py
+index 689a6e2..2eb1b44 100644
+--- a/wokkel/pubsub.py
++++ b/wokkel/pubsub.py
+@@ -16,7 +16,6 @@ from zope.interface import implementer
+ 
+ from twisted.internet import defer
+ from twisted.python import log
+-from twisted.python.compat import StringType, iteritems, unicode
+ from twisted.words.protocols.jabber import jid, error
+ from twisted.words.xish import domish
+ 
+@@ -107,20 +106,20 @@ class Subscription(object):
+ 
+     @ivar nodeIdentifier: The identifier of the node subscribed to.  The root
+         node is denoted by L{None}.
+-    @type nodeIdentifier: L{unicode}
++    @type nodeIdentifier: L{str}
+ 
+     @ivar subscriber: The subscribing entity.
+     @type subscriber: L{jid.JID}
+ 
+     @ivar state: The subscription state. One of C{'subscribed'}, C{'pending'},
+                  C{'unconfigured'}.
+-    @type state: L{unicode}
++    @type state: L{str}
+ 
+     @ivar options: Optional list of subscription options.
+     @type options: L{dict}
+ 
+     @ivar subscriptionIdentifier: Optional subscription identifier.
+-    @type subscriptionIdentifier: L{unicode}
++    @type subscriptionIdentifier: L{str}
+     """
+ 
+     def __init__(self, nodeIdentifier, subscriber, state, options=None,
+@@ -150,7 +149,7 @@ class Subscription(object):
+         element = domish.Element((defaultUri, 'subscription'))
+         if self.nodeIdentifier:
+             element['node'] = self.nodeIdentifier
+-        element['jid'] = unicode(self.subscriber)
++        element['jid'] = str(self.subscriber)
+         element['subscription'] = self.state
+         if self.subscriptionIdentifier:
+             element['subid'] = self.subscriptionIdentifier
+@@ -171,17 +170,17 @@ class Item(domish.Element):
+     def __init__(self, id=None, payload=None):
+         """
+         @param id: optional item identifier
+-        @type id: L{unicode}
++        @type id: L{str}
+         @param payload: optional item payload. Either as a domish element, or
+                         as serialized XML.
+-        @type payload: object providing L{domish.IElement} or L{unicode}.
++        @type payload: object providing L{domish.IElement} or L{str}.
+         """
+ 
+         domish.Element.__init__(self, (None, 'item'))
+         if id is not None:
+             self['id'] = id
+         if payload is not None:
+-            if isinstance(payload, StringType):
++            if isinstance(payload, str):
+                 self.addRawXml(payload)
+             else:
+                 self.addChild(payload)
+@@ -213,7 +212,7 @@ class PubSubRequest(generic.Stanza):
+     @type maxItems: L{int}.
+ 
+     @ivar nodeIdentifier: Identifier of the node the request is about.
+-    @type nodeIdentifier: L{unicode}
++    @type nodeIdentifier: L{str}
+ 
+     @ivar nodeType: The type of node that should be created, or for which the
+                     configuration is retrieved. C{'leaf'} or C{'collection'}.
+@@ -227,7 +226,7 @@ class PubSubRequest(generic.Stanza):
+     @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+     @ivar subscriptionIdentifier: Identifier for a specific subscription.
+-    @type subscriptionIdentifier: L{unicode}
++    @type subscriptionIdentifier: L{str}
+ 
+     @ivar subscriptions: Subscriptions to be modified, as a set of
+         L{Subscription}.
+@@ -235,7 +234,7 @@ class PubSubRequest(generic.Stanza):
+ 
+     @ivar affiliations: Affiliations to be modified, as a dictionary of entity
+         (L{JID<twisted.words.protocols.jabber.jid.JID>} to affiliation
+-        (L{unicode}).
++        (L{str}).
+     @type affiliations: L{dict}
+     """
+ 
+@@ -277,7 +276,7 @@ class PubSubRequest(generic.Stanza):
+     }
+ 
+     # Map request verb to request iq type and subelement name
+-    _verbRequestMap = dict(((v, k) for k, v in iteritems(_requestVerbMap)))
++    _verbRequestMap = dict(((v, k) for k, v in _requestVerbMap.items()))
+ 
+     # Map request verb to parameter handler names
+     _parameters = {
+@@ -487,7 +486,7 @@ class PubSubRequest(generic.Stanza):
+         Render maximum items into an items request.
+         """
+         if self.maxItems:
+-            verbElement['max_items'] = unicode(self.maxItems)
++            verbElement['max_items'] = str(self.maxItems)
+ 
+ 
+     def _parse_subidOrNone(self, verbElement):
+@@ -648,7 +647,7 @@ class PubSubEvent(object):
+     @param recipient: The entity to which the notification was sent.
+     @type recipient: L{wokkel.pubsub.ItemsEvent}
+     @param nodeIdentifier: Identifier of the node the event pertains to.
+-    @type nodeIdentifier: L{unicode}
++    @type nodeIdentifier: L{str}
+     @param headers: SHIM headers, see L{wokkel.shim.extractHeaders}.
+     @type headers: L{dict}
+     """
+@@ -772,7 +771,7 @@ class PubSubClient(XMPPHandler):
+         @param service: The publish subscribe service to create the node at.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: Optional suggestion for the id of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+         @param options: Optional node configuration options.
+         @type options: L{dict}
+         """
+@@ -807,7 +806,7 @@ class PubSubClient(XMPPHandler):
+         @param service: The publish subscribe service to delete the node from.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+         """
+         request = PubSubRequest('delete')
+         request.recipient = service
+@@ -825,7 +824,7 @@ class PubSubClient(XMPPHandler):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param subscriber: The entity to subscribe to the node. This entity
+             will get notifications of new published items.
+@@ -877,13 +876,13 @@ class PubSubClient(XMPPHandler):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param subscriber: The entity to unsubscribe from the node.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param subscriptionIdentifier: Optional subscription identifier.
+-        @type subscriptionIdentifier: L{unicode}
++        @type subscriptionIdentifier: L{str}
+         """
+         request = PubSubRequest('unsubscribe')
+         request.recipient = service
+@@ -901,7 +900,7 @@ class PubSubClient(XMPPHandler):
+         @param service: The publish subscribe service that keeps the node.
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+         @param items: Optional list of L{Item}s to publish.
+         @type items: L{list}
+         """
+@@ -922,7 +921,7 @@ class PubSubClient(XMPPHandler):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param maxItems: Optional limit on the number of retrieved items.
+         @type maxItems: L{int}
+@@ -930,10 +929,10 @@ class PubSubClient(XMPPHandler):
+         @param subscriptionIdentifier: Optional subscription identifier. In
+             case the node has been subscribed to multiple times, this narrows
+             the results to the specific subscription.
+-        @type subscriptionIdentifier: L{unicode}
++        @type subscriptionIdentifier: L{str}
+ 
+         @param itemIdentifiers: Identifiers of the items to be retrieved.
+-        @type itemIdentifiers: L{set} of L{unicode}
++        @type itemIdentifiers: L{set} of L{str}
+         """
+         request = PubSubRequest('items')
+         request.recipient = service
+@@ -965,13 +964,13 @@ class PubSubClient(XMPPHandler):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param subscriber: The entity subscribed to the node.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param subscriptionIdentifier: Optional subscription identifier.
+-        @type subscriptionIdentifier: L{unicode}
++        @type subscriptionIdentifier: L{str}
+ 
+         @rtype: L{data_form.Form}
+         """
+@@ -1002,7 +1001,7 @@ class PubSubClient(XMPPHandler):
+         @type service: L{JID<twisted.words.protocols.jabber.jid.JID>}
+ 
+         @param nodeIdentifier: The identifier of the node.
+-        @type nodeIdentifier: L{unicode}
++        @type nodeIdentifier: L{str}
+ 
+         @param subscriber: The entity subscribed to the node.
+         @type subscriber: L{JID<twisted.words.protocols.jabber.jid.JID>}
+@@ -1011,7 +1010,7 @@ class PubSubClient(XMPPHandler):
+         @type options: L{dict}.
+ 
+         @param subscriptionIdentifier: Optional subscription identifier.
+-        @type subscriptionIdentifier: L{unicode}
++        @type subscriptionIdentifier: L{str}
+         """
+         request = PubSubRequest('optionsSet')
+         request.recipient = service
+@@ -1356,7 +1355,7 @@ class PubSubService(XMPPHandler, IQHandlerMixin):
+         if request.nodeIdentifier:
+             affiliations['node'] = request.nodeIdentifier
+ 
+-        for entity, affiliation in iteritems(result):
++        for entity, affiliation in result.items():
+             item = affiliations.addElement('affiliation')
+             item['jid'] = entity.full()
+             item['affiliation'] = affiliation
+diff --git a/wokkel/server.py b/wokkel/server.py
+index 54517a2..fbd8452 100644
+--- a/wokkel/server.py
++++ b/wokkel/server.py
+@@ -22,7 +22,6 @@ from zope.interface import implementer
+ from twisted.internet import defer, reactor
+ from twisted.names.srvconnect import SRVConnector
+ from twisted.python import log, randbytes
+-from twisted.python.compat import iteritems, unicode
+ from twisted.words.protocols.jabber import error, ijabber, jid, xmlstream
+ from twisted.words.xish import domish
+ 
+@@ -40,15 +39,15 @@ def generateKey(secret, receivingServer, originatingServer, streamID):
+ 
+     @param secret: the shared secret known to the Originating Server and
+                    Authoritive Server.
+-    @type secret: L{unicode}
++    @type secret: L{str}
+     @param receivingServer: the Receiving Server host name.
+-    @type receivingServer: L{unicode}
++    @type receivingServer: L{str}
+     @param originatingServer: the Originating Server host name.
+-    @type originatingServer: L{unicode}
++    @type originatingServer: L{str}
+     @param streamID: the Stream ID as generated by the Receiving Server.
+-    @type streamID: L{unicode}
++    @type streamID: L{str}
+     @return: hexadecimal digest of the generated key.
+-    @type: C{str}
++    @type: L{str}
+     """
+ 
+     hashObject = sha256()
+@@ -340,7 +339,7 @@ class XMPPServerListenAuthenticator(xmlstream.ListenAuthenticator):
+         try:
+             if xmlstream.NS_STREAMS != rootElement.uri or \
+                self.namespace != self.xmlstream.namespace or \
+-               ('db', NS_DIALBACK) not in iteritems(rootElement.localPrefixes):
++               ('db', NS_DIALBACK) not in rootElement.localPrefixes.items():
+                 raise error.StreamError('invalid-namespace')
+ 
+             if targetDomain and targetDomain not in self.service.domains:
+@@ -379,7 +378,7 @@ class XMPPServerListenAuthenticator(xmlstream.ListenAuthenticator):
+             raise error.StreamError('invalid-from')
+ 
+         streamID = verify.getAttribute('id', '')
+-        key = unicode(verify)
++        key = str(verify)
+ 
+         calculatedKey = generateKey(self.service.secret, receivingServer,
+                                     originatingServer, streamID)
+@@ -415,7 +414,7 @@ class XMPPServerListenAuthenticator(xmlstream.ListenAuthenticator):
+ 
+         receivingServer = result['to']
+         originatingServer = result['from']
+-        key = unicode(result)
++        key = str(result)
+ 
+         d = self.service.validateConnection(receivingServer, originatingServer,
+                                             self.xmlstream.sid, key)
+diff --git a/wokkel/shim.py b/wokkel/shim.py
+index 3b12349..85a0848 100644
+--- a/wokkel/shim.py
++++ b/wokkel/shim.py
+@@ -12,7 +12,6 @@ U{XEP-0131<http://xmpp.org/extensions/xep-0131.html>}.
+ 
+ from __future__ import division, absolute_import
+ 
+-from twisted.python.compat import unicode
+ from twisted.words.xish import domish
+ 
+ NS_SHIM = "http://jabber.org/protocol/shim"
+@@ -30,7 +29,7 @@ def extractHeaders(stanza):
+     @param stanza: The stanza to extract headers from.
+     @type stanza: L{Element<twisted.words.xish.domish.Element>}
+     @return: Headers as a mapping from header name to a list of values.
+-    @rtype: C{dict}
++    @rtype: L{dict}
+     """
+     headers = {}
+ 
+@@ -38,6 +37,6 @@ def extractHeaders(stanza):
+                                                  'headers', NS_SHIM):
+         for header in domish.generateElementsQNamed(element.children,
+                                                     'header', NS_SHIM):
+-            headers.setdefault(header['name'], []).append(unicode(header))
++            headers.setdefault(header['name'], []).append(str(header))
+ 
+     return headers
+diff --git a/wokkel/subprotocols.py b/wokkel/subprotocols.py
+index f0a6090..b4cde14 100644
+--- a/wokkel/subprotocols.py
++++ b/wokkel/subprotocols.py
+@@ -14,7 +14,6 @@ from zope.interface import implementer
+ from twisted.internet import defer
+ from twisted.internet.error import ConnectionDone
+ from twisted.python import failure, log
+-from twisted.python.compat import iteritems, itervalues
+ from twisted.python.deprecate import deprecatedModuleAttribute
+ from twisted.words.protocols.jabber import error, ijabber, xmlstream
+ from twisted.words.protocols.jabber.xmlstream import toResponse
+@@ -130,15 +129,15 @@ class StreamManager(XMPPHandlerCollection):
+     @ivar xmlstream: currently managed XML stream
+     @type xmlstream: L{XmlStream}
+     @ivar logTraffic: if true, log all traffic.
+-    @type logTraffic: C{bool}
++    @type logTraffic: L{bool}
+     @ivar _initialized: Whether the stream represented by L{xmlstream} has
+                         been initialized. This is used when caching outgoing
+                         stanzas.
+-    @type _initialized: C{bool}
++    @type _initialized: L{bool}
+     @ivar _packetQueue: internal buffer of unsent data. See L{send} for details.
+     @type _packetQueue: L{list}
+     @ivar timeout: Default IQ request timeout in seconds.
+-    @type timeout: C{int}
++    @type timeout: L{int}
+     @ivar _reactor: A provider of L{IReactorTime} to track timeouts.
+     """
+     timeout = None
+@@ -277,7 +276,7 @@ class StreamManager(XMPPHandlerCollection):
+         # deferreds will never be fired.
+         iqDeferreds = self._iqDeferreds
+         self._iqDeferreds = {}
+-        for d in itervalues(iqDeferreds):
++        for d in iqDeferreds.values():
+             d.errback(reason)
+ 
+ 
+@@ -420,7 +419,7 @@ class IQHandlerMixin(object):
+ 
+     @cvar iqHandlers: Mapping from XPath queries (as a string) to the method
+                       name that will handle requests that match the query.
+-    @type iqHandlers: C{dict}
++    @type iqHandlers: L{dict}
+     """
+ 
+     iqHandlers = None
+@@ -455,7 +454,7 @@ class IQHandlerMixin(object):
+             return error.StanzaError('internal-server-error').toResponse(iq)
+ 
+         handler = None
+-        for queryString, method in iteritems(self.iqHandlers):
++        for queryString, method in self.iqHandlers.items():
+             if xpath.internQuery(queryString).matches(iq):
+                 handler = getattr(self, method)
+ 
+diff --git a/wokkel/test/helpers.py b/wokkel/test/helpers.py
+index 102b3dc..c76a4a0 100644
+--- a/wokkel/test/helpers.py
++++ b/wokkel/test/helpers.py
+@@ -8,7 +8,6 @@ Unit test helpers.
+ from __future__ import division, absolute_import
+ 
+ from twisted.internet import defer
+-from twisted.python.compat import iteritems
+ from twisted.words.xish import xpath
+ from twisted.words.xish.utility import EventDispatcher
+ 
+@@ -79,14 +78,14 @@ class TestableRequestHandlerMixin(object):
+         Find a handler and call it directly.
+ 
+         @param xml: XML stanza that may yield a handler being called.
+-        @type xml: C{str}.
++        @type xml: L{str}.
+         @return: Deferred that fires with the result of a handler for this
+                  stanza. If no handler was found, the deferred has its errback
+                  called with a C{NotImplementedError} exception.
+         """
+         handler = None
+         iq = parseXml(xml)
+-        for queryString, method in iteritems(self.service.iqHandlers):
++        for queryString, method in self.service.iqHandlers.items():
+             if xpath.internQuery(queryString).matches(iq):
+                 handler = getattr(self.service, method)
+ 
+diff --git a/wokkel/test/test_client.py b/wokkel/test/test_client.py
+index ef367f7..ef9adfd 100644
+--- a/wokkel/test/test_client.py
++++ b/wokkel/test/test_client.py
+@@ -8,6 +8,7 @@ Tests for L{wokkel.client}.
+ from __future__ import division, absolute_import
+ 
+ from twisted.internet import defer
++from twisted.python.compat import nativeString
+ from twisted.trial import unittest
+ from twisted.words.protocols.jabber import xmlstream
+ from twisted.words.protocols.jabber.client import XMPPAuthenticator
+@@ -152,7 +153,7 @@ class ClientCreatorTest(unittest.TestCase):
+ 
+         def cb(connector):
+             self.assertEqual('xmpp-client', connector.service)
+-            self.assertEqual('example.org', connector.domain)
++            self.assertEqual('example.org', nativeString(connector.domain))
+             self.assertEqual(factory, connector.factory)
+ 
+         def connect(connector):
+diff --git a/wokkel/test/test_data_form.py b/wokkel/test/test_data_form.py
+index 60e36f4..246f1c5 100644
+--- a/wokkel/test/test_data_form.py
++++ b/wokkel/test/test_data_form.py
+@@ -10,7 +10,6 @@ from __future__ import division, absolute_import
+ from zope.interface import verify
+ from zope.interface.common.mapping import IIterableMapping
+ 
+-from twisted.python.compat import unicode, _PY3
+ from twisted.trial import unittest
+ from twisted.words.xish import domish
+ from twisted.words.protocols.jabber import jid
+@@ -34,7 +33,7 @@ class OptionTest(unittest.TestCase):
+         self.assertEqual('option', element.name)
+         self.assertEqual(NS_X_DATA, element.uri)
+         self.assertEqual(NS_X_DATA, element.value.uri)
+-        self.assertEqual('value', unicode(element.value))
++        self.assertEqual('value', str(element.value))
+         self.assertFalse(element.hasAttribute('label'))
+ 
+ 
+@@ -48,7 +47,7 @@ class OptionTest(unittest.TestCase):
+         self.assertEqual('option', element.name)
+         self.assertEqual(NS_X_DATA, element.uri)
+         self.assertEqual(NS_X_DATA, element.value.uri)
+-        self.assertEqual('value', unicode(element.value))
++        self.assertEqual('value', str(element.value))
+         self.assertEqual('label', element['label'])
+ 
+ 
+@@ -225,7 +224,7 @@ class FieldTest(unittest.TestCase):
+         child = element.children[0]
+         self.assertEqual('desc', child.name)
+         self.assertEqual(NS_X_DATA, child.uri)
+-        self.assertEqual(u'My desc', unicode(child))
++        self.assertEqual(u'My desc', str(child))
+ 
+ 
+     def test_toElementRequired(self):
+@@ -248,7 +247,7 @@ class FieldTest(unittest.TestCase):
+         field = data_form.Field(fieldType='jid-single', var='test',
+                                 value=jid.JID(u'test@example.org'))
+         element = field.toElement()
+-        self.assertEqual(u'test@example.org', unicode(element.value))
++        self.assertEqual(u'test@example.org', str(element.value))
+ 
+ 
+     def test_toElementJIDTextSingle(self):
+@@ -258,7 +257,7 @@ class FieldTest(unittest.TestCase):
+         field = data_form.Field(fieldType='text-single', var='test',
+                                 value=jid.JID(u'test@example.org'))
+         element = field.toElement()
+-        self.assertEqual(u'test@example.org', unicode(element.value))
++        self.assertEqual(u'test@example.org', str(element.value))
+ 
+ 
+     def test_toElementBoolean(self):
+@@ -268,7 +267,7 @@ class FieldTest(unittest.TestCase):
+         field = data_form.Field(fieldType='boolean', var='test',
+                                 value=True)
+         element = field.toElement()
+-        self.assertEqual(u'true', unicode(element.value))
++        self.assertEqual(u'true', str(element.value))
+ 
+ 
+     def test_toElementBooleanTextSingle(self):
+@@ -277,7 +276,7 @@ class FieldTest(unittest.TestCase):
+         """
+         field = data_form.Field(var='test', value=True)
+         element = field.toElement()
+-        self.assertEqual(u'true', unicode(element.value))
++        self.assertEqual(u'true', str(element.value))
+ 
+ 
+     def test_toElementNoType(self):
+@@ -396,7 +395,7 @@ class FieldTest(unittest.TestCase):
+ 
+     def test_fromElementValueTextSingle(self):
+         """
+-        Parsed text-single field values should be of type C{unicode}.
++        Parsed text-single field values should be of type L{str}.
+         """
+         element = domish.Element((NS_X_DATA, 'field'))
+         element['type'] = 'text-single'
+@@ -407,7 +406,7 @@ class FieldTest(unittest.TestCase):
+ 
+     def test_fromElementValueJID(self):
+         """
+-        Parsed jid-single field values should be of type C{unicode}.
++        Parsed jid-single field values should be of type L{str}.
+         """
+         element = domish.Element((NS_X_DATA, 'field'))
+         element['type'] = 'jid-single'
+@@ -418,7 +417,7 @@ class FieldTest(unittest.TestCase):
+ 
+     def test_fromElementValueJIDMalformed(self):
+         """
+-        Parsed jid-single field values should be of type C{unicode}.
++        Parsed jid-single field values should be of type L{str}.
+ 
+         No validation should be done at this point, so invalid JIDs should
+         also be passed as-is.
+@@ -432,7 +431,7 @@ class FieldTest(unittest.TestCase):
+ 
+     def test_fromElementValueBoolean(self):
+         """
+-        Parsed boolean field values should be of type C{unicode}.
++        Parsed boolean field values should be of type L{str}.
+         """
+         element = domish.Element((NS_X_DATA, 'field'))
+         element['type'] = 'boolean'
+@@ -561,7 +560,7 @@ class FormTest(unittest.TestCase):
+         title = elements[0]
+         self.assertEqual('title', title.name)
+         self.assertEqual(NS_X_DATA, title.uri)
+-        self.assertEqual('Bot configuration', unicode(title))
++        self.assertEqual('Bot configuration', str(title))
+ 
+ 
+     def test_toElementInstructions(self):
+@@ -576,7 +575,7 @@ class FormTest(unittest.TestCase):
+         instructions = elements[0]
+         self.assertEqual('instructions', instructions.name)
+         self.assertEqual(NS_X_DATA, instructions.uri)
+-        self.assertEqual('Fill out this form!', unicode(instructions))
++        self.assertEqual('Fill out this form!', str(instructions))
+ 
+ 
+     def test_toElementInstructionsMultiple(self):
+@@ -593,10 +592,10 @@ class FormTest(unittest.TestCase):
+         instructions2 = elements[1]
+         self.assertEqual('instructions', instructions1.name)
+         self.assertEqual(NS_X_DATA, instructions1.uri)
+-        self.assertEqual('Fill out this form!', unicode(instructions1))
++        self.assertEqual('Fill out this form!', str(instructions1))
+         self.assertEqual('instructions', instructions2.name)
+         self.assertEqual(NS_X_DATA, instructions2.uri)
+-        self.assertEqual('no really', unicode(instructions2))
++        self.assertEqual('no really', str(instructions2))
+ 
+ 
+     def test_toElementFormType(self):
+@@ -613,7 +612,7 @@ class FormTest(unittest.TestCase):
+         self.assertEqual(NS_X_DATA, formTypeField.uri)
+         self.assertEqual('FORM_TYPE', formTypeField['var'])
+         self.assertEqual('hidden', formTypeField['type'])
+-        self.assertEqual('jabber:bot', unicode(formTypeField.value))
++        self.assertEqual('jabber:bot', str(formTypeField.value))
+ 
+ 
+     def test_toElementFields(self):
+@@ -1091,7 +1090,7 @@ class FormTest(unittest.TestCase):
+         self.assertNotIn('features', form)
+ 
+ 
+-    def test_iterkeys(self):
++    def test_keys(self):
+         """
+         Iterating over the keys of a form yields all field names.
+         """
+@@ -1101,10 +1100,10 @@ class FormTest(unittest.TestCase):
+                                                 values=['news', 'search'])]
+         form = data_form.Form('submit', fields=fields)
+         self.assertEqual(set(['botname', 'public', 'features']),
+-                         set(form.iterkeys()))
++                         set(form.keys()))
+ 
+ 
+-    def test_itervalues(self):
++    def test_values(self):
+         """
+         Iterating over the values of a form yields all field values.
+         """
+@@ -1112,63 +1111,19 @@ class FormTest(unittest.TestCase):
+                   data_form.Field('boolean', var='public', value=True)]
+         form = data_form.Form('submit', fields=fields)
+         self.assertEqual(set(['The Jabber Bot', True]),
+-                         set(form.itervalues()))
+-
+-
+-    def test_iteritems(self):
+-        """
+-        Iterating over the values of a form yields all item tuples.
+-        """
+-        fields = [data_form.Field(var='botname', value='The Jabber Bot'),
+-                  data_form.Field('boolean', var='public', value=True)]
+-        form = data_form.Form('submit', fields=fields)
+-        self.assertEqual(set([('botname', 'The Jabber Bot'),
+-                              ('public', True)]),
+-                         set(form.iteritems()))
+-
+-
+-    def test_keys(self):
+-        """
+-        Getting the keys of a form yields a list of field names.
+-        """
+-        fields = [data_form.Field(var='botname', value='The Jabber Bot'),
+-                  data_form.Field('boolean', var='public', value=True),
+-                  data_form.Field('list-multi', var='features',
+-                                                values=['news', 'search'])]
+-        form = data_form.Form('submit', fields=fields)
+-        keys = form.keys()
+-        if not _PY3:
+-            self.assertIsInstance(keys, list)
+-        self.assertEqual(set(['botname', 'public', 'features']),
+-                         set(keys))
+-
+-
+-    def test_values(self):
+-        """
+-        Getting the values of a form yields a list of field values.
+-        """
+-        fields = [data_form.Field(var='botname', value='The Jabber Bot'),
+-                  data_form.Field('boolean', var='public', value=True)]
+-        form = data_form.Form('submit', fields=fields)
+-        values = form.values()
+-        if not _PY3:
+-            self.assertIsInstance(values, list)
+-        self.assertEqual(set(['The Jabber Bot', True]), set(values))
++                         set(form.values()))
+ 
+ 
+     def test_items(self):
+         """
+-        Iterating over the values of a form yields a list of all item tuples.
++        Iterating over the values of a form yields all item tuples.
+         """
+         fields = [data_form.Field(var='botname', value='The Jabber Bot'),
+                   data_form.Field('boolean', var='public', value=True)]
+         form = data_form.Form('submit', fields=fields)
+-        items = form.items()
+-        if not _PY3:
+-            self.assertIsInstance(items, list)
+         self.assertEqual(set([('botname', 'The Jabber Bot'),
+                               ('public', True)]),
+-                         set(items))
++                         set(form.items()))
+ 
+ 
+     def test_getValues(self):
+diff --git a/wokkel/test/test_generic.py b/wokkel/test/test_generic.py
+index 94c39e5..4e4ab45 100644
+--- a/wokkel/test/test_generic.py
++++ b/wokkel/test/test_generic.py
+@@ -7,19 +7,12 @@ Tests for L{wokkel.generic}.
+ 
+ from __future__ import division, absolute_import
+ 
+-import re
+-
+ from zope.interface.verify import verifyObject
+ 
+-from twisted.python import deprecate
+-from twisted.python.compat import unicode
+ from twisted.trial import unittest
+-from twisted.trial.util import suppress as SUPPRESS
+ from twisted.words.xish import domish
+ from twisted.words.protocols.jabber.jid import JID
+ 
+-from incremental import Version
+-
+ from wokkel import generic
+ from wokkel.iwokkel import IDisco
+ from wokkel.test.helpers import XmlStreamStub
+@@ -66,11 +59,11 @@ class VersionHandlerTest(unittest.TestCase):
+         elements = list(domish.generateElementsQNamed(response.query.children,
+                                                       'name', NS_VERSION))
+         self.assertEquals(1, len(elements))
+-        self.assertEquals('Test', unicode(elements[0]))
++        self.assertEquals('Test', str(elements[0]))
+         elements = list(domish.generateElementsQNamed(response.query.children,
+                                                       'version', NS_VERSION))
+         self.assertEquals(1, len(elements))
+-        self.assertEquals('0.1.0', unicode(elements[0]))
++        self.assertEquals('0.1.0', str(elements[0]))
+ 
+ 
+ 
+@@ -314,67 +307,3 @@ class RequestTest(unittest.TestCase):
+ 
+         request = SetRequest()
+         self.assertEqual('set', request.stanzaType)
+-
+-
+-
+-class PrepareIDNNameTests(unittest.TestCase):
+-    """
+-    Tests for L{wokkel.generic.prepareIDNName}.
+-    """
+-
+-    suppress = [SUPPRESS(category=DeprecationWarning,
+-                         message=re.escape(
+-                             deprecate.getDeprecationWarningString(
+-                                 generic.prepareIDNName,
+-                                 Version("wokkel", 18, 0, 0),
+-                                 replacement="unicode.encode('idna')")))]
+-
+-
+-    def test_deprecated(self):
+-        """
+-        prepareIDNName is deprecated.
+-        """
+-        self.callDeprecated((Version("wokkel", 18, 0, 0),
+-                             "unicode.encode('idna')"),
+-                            generic.prepareIDNName, ("example.com"))
+-    test_deprecated.suppress = []
+-
+-
+-    def test_unicode(self):
+-        """
+-        A unicode all-ASCII name is converted to an ASCII byte string.
+-        """
+-        name = u"example.com"
+-        result = generic.prepareIDNName(name)
+-        self.assertEqual(b"example.com", result)
+-
+-
+-    def test_unicodeNonASCII(self):
+-        """
+-        A unicode with non-ASCII is converted to its ACE equivalent.
+-        """
+-        name = u"\u00e9chec.example.com"
+-        result = generic.prepareIDNName(name)
+-        self.assertEqual(b"xn--chec-9oa.example.com", result)
+-
+-
+-    def test_unicodeHalfwidthIdeographicFullStop(self):
+-        """
+-        Exotic dots in unicode names are converted to Full Stop.
+-        """
+-        name = u"\u00e9chec.example\uff61com"
+-        result = generic.prepareIDNName(name)
+-        self.assertEqual(b"xn--chec-9oa.example.com", result)
+-
+-
+-    def test_unicodeTrailingDot(self):
+-        """
+-        Unicode names with trailing dots retain the trailing dot.
+-
+-        L{encodings.idna.ToASCII} doesn't allow the empty string as the input,
+-        hence the implementation needs to strip a trailing dot, and re-add it
+-        after encoding the labels.
+-        """
+-        name = u"example.com."
+-        result = generic.prepareIDNName(name)
+-        self.assertEqual(b"example.com.", result)
+diff --git a/wokkel/test/test_muc.py b/wokkel/test/test_muc.py
+index f690d05..282a8a1 100644
+--- a/wokkel/test/test_muc.py
++++ b/wokkel/test/test_muc.py
+@@ -14,7 +14,6 @@ from zope.interface import verify
+ 
+ from twisted.trial import unittest
+ from twisted.internet import defer, task
+-from twisted.python.compat import iteritems, unicode
+ from twisted.words.xish import domish, xpath
+ from twisted.words.protocols.jabber.jid import JID
+ from twisted.words.protocols.jabber.error import StanzaError
+@@ -81,7 +80,7 @@ class StatusCodeTest(unittest.TestCase):
+             332: 'removed-shutdown',
+         }
+ 
+-        for code, condition in iteritems(codes):
++        for code, condition in codes.items():
+             constantName = condition.replace('-', '_').upper()
+             self.assertEqual(getattr(muc.STATUS_CODE, constantName),
+                              muc.STATUS_CODE.lookupByValue(code))
+@@ -757,7 +756,7 @@ class MUCClientProtocolTest(unittest.TestCase):
+         self.assertEquals('message', message.name)
+         self.assertEquals(self.roomJID.full(), message.getAttribute('to'))
+         self.assertEquals('groupchat', message.getAttribute('type'))
+-        self.assertEquals(u'This is a test', unicode(message.body))
++        self.assertEquals(u'This is a test', str(message.body))
+ 
+ 
+     def test_chat(self):
+@@ -773,7 +772,7 @@ class MUCClientProtocolTest(unittest.TestCase):
+         self.assertEquals('message', message.name)
+         self.assertEquals(otherOccupantJID.full(), message.getAttribute('to'))
+         self.assertEquals('chat', message.getAttribute('type'))
+-        self.assertEquals(u'This is a test', unicode(message.body))
++        self.assertEquals(u'This is a test', str(message.body))
+ 
+ 
+     def test_subject(self):
+@@ -787,7 +786,7 @@ class MUCClientProtocolTest(unittest.TestCase):
+         self.assertEquals('message', message.name)
+         self.assertEquals(self.roomJID.full(), message.getAttribute('to'))
+         self.assertEquals('groupchat', message.getAttribute('type'))
+-        self.assertEquals(u'This is a test', unicode(message.subject))
++        self.assertEquals(u'This is a test', str(message.subject))
+ 
+ 
+     def test_invite(self):
+@@ -806,7 +805,7 @@ class MUCClientProtocolTest(unittest.TestCase):
+         self.assertEquals(muc.NS_MUC_USER, message.x.invite.uri)
+         self.assertEquals(invitee.full(), message.x.invite.getAttribute('to'))
+         self.assertEquals(muc.NS_MUC_USER, message.x.invite.reason.uri)
+-        self.assertEquals(u'This is a test', unicode(message.x.invite.reason))
++        self.assertEquals(u'This is a test', str(message.x.invite.reason))
+ 
+ 
+     def test_getRegisterForm(self):
+@@ -1399,7 +1398,7 @@ class MUCClientProtocolTest(unittest.TestCase):
+         nodes = xpath.queryForNodes(query, iq)
+         self.assertNotIdentical(None, nodes, 'Bad configure request')
+         destroy = nodes[0]
+-        self.assertEquals('Time to leave', unicode(destroy.reason))
++        self.assertEquals('Time to leave', str(destroy.reason))
+ 
+         response = toResponse(iq, 'result')
+         self.stub.send(response)
+diff --git a/wokkel/test/test_server.py b/wokkel/test/test_server.py
+index 3e3c923..1efb6e5 100644
+--- a/wokkel/test/test_server.py
++++ b/wokkel/test/test_server.py
+@@ -8,7 +8,11 @@ Tests for L{wokkel.server}.
+ from __future__ import division, absolute_import
+ from twisted.internet import defer
+ from twisted.python import failure
+-from twisted.test.proto_helpers import StringTransport
++try:
++    from twisted.internet.testing import StringTransport
++except ImportError:
++    from twisted.test.proto_helpers import StringTransport
++
+ from twisted.trial import unittest
+ from twisted.words.protocols.jabber import error, jid, xmlstream
+ from twisted.words.xish import domish
+diff --git a/wokkel/test/test_shim.py b/wokkel/test/test_shim.py
+index ded4679..d3b76cf 100644
+--- a/wokkel/test/test_shim.py
++++ b/wokkel/test/test_shim.py
+@@ -9,7 +9,6 @@ Tests for {wokkel.shim}.
+ 
+ from __future__ import division, absolute_import
+ 
+-from twisted.python.compat import unicode
+ from twisted.trial import unittest
+ 
+ from wokkel import shim
+@@ -36,7 +35,7 @@ class HeadersTest(unittest.TestCase):
+         self.assertEquals(NS_SHIM, header.uri)
+         self.assertEquals('header', header.name)
+         self.assertEquals('Urgency', header['name'])
+-        self.assertEquals('high', unicode(header))
++        self.assertEquals('high', str(header))
+ 
+ 
+     def test_headerRepeated(self):
+@@ -47,7 +46,7 @@ class HeadersTest(unittest.TestCase):
+                            ('Collection', 'node2')])
+         elements = list(headers.elements())
+         self.assertEquals(2, len(elements))
+-        collections = set((unicode(element) for element in elements
++        collections = set((str(element) for element in elements
+                            if element['name'] == 'Collection'))
+         self.assertIn('node1', collections)
+         self.assertIn('node2', collections)
+diff --git a/wokkel/test/test_xmppim.py b/wokkel/test/test_xmppim.py
+index faab8ed..0d4fdbf 100644
+--- a/wokkel/test/test_xmppim.py
++++ b/wokkel/test/test_xmppim.py
+@@ -9,7 +9,6 @@ from __future__ import division, absolute_import
+ 
+ from twisted.internet import defer
+ from twisted.trial import unittest
+-from twisted.python.compat import unicode
+ from twisted.words.protocols.jabber import error
+ from twisted.words.protocols.jabber.jid import JID
+ from twisted.words.protocols.jabber.xmlstream import toResponse
+@@ -55,7 +54,7 @@ class PresenceClientProtocolTest(unittest.TestCase):
+         self.assertEquals(None, presence.uri)
+         self.assertEquals("user@example.com", presence.getAttribute('to'))
+         self.assertEquals("unavailable", presence.getAttribute('type'))
+-        self.assertEquals("Disconnected", unicode(presence.status))
++        self.assertEquals("Disconnected", str(presence.status))
+ 
+     def test_unavailableBroadcast(self):
+         """
+@@ -298,9 +297,9 @@ class PresenceProtocolTest(unittest.TestCase):
+         element = self.output[-1]
+         self.assertEquals("user@example.com", element.getAttribute('to'))
+         self.assertIdentical(None, element.getAttribute('type'))
+-        self.assertEquals(u'chat', unicode(element.show))
+-        self.assertEquals(u'Talk to me!', unicode(element.status))
+-        self.assertEquals(u'50', unicode(element.priority))
++        self.assertEquals(u'chat', str(element.show))
++        self.assertEquals(u'Talk to me!', str(element.status))
++        self.assertEquals(u'50', str(element.priority))
+ 
+     def test_availableLanguages(self):
+         """
+@@ -314,19 +313,19 @@ class PresenceProtocolTest(unittest.TestCase):
+         element = self.output[-1]
+         self.assertEquals("user@example.com", element.getAttribute('to'))
+         self.assertIdentical(None, element.getAttribute('type'))
+-        self.assertEquals(u'chat', unicode(element.show))
++        self.assertEquals(u'chat', str(element.show))
+ 
+         statuses = {}
+         for status in element.elements():
+             if status.name == 'status':
+                 lang = status.getAttribute((NS_XML, 'lang'))
+-                statuses[lang] = unicode(status)
++                statuses[lang] = str(status)
+ 
+         self.assertIn(None, statuses)
+         self.assertEquals(u'Talk to me!', statuses[None])
+         self.assertIn('nl', statuses)
+         self.assertEquals(u'Praat met me!', statuses['nl'])
+-        self.assertEquals(u'50', unicode(element.priority))
++        self.assertEquals(u'50', str(element.priority))
+ 
+ 
+     def test_availableSender(self):
+@@ -363,7 +362,7 @@ class PresenceProtocolTest(unittest.TestCase):
+         self.assertEquals(None, element.uri)
+         self.assertEquals("user@example.com", element.getAttribute('to'))
+         self.assertEquals("unavailable", element.getAttribute('type'))
+-        self.assertEquals("Disconnected", unicode(element.status))
++        self.assertEquals("Disconnected", str(element.status))
+ 
+ 
+     def test_unavailableBroadcast(self):
+@@ -568,7 +567,7 @@ class RosterItemTest(unittest.TestCase):
+         foundGroups = set()
+         for child in element.elements():
+             if child.uri == NS_ROSTER and child.name == 'group':
+-                foundGroups.add(unicode(child))
++                foundGroups.add(str(child))
+ 
+         self.assertEqual(groups, foundGroups)
+ 
+diff --git a/wokkel/xmppim.py b/wokkel/xmppim.py
+index e6af929..683577b 100644
+--- a/wokkel/xmppim.py
++++ b/wokkel/xmppim.py
+@@ -15,7 +15,6 @@ from __future__ import division, absolute_import
+ import warnings
+ 
+ from twisted.internet import defer
+-from twisted.python.compat import iteritems, itervalues, unicode
+ from twisted.words.protocols.jabber import error
+ from twisted.words.protocols.jabber.jid import JID
+ from twisted.words.xish import domish
+@@ -48,20 +47,20 @@ class AvailablePresence(Presence):
+             self.addElement('show', content=show)
+ 
+         if statuses is not None:
+-            for lang, status in iteritems(statuses):
++            for lang, status in statuses.items():
+                 s = self.addElement('status', content=status)
+                 if lang:
+                     s[(NS_XML, "lang")] = lang
+ 
+         if priority != 0:
+-            self.addElement('priority', content=unicode(int(priority)))
++            self.addElement('priority', content=str(int(priority)))
+ 
+ class UnavailablePresence(Presence):
+     def __init__(self, to=None, statuses=None):
+         Presence.__init__(self, to, type='unavailable')
+ 
+         if statuses is not None:
+-            for lang, status in iteritems(statuses):
++            for lang, status in statuses.items():
+                 s = self.addElement('status', content=status)
+                 if lang:
+                     s[(NS_XML, "lang")] = lang
+@@ -76,7 +75,7 @@ class PresenceClientProtocol(XMPPHandler):
+         for element in presence.elements():
+             if element.name == 'status':
+                 lang = element.getAttribute((NS_XML, 'lang'))
+-                text = unicode(element)
++                text = str(element)
+                 statuses[lang] = text
+         return statuses
+ 
+@@ -92,14 +91,14 @@ class PresenceClientProtocol(XMPPHandler):
+     def _onPresenceAvailable(self, presence):
+         entity = JID(presence["from"])
+ 
+-        show = unicode(presence.show or '')
++        show = str(presence.show or '')
+         if show not in ['away', 'xa', 'chat', 'dnd']:
+             show = None
+ 
+         statuses = self._getStatuses(presence)
+ 
+         try:
+-            priority = int(unicode(presence.priority or '')) or 0
++            priority = int(str(presence.priority or '')) or 0
+         except ValueError:
+             priority = 0
+ 
+@@ -133,14 +132,14 @@ class PresenceClientProtocol(XMPPHandler):
+         @type entity: {JID}
+         @param show: detailed presence information. One of C{'away'}, C{'xa'},
+                      C{'chat'}, C{'dnd'} or C{None}.
+-        @type show: C{str} or C{NoneType}
++        @type show: L{str} or C{NoneType}
+         @param statuses: dictionary of natural language descriptions of the
+                          availability status, keyed by the language
+                          descriptor. A status without a language
+                          specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+         @param priority: priority level of the resource.
+-        @type priority: C{int}
++        @type priority: L{int}
+         """
+ 
+     def unavailableReceived(self, entity, statuses=None):
+@@ -153,7 +152,7 @@ class PresenceClientProtocol(XMPPHandler):
+                          availability status, keyed by the language
+                          descriptor. A status without a language
+                          specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+         """
+ 
+     def subscribedReceived(self, entity):
+@@ -196,14 +195,14 @@ class PresenceClientProtocol(XMPPHandler):
+         @type entity: {JID}
+         @param show: optional detailed presence information. One of C{'away'},
+                      C{'xa'}, C{'chat'}, C{'dnd'}.
+-        @type show: C{str}
++        @type show: L{str}
+         @param statuses: dictionary of natural language descriptions of the
+                          availability status, keyed by the language
+                          descriptor. A status without a language
+                          specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+         @param priority: priority level of the resource.
+-        @type priority: C{int}
++        @type priority: L{int}
+         """
+         self.send(AvailablePresence(entity, show, statuses, priority))
+ 
+@@ -217,7 +216,7 @@ class PresenceClientProtocol(XMPPHandler):
+                          availability status, keyed by the language
+                          descriptor. A status without a language
+                          specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+         """
+         self.send(UnavailablePresence(entity, statuses))
+ 
+@@ -275,19 +274,19 @@ class AvailabilityPresence(BasePresence):
+     L{SubscriptionPresence}).
+ 
+     @ivar available: The availability being communicated.
+-    @type available: C{bool}
++    @type available: L{bool}
+     @ivar show: More specific availability. Can be one of C{'chat'}, C{'away'},
+                 C{'xa'}, C{'dnd'} or C{None}.
+-    @type show: C{str} or C{NoneType}
++    @type show: L{str} or C{NoneType}
+     @ivar statuses: Natural language texts to detail the (un)availability.
+                     These are represented as a mapping from language code
+-                    (C{str} or C{None}) to the corresponding text (C{unicode}).
++                    (L{str} or C{None}) to the corresponding text (L{str}).
+                     If the key is C{None}, the associated text is in the
+                     default language.
+-    @type statuses: C{dict}
++    @type statuses: L{dict}
+     @ivar priority: Priority level for this resource. Must be between -128 and
+                     127. Defaults to 0.
+-    @type priority: C{int}
++    @type priority: L{int}
+     """
+ 
+     childParsers = {(None, 'show'): '_childParser_show',
+@@ -309,7 +308,7 @@ class AvailabilityPresence(BasePresence):
+         if None in self.statuses:
+             return self.statuses[None]
+         elif self.statuses:
+-            for status in itervalues(self.status):
++            for status in self.status.values():
+                 return status
+         else:
+             return None
+@@ -318,20 +317,20 @@ class AvailabilityPresence(BasePresence):
+ 
+ 
+     def _childParser_show(self, element):
+-        show = unicode(element)
++        show = str(element)
+         if show in ('chat', 'away', 'xa', 'dnd'):
+             self.show = show
+ 
+ 
+     def _childParser_status(self, element):
+         lang = element.getAttribute((NS_XML, 'lang'), None)
+-        text = unicode(element)
++        text = str(element)
+         self.statuses[lang] = text
+ 
+ 
+     def _childParser_priority(self, element):
+         try:
+-            self.priority = int(unicode(element))
++            self.priority = int(str(element))
+         except ValueError:
+             pass
+ 
+@@ -353,9 +352,9 @@ class AvailabilityPresence(BasePresence):
+             if self.show in ('chat', 'away', 'xa', 'dnd'):
+                 presence.addElement('show', content=self.show)
+             if self.priority != 0:
+-                presence.addElement('priority', content=unicode(self.priority))
++                presence.addElement('priority', content=str(self.priority))
+ 
+-        for lang, text in iteritems(self.statuses):
++        for lang, text in self.statuses.items():
+             status = presence.addElement('status', content=text)
+             if lang:
+                 status[(NS_XML, 'lang')] = lang
+@@ -400,7 +399,7 @@ class BasePresenceProtocol(XMPPHandler):
+ 
+     @cvar presenceTypeParserMap: Maps presence stanza types to their respective
+         stanza parser classes (derived from L{Stanza}).
+-    @type presenceTypeParserMap: C{dict}
++    @type presenceTypeParserMap: L{dict}
+     """
+ 
+     presenceTypeParserMap = {}
+@@ -515,15 +514,15 @@ class PresenceProtocol(BasePresenceProtocol):
+ 
+         @param show: Optional detailed presence information. One of C{'away'},
+             C{'xa'}, C{'chat'}, C{'dnd'}.
+-        @type show: C{str}
++        @type show: L{str}
+ 
+         @param statuses: Mapping of natural language descriptions of the
+            availability status, keyed by the language descriptor. A status
+            without a language specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+ 
+         @param priority: priority level of the resource.
+-        @type priority: C{int}
++        @type priority: L{int}
+         """
+         presence = AvailabilityPresence(recipient=recipient, sender=sender,
+                                         show=show, statuses=statuses,
+@@ -541,7 +540,7 @@ class PresenceProtocol(BasePresenceProtocol):
+         @param statuses: dictionary of natural language descriptions of the
+             availability status, keyed by the language descriptor. A status
+             without a language specified, is keyed with C{None}.
+-        @type statuses: C{dict}
++        @type statuses: L{dict}
+         """
+         presence = AvailabilityPresence(recipient=recipient, sender=sender,
+                                         available=False, statuses=statuses)
+@@ -617,25 +616,25 @@ class RosterItem(object):
+     @ivar entity: The JID of the contact.
+     @type entity: L{JID}
+     @ivar name: The associated nickname for this contact.
+-    @type name: C{unicode}
++    @type name: L{str}
+     @ivar subscriptionTo: Subscription state to contact's presence. If C{True},
+                           the roster owner is subscribed to the presence
+                           information of the contact.
+-    @type subscriptionTo: C{bool}
++    @type subscriptionTo: L{bool}
+     @ivar subscriptionFrom: Contact's subscription state. If C{True}, the
+                             contact is subscribed to the presence information
+                             of the roster owner.
+-    @type subscriptionFrom: C{bool}
++    @type subscriptionFrom: L{bool}
+     @ivar pendingOut: Whether the subscription request to this contact is
+         pending.
+-    @type pendingOut: C{bool}
++    @type pendingOut: L{bool}
+     @ivar groups: Set of groups this contact is categorized in. Groups are
+-                  represented by an opaque identifier of type C{unicode}.
+-    @type groups: C{set}
++                  represented by an opaque identifier of type L{str}.
++    @type groups: L{set}
+     @ivar approved: Signals pre-approved subscription.
+-    @type approved: C{bool}
++    @type approved: L{bool}
+     @ivar remove: Signals roster item removal.
+-    @type remove: C{bool}
++    @type remove: L{bool}
+     """
+ 
+     __subscriptionStates = {(False, False): None,
+@@ -755,7 +754,7 @@ class RosterItem(object):
+             item.approved = element.getAttribute('approved') in ('true', '1')
+             for subElement in domish.generateElementsQNamed(element.children,
+                                                             'group', NS_ROSTER):
+-                item.groups.add(unicode(subElement))
++                item.groups.add(str(subElement))
+         return item
+ 
+ 
+@@ -771,7 +770,7 @@ class RosterRequest(Request):
+         retrieving the roster as a delta from a known cached version. This
+         should only be set if the recipient is known to support roster
+         versioning.
+-    @type version: C{unicode}
++    @type version: L{str}
+ 
+     @ivar rosterSet: If set, this is a roster set request. This flag is used
+         to make sure some attributes of the roster item are not rendered by
+@@ -821,7 +820,7 @@ class Roster(dict):
+     identifier for this version of the roster.
+ 
+     @ivar version: Roster version identifier.
+-    @type version: C{unicode}.
++    @type version: L{str}.
+     """
+ 
+     version = None
+@@ -892,7 +891,7 @@ class RosterClientProtocol(XMPPHandler, IQHandlerMixin):
+             known to support roster versioning. If there is no (valid) cached
+             version of the roster, but roster versioning is desired,
+             C{version} should be set to the empty string (C{u''}).
+-        @type version: C{unicode}
++        @type version: L{str}
+ 
+         @return: Roster as a mapping from L{JID} to L{RosterItem}.
+         @rtype: L{twisted.internet.defer.Deferred}
+@@ -1023,11 +1022,11 @@ class Message(Stanza):
+ 
+ 
+     def _childParser_body(self, element):
+-        self.body = unicode(element)
++        self.body = str(element)
+ 
+ 
+     def _childParser_subject(self, element):
+-        self.subject = unicode(element)
++        self.subject = str(element)
+ 
+ 
+     def toElement(self):
+-- 
+2.44.1

@@ -1,0 +1,49 @@
+diff --git a/src/data/gdb_preamble/preamble.py b/src/data/gdb_preamble/preamble.py
+index 4855231b5..a488025c1 100644
+--- a/src/data/gdb_preamble/preamble.py
++++ b/src/data/gdb_preamble/preamble.py
+@@ -773,7 +773,7 @@ def resolve_modules():
+     # core doesn't contain one. That makes the ids a bit unreliable but still better than nothing I suppose.
+     # Ultimately we'll want to use gdb here.
+     # https://sourceware.org/bugzilla/show_bug.cgi?id=32844
+-    output = get_stdout(['eu-unstrip', "--list-only", f"--core={corefile}"], env=env)
++    output = get_stdout(['@eu-unstrip@', "--list-only", f"--core={corefile}"], env=env)
+     for line in output.splitlines():
+         image = CoreImage(line)
+         if image.valid:
+diff --git a/src/debugger.cpp b/src/debugger.cpp
+index 946bdd12e..5c24b3713 100644
+--- a/src/debugger.cpp
++++ b/src/debugger.cpp
+@@ -36,12 +36,12 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+         result.push_back(std::make_shared<Data>(
+             Data{.displayName = i18nc("@label the debugger called GDB", "GDB"),
+                  .codeName = u"gdb"_s,
+-                 .tryExec = u"gdb"_s,
++                 .tryExec = u"@gdb@"_s,
+                  .backendData =
+-                     BackendData{.command = u"gdb -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                     BackendData{.command = u"@gdb@ -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .supportsCommandWithSymbolResolution = true,
+                                  .commandWithSymbolResolution =
+-                                     u"gdb -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                                     u"@gdb@ -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                                  .preambleCommands = expandCommand(
+                                      u"gdb"_s,
+@@ -63,12 +63,12 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+             Data{
+                 .displayName = i18nc("@label the debugger called GDB", "GDB"),
+                 .codeName = u"gdb"_s,
+-                .tryExec = u"gdb"_s,
++                .tryExec = u"@gdb@"_s,
+                 .backendData = BackendData{
+-                    .command = u"gdb --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                    .command = u"@gdb@ --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .supportsCommandWithSymbolResolution = true,
+                     .commandWithSymbolResolution =
+-                        u"gdb --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                        u"@gdb@ --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                     .preambleCommands = expandCommand(
+                         u"gdb"_s,
