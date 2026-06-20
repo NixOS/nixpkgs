@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 buildGoModule {
-  pname = "rHttp";
+  pname = "rhttp";
   version = "0-unstable-2024-04-28";
 
   src = fetchFromGitHub {
