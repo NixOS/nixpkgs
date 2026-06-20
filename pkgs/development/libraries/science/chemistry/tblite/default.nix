@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   gfortran,
   buildType ? "meson",
@@ -29,13 +29,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "tblite";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "tblite";
     repo = "tblite";
     rev = "v${version}";
-    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
+    hash = "sha256-z0g+bf6APqNLB9mDE49FelitQ9ptZXdFQuYeXIT0NIw=";
   };
 
   patches = [
@@ -45,10 +45,18 @@ stdenv.mkDerivation rec {
     ./pkgconfig.patch
   ];
 
-  # Python scripts in test subdirectories to run the tests
-  postPatch = ''
-    patchShebangs ./
-  '';
+  postPatch =
+    # Python scripts in test subdirectories to run the tests
+    ''
+      patchShebangs ./
+    ''
+
+    # libquadmath is only shipped by GCC on architectures that lack native
+    # quad-precision support (e.g. x86_64); on aarch64 it does not exist.
+    + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
+      substituteInPlace config/meson.build \
+        --replace-fail "lib_deps += cc.find_library('quadmath')" ""
+    '';
 
   nativeBuildInputs = [
     gfortran

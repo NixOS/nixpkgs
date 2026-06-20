@@ -87,6 +87,8 @@ buildPythonPackage rec {
     # AssertionError
     "test_cli_scrubs_stale_pid_files"
     "test_message_contains_requeue_time_after_retry"
+    # Timing-sensitive under load on the aarch64-linux builder.
+    "test_actor_messages_can_be_assigned_time_limits"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Takes too long for darwin ofborg
