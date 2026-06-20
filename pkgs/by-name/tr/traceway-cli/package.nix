@@ -10,7 +10,7 @@
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
-  pname = "traceway";
+  pname = "traceway-cli";
   version = "1.7.33";
 
   src = fetchFromGitHub {
