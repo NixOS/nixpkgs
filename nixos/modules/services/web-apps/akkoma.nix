@@ -1173,7 +1173,7 @@ in
           cfg.config.":pleroma".":media_proxy".enabled
           -> cfg.config.":pleroma".":media_proxy".base_url != null;
         message = ''
-          `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set when the media proxy is enabled.
+          `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set to a URL with a different host component (domain name) than the web endpoint when the media proxy is enabled.
         '';
       }
     ];
