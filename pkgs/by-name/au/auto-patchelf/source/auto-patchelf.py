@@ -268,15 +268,28 @@ class IgnoredDependency:
 @dataclass
 class Dependency:
     file: Path                          # The file that contains the dependency
-    name: Path                          # The name of the dependency
-    found: bool = False                 # Whether it was found somewhere
+    candidates: list[Path]              # The list of possible dependency names
     location: Optional[Path] = None     # Where the dependency was found (if found)
 
+    def name(self) -> str:
+        if len(self.candidates) == 1:
+            return self.candidates[0].name
+        return f"any({", ".join(c.name for c in self.candidates)})"
+
+    def found(self) -> bool:
+        return self.location is not None
+
+    def matches(self, pattern: str) -> bool:
+        for candidate in self.candidates:
+            if fnmatch(candidate.name, pattern):
+                return True
+        return False
+
     def to_human_readable_str(self) -> str:
-        if self.found:
-            return f"    {self.name} -> found: {self.location}"
+        if self.found():
+            return f"    {self.name()} -> found: {self.location}"
         else:
-            return f"    {self.name} -> not found!"
+            return f"    {self.name()} -> not found!"
 
 
 @dataclass
@@ -361,9 +374,9 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
     # Be sure to get the output of all missing dependencies instead of
     # failing at the first one, because it's more useful when working
     # on a new package where you don't yet know the dependencies.
-    for dep in file_dependencies:
+    for candidates in file_dependencies:
         was_found = False
-        for candidate in dep:
+        for candidate in candidates:
 
             # This loop determines which candidate for a given
             # dependency can be found, and how. There may be multiple
@@ -402,7 +415,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
                 origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
                 rpath.append(origin_rpath_entry or found_dependency)
-                dep = Dependency(file=path, name=candidate, found=True, location=found_dependency)
+                dep = Dependency(file=path, candidates=candidates, location=found_dependency)
                 dependencies.append(dep)
                 logger.log(dep)
                 was_found = True
@@ -412,8 +425,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
                 break
 
         if not was_found:
-            dep_name = dep[0] if len(dep) == 1 else f"any({', '.join(map(str, dep))})"
-            dep = Dependency(file=path, name=dep_name, found=False, location=None)
+            dep = Dependency(file=path, candidates=candidates, location=None)
             dependencies.append(dep)
             logger.log(dep)
 
@@ -465,18 +477,18 @@ def auto_patchelf(
         if not path.is_symlink() and path.is_file():
             dependencies += auto_patchelf_file(logger, path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
 
-    missing = [dep for dep in dependencies if not dep.found]
+    missing = [dep for dep in dependencies if not dep.found()]
 
     # Print a summary of the missing dependencies at the end
     logger.debug(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
         for pattern in ignore_missing:
-            if fnmatch(dep.name.name, pattern):
-                logger.log(IgnoredDependency(file=dep.file, name=dep.name, pattern=pattern))
+            if dep.matches(pattern):
+                logger.log(IgnoredDependency(file=dep.file, name=dep.name(), pattern=pattern))
                 break
         else:
-            logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+            logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name()} wanted by {dep.file}")
             failure = True
 
     if failure:
