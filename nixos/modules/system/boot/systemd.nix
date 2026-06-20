@@ -233,6 +233,8 @@ let
     "factory-reset.target"
     "systemd-factory-reset-request.service"
     "systemd-factory-reset-reboot.service"
+    "systemd-factory-reset@.service"
+    "systemd-factory-reset.socket"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
