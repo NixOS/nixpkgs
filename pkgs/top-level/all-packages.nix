@@ -6542,6 +6542,8 @@ with pkgs;
     openssl_4_0
     ;
 
+  oxibooru = callPackage ../servers/web-apps/oxibooru { };
+
   # pcre32 seems unused
   pcre-cpp = pcre.override { variant = "cpp"; };
 
