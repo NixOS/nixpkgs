@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  callPackage,
-  rustPlatform,
   fetchFromGitHub,
+  rustPlatform,
   installShellFiles,
   bubblewrap,
   clang,
@@ -11,9 +10,7 @@
   gitMinimal,
   libcap,
   libclang,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  buildRustyV8,
   livekit-libwebrtc,
   lld,
   makeBinaryWrapper,
@@ -24,6 +21,19 @@
   versionCheckHook,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
+let
+  librusty_v8 = buildRustyV8 rec {
+    version = "146.4.0";
+    src = fetchFromGitHub {
+      owner = "denoland";
+      repo = "rusty_v8";
+      tag = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-ABlfRtfkxyOCs8dpsSBx3UMYYRz9rUAb7N6CpQgZdMU=";
+    };
+    cargoHash = "sha256-R629/gy46x5pXR9Ig0XCcv42nGHhq0e+n/QaNDCAvXs=";
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
   version = "0.139.0";
@@ -135,6 +145,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "^rust-v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
+    inherit librusty_v8;
   };
 
   meta = {
