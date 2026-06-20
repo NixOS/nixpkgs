@@ -9,6 +9,8 @@
   libinput,
   libxkbcommon,
   libgbm,
+  libxcursor,
+  libxi,
   versionCheckHook,
   nix-update-script,
   pango,
@@ -63,6 +65,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libinput
     libxkbcommon
     libgbm
+    libxcursor
+    libxi
     pango
     seatd
     wayland # For libwayland-client
