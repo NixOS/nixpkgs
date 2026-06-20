@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "zix";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EfljHq73FA5llX2nnr6pn75nB/FbKnWvr3/Phl5716M=";
   };
 
