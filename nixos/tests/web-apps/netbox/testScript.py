@@ -285,3 +285,6 @@ if compare(netbox_version, '4.5.2') < 0:
 
         t.assertEqual(result["count"], 1)
         t.assertTrue(any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"]))
+
+# Print systemd unit hardening state
+machine.log(machine.execute("systemd-analyze security netbox.service netbox-rq.service netbox-housekeeping.service | grep -v ✓")[1])

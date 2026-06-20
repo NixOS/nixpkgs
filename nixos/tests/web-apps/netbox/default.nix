@@ -30,6 +30,10 @@ import ../../make-test-python.nix (
     containers.machine =
       { config, ... }:
       {
+        boot.kernelParams = [
+          # helps debugging seccomp filter issues
+          "audit=1"
+        ];
         services.netbox = {
           enable = true;
           package = netbox;
