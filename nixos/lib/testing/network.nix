@@ -135,8 +135,13 @@ let
       );
       udevRules = map (
         interface:
-        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
+        lib.concatStringsSep ", " [
+          ''SUBSYSTEM=="net"''
+          ''ACTION=="add"''
+          # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
+          ''ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}"''
+          ''NAME="${interface.name}"''
+        ]
       ) interfaces;
     in
     {
