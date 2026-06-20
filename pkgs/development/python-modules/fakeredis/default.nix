@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.36.0";
+  version = "2.36.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cunla";
     repo = "fakeredis-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rkq8fxQSNPMZE95mlNxSazdwxy5+DMlZKkVWweGVOtc=";
+    hash = "sha256-vOQBezPsgcjSUigCiW7Q+VueUTtQm3Y7hhB0mTstwKM=";
   };
 
   build-system = [ hatchling ];

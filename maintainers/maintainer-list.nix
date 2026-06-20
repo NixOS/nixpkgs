@@ -14591,6 +14591,12 @@
     github = "svelterust";
     githubId = 85593302;
   };
+  knightfemale = {
+    email = "2067834160@qq.com";
+    github = "knightfemale";
+    githubId = 124773040;
+    name = "骑士姬";
+  };
   knightpp = {
     email = "knightpp@proton.me";
     github = "knightpp";
