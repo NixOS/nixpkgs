@@ -516,6 +516,16 @@ in
         kind = "broken";
         handler = "error";
       }
+      # A package with an `unsupported`-kind problem is an error unless the user opts in to
+      # unsupported systems, in which case the matcher disappears and the handler falls back to
+      # the default "ignore". This is the single bypass point for `kind = "unsupported"` problems.
+      (lib.mkIf
+        (!(config.allowUnsupportedSystem || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"))
+        {
+          kind = "unsupported";
+          handler = "error";
+        }
+      )
       # Be loud and clear about package removals
       {
         kind = "removal";

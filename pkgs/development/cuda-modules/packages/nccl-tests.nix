@@ -3,7 +3,6 @@
 # in the case redistributable packages are not available.
 {
   backendStdenv,
-  _cuda,
   cuda_cccl,
   cuda_cudart,
   cuda_nvcc,
@@ -18,9 +17,13 @@
   which,
 }:
 let
-  inherit (_cuda.lib) _mkMetaBroken;
   inherit (lib) licenses maintainers teams;
-  inherit (lib.attrsets) getBin getInclude getLib;
+  inherit (lib.attrsets)
+    getBin
+    getInclude
+    getLib
+    optionalAttrs
+    ;
   inherit (lib.lists) optionals;
 in
 backendStdenv.mkDerivation (finalAttrs: {
@@ -83,13 +86,6 @@ backendStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    brokenAssertions = [
-      {
-        message = "mpi is non-null when mpiSupport is true";
-        assertion = mpiSupport -> mpi != null;
-      }
-    ];
-
     updateScript = gitUpdater {
       inherit (finalAttrs) pname version;
       rev-prefix = "v";
@@ -104,7 +100,12 @@ backendStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     license = licenses.bsd3;
-    broken = _mkMetaBroken finalAttrs;
+    problems = optionalAttrs (mpiSupport && mpi == null) {
+      missingMpi = {
+        kind = "broken";
+        message = "mpi must be non-null when mpiSupport is true.";
+      };
+    };
     maintainers = with maintainers; [ jmillerpdt ];
     teams = [ teams.cuda ];
   };
