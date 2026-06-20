@@ -34,6 +34,7 @@
   wandb,
 
   # tests
+  llvmPackages,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   pytest-timeout,
@@ -57,6 +58,11 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
   dontUseCmakeConfigure = true;
+
+  checkInputs = lib.optionals stdenv.cc.isClang [
+    # test_async_iterator_* hangs after failing to find OMP headers
+    llvmPackages.openmp
+  ];
 
   pythonRelaxDeps = [
     "av"
