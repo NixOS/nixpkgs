@@ -328,6 +328,8 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
+      environment.PYTHONUNBUFFERED = "1";
+
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "syncplay";
