@@ -101,6 +101,15 @@
   "module-services-mautrix-discord-troubleshooting": [
     "index.html#module-services-mautrix-discord-troubleshooting"
   ],
+  "module-services-mautrix-telegram": [
+    "index.html#module-services-mautrix-telegram"
+  ],
+  "module-services-mautrix-telegram-configuration": [
+    "index.html#module-services-mautrix-telegram-configuration"
+  ],
+  "module-services-mautrix-telegram-migrate": [
+    "index.html#module-services-mautrix-telegram-migrate"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
