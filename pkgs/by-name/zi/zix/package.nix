@@ -37,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/drobilla/zix/-/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qweered ];
   };
 })
