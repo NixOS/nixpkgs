@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "blinkstick";
-  version = "unstable-2023-05-04";
+  version = "1.2.0-unstable-2023-05-04";
   pyproject = true;
 
   __structuredAttrs = true;
