@@ -4,30 +4,77 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
+    attrNames
+    elem
+    filter
+    filterAttrs
+    flip
     getExe
+    hasSuffix
+    join
+    lowerChars
     maintainers
+    mapAttrs
+    mapAttrs'
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
+    mkRenamedOptionModule
+    nameValuePair
+    pipe
+    removeSuffix
+    splitStringBy
+    toList
+    toUpper
+    upperChars
     ;
+  inherit (lib.generators) mkKeyValueDefault mkValueStringDefault;
   inherit (lib.types)
+    attrsOf
     bool
-    path
+    externalPath
+    int
+    listOf
+    nullOr
+    oneOf
     port
     str
     submodule
     ;
+
   cfg = config.services.qui;
 
-  stateDir = "/var/lib/qui";
-  configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "qui.toml" cfg.settings;
+  envName = flip pipe [
+    (splitStringBy (prev: curr: elem prev lowerChars && elem curr upperChars) true)
+    (map toUpper)
+    (join "_")
+    (s: "QUI__${s}")
+  ];
+  envValue = flip pipe [
+    toList
+    (map (mkValueStringDefault { }))
+    (join ",")
+  ];
+  toEnvironment = mapAttrs' (n: v: nameValuePair (envName n) (envValue v));
+  toCredentials = mapAttrsToList (mkKeyValueDefault { } ":");
+
+  isSecretFile = hasSuffix "File";
+  publicSettings = filterAttrs (n: _: !isSecretFile n) cfg.settings;
+  secretSettings = filterAttrs (n: v: isSecretFile n && v != null) cfg.settings;
+  secretPaths = mapAttrs (n: _: "%d/${n}") secretSettings;
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "qui" "secretFile" ]
+      [ "services" "qui" "settings" "sessionSecretFile" ]
+    )
+  ];
+
   options = {
     services.qui = {
       enable = mkEnableOption "qui";
@@ -50,16 +97,7 @@ in
       openFirewall = mkOption {
         type = bool;
         default = false;
-        description = "Whether or not to open ports in the firewall for qui.";
-      };
-
-      secretFile = mkOption {
-        type = path;
-        example = "/run/secrets/qui-session.txt";
-        description = ''
-          Path to a file that contains the session secret. The session secret
-          can be generated with `openssl rand -hex 32`.
-        '';
+        description = "Whether to open ports in the firewall for qui.";
       };
 
       settings = mkOption {
@@ -70,7 +108,12 @@ in
           metricsEnabled = true;
         };
         type = submodule {
-          freeformType = configFormat.type;
+          freeformType = attrsOf (oneOf [
+            bool
+            int
+            str
+            (listOf str)
+          ]);
           options = {
             host = mkOption {
               type = str;
@@ -83,31 +126,87 @@ in
               default = 7476;
               description = "The port qui listens on.";
             };
+
+            databaseDsnFile = mkOption {
+              type = nullOr externalPath;
+              default = null;
+              example = "/run/secrets/qui/database-dsn";
+              description = ''
+                Path to a file containing the PostgreSQL connection string (DSN),
+                used when `databaseEngine` is set to `postgres`.
+                Takes precedence over the individual database host, user, and password settings.
+              '';
+            };
+
+            databasePasswordFile = mkOption {
+              type = nullOr externalPath;
+              default = null;
+              example = "/run/secrets/qui/database-password";
+              description = ''
+                Path to a file containing the PostgreSQL password,
+                used when `databaseEngine` is set to `postgres` and no DSN is provided.
+              '';
+            };
+
+            oidcClientSecretFile = mkOption {
+              type = nullOr externalPath;
+              default = null;
+              example = "/run/secrets/qui/oidc-client-secret";
+              description = ''
+                Path to a file containing the OIDC client secret from your identity provider,
+                used when `oidcEnabled` is `true`.
+              '';
+            };
+
+            sessionSecretFile = mkOption {
+              type = nullOr externalPath;
+              default = null;
+              example = "/run/secrets/qui/session-secret";
+              description = ''
+                Path to a file containing the session secret,
+                used to encrypt stored qBittorrent instance credentials.
+                Can be generated with `openssl rand -hex 32`.
+                When `null`, qui generates and persists its own secret.
+              '';
+            };
           };
         };
         description = ''
-          qui configuration options.
+          Configuration for qui.
 
-          Refer to the [template config](https://github.com/autobrr/qui/blob/main/internal/config/config.go)
-          in the source code for the available options.
-          The documentation contains the available [environment variables](https://getqui.com/docs/configuration/environment/),
-          this can be used to get an overview.
+          Settings use camelCase and are mapped to qui's corresponding `QUI__*`
+          [environment variables](https://getqui.com/docs/configuration/environment/).
+          The environment variables are not set directly,
+          to stay backwards compatible with existing configurations.
+          Any setting with a corresponding environment variable can be set here.
+
+          Secret settings (`databaseDsn`, `databasePassword`, `oidcClientSecret`, `sessionSecret`)
+          must instead be supplied as a path by adding the `File` suffix, e.g. `sessionSecretFile`.
+          These `File` settings are passed to the service through systemd `LoadCredential=`,
+          keeping the secret out of the world-readable Nix store.
         '';
       };
-
     };
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !(cfg.settings ? sessionSecret);
-        message = ''
-          Session secrets should not be passed via settings, as
-          these are stored in the world-readable nix store.
-
-          Use the secretFile option instead.'';
-      }
+    assertions = pipe cfg.settings [
+      attrNames
+      (filter isSecretFile)
+      (map (
+        secretFile:
+        let
+          secret = removeSuffix "File" secretFile;
+        in
+        {
+          assertion = !cfg.settings ? ${secret};
+          message = ''
+            `services.qui.settings.${secret}` must not be set,
+            as it is written to the world-readable Nix store.
+            Use `services.qui.settings.${secretFile}` instead.
+          '';
+        }
+      ))
     ];
 
     systemd.services.qui = {
@@ -115,23 +214,18 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-
+      environment = toEnvironment (publicSettings // secretPaths);
       serviceConfig = {
-        Type = "simple";
+        Type = "exec";
         User = cfg.user;
         Group = cfg.group;
-
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
-        Environment = [ "QUI__SESSION_SECRET_FILE=%d/sessionSecret" ];
-        StateDirectory = "qui";
-
-        ExecStartPre = ''
-          ${pkgs.coreutils}/bin/install -m 600 '${configFile}' '%S/qui/config.toml'
-        '';
-        ExecStart = "${getExe cfg.package} serve --config-dir %S/qui";
+        LoadCredential = toCredentials secretSettings;
+        StateDirectory = "%N";
+        StateDirectoryMode = "0700";
+        ExecStartPre = "${getExe cfg.package} generate-config --config-dir %S/%N";
+        ExecStart = "${getExe cfg.package} serve --config-dir %S/%N";
         Restart = "on-failure";
-
-        # Based on qbittorrent and nemorosa hardening settings
+        # Based on qBittorrent and nemorosa hardening settings
         # Similar to what systemd hardening helper suggests
         CapabilityBoundingSet = "";
         LockPersonality = true;
@@ -150,7 +244,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        # This should allow for hardlinking to torrent client files
+        # This should allow hardlinking to torrent client files
         ProtectSystem = "full";
         RemoveIPC = true;
         RestrictAddressFamilies = [
@@ -167,23 +261,18 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
 
     users = {
       users = mkIf (cfg.user == "qui") {
         qui = {
-          group = cfg.group;
+          inherit (cfg) group;
           description = "qui user";
           isSystemUser = true;
-          home = stateDir;
         };
       };
 
-      groups = mkIf (cfg.group == "qui") {
-        qui = { };
-      };
+      groups = mkIf (cfg.group == "qui") { qui = { }; };
     };
   };
 
