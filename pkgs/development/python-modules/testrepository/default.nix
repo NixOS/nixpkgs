@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "testrepository";
-  version = "0.0.21";
+  version = "0.0.22";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nor89+CQs8aIvddUol9kvDFOUSuBb4xxufn8F9w3o9k=";
+    hash = "sha256-P2OTyehG2QxWqDxD+2uAPKEexMbvvlPJTOW1xiqsNxM=";
   };
 
   nativeCheckInputs = [ testresources ];
