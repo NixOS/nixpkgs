@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypika";
-  version = "0.50.0";
+  version = "0.51.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kayak";
     repo = "pypika";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gjHr4tWy1kL7IxOe5QmH0S/HB+MsF/IOIQcTu3yjv6c=";
+    hash = "sha256-jgHAmAQO6SU80W3lVdEv8a8UftPRlPn1KJfsznLxWbY=";
   };
 
   build-system = [ setuptools ];
