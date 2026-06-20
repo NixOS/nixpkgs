@@ -10809,12 +10809,6 @@
     githubId = 328259;
     name = "Henning Kiel";
   };
-  henrikolsson = {
-    email = "henrik@fixme.se";
-    github = "henrikolsson";
-    githubId = 982322;
-    name = "Henrik Olsson";
-  };
   henrikvtcodes = {
     github = "henrikvtcodes";
     githubId = 22358337;
