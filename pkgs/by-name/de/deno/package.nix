@@ -100,6 +100,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+  # Workaround for riscv64 because it has no pre-generated bindings.
+  env.RUSTY_V8_SRC_BINDING_PATH = librusty_v8.binding;
 
   # Don't run checks on hydra as they've been observed to be flakey for us and
   # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
