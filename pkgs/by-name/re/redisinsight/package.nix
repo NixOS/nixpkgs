@@ -177,5 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       tomasajt
     ];
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.redis ];
   };
 })
