@@ -31,6 +31,7 @@
   openssl,
   pam,
   psol,
+  quickjs,
   which,
   yajl,
   zlib,
@@ -540,7 +541,7 @@ let
         mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
         cp --recursive "${src}" "$NJS_SOURCE_DIR"
         chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
-        export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"} --with-ld-opt='-lz'"
+        export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"} --with-ld-opt='-lz' --with-cc-opt='-I${lib.getInclude quickjs}/include/quickjs' --with-ld-opt='-L${lib.getLib quickjs}/lib/quickjs'"
         unset NJS_SOURCE_DIR
       '';
 
