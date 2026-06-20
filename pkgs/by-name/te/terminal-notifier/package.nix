@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   xcbuildFlags = [
     "-target"
     "terminal-notifier"
-    "-configuration"
-    "Release"
   ];
 
   installPhase = ''
