@@ -192,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
+    mainProgram = "groff";
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting
