@@ -26,6 +26,7 @@
   extraPatches ? [ ],
 }:
 {
+  fetchpatch,
   lib,
   stdenv,
   rustPlatform,
@@ -96,27 +97,21 @@ let
   };
 
   # Patches enabled based on rusty-v8 version.
-  versionedPatches =
-    lib.optionals (lib.versionAtLeast version "130.0.0") [
-      ./librusty_v8_no_downloads.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "149.0.0") [
-      ./llvm22.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "149.0.0") [
-      ./gn_inputs_fix.patch
-    ]
-    ++ lib.optionals (stdenv.targetPlatform.isDarwin && lib.versionAtLeast version "140.0.0") [
-      ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
-    ];
+  versionedPatches = [
+    ./librusty_v8_no_downloads.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "149.0.0") [
+    ./149-gn_inputs_fix.patch
+  ]
+  ++ lib.optionals (stdenv.targetPlatform.isDarwin && lib.versionAtLeast version "139.0.0") [
+    ./139-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
+  ];
 
   derivation = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "rusty-v8";
     inherit version;
 
     inherit src cargoHash;
-
-    patches = versionedPatches ++ extraPatches;
 
     nativeBuildInputs = [
       llvmPackages.clang
@@ -140,8 +135,21 @@ let
       apple-sdk_15
     ];
 
+    patches = versionedPatches ++ extraPatches;
+
     postPatch = ''
+      # Provide the rust toolchain at the expected location
       ln -sv ${rustToolchain} third_party/rust-toolchain
+    ''
+    + lib.optionalString (lib.versionOlder llvmPackages.clang.version "22") ''
+      # Remove LLVM 22 compiler flags unknown to LLVM 21
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace-quiet '-fno-lifetime-dse' "" \
+        --replace-quiet '-fdiagnostics-show-inlining-chain' "" \
+        --replace-quiet '-Wno-unsafe-buffer-usage-in-static-sized-array' "" \
+        --replace-quiet '-fsanitize-ignore-for-ubsan-feature=array-bounds' ""
+      substituteInPlace build/config/sanitizers/sanitizers.gni \
+        --replace-quiet '-fsanitize-ignore-for-ubsan-feature=''${invoker.sanitizer}' ""
     '';
 
     env = {
@@ -161,7 +169,7 @@ let
         ]
         # For older rusty-v8 versions, the V8 build submodule does not handle
         # the adler->adler2 Rust std lib transition natively.
-        ++ lib.optionals (lib.versionOlder version "149.0.0") [
+        ++ lib.optionals (lib.versionAtLeast version "145.0.0" && lib.versionOlder version "149.0.0") [
           "use_chromium_rust_toolchain=true"
           "removed_rust_stdlib_libs=[\"adler\"]"
           "added_rust_stdlib_libs=[\"adler2\"]"
