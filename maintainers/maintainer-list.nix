@@ -1901,12 +1901,6 @@
     githubId = 750786;
     name = "Justin Wood";
   };
-  anmonteiro = {
-    email = "anmonteiro@gmail.com";
-    github = "anmonteiro";
-    githubId = 661909;
-    name = "Antonio Nuno Monteiro";
-  };
   anna328p = {
     email = "anna328p@gmail.com";
     github = "anna328p";
@@ -16061,6 +16055,13 @@
     name = "Bernardo Meurer";
     keys = [ { fingerprint = "F193 7596 57D5 6DA4 CCD4  786B F4C0 D53B 8D14 C246"; } ];
   };
+  lovistovis = {
+    email = "love.lysell.berglund@gmail.com";
+    github = "lovistovis";
+    githubId = 64896699;
+    name = "Love Lysell Berglund";
+    keys = [ { fingerprint = "7958 2B47 1D85 3CC9 A3FB  30D5 7B54 D564 D46D 9880"; } ];
+  };
   lowfatcomputing = {
     email = "andreas.wagner@lowfatcomputing.org";
     github = "lowfatcomputing";
@@ -29403,12 +29404,6 @@
     github = "vinnybod";
     name = "Vince Rose";
     githubId = 9831420;
-  };
-  vrthra = {
-    email = "rahul@gopinath.org";
-    github = "vrthra";
-    githubId = 70410;
-    name = "Rahul Gopinath";
   };
   vsharathchandra = {
     email = "chandrasharath.v@gmail.com";
