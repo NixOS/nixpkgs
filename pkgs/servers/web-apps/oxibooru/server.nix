@@ -7,6 +7,7 @@
   tomlq,
   postgresql,
   postgresqlTestHook,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -55,6 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=api::tag_category::test::preferences"
     "--skip=api::tag_category::test::set_default"
   ];
+
+  passthru.tests.oxibooru = nixosTests.oxibooru;
 
   meta = {
     description = "Server of Oxibooru, an image board engine based on Szurubooru";
