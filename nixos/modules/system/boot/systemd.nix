@@ -65,6 +65,7 @@ let
     # Udev.
     "systemd-udevd-control.socket"
     "systemd-udevd-kernel.socket"
+    "systemd-udevd-varlink.socket"
     "systemd-udevd.service"
   ]
   ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
