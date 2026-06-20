@@ -20,13 +20,13 @@
 let
   nodejs = nodejs_24;
 
-  version = "2025.12.5";
+  version = "2025.12.6";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-LPGAhbtmuztDQ4CVhUXb+vBU5HjvNZ7JicI5r3lr1QQ=";
+    hash = "sha256-uIg47z4LaCawF/5ir4mKE6DpDnEpQ8DuObCNaq6TcYk=";
   };
 
   meta = {
@@ -137,8 +137,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-smm9x29z7gOI7Wq0NvP45KHtBbT6p1lH6IjEf9LRuGs=";
-        "x86_64-linux" = "sha256-K86wnn50svP+QG3i0mggH8RQgfoIqEmyQTouz35xzw8=";
+        "aarch64-linux" = "sha256-EbLneRDCyLLLBOZ2DUDpf2TbZoTL8QMXP4WlAZEzS90=";
+        "x86_64-linux" = "sha256-yDjwN/+lX2i9WYDXq4yWwf9o8nA4342iHDDQH4Jt7eQ=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
