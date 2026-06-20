@@ -34,6 +34,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
+    install -D --mode=444 -t $out/etc/ etc/icons.example etc/icons_colored.example
     installManPage lf.1
     installShellCompletion etc/lf.{bash,zsh,fish}
   '';
