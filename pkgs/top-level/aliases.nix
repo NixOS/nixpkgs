@@ -956,6 +956,7 @@ mapAliases {
   linux_6_18 = linuxKernel.kernels.linux_6_18;
   linux_6_19 = linuxKernel.kernels.linux_6_19;
   linux_7_0 = linuxKernel.kernels.linux_7_0;
+  linux_7_1 = linuxKernel.kernels.linux_7_1;
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = linuxPackages_hardened.kernel; # Added 2025-08-10
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
@@ -989,6 +990,7 @@ mapAliases {
   linuxPackages_6_18 = linuxKernel.packages.linux_6_18;
   linuxPackages_6_19 = linuxKernel.packages.linux_6_19;
   linuxPackages_7_0 = linuxKernel.packages.linux_7_0;
+  linuxPackages_7_1 = linuxKernel.packages.linux_7_1;
   linuxPackages_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linuxPackages_hardened = linuxKernel.packages.linux_hardened; # Added 2025-08-10
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
