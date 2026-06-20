@@ -5,6 +5,8 @@
 }:
 
 rustPlatform.buildRustPackage {
+  __structuredAttrs = true;
+
   pname = "hypr-relay";
   version = "0.2.1";
 
