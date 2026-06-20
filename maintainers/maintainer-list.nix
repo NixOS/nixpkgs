@@ -23037,12 +23037,6 @@
     githubId = 1246959;
     name = "Raquel García";
   };
-  rardiol = {
-    email = "ricardo.ardissone@gmail.com";
-    github = "rardiol";
-    githubId = 11351304;
-    name = "Ricardo Ardissone";
-  };
   raskin = {
     email = "7c6f434c@mail.ru";
     github = "7c6f434c";
