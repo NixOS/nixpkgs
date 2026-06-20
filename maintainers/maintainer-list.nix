@@ -11245,12 +11245,6 @@
     github = "hxtmdev";
     githubId = 7771007;
   };
-  hypersw = {
-    email = "baltic@hypersw.net";
-    github = "hypersw";
-    githubId = 2332070;
-    name = "Serge Baltic";
-  };
   hythera = {
     name = "Hythera";
     github = "Hythera";
