@@ -157,6 +157,8 @@ let
     "systemd-ask-password-wall.service"
 
     # Varlink APIs
+    "systemd-ask-password@.service"
+    "systemd-ask-password.socket"
   ]
   ++ lib.optionals cfg.package.withBootloader [
     "systemd-bootctl@.service"
