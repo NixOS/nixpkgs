@@ -46,7 +46,7 @@ let
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    setup_cmd = dmcfg.sessionData.wrapper;
+    setup_cmd = "${ly}/etc/setup.sh";
     brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
     brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
   }
