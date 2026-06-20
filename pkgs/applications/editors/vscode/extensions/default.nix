@@ -392,6 +392,22 @@ let
         };
       };
 
+      astral-sh.ty = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ty";
+          publisher = "astral-sh";
+          version = "2026.14.0";
+          hash = "sha256-I/D5VHnLjDmJWB6pJbLBk3DFIYpuqr3jQTRgHP59d6A=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for ty, an extremely fast Python type checker and language server, written in Rust";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=astral-sh.ty";
+          homepage = "https://github.com/asdine/vscode-cue";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       astro-build.astro-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "astro-vscode";
