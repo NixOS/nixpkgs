@@ -119,6 +119,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64"
         else if stdenv.hostPlatform.isx86_64 then
           "x64"
+        else if stdenv.hostPlatform.isRiscV64 then
+          "riscv64"
         else
           throw "Unsupported architecture";
     in
@@ -284,6 +286,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
