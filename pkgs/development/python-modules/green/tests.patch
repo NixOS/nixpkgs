@@ -1,0 +1,23 @@
+diff --git a/green/test/test_integration.py b/green/test/test_integration.py
+index 9a2d824..372e6e0 100644
+--- a/green/test/test_integration.py
++++ b/green/test/test_integration.py
+@@ -37,9 +37,7 @@ class TestFinalizer(unittest.TestCase):
+                 )
+             )
+         args = [
+-            sys.executable,
+-            "-m",
+-            "green.cmdline",
++            "@green@"
+             "--finalizer=test_finalizer.msg",
+             "--maxtasksperchild=1",
+         ]
+@@ -54,7 +52,6 @@ class TestFinalizer(unittest.TestCase):
+             stdout=subprocess.PIPE,
+             stderr=subprocess.STDOUT,
+             env=env,
+-            timeout=10,
+             encoding="utf-8",
+             check=True,
+         ).stdout

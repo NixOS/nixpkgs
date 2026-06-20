@@ -1,0 +1,39 @@
+commit 9089291006a4258c39c75a920ad536b61504251a
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Fri May 1 19:32:15 2020 +0200
+
+    check for systemwide man_db.conf before the bundled one
+
+diff --git a/src/manp.c b/src/manp.c
+index 5441339..0bbf566 100644
+--- a/src/manp.c
++++ b/src/manp.c
+@@ -841,18 +841,24 @@ void read_config_file (bool optional)
+ 	}
+ 
+ 	if (getenv ("MAN_TEST_DISABLE_SYSTEM_CONFIG") == NULL) {
+-		config_file = fopen (CONFIG_FILE, "r");
++		const char *config_filepath;
++		if (access ("/etc/man_db.conf", F_OK) != -1) {
++			config_filepath = "/etc/man_db.conf";
++		} else {
++			config_filepath = CONFIG_FILE;
++		}
++		config_file = fopen (config_filepath, "r");
+ 		if (config_file == NULL) {
+ 			if (optional)
+ 				debug ("can't open %s; continuing anyway\n",
+-				       CONFIG_FILE);
++				       config_filepath);
+ 			else
+ 				error (FAIL, 0,
+ 				       _ ("can't open the manpath "
+ 				          "configuration file %s"),
+-				       CONFIG_FILE);
++				       config_filepath);
+ 		} else {
+-			debug ("From the config file %s:\n", CONFIG_FILE);
++			debug ("From the config file %s:\n", config_filepath);
+ 
+ 			add_to_dirlist (config_file, 0);
+ 			fclose (config_file);

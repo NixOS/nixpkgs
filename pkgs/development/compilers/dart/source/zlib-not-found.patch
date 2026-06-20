@@ -1,0 +1,10 @@
+--- a/runtime/bin/BUILD.gn
++++ b/runtime/bin/BUILD.gn
+@@ -1152,6 +1152,7 @@
+   deps = [
+     "//third_party/boringssl",  # for secure_socket_utils_test
+     "//third_party/perfetto:libprotozero",  # for timeline_test
++    "//third_party/zlib",  # for gzip
+   ]
+ 
+   if (is_fuchsia) {

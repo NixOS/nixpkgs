@@ -1,0 +1,37 @@
+diff --git a/leafletmap/pom.xml b/leafletmap/pom.xml
+index f1c0089..e13d634 100644
+--- a/leafletmap/pom.xml
++++ b/leafletmap/pom.xml
+@@ -23,16 +23,6 @@
+     </properties>
+     
+     <dependencies>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-web</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+         <dependency>
+             <groupId>org.jetbrains.kotlin</groupId>
+             <artifactId>kotlin-stdlib</artifactId>
+diff --git a/pom.xml b/pom.xml
+index 9446306..d2cb9ec 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -44,11 +43,6 @@
+             <artifactId>kotlin-stdlib</artifactId>
+             <version>${kotlin.version}</version>
+         </dependency>
+-        <dependency>
+-            <groupId>org.openjfx</groupId>
+-            <artifactId>javafx-fxml</artifactId>
+-            <version>${javafx.version}</version>
+-        </dependency>
+         <dependency>
+             <groupId>jakarta.inject</groupId>
+             <artifactId>jakarta.inject-api</artifactId>

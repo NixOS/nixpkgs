@@ -1,0 +1,37 @@
+From 98119b91fc3cf85d65c2e320707324af3c56565d Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 18/18] Use STL containers instead of LLVM containers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream LLVM doesn’t support `std::string_view` in `DenseMap`s.
+---
+ src/abstraction/Containers.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/abstraction/Containers.h b/src/abstraction/Containers.h
+index a27dc83..fca312c 100644
+--- a/src/abstraction/Containers.h
++++ b/src/abstraction/Containers.h
+@@ -31,14 +31,14 @@
+ #include <set>
+ #include <string_view>
+ 
+-#define USE_LLVM_CONTAINERS 1
++#define USE_LLVM_CONTAINERS 0
+ 
+ #if USE_LLVM_CONTAINERS
+ #include "../llvm/llvm-DenseSet.h"
+ #include "../llvm/llvm-DenseMap.h"
+ #else
+ // Include DenseMapInfo helpers even when not using LLVM containers.
+-#include "../llvm/llvm-DenseMapInfo.h"
++// #include "../llvm/llvm-DenseMapInfo.h"
+ #endif
+ 
+ namespace ld {
+-- 
+2.47.2
+

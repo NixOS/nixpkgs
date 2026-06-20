@@ -1,0 +1,31 @@
+--- a/usr/bin/dcvviewer
++++ b/usr/bin/dcvviewer
+@@ -13,7 +13,7 @@
+ 
+     basedir="${_dir}/usr"
+ else
+-    basedir=/usr
++    basedir=@basedir@
+ fi
+ 
+ bindir=${basedir}/bin
+@@ -33,15 +33,15 @@
+ 
+ export LD_LIBRARY_PATH="${libdir}/${variant}:${libdir}:/usr/share/${variant}/cef:${LD_LIBRARY_PATH}"
+ export XDG_DATA_DIRS="${datadir}:${XDG_DATA_DIRS}:/usr/share:/usr/local/share"
+-export GIO_EXTRA_MODULES="${libdir}/${variant}/gio/modules"
+-export GST_PLUGIN_SCANNER="${libexecdir}/${variant}/gst-plugin-scanner"
+-export GST_PLUGIN_SYSTEM_PATH="${libdir}/${variant}/gstreamer-1.0"
++export GIO_EXTRA_MODULES=@gio_extra_modules@
++export GST_PLUGIN_SCANNER=@gst_plugin_scanner@
++export GST_PLUGIN_SYSTEM_PATH=@gst_plugin_system_path@
+ export GTK_PATH="${libdir}/${variant}"
+ export PANGO_LIBDIR="${libdir}/${variant}"
+ export GDK_PIXBUF_MODULE_FILE="${libdir}/${variant}/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+ export GSETTINGS_SCHEMA_DIR="${datadir}/${variant}/schemas"
+ export FONTCONFIG_PATH="${sysconfdir}/fonts"
+-export DCV_SASL_PLUGIN_DIR="${libdir}/dcvviewer/sasl2"
++export DCV_SASL_PLUGIN_DIR=@dcv_sasl_plugin_dir@
+ 
+ case "$1" in
+     --gdb)

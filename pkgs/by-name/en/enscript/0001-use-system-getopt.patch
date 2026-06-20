@@ -1,0 +1,68 @@
+From 4c5cbf6db71cf2981fc836ed370c82149748d8ea Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Wed, 6 Dec 2023 22:57:19 +0000
+Subject: [PATCH] use system getopt
+
+the file compat/getopt.h also needs to be removed otherwise it will
+create conflicts with the system includes
+---
+ compat/Makefile.am | 4 ++--
+ compat/Makefile.in | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/compat/Makefile.am b/compat/Makefile.am
+index aefc06f..23aaf81 100644
+--- a/compat/Makefile.am
++++ b/compat/Makefile.am
+@@ -25,7 +25,7 @@
+ AUTOMAKE_OPTIONS = no-dependencies
+ 
+ noinst_LIBRARIES = libcompat.a
+-libcompat_a_SOURCES = getopt.c getopt1.c xalloc.c regex.c
++libcompat_a_SOURCES = xalloc.c regex.c
+ libcompat_a_LIBADD = @LIBOBJS@ @ALLOCA@
+ libcompat_a_DEPENDENCIES = @LIBOBJS@ @ALLOCA@
+ 
+@@ -34,7 +34,7 @@ libcompat_a_SOURCES_windelta =	\
+ 	+../w32/getpwd.c	\
+ 	+../w32/getuid.c
+ 
+-noinst_HEADERS = getopt.h regex.h xalloc.h
++noinst_HEADERS = regex.h xalloc.h
+ 
+ EXTRA_DIST = ChangeLog.old strerror.c memmove.c memcpy.c strtol.c	\
+ 	strtoul.c gettext.h
+diff --git a/compat/Makefile.in b/compat/Makefile.in
+index edfc620..dee05d7 100644
+--- a/compat/Makefile.in
++++ b/compat/Makefile.in
+@@ -137,7 +137,7 @@ am__v_AR_ = $(am__v_AR_@AM_DEFAULT_V@)
+ am__v_AR_0 = @echo "  AR      " $@;
+ am__v_AR_1 = 
+ libcompat_a_AR = $(AR) $(ARFLAGS)
+-am_libcompat_a_OBJECTS = getopt.$(OBJEXT) getopt1.$(OBJEXT) \
++am_libcompat_a_OBJECTS = \
+ 	xalloc.$(OBJEXT) regex.$(OBJEXT)
+ libcompat_a_OBJECTS = $(am_libcompat_a_OBJECTS)
+ AM_V_P = $(am__v_P_@AM_V@)
+@@ -326,7 +326,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = no-dependencies
+ noinst_LIBRARIES = libcompat.a
+-libcompat_a_SOURCES = getopt.c getopt1.c xalloc.c regex.c
++libcompat_a_SOURCES = xalloc.c regex.c
+ libcompat_a_LIBADD = @LIBOBJS@ @ALLOCA@
+ libcompat_a_DEPENDENCIES = @LIBOBJS@ @ALLOCA@
+ libcompat_a_SOURCES_windelta = \
+@@ -334,7 +334,7 @@ libcompat_a_SOURCES_windelta = \
+ 	+../w32/getpwd.c	\
+ 	+../w32/getuid.c
+ 
+-noinst_HEADERS = getopt.h regex.h xalloc.h
++noinst_HEADERS = regex.h xalloc.h
+ EXTRA_DIST = ChangeLog.old strerror.c memmove.c memcpy.c strtol.c	\
+ 	strtoul.c gettext.h
+ 
+-- 
+2.42.0
+
