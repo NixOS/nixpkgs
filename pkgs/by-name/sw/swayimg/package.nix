@@ -26,6 +26,7 @@
   libdrm,
   luajit,
   openexr,
+  openjpeg,
   bash-completion,
   testers,
   nix-update-script,
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "5.2";
+  version = "5.4";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDZ7Ka8uKVLzEwxS2CT5fRFNDf9z/LO3bB0dCMz1Mf0=";
+    hash = "sha256-PB+EufDpz5Rc6hKO/ish7HdGaEZtxmrtYqnmR+ZpFDY=";
   };
 
   strictDeps = true;
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     luajit
     openexr
+    openjpeg
   ];
 
   passthru = {
