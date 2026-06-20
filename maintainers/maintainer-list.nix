@@ -6195,7 +6195,7 @@
     name = "Daniel Șerbănescu";
   };
   daskladas = {
-    email = "xvzrsm@tutanota.de";
+    email = "mail@daskladas.de";
     github = "daskladas";
     githubId = 155686186;
     name = "Eric Heinemann";
@@ -24192,6 +24192,7 @@
   };
   ryand56 = {
     email = "git@ryand.ca";
+    matrix = "@ryan:ryand.ca";
     github = "ryand56";
     githubId = 22267679;
     name = "Ryan Omasta";
@@ -26973,6 +26974,12 @@
     github = "TakWolf";
     githubId = 6064962;
     name = "TakWolf";
+  };
+  talal = {
+    email = "noreply@talal.ch";
+    github = "talal";
+    githubId = 3526562;
+    name = "Muhammad Talal Anwar";
   };
   talhaHavadar = {
     email = "havadartalha@gmail.com";
