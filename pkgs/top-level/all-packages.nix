@@ -2106,7 +2106,7 @@ with pkgs;
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    pinentry = (callPackages ../tools/security/pinentry { }).pinentry;
+    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
   gnupgMinimal = gnupg.override {
@@ -2774,17 +2774,6 @@ with pkgs;
   phosh-mobile-settings =
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
       { };
-
-  inherit (callPackages ../tools/security/pinentry { })
-    pinentry-curses
-    pinentry-emacs
-    pinentry-gtk2
-    pinentry-gnome3
-    pinentry-qt
-    pinentry-tty
-    pinentry-all
-    pinentry_mac
-    ;
 
   plan9port = callPackage ../tools/system/plan9port {
     inherit (darwin) DarwinTools;

@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf mac
         mkdir mac
 
-        srcDir="$(nix-build ../../../.. --no-out-link -A pinentry_mac.src)"
+        srcDir="$(nix-build ../../../../.. --no-out-link -A pinentry_mac.src)"
         for path in "$srcDir"/macosx/*.xib; do
           filename="''${path##*/}"
           /usr/bin/ibtool --compile "mac/''${filename%.*}.nib" "$path"
