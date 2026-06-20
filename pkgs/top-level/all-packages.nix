@@ -8738,6 +8738,8 @@ with pkgs;
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
+  buildRustyV8 = opts: callPackage (import ../build-support/build-rusty-v8/default.nix opts) { };
+
   firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
     inherit
       stdenv

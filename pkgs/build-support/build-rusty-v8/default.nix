@@ -1,7 +1,33 @@
+/*
+  This is a convenience function to build the given version of rusty-v8.
+  Use it for example as follows:
+
+  librusty_v8 = pkgs.buildRustyV8 rec {
+    version = "149.3.0";
+    src = fetchFromGitHub {
+      owner = "denoland";
+      repo = "rusty_v8";
+      tag = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-hQfSDpdQBeQrOerXi+fI6mGCXkFH2ro90eWZX7xcwjA=";
+    };
+    cargoHash = "sha256-ROz8f+o/OVNKSm4Hp1z4eCI2pmlNTUpBZ5447uvVXUk=";
+  };
+
+  By re-using the version in the git source, nix-update can automatically update this dependency.
+  Look for example in pkgs/by-name/de/deno/update.sh for how to do that.
+  You have to add `librusty_v8` to the package passthru attributes for the update to work.
+*/
+
+{
+  version,
+  src,
+  cargoHash,
+  extraPatches ? [ ],
+}:
 {
   lib,
-  fetchFromGitHub,
-  fetchpatch,
+  stdenv,
   rustPlatform,
   rustc,
   rustc-unwrapped,
@@ -10,9 +36,7 @@
   rustfmt,
   cargo,
   clippy,
-  llvmPackages ? rustc.llvmPackages,
   pkg-config,
-  stdenv,
   glib,
   glibc,
   icu,
@@ -23,8 +47,10 @@
   xcbuild,
   apple-sdk_15,
   symlinkJoin,
-  deno,
+
+  llvmPackages ? rustc.llvmPackages,
 }:
+
 let
   rustToolchain = symlinkJoin {
     name = "rusty-v8-rust-toolchain";
@@ -68,29 +94,30 @@ let
           ln -s ${llvmPackages.compiler-rt}/lib/linux/libclang_rt.builtins-* "$dir/libclang_rt.builtins${stdenv.hostPlatform.extensions.staticLibrary}"
         '';
   };
+
+  # Patches enabled based on rusty-v8 version.
+  versionedPatches =
+    lib.optionals (lib.versionAtLeast version "130.0.0") [
+      ./librusty_v8_no_downloads.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "149.0.0") [
+      ./llvm22.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "149.0.0") [
+      ./gn_inputs_fix.patch
+    ]
+    ++ lib.optionals (stdenv.targetPlatform.isDarwin && lib.versionAtLeast version "140.0.0") [
+      ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
+    ];
 in
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
-  version = "149.3.0";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "denoland";
-    repo = "rusty_v8";
-    tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-hQfSDpdQBeQrOerXi+fI6mGCXkFH2ro90eWZX7xcwjA=";
-  };
+  inherit src cargoHash;
 
-  patches = [
-    ./librusty_v8_no_downloads.patch
-    ./llvm22.patch
-    ./gn_inputs_fix.patch
-  ]
-  ++ lib.optionals stdenv.targetPlatform.isDarwin [
-    ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
-  ];
-
-  cargoHash = "sha256-ROz8f+o/OVNKSm4Hp1z4eCI2pmlNTUpBZ5447uvVXUk=";
+  patches = versionedPatches ++ extraPatches;
 
   nativeBuildInputs = [
     llvmPackages.clang
@@ -104,6 +131,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     xcbuild
   ];
+
   buildInputs = [
     glib
     icu
@@ -132,13 +160,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "rust_sysroot_absolute=\"${rustToolchain}\""
         "rust_bindgen_root=\"${rustToolchain}\""
       ]
+      # For older rusty-v8 versions, the V8 build submodule does not handle
+      # the adler->adler2 Rust std lib transition natively.
+      ++ lib.optionals (lib.versionOlder version "149.0.0") [
+        "use_chromium_rust_toolchain=true"
+        "removed_rust_stdlib_libs=[\"adler\"]"
+        "added_rust_stdlib_libs=[\"adler2\"]"
+      ]
       ++ lib.optional stdenv.targetPlatform.isDarwin "mac_deployment_target=\"${stdenv.targetPlatform.darwinMinVersion}\""
     );
     LIBCLANG_PATH = lib.makeLibraryPath [ llvmPackages.libclang ];
     CLANG_BASE_PATH = clangBasePath;
   };
 
-  buildFeatures = [ "simdutf" ];
+  buildFeatures = lib.optionals (lib.versionAtLeast version "149.0.0") [ "simdutf" ];
 
   hardeningDisable = [
     # rusty-v8 has its own default hardening flags, which are "extensive" for release builds as long as `use_custom_libcxx` stays true.
@@ -171,22 +206,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests = {
-      build-with-unit-tests = deno.passthru.librusty_v8.overrideAttrs (fa: {
-        doCheck = true;
-      });
-    };
-  };
-
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Rust bindings for the V8 JavaScript engine";
     homepage = "https://github.com/denoland/rusty_v8";
     license = lib.licenses.mit;
-    maintainers = deno.meta.maintainers;
+    maintainers = with lib.maintainers; [
+      jk
+      ofalvai
+      mynacol
+    ];
     maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
-    platforms = deno.meta.platforms;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })
