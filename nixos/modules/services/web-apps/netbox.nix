@@ -79,6 +79,7 @@ let
             lib.cli.toCommandLineShellGNU { } {
               preserve-environment = true;
               user = "netbox";
+              supp-group = if cfg.redis.createLocally then config.services.redis.servers.netbox.group else null;
             }
           } -- ${finalPackage}/bin/netbox "$@";;
         "netbox")
@@ -606,6 +607,9 @@ in
               RestartSec = 30;
               Slice = "system-netbox.slice";
               EnvironmentFile = cfg.environmentFiles;
+              SupplementaryGroups = lib.optionals cfg.redis.createLocally [
+                config.services.redis.servers.netbox.group
+              ];
 
               AmbientCapabilities = [ "" ];
               CapabilityBoundingSet = [ "" ];
@@ -773,7 +777,6 @@ in
           group = "netbox";
         };
         users.groups.netbox = { };
-        users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
       }
 
       (lib.mkIf cfg.nginx.enable {
