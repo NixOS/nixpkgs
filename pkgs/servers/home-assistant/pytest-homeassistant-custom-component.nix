@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.339";
+  version = "0.13.340";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
