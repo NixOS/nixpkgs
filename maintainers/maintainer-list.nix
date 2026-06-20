@@ -28250,12 +28250,6 @@
     githubId = 207457;
     name = "Matthieu Chevrier";
   };
-  trepetti = {
-    email = "trepetti@cs.columbia.edu";
-    github = "trepetti";
-    githubId = 25440339;
-    name = "Tom Repetti";
-  };
   trespaul = {
     email = "paul@trespaul.com";
     github = "trespaul";

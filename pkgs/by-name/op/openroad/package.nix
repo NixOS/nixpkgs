@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "openroad";
     maintainers = with lib.maintainers; [
-      trepetti
       hzeller
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
