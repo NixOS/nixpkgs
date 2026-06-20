@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   mkNugetDeps,
   mkNugetSource,
+  nginx-config-formatter,
   pkgs,
   stdenv,
 }:
@@ -1101,11 +1102,14 @@ rec {
       {
         inherit text;
         __structuredAttrs = true;
-        nativeBuildInputs = [ gixy ];
+        nativeBuildInputs = [
+          gixy
+          nginx-config-formatter
+        ];
       } # sh
       ''
-        printf "%s" "$text" | ${lib.getExe pkgs.nginx-config-formatter} --max-empty-lines 0 - > $out
-        ${lib.getExe pkgs.gnused} -i 's/ ;/;/g' $out
+        printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
+        sed -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 

@@ -3101,6 +3101,12 @@
     githubId = 75235;
     name = "Michael Walker";
   };
+  barsikus007 = {
+    name = "barsikus007";
+    email = "barsikus07@gmail.com";
+    github = "barsikus007";
+    githubId = 37113583;
+  };
   bartoostveen = {
     name = "Bart Oostveen";
     github = "bartoostveen";
@@ -29606,6 +29612,14 @@
     email = "nixpkgs@janweitz.de";
     github = "weitzj";
     githubId = 829277;
+  };
+  Wekuz = {
+    name = "Wekuz";
+    github = "Wekuz";
+    githubId = 89638089;
+    email = "wekuz@duck.com";
+    matrix = "@wekuz:matrix.org";
+    keys = [ { fingerprint = "0CCE 1200 AB5E 7B05 9A22  B0D8 2E50 2F2A ABD3 2DF9"; } ];
   };
   wellmannmathis = {
     email = "wellmannmathis@gmail.com";

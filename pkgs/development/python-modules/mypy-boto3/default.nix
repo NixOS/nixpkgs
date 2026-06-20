@@ -127,8 +127,8 @@ in
       "sha256-gJM0o+V8YnmwVkgnRzR+Peaz45JuRpE8Hs6LRwfTeUQ=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.43.17"
-      "sha256-cs792cAqETR/V76EgDuwa8cnLJKfqBgCib6ah6c0Qfc=";
+    buildMypyBoto3Package "appstream" "1.43.34"
+      "sha256-si3z29/l/egjuZZC0kQj7w8nROjvu+n+YtxYLlETnY0=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.43.0"
@@ -335,8 +335,8 @@ in
       "sha256-6FyB/VCGsMYDBFUu0VzWpge94lASfg6CVewhkmpxycQ=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.22"
-      "sha256-XGey9ie/uGSXFaB5NfoQXeQ+LQUnqKPUOtMpq2y7aZk=";
+    buildMypyBoto3Package "connect" "1.43.34"
+      "sha256-NOESFHTxOOYkpkV3Eer4M0Ag7jYA0eZvIdGzQUZlrAg=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.0"
@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.32"
-      "sha256-wV0hi33q2UoKY4LiXQmplnsMuJzf2QGhj1m77Lir08U=";
+    buildMypyBoto3Package "glue" "1.43.34"
+      "sha256-8CB9DsZgBM6ht/yzlkIEeN0+QT3lan+95vSP0pDLps4=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
@@ -966,8 +966,8 @@ in
       "sha256-dlZYG0M6H1b3SyocmFc+HQYn9MX1fryNJo6cIu6paBA=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.43.32"
-      "sha256-fLNaflt1AOYy8OKGiX+MvnDOgYcnFtTP6/h8zi/Eqy0=";
+    buildMypyBoto3Package "opensearch" "1.43.34"
+      "sha256-MCgsSuTTm5JpFVTCWYOqi4usXhqThxyda6Q8dd4FiLA=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.43.17"
