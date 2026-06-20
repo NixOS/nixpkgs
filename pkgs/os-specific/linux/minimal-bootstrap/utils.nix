@@ -25,30 +25,29 @@ rec {
       passthru = attrs.passthru or { };
       validity = assertValidity { inherit meta attrs; };
       meta = commonMeta { inherit validity attrs; };
-      baseDrv = derivation (
-        {
-          inherit (buildPlatform) system;
-          inherit (meta) name;
-        }
-        // maybeContentAddressed
-        // (removeAttrs attrs [
-          "meta"
-          "passthru"
-        ])
-      );
+      baseDrvAttrs = {
+        inherit (buildPlatform) system;
+        inherit (meta) name;
+      }
+      // maybeContentAddressed
+      // (removeAttrs attrs [
+        "meta"
+        "passthru"
+      ]);
       passthru' =
         passthru
         // lib.optionalAttrs (passthru ? tests) {
-          tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
+          tests = lib.mapAttrs (_: f: f final) passthru.tests;
         };
+      final = lib.checkedDerivation validity.handled (
+        {
+          inherit meta;
+          passthru = passthru';
+        }
+        // passthru'
+      ) baseDrvAttrs;
     in
-    lib.extendDerivation validity.handled (
-      {
-        inherit meta;
-        passthru = passthru';
-      }
-      // passthru'
-    ) baseDrv;
+    final;
 
   writeTextFile =
     {
