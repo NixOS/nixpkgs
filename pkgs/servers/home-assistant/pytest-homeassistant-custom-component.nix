@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-4BmtdmQyeYaOPPMDnnBNCvB0EgWcw9umC5hV4rFRTLA=";
+    hash = "sha256-08hshNdSbOJSu/uJVBeZSxksYaCSZo7KjwwyaooqNGo=";
   };
 
   build-system = [ setuptools ];
