@@ -7,17 +7,16 @@
   sqlite,
   libsForQt5,
 }:
-
 stdenv.mkDerivation {
   pname = "pegasus-frontend";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2025-03-02";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "54362976fd4c6260e755178d97e9db51f7a896af";
+    rev = "7d08fdc5578c4cd499d696ea734809185c05a9c1";
     fetchSubmodules = true;
-    hash = "sha256-DqtkvDg0oQL9hGB+6rNXe3sDBywvnqy9N31xfyl6nbI=";
+    hash = "sha256-TBdmvCcIKfueTUxMzMvrle5+MRjjs4yDLTpKiQ2WUk0=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +32,7 @@ stdenv.mkDerivation {
       qtsvg
       qtgraphicaleffects
       qtx11extras
+      qtimageformats
     ])
     ++ [
       sqlite
