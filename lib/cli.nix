@@ -226,17 +226,21 @@
     :::
   */
   toCommandLineGNU =
-    {
+    args@{
       isLong ? optionName: builtins.stringLength optionName > 1,
       explicitBool ? false,
       formatArg ? lib.generators.mkValueStringDefault { },
+      ...
     }:
     let
-      optionFormat = optionName: {
-        option = if isLong optionName then "--${optionName}" else "-${optionName}";
-        sep = if isLong optionName then "=" else "";
-        inherit explicitBool formatArg;
-      };
+      optionFormat =
+        optionName:
+        {
+          option = if isLong optionName then "--${optionName}" else "-${optionName}";
+          sep = if isLong optionName then "=" else "";
+          inherit explicitBool formatArg;
+        }
+        // args;
     in
     lib.cli.toCommandLine optionFormat;
 
