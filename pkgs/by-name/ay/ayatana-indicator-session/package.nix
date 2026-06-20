@@ -13,7 +13,7 @@
   intltool,
   libayatana-common,
   librda,
-  lomiri,
+  lomiri-qt6,
   mate-settings-daemon,
   pkg-config,
   systemd,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    lomiri.cmake-extras
+    lomiri-qt6.cmake-extras
     glib
     gsettings-desktop-schemas
     libayatana-common
