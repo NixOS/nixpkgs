@@ -139,6 +139,11 @@ let
       # https://github.com/home-assistant/core/pull/172909
       "test_upload_image_device_not_in_range"
     ];
+    teslemetry = [
+      # [2026.6.4] http://github.com/home-assistant/core/commit/a33a92982af19e682a0d0fa7bec0cb16929c00d1
+      "test_sensors"
+      "test_sensors_streaming"
+    ];
     yardian = [
       # [2026.6.1] failing snapshot
       "test_all_entities"
