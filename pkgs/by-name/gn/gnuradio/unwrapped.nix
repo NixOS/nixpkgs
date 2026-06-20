@@ -14,7 +14,7 @@
   spdlog,
   mpir,
   doxygen,
-  python,
+  python3,
   codec2,
   gsm,
   fftwFloat,
@@ -50,6 +50,7 @@
 }:
 
 let
+  python = python3;
   sourceSha256 = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
   featuresInfo = {
     # Needed always

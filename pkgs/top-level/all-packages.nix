@@ -8714,11 +8714,6 @@ with pkgs;
     withQt6 = true;
   };
 
-  gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    unwrapped = callPackage ../applications/radio/gnuradio {
-      python = python3;
-    };
-  };
   gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
 
   inherit (ocamlPackages) google-drive-ocamlfuse;

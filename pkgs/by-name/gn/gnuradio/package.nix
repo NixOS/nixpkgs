@@ -2,7 +2,8 @@
   lib,
   stdenv,
   # The unwrapped gnuradio derivation
-  unwrapped,
+  callPackage,
+  unwrapped ? callPackage ./unwrapped.nix { },
   # If it's a minimal build, we don't want to wrap it with lndir and
   # wrapProgram..
   doWrap ? true,
