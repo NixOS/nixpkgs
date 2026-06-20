@@ -1,5 +1,4 @@
 {
-  apple-sdk,
   fetchFromGitHub,
   ibtool,
   lib,
@@ -25,10 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     ibtool
     makeBinaryWrapper
     xcbuildHook
-  ];
-
-  buildInputs = [
-    apple-sdk
   ];
 
   xcbuildFlags = [
