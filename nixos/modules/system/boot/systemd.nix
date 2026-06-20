@@ -186,6 +186,7 @@ let
     "machine.slice"
     "machines.target"
     "systemd-machined.service"
+    "systemd-machined.socket"
   ]
   ++ optionals cfg.package.withNspawn [
     "systemd-nspawn@.service"
