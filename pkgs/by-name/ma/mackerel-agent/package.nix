@@ -44,6 +44,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "mackerel-agent";
     homepage = "https://github.com/mackerelio/mackerel-agent";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
   };
 })

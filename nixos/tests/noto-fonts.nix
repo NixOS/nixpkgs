@@ -3,7 +3,6 @@
   name = "noto-fonts";
   meta.maintainers = with lib.maintainers; [
     nickcao
-    midchildan
   ];
 
   nodes.machine =

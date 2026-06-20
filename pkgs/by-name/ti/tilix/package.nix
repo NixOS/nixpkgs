@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gnunn1.github.io/tilix-web";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      midchildan
       jtbx
     ];
     platforms = lib.platforms.linux;

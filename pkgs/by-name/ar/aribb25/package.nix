@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     description = "Sample implementation of the ARIB STD-B25 standard";
     homepage = "https://code.videolan.org/videolan/aribb25";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
     mainProgram = "b25";
     platforms = lib.platforms.all;
   };

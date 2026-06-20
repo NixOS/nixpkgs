@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
     mainProgram = "mfx-tracer-config";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      midchildan
       pjungkamp
     ];
     knownVulnerabilities = [

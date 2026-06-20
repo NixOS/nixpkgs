@@ -104,8 +104,6 @@ let
     ) instruction;
 in
 {
-  meta.maintainers = with lib.maintainers; [ midchildan ];
-
   imports = [
     (deprecateTopLevelOption [ "port" ])
     (deprecateTopLevelOption [ "socketioPort" ])

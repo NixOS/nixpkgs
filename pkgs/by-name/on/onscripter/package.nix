@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Japanese visual novel scripting engine";
     license = lib.licenses.gpl2Plus;
     mainProgram = "onscripter";
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

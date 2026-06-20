@@ -22,9 +22,6 @@
 { pkgs, ... }:
 {
   name = "trafficserver";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ midchildan ];
-  };
 
   nodes = {
     ats =

@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
       large intranets by maximizing existing and available bandwidth.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

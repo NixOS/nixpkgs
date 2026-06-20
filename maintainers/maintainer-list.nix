@@ -18026,14 +18026,6 @@
     githubId = 837312;
     name = "Michael Mercier";
   };
-  midchildan = {
-    email = "git@midchildan.org";
-    matrix = "@midchildan:matrix.org";
-    github = "midchildan";
-    githubId = 7343721;
-    name = "midchildan";
-    keys = [ { fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83"; } ];
-  };
   midischwarz12 = {
     email = "midischwarz@proton.me";
     github = "midischwarz12";

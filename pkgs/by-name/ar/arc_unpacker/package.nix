@@ -108,7 +108,7 @@ stdenv.mkDerivation {
     description = "Tool to extract files from visual novel archives";
     homepage = "https://github.com/vn-tools/arc_unpacker";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "arc_unpacker";
   };

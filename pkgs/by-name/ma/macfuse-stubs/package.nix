@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       project website</link>.
     '';
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
 
     # macFUSE as a whole includes code with restrictions on commercial
     # redistribution. However, the build artifacts that we actually touch for

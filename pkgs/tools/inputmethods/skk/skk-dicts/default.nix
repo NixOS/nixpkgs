@@ -82,7 +82,6 @@ let
           homepage = "https://github.com/skk-dev/dict";
           maintainers = with lib.maintainers; [
             yuriaisaka
-            midchildan
           ];
           platforms = lib.platforms.all;
         };

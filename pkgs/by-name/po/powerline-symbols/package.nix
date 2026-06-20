@@ -12,7 +12,7 @@ runCommand "powerline-symbols-${version}"
     meta = {
       inherit (powerline.meta) license;
       priority = (powerline.meta.priority or lib.meta.defaultPriority) + 1;
-      maintainers = with lib.maintainers; [ midchildan ];
+      maintainers = [ ];
     };
   }
   ''

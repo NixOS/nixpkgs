@@ -24,6 +24,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "sd-local";
     homepage = "https://github.com/screwdriver-cd/sd-local";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ midchildan ];
+    maintainers = [ ];
   };
 })
