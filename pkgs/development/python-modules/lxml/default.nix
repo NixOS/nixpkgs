@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
     tag = "lxml-${version}";
-    hash = "sha256-crFUn1TmxdHXr3ULDKsRy4Y4PR/itaycsWiSDb+pbeg=";
+    hash = "sha256-SRJaegK4PxgK0rdILVp3J92VnjPmExiD2AuMLoGQIbA=";
   };
 
   build-system = [
