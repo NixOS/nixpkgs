@@ -5244,6 +5244,8 @@ self: super: with self; {
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
+  eumdac = callPackage ../development/python-modules/eumdac { };
+
   euporie = callPackage ../development/python-modules/euporie { };
 
   eurotronic-cometblue-ha = callPackage ../development/python-modules/eurotronic-cometblue-ha { };
