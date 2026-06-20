@@ -30234,6 +30234,12 @@
     githubId = 16359093;
     name = "Xinyang Li";
   };
+  ximimoments = {
+    name = "Valentino Martinez Ferreira";
+    github = "ximimoments";
+    githubId = 161499192;
+    email = "ximimoments3232@hotmail.com";
+  };
   xiorcale = {
     email = "quentin.vaucher@pm.me";
     github = "xiorcale";
