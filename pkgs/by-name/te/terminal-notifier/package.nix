@@ -34,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   xcbuildFlags = [
     "-target"
     "terminal-notifier"
-    "-configuration"
-    "Release"
   ];
 
   # TODO: Clean up on `staging`
