@@ -765,12 +765,6 @@
     githubId = 168;
     name = "Alexander Flatter";
   };
-  afldcr = {
-    email = "alex@fldcr.com";
-    github = "afldcr";
-    githubId = 335271;
-    name = "James Alexander Feldman-Crough";
-  };
   afontain = {
     email = "afontain@posteo.net";
     github = "necessarily-equal";
