@@ -1249,6 +1249,7 @@
   ./services/networking/imaginary.nix
   ./services/networking/inadyn.nix
   ./services/networking/inspircd.nix
+  ./services/networking/iocaine.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
