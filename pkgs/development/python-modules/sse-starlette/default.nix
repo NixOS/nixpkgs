@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   dependencies = [
     anyio
+    starlette
   ];
 
   optional-dependencies = {
@@ -46,7 +47,6 @@ buildPythonPackage rec {
       aiosqlite
       fastapi
       sqlalchemy
-      starlette
       uvicorn
     ]
     ++ sqlalchemy.optional-dependencies.asyncio;
