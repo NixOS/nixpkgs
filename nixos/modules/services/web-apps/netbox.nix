@@ -606,6 +606,43 @@ in
               RestartSec = 30;
               Slice = "system-netbox.slice";
               EnvironmentFile = cfg.environmentFiles;
+
+              AmbientCapabilities = [ "" ];
+              CapabilityBoundingSet = [ "" ];
+              DevicePolicy = "closed";
+              LockPersonality = true;
+              MemoryDenyWriteExecute = true;
+              NoNewPrivileges = true;
+              PrivateDevices = true;
+              PrivateTmp = true;
+              ProcSubset = "pid";
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = "strict";
+              RemoveIPC = true;
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              SystemCallArchitectures = "native";
+              SystemCallErrorNumber = "EPERM";
+              SystemCallFilter = [
+                "@system-service"
+                "~@privileged"
+                "~@resources"
+                "@chown"
+              ];
+              UMask = "0027";
             };
           in
           {
