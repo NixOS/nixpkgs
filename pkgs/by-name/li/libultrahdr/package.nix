@@ -40,6 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })
+
+    # fix tests on big-endian
+    # https://github.com/google/libultrahdr/pull/396
+    (fetchpatch {
+      url = "https://github.com/google/libultrahdr/commit/13a058f452d846e43d4691f6885eeeaa8b0ea8d0.patch";
+      hash = "sha256-2ZVvBMz8wQLEThuXdRJbbx5m2ouRZpxVWoH88RLmit4=";
+    })
   ];
 
   # CMake incorrect absolute include/lib paths: https://github.com/NixOS/nixpkgs/issues/144170
