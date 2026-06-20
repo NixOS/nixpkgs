@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "weather-radar-card";
-  version = "3.6.5";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "jpettitt";
     repo = "weather-radar-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D+aWTcUOVkt99mdl3q1VahJKXDBIbh6RX3psYsjnTLo=";
+    hash = "sha256-ZEd27lt5S7pnGGzTnxLV6voEpzXjvRjubjmusLuISZg=";
   };
 
   npmDepsFetcherVersion = 2;
