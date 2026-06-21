@@ -11,7 +11,7 @@
   sphinx,
 
   # dependencies
-  xlib,
+  python-xlib,
   evdev,
   six,
   pyobjc-framework-ApplicationServices,
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     evdev
-    xlib
+    python-xlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # the darwin backend imports HIServices (ApplicationServices) and Quartz

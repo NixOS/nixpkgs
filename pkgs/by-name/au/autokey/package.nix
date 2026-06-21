@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     dbus-python
     pyinotify
-    xlib
+    python-xlib
     pygobject3
     packaging
     standard-imghdr
