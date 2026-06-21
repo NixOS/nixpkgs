@@ -1506,7 +1506,7 @@ let
   fixupOptionType =
     loc: opt:
     if opt.type.getSubModules or null == null then
-      opt // { type = opt.type or types.unspecified; }
+      if opt ? type then opt else opt // { type = types.unspecified; }
     else
       opt
       // {
