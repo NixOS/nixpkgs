@@ -20,19 +20,19 @@ let
 in
 maven.buildMavenPackage {
   pname = "java-language-server";
-  version = "0.2.46";
+  version = "0.2.47-unstable-2026-03-21";
 
   src = fetchFromGitHub {
     owner = "georgewfraser";
     repo = "java-language-server";
     # commit hash is used as owner sometimes forgets to set tags. See https://github.com/georgewfraser/java-language-server/issues/104
-    rev = "d7f4303cd233cdad84daffbb871dd4512a2c8da2";
-    sha256 = "sha256-BIcfwz+pLQarnK8XBPwDN2nrdvK8xqUo0XFXk8ZV/h0=";
+    rev = "ba0df8e008757d340ac263ea394a52745111422f";
+    hash = "sha256-UBdBxDUv1je11Lt4sv+iCjmMfHTfi9GJth5LNT4DIq4=";
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
+  mvnHash = "sha256-mSjz5OM/tMZuiX4kmB1DprvQuIP4EzeDpAr4oQ5T11s=";
 
   nativeBuildInputs = [
     jdk_headless
