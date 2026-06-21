@@ -15846,6 +15846,8 @@ self: super: with self; {
 
   pytest-md-report = callPackage ../development/python-modules/pytest-md-report { };
 
+  pytest-memray = callPackage ../development/python-modules/pytest-memray { };
+
   pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
