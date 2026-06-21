@@ -5,7 +5,6 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -13,16 +12,18 @@ let
     sanitizeDerivationName
     ;
   inherit (lib.lists)
-    filter
-    foldr
-    foldl'
+    all
+    concatLists
     concatMap
     elemAt
-    all
-    partition
-    groupBy
-    take
+    filter
     foldl
+    foldl'
+    foldr
+    groupBy
+    partition
+    reverseList
+    take
     ;
 in
 
@@ -370,7 +371,11 @@ rec {
 
     :::
   */
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
+  concatMapAttrs =
+    f: v:
+    listToAttrs (
+      concatLists (reverseList (mapAttrsToList (name: value: attrsToList (f name value)) v))
+    );
 
   /**
     Update or set specific paths of an attribute set.
