@@ -8,7 +8,7 @@
   perl,
   openssl,
   zlib,
-  ffmpeg,
+  ffmpeg_6,
   libvpx,
   libopus,
   libuuid,
@@ -16,23 +16,23 @@
   jemalloc,
   pcre2,
   hiredis,
+  spdlog,
+  whisper-cpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.17.1";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
+    sha256 = "sha256-GIjQ8lTZ0jEcZkhvx7lQ8sbHJ9KbJT77FsNt2Ca997Y=";
   };
 
   patches = [
-    # ffmpeg 7.0 Update: Use new channel layout
-    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
-    ./support-ffmpeg-7.patch
+    ./compat.patch
   ];
 
   makeFlags = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     openssl
     srt
     zlib
-    ffmpeg
+    ffmpeg_6
     libvpx
     libopus
     srtp
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     pcre2
     libuuid
     hiredis
+    spdlog
+    whisper-cpp
   ];
 
   preBuild = ''
@@ -84,8 +86,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";

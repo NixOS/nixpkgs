@@ -1,0 +1,35 @@
+diff -ruN a/src/projects/base/ovlibrary/logger/formatters/common.h b/src/projects/base/ovlibrary/logger/formatters/common.h
+--- a/src/projects/base/ovlibrary/logger/formatters/common.h	2026-06-21 10:52:00.801662172 +0200
++++ b/src/projects/base/ovlibrary/logger/formatters/common.h	2026-06-21 10:52:17.244406242 +0200
+@@ -8,7 +8,7 @@
+ //==============================================================================
+ #pragma once
+
+-#include <spdlog/fmt/bundled/format.h>
++#include <spdlog/fmt/fmt.h>
+
+ #include <functional>
+ #include <iostream>
+diff -ruN a/src/projects/base/ovlibrary/logger/logger.h b/src/projects/base/ovlibrary/logger/logger.h
+--- a/src/projects/base/ovlibrary/logger/logger.h	2026-06-21 10:52:00.787662469 +0200
++++ b/src/projects/base/ovlibrary/logger/logger.h	2026-06-21 10:52:17.242315692 +0200
+@@ -8,7 +8,7 @@
+ //==============================================================================
+ #pragma once
+
+-#include <spdlog/fmt/bundled/format.h>
++#include <spdlog/fmt/fmt.h>
+
+ #include <cstdarg>
+ #include <map>
+diff -ruN a/src/projects/base/ovlibrary/string.h b/src/projects/base/ovlibrary/string.h
+--- a/src/projects/base/ovlibrary/string.h	2026-06-21 10:52:00.774662744 +0200
++++ b/src/projects/base/ovlibrary/string.h	2026-06-21 10:52:17.252315483 +0200
+@@ -11,6 +11,7 @@
+ #include <memory.h>
+
+ #include <cstdarg>
++#include <cstdint>
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
