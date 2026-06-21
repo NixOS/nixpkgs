@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libctl";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "libctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "uOydBWYPXSBUi+4MM6FNx6B5l2to7Ny9Uc1MMTV9bGA=";
+    sha256 = "sha256-p6OEPbqdkLB7n6KcC6DCRNnz7eKOq53z9T7xwnCATNM=";
   };
 
   nativeBuildInputs = [
