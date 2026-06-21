@@ -49,9 +49,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/redis/redis-vl-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "rvl";
-    maintainers = with lib.maintainers; [
-      codgician
-      hythera
-    ];
+    maintainers = with lib.maintainers; [ codgician ];
+    teams = [ lib.teams.redis ];
   };
 })

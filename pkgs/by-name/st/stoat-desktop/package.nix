@@ -13,6 +13,7 @@
   nodejs,
   electron_38,
   zip,
+  nix-update-script,
 }:
 let
   electron = electron_38;
@@ -138,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupNotify = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source user-first chat platform";

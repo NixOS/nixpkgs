@@ -43,12 +43,9 @@
     "id": 5468470,
     "maintainers": {},
     "members": {
-      "aherrmann": 732652,
       "avdv": 3471749,
-      "ethercrow": 222467,
       "groodt": 343415,
-      "kalbasit": 87115,
-      "mboes": 51356
+      "kalbasit": 87115
     },
     "name": "Bazel"
   },
