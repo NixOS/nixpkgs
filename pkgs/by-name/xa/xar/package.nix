@@ -31,13 +31,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
-  version = "501";
+  version = "503";
 
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "xar";
     rev = "xar-${finalAttrs.version}";
-    hash = "sha256-Fq+Re0LCBIGhW2FR+pgV8SWtaDOEFgTh+rQ8JFWK/k0=";
+    hash = "sha256-QdK7NTN3A/EWr+vdfT5ZLTdX+wOmfnqvL5yJeiiPwtM=";
   };
 
   # Update patch set with
