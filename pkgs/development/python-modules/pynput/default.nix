@@ -14,6 +14,8 @@
   xlib,
   evdev,
   six,
+  pyobjc-framework-ApplicationServices,
+  pyobjc-framework-Quartz,
 
   # tests
   unittestCheckHook,
@@ -52,6 +54,11 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     evdev
     xlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # the darwin backend imports HIServices (ApplicationServices) and Quartz
+    pyobjc-framework-ApplicationServices
+    pyobjc-framework-Quartz
   ];
 
   doCheck = false; # requires running X server
@@ -59,7 +66,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = lib.licenses.lgpl3;

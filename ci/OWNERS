@@ -39,6 +39,7 @@
 /lib/derivations.nix        @NixOS/stdenv
 /lib/fetchers.nix           @alyssais @NixOS/stdenv
 /lib/meta.nix               @alyssais @NixOS/stdenv
+/lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv
 /lib/source-types.nix       @alyssais @NixOS/stdenv
 /lib/systems                @alyssais @NixOS/stdenv
 ## Libraries / Module system
@@ -67,7 +68,6 @@
 /pkgs/stdenv/generic/problems.nix                @infinisil
 /pkgs/test/problems                              @infinisil
 /pkgs/stdenv/generic/check-meta.nix              @infinisil @Ericson2314 @adisbladis @NixOS/stdenv
-/pkgs/stdenv/generic/meta-types.nix              @infinisil @adisbladis @NixOS/stdenv
 /pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314

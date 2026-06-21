@@ -21,6 +21,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [
     "cmd/niks3"
+    "cmd/niks3-hook"
     "cmd/niks3-server"
   ];
 
