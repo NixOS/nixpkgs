@@ -1528,6 +1528,7 @@
   ./services/security/intune.nix
   ./services/security/jitterentropy-rngd.nix
   ./services/security/kanidm.nix
+  ./services/security/kratos.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
   ./services/security/oauth2-proxy-nginx.nix
