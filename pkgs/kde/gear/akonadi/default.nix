@@ -18,6 +18,14 @@ assert lib.assertOneOf "backend" backend [
   "sqlite"
 ];
 
+let
+  mariadb' = mariadb.overrideAttrs (old: {
+    meta = old.meta // {
+      # Akonadi runs MariaDB under the same user only allowing them socket access
+      knownVulnerabilities = [ ];
+    };
+  });
+in
 mkKdeDerivation {
   pname = "akonadi";
 
@@ -30,7 +38,7 @@ mkKdeDerivation {
     "-DDATABASE_BACKEND=${lib.toUpper backend}"
   ]
   ++ lib.optionals (backend == "mysql") [
-    "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
+    "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb'}/bin"
   ]
   ++ lib.optionals (backend == "postgres") [
     "-DPOSTGRES_PATH=${lib.getBin libpq}/bin"
@@ -46,7 +54,7 @@ mkKdeDerivation {
     accounts-qt
     xz
   ]
-  ++ lib.optionals (backend == "mysql") [ mariadb ]
+  ++ lib.optionals (backend == "mysql") [ mariadb' ]
   ++ lib.optionals (backend == "postgres") [ libpq ]
   ++ lib.optionals (backend == "sqlite") [ sqlite ];
 
@@ -56,7 +64,7 @@ mkKdeDerivation {
     mkdir -p $out/nix-support
   ''
   + lib.optionalString (backend == "mysql") ''
-    echo "${mariadb}" > $out/nix-support/depends
+    echo "${mariadb'}" > $out/nix-support/depends
   ''
   + lib.optionalString (backend == "postgres") ''
     echo "${libpq}" > $out/nix-support/depends
