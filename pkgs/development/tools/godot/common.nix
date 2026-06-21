@@ -82,6 +82,13 @@
   wslay,
   zip,
   zstd,
+  # List of derivations produced by buildGodotModule.
+  # Each must install its source tree to $out/share/godot/modules/<name>/.
+  # Modules are copied to a writable directory before compilation because
+  # some modules write generated files into their own source tree during the
+  # SCons build, and Nix store paths are read-only.
+  godotModules ? [ ],
+  extraSconsFlags ? [ ],
 }:
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [
   "single"
@@ -401,65 +408,79 @@ let
         '';
 
         # darwin needs $HOME/.cache/clang/ModuleCache
-        preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-          export HOME=$(mktemp -d)
-        '';
+        preBuild =
+          lib.optionalString stdenv.hostPlatform.isDarwin ''
+            export HOME=$(mktemp -d)
+          ''
+          + lib.optionalString (godotModules != [ ]) ''
+            echo "Copying custom Godot modules to writable build directory..."
+            mkdir -p "$NIX_BUILD_TOP/godot-modules"
+            ${lib.concatMapStringsSep "\n" (m: ''
+              cp -r --no-preserve=mode \
+                ${m}/share/godot/modules/. \
+                "$NIX_BUILD_TOP/godot-modules/"
+            '') godotModules}
+            chmod -R u+w "$NIX_BUILD_TOP/godot-modules"
+          '';
 
         # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
-        sconsFlags = mkSconsFlagsFromAttrSet (
-          {
-            # Options from 'SConstruct'
-            precision = withPrecision; # Floating-point precision level
-            production = true; # Set defaults to build Godot for use in production
-            platform = withPlatform;
-            inherit target;
-            debug_symbols = true;
+        sconsFlags =
+          mkSconsFlagsFromAttrSet (
+            {
+              # Options from 'SConstruct'
+              precision = withPrecision; # Floating-point precision level
+              production = true; # Set defaults to build Godot for use in production
+              platform = withPlatform;
+              inherit target;
+              debug_symbols = true;
 
-            # Options from 'platform/linuxbsd/detect.py'
-            alsa = withAlsa;
-            dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-            fontconfig = withFontconfig; # Use fontconfig for system fonts support
-            pulseaudio = withPulseaudio; # Use PulseAudio
-            speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
-            touch = withTouch; # Enable touch events
-            udev = withUdev; # Use udev for gamepad connection callbacks
-            wayland = withWayland; # Compile with Wayland support
-            x11 = withX11; # Compile with X11 support
+              # Options from 'platform/linuxbsd/detect.py'
+              alsa = withAlsa;
+              dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
+              fontconfig = withFontconfig; # Use fontconfig for system fonts support
+              pulseaudio = withPulseaudio; # Use PulseAudio
+              speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
+              touch = withTouch; # Enable touch events
+              udev = withUdev; # Use udev for gamepad connection callbacks
+              wayland = withWayland; # Compile with Wayland support
+              x11 = withX11; # Compile with X11 support
 
-            module_mono_enabled = withMono;
+              module_mono_enabled = withMono;
 
-            # aliasing bugs exist with hardening+LTO
-            # https://github.com/godotengine/godot/pull/104501
-            ccflags = "-fno-strict-aliasing";
-            # on darwin: ld: unknown option: --build-id
-            linkflags = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--build-id";
+              # aliasing bugs exist with hardening+LTO
+              # https://github.com/godotengine/godot/pull/104501
+              ccflags = "-fno-strict-aliasing";
+              # on darwin: ld: unknown option: --build-id
+              linkflags = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--build-id";
 
-            # libraries that aren't available in nixpkgs
-            builtin_msdfgen = true;
-            builtin_rvo2_2d = true;
-            builtin_rvo2_3d = true;
-            builtin_xatlas = true;
+              # libraries that aren't available in nixpkgs
+              builtin_msdfgen = true;
+              builtin_rvo2_2d = true;
+              builtin_rvo2_3d = true;
+              builtin_xatlas = true;
 
-            # using system clipper2 is currently not implemented
-            builtin_clipper2 = true;
+              # using system clipper2 is currently not implemented
+              builtin_clipper2 = true;
 
-            use_sowrap = false;
-          }
-          // lib.optionalAttrs (lib.versionOlder version "4.4") {
-            # libraries that aren't available in nixpkgs
-            builtin_squish = true;
+              use_sowrap = false;
+            }
+            // lib.optionalAttrs (lib.versionOlder version "4.4") {
+              # libraries that aren't available in nixpkgs
+              builtin_squish = true;
 
-            # broken with system packages
-            builtin_miniupnpc = true;
-          }
-          // lib.optionalAttrs (lib.versionAtLeast version "4.5") {
-            redirect_build_objects = false; # Avoid copying build objects to output
-          }
-          # see postBuild
-          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && !(editor && withMono)) {
-            generate_bundle = "yes";
-          }
-        );
+              # broken with system packages
+              builtin_miniupnpc = true;
+            }
+            // lib.optionalAttrs (lib.versionAtLeast version "4.5") {
+              redirect_build_objects = false; # Avoid copying build objects to output
+            }
+            # see postBuild
+            // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && !(editor && withMono)) {
+              generate_bundle = "yes";
+            }
+          )
+          ++ lib.optional (godotModules != [ ]) "custom_modules=$NIX_BUILD_TOP/godot-modules"
+          ++ extraSconsFlags;
 
         enableParallelBuilding = true;
 
@@ -610,7 +631,8 @@ let
           ++ lib.optionals stdenv.hostPlatform.isDarwin [
             apple-sdk_26
             moltenvk
-          ];
+          ]
+          ++ godotModules;
 
         nativeBuildInputs = [
           gettext
