@@ -21301,6 +21301,12 @@
     githubId = 6931743;
     name = "pasqui23";
   };
+  passeriform = {
+    email = "bhardwajutkarsh.ub@gmail.com";
+    github = "Passeriform";
+    githubId = 32395996;
+    name = "Passeriform";
+  };
   passivelemon = {
     email = "jeremyseber@gmail.com";
     github = "PassiveLemon";
