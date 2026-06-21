@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "py-multiaddr";
-  version = "0.0.11";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = "py-multiaddr";
     tag = "v${version}";
-    hash = "sha256-mlHcuLVtczp3APXJFkWbjeY7xU39eFERa8hhiOEwBSU=";
+    hash = "sha256-F9qklMQ3YWJUYnnHNV4Hdmu0UDnWZtdKYHGhFvf2gtI=";
   };
 
   build-system = [ setuptools ];
