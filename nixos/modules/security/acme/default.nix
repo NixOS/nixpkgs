@@ -2,13 +2,11 @@
   config,
   lib,
   pkgs,
-  options,
   ...
 }:
 let
 
   cfg = config.security.acme;
-  opt = options.security.acme;
   user = if cfg.useRoot then "root" else "acme";
 
   # Used to calculate timer accuracy for coalescing
