@@ -5714,6 +5714,12 @@
     githubId = 6821729;
     github = "criyle";
   };
+  crmne = {
+    email = "carmine@paolino.me";
+    github = "crmne";
+    githubId = 106617;
+    name = "Carmine Paolino";
+  };
   croissong = {
     email = "jan.moeller0@pm.me";
     name = "Jan Möller";
