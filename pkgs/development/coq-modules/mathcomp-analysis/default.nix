@@ -230,17 +230,14 @@ let
       );
     in
     patched-derivation;
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? mathcomp-analysis
+    else
+      lib.versionAtLeast version "1.16.0";
 in
 # this is just a wrapper for rocqPackages.mathcomp-analysis for Rocq >= 9.0
-if
-  coq.rocqPackages ? mathcomp-analysis
-  && !(lib.elem version [
-    "1.12.0"
-    "1.13.0"
-    "1.14.0"
-    "1.15.0"
-  ])
-then
+if useRocqPackages then
   coq.rocqPackages.mathcomp-analysis.override {
     inherit version single;
     inherit

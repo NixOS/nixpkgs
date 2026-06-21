@@ -153,9 +153,14 @@ let
         '';
       }
   );
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? rocq-elpi
+    else
+      lib.versionAtLeast version "2.5.2";
 in
 # this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
-if coq.rocqPackages ? rocq-elpi then
+if useRocqPackages then
   coq.rocqPackages.rocq-elpi.override {
     inherit version elpi-version;
     inherit (coq.rocqPackages) rocq-core;

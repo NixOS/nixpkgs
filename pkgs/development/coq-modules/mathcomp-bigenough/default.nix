@@ -41,9 +41,14 @@ let
       license = lib.licenses.cecill-b;
     };
   };
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? mathcomp-bigenough
+    else
+      lib.versionAtLeast version "1.0.4";
 in
 # this is just a wrapper for rocqPackages.mathcomp-bigenough for Rocq >= 9.0
-if coq.rocqPackages ? mathcomp-bigenough then
+if useRocqPackages then
   coq.rocqPackages.mathcomp-bigenough.override {
     inherit version mathcomp-boot;
     inherit (coq.rocqPackages) rocq-core;

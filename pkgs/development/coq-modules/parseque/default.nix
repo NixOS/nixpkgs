@@ -30,9 +30,11 @@ let
       license = lib.licenses.mit;
     };
   };
+  useRocqPackages =
+    if builtins.isNull version then coq.rocqPackages ? parseque else lib.versionAtLeast version "0.3.0";
 in
 # this is just a wrapper for rocqPackages.parseque for Rocq >= 9.0
-if coq.rocqPackages ? parseque then
+if useRocqPackages then
   coq.rocqPackages.parseque.override {
     inherit version;
     inherit (coq.rocqPackages) rocq-core;
