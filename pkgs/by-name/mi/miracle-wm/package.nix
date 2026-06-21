@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -41,6 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-7JtdSopKBHfFK0KsV0+9OxrOx3vrSydmZSmAiBvKQiI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-miracle-wm-mir2.28.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/0fcfb54c59327d0776f6e8074e885080731a95c4.patch";
+      excludes = [
+        ".github/workflows/test-deb-install.yml"
+      ];
+      hash = "sha256-HuXwPkM0whLFIy8HM6n9bG9I/DZOuzAajmDpJMZt9BQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

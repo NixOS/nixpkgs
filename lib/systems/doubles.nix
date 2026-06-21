@@ -1,7 +1,15 @@
 { lib }:
 let
-  inherit (lib) lists;
+  inherit (lib)
+    lists
+    splitString
+    ;
   inherit (lib.systems) parse;
+  inherit (parse)
+    mkSystemFromSkeleton
+    mkSkeletonFromList
+    doubleFromSystem
+    ;
   inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
@@ -117,9 +125,17 @@ let
     "x86_64-uefi"
   ];
 
-  allParsed = map parse.mkSystemFromString all;
+  uncheckedSystemFromString =
+    let
+      systemType = {
+        _type = "system";
+      };
+    in
+    s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)) // systemType;
 
-  filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
+  allParsed = map uncheckedSystemFromString all;
+
+  filterDoubles = f: map doubleFromSystem (lists.filter f allParsed);
 
 in
 {
