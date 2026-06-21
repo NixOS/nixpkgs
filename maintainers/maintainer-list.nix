@@ -30142,6 +30142,12 @@
     github = "xanderio";
     githubId = 6298052;
   };
+  XanderTheDev = {
+    name = "Xander Logtmeijer";
+    email = "xanderthedev@protonmail.com";
+    github = "XanderTheDev";
+    githubId = 101188151;
+  };
   xaverdh = {
     email = "hoe.dom@gmx.de";
     github = "xaverdh";
