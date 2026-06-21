@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "osprofiler";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d6jaKyO7X5BIBUvVzMRdCshFdMqKiO8SC4+sbohk4kw=";
+    hash = "sha256-bgjffu9q/A0tAngT1A5DyyKPDrPrNEHWFJXCgA6/oyA=";
   };
 
   build-system = [ setuptools ];
