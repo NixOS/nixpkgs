@@ -227,6 +227,20 @@ let
             thoughtpolice
           ];
           platforms = lib.platforms.all;
+          knownVulnerabilities = [
+            "CVE-2026-3494"
+            "CVE-2026-34303"
+            "CVE-2026-35549"
+            "CVE-2026-44168"
+            "CVE-2026-44169"
+            "CVE-2026-44170"
+            "CVE-2026-44171"
+            "CVE-2026-44172"
+            "CVE-2026-44173"
+            "CVE-2026-48163"
+            "CVE-2026-48165"
+            "CVE-2026-49261"
+          ];
         };
       };
 

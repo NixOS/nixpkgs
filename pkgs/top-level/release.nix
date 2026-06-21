@@ -125,7 +125,6 @@ let
             jobs.ghc.x86_64-darwin
             jobs.git.x86_64-darwin
             jobs.go.x86_64-darwin
-            jobs.mariadb.x86_64-darwin
             jobs.nix.x86_64-darwin
             jobs.nixpkgs-review.x86_64-darwin
             jobs.nix-info.x86_64-darwin
@@ -167,7 +166,6 @@ let
             jobs.ghc.aarch64-darwin
             jobs.git.aarch64-darwin
             jobs.go.aarch64-darwin
-            jobs.mariadb.aarch64-darwin
             jobs.nix.aarch64-darwin
             jobs.nixpkgs-review.aarch64-darwin
             jobs.nix-info.aarch64-darwin
@@ -263,7 +261,6 @@ let
         jobs.nix-info.x86_64-darwin
         jobs.nix-info-tested.x86_64-darwin
         jobs.git.x86_64-darwin
-        jobs.mariadb.x86_64-darwin
         jobs.vim.x86_64-darwin
         jobs.inkscape.x86_64-darwin
         jobs.qt5.qtmultimedia.x86_64-darwin
@@ -289,7 +286,6 @@ let
         jobs.nix-info.aarch64-darwin
         jobs.nix-info-tested.aarch64-darwin
         jobs.git.aarch64-darwin
-        jobs.mariadb.aarch64-darwin
         jobs.vim.aarch64-darwin
         jobs.inkscape.aarch64-darwin
         jobs.qt5.qtmultimedia.aarch64-darwin

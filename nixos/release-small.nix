@@ -97,7 +97,6 @@ rec {
       imagemagick
       jdk
       linux
-      mariadb
       nginx
       nodejs
       openssh
