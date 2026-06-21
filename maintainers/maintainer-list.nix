@@ -3062,6 +3062,12 @@
     name = "Wanderson Ferreira";
     keys = [ { fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE"; } ];
   };
+  bartwaardenburg = {
+    name = "Bart Waardenburg";
+    email = "bart@waardenburg.dev";
+    github = "BartWaardenburg";
+    githubId = 1352352;
+  };
   bashsu = {
     name = "Joeal Subash";
     email = "joeal.subash@cern.ch";
