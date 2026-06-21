@@ -5325,8 +5325,6 @@ with pkgs;
     sdk = true;
   };
 
-  openai = with python3Packages; toPythonApplication openai;
-
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
