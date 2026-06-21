@@ -1158,7 +1158,7 @@ rec {
     mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
     ```
   */
-  mapAttrsRecursive = f: set: mapAttrsRecursiveCond (as: true) f set;
+  mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
 
   /**
     Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
