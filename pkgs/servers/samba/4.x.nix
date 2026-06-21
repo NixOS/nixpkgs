@@ -282,6 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pythonPath = [
+    python3Packages.cryptography
     python3Packages.dnspython
     python3Packages.markdown
     tdb
