@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "gofu";
-  version = "unstable-2023-04-25";
+  version = "2026.2";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "gofu";
-    rev = "f308ca92d1631e579fbfe3b3da13c93709dc18a2";
-    hash = "sha256-8c/Z+44gX7diAhXq8sHOqISoGhYdFA7VUYn7eNMCYxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4ssDfWsV1/3iQ7beR+kyqsN+rMe6cxda4OB6f8KkWVY=";
   };
 
   vendorHash = null;
@@ -30,4 +30,4 @@ buildGoModule {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

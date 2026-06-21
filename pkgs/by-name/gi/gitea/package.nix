@@ -29,8 +29,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-Qo0DLuZv+2GVLsBfCv/6CC9E/qhSE4HwV4StQL4HX4Y=";
+      fetcherVersion = 4;
+      hash = "sha256-FroVRhNzCLtbW9Z0s6xr4l0mIX+hY4KOomZAhPILWlY=";
     };
 
     nativeBuildInputs = [
@@ -38,6 +38,8 @@ let
       pnpmConfigHook
       pnpm
     ];
+
+    __darwinAllowLocalNetworking = true;
 
     buildPhase = ''
       make frontend
@@ -49,20 +51,20 @@ let
     '';
   });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.26.2";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    tag = "v${gitea.version}";
-    hash = "sha256-S7KV7soOnVQbw+2Ru7+DOL3Q4uWmSSdR6K90yofQlqw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xfLhiQMygYKgSMrvmH2V/LIMeaA4ovOeUDT4RUwhvgo=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-7+M1n8RSgB3gZ/2na4RF9kYOf90H0bnsJZMDKpgAy64=";
+  vendorHash = "sha256-VyzfBZnxnubNIdf+xwLav4W4DgapcLLKN1aKrZ9NbDg=";
 
   outputs = [
     "out"
@@ -99,8 +101,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+    "-X main.Version=${finalAttrs.version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
   postInstall = ''
@@ -133,6 +135,7 @@ buildGoModule rec {
   meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
+    changelog = "https://github.com/go-gitea/gitea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       techknowlogick
@@ -140,4 +143,4 @@ buildGoModule rec {
     ];
     mainProgram = "gitea";
   };
-}
+})

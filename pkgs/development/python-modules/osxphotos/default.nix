@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "osxphotos";
-  version = "0.75.9";
+  version = "0.76.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9oQ9yLNHACLgOegNRcuysGIo8cbYLhlkNa41Y+YHFTM=";
+    hash = "sha256-ZpY9T4Y0ZQmBgbFM0S/AuVw9YOpuM6V6CUW5GUHTjXI=";
   };
 
   pythonRelaxDeps = [
