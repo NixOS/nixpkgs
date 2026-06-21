@@ -1970,7 +1970,7 @@ rec {
   getFirstOutput =
     candidates: pkg:
     let
-      outputs = builtins.filter (name: hasAttr name pkg) candidates;
+      outputs = builtins.filter (name: pkg ? ${name}) candidates;
     in
     if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${head outputs};
 
