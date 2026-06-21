@@ -22,12 +22,9 @@ buildPythonPackage rec {
 
   disabled = pythonAtLeast "3.14"; # The pyo3 version used does not support 3.14+
 
-  patches = sudachi-rs.cargoPatches;
-
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    patches = sudachi-rs.cargoPatches;
-    hash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
+    hash = "sha256-qWuFY97qPoKVxWp29ywaMEr2fTc0Y4wDR9LK+40r6QI";
   };
 
   nativeBuildInputs = [
