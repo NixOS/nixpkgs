@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "above";
-  version = "2.8.1";
+  version = "ivid";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "caster0x00";
     repo = "Above";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wyXWGfthzJeHZoJe4OKe9k2BIwLae/aOUtiJpT4SfHw=";
+    hash = "sha256-UWE8QEfy+gc3gXd1HqiF4OpMJRXSxRP4dspK3gfztxc=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
