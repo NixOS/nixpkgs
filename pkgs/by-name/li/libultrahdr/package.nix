@@ -51,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
         'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    # These rounding-sensitive tests fail on i686 due to small floating-point differences.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'add_test(NAME UHDRUnitTests, COMMAND ultrahdr_unit_test)' \
+        'add_test(NAME UHDRUnitTests, COMMAND ultrahdr_unit_test --gtest_filter=-GainMapMathTest.ColorSubtractFloat:GainMapMathTest.EncodeGain:GainMapMathTest.SampleMap)'
   '';
 
   cmakeFlags = [
@@ -66,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    NIX_LDFLAGS = "-latomic";
+  };
 
   buildInputs = [
     gtest
