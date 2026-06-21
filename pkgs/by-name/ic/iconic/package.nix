@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iconic";
-  version = "2025.9.1";
+  version = "2026.4.1";
 
   src = fetchFromGitHub {
     owner = "youpie";
     repo = "Iconic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vjtPVE+n1p5DB+KewhylA9w1kVkpKyDz0WF5Mrd+BBM=";
+    hash = "sha256-iK8YluY2kJ04/YQ3GWvk21b8wKs1GY5TiarhgH7c0ek=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ma+ryvDaFfP3BYrtuPPKMVjF2l83xP+T7GlIiOenRAo=";
+    hash = "sha256-ic09lH6gth+guuNqx3S4pWwcJgmr4SGfkDt0NibiNKM=";
   };
 
   nativeBuildInputs = [
