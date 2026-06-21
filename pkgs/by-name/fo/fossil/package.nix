@@ -13,7 +13,6 @@
   sqlite,
   ed,
   which,
-  tclPackages,
   withJson ? true,
 }:
 

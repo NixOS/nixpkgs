@@ -8702,10 +8702,6 @@ with pkgs;
 
   firewalld-gui = firewalld.override { withGui = true; };
 
-  fossil = callPackage ../applications/version-management/fossil {
-    sqlite = sqlite.override { enableDeserialize = true; };
-  };
-
   fvwm = fvwm2;
 
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };
