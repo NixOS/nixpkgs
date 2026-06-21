@@ -140,7 +140,7 @@ rec {
 
           mkBool ? k: v: optional v (mkOptionName k),
 
-          mkList ? k: v: concatMap (mkOption k) v,
+          mkList ? k: concatMap (mkOption k),
 
           mkOption ?
             k: v:
