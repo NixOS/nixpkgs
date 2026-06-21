@@ -287,9 +287,6 @@ with haskellLib;
   }) (doJailbreak super.language-haskell-extract);
 
   vector = overrideCabal (old: {
-    # 2026-05-16: allow QuickCheck 2.16
-    # https://github.com/haskell/vector/issues/562
-    jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTargets = [
       "vector-tests-O0"
@@ -460,8 +457,6 @@ with haskellLib;
   # Too strict upper bound on hakyll (<4.17)
   # https://gitlab.com/lysxia/hakyll-alectryon/-/work_items/2
   hakyll-alectryon = doJailbreak super.hakyll-alectryon;
-  # https://gitlab.com/aergus/hakyll-filestore/-/work_items/1
-  hakyll-filestore = doJailbreak super.hakyll-filestore;
 
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
@@ -2129,13 +2124,6 @@ with haskellLib;
   # https://github.com/haskell-works/hw-string-parse/issues/43
   hw-string-parse = doJailbreak super.hw-string-parse;
 
-  # 2026-05-18: allow QuickCheck 2.16
-  # https://github.com/haskell-works/hw-prim/issues/150
-  hw-prim = lib.pipe super.hw-prim [
-    (warnAfterVersion "0.6.3.2")
-    doJailbreak
-  ];
-
   # 2026-06-10: pin validation to < 1.2 due to breaking API changes affecting geojson
   validation = super.validation_1_1_5;
 
@@ -2439,6 +2427,10 @@ with haskellLib;
   # calls ghc in tests
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
+
+  # 2026-06-17: wai-app-static >=3.1.7.1 && <3.2
+  # https://github.com/diogob/postgres-websockets/issues/115
+  postgres-websockets = doJailbreak super.postgres-websockets;
 
   postgrest =
     lib.pipe

@@ -57,7 +57,7 @@ self: super: {
   integer-gmp = markBroken self.integer-gmp_1_1;
   libiserv = null;
   mtl = doDistribute self.mtl_2_3_2;
-  os-string = doDistribute self.os-string_2_0_10;
+  os-string = doDistribute self.os-string_2_0_11;
   parsec = doDistribute self.parsec_3_1_18_0;
   pretty = markBroken self.pretty_1_1_3_6;
   rts = null;
@@ -69,7 +69,7 @@ self: super: {
   time = doDistribute self.time_1_16;
   transformers = doDistribute self.transformers_0_6_3_0;
   unix = markBroken self.unix_2_8_8_0;
-  xhtml = markBroken self.xhtml_3000_4_0_0;
+  xhtml = markBroken self.xhtml_3000_4_1_0;
 
   # MicroHs replacements for widely used libraries
   array = self.array-mhs;

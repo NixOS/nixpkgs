@@ -42,7 +42,7 @@ self: super: {
   # or Hackage released version for (though they may not build).
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
   semaphore-compat = self.semaphore-compat_2_0_0;
-  os-string = self.os-string_2_0_10;
+  os-string = self.os-string_2_0_11;
   file-io = self.file-io_0_2_0;
   # Would need 2.25.*, but let's not bother
   haddock-api = self.haddock-api_2_29_1;
