@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-apl";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-KRhn8bGTdpOrtXvn2aN2GLA3bj4nCVdIVKe75Suyjrg=";
+    sha256 = "sha256-PKfKa1imVBYyXMozvdkvoBBsxN5sMC+oIosnYD9P8ug=";
   };
 
   buildInputs = [
