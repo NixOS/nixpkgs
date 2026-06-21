@@ -5615,6 +5615,8 @@ self: super: with self; {
 
   firedrake-fiat = callPackage ../development/python-modules/firedrake-fiat { };
 
+  firedrake-ufl = callPackage ../development/python-modules/firedrake-ufl { };
+
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
   firetv = callPackage ../development/python-modules/firetv { };
