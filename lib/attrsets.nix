@@ -868,13 +868,18 @@ rec {
     :::
   */
   collect =
-    pred: attrs:
-    if pred attrs then
-      [ attrs ]
-    else if isAttrs attrs then
-      concatMap (collect pred) (attrValues attrs)
-    else
-      [ ];
+    pred:
+    let
+      recurse =
+        attrs:
+        if pred attrs then
+          [ attrs ]
+        else if isAttrs attrs then
+          concatMap recurse (attrValues attrs)
+        else
+          [ ];
+    in
+    recurse;
 
   /**
     Return the cartesian product of attribute set value combinations.
