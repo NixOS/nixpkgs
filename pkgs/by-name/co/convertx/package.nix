@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
 
@@ -43,11 +43,12 @@ let
     hash = pin.srcHash;
   };
 
-  node_modules = stdenv.mkDerivation (finalAttrs: {
+  node_modules = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-node_modules";
     inherit version src;
 
     dontConfigure = true;
+    dontFixup = true;
 
     nativeBuildInputs = [
       bun
@@ -70,11 +71,11 @@ let
       cp package.json $out/lib
     '';
 
-    outputHash = pin."${stdenv.system}";
+    outputHash = pin."${stdenvNoCC.system}";
     outputHashMode = "recursive";
   });
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
