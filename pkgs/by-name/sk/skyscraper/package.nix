@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skyscraper";
-  version = "3.18.5";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "Gemba";
     repo = "skyscraper";
     tag = finalAttrs.version;
-    hash = "sha256-lX+ew/PkZdOFjYDVLCsF3JH8oqQBAjxfZQegHZ1vcDo=";
+    hash = "sha256-KjYQ+WOEelJ4HYHjz8pSoJ1kw54yYfo5W1cPn7ny2gc=";
   };
 
   strictDeps = true;
