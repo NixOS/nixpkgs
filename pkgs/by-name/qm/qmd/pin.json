@@ -1,0 +1,8 @@
+{
+  "version": "2.0.1",
+  "srcHash": "sha256-UoR9iyxqbjwAbEmiC/kxS10lvdBJmDuQigS/aEgEzDs=",
+  "x86_64-linux": "sha256-VJwVhcAw4hHe+hmUAEBQIGp3ibERBQuPdw2zmvLcvVI=",
+  "x86_64-darwin": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "aarch64-darwin": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "aarch64-linux": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}
