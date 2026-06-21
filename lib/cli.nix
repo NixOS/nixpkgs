@@ -155,7 +155,6 @@ rec {
 
           optionValueSeparator ? null,
         }:
-        options:
         let
           render =
             k: v:
@@ -165,9 +164,8 @@ rec {
               mkList k v
             else
               mkOption k v;
-
         in
-        concatLists (mapAttrsToList render options)
+        options: concatLists (mapAttrsToList render options)
       );
 
   /**
