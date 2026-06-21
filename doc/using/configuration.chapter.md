@@ -150,6 +150,16 @@ There are several ways to tweak how Nix handles a package which has been marked 
     }
     ```
 
+    License exceptions can also be specified by their SPDX identifiers:
+
+    ```nix
+    {
+      allowlistedLicenses = [
+        "CC-BY-NC-ND-3.0-IGO"
+      ];
+    }
+    ```
+
     Note that `allowlistedLicenses` only applies to unfree licenses unless `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses. `blocklistedLicenses` applies to all licenses.
 
 A complete list of licenses can be found in the file [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix) of the nixpkgs tree.
