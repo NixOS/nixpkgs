@@ -19,14 +19,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "octodns";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wVUMj47Ex2GrCytV0JhmXUKuIwAw59X7+ce/0LhwmkE=";
+    hash = "sha256-Dm6b7rxzBmImQmMKnMjobwrSmx8OAUhJEbtlpZ/4GKE=";
   };
 
   build-system = with python3Packages; [
