@@ -8396,12 +8396,6 @@
       { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
     ];
   };
-  ethercrow = {
-    email = "ethercrow@gmail.com";
-    github = "ethercrow";
-    githubId = 222467;
-    name = "Dmitry Ivanov";
-  };
   ethindp = {
     name = "Ethin Probst";
     email = "harlydavidsen@gmail.com";
