@@ -5,6 +5,8 @@
   buildPythonPackage,
   replaceVars,
   fetchpatch,
+  symlinkJoin,
+  runCommand,
 
   # nativeBuildInputs
   setuptools,
@@ -12,6 +14,7 @@
   # dependencies
   llvmlite,
   numpy,
+  onetbb,
 
   # tests
   numba,
@@ -35,6 +38,16 @@
 
 let
   cudatoolkit = cudaPackages.cuda_nvcc;
+
+  # numba needs both `lib/` and `include/` in that path, so we make a `_joined` output for it.
+  onetbb_joined = symlinkJoin {
+    name = "onetbb_joined";
+    paths = [
+      onetbb.dev
+      onetbb.out
+    ];
+  };
+
 in
 buildPythonPackage (finalAttrs: {
   version = "0.63.1";
@@ -56,12 +69,28 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-M7Hdc1Qakclz7i/HujBUqVEWFsHj9ZGQDzb8Ze9AztA=";
   };
 
+  env.TBBROOT = "${onetbb_joined}";
+
   postPatch = ''
     substituteInPlace numba/cuda/cudadrv/driver.py \
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-  '';
+  ''
+  +
+    # At runtime, `numba` does `CDLL('libtbb.so.12')` in `_check_tbb_version_compatible()`
+    # to check the TBB version before loading the TBB threading layer.
+    # That bare `dlopen` does not find the library without `LD_LIBRARY_PATH`.
+    # We patch it to use the absolute path instead.
+    ''
+      substituteInPlace numba/np/ufunc/parallel.py \
+        --replace-fail \
+          "libtbb_name = 'libtbb.so.12'" \
+          "libtbb_name = '${onetbb_joined}/lib/libtbb.so.12'" \
+        --replace-fail \
+          "libtbb_name = 'libtbb.12.dylib'" \
+          "libtbb_name = '${onetbb_joined}/lib/libtbb.12.dylib'"
+    '';
 
   build-system = [
     setuptools
@@ -166,6 +195,47 @@ buildPythonPackage (finalAttrs: {
     numpy_1 = numba.override {
       numpy = numpy_1;
     };
+    # Tests whether the various numba threading backends work.
+    threadingLayers =
+      let
+        numbaTestScript = writers.writePython3 "numba-test" { } ''
+          import numba
+          import numpy as np
+          from numba import njit
+
+
+          print("numba from:", numba.__file__)
+
+
+          @njit(parallel=True)
+          def test():
+              return np.sum(np.arange(100))
+
+
+          print("Result:", test())
+          print("Threading layer:", numba.threading_layer())
+          print("Success")
+        '';
+        makeThreadingLayerTest =
+          threadingLayerName:
+          runCommand "${finalAttrs.pname}-test-${threadingLayerName}"
+            {
+              nativeBuildInputs = [
+                (python.withPackages (ps: [
+                  finalAttrs.finalPackage
+                ]))
+              ];
+            }
+            ''
+              NUMBA_THREADING_LAYER=${threadingLayerName} python ${numbaTestScript} > $out
+            '';
+      in
+
+      {
+        workqueue = makeThreadingLayerTest "workqueue";
+        omp = makeThreadingLayerTest "omp";
+        tbb = makeThreadingLayerTest "tbb";
+      };
   };
 
   meta = {
