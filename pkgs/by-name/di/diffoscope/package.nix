@@ -232,6 +232,7 @@ python.pkgs.buildPythonApplication rec {
         mono
         ocaml
         odt2txt
+        oggvideotools
         openssh
         pdftk
         perl
@@ -255,8 +256,6 @@ python.pkgs.buildPythonApplication rec {
         r2pipe
         # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
-      # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
       # Causes an eval failure
       # See https://github.com/NixOS/nixpkgs/issues/463873
       ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
@@ -272,6 +271,20 @@ python.pkgs.buildPythonApplication rec {
     # Always show more information when tests fail
     "-vv"
   ];
+
+  preCheck = lib.optionalString (enableBloat && stdenv.hostPlatform.isDarwin) ''
+    # h5dump is in hdf5's bin output, but its dylibs are in the out output.
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ hdf5 ]}''${DYLD_LIBRARY_PATH:+:''${DYLD_LIBRARY_PATH}}"
+  '';
+
+  makeWrapperArgs = lib.optionals enableBloat (
+    [
+      "--prefix PATH : ${lib.makeBinPath [ hdf5 ]}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ hdf5 ]}"
+    ]
+  );
 
   postInstall = ''
     make -C doc

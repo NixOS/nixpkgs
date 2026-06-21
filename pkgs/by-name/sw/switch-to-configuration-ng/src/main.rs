@@ -1077,14 +1077,17 @@ fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
 fn block_on_jobs(
     conn: &LocalConnection,
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
-) {
+) -> anyhow::Result<()> {
     while !submitted_jobs.borrow().is_empty() {
         log::debug!(
             "waiting for submitted jobs to finish, still have {} job(s)",
             submitted_jobs.borrow().len()
         );
-        _ = conn.process(DBUS_PROCESS_TIME);
+        _ = conn
+            .process(DBUS_PROCESS_TIME)
+            .context("Failed to process dbus messages while waiting for jobs")?;
     }
+    Ok(())
 }
 
 fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
@@ -1525,7 +1528,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     if !units_to_skip.is_empty() {
         print_units("NOT restarting", &units_to_skip);
@@ -1551,7 +1554,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&reload_list)
         .with_context(|| format!("Failed to remove {}", reload_list.display()))?;
 
@@ -1567,7 +1570,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&restart_list)
         .with_context(|| format!("Failed to remove {}", restart_list.display()))?;
 
@@ -1584,7 +1587,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&start_list)
         .with_context(|| format!("Failed to remove {}", start_list.display()))?;
 
@@ -1681,7 +1684,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         print_units("restarting (post-activation)", &to_restart);
         for unit in to_restart.keys() {
@@ -1695,7 +1698,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         let to_start_filtered = filter_units(&units_to_filter, &to_start);
         print_units("starting (post-activation)", &to_start_filtered);
@@ -1710,7 +1713,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     let finished = finished_jobs.borrow();
@@ -2202,7 +2205,7 @@ won't take effect until you reboot the system.
             };
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     if !units_to_skip.is_empty() {
@@ -2218,7 +2221,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for all stop jobs to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     let mut exit_code = 0;
 
@@ -2441,7 +2444,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for the restart job of sysinit-reactivation.service to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     // Before reloading we need to ensure that the units are still active. They may have been
     // deactivated because one of their requirements got stopped. If they are inactive but should
@@ -2496,7 +2499,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RELOAD_LIST_FILE)
             .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
@@ -2524,7 +2527,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RESTART_LIST_FILE)
             .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
@@ -2557,7 +2560,7 @@ won't take effect until you reboot the system.
         }
     }
 
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     remove_file_if_exists(START_LIST_FILE)
         .with_context(|| format!("Failed to remove {START_LIST_FILE}"))?;
