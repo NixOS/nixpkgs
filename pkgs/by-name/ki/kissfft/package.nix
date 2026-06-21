@@ -15,9 +15,9 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "kissfft-${datatype}${lib.optionalString enableOpenmp "-openmp"}";
-  version = "131.1.0";
+  version = "0-unstable-2026-03-07";
 
   outputs = [
     "bin"
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mborgerding";
     repo = "kissfft";
-    rev = finalAttrs.version;
-    hash = "sha256-ukikTVnmKomKXTo6zc+PhpZzEkzXN2imFwZOYlfR3Pk=";
+    rev = "1e56ac81667d53363a8483a9e53afdbdf49ddfab";
+    hash = "sha256-7Jvt77w/hp/g+BtSIxEbZyAQHxDU11hbpKUq0BfuKrA=";
   };
 
   patches = [
@@ -83,4 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-})
+}
