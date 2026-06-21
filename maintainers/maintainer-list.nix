@@ -832,12 +832,6 @@
     githubId = 207841739;
     name = "Savchenko Dmitriy";
   };
-  aherrmann = {
-    email = "andreash87@gmx.ch";
-    github = "aherrmann";
-    githubId = 732652;
-    name = "Andreas Herrmann";
-  };
   ahirner = {
     email = "a.hirner+nixpkgs@gmail.com";
     github = "ahirner";
