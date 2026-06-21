@@ -38,7 +38,7 @@
   xcbutilxrm,
   hicolor-icon-theme,
   asciidoctor,
-  fontsConf,
+  texFunctions,
   gtk3Support ? false,
   gtk3 ? null,
 }:
@@ -51,6 +51,8 @@ let
     ps.lgi
     ps.ldoc
   ]);
+
+  inherit (texFunctions) fontsConf;
 in
 
 stdenv.mkDerivation rec {
@@ -116,7 +118,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [
-    cairo
+    (cairo.override { xcbSupport = true; })
     librsvg
     dbus
     gdk-pixbuf

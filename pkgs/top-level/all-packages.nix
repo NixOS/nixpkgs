@@ -8518,11 +8518,6 @@ with pkgs;
 
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
 
-  awesome = callPackage ../applications/window-managers/awesome {
-    cairo = cairo.override { xcbSupport = true; };
-    inherit (texFunctions) fontsConf;
-  };
-
   backintime = backintime-qt;
 
   bespokesynth-with-vst2 = bespokesynth.override {
