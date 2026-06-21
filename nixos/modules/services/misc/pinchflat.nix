@@ -96,7 +96,7 @@ in
         '';
         description = ''
           The configuration of Pinchflat is handled through environment variables.
-          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/README.md#environment-variables).
+          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/blob/master/README.md#environment-variables).
         '';
       };
 
