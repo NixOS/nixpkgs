@@ -48,8 +48,22 @@ let
     zigBuildFlags = finalAttrs.zigCheckFlags;
 
     postConfigure = ''
-      cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
-      chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
+        cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
+        chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
+
+        # Ghostel only consumes Ghostty's libghostty-vt module.  Ghostty's build
+        # still eagerly initializes disabled benchmark artifacts, which probes the
+        # native Darwin SDK and fails in the Nix sandbox with DarwinSdkNotFound.
+        substituteInPlace "$ZIG_GLOBAL_CACHE_DIR"/p/ghostty-*/build.zig \
+          --replace-fail '    const bench = try buildpkg.GhosttyBench.init(b, &deps);' '    if (config.emit_bench) {
+          const bench = try buildpkg.GhosttyBench.init(b, &deps);' \
+          --replace-fail '    if (config.emit_bench) bench.install();' '        bench.install();
+      }'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace build.zig \
+        --replace-fail '.macos => "../ghostel-module.dylib",' \
+                       '.macos => "lib/ghostel-module.dylib",'
     '';
   });
 
