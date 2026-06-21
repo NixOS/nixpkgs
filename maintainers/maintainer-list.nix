@@ -4295,6 +4295,12 @@
       { fingerprint = "D088 A5AF C45B 78D1 CD4F  457C 6957 B3B6 46F2 BB4E"; }
     ];
   };
+  c6rg0 = {
+    email = "c6rg0@protonmail.com";
+    github = "c6rg0";
+    githubId = 64259221;
+    name = "c6rg0";
+  };
   caarlos0 = {
     name = "Carlos A Becker";
     email = "carlos@becker.software";
