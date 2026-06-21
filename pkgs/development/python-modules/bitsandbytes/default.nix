@@ -41,7 +41,7 @@ let
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
   cuda-common-redist = with cudaPackages; [
-    (lib.getDev cuda_cccl) # <thrust/*>
+    (lib.getDev cccl) # <thrust/*>
     (lib.getDev libcublas) # cublas_v2.h
     (lib.getLib libcublas)
     (lib.getInclude libcublas) # cublasLt.h
