@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
 }:
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-Eb0+rgbI+gbY1NjVyPLB6kZgDsYoSCxjy162GophiMI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-kernel-6_19-fixes.patch";
+      url = "https://github.com/lkrg-org/lkrg/commit/b8b1418a6c1e7229cdf3dfa020fcc4945e108d83.patch";
+      hash = "sha256-mLsgcHWL0e9/XNMGf3zuXRAFQHudoXW5ME0Y4ptE4vw=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 
