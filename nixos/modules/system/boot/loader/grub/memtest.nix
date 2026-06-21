@@ -65,7 +65,7 @@ in
 
   config = mkIf cfg.enable {
     boot.loader.grub.extraEntries = ''
-      menuentry "Memtest86+" {
+      menuentry "Memtest86+" --class memtest {
         linux @bootRoot@/memtest.bin ${toString cfg.params}
       }
     '';
