@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dlms-cosem";
-  version = "25.1.0";
+  version = "2026.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pwitab";
     repo = "dlms-cosem";
     tag = version;
-    hash = "sha256-ZsF+GUVG9bZNZE5daROQJIZZgqpjAkB/bFyre2oGu+E=";
+    hash = "sha256-HlOU/yOED7HqjeYDIsXA6nWBBrywKdLaWe/uan57jIw=";
   };
 
   build-system = [ setuptools ];
