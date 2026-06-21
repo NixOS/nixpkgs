@@ -14,6 +14,7 @@ let
     warnIf
     ;
   inherit (lib.generators) mkValueStringDefault;
+  mkValueString = mkValueStringDefault { };
 in
 rec {
   /**
@@ -148,10 +149,10 @@ rec {
             else if optionValueSeparator == null then
               [
                 (mkOptionName k)
-                (mkValueStringDefault { } v)
+                (mkValueString v)
               ]
             else
-              [ "${mkOptionName k}${optionValueSeparator}${mkValueStringDefault { } v}" ],
+              [ "${mkOptionName k}${optionValueSeparator}${mkValueString v}" ],
 
           optionValueSeparator ? null,
         }:
@@ -241,7 +242,7 @@ rec {
     {
       isLong ? optionName: stringLength optionName > 1,
       explicitBool ? false,
-      formatArg ? mkValueStringDefault { },
+      formatArg ? mkValueString,
     }:
     let
       optionFormat = optionName: {
@@ -450,7 +451,7 @@ rec {
           option,
           sep,
           explicitBool,
-          formatArg ? mkValueStringDefault { },
+          formatArg ? mkValueString,
         }:
         k: v:
         if v == null || (!explicitBool && v == false) then
