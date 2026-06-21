@@ -16375,6 +16375,12 @@
     githubId = 80571430;
     name = "Luminar Leaf";
   };
+  luna-the-tuna = {
+    email = "contact@luna.fish";
+    github = "luna-the-tuna";
+    githubId = 112084382;
+    name = "Luna Heyman";
+  };
   luna_1024 = {
     email = "contact@luna.computer";
     github = "luna-1024";
@@ -28251,12 +28257,6 @@
     github = "tonybutt";
     githubId = 38566841;
     name = "Anthony Butt";
-  };
-  toodeluna = {
-    email = "luna@toodeluna.net";
-    github = "toodeluna";
-    githubId = 112084382;
-    name = "Luna Heyman";
   };
   toonn = {
     email = "nixpkgs@toonn.io";
