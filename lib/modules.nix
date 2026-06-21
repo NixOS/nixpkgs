@@ -1057,7 +1057,7 @@ let
         res: opt:
         let
           typeSet =
-            if opt.options ? type && res ? type then
+            if res ? type && opt.options ? type then
               let
                 mergedType = res.type.typeMerge opt.options.type.functor;
               in
@@ -1072,7 +1072,7 @@ let
             else
               { };
 
-          bothHave = k: opt.options ? ${k} && res ? ${k};
+          bothHave = k: res ? ${k} && opt.options ? ${k};
         in
         if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
           # Keep in sync with the same error above!
