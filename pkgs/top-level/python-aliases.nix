@@ -102,6 +102,7 @@ mapAliases {
   audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
+  avro3k = throw "'avro3k' was removed because it's unmaintained since 2014"; # added 2026-06-18
   awesome-slugify = throw "'awesome-slugify' has been removed as it was unmaintained upstream"; # Added 2026-06-14
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
   backports-functools-lru-cache = throw "'backports-functools-lru-cache' has been removed from nixpkgs as it was not longer used in python2"; # Added 2026-01-14
