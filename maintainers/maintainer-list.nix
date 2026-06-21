@@ -15999,6 +15999,11 @@
     github = "Lord-Valen";
     githubId = 46138807;
   };
+  lordkekz = {
+    name = "lordkekz";
+    github = "lordkekz";
+    githubId = 50516935;
+  };
   lordmzte = {
     name = "Moritz Thomae";
     email = "lord@mzte.de";
