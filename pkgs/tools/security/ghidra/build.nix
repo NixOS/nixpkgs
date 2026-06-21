@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
+  cmake,
   gradle,
   makeBinaryWrapper,
   openjdk21,
@@ -15,6 +16,7 @@
   ghidra-extensions,
   python3,
   python3Packages,
+  zulu8,
 }:
 
 let
@@ -23,6 +25,8 @@ let
   version = "12.1.2";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+  zulu8Include = lib.makeIncludePath [ zulu8 ];
+  zulu8DarwinInclude = "${zulu8Include}/darwin";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -43,6 +47,14 @@ let
       date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/SOURCE_DATE_EPOCH_SHORT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
+  };
+
+  # https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_12.1.2_build/Ghidra/Features/FileFormats/build.gradle#L49-L50
+  sevenzipjbindingSrc = fetchFromGitHub {
+    owner = "borisbrodski";
+    repo = "sevenzipjbinding";
+    rev = "Release-16.02-2.01";
+    hash = "sha256-MtdPBjXUNFc9KwMNMtxmQ1R+cW6dhum73d3KX76GjG0=";
   };
 
   patches = [
@@ -162,6 +174,42 @@ stdenv.mkDerivation (finalAttrs: {
     f=("${pkg_path}"/*)
     mv "${pkg_path}"/*/* "${pkg_path}"
     rmdir "''${f[@]}"
+
+    ${lib.optionalString isMacArm64 ''
+      # sevenzipjbinding-all-platforms jar only ships a macOS x86_64 dylib.
+      # Leaving that in the output makes the whole native Ghidra install ask for
+      # Rosetta 2 just for 7-Zip support.
+      cp -R ${sevenzipjbindingSrc} sevenzipjbinding-src
+      chmod -R u+w sevenzipjbinding-src
+      substituteInPlace sevenzipjbinding-src/CMakeLists.txt \
+        --replace-fail "cmake_policy(SET CMP0026 OLD)" "# cmake_policy(SET CMP0026 OLD)" \
+        --replace-fail "GET_TARGET_PROPERTY(SEVENZIP_JBINDING_LIB 7-Zip-JBinding LOCATION)" \
+          "SET(SEVENZIP_JBINDING_LIB_FILENAME \"lib7-Zip-JBinding.dylib\")" \
+        --replace-fail "GET_FILENAME_COMPONENT(SEVENZIP_JBINDING_LIB_FILENAME \"\''${SEVENZIP_JBINDING_LIB}\" NAME)" ""
+      # Call CMake directly so its setup hook does not try to configure Ghidra's
+      # Gradle source tree as a CMake project.
+      ${lib.getExe cmake} -S sevenzipjbinding-src -B sevenzipjbinding-build \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DJAVA_SYSTEM=Mac \
+        -DJAVA_ARCH=arm64 \
+        -DJAVA_JDK=${zulu8.home} \
+        -DJAVA_INCLUDE_PATH=${zulu8Include} \
+        -DJAVA_INCLUDE_PATH2=${zulu8DarwinInclude} \
+        -DCMAKE_CXX_FLAGS="-std=gnu++98" \
+        -DCMAKE_BUILD_TYPE=Release
+      ${lib.getExe cmake} --build sevenzipjbinding-build --parallel "$NIX_BUILD_CORES"
+
+      rm -f "${pkg_path}/Ghidra/Features/FileFormats/lib"/sevenzipjbinding-all-platforms-*.jar
+      rm -rf "${pkg_path}/Ghidra/Features/FileFormats/data/sevenzipnativelibs"
+      install -Dm444 sevenzipjbinding-build/sevenzipjbinding-Mac-arm64.jar \
+        "${pkg_path}/Ghidra/Features/FileFormats/lib/sevenzipjbinding-Mac-arm64.jar"
+      substituteInPlace "${pkg_path}/Ghidra/Features/FileFormats/Module.manifest" \
+        --replace-fail "lib/sevenzipjbinding-all-platforms-16.02-2.01.jar LGPL 2.1" \
+          "lib/sevenzipjbinding-Mac-arm64.jar LGPL 2.1"
+      mkdir -p "${pkg_path}/Ghidra/Features/FileFormats/data/sevenzipnativelibs"
+      unzip -q sevenzipjbinding-build/sevenzipjbinding-Mac-arm64.jar "Mac-arm64/*" \
+        -d "${pkg_path}/Ghidra/Features/FileFormats/data/sevenzipnativelibs"
+    ''}
 
     for f in Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon*.png; do
       res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -c11-)
