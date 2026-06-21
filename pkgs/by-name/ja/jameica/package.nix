@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     tag = version;
-    hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
+    hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=";
   };
 
   nativeBuildInputs = [
