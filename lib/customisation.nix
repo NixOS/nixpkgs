@@ -66,11 +66,11 @@ rec {
 
     `drv`
 
-    : 1\. Function argument
+    : Derivation to override.
 
     `f`
 
-    : 2\. Function argument
+    : Function called with original derivation attributes, returning attributes to override.
 
     # Type
 
@@ -216,11 +216,12 @@ rec {
       mirrorArgs f';
 
   /**
-    Call the package function in the file `fn` with the required
-    arguments automatically.  The function is called with the
-    arguments `args`, but any missing arguments are obtained from
-    `autoArgs`.  This function is intended to be partially
-    parameterised, e.g.,
+    Call the package function in the file `fn` with the required arguments
+    automatically and make the result overridable with
+    [`makeOverridable`](#function-library-lib.customisation.makeOverridable).
+    The function is called with the arguments `args`, but any missing
+    arguments are obtained from `autoArgs`.  This function is intended to be
+    partially parameterised, e.g.,
 
       ```nix
       callPackage = callPackageWith pkgs;
@@ -247,15 +248,15 @@ rec {
 
     `autoArgs`
 
-    : 1\. Function argument
+    : Attribute set to automatically apply to `fn`'s arguments.
 
     `fn`
 
-    : 2\. Function argument
+    : Function (or path to import) that takes in an attribute set composed of `autoArgs`, `args` and overridden arguments.
 
     `args`
 
-    : 3\. Function argument
+    : Attribute set to always apply to `fn`'s arguments.
 
     # Type
 
@@ -329,7 +330,7 @@ rec {
       abort (makeErrorMessage autoArgs fn args fargs unpassedArgs);
 
   /**
-    Like `callPackage`, but for a function that returns an attribute
+    Like `callPackageWith`, but for a function that returns an attribute
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -337,15 +338,15 @@ rec {
 
     `autoArgs`
 
-    : 1\. Function argument
+    : Attribute set to automatically apply to `fn`'s arguments.
 
     `fn`
 
-    : 2\. Function argument
+    : Function (or path to import) that takes in an attribute set composed of `autoArgs`, `args` and overridden arguments.
 
     `args`
 
-    : 3\. Function argument
+    : Attribute set to always apply to `fn`'s arguments.
 
     # Type
 
