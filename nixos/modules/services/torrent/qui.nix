@@ -276,5 +276,8 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ undefined-landmark ];
+  meta.maintainers = with maintainers; [
+    connor-grady
+    undefined-landmark
+  ];
 }

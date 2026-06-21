@@ -5,7 +5,10 @@ in
 
 {
   name = "qui";
-  meta.maintainers = with lib.maintainers; [ undefined-landmark ];
+  meta.maintainers = with lib.maintainers; [
+    connor-grady
+    undefined-landmark
+  ];
 
   nodes.machine = {
     services.qui.enable = true;
