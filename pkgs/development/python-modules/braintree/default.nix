@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "braintree";
-  version = "4.44.0";
+  version = "4.45.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "braintree";
     repo = "braintree_python";
     tag = finalAttrs.version;
-    hash = "sha256-Dsmfqy/thftJe3ovh/Y71gIz7w+mv/lDUhlsb1CsjtA=";
+    hash = "sha256-cD0TKqf2c/wdFwDc78rEPm4ucZkYS1nk2Uo0oTfcJvE=";
   };
 
   build-system = [ setuptools ];
