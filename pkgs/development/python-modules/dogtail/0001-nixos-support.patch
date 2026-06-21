@@ -1,0 +1,56 @@
+From 9c9581aefeb8b1d8e1c664a588867d9e0df675c6 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Thu, 26 Mar 2026 21:21:25 +0530
+Subject: [PATCH] nixos support
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ dogtail/distro.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/dogtail/distro.py b/dogtail/distro.py
+index d5c09ad..c70932e 100644
+--- a/dogtail/distro.py
++++ b/dogtail/distro.py
+@@ -353,6 +353,15 @@ class _SolarisPackageDb(PackageDb):
+     # module.
+ 
+ 
++class _NixOSPackageDb(PackageDb):  # pragma: no cover
++    """
++    NixOS Package Database Implementation.
++    """
++
++    def __init__(self):
++        super().__init__()
++
++
+ class JhBuildPackageDb(PackageDb):
+     """
+     JH Build Package Database Implementation.
+@@ -570,6 +579,11 @@ class Solaris(Distro):  # pragma: no cover
+         self.package_database = _SolarisPackageDb()
+ 
+ 
++class NixOS(Distro):  # pragma: no cover
++    def __init__(self) -> None:
++        self.package_database = _NixOSPackageDb()
++
++
+ class JHBuild(Distro):  # pragma: no cover
+     """
+     Defining JHBuild Distribution.
+@@ -633,6 +647,10 @@ def detect_distribution():
+             re.match(".*Solaris", open("/etc/release", encoding="utf-8").readline()):
+         distribution_detection = Solaris()
+ 
++    elif os.path.exists("/etc/os-release") and \
++            re.match(".*NixOS", open("/etc/os-release", encoding="utf-8").readline()):
++        distribution_detection = NixOS()
++
+     elif os.path.exists("/etc/os-release") and \
+             re.match(".*GNOME-Continuous", open("/etc/os-release",  encoding="utf-8").readline()):
+         distribution_detection = GnomeContinuous()
+-- 
+2.53.0
+
