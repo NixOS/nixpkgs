@@ -39,8 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper \
       $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier \
-      $out/bin/terminal-notifier \
-      --chdir $out/Applications/terminal-notifier.app
+      $out/bin/terminal-notifier
 
     runHook postInstall
   '';
