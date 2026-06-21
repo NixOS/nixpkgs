@@ -8,16 +8,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "ticker";
-  version = "5.2.1";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = "ticker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1q+TMCYPp9AicWJZzWrrr5ukj6AcckNkp2yP4NyOm5g=";
+    hash = "sha256-DXaW1pL0MDM6GTm1i7ns94OgBqSsR94wFYoumOZsnXo=";
   };
 
-  vendorHash = "sha256-kEyZMFW1ex45yC4G9qZUOeXVdQKjcExG7hKvN8lxrDI=";
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.4" "go 1.26.3"
+  '';
+
+  vendorHash = "sha256-ulAmWbsLp5oiIRJNyI0jRXBGUnjRzkZt3zHdbxkCLV0=";
 
   ldflags = [
     "-s"
