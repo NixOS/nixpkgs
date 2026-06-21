@@ -9,6 +9,7 @@
   gcc,
   pixman,
   libadwaita,
+  libdrm,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             pixman
           ]
         )
-      }'
+      }:${libdrm.dev}/include/libdrm'
     )
   '';
 
