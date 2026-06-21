@@ -5,72 +5,17 @@
   nix-update-script,
   nixosTests,
   python3Packages,
+  # Optional runtime dependencies
+  withComics ? false,
+  withGdrive ? false,
+  withGmail ? false,
+  withKobo ? false,
+  withLdap ? false,
+  withMetadata ? false,
+  withOauth ? false,
 }:
-python3Packages.buildPythonApplication rec {
-  pname = "calibre-web";
-  version = "0.6.26-unstable-2026-03-01";
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "janeczku";
-    repo = "calibre-web";
-    # remember changing this back (and changelog below) to tag after new release come out
-    rev = "6157f5027c979aa05f8d97a09f1388ceb3085ac5";
-    hash = "sha256-1ljMsf8Puvq4ELUSi8Vl3T7EHcd7MO3zGgT4j5PYsT0=";
-  };
-
-  patches = [
-    # default-logger.patch switches default logger to /dev/stdout. Otherwise calibre-web tries to open a file relative
-    # to its location, which can't be done as the store is read-only. Log file location can later be configured using UI
-    # if needed.
-    ./default-logger.patch
-    # DB migrations adds an env var __RUN_MIGRATIONS_ANDEXIT that, when set, instructs calibre-web to run DB migrations
-    # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
-    # are stored in the DB.
-    ./db-migrations.patch
-  ];
-
-  # calibre-web doesn't follow setuptools directory structure.
-  postPatch = ''
-    mkdir -p src/calibreweb
-    mv cps.py src/calibreweb/__init__.py
-    mv cps src/calibreweb
-
-    substituteInPlace pyproject.toml \
-      --replace-fail 'cps = "calibreweb:main"' 'calibre-web = "calibreweb:main"'
-  '';
-
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = with python3Packages; [
-    apscheduler
-    babel
-    bleach
-    chardet
-    cryptography
-    flask
-    flask-babel
-    flask-httpauth
-    flask-limiter
-    flask-principal
-    flask-wtf
-    iso-639
-    lxml
-    netifaces-plus
-    pycountry
-    pypdf
-    python-magic
-    pytz
-    regex
-    requests
-    sqlalchemy
-    tornado
-    unidecode
-    urllib3
-    wand
-  ];
-
-  optional-dependencies = {
+let
+  optionalDependencies = {
     comics = with python3Packages; [
       comicapi
       natsort
@@ -123,6 +68,79 @@ python3Packages.buildPythonApplication rec {
       sqlalchemy-utils
     ];
   };
+in
+python3Packages.buildPythonApplication rec {
+  pname = "calibre-web";
+  version = "0.6.26-unstable-2026-03-01";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "janeczku";
+    repo = "calibre-web";
+    # remember changing this back (and changelog below) to tag after new release come out
+    rev = "6157f5027c979aa05f8d97a09f1388ceb3085ac5";
+    hash = "sha256-1ljMsf8Puvq4ELUSi8Vl3T7EHcd7MO3zGgT4j5PYsT0=";
+  };
+
+  patches = [
+    # default-logger.patch switches default logger to /dev/stdout. Otherwise calibre-web tries to open a file relative
+    # to its location, which can't be done as the store is read-only. Log file location can later be configured using UI
+    # if needed.
+    ./default-logger.patch
+    # DB migrations adds an env var __RUN_MIGRATIONS_ANDEXIT that, when set, instructs calibre-web to run DB migrations
+    # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
+    # are stored in the DB.
+    ./db-migrations.patch
+  ];
+
+  # calibre-web doesn't follow setuptools directory structure.
+  postPatch = ''
+    mkdir -p src/calibreweb
+    mv cps.py src/calibreweb/__init__.py
+    mv cps src/calibreweb
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'cps = "calibreweb:main"' 'calibre-web = "calibreweb:main"'
+  '';
+
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies =
+    with python3Packages;
+    [
+      apscheduler
+      babel
+      bleach
+      chardet
+      cryptography
+      flask
+      flask-babel
+      flask-httpauth
+      flask-limiter
+      flask-principal
+      flask-wtf
+      iso-639
+      lxml
+      netifaces-plus
+      pycountry
+      pypdf
+      python-magic
+      pytz
+      regex
+      requests
+      sqlalchemy
+      tornado
+      unidecode
+      urllib3
+      wand
+    ]
+    ++ lib.optionals withComics optionalDependencies.comics
+    ++ lib.optionals withGdrive optionalDependencies.gdrive
+    ++ lib.optionals withGmail optionalDependencies.gmail
+    ++ lib.optionals withKobo optionalDependencies.kobo
+    ++ lib.optionals withLdap optionalDependencies.ldap
+    ++ lib.optionals withMetadata optionalDependencies.metadata
+    ++ lib.optionals withOauth optionalDependencies.oauth;
 
   pythonRelaxDeps = [
     "apscheduler"
@@ -139,7 +157,7 @@ python3Packages.buildPythonApplication rec {
     "wand"
   ];
 
-  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = lib.concatAttrValues optionalDependencies;
 
   pythonImportsCheck = [ "calibreweb" ];
 
