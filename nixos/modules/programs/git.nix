@@ -85,6 +85,12 @@ in
         enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
       };
 
+      filter-repo = {
+        enable = lib.mkEnableOption "git-filter-repo";
+
+        package = lib.mkPackageOption pkgs "git-filter-repo" { };
+      };
+
       attributes = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -130,6 +136,11 @@ in
       environment.interactiveShellInit = ''
         source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
       '';
+    })
+    (lib.mkIf (cfg.enable && cfg.filter-repo.enable) {
+      environment.systemPackages = [
+        cfg.filter-repo.package
+      ];
     })
   ];
 
