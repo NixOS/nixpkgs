@@ -1125,9 +1125,10 @@ rec {
   reverseList =
     xs:
     let
-      l = length xs;
+      # subtract one to save an __sub call on every element
+      lastIndex = length xs - 1;
     in
-    genList (n: elemAt xs (l - n - 1)) l;
+    genList (n: elemAt xs (lastIndex - n)) (lastIndex + 1);
 
   /**
     Depth-First Search (DFS) for lists `list != []`.
