@@ -5233,6 +5233,7 @@ with pkgs;
 
   rust_1_91 = callPackage ../development/compilers/rust/1_91.nix { };
   rust_1_94 = callPackage ../development/compilers/rust/1_94.nix { };
+  rust_1_95 = callPackage ../development/compilers/rust/1_95.nix { };
   rust = rust_1_91;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -5241,6 +5242,7 @@ with pkgs;
 
   rustPackages_1_91 = rust_1_91.packages.stable;
   rustPackages_1_94 = rust_1_94.packages.stable;
+  rustPackages_1_95 = rust_1_95.packages.stable;
   rustPackages = rustPackages_1_91;
 
   inherit (rustPackages)
