@@ -341,6 +341,8 @@ let
         );
 
       attrs = finalAttrs: {
+        __structuredAttrs = true;
+
         pname = "godot${suffix}";
         inherit version;
 
@@ -645,7 +647,7 @@ let
           # when building the mono editor, we need to build the assemblies
           # before generating the bundle
           + lib.optionalString stdenv.hostPlatform.isDarwin ''
-            scons $sconsFlags generate_bundle=yes
+            scons "''${sconsFlags[@]}" generate_bundle=yes
           ''
         );
 
