@@ -39,6 +39,8 @@ let
       pnpm
     ];
 
+    __darwinAllowLocalNetworking = true;
+
     buildPhase = ''
       make frontend
     '';
@@ -49,15 +51,15 @@ let
     '';
   });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.26.3";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    tag = "v${gitea.version}";
-    hash = "sha256-61iW27pYwbEXV3W72IsPNVFD05/XpMLyPbseZzW6OG0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xfLhiQMygYKgSMrvmH2V/LIMeaA4ovOeUDT4RUwhvgo=";
   };
 
   proxyVendor = true;
@@ -99,8 +101,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+    "-X main.Version=${finalAttrs.version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
   postInstall = ''
@@ -133,6 +135,7 @@ buildGoModule rec {
   meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
+    changelog = "https://github.com/go-gitea/gitea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       techknowlogick
@@ -140,4 +143,4 @@ buildGoModule rec {
     ];
     mainProgram = "gitea";
   };
-}
+})
