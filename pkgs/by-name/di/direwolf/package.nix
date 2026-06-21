@@ -3,16 +3,22 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  cmake,
+  avahi,
+  avahiSupport ? false,
   alsa-lib,
+  cmake,
+  libgpiod,
+  libgpiodSupport ? false,
   gpsd,
   gpsdSupport ? false,
   hamlib_4,
   hamlib ? hamlib_4,
   hamlibSupport ? true,
+  hidapi,
   perl,
   portaudio,
   python3,
+  sndio,
   espeak,
   udev,
   udevCheckHook,
@@ -44,7 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
       alsa-lib
       udev
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ portaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      hidapi
+      portaudio
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isBSD) [ sndio ]
+    ++ lib.optionals avahiSupport [ avahi ]
+    ++ lib.optionals libgpiodSupport [ libgpiod ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [
