@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Aurulent Sans";
     longDescription = "Aurulent Sans is a humanist sans serif intended to be used as an interface font.";
     homepage = "http://delubrum.org/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
