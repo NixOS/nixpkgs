@@ -1,0 +1,44 @@
+diff --git a/package-lock.json b/package-lock.json
+index 8de56453512..e2d5fc6f722 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -10,6 +10,7 @@
+       "license": "MIT",
+       "dependencies": {
+         "@vscode/l10n": "^0.0.18",
++        "typescript": "^5.8.3",
+         "vscode-css-languageservice": "^6.3.6",
+         "vscode-html-languageservice": "^5.5.0",
+         "vscode-languageserver": "^10.0.0-next.13",
+@@ -45,6 +46,19 @@
+       "resolved": "https://registry.npmjs.org/@vscode/l10n/-/l10n-0.0.18.tgz",
+       "integrity": "sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ=="
+     },
++    "node_modules/typescript": {
++      "version": "5.8.3",
++      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz",
++      "integrity": "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==",
++      "license": "Apache-2.0",
++      "bin": {
++        "tsc": "bin/tsc",
++        "tsserver": "bin/tsserver"
++      },
++      "engines": {
++        "node": ">=14.17"
++      }
++    },
+     "node_modules/undici-types": {
+       "version": "6.20.0",
+       "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-6.20.0.tgz",
+diff --git a/package.json b/package.json
+index 64b426fa41a..a372f64f249 100644
+--- a/package.json
++++ b/package.json
+@@ -10,6 +10,7 @@
+   "main": "./out/node/htmlServerMain",
+   "dependencies": {
+     "@vscode/l10n": "^0.0.18",
++    "typescript": "^5.8.3",
+     "vscode-css-languageservice": "^6.3.6",
+     "vscode-html-languageservice": "^5.5.0",
+     "vscode-languageserver": "^10.0.0-next.13",
