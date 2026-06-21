@@ -5,6 +5,7 @@
   ncurses,
   ocaml,
   writeText,
+  removeReferencesTo,
 }:
 
 stdenv.mkDerivation rec {
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
         exit 1
       fi
     }
+    stripOCamlReferences () {
+      if [[ -n "''${dontStripOCamlReferences-}" || ! -d "$prefix" ]]; then return; fi
+      find "$prefix" -type f -name '*.cmt*' -exec ${removeReferencesTo}/bin/remove-references-to -t ${ocaml} {} +
+    }
 
     # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
@@ -80,6 +85,8 @@ stdenv.mkDerivation rec {
     preInstallHooks+=(createOcamlDestDir)
     # run even in nix-shell, and even without buildInputs
     addEnvHooks "$hostOffset" exportOcamlDestDir
+    # nuke compiler paths from bin-annot files
+    fixupOutputHooks+=(stripOCamlReferences)
     # runs after all calls to addOCamlPath
     if [[ -z "''${dontDetectOcamlConflicts-}" ]]; then
       postHooks+=("detectOcamlConflicts")
