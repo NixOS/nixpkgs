@@ -1,6 +1,21 @@
 { lib }:
 
-{
+let
+  inherit (lib)
+    concatLists
+    concatMap
+    escapeShellArgs
+    isBool
+    isList
+    mapAttrsToList
+    oldestSupportedReleaseIsAtLeast
+    optional
+    stringLength
+    warnIf
+    ;
+  inherit (lib.generators) mkValueStringDefault;
+in
+rec {
   /**
     Automatically convert an attribute set to command-line options.
 
@@ -40,9 +55,9 @@
     :::
   */
   toGNUCommandLineShell =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511)
+    warnIf (oldestSupportedReleaseIsAtLeast 2511)
       "lib.cli.toGNUCommandLineShell is deprecated, please use lib.cli.toCommandLineShell or lib.cli.toCommandLineShellGNU instead."
-      (options: attrs: lib.escapeShellArgs (lib.cli.toGNUCommandLine options attrs));
+      (options: attrs: escapeShellArgs (toGNUCommandLine options attrs));
 
   /**
     Automatically convert an attribute set to a list of command-line options.
@@ -116,15 +131,15 @@
     :::
   */
   toGNUCommandLine =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511)
+    warnIf (oldestSupportedReleaseIsAtLeast 2511)
       "lib.cli.toGNUCommandLine is deprecated, please use lib.cli.toCommandLine or lib.cli.toCommandLineShellGNU instead."
       (
         {
-          mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}",
+          mkOptionName ? k: if stringLength k == 1 then "-${k}" else "--${k}",
 
-          mkBool ? k: v: lib.optional v (mkOptionName k),
+          mkBool ? k: v: optional v (mkOptionName k),
 
-          mkList ? k: v: lib.concatMap (mkOption k) v,
+          mkList ? k: v: concatMap (mkOption k) v,
 
           mkOption ?
             k: v:
@@ -133,10 +148,10 @@
             else if optionValueSeparator == null then
               [
                 (mkOptionName k)
-                (lib.generators.mkValueStringDefault { } v)
+                (mkValueStringDefault { } v)
               ]
             else
-              [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
+              [ "${mkOptionName k}${optionValueSeparator}${mkValueStringDefault { } v}" ],
 
           optionValueSeparator ? null,
         }:
@@ -144,15 +159,15 @@
         let
           render =
             k: v:
-            if builtins.isBool v then
+            if isBool v then
               mkBool k v
-            else if builtins.isList v then
+            else if isList v then
               mkList k v
             else
               mkOption k v;
 
         in
-        builtins.concatLists (lib.mapAttrsToList render options)
+        concatLists (mapAttrsToList render options)
       );
 
   /**
@@ -163,8 +178,7 @@
     For further reference see:
     [`lib.cli.toCommandLineGNU`](#function-library-lib.cli.toCommandLineGNU)
   */
-  toCommandLineShellGNU =
-    options: attrs: lib.escapeShellArgs (lib.cli.toCommandLineGNU options attrs);
+  toCommandLineShellGNU = options: attrs: escapeShellArgs (toCommandLineGNU options attrs);
 
   /**
     Converts an attribute set into a list of GNU-style command-line arguments.
@@ -227,9 +241,9 @@
   */
   toCommandLineGNU =
     {
-      isLong ? optionName: builtins.stringLength optionName > 1,
+      isLong ? optionName: stringLength optionName > 1,
       explicitBool ? false,
-      formatArg ? lib.generators.mkValueStringDefault { },
+      formatArg ? mkValueStringDefault { },
     }:
     let
       optionFormat = optionName: {
@@ -238,7 +252,7 @@
         inherit explicitBool formatArg;
       };
     in
-    lib.cli.toCommandLine optionFormat;
+    toCommandLine optionFormat;
 
   /**
     Converts the given attributes into a single shell-escaped command-line
@@ -248,8 +262,7 @@
     For further reference see:
     [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
   */
-  toCommandLineShell =
-    optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
+  toCommandLineShell = optionFormat: attrs: escapeShellArgs (toCommandLine optionFormat attrs);
 
   /**
     Converts an attribute set into a list of command-line arguments.
@@ -426,9 +439,9 @@
       handlePair =
         k: v:
         if k == "" then
-          lib.throw "lib.cli.toCommandLine only accepts non-empty option names."
-        else if builtins.isList v then
-          builtins.concatMap (handleOption k) v
+          throw "lib.cli.toCommandLine only accepts non-empty option names."
+        else if isList v then
+          concatMap (handleOption k) v
         else
           handleOption k v;
 
@@ -439,7 +452,7 @@
           option,
           sep,
           explicitBool,
-          formatArg ? lib.generators.mkValueStringDefault { },
+          formatArg ? mkValueStringDefault { },
         }:
         k: v:
         if v == null || (!explicitBool && v == false) then
@@ -458,5 +471,5 @@
               arg
             ];
     in
-    attrs: builtins.concatLists (lib.mapAttrsToList handlePair attrs);
+    attrs: concatLists (mapAttrsToList handlePair attrs);
 }
