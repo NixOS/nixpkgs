@@ -41,8 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{Applications,bin}
+    mkdir -p $out/Applications
     cp -r Products/Release/terminal-notifier.app $out/Applications/
+
     makeWrapper \
       $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier \
       $out/bin/terminal-notifier \
