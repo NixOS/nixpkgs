@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   docbook_xsl,
   exempi,
   gdk-pixbuf,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ayd91gVLuSUVlCxaPSBbx7hg4tthVTaBEnl5V9YYbQw=";
   };
 
+  patches = [
+    # build: Add support for GIRepository-2.0.
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xviewer/commit/74d7d4ba2584c658ae6fb87208543671664943cc.patch";
+      hash = "sha256-lL4MTvC2RvdVZ4O5RaYyK+1sHnLGPYzGNbZ99aN22U8=";
+    })
+  ];
+
   nativeBuildInputs = [
     docbook_xsl
     gobject-introspection
@@ -65,18 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     xapp
   ];
-
-  postPatch = ''
-    # Switch to girepository-2.0
-    substituteInPlace src/main.c \
-      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
-      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
-
-    substituteInPlace src/xviewer-plugin-engine.c \
-      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
-      --replace-fail "g_irepository_get_default" "gi_repository_dup_default" \
-      --replace-fail "g_irepository_require" "gi_repository_require"
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
