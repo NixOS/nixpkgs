@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fswatch";
-  version = "1.18.3";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = finalAttrs.version;
-    sha256 = "sha256-C/NHDhhRTQppu8xRWe9fy1+KIutyoRbkkabUtGlJ1fE=";
+    sha256 = "sha256-/ZCvOxigZO4CnVOvPyg+CztiWrbZ0xtCzme8cOXL9Fw=";
   };
 
   nativeBuildInputs = [
