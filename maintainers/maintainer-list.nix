@@ -30796,6 +30796,12 @@
     github = "ZachDavies";
     githubId = 131615861;
   };
+  zachthieme = {
+    email = "zach@techsage.org";
+    github = "zachthieme";
+    githubId = 590418;
+    name = "Zach Thieme";
+  };
   Zaczero = {
     name = "Kamil Monicz";
     email = "kamil@monicz.dev";
