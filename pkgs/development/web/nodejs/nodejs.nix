@@ -524,6 +524,27 @@ let
               "test-esm-import-meta-main-eval"
               "test-worker-debug"
             ]
+            # These network/fetch/inspector tests fail on riscv64
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
+              "test-fetch"
+              "test-http2-allow-http1-upgrade-ws"
+              "test-http-proxy-fetch"
+              "test-http-set-global-proxy-from-env-fetch"
+              "test-http-set-global-proxy-from-env-fetch-default"
+              "test-http-set-global-proxy-from-env-fetch-empty"
+              "test-http-set-global-proxy-from-env-fetch-no-proxy"
+              "test-http-set-global-proxy-from-env-fetch-restore"
+              "test-http-set-global-proxy-from-env-override-fetch"
+              "test-inspector-invalid-protocol"
+              "test-inspector-network-content-type"
+              "test-inspector-network-fetch"
+              "test-inspector-network-websocket"
+              "test-report-exclude-network"
+              "test-tls-set-default-ca-certificates-append-fetch"
+              "test-tls-set-default-ca-certificates-reset-fetch"
+              "test-use-env-proxy-cli-http"
+              "test-wasm-web-api"
+            ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (
