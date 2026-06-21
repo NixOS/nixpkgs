@@ -72,7 +72,6 @@ with lib.maintainers;
       cbley
       groodt
       aherrmann
-      ylecornec
       boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";

@@ -30542,12 +30542,6 @@
     githubId = 1742643;
     name = "Ravi Peters";
   };
-  ylecornec = {
-    email = "yves.stan.lecornec@tweag.io";
-    github = "ylecornec";
-    githubId = 5978566;
-    name = "Yves-Stan Le Cornec";
-  };
   ylh = {
     email = "nixpkgs@ylh.io";
     github = "ylh";
