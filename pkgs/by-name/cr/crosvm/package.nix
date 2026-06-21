@@ -63,6 +63,50 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = [ "virgl_renderer" ];
 
+  # Patch the bundled `.policy` source files in `jail/seccomp/<arch>/`
+  # *before* crosvm's own build runs. crosvm's `jail/build.rs` invokes
+  # `third_party/minijail/tools/compile_seccomp_policy.py` at compile
+  # time and bakes the resulting `.bpf` programs into the binary
+  # (since crosvm 107.1, fb60a5c9473b), so editing the source policies
+  # at this point flows directly into the embedded filters that
+  # crosvm jails its device proxies with at runtime.
+  #
+  # Two narrow widenings are required for any multi-process Rust device
+  # proxy to function on Linux ≥ 6.13 with glibc ≥ 2.40, both in
+  # `common_device.policy`:
+  #
+  #   - `prctl: arg0 == PR_SET_VMA` gains an `|| arg0 == PR_SET_NAME`
+  #     alternation. Rust's `std::thread::Thread::new` calls
+  #     `prctl(PR_SET_NAME, ...)` from the new thread before user code
+  #     runs; without this, every device proxy that spawns a worker
+  #     thread (serial, xhci, virtio-block, ...) dies with SIGSYS
+  #     during `pthread_create`.
+  #
+  #   - `madvise: arg2 == <fixed MADV_* list>` gains an
+  #     `|| arg2 == 102` alternation (`MADV_GUARD_INSTALL`). On kernel
+  #     6.13+, glibc 2.40+ uses `MADV_GUARD_INSTALL` for stack guard
+  #     pages, which isn't in the bundled list, and every Rust thread
+  #     spawn dies the moment glibc decides to install guard pages.
+  #     The constant is referenced numerically because
+  #     `compile_seccomp_policy.py`'s constants table predates it.
+  #     Keeping the rule a conditional alternation (rather than
+  #     collapsing to `madvise: 1`) preserves the bundled `@include`
+  #     contract — sub-policies like `jail_warden.policy` redefine
+  #     `madvise` themselves, which the minijail parser only allows
+  #     while the parent rule is conditional.
+  postPatch = ''
+    if [ ! -f jail/seccomp/x86_64/common_device.policy ]; then
+      echo "no common_device.policy found under jail/seccomp/x86_64/" >&2
+      exit 1
+    fi
+    for policy in jail/seccomp/*/common_device.policy; do
+      sed -i \
+        -e 's~^prctl: arg0 == PR_SET_VMA$~prctl: arg0 == PR_SET_VMA || arg0 == PR_SET_NAME~' \
+        -e 's~^\(madvise: arg2 ==.*\)$~\1 || arg2 == 102~' \
+        "$policy"
+    done
+  '';
+
   passthru = {
     updateScript = writeShellScript "update-crosvm.sh" ''
       set -ue
