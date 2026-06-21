@@ -599,35 +599,6 @@ with haskellLib;
   # if it's a bug, at least doesn't seem to be nixpkgs-specific.
   nspace = dontCheck super.nspace;
 
-  # Unreleased commits relaxing bounds on various dependencies
-  gitit = appendPatches [
-    (fetchpatch {
-      name = "gitit-allow-hoauth2-2.14.patch";
-      url = "https://github.com/jgm/gitit/commit/58a226c48b37f076ccc1b94ad88a9ffc05f983cc.patch";
-      sha256 = "1fvfzbas18vsv9qvddp6g82hy9hdgz34n51w6dpkd7cm4sl07pjv";
-    })
-    (fetchpatch {
-      name = "gitit-allow-pandoc-3.6.patch";
-      url = "https://github.com/jgm/gitit/commit/c57c790fa0db81d383f22901a0db4ffe90f1bfcc.patch";
-      sha256 = "0nbzxyc9gkhkag1fhv3qmw5zgblhbz0axrlsismrcvdzr28amii8";
-    })
-    (fetchpatch {
-      name = "gitit-allow-zlib-0.7-network-3.2.patch";
-      url = "https://github.com/jgm/gitit/commit/efaee62bc32c558e618ad34458fa2ef85cb8eb1e.patch";
-      sha256 = "1ghky3afnib56w102mh09cz2alfyq743164mnjywwfl6a6yl6i5h";
-    })
-    (pkgs.fetchpatch {
-      name = "gitit-pandoc-3.7.patch";
-      url = "https://github.com/jgm/gitit/commit/211631ffdd8b520f368220e5cfbd8d64a28b43b6.patch";
-      hash = "sha256-eVjwiGNfEKmeamsUfTNCxJm7OJ7N9xuYHfFllwtwRi0=";
-    })
-    (pkgs.fetchpatch {
-      name = "gitit-xml-conduit-1.10.patch";
-      url = "https://github.com/jgm/gitit/commit/88d1a91795e08ea573d50f4f24e2e1c5d6da5002.patch";
-      hash = "sha256-LrP51+Uxp1VPKrDkIhVlm3kSAnYkodiENtLbWHxV3B4=";
-    })
-  ] super.gitit;
-
   # Cut off infinite recursion via test suites:
   #
   #   tasty-quickcheck-0.11.1 (test) -> regex-tdfa-1.3.2.4 (test) -> doctest-parallel-0.4
