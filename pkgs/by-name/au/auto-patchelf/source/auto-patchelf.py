@@ -260,23 +260,27 @@ class SetInterpreter:
 class IgnoredDependency:
     file: Path                          # The file that contains the ignored dependency
     name: Path                          # The name of the dependency
+    alternative_names: list[Path]       # Alternative names of this dependency
     pattern: str                        # The pattern that caused this missing dep to be ignored
 
     def to_human_readable_str(self) -> str:
-        return f"warn: auto-patchelf ignoring missing {self.name} wanted by {self.file}"
+        alt_names = f" [alternative names: {', '.join(map(str, self.alternative_names))}]" if self.alternative_names else ""
+        return f"warn: auto-patchelf ignoring missing {self.name}{alt_names} wanted by {self.file}"
 
 @dataclass
 class Dependency:
     file: Path                          # The file that contains the dependency
     name: Path                          # The name of the dependency
+    alternative_names: list[Path]       # Alternative names of this dependency
     found: bool = False                 # Whether it was found somewhere
     location: Optional[Path] = None     # Where the dependency was found (if found)
 
     def to_human_readable_str(self) -> str:
+        alt_names = f" [alternative names: {', '.join(map(str, self.alternative_names))}]" if self.alternative_names else ""
         if self.found:
-            return f"    {self.name} -> found: {self.location}"
+            return f"    {self.name}{alt_names} -> found: {self.location}"
         else:
-            return f"    {self.name} -> not found!"
+            return f"    {self.name}{alt_names} -> not found!"
 
 
 @dataclass
@@ -402,7 +406,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
                 origin_rpath_entry = find_first_matching_rpath_with_origin(path, found_dependency, existing_rpaths) if preserve_origin else None
                 rpath.append(origin_rpath_entry or found_dependency)
-                dep = Dependency(file=path, name=candidate, found=True, location=found_dependency)
+                dep = Dependency(file=path, name=candidate, alternative_names=[c for c in dep if c != candidate], found=True, location=found_dependency)
                 dependencies.append(dep)
                 logger.log(dep)
                 was_found = True
@@ -412,8 +416,7 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
                 break
 
         if not was_found:
-            dep_name = dep[0] if len(dep) == 1 else f"any({', '.join(map(str, dep))})"
-            dep = Dependency(file=path, name=dep_name, found=False, location=None)
+            dep = Dependency(file=path, name=dep[0], alternative_names=dep[1:], found=False, location=None)
             dependencies.append(dep)
             logger.log(dep)
 
@@ -460,7 +463,7 @@ def auto_patchelf(
 
     populate_cache(lib_dirs)
 
-    dependencies = []
+    dependencies: list[Dependency] = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
             dependencies += auto_patchelf_file(logger, path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
@@ -472,8 +475,8 @@ def auto_patchelf(
     failure = False
     for dep in missing:
         for pattern in ignore_missing:
-            if fnmatch(dep.name.name, pattern):
-                logger.log(IgnoredDependency(file=dep.file, name=dep.name, pattern=pattern))
+            if any(fnmatch(dep_name.name, pattern) for dep_name in [dep.name, *dep.alternative_names]):
+                logger.log(IgnoredDependency(file=dep.file, name=dep.name, alternative_names=dep.alternative_names, pattern=pattern))
                 break
         else:
             logger.debug(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
