@@ -39,6 +39,8 @@ let
       pnpm
     ];
 
+    __darwinAllowLocalNetworking = true;
+
     buildPhase = ''
       make frontend
     '';
