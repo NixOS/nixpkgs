@@ -37,10 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/redis/memtier_benchmark";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      thoughtpolice
-      hythera
-    ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     mainProgram = "memtier_benchmark";
+    teams = [ lib.teams.redis ];
   };
 })

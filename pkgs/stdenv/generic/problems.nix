@@ -242,7 +242,7 @@ rec {
   # The type for meta.problems
   problemsType =
     let
-      types = import ./meta-types.nix { inherit lib; };
+      types = import ../../../lib/meta-types.nix { inherit lib; };
       inherit (types)
         str
         listOf

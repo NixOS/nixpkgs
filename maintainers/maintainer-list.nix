@@ -3141,7 +3141,10 @@
     email = "bastian@asmussen.tech";
     github = "BastianAsmussen";
     githubId = 76102128;
-    keys = [ { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; } ];
+    keys = [
+      { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; }
+      { fingerprint = "220D 68EC DF94 20EE 1E6C  B215 D92D 668B 77A2 9897"; }
+    ];
   };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
@@ -15145,6 +15148,11 @@
     githubId = 27364685;
     name = "Lorenzo Pasqui";
   };
+  l1n = {
+    github = "l1n";
+    githubId = 1367322;
+    name = "Nova DasSarma";
+  };
   l1npengtul = {
     email = "l1npengtul@l1npengtul.lol";
     github = "l1npengtul";
@@ -17211,6 +17219,12 @@
     email = "matthias.risze@t-online.de";
     github = "matrss";
     githubId = 9308656;
+  };
+  matshch = {
+    name = "Artem Leshchev";
+    github = "matshch";
+    githubId = 2412121;
+    email = "matshch@gmail.com";
   };
   matt-snider = {
     email = "matt.snider@protonmail.com";
@@ -23028,12 +23042,6 @@
     github = "raquelgb";
     githubId = 1246959;
     name = "Raquel García";
-  };
-  rardiol = {
-    email = "ricardo.ardissone@gmail.com";
-    github = "rardiol";
-    githubId = 11351304;
-    name = "Ricardo Ardissone";
   };
   raskin = {
     email = "7c6f434c@mail.ru";
