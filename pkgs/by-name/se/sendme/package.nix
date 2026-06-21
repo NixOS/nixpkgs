@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sendme";
-  version = "0.33.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "sendme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y7aaBm6KG+b8eEr2W8jmN2Ws3y0Dzkk848af3yse1/8=";
+    hash = "sha256-pylf7QuIn5Dm7V31VwfBrkI0W8LML1XoHKvxF/jrRcw=";
   };
 
-  cargoHash = "sha256-J4ctZ1a7pSKVTi1BAHRZMNLrfrODWKDrgsBRZN/24DM=";
+  cargoHash = "sha256-4GRyEojm115nTjX2/zZWe/Jv8x6DOFY4WpzIR0pm8H4=";
 
   # The tests require contacting external servers.
   doCheck = false;
