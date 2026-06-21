@@ -12,7 +12,6 @@ let
     "fcitx5"
     "nabi"
     "uim"
-    "hime"
     "kime"
   ];
 
@@ -76,7 +75,6 @@ in
           - fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
           - nabi: A Korean input method based on XIM. Nabi doesn't support Qt 5.
           - uim: The universal input method, is a library with a XIM bridge. uim mainly support Chinese, Japanese and Korean.
-          - hime: An extremely easy-to-use input method framework.
           - kime: Koream IME.
         '';
       };
