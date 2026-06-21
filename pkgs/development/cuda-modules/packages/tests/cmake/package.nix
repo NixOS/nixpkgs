@@ -59,8 +59,8 @@ let
         __structuredAttrs = true;
         strictDeps = true;
 
-        testSuiteName = builtins.throw "testSuiteName must be set";
-        testName = builtins.throw "testName must be set";
+        testSuiteName = throw "testSuiteName must be set";
+        testName = throw "testName must be set";
 
         name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
         pname = "tests-cmake-${finalAttrs.testSuiteName}-${finalAttrs.testName}";

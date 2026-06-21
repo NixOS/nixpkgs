@@ -83,8 +83,7 @@ let
                     vlanId = remoteIfaceMeta.vlan or null;
                   in
                   if vlanId != null && builtins.elem vlanId localVlans then
-                    builtins.map (addr: addr.address) ifaceCfg.ipv4.addresses
-                    ++ builtins.map (addr: addr.address) ifaceCfg.ipv6.addresses
+                    map (addr: addr.address) ifaceCfg.ipv4.addresses ++ map (addr: addr.address) ifaceCfg.ipv6.addresses
                   else
                     [ ]
                 ) remoteInterfaces

@@ -18,7 +18,7 @@ mkDerivation {
 
   makeFlags = [
     "SYSDIR=${sys.src}/sys"
-    "KMODDIR=${builtins.placeholder "out"}/kernel"
+    "KMODDIR=${placeholder "out"}/kernel"
     "NO_XREF=1"
   ];
 

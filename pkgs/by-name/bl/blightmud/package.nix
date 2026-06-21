@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_mccp2_negotiation"
       ];
     in
-    builtins.map (x: "--skip=" + x) skipList;
+    map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Terminal MUD client written in Rust";

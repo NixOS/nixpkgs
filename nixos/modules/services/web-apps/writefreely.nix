@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (builtins) toString;
   inherit (lib)
     types
     mkIf

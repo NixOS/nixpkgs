@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       includePaths = builtins.concatStringsSep " " (
         lib.flatten (
-          builtins.map includeBaseFor [
+          map includeBaseFor [
             "QtCore"
             "QtGui"
             "QtWidgets"
