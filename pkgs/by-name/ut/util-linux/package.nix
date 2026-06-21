@@ -43,11 +43,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.42.1";
+  version = "2.42.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gukVjrEqmwtWnYThaH/tndGP6JzNjvWsNCchinwNf38=";
+    hash = "sha256-A6BdOt+WAu8Sjy2gW4SzIFzmDDUeVzfANw90AAZ5zoo=";
   };
 
   # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
