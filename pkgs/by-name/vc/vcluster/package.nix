@@ -6,6 +6,8 @@
   nix-update-script,
   testers,
   vcluster,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +22,12 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [
+    installShellFiles
+    # vcluster crashes, even on generating the completion script, if home is not writeable
+    writableTmpDirAsHomeHook
+  ];
 
   subPackages = [ "cmd/vclusterctl" ];
 
@@ -41,9 +49,16 @@ buildGoModule (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    installShellCompletion --cmd vcluster \
+      --bash <($out/bin/vcluster completion bash) \
+      --fish <($out/bin/vcluster completion fish) \
+      --zsh <($out/bin/vcluster completion zsh)
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = vcluster;
-    command = "HOME=$(mktemp -d) vcluster --version";
+    command = "vcluster --version";
   };
 
   passthru.updateScript = nix-update-script { };
