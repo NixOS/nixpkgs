@@ -27917,6 +27917,11 @@
     github = "tilpner";
     githubId = 4322055;
   };
+  tim-tx = {
+    name = "Timothy S. Jones";
+    github = "tim-tx";
+    githubId = 13240467;
+  };
   timasoft = {
     name = "Timofey Klester";
     email = "tima.klester@yandex.ru";

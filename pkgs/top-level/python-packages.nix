@@ -6316,6 +6316,8 @@ self: super: with self; {
 
   geotorch = callPackage ../development/python-modules/geotorch { };
 
+  gepa = callPackage ../development/python-modules/gepa { };
+
   gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
 
   gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
