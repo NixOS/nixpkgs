@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-push-qml";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-push-qml";
     tag = finalAttrs.version;
-    hash = "sha256-QpkW/fbl0Px5HsKfz/gv+D1S+iSpMZM8TiZCuAq1myk=";
+    hash = "sha256-+D8F0H3S+lfU53CJarE7Wrsc66JvJywzih0IgGD8cJo=";
   };
 
   postPatch = ''
