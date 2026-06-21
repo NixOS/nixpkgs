@@ -12,6 +12,9 @@
   qtdeclarative,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
   version = "1.3.3";
@@ -63,8 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
     # In case anything still depends on deprecated hints
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true)
+    (lib.strings.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
