@@ -1,0 +1,26 @@
+diff --git a/build.gradle b/build.gradle
+index b35e3f5..81b3f21 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -120 +120 @@ repositories {
+-    mavenCentral()
++    maven { url = uri("@maven-repository@") }
+diff --git a/buildSrc/build.gradle b/buildSrc/build.gradle
+index 26e0515..ab6763e 100644
+--- a/buildSrc/build.gradle
++++ b/buildSrc/build.gradle
+@@ -39 +39 @@ repositories {
+-    mavenCentral()
++    maven { url = uri("@maven-repository@") }
+diff --git a/settings.gradle b/settings.gradle
+index 505fa1f..253ec71 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -0,0 +1,7 @@
++pluginManagement {
++    repositories {
++        maven { url = uri("@gradle-plugin-repository@") }
++        maven { url = uri("@maven-repository@") }
++    }
++}
++

@@ -39,9 +39,44 @@ let
       z3_lib
     ];
 
+    patches = [
+      ./use-gradle-dependency-cache.patch
+      ./disable-groovy-worker-daemon.patch
+    ];
+
+    postPatch = ''
+      if [[ -n "''${IN_GRADLE_UPDATE_DEPS-}" ]]; then
+        gradlePluginRepository="https://plugins.gradle.org/m2"
+        mavenRepository="https://repo.maven.apache.org/maven2"
+      else
+        gradlePluginRepository="file://${finalAttrs.mitmCache}/https/plugins.gradle.org/m2"
+        mavenRepository="file://${finalAttrs.mitmCache}/https/repo.maven.apache.org/maven2"
+      fi
+
+      substituteInPlace settings.gradle \
+        --replace-fail '@gradle-plugin-repository@' "$gradlePluginRepository" \
+        --replace-fail '@maven-repository@' "$mavenRepository"
+
+      substituteInPlace build.gradle buildSrc/build.gradle \
+        --replace-fail '@maven-repository@' "$mavenRepository"
+    '';
+
     # used to copy java bindings from nixpkgs z3 package instead of having kaiju's build.gradle build gradle from source
     # https://github.com/CERTCC/kaiju/blob/c9dbb55484b3d2a6abd9dfca2197cd00fb7ee3c1/build.gradle#L189
     preBuild = ''
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        kaijuJavacModuleArgs="--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+        kaijuJavacModuleArgs+=" --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
+        kaijuJavacModuleArgs+=" --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED"
+        kaijuJavacModuleArgs+=" --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
+        kaijuJavacModuleArgs+=" --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        kaijuJavacModuleArgs+=" --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED"
+
+        substituteInPlace gradle.properties \
+          --replace-fail 'org.gradle.jvmargs=' "org.gradle.jvmargs=$kaijuJavacModuleArgs "
+        export GRADLE_OPTS="$kaijuJavacModuleArgs ''${GRADLE_OPTS:-}"
+      ''}
+
       mkdir -p build/cmake/z3/java-bindings
       ln -s ${lib.getOutput "java" z3_lib}/share/java/com.microsoft.z3.jar build/cmake/z3/java-bindings
       mkdir -p os/${ghidraPlatformName}
@@ -66,6 +101,10 @@ let
         "aarch64-linux"
         "x86_64-darwin"
         "aarch64-darwin"
+      ];
+      sourceProvenance = with lib.sourceTypes; [
+        fromSource
+        binaryBytecode # mitm cache
       ];
     };
   });
