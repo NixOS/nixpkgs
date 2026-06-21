@@ -2,8 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  util-linux,
+  util-linuxMinimal,
 }:
+
+let
+  util-linux = util-linuxMinimal;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcelog";

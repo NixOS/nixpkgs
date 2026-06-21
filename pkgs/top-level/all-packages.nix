@@ -1719,10 +1719,6 @@ with pkgs;
 
   xmlsort = perlPackages.XMLFilterSort;
 
-  mcelog = callPackage ../os-specific/linux/mcelog {
-    util-linux = util-linuxMinimal;
-  };
-
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
   asciidoc-full = asciidoc.override {
