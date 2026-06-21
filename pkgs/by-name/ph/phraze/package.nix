@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phraze";
-  version = "0.3.25";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "sts10";
     repo = "phraze";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Eeyf3+zJYMRbfeTj+LdxMGEeouvvky6cAmADFqIoRNo=";
+    hash = "sha256-gWgiufSjZnH8XrEufQPdF2hNkh5Lekp9YY1XVEfHapM=";
   };
 
   doCheck = true;
 
-  cargoHash = "sha256-NJOVWIUObmjjamRDZsj7V6xKsfRfUeUqCiKBv/vNiEY=";
+  cargoHash = "sha256-BlZo8hbgIr6hGyf7e6M2rUSCqpsAavyFBqbwVlgZo2Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
