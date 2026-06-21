@@ -191,8 +191,11 @@ dont-distribute-packages:
  - babylon
  - backblaze-b2-hs
  - backdropper
+ - baikai
  - baikai-claude
+ - baikai-effectful
  - baikai-openai
+ - baikai-trace-otel
  - balkon
  - ballast
  - bamboo
@@ -2671,6 +2674,7 @@ dont-distribute-packages:
  - pms-domain-service
  - pms-infra-agent-process
  - pms-infra-agent-serial
+ - pms-infra-agent-server
  - pms-infra-agent-socket
  - pms-infra-cmdrun
  - pms-infra-filesystem
@@ -3189,6 +3193,16 @@ dont-distribute-packages:
  - shibuya-kafka-adapter
  - shibuya-metrics
  - shibuya-pgmq-adapter
+ - shikumi
+ - shikumi-cache
+ - shikumi-cache-postgres
+ - shikumi-cache-redis
+ - shikumi-compile
+ - shikumi-eval
+ - shikumi-optimize
+ - shikumi-tools
+ - shikumi-trace
+ - shikumi-trace-otel
  - shine-varying
  - short-vec
  - short-vec-lens
