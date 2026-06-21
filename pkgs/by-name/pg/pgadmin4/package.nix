@@ -9,23 +9,20 @@
   yarn-berry_4,
   nodejs,
   stdenv,
-  pkgsBuildHost,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.15";
-  yarnHash = "sha256-ey3JyQy4L6R6UqzRTT9qY9Z6Se62UGrX75hpNEOQxTU=";
+  version = "9.16";
+  yarnHash = "sha256-AesYuEyjTNFC4yDGDXQqpWPIv7DFh6j+RNKj/60nGD4=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-a8DacMPXgDP633T0zRX45vHTrkb+2ys74XPErLPMz3E=";
+    hash = "sha256-7KPY/yC9Tb/7JxmDx6XzIM3c4cWqGUVwLeLL7fRZCWA=";
   };
-
-  yarnPatch = ./yarn-4.16-support.patch;
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
@@ -52,7 +49,6 @@ pythonPackages.buildPythonApplication rec {
     inherit missingHashes;
     src = src + "/web";
     hash = yarnHash;
-    patches = [ yarnPatch ];
   };
 
   # from Dockerfile
@@ -113,8 +109,6 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-      PATH=$PATH:${lib.makeBinPath [ pkgsBuildHost.git ]}
-      git apply ${yarnPatch}
       export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
       yarnBerryConfigHook
     )
