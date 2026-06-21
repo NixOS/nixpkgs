@@ -332,8 +332,8 @@ rec {
     :::
   */
   getAttrFromPath =
-    attrPath: set:
-    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'")) set;
+    attrPath:
+    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'"));
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.
