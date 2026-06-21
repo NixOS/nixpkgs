@@ -421,7 +421,7 @@
     - `lib.cli.toCommandLineShellGNU`
   */
   toCommandLine =
-    optionFormat: attrs:
+    optionFormat:
     let
       handlePair =
         k: v:
@@ -458,5 +458,5 @@
               arg
             ];
     in
-    builtins.concatLists (lib.mapAttrsToList handlePair attrs);
+    attrs: builtins.concatLists (lib.mapAttrsToList handlePair attrs);
 }
