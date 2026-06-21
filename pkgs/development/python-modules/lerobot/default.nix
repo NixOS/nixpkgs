@@ -198,6 +198,8 @@ buildPythonPackage (finalAttrs: {
     "tests/policies/rtc/test_modeling_rtc.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
     homepage = "https://github.com/huggingface/lerobot";
