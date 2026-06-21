@@ -16,9 +16,9 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2026.1.1.8"; # "Android Studio Quail 1 | 2026.1.1"
-    sha256Hash = "sha256-DB+kujz6vQfkipDgCl+i6iqCzVhwgz2tpbApDIF9g9M=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.8/android-studio-quail1-linux.tar.gz";
+    version = "2026.1.1.10"; # "Android Studio Quail 1 | 2026.1.1 Patch 2"
+    sha256Hash = "sha256-+9PxFtEsrtck6o2g0s2ufnkRcPefKqESc+oPLSKiJNw=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.10/android-studio-quail1-patch2-linux.tar.gz";
   };
   betaVersion = {
     version = "2026.1.1.7"; # "Android Studio Quail 1 | 2026.1.1 RC 2"

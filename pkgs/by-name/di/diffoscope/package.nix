@@ -7,6 +7,7 @@
   apksigcopier,
   apksigner,
   apktool,
+  asar,
   binutils-unwrapped-all-targets,
   bzip2,
   cbfstool,
@@ -23,10 +24,10 @@
   enableBloat ? true,
   enjarify,
   fetchurl,
+  ffmpeg,
   file,
   findutils,
   fontforge-fonttools,
-  ffmpeg,
   fpc,
   gettext,
   ghc,
@@ -54,6 +55,7 @@
   oggvideotools,
   openssh,
   openssl,
+  p7zip,
   pdftk,
   perl,
   pgpdump,
@@ -75,7 +77,6 @@
   xz,
   zip,
   zstd,
-  binwalk,
   # updater only
   writeScript,
 }:
@@ -108,12 +109,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "319";
+  version = "321";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-oIEC3ssdp0p2cE0VunTv6oo5CFuMQyftr4e5kqWmfP4=";
+    hash = "sha256-M/rsyUGlJDpU3o1RMfaN9fNMpOn9Xpz2ydflPUXVhD4=";
   };
 
   outputs = [
@@ -121,7 +122,11 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  patches = [ ./ignore_links.patch ];
+  patches = [
+    ./ignore_links.patch
+    # Remove flags output from an OCaml test's diff, as it's Debian-specific
+    ./remove-flags-from-ocaml-diff.patch
+  ];
 
   postPatch = ''
     # When generating manpage, use the installed version
@@ -145,18 +150,14 @@ python.pkgs.buildPythonApplication rec {
   # Still missing these tools:
   # Android-specific tools:
   # dexdump
-  # Darwin-specific tools:
+  # Darwin-specific tools (llvm-lipo and llvm-otool don't suffice):
   # lipo
   # otool
   # Other tools:
-  # docx2txt <- makes tests broken:
-  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
-  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # docx2txt (needs Debian's package called this, not the python package)
   # radare2
-  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
-  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
-  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
-  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - KeyError: 'offset'
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - KeyError: 'offset'
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
@@ -197,13 +198,13 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ (with python.pkgs; [
       argcomplete
-      python-debian
       defusedxml
       jsbeautifier
       jsondiff
       libarchive-c
       progressbar
       pypdf
+      python-debian
       python-magic
       pyxattr
       rpm
@@ -214,6 +215,7 @@ python.pkgs.buildPythonApplication rec {
         abootimg
         apksigcopier
         apksigner
+        asar
         cbfstool
         colord
         enjarify
@@ -234,6 +236,7 @@ python.pkgs.buildPythonApplication rec {
         odt2txt
         oggvideotools
         openssh
+        p7zip
         pdftk
         perl
         poppler-utils
@@ -245,7 +248,6 @@ python.pkgs.buildPythonApplication rec {
         ubootTools
         wabt
         xmlbeans
-        binwalk
       ]
       ++ (with python.pkgs; [
         androguard
@@ -254,11 +256,10 @@ python.pkgs.buildPythonApplication rec {
         h5py
         pdfminer-six
         r2pipe
-        # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # Causes an eval failure
       # See https://github.com/NixOS/nixpkgs/issues/463873
-      ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isAarch64) [
         aapt
         apktool
       ]
