@@ -17442,12 +17442,6 @@
     githubId = 9051309;
     name = "Maximilian Bode";
   };
-  mboes = {
-    email = "mboes@tweag.net";
-    github = "mboes";
-    githubId = 51356;
-    name = "Mathieu Boespflug";
-  };
   mBornand = {
     email = "dev.mbornand@systemb.ch";
     github = "mBornand";
