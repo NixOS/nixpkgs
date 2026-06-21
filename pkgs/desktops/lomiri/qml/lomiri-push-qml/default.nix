@@ -11,6 +11,9 @@
   qtdeclarative,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-push-qml";
   version = "0.4.1";
@@ -22,11 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+D8F0H3S+lfU53CJarE7Wrsc66JvJywzih0IgGD8cJo=";
   };
 
-  postPatch = ''
-    # Queries QMake for QML install location, returns QtBase build path
-    substituteInPlace src/*/PushNotifications/CMakeLists.txt \
-      --replace-fail 'qmake -query QT_INSTALL_QML' 'echo ''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}'
-  '';
+  postPatch =
+    if (!withQt6) then
+      ''
+        # Queries QMake for QML install location, returns QtBase build path
+        substituteInPlace src/*/PushNotifications/CMakeLists.txt \
+          --replace-fail 'qmake -query QT_INSTALL_QML' 'echo ''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}'
+      ''
+    else
+      ''
+        substituteInPlace src/Lomiri/PushNotifications/CMakeLists.txt \
+          --replace-fail \
+            'set(QT_INSTALL_QML "''${CMAKE_INSTALL_LIBDIR}/qt6/qml/")' \
+            'set(QT_INSTALL_QML "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}")'
+      '';
 
   strictDeps = true;
 
@@ -46,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
   ];
 
   preBuild = ''
