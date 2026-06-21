@@ -14,19 +14,27 @@
   spdlog,
 
   # nativeCheckInputs
+  ctestCheckHook,
   python3,
 
   # checkInputs
   gtest,
+
+  nix-update-script,
+  testers,
 }:
+let
+  version = "4.0.0";
+  versionPrefix = "gz-utils${lib.versions.major version}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
-  version = "4.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-utils";
-    tag = "gz-utils${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
+    tag = "${versionPrefix}_${finalAttrs.version}";
     hash = "sha256-fZonC/o5CNHdK/R3IgEoo1llehy36MwvXPQCgFnP8Ls=";
   };
 
@@ -45,12 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    gz-cmake
     doxygen
     graphviz
   ];
 
-  buildInputs = [
+  propagatedNativeBuildInputs = [
+    gz-cmake
+  ];
+
+  propagatedBuildInputs = [
     cli11
     spdlog
   ];
@@ -67,18 +78,34 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doxygen/html $doc
   '';
 
-  nativeCheckInputs = [ python3 ];
+  nativeCheckInputs = [
+    ctestCheckHook
+    python3
+  ];
 
   checkInputs = [ gtest ];
 
   doCheck = true;
+
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=${versionPrefix}_([\\d\\.]+)" ];
+    };
+  };
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";
     homepage = "https://gazebosim.org/home";
     changelog = "https://github.com/gazebosim/gz-utils/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
-    maintainers = with lib.maintainers; [ guelakais ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
+    pkgConfigModules = [ "gz-utils" ];
+    maintainers = with lib.maintainers; [
+      guelakais
+      taylorhoward92
+    ];
   };
 })
