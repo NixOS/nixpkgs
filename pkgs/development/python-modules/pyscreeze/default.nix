@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
-  xlib,
+  python-xlib,
   xvfb-run,
   scrot,
 }:
@@ -24,7 +24,7 @@ buildPythonPackage {
   doCheck = stdenv.hostPlatform.isLinux;
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     scrot
-    xlib
+    python-xlib
     xvfb-run
   ];
   checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''

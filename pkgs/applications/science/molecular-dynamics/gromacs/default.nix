@@ -110,7 +110,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableMpi [ mpi ]
   ++ lib.optionals enableCuda [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api

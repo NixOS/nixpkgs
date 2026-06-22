@@ -25,7 +25,7 @@ let
       peewee
       pynvml
       pygobject3
-      xlib
+      python-xlib
       pyxdg
       requests
       rx

@@ -3,7 +3,7 @@
   buildPythonPackage,
   pyperclip,
   fetchFromGitHub,
-  xlib,
+  python-xlib,
   pillow,
 }:
 buildPythonPackage {
@@ -29,7 +29,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     pyperclip
-    xlib
+    python-xlib
     pillow
   ];
 

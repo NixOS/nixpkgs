@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals config.cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas

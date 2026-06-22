@@ -6,7 +6,7 @@
   setuptools,
 
   ewmhlib,
-  xlib,
+  python-xlib,
   typing-extensions,
   pyobjc-core,
   pyobjc-framework-Cocoa,
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     ewmhlib
-    xlib
+    python-xlib
     typing-extensions
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
