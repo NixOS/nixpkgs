@@ -18,8 +18,8 @@
 }:
 
 buildPythonPackage {
+  pname = "python-subunit";
   inherit (subunit)
-    pname
     version
     src
     meta

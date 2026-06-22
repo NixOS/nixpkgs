@@ -3946,6 +3946,13 @@
     githubId = 140968250;
     keys = [ { fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26"; } ];
   };
+  Br1ght0ne = {
+    name = "Oleksii Filonenko";
+    email = "nixpkgs@brightone.cloud";
+    matrix = "@br1ght0ne:matrix.org";
+    github = "Br1ght0ne";
+    githubId = 12615679;
+  };
   br337 = {
     email = "brian.porumb@proton.me";
     github = "br337";
