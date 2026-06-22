@@ -2,33 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoconf,
   autoreconfHook,
-  pkg-config,
+  automake,
+  libtool,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ta-lib";
-  version = "0.4.0";
+  version = "0.6.4";
+
   src = fetchFromGitHub {
-    owner = "rafa-dot-el";
-    repo = "talib";
-    rev = finalAttrs.version;
-    sha256 = "sha256-bIzN8f9ZiOLaVzGAXcZUHUh/v9z1U+zY+MnyjJr1lSw=";
+    owner = "TA-lib";
+    repo = "ta-lib";
+    rev = "v${version}";
+    sha256 = "sha256-aTRiScPNWsGDwJvumZXlMilvSDYZVDWgpeZ2F/S5WgQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [
+    autoconf
+    automake
+    libtool
   ];
-  hardeningDisable = [ "format" ];
 
-  meta = {
-    description = "Add technical analysis to your own financial market trading applications";
-    mainProgram = "ta-lib-config";
+  configureFlags = [
+    "--libdir=${placeholder "out"}/lib"
+  ];
+
+  meta = with lib; {
+    description = "A widely used library for technical analysis of financial market data";
     homepage = "https://ta-lib.org/";
-    license = lib.licenses.bsd3;
-
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rafael ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      rafael
+      lpbigfish
+    ];
   };
-})
+}
