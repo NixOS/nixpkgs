@@ -17782,6 +17782,8 @@ self: super: with self; {
 
   scipp = callPackage ../development/python-modules/scipp { };
 
+  scippnexus = callPackage ../development/python-modules/scippnexus { };
+
   scipy = callPackage ../development/python-modules/scipy { };
 
   scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
