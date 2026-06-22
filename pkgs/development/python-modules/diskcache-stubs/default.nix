@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-yYds/00K9XyJirreBGG/r30HZTyBQbFa6N4EizsmdKg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [ typing-extensions ];
