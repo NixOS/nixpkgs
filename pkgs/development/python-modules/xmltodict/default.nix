@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "xmltodict";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinblech";
     repo = "xmltodict";
     tag = "v${version}";
-    hash = "sha256-gnTNkh0GLfRmjMsLhfvpNrewfinNOhem0i3wzIZvKpA=";
+    hash = "sha256-G7hVtS6toUJC0YY1AXBOJSc3wnAZyWilLnT/5vvFRRw=";
   };
 
   build-system = [ setuptools ];
