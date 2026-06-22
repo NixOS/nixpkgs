@@ -44,5 +44,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Quad4-Software/Reticulum-Go";
     license = lib.licenses.asl20;
     mainProgram = "reticulum-go";
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
