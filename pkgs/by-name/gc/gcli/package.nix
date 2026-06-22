@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcli";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "herrhotzenplotz";
     repo = "gcli";
     rev = "v${version}";
-    hash = "sha256-KTXAmwLTOGvFlJ52w6PplVlF72CC5JJheGlhJirh2+I=";
+    hash = "sha256-k691ocg5rkvGJZDp6X9PRIDaNvVPLcJRoXvwPbyxjLE=";
   };
 
   nativeBuildInputs = [
