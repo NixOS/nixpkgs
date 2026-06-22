@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2025.3.3";
+  version = "2026.2.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = "monty";
     tag = "v${version}";
-    hash = "sha256-3UoACKJtPm2BrkJP8z7BFrh3baRyL/S3VwCG3K8AQn0=";
+    hash = "sha256-rbbRshQyOhGqnP+YBoVgi2Me87+BBmtXcmgBc0cEucA=";
   };
 
   build-system = [
@@ -100,6 +100,9 @@ buildPythonPackage rec {
     torch
     tqdm
   ];
+
+  # https://github.com/materialyzeai/monty/issues/788
+  disabledTests = [ "test_pandas" ];
 
   pythonImportsCheck = [ "monty" ];
 
