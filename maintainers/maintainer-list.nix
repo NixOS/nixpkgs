@@ -28922,6 +28922,12 @@
     githubId = 6882568;
     name = "Vaci";
   };
+  vadim-su = {
+    email = "vsuharnikov@proton.me";
+    github = "vadim-su";
+    githubId = 1702003;
+    name = "Vadim Suharnikov";
+  };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";
     matrix = "@vaibhavsagar:matrix.org";
