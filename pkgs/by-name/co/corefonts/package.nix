@@ -82,12 +82,16 @@ stdenv.mkDerivation {
     installFonts
   ];
 
-  buildCommand = ''
+  unpackPhase = ''
+    runHook preUnpack
     for i in $exes; do
       cabextract --lowercase $i
     done
     cabextract --lowercase viewer1.cab
+    runHook postUnpack
+  '';
 
+  preInstall = ''
     # rename to more standard names
     # handle broken macOS file-system
     mv andalemo.ttf  Andale_Mono.ttf
@@ -127,11 +131,9 @@ stdenv.mkDerivation {
     mv verdanaz.ttf  Verdana_Bold_Italic.ttf
     mv webdings.ttf  Webdings.ttf.tmp
     mv Webdings.ttf.tmp  Webdings.ttf
+  '';
 
-    # using buildCommand means no phases are run
-    # so we run the function ourselves
-    installFonts
-
+  postInstall = ''
     # Also put the EULA there to be on the safe side.
     cp ${eula} $out/share/fonts/truetype/eula.html
 
