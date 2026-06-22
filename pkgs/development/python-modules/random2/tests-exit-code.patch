@@ -1,0 +1,10 @@
+diff --git a/src/tests.py b/src/tests.py
+index dcd2f48..018e6f4 100644
+--- a/src/tests.py
++++ b/src/tests.py
+@@ -603,4 +603,5 @@ def test_suite():
+ if __name__ == "__main__":
+     runner = unittest.TextTestRunner(verbosity=3)
+     result = runner.run(test_suite())
++    assert result.wasSuccessful()
+     #test_main(verbose=True)
