@@ -13,7 +13,6 @@
   pytestCheckHook,
   beets-audible,
   mediafile,
-  pytest,
   reflink,
   toml,
   typeguard,
