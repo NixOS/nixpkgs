@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.56.0";
+  version = "1.56.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WaMtOFzB564m5DeYxvEtB/9hmKvQQewGILOgjPwCHMw=";
+    hash = "sha256-sO6aid+6OdKhpp1ghovpkJbTtrZqGiK/ip1aOLiu1Q4=";
   };
 
   outputs = [
