@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./macos-10_7-getline.patch
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # wol's bundled gettext sources do not compile as gnu23 with Apple clang.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   nativeBuildInputs = [
     perl # for pod2man in order to get a manpage
     autoreconfHook # for the patch
