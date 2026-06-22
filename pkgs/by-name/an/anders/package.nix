@@ -6,7 +6,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "anders";
-  version = "5.0.0";
+  version = "5.1.0";
 
   duneVersion = "3";
 
@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "groupoid";
     repo = "anders";
     tag = version;
-    sha256 = "sha256-8T/+faVsmgghjxC4SkXQ5B6KDuhVO9NdwMvu7UDlk/0=";
+    sha256 = "sha256-SWM0Oijm5ppFUE5O+s9feSNKULLstrAyI/xns1SE8X8=";
   };
 
   strictDeps = true;
