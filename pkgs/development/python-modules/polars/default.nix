@@ -36,32 +36,30 @@
     assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
     jemalloc',
 
-  polars,
   python,
 }:
 
 let
-  version = "1.40.1";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polars";
-  inherit version;
+  version = "1.40.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
-    tag = "py-${version}";
+    tag = "py-${finalAttrs.version}";
     hash = "sha256-QlrEYwoYPALELK3UGBC/92vCBIzFrigJAwU8qxn7Pys=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-rmCJ5SY5okvkgfd63yPDO2YOksqAWgKa9nqxTqP7Grw=";
   };
 
@@ -128,7 +126,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
       }
@@ -145,7 +143,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
         failureHook = ''
@@ -159,13 +157,13 @@ buildPythonPackage rec {
         EOF
       '';
   passthru.tests.pytest = stdenv.mkDerivation {
-    pname = "${polars.pname}-pytest";
+    pname = "${finalAttrs.pname}-pytest";
 
-    inherit (polars) version src;
+    inherit (finalAttrs) version src;
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "${src.name}/py-polars";
+    sourceRoot = "${finalAttrs.src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
@@ -183,7 +181,7 @@ buildPythonPackage rec {
     checkPhase = "pytestCheckPhase";
     nativeBuildInputs = [
       (python.withPackages (ps: [
-        polars
+        finalAttrs.finalPackage
         ps.aiosqlite
         ps.altair
         ps.boto3
@@ -292,7 +290,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dataframes powered by a multithreaded, vectorized query engine, written in Rust";
     homepage = "https://github.com/pola-rs/polars";
-    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
+    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -301,4 +299,4 @@ buildPythonPackage rec {
     mainProgram = "polars";
     platforms = lib.platforms.all;
   };
-}
+})
