@@ -3,13 +3,13 @@
   dbus,
   fetchFromGitHub,
   nixosTests,
-  python3,
+  python3Packages,
   sphinxHook,
   withDocs ? true,
   withMan ? true,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
   version = "10.1.0";
   pyproject = true;
@@ -42,11 +42,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   sphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     dbus-python
     icalendar
     jsonpath-ng
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   optional-dependencies = {
-    docs = with python3.pkgs; [
+    docs = with python3Packages; [
       furo
       recommonmark
       sphinx-autodoc-typehints
@@ -71,7 +71,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ];
   };
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     dbus
     freezegun
     pytest-cov-stub

@@ -1,11 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitLab,
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "annextimelog";
   version = "0.15.0";
   pyproject = true;
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "rich" ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     unittestCheckHook
     setuptools
     wheel
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   unittestFlags = [ "-vb" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     rich
   ];
 

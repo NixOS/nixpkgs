@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aiodnsbrute";
   version = "0.3.3";
   pyproject = true;
@@ -16,11 +16,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-cEpk71VoQJZfKeAZummkk7yjtXKSMndgo0VleYiMlWE=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     aiodns
     click
     tqdm

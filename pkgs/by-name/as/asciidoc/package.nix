@@ -3,6 +3,7 @@
   lib,
   stdenv,
   python3,
+  python3Packages,
   fetchFromGitHub,
   autoreconfHook,
   installShellFiles,
@@ -56,7 +57,7 @@
 }:
 
 let
-  inherit (python3.pkgs)
+  inherit (python3Packages)
     pygments
     matplotlib
     numpy
@@ -140,7 +141,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname =
     "asciidoc"
     + lib.optionalString enableStandardFeatures "-full"
@@ -307,7 +308,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     installManPage doc/asciidoc.1 doc/a2x.1 doc/testasciidoc.1
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     pytest-mock
   ];

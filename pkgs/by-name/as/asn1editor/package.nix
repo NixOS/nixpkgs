@@ -1,11 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "asn1editor";
   version = "0.8.0";
   pyproject = true;
@@ -17,12 +17,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-mgluhC2DMS4OyS/BoWqBdVf7GcxquOtOKTHZ/hbiHQM=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     wrapGAppsHook3
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     asn1tools
     coverage
     wxpython

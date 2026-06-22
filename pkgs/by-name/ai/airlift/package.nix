@@ -1,13 +1,13 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   kubernetes-helm,
   kind,
   docker,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
 
   pname = "airlift";
   pyproject = true;
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    python3.pkgs.poetry-core
+    python3Packages.poetry-core
   ];
 
   buildInputs = [
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     docker
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     halo
     pyyaml
     hiyapyco

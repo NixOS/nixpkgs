@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apachetomcatscanner";
   version = "3.8.2";
   pyproject = true;
@@ -27,9 +27,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "urllib3"
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     requests
     sectools
     urllib3

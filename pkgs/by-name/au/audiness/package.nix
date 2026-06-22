@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "audiness";
   version = "1.0.1";
   pyproject = true;
@@ -21,15 +21,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "validators"
   ];
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     pytenable
     typer
     validators
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytest-mock
     pytestCheckHook
   ];

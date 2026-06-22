@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gzip,
   gnutar,
@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "asahi-fwextract";
   version = "0.8.0";
   pyproject = true;
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail '"xf"' '"-x", "-I", "${gzip}/bin/gzip", "-f"'
   '';
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   passthru = {
     updateScript = nix-update-script { };

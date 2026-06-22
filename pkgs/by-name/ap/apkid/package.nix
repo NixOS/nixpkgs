@@ -2,9 +2,10 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apkid";
   version = "3.1.0";
   pyproject = true;
@@ -22,11 +23,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace "yara-python-dex>=1.0.1" "yara-python"
   '';
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [ yara-python ];
+  dependencies = with python3Packages; [ yara-python ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   preBuild = ''
     # Prepare the YARA rules

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitLab,
   python3,
+  python3Packages,
   autoconf,
   automake,
   gettext,
@@ -15,7 +16,7 @@
   docbook_xsl,
   nix-update-script,
 }:
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alacarte";
   version = "3.58.0";
 
@@ -46,7 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
   configureScript = "./autogen.sh";
 

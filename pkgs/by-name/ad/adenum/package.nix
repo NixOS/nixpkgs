@@ -2,10 +2,10 @@
   lib,
   fetchFromGitHub,
   john,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "adenum";
   version = "0-unstable-2022-04-01";
   pyproject = false;
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   propagatedBuildInputs =
-    with python3.pkgs;
+    with python3Packages;
     [
       impacket
       pwntools

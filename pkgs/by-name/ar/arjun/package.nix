@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "arjun";
   version = "2.2.7-unstable-2025-02-20";
   pyproject = true;
@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-z6YGCwypp69+98KSC1YUzJETfwb3V4Qp1sV5V3N9zMI=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     dicttoxml
     ratelimit
     requests
