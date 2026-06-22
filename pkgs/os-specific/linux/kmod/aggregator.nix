@@ -11,6 +11,9 @@ buildEnv {
 
   paths = modules;
 
+  # buildEnv is preferLocalBuild by default, but this is a bit less trivial, compiling C code
+  derivationArgs.preferLocalBuild = false;
+
   postBuild = ''
     source ${stdenvNoCC}/setup
 
