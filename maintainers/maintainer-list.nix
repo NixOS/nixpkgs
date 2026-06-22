@@ -22355,6 +22355,12 @@
     githubId = 406946;
     name = "Valentin Lorentz";
   };
+  proitheus = {
+    email = "me@mail.proitheus.top";
+    github = "proitheus";
+    githubId = 50539150;
+    name = "proitheus";
+  };
   projectinitiative = {
     name = "ProjectInitiative";
     github = "ProjectInitiative";
