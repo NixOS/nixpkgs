@@ -178,6 +178,9 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_pi0_rtc_inference_with_prev_chunk"
+
+    # Flakes under load with AssertionError: assert 'second' == 'last'
+    "test_get_last_item_multiple_items_with_torch_queue"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!
