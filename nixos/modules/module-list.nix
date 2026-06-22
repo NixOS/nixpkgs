@@ -876,6 +876,7 @@
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoipupdate.nix
   ./services/misc/gitea.nix
+  ./services/misc/gitlab/container-registry.nix
   ./services/misc/gitlab/default.nix
   ./services/misc/gitolite.nix
   ./services/misc/gitweb.nix
