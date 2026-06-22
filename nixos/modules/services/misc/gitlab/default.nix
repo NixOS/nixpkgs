@@ -22,7 +22,7 @@ let
     if config.services.postgresql.enable then
       config.services.postgresql.package
     else
-      pkgs.postgresql_16;
+      pkgs.postgresql_17;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -176,7 +176,7 @@ let
         host = cfg.registry.externalAddress;
         port = cfg.registry.externalPort;
         key = cfg.registry.keyFile;
-        api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
+        api_url = "http://${cfg.registry.externalAddress}:${toString cfg.registry.externalPort}/";
         issuer = cfg.registry.settings.auth.token.issuer;
       };
       elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
@@ -1160,11 +1160,25 @@ in
         assertion = cfg.secrets.activeRecordSaltFile != null;
         message = "services.gitlab.secrets.activeRecordSaltFile must be set!";
       }
-      {
-        assertion = versionAtLeast postgresqlPackage.version "16";
-        message = "PostgreSQL >= 16 is required to run GitLab 18. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
-      }
-    ];
+    ]
+    ++
+      map
+        (x: {
+          assertion =
+            lib.versions.major (lib.getVersion cfg.packages.gitlab) == x.gitlabMajorVersion
+            -> lib.versionAtLeast (lib.getVersion postgresqlPackage) x.requiresMinimumPostgres;
+          message = "PostgreSQL >= ${x.requiresMinimumPostgres} is required to run GitLab ${x.gitlabMajorVersion}. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        })
+        [
+          {
+            gitlabMajorVersion = "18";
+            requiresMinimumPostgres = "16";
+          }
+          {
+            gitlabMajorVersion = "19";
+            requiresMinimumPostgres = "17";
+          }
+        ];
 
     environment.systemPackages = [
       gitlab-rake

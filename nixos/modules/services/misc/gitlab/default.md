@@ -124,7 +124,7 @@ A list of all available rake tasks can be obtained by running:
 $ sudo -u git -H gitlab-rake -T
 ```
 
-## GitLab Container Registry Migration to database metadata store
+## GitLab Container Registry Migration to database metadata store {#module-services-gitlab-registry-database-migration}
 
 For a general explanation please read the [official documentation](https://docs.gitlab.com/administration/packages/container_registry_metadata_database/).
 
