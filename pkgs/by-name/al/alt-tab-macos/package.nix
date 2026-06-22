@@ -32,11 +32,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Windows alt-tab on macOS";
-    homepage = "https://alt-tab-macos.netlify.app";
+    homepage = "https://alt-tab.app";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       FlameFlag
       emilytrau
+      Br1ght0ne
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
