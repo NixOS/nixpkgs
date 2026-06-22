@@ -149,6 +149,7 @@ stdenv.mkDerivation (
           extraBwrapArgs = [
             "--bind-try /etc/nixos/ /etc/nixos/"
             "--ro-bind-try /etc/xdg/ /etc/xdg/"
+            "--ro-bind-try /etc/vscode/policy.json /etc/vscode/policy.json"
           ];
 
           # symlink shared assets, including icons and desktop entries
