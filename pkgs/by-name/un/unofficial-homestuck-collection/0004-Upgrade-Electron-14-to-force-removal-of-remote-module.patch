@@ -1,0 +1,40 @@
+From 95734ddc06af1e98a0a6165d382c353c423c6e63 Mon Sep 17 00:00:00 2001
+From: "tsrk." <tsrk@tsrk.me>
+Date: Sun, 24 May 2026 05:14:44 +0200
+Subject: [PATCH 4/4] Upgrade Electron 14 to force removal of remote module
+Cc: Freya Murphy <freya@freyacat.org>
+
+Signed-off-by: tsrk. <tsrk@tsrk.me>
+---
+ package.json      | 2 +-
+ src/background.js | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package.json b/package.json
+index 54a0ec9..9404be1 100644
+--- a/package.json
++++ b/package.json
+@@ -80,7 +80,7 @@
+     "acorn": "^8",
+     "babel-loader": "^8.1.2",
+     "css-loader": "^3.5",
+-    "electron": "^9.0.0",
++    "electron": "^14.2.9",
+     "electron-builder-squirrel-windows": "24.13.3",
+     "electron-devtools-assembler": "^1.2.0",
+     "electron-icon-builder": "^1.0.2",
+diff --git a/src/background.js b/src/background.js
+index 6fa2256..3a4b6d7 100644
+--- a/src/background.js
++++ b/src/background.js
+@@ -750,7 +750,6 @@ async function createWindow () {
+       // MOD: disable isolation to get
+       // collection to work with electron 35
+       contextIsolation: false,
+-      enableRemoteModule: true,
+       plugins: true,
+       webviewTag: true
+     }
+-- 
+2.51.2
+

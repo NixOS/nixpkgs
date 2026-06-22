@@ -1,0 +1,69 @@
+From ab20ba112e6fa5117bfeadde199fdc6c18cbdfb5 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 12 Jan 2026 16:41:53 +0100
+Subject: [PATCH] Look for external gtest build, if not building in-tree
+
+---
+ CMakeLists.txt        | 12 ++++++++++++
+ gtests/CMakeLists.txt |  8 +++-----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1e7d3ec9..ecda9c53 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -321,6 +321,18 @@ if(ENABLE_GLSLANG_BINARIES)
+     add_subdirectory(StandAlone)
+ endif()
+ 
++option(ALLOW_EXTERNAL_GTEST "Allows to build against installed googletest. This is unsupported if the commit isn't the one in known_good.json")
++set(GMOCK_TARGET gmock)
++if(NOT TARGET ${GMOCK_TARGET})
++    if(ALLOW_EXTERNAL_GTEST)
++        message(STATUS "Trying to find local googletest")
++        find_package(GTest)
++        if(TARGET GTest::gmock)
++            set(GMOCK_TARGET GTest::gmock)
++        endif()
++    endif()
++endif()
++
+ if(GLSLANG_TESTS)
+     enable_testing()
+     add_subdirectory(gtests)
+diff --git a/gtests/CMakeLists.txt b/gtests/CMakeLists.txt
+index 27a5500c..21125775 100644
+--- a/gtests/CMakeLists.txt
++++ b/gtests/CMakeLists.txt
+@@ -32,7 +32,7 @@
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
+ if(GLSLANG_TESTS)
+-    if(TARGET gmock)
++    if(TARGET ${GMOCK_TARGET})
+         message(STATUS "Google Mock found - building tests")
+ 
+         set(TEST_SOURCES
+@@ -76,9 +76,7 @@ if(GLSLANG_TESTS)
+                                    PRIVATE GLSLANG_TEST_BUILD=1)
+         target_include_directories(glslangtests PRIVATE
+                                    ${CMAKE_CURRENT_SOURCE_DIR}
+-                                   ${PROJECT_SOURCE_DIR}
+-                                   ${gmock_SOURCE_DIR}/include
+-                                   ${gtest_SOURCE_DIR}/include)
++                                   ${PROJECT_SOURCE_DIR})
+ 
+         if(ENABLE_OPT)
+             target_link_libraries(glslangtests
+@@ -90,7 +88,7 @@ if(GLSLANG_TESTS)
+             glslang glslang-default-resource-limits
+             $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
+ 
+-        target_link_libraries(glslangtests PRIVATE ${LIBRARIES} gmock)
++        target_link_libraries(glslangtests PRIVATE ${LIBRARIES} ${GMOCK_TARGET})
+ 
+         # The TARGET_RUNTIME_DLL_DIRS feature requires CMake 3.27 or greater.
+         if(WIN32 AND BUILD_SHARED_LIBS AND CMAKE_VERSION VERSION_LESS "3.27")
+-- 
+2.51.2
+

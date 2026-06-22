@@ -1,0 +1,35 @@
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
+index e6d0e84d..aeaa32af 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/EDDNService.java
+@@ -408,7 +408,7 @@ public class EDDNService {
+     private static void send(final Object message, final Event event, final String schemaName, final int delaySecondsAllowed) {
+         final boolean isLive = ApplicationState.getInstance().getGameVersion().equals(GameVersion.LIVE);
+         final boolean isNew = isNew(event, delaySecondsAllowed);
+-        final Boolean isEnabled = PreferencesService.getPreference(PreferenceConstants.EDDN_ENABLED, Boolean.FALSE);
++        final Boolean isEnabled = false;
+         if (isLive && isNew && isEnabled) {
+             final Runnable run = () -> {
+                 try {
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
+index f39a7a17..0dd77370 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/SettingsTab.java
+@@ -43,16 +43,13 @@ public class SettingsTab extends MainTab implements DestroyableTemplate {
+                         new HorizonsWishlist(),
+                         new HorizonsShips(),
+                         new HorizonsColonisation(),
+-                        new Notifications(),
+-                        new FrontierAPI()
++                        new Notifications()
+                 )
+                 .buildVBox();
+         //AR
+         if (OsCheck.isWindows()) {
+             settings.getNodes().add(new AugmentedReality());
+         }
+-        //Tracking
+-        settings.getNodes().add(new Tracking());
+ 
+         ScrollPane scrollPane = register(ScrollPaneBuilder.builder()
+                 .withStyleClass("settings-tab-content")

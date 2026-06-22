@@ -1,0 +1,14 @@
+diff --git a/AM2RLauncher/AM2RLauncherLib/Profile.cs b/AM2RLauncher/AM2RLauncherLib/Profile.cs
+index 8186350..2f9de2a 100644
+--- a/AM2RLauncher/AM2RLauncherLib/Profile.cs
++++ b/AM2RLauncher/AM2RLauncherLib/Profile.cs
+@@ -796,7 +796,8 @@ public static class Profile
+                 UseShellExecute = false,
+                 WorkingDirectory = gameDirectory,
+                 #if NOAPPIMAGE
+-                FileName = $"{gameDirectory}/runner"
++                FileName = "am2r-run",
++                Arguments = "./runner"
+                 #else
+                 FileName = $"{gameDirectory}/AM2R.AppImage"
+                 #endif

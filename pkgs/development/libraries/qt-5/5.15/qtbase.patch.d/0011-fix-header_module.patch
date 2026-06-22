@@ -1,0 +1,22 @@
+From 2bce8511877db1db532e1437e7140b1d55633f86 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Mon, 30 Sep 2019 20:15:40 -0500
+Subject: [PATCH 11/11] fix header_module
+
+---
+ mkspecs/features/qt_module.prf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 0b2a30d159..37271e09d9 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -84,7 +84,7 @@ header_module {
+         qt_no_install_library
+ 
+     # Allow creation of .prl, .la and .pc files.
+-    target.path = $$[QT_INSTALL_LIBS]
++    target.path = $$NIX_OUTPUT_OUT/lib
+     target.CONFIG += dummy_install
+     INSTALLS    += target
+ } else {
