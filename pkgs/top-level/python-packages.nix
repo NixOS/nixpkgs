@@ -11662,6 +11662,8 @@ self: super: with self; {
 
   oic = callPackage ../development/python-modules/oic { };
 
+  oinker = callPackage ../development/python-modules/oinker { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
