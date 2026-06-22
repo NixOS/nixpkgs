@@ -19957,6 +19957,8 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  toppra = toPythonModule (pkgs.toppra.override { python3Packages = self; });
+
   toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
 
   torch = callPackage ../development/python-modules/torch/source { };
