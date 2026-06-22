@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     scrot
     slop
     xclip
-    python3Packages.xlib
+    python3Packages.python-xlib
   ]
   ++ (with python3Packages; [
     pillow

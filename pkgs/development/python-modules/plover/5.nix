@@ -25,7 +25,7 @@
   setuptools,
   wcwidth,
   wheel,
-  xlib,
+  python-xlib,
   qtbase,
   wrapQtAppsHook,
   hidapi,
@@ -105,7 +105,7 @@ buildPythonPackage (finalAttrs: {
     setuptools
     wcwidth
     xkbcommon
-    xlib
+    python-xlib
   ]
   ++ readme-renderer.optional-dependencies.md
   ++ lib.optionals stdenv.hostPlatform.isLinux [ evdev ]

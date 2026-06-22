@@ -4,7 +4,7 @@
 {
   backendStdenv,
   _cuda,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaNamePrefix,
@@ -53,7 +53,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart
     nccl
   ]

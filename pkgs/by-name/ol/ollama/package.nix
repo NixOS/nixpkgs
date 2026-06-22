@@ -82,7 +82,7 @@ let
   cudaLibs = [
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ];
 
   vulkanLibs = [
@@ -102,7 +102,7 @@ let
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
 
-    # cuda_cccl and cuda_cudart both have a LICENSE file in their output
+    # cccl and cuda_cudart both have a LICENSE file in their output
     ignoreCollisions = true;
   };
 
