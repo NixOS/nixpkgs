@@ -16,7 +16,7 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
-  version = "2.4.3";
+  version = "2.4.5";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "fdroid";
     repo = "fdroidserver";
     tag = finalAttrs.version;
-    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
+    hash = "sha256-AiDhtYpaOXTRVY5QA7fOgfGbpCtdJYzt3tnY2lrGJao=";
   };
 
   pythonRelaxDeps = [
