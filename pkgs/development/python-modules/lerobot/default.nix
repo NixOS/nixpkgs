@@ -187,6 +187,12 @@ buildPythonPackage (finalAttrs: {
     "test_complementary_data_float_dtype_conversion"
     "test_float_dtype_conversion"
     "test_float_dtype_with_mixed_tensors"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # gRPC fails to connect on loopback in sandbox despite __darwinAllowLocalNetworking
+    "test_end_to_end_interactions_flow"
+    "test_end_to_end_parameters_flow"
+    "test_end_to_end_transitions_flow"
   ];
 
   disabledTestPaths = [
