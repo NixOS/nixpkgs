@@ -1,0 +1,32 @@
+From 893ecf6d8c14d74ab21e5aa87dd08e3824725a69 Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <peter@pcc.me.uk>
+Date: Sat, 16 May 2026 01:01:20 -0700
+Subject: [PATCH 2/2] gn: Stop passing -Werror in non-hermetic builds
+
+Passing -Werror when the compiler version is not
+controlled is considered a bad practice. See e.g.
+https://blog.schmorp.de/2016-02-27-tidbits-for-the-love-of-god-dont-use-werror.html
+
+Therefore, stop doing so in non-hermetic builds.
+---
+ gn/standalone/BUILD.gn | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gn/standalone/BUILD.gn b/gn/standalone/BUILD.gn
+index d5c685a03a..7ecaae6002 100644
+--- a/gn/standalone/BUILD.gn
++++ b/gn/standalone/BUILD.gn
+@@ -267,8 +267,8 @@ config("default") {
+     ]
+   }
+ 
+-  # Treat warnings as errors, but give up on fuzzer builds.
+-  if (!is_fuzzer) {
++  # Treat warnings as errors, but give up on fuzzer and non-hermetic builds.
++  if (!is_fuzzer && is_hermetic_clang) {
+     if (is_win) {
+       cflags += [ "/WX" ]
+     } else {
+-- 
+2.54.0
+
