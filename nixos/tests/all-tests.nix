@@ -1054,6 +1054,7 @@ in
   # aarch64 machine..
   musescore = runTestOn [ "x86_64-linux" ] ./musescore.nix;
   music-assistant = runTest ./music-assistant.nix;
+  musivault = runTest ./musivault.nix;
   mutableUsers = runTest ./mutable-users.nix;
   mycelium = runTest ./mycelium;
   mympd = runTest ./mympd.nix;

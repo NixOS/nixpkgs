@@ -28198,6 +28198,13 @@
     githubId = 61303;
     name = "Tom Fitzhenry";
   };
+  tomhesse = {
+    name = "Tom Hesse";
+    github = "tomhesse";
+    githubId = 110232960;
+    email = "contact@tomhesse.xyz";
+    keys = [ { fingerprint = "1663 EC2E 7C8C 8E95 BE95  9EB3 ABF7 7DD0 DF58 CFF4"; } ];
+  };
   tomhoule = {
     email = "secondary+nixpkgs@tomhoule.com";
     github = "tomhoule";
