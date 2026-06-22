@@ -25,7 +25,7 @@ let
   '';
 in
 buildPythonPackage {
-  pname = "libclang";
+  pname = "clang";
   pyproject = true;
 
   inherit (libclang) version src;
