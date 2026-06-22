@@ -956,6 +956,8 @@ self: super: with self; {
 
   arc4 = callPackage ../development/python-modules/arc4 { };
 
+  arcade = callPackage ../development/python-modules/arcade { };
+
   arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
 
   arch = callPackage ../development/python-modules/arch { };
