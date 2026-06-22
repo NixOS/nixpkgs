@@ -16341,6 +16341,10 @@ self: super: with self; {
 
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
+  python-subunit = callPackage ../development/python-modules/python-subunit {
+    inherit (pkgs) subunit cppunit check;
+  };
+
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
@@ -19203,10 +19207,6 @@ self: super: with self; {
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
 
   subprocess4 = callPackage ../development/python-modules/subprocess4 { };
-
-  subunit = callPackage ../development/python-modules/subunit {
-    inherit (pkgs) subunit cppunit check;
-  };
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
