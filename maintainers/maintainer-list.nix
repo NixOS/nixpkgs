@@ -24315,6 +24315,12 @@
     name = "Ryan Eschinger";
     keys = [ { fingerprint = "E4F4 1EAB BF0F C785 06D8  62EF EF68 CF41 D42A 593D"; } ];
   };
+  ryanfanchiotti = {
+    email = "ryan@rur.com";
+    github = "ryanfanchiotti";
+    githubId = 112440089;
+    name = "Ryan Fanchiotti";
+  };
   ryangibb = {
     email = "ryan@freumh.org";
     github = "ryangibb";
