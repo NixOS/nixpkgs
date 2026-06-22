@@ -545,6 +545,17 @@ in
                 default = true;
                 description = ''
                   Specifies whether password authentication is allowed.
+
+                  ::: {.warning}
+                  Setting this to `false` also removes `pam_unix.so` from the
+                  generated `sshd` PAM service.
+
+                  Re-enabling password authentication for specific clients via
+                  a `Match` block in {option}`services.openssh.extraConfig` does
+                  not restore `pam_unix.so`. PAM rejects every attempt regardless
+                  of correctness. Set {option}`security.pam.services.sshd.unixAuth`
+                  to `true` explicitly to fix this.
+                  :::
                 '';
               };
               PermitRootLogin = lib.mkOption {
