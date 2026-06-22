@@ -19,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
-  version = "2.69.1";
+  version = "2.69.3";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "ringrtc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XKzZ9AUGunOTs4vchWNlBYDIln25kRfxyQ2RZCr29Bs=";
+    hash = "sha256-ekSXEaAyVzd5957qoFakD33UYrUmvxZL19M6uflPR5U=";
   };
 
-  cargoHash = "sha256-U1Zf7fCNoJNBYyIN/IRI41Gj6sK+iiUwGbAfYEo+a/0=";
+  cargoHash = "sha256-oNHT2owg3Ob2z8JxdYnICRdogK+XaasVgbF5RYYBJas=";
 
   preConfigure = ''
     # Check for matching webrtc version
