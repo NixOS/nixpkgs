@@ -10,6 +10,7 @@
   gnupg,
   execline,
   gnused,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
     pkg-config
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
   ];
+
+  env.ASSET_OUT_DIR = "target";
 
   postInstall = ''
     # Wrap to find gpg-agent from GnuPG.
@@ -55,6 +59,12 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/gpgconf
     ln -s gpg $out/bin/gpg2
     ln -s ${lib.getExe' gnupg "gpg"} $out/bin/gpg-g10code
+
+    # Install man pages and shell completions.
+    installManPage ${env.ASSET_OUT_DIR}/man-pages/*.1
+    installShellCompletion --bash ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.bash
+    installShellCompletion --zsh ${env.ASSET_OUT_DIR}/shell-completions/_${meta.mainProgram}
+    installShellCompletion --fish ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.fish
   '';
 
   # gpgconf: error creating socket directory
