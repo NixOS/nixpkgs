@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "bqplot";
-  version = "0.12.46";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lBdL4+skHJ+h1pelQxMomgvT/ogK3ZbGZA0xY73T0io=";
+    hash = "sha256-3R9Vyb+XGxw+31caI+3s1weqtacsP12sPLmO4jP8YhY=";
   };
 
   # upstream seems in flux for 0.13 release. they seem to want to migrate from
