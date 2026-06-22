@@ -185,12 +185,53 @@ in
             ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ssh_ip=${cfg.queryIP}"} \
-            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"} \
+            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"}
         '';
         WorkingDirectory = cfg.dataDir;
         User = user;
         Group = group;
         Restart = "on-failure";
+
+        # Hardening
+        ReadWritePaths = [
+          cfg.dataDir
+          cfg.logPath
+        ];
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        UMask = "0077";
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+          "~@debug"
+          "~@mount"
+        ];
       };
     };
   };
