@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast-beta";
-  version = "0.60.0.0";
+  version = "0.65.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     {
       aarch64-darwin = fetchurl {
         name = "Raycast_Beta.dmg";
-        url = "https://x-r2.raycast-releases.com/Raycast_Beta_${finalAttrs.version}_2fc04147cc_arm64.dmg";
-        hash = "sha256-PQX5l5UzlphKySIR5QRcJvJLe9NxQrTOPLy3itV0QHU=";
+        url = "https://x-r2.raycast-releases.com/Raycast_Beta_0.65.1.0_66eacbc22e_arm64.dmg";
+        hash = "sha256-K9OuqlUR0E3hIVonSuBYAWFAvQCZQG35fsv5OWO8gKM=";
       };
     }
     .${stdenvNoCC.system} or (throw "raycast-beta: ${stdenvNoCC.system} is unsupported.");
@@ -68,10 +68,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Control your tools with a few keystrokes - beta release";
-    homepage = "https://raycast.app/";
+    homepage = "https://raycast.app/new";
+    changelog = "https://www.raycast.com/changelog/macos-beta";
     license = lib.licenses.unfree;
     mainProgram = "raycast-beta";
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [
+      FlameFlag
+      Br1ght0ne
+    ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
