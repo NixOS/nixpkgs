@@ -1586,7 +1586,7 @@ class NspawnMachine(BaseMachine):
         # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
         # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
         # will continue to use the original /etc/profile.
-        command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
+        command = f"set -eo pipefail; USER=root HOME=/root source /etc/profile; set -u; {command}"
 
         cp = subprocess.run(
             [
