@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xlsclients";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xlsclients-${finalAttrs.version}.tar.xz";
-    hash = "sha256-aLruV+cCUKxKd1n7eCIYMfl9iLyOUdzC5k6z+MpWuuM=";
+    hash = "sha256-kJgQo/29AdhHR5B/LAzDLucy53r8iMsxCrudFVsqCAc=";
   };
 
   strictDeps = true;
