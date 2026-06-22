@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixfmt-rs";
-  version = "0.4.1";
+  version = "0.5.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Mic92";
     repo = "nixfmt-rs";
     tag = finalAttrs.version;
-    hash = "sha256-MsSefbTC6u9GAEB9PhDSz9GvWTCASgTxysIHRrqGINc=";
+    hash = "sha256-Gapz+ra0dyGHfY028QTbVVoGwu0yXaQOgKcarzX1nYo=";
   };
 
-  cargoHash = "sha256-QSckmh8hBpQjpg0/4rwlpJZ2uxEZ1sPQvZfjmi4NFEc=";
+  cargoHash = "sha256-SN/IXbJpAW9kLVn7y4K4oI3DcTX8ekwWWJVTn+7oNhY=";
 
   nativeBuildInputs = [
     installShellFiles
