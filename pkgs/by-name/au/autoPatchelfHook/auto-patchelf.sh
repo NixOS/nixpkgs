@@ -59,6 +59,10 @@ autoPatchelf() {
     concatTo patchelfFlagsArray patchelfFlags
     concatTo autoPatchelfFlagsArray autoPatchelfFlags
 
+    if [[ -n "${autoPatchelfRelativeRpaths-}" ]]; then
+        autoPatchelfFlagsArray+=("--relative-rpaths")
+    fi
+
     # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
     # "*", printing a deprecation warning.
     for dep in "${ignoreMissingDepsArray[@]}"; do

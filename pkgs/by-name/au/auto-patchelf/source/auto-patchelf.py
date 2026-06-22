@@ -310,7 +310,7 @@ class Logger:
 
 
 
-def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, preserve_origin: bool = False, extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, preserve_origin: bool = False, relative_rpaths: bool = False, extra_args: list[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -425,6 +425,36 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
             if "$ORIGIN" in existing_rpath:
                 rpath.append(Path(existing_rpath))
 
+    if relative_rpaths:
+        # Determine the store directory to identify which absolute paths can be made relative.
+        # Check NIX_STORE environment variable first, then fall back dynamically to libc_lib's grandparent
+        # (which is guaranteed to point to the store when main() is running successfully).
+        store_dir_env = os.environ.get('NIX_STORE')
+        store_path = Path(store_dir_env) if store_dir_env else libc_lib.parent.parent
+        if store_path == Path('/'):
+            store_path = None
+
+        relative_rpath = []
+        for r in rpath:
+            if not r.is_absolute():
+                relative_rpath.append(r)
+            else:
+                in_store = True
+                if store_path:
+                    try:
+                        path.relative_to(store_path)
+                        r.relative_to(store_path)
+                    except ValueError:
+                        in_store = False
+
+                if in_store:
+                    # Construct relative path starting with $ORIGIN
+                    rel = os.path.relpath(r, path.parent)
+                    relative_rpath.append(Path(f"$ORIGIN/{rel}"))
+                else:
+                    relative_rpath.append(r)
+        rpath = relative_rpath
+
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
@@ -447,6 +477,7 @@ def auto_patchelf(
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
         preserve_origin: bool = False,
+        relative_rpaths: bool = False,
         add_existing: bool = True,
         extra_args: list[str] = []) -> None:
 
@@ -463,7 +494,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(logger, path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
+            dependencies += auto_patchelf_file(logger, path, runtime_deps, append_rpaths, keep_libc, preserve_origin, relative_rpaths, extra_args)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -550,6 +581,12 @@ def main() -> None:
         help="When possible, replace absolute RPATH entries with original $ORIGIN entries that resolve to the same directory.",
     )
     parser.add_argument(
+        "--relative-rpaths",
+        dest="relative_rpaths",
+        action="store_true",
+        help="When possible, replace absolute RPATH entries with relative paths starting with $ORIGIN.",
+    )
+    parser.add_argument(
         "--ignore-existing",
         dest="add_existing",
         action="store_false",
@@ -586,6 +623,7 @@ def main() -> None:
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
         preserve_origin=args.preserve_origin,
+        relative_rpaths=args.relative_rpaths,
         add_existing=args.add_existing,
         extra_args=args.extra_args)
 
