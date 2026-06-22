@@ -3506,6 +3506,8 @@ self: super: with self; {
 
   cybox = callPackage ../development/python-modules/cybox { };
 
+  cyclebane = callPackage ../development/python-modules/cyclebane { };
+
   cycler = callPackage ../development/python-modules/cycler { };
 
   cyclonedds-python = callPackage ../development/python-modules/cyclonedds-python { };
