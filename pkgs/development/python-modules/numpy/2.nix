@@ -34,7 +34,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.4.6";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jHi3cYiSwFRm3G0Dl4dL6yACSP4lAUECotVI+4KXMg8=";
+    hash = "sha256-RiC1dLoDamK5B2VzHBL0V//K/Vix25q11wNGcl3Witk=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -86,11 +86,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  # we default openblas to build with 64 threads
-  # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
-    sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
