@@ -1,7 +1,5 @@
 {
   lib,
-  jq,
-  moreutils,
   racket,
   vscode-utils,
 }:
@@ -13,15 +11,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "0.8.0";
     hash = "sha256-yWmJFLXktsJDEDwHO8ZCXQBTw8j5bOv6TXEOO/V8mZs=";
   };
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."magicRacket.general.racketPath".default = "${racket}/bin/racket"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."magicRacket.general.racoPath".default = "${racket}/bin/raco"' package.json | sponge package.json
-  '';
+  executableConfig = {
+    "magicRacket.general.racketPath".package = racket;
+    "magicRacket.general.racoPath".package = lib.getExe' racket "raco";
+  };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
     description = "Best coding experience for Racket in VS Code";
