@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal-ui-server";
-  version = "2.49.1";
+  version = "2.51.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "ui-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cCYBMNkQZBdy1OpofI0THT9qDtYdsfI/rl3MWi0K1CU=";
+    hash = "sha256-//vcBYobI/5hh9S1GO/uTvZ5UvNhrylEvq0W4wft9zY=";
   };
 
-  vendorHash = "sha256-nw4OHa13kRvdR6IFop5eZiB+5+cJCry4sgTnercRq9s=";
+  vendorHash = "sha256-XAYn0wSZirOYDHQV6GXpN64sbdSLjk7k1x8fmfSUagA=";
 
   postInstall = ''
     mv $out/bin/server $out/bin/temporal-ui-server
