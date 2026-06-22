@@ -103,11 +103,26 @@ in
       };
     };
 
-    environment.plasma6.excludePackages = mkOption {
-      description = "List of default packages to exclude from the configuration";
-      type = types.listOf types.package;
-      default = [ ];
-      example = literalExpression "[ pkgs.kdePackages.elisa ]";
+    environment.plasma6 = {
+      excludePackages = mkOption {
+        description = "List of default packages to exclude from the configuration";
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExpression "[ pkgs.kdePackages.elisa ]";
+      };
+      # FIXME: warn the user effectively about the potential danger of this option
+      excludeRequiredPackages = mkOption {
+        description = ''
+          WARNING: although some packages here can be safely removed, many will make the desktop fundamentally unuseable if removed
+          and or quitely and subtley break many different features. ensure you understand what you are excluding.
+          removal of many of these packages after having previously included them may make for invalid user config and or state which could both quitely break features or outright break the desktop.
+
+          List of required packages to exclude from the configuration.
+        '';
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExpression "[ pkgs.kdePackages.kde-inotify-survey ]";
+      };
     };
   };
 
@@ -244,7 +259,7 @@ in
               kdePackages.discover
             ];
         in
-        requiredPackages
+        utils.removePackagesByName requiredPackages config.environment.plasma6.excludeRequiredPackages
         ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
         ++ optionals config.services.desktopManager.plasma6.enableQt5Integration [
           kdePackages.breeze.qt5
