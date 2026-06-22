@@ -15,17 +15,20 @@ let
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   initialRootPassword = "notproduction";
   rootProjectId = "2";
+  rootPAT = "root-PAT-01234567890";
 
   aliceUsername = "alice";
   aliceUserId = "2";
   alicePassword = "R5twyCgU0uXC71wT9BBTCqLs6HFZ7h3L";
   aliceProjectId = "1";
   aliceProjectName = "test-alice";
+  alicePAT = "alice-PAT-0123456789";
 
   bobUsername = "bob";
   bobUserId = "3";
   bobPassword = "XwkkBbl2SiIwabQzgcoaTbhsotijEEtF";
   bobProjectId = "2";
+  bobPAT = "bob-PAT-012345678901";
 in
 {
   name = "gitlab";
@@ -135,14 +138,6 @@ in
   testScript =
     { nodes, ... }:
     let
-      auth = pkgs.writeText "auth.json" (
-        builtins.toJSON {
-          grant_type = "password";
-          username = "root";
-          password = initialRootPassword;
-        }
-      );
-
       createUserAlice = pkgs.writeText "create-user-alice.json" (
         builtins.toJSON rec {
           username = aliceUsername;
@@ -160,22 +155,6 @@ in
           email = "bob@localhost";
           password = bobPassword;
           skip_confirmation = true;
-        }
-      );
-
-      aliceAuth = pkgs.writeText "alice-auth.json" (
-        builtins.toJSON {
-          grant_type = "password";
-          username = aliceUsername;
-          password = alicePassword;
-        }
-      );
-
-      bobAuth = pkgs.writeText "bob-auth.json" (
-        builtins.toJSON {
-          grant_type = "password";
-          username = bobUsername;
-          password = bobPassword;
         }
       );
 
@@ -235,9 +214,10 @@ in
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-pages.service")
         gitlab.wait_for_unit("gitlab-sidekiq.service")
+        gitlab.wait_for_unit("gitlab.target")
         gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
         gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
-        gitlab.wait_for_unit("docker-registry.service")
+        gitlab.wait_for_unit("gitlab-container-registry.service")
       '';
 
       # The actual test of GitLab. Only push data to GitLab if
@@ -251,27 +231,27 @@ in
               "curl -isSf http://gitlab | grep -i location | grep http://gitlab/users/sign_in"
           )
           gitlab.succeed(
-              "${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"
-          )
-          gitlab.succeed(
-              "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers"
+              "/run/wrappers/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"
           )
         ''
         + lib.optionalString doSetup ''
+          gitlab.succeed(
+              "/run/wrappers/bin/sudo -u gitlab gitlab-rails runner \"token = User.find_by_username('root').personal_access_tokens.create(scopes: ['api'], name: 'Test Token', expires_at: 365.days.from_now); token.set_token('${rootPAT}'); token.save!\""
+          )
           with subtest("Create user Alice"):
               gitlab.succeed(
-                  """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserAlice} http://gitlab/api/v4/users)" = "201" ]"""
+                  """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer ${rootPAT}' -d @${createUserAlice} http://gitlab/api/v4/users)" = "201" ]"""
               )
               gitlab.succeed(
-                  "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${aliceAuth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers-alice"
+                  "/run/wrappers/bin/sudo -u gitlab gitlab-rails runner \"token = User.find_by_username('alice').personal_access_tokens.create(scopes: ['api'], name: 'Test Token', expires_at: 365.days.from_now); token.set_token('${alicePAT}'); token.save!\""
               )
 
           with subtest("Create user Bob"):
               gitlab.succeed(
-                  """ [ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserBob} http://gitlab/api/v4/users)" = "201" ]"""
+                  """ [ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer ${rootPAT}' -d @${createUserBob} http://gitlab/api/v4/users)" = "201" ]"""
               )
               gitlab.succeed(
-                  "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${bobAuth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers-bob"
+                "/run/wrappers/bin/sudo -u gitlab gitlab-rails runner \"token = User.find_by_username('bob').personal_access_tokens.create(scopes: ['api'], name: 'Test Token', expires_at: 365.days.from_now); token.set_token('${bobPAT}'); token.save!\""
               )
 
           with subtest("Setup Git and SSH for Alice"):
@@ -287,7 +267,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-alice -d @${aliceAddSSHKey} \
+                      -H 'Authorization: Bearer ${alicePAT}' -d @${aliceAddSSHKey} \
                       http://gitlab/api/v4/user/keys)" = "201" ]
                   """
               )
@@ -301,7 +281,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       -d @${createProjectAlice} \
                       http://gitlab/api/v4/projects)" = "201" ]
                   """
@@ -315,7 +295,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       -d @${putFile} \
                       http://gitlab/api/v4/projects/${aliceProjectId}/repository/files/some-file.txt)" = "201" ]"""
               )
@@ -363,7 +343,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-bob \
+                      -H 'Authorization: Bearer ${bobPAT}' \
                       http://gitlab/api/v4/projects/${aliceProjectId}/fork)" = "201" ]
                   """
               )
@@ -376,7 +356,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-bob \
+                      -H 'Authorization: Bearer ${bobPAT}' \
                       -d @${putFile} \
                       http://gitlab/api/v4/projects/${bobProjectId}/repository/files/some-other-file.txt)" = "201" ]
                   """
@@ -391,7 +371,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-bob \
+                      -H 'Authorization: Bearer ${bobPAT}' \
                       -d @${mergeRequest} \
                       http://gitlab/api/v4/projects/${bobProjectId}/merge_requests)" = "201" ]
                   """
@@ -405,7 +385,7 @@ in
                       -w '%{http_code}' \
                       -X PUT \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       -d @${mergeRequest} \
                       http://gitlab/api/v4/projects/${aliceProjectId}/merge_requests/1/merge)" = "200" ]
                   """
@@ -419,7 +399,7 @@ in
                       -w '%{http_code}' \
                       -X POST \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-bob \
+                      -H 'Authorization: Bearer ${bobPAT}' \
                       -d @${newIssue} \
                       http://gitlab/api/v4/projects/${aliceProjectId}/issues)" = "201" ]
                   """
@@ -433,7 +413,7 @@ in
                       -w '%{http_code}' \
                       -X PUT \
                       -H 'Content-Type: application/json' \
-                      -H @/tmp/headers-alice -d @${closeIssue} http://gitlab/api/v4/projects/${aliceProjectId}/issues/1)" = "200" ]
+                      -H 'Authorization: Bearer ${alicePAT}' -d @${closeIssue} http://gitlab/api/v4/projects/${aliceProjectId}/issues/1)" = "200" ]
                   """
               )
         ''
@@ -444,14 +424,14 @@ in
                   [ "$(curl \
                       -o /dev/null \
                       -w '%{http_code}' \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       http://gitlab/api/v4/projects/${aliceProjectId}/repository/archive.tar.gz)" = "200" ]
                   """
               )
               gitlab.succeed(
                   """
                   curl \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       http://gitlab/api/v4/projects/${aliceProjectId}/repository/archive.tar.gz > /tmp/archive.tar.gz
                   """
               )
@@ -463,14 +443,14 @@ in
                   [ "$(curl \
                       -o /dev/null \
                       -w '%{http_code}' \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       http://gitlab/api/v4/projects/${aliceProjectId}/repository/archive.tar.bz2)" = "200" ]
                   """
               )
               gitlab.succeed(
                   """
                   curl \
-                      -H @/tmp/headers-alice \
+                      -H 'Authorization: Bearer ${alicePAT}' \
                       http://gitlab/api/v4/projects/${aliceProjectId}/repository/archive.tar.bz2 > /tmp/archive.tar.bz2
                   """
               )
@@ -506,6 +486,7 @@ in
           "sudo -u gitlab -H gitlab-rake gitlab:backup:restore RAILS_ENV=production BACKUP=dump force=yes"
       )
       gitlab.systemctl("start gitlab.target")
+      gitlab.systemctl("start gitlab-container-registry")
     ''
     + waitForServices
     + ''
