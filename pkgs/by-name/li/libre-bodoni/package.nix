@@ -2,26 +2,34 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libre-bodoni";
-  version = "2.000";
+  version = "2.005-unstable-2023-02-08";
+
+  outputs = [
+    "out"
+    "webfont"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
-    owner = "impallari";
+    owner = "googlefonts";
     repo = "Libre-Bodoni";
-    rev = "995a40e8d6b95411d660cbc5bb3f726ffd080c7d";
-    hash = "sha256-yfqVeT/JiAT+fsqkXUxqlz4sEEFwEJUdvFTAzuqejtk=";
+    rev = "37d048938a8a32e6ba3992072cb3857659a7828f";
+    hash = "sha256-wqdeJ0prag8BbT3hhXmSUk4X170ytSwPaJHBHMQH7bo=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/opentype */v2000\ -\ initial\ glyphs\ migration/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+  preInstall = ''
+    rm -r old
+  '';
 
-    runHook postInstall
+  postInstall = ''
+    install -Dm444 README.md FONTLOG.txt -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
@@ -42,4 +50,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
