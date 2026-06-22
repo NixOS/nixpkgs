@@ -3,43 +3,50 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  SDL,
+  SDL2,
   which,
+  pkg-config,
   installTool ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "azimuth";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "mdsteele";
     repo = "azimuth";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N5Ahetw/zOXDrEiR1umQNF6i3yeawavoLceiU+xD//g=";
   };
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [
-    libGL
-    SDL
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail "-Werror" ""
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    which
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
-
-  preConfigure = ''
-    substituteInPlace data/azimuth.desktop \
-      --replace Exec=azimuth "Exec=$out/bin/azimuth" \
-      --replace "Version=%AZ_VERSION_NUMBER" "Version=${finalAttrs.version}"
-  '';
+  buildInputs = [
+    libGL
+    SDL2
+  ];
 
   makeFlags = [
     "BUILDTYPE=release"
-    "INSTALLDIR=$(out)"
-  ]
-  ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
+    "PREFIX=${placeholder "out"}"
+    "INSTALLTOOL=${if installTool then "true" else "false"}"
+  ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+  checkTarget = "test";
 
   meta = {
     description = "Metroidvania game using only vectorial graphic";
