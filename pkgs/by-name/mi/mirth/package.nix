@@ -17,6 +17,28 @@ stdenv.mkDerivation {
     hash = "sha256-6nd1DrN3sGobmOh+E/8hYUFW2tBSFLdaEPXrViKDVSc=";
   };
 
+  postPatch =
+    # Bug report: https://todo.sr.ht/~typeswitch/mirth/16
+    lib.optionalString (with stdenv.buildPlatform; isAarch64 && isLinux) ''
+      substituteInPlace bin/mirth0.c \
+        --replace-fail "WRAP_I63(24LL);" "WRAP_I63(16LL);"
+      substituteInPlace lib/std/world.mth \
+        --replace-fail "Linux -> 24u," "Linux -> running-arch Arch.ARM64 = if(16u, 24u),"
+    ''
+    # Replace hard-coded GCC with stdenv’s C compiler.
+    # NOTE: newer GCC requires optimization level ≥1 to use fortity. -O1 is
+    # fast enough as a default for the compiler stages.
+    + ''
+      substituteInPlace Makefile \
+        --replace-fail "-O0" "-O1" \
+        --replace-fail "CC=gcc \$(C99FLAGS)" "CC=${buildPackages.stdenv.cc.targetPrefix}cc \$(C99FLAGS)"
+    ''
+    # Override the final binary, mirth3, with the target’s C compiler & -O2
+    # optimization for distribution.
+    + ''
+      echo "bin/mirth3: CC := ${stdenv.cc.targetPrefix}cc \$(C99FLAGS) -O2" >>Makefile
+    '';
+
   outputs = [
     "out"
     "lib"
@@ -32,27 +54,6 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
-
-  postPatch = ''
-    ${lib.optionalString (with stdenv.buildPlatform; isAarch64 && isLinux) /* sh */ ''
-      # Bug report: https://todo.sr.ht/~typeswitch/mirth/16
-      substituteInPlace bin/mirth0.c \
-        --replace-fail "WRAP_I63(24LL);" "WRAP_I63(16LL);"
-      substituteInPlace lib/std/world.mth \
-        --replace-fail "Linux -> 24u," "Linux -> running-arch Arch.ARM64 = if(16u, 24u),"
-    ''}
-
-    # Replace hard-coded GCC with stdenv’s C compiler.
-    # NOTE: newer GCC requires optimization level ≥1 to use fortity. -O1 is
-    # fast enough as a default for the compiler stages.
-    substituteInPlace Makefile \
-      --replace-fail "-O0" "-O1" \
-      --replace-fail "CC=gcc \$(C99FLAGS)" "CC=${buildPackages.stdenv.cc.targetPrefix}cc \$(C99FLAGS)"
-
-    # Override the final binary, mirth3, with the target’s C compiler & -O2
-    # optimization for distribution.
-    echo "bin/mirth3: CC := ${stdenv.cc.targetPrefix}cc \$(C99FLAGS) -O2" >>Makefile
-  '';
 
   buildFlags = [
     "bin/mirth2"
