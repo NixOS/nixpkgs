@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   python3,
-  pkgs,
+  nix-update-script,
+  cksfv,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -25,13 +26,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     runHook preCheck
     cd test
     ulimit -n 4096
-    python3 test.py
+    ${python3.interpreter} test.py
     runHook postCheck
   '';
 
   nativeCheckInputs = [
-    pkgs.cksfv
+    cksfv
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Utility to verify and create a wide range of checksums";
