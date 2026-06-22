@@ -2,31 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   libwebp,
   pidgin,
   tdlib,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdlib-purple";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
-    owner = "ars3niy";
+    owner = "adrighem";
     repo = "tdlib-purple";
-    rev = "v${version}";
-    sha256 = "sha256-mrowzTtNLyMc2WwLVIop8Mg2DbyiQs0OPXmJuM9QUnM=";
+    rev = "tdlib-purple-v${version}";
+    sha256 = "";
   };
-
-  patches = [
-    # Update to tdlib 1.8.0
-    (fetchpatch {
-      url = "https://github.com/ars3niy/tdlib-purple/commit/8c87b899ddbec32ec6ab4a34ddf0dc770f97d396.patch";
-      sha256 = "sha256-sysPYPno+wS8mZwQAXtX5eVnhwKAZrtr5gXuddN3mko=";
-    })
-  ];
 
   preConfigure = ''
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION "lib/purple-2|' CMakeLists.txt
@@ -38,6 +30,7 @@ stdenv.mkDerivation rec {
     libwebp
     pidgin
     tdlib
+    openssl
   ];
 
   cmakeFlags = [ "-DNoVoip=True" ]; # libtgvoip required
@@ -47,14 +40,10 @@ stdenv.mkDerivation rec {
   );
 
   meta = {
-    homepage = "https://github.com/ars3niy/tdlib-purple";
+    homepage = "https://github.com/adrighem/tdlib-purple";
     description = "libpurple Telegram plugin using tdlib";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
-
-    # tdlib-purple is not actively maintained and currently not
-    # compatible with recent versions of tdlib
-    broken = true;
   };
 }
