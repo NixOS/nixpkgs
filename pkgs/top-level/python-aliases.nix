@@ -590,6 +590,7 @@ mapAliases {
   sphinx-hoverxref = throw "'sphinx-hoverxref' has been deprecated upstream. It's functionality was merged into the readthedocs.org admin panel."; # Added 2026-01-18"
   sphinx-jquery = throw "'sphinx-jquery' has been renamed to/replaced by 'sphinxcontrib-jquery'"; # Converted to throw 2025-10-29
   sphinx-version-warning = throw "'sphinx-version-warning' has been abandoned upstream in 2019"; # Added 2026-01-18
+  sphinx-versions = throw "'sphinx-versions' has been removed because it is unused in Nixpkgs"; # Added 2026-06-22
   sphinx_rtd_theme = throw "'sphinx_rtd_theme' has been renamed to/replaced by 'sphinx-rtd-theme'"; # Converted to throw 2025-10-29
   sphinxcontrib-autoapi = throw "'sphinxcontrib-autoapi' has been renamed to/replaced by 'sphinx-autoapi'"; # Converted to throw 2025-10-29
   sphinxcontrib-newsfeed = throw "'sphinxcontrib-newsfeed has been removed due to abandonment upstream"; # Added 2026-03-24
