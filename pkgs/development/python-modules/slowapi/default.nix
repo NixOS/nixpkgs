@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
 
+  patches = [
+    # https://github.com/laurentS/slowapi/pull/279
+    ./starlette-1.0-compat.patch
+  ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
