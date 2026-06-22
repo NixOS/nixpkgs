@@ -1,0 +1,11 @@
+diff --git a/cc/private/toolchain/generate_system_module_map.sh b/cc/private/toolchain/generate_system_module_map.sh
+index 6bcbd85..b5e4f2c 100755
+--- a/cc/private/toolchain/generate_system_module_map.sh
++++ b/cc/private/toolchain/generate_system_module_map.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@defaultBash@
+ # Copyright 2020 The Bazel Authors. All rights reserved.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+

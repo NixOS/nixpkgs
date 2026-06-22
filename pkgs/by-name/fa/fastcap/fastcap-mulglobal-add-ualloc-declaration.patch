@@ -1,0 +1,12 @@
+Fix implicit int truncating points in 64 bit systems.
+--- a/src/mulGlobal.h
++++ b/src/mulGlobal.h
+@@ -77,6 +77,8 @@
+ /* #define MALCORE malloc */
+ #define MALCORE ualloc
+ 
++extern char *ualloc(unsigned int);
++
+ /* counts of memory usage by multipole matrix type */
+ extern long memcount;
+ extern long memQ2M;
