@@ -1,0 +1,160 @@
+diff --git a/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx b/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx
+index a49ba1890f..b32fb24208 100644
+--- a/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/cufile_linux.pyx
+@@ -9,7 +9,7 @@ import threading
+ 
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ import cython
+ 
+@@ -107,7 +107,7 @@ cdef void* __cuFileGetParameterPosixPoolSlabArray = NULL
+ 
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("cufile")._handle_uint
++    cdef uintptr_t handle = CDLL("@libcufile@/lib/libcufile.so")._handle
+     return <void*>handle
+ 
+ 
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvfatbin_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvfatbin_linux.pyx
+index 448e51240e..6de894800b 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvfatbin_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvfatbin_linux.pyx
+@@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
+ import threading
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ 
+ ###############################################################################
+@@ -74,7 +74,7 @@ cdef void* __nvFatbinAddTileIR = NULL
+ 
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvfatbin")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvfatbin@/lib/libnvfatbin.so")._handle
+     return <void*>handle
+ 
+ 
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvjitlink_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvjitlink_linux.pyx
+index 34ad6b5f0c..dc20de43a7 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvjitlink_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvjitlink_linux.pyx
+@@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
+ import threading
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ 
+ ###############################################################################
+@@ -78,7 +78,7 @@ cdef void* __nvJitLinkGetLinkedLTOIR = NULL
+ 
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvJitLink")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvjitlink@/lib/libnvJitLink.so")._handle
+     return <void*>handle
+ 
+ 
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
+index 825931d756..77004f360c 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
+@@ -10,7 +10,7 @@ import threading
+ 
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ 
+ ###############################################################################
+@@ -414,7 +414,7 @@ cdef void* __nvmlGpuInstanceSetVgpuSchedulerState_v2 = NULL
+ 
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvml")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvml@/lib/libnvidia-ml.so")._handle
+     return <void*>handle
+ 
+ 
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
+index ac9cbca550..68644df6be 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvrtc_linux.pyx
+@@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
+ import threading
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ ###############################################################################
+ # Extern
+@@ -87,7 +87,7 @@ cdef void* __nvrtcGetBundledHeadersInfo = NULL
+ cdef void* __nvrtcRemoveBundledHeaders = NULL
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvrtc")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvrtc@/lib/libnvrtc.so")._handle
+     return <void*>handle
+ 
+ cdef int _init_nvrtc() except -1 nogil:
+diff --git a/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
+index 2a1d155862..94aa05421a 100644
+--- a/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
++++ b/cuda_bindings/cuda/bindings/_internal/nvvm_linux.pyx
+@@ -9,7 +9,7 @@ from libc.stdint cimport intptr_t, uintptr_t
+ import threading
+ from .utils import FunctionNotFoundError, NotSupportedError
+ 
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ 
+ 
+ ###############################################################################
+@@ -76,7 +76,7 @@ cdef void* __nvvmLLVMVersion = NULL
+ 
+ 
+ cdef void* load_library() except* with gil:
+-    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvvm")._handle_uint
++    cdef uintptr_t handle = CDLL("@libnvvm@/lib/libnvvm.so")._handle
+     return <void*>handle
+ 
+ 
+diff --git a/cuda_bindings/cuda/bindings/cyruntime.pyx.in b/cuda_bindings/cuda/bindings/cyruntime.pyx.in
+index 230b5d8f84..c88872e5f1 100644
+--- a/cuda_bindings/cuda/bindings/cyruntime.pyx.in
++++ b/cuda_bindings/cuda/bindings/cyruntime.pyx.in
+@@ -2048,7 +2048,7 @@ cdef cudaError_t cudaGraphicsVDPAURegisterOutputSurface(cudaGraphicsResource** r
+ {{if True}}
+ 
+ from libc.stdint cimport uintptr_t
+-from cuda.pathfinder import load_nvidia_dynamic_lib
++from ctypes import CDLL
+ {{if 'Windows' == platform.system()}}
+ cimport cuda.bindings._lib.windll as windll
+ {{else}}
+@@ -2058,11 +2058,11 @@ cimport cuda.bindings._lib.dlfcn as dlfcn
+ cdef cudaError_t getLocalRuntimeVersion(int* runtimeVersion) except ?cudaErrorCallRequiresNewerDriver nogil:
+     # Load
+     with gil:
+-        loaded_dl = load_nvidia_dynamic_lib("cudart")
++        loaded_dl = CDLL("@libcudart@/lib/libcudart.so")
+         {{if 'Windows' == platform.system()}}
+-        handle = <uintptr_t>loaded_dl._handle_uint
++        handle = <uintptr_t>loaded_dl._handle
+         {{else}}
+-        handle = <void *><uintptr_t>loaded_dl._handle_uint
++        handle = <void *><uintptr_t>loaded_dl._handle
+         {{endif}}
+ 
+     {{if 'Windows' == platform.system()}}

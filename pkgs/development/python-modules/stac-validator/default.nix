@@ -7,6 +7,7 @@
   setuptools,
   # runtime deps
   click,
+  fastjsonschema,
   jsonschema,
   pyyaml,
   requests,
@@ -14,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "stac-validator";
-  version = "4.1.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-qO1DRYpPn+zarHTj2mZQ2LJ2uhmS1bax6Yxy035ZEUA=";
+    hash = "sha256-JrLpny4PDXvjKN1iQ0uxcTuPgNTykZzv7RdQDoMLQT4=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
+    fastjsonschema
     jsonschema
     pyyaml
     requests
