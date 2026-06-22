@@ -244,7 +244,7 @@ in
                 qtvirtualkeyboard # used by plasma-keyboard KCM
 
                 # experimental(?) Union theme
-                union
+                # union
                 ;
             })
             ++ [ (getBin kdePackages.qttools) ] # Expose qdbus in PATH
