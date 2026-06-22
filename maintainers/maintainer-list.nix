@@ -1387,6 +1387,12 @@
     githubId = 30437811;
     name = "Alex Andrews";
   };
+  alikaansun = {
+    name = "Ali Kaan Sunnetcioglu";
+    email = "asunnetcoglu@gmail.com";
+    github = "alikaansun";
+    githubId = 77810345;
+  };
   alikindsys = {
     email = "alice@blocovermelho.org";
     github = "alikindsys";

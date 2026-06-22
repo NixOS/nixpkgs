@@ -11114,6 +11114,8 @@ self: super: with self; {
 
   nbmake = callPackage ../development/python-modules/nbmake { };
 
+  nbpreview = callPackage ../development/python-modules/nbpreview { };
+
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
 
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
@@ -12714,6 +12716,8 @@ self: super: with self; {
   piccolo = callPackage ../development/python-modules/piccolo { };
 
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
+
+  picharsso = callPackage ../development/python-modules/picharsso { };
 
   pick = callPackage ../development/python-modules/pick { };
 
@@ -19195,6 +19199,8 @@ self: super: with self; {
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
   stups-zign = callPackage ../development/python-modules/stups-zign { };
+
+  sty = callPackage ../development/python-modules/sty { };
 
   stytra = callPackage ../development/python-modules/stytra { };
 
