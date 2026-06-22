@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyudev
     pyyaml
     typing-extensions
-    xlib
+    python-xlib
   ];
 
   nativeCheckInputs = with python3Packages; [

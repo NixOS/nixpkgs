@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "xlib";
+  pname = "python-xlib";
   version = "0.33";
   pyproject = true;
 

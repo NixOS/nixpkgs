@@ -16405,6 +16405,8 @@ self: super: with self; {
 
   python-xbox = callPackage ../development/python-modules/python-xbox { };
 
+  python-xlib = callPackage ../development/python-modules/python-xlib { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   python-xz = callPackage ../development/python-modules/python-xz { };
@@ -21828,8 +21830,6 @@ self: super: with self; {
   xknx = callPackage ../development/python-modules/xknx { };
 
   xknxproject = callPackage ../development/python-modules/xknxproject { };
-
-  xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
 
