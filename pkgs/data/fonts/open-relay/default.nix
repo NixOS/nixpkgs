@@ -10,13 +10,13 @@ let
     { directory, meta }:
     stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "open-relay-${name}";
-      version = "2026-04-12";
+      version = "2026-05-08";
 
       src = fetchFromGitHub {
         owner = "kreativekorp";
         repo = "open-relay";
         tag = finalAttrs.version;
-        hash = "sha256-UI3JP/5Os7xWB07dwlEpWuDMG1awpsOr0itmZpxGtyg=";
+        hash = "sha256-ywLCAsAEpD25w7zuBpi3hFMosXvyt+zpelsGEASKX68=";
       };
 
       installPhase = ''
