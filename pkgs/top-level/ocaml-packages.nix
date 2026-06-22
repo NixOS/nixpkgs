@@ -944,6 +944,7 @@ let
                 lib
                 openssl
                 zstd
+                replaceVars
                 ;
             }
           else if lib.versionOlder "4.13.1" ocaml.version then

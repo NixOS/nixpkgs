@@ -1,0 +1,25 @@
+diff --git a/command_unix/src/command_unix.ml b/command_unix/src/command_unix.ml
+index 5527c39..b2f7600 100644
+--- a/command_unix/src/command_unix.ml
++++ b/command_unix/src/command_unix.ml
+@@ -20,7 +20,7 @@ module For_unix = Command.Private.For_unix (struct
+   end
+ end)
+
+-let run = For_unix.run
++let run = For_unix.run ~version:"@JANESTREET_MISSING_VERSION@"
+ let shape = For_unix.shape
+
+ module Deprecated = struct
+diff --git a/command_unix/src/command_unix.mli b/command_unix/src/command_unix.mli
+index d9e81b3..93aeaac 100644
+--- a/command_unix/src/command_unix.mli
++++ b/command_unix/src/command_unix.mli
+@@ -32,7 +32,6 @@ open! Core
+ val run
+   :  ?add_validate_parsing_flag:bool
+   -> ?verbose_on_parse_error:bool
+-  -> ?version:string
+   -> ?build_info:string
+   -> ?argv:string list
+   -> ?extend:(string list -> string list)
