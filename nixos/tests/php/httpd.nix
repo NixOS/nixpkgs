@@ -7,7 +7,7 @@
   name = "php-${php.version}-httpd-test";
   meta.maintainers = lib.teams.php.members;
 
-  nodes.machine =
+  containers.machine =
     {
       config,
       pkgs,
@@ -32,13 +32,13 @@
       };
     };
   testScript =
-    { ... }:
+    # python
     ''
       machine.wait_for_unit("httpd.service")
 
       # Check so we get an evaluated PHP back
-      response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
-      assert "PHP Version ${php.version}" in response, "PHP version not detected"
+      response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1:80/")
+      t.assertIn("PHP Version ${php.version}", response, "PHP version not detected")
 
       # Check so we have database and some other extensions loaded
       for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:
