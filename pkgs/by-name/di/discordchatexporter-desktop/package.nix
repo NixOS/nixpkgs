@@ -41,7 +41,10 @@ buildDotnetModule rec {
     license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/${version}";
     maintainers = with lib.maintainers; [ willow ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "discordchatexporter";
   };
 }
