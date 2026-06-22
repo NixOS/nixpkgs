@@ -140,6 +140,7 @@ in
       noto-fonts
       open-sans
     ];
+    i18n.spellcheck.enable = lib.mkDefault true;
 
     # Required options for the COSMIC DE
     environment.sessionVariables.X11_BASE_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.xml";
