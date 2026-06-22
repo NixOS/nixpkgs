@@ -95,7 +95,10 @@ stdenv.mkDerivation (
       homepage = "https://www.gnu.org/software/src-highlite/";
       license = lib.licenses.gpl3Plus;
       mainProgram = "source-highlight";
-      maintainers = with lib.maintainers; [ SuperSandro2000 ];
+      maintainers = with lib.maintainers; [
+        SuperSandro2000
+        yiyu
+      ];
       platforms = lib.platforms.all;
     };
   }
