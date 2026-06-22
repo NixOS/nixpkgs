@@ -16025,6 +16025,12 @@
     githubId = 28735087;
     keys = [ { fingerprint = "AB47 3D70 53D2 74CA DC2C  230C B648 02DC 33A6 4FF6"; } ];
   };
+  lords1nister1 = {
+    name = "Lord Sinister";
+    email = "youubepro@gmail.com";
+    github = "lords1nister1";
+    githubId = 145019965;
+  };
   lorenz = {
     name = "Lorenz Brun";
     email = "lorenz@brun.one";
