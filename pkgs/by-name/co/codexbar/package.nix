@@ -9,6 +9,8 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "codexbar";
   version = "0.37.2";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
