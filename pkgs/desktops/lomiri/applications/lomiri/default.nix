@@ -57,17 +57,18 @@
   qtsvg,
   wrapGAppsHook3,
   wrapQtAppsHook,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
     tag = finalAttrs.version;
-    hash = "sha256-blXEfDauwtDH+0OdUx0vAR+8lnAGrREssqjsBNmvomk=";
+    hash = "sha256-ON5vKDzVogAVfQ7fbFAFDy4s/rWgljiKJ9AgBtu+vr0=";
   };
 
   patches = [
@@ -86,11 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Make greeter behave nicer & more Wayland-native
-    (fetchpatch {
-      name = "2014-lomiri-greeter-wrapper-on-wayland.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/e655e14c7d420021193e37debd3e7da620b45429/debian/patches/2014_lomiri-greeter-wrapper-on-wayland.patch";
-      hash = "sha256-aEId3UDqH1iUi9gV5IpW/5S5rke93UyZVr0jWlNYnOU=";
-    })
+    # https://salsa.debian.org/ubports-team/lomiri/-/raw/e655e14c7d420021193e37debd3e7da620b45429/debian/patches/2014_lomiri-greeter-wrapper-on-wayland.patch, adjusted for 0.6.0
+    ./2014_lomiri-greeter-wrapper-on-wayland.patch
     (fetchpatch {
       name = "2015-lomiri-greeter-use-wayland.patch";
       url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/2f5acfa085c901359bf6f6cccbce36d7e2981555/debian/patches/2015_lomiri-greeter-use-wayland.patch";
@@ -102,21 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
       name = "1005-lomiri-cursor-always-follow-cursor-position-from-mir.patch";
       url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/f3ba943006f5469a8a7aa24f232d6383afb3bc74/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
       hash = "sha256-FYWRHt3//gm3jT9dr35tH4PlZssMMA/zBhjkszgqTYo=";
-    })
-
-    # Undo start-here integration & uglier colours for launcher
-    (fetchpatch {
-      name = "0001-lomiri-LauncherPanel-Use-Lomiri-upstream-home-logo-and-home-background-color.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/defaabfaf4818ee6b618c97b34acf5e0ed2ebb2e.patch";
-      hash = "sha256-9YRWMV+1UT+EQd9Uq1+6enNzz+HDlSt3LTPM1BKJxiE=";
-    })
-
-    # Compatibility with newer lomiri-api
-    # Remove when version > 0.5.0
-    (fetchpatch {
-      name = "0002-lomiri-Adjust-to-newer-lomiri-api.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/26cbfa458766df406ed7d2c351ec84522371b083.patch";
-      hash = "sha256-1mPDtitMpktuvLs3Zn+6pCaMGTwGvIglGBdrm4Y8QwA=";
     })
 
     ./9901-lomiri-Disable-Wizard.patch
@@ -156,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/whitespace/check_whitespace.py
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -201,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtdeclarative
     qtmir
     qtsvg
+    xwayland
 
     # QML import path
     biometryd
@@ -212,7 +198,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtmultimedia
   ];
 
-  nativeCheckInputs = [ (python3.withPackages (ps: with ps; [ python-dbusmock ])) ];
+  nativeCheckInputs = [
+    libqtdbustest
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
+  ];
 
   checkInputs = [
     libqtdbustest
@@ -226,8 +215,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
-    (lib.cmakeBool "WITH_MIR2" true)
+    (lib.strings.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
+    (lib.strings.cmakeBool "WITH_MIR2" true)
+    # These get embedded into systemd service files
+    (lib.strings.cmakeFeature "DUAE_BIN" (lib.getExe' dbus "dbus-update-activation-environment"))
+    (lib.strings.cmakeFeature "XWAYLAND_BIN" (lib.getExe xwayland))
   ];
 
   postInstall = ''
