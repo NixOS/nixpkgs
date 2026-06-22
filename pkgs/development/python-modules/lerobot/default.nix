@@ -34,6 +34,7 @@
   wandb,
 
   # tests
+  llvmPackages,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   pytest-timeout,
@@ -57,6 +58,11 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
   dontUseCmakeConfigure = true;
+
+  checkInputs = lib.optionals stdenv.cc.isClang [
+    # test_async_iterator_* hangs after failing to find OMP headers
+    llvmPackages.openmp
+  ];
 
   pythonRelaxDeps = [
     "av"
@@ -172,12 +178,21 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_pi0_rtc_inference_with_prev_chunk"
+
+    # Flakes under load with AssertionError: assert 'second' == 'last'
+    "test_get_last_item_multiple_items_with_torch_queue"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!
     "test_complementary_data_float_dtype_conversion"
     "test_float_dtype_conversion"
     "test_float_dtype_with_mixed_tensors"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # gRPC fails to connect on loopback in sandbox despite __darwinAllowLocalNetworking
+    "test_end_to_end_interactions_flow"
+    "test_end_to_end_parameters_flow"
+    "test_end_to_end_transitions_flow"
   ];
 
   disabledTestPaths = [
@@ -191,6 +206,8 @@ buildPythonPackage (finalAttrs: {
     # Sometimes hang forever
     "tests/policies/rtc/test_modeling_rtc.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";
