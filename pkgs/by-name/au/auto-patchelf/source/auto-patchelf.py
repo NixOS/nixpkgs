@@ -427,12 +427,9 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
 
     if relative_rpaths:
         # Determine the store directory to identify which absolute paths can be made relative.
-        # Check NIX_STORE environment variable first, then fall back dynamically to libc_lib's grandparent
-        # (which is guaranteed to point to the store when main() is running successfully).
         store_dir_env = os.environ.get('NIX_STORE')
-        store_path = Path(store_dir_env) if store_dir_env else libc_lib.parent.parent
-        if store_path == Path('/'):
-            store_path = None
+        assert store_dir_env, "NIX_STORE environment variable is not set."
+        store_path = Path(store_dir_env)
 
         relative_rpath = []
         for r in rpath:
