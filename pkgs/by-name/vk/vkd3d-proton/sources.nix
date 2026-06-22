@@ -5,7 +5,7 @@
     let
       self = {
         pname = "vkd3d-proton";
-        version = "2.14.1";
+        version = "3.0.1";
 
         src = fetchFromGitHub {
           owner = "HansKristian-Work";
@@ -31,7 +31,7 @@
             git describe --always --tags --dirty=+ > .nixpkgs-auxfiles/vkd3d_version
             find $out -name .git -print0 | xargs -0 rm -fr
           '';
-          hash = "sha256-8YA/I5UL6G5v4uZE2qKqXzHWeZxg67jm20rONKocvvE=";
+          hash = "sha256-PFJU5x/Zd5+AytNag69aqessmZTSvDdTZ62z74w5xlU=";
         };
       };
     in
