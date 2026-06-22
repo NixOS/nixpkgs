@@ -846,12 +846,6 @@
     githubId = 207841739;
     name = "Savchenko Dmitriy";
   };
-  aherrmann = {
-    email = "andreash87@gmx.ch";
-    github = "aherrmann";
-    githubId = 732652;
-    name = "Andreas Herrmann";
-  };
   ahirner = {
     email = "a.hirner+nixpkgs@gmail.com";
     github = "ahirner";
@@ -5720,6 +5714,12 @@
     githubId = 6821729;
     github = "criyle";
   };
+  crmne = {
+    email = "carmine@paolino.me";
+    github = "crmne";
+    githubId = 106617;
+    name = "Carmine Paolino";
+  };
   croissong = {
     email = "jan.moeller0@pm.me";
     name = "Jan Möller";
@@ -8395,12 +8395,6 @@
       { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; }
       { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
     ];
-  };
-  ethercrow = {
-    email = "ethercrow@gmail.com";
-    github = "ethercrow";
-    githubId = 222467;
-    name = "Dmitry Ivanov";
   };
   ethindp = {
     name = "Ethin Probst";
@@ -16375,6 +16369,12 @@
     githubId = 80571430;
     name = "Luminar Leaf";
   };
+  luna-the-tuna = {
+    email = "contact@luna.fish";
+    github = "luna-the-tuna";
+    githubId = 112084382;
+    name = "Luna Heyman";
+  };
   luna_1024 = {
     email = "contact@luna.computer";
     github = "luna-1024";
@@ -17531,12 +17531,6 @@
     github = "mbode";
     githubId = 9051309;
     name = "Maximilian Bode";
-  };
-  mboes = {
-    email = "mboes@tweag.net";
-    github = "mboes";
-    githubId = 51356;
-    name = "Mathieu Boespflug";
   };
   mBornand = {
     email = "dev.mbornand@systemb.ch";
@@ -28252,12 +28246,6 @@
     githubId = 38566841;
     name = "Anthony Butt";
   };
-  toodeluna = {
-    email = "luna@toodeluna.net";
-    github = "toodeluna";
-    githubId = 112084382;
-    name = "Luna Heyman";
-  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
@@ -30541,12 +30529,6 @@
     github = "ylannl";
     githubId = 1742643;
     name = "Ravi Peters";
-  };
-  ylecornec = {
-    email = "yves.stan.lecornec@tweag.io";
-    github = "ylecornec";
-    githubId = 5978566;
-    name = "Yves-Stan Le Cornec";
   };
   ylh = {
     email = "nixpkgs@ylh.io";

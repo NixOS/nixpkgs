@@ -11,7 +11,6 @@
   pkg-config,
   curl,
   glib,
-  fuse,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,8 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     glib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
