@@ -48,10 +48,10 @@ let
           six
           zope-interface
           dbus-python
-          pycairo
-          librsvg
         ]
         ++ optionals withGUI [
+          pycairo
+          librsvg
           gtk3
           gobject-introspection
           pygobject3
