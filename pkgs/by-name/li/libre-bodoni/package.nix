@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   installFonts,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -22,7 +23,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wqdeJ0prag8BbT3hhXmSUk4X170ytSwPaJHBHMQH7bo=";
   };
 
-  nativeBuildInputs = [ installFonts ];
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
+  nativeBuildInputs = [
+    python3Packages.gftools
+    installFonts
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    # clean out the prebuilt files
+    rm -r fonts
+    gftools builder sources/config.yaml
+    runHook postBuild
+  '';
+
+  dontUseNinjaBuild = true;
+  dontUseNinjaInstall = true;
 
   preInstall = ''
     rm -r old
