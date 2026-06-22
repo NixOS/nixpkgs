@@ -20086,6 +20086,8 @@ self: super: with self; {
 
   tracerite = callPackage ../development/python-modules/tracerite { };
 
+  trackers = callPackage ../development/python-modules/trackers { };
+
   trackpy = callPackage ../development/python-modules/trackpy { };
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
