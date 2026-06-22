@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "argo-workflows";
-  version = "3.6.10";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-workflows";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
+    hash = "sha256-UmkUFuYFeuyqgdf/ByZkkulkVRregp53bvcyyEKgZQo=";
   };
 
-  vendorHash = "sha256-Y/2+ykzcJdA5uwP1v9Z1wZtF3hBV2x7XZc7+FhPJP64=";
+  vendorHash = "sha256-UTBM1zd+HrC5bUadn0VSsO52HhqdPGzZwipQv7WOrNU=";
 
   doCheck = false;
 
@@ -30,14 +30,19 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
+  preBuild = ''
+    mkdir -p ui/dist/app
+    echo "Built without static files" > ui/dist/app/index.html
+  '';
+
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/argoproj/argo-workflows/v3.buildDate=unknown"
-    "-X github.com/argoproj/argo-workflows/v3.gitCommit=${finalAttrs.src.rev}"
-    "-X github.com/argoproj/argo-workflows/v3.gitTag=${finalAttrs.src.rev}"
-    "-X github.com/argoproj/argo-workflows/v3.gitTreeState=clean"
-    "-X github.com/argoproj/argo-workflows/v3.version=${finalAttrs.version}"
+    "-X github.com/argoproj/argo-workflows/v4.buildDate=unknown"
+    "-X github.com/argoproj/argo-workflows/v4.gitCommit=${finalAttrs.src.rev}"
+    "-X github.com/argoproj/argo-workflows/v4.gitTag=${finalAttrs.src.rev}"
+    "-X github.com/argoproj/argo-workflows/v4.gitTreeState=clean"
+    "-X github.com/argoproj/argo-workflows/v4.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
