@@ -1,9 +1,11 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   olm,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,6 +25,9 @@ buildGoModule (finalAttrs: {
   buildInputs = [ olm ];
 
   preBuild = ''
+    rm -rf web/backend/dist
+    cp -r ${finalAttrs.passthru.frontend} web/backend/dist
+
     go generate ./...
   '';
 
@@ -31,6 +36,12 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X github.com/sipeed/picoclaw/pkg/config.Version=${finalAttrs.version}"
   ];
+
+  postInstall = ''
+    ln -sf $out/bin/{backend,picoclaw-launcher}
+    install -Dm644 web/picoclaw-launcher.png -t $out/share/icons/hicolor/256x256/apps
+    install -Dm444 web/picoclaw-launcher.desktop -t $out/share/applications
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -48,6 +59,11 @@ buildGoModule (finalAttrs: {
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  passthru = {
+    frontend = callPackage ./frontend.nix { picoclaw = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=frontend" ]; };
+  };
 
   meta = {
     description = "Tiny, Fast, and Deployable anywhere - automate the mundane, unleash your creativity";
