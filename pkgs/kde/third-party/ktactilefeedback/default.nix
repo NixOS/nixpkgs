@@ -1,16 +1,16 @@
 {
   stdenv,
   lib,
+  mkKdeDerivation,
   fetchFromGitLab,
   unstableGitUpdater,
-  cmake,
   extra-cmake-modules,
   qtbase,
   qtdeclarative,
   qtmultimedia,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkKdeDerivation rec {
   pname = "ktactilefeedback";
   version = "0-unstable-2025-07-25";
 
@@ -27,22 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
-
-  buildInputs = [
+  extraBuildInputs = [
     extra-cmake-modules
-    qtbase
     qtmultimedia
   ];
 
   # Library
   dontWrapQtApps = true;
 
-  cmakeFlags = [
+  extraCmakeFlags = [
     # Need to run these post-install, so QML import path exists
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
+    (lib.cmakeBool "BUILD_TESTING" doInstallCheck)
   ];
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -62,4 +57,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

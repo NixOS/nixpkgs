@@ -63,8 +63,7 @@ let
           zxing-cpp
           ;
 
-        # Alias to match metadata
-        kquickimageeditor = self.kquickimageedit;
+        kquickimageeditor = self.callPackage ./misc/kquickimageeditor { };
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
@@ -96,6 +95,10 @@ let
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
+        sierra-breeze-enhanced = self.callPackage ./third-party/sierra-breeze-enhanced { };
+        ktactilefeedback = self.callPackage ./third-party/ktactilefeedback { };
+
+        qtstyleplugin-kvantum = self.callPackage ../development/libraries/qtstyleplugin-kvantum { };
       }
     );
 in

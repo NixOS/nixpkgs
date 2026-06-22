@@ -154,7 +154,7 @@ makeScopeWithSplicing' {
         qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
         qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
-          qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+          qt6Kvantum = pkgs.kdePackages.qtstyleplugin-kvantum;
         };
 
         quazip = callPackage ../development/libraries/quazip { };

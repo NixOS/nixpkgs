@@ -50,15 +50,11 @@ makeScopeWithSplicing' {
 
       fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
-      fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
-
       fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
       fcitx5-skk-qt = pkgs.fcitx5-skk.override { enableQt = true; };
 
       fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
-
-      fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
 
       kdsoap = callPackage ../development/libraries/kdsoap { };
 
@@ -66,9 +62,6 @@ makeScopeWithSplicing' {
       kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
       futuresql = callPackage ../development/libraries/futuresql { };
-      kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
-
-      ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
 
       libiodata = callPackage ../development/libraries/libiodata { };
 
@@ -119,8 +112,6 @@ makeScopeWithSplicing' {
 
       qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-      qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
-
       qtutilities = callPackage ../development/libraries/qtutilities { };
 
       qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
@@ -147,12 +138,8 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
-      sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
-
-      sierra-breeze-enhanced =
-        kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
-          { };
+      sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
+      sddm = callPackage ../applications/display-managers/sddm { };
 
       signond = callPackage ../development/libraries/signond { };
 
@@ -161,6 +148,24 @@ makeScopeWithSplicing' {
       wayqt = callPackage ../development/libraries/wayqt { };
     }
     // lib.optionalAttrs config.allowAliases {
+      fcitx5-with-addons = throw ''
+        'qt6Packages.fcitx5-with-addons' has been replaced by top-level 'fcitx5-with-addons'.
+      ''; # Added 2026-06-06
+      fcitx5-configtool = throw ''
+        'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
+      ''; # Added 2026-06-06
+      ktactilefeedback = throw ''
+        'qt6Packages.ktactilefeedback' has been replaced by 'kdePackages.ktactilefeedback'.
+      ''; # Added 2026-06-04
+      kquickimageedit = throw ''
+        'qt6Packages.kquickimageedit' has been replaced by 'kdePackages.kquickimageeditor'.
+      ''; # Added 2026-06-04
+      sierra-breeze-enhanced = throw ''
+        'qt6Packages.sierra-breeze-enhanced' has been replaced by 'kdePackages.sierra-breeze-enhanced'.
+      ''; # Added 2026-06-04
+      qtstyleplugin-kvantum = throw ''
+        'qt6Packages.qtstyleplugin-kvantum' has been replaced by 'kdePackages.qtstyleplugin-kvantum'.
+      ''; # Added 2026-06-04
       qwlroots = throw ''
         'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
         The upstream no longer provides it as a standalone development library.

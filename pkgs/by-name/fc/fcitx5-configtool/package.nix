@@ -3,29 +3,12 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
   pkg-config,
   fcitx5,
-  fcitx5-qt,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  qtdeclarative,
-  qtx11extras ? null,
-  kitemviews,
-  kwidgetsaddons,
-  qtquickcontrols2 ? null,
-  kcmutils,
-  kcoreaddons,
-  kdeclarative,
-  kirigami ? null,
-  kirigami2 ? null,
+  kdePackages,
   isocodes,
   xkeyboard-config,
   libxkbfile,
-  libplasma ? null,
-  plasma-framework ? null,
-  wrapQtAppsHook,
   kcmSupport ? true,
 }:
 
@@ -47,43 +30,31 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     fcitx5
-    fcitx5-qt
-    qtbase
-    qtsvg
-    qtwayland
-    kitemviews
-    kwidgetsaddons
+    kdePackages.fcitx5-qt
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qtwayland
+    kdePackages.kitemviews
+    kdePackages.kwidgetsaddons
     isocodes
     xkeyboard-config
     libxkbfile
   ]
-  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtx11extras
-  ]
-  ++ lib.optionals kcmSupport (
-    [
-      qtdeclarative
-      kcoreaddons
-      kdeclarative
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtquickcontrols2
-      plasma-framework
-      kirigami2
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-      kcmutils
-      libplasma
-      kirigami
-    ]
-  );
+  ++ lib.optionals kcmSupport [
+    kdePackages.qtdeclarative
+    kdePackages.kcoreaddons
+    kdePackages.kdeclarative
+    kdePackages.kcmutils
+    kdePackages.libplasma
+    kdePackages.kirigami
+  ];
 
   meta = {
     description = "Configuration Tool for Fcitx5";
