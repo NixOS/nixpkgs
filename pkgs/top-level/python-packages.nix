@@ -3140,6 +3140,8 @@ self: super: with self; {
 
   commonregex = callPackage ../development/python-modules/commonregex { };
 
+  compas = callPackage ../development/python-modules/compas { };
+
   compit-inext-api = callPackage ../development/python-modules/compit-inext-api { };
 
   compliance-trestle = callPackage ../development/python-modules/compliance-trestle { };
