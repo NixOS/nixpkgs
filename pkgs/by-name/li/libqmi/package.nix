@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "doc"
   ];
 
   src = fetchFromGitLab {
