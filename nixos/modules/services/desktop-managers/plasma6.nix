@@ -10,11 +10,15 @@ let
 
   inherit (pkgs) kdePackages;
   inherit (lib)
+    getBin
     literalExpression
     mkDefault
     mkIf
     mkOption
     mkPackageOption
+    mkRenamedOptionModule
+    optional
+    optionals
     types
     ;
 
@@ -53,15 +57,15 @@ in
   };
 
   imports = [
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "plasma6" "enable" ]
       [ "services" "desktopManager" "plasma6" "enable" ]
     )
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "plasma6" "enableQt5Integration" ]
       [ "services" "desktopManager" "plasma6" "enableQt5Integration" ]
     )
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "plasma6" "notoPackage" ]
       [ "services" "desktopManager" "plasma6" "notoPackage" ]
     )
@@ -182,13 +186,13 @@ in
               union
               ;
           })
-          ++ [ (lib.getBin kdePackages.qttools) ] # Expose qdbus in PATH
-          ++ lib.optional config.networking.networkmanager.enable kdePackages.qrca
-          ++ lib.optionals config.hardware.sensor.iio.enable [
+          ++ [ (getBin kdePackages.qttools) ] # Expose qdbus in PATH
+          ++ optional config.networking.networkmanager.enable kdePackages.qrca
+          ++ optionals config.hardware.sensor.iio.enable [
             # This is required for autorotation in Plasma 6
             kdePackages.qtsensors
           ]
-          ++ lib.optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
+          ++ optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
             # Since PackageKit Nix support is not there yet,
             # only install discover if flatpak or fwupd is enabled.
             kdePackages.discover
@@ -196,7 +200,7 @@ in
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
-      ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
+      ++ optionals config.services.desktopManager.plasma6.enableQt5Integration [
         kdePackages.breeze.qt5
         kdePackages.plasma-integration.qt5
         kdePackages.kwayland-integration
@@ -215,23 +219,23 @@ in
         kdePackages.kio-extras-kf5
       ]
       # Optional and hardware support features
-      ++ lib.optionals config.hardware.bluetooth.enable [
+      ++ optionals config.hardware.bluetooth.enable [
         kdePackages.bluedevil
         kdePackages.bluez-qt
         pkgs.openobex
         pkgs.obexftp
       ]
-      ++ lib.optional config.networking.networkmanager.enable kdePackages.plasma-nm
-      ++ lib.optional config.services.pulseaudio.enable kdePackages.plasma-pa
-      ++ lib.optional config.services.pipewire.pulse.enable kdePackages.plasma-pa
-      ++ lib.optional config.powerManagement.enable kdePackages.powerdevil
-      ++ lib.optional config.services.printing.enable kdePackages.print-manager
-      ++ lib.optional config.hardware.sane.enable kdePackages.skanpage
-      ++ lib.optional config.services.colord.enable kdePackages.colord-kde
-      ++ lib.optional config.services.hardware.bolt.enable kdePackages.plasma-thunderbolt
-      ++ lib.optional config.services.samba.enable kdePackages.kdenetwork-filesharing
-      ++ lib.optional config.services.xserver.wacom.enable kdePackages.wacomtablet
-      ++ lib.optional config.services.flatpak.enable kdePackages.flatpak-kcm;
+      ++ optional config.networking.networkmanager.enable kdePackages.plasma-nm
+      ++ optional config.services.pulseaudio.enable kdePackages.plasma-pa
+      ++ optional config.services.pipewire.pulse.enable kdePackages.plasma-pa
+      ++ optional config.powerManagement.enable kdePackages.powerdevil
+      ++ optional config.services.printing.enable kdePackages.print-manager
+      ++ optional config.hardware.sane.enable kdePackages.skanpage
+      ++ optional config.services.colord.enable kdePackages.colord-kde
+      ++ optional config.services.hardware.bolt.enable kdePackages.plasma-thunderbolt
+      ++ optional config.services.samba.enable kdePackages.kdenetwork-filesharing
+      ++ optional config.services.xserver.wacom.enable kdePackages.wacomtablet
+      ++ optional config.services.flatpak.enable kdePackages.flatpak-kcm;
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -353,11 +357,11 @@ in
         fprintAuth = false;
         p11Auth = false;
       };
-      kde-fingerprint = lib.mkIf config.services.fprintd.enable {
+      kde-fingerprint = mkIf config.services.fprintd.enable {
         fprintAuth = true;
         p11Auth = false;
       };
-      kde-smartcard = lib.mkIf config.security.pam.p11.enable {
+      kde-smartcard = mkIf config.security.pam.p11.enable {
         p11Auth = true;
         fprintAuth = false;
       };
@@ -368,7 +372,7 @@ in
         owner = "root";
         group = "root";
         capabilities = "cap_sys_nice+ep";
-        source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
+        source = "${getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
 
       ksystemstats_intel_helper = {
@@ -391,7 +395,7 @@ in
     # However, on NixOS NTP cannot be overwritten via dbus, and timezone
     # can only be set if `time.timeZone` is set to `null`. So, we only allow
     # set-timezone, and we only allow it when the timezone can actually be set.
-    security.polkit.extraConfig = lib.mkIf (config.time.timeZone != null) ''
+    security.polkit.extraConfig = mkIf (config.time.timeZone != null) ''
       polkit.addRule(function(action, subject) {
         if (action.id == "org.freedesktop.timedate1.set-timezone" && subject.active) {
           return polkit.Result.YES;
