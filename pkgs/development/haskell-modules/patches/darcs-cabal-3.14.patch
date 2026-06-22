@@ -1,0 +1,85 @@
+diff -rN -u old-darcs.net/darcs.cabal new-darcs.net/darcs.cabal
+--- old-darcs.net/darcs.cabal	2025-09-13 02:45:32.790227974 +0200
++++ new-darcs.net/darcs.cabal	2025-09-13 02:45:32.791227985 +0200
+@@ -124,7 +124,7 @@
+ 
+ custom-setup
+     setup-depends: base      >= 4.10 && < 4.21,
+-                   Cabal     >= 2.4 && < 3.13,
++                   Cabal     >= 2.4 && < 3.15,
+                    process   >= 1.2.3.0 && < 1.7,
+                    filepath  >= 1.4.1 && < 1.5.0.0,
+                    directory >= 1.2.7 && < 1.4
+--- old-darcs.net/Setup.hs	2026-06-22 14:55:26.775706597 +0200
++++ new-darcs.net/Setup.hs	2026-06-22 14:56:31.996746207 +0200
+--- tmp2.hs	2026-06-22 14:55:26.775706597 +0200
++++ /home/lukas/tmp.hs	2026-06-22 15:25:23.957579360 +0200
+--- tmp2.hs	2026-06-22 14:55:26.775706597 +0200
++++ /home/lukas/tmp.hs	2026-06-22 15:28:17.448848236 +0200
+@@ -2,6 +2,7 @@
+ -- portions copyright (c) 2008 David Roundy
+ -- portions copyright (c) 2007-2009 Judah Jacobson
+ {-# OPTIONS_GHC -Wall #-}
++{-# LANGUAGE CPP #-}
+ import Distribution.Simple
+          ( defaultMainWithHooks, UserHooks(..), simpleUserHooks )
+ import Distribution.PackageDescription ( PackageDescription )
+@@ -25,8 +26,17 @@
+ import System.IO ( openFile, IOMode(..) )
+ import System.Process (callProcess, runProcess)
+ import Data.List( isInfixOf )
++#if MIN_VERSION_Cabal_syntax(3,14,0)
++import Distribution.Utils.Path ( (</>), interpretSymbolicPathCWD, makeRelativePathEx )
++#else
+ import System.FilePath ( (</>) )
+ 
++-- Shims so we can use the Cabal >= 3.14 API
++interpretSymbolicPathCWD, makeRelativePathEx :: FilePath -> FilePath
++interpretSymbolicPathCWD = id
++makeRelativePathEx = id
++#endif
++
+ import qualified Control.Exception as Exception
+ 
+ catchAny :: IO a -> (Exception.SomeException -> IO a) -> IO a
+@@ -73,22 +83,26 @@
+ 
+ buildManpage :: LocalBuildInfo -> IO ()
+ buildManpage lbi = do
+-  have_darcs_exe_dir <- doesDirectoryExist (buildDir lbi </> "darcs")
++  have_darcs_exe_dir <- doesDirectoryExist
++    $ interpretSymbolicPathCWD (buildDir lbi </> makeRelativePathEx "darcs")
+   when have_darcs_exe_dir $ do
+-    let darcs = buildDir lbi </> "darcs/darcs"
+-        manpage = buildDir lbi </> "darcs/darcs.1"
++    let darcs = interpretSymbolicPathCWD
++          $ buildDir lbi </> makeRelativePathEx "darcs/darcs"
++        manpage = interpretSymbolicPathCWD
++          $ buildDir lbi </> makeRelativePathEx "darcs/darcs.1"
+     manpageHandle <- openFile manpage WriteMode
+     void $ runProcess darcs ["help","manpage"]
+             Nothing Nothing Nothing (Just manpageHandle) Nothing
+ 
+ installManpage :: PackageDescription -> LocalBuildInfo -> Verbosity -> CopyDest -> IO ()
+ installManpage pkg lbi verbosity copy = do
+-  have_manpage <- doesFileExist (buildDir lbi </> "darcs" </> "darcs.1")
++  have_manpage <- doesFileExist
++    $ interpretSymbolicPathCWD (buildDir lbi </> makeRelativePathEx "darcs/darcs.1")
+   when have_manpage $
+     copyFiles
+       verbosity
+       (mandir (absoluteInstallDirs pkg lbi copy) </> "man1")
+-      [(buildDir lbi </> "darcs", "darcs.1")]
++      [(interpretSymbolicPathCWD (buildDir lbi </> makeRelativePathEx "darcs"), "darcs.1")]
+ 
+ -- ---------------------------------------------------------------------
+ -- version module
+@@ -124,7 +138,7 @@
+ 
+ generateVersionModule :: Verbosity -> LocalBuildInfo -> String -> String -> IO ()
+ generateVersionModule verbosity lbi version state = do
+-  let dir = autogenPackageModulesDir lbi
++  let dir = interpretSymbolicPathCWD (autogenPackageModulesDir lbi)
+   createDirectoryIfMissingVerbose verbosity True dir
+   ctx <- context verbosity
+   hash <- weakhash verbosity

@@ -2005,6 +2005,10 @@ with haskellLib;
     # GHC 9.10 patch plus lifted constraints for hashable
     # https://hub.darcs.net/darcs/darcs-reviewed/patch/32646b190e019de21a103e950c4eccdd66f7eadc
     ./patches/darcs-stackage-lts-23.patch
+    # Support Cabal 3.14's Symbolic Path API
+    ./patches/darcs-cabal-3.14.patch
+    # Lift bounds for GHC 9.12 / Stackage Nightly 2026-06-16
+    ./patches/darcs-stackage-nightly-2026-06-16.patch
   ] super.darcs;
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
