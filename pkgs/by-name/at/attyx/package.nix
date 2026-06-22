@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "attyx";
-  version = "0.4.5";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "semos-labs";
     repo = "attyx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9/Zl6IrgrT8vHYllCKb977Ar5QRYQiXDmK/g+4YWcqM=";
+    hash = "sha256-lxQR8oAXH+S78jklmOsJO16i//iw0vsxjwN49Vxmb4k=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
