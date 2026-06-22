@@ -832,12 +832,6 @@
     githubId = 207841739;
     name = "Savchenko Dmitriy";
   };
-  aherrmann = {
-    email = "andreash87@gmx.ch";
-    github = "aherrmann";
-    githubId = 732652;
-    name = "Andreas Herrmann";
-  };
   ahirner = {
     email = "a.hirner+nixpkgs@gmail.com";
     github = "ahirner";
@@ -4294,6 +4288,12 @@
       { fingerprint = "EA60 D516 A926 7532 369D  3E67 E161 DF22 9EC1 280E"; }
       { fingerprint = "D088 A5AF C45B 78D1 CD4F  457C 6957 B3B6 46F2 BB4E"; }
     ];
+  };
+  c6rg0 = {
+    email = "c6rg0@protonmail.com";
+    github = "c6rg0";
+    githubId = 64259221;
+    name = "c6rg0";
   };
   caarlos0 = {
     name = "Carlos A Becker";
@@ -8364,12 +8364,6 @@
       { fingerprint = "0E69 0F46 3457 D812 3387  C978 F93D DAFA 26EF 2458"; }
       { fingerprint = "2E51 F618 39D1 FA94 7A73  00C2 34C0 4305 D581 DBFE"; }
     ];
-  };
-  ethercrow = {
-    email = "ethercrow@gmail.com";
-    github = "ethercrow";
-    githubId = 222467;
-    name = "Dmitry Ivanov";
   };
   ethindp = {
     name = "Ethin Probst";
@@ -17118,6 +17112,12 @@
     github = "matrss";
     githubId = 9308656;
   };
+  matshch = {
+    name = "Artem Leshchev";
+    github = "matshch";
+    githubId = 2412121;
+    email = "matshch@gmail.com";
+  };
   matt-snider = {
     email = "matt.snider@protonmail.com";
     github = "matt-snider";
@@ -17429,12 +17429,6 @@
     github = "mbode";
     githubId = 9051309;
     name = "Maximilian Bode";
-  };
-  mboes = {
-    email = "mboes@tweag.net";
-    github = "mboes";
-    githubId = 51356;
-    name = "Mathieu Boespflug";
   };
   mBornand = {
     email = "dev.mbornand@systemb.ch";
@@ -30405,12 +30399,6 @@
     github = "ylannl";
     githubId = 1742643;
     name = "Ravi Peters";
-  };
-  ylecornec = {
-    email = "yves.stan.lecornec@tweag.io";
-    github = "ylecornec";
-    githubId = 5978566;
-    name = "Yves-Stan Le Cornec";
   };
   ylh = {
     email = "nixpkgs@ylh.io";

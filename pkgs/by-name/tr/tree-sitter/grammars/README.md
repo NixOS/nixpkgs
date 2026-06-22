@@ -121,5 +121,5 @@ nix-shell maintainers/scripts/update.nix --argstr package tree-sitter-grammars.t
 Or, to update all grammars:
 
 ```shell
-nix-shell maintainers/scripts/update.nix --argstr path tree-sitter-grammars --argstr keep-going true
+nix-shell maintainers/scripts/update.nix --argstr path tree-sitter-grammars --arg keep-going true
 ```
