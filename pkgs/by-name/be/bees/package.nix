@@ -79,6 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = [ ];
   };
 })
