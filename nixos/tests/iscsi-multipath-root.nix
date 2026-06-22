@@ -129,7 +129,7 @@ in
         ];
 
         environment.etc."initiator-root-disk-closure".source =
-          nodes.initiatorRootDisk.config.system.build.toplevel;
+          nodes.initiatorRootDisk.system.build.toplevel;
 
         nix.settings = {
           substituters = lib.mkForce [ ];
