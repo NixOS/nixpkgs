@@ -6,6 +6,8 @@
   protobuf,
   python3,
   wayland-scanner,
+  aemu,
+  gfxstream,
   libcap,
   libdrm,
   libepoxy,
@@ -43,6 +45,8 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
+    aemu
+    gfxstream
     libcap
     libdrm
     libepoxy
@@ -61,7 +65,10 @@ rustPlatform.buildRustPackage {
     CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
   };
 
-  buildFeatures = [ "virgl_renderer" ];
+  buildFeatures = [
+    "virgl_renderer"
+    "gfxstream"
+  ];
 
   passthru = {
     updateScript = writeShellScript "update-crosvm.sh" ''
