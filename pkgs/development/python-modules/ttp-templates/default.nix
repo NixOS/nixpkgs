@@ -23,6 +23,9 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ pydantic ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.5.7"' 'version = "${finalAttrs.version}"'
+
     # Drop circular dependency on ttp
     sed -i '/ttp =/d' pyproject.toml
   '';
