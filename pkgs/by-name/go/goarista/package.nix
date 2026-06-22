@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "goarista";
-  version = "0-unstable-2025-12-01";
+  version = "untagged-ac532b8620c4bd49962c-unstable-2025-12-01";
 
   src = fetchFromGitHub {
     owner = "aristanetworks";
