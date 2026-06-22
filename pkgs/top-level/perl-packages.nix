@@ -39731,8 +39731,17 @@ with self;
   LWPProtocolhttps = self.LWPProtocolHttps;
   LWPUserAgent = self.LWP;
   MIMEtools = self.MIMETools;
+  NetCmd = self.libnet;
+  NetConfig = self.libnet;
+  NetDomain = self.libnet;
+  NetFTP = self.libnet;
+  NetFTPdataconn = self.libnet;
   NetLDAP = self.perlldap;
+  NetNetrc = self.libnet;
+  NetNNTP = self.libnet;
+  NetPOP3 = self.libnet;
   NetSMTP = self.libnet;
+  NetTime = self.libnet;
   OLEStorageLight = self.OLEStorage_Lite; # For backwards compatibility. Please use OLEStorage_Lite instead.
   ParseCPANMeta = self.CPANMeta;
   TestMoose = self.Moose;
