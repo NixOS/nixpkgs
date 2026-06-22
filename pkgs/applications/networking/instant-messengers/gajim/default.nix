@@ -25,7 +25,6 @@
   gst-libav,
   gst-plugins-good,
   libnice,
-  enableE2E ? true,
   enableSecrets ? true,
   libsecret,
   enableRST ? true,
@@ -43,14 +42,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
+    hash = "sha256-tZ1+DRVCzwaWeur9mwc/zE34H2xdqk96upqWfqNTl3g=";
   };
 
   pyproject = true;
@@ -115,12 +114,9 @@ python3.pkgs.buildPythonApplication rec {
       httpx
       h2
       truststore
+      pysequoia
     ]
     ++ httpx.optional-dependencies.socks
-    ++ lib.optionals enableE2E [
-      pycrypto
-      python-gnupg
-    ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
