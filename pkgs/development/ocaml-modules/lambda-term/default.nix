@@ -11,13 +11,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "lambda-term";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "lambda-term";
     tag = finalAttrs.version;
-    hash = "sha256-WAn3gTTHjfsEG5sLk3c1YHcyyzPUDzkcU+/fKBcGZFo=";
+    hash = "sha256-694s4cCjHKIlb780247q+nRKd4taM1xyOpITACcMqJc=";
   };
 
   propagatedBuildInputs = [
