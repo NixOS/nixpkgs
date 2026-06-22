@@ -7,12 +7,12 @@
 
 gccStdenv.mkDerivation {
   pname = "uemacs";
-  version = "4.0-unstable-2018-07-19";
+  version = "4.0-unstable-2021-30-03";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/editors/uemacs/uemacs.git";
-    rev = "1cdcf9df88144049750116e36fe20c8c39fa2517";
-    hash = "sha256-QSouqZiBmKBU6FqRRfWtTGRIl5sqJ8tVPYwdytt/43w=";
+    rev = "1c1b25ef723c952ca557cb5ff6d8db159ef1d4bc";
+    hash = "sha256-NN3FpeHycPyIhJuEcRm7IO4n+mvAAhxecqSCTuw2elA=";
   };
 
   buildInputs = [ ncurses ];
