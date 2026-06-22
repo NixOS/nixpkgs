@@ -16,6 +16,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "Libre-Bodoni";
