@@ -1,4 +1,5 @@
 {
+  actool,
   stdenv,
   lib,
   nodejs_24,
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    actool
     node-gyp
     nodejs
     pnpmConfigHook
