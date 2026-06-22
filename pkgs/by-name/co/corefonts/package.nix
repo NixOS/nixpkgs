@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   cabextract,
   installFonts,
@@ -63,7 +63,7 @@ let
     hash = "sha256-LOgNEsM+dANEreP2LsFi+pAnBNDMFB9Pg+KJAahlC6s=";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "corefonts";
   version = "1";
 
