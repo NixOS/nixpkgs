@@ -72,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
+  # Floating point behavior on i686 causes test-scopesim failures. Preventing
+  # extended precision fixes this problem.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-ffloat-store";
+
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
