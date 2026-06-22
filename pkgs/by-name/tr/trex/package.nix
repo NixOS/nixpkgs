@@ -9,6 +9,8 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "trex";
   version = "2.0.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/amebalabs/TRex/releases/download/v${finalAttrs.version}/TRex-${finalAttrs.version}.zip";
