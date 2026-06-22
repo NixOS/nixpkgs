@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://freeplane.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = [ ];
     mainProgram = "freeplane";
   };
 })
