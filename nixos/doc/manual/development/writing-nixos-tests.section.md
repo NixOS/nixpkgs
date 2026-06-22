@@ -146,8 +146,6 @@ Some advantages of virtual machines over containers are:
   (kernel modules, etc.).
 - Virtual machines support testing graphical applications on X11.
 - Virtual machines allow testing NixOS modules that use systemd's namespacing options (such as `ProtectSystem=` or `MountAPIVFS=`).
-- Virtual machines allow testing [`specialisation`](options.html#opt-specialisation).
-  (Switching to a specialisation requires the creation of SUID/SGID wrappers, which is disallowed in `systemd-nspawn` within the Nix sandbox.)
 - Virtual machines allow the execution of `setuid` binaries.
 
 Refer to the sections on [QEMU virtual machines](#ssec-nixos-test-qemu-vms)

@@ -10,8 +10,9 @@
 #   * `resolvconf.service` would run `setfacl /run/resolvconf` -- the noacl
 #     `/run` tmpfs returns ENOTSUP.
 #
-# This declares a setuid wrapper and resolvconf, then asserts a real
-# `switch-to-configuration test` exits 0 and the wrapper can be invoked.
+# This declares a setuid wrapper, resolvconf, and a specialisation, then
+# asserts a real `switch-to-configuration test` exits 0, the wrapper can be
+# invoked, and the specialisation can be switched into.
 #
 # It also asserts the fidelity gap directly: the wrapper is non-setuid and
 # cap-less here, so a test that needs real privilege escalation (setuid,
@@ -39,6 +40,11 @@
 
       # test `setfacl` on the container's noacl `/run` tmpfs
       networking.resolvconf.enable = true;
+
+      # a specialisation with a trivial config change
+      specialisation.other.configuration = {
+        environment.memoryAllocator.provider = "libc";
+      };
     };
 
   testScript =
@@ -75,5 +81,8 @@
       # real privilege escalation is out of scope here, use the QEMU driver.
       machine.succeed("! test -u /run/wrappers/bin/test-wrapper")
       machine.succeed("! getcap /run/wrappers/bin/test-wrapper | grep -q cap_")
+
+      # A specialisation can be switched into under nspawn (previously forbidden).
+      machine.succeed("/run/booted-system/specialisation/other/bin/switch-to-configuration test")
     '';
 }
