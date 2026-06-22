@@ -113,6 +113,14 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  # Enables any dependent package to easily find numpy.pc via standard
+  # pkg-config call. The `$out/include` symlink matches what's written in the
+  # numpy.pc file.
+  postInstall = ''
+    ln -s $out/${python.sitePackages}/numpy/_core/lib/pkgconfig $out/lib/pkgconfig
+    ln -s ${placeholder "out"}/${finalAttrs.passthru.coreIncludeInnerDir} $out/include
+  '';
+
   preCheck = ''
     pushd $out
     # For numpy-config executable to be available during tests
@@ -192,7 +200,11 @@ buildPythonPackage (finalAttrs: {
       name = "site.cfg";
       text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
     };
-    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
+    # Need to be defined with two variables for postInstall to use `placeholder
+    # "out"` where here we have to use `${finalAttrs.finalPackage}`, that would
+    # cause infinite recursion if used in postInstall too.
+    coreIncludeInnerDir = "${python.sitePackages}/numpy/_core/include";
+    coreIncludeDir = "${finalAttrs.finalPackage}/${finalAttrs.finalPackage.passthru.coreIncludeInnerDir}";
     tests = {
       inherit sage;
     };
