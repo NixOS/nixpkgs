@@ -71,128 +71,135 @@ in
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =
-      with kdePackages;
       let
-        requiredPackages = [
-          qtwayland # Hack? To make everything run on Wayland
-          qtsvg # Needed to render SVG icons
+        requiredPackages =
+          (builtins.attrValues {
+            inherit (kdePackages)
+              qtwayland # Hack? To make everything run on Wayland
+              qtsvg # Needed to render SVG icons
 
-          # Frameworks with globally loadable bits
-          frameworkintegration # provides Qt plugin
-          kauth # provides helper service
-          kcoreaddons # provides extra mime type info
-          kded # provides helper service
-          kfilemetadata # provides Qt plugins
-          kguiaddons # provides geo URL handlers
-          kiconthemes # provides Qt plugins
-          kimageformats # provides Qt plugins
-          qtimageformats # provides optional image formats such as .webp and .avif
-          kio # provides helper service + a bunch of other stuff
-          kio-admin # managing files as admin
-          kio-extras # stuff for MTP, AFC, etc
-          kio-fuse # fuse interface for KIO
-          knighttime # night mode switching daemon
-          kpackage # provides kpackagetool tool
-          kservice # provides kbuildsycoca6 tool
-          kunifiedpush # provides a background service and a KCM
-          kwallet # provides helper service
-          kwallet-pam # provides helper service
-          kwalletmanager # provides KCMs and stuff
-          plasma-activities # provides plasma-activities-cli tool
-          solid # provides solid-hardware6 tool
-          phonon-vlc # provides Phonon plugin
+              # Frameworks with globally loadable bits
+              frameworkintegration # provides Qt plugin
+              kauth # provides helper service
+              kcoreaddons # provides extra mime type info
+              kded # provides helper service
+              kfilemetadata # provides Qt plugins
+              kguiaddons # provides geo URL handlers
+              kiconthemes # provides Qt plugins
+              kimageformats # provides Qt plugins
+              qtimageformats # provides optional image formats such as .webp and .avif
+              kio # provides helper service + a bunch of other stuff
+              kio-admin # managing files as admin
+              kio-extras # stuff for MTP, AFC, etc
+              kio-fuse # fuse interface for KIO
+              knighttime # night mode switching daemon
+              kpackage # provides kpackagetool tool
+              kservice # provides kbuildsycoca6 tool
+              kunifiedpush # provides a background service and a KCM
+              kwallet # provides helper service
+              kwallet-pam # provides helper service
+              kwalletmanager # provides KCMs and stuff
+              plasma-activities # provides plasma-activities-cli tool
+              solid # provides solid-hardware6 tool
+              phonon-vlc # provides Phonon plugin
 
-          # Core Plasma parts
-          kwin
-          kscreen
-          libkscreen
-          kscreenlocker
-          kactivitymanagerd
-          kde-cli-tools
-          kglobalacceld # keyboard shortcut daemon
-          kwrited # wall message proxy, not to be confused with kwrite
-          baloo # system indexer
-          milou # search engine atop baloo
-          kdegraphics-thumbnailers # pdf etc thumbnailer
-          polkit-kde-agent-1 # polkit auth ui
-          plasma-desktop
-          plasma-workspace
-          drkonqi # crash handler
-          kde-inotify-survey # warns the user on low inotifywatch limits
+              # Core Plasma parts
+              kwin
+              kscreen
+              libkscreen
+              kscreenlocker
+              kactivitymanagerd
+              kde-cli-tools
+              kglobalacceld # keyboard shortcut daemon
+              kwrited # wall message proxy, not to be confused with kwrite
+              baloo # system indexer
+              milou # search engine atop baloo
+              kdegraphics-thumbnailers # pdf etc thumbnailer
+              polkit-kde-agent-1 # polkit auth ui
+              plasma-desktop
+              plasma-workspace
+              drkonqi # crash handler
+              kde-inotify-survey # warns the user on low inotifywatch limits
 
-          # Application integration
-          libplasma # provides Kirigami platform theme
-          plasma-integration # provides Qt platform theme
-          kde-gtk-config # syncs KDE settings to GTK
+              # Application integration
+              libplasma # provides Kirigami platform theme
+              plasma-integration # provides Qt platform theme
+              kde-gtk-config # syncs KDE settings to GTK
 
-          # Artwork + themes
-          breeze
-          breeze-icons
-          breeze-gtk
-          ocean-sound-theme
-          pkgs.hicolor-icon-theme # fallback icons
-          qqc2-breeze-style
-          qqc2-desktop-style
+              # Artwork + themes
+              breeze
+              breeze-icons
+              breeze-gtk
+              ocean-sound-theme
+              qqc2-breeze-style
+              qqc2-desktop-style
 
-          # misc Plasma extras
-          kdeplasma-addons
-          pkgs.xdg-user-dirs # recommended upstream
+              # misc Plasma extras
+              kdeplasma-addons
 
-          # Plasma utilities
-          kmenuedit
-          kinfocenter
-          plasma-systemmonitor
-          ksystemstats
-          libksysguard
-          systemsettings
-          kcmutils
-        ];
-        optionalPackages = [
-          aurorae
-          plasma-browser-integration
-          plasma-workspace-wallpapers
-          konsole
-          kwin-x11
-          (lib.getBin qttools) # Expose qdbus in PATH
-          ark
-          elisa
-          gwenview
-          okular
-          kate
-          ktexteditor # provides elevated actions for kate
-          khelpcenter
-          dolphin
-          baloo-widgets # baloo information in Dolphin
-          dolphin-plugins
-          spectacle
-          ffmpegthumbs
-          krdp
-          kconfig # required for xdg-terminal from xdg-utils
-          qtbase # for qtpaths which is required for xdg-mime from xdg-utils
-          # touch keyboard
-          plasma-keyboard
-          qtvirtualkeyboard # used by plasma-keyboard KCM
+              # Plasma utilities
+              kmenuedit
+              kinfocenter
+              plasma-systemmonitor
+              ksystemstats
+              libksysguard
+              systemsettings
+              kcmutils
+              ;
+          })
+          ++ [
+            pkgs.hicolor-icon-theme # fallback icons
+            pkgs.xdg-user-dirs # recommended upstream
+          ];
+        optionalPackages =
+          (builtins.attrValues {
+            inherit (kdePackages)
+              aurorae
+              plasma-browser-integration
+              plasma-workspace-wallpapers
+              konsole
+              kwin-x11
+              ark
+              elisa
+              gwenview
+              okular
+              kate
+              ktexteditor # provides elevated actions for kate
+              khelpcenter
+              dolphin
+              baloo-widgets # baloo information in Dolphin
+              dolphin-plugins
+              spectacle
+              ffmpegthumbs
+              krdp
+              kconfig # required for xdg-terminal from xdg-utils
+              qtbase # for qtpaths which is required for xdg-mime from xdg-utils
+              # touch keyboard
+              plasma-keyboard
+              qtvirtualkeyboard # used by plasma-keyboard KCM
 
-          # experimental(?) Union theme
-          union
-        ]
-        ++ lib.optional config.networking.networkmanager.enable qrca
-        ++ lib.optionals config.hardware.sensor.iio.enable [
-          # This is required for autorotation in Plasma 6
-          qtsensors
-        ]
-        ++ lib.optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
-          # Since PackageKit Nix support is not there yet,
-          # only install discover if flatpak or fwupd is enabled.
-          discover
-        ];
+              # experimental(?) Union theme
+              union
+              ;
+          })
+          ++ [ (lib.getBin kdePackages.qttools) ] # Expose qdbus in PATH
+          ++ lib.optional config.networking.networkmanager.enable kdePackages.qrca
+          ++ lib.optionals config.hardware.sensor.iio.enable [
+            # This is required for autorotation in Plasma 6
+            kdePackages.qtsensors
+          ]
+          ++ lib.optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
+            # Since PackageKit Nix support is not there yet,
+            # only install discover if flatpak or fwupd is enabled.
+            kdePackages.discover
+          ];
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
-        breeze.qt5
-        plasma-integration.qt5
-        kwayland-integration
+        kdePackages.breeze.qt5
+        kdePackages.plasma-integration.qt5
+        kdePackages.kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
@@ -205,26 +212,26 @@ in
             ln -s ${kio}/${kioPluginPath}/* $out/${kioPluginPath}
           ''
         )
-        kio-extras-kf5
+        kdePackages.kio-extras-kf5
       ]
       # Optional and hardware support features
       ++ lib.optionals config.hardware.bluetooth.enable [
-        bluedevil
-        bluez-qt
+        kdePackages.bluedevil
+        kdePackages.bluez-qt
         pkgs.openobex
         pkgs.obexftp
       ]
-      ++ lib.optional config.networking.networkmanager.enable plasma-nm
-      ++ lib.optional config.services.pulseaudio.enable plasma-pa
-      ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
-      ++ lib.optional config.powerManagement.enable powerdevil
-      ++ lib.optional config.services.printing.enable print-manager
-      ++ lib.optional config.hardware.sane.enable skanpage
-      ++ lib.optional config.services.colord.enable colord-kde
-      ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
-      ++ lib.optional config.services.samba.enable kdenetwork-filesharing
-      ++ lib.optional config.services.xserver.wacom.enable wacomtablet
-      ++ lib.optional config.services.flatpak.enable flatpak-kcm;
+      ++ lib.optional config.networking.networkmanager.enable kdePackages.plasma-nm
+      ++ lib.optional config.services.pulseaudio.enable kdePackages.plasma-pa
+      ++ lib.optional config.services.pipewire.pulse.enable kdePackages.plasma-pa
+      ++ lib.optional config.powerManagement.enable kdePackages.powerdevil
+      ++ lib.optional config.services.printing.enable kdePackages.print-manager
+      ++ lib.optional config.hardware.sane.enable kdePackages.skanpage
+      ++ lib.optional config.services.colord.enable kdePackages.colord-kde
+      ++ lib.optional config.services.hardware.bolt.enable kdePackages.plasma-thunderbolt
+      ++ lib.optional config.services.samba.enable kdePackages.kdenetwork-filesharing
+      ++ lib.optional config.services.xserver.wacom.enable kdePackages.wacomtablet
+      ++ lib.optional config.services.flatpak.enable kdePackages.flatpak-kcm;
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -318,14 +325,16 @@ in
         enable = true;
         compositor = "kwin";
       };
-      extraPackages = with kdePackages; [
-        breeze-icons
-        kirigami
-        libplasma
-        plasma5support
-        qtsvg
-        qtvirtualkeyboard
-      ];
+      extraPackages = builtins.attrValues {
+        inherit (kdePackages)
+          breeze-icons
+          kirigami
+          libplasma
+          plasma5support
+          qtsvg
+          qtvirtualkeyboard
+          ;
+      };
     };
 
     security.pam.services = {
