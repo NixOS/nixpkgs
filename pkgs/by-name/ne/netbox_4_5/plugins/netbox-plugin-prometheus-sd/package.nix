@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-plugin-prometheus-sd";
-  version = "1.3.0";
+  version = "1.3.0-pre.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2SVfWkw6/AkDihWp9chU8rTqLiSn9ax4uLaK1xydfGM=";
+    hash = "sha256-jmCG4AVdsgyxHJ6VS4bdvfahXLNcnzzLnm78RD3GEi4=";
   };
 
   postPatch = ''
