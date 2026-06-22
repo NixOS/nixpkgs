@@ -401,7 +401,7 @@ self: {
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.3";
-    hash = "sha256-EBSoXHaN6PnpxtS/C0JhfzsViL4a03H3FnTqMrhxGcA=";
+    version = "11.8.8";
+    hash = "sha256-vQI6SVn68BLbfw6/wNJ2cp5n5UQ98ZMWP5jYD9/FJMk=";
   };
 }
