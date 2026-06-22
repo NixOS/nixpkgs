@@ -22847,6 +22847,12 @@
     github = "Ra77a3l3-jar";
     githubId = 175424218;
   };
+  raas = {
+    email = "andras.horvath@gmail.com";
+    github = "raas";
+    githubId = 126327;
+    name = "Andras Horvath";
+  };
   raboof = {
     email = "arnout@bzzt.net";
     matrix = "@raboof:matrix.org";
