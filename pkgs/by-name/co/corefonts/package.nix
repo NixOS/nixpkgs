@@ -67,15 +67,13 @@ stdenv.mkDerivation {
   pname = "corefonts";
   version = "1";
 
-  env.exes = toString (
-    map (
-      { name, hash }:
-      fetchurl {
-        url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
-        inherit hash;
-      }
-    ) fonts
-  );
+  srcs = map (
+    { name, hash }:
+    fetchurl {
+      url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
+      inherit hash;
+    }
+  ) fonts;
 
   nativeBuildInputs = [
     cabextract
@@ -84,7 +82,7 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     runHook preUnpack
-    for i in $exes; do
+    for i in "''${srcs[@]}"; do
       cabextract --lowercase $i
     done
     cabextract --lowercase viewer1.cab
