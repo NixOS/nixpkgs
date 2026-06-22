@@ -198,25 +198,12 @@ with haskellLib;
     }
   );
 
-  # First to upgrade to lsp >= 2.8 while HLS hasn't yet had a compatible release
-  futhark = super.futhark.override {
-    lsp = self.lsp_2_8_0_0;
-    lsp-test =
-      overrideCabal
-        (old: {
-          testTargets = [
-            "tests"
-            "func-test"
-          ];
-        })
-        (
-          self.lsp-test_0_18_0_0.override {
-            lsp = self.lsp_2_8_0_0;
-            lsp-types = self.lsp-types_2_4_0_0;
-          }
-        );
-    lsp-types = self.lsp-types_2_4_0_0;
-  };
+  lsp-test = overrideCabal (old: {
+    testTargets = [
+      "tests"
+      "func-test"
+    ];
+  }) super.lsp-test;
 
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
@@ -280,7 +267,6 @@ with haskellLib;
     haskell-language-server
     hls-plugin-api
     ghcide
-    lsp-types
     ;
 
   # For -f-auto see cabal.project in haskell-language-server.
@@ -296,6 +282,14 @@ with haskellLib;
       hash = "sha256-4Nbro9Gl+RC78yprO8fYG/IWS7QvJPd0dKqSZb5jq9k=";
     })
   ] super.cabal-add;
+
+  stylish-haskell = appendPatches [
+    (pkgs.fetchpatch {
+      name = "bump-optparse-applicative.patch";
+      url = "https://github.com/haskell/stylish-haskell/commit/d1bc9bb91a0f9b122f2d4348022ce0fa1566124f.patch";
+      hash = "sha256-kRP4mABb1rlrx4GBPTozOS9fPudSzb36JcTKA8VMhgw=";
+    })
+  ] super.stylish-haskell;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###

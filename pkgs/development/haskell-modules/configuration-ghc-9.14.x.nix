@@ -81,7 +81,6 @@ with haskellLib;
   #
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
-  hie-bios = doDistribute (dontCheck self.hie-bios_0_19_0); # Tests access homeless-shelter.
 
   #
   # Jailbreaks
