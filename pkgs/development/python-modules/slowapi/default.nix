@@ -25,6 +25,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-YNL/xfs8fmkAGagMhqJX3tXoltjHznZjUrF/a2RWCDs=";
   };
 
+  patches = [
+    # https://github.com/laurentS/slowapi/pull/279
+    ./starlette-1.0-compat.patch
+  ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
