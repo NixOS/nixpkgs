@@ -2873,6 +2873,8 @@ self: super: with self; {
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+  clickdc = callPackage ../development/python-modules/clickdc { };
+
   clickgen = callPackage ../development/python-modules/clickgen { };
 
   clickhouse-cityhash = callPackage ../development/python-modules/clickhouse-cityhash { };
