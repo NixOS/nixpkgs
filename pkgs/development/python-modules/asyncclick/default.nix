@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.3.0.5+async";
+  version = "8.3.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
-    tag = version;
+    tag = "${version}+async";
     hash = "sha256-gKtxwI/vDB2pDrhiA+e1TClwW5nXvBRCMF3oCNoLaDo=";
   };
 
