@@ -6,12 +6,12 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  gtk3,
-  libayatana-appindicator,
-  libx11,
-  libxcursor,
-  libxxf86vm,
+  wails3,
+  imagemagick,
+  fetchPnpmDeps,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_11,
   versionCheckHook,
   netbird-management,
   netbird-proxy,
@@ -73,26 +73,62 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.73.1";
+  version = "0.75.0-rc.3";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KDtu29DaiaQ3IdlaqNdgJWt+n853pnE2PbRnYVxpU8A=";
+    hash = "sha256-75aRmLmA6vfu0V5vnrjiZmpr0js9TvV2CSAr4tULNtg=";
   };
 
-  vendorHash = "sha256-qa++ONGrFsKJTK7R6Q/9FsMfptKNK9bza32nFKosDxY=";
+  proxyVendor = true;
+  vendorHash = "sha256-P3btLPC0kOXMVw1C2je0D4SqwCnhmWruyqmNIMQOLJ0=";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
+  overrideModAttrs = final: prev: {
+    # override output name so that we don't download the same modules every time
+    # for every component of the monorepo
+    name = "netbird-${finalAttrs.version}-go-modules";
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && componentName == "ui") [
-    gtk3
-    libayatana-appindicator
-    libx11
-    libxcursor
-    libxxf86vm
+    # don't call pnpm when building modules
+    dontPnpmConfigure = true;
+    preBuild = null;
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals (componentName == "ui") [
+    nodejs
+    pnpmConfigHook
+    pnpm_11
+    wails3
+    # to convert the icons
+    imagemagick
   ];
+
+  pnpmRoot = "client/ui/frontend";
+
+  pnpmDeps = fetchPnpmDeps {
+    pname = "netbird";
+    inherit (finalAttrs)
+      version
+      src
+      ;
+
+    sourceRoot = "${finalAttrs.src.name}/client/ui/frontend";
+
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-T4E4GJgsoMZnLokJRuDm1L43OrYF99PLF4x/4HRIB4E=";
+  };
+
+  preBuild = lib.optionalString (componentName == "ui") ''
+    pushd client/ui/frontend
+    pnpm run bindings
+    pnpm build
+    popd
+  '';
 
   subPackages = [ component.module ];
 
@@ -110,7 +146,7 @@ buildGoModule (finalAttrs: {
     # make it compatible with systemd's RuntimeDirectory
     substituteInPlace client/cmd/root.go \
       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
-    substituteInPlace client/ui/client_ui.go \
+    substituteInPlace client/ui/grpc.go \
       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
@@ -132,11 +168,16 @@ buildGoModule (finalAttrs: {
         ''
     # assemble & adjust netbird.desktop files for the GUI
     + lib.optionalString (stdenv.hostPlatform.isLinux && componentName == "ui") ''
-      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/icons/hicolor/256x256/apps/netbird.png"
-      install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
+      install -Dm644 $src/client/ui/build/linux/netbird.desktop $out/share/applications/netbird.desktop
+
+      for RES in 16 24 32 48 64 128 256 512 1024
+      do
+        mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
+        convert $src/client/ui/build/appicon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/netbird.png
+      done
 
       substituteInPlace $out/share/applications/netbird.desktop \
-        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=${component.binaryName}"
+        --replace-fail "/usr/bin/netbird-ui" "${component.binaryName}"
     '';
 
   nativeInstallCheckInputs = lib.lists.optionals (component ? versionCheckProgramArg) [
