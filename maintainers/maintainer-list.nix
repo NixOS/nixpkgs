@@ -28697,7 +28697,7 @@
   uku3lig = {
     name = "uku";
     email = "hi@uku.moe";
-    matrix = "@uku:m.uku.moe";
+    matrix = "@uku:rei.uku.moe";
     github = "uku3lig";
     githubId = 61147779;
   };

@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
-  version = "3.16.1";
+  version = "3.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = finalAttrs.version;
-    hash = "sha256-5BTwUzo2U7/VwmEqldxXddt/ByKebZKY1KhCEoIb9F8=";
+    hash = "sha256-rzCBOQ0dIfreMRDHMSgMYspJ5KyOSxN18B3mf+n9v2w=";
   };
 
   # Remove Bundled binaries

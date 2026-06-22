@@ -7,6 +7,7 @@
 
 let
   cfg = config.programs.vscode;
+  jsonFormat = pkgs.formats.json { };
 in
 {
   options.programs.vscode = {
@@ -36,6 +37,21 @@ in
       description = "List of extensions to install.";
     };
 
+    enterprisePolicies = lib.mkOption {
+      type = jsonFormat.type;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          "UpdateMode" = "none";
+          "TelemetryLevel" = "off";
+        }
+      '';
+      description = ''
+        System-wide policies for VSCode in `/etc/vscode/policy.json`.
+        See <https://code.visualstudio.com/docs/setup/enterprise#_centrally-manage-vs-code-settings> for more information.
+      '';
+    };
+
     finalPackage = lib.mkOption {
       type = lib.types.package;
       visible = false;
@@ -45,13 +61,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      cfg.finalPackage
-    ];
+    environment = {
+      systemPackages = [
+        cfg.finalPackage
+      ];
 
-    environment.sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (
-      lib.mkOverride 900 cfg.finalPackage.meta.mainProgram
-    );
+      sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (
+        lib.mkOverride 900 cfg.finalPackage.meta.mainProgram
+      );
+
+      etc."vscode/policy.json" = lib.mkIf (cfg.enterprisePolicies != { }) {
+        source = jsonFormat.generate "vscode-policy.json" cfg.enterprisePolicies;
+      };
+    };
 
     programs.vscode.finalPackage = pkgs.vscode-with-extensions.override {
       vscode = cfg.package;
