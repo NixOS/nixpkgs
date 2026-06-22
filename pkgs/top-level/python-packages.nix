@@ -18729,8 +18729,6 @@ self: super: with self; {
 
   sphinxcontrib-httpdomain = callPackage ../development/python-modules/sphinxcontrib-httpdomain { };
 
-  sphinxcontrib-images = callPackage ../development/python-modules/sphinxcontrib-images { };
-
   sphinxcontrib-jinjadomain = callPackage ../development/python-modules/sphinxcontrib-jinjadomain { };
 
   sphinxcontrib-jquery = callPackage ../development/python-modules/sphinxcontrib-jquery { };
