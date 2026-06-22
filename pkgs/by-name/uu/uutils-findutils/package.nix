@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-findutils";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "findutils";
     tag = finalAttrs.version;
-    hash = "sha256-ILMInyjOMYlgPxrOjvLoBfkcaZ4aj6GeA/jiGPpNjiI=";
+    hash = "sha256-4IymLQ9TNvTjKgWGLmV4dQWs5xmEp8bNw3iaGG5CGdw=";
   };
 
-  cargoHash = "sha256-/rQTcyRXtluPKPuuZKn/qD/3U0PQLIqyq777/ww3q/0=";
+  cargoHash = "sha256-diS3iZcjMYUeHyV1dkQM8MHB6UouOGj6Jcd1IVcIH2k=";
 
   postInstall = ''
     rm $out/bin/testing-commandline
