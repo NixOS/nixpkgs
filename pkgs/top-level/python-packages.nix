@@ -10473,8 +10473,6 @@ self: super: with self; {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
-  mpire = callPackage ../development/python-modules/mpire { };
-
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
   mpl-typst = callPackage ../development/python-modules/mpl-typst {
