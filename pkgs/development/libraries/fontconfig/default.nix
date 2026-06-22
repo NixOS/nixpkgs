@@ -67,11 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    "ac_cv_va_copy=C99"
   ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installFlags = [
     # Don't try to write to /var/cache/fontconfig at install time.
