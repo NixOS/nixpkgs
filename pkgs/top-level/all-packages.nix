@@ -9029,8 +9029,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
 
-  linkerd = callPackage ../applications/networking/cluster/linkerd { };
-  linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
