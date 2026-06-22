@@ -5,14 +5,14 @@
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
-  version = "0.5.2";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "forestix";
     repo = "joystickwake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qIXXlwZec4CQk93gmY5O3mdGdlNCeXWTr/DDw4vwRUM=";
+    hash = "sha256-YIHG8oP9vA4eAp8ZK5wW3FjG/sJvkmG3MyPSwF/hQX4=";
   };
 
   build-system = with python3.pkgs; [
