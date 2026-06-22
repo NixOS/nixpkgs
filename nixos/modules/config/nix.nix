@@ -153,7 +153,11 @@ in
 
       extraOptions = mkOption {
         type = types.lines;
-        default = "";
+        default = ''
+          # /etc/nix/provision.conf provisioned by the org.nixos.nix.settings
+          # systemd credential. It is ignored when it does not exist.
+          !include /etc/nix/provision.conf
+        '';
         example = ''
           keep-outputs = true
           keep-derivations = true
@@ -372,6 +376,21 @@ in
       trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
       system-features = defaultSystemFeatures;
+    };
+
+    systemd.services.systemd-tmpfiles-setup = {
+      serviceConfig.ImportCredential = [ "org.nixos.nix.settings" ];
+    };
+
+    systemd.services.systemd-tmpfiles-resetup = {
+      serviceConfig.ImportCredential = [ "org.nixos.nix.settings" ];
+    };
+
+    systemd.tmpfiles.settings."nix-provision"."/etc/nix/provision.conf"."f^" = {
+      user = "root";
+      group = "root";
+      mode = "0644";
+      argument = "org.nixos.nix.settings";
     };
   };
 }
