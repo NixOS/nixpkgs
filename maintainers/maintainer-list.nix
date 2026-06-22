@@ -14561,8 +14561,7 @@
   };
   koi = {
     name = "june";
-    email = "me@koi.rip";
-    matrix = "@koi:nelliel.cv";
+    email = "packages@koi.rip";
     github = "koibtw";
     githubId = 75480869;
     keys = [
