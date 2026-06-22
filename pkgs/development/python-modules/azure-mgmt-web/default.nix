@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "10.1.0";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_web";
     inherit version;
-    hash = "sha256-JtNZS74bMFibcpIsNYVbxbdMFR8CJBR6YNGnUjSFkiY=";
+    hash = "sha256-H5iykoPsucNu3nMJwNqNJtsEVdd6434cts3NJEBE1t4=";
   };
 
   build-system = [ setuptools ];
