@@ -58,7 +58,7 @@ let
     ;
 
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792

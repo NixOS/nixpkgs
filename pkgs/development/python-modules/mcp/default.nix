@@ -44,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   pname = "mcp";
   version = "1.27.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
@@ -139,6 +140,7 @@ buildPythonPackage (finalAttrs: {
     # Flaky: httpx.ConnectError: All connection attempts failed
     "test_sse_security_"
     "test_streamable_http_"
+    "test_streamablehttp_"
 
     # This just feels a bit optimistic...
     #     	assert duration < 3 * _sleep_time_seconds

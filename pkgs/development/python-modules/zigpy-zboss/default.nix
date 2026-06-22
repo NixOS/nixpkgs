@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zigpy-zboss";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kardia-as";
     repo = "zigpy-zboss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wG2lDj6bIx1HrKfvZbtf9aqfmv6E25S/ihYtQGs0guM=";
+    hash = "sha256-NXla0X1WUg07Px/ZYrmldfXEqYJ/xIryz79/QMiDVn8=";
   };
 
   build-system = [ setuptools ];

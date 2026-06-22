@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.22.1";
-          hash = "sha256-ln9DcfjW0QO7V6hF+QNqy+V13hbjWwhsisrgZPrk1R4=";
+          version = "3.23.0";
+          hash = "sha256-bbyFdb/hGPV93RJecdx6uozJIOaKitBBhwlI04s50NU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.11.0";
-          hash = "sha256-9izhQvZmfUVeKS0H89XXkN1bNP4+AZyUuetfD0kRJ/c=";
+          version = "2.11.1";
+          hash = "sha256-QegVk1SJM/RegAVj7isgFcHwAJyQj9YDuP90u/7weSo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1567,8 +1567,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.30.0";
-          hash = "sha256-vHD16liYmcWeiSP16QqKhPst8e7iT9wZ1vGT5gV6xoo=";
+          version = "0.31.1";
+          hash = "sha256-eF0OGWpiu5aDiFp8MFP7j2r2+3QCPb1q93gWg7L/Xzc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.43.1";
-          hash = "sha256-rZjdBzqXpSG4aCMjRCmIrWtQdmmh7vEJQLIuH65Ewf0=";
+          version = "0.44.1";
+          hash = "sha256-OH4i4cGh/ivHQNAI55FHjM9ZjnhMaJSnsuQUnxub9/g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2670,8 +2670,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.215.2";
-          hash = "sha256-/3ULGcywO6SHvABRxaLXJQpjcrVs/vZxUGpG+NaSx3s=";
+          version = "1.219.2";
+          hash = "sha256-LQ7UL+/FtzRxn/M85fv3oh8g622KEPS35lque3kqby8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -5482,8 +5482,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.13";
-          hash = "sha256-Si8/piNNktcyRY8o8o9my9sP9NEwrNuySVjlyadDjtU=";
+          version = "0.1.15";
+          hash = "sha256-wNGIps0Y/p5X/lutOh1gTPWXh0zpdTm5fFiccba6Pww=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";

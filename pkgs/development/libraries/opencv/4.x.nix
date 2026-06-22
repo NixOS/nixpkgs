@@ -434,7 +434,7 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ]

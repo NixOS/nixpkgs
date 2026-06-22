@@ -101,6 +101,10 @@ makeScopeWithSplicing' {
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
+      qmenumodel = callPackage ../development/libraries/qmenumodel {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
       qodeassist-plugin = callPackage ../development/libraries/qodeassist-plugin { };
 
       qt6ct = callPackage ../tools/misc/qt6ct { };

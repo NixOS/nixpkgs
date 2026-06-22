@@ -166,7 +166,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     ]
     ++ lib.optionals cudaSupport [
       (lib.getStatic cudaPackages.cuda_nvcc) # dependency on nvptxcompiler_static; no dynamic version available
-      cudaPackages.cuda_cccl
+      cudaPackages.cccl
       cudaPackages.cuda_cudart
       cudaPackages.cuda_nvcc
       cudaPackages.cuda_nvrtc

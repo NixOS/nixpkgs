@@ -1339,8 +1339,6 @@ self: super: with self; {
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
-  avro3k = callPackage ../development/python-modules/avro3k { };
-
   avwx-engine = callPackage ../development/python-modules/avwx-engine { };
 
   aw-client = callPackage ../development/python-modules/aw-client { };
@@ -16418,6 +16416,8 @@ self: super: with self; {
 
   python-xbox = callPackage ../development/python-modules/python-xbox { };
 
+  python-xlib = callPackage ../development/python-modules/python-xlib { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   python-xz = callPackage ../development/python-modules/python-xz { };
@@ -19265,6 +19265,8 @@ self: super: with self; {
 
   supervise-api = callPackage ../development/python-modules/supervise-api { };
 
+  supervision = callPackage ../development/python-modules/supervision { };
+
   supervisor = callPackage ../development/python-modules/supervisor { };
 
   sure = callPackage ../development/python-modules/sure { };
@@ -21843,8 +21845,6 @@ self: super: with self; {
   xknx = callPackage ../development/python-modules/xknx { };
 
   xknxproject = callPackage ../development/python-modules/xknxproject { };
-
-  xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
 
