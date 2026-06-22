@@ -1,43 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   callPackage,
-  pbr,
-  setuptools,
-
-  # direct
+  fetchPypi,
+  platformdirs,
   cryptography,
   dogpile-cache,
   jmespath,
   jsonpatch,
   keystoneauth1,
   munch,
+  openstackdocstheme,
   os-service-types,
-  platformdirs,
+  pbr,
   psutil,
   pyyaml,
-
-  # docs
+  requestsexceptions,
+  setuptools,
   sphinxHook,
-  openstackdocstheme,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.13.0";
+  version = "4.10.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "openstack";
-    repo = "openstacksdk";
-    tag = finalAttrs.version;
-    hash = "sha256-nMpUNLz7OosoGd5rozWcOcOEf3jdEHo5dhxmOv0xONw=";
-  };
-
-  patches = [
-    ./fix-pyproject.patch
+  outputs = [
+    "out"
+    "man"
   ];
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Xd6a4/HiQRqH/1ey142lP6yOrp5brI5YcJJ8ti3fwDM=";
+  };
 
   postPatch = ''
     # Disable rsvgconverter not needed to build manpage
@@ -45,24 +41,14 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
   '';
 
-  env.PBR_VERSION = finalAttrs.version;
-
-  build-system = [
-    pbr
-    setuptools
-  ];
-
-  outputs = [
-    "out"
-    "man"
-  ];
-
-  sphinxBuilders = [ "man" ];
-
   nativeBuildInputs = [
     openstackdocstheme
     sphinxHook
   ];
+
+  sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     platformdirs
@@ -73,7 +59,9 @@ buildPythonPackage (finalAttrs: {
     keystoneauth1
     munch
     os-service-types
+    pbr
     psutil
+    requestsexceptions
     pyyaml
   ];
 
@@ -84,20 +72,13 @@ buildPythonPackage (finalAttrs: {
     tests = callPackage ./tests.nix { };
   };
 
-  # Non-exhaustive imports
-  pythonImportsCheck = [
-    "openstack"
-    "openstack.config.loader"
-    "openstack.compute.v2.server"
-    "openstack.test"
-  ];
+  pythonImportsCheck = [ "openstack" ];
 
   meta = {
-    description = "SDK for building applications to work with OpenStack clouds.";
-    mainProgram = "openstack";
-    homepage = "https://docs.openstack.org/openstacksdk/latest/";
-    downloadPage = "https://github.com/openstack/openstacksdk/releases/tag/${finalAttrs.src.tag}";
+    description = "SDK for building applications to work with OpenStack";
+    mainProgram = "openstack-inventory";
+    homepage = "https://github.com/openstack/openstacksdk";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-})
+}
