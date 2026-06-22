@@ -2,27 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  diff-cover,
   graphviz,
   hatchling,
   hatch-vcs,
   packaging,
-  pytest-mock,
+  pip-requirements-parser,
   pytestCheckHook,
-  pip,
+  pytest-mock,
+  pytest-subprocess,
+  rich,
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "2.30.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
-    tag = version;
-    hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
+    tag = finalAttrs.version;
+    hash = "sha256-poUults9ev+5aryrZPxnxF/X9u0iivnlc1ceLxB7dys=";
   };
 
   build-system = [
@@ -30,22 +31,25 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies = [
-    pip
-    packaging
-  ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     graphviz = [ graphviz ];
+    index = [
+      # nab-index # Unstable + not packaged yet
+      # nab-python # Same
+      pip-requirements-parser
+    ];
+    rich = [ rich ];
   };
 
   nativeCheckInputs = [
-    diff-cover
     pytest-mock
+    pytest-subprocess
     pytestCheckHook
     virtualenv
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -57,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
+    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       charlesbaynham
@@ -65,4 +69,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "pipdeptree";
   };
-}
+})

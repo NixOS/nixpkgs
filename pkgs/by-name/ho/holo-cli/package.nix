@@ -2,26 +2,48 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+
+  stdenv,
+  replaceVars,
+
   cmake,
   pkg-config,
   protobuf,
+
   pcre2,
+
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-cli";
-  version = "0.5.0-unstable-2025-09-22";
+  version = "0.5.0-unstable-2026-03-15";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo-cli";
-    rev = "7d99e7de5eb5226728ee57153c03362c90eb65b2";
-    hash = "sha256-O509LNSpak+MJPQheYLPtJQcNGPyZLMHMasKScoVnls=";
+    rev = "36fdc13323e384c086da8663f0d510b238fb6e4f";
+    hash = "sha256-5Nvyh9gznMsutu3wHR6gwgKkIm115hbx4R6D/Gm1Rug=";
   };
 
-  cargoHash = "sha256-bsoxWjOMzRRtFGEaaqK0/adhGpDcejCIY0Pzw1HjQ5U=";
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  cargoPatches = [
+    # cargo lock is outdated
+    # https://github.com/holo-routing/holo-cli/pull/31
+    ./update-cargo-lock.patch
+  ];
+
+  cargoHash = "sha256-77aUfXcnVQLVEKQuUdBZ4k5/3rOoe9PvGC0AlJS0UJc=";
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    pushd $cargoDepsCopy/*/libyang4-sys-*
+    patch -p1 < ${
+      replaceVars ./libyang4-sys.patch {
+        PCRE2_INCLUDE_DIRS = "${lib.getInclude pcre2}/include";
+        PCRE2_LIBRARIES = "${lib.getLib pcre2}/lib/libpcre2-8${stdenv.hostPlatform.extensions.sharedLibrary}";
+      }
+    }
+    popd
+  '';
 
   # Use rust nightly features
   env.RUSTC_BOOTSTRAP = 1;
@@ -31,17 +53,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     protobuf
   ];
+
   buildInputs = [
     pcre2
   ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Holo` Command Line Interface";
     homepage = "https://github.com/holo-routing/holo-cli";
-    teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ themadbit ];
     license = lib.licenses.mit;
     mainProgram = "holo-cli";
+    maintainers = with lib.maintainers; [ themadbit ];
     platforms = lib.platforms.all;
+    teams = with lib.teams; [ ngi ];
   };
 })

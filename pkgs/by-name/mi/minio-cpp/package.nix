@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minio-cpp";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JKC9SYgb5+nQ3M5C6j6QLfltM+U18oaFrep4gOKPlCI=";
+    hash = "sha256-4XQapUPNacgwXOm64efxOJnhqBgeJt2pSoWKBzp7obc=";
   };
 
   postPatch = ''

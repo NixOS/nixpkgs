@@ -6,7 +6,7 @@
   kdePackages,
   taglib,
   exiv2,
-  podofo_0_10,
+  podofo0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = with kdePackages; [
     exiv2
-    podofo_0_10
+    podofo0
     kio
     kxmlgui
     qtbase

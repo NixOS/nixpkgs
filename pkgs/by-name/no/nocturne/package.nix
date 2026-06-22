@@ -12,7 +12,6 @@
   glib,
   glib-networking,
   pkg-config,
-  cmake,
   gtk4,
   python3,
   python3Packages,
@@ -21,17 +20,22 @@
   libsecret,
   gst_all_1,
   xdg-user-dirs,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
+  libavif,
+  libheif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-CfrPmpkjcmKMB66kdFL4HqVukaIWAkIzOkwtBqZ65k4=";
+    hash = "sha256-z7E4PVSp7HDarnJeQFrJ/HznxUT+b6xTF0QTm5ffvTQ=";
   };
 
   __structuredAttrs = true;
@@ -50,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
     glib
     pkg-config
-    cmake
     gtk4
     python3
   ];
@@ -64,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   pythonDependencies = [
@@ -73,10 +77,22 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.syncedlyrics
     python3Packages.pycairo
     python3Packages.colorthief
-    python3Packages.favicon
     python3Packages.mpris-server
     python3Packages.pillow
   ];
+
+  preInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+          libavif
+          libheif.lib
+        ];
+      }
+    }"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -85,8 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  # avoid installing Navidrome at runtime if not available, incompatible with the nix store
+  patches = [ ./disable-navidrome-setup.patch ];
+
   meta = {
-    description = "Adwaita Music Player and Library Manager";
+    description = "Adwaita music player for OpenSubsonic servers like Navidrome";
     homepage = "https://jeffser.com/nocturne/";
     changelog = "https://github.com/Jeffser/Nocturne/releases";
     license = lib.licenses.gpl3Plus;

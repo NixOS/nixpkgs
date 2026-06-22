@@ -14,6 +14,7 @@
   glib-networking,
   glycin-loaders,
   gtk4,
+  gtksourceview5,
   json-glib,
   libadwaita,
   libdex,
@@ -33,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.7.15";
+  version = "0.8.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bazaar-org";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+52W2iU8rdzN4cCxjkKe80qAbvyeqkvDYRRIiBB5yCg=";
+    hash = "sha256-s0l548kuVD+eNAxA3BnbpuMHD1alq0/xGBIkXb7WpC0=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     flatpak
     glib-networking
     gtk4
+    gtksourceview5
     json-glib
     libadwaita
     libdex

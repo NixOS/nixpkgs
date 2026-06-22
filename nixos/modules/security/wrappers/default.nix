@@ -181,8 +181,23 @@ in
   ###### interface
 
   options = {
-    security.enableWrappers = lib.mkEnableOption "SUID/SGID wrappers" // {
+    security.enableWrappers = lib.mkEnableOption "" // {
       default = true;
+      description = ''
+        Whether to enable SUID/SGID wrappers.
+
+        ::: {.warning}
+        ONLY DISABLE THIS OPTION IF YOU KNOW WHAT YOU'RE DOING.
+        :::
+
+        A normal interactive NixOS system requires SUID/SGID wrappers (e.g. for
+        PAM and sudo). Disabling them, thus will lock you out from your system.
+
+        Disabling the SUID/SGID binaries is useful for non-interactive systems
+        (like a firewall appliance) to minimize the attack surface. In the
+        future, this might become available for interactive systems as well
+        (e.g. with systemd's [run0](https://www.freedesktop.org/software/systemd/man/latest/run0)).
+      '';
     };
 
     security.wrappers = lib.mkOption {

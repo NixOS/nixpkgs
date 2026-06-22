@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
-  version = "4.3.4";
+  version = "4.3.5";
   outputs = [
     "out"
     "man"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xaos-project";
     repo = "XaoS";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-vOFwZbdbcrcJLHUa1QzxzadPcx5GF5uNPg+MZ7NbAPc=";
+    hash = "sha256-dGfmX55bm2BCFl7mRit88ULAcJ0VP15yVGI7nhRH0Ig=";
   };
 
   nativeBuildInputs = [
@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
 })

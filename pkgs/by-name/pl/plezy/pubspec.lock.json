@@ -108,8 +108,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "4c965996210e408465e3c8b66e63ab4a659a62f9",
-        "resolved-ref": "4c965996210e408465e3c8b66e63ab4a659a62f9",
+        "ref": "b4d36f88bb365faaf308ff26be7ade49bbaec859",
+        "resolved-ref": "b4d36f88bb365faaf308ff26be7ade49bbaec859",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -219,11 +219,11 @@
       "dependency": "transitive",
       "description": {
         "name": "characters",
-        "sha256": "f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803",
+        "sha256": "faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.4.0"
+      "version": "1.4.1"
     },
     "charcode": {
       "dependency": "transitive",
@@ -298,22 +298,23 @@
     "connectivity_plus": {
       "dependency": "direct main",
       "description": {
-        "name": "connectivity_plus",
-        "sha256": "33bae12a398f841c6cda09d1064212957265869104c478e5ad51e2fb26c3973c",
-        "url": "https://pub.dev"
+        "path": "packages/connectivity_plus/connectivity_plus",
+        "ref": "2b614414ce95d920880765d07cbb9759699a4563",
+        "resolved-ref": "2b614414ce95d920880765d07cbb9759699a4563",
+        "url": "https://github.com/edde746/plus_plugins"
       },
-      "source": "hosted",
-      "version": "7.0.0"
+      "source": "git",
+      "version": "7.1.1"
     },
     "connectivity_plus_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "connectivity_plus_platform_interface",
-        "sha256": "42657c1715d48b167930d5f34d00222ac100475f73d10162ddf43e714932f204",
+        "sha256": "3c09627c536d22fd24691a905cdd8b14520de69da52c7a97499c8be5284a32ed",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.1"
+      "version": "2.1.0"
     },
     "convert": {
       "dependency": "transitive",
@@ -476,7 +477,7 @@
       "version": "4.0.3"
     },
     "fake_async": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "fake_async",
         "sha256": "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44",
@@ -853,21 +854,21 @@
       "dependency": "transitive",
       "description": {
         "name": "matcher",
-        "sha256": "dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2",
+        "sha256": "dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.12.17"
+      "version": "0.12.19"
     },
     "material_color_utilities": {
       "dependency": "transitive",
       "description": {
         "name": "material_color_utilities",
-        "sha256": "f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec",
+        "sha256": "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.11.1"
+      "version": "0.13.0"
     },
     "material_symbols_icons": {
       "dependency": "direct main",
@@ -884,11 +885,11 @@
       "dependency": "transitive",
       "description": {
         "name": "meta",
-        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
+        "sha256": "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.17.0"
+      "version": "1.18.0"
     },
     "mime": {
       "dependency": "transitive",
@@ -954,12 +955,12 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "5ddd27c",
-        "resolved-ref": "5ddd27c2acacca31060d288db1371a870602cf46",
-        "url": "https://github.com/edde746/os-media-controls"
+        "ref": "f51c805ebc15bf7a2f49a74174aeb470d3c4c78e",
+        "resolved-ref": "f51c805ebc15bf7a2f49a74174aeb470d3c4c78e",
+        "url": "https://github.com/edde746/media_controls"
       },
       "source": "git",
-      "version": "0.2.1"
+      "version": "0.2.4"
     },
     "package_config": {
       "dependency": "transitive",
@@ -1581,11 +1582,11 @@
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55",
+        "sha256": "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.7"
+      "version": "0.7.11"
     },
     "typed_data": {
       "dependency": "transitive",
@@ -1601,11 +1602,11 @@
       "dependency": "direct main",
       "description": {
         "name": "universal_gamepad",
-        "sha256": "3ada9b26e3b3471adc414fd50b8a27d2f890301d9d4cfd7a46732988a9f143d0",
+        "sha256": "eec9726c9e03b4ce54c0c613628ee3998c33f6d5e98ef4a99af3d5d7a79d341b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.5"
+      "version": "1.5.7"
     },
     "url_launcher": {
       "dependency": "direct main",
@@ -1832,11 +1833,11 @@
       "dependency": "direct main",
       "description": {
         "name": "win_http",
-        "sha256": "efbfec044d43665e271b2c51d40864275d055b28eda1e9feddb42d884ae982df",
+        "sha256": "a50a14f1bf32bc5c9b39add9baa01658b97146b21de25237810ca6b850a6704e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     "window_manager": {
       "dependency": "direct main",
@@ -1880,7 +1881,7 @@
     }
   },
   "sdks": {
-    "dart": ">=3.10.7 <4.0.0",
-    "flutter": ">=3.38.4"
+    "dart": ">=3.12.0 <4.0.0",
+    "flutter": ">=3.44.0"
   }
 }

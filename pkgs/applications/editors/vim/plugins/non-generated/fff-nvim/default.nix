@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.8.4";
+  version = "0.9.4";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
     tag = "v${version}";
-    hash = "sha256-w88NovzYVTiUVZmgvvmRvRq1didlbxMJYtKj1A3VB/Y=";
+    hash = "sha256-q/RfjfVZMM8RyfOP1o2NjUP6NrOh7D2ribgq5Dvwxkc=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-2LGrohseOYdroUFY3cHy57HzgfS34CBuIbN1AFuYTUg=";
+    cargoHash = "sha256-NmQDTsevfJq6UGfoxaHwEX4+eJZLXebndpFAsbUNvl8=";
 
     cargoBuildFlags = [
       "-p"
@@ -92,7 +92,7 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];

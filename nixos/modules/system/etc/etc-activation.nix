@@ -71,6 +71,10 @@
               RequiresMountsFor = [
                 "/sysroot/nix/store"
               ];
+              # find-etc only creates this symlink for a NixOS init. For a
+              # non-NixOS init= (e.g. init=/bin/sh) it is absent, so skip the
+              # mount instead of failing the whole initrd.
+              ConditionPathExists = "/etc-metadata-image";
             };
             requires = [
               config.boot.initrd.systemd.services.initrd-find-etc.name
@@ -123,6 +127,8 @@
                 "/run/nixos-etc-metadata"
               ];
               DefaultDependencies = false;
+              # Skip for a non-NixOS init=, see the metadata mount above.
+              ConditionPathExists = "/etc-basedir";
             };
           }
         ];
@@ -140,6 +146,8 @@
                   # before the overlay is mounted.
                   "/run/nixos-etc-metadata"
                 ];
+                # Skip for a non-NixOS init=, see the metadata mount above.
+                ConditionPathExists = "/etc-metadata-image";
               };
               serviceConfig = {
                 Type = "oneshot";
@@ -171,6 +179,19 @@
         ];
       };
 
+    })
+
+    (lib.mkIf (config.system.etc.overlay.enable && !config.system.etc.overlay.mutable) {
+      # Systemd requires /etc/machine-id exists or can be initialized on first
+      # boot. This file should not be part of an image or system config because
+      # it is unique to the machine, so it is initialized at first boot and
+      # persisted in the system state directory, /var/lib/nixos.
+      environment.etc."machine-id".source = lib.mkDefault "/var/lib/nixos/machine-id";
+      boot.initrd.systemd.tmpfiles.settings.machine-id."/sysroot/var/lib/nixos/machine-id".f =
+        lib.mkDefault
+          {
+            argument = "uninitialized";
+          };
     })
 
   ];

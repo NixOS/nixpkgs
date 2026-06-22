@@ -13,7 +13,6 @@
   bats,
   libressl,
   openssl,
-  python27,
   file,
   gettext,
   rSrc,

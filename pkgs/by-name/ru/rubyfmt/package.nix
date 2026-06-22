@@ -13,19 +13,19 @@
   libunwind,
   libxcrypt,
   libyaml,
-  rust-jemalloc-sys-unprefixed,
+  rust-jemalloc-sys,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rubyfmt";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "fables-tales";
     repo = "rubyfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wGvfmBm2GNXASXc//K2JOrn/iUdlbA5dDReNJ+NqjDM=";
+    hash = "sha256-Pzv51KUvDi9MyOOj/RiJus91JzU5M2IhHDoxUS4cN2I=";
     fetchSubmodules = true;
   };
 
@@ -34,13 +34,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     automake
     bison
     ruby
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     zlib
     libxcrypt
     libyaml
-    rust-jemalloc-sys-unprefixed
+    rust-jemalloc-sys
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     readline
@@ -48,23 +49,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libunwind
   ];
 
-  preConfigure = ''
-    pushd librubyfmt/ruby_checkout
-    autoreconf --install --force --verbose
-    ./configure
-    popd
-  '';
+  cargoHash = "sha256-Y7W3zwbScdZd+4W75od3CpwKWSxe1Bk2u2QEzgDUn/Y=";
 
-  cargoPatches = [
-    # Avoid checking whether ruby gitsubmodule is up-to-date.
-    ./0002-remove-dependency-on-git.patch
-    # Avoid failing on unused variable warnings.
-    ./0003-ignore-warnings.patch
-  ];
-
-  cargoHash = "sha256-jJa/6TKwTTN3xOBuUy+YdwKOJbtYVrmlHgMyqPCVqVs=";
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    "BINDGEN_EXTRA_CLANG_ARGS_${stdenv.hostPlatform.rust.rustcTarget}" =
+      "-isystem ${stdenv.cc.libc.dev}/include";
+  };
 
   preFixup = ''
     mv $out/bin/rubyfmt{-main,}
@@ -77,7 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/fables-tales/rubyfmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bobvanderlinden ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "rubyfmt";
   };
 })

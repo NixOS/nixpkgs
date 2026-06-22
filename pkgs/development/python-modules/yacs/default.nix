@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

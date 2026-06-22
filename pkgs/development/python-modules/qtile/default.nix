@@ -17,6 +17,7 @@
   iwlib,
   libcst,
   mpd2,
+  prompt-toolkit,
   psutil,
   pulsectl-asyncio,
   pygobject3,
@@ -118,6 +119,9 @@ buildPythonPackage (finalAttrs: {
     iwlib
     libcst
     mpd2
+    # prompt-toolkit used for qtile repl
+    # see https://github.com/qtile/qtile/blob/master/libqtile/scripts/repl.py
+    prompt-toolkit
     psutil
     pulsectl-asyncio
     pygobject3

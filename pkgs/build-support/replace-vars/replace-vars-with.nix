@@ -122,7 +122,7 @@ in
 
 stdenvNoCC.mkDerivation (
   {
-    name = baseNameOf (toString src);
+    name = baseNameOf src;
   }
   // optionalAttrs
   // forcedAttrs

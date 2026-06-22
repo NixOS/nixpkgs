@@ -10,6 +10,7 @@
   lz4,
   autoPatchelfHook,
   writeShellScript,
+  runCommand,
   curl,
   common-updater-scripts,
 }:
@@ -99,20 +100,46 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       let
         args =
-          lib.strings.concatMapStrings
-            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
+          lib.concatMapStrings
             (
-              with lib.attrsets;
-              [
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-              ]
-            );
+              v:
+              let
+                targetName = if v ? to then v.to else builtins.baseNameOf v.from;
+              in
+              " -change ${v.from} ${lib.strings.makeLibraryPath [ v.pkg ]}/${targetName}"
+            )
+            [
+              {
+                from = "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib";
+                pkg = libck;
+              }
+              {
+                from = "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib";
+                pkg = openssl;
+              }
+              {
+                from = "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib";
+                pkg = openssl;
+              }
+              {
+                from = "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib";
+                pkg = zstd;
+              }
+              {
+                from = "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib";
+                pkg = lz4;
+              }
+              {
+                from = "/opt/homebrew/opt/hiredis/lib/libhiredis.1.3.0.dylib";
+                pkg = hiredis;
+                to = "libhiredis.1.1.0.dylib";
+              }
+              {
+                from = "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.1.3.0.dylib";
+                pkg = hiredis;
+                to = "libhiredis_ssl.dylib.1.1.0";
+              }
+            ];
       in
       # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
       ''
@@ -130,6 +157,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.smokeTest = runCommand "php-relay-smoke-test" { } ''
+      ${lib.getExe php} \
+        -d extension=${finalAttrs.finalPackage}/lib/php/extensions/relay.so \
+        -r 'exit(extension_loaded("relay") ? 0 : 1);'
+      touch $out
+    '';
+
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
       export PATH="$PATH:${

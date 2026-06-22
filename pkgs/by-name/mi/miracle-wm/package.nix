@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -33,18 +34,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yrshySK7tstNAgb9jApqqx4R+c74G2Ada6fjmCeKsV0=";
+    hash = "sha256-7JtdSopKBHfFK0KsV0+9OxrOx3vrSydmZSmAiBvKQiI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-miracle-wm-mir2.28.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/0fcfb54c59327d0776f6e8074e885080731a95c4.patch";
+      excludes = [
+        ".github/workflows/test-deb-install.yml"
+      ];
+      hash = "sha256-HuXwPkM0whLFIy8HM6n9bG9I/DZOuzAajmDpJMZt9BQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail 'DESTINATION lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
       --replace-fail '-march=native' '# -march=native'
   '';
 

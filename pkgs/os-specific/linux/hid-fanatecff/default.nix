@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hid-fanatecff";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "gotzl";
     repo = "hid-fanatecff";
     tag = finalAttrs.version;
-    hash = "sha256-aVuTnrxw7zWMZ1U21DUKDvcYlIp7iHJHaX8ijmUd/TE=";
+    hash = "sha256-lJ+Pn1OLgZK+T1dsV1mwzAwJJgsouFFwDH7bFUD1SGI=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

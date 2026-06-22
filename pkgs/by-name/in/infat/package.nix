@@ -7,20 +7,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "infat";
-  version = "3.0.3";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "philocalyst";
     repo = "infat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M0A9/rjw5aX4yfkEzkczLcvMpMuVTV5u1eyKhlM7nNk=";
+    hash = "sha256-/lZqI6E6mGQLtc3bmDH1NhnmVYa4sLjMJaYga33vLmI=";
   };
 
-  cargoHash = "sha256-8WE9TiZX1QWenjEQF/uhzJ8Gqbggt8B9EZ+1tzWq72Q=";
+  cargoHash = "sha256-XPwhwJNHou5fJZ94RpbOlWUPQjw45PNmYCRzmukrFYo=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+  # The v3.1.2 tag ships infat-cli/Cargo.toml with version = "3.1.1", so the
+  # built binary reports "infat-cli 3.1.1" and versionCheckHook fails. Disable
+  # the check until upstream aligns the crate version with the release tag.
+  # https://github.com/philocalyst/infat/blob/v3.1.2/infat-cli/Cargo.toml
+  doInstallCheck = false;
 
   passthru.updateScript = nix-update-script { };
 

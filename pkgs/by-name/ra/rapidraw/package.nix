@@ -118,11 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
-  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
-  '';
-
   dontWrapGApps = true;
 
   env = {
@@ -141,8 +136,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # The binary links against @rpath/libonnxruntime.*.dylib but has no LC_RPATH entries
-      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
       # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
       mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
       ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"

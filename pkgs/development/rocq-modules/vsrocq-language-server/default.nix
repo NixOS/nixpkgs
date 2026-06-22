@@ -17,7 +17,7 @@ let
     in
     lib.switch rocq-core.rocq-version [
       # When updating the default version here, also update the VsRocq VS Code extension
-      (case (lib.versions.range "8.18" "9.1") "2.3.4")
+      (case (lib.versions.range "8.18" "9.1") "2.4.3")
     ] null;
   location = {
     domain = "github.com";
@@ -31,6 +31,8 @@ let
     release."2.3.3".sha256 = "sha256-wgn28wqWhZS4UOLUblkgXQISgLV+XdSIIEMx9uMT/ig=";
     release."2.3.4".rev = "v2.3.4";
     release."2.3.4".sha256 = "sha256-v1hQjE8U1o2VYOlUjH0seIsNG+NrMNZ8ixt4bQNyGvI=";
+    release."2.4.3".rev = "v2.4.3";
+    release."2.4.3".sha256 = "sha256-R/fpTiYZ9uvtKQcWD4jwUZPvUrcdvHc/wpoTrdkEQoQ=";
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);

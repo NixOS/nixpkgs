@@ -146,7 +146,10 @@ in
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
     programs.dconf.enable = true;
     programs.dconf.packages = [ pkgs.cosmic-session ];
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];

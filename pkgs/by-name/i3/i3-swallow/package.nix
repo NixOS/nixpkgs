@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [
     python3Packages.i3ipc
-    python3Packages.xlib
+    python3Packages.python-xlib
     python3Packages.six
   ];
 

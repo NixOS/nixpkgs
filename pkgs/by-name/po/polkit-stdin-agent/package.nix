@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nixos-rebuild-target-host; };
   };
 
   meta = {

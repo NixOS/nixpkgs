@@ -158,7 +158,7 @@ let
     in
     mkCudaPackages {
       cublasmp = "0.8.1";
-      cuda = "13.2.0";
+      cuda = "13.2.1";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
       cudss = "0.6.0";

@@ -1,12 +1,12 @@
 {
   bison,
-  boost,
   cmake,
   fetchFromGitHub,
   flex,
+  hexdump,
   lib,
   libxml2,
-  llvmPackages_19,
+  llvmPackages,
   openexr,
   openimageio,
   partio,
@@ -14,13 +14,11 @@
   python3Packages,
   robin-map,
   stdenv,
-  util-linux,
   zlib,
 }:
 
 let
-  boost_static = boost.override { enableStatic = true; };
-  inherit (llvmPackages_19) clang libclang llvm;
+  inherit (llvmPackages) clang libclang llvm;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
@@ -34,18 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DBoost_ROOT=${boost}"
-    "-DUSE_BOOST_WAVE=ON"
-    "-DENABLE_RTTI=ON"
+    (lib.cmakeBool "USE_QT" false)
 
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
-    "-DLLVM_DIRECTORY=${llvm}"
-    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
-    "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
+    (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
+    (lib.cmakeFeature "LLVM_CONFIG" "${llvm.dev}/bin/llvm-config")
+    (lib.cmakeFeature "LLVM_DIRECTORY" "${llvm}")
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace src/cmake/modules/FindLLVM.cmake \
       --replace-fail "NO_DEFAULT_PATH" ""
   '';
@@ -62,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost_static
+    hexdump
     libclang
     llvm
     openexr
@@ -71,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     python3Packages.pybind11
     robin-map
-    util-linux # needed just for hexdump
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -90,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "http://openshadinglanguage.org";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.amarshall ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

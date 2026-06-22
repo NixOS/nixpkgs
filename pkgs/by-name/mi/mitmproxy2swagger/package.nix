@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mitmproxy2swagger";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = "mitmproxy2swagger";
     tag = finalAttrs.version;
-    hash = "sha256-bQ9zjRsMrC/B118iP2hevj2hhSFD7FTnsCe6lUMwYSI=";
+    hash = "sha256-J5vuT0p+mc1XXEl7GnXbT/J4mTjzva66o3cUizBWMko=";
   };
 
   pythonRelaxDeps = [
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "ruamel.yaml"
   ];
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     json-stream

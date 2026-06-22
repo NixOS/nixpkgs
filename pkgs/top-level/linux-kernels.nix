@@ -565,7 +565,7 @@ in
         veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
         vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-        vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+        vhba = callPackage ../by-name/cd/cdemu-daemon/vhba.nix { };
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
@@ -629,7 +629,7 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
         nullfsvfs = callPackage ../os-specific/linux/nullfsvfs { };
 

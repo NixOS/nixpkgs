@@ -4,7 +4,6 @@
 {
   lib,
   config,
-  hostPlatform,
 }:
 
 let
@@ -122,6 +121,7 @@ let
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
+    hostPlatform:
     let
       inherit (hostPlatform) system;
       # in almost all cases, meta.platforms is a simple list of strings, and we
@@ -300,7 +300,7 @@ let
 
   metaType =
     let
-      types = import ./meta-types.nix { inherit lib; };
+      types = import ../../../lib/meta-types.nix { inherit lib; };
       inherit (types)
         str
         union
@@ -416,6 +416,10 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
+    hostPlatform:
+    let
+      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+    in
     attrs:
     if !attrs ? meta then
       null
@@ -458,7 +462,7 @@ let
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
       }
-    else if hasUnsupportedPlatform attrs && !allowUnsupportedSystem then
+    else if hasUnsupportedPlatform' attrs && !allowUnsupportedSystem then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
@@ -518,9 +522,13 @@ let
   # passed to the builder and is not a dependency.  But since we
   # include it in the result, it *is* available to nix-env for queries.
   # Example:
-  #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
-  #   validity = checkMeta.assertValidity { inherit meta attrs; };
+  #   meta = checkMeta.commonMeta hostPlatform { inherit validity attrs pos references; };
+  #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
+    hostPlatform:
+    let
+      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+    in
     {
       validity,
       attrs,
@@ -623,20 +631,43 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purlPartsFormatted =
+            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
+
+          # search for a PURL in the following order:
+          purl =
+            # 1) locally set through API
+            if purlPartsFormatted != null then purlPartsFormatted else null;
+
+          # search for a PURL in the following order:
+          purls =
+            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
+            attrs.meta.identifiers.purls or (
+              # 2) locally set through API
+              if purlPartsFormatted != null then [ purlPartsFormatted ] else [ ]
+            );
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform attrs;
+      unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
       available =
@@ -682,9 +713,13 @@ let
     builtins.seq (foldl' giveWarning null warnings) withError;
 
   assertValidity =
+    hostPlatform:
+    let
+      checkValidity' = checkValidity hostPlatform;
+    in
     { meta, attrs }:
     let
-      invalid = checkValidity attrs;
+      invalid = checkValidity' attrs;
       problems = checkProblems attrs;
     in
     if isNull invalid then

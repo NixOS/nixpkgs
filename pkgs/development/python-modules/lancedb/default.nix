@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${finalAttrs.version}";
-    hash = "sha256-oXKlpgGACMVn/86PWQng9NXHpCzdjzikVzVfoAgvQJQ=";
+    hash = "sha256-OIoQCk0YlWpaaau4AiWxarvH4oy1rAjaS9yvs3mIzzo=";
   };
 
   buildAndTestSubdir = "python";

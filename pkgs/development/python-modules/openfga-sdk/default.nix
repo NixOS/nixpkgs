@@ -41,15 +41,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # These fail due to a race condition in the test mocks
-    "test_client_batch_check_multiple_request"
-    "test_client_batch_check_multiple_request_fail"
   ];
 
   meta = {

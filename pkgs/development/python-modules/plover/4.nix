@@ -17,7 +17,7 @@
   setuptools,
   wcwidth,
   wheel,
-  xlib,
+  python-xlib,
   wrapQtAppsHook,
 }:
 
@@ -54,8 +54,13 @@ buildPythonPackage (finalAttrs: {
     rtf-tokenize
     setuptools
     wcwidth
-    xlib
+    python-xlib
   ];
+  optional-dependencies = {
+    gui-qt = [
+      pyqt5
+    ];
+  };
   nativeBuildInputs = [
     wrapQtAppsHook
   ];

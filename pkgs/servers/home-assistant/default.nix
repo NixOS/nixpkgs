@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch,
   python314Packages,
   replaceVars,
   ffmpeg-headless,
@@ -85,6 +84,8 @@ let
           self.pytz
         ];
       });
+
+      caldav = self.caldav_2;
 
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
@@ -264,7 +265,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.5.4";
+  hassVersion = "2026.6.4";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -285,13 +286,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-Z5FUkljaWRr9tfBb6RXJCC86ZbyNkw0PvUcOl+bZ2cc=";
+    hash = "sha256-NeqJT2CW8A0VfUJ2yrR+KGmmQMK8q0Wdag43rUBBoWU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-o5S6rnOTqzPLZpMBxgmp9IpmLlEHLvHTH68ql2EkVbI=";
+    hash = "sha256-7Y26vN0oskJBgijtm9RZcvHw/xBEH3IsI8hezgsOVr0=";
   };
 
   build-system = with python3Packages; [
@@ -316,22 +317,12 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about not running in a docker or a venv
     ./patches/pythonpath-is-a-venv.patch
 
+    # No scaring our users about our install method
+    ./patches/nixos-was-never-supported.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
-    })
-
-    (fetchpatch {
-      name = "2026.5.4-shelly-tests-fix.patch";
-      url = "https://github.com/home-assistant/core/commit/072e9b51a2321b0d4489bae6f1e04f7ed845222f.patch";
-      includes = [ "tests/components/shelly/test_coordinator.py" ];
-      hash = "sha256-0XQdw2MnwzrHKYY06TotfJJem0bqremmi7k8SyVQVGA=";
-    })
-
-    (fetchpatch {
-      name = "2026.5.4-homewizard-tests-fix.patch";
-      url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
-      hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
   ];
 
@@ -434,6 +425,9 @@ python3Packages.buildPythonApplication rec {
     requests-mock
     respx
     syrupy
+    unidiff
+    # Used in tests/common.py
+    paho-mqtt
   ];
 
   nativeCheckInputs =

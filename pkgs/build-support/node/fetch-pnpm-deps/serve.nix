@@ -17,8 +17,6 @@ writeShellApplication {
   text = ''
     storePath=$(mktemp -d)
 
-    fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
-
     clean() {
       echo "Cleaning up temporary store at '$storePath'..."
 
@@ -27,11 +25,7 @@ writeShellApplication {
 
     echo "Copying pnpm store '${pnpmDeps}' to temporary store..."
 
-    if [[ $fetcherVersion -ge 3 ]]; then
-      tar --zstd -xf "${pnpmDeps}/pnpm-store.tar.zst" -C "$storePath"
-    else
-      cp -Tr "${pnpmDeps}" "$storePath"
-    fi
+    tar --zstd -xf "${pnpmDeps}/pnpm-store.tar.zst" -C "$storePath"
 
     chmod -R +w "$storePath"
 

@@ -1,22 +1,15 @@
 {
   lib,
   buildHomeAssistantComponent,
-  fetchFromGitHub,
+  ha-mcp,
   nix-update-script,
   ruamel-yaml,
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "homeassistant-ai";
   domain = "ha_mcp_tools";
-  version = "7.5.0";
-
-  src = fetchFromGitHub {
-    owner = "homeassistant-ai";
-    repo = "ha-mcp";
-    tag = "v${version}";
-    hash = "sha256-qRWNh7kKFQZpgZjkpc/Qv2s16DdWFX35HLHIToYXccU=";
-  };
+  inherit (ha-mcp) version src;
+  inherit (ha-mcp.src) owner;
 
   dependencies = [
     ruamel-yaml

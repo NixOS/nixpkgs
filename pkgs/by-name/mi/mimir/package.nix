@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "3.0.7";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-Hw7TiUyTXZ/CKT4jeyWYVQM4EY/DbwBtaTEebNHonGs=";
+    hash = "sha256-Gp4+eVL6HUFlhtAZmDJyHYr/QP0+JQIcDXJfCk2IpCg=";
   };
 
   vendorHash = null;
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "mimir-(3\\.0\\.[0-9]+)"
+        "mimir-(3\\.[0-9.]+)"
       ];
     };
     tests = {

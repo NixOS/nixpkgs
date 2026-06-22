@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiled";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "mapeditor";
     repo = "tiled";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7Z6ibZyfFWdsxvz6rlGOqB9toULr4h2qa2uX9QXh1uU=";
+    sha256 = "sha256-Pq36xfaKtloyf0bneBE2xC/9twO/0qLq533dDbAyBCU=";
   };
 
   nativeBuildInputs = [

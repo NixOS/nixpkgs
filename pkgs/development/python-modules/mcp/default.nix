@@ -42,14 +42,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mcp";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TGkAyuBcIstL2BCZYBWoi7PhnhoBvap67sLWGe0QUoU=";
+    hash = "sha256-qvbGyF0PVC626yCgUqOYmA1zOmvI3/bC7l7HhfOtKH8=";
   };
 
   # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
@@ -139,6 +140,7 @@ buildPythonPackage (finalAttrs: {
     # Flaky: httpx.ConnectError: All connection attempts failed
     "test_sse_security_"
     "test_streamable_http_"
+    "test_streamablehttp_"
 
     # This just feels a bit optimistic...
     #     	assert duration < 3 * _sleep_time_seconds

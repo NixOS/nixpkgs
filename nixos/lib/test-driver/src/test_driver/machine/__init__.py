@@ -1031,6 +1031,7 @@ class QemuMachine(BaseMachine):
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
+            assert self.shell
             (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
             return bool(ready)
 

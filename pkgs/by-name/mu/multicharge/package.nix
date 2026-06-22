@@ -25,13 +25,13 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
+    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
   };
 
   patches = [
@@ -69,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build config/install-mod.py
+
+    # custom blas and lapack need to be explicitly found for transitive dependencies
+    # otherwise CMAKE builds can not proceed.
+    echo 'set(custom-blas_FOUND TRUE)' >> config/cmake/Findcustom-blas.cmake
+    echo 'set(custom-lapack_FOUND TRUE)' >> config/cmake/Findcustom-lapack.cmake
   '';
 
   preCheck = ''

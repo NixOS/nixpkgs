@@ -565,9 +565,9 @@ in
           coercedTo attrs (
             val:
             if builtins.isAttrs val && val ? enable then
-              trace "Obsolete option `networking.wireless.userControlled.enable' is used. It was renamed to networking.wireless.userControlled" val.enable
+              warn "Obsolete option `networking.wireless.userControlled.enable' is used. It was renamed to networking.wireless.userControlled" val.enable
             else if builtins.isAttrs val && val ? group then
-              trace
+              warn
                 "The option definition `networking.wireless.userControlled.group' no longer has any effect. The group is now fixed to `wpa_supplicant'."
                 (val.enable or false)
             else if builtins.isBool val then

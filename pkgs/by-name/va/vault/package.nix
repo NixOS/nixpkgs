@@ -73,7 +73,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "vault";
     maintainers = with lib.maintainers; [
       rushmorem
-      lnl7
       Chili-Man
       techknowlogick
     ];

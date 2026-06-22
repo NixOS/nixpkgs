@@ -9,7 +9,7 @@ let
   inherit (home-assistant) python3Packages;
 
   manifestRequirementsCheckHook = import ./manifest-requirements-check-hook.nix {
-    inherit makeSetupHook python3Packages;
+    inherit lib makeSetupHook python3Packages;
   };
 in
 
@@ -26,12 +26,12 @@ lib.extendMkDerivation {
       owner,
       domain,
       version,
-      format ? "other",
       ...
     }@args:
     {
       pname = "${owner}/${domain}";
-      inherit version format;
+      inherit version;
+      pyproject = false;
 
       installPhase = ''
         runHook preInstall

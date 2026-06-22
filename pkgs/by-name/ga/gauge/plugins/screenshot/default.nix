@@ -13,7 +13,7 @@ makeGaugePlugin {
     description = "Gauge plugin to take screenshots";
     homepage = "https://github.com/getgauge/gauge_screenshot/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-darwin"

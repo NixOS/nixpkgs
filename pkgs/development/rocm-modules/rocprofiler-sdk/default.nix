@@ -135,6 +135,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0006-rocprofiler-sdk-allow-using-system-otf2-dependency.patch
     ./0007-rocprofiler-sdk-Allow-using-system-json-dependency.patch
     ./0008-rocprofiler-sdk-stop-manually-setting-warning-flags-.patch
+    # Prevent a segfault on `import torch` (and other consumers that link
+    # librocprofiler-sdk for tracing) when OpenMP auto-discovers our
+    # ompt_start_tool before glog is initialized. Upstream incidentally fixes
+    # this by dropping glog in rocm-systems d80117889b3f
+    # "[rocprofiler-sdk] Migrate from glog to Abseil Logging (#4668)", which
+    # is too invasive (40 files + new abseil submodule) to backport.
+    ./0009-rocprofiler-sdk-guard-ompt-auto-start.patch
   ];
 
   postPatch = ''

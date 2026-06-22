@@ -17,6 +17,7 @@
   pexpect,
   psutil,
   pyserial,
+  pytest,
   pytestCheckHook,
   pytest-benchmark,
   pytest-dependency,
@@ -64,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     pyudev
     pyusb
     pyyaml
+    pytest
     requests
     xmodem
   ];

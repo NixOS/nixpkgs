@@ -10,7 +10,7 @@
   boost,
   fmt,
   openssl,
-  sv-lang,
+  sv-lang_9, # update sv-lang version here according to upstream requirements
   mimalloc,
 
   verible,
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
     boost
     fmt
     openssl
-    sv-lang
+    sv-lang_9
     mimalloc
   ];
 
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = "1";
     RUSTFLAGS = "-C link-args=-lmimalloc";
     # this is needed so that veridian doesn't try to build the sv-lang package itself
-    SLANG_INSTALL_PATH = sv-lang;
+    SLANG_INSTALL_PATH = sv-lang_9;
   };
 
   passthru = {

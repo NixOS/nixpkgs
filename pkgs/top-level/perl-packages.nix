@@ -1785,10 +1785,10 @@ with self;
 
   ArchiveTar = buildPerlPackage {
     pname = "Archive-Tar";
-    version = "3.10";
+    version = "3.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.10.tar.gz";
-      hash = "sha256-irvDaMxHIwjiqWDEpOi258pJJFefxGPH+oemplbITlY=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.12.tar.gz";
+      hash = "sha256-ARTvObZfSfiWgoOrR3Gdfoj5jXNg/jZJvjMcf1PVgyw=";
     };
     meta = {
       description = "Manipulates TAR archives";
@@ -5806,10 +5806,10 @@ with self;
 
   CompressRawBzip2 = buildPerlPackage {
     pname = "Compress-Raw-Bzip2";
-    version = "2.206";
+    version = "2.218";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.206.tar.gz";
-      hash = "sha256-ISuB2xwK6CLRmShhmmA70QjLXVxHAPxn3HyxaeDMZSU=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.218.tar.gz";
+      hash = "sha256-iRU+ai69pSNJSTsHT6S3VJ/x+QU952E8GKXgXFtBX6g=";
     };
 
     # Don't build a private copy of bzip2.
@@ -5852,21 +5852,21 @@ with self;
 
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
-    version = "2.206";
+    version = "2.222";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.206.tar.gz";
-      hash = "sha256-Rnhaajg6HIQ4lbf58l1ddZ58MFFZ+dHgSjYE63THc3Q=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.222.tar.gz";
+      hash = "sha256-Hf19URplVifIGBXTDTurwo+luIRV/wP4sECZ3LUShrg=";
     };
 
     preConfigure = ''
       cat > config.in <<EOF
-        BUILD_ZLIB   = False
-        INCLUDE      = ${pkgs.zlib.dev}/include
-        LIB          = ${pkgs.zlib.out}/lib
-        OLD_ZLIB     = False
-        GZIP_OS_CODE = AUTO_DETECT
-        USE_ZLIB_NG  = False
+        BUILD_ZLIB    = False
+        ZLIB_INCLUDE  = ${pkgs.zlib.dev}/include
+        ZLIB_LIB      = ${pkgs.zlib.out}/lib
+        OLD_ZLIB      = False
+        GZIP_OS_CODE  = AUTO_DETECT
+        USE_ZLIB_NG   = False
       EOF
     '';
 
@@ -9731,11 +9731,18 @@ with self;
 
   DBDCSV = buildPerlPackage {
     pname = "DBD-CSV";
-    version = "0.60";
+    version = "0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.60.tgz";
-      hash = "sha256-AYuDow95mXm8jDwwRMixyAAc32C9w+dGhIgYGVJUtOc=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.62.tgz";
+      hash = "sha256-0/EVD+IGfA49FJWHZeqNQZWDSY+WMTawQC2qkwvJMOM=";
     };
+    patches = [
+      (fetchpatch2 {
+        url = "https://github.com/perl5-dbi/DBD-CSV/commit/ae091790398088a66b22fa572856bfeb4db4c78a.patch?full_index=1";
+        excludes = [ "ChangeLog" ];
+        hash = "sha256-eZdCNSi3YJrZdZcK/8nFx5Q4rB89b0ynKemupvKrfys=";
+      })
+    ];
     propagatedBuildInputs = [
       DBI
       SQLStatement
@@ -17519,10 +17526,10 @@ with self;
 
   IOCompress = buildPerlPackage {
     pname = "IO-Compress";
-    version = "2.206";
+    version = "2.220";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.206.tar.gz";
-      hash = "sha256-fTBiuaSU91fo0GFPIg2D8icxu9oa6198/w5yqD9DPTU=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.220.tar.gz";
+      hash = "sha256-nZbqKR8sVO82fHOWuFfZO6GsHEsvG84T7Yo+Xz7rtic=";
     };
     propagatedBuildInputs = [
       CompressRawBzip2
@@ -21543,6 +21550,23 @@ with self;
       description = "Mail-to-HTML converter";
       mainProgram = "mhonarc";
       license = with lib.licenses; [ gpl2Only ];
+    };
+  };
+
+  MIMEBase32 = buildPerlPackage {
+    pname = "MIME-Base32";
+    version = "1.303";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/MIME-Base32-1.303.tar.gz";
+      hash = "sha256-qyH6mRMOM6Cv9s21lvZH5eVl0gfWNLou8Gvb71BCTpk=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/MIME-Base32";
+      description = "Base32 encoder and decoder";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -32591,12 +32615,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "12.1.0";
+    version = "12.4.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-WjTDvmnj1i1hoC6dska1VEJOiKi+obPjGlO7T2Now+U=";
+      hash = "sha256-GMZvSRZnxrPvhhLOJoFnNas7+ccsGXsL6s16EAeeFJQ=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
@@ -39510,15 +39534,23 @@ with self;
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "6.000003";
+    version = "8.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v6.0.3.tar.gz";
-      hash = "sha256-oYDBYVygvPUZ9vrGX/y5A0MAQ6zgSsrf6AtUdFcZG4Q=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v8.0.1.tar.gz";
+      hash = "sha256-QLUza9M72r/q1W+uhG5pn6YWz7dDJQ0rIq3NyDVUtjU=";
     };
+    buildInputs = [
+      JSONValidator
+      TestDifferences
+      TestException
+      TestNoWarnings
+    ];
     propagatedBuildInputs = [
       JSONXS
       MooseXGetopt
+      NetIPXS
       TextReflow
+      TryTiny
       ZonemasterEngine
       ZonemasterLDNS
       libintl-perl
@@ -39537,13 +39569,15 @@ with self;
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.6.1";
+    version = "8.1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
-      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v8.1.1.tar.gz";
+      hash = "sha256-QlQQ+saL++8A1MW9dqMRzDNH6cydyQl9HB3cXanudGI=";
     };
     buildInputs = [
+      LocalePO
       PodCoverage
+      SubOverride
       TestDifferences
       TestException
       TestFatal
@@ -39557,15 +39591,17 @@ with self;
       FileShareDir
       FileSlurp
       IOSocketINET6
+      ListCompare
       ListMoreUtils
+      LogAny
+      MailSPF
       ModuleFind
-      Moose
-      MooseXSingleton
-      NetIP
+      NetDNS
       NetIPXS
       Readonly
       TextCSV
       ZonemasterLDNS
+      YAMLLibYAML
       libintl-perl
     ];
 
@@ -39577,10 +39613,10 @@ with self;
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "3.2.0";
+    version = "5.0.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.2.0.tar.gz";
-      hash = "sha256-BpsWQRcpX6gtJSlAocqLMIrYsfPocjvk6CaqqX9wbWw=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-5.0.2.tar.gz";
+      hash = "sha256-IP1f+7SgnQ1vv9BjkBoSsa7rv9k3KoXOLUVcmkwJqYY=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
@@ -39590,10 +39626,13 @@ with self;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
       DevelChecklib
+      ExtUtilsPkgConfig
+      MIMEBase32
       ModuleInstall
       ModuleInstallXSUtil
       TestFatal
       TestDifferences
+      TestException
       pkgs.ldns
       pkgs.libidn2
       pkgs.openssl

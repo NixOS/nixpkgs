@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blightmud";
-  version = "5.6.1";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "blightmud";
     repo = "blightmud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fwWyQq6rb8qSR7aiQagOodkQRqanUJA2uH5I/Z1XfAA=";
+    hash = "sha256-M+tbV8zuwnwwv335ljKIq0UIsSkb4SQnJnOtOhL25N8=";
   };
 
-  cargoHash = "sha256-4JArgwNFjnGwyEnWdjZkUlahloQu+C8qF9QyYo8s1jQ=";
+  cargoHash = "sha256-EWI+k+q8JdyZDw+k2pM1mRkfBDQH0IsuzgrTECLrHt0=";
 
   postPatch = ''
     substituteInPlace Cargo.toml --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'

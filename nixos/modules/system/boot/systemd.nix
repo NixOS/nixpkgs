@@ -40,6 +40,7 @@ let
     "network-online.target"
     "nss-lookup.target"
     "nss-user-lookup.target"
+    "time-set.target"
     "time-sync.target"
     "first-boot-complete.target"
   ]
@@ -808,7 +809,7 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {
       environment = proxy_env;
-      path = [ pkgs.gnupg ];
+      path = [ pkgs.gnupgMinimal ];
     };
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 

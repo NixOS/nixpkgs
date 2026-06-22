@@ -6,23 +6,33 @@
   hatchling,
   hatch-vcs,
   installShellFiles,
+  colorama,
   packaging,
   platformdirs,
-  pytestCheckHook,
+  tomli,
   userpath,
+  uv,
   git,
+  writableTmpDirAsHomeHook,
+  pytestCheckHook,
+  pypiserver,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-subprocess,
+  pytest-xdist,
+  watchdog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pipx";
-  version = "1.8.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
-    tag = version;
-    hash = "sha256-TEF5zBAB0tvfY0dsZOnu2r9P+pheMr/OOI6CCY8PItg=";
+    tag = finalAttrs.version;
+    hash = "sha256-4qSCyaYHam9y04qTgEUvbo/XiY9WNqX2fKZJOAVE2EM=";
   };
 
   build-system = [
@@ -32,10 +42,19 @@ buildPythonPackage rec {
 
   dependencies = [
     argcomplete
+    colorama
     packaging
     platformdirs
+    tomli
     userpath
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.uv;
+
+  optional-dependencies = {
+    uv = [
+      uv
+    ];
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,26 +64,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     git
+    writableTmpDirAsHomeHook
+    pypiserver
+    pytest-cov-stub
+    pytest-mock
+    pytest-subprocess
+    pytest-xdist
+    watchdog
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pytestFlags = [
     # start local pypi server and use in tests
     "--net-pypiserver"
   ];
 
-  disabledTestPaths = [
-    "tests/test_install_all_packages.py"
-  ];
-
   disabledTests = [
-    # disable tests which are difficult to emulate due to shell manipulations
-    "path_warning"
-    "script_from_internet"
-    "ensure_null_pythonpath"
     # disable tests, which require internet connection
     "install"
     "inject"
@@ -93,6 +107,7 @@ buildPythonPackage rec {
     "test_skip_maintenance"
     "test_unpin"
     "test_unpin_warning"
+    "test_shared_libs_excludes_setuptools"
   ];
 
   postInstall = ''
@@ -102,12 +117,16 @@ buildPythonPackage rec {
       --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
+  pythonImportsCheck = [ "pipx" ];
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
     homepage = "https://github.com/pypa/pipx";
-    changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pypa/pipx/blob/main/docs/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yshym ];
   };
-}
+})

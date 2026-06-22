@@ -6,12 +6,16 @@
   - ./nix.nix
   - ./nix-flakes.nix
 */
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
     mkIf
     mkOption
-    stringAfter
     types
     ;
 
@@ -70,7 +74,7 @@ in
       defaultChannel = mkOption {
         internal = true;
         type = types.str;
-        default = "https://channels.nixos.org/nixos-26.05";
+        default = "https://channels.nixos.org/nixos-unstable";
         description = "Default NixOS channel to which the root user is subscribed.";
       };
     };
@@ -98,8 +102,10 @@ in
       ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
 
-    system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
-      stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh)
+    system.preSwitchChecks.no-nix-channel = mkIf (!cfg.channel.enable) (
+      lib.replaceStrings [ "@getent@" ] [ (lib.getExe pkgs.getent) ] (
+        builtins.readFile ./nix-channel/pre-switch-check.sh
+      )
     );
   };
 }

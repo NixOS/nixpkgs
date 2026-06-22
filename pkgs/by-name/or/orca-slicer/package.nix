@@ -28,14 +28,11 @@
   hicolor-icon-theme,
   libsecret,
   libpng,
-  makeFontsConf,
   mpfr,
-  nanum,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
@@ -61,12 +58,6 @@ let
           "--enable-secretstore"
         ];
       });
-
-  # Workaround for crash due to missing font
-  # https://github.com/OrcaSlicer/OrcaSlicer/issues/11641
-  fontsConf = makeFontsConf {
-    fontDirectories = [ nanum ];
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
@@ -124,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
     opencascade-occt_7_6
     openvdb
-    pcre
     onetbb
     webkitgtk_4_1
     wxGTK'
@@ -227,7 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-      --set FONTCONFIG_FILE "${fontsConf}"
       ${lib.optionalString withNvidiaGLWorkaround ''
         --set __GLX_VENDOR_LIBRARY_NAME mesa
         --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json

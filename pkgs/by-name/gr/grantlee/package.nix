@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = "https://github.com/steveire/grantlee";
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     license = lib.licenses.lgpl21;
     inherit (qt5.qtbase.meta) platforms;
   };

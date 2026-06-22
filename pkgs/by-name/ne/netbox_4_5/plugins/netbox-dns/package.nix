@@ -5,16 +5,17 @@
   setuptools,
   dnspython,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-plugin-dns";
-  version = "1.5.8";
+  version = "1.5.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "peteeckel";
     repo = "netbox-plugin-dns";
-    tag = version;
-    hash = "sha256-IV7/YQ/IhoKH9JJU4eZwmSrj3zB9nRcqko8HA1gtMgg=";
+    tag = finalAttrs.version;
+    hash = "sha256-wxTW/qiwp+1CXUeCDJnllEW2oCTjlFVUot7JfWPooaw=";
   };
 
   build-system = [ setuptools ];
@@ -28,9 +29,9 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin for managing DNS data";
     homepage = "https://github.com/peteeckel/netbox-plugin-dns";
-    changelog = "https://github.com/peteeckel/netbox-plugin-dns/releases/tag/${src.tag}";
+    changelog = "https://github.com/peteeckel/netbox-plugin-dns/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

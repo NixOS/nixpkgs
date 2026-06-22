@@ -78,8 +78,9 @@ lib.extendMkDerivation {
       ...
     }@args:
 
-    assert lib.assertMsg useFetchCargoVendor
-      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
+    assert
+      useFetchCargoVendor
+      || throw "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
 
     assert lib.warnIf (args ? useFetchCargoVendor)
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"

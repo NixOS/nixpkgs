@@ -77,5 +77,6 @@ makeSetupHook {
     inherit (cargo-tauri.meta) maintainers broken;
     # Platforms that Tauri supports bundles for
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 } ./hook.sh

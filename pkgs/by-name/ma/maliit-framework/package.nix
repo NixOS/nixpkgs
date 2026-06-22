@@ -12,7 +12,6 @@
   libselinux,
   libsepol,
   libthai,
-  pcre,
   util-linux,
   wayland,
   libxtst,
@@ -46,7 +45,6 @@ stdenv.mkDerivation {
     libselinux
     libsepol
     libthai
-    pcre
     util-linux
     wayland
     libxdmcp

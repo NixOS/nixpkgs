@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gore";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "motemen";
     repo = "gore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EPySMj+mQxTJbGheAtzKvQq23DLljPR6COrmytu1x/Q=";
+    sha256 = "sha256-niMYoYkDaZsv6ntUIfB0B4VheiG6rMouZGUSjHnm51w=";
   };
 
-  vendorHash = "sha256-W9hMxANySY31X2USbs4o5HssxQfK/ihJ+vCQ/PTyTDc=";
+  vendorHash = "sha256-oS5LJfLFrmHEwayoD+HygfamZpmerIL1i4QtoRL4Om4=";
 
   doCheck = false;
 

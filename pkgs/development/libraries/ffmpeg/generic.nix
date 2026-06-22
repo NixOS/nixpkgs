@@ -439,6 +439,13 @@ stdenv.mkDerivation (
         --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
       substituteInPlace doc/filters.texi \
         --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+    ''
+    # https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/22564, also fails on big-endian POWER
+    + lib.optionalString (lib.versionAtLeast version "8.1" && stdenv.hostPlatform.isBigEndian) ''
+      substituteInPlace tests/fate/vcodec.mak \
+        --replace-fail \
+          'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff420p12 ffvhuff422p10left ffvhuff444p16' \
+          'FATE_VCODEC_SCALE-$(call ENCDEC, FFVHUFF, AVI) += ffvhuff444 ffvhuff422p10left ffvhuff444p16'
     '';
 
     patches =
@@ -458,14 +465,6 @@ stdenv.mkDerivation (
           name = "unbreak-hardcoded-tables.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
           hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
-        })
-      ]
-      ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
-        (fetchpatch2 {
-          # this can be removed post 6.1
-          name = "fix_build_failure_due_to_PropertyKey_EncoderID";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
-          hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
         })
       ]
       ++ optionals (lib.versionOlder version "7.1.1") [

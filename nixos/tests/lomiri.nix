@@ -142,16 +142,46 @@ let
       with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
         retry(fn=check_for_color_continued_presence(terminalTextColor), timeout_seconds=5)
 
-    def ensure_lomiri_running() -> None:
+    def change_tty_back_forth(ttynumMain: int, ttynumDiff: int) -> None:
+      """
+      A qtmir bump made the image get stuck, a tty switch back and forth fixes it.
+      """
+
+      machine.send_key(f"ctrl-alt-f{ttynumDiff}")
+      machine.sleep(10)
+      machine.send_key(f"ctrl-alt-f{ttynumMain}")
+      machine.sleep(10)
+
+    def ensure_greeter_launched() -> None:
+      """
+      Ensure that Lomiri (in greeter mode) has started up and is responsive.
+      Execution will stop at the user selection.
+      """
+
+      machine.wait_for_unit("display-manager.service")
+      machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
+
+      # Start page shows current time
+      wait_for_text(r"(AM|PM)")
+
+      # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that time is still shown
+      # Greeter runs on: tty1
+      change_tty_back_forth(1, 2)
+      wait_for_text(r"(AM|PM)")
+      machine.screenshot("lomiri_greeter_launched")
+
+      # Advance to user selection, to make sure display really isn't stuck anymore
+      machine.send_key("ret")
+      wait_for_text("${description}")
+      machine.screenshot("lomiri_greeter_login")
+
+    def ensure_lomiri_running(ttynumMain: int = 1, ttynumDiff: int = 2) -> None:
       """
       Ensure that Lomiri has finished starting up.
       """
 
       # Process runs
       machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-
-      # Output rendering from Lomiri has started when it starts printing performance diagnostics
-      machine.wait_for_console_text("Last frame took")
 
       # One of the last UI elements that loads is the clock. In the past, we could OCR for AM/PM to ensure it's there. That is now flaky.
       # The next best thing is to look for the launcher button, and ensure it stays around for awhile (DE doesn't crash).
@@ -160,6 +190,15 @@ let
         retry(check_for_color(launcherColor))
       with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
         retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
+
+      # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that launcher button is still shown
+      change_tty_back_forth(ttynumMain, ttynumDiff)
+      with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
+        retry(check_for_color(launcherColor))
+
+      # First input seems to get dropped while Mir registers the new input device. Send a key that does nothing, to get that out of the way, and sleep a tiny bit for registration to finish.
+      machine.send_key("left")
+      machine.sleep(3)
 
       machine.screenshot("lomiri_launched")
 
@@ -358,17 +397,7 @@ in
 
           # Lomiri in greeter mode should work & be able to start a session
           with subtest("lomiri greeter works"):
-              machine.wait_for_unit("display-manager.service")
-              machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
-
-              # Start page shows current time
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_greeter_launched")
-
-              # Advance to login part
-              machine.send_key("ret")
-              wait_for_text("${description}")
-              machine.screenshot("lomiri_greeter_login")
+              ensure_greeter_launched()
 
               # Login
               machine.send_chars("${password}\n")
@@ -640,7 +669,7 @@ in
 
               # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
               with subtest("polkit agent works"):
-                  machine.send_chars("pkexec touch /tmp/polkit-test\n")
+                  machine.send_chars("run0 touch /tmp/polkit-test\n")
                   # There's an authentication notification here that gains focus, but we struggle with OCRing it
                   # Just hope that it's up after a short wait
                   machine.sleep(10)
@@ -771,24 +800,14 @@ in
 
             # Lomiri in greeter mode should use the correct keymap
             with subtest("lomiri greeter keymap works"):
-                machine.wait_for_unit("display-manager.service")
-                machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
-
-                # Start page shows current time
-                # And the greeter *actually* renders our wallpaper!
-                wait_for_text(r"(AM|PM|Lorem|ipsum)")
-                machine.screenshot("lomiri_greeter_launched")
-
-                # Advance to login part
-                machine.send_key("ret")
-                wait_for_text("${description}")
-                machine.screenshot("lomiri_greeter_login")
+                ensure_greeter_launched()
 
                 # Login
                 machine.send_chars("${pwInput}\n")
 
                 # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
-                ensure_lomiri_running()
+                # When going lomiri(greeter) -> lomiri(desktop), we run on tty2
+                ensure_lomiri_running(2, 1)
 
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):

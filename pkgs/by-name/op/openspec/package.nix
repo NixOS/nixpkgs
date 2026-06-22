@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -24,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-9s2kdvd7svK4hofnD66HkDc86WTQeayfF5y7L2dmjNg=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-p44ctVCA3d1CXoq+zzhswVqhScF23ZhvpLUVVcrgQlM=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     makeWrapper
     installShellFiles
   ];
@@ -76,10 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "AI-native system for spec-driven development";
     homepage = "https://github.com/Fission-AI/OpenSpec";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kalbasit
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.all;
     mainProgram = "openspec";
   };

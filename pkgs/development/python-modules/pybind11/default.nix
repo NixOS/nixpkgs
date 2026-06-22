@@ -26,6 +26,7 @@ let
       pythonIncludeDir = "${python}/include/${python.libPrefix}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
+    meta.license = lib.licenses.mit;
   } ./setup-hook.sh;
 in
 buildPythonPackage (finalAttrs: {

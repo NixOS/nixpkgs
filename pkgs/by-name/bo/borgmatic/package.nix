@@ -13,13 +13,16 @@
   testers,
   nixosTests,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "borgmatic";
   version = "2.1.5";
   pyproject = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-T0+E6opyfr7zxfP44OlNuhqsdQyi7OdIXiE5r310LaU=";
   };
 
@@ -33,7 +36,7 @@ python3Packages.buildPythonApplication rec {
       pytest-cov-stub
       pytest-timeout
     ]
-    ++ optional-dependencies.apprise;
+    ++ finalAttrs.passthru.optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
   #   NEWS file not available on the pypi source
@@ -48,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     borgbackup
     colorama
     jsonschema
@@ -98,4 +101,4 @@ python3Packages.buildPythonApplication rec {
       x123
     ];
   };
-}
+})

@@ -51,7 +51,6 @@ let
       VENDOR_URL = optionalString isNixos "https://nixos.org/";
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
       SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
-      SUPPORT_END = "2026-12-31";
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
       ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;

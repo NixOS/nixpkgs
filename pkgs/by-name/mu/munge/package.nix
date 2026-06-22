@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = ''
       An authentication service for creating and validating credentials
     '';
+    homepage = "https://github.com/dun/munge";
     license = [
       # MUNGE
       lib.licenses.gpl3Plus

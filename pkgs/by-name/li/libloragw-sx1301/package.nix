@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Driver/HAL to build a gateway using a concentrator board based on Semtech SX1301 multi-channel modem and SX1257/SX1255 RF transceivers";
+    homepage = "https://github.com/brocaar/lora_gateway";
     license = [
       lib.licenses.bsd3
       lib.licenses.mit

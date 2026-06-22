@@ -5,14 +5,17 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
-  nodejs_22,
+  pnpm_11,
+  nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.5.7",
+  version ? "2026.6.5",
 }:
+let
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
   version = version;
@@ -21,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ICkq6YfMJVvRC93sM+7/q2JI82wUhjaYAI3pRzmTHYc=";
+    hash = "sha256-hiYbIhE13XMFIeB0zmb6AHlfw8le6vpJgCqN81YWGsE=";
   };
 
-  pnpmDepsHash = "sha256-LXaRfZ0WY8VDpDc2zFr+Oel6AuYo6SiTrp37yokT1VU=";
+  pnpmDepsHash = "sha256-7RQJAVWqhauG8JrF8AD1VU1IJRM+SH05aHAfmFaXraU=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
+    inherit pnpm;
+    fetcherVersion = 4;
     hash = finalAttrs.pnpmDepsHash;
   };
 
@@ -37,8 +40,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
-    nodejs_22
+    pnpm
+    nodejs-slim_22
     makeWrapper
     installShellFiles
   ];
@@ -73,6 +76,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp --reflink=auto -r package.json dist node_modules $libdir/
     cp --reflink=auto -r docs skills patches extensions qa $libdir/
+    mkdir -p $libdir/src
+    cp --reflink=auto -r src/agents $libdir/src/
 
     rm -f $libdir/node_modules/.pnpm/node_modules/clawdbot \
       $libdir/node_modules/.pnpm/node_modules/moltbot \
@@ -83,7 +88,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Remove symlinks pointing back to the build sandbox
     find $libdir/dist/extensions -type l -lname "$NIX_BUILD_TOP/*" -delete
 
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
+    makeWrapper ${lib.getExe nodejs-slim_22} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
       --set NODE_PATH "$libdir/node_modules"
     ln -s $out/bin/openclaw $out/bin/moltbot
@@ -129,6 +134,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       chrisportela
       mkg20001
+      nikhilmaddirala
     ];
     platforms = with lib.platforms; linux ++ darwin;
     knownVulnerabilities = [

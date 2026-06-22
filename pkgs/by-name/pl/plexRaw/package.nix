@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       badmutex
       forkk
-      lnl7
       pjones
       thoughtpolice
       MayNiklas

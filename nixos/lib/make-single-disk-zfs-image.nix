@@ -250,7 +250,8 @@ let
         "virtiofs"
         "zfs"
       ];
-      kernel = modulesTree;
+      kernel = config.boot.kernelPackages.kernel;
+      kernelModules = modulesTree;
     }).runInLinuxVM
       (
         pkgs.runCommand name

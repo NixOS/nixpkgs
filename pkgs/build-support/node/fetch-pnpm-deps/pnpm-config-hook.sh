@@ -40,7 +40,7 @@ pnpmConfigHook() {
 
     echo "Found 'pnpm' with version '$pnpmVersion'"
 
-    fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
+    fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version")
 
     echo "Using fetcherVersion: $fetcherVersion"
 
@@ -52,11 +52,7 @@ pnpmConfigHook() {
     export npm_config_platform="@npmPlatform@"
     export pnpm_config_platform="@npmPlatform@"
 
-    if [[ $fetcherVersion -ge 3 ]]; then
-      tar --zstd -xf "$pnpmDeps/pnpm-store.tar.zst" -C "$STORE_PATH"
-    else
-      cp -Tr "$pnpmDeps" "$STORE_PATH"
-    fi
+    tar --zstd -xf "$pnpmDeps/pnpm-store.tar.zst" -C "$STORE_PATH"
 
     chmod -R +w "$STORE_PATH"
 
@@ -74,18 +70,14 @@ pnpmConfigHook() {
     # See: https://pnpm.io/settings#packageimportmethod
     pnpm config set package-import-method clone-or-copy
 
-    if [[ -n "$pnpmWorkspace" ]]; then
-        echo "'pnpmWorkspace' is deprecated, please migrate to 'pnpmWorkspaces'."
-        exit 2
-    fi
-
     echo "Installing dependencies"
-    if [[ -n "$pnpmWorkspaces" ]]; then
-        local IFS=" "
-        for ws in $pnpmWorkspaces; do
-            pnpmInstallFlags+=("--filter=$ws")
-        done
-    fi
+
+    local -a pnpmWorkspacesArray
+    concatTo pnpmWorkspacesArray pnpmWorkspaces
+
+    for ws in "${pnpmWorkspacesArray[@]}"; do
+        pnpmInstallFlags+=("--filter=$ws")
+    done
 
     runHook prePnpmInstall
 

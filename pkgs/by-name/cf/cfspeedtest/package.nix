@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # require internet access
   checkFlags = map (t: "--skip=${t}") [
     "speedtest::tests::test_fetch_metadata_integration"
+    "speedtest::tests::test_fetch_metadata_ipv6_timeout_error"
     "speedtest::tests::test_run_tests_does_not_retry_non_retryable_4xx"
     "speedtest::tests::test_run_tests_retries_429_and_records_success"
     "speedtest::tests::test_run_tests_retry_delay_resets_after_success"

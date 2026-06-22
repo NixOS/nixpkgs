@@ -769,11 +769,7 @@ fn handle_modified_unit(
                     };
 
                     if sockets.is_empty() {
-                        // For a templated instance (`foo@bar.service`), `base_name`
-                        // includes the trailing `@`; the implicitly-associated socket
-                        // is `foo.socket`, so strip it.
-                        let socket_base = base_name.strip_suffix('@').unwrap_or(base_name);
-                        sockets.push(format!("{socket_base}.socket"));
+                        sockets.push(format!("{base_name}.socket"));
                     }
 
                     for socket in &sockets {

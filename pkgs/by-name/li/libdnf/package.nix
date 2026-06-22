@@ -103,9 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [
-      rb2k
-      katexochen
-    ];
+    maintainers = with lib.maintainers; [ katexochen ];
   };
 })

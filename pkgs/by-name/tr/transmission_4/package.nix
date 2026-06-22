@@ -1,0 +1,260 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  openssl,
+  curl,
+  libevent,
+  inotify-tools,
+  systemd,
+  zlib,
+  rapidjson,
+  small,
+  libb64,
+  libutp_3_4,
+  libdeflate,
+  utf8cpp,
+  fast-float,
+  fmt,
+  libpsl,
+  miniupnpc,
+  dht,
+  libnatpmp,
+  # Build options
+  enableGTK4 ? false,
+  gtkmm4,
+  libpthread-stubs,
+  libayatana-appindicator,
+  wrapGAppsHook4,
+  enableQt5 ? false,
+  enableQt6 ? false,
+  enableMac ? false,
+  qt5,
+  qt6Packages,
+  nixosTests,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  enableDaemon ? true,
+  enableCli ? true,
+  installLib ? false,
+  apparmorRulesFromClosure,
+  ibtool,
+  actool,
+  coreutils,
+  makeWrapper,
+}:
+
+let
+  inherit (lib) cmakeBool optionals optionalString;
+
+  apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } (
+    [
+      curl
+      libdeflate
+      libevent
+      libnatpmp
+      libpsl
+      miniupnpc
+      openssl
+      zlib
+    ]
+    ++ optionals enableSystemd [ systemd ]
+    ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+  );
+
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "transmission";
+  version = "4.1.2";
+
+  src = fetchFromGitHub {
+    owner = "transmission";
+    repo = "transmission";
+    tag = finalAttrs.version;
+    hash = "sha256-FI/qH0VqhEjiN+31UCOiDLWkyucMKfH4i0bYW7lceQk=";
+    fetchSubmodules = true;
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    ./0001-Skip-bundle-fixup.patch
+  ];
+
+  outputs = [
+    "out"
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    "apparmor"
+  ];
+
+  # Remove once https://github.com/NixOS/nixpkgs/pull/508307 lands
+  # Stop clang trying to write in $HOME
+  env.CLANG_MODULE_CACHE_PATH = "/tmp/clang_module_cache";
+
+  cmakeFlags = [
+    (cmakeBool "ENABLE_CLI" enableCli)
+    (cmakeBool "ENABLE_DAEMON" enableDaemon)
+    (cmakeBool "ENABLE_GTK" enableGTK4)
+    (cmakeBool "ENABLE_MAC" enableMac)
+    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "INSTALL_LIB" installLib)
+    (cmakeBool "RUN_CLANG_TIDY" false)
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    # we don't have a compatible-enough signing tool right now
+    "-DCODESIGN_EXECUTABLE=${lib.getExe' coreutils "true"}"
+    "-DACTOOL_EXECUTABLE=${lib.getExe actool}"
+  ];
+
+  postPatch = ''
+    # Clean third-party libraries to ensure system ones are used.
+    # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
+    pushd third-party
+    for f in *; do
+        if [[ ! $f =~ googletest|wildmat|wide-integer|jsonsl|madler-crcany ]]; then
+            rm -r "$f"
+        fi
+    done
+    popd
+    rm \
+      cmake/FindFastFloat.cmake \
+      cmake/FindFmt.cmake \
+      cmake/FindRapidJSON.cmake \
+      cmake/FindSmall.cmake \
+      cmake/FindUtfCpp.cmake
+    # Upstream uses different config file name.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+  ''
+  + optionalString (stdenv.hostPlatform.isDarwin && (enableQt5 || enableQt6)) ''
+    substituteInPlace qt/CMakeLists.txt \
+      --replace-fail \
+        'transmission::qt_impl)' \
+        'transmission::qt_impl "-framework AppKit" "-framework CoreGraphics")'
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    python3
+  ]
+  ++ optionals enableGTK4 [ wrapGAppsHook4 ]
+  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
+  ++ optionals enableMac [
+    ibtool
+    actool
+    makeWrapper
+  ];
+
+  buildInputs = [
+    curl
+    dht
+    fast-float
+    fmt
+    libb64
+    libdeflate
+    libevent
+    libnatpmp
+    libpsl
+    libutp_3_4
+    miniupnpc
+    openssl
+    rapidjson
+    small
+    utf8cpp
+    zlib
+  ]
+  ++ optionals enableQt5 (
+    with qt5;
+    [
+      qttools
+      qtbase
+    ]
+  )
+  ++ optionals enableQt6 (
+    with qt6Packages;
+    [
+      qttools
+      qtbase
+      qtsvg
+    ]
+  )
+  ++ optionals enableGTK4 [
+    gtkmm4
+    libpthread-stubs
+    libayatana-appindicator
+  ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
+
+  postInstall =
+    optionalString stdenv.hostPlatform.isLinux ''
+      mkdir $apparmor
+      cat >$apparmor/bin.transmission-daemon <<EOF
+      abi <abi/4.0>,
+      include <tunables/global>
+      profile $out/bin/transmission-daemon {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${apparmorRules}"
+        @{PROC}/sys/kernel/random/uuid r,
+        @{PROC}/sys/vm/overcommit_memory r,
+        @{PROC}/@{pid}/environ r,
+        @{PROC}/@{pid}/mounts r,
+        /tmp/tr_session_id_* rwk,
+
+        $out/share/transmission/public_html/** r,
+
+        include if exists <local/bin.transmission-daemon>
+      }
+      EOF
+      install -Dm0444 -t $out/share/icons ../icons/hicolor_apps_scalable_transmission.svg
+    ''
+    + optionalString enableMac ''
+      makeWrapper $out/Applications/Transmission.app/Contents/MacOS/Transmission $out/bin/transmission-mac
+    '';
+
+  passthru.tests = {
+    apparmor = nixosTests.transmission_4; # starts the service with apparmor enabled
+    smoke-test = nixosTests.bittorrent;
+  };
+
+  meta = {
+    description = "Fast, easy and free BitTorrent client";
+    mainProgram =
+      if (enableQt5 || enableQt6) then
+        "transmission-qt"
+      else if enableGTK4 then
+        "transmission-gtk"
+      else if enableMac then
+        "transmission-mac"
+      else
+        "transmission-cli";
+    longDescription = ''
+      Transmission is a BitTorrent client which features a simple interface
+      on top of a cross-platform back-end.
+      Feature spotlight:
+        * Uses fewer resources than other clients
+        * Native Mac, GTK and Qt GUI clients
+        * Daemon ideal for servers, embedded systems, and headless use
+        * All these can be remote controlled by Web and Terminal clients
+        * Bluetack (PeerGuardian) blocklists with automatic updates
+        * Full encryption, DHT, and PEX support
+    '';
+    homepage = "https://www.transmissionbt.com/";
+    maintainers = with lib.maintainers; [ nyanloutre ];
+    license = with lib.licenses; [
+      gpl2Plus
+      mit
+    ];
+    platforms = if enableMac then lib.platforms.darwin else lib.platforms.unix;
+  };
+})

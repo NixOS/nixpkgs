@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   version = "0.0pre20160915";
   src = fetchFromGitHub {
     owner = "mxgmn";
-    repo = "SynTex";
+    repo = "TextureSynthesis";
     rev = "f499a7c8112be4a63eb44843ba72957c2c9a04db";
     sha256 = "13fz6frlxsdz8qq94fsvim27cd5klmdsax5109yxm9175vgvpa0a";
   };
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ mono ];
   meta = {
     description = "Texture synthesis from examples";
+    homepage = "https://github.com/mxgmn/TextureSynthesis";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

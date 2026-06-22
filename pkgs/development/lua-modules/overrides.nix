@@ -591,8 +591,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
-        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/mysql";
       };
     };
     buildInputs = old.buildInputs ++ [
@@ -1096,10 +1096,6 @@ in
     # TODO: figure out darwin failure
     doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
-    nvimSkipModules = [
-      "bootstrap" # tries to install luarocks from network
-    ];
-
     bustedFlags = [
       "--run=offline"
     ];
@@ -1265,6 +1261,13 @@ in
     ];
   });
 
+  tree-sitter-kulala_http = prev.tree-sitter-kulala_http.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = lua.luaversion != "5.1";
@@ -1306,6 +1309,19 @@ in
       ' lutf8lib.c
     '';
   };
+
+  vicious = prev.vicious.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [
+        makefu
+        mic92
+        mrcjkb
+        McSinyx
+      ];
+      platforms = lib.platforms.linux;
+    };
+  });
 
   vstruct = prev.vstruct.overrideAttrs (old: {
     meta = (old.meta or { }) // {

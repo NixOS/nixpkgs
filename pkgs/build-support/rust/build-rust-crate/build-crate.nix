@@ -9,6 +9,7 @@
 
 {
   crateName,
+  version,
   dependencies,
   crateFeatures,
   crateRenames,
@@ -25,6 +26,7 @@
   buildTests,
   codegenUnits,
   capLints,
+  useClippy,
 }:
 
 let
@@ -32,6 +34,20 @@ let
     (if release then "-C opt-level=3" else "-C debuginfo=2")
     "-C codegen-units=${toString codegenUnits}"
     "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    # Map the unpacked source root to a stable, crate-identifying path.
+    # Sources from fetchCrate unpack to $NIX_BUILD_TOP/<crateName>-<version>,
+    # so the prefix above already yields /<crateName>-<version>/src/... and
+    # this remap is a no-op for them. Sources supplied via a custom `src`
+    # (lib.fileset.toSource, lib.cleanSource, a flake's `self`) all unpack to
+    # a fixed basename like `source`, so without this every such crate
+    # collapses to /source/src/... — losing crate identity in panic
+    # backtraces, file!() expansions, debuginfo, and coverage maps. rustc
+    # applies remaps last-match-wins, so this more-specific prefix wins
+    # for everything under the source root (including OUT_DIR, which
+    # configure-crate.nix places at $sourceRoot/target/build/); the
+    # broader $NIX_BUILD_TOP remap above remains as a fallback for any
+    # path that happens to fall outside $sourceRoot.
+    "--remap-path-prefix=$NIX_BUILD_TOP/$sourceRoot=/${crateName}-${version}"
     # When the rust-src component is present (common with rust-overlay
     # toolchains), rustc unvirtualises libstd source paths. Panic
     # locations from monomorphised generic std code then embed the
@@ -94,6 +110,7 @@ in
   runHook preBuild
 
   # configure & source common build functions
+  RUSTC_DRIVER="${if useClippy then "clippy-driver" else "rustc"}"
   LIB_RUSTC_OPTS="${libRustcOpts}"
   BIN_RUSTC_OPTS="${binRustcOpts}"
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
@@ -162,6 +179,8 @@ in
     fi
   ''}
 
+  declare -A BINS
+
   ${lib.optionalString (lib.length crateBin > 0) (
     lib.concatMapStringsSep "\n" (
       bin:
@@ -188,7 +207,7 @@ in
                 BIN_PATH='${bin.path}'
               ''
           }
-            ${build_bin} "$BIN_NAME" "$BIN_PATH"
+            BINS["$BIN_NAME"]="$BIN_PATH"
         ''
       else
         ''
@@ -222,13 +241,39 @@ in
   ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
     if [[ -e src/main.rs ]]; then
       mkdir -p target/bin
-      ${build_bin} ${crateName} src/main.rs
+      BINS["${crateName}"]="src/main.rs"
     fi
     for i in src/bin/*.rs; do #*/
       mkdir -p target/bin
-      ${build_bin} "$(basename $i .rs)" "$i"
+      BINS["$(basename $i .rs)"]="$i"
     done
   ''}
+
+  if [[ ''${#BINS[@]} -gt 0 ]]; then
+    export BIN_RUSTC_OPTS LINK EXTRA_LINK_ARGS EXTRA_LINK_ARGS_BINS EXTRA_LIB \
+           BUILD_OUT_DIR EXTRA_BUILD EXTRA_FEATURES EXTRA_RUSTC_FLAGS CAP_LINTS
+    export -f build_bin build_bin_test echo_build_heading noisily echo_colored echo_error
+    # Generate a Makefile and pipe it to make, which handles parallel execution
+    # and the jobserver protocol natively so rustc invocations share a token pool.
+    # Targets use synthetic names (b0, b1, …) and are declared .PHONY so that a
+    # file/dir in the source tree matching a binary name cannot cause make to
+    # skip the build, and so that binary names never collide with make syntax
+    # or the `all` target.
+    {
+      printf 'SHELL = %s\n' "$BASH"
+      _i=0
+      for _n in "''${!BINS[@]}"; do
+        # Escape `$` for make; other metachars are confined to the quoted
+        # recipe string where only `$` is special to make.
+        _en=''${_n//\$/\$\$}
+        _ep=''${BINS[$_n]//\$/\$\$}
+        printf '.PHONY: b%d\nall: b%d\nb%d:\n\t${build_bin} "%s" "%s"\n' \
+          "$_i" "$_i" "$_i" "$_en" "$_ep"
+        _i=$((_i + 1))
+      done
+    } | make --no-print-directory -j"''${NIX_BUILD_CORES:-1}" -f -
+  fi
+
   # Remove object files to avoid "wrong ELF type"
   find target -type f -name "*.o" -print0 | xargs -0 rm -f
   runHook postBuild

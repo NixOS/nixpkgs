@@ -13,14 +13,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pricehist";
-  version = "1.4.14";
+  version = "1.4.16";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
     tag = finalAttrs.version;
-    hash = "sha256-BnyoSYVjs2odnOzSpvgMF860PDkz7tPNnM0s3Fep5G0=";
+    hash = "sha256-klNelb25yfToGUHyFGxNCvCwLhgIeISW46WBWjBZPVA=";
   };
 
   pythonRelaxDeps = [ "lxml" ];

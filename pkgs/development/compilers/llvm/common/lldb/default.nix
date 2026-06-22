@@ -213,6 +213,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man pages for LLDB ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

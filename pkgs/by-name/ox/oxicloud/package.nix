@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.5.6";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+jtFA6SWHcTTEjc+am2oFqJ1cC2bmKb5oppchpAN0SE=";
+    hash = "sha256-7alpcK0KYg+ZusK2K7FPdQMLdPrawvL5wsfB6NpSXQw=";
   };
 
-  cargoHash = "sha256-PxygWzlOhpAKGnP2dT4tDtAJ6AJ2duRcwWZTjHks1lg=";
+  cargoHash = "sha256-4gxpTCsS1W2CmRzdnRcsuRe+kr+TgG4hjkzdgihop5I=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -28,6 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
 
   cargoBuildFlags = [ "--bin=oxicloud" ];
+
+  postPatch = ''
+    # Upstream pins `target-cpu=native`, making the binary non-portable
+    # (breaks the binary cache). Build for the generic baseline instead.
+    rm -f .cargo/config.toml
+  '';
 
   postInstall = ''
     mkdir -p $out/share/oxicloud

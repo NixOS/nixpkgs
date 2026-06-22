@@ -54,7 +54,7 @@ buildPythonPackage {
   ];
 
   buildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart # cuda_runtime.h
     libcufft
     libcurand

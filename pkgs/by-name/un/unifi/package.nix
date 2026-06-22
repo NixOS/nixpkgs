@@ -10,12 +10,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "10.2.105";
+  version = "10.4.57";
 
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
-    hash = "sha256-MBTFxNwrIbx6UKZYCcZ+BjYjSlfdxL60Ogei/ba4O+U=";
+    hash = "sha256-/DeM+M0r7D0zS/e3Lqv80YYeX65nucFnNUcRMhBbIHI=";
   };
 
   nativeBuildInputs = [

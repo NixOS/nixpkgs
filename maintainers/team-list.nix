@@ -69,7 +69,6 @@ with lib.maintainers;
   bazel = {
     members = [
       cbley
-      olebedev
       groodt
       boltzmannrain
     ];
@@ -684,6 +683,10 @@ with lib.maintainers;
 
   radicle = {
     github = "radicle";
+  };
+
+  redis = {
+    github = "redis";
   };
 
   rocm = {
