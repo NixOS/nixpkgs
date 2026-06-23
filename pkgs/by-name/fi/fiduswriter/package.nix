@@ -2,6 +2,11 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  gettext,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_11,
+  fetchPnpmDeps,
   makeWrapper,
 }:
 
@@ -18,13 +23,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-NkFJehSgwYwYUZaznZW63KEXR1wTf+Hpa+8ZM71aZ84=";
   };
 
+  # pnpmDeps = fetchPnpmDeps {
+  #   inherit (finalAttrs) pname version src;
+  #   pnpm = pnpm_11;
+  #   fetcherVersion = 4;
+  #   hash = "";
+  # };
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=82.0.1" "setuptools"
   '';
 
   nativeBuildInputs = [
+    gettext
     makeWrapper
+    nodejs
+    # pnpmConfigHook
+    # pnpm_11
   ];
 
   build-system = with python3Packages; [
@@ -112,7 +128,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   preBuild = ''
-    python fiduswriter/manage.py collectstatic
+    pushd fiduswriter || true
+    cp configuration-default.py configuration.py
+    python manage.py setup # migrations, npm install, transpilation
+    python manage.py collectstatic
+    popd
   '';
 
   env.FIDUS_OUT_DIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
