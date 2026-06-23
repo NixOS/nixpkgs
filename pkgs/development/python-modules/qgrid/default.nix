@@ -1,38 +1,51 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   ipywidgets,
   looseversion,
   notebook,
   pandas,
+
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qgrid";
   version = "1.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # Using the Pypi archive to avoid building the node modules from source
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/or1tQgzCE3AtqJlzRrHuDfAPA+FIRUBY1YNzneNcRw=";
   };
 
-  patches = [
-    # Fixes compatibility of qgrid with ipywidgets >= 8.0.0
-    # See https://github.com/quantopian/qgrid/pull/331
-    (fetchpatch {
-      url = "https://github.com/quantopian/qgrid/pull/331/commits/8cc50d5117d4208a9dd672418021c59898e2d1b2.patch";
-      hash = "sha256-+NLz4yBUGUXKyukPVE4PehenPzjnfljR5RAX7CEtpV4=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace qgrid/grid.py \
-      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+      --replace-fail \
+        "from distutils.version import LooseVersion" \
+        "from looseversion import LooseVersion"
+  ''
+  # Fixes compatibility of qgrid with ipywidgets >= 8.0.0
+  # See https://github.com/quantopian/qgrid/pull/331
+  + ''
+    substituteInPlace qgrid/grid.py \
+      --replace-fail \
+        "@widgets.register()" \
+        "@widgets.register"
   '';
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     ipywidgets
@@ -58,7 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
     homepage = "https://github.com/quantopian/qgrid";
+    changelog = "https://github.com/quantopian/qgrid/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
