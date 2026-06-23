@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   python3Packages,
   fetchFromGitHub,
   go-md2man,
@@ -83,6 +84,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   passthru = {
     tests = {
+      nocontainer = callPackage ./tests/nocontainer.nix {
+        ramalama = finalAttrs.finalPackage;
+      };
+
       withoutPodman = ramalama.override {
         withPodman = false;
       };
