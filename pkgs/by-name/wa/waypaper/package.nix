@@ -16,8 +16,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    rev = "17f60be4c6abc5ab9c5d4837d930015661ccdd3d";
-    hash = "sha256-HkWsffcK/FjXeyzp948xhvMbrdrBcGwkuTI9O16OWbo=";
+    tag = finalAttrs.version;
+    hash = "sha256-BTbpl7h/VG+yD7Uo+088j3CLwhhYacABlSyKajI+o3U=";
   };
 
   nativeBuildInputs = [
