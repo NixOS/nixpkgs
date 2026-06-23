@@ -12,6 +12,7 @@
   tqdm,
   flaky,
   llvmPackages,
+  openssl,
   pandas,
   pytest-cov-stub,
   pytestCheckHook,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
+    openssl
     pytest-cov-stub
     pytestCheckHook
     safetensors
