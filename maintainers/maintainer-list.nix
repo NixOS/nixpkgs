@@ -18105,6 +18105,12 @@
     githubId = 14096356;
     name = "Michael McLeod";
   };
+  mikeee = {
+    email = "hey@mike.ee";
+    github = "mikeee";
+    githubId = 19765254;
+    name = "Mike";
+  };
   mikefaille = {
     email = "michael@faille.io";
     github = "mikefaille";
