@@ -42,7 +42,8 @@ When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
 instance, if you installed from a 26.05 ISO, you will be subscribed to
 the `nixos-26.05` channel. To see which NixOS channel you're subscribed
-to, run the following as root:
+to, run the following as root in a login shell (see the note below on
+why the shell matters):
 
 ```ShellSession
 # nix-channel --list | grep nixos
@@ -84,9 +85,18 @@ by running
 which is equivalent to the more verbose `nix-channel --update nixos; nixos-rebuild switch`.
 
 ::: {.note}
-Channels are set per user. This means that running `nix-channel --add`
-as a non root user (or without sudo) will not affect
-configuration in `/etc/nixos/configuration.nix`
+Channels are set per user: `nix-channel` reads and writes its channel
+list from `$HOME/.nix-channels`, so it always acts on the channels of
+whoever owns the current `$HOME`. This has two consequences:
+
+- Running `nix-channel --add` as a non-root user (or without `sudo`)
+  will not affect the system channel used by
+  `/etc/nixos/configuration.nix`.
+- Becoming root with a *non-login* shell (plain `sudo`/`su`) keeps your
+  own `$HOME`, so commands like `nix-channel --list` operate on your
+  user's channels — typically printing nothing — instead of root's. Use
+  a login shell (`sudo -i` or `su -`) so that `$HOME` is `/root` and the
+  system channels are used.
 :::
 
 ::: {.warning}
