@@ -1,4 +1,8 @@
-{ fetchpatch, lib }:
+{
+  fetchpatch,
+  lib,
+  stdenv,
+}:
 
 {
 
@@ -1758,6 +1762,8 @@
     url = "github:nvim-neorg/tree-sitter-norg";
     hash = "sha256-z3h5qMuNKnpQgV62xZ02F5vWEq4VEnm5lxwEnIFu+Rw=";
     meta = {
+      # Uses a C++ external scanner, unsupported by the WASM grammar build.
+      broken = stdenv.hostPlatform.isWasi;
       license = lib.licenses.mit;
     };
   };

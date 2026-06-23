@@ -61,6 +61,7 @@ let
       fetchFromSourcehut
       fetchFromCodeberg
       fetchpatch
+      stdenv
       ;
   };
 
