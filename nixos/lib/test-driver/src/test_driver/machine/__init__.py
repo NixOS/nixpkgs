@@ -1044,12 +1044,16 @@ class QemuMachine(BaseMachine):
             assert self.shell
 
             tic = time.time()
-            # TODO: do we want to bail after a set number of attempts?
-            while not shell_ready(timeout_secs=30):
+
+            for _ in range(10):
+                if shell_ready(timeout_secs=30):
+                    break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
                     "  To debug, enter the VM and run 'systemctl status backdoor.service'."
                 )
+            else:
+                raise RuntimeError("Shell did not start in time")
 
             while True:
                 chunk = self.shell.recv(1024)
