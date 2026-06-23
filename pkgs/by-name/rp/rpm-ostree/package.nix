@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpm-ostree";
-  version = "2026.1";
+  version = "2026.2";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/coreos/rpm-ostree/releases/download/v${finalAttrs.version}/rpm-ostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/dgF4jN4Sq7pRFmSMWXmG21y0PlkPPOMf8QhP8CB+yA=";
+    hash = "sha256-PxL+kkFg3+int05IdqTgbaH1cL6OTAbZjKHOW4xCj/w=";
   };
 
   nativeBuildInputs = [
