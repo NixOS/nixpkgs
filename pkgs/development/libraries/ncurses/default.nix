@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false; # some aren't supported
   separateDebugInfo = false;
 
+  patches = lib.optionals stdenv.hostPlatform.isMlibc [
+    ./0001-Add-mlibc-support.patch
+  ];
+
   postPatch = ''
     sed -i '1i #include <stdbool.h>' include/curses.h.in
   '';
