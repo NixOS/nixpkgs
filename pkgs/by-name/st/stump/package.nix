@@ -16,6 +16,7 @@
   cacert,
   pkg-config,
   makeWrapper,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
@@ -101,7 +102,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set-default API_VERSION v1
   '';
 
-  passthru.tests = nixosTests.stump;
+  passthru = {
+    tests = nixosTests.stump;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://stumpapp.dev/";
