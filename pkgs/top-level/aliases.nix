@@ -1794,6 +1794,7 @@ mapAliases {
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
   pipecontrol = throw "'pipecontrol' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
+  pkgsx86_64Darwin = throw "pkgsx86_64Darwin has been removed, as support for the platform has been dropped; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11"; # Added 2026-06-21
   plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
