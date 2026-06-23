@@ -104,61 +104,66 @@ let
           };
       };
 
-      testScript = ''
-        start_all()
+      testScript =
+        { nodes, ... }:
+        let
+          mysqlClient = lib.getExe nodes.${name}.services.mysql.package.client;
+        in
+        ''
+          start_all()
 
-        machine = ${name}
-        machine.wait_for_unit("mysql")
-        machine.succeed(
-            "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser mysql -u testuser"
-        )
-        machine.succeed(
-            "echo 'use testdb; insert into tests values (42);' | sudo -u testuser mysql -u testuser"
-        )
-        # Ensure testuser2 is not able to insert into testdb as mysql testuser2
-        machine.fail(
-            "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser2"
-        )
-        # Ensure testuser2 is not able to authenticate as mysql testuser
-        machine.fail(
-            "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 mysql -u testuser"
-        )
-        machine.succeed(
-            "echo 'use testdb; select test_id from tests;' | sudo -u testuser mysql -u testuser -N | grep 42"
-        )
+          machine = ${name}
+          machine.wait_for_unit("mysql")
+          machine.succeed(
+              "echo 'use testdb; create table tests (test_id INT, PRIMARY KEY (test_id));' | sudo -u testuser ${mysqlClient} -u testuser"
+          )
+          machine.succeed(
+              "echo 'use testdb; insert into tests values (42);' | sudo -u testuser ${mysqlClient} -u testuser"
+          )
+          # Ensure testuser2 is not able to insert into testdb as mysql testuser2
+          machine.fail(
+              "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 ${mysqlClient} -u testuser2"
+          )
+          # Ensure testuser2 is not able to authenticate as mysql testuser
+          machine.fail(
+              "echo 'use testdb; insert into tests values (23);' | sudo -u testuser2 ${mysqlClient} -u testuser"
+          )
+          machine.succeed(
+              "echo 'use testdb; select test_id from tests;' | sudo -u testuser ${mysqlClient} -u testuser -N | grep 42"
+          )
 
-        ${lib.optionalString hasMroonga ''
-          # Check if Mroonga plugin works
-          machine.succeed(
-              "echo 'use testdb; create table mroongadb (test_id INT, PRIMARY KEY (test_id)) ENGINE = Mroonga;' | sudo -u testuser mysql -u testuser"
-          )
-          machine.succeed(
-              "echo 'use testdb; insert into mroongadb values (25);' | sudo -u testuser mysql -u testuser"
-          )
-          machine.succeed(
-              "echo 'use testdb; select test_id from mroongadb;' | sudo -u testuser mysql -u testuser -N | grep 25"
-          )
-          machine.succeed(
-              "echo 'use testdb; drop table mroongadb;' | sudo -u testuser mysql -u testuser"
-          )
-        ''}
+          ${lib.optionalString hasMroonga ''
+            # Check if Mroonga plugin works
+            machine.succeed(
+                "echo 'use testdb; create table mroongadb (test_id INT, PRIMARY KEY (test_id)) ENGINE = Mroonga;' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+            machine.succeed(
+                "echo 'use testdb; insert into mroongadb values (25);' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+            machine.succeed(
+                "echo 'use testdb; select test_id from mroongadb;' | sudo -u testuser ${mysqlClient} -u testuser -N | grep 25"
+            )
+            machine.succeed(
+                "echo 'use testdb; drop table mroongadb;' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+          ''}
 
-        ${lib.optionalString hasRocksDB ''
-          # Check if RocksDB plugin works
-          machine.succeed(
-              "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser mysql -u testuser"
-          )
-          machine.succeed(
-              "echo 'use testdb; insert into rocksdb values (28);' | sudo -u testuser mysql -u testuser"
-          )
-          machine.succeed(
-              "echo 'use testdb; select test_id from rocksdb;' | sudo -u testuser mysql -u testuser -N | grep 28"
-          )
-          machine.succeed(
-              "echo 'use testdb; drop table rocksdb;' | sudo -u testuser mysql -u testuser"
-          )
-        ''}
-      '';
+          ${lib.optionalString hasRocksDB ''
+            # Check if RocksDB plugin works
+            machine.succeed(
+                "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+            machine.succeed(
+                "echo 'use testdb; insert into rocksdb values (28);' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+            machine.succeed(
+                "echo 'use testdb; select test_id from rocksdb;' | sudo -u testuser ${mysqlClient} -u testuser -N | grep 28"
+            )
+            machine.succeed(
+                "echo 'use testdb; drop table rocksdb;' | sudo -u testuser ${mysqlClient} -u testuser"
+            )
+          ''}
+        '';
     };
 in
 lib.mapAttrs (
