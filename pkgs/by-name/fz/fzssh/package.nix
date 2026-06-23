@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fzssh";
-  version = "1.2.1";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
     # See https://trac.filezilla-project.org/ticket/13186
     url = "https://sources.archlinux.org/other/packages/fzssh/fzssh-${finalAttrs.version}.tar.xz";
-    hash = "sha256-oFj1meahLF00t0hu4Ra4zvfG5sq/6xchd5xDjGHx/h0=";
+    hash = "sha256-hkWCsgNyZYi1oW2GFB/5Wrd9I5l2L+u+H97ZLk8EeZY=";
   };
 
   strictDeps = true;
