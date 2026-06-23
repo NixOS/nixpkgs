@@ -9821,6 +9821,12 @@
     githubId = 67984144;
     name = "Gerhard Schwanzer";
   };
+  germanphoneguy = {
+    email = "germanTECH@web.de";
+    github = "germanphoneguy";
+    githubId = 249116663;
+    name = "germanphoneguy";
+  };
   gernotfeichter = {
     email = "gernotfeichter@gmail.com";
     github = "gernotfeichter";
