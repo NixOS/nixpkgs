@@ -85,6 +85,8 @@ self: super: with self; {
 
   adbc-driver-manager = callPackage ../development/python-modules/adbc-driver-manager { };
 
+  adbc-driver-sqlite = callPackage ../development/python-modules/adbc-driver-sqlite { };
+
   adblock = callPackage ../development/python-modules/adblock { };
 
   adbutils = callPackage ../development/python-modules/adbutils { };
