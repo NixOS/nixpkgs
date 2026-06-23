@@ -554,9 +554,7 @@ let
       ];
       haskell-language-server = released;
       hoogle = released;
-      hlint = lib.subtractLists [
-        compilerNames.ghc9125
-      ] released;
+      hlint = released;
       hpack = released;
       hsdns = released;
       iserv-proxy = released;
@@ -567,12 +565,8 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9125
-      ] released;
-      ghc-tags = lib.subtractLists [
-        compilerNames.ghc9125
-      ] released;
+      ghc-source-gen = released;
+      ghc-tags = released;
       hashable = released;
       primitive = released;
       scrod = [
@@ -583,9 +577,7 @@ let
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
-      weeder = lib.subtractLists [
-        compilerNames.ghc9125
-      ] released;
+      weeder = released;
 
       # MicroHs core packages
       ghc-compat = [
