@@ -67,7 +67,7 @@ let
     ghc967
     ghc984
     ghc9103
-    ghc9123
+    ghc9125
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -529,7 +529,7 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
@@ -555,7 +555,7 @@ let
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
       hpack = released;
       hsdns = released;
@@ -568,10 +568,10 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
       hashable = released;
       primitive = released;
@@ -584,7 +584,7 @@ let
         compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
 
       # MicroHs core packages
