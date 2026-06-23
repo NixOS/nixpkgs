@@ -7,35 +7,47 @@
 
 python3Packages.buildPythonApplication rec {
   __structuredAttrs = true;
+  # official PyPI package name is 'graphifyy', here it is renamed to be in sync with CLI binary name
   pname = "graphify";
-  version = "0.4.23";
+  version = "0.8.46";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "safishamsi";
     repo = "graphify";
     tag = "v${version}";
-    hash = "sha256-QEzB1tFBqGhpmI7oudMRC1Ia0CDcm+GYt6AgxMA5zDo=";
+    hash = "sha256-L+bno9hKc4cRbAgfgI0LltiYgQcnArV5h7eWCSmqnek=";
   };
 
   build-system = [
     python3.pkgs.setuptools
   ];
 
+  # existing grammar differ from github:amaanq/tree-sitter-groovy
+  pythonRemoveDeps = [ "tree-sitter-groovy" ];
   dependencies =
     with python3.pkgs;
     [
+      # keep-sorted start
       networkx
+      numpy
+      rapidfuzz
       tree-sitter
+      # keep-sorted end
     ]
     ++ (with python3.pkgs.tree-sitter-grammars; [
+      # keep-sorted start
+      tree-sitter-bash
       tree-sitter-c
       tree-sitter-c-sharp
       tree-sitter-cpp
       tree-sitter-elixir
+      tree-sitter-fortran
       tree-sitter-go
+      # tree-sitter-groovy
       tree-sitter-java
       tree-sitter-javascript
+      tree-sitter-json
       tree-sitter-julia
       tree-sitter-kotlin
       tree-sitter-lua
@@ -50,6 +62,7 @@ python3Packages.buildPythonApplication rec {
       tree-sitter-typescript
       tree-sitter-verilog
       tree-sitter-zig
+      # keep-sorted end
     ]);
 
   optional-dependencies = with python3.pkgs; {
