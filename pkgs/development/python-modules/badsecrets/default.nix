@@ -1,49 +1,48 @@
 {
   lib,
+  blasthttp,
   buildPythonPackage,
   colorama,
   django,
   fetchFromGitHub,
   flask-unsign,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pycryptodome,
   pyjwt,
   requests,
-  viewstate,
+  yara-python,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "badsecrets";
-  version = "0.13.47";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "badsecrets";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Yvd9AGbVDOfXep8y+XzwYP2EpTvy+rwyz5hRIe7v4oc=";
+    tag = finalAttrs.version;
+    hash = "sha256-fhRQvVb+JUP1DyTMAV7leIAKD/L4kRhGFYtD78cYABI=";
   };
 
   pythonRelaxDeps = [
     "django"
-    "viewstate"
+    "pyjwt"
   ];
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    blasthttp
     colorama
     django
     flask-unsign
     pycryptodome
     pyjwt
     requests
-    viewstate
-  ];
+    yara-python
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
   pythonImportsCheck = [ "badsecrets" ];
 
