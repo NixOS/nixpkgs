@@ -25,6 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # src/Makefile hardcodes `CFLAGS = -mmacosx-version-min=10.5` on Darwin.
+  # For deployment target < 10.6, clang's link spec wants `libgcc_s.1.dylib`
+  # as the C++ unwinder; that lib isn't present in nixpkgs's apple-sdk
+  # (modern macOS uses libSystem's unwinder, picked up automatically for
+  # target >= 10.6). Bump to 10.6 — still about as backwards-compatible as
+  # 10.5 in practice (10.6 shipped 2009) but avoids the missing libgcc_s.1.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/Makefile \
+      --replace-fail '-mmacosx-version-min=10.5' '-mmacosx-version-min=10.6'
+  '';
+
   configurePhase = false;
   installPhase = ''
     mkdir -p $out/bin
