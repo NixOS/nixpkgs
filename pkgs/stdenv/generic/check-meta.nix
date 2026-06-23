@@ -70,6 +70,8 @@ let
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
 
+  allowSrcEvalForDrvMeta = config.allowSrcEvalForDrvMeta;
+
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
       true
@@ -632,6 +634,7 @@ let
                 }
               ) possibleCPEPartsFuns;
 
+          evaluateSrc = allowSrcEvalForDrvMeta && !isMarkedBroken attrs && !hasUnsupportedPlatform attrs;
           purlParts = attrs.meta.identifiers.purlParts or { };
           purlPartsFormatted =
             if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
@@ -639,14 +642,35 @@ let
           # search for a PURL in the following order:
           purl =
             # 1) locally set through API
-            if purlPartsFormatted != null then purlPartsFormatted else null;
+            if purlPartsFormatted != null then
+              purlPartsFormatted
+            else if !evaluateSrc then
+              null
+            else
+              # 2) locally overwritten through meta.identifiers.purl
+              (attrs.src.meta.identifiers.purl or null);
 
           # search for a PURL in the following order:
           purls =
             # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
             attrs.meta.identifiers.purls or (
               # 2) locally set through API
-              if purlPartsFormatted != null then [ purlPartsFormatted ] else [ ]
+              if purlPartsFormatted != null then
+                [ purlPartsFormatted ]
+              else if !evaluateSrc then
+                [ ]
+              else
+                # 3) src.meta.PURL
+                (attrs.src.meta.identifiers.purls or (
+                  # 4) srcs.meta.PURL
+                  if !attrs ? srcs then
+                    [ ]
+                  else if isList attrs.srcs then
+                    concatMap (drv: drv.meta.identifiers.purls or [ ]) attrs.srcs
+                  else
+                    attrs.srcs.meta.identifiers.purls or [ ]
+                )
+                )
             );
 
           v1 = {
