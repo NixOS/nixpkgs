@@ -16,6 +16,7 @@
   pyarrow,
   pyspark,
   pytest-env,
+  pytest-xdist,
   pytestCheckHook,
   rich,
   sqlframe,
@@ -76,6 +77,7 @@ buildPythonPackage rec {
     duckdb
     hypothesis
     pytest-env
+    pytest-xdist
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
