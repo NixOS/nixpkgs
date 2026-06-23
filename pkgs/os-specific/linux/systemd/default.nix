@@ -778,7 +778,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          systemd-repart-factory-reset
+          # systemd-repart-factory-reset # broken upstream
           ;
       }
       // {
