@@ -77,12 +77,12 @@
 }:
 
 let
-  version = "0.27.2";
+  version = "0.28.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-guNepG8h8Pl8SaJqImS5UsWNFmPyrWidsXh+q9Es73I=";
+    hash = "sha256-YdM/LrrWQFup/1Fkv49//eOFfYFCRgpuuH7+DZIOT1M=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
