@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "itg3encore";
-  version = "0-unstable-2026-06-13";
+  version = "0-unstable-2026-06-22";
 
   src = fetchFromGitHub {
     owner = "DarkBahamut162";
     repo = "itg3encore";
-    rev = "409dc62c7c7a6c3ce3a713e84c81d95995eb20a6";
-    hash = "sha256-sJLkHRngmA9dPZoQPpUdOAz1nLCHTTOPG4i/SP6rl9A=";
+    rev = "c669a04ce6487a32263a2f617efa26bfd5eaf764";
+    hash = "sha256-CbqIzHcHmxICoi23z032Ti8AZyB5Ur/SPsolr1VjBhY=";
   };
 
   postInstall = ''
