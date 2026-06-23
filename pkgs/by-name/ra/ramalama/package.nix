@@ -15,6 +15,11 @@
   ramalama,
 }:
 
+let
+  # Upstream's MlxPlugin rejects hosts other than Apple-Silicon macOS:
+  # https://github.com/containers/ramalama/blob/f9f4c93a565124b92a1a1e689c0fd865a1507499/ramalama/plugins/runtimes/inference/mlx.py#L85-L88
+  mlxRuntimeSupported = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
   version = "0.19.0";
@@ -62,8 +67,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
           ]
           ++ (with python3Packages; [
             huggingface-hub
-            mlx-lm
           ])
+          ++ lib.optionals mlxRuntimeSupported (
+            with python3Packages;
+            [
+              mlx-lm
+            ]
+          )
         )
       }
   '';
@@ -93,9 +103,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         withPodman = false;
       };
     }
-    # Upstream's MlxPlugin rejects hosts other than Apple-Silicon macOS even though
-    # mlx-lm is available on other platforms in nixpkgs.
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+    // lib.optionalAttrs mlxRuntimeSupported {
       mlx = callPackage ./tests/mlx.nix {
         ramalama = finalAttrs.finalPackage;
       };
