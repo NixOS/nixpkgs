@@ -1,23 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amf-headers";
   version = "1.5.2";
 
-  src = fetchFromGitHub {
-    owner = "GPUOpen-LibrariesAndSDKs";
-    repo = "AMF";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-+jVYm/Zmt+1bzKnKTiClgoMRsyhqpuKZj79DvGHpPTM=";
+  src = fetchurl {
+    url = "https://github.com/GPUOpen-LibrariesAndSDKs/AMF/releases/download/v${finalAttrs.version}/AMF-headers-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-08EusyTt8F4hRgi2o5WlHdlXcO2dRVIBhdbDogaBHJk=";
   };
 
   installPhase = ''
     mkdir -p $out/include/AMF
-    cp -r amf/public/include/* $out/include/AMF
+    cp -r AMF $out/include
   '';
 
   meta = {
