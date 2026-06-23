@@ -31,23 +31,18 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.6.3";
+    version = "2.7.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-G2K2iElEpX2+MhUJq5T9TTswcHXgwurpkaxx7hWtOO0=";
+      hash = "sha256-Ix4Ow7Y86xRmfGe+YPLyxApRjLOLA69gq8gT2iZQX0w=";
     };
 
     build-system = [
       hatchling
       hatch-vcs
     ];
-
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace-fail ', "setuptools-scm>=8,<10"' ""
-    '';
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
