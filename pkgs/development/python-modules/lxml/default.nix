@@ -16,16 +16,16 @@
   xcodebuild,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxml";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
-    tag = "lxml-${version}";
-    hash = "sha256-crFUn1TmxdHXr3ULDKsRy4Y4PR/itaycsWiSDb+pbeg=";
+    tag = "lxml-${finalAttrs.version}";
+    hash = "sha256-SRJaegK4PxgK0rdILVp3J92VnjPmExiD2AuMLoGQIbA=";
   };
 
   build-system = [
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/lxml/lxml/blob/lxml-${version}/CHANGES.txt";
+    changelog = "https://github.com/lxml/lxml/blob/${finalAttrs.src.tag}/CHANGES.txt";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
