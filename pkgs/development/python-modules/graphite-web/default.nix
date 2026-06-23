@@ -4,6 +4,10 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  setuptools,
 
   # dependencies
   cairocffi,
@@ -31,15 +35,24 @@
 
 buildPythonPackage {
   pname = "graphite-web";
-  version = "1.1.10-unstable-2025-02-24";
+  version = "1.2.1-pre2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = "graphite-web";
-    rev = "49c28e2015d605ad9ec93524f7076dd924a4731a";
-    hash = "sha256-TxsQPhnI5WhQvKKkDEYZ8xnyg/qf+N9Icej6d6A0jC0=";
+    tag = "1.2.1-pre2";
+    hash = "sha256-2C5iWn5/BoX0OPT/UQO94V1oZ/xiRzgoipp0551dnpM=";
   };
+
+  patches = [
+    # https://github.com/graphite-project/graphite-web/pull/2914
+    (fetchpatch {
+      name = "epoch-django5-localize-via-pytz.patch";
+      url = "https://github.com/graphite-project/graphite-web/commit/a2fdc9042053e0eb7a751609571dd753b3f1476b.patch";
+      hash = "sha256-iYQ9B3zWQZC9uI6yysBtKmPa0qvD422rJrMIuLxknV8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace webapp/graphite/settings.py \
@@ -53,6 +66,8 @@ buildPythonPackage {
     substituteInPlace webapp/tests/test_render.py \
       --replace-fail "test_render_view" "_dont_test_render_view"
   '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     cairocffi
@@ -89,9 +104,12 @@ buildPythonPackage {
   ];
 
   preCheck =
-    # Start a redis server
+    # Start a redis server on a per-build port. Darwin builds share the host
+    # network (no netns isolation), so concurrent builds would otherwise
+    # collide on the default port 6379. test_redis_tagdb reads TEST_REDIS_PORT.
     ''
-      ${pkgs.valkey}/bin/redis-server &
+      export TEST_REDIS_PORT=$(( ($$ % 20000) + 20000 ))
+      ${pkgs.valkey}/bin/redis-server --port "$TEST_REDIS_PORT" &
       REDIS_PID=$!
     '';
 
