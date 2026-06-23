@@ -4,19 +4,22 @@
   fetchFromGitHub,
   pytest-xprocess,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cachelib";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "cachelib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-xprocess
@@ -37,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
