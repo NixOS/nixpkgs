@@ -687,6 +687,8 @@ with haskellLib;
         # TODO(@sternenseemann): submit upstreamable patch resolving this
         # (this should be possible by also taking PREFIX into account).
         ./patches/git-annex-no-usr-prefix.patch
+        # Fix build with http-types >= 0.12.5, will be part of next release
+        ./patches/git-annex-http-types-0.12.5.patch
       ];
 
       postPatch = ''
