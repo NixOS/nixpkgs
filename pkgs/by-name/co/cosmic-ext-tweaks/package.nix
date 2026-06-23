@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
+# Portions of this code are adapted from nixos-cosmic
+# https://github.com/lilyinstarlight/nixos-cosmic
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libcosmicAppHook,
+  just,
+  openssl,
+  nix-update-script,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-ext-tweaks";
+  version = "0.2.2";
+
+  src = fetchFromGitHub {
+    owner = "cosmic-utils";
+    repo = "tweaks";
+    tag = finalAttrs.version;
+    hash = "sha256-kREYDT42Xh/APrZAs3uho6Mw2MNEGeG0jc00I2yQemI=";
+  };
+
+  cargoHash = "sha256-mC19GLLHrjqYXl052HoNFscz9zzQWVBBm0OxzXoUd8U=";
+
+  separateDebugInfo = true;
+
+  nativeBuildInputs = [
+    libcosmicAppHook
+    just
+  ];
+
+  buildInputs = [ openssl ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "bin-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-tweaks"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/cosmic-utils/tweaks/releases/tag/${finalAttrs.version}";
+    description = "Tweaking tool for the COSMIC Desktop Environment";
+    homepage = "https://github.com/cosmic-utils/tweaks";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "cosmic-ext-tweaks";
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+  };
+})

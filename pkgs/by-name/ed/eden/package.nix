@@ -1,0 +1,220 @@
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  SDL2,
+  boost,
+  catch2_3,
+  cpp-jwt,
+  cubeb,
+  enet,
+  fetchFromGitea,
+  fetchpatch,
+  fetchurl,
+  ffmpeg-headless,
+  fmt,
+  frozen-containers,
+  gamemode,
+  glslang,
+  httplib,
+  kdePackages,
+  libopus,
+  libusb1,
+  lz4,
+  nlohmann_json,
+  oaknut,
+  openssl,
+  pipewire,
+  pkg-config,
+  python3,
+  qt6,
+  simpleini,
+  sirit,
+  spirv-headers,
+  stb,
+  unordered_dense,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-memory-allocator,
+  vulkan-utility-libraries,
+  xbyak,
+  zlib,
+  zstd,
+  writeScript,
+  callPackage,
+}:
+
+let
+  # Old yuzu compat list, the project does not publish its own at the moment
+  compat-list = fetchurl {
+    url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/4abf1d239aba843180abfed58fa8541432fece5b/compatibility_list.json";
+    hash = "sha256-OC22KdawYK9yKiffqc1rtgrBanVExYMi9jqhvkwMD6w=";
+  };
+
+  nx_tzdb = callPackage ./nx_tzdb.nix { };
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "eden";
+  version = "0.2.1";
+
+  src = fetchFromGitea {
+    domain = "git.eden-emu.dev";
+    owner = "eden-emu";
+    repo = "eden";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-79/JmIRWysoc3psJqMFyiNc2gjTY4VhJfdNaiTvisMk=";
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    glslang
+    pkg-config
+    python3
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    boost
+    cpp-jwt
+    cubeb
+    enet
+    ffmpeg-headless
+    fmt
+    frozen-containers
+    gamemode
+    httplib
+    kdePackages.quazip
+    libopus
+    libusb1
+    # intentionally omitted: LLVM - heavy, only used for stack traces in the debugger
+    lz4
+    nlohmann_json
+    openssl
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtwayland
+    qt6.qtwebengine
+    qt6.qtcharts
+    # intentionally omitted: renderdoc - heavy, developer only
+    SDL2
+    stb
+    simpleini
+    spirv-headers
+    vulkan-headers
+    vulkan-memory-allocator
+    vulkan-utility-libraries
+    sirit
+    unordered_dense
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    xbyak
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    oaknut
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    catch2_3
+    oaknut
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "YUZU_TESTS" false) # some timer tests are flaky
+
+    # use system libraries
+    (lib.cmakeBool "CPMUTIL_FORCE_SYSTEM" true)
+    (lib.cmakeFeature "YUZU_TZDB_PATH" "${nx_tzdb}")
+
+    # enable some optional features
+    (lib.cmakeBool "YUZU_USE_QT_WEB_ENGINE" true)
+    (lib.cmakeBool "YUZU_USE_QT_MULTIMEDIA" true)
+    (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
+    (lib.cmakeBool "ENABLE_LTO" true)
+
+    # We dont want to bother upstream with potentially outdated compat reports
+    (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
+
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}")
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_RUNNING" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}")
+  ];
+
+  postConfigure = ''
+    ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
+  '';
+
+  postInstall = ''
+    install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        vulkan-loader
+        pipewire
+      ]
+    })
+  '';
+
+  passthru = {
+    inherit nx_tzdb compat-list;
+
+    updateScript = writeScript "update-eden" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix-update
+
+      set -eu -o pipefail
+
+      nix-update eden
+      nix-update eden.nx_tzdb
+    '';
+  };
+
+  meta = {
+    description = "Switch 1 emulator derived from Yuzu and Sudachi";
+    homepage = "https://eden-emu.dev/";
+    mainProgram = "eden";
+    maintainers = with lib.maintainers; [ marcin-serwin ];
+    license = with lib.licenses; [
+      # Primary
+      gpl3Plus
+
+      # Build system
+      lgpl3Plus
+
+      # Dynarmic and Yuzu code
+      gpl2Plus
+      bsd0
+
+      # Icons
+      cc-by-40
+      cc-by-sa-30
+      cc0
+
+      # Vendored/incorporated libs
+      apsl20
+      llvm-exception
+      lib.licenses.boost
+      bsd2
+      bsd3
+      mit
+      mpl20
+      wtfpl
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+  };
+})

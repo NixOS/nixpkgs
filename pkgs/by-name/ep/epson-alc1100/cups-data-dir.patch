@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 0053441..9a6b855 100755
+--- a/configure
++++ b/configure
+@@ -2833,7 +2833,7 @@ if test $have_cups_config = yes; then
+    CUPS_LIBS=`cups-config --libs`
+    CUPS_IMAGE_LIBS=`cups-config --image --libs`
+    CUPS_SERVER_DIR=`cups-config --serverbin`
+-   CUPS_DATA_DIR=`cups-config --datadir`
++   CUPS_DATA_DIR="${prefix}/share/cups"
+ else
+    { { echo "$as_me:$LINENO: error: *** 'cups-config' missing, please install CUPS or fix your \$PATH ***" >&5
+ echo "$as_me: error: *** 'cups-config' missing, please install CUPS or fix your \$PATH ***" >&2;}

@@ -1,0 +1,11 @@
+--- a/src/downloader/lib/src/Downloader/CurlWrapper.cpp
++++ b/src/downloader/lib/src/Downloader/CurlWrapper.cpp
+@@ -108,7 +108,6 @@
+ 		if (res != CURLE_OK) {
+ 			LOG_WARN("Error setting CURLOPT_CAPATH: %d", res);
+ 		}
+-		return;
+ 	}
+ 
+ 	const std::string cafile = GetCAFilePath();
+
