@@ -1,0 +1,10 @@
+--- a/extra/keymapper-launchd
++++ b/extra/keymapper-launchd
+@@ -39,5 +39,5 @@ keymapperd_as_agent_plist="$agents_path/$keymapperd_id.plist"
+ 
+ karabiner_id="org.pqrs.Karabiner-VirtualHIDDevice-Daemon"
+-karabiner_path="/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon"
++karabiner_path="@karabiner-dk@/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon"
+ karabiner_plist="$daemons_path/org.pqrs.Karabiner-VirtualHIDDevice.plist"
+-karabiner_manager_path="/Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Manager"
++karabiner_manager_path="@karabiner-dk@/Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Manager"
