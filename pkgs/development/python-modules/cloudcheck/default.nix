@@ -10,11 +10,13 @@
   pytestCheckHook,
   radixtarget,
   regex,
+  starlette,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "cloudcheck";
-  version = "7.2.11";
+  version = "9.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,6 +41,8 @@ buildPythonPackage rec {
     pydantic
     radixtarget
     regex
+    starlette
+    tornado
   ];
 
   nativeCheckInputs = [
