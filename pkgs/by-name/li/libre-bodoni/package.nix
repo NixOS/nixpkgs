@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Libre Bodoni currently features four styles: Regular, Italic, Bold and
       Bold Italic.
     '';
-    homepage = "https://github.com/impallari/Libre-Bodoni";
+    homepage = "https://github.com/googlefonts/Libre-Bodoni";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
