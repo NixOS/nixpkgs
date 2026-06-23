@@ -1,0 +1,35 @@
+From 5062d6a7649a1e7c8a7fb711b7f5d80a3d4a1f2e Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 20:14:00 -0500
+Subject: [PATCH 5/10] cmake: propagate project C flags to mkgensysinfo
+
+The mkgensysinfo helper invokes the C compiler directly but only uses
+the flags passed by its caller. That skips project-wide C flags from
+CMAKE_C_FLAGS, even though those flags still describe how the rest of
+the build expects helper sources to be compiled.
+
+This matters for packaged builds that force an older C dialect. In
+particular, the Nix build uses -std=gnu17 so sysinfo.c is not compiled
+as C23 by GCC 15, which otherwise makes llvm-godumpspec trip over
+nullptr_t in the generated DWARF.
+---
+ cmake/modules/AutoGenGo.cmake | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/cmake/modules/AutoGenGo.cmake b/cmake/modules/AutoGenGo.cmake
+--- a/cmake/modules/AutoGenGo.cmake
++++ b/cmake/modules/AutoGenGo.cmake
+@@ -541,7 +541,9 @@ endfunction()
+ function(mkgensysinfo tmpfile outfile macrofile objfile godumpspec sysinfoc)
+   CMAKE_PARSE_ARGUMENTS(ARG "" "" "DEPS;CFLAGS" ${ARGN})
+ 
+   set(ccomp ${CMAKE_C_COMPILER})
+-  set(cflags ${ARG_CFLAGS})
++  separate_arguments(project_cflags NATIVE_COMMAND "${CMAKE_C_FLAGS}")
++  set(cflags ${project_cflags})
++  list(APPEND cflags ${ARG_CFLAGS})
+   if(NOT "${CMAKE_SYSROOT}" STREQUAL "")
+     set(cflags ${cflags} "--sysroot=${CMAKE_SYSROOT}")
+   endif()
+-- 
+2.50.1

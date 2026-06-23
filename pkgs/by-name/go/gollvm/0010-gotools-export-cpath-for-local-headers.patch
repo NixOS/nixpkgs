@@ -1,0 +1,38 @@
+From b07a3814d34ab07db8f2724f2e248fed4560f6aa Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 22:35:00 -0500
+Subject: [PATCH 10/10] gotools: export CPATH for copied local headers
+
+The gotools tests copy Go sources into a temporary GOPATH-like work tree
+and then run `go test` there. Some cgo tests rely on local headers, such
+as `issue8331.h`, that live beside the copied Go files.
+
+Under Nix, the C compiler in the build environment is the wrapped GCC
+driver from `stdenv`. That wrapper drops non-store include directories
+passed with `-I`, so cgo's generated compile commands no longer find
+headers from the temporary test tree even though they were copied
+correctly.
+
+Export `CPATH=$PWD` after changing into the package-under-test. GCC
+honors `CPATH` under the wrapper, which restores local header lookup for
+the copied cgo tests without changing their command lines.
+---
+ gotools/gotestprogram.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/gotools/gotestprogram.sh b/gotools/gotestprogram.sh
+--- a/gotools/gotestprogram.sh
++++ b/gotools/gotestprogram.sh
+@@ -164,6 +164,9 @@ cd ${SUBDIR}
+ if [ $? != 0 ]; then
+   echo "can't change to ${SUBDIR}"
+   exit 1
+ fi
++
++# gcc-wrapper drops non-store -I paths; export CPATH for local test headers.
++setenv CPATH="${PWD}${CPATH:+:${CPATH}}"
+ CMD="go test -compiler gccgo -test.short -test.timeout=${TIMEOUT}s -test.v ${TESTARG}"
+ #
+ # Set up environment
+-- 
+2.50.1
