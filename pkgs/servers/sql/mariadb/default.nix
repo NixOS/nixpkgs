@@ -256,6 +256,10 @@ let
             mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
             ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
           '';
+
+          meta = common.meta // {
+            mainProgram = "mariadb";
+          };
         }
       );
     in
@@ -386,6 +390,10 @@ let
         passthru = {
           inherit client;
           server = finalAttrs.finalPackage;
+        };
+
+        meta = common.meta // {
+          mainProgram = "mariadbd";
         };
       }
     );
