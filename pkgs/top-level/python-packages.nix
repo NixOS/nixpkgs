@@ -83,6 +83,8 @@ self: super: with self; {
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
 
+  adbc-driver-flightsql = callPackage ../development/python-modules/adbc-driver-flightsql { };
+
   adbc-driver-manager = callPackage ../development/python-modules/adbc-driver-manager { };
 
   adbc-driver-snowflake = callPackage ../development/python-modules/adbc-driver-snowflake { };
