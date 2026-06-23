@@ -83,6 +83,8 @@ self: super: with self; {
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
 
+  adbc-driver-manager = callPackage ../development/python-modules/adbc-driver-manager { };
+
   adblock = callPackage ../development/python-modules/adblock { };
 
   adbutils = callPackage ../development/python-modules/adbutils { };
