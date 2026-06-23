@@ -5,7 +5,7 @@
   nodejs,
   fetchFromGitHub,
   python3,
-  electron_39,
+  electron_42,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
@@ -15,17 +15,17 @@
 }:
 let
   pnpm = pnpm_10;
-  electron = electron_39;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shiru";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "RockinChaos";
     repo = "shiru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LccI6Z4hhkmzWHt0CKum9giJMVGm3qM0ZKNvChUCYQ4=";
+    hash = "sha256-+qXbtRucviNvdZYqIh/CjYX0AGIIxAmw8V5j41BocGE=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       cd electron
     '';
     fetcherVersion = 3;
-    hash = "sha256-bTo6sEQuUghwm2I99WB7+akL4AOZ1ZN2ovaLWrd5MMg=";
+    hash = "sha256-y+CWr/YLmDjB9GDTFlsMni7uGAME3XOG3GB43KzZxOQ=";
   };
 
   buildPhase = ''
