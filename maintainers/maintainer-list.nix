@@ -24912,6 +24912,12 @@
     githubId = 149248;
     name = "Christian Rackerseder";
   };
+  screwys = {
+    email = "screwygit@proton.me";
+    github = "screwys";
+    githubId = 254296947;
+    name = "screwy";
+  };
   Scriptkiddi = {
     email = "nixos@scriptkiddi.de";
     matrix = "@fritz.otlinghaus:helsinki-systems.de";
