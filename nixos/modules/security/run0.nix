@@ -13,6 +13,7 @@ let
     mkOption
     mkPackageOption
     mkAliasOptionModule
+    optionalString
     ;
 
   cfg = config.security.run0;
@@ -20,6 +21,12 @@ in
 {
   options.security.run0 = {
     enable = mkEnableOption "support for run0";
+
+    persistentAuth.enable = mkEnableOption ''
+      persistent authentication for sessions.
+      Timeout configurable via {option}`security.polkit.settings.Polkitd.ExpirationSeconds`
+    '';
+    persistentAuth.enableRemote = mkEnableOption "persistent authentication for remote sessions";
 
     wheelNeedsPassword = mkOption {
       type = lib.types.bool;
@@ -67,13 +74,24 @@ in
 
       security.polkit = {
         enable = true;
-        extraConfig = mkIf (!cfg.wheelNeedsPassword) ''
-          polkit.addRule(function(action, subject) {
-            if (action.id == "org.freedesktop.systemd1.manage-units" && subject.isInGroup("wheel")) {
-              return polkit.Result.YES;
-            }
-          });
-        '';
+        extraConfig = lib.concatLines [
+          (optionalString (!cfg.wheelNeedsPassword) ''
+            polkit.addRule(function(action, subject) {
+              if (action.id == "org.freedesktop.systemd1.manage-units" && subject.isInGroup("wheel")) {
+                return polkit.Result.YES;
+              }
+            });
+          '')
+          (optionalString cfg.persistentAuth.enable ''
+            polkit.addRule(function(action, subject) {
+              if (action.id == "org.freedesktop.systemd1.manage-units" && subject.active ${
+                optionalString (!cfg.persistentAuth.enableRemote) "&& subject.local"
+              }) {
+                return polkit.Result.AUTH_ADMIN_KEEP;
+              }
+            });
+          '')
+        ];
       };
 
       environment.systemPackages = lib.optional cfg.sudo-shim.enable cfg.sudo-shim.package;
