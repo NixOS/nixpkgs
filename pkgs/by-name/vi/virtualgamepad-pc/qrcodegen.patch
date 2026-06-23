@@ -1,0 +1,44 @@
+--- a/src/networking/server.cpp	2025-12-23 00:41:52.712090930 +0100
++++ b/src/networking/server.cpp	2025-12-23 00:44:24.751770289 +0100
+@@ -1,6 +1,6 @@
+ #include "server.hpp"
+ 
+-#include "../../third-party-libs/QR-Code-generator/cpp/qrcodegen.hpp"
++#include <qrcodegen/qrcodegen.hpp>
+ #include "../settings/settings_singleton.hpp"
+ #include "ui_server.h"
+ 
+--- a/CMakeLists.txt	2025-12-23 00:31:18.723532745 +0100
++++ b/CMakeLists.txt	2025-12-23 01:11:16.350376537 +0100
+@@ -55,12 +55,7 @@
+ 
+ add_subdirectory(VGP_Data_Exchange/C)
+ 
+-set(QR_CODE_GEN_SOURCES
+-    third-party-libs/QR-Code-generator/cpp/qrcodegen.cpp
+-    third-party-libs/QR-Code-generator/cpp/qrcodegen.hpp
+-)
+-
+-add_library(QR_Code_Generator SHARED ${QR_CODE_GEN_SOURCES})
++find_library(qrcodegen NAMES libqrcodegencpp.a REQUIRED)
+ 
+ # Manifest file for the application
+ # This file is used to request permissions on Windows
+@@ -128,7 +123,7 @@
+     Qt${QT_VERSION_MAJOR}::Widgets
+     Qt${QT_VERSION_MAJOR}::Network
+     Data_Exchange
+-    QR_Code_Generator
++    libqrcodegencpp.a
+ )
+ 
+ # Platform-specific linking and include directories
+@@ -152,7 +147,7 @@
+ 
+ set(CMAKE_INSTALL_DIR "${CMAKE_SOURCE_DIR}/dist")
+ 
+-install(TARGETS VGamepadPC Data_Exchange QR_Code_Generator
++install(TARGETS VGamepadPC Data_Exchange
+     BUNDLE DESTINATION .
+     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
