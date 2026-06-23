@@ -4,6 +4,7 @@
  PartOf=graphical-session.target
  
  [Service]
+ Environment="KWIN_USE_OVERLAYS=0"
 -ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/kwin_wayland --no-lockscreen --no-global-shortcuts --no-kactivities --inputmethod plasma-keyboard --locale1
 +ExecStart=@kwin_wayland@ --no-lockscreen --no-global-shortcuts --no-kactivities --inputmethod plasma-keyboard --locale1
  SuccessExitStatus=15

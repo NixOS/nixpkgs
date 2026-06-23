@@ -8,7 +8,6 @@
   libxdmcp,
   libpthread-stubs,
   libxcb,
-  pcre,
   pkg-config,
   python3,
   python3Packages, # sphinx-build
@@ -68,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libpthread-stubs
     libxcb
-    pcre
     python3
     xcbproto
     libxcb-util
