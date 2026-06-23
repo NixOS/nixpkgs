@@ -68,7 +68,7 @@ let
     ];
 
     buildInputs = [
-      cudaPackages.cuda_cccl # <thrust/*>
+      cudaPackages.cccl # <thrust/*>
       cudaPackages.libcublas # cublas_v2.h
       cudaPackages.libcurand # curand.h
       cudaPackages.libcusolver # cusolverDn.h

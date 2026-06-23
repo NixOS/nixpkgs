@@ -23,6 +23,7 @@
   libtirpc,
   rpcsvc-proto,
   curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -111,6 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+    tests.mysql-secure-root-by-default =
+      nixosTests.mysql-secure-root.secure-by-default."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+    tests.mysql-root-can-be-kept-insecure =
+      nixosTests.mysql-secure-root.can-be-insecure."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
   };
 
   meta = {

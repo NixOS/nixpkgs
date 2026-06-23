@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdemu-daemon";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/cdemu-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AYHjiOAQdu685gc6p0j2QNtCmTYTWix1kzWQZYvGPWU=";
+    hash = "sha256-rkhxivVGQ2lsCUQEXJupDenj74E3shQXExhTWysf+qo=";
   };
 
   nativeBuildInputs = [

@@ -73,13 +73,13 @@
     "vendorHash": "sha256-FHBpTYSmVivoqz+Eaa/r5y1f/saIx4l6mjOtZhxZVRw="
   },
   "auth0_auth0": {
-    "hash": "sha256-WXqZ0566/BrpidrxbtbTf5VOqBmuXTZiqHlw9x2Wkug=",
+    "hash": "sha256-QNVACeebepZMCYMn284KUulqnYMU5Mt/e65o+dSRTxg=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.49.0",
+    "rev": "v1.50.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6bWfFGBa19Po/26ktT5BKKiowNsQwxnpOI6orA2GweY="
+    "vendorHash": "sha256-wW3dAmDl1qhWlCcTlujdEGB0GFQsgD0YmrGENYhg/qY="
   },
   "aviatrixsystems_aviatrix": {
     "hash": "sha256-46djOfAj/5kfeoKLQHbeKefzdGbmlBATR+uN/IaAn8I=",
@@ -319,11 +319,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-gvLdDUFg8WoBg8+351CCK84LhLJlsV6Nqm9kbxlQQ50=",
+    "hash": "sha256-SguubBNjYqWuxeYkCKoPAK3Vvdv8wdBJfnvySwBQt8c=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.89.0",
+    "rev": "v2.91.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -517,13 +517,13 @@
     "vendorHash": "sha256-Msl/Mn0GK3D+QyLnSFU3m9ux/ThkwDCDh85b0Yzpnjo="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-/4NhHZs/8LwrL+TXoOGyszvHZcKps5tDu7uewKeNmb4=",
+    "hash": "sha256-ZQaBYZTsF68IjbRYa3Z7VRqKfaHCvOtMkJHsybJn+ec=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.88.0",
+    "rev": "v1.89.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vTJI/71O8u6DqAF3E7pde1Z1qsoyTTJMNen3AvRomls="
+    "vendorHash": "sha256-9FzpBgb3BzIVhx8kqhyDJw/liH6X8jUhFmwtbic4uVw="
   },
   "hashicorp_azuread": {
     "hash": "sha256-BkQwLkGu8Xmb4laoXOLDbSPyya5v8HBBNIya5hUBlV8=",
@@ -833,13 +833,13 @@
     "vendorHash": "sha256-7mJ+BX7laBKsr4DX1keMXnGi79CZp8M1jD0COQ1lcmU="
   },
   "kreuzwerker_docker": {
-    "hash": "sha256-wC0XYOGx3CBrXOkISmYFMMqcNijl3u2XZzrVOPF+EDo=",
+    "hash": "sha256-prvQBNT2OhKmH0ABIs7saRqpURZwO+ntfIxoGe/KmMc=",
     "homepage": "https://registry.terraform.io/providers/kreuzwerker/docker",
     "owner": "kreuzwerker",
     "repo": "terraform-provider-docker",
-    "rev": "v4.4.0",
+    "rev": "v4.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PIltVJ3o3ROFi1ensrJyFYEsCm6nEFXHkkTPU3ho+gU="
+    "vendorHash": "sha256-EAv8EeNn0PJ3BElmg6sKkd/LXNe0lFjEIjHuZRG3CoQ="
   },
   "launchdarkly_launchdarkly": {
     "hash": "sha256-PgAK0BUTSyW4CXssQkENohnhtd2O5GPuFVvSDcHWjQ8=",
@@ -968,11 +968,11 @@
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
   "newrelic_newrelic": {
-    "hash": "sha256-eteX6j+gtWsxN8UdttP1YjCrBlzXVVrhOT+kiw98gFo=",
+    "hash": "sha256-sUawDMMhwCo2xqnPNiaRMGKo3rRxNGjLEl2NYwfVuMk=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.93.0",
+    "rev": "v3.93.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-fCdwTWYbwuJUh+9WeVN5WmpPxdop49oHZ2cUm3K5w6w="
   },

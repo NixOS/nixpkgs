@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reframe";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = "reframe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xm5vrrxao7sUKq+yWnlZ71KixiShtjQSDG9I5R3/ja8=";
+    hash = "sha256-gZSvNoVY2gDGcN/EFbK6vH7PghfR1GXzZt2JXPBhLuo=";
     fetchSubmodules = true;
   };
 

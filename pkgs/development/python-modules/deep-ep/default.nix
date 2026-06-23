@@ -79,7 +79,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # <nv/target>
+      cccl # <nv/target>
       cuda_cudart # cuda_runtime.h
       libcublas # cublas_v2.h
       libcusolver # cusolverDn.h

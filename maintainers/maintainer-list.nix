@@ -3946,6 +3946,13 @@
     githubId = 140968250;
     keys = [ { fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26"; } ];
   };
+  Br1ght0ne = {
+    name = "Oleksii Filonenko";
+    email = "nixpkgs@brightone.cloud";
+    matrix = "@br1ght0ne:matrix.org";
+    github = "Br1ght0ne";
+    githubId = 12615679;
+  };
   br337 = {
     email = "brian.porumb@proton.me";
     github = "br337";
@@ -4736,12 +4743,6 @@
     github = "ch4og";
     githubId = 32384814;
     name = "Nikita Mitasov";
-  };
-  chaduffy = {
-    email = "charles@dyfis.net";
-    github = "charles-dyfis-net";
-    githubId = 22370;
-    name = "Charles Duffy";
   };
   changlinli = {
     email = "mail@changlinli.com";
@@ -10208,6 +10209,11 @@
     githubId = 13297896;
     name = "David Isaksson";
   };
+  grandjeanlab = {
+    github = "grandjeanlab";
+    githubId = 22633767;
+    name = "grandjeanlab";
+  };
   gravndal = {
     email = "gaute.ravndal+nixos@gmail.com";
     github = "gravndal";
@@ -14454,6 +14460,13 @@
     githubId = 7587245;
     name = "Kit Langton";
   };
+  Kitsune = {
+    name = "Lunae V";
+    github = "KitsuneDev";
+    githubId = 11809449;
+    email = "kitsune@akitsune.dev";
+    matrix = "@kitsune:akitsune.dev";
+  };
   kitsunoff = {
     github = "kitsunoff";
     githubId = 58953114;
@@ -14619,8 +14632,7 @@
   };
   koi = {
     name = "june";
-    email = "me@koi.rip";
-    matrix = "@koi:nelliel.cv";
+    email = "packages@koi.rip";
     github = "koibtw";
     githubId = 75480869;
     keys = [
@@ -26086,6 +26098,12 @@
     githubId = 13762043;
     matrix = "@sophie:nue.soopy.moe";
   };
+  sophiebsw = {
+    name = "Sophia";
+    email = "nixpkgs@drifter.dev";
+    github = "sophiebsw";
+    githubId = 4594464;
+  };
   sophronesis = {
     email = "oleksandr.buzynnyi@gmail.com";
     github = "sophronesis";
@@ -28690,7 +28708,7 @@
   uku3lig = {
     name = "uku";
     email = "hi@uku.moe";
-    matrix = "@uku:m.uku.moe";
+    matrix = "@uku:rei.uku.moe";
     github = "uku3lig";
     githubId = 61147779;
   };

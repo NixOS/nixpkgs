@@ -8,28 +8,30 @@
   libtirpc,
   libnsl,
   prometheus-cpp-lite,
+  rdma-core,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntirpc";
-  version = "7.2";
+  version = "9.16";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4E6wDAwinCNn7arRgBulg7e0x9S/steh+mjwNY4X3Vc=";
+    hash = "sha256-ZpjP1ugT9gN3TW7roBfJJBA6Y6FCkaOl31WRoRqPvTU=";
   };
 
   outputs = [
     "out"
     "dev"
   ];
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "cmake_minimum_required(VERSION 2.6.3)" \
-      "cmake_minimum_required(VERSION 3.10)"
 
+  patches = [
+    ./pkg-config.patch
+  ];
+
+  postPatch = ''
     substituteInPlace ntirpc/netconfig.h --replace-fail \
       "/etc/netconfig" "$out/etc/netconfig"
   '';
@@ -40,10 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     liburcu
     libnsl
     prometheus-cpp-lite
+    rdma-core
   ];
 
   cmakeFlags = [
     "-DUSE_MONITORING=ON"
+    "-DUSE_RPC_RDMA=ON"
   ];
 
   postInstall = ''

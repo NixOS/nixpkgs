@@ -1335,8 +1335,6 @@ self: super: with self; {
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
-  avro3k = callPackage ../development/python-modules/avro3k { };
-
   avwx-engine = callPackage ../development/python-modules/avwx-engine { };
 
   aw-client = callPackage ../development/python-modules/aw-client { };
@@ -12332,6 +12330,8 @@ self: super: with self; {
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
+  pandas-flavor = callPackage ../development/python-modules/pandas-flavor { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   pandas-ta = callPackage ../development/python-modules/pandas-ta { };
@@ -12786,6 +12786,8 @@ self: super: with self; {
   pinecone-plugin-interface = callPackage ../development/python-modules/pinecone-plugin-interface { };
 
   ping3 = callPackage ../development/python-modules/ping3 { };
+
+  pingouin = callPackage ../development/python-modules/pingouin { };
 
   pinocchio = callPackage ../development/python-modules/pinocchio { inherit (pkgs) pinocchio; };
 
@@ -16343,6 +16345,10 @@ self: super: with self; {
 
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
 
+  python-subunit = callPackage ../development/python-modules/python-subunit {
+    inherit (pkgs) subunit cppunit check;
+  };
+
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
@@ -16406,6 +16412,8 @@ self: super: with self; {
   };
 
   python-xbox = callPackage ../development/python-modules/python-xbox { };
+
+  python-xlib = callPackage ../development/python-modules/python-xlib { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
@@ -19204,10 +19212,6 @@ self: super: with self; {
 
   subprocess4 = callPackage ../development/python-modules/subprocess4 { };
 
-  subunit = callPackage ../development/python-modules/subunit {
-    inherit (pkgs) subunit cppunit check;
-  };
-
   subzerod = callPackage ../development/python-modules/subzerod { };
 
   succulent = callPackage ../development/python-modules/succulent { };
@@ -19251,6 +19255,8 @@ self: super: with self; {
   superqt = callPackage ../development/python-modules/superqt { };
 
   supervise-api = callPackage ../development/python-modules/supervise-api { };
+
+  supervision = callPackage ../development/python-modules/supervision { };
 
   supervisor = callPackage ../development/python-modules/supervisor { };
 
@@ -19801,6 +19807,8 @@ self: super: with self; {
 
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
+  tilelang = callPackage ../development/python-modules/tilelang { };
+
   tilequant = callPackage ../development/python-modules/tilequant { };
 
   tiler = callPackage ../development/python-modules/tiler { };
@@ -20077,6 +20085,8 @@ self: super: with self; {
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   tracerite = callPackage ../development/python-modules/tracerite { };
+
+  trackers = callPackage ../development/python-modules/trackers { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
@@ -21828,8 +21838,6 @@ self: super: with self; {
   xknx = callPackage ../development/python-modules/xknx { };
 
   xknxproject = callPackage ../development/python-modules/xknxproject { };
-
-  xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
 

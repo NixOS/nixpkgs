@@ -31,10 +31,10 @@ let
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
   cudaComponents = with cudaPackages; [
+    cccl
     cuda_cudart # cuda_runtime.h
     libcublas
     libcurand
-    cuda_cccl
 
     # cuda_profiler_api.h
     (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)

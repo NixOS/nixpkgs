@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
     rich
     setuptools
-    xlib
+    python-xlib
     pyroute2
     pygobject3
     dbus-python

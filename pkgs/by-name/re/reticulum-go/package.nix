@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "reticulum-go";
-  version = "0.9.5";
+  version = "0.9.6";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -15,8 +15,14 @@ buildGoModule (finalAttrs: {
     owner = "Quad4-Software";
     repo = "Reticulum-Go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LszknSPyZRE/uGy5jSmKAmi+oBargjN+AgbT8QJ3hug=";
+    hash = "sha256-Rji6MJQAN48zKsLHQS8ukbi9pWjHPEbezXJu/700HZs=";
   };
+
+  # TODO: Remove this when https://github.com/NixOS/nixpkgs/pull/527289 has landed in `master`
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "1.26.4" "1.26.3"
+  '';
 
   vendorHash = null;
 
@@ -38,5 +44,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Quad4-Software/Reticulum-Go";
     license = lib.licenses.asl20;
     mainProgram = "reticulum-go";
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })

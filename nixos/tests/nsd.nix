@@ -21,7 +21,7 @@ in
       {
         imports = [ common ];
         networking.nameservers = lib.mkForce [
-          (lib.head nodes.server.config.networking.interfaces.eth1.ipv4.addresses).address
+          (lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address
         ];
         networking.interfaces.eth1.ipv4.addresses = [
           {
@@ -36,7 +36,7 @@ in
       {
         imports = [ common ];
         networking.nameservers = lib.mkForce [
-          (lib.head nodes.server.config.networking.interfaces.eth1.ipv6.addresses).address
+          (lib.head nodes.server.networking.interfaces.eth1.ipv6.addresses).address
         ];
         networking.interfaces.eth1.ipv4.addresses = [
           {

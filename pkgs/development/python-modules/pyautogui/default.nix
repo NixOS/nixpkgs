@@ -10,7 +10,7 @@
   pyscreeze,
   pytweening,
   tkinter,
-  xlib,
+  python-xlib,
   xvfb-run,
   scrot,
 }:
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     mouseinfo
     pygetwindow
     pymsgbox
-    xlib
+    python-xlib
     tkinter
     pyperclip
     pyscreeze

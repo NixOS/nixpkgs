@@ -1145,8 +1145,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.5.1";
-          hash = "sha256-adpTh4tNlWFdAGultTLZ9SfN9sMOpMaMWq8x6diGzBg=";
+          version = "9.0.1";
+          hash = "sha256-P2GoE92SwGMb45On5ziTZ9dBjPb0VnFSo+4TEwrcWuM=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.22.1";
-          hash = "sha256-ln9DcfjW0QO7V6hF+QNqy+V13hbjWwhsisrgZPrk1R4=";
+          version = "3.23.0";
+          hash = "sha256-bbyFdb/hGPV93RJecdx6uozJIOaKitBBhwlI04s50NU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.11.0";
-          hash = "sha256-9izhQvZmfUVeKS0H89XXkN1bNP4+AZyUuetfD0kRJ/c=";
+          version = "2.11.1";
+          hash = "sha256-QegVk1SJM/RegAVj7isgFcHwAJyQj9YDuP90u/7weSo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1567,8 +1567,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.30.0";
-          hash = "sha256-vHD16liYmcWeiSP16QqKhPst8e7iT9wZ1vGT5gV6xoo=";
+          version = "0.31.1";
+          hash = "sha256-eF0OGWpiu5aDiFp8MFP7j2r2+3QCPb1q93gWg7L/Xzc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.43.1";
-          hash = "sha256-rZjdBzqXpSG4aCMjRCmIrWtQdmmh7vEJQLIuH65Ewf0=";
+          version = "0.44.1";
+          hash = "sha256-OH4i4cGh/ivHQNAI55FHjM9ZjnhMaJSnsuQUnxub9/g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -1884,8 +1884,8 @@ let
         mktplcRef = {
           name = "godot-tools";
           publisher = "geequlim";
-          version = "2.6.1";
-          hash = "sha256-x+u5t4HB+uM2CbhSw0h/zoYPgBPTZNFaMuzL+KB9mAM=";
+          version = "2.7.1";
+          hash = "sha256-TNCMSmZdBXxAHkcFLpTDkCzaXNO4yvkCfQ8Xrb9gquo=";
         };
         meta = {
           description = "VS Code extension for game development with Godot Engine and GDScript";
@@ -2015,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.81.0";
-          hash = "sha256-0IN00IpgON/2nNl5/eQn+KABNtmG2ymVULOBPvi2dYA=";
+          version = "6.83.2";
+          hash = "sha256-IsiK3A+aVlYKnTSkgeTz4ZZc1rXiYCKDXPVrJsnSFRk=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2184,8 +2184,8 @@ let
         mktplcRef = {
           publisher = "haskell";
           name = "haskell";
-          version = "2.8.0";
-          hash = "sha256-Tp4Ahfp3Ma9aJtghD+mgsCBTMOP1GI1vGE5xzvHO+d4=";
+          version = "2.8.1";
+          hash = "sha256-mAlEy5a83BRhUhA22AKheP6PPpfbrdGT6HsTKbFwJYs=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2670,8 +2670,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.215.2";
-          hash = "sha256-/3ULGcywO6SHvABRxaLXJQpjcrVs/vZxUGpG+NaSx3s=";
+          version = "1.219.2";
+          hash = "sha256-LQ7UL+/FtzRxn/M85fv3oh8g622KEPS35lque3kqby8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -2906,8 +2906,8 @@ let
         mktplcRef = {
           name = "vscode-ltex-plus";
           publisher = "ltex-plus";
-          version = "15.6.1";
-          hash = "sha256-UOiYjA11P7xqPFgdR7eS63wOQl9dqWAqBxz3nklapqo=";
+          version = "15.7.1";
+          hash = "sha256-wOwOD/rsUdwGJ24n6NkH1XY5Hf4T6LE34nFDOteubLY=";
         };
         meta = {
           description = "VS Code extension for grammar/spell checking using LanguageTool with support for LaTeX, Markdown, and others";
@@ -5266,8 +5266,8 @@ let
         mktplcRef = {
           name = "csharp-ls";
           publisher = "vytautassurvila";
-          version = "0.0.32";
-          hash = "sha256-dc7aIUb+5fdmqVeHrysy8jjk0Sx6ThIsO9KagdQpx+M=";
+          version = "0.0.33";
+          hash = "sha256-VsNjdPmnstXgmgxzbC7+IGFggfLtYlQFsH3tGWjdUhM=";
         };
         meta = {
           changelog = "https://github.com/vytautassurvila/vscode-csharp-ls/blob/master/CHANGELOG.md";
@@ -5482,8 +5482,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.13";
-          hash = "sha256-Si8/piNNktcyRY8o8o9my9sP9NEwrNuySVjlyadDjtU=";
+          version = "0.1.15";
+          hash = "sha256-wNGIps0Y/p5X/lutOh1gTPWXh0zpdTm5fFiccba6Pww=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";

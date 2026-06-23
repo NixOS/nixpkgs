@@ -152,8 +152,6 @@ lib.makeOverridable (
     isModular = config.isYes "MODULES";
     withRust = config.isYes "RUST";
 
-    inherit buildDTBs target;
-
     # Dependencies that are required to build kernel modules
     moduleBuildDependencies = [
       pahole

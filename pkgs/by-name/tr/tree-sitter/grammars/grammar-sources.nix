@@ -1778,6 +1778,18 @@
     };
   };
 
+  objc = {
+    version = "3.0.2";
+    url = "github:tree-sitter-grammars/tree-sitter-objc";
+    hash = "sha256-aK8Cf8F05NzlXnYS47jPjSyouaajsr1H+vRg2aXsPrs=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        stunkymonkey
+      ];
+    };
+  };
+
   ocaml = {
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-ocaml";

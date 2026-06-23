@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "yarn-berry-fetcher";
     maintainers = with lib.maintainers; [
-      yuka
       flokli
     ];
   };
