@@ -1,9 +1,8 @@
 # shellcheck shell=bash
 
-npmBuildHook() {
+# For running npm build in a multi-language environment
+npmBuildPhase() {
     echo "Executing npmBuildHook"
-
-    runHook preBuild
 
     if [ -z "${npmBuildScript-}" ]; then
         echo
@@ -28,9 +27,17 @@ npmBuildHook() {
         exit 1
     fi
 
-    runHook postBuild
-
     echo "Finished npmBuildHook"
+
+}
+
+# Hook for building automatically
+npmBuildHook() {
+    runHook preBuild
+
+    npmBuildPhase
+
+    runHook postBuild
 }
 
 if [ -z "${dontNpmBuild-}" ] && [ -z "${buildPhase-}" ]; then

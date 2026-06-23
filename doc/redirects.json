@@ -105,6 +105,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-npm-build-hook-multilanguage": [
+    "index.html#ex-npm-build-hook-multilanguage"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
