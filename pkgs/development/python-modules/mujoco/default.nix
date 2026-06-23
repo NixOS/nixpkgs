@@ -31,6 +31,7 @@ buildPythonPackage (finalAttrs: {
   inherit (mujoco) version;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via
@@ -38,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-AZoLNAaJK8mEVOr1XL0n+F0Wd1iteF93xgimHzo0rRc=";
+    hash = "sha256-yejV2H2CIE7VvMyH2EPApT51qvOB3ik47EbQTxrG4k4=";
   };
 
   nativeBuildInputs = [ cmake ];
