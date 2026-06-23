@@ -19,7 +19,6 @@
   doxygen,
   python3,
   pciutils,
-  fetchpatch,
   withExamples ? [ ],
   shared ? false,
   machine ? (
@@ -32,14 +31,17 @@
   ),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk";
-  version = "25.07";
+  version = "26.03";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-aIbL7cNQu4y+80fRA2fWJZ42Q1Yn+7J9V4rb3A07QQ0=";
+    url = "https://fast.dpdk.org/rel/dpdk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hJiSArvg+67rYvj9xj9pGICsC2bNDcZMFnhDxZ2ynSw=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -55,12 +57,14 @@ stdenv.mkDerivation rec {
     jansson
     libbpf
     elfutils
-    intel-ipsec-mb
     libpcap
     numactl
     openssl.dev
     zlib
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    intel-ipsec-mb
   ];
 
   propagatedBuildInputs = [
@@ -76,13 +80,15 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Dtests=false"
-    "-Denable_docs=true"
-    "-Ddeveloper_mode=disabled"
+    (lib.mesonBool "tests" false)
+    (lib.mesonBool "enable_docs" true)
+    (lib.mesonEnable "developer_mode" false)
+    (lib.mesonOption "default_library" (if shared then "shared" else "static"))
   ]
-  ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
-  ++ lib.optional (machine != null) "-Dmachine=${machine}"
-  ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  ++ lib.optionals (machine != null) [ (lib.mesonOption "machine" machine) ]
+  ++ lib.optionals (withExamples != [ ]) [
+    (lib.mesonOption "examples" (lib.concatStringsSep "," withExamples))
+  ];
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -117,4 +123,4 @@ stdenv.mkDerivation rec {
       zhaofengli
     ];
   };
-}
+})
