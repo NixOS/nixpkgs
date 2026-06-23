@@ -4,11 +4,25 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
-
+  inherit (lib)
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    escapeShellArg
+    flip
+    isString
+    listToAttrs
+    literalExpression
+    mkIf
+    mkOption
+    mkRemovedOptionModule
+    nameValuePair
+    optionalString
+    stringLength
+    substring
+    types
+    ;
   cfg = config.boot.initrd.network.ssh;
   shell = if cfg.shell == null then "/bin/ash" else cfg.shell;
   inherit (config.programs.ssh) package;
