@@ -1486,6 +1486,7 @@
   ./services/networking/zerotierone.nix
   ./services/networking/znc/default.nix
   ./services/printing/cups-pdf.nix
+  ./services/printing/cups-v3.nix
   ./services/printing/cupsd.nix
   ./services/printing/ipp-usb.nix
   ./services/scheduling/atd.nix
