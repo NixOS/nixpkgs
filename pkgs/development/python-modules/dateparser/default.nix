@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.4.0";
+  version = "1.4.1";
 
   disabled = pythonOlder "3.7";
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     tag = "v${version}";
-    hash = "sha256-CmcQf0cGcZVmZfpLSYDGdZUj83T7enNRl9FTY1Q6vtk=";
+    hash = "sha256-TA4GZb24++RF1sw4tECJF5UzouRCwwhPiim5z5/hMzU=";
   };
 
   build-system = [ setuptools ];
