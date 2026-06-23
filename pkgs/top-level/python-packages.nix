@@ -7811,6 +7811,8 @@ self: super: with self; {
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
+  ipinfo = callPackage ../development/python-modules/ipinfo { };
+
   iplotx = callPackage ../development/python-modules/iplotx { };
 
   ipsw-parser = callPackage ../development/python-modules/ipsw-parser { };
