@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    CFLAGS = "-mfpmath=sse -msse2";
+    CXXFLAGS = "-mfpmath=sse -msse2";
+  };
+
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
