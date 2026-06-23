@@ -231,6 +231,10 @@ stdenv.mkDerivation (finalAttrs: {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
+  # check_install is defined in PETSc's top-level makefile. Select it directly
+  # instead of the default GNUmakefile wrapper, then check the installed prefix
+  # by pointing PETSC_DIR at $out. PETSC_ARCH must be empty for prefix installs,
+  # where lib/petsc/conf is not nested below an architecture-specific build dir.
   installCheckFlags = [
     "-f"
     "makefile"
