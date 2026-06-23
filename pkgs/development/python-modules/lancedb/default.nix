@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,14 +50,14 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${finalAttrs.version}";
-    hash = "sha256-OIoQCk0YlWpaaau4AiWxarvH4oy1rAjaS9yvs3mIzzo=";
+    hash = "sha256-TWCS6AnoETObvFYw8/X5naoZ5/R+qqX/O/GdBCgsDpc=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rfAhvC6byg134NF21CR5n0A0DL42CLGy7VvHi9aZUrw=";
+    hash = "sha256-xhpAIrzhfB3D9Pnuld2rFTo9/a0QLG6ATE76l/kxRoY=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
