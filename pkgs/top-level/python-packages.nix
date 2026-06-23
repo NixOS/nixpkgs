@@ -11132,7 +11132,10 @@ self: super: with self; {
 
   nampa = callPackage ../development/python-modules/nampa { };
 
-  nanoarrow = callPackage ../development/python-modules/nanoarrow { zstd-c = pkgs.zstd; };
+  nanoarrow = callPackage ../development/python-modules/nanoarrow {
+    zstd-c = pkgs.zstd;
+    nanoarrow-c = pkgs.nanoarrow;
+  };
 
   nanobind = callPackage ../development/python-modules/nanobind { };
 
