@@ -3,6 +3,7 @@
   stdenv,
   pkgsHostHost,
   pkgsBuildBuild,
+  fetchpatch,
   file,
   curl,
   pkg-config,
@@ -25,6 +26,23 @@ rustPlatform.buildRustPackage.override
   {
     pname = "cargo";
     inherit (rustc.unwrapped) version src;
+
+    patches = [
+      (fetchpatch {
+        name = "CVE-2026-5222.patch";
+        url = "https://github.com/rust-lang/cargo/commit/c4d63a44234de22dc745231c416b80ed848d997f.patch";
+        stripLen = 1;
+        extraPrefix = "src/tools/cargo/";
+        hash = "sha256-YG7xtC308z+o1xVzrV81qqWov1121GVouyAXKflyBF8=";
+      })
+      (fetchpatch {
+        name = "CVE-2026-5223.patch";
+        url = "https://github.com/rust-lang/cargo/commit/285cebf58911eca5b7f177f5d0b1c53e1f646577.patch";
+        stripLen = 1;
+        extraPrefix = "src/tools/cargo/";
+        hash = "sha256-DbmPQ31N4AIYZEBiwwGAn59hgPsFEVTzA6PrI071LXE=";
+      })
+    ];
 
     # the rust source tarball already has all the dependencies vendored, no need to fetch them again
     cargoVendorDir = "vendor";

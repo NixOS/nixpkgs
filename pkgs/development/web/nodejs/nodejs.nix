@@ -47,7 +47,7 @@
   uvwasi,
   zlib,
   zstd,
-  icu,
+  icu78,
   bash,
   ninja,
   pkgconf,
@@ -274,7 +274,7 @@ let
       # that use bash wrappers, e.g. polaris-web.
       buildInputs = [
         bash
-        icu
+        icu78
       ]
       ++ builtins.attrValues sharedLibDeps;
 
