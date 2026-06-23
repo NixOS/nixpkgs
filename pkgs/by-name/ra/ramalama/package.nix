@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -90,6 +91,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       withoutPodman = ramalama.override {
         withPodman = false;
+      };
+    }
+    # Upstream's MlxPlugin rejects hosts other than Apple-Silicon macOS even though
+    # mlx-lm is available on other platforms in nixpkgs.
+    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+      mlx = callPackage ./tests/mlx.nix {
+        ramalama = finalAttrs.finalPackage;
       };
     };
   };
