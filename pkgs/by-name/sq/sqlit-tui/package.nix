@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     duckdb
     keyring
     mariadb
-    mysql-connector
+    mysql-connector-python
     oracledb
     paramiko
     psycopg2

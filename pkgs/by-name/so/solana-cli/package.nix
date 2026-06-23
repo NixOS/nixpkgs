@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  darwin,
   udev,
   protobuf,
   installShellFiles,
@@ -12,20 +13,15 @@
   versionCheckHook,
   clang,
   libclang,
+  libusb1,
   rocksdb,
-  # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/cargo-install-all.sh#L84
+  # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/agave-build-lists.sh
   solanaPkgs ? [
-    "cargo-build-sbf"
-    "cargo-test-sbf"
     "solana"
-    "solana-bench-tps"
     "solana-faucet"
     "solana-gossip"
     "agave-install"
     "solana-keygen"
-    "agave-ledger-tool"
-    "solana-dos"
-    "solana-net-shaper"
     "agave-validator"
     "solana-test-validator"
     "agave-watchtower"
@@ -84,11 +80,14 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     protobuf
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
   buildInputs = [
     openssl
     clang
     libclang
+    libusb1
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
