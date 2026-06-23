@@ -19,12 +19,12 @@
 }:
 buildDotnetModule rec {
   pname = "undercut-f1";
-  version = "4.0.73";
+  version = "4.0.89";
   src = fetchFromGitHub {
     owner = "JustAman62";
     repo = "undercut-f1";
     tag = "v${version}";
-    hash = "sha256-EZnJDkgQK5je/xrw3+hDK3jqzKDaRbSmNPIVIL5F/8I=";
+    hash = "sha256-JAyOSoiaV+US6liqfci0gIgULdgwd7o8VtlJZfGPHFc=";
   };
 
   projectFile = "UndercutF1.Console/UndercutF1.Console.csproj";

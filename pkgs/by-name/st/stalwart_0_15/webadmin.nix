@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  stalwart,
+  stalwart_0_15,
   fetchFromGitHub,
   trunk,
   tailwindcss_3,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     name = "${finalAttrs.pname}-npm-deps";
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
-
+  __structuredAttrs = true;
   cargoHash = "sha256-qYIg1BthkpS77I6duYGGX168Y/IO8Mx4SWMQbE0BwDA=";
 
   postPatch = ''
@@ -72,6 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/stalwartlabs/webadmin";
     changelog = "https://github.com/stalwartlabs/webadmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    inherit (stalwart.meta) maintainers;
+    inherit (stalwart_0_15.meta) maintainers;
   };
 })

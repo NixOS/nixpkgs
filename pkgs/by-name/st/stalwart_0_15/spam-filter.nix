@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  stalwart,
+  stalwart_0_15,
   nix-update-script,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-2D/0mnkV4G/Gyr48rbMGTo6uTL7pe+AT+DNKqkBTIbA=";
   };
-
+  __structuredAttrs = true;
   buildPhase = ''
     bash ./build.sh
   '';
@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       asl20
     ];
-    inherit (stalwart.meta) maintainers;
+    inherit (stalwart_0_15.meta) maintainers;
   };
 })

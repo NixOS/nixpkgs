@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "anytone-emu";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "dmr-tools";
     repo = "anytone-emu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RTYLtVCKP2TW7Ery51POEZuCtyRhkgKhoDhJPe18y80=";
+    hash = "sha256-MdxnToDWnF7bLEv9wQpHUCo58RJi54q2tn2ToXOB954=";
   };
 
   nativeBuildInputs = [

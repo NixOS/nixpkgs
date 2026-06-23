@@ -6,6 +6,7 @@
   stdenv,
   zig_0_15,
   emacs,
+  xcbuild,
 }:
 
 let
@@ -31,7 +32,7 @@ let
       hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
     };
 
-    nativeBuildInputs = [ zig ];
+    nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
@@ -47,6 +48,19 @@ let
 
     zigBuildFlags = finalAttrs.zigCheckFlags;
 
+    postPatch = ''
+      # https://github.com/dakra/ghostel/issues/446
+      substituteInPlace build.zig \
+        --replace-fail 'addInstallFile(version_file, "../ghostel-module.version")' \
+                       'addInstallFile(version_file, "ghostel-module.version")'
+
+      # remove copy_step
+      substituteInPlace build.zig \
+        --replace-fail 'b.getInstallStep().dependOn(&copy_step.step);' ' ' \
+        --replace-fail 'const copy_step = b.addInstallFile' \
+                       '_ = b.addInstallFile'
+    '';
+
     postConfigure = ''
       cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
       chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
@@ -59,11 +73,12 @@ melpaBuild {
   inherit pname version src;
 
   files = ''
-    (:defaults "etc" "ghostel-module${libExt}")
+    (:defaults "etc" "ghostel-module${libExt}" "ghostel-module.version")
   '';
 
   preBuild = ''
     install ${module}/lib/libghostel-module${libExt} ghostel-module${libExt}
+    install --mode=444 ${module}/ghostel-module.version ghostel-module.version
   '';
 
   passthru = {

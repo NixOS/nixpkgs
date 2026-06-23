@@ -3,32 +3,35 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  # webpack,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "eslint";
-  version = "10.4.1";
+  version = "10.5.0";
 
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/gNNO8r2QmvfVS28aF3hsWqCz157pInDVlPxy+xq0hA=";
+    hash = "sha256-mhDOWOp9l42wwMFOFGZwI0Voc1+e5slcXVGh82Nebwg=";
   };
 
   # NOTE: Generating lock-file
-  # arch = [ x64 arm64 ]
-  # platform = [ darwin linux]
-  # npm install --package-lock-only --arch=<arch> --platform=<os>
-  # darwin seems to generate a cross platform compatible lockfile
+  # npm install --package-lock-only
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-OJ/xO2zJk0N4SmKYXCjiqcBc8B+wJKTKDE52ag6ODeo=";
+  npmDepsHash = "sha256-0quy/i4PeyDwNqQsbeebFxz616c/a+1f0XT7tbHgVXM=";
   npmInstallFlags = [ "--omit=dev" ];
 
   dontNpmBuild = true;
   dontNpmPrune = true;
+
+  # Delete dangling symlinks
+  preFixup = ''
+    rm $out/lib/node_modules/eslint/node_modules/{eslint-config-eslint,@eslint/js}
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--generate-lockfile" ];

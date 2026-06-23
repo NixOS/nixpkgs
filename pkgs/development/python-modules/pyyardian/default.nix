@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyyardian";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h3l1o5";
     repo = "pyyardian";
     tag = finalAttrs.version;
-    hash = "sha256-UKQajfgCA2wJhsc9Nu7kdi0X2LjptdXg/ZvDna6yFYw=";
+    hash = "sha256-xikLOZjoa8XQ9v8odJRJpqM94zAjMPpSVH9uJSFvk68=";
   };
 
   build-system = [ setuptools ];

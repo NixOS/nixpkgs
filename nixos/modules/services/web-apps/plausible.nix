@@ -10,6 +10,68 @@ with lib;
 let
   cfg = config.services.plausible;
 
+  seedAdminEnabled = cfg.adminUser.email != null;
+
+  # Note [plausible-seed-admin-no-wizard-race]:
+  # Plausible Community Edition shows an unauthenticated "first launch" setup
+  # wizard to create the admin user whenever no user exists in the database
+  # (`Plausible.Release.should_be_first_launch?` is
+  # `not Repo.exists?(Plausible.Auth.User)`, and `PlausibleWeb.FirstLaunchPlug`
+  # 302-redirects every page to `/register` while that is true). On an instance
+  # reachable over the network this lets any stranger create the first admin
+  # account.
+  #
+  # `DISABLE_REGISTRATION` does NOT gate this wizard (it must not, otherwise the
+  # first user could never be created), so the only robust fix is to ensure a
+  # user already exists before the web server accepts any connection.
+  #
+  # We therefore seed the admin user inside the service's main `script`, after
+  # the DB migrations and strictly before `exec plausible start`. This
+  # guarantees there is no time window in which the wizard is reachable. The
+  # seed is idempotent (it only inserts when no user exists), so it is safe to
+  # run on every (re)start.
+  #
+  # We insert the precomputed bcrypt `password_hash` directly rather than going
+  # through `Plausible.Auth.User.new/1`, so the plaintext password never has to
+  # be stored on disk. `email_verified` is set to `true` because self-hosted
+  # Plausible does not require email verification by default.
+  #
+  # This Elixir script may need updating as newer Plausible versions get
+  # released (e.g. if the `Plausible.Auth.User` schema changes). The NixOS VM
+  # test `nixos/tests/plausible.nix` validates that the wizard is unreachable
+  # once an admin user is configured.
+  seedAdminScript = pkgs.writeText "plausible-seed-admin.exs" ''
+    # This script runs via `plausible eval`, which evaluates it WITHOUT
+    # starting the `:plausible` application or its Ecto repos. We therefore
+    # start them ourselves before querying/inserting, mirroring the private
+    # `Plausible.Release.prepare/0` (the same startup the release uses for its
+    # `migrate`/`seed` commands): load the app, start the DB-related apps and
+    # start each Ecto repo. Otherwise `Repo.exists?/1` raises
+    # `could not lookup Ecto repo Plausible.Repo because it was not started`.
+    :ok = Application.ensure_loaded(:plausible)
+    Enum.each([:ssl, :postgrex, :ch, :ecto], &Application.ensure_all_started/1)
+    Enum.each(Application.fetch_env!(:plausible, :ecto_repos), & &1.start_link(pool_size: 2))
+
+    alias Plausible.Repo
+    alias Plausible.Auth.User
+
+    unless Repo.exists?(User) do
+      email = System.fetch_env!("SEED_ADMIN_USER_EMAIL")
+      name = System.fetch_env!("SEED_ADMIN_USER_NAME")
+      password_hash = System.fetch_env!("SEED_ADMIN_USER_PASSWORD_HASH")
+
+      %User{
+        email: email,
+        name: name,
+        password_hash: password_hash,
+        email_verified: true
+      }
+      |> Repo.insert!()
+
+      IO.puts("plausible: seeded admin user #{email}")
+    end
+  '';
+
 in
 {
   options.services.plausible = {
@@ -48,6 +110,57 @@ in
             Path to the UNIX domain-socket to communicate with `postgres`.
           '';
         };
+      };
+    };
+
+    adminUser = {
+      email = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = ''
+          Email address of an admin user to seed into the database before the
+          Plausible web server starts accepting connections.
+
+          Plausible Community Edition shows an unauthenticated "first launch"
+          setup wizard whenever no user exists in the database, which redirects
+          every page to `/register` and lets anyone reaching the instance over
+          the network create the first admin account. Setting this option (and
+          {option}`services.plausible.adminUser.passwordHashFile`) seeds an
+          admin user before the port is opened, so the wizard is never reachable
+          by strangers.
+
+          When `null`, no user is seeded and Plausible's setup wizard is used as
+          usual.
+
+          Seeding is idempotent: if any user already exists, no user is created.
+        '';
+        example = "admin@example.org";
+      };
+
+      name = mkOption {
+        default = "Admin";
+        type = types.str;
+        description = ''
+          Display name of the seeded admin user (see
+          {option}`services.plausible.adminUser.email`).
+        '';
+      };
+
+      passwordHashFile = mkOption {
+        default = null;
+        type = with types; nullOr (either str path);
+        description = ''
+          Path to a file containing the bcrypt hash of the seeded admin user's
+          password (see {option}`services.plausible.adminUser.email`).
+
+          Using a hash file (rather than the plaintext password) means the
+          plaintext never has to be stored on disk or in the Nix store. Generate
+          a hash e.g. with `mkpasswd -m bcrypt` (the resulting `$2b$...` string).
+
+          This file is read via systemd's `LoadCredential`, so it does not enter
+          the Nix store.
+        '';
+        example = "/run/secrets/plausible-admin-password-hash";
       };
     };
 
@@ -150,33 +263,34 @@ in
     (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ]
       "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed"
     )
-    (mkRemovedOptionModule [
-      "services"
-      "plausible"
-      "adminUser"
-      "name"
-    ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
-      "services"
-      "plausible"
-      "adminUser"
-      "email"
-    ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
-      "services"
-      "plausible"
-      "adminUser"
-      "passwordFile"
-    ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [
-      "services"
-      "plausible"
-      "adminUser"
-      "activate"
-    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "plausible"
+        "adminUser"
+        "passwordFile"
+      ]
+      "Use services.plausible.adminUser.passwordHashFile instead, which keeps the plaintext password out of the Nix store"
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "plausible"
+        "adminUser"
+        "activate"
+      ]
+      "The seeded admin user is always created as email-verified; self-hosted Plausible does not require email verification"
+    )
   ];
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = seedAdminEnabled -> (cfg.adminUser.passwordHashFile != null);
+        message = "services.plausible.adminUser.passwordHashFile must be set when services.plausible.adminUser.email is set.";
+      }
+    ];
+
     services.postgresql = mkIf cfg.database.postgres.setup {
       enable = true;
     };
@@ -285,6 +399,18 @@ in
             ''}
 
             ${cfg.package}/migrate.sh
+
+            ${lib.optionalString seedAdminEnabled ''
+              # Seed the admin user before the web server starts, so the
+              # unauthenticated "first launch" setup wizard is never reachable;
+              # see note [plausible-seed-admin-no-wizard-race].
+              export SEED_ADMIN_USER_EMAIL=${lib.escapeShellArg cfg.adminUser.email}
+              export SEED_ADMIN_USER_NAME=${lib.escapeShellArg cfg.adminUser.name}
+              SEED_ADMIN_USER_PASSWORD_HASH="$(< "$CREDENTIALS_DIRECTORY/ADMIN_USER_PASSWORD_HASH" )"
+              export SEED_ADMIN_USER_PASSWORD_HASH
+              plausible eval "$(< ${seedAdminScript} )"
+            ''}
+
             export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
 
             exec plausible start
@@ -300,6 +426,9 @@ in
             ]
             ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [
               "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"
+            ]
+            ++ lib.optionals seedAdminEnabled [
+              "ADMIN_USER_PASSWORD_HASH:${cfg.adminUser.passwordHashFile}"
             ];
           };
         };

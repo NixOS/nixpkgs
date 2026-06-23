@@ -1145,8 +1145,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.5.1";
-          hash = "sha256-adpTh4tNlWFdAGultTLZ9SfN9sMOpMaMWq8x6diGzBg=";
+          version = "9.0.1";
+          hash = "sha256-P2GoE92SwGMb45On5ziTZ9dBjPb0VnFSo+4TEwrcWuM=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1884,8 +1884,8 @@ let
         mktplcRef = {
           name = "godot-tools";
           publisher = "geequlim";
-          version = "2.6.1";
-          hash = "sha256-x+u5t4HB+uM2CbhSw0h/zoYPgBPTZNFaMuzL+KB9mAM=";
+          version = "2.7.1";
+          hash = "sha256-TNCMSmZdBXxAHkcFLpTDkCzaXNO4yvkCfQ8Xrb9gquo=";
         };
         meta = {
           description = "VS Code extension for game development with Godot Engine and GDScript";
@@ -2015,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.81.0";
-          hash = "sha256-0IN00IpgON/2nNl5/eQn+KABNtmG2ymVULOBPvi2dYA=";
+          version = "6.83.2";
+          hash = "sha256-IsiK3A+aVlYKnTSkgeTz4ZZc1rXiYCKDXPVrJsnSFRk=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2906,8 +2906,8 @@ let
         mktplcRef = {
           name = "vscode-ltex-plus";
           publisher = "ltex-plus";
-          version = "15.6.1";
-          hash = "sha256-UOiYjA11P7xqPFgdR7eS63wOQl9dqWAqBxz3nklapqo=";
+          version = "15.7.1";
+          hash = "sha256-wOwOD/rsUdwGJ24n6NkH1XY5Hf4T6LE34nFDOteubLY=";
         };
         meta = {
           description = "VS Code extension for grammar/spell checking using LanguageTool with support for LaTeX, Markdown, and others";
@@ -5266,8 +5266,8 @@ let
         mktplcRef = {
           name = "csharp-ls";
           publisher = "vytautassurvila";
-          version = "0.0.32";
-          hash = "sha256-dc7aIUb+5fdmqVeHrysy8jjk0Sx6ThIsO9KagdQpx+M=";
+          version = "0.0.33";
+          hash = "sha256-VsNjdPmnstXgmgxzbC7+IGFggfLtYlQFsH3tGWjdUhM=";
         };
         meta = {
           changelog = "https://github.com/vytautassurvila/vscode-csharp-ls/blob/master/CHANGELOG.md";

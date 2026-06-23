@@ -160,9 +160,7 @@ beamPackages.mixRelease rec {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) plausible;
-    };
+    tests = nixosTests.plausible;
     updateScript = nix-update-script {
       extraArgs = [
         "-s"
@@ -217,7 +215,10 @@ beamPackages.mixRelease rec {
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
     description = "Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      stepbrobd
+      nh2
+    ];
     platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,5 @@
 {
+  actool,
   stdenv,
   lib,
   nodejs_24,
@@ -40,13 +41,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.14.0";
+  version = "8.15.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-U5xJumoKWc1hGZ7OML05U7U3DFdrnRHUlfIU3qYph6w=";
+    hash = "sha256-SiOgNUll6J+EZNlmM6yhXakOc5qFCFRE/GczhaH57Vo=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    actool
     node-gyp
     nodejs
     pnpmConfigHook
@@ -170,13 +172,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-YQY+ohfLcaR2jzB9bzWpNQImuLja2DQ9iwDKhoH8kiU=";
+    hash = "sha256-/z+P9mb7Cm3FzzMpV6Da6THcHd73JgPuuB0Gx8KwKcc=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1781124627;
+    SOURCE_DATE_EPOCH = 1781737260;
   };
 
   preBuild = ''

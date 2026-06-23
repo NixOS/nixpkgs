@@ -10209,6 +10209,11 @@
     githubId = 13297896;
     name = "David Isaksson";
   };
+  grandjeanlab = {
+    github = "grandjeanlab";
+    githubId = 22633767;
+    name = "grandjeanlab";
+  };
   gravndal = {
     email = "gaute.ravndal+nixos@gmail.com";
     github = "gravndal";
@@ -14627,8 +14632,7 @@
   };
   koi = {
     name = "june";
-    email = "me@koi.rip";
-    matrix = "@koi:nelliel.cv";
+    email = "packages@koi.rip";
     github = "koibtw";
     githubId = 75480869;
     keys = [
@@ -26093,6 +26097,12 @@
     github = "soopyc";
     githubId = 13762043;
     matrix = "@sophie:nue.soopy.moe";
+  };
+  sophiebsw = {
+    name = "Sophia";
+    email = "nixpkgs@drifter.dev";
+    github = "sophiebsw";
+    githubId = 4594464;
   };
   sophronesis = {
     email = "oleksandr.buzynnyi@gmail.com";
