@@ -131,7 +131,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       "''${makeWrapperArgs[@]}"
 
     makeWrapper ${lib.getExe python3Packages.granian} $out/bin/fiduswriter-start \
-      --add-flags '--host ''${GRANIAN_HOST:-0.0.0.0} --port ''${GRANIAN_PORT:-8000} fiduswriter.asgi:application' \
+      --add-flags '\
+        --interface asgi \
+        --host ''${GRANIAN_HOST:-0.0.0.0} \
+        --port ''${GRANIAN_PORT:-8000} \
+        --access-log \
+        fiduswriter.asgi:application \
+      ' \
       "''${makeWrapperArgs[@]}"
   '';
 
