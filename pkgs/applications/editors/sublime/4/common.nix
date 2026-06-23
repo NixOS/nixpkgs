@@ -221,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
       demin-dmitriy
       zimbatm
     ];
+    mainProgram = "subl";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
