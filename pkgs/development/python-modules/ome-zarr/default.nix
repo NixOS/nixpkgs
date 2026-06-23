@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ome-zarr";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hrk+F1a1yJzaIb7G80sGdqeMb2POIAD2gLOfK57A22A=";
+    hash = "sha256-Z3jSRhOW6e2YTfyDATOoDRdrJyQcdZaWvuWkGdwL5Mo=";
   };
 
   build-system = [
