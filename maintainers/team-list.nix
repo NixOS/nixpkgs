@@ -402,6 +402,7 @@ with lib.maintainers;
       GaetanLepage
       natsukium
       thomasjm
+      haansn08
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
