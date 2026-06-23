@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  callPackage,
   python3Packages,
   fetchFromGitHub,
   go-md2man,
@@ -80,9 +82,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = ./update.sh;
+
     tests = {
+      nocontainer = callPackage ./tests/nocontainer.nix {
+        ramalama = finalAttrs.finalPackage;
+      };
+
       withoutPodman = ramalama.override {
         withPodman = false;
+      };
+    }
+    //
+      lib.optionalAttrs
+        (
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+        )
+        {
+          podman = callPackage ./tests/podman.nix { };
+        }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      mlx = callPackage ./tests/mlx.nix {
+        ramalama = finalAttrs.finalPackage;
       };
     };
   };
