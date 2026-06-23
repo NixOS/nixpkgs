@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "baddns";
   version = "1.12.294";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "baddns";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HAVoCyI7yxCdAR4qq7yXJz3YxkPnhBdeXLJZmzZpwF4=";
   };
 
@@ -63,9 +63,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to check subdomains for subdomain takeovers and other DNS issues";
     homepage = "https://github.com/blacklanternsecurity/baddns/";
-    changelog = "https://github.com/blacklanternsecurity/baddns/releases/tag/${src.tag}";
+    changelog = "https://github.com/blacklanternsecurity/baddns/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "baddns";
   };
-}
+})
