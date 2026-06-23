@@ -28586,6 +28586,11 @@
     githubId = 223833;
     name = "Klaas van Schelven";
   };
+  VarNepvius = {
+    name = "VarNapvius";
+    github = "VarNapvius";
+    githubId = 14352929;
+  };
   varunpatro = {
     email = "varun.kumar.patro@gmail.com";
     github = "varunpatro";
