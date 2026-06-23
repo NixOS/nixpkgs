@@ -191,6 +191,12 @@ in
       + ''
         mkdir -p /var/lib/glusterd/glusterfind/.keys
         mkdir -p /var/lib/glusterd/hooks/1/delete/post/
+      ''
+      # Volume option presets, installed by upstream under $out/var; copy them so
+      # `gluster volume set <vol> group <name>` works (#33159).
+      + ''
+        mkdir -p /var/lib/glusterd/groups/
+        ${rsync}/bin/rsync -a ${glusterfs}/var/lib/glusterd/groups/ /var/lib/glusterd/groups/
       '';
 
       serviceConfig = {
