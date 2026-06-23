@@ -7,20 +7,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "exoscale-cli";
-  version = "1.93.0";
+  version = "1.95.2";
 
   src = fetchFromGitHub {
     owner = "exoscale";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8GEho1mlxqggVFwUtvpMGyJKk/E+eFN2FnCQJwK51L0=";
+    sha256 = "sha256-otdEQyudzL6P3arfBgd9Fx2g77QtD3w5OdVcgum//H8=";
   };
 
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [ "internal/integ" ];
+  excludedPackages = [
+    "tests/e2e"
+    "tests/integ"
+  ];
 
   ldflags = [
     "-s"
