@@ -67,7 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  configureFlags = [ "--disable-examples" ];
+  configureFlags = [
+    "--disable-examples"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # lttng-ust puts a single array on the stack that's the size of
+    # musl's whole default stack.
+    # https://review.lttng.org/c/lttng-ust/+/18160
+    "CFLAGS=-Wl,-z,stack-size=2097152"
+  ];
 
   doCheck = true;
 
