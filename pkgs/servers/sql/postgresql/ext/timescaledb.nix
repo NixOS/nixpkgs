@@ -101,6 +101,12 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with lib.licenses; if enableUnfree then tsl else asl20;
-    broken = lib.versionOlder postgresql.version "15";
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "2.28.0") "Is postgresql19Packages.timescaledb still broken?" (
+          lib.versionAtLeast postgresql.version "19"
+        );
   };
 })
