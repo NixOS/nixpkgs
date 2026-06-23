@@ -94,6 +94,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = ./update.sh;
+
     tests = {
       nocontainer = callPackage ./tests/nocontainer.nix {
         ramalama = finalAttrs.finalPackage;
@@ -103,6 +105,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
         withPodman = false;
       };
     }
+    //
+      lib.optionalAttrs
+        (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+        {
+          podman = callPackage ./tests/podman.nix {
+            ramalama = finalAttrs.finalPackage;
+          };
+        }
     // lib.optionalAttrs mlxRuntimeSupported {
       mlx = callPackage ./tests/mlx.nix {
         ramalama = finalAttrs.finalPackage;
