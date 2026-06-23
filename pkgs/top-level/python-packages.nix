@@ -2148,6 +2148,8 @@ self: super: with self; {
 
   blake3 = callPackage ../development/python-modules/blake3 { };
 
+  blasthttp = callPackage ../development/python-modules/blasthttp { };
+
   ble-serial = callPackage ../development/python-modules/ble-serial { };
 
   bleach = callPackage ../development/python-modules/bleach { };

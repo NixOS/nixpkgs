@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "osc-lib";
     tag = version;
-    hash = "sha256-HYRm3GdgGUZqi7sqe2wmni2t0t7Ox3qJAukGABKPoyY=";
+    hash = "sha256-XwOJSd3k/74FvSZGveSTjH+KGLlQ2jNbk8GrTzFhbL0=";
   };
 
   patches = [
