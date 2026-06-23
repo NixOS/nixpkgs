@@ -23,7 +23,9 @@
   libGL,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "mangowc";
+  __structuredAttrs = true;
+  strictDeps = true;
+  pname = "mango";
   version = "0.14.4";
 
   src = fetchFromGitHub {
