@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n66RPDTfBsPCR/4y8dpU3Au1WZHpkpln899e2+LKxto=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   cmakeBuildType = "Release";
 
   cmakeFlags =
@@ -77,7 +80,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "SvtAv1EncApp";
   };
-
-  strictDeps = true;
-  __structuredAttrs = true;
 })
