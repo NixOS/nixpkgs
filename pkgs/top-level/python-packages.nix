@@ -2144,6 +2144,8 @@ self: super: with self; {
 
   blake3 = callPackage ../development/python-modules/blake3 { };
 
+  blastdns = callPackage ../development/python-modules/blastdns { };
+
   blasthttp = callPackage ../development/python-modules/blasthttp { };
 
   ble-serial = callPackage ../development/python-modules/ble-serial { };
