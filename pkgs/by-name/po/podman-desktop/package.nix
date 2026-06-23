@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
-  electron_41,
+  electron_42,
   nodejs-slim_24,
   pnpm_10,
   fetchPnpmDeps,
@@ -21,12 +21,12 @@
 let
   nodejs-slim = nodejs-slim_24;
   pnpm = pnpm_10.override { inherit nodejs-slim; };
-  electron = electron_41;
+  electron = electron_42;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.27.2";
+  version = "1.28.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -66,14 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HcT33KjWnoY/pGuolt0BZurxdaWgUTF0tuACE9flfCM=";
+    hash = "sha256-8pp1lxWduKZuxDXmq3GQQ7w10PUC9wR667gO6u9OhSI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-FD5lXAgA6uJLRLbaiZDbmow6BEiF6DWCzryAzyMGKe8=";
+    hash = "sha256-llkgy+JDJRxTZXxXHxza3RKdACU/Yd9xiGJ5CyptXpY=";
   };
 
   patches = [
