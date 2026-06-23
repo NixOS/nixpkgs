@@ -1017,7 +1017,13 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = serializableValueWith { typeName = "XML"; };
+        type =
+          attrsOf (serializableValueWith {
+            typeName = "XML";
+          })
+          // {
+            description = "XML value";
+          };
 
         generate =
           name: value:
