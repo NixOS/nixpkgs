@@ -54,11 +54,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     let
       binPackages = [
         llama-cpp-vulkan
+        python3Packages.huggingface-hub
       ]
-      ++ (with python3Packages; [
-        huggingface-hub
-        mlx-lm
-      ])
+      ++ lib.optional stdenv.hostPlatform.isDarwin python3Packages.mlx-lm
       ++ lib.optional withPodman podman;
     in
     ''
