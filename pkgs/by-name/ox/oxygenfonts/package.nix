@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation {
 
     homepage = "https://github.com/vernnobile/oxygenFont";
     license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ VarNepvius ];
     platforms = lib.platforms.all;
   };
 }
