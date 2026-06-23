@@ -3134,6 +3134,8 @@ with pkgs;
     nvidiaSupport = true;
   };
 
+  zennotes = callPackage ../applications/editors/zennotes { };
+
   zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
 
   zstd = callPackage ../tools/compression/zstd {
