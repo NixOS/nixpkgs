@@ -180,7 +180,9 @@ in
       # Excludes one hook due to missing SELinux binaries.
       + ''
         mkdir -p /var/lib/glusterd/hooks/
-        ${rsync}/bin/rsync -a --exclude="S10selinux-label-brick.sh" ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
+        # --copy-unsafe-links: the glusterfind hook is a symlink into the package's
+        # libexec that would dangle once copied verbatim into / (#257863).
+        ${rsync}/bin/rsync -a --copy-unsafe-links --exclude="S10selinux-label-brick.sh" ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
 
         ${tlsCmd}
       ''
