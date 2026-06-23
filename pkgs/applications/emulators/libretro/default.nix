@@ -38,6 +38,8 @@ lib.makeScope newScope (self: {
 
   bluemsx = self.callPackage ./cores/bluemsx.nix { };
 
+  bk = self.callPackage ./cores/bk.nix { };
+
   bsnes = self.callPackage ./cores/bsnes.nix { };
 
   bsnes-hd = self.callPackage ./cores/bsnes-hd.nix { };
