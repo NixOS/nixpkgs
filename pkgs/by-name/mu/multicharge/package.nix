@@ -1,0 +1,96 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  buildType ? "meson",
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+  python3,
+  blas,
+  lapack,
+  mctc-lib,
+  mstore,
+}:
+
+assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "multicharge";
+  version = "0.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "grimme-lab";
+    repo = "multicharge";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
+  };
+
+  patches = [
+    # Fix wrong generation of package config include paths
+    ./pkgconfig.patch
+  ];
+
+  nativeBuildInputs = [
+    gfortran
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals (buildType == "meson") [
+    meson
+    ninja
+  ]
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
+
+  propagatedBuildInputs = [
+    mctc-lib
+    mstore
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs --build config/install-mod.py
+
+    # custom blas and lapack need to be explicitly found for transitive dependencies
+    # otherwise CMAKE builds can not proceed.
+    echo 'set(custom-blas_FOUND TRUE)' >> config/cmake/Findcustom-blas.cmake
+    echo 'set(custom-lapack_FOUND TRUE)' >> config/cmake/Findcustom-lapack.cmake
+  '';
+
+  preCheck = ''
+    export OMP_NUM_THREADS=2
+  '';
+
+  meta = {
+    description = "Electronegativity equilibration model for atomic partial charges";
+    mainProgram = "multicharge";
+    license = lib.licenses.asl20;
+    homepage = "https://github.com/grimme-lab/multicharge";
+    changelog = "https://github.com/grimme-lab/multicharge/releases/tag/${finalAttrs.src.tag}";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
+  };
+})

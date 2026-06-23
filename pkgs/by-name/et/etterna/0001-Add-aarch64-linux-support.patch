@@ -1,0 +1,61 @@
+From 778cb2ed0d56614fd06d2129398799e46ff51720 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Mon, 3 Nov 2025 22:25:10 +0100
+Subject: [PATCH] Add aarch64-linux support
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src/Etterna/Models/Misc/StageStats.cpp | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/src/Etterna/Models/Misc/StageStats.cpp b/src/Etterna/Models/Misc/StageStats.cpp
+index 0c70cf25ae..671717505d 100644
+--- a/src/Etterna/Models/Misc/StageStats.cpp
++++ b/src/Etterna/Models/Misc/StageStats.cpp
+@@ -19,8 +19,9 @@
+ #include "Etterna/Singletons/GameManager.h"
+ #include "Etterna/Models/NoteData/NoteDataUtil.h"
+ 
+-#if !( defined(_WIN32) || defined(__APPLE__))
+-	#include <cpuid.h> //We only use cpuid.h on Linux :)
++#if !( defined(_WIN32) || defined(__APPLE__)) \
++    && (defined(__x86_64__) || defined(__i386__))
++	#include <cpuid.h> //We only use cpuid.h on x86 Linux :)
+ #endif
+ 
+ #ifdef _WIN32
+@@ -236,6 +237,8 @@ getCpuHash()
+ 
+ #else  // !DARWIN
+ 
++#if defined(__x86_64__) || defined(__i386__)
++
+ uint16_t
+ getCpuHash()
+ {
+@@ -248,6 +251,22 @@ getCpuHash()
+ 
+ 	return hash;
+ }
++
++#else // !x86
++
++uint16_t
++getCpuHash()
++{
++	// https://www.kernel.org/doc/html/v6.17/arch/arm64/cpu-feature-registers.html
++	uint64_t midr = 0;
++	asm("mrs %0, MIDR_EL1" : "=r"(midr));
++
++	// Only leave implementer, variant, and architecture bits.
++	// See https://developer.arm.com/documentation/ddi0601/2025-09/AArch64-Registers/MIDR-EL1--Main-ID-Register?lang=en
++	return midr >> 16;
++}
++
++#endif // !x86
+ #endif // !DARWIN
+ 
+ std::string
+-- 
+2.51.0
+

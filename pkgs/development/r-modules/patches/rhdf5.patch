@@ -1,0 +1,11 @@
+diff --git a/src/Makevars b/src/Makevars
+index 713b44c..704ac17 100644
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -1,5 +1,5 @@
+ RHDF5_LIBS = $(shell "$(R_HOME)/bin${R_ARCH_BIN}/Rscript" -e 'Rhdf5lib::pkgconfig("PKG_C_LIBS")')
+-PKG_LIBS = $(RHDF5_LIBS)
++PKG_LIBS = $(RHDF5_LIBS) -lhdf5
+ 
+ #PKG_CFLAGS = -Wall
+ 

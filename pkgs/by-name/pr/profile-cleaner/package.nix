@@ -1,0 +1,52 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  parallel,
+  sqlite,
+  bc,
+  file,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.46";
+  pname = "profile-cleaner";
+
+  src = fetchFromGitHub {
+    owner = "graysky2";
+    repo = "profile-cleaner";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-gY6fmm6B6H7tg3xENnqaoy1QEMIf+a3k/C+JcnkyZwo=";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    PREFIX=\"\" DESTDIR=$out make install
+    wrapProgram $out/bin/profile-cleaner \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          parallel
+          sqlite
+          bc
+          file
+        ]
+      }"
+  '';
+
+  meta = {
+    description = "Reduces browser profile sizes by cleaning their sqlite databases";
+    longDescription = ''
+      Use profile-cleaner to reduce the size of browser profiles by organizing
+      their sqlite databases using sqlite3's vacuum and reindex functions. The
+      term "browser" is used loosely since profile-cleaner happily works on
+      some email clients and newsreaders too.
+    '';
+    homepage = "https://github.com/graysky2/profile-cleaner";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.devhell ];
+    mainProgram = "profile-cleaner";
+  };
+})

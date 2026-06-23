@@ -1,0 +1,15 @@
+{
+  "audio_service_mpris": "sha256-IVv1ioBpiK0VbnOFqnc9NbNn3Z+l9VN2clpCQjckBRo=",
+  "audio_service_win": "sha256-OZq2waTr0WLJ6uki/VLdUBdDdui25PvXnMNFohs7gjs=",
+  "desktop_webview_window": "sha256-KWON5aTPlVVrLidmnfpV+syWPYEngChOvkN7miIFjvE=",
+  "media_kit": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_android_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_ios_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_linux": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_macos_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_ohos": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_libs_windows_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "media_kit_video": "sha256-JnMA/Q3DcuD/if7vAu8ZztKVBtfXAQb3SmXmT+dxVmQ=",
+  "webview_windows": "sha256-afBTwbam9YA0xvIYMtiJe+CKi8GWit1HqDR3J72r2o0="
+}

@@ -1,0 +1,41 @@
+From c1283b82daff94ebac21fc20cb8df0b05aa080f8 Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Fri, 22 May 2026 23:06:52 -0700
+Subject: [PATCH] net: disable networking tests
+
+---
+ packages/net/_test.pony | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/packages/net/_test.pony b/packages/net/_test.pony
+index 1d7b2d6f..69cbeea6 100644
+--- a/packages/net/_test.pony
++++ b/packages/net/_test.pony
+@@ -20,24 +20,6 @@ actor \nodoc\ Main is TestList
+     // Tests below function across all systems and are listed alphabetically
+     test(_TestOsIpString)
+     test(_TestTCPConnectionFailed)
+-    test(_TestTCPExpect)
+-    test(_TestTCPExpectOverBufferSize)
+-    test(_TestTCPExpectSetToZero)
+-    test(_TestTCPMute)
+-    test(_TestTCPProxy)
+-    test(_TestTCPUnmute)
+-    test(_TestTCPWritev)
+-
+-    // Tests below exclude windows and are listed alphabetically
+-    ifdef not windows then
+-      test(_TestTCPConnectionToClosedServerFailed)
+-      test(_TestTCPThrottle)
+-    end
+-
+-    // Tests below exclude osx and are listed alphabetically
+-    ifdef not osx then
+-      test(_TestBroadcast)
+-    end
+ 
+ class \nodoc\ _TestPing is UDPNotify
+   let _h: TestHelper
+-- 
+2.53.0
+
