@@ -4109,6 +4109,12 @@
     github = "brittonr";
     githubId = 4730485;
   };
+  BrockoliniMorgan = {
+    name = "Brock Morgan";
+    email = "brockjamesmorgan@gmail.com";
+    github = "BrockoliniMorgan";
+    githubId = 166275321;
+  };
   brodes = {
     email = "me@brod.es";
     github = "brhoades";

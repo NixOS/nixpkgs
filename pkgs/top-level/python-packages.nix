@@ -17570,6 +17570,8 @@ self: super: with self; {
 
   runstats = callPackage ../development/python-modules/runstats { };
 
+  runtype = callPackage ../development/python-modules/runtype { };
+
   russound = callPackage ../development/python-modules/russound { };
 
   rustworkx = callPackage ../development/python-modules/rustworkx { };
