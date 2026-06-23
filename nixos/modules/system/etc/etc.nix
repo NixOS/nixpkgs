@@ -391,7 +391,7 @@ in
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
         etcDump = pkgs.runCommandLocal "etc-dump" { } ''
-          ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
+          ${lib.getExe pkgs.build-composefs-dump} ${etcJson} > $out
         '';
       in
       pkgs.runCommandLocal "etc-metadata.erofs"
