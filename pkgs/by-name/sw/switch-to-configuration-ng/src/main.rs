@@ -743,11 +743,6 @@ fn handle_modified_unit(
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
                 record_unit(&restart_list, unit);
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
@@ -804,14 +799,6 @@ fn handle_modified_unit(
                         } else if socket_in_new_config {
                             // Transitioning to socket activation; let the socket start it.
                             socket_activated = true;
-                        } else {
-                            continue;
-                        }
-
-                        // Remove from units to reload so we don't restart and reload
-                        if units_to_reload.contains_key(unit) {
-                            units_to_reload.remove(unit);
-                            unrecord_unit(&reload_list, unit);
                         }
                     }
                 }
@@ -840,11 +827,11 @@ fn handle_modified_unit(
                 } else {
                     units_to_stop.insert(unit.to_string(), ());
                 }
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
+            }
+
+            // Remove from units to reload so we don't restart and reload
+            if units_to_reload.remove(unit).is_some() {
+                unrecord_unit(&reload_list, unit);
             }
         }
     }
