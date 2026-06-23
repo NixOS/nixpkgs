@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
-  version = "2.4.1";
+  version = "2.5.0";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-SM0Bn4qgeqRJAXr2MMjNjfWJVTcciERZxMHiyx4Z1hA=";
+    hash = "sha256-+Fi3ytznasQS4M8cMlsSpQtxoyCU2Enivrp/TTKbvtA=";
   };
 
   strictDeps = true;
