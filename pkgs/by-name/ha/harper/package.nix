@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  vscode-extensions,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=harper-ls"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = vscode-extensions.elijah-potter.harper;
+    updateScript = nix-update-script { };
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -16,7 +16,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lua";
-  version = "5.0.16";
+  version = "5.0.17";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fcitx";
     repo = "fcitx5-lua";
     tag = finalAttrs.version;
-    hash = "sha256-df0BjORGT+zx/8kg/nGPDa9MBAXpPtdfx8S5O+E31wE=";
+    hash = "sha256-uEWa1wprWT8vDSHKXHUHEmXBtNHgj94hFuKvBm5GXqc=";
   };
 
   nativeBuildInputs = [

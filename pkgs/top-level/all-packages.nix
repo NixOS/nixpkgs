@@ -7701,10 +7701,10 @@ with pkgs;
     enableAirplay2 = true;
   };
 
-  stalwart-webadmin = stalwart.webadmin;
-  stalwart-spam-filter = stalwart.spam-filter;
+  stalwart-webadmin = stalwart_0_15.webadmin;
+  stalwart-spam-filter = stalwart_0_15.spam-filter;
 
-  stalwart-enterprise = stalwart.override {
+  stalwart-enterprise = stalwart_0_15.override {
     stalwartEnterprise = true;
   };
 

@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dependency-injector";
-  version = "4.49.0";
+  version = "4.49.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ets-labs";
     repo = "python-dependency-injector";
     tag = finalAttrs.version;
-    hash = "sha256-oL+Vgz2EOD/w385MJy+hLfkSctLEKRrzbx5RP9N8AmY=";
+    hash = "sha256-ncxKYzkV10hA2D8U1/zvkYJ/VFhNUsvRaOBNjzhIdtA=";
   };
 
   build-system = [

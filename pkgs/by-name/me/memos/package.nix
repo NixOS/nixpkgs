@@ -52,6 +52,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-6oJgxhGS7aD3I0umTQuVMLzcOhzf53g4TZcCtkKrrc8=";
 
+  ldflags = [
+    "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
+  ];
+
   preBuild = ''
     rm -rf server/router/frontend/dist
     cp -r ${finalAttrs.memos-web} server/router/frontend/dist

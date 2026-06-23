@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wfview";
-  version = "2.11";
+  version = "2.23";
 
   src = fetchFromGitLab {
     owner = "eliggett";
     repo = "wfview";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oPgQnldJA3IEZ0FuigdBpArhVcWE0GR8oa/kyYWDvEo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RQjNdeBvONxqUdybUvO17lTFjM4kkGx10fNdHsvH+0M=";
   };
 
   patches = [
