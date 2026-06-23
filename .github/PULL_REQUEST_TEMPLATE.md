@@ -13,7 +13,6 @@ For new packages please briefly describe the package or provide a link to its ho
 - Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
-  - [ ] x86_64-darwin
   - [ ] aarch64-darwin
 - Tested, as applicable:
   - [ ] [NixOS tests] in [nixos/tests].
