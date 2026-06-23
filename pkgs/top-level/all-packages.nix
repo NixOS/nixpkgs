@@ -2327,6 +2327,7 @@ with pkgs;
     definitions = {
       clojure = clojupyter.definition;
       octave = octave-kernel.definition;
+      r = r-ark-kernel.definition;
       # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
     };
   };
@@ -4556,6 +4557,8 @@ with pkgs;
   };
 
   octave-kernel = recurseIntoAttrs (callPackage ../applications/editors/jupyter-kernels/octave { });
+
+  r-ark-kernel = callPackage ../applications/editors/jupyter-kernels/r-ark { };
 
   octavePackages = recurseIntoAttrs octave.pkgs;
 
