@@ -201,6 +201,10 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (!(grammarDrv.checkTreeSitterJson or true)) [
+    "test_config"
+  ];
+
   pythonImportsCheck = [ snakeCaseName ];
 
   meta = {
