@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Mapping, List, Any, Set, Self
-from graphlib import TopologicalSorter
 from .error import VarsError
 
 
@@ -9,7 +8,7 @@ class VarsPromptBackend:
 	script: str
 
 	def from_jsom(json: Any) -> Self:
-		return VarsPromptBackend(json["script"])
+		return VarsPromptBackend(script=json["script"])
 
 
 @dataclass
@@ -19,7 +18,11 @@ class VarsPrompt:
 	type: str  # There's probably a way to type this properly..
 
 	def from_jsom(json: Any) -> Self:
-		return VarsPrompt(json["description"], json["backend"], json["type"])
+		return VarsPrompt(
+			description=json["description"],
+			backend=json["backend"],
+			type=json["type"],
+		)
 
 
 @dataclass
@@ -34,13 +37,13 @@ class VarsGeneratorBackend:
 
 	def from_jsom(json: Any) -> Self:
 		return VarsGeneratorBackend(
-			json["get"],
-			json["set"],
-			json["exists"],
-			json["delete"],
-			json["list"],
-			json["deploy"],
-			json["deployLocal"],
+			get=json["get"],
+			set=json["set"],
+			exists=json["exists"],
+			delete=json["delete"],
+			list=json["list"],
+			deploy=json["deploy"],
+			deployLocal=json["deployLocal"],
 		)
 
 
@@ -51,24 +54,28 @@ class VarsFile:
 	secret: bool
 
 	def from_jsom(json: Any) -> Self:
-		return VarsFile(json["name"], json["deploy"], json["secret"])
+		return VarsFile(
+			name=json["name"], deploy=json["deploy"], secret=json["secret"]
+		)
 
 
 @dataclass
 class VarsGenerator:
+	name: str
 	backend: str
 	script: str
 	dependencies: List[str]
 	prompts: List[str]
 	files: List[VarsFile]
 
-	def from_jsom(json: Any) -> Self:
+	def from_jsom(name: str, json: Any) -> Self:
 		result = VarsGenerator(
-			json["backend"],
-			json["script"],
-			json["dependencies"],
-			json["prompts"],
-			[],
+			name=name,
+			backend=json["backend"],
+			script=json["script"],
+			dependencies=json["dependencies"],
+			prompts=json["prompts"],
+			files=[],
 		)
 
 		for file in json["files"].values():
@@ -95,42 +102,52 @@ class VarsConfig:
 			result.promptBackends[k] = VarsPromptBackend.from_jsom(v)
 
 		for k, v in json["generators"].items():
-			result.generators[k] = VarsGenerator.from_jsom(v)
+			result.generators[k] = VarsGenerator.from_jsom(k, v)
 
 		for k, v in json["generatorBackends"].items():
 			result.generatorBackends[k] = VarsGeneratorBackend.from_jsom(v)
 
-		missingPrompts: Set[str] = set()
-		promptNames = set(result.prompts.keys())
-
-		missingDependencies: Set[str] = set()
-		dependencyNames = set(result.generators.keys())
+		referencedPrompts: Set[str] = set()
+		referencedGenerators: Set[str] = set()
+		referencedGeneratorBackends: Set[str] = set()
+		referencedPromptBackends: Set[str] = set()
 
 		for name, gen in result.generators.items():
-			missingDependencies.update(set(gen.dependencies) - dependencyNames)
-			missingPrompts.update(set(gen.prompts) - promptNames)
+			referencedGenerators.update(gen.dependencies)
+			referencedPrompts.update(gen.prompts)
+			referencedGeneratorBackends.add(gen.backend)
 
-		if missingPrompts:
+		for name, prompt in result.prompts.items():
+			referencedPromptBackends.add(prompt.backend)
+
+		if missingPromptBackends := referencedPromptBackends - set(
+			result.promptBackends.keys()
+		):
+			missingList = ", ".join(sorted(missingPromptBackends))
+			raise VarsError(
+				f"The following prompt backends are referenced but not defined: {missingList}"
+			)
+
+		if missingPrompts := referencedPrompts - set(result.prompts.keys()):
 			missingList = ", ".join(sorted(missingPrompts))
 			raise VarsError(
 				f"The following prompts are referenced but not defined: {missingList}"
 			)
 
-		if missingDependencies:
-			missingList = ", ".join(sorted(missingDependencies))
+		if missingGeneratorBackends := referencedGeneratorBackends - set(
+			result.generators.keys()
+		):
+			missingList = ", ".join(sorted(missingGeneratorBackends))
+			raise VarsError(
+				f"The following generator backends are referenced but not defined: {missingList}"
+			)
+
+		if missingGenerators := referencedGenerators - set(
+			result.generators.keys()
+		):
+			missingList = ", ".join(sorted(missingGenerators))
 			raise VarsError(
 				f"The following generators are referenced but not defined: {missingList}"
 			)
 
 		return result
-
-	def execution_order(self) -> List[str]:
-		ts = TopologicalSorter()
-
-		for name, gen in self.generators.items():
-			ts.add(name, *gen.dependencies)
-
-		try:
-			return list(ts.static_order())
-		except Exception as e:
-			raise VarsError(f"Dependency cycle detected in configuration:\n{e}")
