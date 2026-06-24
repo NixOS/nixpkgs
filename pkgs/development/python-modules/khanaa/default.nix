@@ -28,10 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
-  ];
+  unittestStartDir = "tests";
 
   pythonImportsCheck = [ "khanaa" ];
 
