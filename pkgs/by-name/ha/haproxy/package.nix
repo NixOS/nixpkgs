@@ -6,6 +6,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   nixosTests,
   zlib,
   libxcrypt,
@@ -39,6 +40,19 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
     hash = "sha256-kpj1ZcKpuopOf4nFS+LF0/2WC1swTrVRXhXSnSwV1Pc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-55203.patch";
+      url = "https://github.com/haproxy/haproxy/commit/5985276735777634d8c85f1d73bb7764aab0d6dd.patch";
+      hash = "sha256-l6wOGcvw1p6/zY3l8DCcUeAk17ekDGxJBxMcUNOTViQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-55204.patch";
+      url = "https://github.com/haproxy/haproxy/commit/9a6d1fe3f00d86ab4ea6ea6ea0a5d48fc058a513.patch";
+      hash = "sha256-+VU92NUQuHifakCl8osfNLhQRnpkaSmsUDe4D5crP60=";
+    })
+  ];
 
   buildInputs = [
     sslPkg
