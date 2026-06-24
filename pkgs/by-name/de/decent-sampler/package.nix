@@ -81,6 +81,7 @@ buildFHSEnv {
     freetype
     nghttp2
     libx11
+    expat
   ];
 
   runScript = "decent-sampler";
