@@ -333,6 +333,9 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
       hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
+
+    # https://github.com/home-assistant/core/pull/172893
+    ./patches/pyjwt-2.13-compat.patch
   ];
 
   postPatch = ''
