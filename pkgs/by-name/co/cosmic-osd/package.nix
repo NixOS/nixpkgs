@@ -25,14 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-jv28hxhQUcUDLnOwU3xQJwCU+s52pwDNs8Gf4I5Hp9k=";
   };
 
-  cargoHash = "sha256-YwZXlhggrUddxour+/S1mSL3Fq1mzvFaOHArLSnfPvc=";
-
-  cargoPatches = [
-    # A different reference to the `cargo-settings` crate was added in:
-    # <https://github.com/pop-os/cosmic-osd/pull/204>
-    # Remove this patch once upstream fixes their lockfile.
-    ./deduplicate-cosmic-settings-crate.patch
-  ];
+  cargoHash = "sha256-BngWy8fSfmQYSLV+/3jBvDdI0lpTwqGUiwwHvDlqySw=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
