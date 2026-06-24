@@ -945,6 +945,7 @@
   ./services/misc/portunus.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
+  ./services/misc/quota-tracker.nix
   ./services/misc/radicle.nix
   ./services/misc/realmd.nix
   ./services/misc/rebuilderd.nix
