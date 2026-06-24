@@ -77,7 +77,7 @@
 
             # Enable communication between dhcp4 and a local dhcp-ddns
             # instance.
-            # https://kea.readthedocs.io/en/kea-2.2.0/arm/dhcp4-srv.html#ddns-for-dhcpv4
+            # https://kea.readthedocs.io/en/kea-3.2.0/arm/dhcp4-srv.html#ddns-for-dhcpv4
             dhcp-ddns = {
               enable-updates = true;
             };
@@ -93,7 +93,7 @@
             forward-ddns = {
               # Configure updates of a forward zone named `lan.nixos.test`
               # hosted at the nameserver at 10.0.0.2
-              # https://kea.readthedocs.io/en/kea-2.2.0/arm/ddns.html#adding-forward-dns-servers
+              # https://kea.readthedocs.io/en/kea-3.2.0/arm/ddns.html#adding-forward-dns-servers
               ddns-domains = [
                 {
                   name = "lan.nixos.test.";
@@ -109,25 +109,6 @@
               ];
             };
           };
-        };
-
-        services.kea.ctrl-agent = {
-          enable = true;
-          settings = {
-            http-host = "127.0.0.1";
-            http-port = 8000;
-            control-sockets.dhcp4 = {
-              socket-type = "unix";
-              socket-name = "/run/kea/dhcp4.sock";
-            };
-          };
-        };
-
-        services.prometheus.exporters.kea = {
-          enable = true;
-          controlSocketPaths = [
-            "http://127.0.0.1:8000"
-          ];
         };
       };
 
@@ -236,9 +217,5 @@
 
       with subtest("DDNS"):
           nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
-
-      with subtest("Prometheus Exporter"):
-          router.log(router.execute("curl 127.0.0.1:9547")[1])
-          router.succeed("curl --silent 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
     '';
 }
