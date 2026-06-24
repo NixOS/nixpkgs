@@ -1,11 +1,13 @@
 import subprocess
 import graphlib
+import functools
 from typing import List
 from pathlib import Path
 from .config import VarsConfig, VarsGeneratorBackend, VarsGenerator, VarsFile
 from .error import VarsError
 
 
+@functools.cache
 def build_binary(path: Path) -> Path:
 	try:
 		result = subprocess.run(
@@ -30,6 +32,34 @@ def file_exists(
 		text=True,
 	)
 	return result.returncode == 0
+
+
+def get_secret(
+	config: VarsConfig, generator: VarsGenerator, file: VarsFile, out: Path
+):
+	backend = config.generatorBackends[generator.backend]
+	binary = build_binary(backend.get)
+	subprocess.run(
+		[binary, generator.name, file.name],
+		capture_output=True,
+		text=True,
+		check=True,
+		env={"out": out},
+	)
+
+
+def set_secret(
+	config: VarsConfig, generator: VarsGenerator, file: VarsFile, at: Path
+):
+	backend = config.generatorBackends[generator.backend]
+	binary = build_binary(backend.set)
+	subprocess.run(
+		[binary, generator.name, file.name],
+		capture_output=True,
+		text=True,
+		check=True,
+		env={"in": at},
+	)
 
 
 def execution_order(config: VarsConfig) -> List[str]:
