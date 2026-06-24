@@ -16,7 +16,7 @@ let
   };
 in
 {
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
+  meta.maintainers = [ ];
   options.services.journald.remote = {
     enable = lib.mkEnableOption "receiving systemd journals from the network";
 
