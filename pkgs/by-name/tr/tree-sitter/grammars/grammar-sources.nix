@@ -1575,10 +1575,10 @@
   };
 
   make = {
-    version = "0-unstable-2021-12-16";
-    url = "github:alemuller/tree-sitter-make";
-    rev = "a4b9187417d6be349ee5fd4b6e77b4172c6827dd";
-    hash = "sha256-qQqapnKKH5X8rkxbZG5PjnyxvnpyZHpFVi/CLkIn/x0=";
+    version = "0-unstable-2026-02-26";
+    url = "github:tree-sitter-grammars/tree-sitter-make";
+    rev = "70613f3d812cbabbd7f38d104d60a409c4008b43";
+    hash = "sha256-gyshhqVYiL0qSsMp38BM20FYc4uPgr2de5/DWsAJZGc=";
     meta = {
       license = lib.licenses.mit;
     };
