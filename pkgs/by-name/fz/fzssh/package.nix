@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     pkgConfigModules = [ "libfzssh-client" ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -49,6 +49,7 @@ buildNpmPackage rec {
     description = "Efficient and privacy-friendly YouTube frontend";
     maintainers = [ ];
     license = [ lib.licenses.agpl3Plus ];
+    hasNoMaintainersButDependents = true;
   };
 
 }

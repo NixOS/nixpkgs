@@ -82,5 +82,6 @@ buildGoModule (finalAttrs: {
     ];
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

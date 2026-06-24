@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "znc" ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -59,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

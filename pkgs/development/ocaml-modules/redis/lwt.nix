@@ -14,6 +14,7 @@ buildDunePackage {
   ];
 
   meta = redis.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Redis client (Lwt interface)";
   };
 }

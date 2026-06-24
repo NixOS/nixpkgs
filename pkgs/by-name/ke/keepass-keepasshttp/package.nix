@@ -26,6 +26,7 @@ let
       homepage = "https://github.com/pfn/keepasshttp";
       platforms = with lib.platforms; linux;
       license = lib.licenses.gpl3;
+      hasNoMaintainersButDependents = true;
     };
 
     pluginFilename = "KeePassHttp.plgx";

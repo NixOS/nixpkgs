@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pyudev/pyudev/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

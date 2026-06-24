@@ -48,6 +48,7 @@ let
     meta = {
       description = "Node dependencies for the Mailspring electron frontend";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"

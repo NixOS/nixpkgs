@@ -53,6 +53,5 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    hasNoMaintainersButDependents = true;
   };
 }

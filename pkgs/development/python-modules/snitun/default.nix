@@ -64,6 +64,5 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
     platforms = lib.platforms.linux;
-    hasNoMaintainersButDependents = true;
   };
 }

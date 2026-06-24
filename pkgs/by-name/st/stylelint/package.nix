@@ -27,5 +27,6 @@ buildNpmPackage rec {
     homepage = "https://stylelint.io";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -38,5 +38,6 @@ buildPythonPackage {
     homepage = "https://github.com/asweigart/mouseinfo";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

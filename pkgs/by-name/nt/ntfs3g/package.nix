@@ -94,6 +94,5 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus # ntfs-3g itself
       lgpl2Plus # fuse-lite
     ];
-    hasNoMaintainersButDependents = true;
   };
 })

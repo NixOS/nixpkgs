@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -11,5 +11,6 @@ vimUtils.buildVimPlugin {
       platforms
       ;
     description = "Syntax highlighting & filetype detection for the Mirth programming language";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -29,5 +29,6 @@ buildPythonPackage rec {
     ]; # it includes shared libraries for which no license is available (https://github.com/NXPmicro/pypemicro/issues/10)
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -113,6 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
       nick-linux
     ];
     mainProgram = "inxi";
-    hasNoMaintainersButDependents = true;
   };
 })

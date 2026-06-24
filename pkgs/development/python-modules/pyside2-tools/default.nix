@@ -68,6 +68,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = [ ];
-    hasNoMaintainersButDependents = true;
   };
 }

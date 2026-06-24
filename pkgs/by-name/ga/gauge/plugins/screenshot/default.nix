@@ -14,6 +14,7 @@ makeGaugePlugin {
     homepage = "https://github.com/getgauge/gauge_screenshot/";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-darwin"

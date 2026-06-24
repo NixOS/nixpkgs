@@ -24,5 +24,6 @@ buildDunePackage (finalAttrs: {
     description = "Efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -116,5 +116,6 @@ effectiveStdenv.mkDerivation rec {
     ];
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 }

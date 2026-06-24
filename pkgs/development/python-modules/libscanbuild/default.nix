@@ -38,5 +38,6 @@ buildPythonPackage rec {
       llvm-exception
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

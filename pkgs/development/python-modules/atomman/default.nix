@@ -84,5 +84,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/usnistgov/atomman/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

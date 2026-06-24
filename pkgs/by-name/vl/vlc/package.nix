@@ -321,6 +321,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "vlc";
-    hasNoMaintainersButDependents = true;
   };
 })

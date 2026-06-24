@@ -24,6 +24,7 @@ buildDunePackage {
   ];
 
   meta = amqp-client.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Amqp client library, async version";
   };
 }

@@ -150,5 +150,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = [
     ];
     mainProgram = "spsdk";
+    hasNoMaintainersButDependents = true;
   };
 })

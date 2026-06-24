@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     homepage = "https://sourceforge.net/projects/sblim/";
     license = lib.licenses.cpl10;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.unix;
   };
 }

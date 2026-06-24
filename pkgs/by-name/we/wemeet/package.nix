@@ -211,6 +211,7 @@ let
     meta = {
       description = "Fix for WeMeet Wayland camera preview rendering";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 

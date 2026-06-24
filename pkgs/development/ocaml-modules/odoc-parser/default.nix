@@ -68,5 +68,6 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
       maintainers = [ ];
       homepage = "https://github.com/ocaml-doc/odoc-parser";
       changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
+      hasNoMaintainersButDependents = true;
     };
   }
