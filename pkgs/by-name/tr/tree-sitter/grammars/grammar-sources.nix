@@ -2988,10 +2988,10 @@
   };
 
   vim = {
-    version = "0.2.0-unstable-2023-05-05";
-    url = "github:vigoux/tree-sitter-viml";
-    rev = "7c317fbade4b40baa7babcd6c9097c157d148e60";
-    hash = "sha256-/TyPUBsKRcF9Ig8psqd4so2IMbHtTu4weJXgfd96Vrs=";
+    version = "0.2.0-unstable-2026-02-26";
+    url = "github:tree-sitter-grammars/tree-sitter-vim";
+    rev = "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b";
+    hash = "sha256-MnLBFuJCJbetcS07fG5fkCwHtf/EcNP+Syf0Gn0K39c=";
     meta = {
       license = lib.licenses.mit;
     };
