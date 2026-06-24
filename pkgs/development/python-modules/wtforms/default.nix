@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "wtforms";
-  version = "3.2.1";
+  version = "3.3.0b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wtforms";
     repo = "wtforms";
     tag = version;
-    hash = "sha256-jwjP/wkk8MdNJbPE8MlkrH4DyR304Ju41nN4lMo3jFs=";
+    hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
   };
 
   nativeBuildInputs = [
