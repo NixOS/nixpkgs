@@ -1057,10 +1057,10 @@
   };
 
   hare = {
-    version = "0-unstable-2024-07-30";
-    url = "sourcehut:~ecs/tree-sitter-hare";
-    rev = "fb6ea01461441ec7c312e64e326649f5e9011a64";
-    hash = "sha256-KQ9U3XWzqS0ozTHpaLpAIvK8T8ilbV1ex6CLFzHXPzA=";
+    version = "0-unstable-2025-10-07";
+    url = "github:tree-sitter-grammars/tree-sitter-hare";
+    rev = "eed7ddf6a66b596906aa8ca3d40521b8278adc6f";
+    hash = "sha256-qXLRb+5SgfBrOXta10P04ErV5z8eSM/J0Od5pk06OCc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
