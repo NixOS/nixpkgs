@@ -665,10 +665,10 @@
   };
 
   fennel = {
-    version = "1.1.0-unstable-2025-09-07";
-    url = "github:travonted/tree-sitter-fennel";
-    rev = "36eb796a84b4f57bdf159d0a99267260d4960c89";
-    hash = "sha256-aFcTPgWkd/o1qu8d/hulmVDyFlTHJgb35iea4Jc1510=";
+    version = "1.1.0-unstable-2026-01-21";
+    url = "github:alexmozaidze/tree-sitter-fennel";
+    rev = "3f0f6b24d599e92460b969aabc4f4c5a914d15a0";
+    hash = "sha256-jk9Misdfdso/h/lK/o9FTorK6DbNJPrZs/aw+3r/H1M=";
     meta = {
       license = lib.licenses.mit;
     };
