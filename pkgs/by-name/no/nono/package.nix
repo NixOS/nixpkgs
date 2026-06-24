@@ -8,12 +8,13 @@
 
   dbus,
 
+  git,
   writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.61.1";
+  version = "0.65.1";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -21,9 +22,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y5oMR5Vawf/1QUj3ACDdqAjKT+Q2gizRfKkal340EP8=";
+    hash = "sha256-G3SOHq9FB1hjadlSHcMyh4qAOwddbS6lr2HBRgZBtjo=";
   };
-  cargoHash = "sha256-Oy/IqAK5ml1vu0eee+pF5pRjzk0Na/Fb04e1Mx0d924=";
+  cargoHash = "sha256-V34BLhvWkIr61ddLRO5welwBnQrdIweiE3vsjZMtOlc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    git
     writableTmpDirAsHomeHook
+  ];
+
+  cargoTestFlags = [
+    "--no-fail-fast" # run every test binary even after one fails
   ];
 
   checkFlags = map (t: "--skip=${t}") (
@@ -55,31 +61,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "rollback_signed_session_verifies_from_audit_dir_bundle"
 
       # nono-cli
-      # wants a script `cripts/test-list-aliases.sh`, `git`, and `.git` history
-      "alias_inventory_script_passes"
       # fails to initialize the sandbox under '/build'
       # has also failed due to running on darwin despite testing the linux only
       # landlock sandboxing
       "policy::tests::test_all_groups_no_deny_within_allow_overlap"
-      # not relevant for us, requires `git`
+      # run repo shell scripts that need the `.git` history the source
+      # tarball does not include
+      "alias_inventory_script_passes"
       "lint_docs_script_passes"
-      # want to run `git`
-      "alias_inventory_rejects_marker_missing_field"
-      "alias_inventory_rejects_naked_serde_alias"
-      "alias_inventory_rejects_unapproved_deprecated_module_reach_in"
-      "lint_docs_accepts_clean_tree"
-      "lint_docs_rejects_quoted_override_deny_outside_allowlist"
+      # proxy_runtime: canonicalize `/bin/echo` and `/bin/cat`, absent in the build sandbox
+      "proxy_runtime::tests::proxy_credential_capture_backend_captures_and_caches"
+      "proxy_runtime::tests::proxy_credential_capture_backend_parses_json_headers"
+      "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
+      "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # terminal_approval: open `/dev/tty`, unavailable in the build sandbox
+      "terminal_approval::tests::non_tty_auto_denies_capability_request"
+      "terminal_approval::tests::non_tty_auto_denies_command_request"
+      "terminal_approval::tests::non_tty_auto_denies_endpoint_request"
+      "terminal_approval::tests::non_tty_auto_denies_network_request"
+      "terminal_approval::tests::non_tty_denial_carries_reason"
 
       # nono-proxy
       # fails to prepare TLS bundle inside build sandbox
       "server::tests::test_intercept_lifecycle_end_to_end"
       "server::tests::test_route_diagnostics_summarises_each_route"
+      "server::tests::reactive_proxy_auth_retry_answered_after_407"
       "tls_intercept::bundle::tests::bundle_contains_ephemeral_and_system_roots"
       "tls_intercept::bundle::tests::bundle_file_has_restrictive_permissions"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # panics with "exact-path fallback must not recursively cover descendants"
       "capability_ext::tests::test_from_profile_allow_file_falls_back_to_exact_directory_when_present"
+      # canonicalizes `/usr/share/locale`, denied by the macOS build sandbox
+      "tool_sandbox::macos::tests::macos_runtime_baseline_does_not_grant_system_volumes_data"
 
       # nono-cli
       # wants access to /var/folders
@@ -100,8 +115,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "env_nono_allow_comma_separated"
       "env_nono_block_net"
       "env_nono_block_net_accepts_true"
+      "env_nono_capability_elevation_accepts_truthy"
       "env_nono_network_profile"
       "env_nono_profile"
+      "env_nono_trust_override_accepts_truthy"
+      "env_nono_trust_proxy_ca_accepts_truthy"
       "env_nono_upstream_bypass_comma_separated"
       "env_nono_upstream_proxy"
       "legacy_env_nono_net_block_still_works"
