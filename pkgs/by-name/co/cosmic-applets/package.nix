@@ -30,6 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-A8Qk9u3Q83Q4AjzTrdptfS9UNoyKq39YihC4d/dNBYc=";
   };
 
+  cargoPatches = [
+    # A different reference to the `cosmic-settings-daemon` crate was added
+    # Remove this patch once upstream fixes their lockfile.
+    ./dedup-cosmic-settings-daemon.patch
+  ];
+
   cargoHash = "sha256-81BFu13QmqOq43iN+ORQuktisEFYRrK+wd6diFfSufs=";
 
   separateDebugInfo = true;
