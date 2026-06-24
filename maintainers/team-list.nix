@@ -510,6 +510,7 @@ with lib.maintainers;
       dandellion
       nickcao
       teutat3s
+      transcaffeine
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
