@@ -75,7 +75,7 @@ in
 
     profileDir = mkOption {
       type = path;
-      default = "/var/lib/qBittorrent/";
+      default = "/var/lib/qBittorrent";
       description = "the path passed to qbittorrent via --profile.";
     };
 
