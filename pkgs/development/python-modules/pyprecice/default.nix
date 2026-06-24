@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/precice/python-bindings";
     changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }
