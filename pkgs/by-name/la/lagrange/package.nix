@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { attrPath = "lagrange"; };
   };
 
   meta = {
