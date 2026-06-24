@@ -100,7 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_nvtx
+    cudaPackages.libcufft
+    cudaPackages.libcusolver
     cudaPackages.libcublas
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
@@ -150,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     "-DSIRIUS_USE_CUDA=ON"
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
