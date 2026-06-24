@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-codspeed";
-  version = "4.7.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6XSKAPLcxgnshkMuiSmw13tsE4keJ9h5DpxwidqMLbg=";
+    hash = "sha256-F4QRTNS9mo8juXyCFAlETNEaZZu56bYYr8i464FYPd4=";
   };
 
-  cargoHash = "sha256-1AjODDI114CL/L8ZDFWDfPwxxxY9vgT/miSVsMLLSgE=";
+  cargoHash = "sha256-it/4LSTGajQe5f47LCh9eDAf8ZNyFTGJJ4Z5N6klgNw=";
 
   nativeBuildInputs = [
     curl
