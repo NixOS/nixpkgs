@@ -52,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui"
     + lib.optionalString textClient "-cmd";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "amule-org";
     repo = "amule";
     tag = finalAttrs.version;
-    hash = "sha256-2qQof2/JFTfOmqd25+YVWBpZgCDCOwf3NBo1aHcMPds=";
+    hash = "sha256-zLd8mt+dYEilGcFn3qspZv5EkZ4TmBbKgvgcuSvswFk=";
   };
 
   __structuredAttrs = true;
