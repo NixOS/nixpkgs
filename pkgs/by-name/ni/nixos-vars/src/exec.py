@@ -85,7 +85,7 @@ def rebuild_order(config: VarsConfig) -> List[str]:
 
 		for dep in generator.dependencies:
 			if dep in order:
-				print(f"- '{item}' (dependency '{dep}' changed)")
+				print(f"- '{item}' (dependency '{dep}' has changed)")
 				order.append(item)
 				break
 		else:
