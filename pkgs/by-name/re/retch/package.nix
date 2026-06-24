@@ -1,12 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, mandown
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  mandown,
 }:
 
 rustPlatform.buildRustPackage rec {
+  __structuredAttrs = true;
+
   pname = "retch";
   version = "0.3.22";
 
@@ -42,12 +45,12 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/retch --completions fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A fast, feature-rich system information fetcher written in Rust";
     homepage = "https://github.com/l1a/retch";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "retch";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
