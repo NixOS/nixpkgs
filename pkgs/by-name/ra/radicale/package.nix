@@ -1,8 +1,9 @@
 {
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
   nixosTests,
   python3,
+  infcloud ? null,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -40,6 +41,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     waitress
   ];
+
+  # Since 3.5.0 Radicale allows for an optionally bundled InfCloud web client,
+  # no need for RadicaleInfcloud.
+  postInstall = lib.optionalString (infcloud != null) ''
+    ln -s '${infcloud}' $out/${python3.sitePackages}/radicale/web/internal_data/infcloud
+  '';
 
   passthru.tests = {
     inherit (nixosTests) radicale;
