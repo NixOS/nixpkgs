@@ -1708,10 +1708,10 @@
   };
 
   nginx = {
-    version = "0-unstable-2024-10-15";
-    url = "gitlab:joncoole/tree-sitter-nginx";
-    rev = "f6d13cf6281b25f2ce342a49a41a10a0381e00f0";
-    hash = "sha256-ofFBxW4p7rZFZm9w5cyA0semYLJWFu9emv8bfTfAFok=";
+    version = "0-unstable-2026-01-02";
+    url = "github:opa-oz/tree-sitter-nginx";
+    rev = "47ade644d754cce57974aac44d2c9450e823d4f4";
+    hash = "sha256-exbjYJouZYcxC3suV7byqSEwu2r8hHj/wehPpf5Aecc=";
     meta = {
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
