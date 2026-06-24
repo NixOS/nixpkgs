@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     RAILS_ENV = "production";
     NODE_ENV = "production";
-    REDIS_URL = ""; # build error if not defined
     TAILWINDCSS_INSTALL_DIR = "${tailwindcss_3}/bin";
   };
 
