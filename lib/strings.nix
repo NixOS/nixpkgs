@@ -2162,8 +2162,9 @@ rec {
         "LIST"
       ];
     in
-    type: feature: value:
+    type:
     assert (elem (toUpper type) types);
+    feature: value:
     assert (isString feature);
     assert (isString value);
     "-D${feature}:${toUpper type}=${value}";
@@ -2232,7 +2233,7 @@ rec {
 
     :::
   */
-  cmakeFeature = feature: value: cmakeOptionType "string" feature value;
+  cmakeFeature = cmakeOptionType "string";
 
   /**
     Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
