@@ -92,7 +92,7 @@ in
 
       dates = lib.mkOption {
         type = lib.types.str;
-        default = "04:40";
+        default = "04:44";
         example = "daily";
         description = ''
           How often or when upgrade occurs. For most desktop and server systems
