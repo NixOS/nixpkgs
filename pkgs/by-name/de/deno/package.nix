@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
   version = "2.8.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
