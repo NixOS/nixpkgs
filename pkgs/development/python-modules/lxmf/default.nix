@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  # rns optionally depends on lxmf but we can't have two versions of rns in a closure
-  propagateRns ? false,
   qrcode,
+  lxmf,
   rns,
   setuptools,
   versionCheckHook,
@@ -25,22 +24,20 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  buildInputs = lib.optionals (!propagateRns) [
-    rns
-  ];
+  buildInputs = [ rns ];
 
   dependencies = [
     qrcode
-  ]
-  ++ lib.optionals propagateRns [
     rns
   ];
 
   pythonImportsCheck = [ "LXMF" ];
+  nativeCheckInputs = [ versionCheckHook ];
 
-  nativeCheckInputs = lib.optionals propagateRns [
-    versionCheckHook
-  ];
+  passthru.withoutRns = lxmf.overridePythonAttrs (old: {
+    dependencies = builtins.filter (dep: dep != rns) (old.dependencies or [ ]);
+    nativeCheckInputs = [];
+  });
 
   meta = {
     description = "Lightweight Extensible Message Format for Reticulum";
