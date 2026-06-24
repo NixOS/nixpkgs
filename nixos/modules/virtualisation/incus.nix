@@ -96,7 +96,7 @@ let
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
-  OVMF2MB = pkgs.OVMF.override {
+  OVMF2MB = pkgs.ovmf.qemu.override {
     secureBoot = true;
     fdSize2MB = true;
   };
@@ -119,15 +119,15 @@ let
 
       {
         name = "OVMF_CODE.4MB.fd";
-        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
+        path = "${pkgs.ovmf.full.fd}/FV/${ovmf-prefix}_CODE.fd";
       }
       {
         name = "OVMF_VARS.4MB.fd";
-        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+        path = "${pkgs.ovmf.full.fd}/FV/${ovmf-prefix}_VARS.fd";
       }
       {
         name = "OVMF_VARS.4MB.ms.fd";
-        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+        path = "${pkgs.ovmf.full.fd}/FV/${ovmf-prefix}_VARS.fd";
       }
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
@@ -392,7 +392,7 @@ in
         # Support use of VM instance
         mrix ${pkgs.qemu_kvm}/bin/*,
         k ${OVMF2MB.fd}/FV/*.fd,
-        k ${pkgs.OVMFFull.fd}/FV/*.fd,
+        k ${pkgs.ovmf.full.fd}/FV/*.fd,
       ''
       + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
         k ${pkgs.seabios-qemu}/share/seabios/bios.bin,

@@ -139,7 +139,7 @@
   touchEFIVars ? false,
 
   # OVMF firmware derivation
-  OVMF ? pkgs.OVMF.fd,
+  OVMF ? pkgs.ovmf.qemu.fd,
 
   # EFI firmware
   efiFirmware ? OVMF.firmware,

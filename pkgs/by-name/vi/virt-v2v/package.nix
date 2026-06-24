@@ -7,7 +7,7 @@
   makeWrapper,
   autoreconfHook,
   bash-completion,
-  OVMF,
+  ovmf,
   qemu,
   ocamlPackages,
   perl,
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # TODO: allow guest != host CPU ISA
     substituteInPlace output/output_qemu.ml \
-        --replace-fail '/usr/share/OVMF' ""${OVMF.fd}/FV/" \
-        --replace-fail '/usr/share/AAVMF' ""${OVMF.fd}/FV/"
+        --replace-fail '/usr/share/OVMF' ""${ovmf.qemu.fd}/FV/" \
+        --replace-fail '/usr/share/AAVMF' ""${ovmf.qemu.fd}/FV/"
 
     patchShebangs .
   '';

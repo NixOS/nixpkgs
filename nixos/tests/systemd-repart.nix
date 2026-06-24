@@ -286,7 +286,7 @@ in
         virtualisation = {
           useEFIBoot = true;
           tpm.enable = true;
-          efi.OVMF = pkgs.OVMFFull;
+          efi.OVMF = pkgs.ovmf.full;
           useDefaultFilesystems = false;
           fileSystems = {
             "/state" = {

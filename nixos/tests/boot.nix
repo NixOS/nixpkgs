@@ -52,9 +52,9 @@ let
       ]
       ++ lib.optionals uefi [
         "-drive"
-        "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
+        "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.ovmf.qemu.firmware}"
         "-drive"
-        "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
+        "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.ovmf.qemu.variables}"
       ]
       ++ extraFlags;
 
