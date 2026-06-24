@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9BlNhllLz4LHPMy6gkph5flztQZBHI1tIMlNa22YPh4=";
+    hash = "sha256-X40vTjtai6zlZWvGG/wPt8us4AONcXZ9TxIZn2cPH2E=";
   };
 
-  vendorHash = "sha256-NHLryreDHxrqjo8VHR9R/MD8tDXYaZYyqgulxPOKUyA=";
+  vendorHash = "sha256-WAGIhGW7R5BZuQmERbJhN3mFCLVSDsNqtAFYnrNo7XE=";
 
   ldflags = [
     "-s"

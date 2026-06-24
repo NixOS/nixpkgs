@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   yasm,
   cpuinfo,
   libdovi,
@@ -11,15 +12,18 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "svt-av1-psyex";
-  version = "3.0.2-B";
+  pname = "svt-av1-hdr";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner = "BlueSwordM";
-    repo = "svt-av1-psyex";
+    owner = "juliobbv-p";
+    repo = "svt-av1-hdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-klfrbow8UtpIPwIgt8tK7FP7Jp6In9nxfOZrdi1PsHo=";
+    hash = "sha256-n66RPDTfBsPCR/4y8dpU3Au1WZHpkpln899e2+LKxto=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   cmakeBuildType = "Release";
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     yasm
@@ -51,16 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     cpuinfo
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/BlueSwordM/svt-av1-psyex";
+    homepage = "https://github.com/juliobbv-p/svt-av1-hdr";
     description = "Scalable Video Technology AV1 Encoder and Decoder";
 
     longDescription = ''
-      SVT-AV1-PSYEX is the Scalable Video Technology for AV1 (SVT-AV1 Encoder and Decoder)
-      with perceptual enhancements for psychovisually optimal AV1 encoding.
-      The goal is to create the best encoding implementation for perceptual quality with AV1.
+      SVT-AV1-HDR is the Scalable Video Technology for AV1 (SVT-AV1 Encoder)
+      with perceptual enhancements for psychovisually optimal SDR and HDR AV1 encoding.
+      The goal is to create the best encoding implementation for perceptual quality with AV1,
+      with additional optimizations for HDR encoding and content with film grain.
     '';
 
     license = with lib.licenses; [
@@ -69,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      johnrtitor
       ccicnce113424
+      claraphyll
     ];
     mainProgram = "SvtAv1EncApp";
   };
