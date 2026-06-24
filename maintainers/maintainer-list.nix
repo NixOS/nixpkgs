@@ -9728,6 +9728,12 @@
     githubId = 37017396;
     name = "gbtb";
   };
+  gbhu753 = {
+    email = "me@gurjotbhullar.com";
+    github = "GBHU753";
+    githubId = 100983240;
+    name = "Gurjot Bhullar";
+  };
   gcleroux = {
     email = "guillaume@cleroux.dev";
     github = "gcleroux";
