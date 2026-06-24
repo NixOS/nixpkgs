@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "22.23.0";
-  sha256 = "3acfae100c7b855a4c76520ee0f95cadcace3f4254f16b7d4887f178fc95d4a0";
+  version = "22.23.1";
+  sha256 = "b27385d6845089bdb91285d94b06c2a5cf1c37f8173a3c4e10824cc1ffadeaba";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
