@@ -1,0 +1,20 @@
+Use importlib.metadata instead of pkg_resources for version queries.
+
+pkg_resources is a legacy setuptools API. importlib.metadata (stdlib since
+Python 3.8) is the correct replacement and requires no extra runtime dependency.
+
+--- a/nvr/nvr.py
++++ b/nvr/nvr.py
+@@ -360,10 +360,10 @@
+
+
+ def print_versions():
+-    import pkg_resources
+-    print('nvr ' + pkg_resources.require("neovim-remote")[0].version)
+-    print('pynvim ' + pkg_resources.require('pynvim')[0].version)
+-    print('psutil ' + pkg_resources.require('psutil')[0].version)
++    from importlib.metadata import version
++    print('nvr ' + version("neovim-remote"))
++    print('pynvim ' + version('pynvim'))
++    print('psutil ' + version('psutil'))
+     print('Python ' + sys.version.split('\n')[0])
