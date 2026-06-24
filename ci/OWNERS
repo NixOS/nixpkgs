@@ -25,27 +25,27 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil @hsjobeki
-/lib/generators.nix         @infinisil @hsjobeki
-/lib/cli.nix                @infinisil @hsjobeki
-/lib/debug.nix              @infinisil @hsjobeki
-/lib/asserts.nix            @infinisil @hsjobeki
-/lib/path/*                 @infinisil @hsjobeki
-/lib/fileset                @infinisil @hsjobeki
-/maintainers/github-teams.json @infinisil
-/maintainers/computed-team-list.nix @infinisil
+/lib                        @infinisil @hsjobeki @llakala
+/lib/generators.nix         @infinisil @hsjobeki @llakala
+/lib/cli.nix                @infinisil @hsjobeki @llakala
+/lib/debug.nix              @infinisil @hsjobeki @llakala
+/lib/asserts.nix            @infinisil @hsjobeki @llakala
+/lib/path/*                 @infinisil @hsjobeki @llakala
+/lib/fileset                @infinisil @hsjobeki @llakala
+/maintainers/github-teams.json @infinisil @llakala
+/maintainers/computed-team-list.nix @infinisil @llakala
 ## Standard environment–related libraries
-/lib/customisation.nix      @alyssais @NixOS/stdenv
-/lib/derivations.nix        @NixOS/stdenv
-/lib/fetchers.nix           @alyssais @NixOS/stdenv
-/lib/meta.nix               @alyssais @NixOS/stdenv
-/lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv
-/lib/source-types.nix       @alyssais @NixOS/stdenv
-/lib/systems                @alyssais @NixOS/stdenv
+/lib/customisation.nix      @alyssais @NixOS/stdenv @llakala
+/lib/derivations.nix        @NixOS/stdenv @llakala
+/lib/fetchers.nix           @alyssais @NixOS/stdenv @llakala
+/lib/meta.nix               @alyssais @NixOS/stdenv @llakala
+/lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv @llakala
+/lib/source-types.nix       @alyssais @NixOS/stdenv @llakala
+/lib/systems                @alyssais @NixOS/stdenv @llakala
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth @hsjobeki
-/lib/types.nix              @infinisil @roberth @hsjobeki
-/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/modules.nix            @infinisil @roberth @hsjobeki @llakala
+/lib/types.nix              @infinisil @roberth @hsjobeki @llakala
+/lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
 
@@ -272,7 +272,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses @alyssais @emilazy @jopejoe1
+/lib/licenses @alyssais @emilazy @jopejoe1 @llakala
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000
