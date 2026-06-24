@@ -27,7 +27,7 @@
   pybind11,
   pooch,
   xsimd,
-  boost189,
+  boost191,
   qhull,
 
   # dependencies
@@ -44,41 +44,26 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scipy";
-  version = "1.17.1";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lFmqdbCf7pcosdZ7RFMv+8H9+ztMJbDS5g5fQs8Nws8=";
+    hash = "sha256-qVTFWYZ9krhZNYLyuZTfiS7UYmMZL40GFqod84l+VHI=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Helps with cross compilation, see https://github.com/scipy/scipy/pull/18167
     (fetchpatch {
-      url = "https://github.com/scipy/scipy/commit/dd50ac9d98dbb70625333a23e3a90e493228e3be.patch";
-      hash = "sha256-Vf6/hhwu6X5s8KWhq8bUZKtSkdVu/GtEpGtj8Olxe7s=";
-      excludes = [ "doc/source/dev/contributor/meson_advanced.rst" ];
+      url = "https://github.com/scipy/scipy/commit/33696c545b74d6fda6f6f39e818d26c2b7631498.patch";
+      hash = "sha256-R5rgSz/9+T2+fpDFTfZQLTvdISTGUAuHEBAWT39x9LQ=";
+      excludes = [ "doc/source/building/cross_compilation.rst" ];
     })
   ];
-  # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
-  # 2.x are supported. However upstream wants to always build with Numpy 2,
-  # and with it to still be able to run with a Numpy 1 or 2. We insist to
-  # perform this substitution even though python3.pkgs.numpy is of version 2
-  # nowadays, because our ecosystem unfortunately doesn't allow easily
-  # separating runtime and build-system dependencies. See also:
-  #
-  # https://discourse.nixos.org/t/several-comments-about-priorities-and-new-policies-in-the-python-ecosystem/51790
-  #
-  # Being able to build (& run) with Numpy 1 helps for python environments
-  # that override globally the `numpy` attribute to point to `numpy_1`.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0,<2.7" numpy
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace scipy/meson.build \
       --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
     substituteInPlace scipy/meson.build \
@@ -101,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     pybind11
     pooch
     xsimd
-    boost189
+    boost191
     qhull
   ];
 
