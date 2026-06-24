@@ -64,6 +64,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "gtkgreet";
-    hasNoMaintainersButDependents = true;
   };
 })

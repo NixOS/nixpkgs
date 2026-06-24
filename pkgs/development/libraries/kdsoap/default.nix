@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
       lgpl21
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

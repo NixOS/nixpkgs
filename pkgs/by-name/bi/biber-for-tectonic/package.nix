@@ -56,5 +56,6 @@ in
         doronbehar
         bryango
       ];
+      hasNoMaintainersButDependents = false;
     };
   })

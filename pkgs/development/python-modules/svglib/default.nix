@@ -50,5 +50,6 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
     mainProgram = "svg2pdf";
+    hasNoMaintainersButDependents = true;
   };
 }

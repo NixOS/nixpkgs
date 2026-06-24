@@ -34,6 +34,5 @@ stdenv.mkDerivation (finalAttrs: {
       panicgh
     ];
     platforms = lib.platforms.unix;
-    hasNoMaintainersButDependents = true;
   };
 })

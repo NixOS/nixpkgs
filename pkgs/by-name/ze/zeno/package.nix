@@ -37,5 +37,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "Zeno";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -29,5 +29,6 @@ buildDunePackage {
   meta = opam.meta // {
     description = "Actions on the opam root, switches, installations, and front-end";
     maintainers = with lib.maintainers; [ stepbrobd ];
+    hasNoMaintainersButDependents = false;
   };
 }

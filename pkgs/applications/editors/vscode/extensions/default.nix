@@ -2102,6 +2102,7 @@ let
           description = "Grafana Alloy support for VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=grafana.grafana-alloy";
           license = lib.licenses.asl20;
+          hasNoMaintainersButDependents = true;
         };
       };
 

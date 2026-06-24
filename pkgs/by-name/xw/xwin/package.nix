@@ -58,5 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       greaka
     ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
+    hasNoMaintainersButDependents = true;
   };
 })

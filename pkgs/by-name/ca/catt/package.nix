@@ -57,5 +57,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.aaravrav ];
     mainProgram = "catt";
+    hasNoMaintainersButDependents = true;
   };
 })

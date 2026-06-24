@@ -71,5 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/signalapp/libsignal";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

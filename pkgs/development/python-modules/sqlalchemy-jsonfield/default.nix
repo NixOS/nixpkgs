@@ -48,5 +48,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

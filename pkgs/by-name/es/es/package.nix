@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

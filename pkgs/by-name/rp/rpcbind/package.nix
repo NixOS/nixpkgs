@@ -52,6 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Universal addresses to RPC program number mapper.
     '';
-    hasNoMaintainersButDependents = true;
   };
 })

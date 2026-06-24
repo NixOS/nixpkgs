@@ -22568,6 +22568,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -25417,7 +25418,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      hasNoMaintainersButDependents = true;
     };
   };
 

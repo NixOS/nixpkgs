@@ -145,5 +145,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     platforms = ghc.meta.platforms;
     hydraPlatforms = with lib.platforms; none;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

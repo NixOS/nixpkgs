@@ -182,6 +182,7 @@ rec {
         homepage = "https://github.com/openresty/lua-resty-core";
         license = lib.licenses.bsd3;
         maintainers = [ ];
+        hasNoMaintainersButDependents = true;
       };
     }
   ) { };

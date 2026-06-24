@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       "taglib_c"
     ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -24,6 +24,7 @@ let
       platforms = with lib.platforms; linux;
       license = lib.licenses.gpl2;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
 
     pluginFilename = "KeeAgent.plgx";

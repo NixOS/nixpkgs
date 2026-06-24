@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ hythera ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

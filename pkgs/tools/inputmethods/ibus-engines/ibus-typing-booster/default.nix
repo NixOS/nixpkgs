@@ -59,6 +59,5 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     isIbusEngine = true;
-    hasNoMaintainersButDependents = true;
   };
 }

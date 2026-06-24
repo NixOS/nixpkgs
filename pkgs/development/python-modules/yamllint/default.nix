@@ -51,6 +51,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram = "yamllint";
   };
 }

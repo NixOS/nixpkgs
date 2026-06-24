@@ -55,6 +55,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; unix;
     mainProgram = "xdotool";
-    hasNoMaintainersButDependents = true;
   };
 })
