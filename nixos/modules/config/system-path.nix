@@ -187,7 +187,6 @@ in
 
     environment.pathsToLink = [
       "/bin"
-      "/etc/xdg"
       "/etc/gtk-2.0"
       "/etc/gtk-3.0"
       "/lib" # FIXME: remove and update debug-info.nix
