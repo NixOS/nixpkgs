@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -50,6 +51,10 @@ buildPythonPackage rec {
     pytest-cov-stub
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  passthru = {
+    tests.simple = nixosTests.gunicorn;
+  };
 
   meta = {
     description = "WSGI HTTP Server for UNIX, fast clients and sleepy applications";
