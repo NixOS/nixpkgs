@@ -1262,10 +1262,10 @@
   };
 
   janet-simple = {
-    version = "0.0.7-unstable-2025-05-19";
+    version = "0.0.7-unstable-2026-02-10";
     url = "github:sogaiu/tree-sitter-janet-simple";
-    rev = "7e28cbf1ca061887ea43591a2898001f4245fddf";
-    hash = "sha256-qWsUPZfQkuEUiuCSsqs92MIMEvdD+q2bwKir3oE5thc=";
+    rev = "d183186995204314700be3e9e0a48053ea16b350";
+    hash = "sha256-zETOH+HpHyiCdOiggRy7VVjOv/WVRDb4qQ+kN9r2Frc=";
     meta = {
       license = lib.licenses.cc0;
     };
