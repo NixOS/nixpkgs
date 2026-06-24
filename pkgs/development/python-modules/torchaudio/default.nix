@@ -4,9 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -88,13 +85,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs =
-    lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals torch.stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   dependencies = [
     torch

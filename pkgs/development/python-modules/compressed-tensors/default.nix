@@ -7,7 +7,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  llvmPackages,
 
   # dependencies
   frozendict,
@@ -45,10 +44,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
   ];
 
   dependencies = [

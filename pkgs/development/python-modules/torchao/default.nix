@@ -77,13 +77,6 @@ buildPythonPackage (finalAttrs: {
     cpuinfo
   ];
 
-  propagatedBuildInputs = lib.optionals isDarwin [
-    # Otherwise, torch will fail to include `omp.h`:
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # OpenMP support not found.
-    llvmPackages.openmp
-  ];
-
   dependencies = [
     torch
   ];
