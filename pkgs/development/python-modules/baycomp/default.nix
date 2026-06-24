@@ -2,23 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   numpy,
   scipy,
   matplotlib,
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "baycomp";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MrJa17FtWyUd259hEKMtezlTuYcJbaHSXvJ3k10l2uw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
     matplotlib
@@ -33,4 +38,4 @@ buildPythonPackage rec {
     license = [ lib.licenses.mit ];
     maintainers = [ ];
   };
-}
+})
