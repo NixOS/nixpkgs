@@ -935,6 +935,7 @@
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
+  ./services/misc/pelican-panel.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pghero.nix
   ./services/misc/pinchflat.nix
@@ -1001,6 +1002,7 @@
   ./services/misc/unpackerr.nix
   ./services/misc/wastebin.nix
   ./services/misc/weechat.nix
+  ./services/misc/wings.nix
   ./services/misc/workout-tracker.nix
   ./services/misc/xmrig.nix
   ./services/misc/yarr.nix
