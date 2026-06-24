@@ -246,6 +246,10 @@ buildPythonPackage (finalAttrs: {
     "test_transcribe_long"
     "test_transcribe_long_no_batch"
     "test_vgg7"
+    # Downloads external model each time.
+    # Skipped when building on Hydra (no network access),
+    # but interferes with local builds
+    "test_xlm_roberta_large"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fail with AssertionError
