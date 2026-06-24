@@ -6,21 +6,22 @@
   jdk17,
   makeWrapper,
   stripJavaArchivesHook,
+  nix-update-script,
 }:
 
 let
-  jdk = jdk17; # Only java 17 is supported as of 23.09
+  jdk = jdk17;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openrocket";
-  version = "23.09";
+  version = "24.12";
 
   src = fetchFromGitHub {
     owner = "openrocket";
     repo = "openrocket";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Dg/v72N9cDG9Ko5JIcZxGxh+ClRDgf5Jq5DvQyCiYOs=";
     fetchSubmodules = true;
+    hash = "sha256-Vb1NkhEkMvotyGzswq3Lq0RbG1rTmtfzRD+MHbsYFWM=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +53,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 snap/gui/openrocket.png -t $out/share/icons/hicolor/256x256/apps
     install -Dm644 swing/build/jar/OpenRocket.jar -t $out/share/openrocket
 
-    makeWrapper ${jdk}/bin/java $out/bin/openrocket \
-        --add-flags "-jar $out/share/openrocket/OpenRocket.jar"
+    makeWrapper ${lib.getExe jdk} $out/bin/openrocket \
+      --add-flags "-jar $out/share/openrocket/OpenRocket.jar"
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^release-(.*)$"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/openrocket/openrocket/releases/tag/${finalAttrs.src.rev}";
