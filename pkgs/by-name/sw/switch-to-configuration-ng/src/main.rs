@@ -743,11 +743,6 @@ fn handle_modified_unit(
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
                 record_unit(&restart_list, unit);
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
@@ -769,10 +764,17 @@ fn handle_modified_unit(
                     };
 
                     if sockets.is_empty() {
-                        sockets.push(format!("{base_name}.socket"));
+                        // For a templated instance (`foo@bar.service`), `base_name`
+                        // includes the trailing `@`; the implicitly-associated socket
+                        // is `foo.socket`, so strip it.
+                        let socket_base = base_name.strip_suffix('@').unwrap_or(base_name);
+                        sockets.push(format!("{socket_base}.socket"));
                     }
 
                     for socket in &sockets {
+                        let socket_in_new_config =
+                            toplevel.join(scope.etc_dir()).join(socket).exists();
+
                         if active_cur.contains_key(socket) {
                             // We can now be sure this is a socket-activated unit
 
@@ -783,7 +785,7 @@ fn handle_modified_unit(
                             }
 
                             // Only restart sockets that actually exist in new configuration:
-                            if toplevel.join(scope.etc_dir()).join(socket).exists() {
+                            if socket_in_new_config {
                                 if use_restart_as_stop_and_start {
                                     units_to_restart.insert(socket.to_string(), ());
                                     record_unit(&restart_list, socket);
@@ -794,12 +796,9 @@ fn handle_modified_unit(
 
                                 socket_activated = true;
                             }
-
-                            // Remove from units to reload so we don't restart and reload
-                            if units_to_reload.contains_key(unit) {
-                                units_to_reload.remove(unit);
-                                unrecord_unit(&reload_list, unit);
-                            }
+                        } else if socket_in_new_config {
+                            // Transitioning to socket activation; let the socket start it.
+                            socket_activated = true;
                         }
                     }
                 }
@@ -828,11 +827,11 @@ fn handle_modified_unit(
                 } else {
                     units_to_stop.insert(unit.to_string(), ());
                 }
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
+            }
+
+            // Remove from units to reload so we don't restart and reload
+            if units_to_reload.remove(unit).is_some() {
+                unrecord_unit(&reload_list, unit);
             }
         }
     }

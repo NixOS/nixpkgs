@@ -32,6 +32,8 @@ buildPythonPackage rec {
   version = "1.12.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
@@ -97,11 +99,6 @@ buildPythonPackage rec {
     # Fails when no "model name" is present in /proc/cpuinfo,
     # which is common on Arm Linux systems
     "test_sys_info_basic"
-  ];
-
-  pytestFlag = [
-    # removes 700k lines from pytest log, remove this when scipy is at v1.17.0
-    "--disable-warnings"
   ];
 
   disabledTestMarks = [
