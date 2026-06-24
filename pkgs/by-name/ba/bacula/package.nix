@@ -27,10 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-console-include-termios.h-explicitly.patch
   ];
 
-  # libtool.m4 only matches macOS 10.*
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  # libtool.m4 only matches macOS 10.*; widen the configure case to
+  # any version so it recognises Big Sur and later. The substitution
+  # applies to the host-OS match in the generated `configure`, which
+  # is version-sensitive but arch-agnostic — drop the previous
+  # `isAarch64` gate that left x86_64-darwin failing the link step
+  # with "ld: symbol(s) not found for architecture x86_64".
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
-      --replace "10.*)" "*)"
+      --replace-fail "10.*)" "*)"
   '';
 
   buildInputs = [
