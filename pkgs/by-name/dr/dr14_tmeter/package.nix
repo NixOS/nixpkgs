@@ -2,13 +2,17 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  pkgs,
+  flac,
+  vorbis-tools,
+  ffmpeg,
+  faad2,
+  lame,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "dr14_tmeter";
   version = "1.0.16-unstable-2025-09-27";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hboetes";
@@ -17,7 +21,9 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-3z9Gi32aG6Tk9UHpfT1VqmBZpFJrlKB+NZFu3CH+18U=";
   };
 
-  propagatedBuildInputs = with pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     python3Packages.numpy
     python3Packages.mutagen
     flac
