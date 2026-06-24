@@ -2387,10 +2387,10 @@
   };
 
   scheme = {
-    version = "0.24.7-1-unstable-2025-12-13";
+    version = "0.24.7-1-unstable-2026-03-17";
     url = "github:6cdh/tree-sitter-scheme";
-    rev = "b5c701148501fa056302827442b5b4956f1edc03";
-    hash = "sha256-SLuK8S03pKVVhxJTkE3ZJvNaNnmXD323YwE7ah2VxyQ=";
+    rev = "c6cb7c7d7a04b3f5d999c28e2e9c0c31b2d50ece";
+    hash = "sha256-aFonUd15PJkQmz5lDJthtd1rU+8OXNknHDlgqH2s+OA=";
     meta = {
       license = lib.licenses.mit;
     };
