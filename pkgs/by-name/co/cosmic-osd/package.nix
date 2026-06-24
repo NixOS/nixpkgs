@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.16";
+  version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-jv28hxhQUcUDLnOwU3xQJwCU+s52pwDNs8Gf4I5Hp9k=";
+    hash = "sha256-veqkYF2CSwnc1nGIFeZXpfannCQ0RuacvqPVxVsiVDc=";
   };
 
-  cargoHash = "sha256-BngWy8fSfmQYSLV+/3jBvDdI0lpTwqGUiwwHvDlqySw=";
+  cargoHash = "sha256-aweq4E2bwqRpetakpR0OqTsIsoJK6h4eRzMdBhGuIoU=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
