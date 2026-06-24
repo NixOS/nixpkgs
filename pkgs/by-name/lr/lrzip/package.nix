@@ -12,7 +12,13 @@
 }:
 
 let
-  inherit (stdenv.hostPlatform) isx86;
+  inherit (stdenv.hostPlatform) isx86 isDarwin;
+  # nasm emits ELF by default and lrzip's build system doesn't pass
+  # `-f macho64`, so the resulting `7zCrcOpt_asm.o` is rejected at
+  # link time on darwin with "archive member ... is not mach-o".
+  # Falling back to the C path via --disable-asm is the simplest fix;
+  # the perf delta is negligible for this codepath.
+  useAsm = isx86 && !isDarwin;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lrzip";
@@ -29,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     perl
   ]
-  ++ lib.optionals isx86 [ nasm ];
+  ++ lib.optionals useAsm [ nasm ];
 
   buildInputs = [
     zlib
@@ -38,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
 
-  configureFlags = lib.optionals (!isx86) [
+  configureFlags = lib.optionals (!useAsm) [
     "--disable-asm"
   ];
 
