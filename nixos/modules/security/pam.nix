@@ -1008,7 +1008,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               # pam_slurm_adopt must be the last module in the account stack.
               {
@@ -1217,11 +1217,11 @@ let
                       name = "unix-early";
                       enable = cfg.unixAuth;
                       control = "optional";
-                      modulePath = "${package}/lib/security/pam_unix.so";
+                      modulePath = config.security.pam.pam_unixModulePath;
                       settings = {
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
-                        likeauth = true;
+                        likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                       };
                     }
                     {
@@ -1315,11 +1315,11 @@ let
                   name = "unix";
                   enable = cfg.unixAuth;
                   control = "sufficient";
-                  modulePath = "${package}/lib/security/pam_unix.so";
+                  modulePath = config.security.pam.pam_unixModulePath;
                   settings = {
                     nullok = cfg.allowNullPassword;
                     inherit (cfg) nodelay;
-                    likeauth = true;
+                    likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                     try_first_pass = true;
                   };
                 }
@@ -1404,10 +1404,10 @@ let
               {
                 name = "unix";
                 control = "sufficient";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = true;
+                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1493,7 +1493,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               {
                 name = "loginuid";
@@ -1860,6 +1860,14 @@ in
 
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
+    security.pam.pam_unixModulePath = lib.mkOption {
+      type = lib.types.pathInStore;
+      default = "${package}/lib/security/pam_unix.so";
+      defaultText = "\${config.security.pam.package}/lib/security/pam_unix.so";
+      description = "The pam_unix module to use in all the default pam services.";
+      internal = true;
+    };
+
     security.pam.loginLimits = lib.mkOption {
       default = [ ];
       type = limitsType;
@@ -1901,6 +1909,19 @@ in
         e.g. {command}`login` or {command}`passwd`.
         Each attribute of this set defines a PAM service, with the attribute name
         defining the name of the service.
+      '';
+    };
+
+    security.pam.enableLegacySettings = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = ''
+        Alternative implementations of pam_unix may not support all legacy arguments.
+        This option will disable all known legacy settings.
+        ::: {.note}
+        Setting this option to false will omit arguments, such as `yescrypt`.
+        Doing so is only safe if the defaults used by pam_unix are sensible.
+        :::
       '';
     };
 
