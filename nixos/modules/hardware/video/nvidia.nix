@@ -721,6 +721,18 @@ in
             cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier
           ) nvidia_x11.out;
 
+          environment.etc."systemd/system-sleep/nvidia".source = lib.mkIf cfg.powerManagement.enable (
+            pkgs.writeShellScript "nvidia-sleep" ''
+              export PATH=${
+                lib.makeBinPath [
+                  pkgs.coreutils
+                  pkgs.kbd
+                ]
+              }:$PATH
+              exec "${nvidia_x11.out}/lib/systemd/system-sleep/nvidia" "$@"
+            ''
+          );
+
           systemd.services =
             let
               nvidiaService = state: {
@@ -731,22 +743,39 @@ in
                   ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
                 };
                 before = [ "systemd-${state}.service" ];
-                requiredBy = [ "systemd-${state}.service" ];
+                wantedBy = [ "systemd-${state}.service" ];
               };
             in
             lib.mkMerge [
               (lib.mkIf (cfg.powerManagement.enable && !cfg.powerManagement.kernelSuspendNotifier) {
                 nvidia-suspend = nvidiaService "suspend";
                 nvidia-hibernate = nvidiaService "hibernate";
+                nvidia-suspend-then-hibernate = {
+                  description = "NVIDIA system suspend-then-hibernate actions";
+                  path = [ pkgs.kbd ];
+                  serviceConfig = {
+                    Type = "oneshot";
+                    ExecStart = [
+                      "${nvidia_x11.out}/bin/nvidia-sleep.sh 'is-suspend-then-hibernate-supported'"
+                      "${nvidia_x11.out}/bin/nvidia-sleep.sh 'suspend'"
+                    ];
+                  };
+                  before = [ "systemd-suspend-then-hibernate.service" ];
+                  wantedBy = [ "systemd-suspend-then-hibernate.service" ];
+                };
                 nvidia-resume = (nvidiaService "resume") // {
                   before = [ ];
                   after = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
-                  requiredBy = [
+                  wantedBy = [
                     "systemd-suspend.service"
                     "systemd-hibernate.service"
+                    "systemd-hybrid-sleep.service"
+                    "systemd-suspend-then-hibernate.service"
                   ];
                 };
               })
