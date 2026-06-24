@@ -27,9 +27,7 @@
   srtp,
   libnice,
   gnutls,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
+  gst_all_1,
   webrtc-audio-processing,
 }:
 
@@ -81,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     srtp
     libnice
     gnutls
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good # contains rtpbin, required for VP9
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; }) # contains rtpbin, required for VP9
     webrtc-audio-processing
   ];
 
