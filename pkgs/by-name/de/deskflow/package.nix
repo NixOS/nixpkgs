@@ -125,6 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       mit # share/applications/org.deskflow.deskflow.desktop
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
