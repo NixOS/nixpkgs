@@ -343,6 +343,9 @@ in
     };
 
     hub = lib.mkOption {
+      description = ''
+        Hub collections, parsers, AppSec rules, etc.
+      '';
       type = lib.types.submodule {
         options = {
           collections = lib.mkOption {
@@ -366,47 +369,29 @@ in
             example = [ "crowdsecurity/sshd-logs" ];
           };
 
-          postOverflows = lib.mkOption {
+          postoverflows = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "List of hub postoverflows to install";
             example = [ "crowdsecurity/auditd-nix-wrappers-whitelist-process" ];
           };
 
-          appSecConfigs = lib.mkOption {
+          appsec-configs = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "List of hub appsec configurations to install";
             example = [ "crowdsecurity/appsec-default" ];
           };
 
-          appSecRules = lib.mkOption {
+          appsec-rules = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
             description = "List of hub appsec rules to install";
             example = [ "crowdsecurity/base-config" ];
           };
-
-          branch = lib.mkOption {
-            type = lib.types.str;
-            default = "master";
-            description = ''
-              The git branch on which cscli is going to fetch configurations.
-
-              See `https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#hub_branch` for more information.
-            '';
-            example = [
-              "master"
-              "v1.4.3"
-              "v1.4.2"
-            ];
-          };
         };
       };
       default = { };
-      description = ''
-        Hub collections, parsers, AppSec rules, etc.
-      '';
     };
 
     settings = lib.mkOption {
@@ -580,19 +565,19 @@ in
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
         }"
       ]
-      ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
+      ++ lib.optionals (cfg.hub.postoverflows != [ ]) [
         "${lib.getExe cscli} postoverflows install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
+          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postoverflows
         }"
       ]
-      ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
+      ++ lib.optionals (cfg.hub.appsec-configs != [ ]) [
         "${lib.getExe cscli} appsec-configs install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
+          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appsec-configs
         }"
       ]
-      ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
+      ++ lib.optionals (cfg.hub.appsec-rules != [ ]) [
         "${lib.getExe cscli} appsec-rules install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
+          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appsec-rules
         }"
       ]
       ++ lib.optionals (cfg.settings.general.api.server.enable) [
@@ -976,7 +961,7 @@ in
           extraGroups = [ "systemd-journal" ] ++ cfg.extraGroups;
         };
 
-        groups.${cfg.group} = {};
+        groups.${cfg.group} = { };
       };
 
       networking.firewall.allowedTCPPorts =
