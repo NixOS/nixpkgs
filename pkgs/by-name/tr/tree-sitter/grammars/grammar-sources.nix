@@ -1306,10 +1306,9 @@
   };
 
   jjdescription = {
-    version = "0-unstable-2025-02-20";
-    url = "github:kareigu/tree-sitter-jjdescription";
-    rev = "1613b8c85b6ead48464d73668f39910dcbb41911";
-    hash = "sha256-HPghz3mOukXrY0KQllOR7Kkl2U3+ukPBrXWKnJCwsqI=";
+    version = "1.0.3";
+    url = "github:ribru17/tree-sitter-jjdescription";
+    hash = "sha256-3v/SiIQIR8ptUnzzRVTaqcznw3kXqdWlS2Ua/f6npDU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
