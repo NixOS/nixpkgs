@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "snapweb";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapweb";
     rev = "v${version}";
-    hash = "sha256-7W7rvJPVcRtXcQt+wWAvrl0DOIh7zEfXZdFDcH23/ls=";
+    hash = "sha256-ngtfmgaC+YioIqBXZ1dkNl3S7JqysdxxKNfi3qhYQAA=";
   };
 
-  npmDepsHash = "sha256-STZ/+vmiUAOZ8+yeaFg+428pZ/iZZXXUeGx6gLmnDQ8=";
+  npmDepsHash = "sha256-bmCXbB0jQmsYLNlx92olYHudTNpKftbxEcFxtJIV9bQ=";
 
   # For 'sharp' dependency, otherwise it will try to build it
   nativeBuildInputs = [ pkg-config ];
