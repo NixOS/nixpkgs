@@ -522,6 +522,7 @@ mapAliases {
   pytorch-bin = throw "'pytorch-bin' has been renamed to/replaced by 'torch-bin'"; # Converted to throw 2025-10-29
   pytorchWithCuda = throw "'pytorchWithCuda' has been renamed to/replaced by 'torchWithCuda'"; # Converted to throw 2025-10-29
   pytorchWithoutCuda = throw "'pytorchWithoutCuda' has been renamed to/replaced by 'torchWithoutCuda'"; # Converted to throw 2025-10-29
+  pytrec_eval = throw "'pytrec_eval' has been renamed to/replaced by 'pytrec-eval'"; # added 2026-06-24
   pytwitchapi = throw "'pytwitchapi' has been renamed to/replaced by 'twitchapi'"; # Converted to throw 2025-10-29
   pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
