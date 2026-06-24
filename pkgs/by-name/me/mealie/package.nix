@@ -19,12 +19,12 @@
 }:
 
 let
-  version = "3.19.2";
+  version = "3.20.1";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-OH48XiOoaIdVCl5tm22OaI5UKKlhj8b0uVsGlgsjx6I=";
+    hash = "sha256-SkPbu0DUNyjo1ARjZX+BXq+3ehZqnrku9kPjwsTJfuM=";
   };
 
   frontend = stdenv.mkDerivation {
@@ -36,7 +36,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/frontend/yarn.lock";
-      hash = "sha256-q3dqJrzqEx0G3Q/EGhjVzBd6XTAn6cELfaqLJCD5kFs=";
+      hash = "sha256-nhV93uRfKUa/G7ikJkd6l9IudgMk7PZ7ujZNnwIZ71k=";
     };
 
     nativeBuildInputs = [
