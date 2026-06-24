@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/asweigart/PyGetWindow";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

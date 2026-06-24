@@ -156,6 +156,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ spk ];
     platforms = lib.attrNames (lib.filterAttrs (_: v: v.hash ? ${phpMajor}) hashes);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    hasNoMaintainersButDependents = true;
   };
 })

@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [ ];
   };

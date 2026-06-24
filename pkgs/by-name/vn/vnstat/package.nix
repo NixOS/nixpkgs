@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://humdi.net/vnstat/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ choco98 ];
-    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://distlib.readthedocs.io";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

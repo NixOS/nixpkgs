@@ -57,5 +57,6 @@ buildPythonPackage {
     homepage = "https://github.com/varunagrawal/bbox";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

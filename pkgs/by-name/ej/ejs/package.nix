@@ -33,5 +33,6 @@ buildNpmPackage {
     license = lib.licenses.asl20;
     mainProgram = "ejs";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

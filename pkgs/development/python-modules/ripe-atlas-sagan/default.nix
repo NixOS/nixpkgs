@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-sagan";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

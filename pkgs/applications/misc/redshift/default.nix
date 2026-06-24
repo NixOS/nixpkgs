@@ -179,6 +179,7 @@ rec {
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
       maintainers = with lib.maintainers; [ acidbong ] ++ redshift.meta.maintainers;
+      hasNoMaintainersButDependents = false;
     };
   };
 }

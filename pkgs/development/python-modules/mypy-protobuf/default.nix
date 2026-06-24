@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "protoc-gen-mypy";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -65,6 +65,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     pkgConfigModules = [ "xorg-libinput" ];
     platforms = lib.platforms.unix;
-    hasNoMaintainersButDependents = true;
   };
 })

@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     longDescription = ''
       Blitz++ is a C++ class library for scientific computing which provides
       performance on par with Fortran 77/90. It uses template techniques to
