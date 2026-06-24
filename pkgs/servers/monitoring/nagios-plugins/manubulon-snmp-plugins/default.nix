@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "manubulon-snmp-plugins";
-  version = "2.1.0-unstable-2024-03-13";
+  version = "0-unstable-2024-03-13";
 
   src = fetchFromGitHub {
     owner = "SteScho";
