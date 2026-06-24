@@ -22,13 +22,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meld";
-  version = "3.23.1";
+  version = "3.24.0";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${lib.versions.majorMinor finalAttrs.version}/meld-${finalAttrs.version}.tar.xz";
-    hash = "sha256-c/gnkkZjx8a0UadMg4UwTZn+qhPIH04KFx2ll8aENXQ=";
+    hash = "sha256-GfA2KX58iVFFFrzS5WGC2yuyuhO0hQiTwc5ZdEUBi5Q=";
   };
 
   nativeBuildInputs = [
