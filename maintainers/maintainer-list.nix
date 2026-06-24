@@ -10910,6 +10910,12 @@
     githubId = 18178614;
     name = "Spencer Heywood";
   };
+  heyzec = {
+    email = "hz.tiang+nixpkgs@gmail.com";
+    github = "heyzec";
+    githubId = 61238538;
+    name = "heyzec";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
