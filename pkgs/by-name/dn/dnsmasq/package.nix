@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   nettle,
-  libidn,
+  libidn2,
   libnetfilter_conntrack,
   nftables,
   buildPackages,
@@ -16,7 +16,7 @@
 let
   copts = lib.concatStringsSep " " (
     [
-      "-DHAVE_IDN"
+      "-DHAVE_LIBIDN2"
       "-DHAVE_DNSSEC"
     ]
     ++ lib.optionals dbusSupport [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     nettle
-    libidn
+    libidn2
   ]
   ++ lib.optionals dbusSupport [ dbus ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
