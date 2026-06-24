@@ -1,9 +1,9 @@
 import argparse
-import os
 import sys
 from pathlib import Path
 from .error import VarsError
 from .eval import evaluate_config
+from .generate import generate_vars
 from .args import VarsArgs
 
 
@@ -74,9 +74,11 @@ def main() -> None:
 	print(args)
 
 	try:
+		config = evaluate_config(args)
 		if args.command == "evaluate":
-			config = evaluate_config(args)
 			print(config)
+		elif args.command == "generate":
+			generate_vars(args, config)
 		else:
 			raise VarsError(f"Command '{args.command}' is not implemented :(")
 	except VarsError as e:

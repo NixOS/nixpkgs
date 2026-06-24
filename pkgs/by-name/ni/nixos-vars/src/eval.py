@@ -14,20 +14,6 @@ def evaluate_config(args: VarsArgs) -> VarsConfig:
 
 
 def evaluate_config_raw(args: VarsArgs) -> Any:
-	configSources = []
-
-	if args.file is not None:
-		configSources.append(args.file)
-	if args.flake is not None:
-		configSources.append(args.flake)
-	if args.json is not None:
-		configSources.append(args.json)
-
-	if len(configSources) != 1:
-		raise VarsError(
-			"Precisely one of the --file, --flake, or --json flags must be given"
-		)
-
 	if args.json is not None:
 		try:
 			with open(args.json) as f:
@@ -41,7 +27,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
 	elif args.file is not None:
 		expr = f"""
 import {jsonify} {{
-	config = (import {args.file}){"" if args.attr is None else f".{args.attr}"};
+	config = (import ./{args.file}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
 		evalCommand = ["--impure", "-E", expr]
