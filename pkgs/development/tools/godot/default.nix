@@ -62,7 +62,7 @@ rec {
   godotPackages_4_5 = mkGodotPackages "4.5";
   godotPackages_4_6 = mkGodotPackages "4.6";
   godotPackages_4_7 = mkGodotPackages "4.7";
-  godotPackages_4 = godotPackages_4_6;
+  godotPackages_4 = godotPackages_4_7;
   godotPackages = godotPackages_4;
 
   godot_4_3 = godotPackages_4_3.godot;
