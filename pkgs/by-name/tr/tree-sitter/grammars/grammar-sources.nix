@@ -1645,10 +1645,10 @@
   };
 
   meson = {
-    version = "0-unstable-2022-11-02";
-    url = "github:staysail/tree-sitter-meson";
-    rev = "1a497eecfb1b840ab12caf28f0ef45d4a5e26d28";
-    hash = "sha256-VWI4q85uOzT/n/tWYAMgGWdK1q3BAAuwC4WjErE82xk=";
+    version = "0-unstable-2026-01-22";
+    url = "github:tree-sitter-grammars/tree-sitter-meson";
+    rev = "c84f3540624b81fc44067030afce2ff78d6ede05";
+    hash = "sha256-+GMR051L89asgavX2T3zKwWl8xUFHenlCWJYELhMuyA=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
