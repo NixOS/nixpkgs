@@ -31,7 +31,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "2.1.2";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-7FzAvC/JMMIFcuTGkL2Ju644UAIsneOMhiDUFnQske4=";
+    hash = "sha256-w0uZ2qAc3Tt6QVRAX97LWW9aOs02fG1SEYCDhpUhinE=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
   '';
 
-  cargoHash = "sha256-feESY8ALSG3xa906HBc4pOKGerQ1jF7VUxzvUcsZbrY=";
+  cargoHash = "sha256-+lmDbawAIRllC7LzGJ9qPMtHXPd5aMoul47YOA7nfXA=";
 
   __structuredAttrs = true;
 
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    libgit2
+    (libgit2.override { withExperimentalSha256 = true; })
     openssl
     sqlite
     zlib
