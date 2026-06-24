@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "librepods";
   version = "0.2.5";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "kavishdevar";
     repo = "librepods";

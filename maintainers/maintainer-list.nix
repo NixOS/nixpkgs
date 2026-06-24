@@ -24905,6 +24905,13 @@
     githubId = 149248;
     name = "Christian Rackerseder";
   };
+  Scriptkiddi = {
+    email = "nixos@scriptkiddi.de";
+    matrix = "@fritz.otlinghaus:helsinki-systems.de";
+    github = "Scriptkiddi";
+    githubId = 3598650;
+    name = "Fritz Otlinghaus";
+  };
   Scrumplex = {
     name = "Sefa Eyeoglu";
     email = "contact@scrumplex.net";
@@ -26546,6 +26553,11 @@
     name = "StephenWithPH";
     github = "StephenWithPH";
     githubId = 2990492;
+  };
+  stephsi = {
+    name = "Stephan Siegl";
+    github = "stephsi";
+    githubId = 3120909;
   };
   sterfield = {
     email = "sterfield@gmail.com";
