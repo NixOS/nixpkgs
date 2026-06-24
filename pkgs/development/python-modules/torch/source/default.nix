@@ -389,7 +389,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   # Otherwise, torch compile will fail at runtime if openmp is not available
   #   torch._inductor.exc.InductorError: CppCompileError: C++ compile error
   #   fatal error: 'omp.h' file not found
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace torch/csrc/inductor/cpp_prefix.h \
       --replace-fail \
         "#include <omp.h>" \

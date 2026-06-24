@@ -40,12 +40,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "hoptorch" ];
 
-  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # fatal error: 'omp.h' file not found
-    llvmPackages.openmp
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
   ];

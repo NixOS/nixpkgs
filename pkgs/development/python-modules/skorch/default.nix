@@ -53,8 +53,6 @@ buildPythonPackage rec {
     transformers
   ];
 
-  checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
-
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run
     "test_load_cuda_params_to_cpu"

@@ -22,7 +22,6 @@
   pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  llvmPackages,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -64,12 +63,6 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ];
-
-  checkInputs = lib.optionals stdenv.cc.isClang [
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # fatal error: 'omp.h' file not found
-    llvmPackages.openmp
   ];
 
   disabledTests = [
