@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amiberry";
-  version = "8.1.6";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "BlitterStudio";
     repo = "amiberry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XUq7L2udZDH78UHeZBjbiERRwEwv8+JfxpPnThOGV6k=";
+    hash = "sha256-glGsWStkjpNRm4V3uXDJsFzY6krKWzgDTPJIlqh3lVY=";
   };
 
   nativeBuildInputs = [
