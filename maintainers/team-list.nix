@@ -512,7 +512,7 @@ with lib.maintainers;
       teutat3s
       transcaffeine
     ];
-    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+    scope = "Maintain the foundational packages of the Matrix ecosystem.";
     shortName = "Matrix";
   };
 
