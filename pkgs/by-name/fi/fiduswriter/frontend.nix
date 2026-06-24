@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  python3Packages,
   fiduswriter,
   fetchPnpmDeps,
 
@@ -9,10 +8,8 @@
   nodejs,
   pnpmConfigHook,
   pnpm_11,
-  makeWrapper,
-  rsync,
-
   python3,
+  rsync,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,10 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     ;
   __structuredAttrs = true;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=82.0.1" "setuptools"
-
+  postPatch = fiduswriter.postPatch or "" + ''
     # Upstream uses a `package.json5` file for multiple components, each with
     # its own dependencies. To merge all of them into a single `package.json`
     # and get the associated lockfile, run: `python manage.py npm_install`
@@ -64,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     rsync
   ];
 
+  env.PYTHONPATH = "${fiduswriter.passthru.pythonPath}";
+
   preBuild = ''
     pushd fiduswriter || true
     cp configuration-default.py configuration.py
@@ -71,9 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     python manage.py collectstatic
     popd
   '';
-
-  env.FIDUS_OUT_DIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
-  env.PYTHONPATH = "${fiduswriter.passthru.pythonPath}";
 
   installPhase = ''
     runHook preInstall

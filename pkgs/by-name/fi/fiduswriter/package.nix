@@ -118,6 +118,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   env.PYTHONPATH = "${finalAttrs.passthru.pythonPath}";
 
   makeWrapperArgs = [
+    "--chdir"
+    "${finalAttrs.env.FIDUS_OUT_DIR}/fiduswriter"
+
+    "--set"
+    "STATIC_ROOT"
+    "${finalAttrs.passthru.frontend}/static-collected"
+
     "--prefix"
     "PYTHONPATH"
     ":"
