@@ -19,9 +19,9 @@
   psutil,
   pygments,
   pymdown-extensions,
+  python-multipart,
   pyyaml,
   pyzmq,
-  ruff,
   starlette,
   tomlkit,
   uvicorn,
@@ -32,13 +32,13 @@
 }:
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.23.6";
+  version = "0.23.10";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1jru7h6ep8rHm/JTDaupFRmRU9zk0Vb63nVGR0Z508o=";
+    hash = "sha256-7XQ0NGLIhDbugeSM97f1zA8FyrJ/1lAnl8Zb1DtTvEA=";
   };
 
   build-system = [ uv-build ];
@@ -58,9 +58,9 @@ buildPythonPackage rec {
     psutil
     pygments
     pymdown-extensions
+    python-multipart
     pyyaml
     pyzmq
-    ruff
     starlette
     tomlkit
     uvicorn
