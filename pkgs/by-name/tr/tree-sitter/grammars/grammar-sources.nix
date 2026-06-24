@@ -1933,10 +1933,10 @@
   };
 
   pem = {
-    version = "0-unstable-2023-02-05";
-    url = "github:mtoohey31/tree-sitter-pem";
-    rev = "62842ea106ff66876f9af4cccdf87913d1ed912e";
-    hash = "sha256-yxxm3Iu3FQxdWM0d2VeptZj/ePTa58NFhLgYBzaeSeU=";
+    version = "0-unstable-2025-08-17";
+    url = "github:tree-sitter-grammars/tree-sitter-pem";
+    rev = "e525b177a229b1154fd81bc0691f943028d9e685";
+    hash = "sha256-2fhqFGLdQ5eugv405osviYUcAPMdm1N0VfGoVuI84Qk=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
