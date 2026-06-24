@@ -8,7 +8,7 @@ from .error import VarsError
 class VarsPromptBackend:
 	script: str
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		return VarsPromptBackend(json["script"])
 
 
@@ -18,7 +18,7 @@ class VarsPrompt:
 	backend: str
 	type: str  # There's probably a way to type this properly..
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		return VarsPrompt(json["description"], json["backend"], json["type"])
 
 
@@ -32,7 +32,7 @@ class VarsGeneratorBackend:
 	deploy: str
 	deployLocal: str
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		return VarsGeneratorBackend(
 			json["get"],
 			json["set"],
@@ -50,7 +50,7 @@ class VarsFile:
 	deploy: bool
 	secret: bool
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		return VarsFile(json["name"], json["deploy"], json["secret"])
 
 
@@ -62,7 +62,7 @@ class VarsGenerator:
 	prompts: List[str]
 	files: List[VarsFile]
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		result = VarsGenerator(
 			json["backend"],
 			json["script"],
@@ -72,7 +72,7 @@ class VarsGenerator:
 		)
 
 		for file in json["files"].values():
-			result.files.append(VarsFile.fromJSON(file))
+			result.files.append(VarsFile.from_jsom(file))
 
 		return result
 
@@ -85,20 +85,20 @@ class VarsConfig:
 	generators: Mapping[str, VarsGenerator]
 	generatorBackends: Mapping[str, VarsGeneratorBackend]
 
-	def fromJSON(json: Any) -> Self:
+	def from_jsom(json: Any) -> Self:
 		result = VarsConfig({}, {}, {}, {})
 
 		for k, v in json["prompts"].items():
-			result.prompts[k] = VarsPrompt.fromJSON(v)
+			result.prompts[k] = VarsPrompt.from_jsom(v)
 
 		for k, v in json["promptBackends"].items():
-			result.promptBackends[k] = VarsPromptBackend.fromJSON(v)
+			result.promptBackends[k] = VarsPromptBackend.from_jsom(v)
 
 		for k, v in json["generators"].items():
-			result.generators[k] = VarsGenerator.fromJSON(v)
+			result.generators[k] = VarsGenerator.from_jsom(v)
 
 		for k, v in json["generatorBackends"].items():
-			result.generatorBackends[k] = VarsGeneratorBackend.fromJSON(v)
+			result.generatorBackends[k] = VarsGeneratorBackend.from_jsom(v)
 
 		missingPrompts: Set[str] = set()
 		promptNames = set(result.prompts.keys())
@@ -124,7 +124,7 @@ class VarsConfig:
 
 		return result
 
-	def executionOrder(self) -> List[str]:
+	def execution_order(self) -> List[str]:
 		ts = TopologicalSorter()
 
 		for name, gen in self.generators.items():
