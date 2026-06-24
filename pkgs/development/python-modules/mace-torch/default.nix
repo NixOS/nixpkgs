@@ -82,6 +82,10 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  preCheck = ''
+    export OMP_NUM_THREADS=1
+  '';
+
   disabledTests = [
     # _pickle.PickleError: ScriptFunction cannot be pickled
     "test_run_eval_fail_with_wrong_model"
