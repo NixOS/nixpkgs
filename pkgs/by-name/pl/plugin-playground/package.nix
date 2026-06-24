@@ -9,6 +9,7 @@
   rustc,
   corrosion,
   apple-sdk_15,
+  git,
 }:
 
 let
@@ -26,8 +27,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "CoreBedtime";
     repo = "playground";
-    rev = "72d411df1a6c9c0770698b99d4f757e4bc69871e";
-    hash = "sha256-+Q4tizoQIidGm23sKeR+prJWRA4wspEt3pC112yrgrQ=";
+    rev = "2d152742a8419060c201851e94763ff16ce1969e";
+    hash = "sha256-tfT0Oo2FqxYXqsSrZw5dh7eVDHxIyV2ndVcxfdOwWNk=";
   };
 
   strictDeps = true;
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
     cargo
     rustc
     corrosion
+    git
   ];
 
   buildInputs = [
@@ -67,12 +69,14 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DBUILD_CONFIGURATOR=ON"
     "-DFETCHCONTENT_SOURCE_DIR_SLINT=../slintSrc"
+    "-DFETCHCONTENT_SOURCE_DIR_CORROSION=${corrosion.src}"
   ];
 
   postInstall = ''
     rm -rf $out/include
     rm -rf $out/lib
     rm -f $out/bin/slint-compiler
+    mv $out/Applications/configurator.app "$out/Applications/Plugin Playground.app"
   '';
 
   meta = {
