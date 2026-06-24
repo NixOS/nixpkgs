@@ -279,6 +279,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       jk
       ofalvai
       mynacol
+      anish
     ];
     maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
