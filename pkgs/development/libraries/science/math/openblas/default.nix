@@ -273,6 +273,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Disables the test zblas3, which is very slow (>1h runtime) when building for i686
+  # https://github.com/NixOS/nixpkgs/issues/534670
+  preCheck = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") ''
+    checkFlagsArray+=("ARGS=-E zblas3")
+  '';
+
   postInstall = ''
         # Provide headers in /include directly for compat with some consumers like flint
         (cd $dev/include && ln -sf openblas/*.h .)
