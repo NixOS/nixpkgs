@@ -9862,7 +9862,7 @@ with self;
     };
 
     nativeBuildInputs = [
-      pkgs.mysql84 # for mysql_config
+      pkgs.mysql84.client # for mysql_config
     ];
     buildInputs = [
       DevelChecklib
