@@ -3093,10 +3093,11 @@
   };
 
   wit = {
-    version = "0-unstable-2022-10-31";
-    url = "github:hh9527/tree-sitter-wit";
-    rev = "c917790ab9aec50c5fd664cbfad8dd45110cfff3";
-    hash = "sha256-5+cw9vWPizK7YlEhiNJheYVYOgtheEifd4g1KF5ldyE=";
+    version = "1.3.0";
+    url = "github:bytecodealliance/tree-sitter-wit";
+    hash = "sha256-FG73R38Bw60+aT5YB/xpENCnQwoGMVjXRLjP1GdJEn4=";
+    # Fails strict schema validation due to Neovim ecosystem extensions
+    excludeBrokenTreeSitterJson = true;
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
