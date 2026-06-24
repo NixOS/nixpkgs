@@ -37,6 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-LfhFza0G85+fIuACMdwV50Okh5/46z8tLoJ9IvLqTgw=";
   };
 
+  cargoPatches = [
+    # A different reference to the `libcosmic` crate was added
+    # Remove this patch once upstream fixes their lockfile.
+    ./dedup-libcosmic.patch
+  ];
+
   cargoHash = "sha256-rYjizOCcLJ4aq3UB5xEwWq5+KvrSi5PCUTIwUM/wegM=";
 
   separateDebugInfo = true;
