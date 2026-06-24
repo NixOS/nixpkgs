@@ -1,0 +1,124 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dennis Bonke <admin@dennisbonke.com>
+Date: Sun, 11 Jan 2026 16:00:15 +0100
+Subject: [PATCH] gcc: define __mlibc__ and add LIBC_MLIBC
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index dc350422f..1d59563b2 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -693,7 +693,7 @@ case ${target} in
+ esac
+ 
+ # Common C libraries.
+-tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3 LIBC_MUSL=4"
++tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3 LIBC_MUSL=4 LIBC_MLIBC=5"
+ 
+ # 32-bit x86 processors supported by --with-arch=.  Each processor
+ # MUST be separated by exactly one space.
+@@ -919,6 +919,9 @@ case ${target} in
+     *-*-*musl*)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MUSL"
+       ;;
++	*-*-*mlibc*)
++	  tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MLIBC"
++	  ;;
+     *)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
+       ;;
+diff --git a/gcc/config/linux.h b/gcc/config/linux.h
+index a7248ac90..f6c7b8661 100644
+--- a/gcc/config/linux.h
++++ b/gcc/config/linux.h
+@@ -34,23 +34,28 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ #define OPTION_BIONIC_P(opts)	(DEFAULT_LIBC == LIBC_BIONIC)
+ #undef OPTION_MUSL_P
+ #define OPTION_MUSL_P(opts)	(DEFAULT_LIBC == LIBC_MUSL)
++#define OPTION_MLIBC_P(opts) (DEFAULT_LIBC == LIBC_MLIBC)
+ #else
+ #define OPTION_GLIBC_P(opts)	((opts)->x_linux_libc == LIBC_GLIBC)
+ #define OPTION_UCLIBC_P(opts)	((opts)->x_linux_libc == LIBC_UCLIBC)
+ #define OPTION_BIONIC_P(opts)	((opts)->x_linux_libc == LIBC_BIONIC)
+ #undef OPTION_MUSL_P
+ #define OPTION_MUSL_P(opts)	((opts)->x_linux_libc == LIBC_MUSL)
++#define OPTION_MLIBC_P(opts) ((opts)->x_linux_libc == LIBC_MLIBC)
+ #endif
+ #define OPTION_GLIBC		OPTION_GLIBC_P (&global_options)
+ #define OPTION_UCLIBC		OPTION_UCLIBC_P (&global_options)
+ #define OPTION_BIONIC		OPTION_BIONIC_P (&global_options)
+ #undef OPTION_MUSL
+ #define OPTION_MUSL		OPTION_MUSL_P (&global_options)
++#define OPTION_MLIBC		OPTION_MLIBC_P (&global_options)
+ 
+ #define GNU_USER_TARGET_OS_CPP_BUILTINS()			\
+     do {							\
+ 	if (OPTION_GLIBC)					\
+ 	  builtin_define ("__gnu_linux__");			\
++	if (OPTION_MLIBC)					\
++	  builtin_define ("__mlibc__");				\
+ 	builtin_define_std ("linux");				\
+ 	builtin_define_std ("unix");				\
+ 	builtin_assert ("system=linux");			\
+@@ -63,21 +68,24 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+    -muclibc or -mglibc or -mbionic or -mmusl has been passed to change
+    the default.  */
+ 
+-#define CHOOSE_DYNAMIC_LINKER1(LIBC1, LIBC2, LIBC3, LIBC4, LD1, LD2, LD3, LD4)	\
+-  "%{" LIBC2 ":" LD2 ";:%{" LIBC3 ":" LD3 ";:%{" LIBC4 ":" LD4 ";:" LD1 "}}}"
++#define CHOOSE_DYNAMIC_LINKER1(LIBC1, LIBC2, LIBC3, LIBC4, LIBC5, LD1, LD2, LD3, LD4, LD5)	\
++  "%{" LIBC2 ":" LD2 ";:%{" LIBC3 ":" LD3 ";:%{" LIBC4 ":" LD4 ";:%{" LIBC5 ":" LD5 ";:" LD1 "}}}}"
+ 
+ #if DEFAULT_LIBC == LIBC_GLIBC
+-#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-  CHOOSE_DYNAMIC_LINKER1 ("mglibc", "muclibc", "mbionic", "mmusl", G, U, B, M)
++#define CHOOSE_DYNAMIC_LINKER(G, U, B, MU, ML) \
++  CHOOSE_DYNAMIC_LINKER1 ("mglibc", "muclibc", "mbionic", "mmusl", "mmlibc", G, U, B, MU, ML)
+ #elif DEFAULT_LIBC == LIBC_UCLIBC
+-#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-  CHOOSE_DYNAMIC_LINKER1 ("muclibc", "mglibc", "mbionic", "mmusl", U, G, B, M)
++#define CHOOSE_DYNAMIC_LINKER(G, U, B, MU, ML) \
++  CHOOSE_DYNAMIC_LINKER1 ("muclibc", "mglibc", "mbionic", "mmusl", "mmlibc", U, G, B, MU, ML)
+ #elif DEFAULT_LIBC == LIBC_BIONIC
+-#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-  CHOOSE_DYNAMIC_LINKER1 ("mbionic", "mglibc", "muclibc", "mmusl", B, G, U, M)
++#define CHOOSE_DYNAMIC_LINKER(G, U, B, MU, ML) \
++  CHOOSE_DYNAMIC_LINKER1 ("mbionic", "mglibc", "muclibc", "mmusl", "mmlibc", B, G, U, MU, ML)
+ #elif DEFAULT_LIBC == LIBC_MUSL
+-#define CHOOSE_DYNAMIC_LINKER(G, U, B, M) \
+-  CHOOSE_DYNAMIC_LINKER1 ("mmusl", "mglibc", "muclibc", "mbionic", M, G, U, B)
++#define CHOOSE_DYNAMIC_LINKER(G, U, B, MU, ML) \
++  CHOOSE_DYNAMIC_LINKER1 ("mmusl", "mglibc", "muclibc", "mbionic", "mmlibc", MU, G, U, B, ML)
++#elif DEFAULT_LIBC == LIBC_MLIBC
++#define CHOOSE_DYNAMIC_LINKER(G, U, B, MU, ML) \
++  CHOOSE_DYNAMIC_LINKER1 ("mmlibc", "mmusl", "mglibc", "muclibc", "mbionic", ML, G, U, B, MU)
+ #else
+ #error "Unsupported DEFAULT_LIBC"
+ #endif /* DEFAULT_LIBC */
+@@ -100,18 +108,23 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ #define MUSL_DYNAMIC_LINKER64 "/dev/null"
+ #define MUSL_DYNAMIC_LINKERX32 "/dev/null"
+ 
++#define MLIBC_DYNAMIC_LINKER "/usr/lib/ld-linux-mlibc.so"
++#define MLIBC_DYNAMIC_LINKER32 "/usr/lib/ld_i386-linux-mlibc.so"
++#define MLIBC_DYNAMIC_LINKER64 "/usr/lib/ld-linux-mlibc.so"
++#define MLIBC_DYNAMIC_LINKERX32 "/usr/lib/ld32-linux-mlibc.so"
++
+ #define GNU_USER_DYNAMIC_LINKER						\
+   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER,	\
+-			 BIONIC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
++			 BIONIC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER, MLIBC_DYNAMIC_LINKER)
+ #define GNU_USER_DYNAMIC_LINKER32					\
+   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32, \
+-			 BIONIC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32)
++			 BIONIC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32, MLIBC_DYNAMIC_LINKER32)
+ #define GNU_USER_DYNAMIC_LINKER64					\
+   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64, \
+-			 BIONIC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64)
++			 BIONIC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64, MLIBC_DYNAMIC_LINKER64)
+ #define GNU_USER_DYNAMIC_LINKERX32					\
+   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKERX32, UCLIBC_DYNAMIC_LINKERX32, \
+-			 BIONIC_DYNAMIC_LINKERX32, MUSL_DYNAMIC_LINKERX32)
++			 BIONIC_DYNAMIC_LINKERX32, MUSL_DYNAMIC_LINKERX32, MLIBC_DYNAMIC_LINKERX32)
+ 
+ /* Whether we have Bionic libc runtime */
+ #undef TARGET_HAS_BIONIC
