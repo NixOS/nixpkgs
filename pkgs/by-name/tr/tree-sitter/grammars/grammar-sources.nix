@@ -3131,10 +3131,10 @@
   };
 
   xml = {
-    version = "0-unstable-2023-01-17";
-    url = "github:RenjiSann/tree-sitter-xml";
-    rev = "48a7c2b6fb9d515577e115e6788937e837815651";
-    hash = "sha256-8c/XtnffylxiqX3Q7VFWlrk/655FG2pwqYrftGpnVxI=";
+    version = "0-unstable-2026-01-21";
+    url = "github:tree-sitter-grammars/tree-sitter-xml";
+    rev = "5000ae8f22d11fbe93939b05c1e37cf21117162d";
+    hash = "sha256-QN+jQx1CrTbYpmM9mLUfjWcymGsa0Th7LVgk4thnQXU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
