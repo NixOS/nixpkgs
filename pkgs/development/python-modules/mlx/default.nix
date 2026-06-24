@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  nanobind,
 
   # build-system
   cmake,
@@ -14,6 +13,7 @@
   # buildInputs
   apple-sdk,
   fmt,
+  nanobind,
   nlohmann_json,
   # linux-only
   openblas,
@@ -93,9 +93,6 @@ buildPythonPackage (finalAttrs: {
         (lib.cmakeBool "USE_SYSTEM_FMT" true)
         (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
         (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
-
-        # Cmake cannot find nanobind-config.cmake by itself
-        (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
       ]
       ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         (lib.cmakeBool "MLX_ENABLE_X64_MAC" true)
@@ -111,6 +108,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     fmt
+    nanobind
     nlohmann_json
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   # for the CMake files.
   buildInputs = [
     protobuf
+    python3Packages.nanobind
     python3Packages.protobuf
   ];
 
@@ -77,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     ONNX_ML = "1";
     ONNX_NAMESPACE = "onnx";
     ONNX_USE_PROTOBUF_SHARED_LIBS = "1";
-
-    nanobind_DIR = "${python3Packages.nanobind}/${python.sitePackages}/nanobind/cmake";
   };
 
   cmakeFlags = mapAttrsToList cmakeFeature finalAttrs.env;
