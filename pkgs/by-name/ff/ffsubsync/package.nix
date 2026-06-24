@@ -1,11 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   ffmpeg,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ffsubsync";
   version = "0.4.31";
   pyproject = true;
@@ -17,9 +17,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-j9E4h2de2EOtYpuxKFbPOxZ5FBRO0EkbZhJdx5RiPn8=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     auditok
     charset-normalizer
     faust-cchardet
@@ -36,9 +38,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     webrtcvad
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "ffsubsync" ];
+  pythonImportsCheck = [
+    "ffsubsync"
+  ];
 
   makeWrapperArgs = [
     "--prefix"
