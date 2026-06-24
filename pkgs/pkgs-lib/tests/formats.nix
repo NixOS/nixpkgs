@@ -845,6 +845,11 @@ runBuildTests {
     '';
   };
 
+  tomlNull = shouldFail {
+    format = formats.toml { };
+    input = null;
+  };
+
   cdnAtoms = shouldPass {
     format = formats.cdn { };
     input = {
