@@ -85,6 +85,9 @@ let
           "man"
         ];
 
+        strictDeps = lib.versionAtLeast finalAttrs.version "12.3";
+        __structuredAttrs = lib.versionAtLeast finalAttrs.version "12.3";
+
         nativeBuildInputs = [
           cmake
           pkg-config
@@ -427,5 +430,10 @@ self: {
     # Supported until 2028-06-04
     version = "11.8.9";
     hash = "sha256-LgFbfpEAQULtqLOiDTzrh1zyrlXnJgPnIizUl9Tlb8Y=";
+  };
+  mariadb_123 = self.callPackage generic {
+    # Supported until June 2029
+    version = "12.3.3";
+    hash = "sha256-6Z1zn9SlX5oR3qe9IoeiYmc+KHVQrzBxyEad0r7AwWM=";
   };
 }
