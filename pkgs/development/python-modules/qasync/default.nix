@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CabbageDevelopment/qasync";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

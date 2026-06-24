@@ -30,6 +30,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/makinacorpus/easydict";
     changelog = "https://github.com/makinacorpus/easydict/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3;
-    hasNoMaintainersButDependents = true;
   };
 })

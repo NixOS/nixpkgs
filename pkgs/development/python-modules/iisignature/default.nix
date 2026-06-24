@@ -34,6 +34,5 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/iisignature";
     license = lib.licenses.mit;
     maintainers = [ ];
-    hasNoMaintainersButDependents = true;
   };
 }

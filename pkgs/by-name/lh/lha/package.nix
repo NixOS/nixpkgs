@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     # use).
     license = lib.licenses.unfree;
     mainProgram = "lha";
+    hasNoMaintainersButDependents = true;
   };
 })

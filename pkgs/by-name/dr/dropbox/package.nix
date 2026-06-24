@@ -117,5 +117,6 @@ buildFHSEnv {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "dropbox";
+    hasNoMaintainersButDependents = true;
   };
 }

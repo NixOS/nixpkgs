@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

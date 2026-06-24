@@ -39,5 +39,6 @@ buildPythonPackage {
     homepage = "https://github.com/asweigart/pyscreeze";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

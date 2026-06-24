@@ -373,5 +373,6 @@ python3Packages.buildPythonApplication {
         ];
     platforms = lib.attrNames hplipPlatforms;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -22,6 +22,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = lun.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Optics with lun package and PPX";
     license = lib.licenses.mit;
   };

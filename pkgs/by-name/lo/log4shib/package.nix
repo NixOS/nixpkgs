@@ -31,6 +31,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drawbu ];
     license = lib.licenses.lgpl21;
     homepage = "https://codeberg.org/Shibboleth/cpp-log4shib";
-    hasNoMaintainersButDependents = true;
   };
 })

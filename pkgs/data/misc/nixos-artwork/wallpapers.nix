@@ -220,7 +220,7 @@ rec {
     meta.hasNoMaintainersButDependents = true;
   };
 
-  gnome-dark = simple-dark-gray-bottom;
+  gnome-dark = noMaintainersNorDependents simple-dark-gray-bottom;
 
   gradient-grey = mkNixBackground {
     pname = "gradient-grey";

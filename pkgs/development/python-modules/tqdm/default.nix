@@ -61,6 +61,5 @@ buildPythonPackage rec {
     changelog = "https://tqdm.github.io/releases/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ miniharinn ];
-    hasNoMaintainersButDependents = true;
   };
 }

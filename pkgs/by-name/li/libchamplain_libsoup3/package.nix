@@ -92,6 +92,5 @@ stdenv.mkDerivation rec {
       lib.teams.pantheon
     ];
     platforms = lib.platforms.unix;
-    hasNoMaintainersButDependents = true;
   };
 }

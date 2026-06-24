@@ -40,5 +40,6 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -165,5 +165,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "mypy";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }
