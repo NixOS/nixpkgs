@@ -7,6 +7,7 @@
   pnpmConfigHook,
   fetchPnpmDeps,
   makeWrapper,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -91,6 +92,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
+  };
 
   meta = {
     description = "Publish your home-assistant instance using Matter";
