@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "6.5";
+  version = "6.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RwkiFZZTKYZRBcSMFSTp0mF6o88INaxiXDeUBPbL298=";
+    hash = "sha256-lWhlrgbyOF/FpkOwEk8ZdiSbO33C2rHkbXd/YY+YdN4=";
   };
 
   build-system = [ setuptools ];
