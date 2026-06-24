@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
+  libiconv,
   lld,
   nodejs,
   npmHooks,
@@ -55,6 +56,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     rustPlatform.bindgenHook
+  ];
+  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
+    libiconv
   ];
 
   # io-extras v0.18.4 uses #![feature]
