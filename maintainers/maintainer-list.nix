@@ -22392,6 +22392,13 @@
     githubId = 20529712;
     name = "William Harrell";
   };
+  proteus = {
+    name = "Proteus Qian";
+    github = "magic0whi";
+    githubId = 28147340;
+    email = "sudaku233@outlook.com";
+    keys = [ { fingerprint = "9C63 5181 306E 1D7F EA53  8587 75DB 2526 83B0 7650"; } ];
+  };
   protoben = {
     email = "protob3n@gmail.com";
     github = "protoben";
