@@ -426,7 +426,7 @@ let
         addDrvOutputDependencies
         unsafeDiscardOutputDependency
         ;
-      inherit (self.generators) mkLuaInline;
+      inherit (self.generators) mkLuaInline mkPlistData;
       inherit (self.meta)
         addMetaAttrs
         dontDistribute

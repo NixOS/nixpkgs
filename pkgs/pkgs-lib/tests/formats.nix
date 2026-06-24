@@ -1225,6 +1225,30 @@ runBuildTests {
       </plist>'';
   };
 
+  PlistData = shouldPass {
+    format = formats.plist { };
+    input = {
+      holdShortcut = {
+        secureData = lib.mkPlistData "YnBsaXN0MDA=";
+        string = "⌘";
+      };
+    };
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+      ''\t<key>holdShortcut</key>
+      ''\t<dict>
+      ''\t''\t<key>secureData</key>
+      ''\t''\t<data>YnBsaXN0MDA=</data>
+      ''\t''\t<key>string</key>
+      ''\t''\t<string>⌘</string>
+      ''\t</dict>
+      </dict>
+      </plist>'';
+  };
+
   hcl1Atoms = shouldPass {
     format = formats.hcl1 { };
     input = {

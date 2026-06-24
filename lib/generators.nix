@@ -632,6 +632,10 @@ rec {
   /**
     Translate a simple Nix expression to [Plist notation](https://en.wikipedia.org/wiki/Property_list).
 
+    Binary data can be represented by wrapping a base64-encoded
+    string with `mkPlistData`; `toPlist` emits these as `<data>`
+    elements.
+
     # Inputs
 
     Structured function argument
@@ -660,6 +664,8 @@ rec {
           str ind x
         else if isList x then
           list ind x
+        else if x ? _type && x._type == "plistData" then
+          data ind x.base64
         else if isAttrs x then
           attrs ind x
         else if isPath x then
@@ -678,6 +684,7 @@ rec {
       str = ind: x: literal ind "<string>${maybeEscapeXML x}</string>";
       key = ind: x: literal ind "<key>${maybeEscapeXML x}</key>";
       float = ind: x: literal ind "<real>${toString x}</real>";
+      data = ind: x: literal ind "<data>${x}</data>";
 
       indent = ind: expr "\t${ind}";
 
@@ -903,6 +910,26 @@ rec {
   mkLuaInline = expr: {
     _type = "lua-inline";
     inherit expr;
+  };
+
+  /**
+    Mark a string as base64-encoded binary data to be emitted inside a `<data>` tag by `toPlist`.
+
+    # Inputs
+
+    `base64`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkPlistData :: String -> { _type = "plistData"; base64 :: String; }
+    ```
+  */
+  mkPlistData = base64: {
+    _type = "plistData";
+    inherit base64;
   };
 }
 // {

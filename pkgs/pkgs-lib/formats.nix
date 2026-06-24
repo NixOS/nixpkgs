@@ -57,6 +57,7 @@ let
     nullOr
     oneOf
     path
+    plistData
     str
     submodule
     ;
@@ -1065,6 +1066,9 @@ optionalAttrs allowAliases aliases
         let
           valueType =
             nullOr (oneOf [
+              # Must precede attrsOf so a tagged plistData attrset matches as
+              # the marker rather than as a generic attrset.
+              plistData
               bool
               int
               float
