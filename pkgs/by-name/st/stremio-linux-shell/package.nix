@@ -1,124 +1,89 @@
 {
   lib,
-  symlinkJoin,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
   gitUpdater,
 
-  # buildInputs
-  atk,
-  cef-binary,
-  gtk3,
-  libayatana-appindicator,
-  libxkbcommon,
-  mpv,
-  openssl,
-
   # nativeBuildInputs
-  makeBinaryWrapper,
   pkg-config,
   wrapGAppsHook4,
 
+  # buildInputs
+  bashNonInteractive,
+  glib-networking,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libsoup_3,
+  mpv,
+  webkitgtk_6_0,
+
   # Wrapper
   addDriverRunpath,
-  libGL,
   nodejs,
 }:
 
-let
-  # Stremio expects CEF files in a specific layout
-  cef = symlinkJoin {
-    name = "stremio-linux-shell-cef";
-    paths = [
-      "${cef-binary}/Resources"
-      "${cef-binary}/Release"
-    ];
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
-  version = "1.0.0-beta.13";
+  version = "1.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = "stremio-linux-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1f9IBNo5gxpSqTSIf8QuQOlf+sfRhohOmQTLRbX/OU8=";
+    hash = "sha256-iCX2YOF+I5oqnpOLnBKI5l7wRk4Ij8st2RTix5byu5c=";
   };
 
-  cargoHash = "sha256-wx5oF4uF9UMtKzfGxZKsy6mVjYaRD40dLuvaRtz8yE4=";
-
-  patches = [
-    # Chromium 142 stopped allowing local network access by default, which
-    # breaks the app's ability to communicate with the Stremio server.
-    ./allow-local-network-access.patch
-
-    # GLchar is u8 on aarch64
-    # Upstream PR: https://github.com/Stremio/stremio-linux-shell/pull/40
-    ./fix-getshaderinfolog-call.patch
-
-    # Patch server.js path so that we don't have to install it in $out/bin
-    ./better-server-path.patch
-  ];
+  cargoHash = "sha256-4hioDrZAlZbi7ilUvfZJAVJoFAJmrErhxuemkmpKeCM=";
 
   postPatch = ''
-    substituteInPlace src/config.rs \
-      --replace-fail "@serverjs@" "${placeholder "out"}/share/stremio/server.js"
+    substituteInPlace data/com.stremio.Stremio.service \
+      --replace-fail "Exec=/app/bin/stremio" "Exec=$out/bin/stremio"
 
-    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace $cargoDepsCopy/*/xkbcommon-dl-*/src/lib.rs \
-      --replace-fail "libxkbcommon.so.0" "${libxkbcommon}/lib/libxkbcommon.so.0"
-    substituteInPlace $cargoDepsCopy/*/xkbcommon-dl-*/src/x11.rs \
-      --replace-fail "libxkbcommon-x11.so.0" "${libxkbcommon}/lib/libxkbcommon-x11.so.0"
+    substituteInPlace data/stremio.sh \
+      --replace-fail "/app/libexec/stremio/stremio" "$out/libexec/stremio/stremio"
   '';
 
-  # Don't download CEF during build
-  buildFeatures = [ "offline-build" ];
-
-  buildInputs = [
-    atk
-    cef
-    gtk3
-    libayatana-appindicator
-    libxkbcommon
-    mpv
-    openssl
-  ];
-
   nativeBuildInputs = [
-    makeBinaryWrapper
     pkg-config
     wrapGAppsHook4
   ];
 
-  env.CEF_PATH = "${cef}";
-
-  strictDeps = true;
-  __structuredAttrs = true;
+  buildInputs = [
+    bashNonInteractive
+    glib-networking
+    gtk4
+    libadwaita
+    libepoxy
+    libsoup_3
+    mpv
+    webkitgtk_6_0
+  ];
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
+    install -Dm644 data/icons/com.stremio.Stremio.svg $out/share/icons/hicolor/scalable/apps/com.stremio.Stremio.svg
+    install -Dm644 data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
+    install -Dm644 data/com.stremio.Stremio.service $out/share/dbus-1/services/com.stremio.Stremio.service
+    install -Dm644 data/server.js $out/libexec/stremio/server.js
+    install -Dm755 data/stremio.sh $out/bin/stremio
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp data/icons/com.stremio.Stremio.svg $out/share/icons/hicolor/scalable/apps/com.stremio.Stremio.svg
-
-    mkdir -p $out/share/stremio
-    cp data/server.js $out/share/stremio/server.js
-
-    mv $out/bin/stremio-linux-shell $out/bin/stremio
+    mv $out/bin/stremio-linux-shell $out/libexec/stremio/stremio
   '';
 
+  # Avoid also wrapping `$out/libexec/stremio/stremio`
+  dontWrapGApps = true;
+
   # Node.js is required to run `server.js`
-  # Add to `gappsWrapperArgs` to avoid two layers of wrapping.
+  # Add to `wrapGApp` arguments to avoid two layers of wrapping.
   preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${addDriverRunpath.driverLink}/lib" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --prefix PATH : "${lib.makeBinPath [ nodejs ]}"
-    )
+    wrapGApp $out/bin/stremio \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}" \
+      --prefix PATH : "${lib.makeBinPath [ nodejs ]}" \
+      --prefix SERVER_PATH : "$out/libexec/stremio/server.js"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -126,7 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    inherit cef;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
