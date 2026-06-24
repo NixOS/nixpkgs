@@ -89,6 +89,12 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/supervc-stack/VectorChord/issues/464
+    # Check after next package update.
+    broken = lib.warnIf (
+      finalAttrs.version != "1.1.1"
+    ) "Is postgresql19Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "19");
     changelog = "https://github.com/supervc-stack/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/supervc-stack/VectorChord";
