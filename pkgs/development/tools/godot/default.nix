@@ -61,6 +61,7 @@ rec {
   godotPackages_4_4 = mkGodotPackages "4.4";
   godotPackages_4_5 = mkGodotPackages "4.5";
   godotPackages_4_6 = mkGodotPackages "4.6";
+  godotPackages_4_7 = mkGodotPackages "4.7";
   godotPackages_4 = godotPackages_4_6;
   godotPackages = godotPackages_4;
 
@@ -76,6 +77,9 @@ rec {
   godot_4_6 = godotPackages_4_6.godot;
   godot_4_6-mono = godotPackages_4_6.godot-mono;
   godot_4_6-export-templates-bin = godotPackages_4_6.export-templates-bin;
+  godot_4_7 = godotPackages_4_7.godot;
+  godot_4_7-mono = godotPackages_4_7.godot-mono;
+  godot_4_7-export-templates-bin = godotPackages_4_7.export-templates-bin;
   godot_4 = godotPackages_4.godot;
   godot_4-mono = godotPackages_4.godot-mono;
   godot_4-export-templates-bin = godotPackages_4.export-templates-bin;

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,13 +30,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--workspace"
     "--exclude"
     "wit-dylib"
-  ]
-  ++
-    # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
-    [
-      "--"
-      "--test-threads=1"
-    ];
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wasm-tools \
+      --bash <($out/bin/wasm-tools completion bash) \
+      --fish <($out/bin/wasm-tools completion fish) \
+      --zsh <($out/bin/wasm-tools completion zsh)
+  '';
 
   meta = {
     description = "Low level tooling for WebAssembly in Rust";

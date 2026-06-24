@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghost-complete";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "StanMarek";
     repo = "ghost-complete";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SL0PRGppuiglP/BStlvc//6dn2lP472lLfhz3Hq7ZVw=";
+    hash = "sha256-AOhH98qGHISf8AZw3MSMnS5ADL6wQJ5jlo4PXsw7CAo=";
   };
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"-C", "link-arg=-fuse-ld=/usr/bin/ld",' ""
   '';
 
-  cargoHash = "sha256-F568kxHWcbBQuAwUpkT1AwAr/u486/k094wVmB9SiqY=";
+  cargoHash = "sha256-l1Gp9FVtrGhzobM2Wdq110y1W7V6PNsQsJLBJ3sgOEs=";
 
   cargoBuildFlags = [ "--package=ghost-complete" ];
 
