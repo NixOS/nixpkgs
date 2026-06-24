@@ -59,6 +59,10 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
+  pythonRelaxDeps = [
+    "jupyterlite-core"
+  ];
+
   # upstream has no tests
   doCheck = false;
 
