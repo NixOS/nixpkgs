@@ -95,8 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Modern media center that gives you the freedom to watch everything you want";
+    description = "Client for Stremio on Linux";
     homepage = "https://www.stremio.com/";
+    downloadPage = "https://github.com/Stremio/stremio-linux-shell";
+    changelog = "https://github.com/Stremio/stremio-linux-shell/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
