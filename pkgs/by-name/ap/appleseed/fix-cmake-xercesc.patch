@@ -1,0 +1,62 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 327ee229b..82e1db50f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -326,8 +326,7 @@ endif ()
+ 
+ if (USE_FIND_PACKAGE_FOR_XERCES)
+     add_definitions (-DAPPLESEED_WITH_EXTERNAL_XERCES)
+-    find_package (Xerces REQUIRED NAMES XercesC CONFIG)
+-    find_package_handle_standard_args(Xerces CONFIG_MODE)
++    find_package (XercesC REQUIRED)
+ endif ()
+ 
+ if (USE_FIND_PACKAGE_FOR_ZLIB)
+@@ -424,8 +423,6 @@ else ()
+ endif ()
+ 
+ if (USE_FIND_PACKAGE_FOR_XERCES)
+-    get_target_property (XERCES_LIBRARIES XercesC::XercesC INTERFACE_LINK_LIBRARIES) 
+-
+     include_directories (${XercesC_INCLUDE_DIRS})
+ else ()
+     include_directories (${APPLESEED_DEPS_STAGE_DIR}/xerces-c-debug/include)
+diff --git a/cmake/config/linux-gcc-clang.txt b/cmake/config/linux-gcc-clang.txt
+index 5f3289aa3..dd7c4e575 100644
+--- a/cmake/config/linux-gcc-clang.txt
++++ b/cmake/config/linux-gcc-clang.txt
+@@ -202,7 +202,7 @@ macro (link_against_osl target)
+ endmacro ()
+ 
+ macro (link_against_xercesc target)
+-    target_link_libraries (${target} ${XERCES_LIBRARIES})
++    target_link_libraries (${target} XercesC::XercesC)
+ endmacro ()
+ 
+ macro (link_against_zlib target)
+diff --git a/cmake/config/mac-clang.txt b/cmake/config/mac-clang.txt
+index 8f6393e5f..25eb4a00e 100644
+--- a/cmake/config/mac-clang.txt
++++ b/cmake/config/mac-clang.txt
+@@ -149,7 +149,7 @@ macro (link_against_osl target)
+ endmacro ()
+ 
+ macro (link_against_xercesc target)
+-    target_link_libraries (${target} ${XERCES_LIBRARIES})
++    target_link_libraries (${target} XercesC::XercesC)
+ endmacro ()
+ 
+ macro (link_against_zlib target)
+diff --git a/cmake/config/win-vs.txt b/cmake/config/win-vs.txt
+index c7bb60851..90888898b 100644
+--- a/cmake/config/win-vs.txt
++++ b/cmake/config/win-vs.txt
+@@ -353,7 +353,7 @@ endmacro ()
+ 
+ macro (link_against_xercesc target)
+     if (USE_FIND_PACKAGE_FOR_XERCES)
+-        target_link_libraries (${target} ${XERCES_LIBRARIES})
++        target_link_libraries (${target} XercesC::XercesC)
+     else ()
+         target_link_libraries (${target}
+             debug       ${APPLESEED_DEPS_STAGE_DIR}/xerces-c-debug/lib/xerces-c_3D.lib
