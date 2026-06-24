@@ -90,7 +90,10 @@ stdenv.mkDerivation rec {
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      lukegb
+      findus
+    ];
     platforms = lib.platforms.linux;
   };
 }
