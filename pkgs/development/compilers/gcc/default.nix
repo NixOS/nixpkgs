@@ -276,13 +276,13 @@ pipe
           in
           (
             ''
-              echo "fixing the {GLIBC,UCLIBC,MUSL}_DYNAMIC_LINKER macros..."
+              echo "fixing the {GLIBC,UCLIBC,MLIBC,MUSL}_DYNAMIC_LINKER macros..."
               for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
               do
                 grep -q _DYNAMIC_LINKER "$header" || continue
                 echo "  fixing $header..."
                 sed -i "$header" \
-                    -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
+                    -e 's|define[[:blank:]]*\([UCGM]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
                     -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
                 done
             ''
