@@ -41,7 +41,7 @@
 }:
 
 let
-  mysql = mysql84;
+  mysql = mysql84.client;
   gdal' = gdal.override { libmysqlclient = mysql; };
   antlr = antlr4_13;
 
