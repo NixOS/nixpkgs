@@ -158,7 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gfortran
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
     fftw
@@ -191,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
+    cudaPackages.libcufft
     cudaPackages.libcublas
     cudaPackages.cuda_nvrtc
   ]
