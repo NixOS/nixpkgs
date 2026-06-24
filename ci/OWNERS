@@ -63,11 +63,11 @@
 /pkgs/top-level/packages-info.nix                @jopejoe1
 /pkgs/top-level/release-lib.nix                  @jopejoe1
 /pkgs/top-level/release.nix                      @jopejoe1
-/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
-/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
-/pkgs/stdenv/generic/problems.nix                @infinisil
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv @llakala
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv @llakala
+/pkgs/stdenv/generic/problems.nix                @infinisil @llakala
 /pkgs/test/problems                              @infinisil
-/pkgs/stdenv/generic/check-meta.nix              @infinisil @Ericson2314 @adisbladis @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @infinisil @Ericson2314 @adisbladis @NixOS/stdenv @llakala
 /pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
