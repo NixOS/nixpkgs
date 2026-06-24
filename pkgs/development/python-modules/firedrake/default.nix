@@ -15,7 +15,7 @@
   decorator,
   cachetools,
   mpi4py,
-  fenics-ufl,
+  firedrake-ufl,
   firedrake-fiat,
   h5py,
   libsupermesh,
@@ -34,7 +34,6 @@
   scipy,
   sympy,
   islpy,
-  vtk,
   matplotlib,
   immutabledict,
 
@@ -59,20 +58,20 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "firedrake";
-  version = "2025.10.3";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
     tag = finalAttrs.version;
-    hash = "sha256-9AkyVM0dpjdQqpuOBN60lCKIZJR0HXpp0g1Am/xUwbI=";
+    hash = "sha256-scsxxs9k280R9+mM5CC7aIkKJ8rR1faexnUuMrDO9+k=";
   };
 
   # relax build-dependency petsc4py
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-      "petsc4py==3.24.5" "petsc4py"
+      "petsc4py==3.25.0" "petsc4py"
   '';
 
   pythonRelaxDeps = [
@@ -99,7 +98,7 @@ buildPythonPackage (finalAttrs: {
     decorator
     cachetools
     firedrakePackages.mpi4py
-    fenics-ufl
+    firedrake-ufl
     firedrake-fiat
     firedrakePackages.h5py
     immutabledict
@@ -118,9 +117,6 @@ buildPythonPackage (finalAttrs: {
     rtree
     scipy
     sympy
-    # vtk optional required by IO module, we can make it a hard dependency in nixpkgs,
-    # see https://github.com/firedrakeproject/firedrake/pull/4713
-    vtk
     # required by script spydump
     matplotlib
   ]
