@@ -24,6 +24,10 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 			generator = config.generators[entry]
 			binary = build_binary(generator.script)
 
+			if args.dry_run:
+				print(f"Generating '{entry}'")
+				continue
+
 			for dep_name in generator.dependencies:
 				dep = config.generators[dep_name]
 				os.makedirs(in_dir / dep_name)
