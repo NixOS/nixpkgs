@@ -270,7 +270,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     platforms = metaPlatforms;
     maintainers = with lib.maintainers; [
       adamcstephens
-      raitobezarius
       mjoerg
       sigmasquadron
     ];

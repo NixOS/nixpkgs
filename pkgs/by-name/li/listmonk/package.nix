@@ -78,7 +78,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      raitobezarius
       hougo
     ];
     license = lib.licenses.agpl3Only;
