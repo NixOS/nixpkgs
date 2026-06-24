@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
-  version = "1.9.7";
+  version = "1.9.8";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = finalAttrs.version;
-    sha256 = "sha256-rf8d2UNTVEZhuiyChK2XnUbfGDvsfXnKADhaSp8qBwQ=";
+    sha256 = "sha256-5cH9G4/TVCM5HX6QSk3P4m5+cwuK4x8hP9FohBcmjik=";
   };
 
   /*
