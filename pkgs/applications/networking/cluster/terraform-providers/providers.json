@@ -580,11 +580,11 @@
     "vendorHash": "sha256-sPQR+LDZRMXygLUd9xj6/bI+8DhAPKbkytlTzmrEOBU="
   },
   "hashicorp_google": {
-    "hash": "sha256-xAzkBYqQR1VdERjt9zJFyItTj8dpfywHO8xex0biXPQ=",
+    "hash": "sha256-/O0K2qf1kk8kfRl/FQ3eNAs96Z7Te4yg6boVHdYtLJo=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v7.36.0",
+    "rev": "v7.37.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-Ub+Dvddw5jcSy2hR72OSsy4EgHphhCW1kekPyrQGc9E="
   },
@@ -1040,13 +1040,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-gWzDgZdZJJ2kHIXIw12+1YaCUkcO+0Biu0dY2F88FJQ=",
+    "hash": "sha256-HrqJQso8wWF7+WiQUNtR522lCpz5pYZIq2Q3RZkakU0=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.68",
+    "rev": "v1.36.69",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ECuzdph5/lKBqIoXUwpIulyl6KYFxJLzdKn/G9UZJpk="
+    "vendorHash": "sha256-4Kndye/lGV0IjSyaOpJsj6pP0Hznf20LFQvEwY3+ajE="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",
@@ -1058,11 +1058,11 @@
     "vendorHash": null
   },
   "oracle_oci": {
-    "hash": "sha256-SFs0BYaYgB4J/HbaYFx1Sh1raVWhRJdW/3KMWdyvX+I=",
+    "hash": "sha256-ByAuY0y7tpzeaHmf1VTpvVUzRFxhuS49g57XqJ4Mnuk=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v8.18.0",
+    "rev": "v8.19.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1436,13 +1436,13 @@
     "vendorHash": "sha256-lWBMihP6oX7qPpTuPQQwQS3IDwdyb/rEYqtBsTozb7Q="
   },
   "venafi_venafi": {
-    "hash": "sha256-WOCZRVAYVR9uzsyyAvCQvYReaas6YmZsbRgxxxhDF/k=",
+    "hash": "sha256-oEyrnKMe+cMLSajI2wxkjXfHySM198NviiSqX0hGduk=",
     "homepage": "https://registry.terraform.io/providers/Venafi/venafi",
     "owner": "Venafi",
     "repo": "terraform-provider-venafi",
-    "rev": "v0.23.2",
+    "rev": "v0.24.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rqDzBez3HvhG+xvEyQ6foq/m0sFyyqrioquY9mcuWOU="
+    "vendorHash": "sha256-UnC3dob6idNgitHo4uGs1BPb3T7UQTR8wAJ2faYVvhE="
   },
   "vinyldns_vinyldns": {
     "hash": "sha256-/M+HFMDeKpIzzdn04TkMxriVeE6vvORRiqonxF38B9Q=",

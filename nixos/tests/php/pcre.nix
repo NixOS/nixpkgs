@@ -11,7 +11,7 @@ in
   name = "php-${php.version}-httpd-pcre-jit-test";
   meta.maintainers = lib.teams.php.members;
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       time.timeZone = "UTC";
@@ -50,12 +50,13 @@ in
         pcntl_wait($pid);
       '';
     in
+    # python
     ''
       machine.wait_for_unit("httpd.service")
       # Ensure php evaluation by matching on the var_dump syntax
-      response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/index.php")
+      response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1:80/index.php")
       expected = 'string(${toString (builtins.stringLength testString)}) "${testString}"'
-      assert expected in response, "Does not appear to be able to use subgroups."
-      machine.succeed("${php}/bin/php -f ${pcreJitSeallocForkIssue}")
+      t.assertIn(expected, response, "Does not appear to be able to use subgroups.")
+      machine.succeed("${lib.getExe php} -f ${pcreJitSeallocForkIssue}")
     '';
 }

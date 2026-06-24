@@ -44,15 +44,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyannote-audio";
-  version = "4.0.4";
+  version = "4.0.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-mns5ooODnJBTfFlM4b0GOoWqeTeD2CEhMikby6WdIM4=";
+    hash = "sha256-Wz4sJZhcc4KSwn6WeAZVDdOFL2Nc19BhoRovw8CwR38=";
   };
 
   build-system = [

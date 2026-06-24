@@ -21,11 +21,13 @@ assert (
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml-f";
   version = "0.5.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "toml-f";
     repo = "toml-f";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lReez2rSAJVnLFngjUYgGkm+HUDH8VsCC2m9zYOOr4A=";
   };
 
@@ -42,7 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
 
   buildInputs = [ test-drive ];
 
@@ -65,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     homepage = "https://github.com/toml-f/toml-f";
+    changelog = "https://github.com/toml-f/toml-f/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };

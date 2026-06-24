@@ -460,6 +460,9 @@ in
       nodes.machine = common;
 
       testScript =
+        let
+          oldVersion = "222";
+        in
         # python
         ''
           machine.succeed("mount -o remount,rw /boot")
@@ -469,13 +472,13 @@ in
               machine.succeed(
                 """
                 find /boot -iname '*boot*.efi' -print0 | \
-                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
+                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot ${oldVersion} ####/' '{}'
                 """
               )
               return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
 
           output = switch()
-          assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+          assert "updating systemd-boot from ${oldVersion} to " in output, "Couldn't find systemd-boot update message"
           assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
           assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
 
@@ -486,7 +489,7 @@ in
                   "mv /boot/EFI/BOOT/bootx64.efi.new /boot/EFI/BOOT/bootx64.efi",
               )
               output = switch()
-              assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+              assert "updating systemd-boot from ${oldVersion} to " in output, "Couldn't find systemd-boot update message"
               assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
               assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
         '';

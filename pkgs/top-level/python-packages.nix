@@ -2144,6 +2144,10 @@ self: super: with self; {
 
   blake3 = callPackage ../development/python-modules/blake3 { };
 
+  blastdns = callPackage ../development/python-modules/blastdns { };
+
+  blasthttp = callPackage ../development/python-modules/blasthttp { };
+
   ble-serial = callPackage ../development/python-modules/ble-serial { };
 
   bleach = callPackage ../development/python-modules/bleach { };
@@ -3505,6 +3509,8 @@ self: super: with self; {
   cxxheaderparser = callPackage ../development/python-modules/cxxheaderparser { };
 
   cybox = callPackage ../development/python-modules/cybox { };
+
+  cyclebane = callPackage ../development/python-modules/cyclebane { };
 
   cycler = callPackage ../development/python-modules/cycler { };
 
@@ -6844,6 +6850,8 @@ self: super: with self; {
 
   griffe = callPackage ../development/python-modules/griffe { };
 
+  griffecli = callPackage ../development/python-modules/griffecli { };
+
   griffelib = callPackage ../development/python-modules/griffelib { };
 
   grip = callPackage ../development/python-modules/grip { };
@@ -9514,6 +9522,8 @@ self: super: with self; {
 
   london-tube-status = callPackage ../development/python-modules/london-tube-status { };
 
+  lookup-license = callPackage ../development/python-modules/lookup-license { };
+
   lookyloo-models = callPackage ../development/python-modules/lookyloo-models { };
 
   loompy = callPackage ../development/python-modules/loompy { };
@@ -11010,7 +11020,7 @@ self: super: with self; {
 
   mypyllant = callPackage ../development/python-modules/mypyllant { };
 
-  mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+  mysql-connector-python = callPackage ../development/python-modules/mysql-connector-python { };
 
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
@@ -17766,6 +17776,8 @@ self: super: with self; {
 
   scikits-odes-sundials = callPackage ../development/python-modules/scikits-odes-sundials { };
 
+  sciline = callPackage ../development/python-modules/sciline { };
+
   scim2-client = callPackage ../development/python-modules/scim2-client { };
 
   scim2-filter-parser = callPackage ../development/python-modules/scim2-filter-parser { };
@@ -17777,6 +17789,10 @@ self: super: with self; {
   scim2-tester = callPackage ../development/python-modules/scim2-tester { };
 
   scipp = callPackage ../development/python-modules/scipp { };
+
+  scippneutron = callPackage ../development/python-modules/scippneutron { };
+
+  scippnexus = callPackage ../development/python-modules/scippnexus { };
 
   scipy = callPackage ../development/python-modules/scipy { };
 

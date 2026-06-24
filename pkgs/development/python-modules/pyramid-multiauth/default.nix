@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyramid-multiauth";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "pyramid_multiauth";
     tag = version;
-    hash = "sha256-Bz53iCGsl6WZASIvBQ1pFfcGLra82vA2OLWjhLVdkrw=";
+    hash = "sha256-tDQENdM+eeAve3DoU3bXMP4k1hSIQ6FlFNlG+rVYhOc=";
   };
 
   build-system = [
