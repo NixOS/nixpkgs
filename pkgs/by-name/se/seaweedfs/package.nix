@@ -43,11 +43,13 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-extldflags=-static"
   ];
 
   env = {
-    CGO_ENABLED = 0;
+    CGO_ENABLED = if stdenv.hostPlatform.isDarwin then 1 else 0;
     GODEBUG = "http2client=0";
   };
 
@@ -93,6 +95,5 @@ buildGoModule (finalAttrs: {
       wozeparrot
     ];
     mainProgram = "weed";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
