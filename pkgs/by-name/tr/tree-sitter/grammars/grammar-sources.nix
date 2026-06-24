@@ -2901,10 +2901,10 @@
   };
 
   uxntal = {
-    version = "0-unstable-2024-03-23";
-    url = "github:Jummit/tree-sitter-uxntal";
-    rev = "1a44f8d31053096b79c52f10a39da12479edbf64";
-    hash = "sha256-S6B2K2eqHktLknpfTATR5fZYE8+W1BvOYTSNTwslSVg=";
+    version = "0-unstable-2024-05-05";
+    url = "github:tree-sitter-grammars/tree-sitter-uxntal";
+    rev = "ad9b638b914095320de85d59c49ab271603af048";
+    hash = "sha256-hR0EaYv1++MJ0pdBl3ZtyEljitnp5hgFWQa9F6b1KE4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
