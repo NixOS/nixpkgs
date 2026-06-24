@@ -5,8 +5,7 @@
   ...
 }:
 let
-
-  format = pkgs.formats.yaml { };
+  yaml = pkgs.formats.yaml { };
 
   rootDir = "/var/lib/crowdsec";
   stateDir = "${rootDir}/state";
@@ -25,6 +24,19 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "crowdsec"
+      "localConfig"
+    ] "Please move options to `services.crowdsec.settings`.")
+
+    (lib.mkChangedOptionModule
+      [ "services" "crowdsec" "enrollKeyFile" ]
+      [ "services" "crowdsec" "settings" "console" "enrollKeyFile" ]
+      (config: config.services.crowdsec.enrollKeyFile)
+    )
+  ];
 
   options.services.crowdsec = {
     enable = lib.mkEnableOption "CrowdSec Security Engine";
@@ -71,275 +83,6 @@ in
       '';
       default = config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.hostName";
-    };
-
-    localConfig = lib.mkOption {
-      type = lib.types.submodule {
-        options = {
-          acquisitions = lib.mkOption {
-            type = lib.types.listOf format.type;
-            default = [ ];
-            description = ''
-              A list of acquisition specifications, which define the data sources you want to be parsed.
-
-              See <https://docs.crowdsec.net/docs/data_sources/intro> for details.
-            '';
-            example = [
-              {
-                source = "journalctl";
-                journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
-                labels = {
-                  type = "syslog";
-                };
-              }
-            ];
-          };
-          scenarios = lib.mkOption {
-            type = lib.types.listOf format.type;
-            default = [ ];
-            description = ''
-              A list of scenarios specifications.
-
-              See <https://docs.crowdsec.net/docs/scenarios/intro> for details.
-            '';
-            example = [
-              {
-                type = "leaky";
-                name = "crowdsecurity/myservice-bf";
-                description = "Detect myservice bruteforce";
-                filter = "evt.Meta.log_type == 'myservice_failed_auth'";
-                leakspeed = "10s";
-                capacity = 5;
-                groupby = "evt.Meta.source_ip";
-              }
-            ];
-          };
-          parsers = lib.mkOption {
-            type = lib.types.submodule {
-              options = {
-                s00Raw = lib.mkOption {
-                  type = lib.types.listOf format.type;
-                  default = [ ];
-                  description = ''
-                    A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway.
-
-                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
-                  '';
-                };
-                s01Parse = lib.mkOption {
-                  type = lib.types.listOf format.type;
-                  default = [ ];
-                  description = ''
-                    A list of stage s01-parse specifications.
-
-                    See <https://docs.crowdsec.net/docs/parsers/intro> for details.
-                  '';
-                  example = [
-                    {
-                      filter = "1=1";
-                      debug = true;
-                      onsuccess = "next_stage";
-                      name = "example/custom-service-logs";
-                      description = "Parsing custom service logs";
-                      grok = {
-                        pattern = "^%{DATA:some_data}$";
-                        apply_on = "message";
-                      };
-                      statics = [
-                        {
-                          parsed = "is_my_custom_service";
-                          value = "yes";
-                        }
-                      ];
-                    }
-                  ];
-                };
-                s02Enrich = lib.mkOption {
-                  type = lib.types.listOf format.type;
-                  default = [ ];
-                  description = ''
-                    A list of stage s02-enrich specifications. Inside this list, you can specify Parser Whitelists.
-
-                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
-                  '';
-                  example = [
-                    {
-                      name = "myips/whitelist";
-                      description = "Whitelist parse events from my IPs";
-                      whitelist = {
-                        reason = "My IP ranges";
-                        ip = [
-                          "1.2.3.4"
-                        ];
-                        cidr = [
-                          "1.2.3.0/24"
-                        ];
-                      };
-                    }
-                  ];
-                };
-              };
-            };
-            description = ''
-              The set of parser specifications.
-
-              See <https://docs.crowdsec.net/docs/parsers/intro> for details.
-            '';
-            default = { };
-          };
-          postOverflows = lib.mkOption {
-            type = lib.types.submodule {
-              options = {
-                s01Whitelist = lib.mkOption {
-                  type = lib.types.listOf format.type;
-                  default = [ ];
-                  description = ''
-                    A list of stage s01-whitelist specifications. Inside this list, you can specify Postoverflows Whitelists.
-
-                    See <https://docs.crowdsec.net/docs/whitelist/intro> for details.
-                  '';
-                  example = [
-                    {
-                      name = "postoverflows/whitelist_my_dns_domain";
-                      description = "Whitelist my reverse DNS";
-                      whitelist = {
-                        reason = "Don't ban me";
-                        expression = [
-                          "evt.Enriched.reverse_dns endsWith '.local.'"
-                        ];
-                      };
-                    }
-                  ];
-                };
-              };
-            };
-            description = ''
-              The set of Postoverflows specifications.
-
-              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro#postoverflows> for details.
-            '';
-            default = { };
-          };
-          contexts = lib.mkOption {
-            type = lib.types.listOf format.type;
-            description = ''
-              A list of additional contexts to specify.
-
-              See <https://docs.crowdsec.net/docs/next/log_processor/alert_context/intro> for details.
-            '';
-            example = [
-              {
-                context = {
-                  target_uri = [ "evt.Meta.http_path" ];
-                  user_agent = [ "evt.Meta.http_user_agent" ];
-                  method = [ "evt.Meta.http_verb" ];
-                  status = [ "evt.Meta.http_status" ];
-                };
-              }
-            ];
-            default = [ ];
-          };
-          notifications = lib.mkOption {
-            type = lib.types.listOf format.type;
-            description = ''
-              A list of notifications to enable and use in your profiles. Note that for now, only the plugins shipped by default with CrowdSec are supported.
-
-              See <https://docs.crowdsec.net/docs/notification_plugins/intro> for details.
-            '';
-            example = [
-              {
-                type = "http";
-                name = "default_http_notification";
-                log_level = "info";
-                format = ''
-                  {{.|toJson}}
-                '';
-                url = "https://example.com/hook";
-                method = "POST";
-              }
-            ];
-            default = [ ];
-          };
-          profiles = lib.mkOption {
-            type = lib.types.listOf format.type;
-            description = ''
-              A list of profiles to enable.
-
-              See <https://docs.crowdsec.net/docs/profiles/intro> for more details.
-            '';
-            example = [
-              {
-                name = "default_ip_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-              {
-                name = "default_range_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Range'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-            ];
-            default = [
-              {
-                name = "default_ip_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-              {
-                name = "default_range_remediation";
-                filters = [
-                  "Alert.Remediation == true && Alert.GetScope() == 'Range'"
-                ];
-                decisions = [
-                  {
-                    type = "ban";
-                    duration = "4h";
-                  }
-                ];
-                on_success = "break";
-              }
-            ];
-          };
-          patterns = lib.mkOption {
-            type = lib.types.listOf lib.types.package;
-            description = ''
-              A list of files containing custom grok patterns.
-            '';
-            default = [ ];
-            example = lib.literalExpression ''
-              [ (pkgs.writeTextDir "custom_service_logs" (builtins.readFile ./custom_service_logs)) ]
-            '';
-          };
-        };
-      };
-      description = ''
-        The configuration for a crowdsec security engine.
-      '';
-      default = { };
     };
 
     hub = lib.mkOption {
@@ -403,17 +146,8 @@ in
 
               Refer to the defaults at <https://github.com/crowdsecurity/crowdsec/blob/master/config/config.yaml>.
             '';
-            type = format.type;
+            type = yaml.type;
             default = { };
-          };
-          simulation = lib.mkOption {
-            type = format.type;
-            default = {
-              simulation = false;
-            };
-            description = ''
-              Attributes inside the simulation.yaml file.
-            '';
           };
 
           lapi = lib.mkOption {
@@ -452,28 +186,283 @@ in
             '';
             default = { };
           };
+
+          simulation = lib.mkOption {
+            type = yaml.type;
+            default = {
+              simulation = false;
+            };
+            description = ''
+              Attributes inside the simulation.yaml file.
+            '';
+          };
+
+          acquisitions = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            default = [
+              {
+                source = "journalctl";
+                journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
+                labels = {
+                  type = "syslog";
+                };
+              }
+            ];
+            description = ''
+              A list of acquisition specifications, which define the data sources you want to be parsed.
+
+              See <https://docs.crowdsec.net/u/getting_started/post_installation/acquisition/> for details.
+            '';
+          };
+
+          scenarios = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            default = [ ];
+            description = ''
+              A list of scenarios specifications.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/scenarios/create/> for details.
+            '';
+            example = [
+              {
+                type = "leaky";
+                name = "crowdsecurity/myservice-bf";
+                description = "Detect myservice bruteforce";
+                filter = "evt.Meta.log_type == 'myservice_failed_auth'";
+                leakspeed = "10s";
+                capacity = 5;
+                groupby = "evt.Meta.source_ip";
+              }
+            ];
+          };
+
+          parsers = lib.mkOption {
+            type = lib.types.submodule {
+              options = {
+                s00Raw = lib.mkOption {
+                  type = lib.types.listOf yaml.type;
+                  default = [ ];
+                  description = ''
+                    A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway.
+
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s00-raw> for details.
+                  '';
+                };
+                s01Parse = lib.mkOption {
+                  type = lib.types.listOf yaml.type;
+                  default = [ ];
+                  description = ''
+                    A list of stage s01-parse specifications.
+
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s01-parse> for details.
+                  '';
+                  example = [
+                    {
+                      filter = "1=1";
+                      debug = true;
+                      onsuccess = "next_stage";
+                      name = "example/custom-service-logs";
+                      description = "Parsing custom service logs";
+                      grok = {
+                        pattern = "^%{DATA:some_data}$";
+                        apply_on = "message";
+                      };
+                      statics = [
+                        {
+                          parsed = "is_my_custom_service";
+                          value = "yes";
+                        }
+                      ];
+                    }
+                  ];
+                };
+                s02Enrich = lib.mkOption {
+                  type = lib.types.listOf yaml.type;
+                  default = [ ];
+                  description = ''
+                    A list of stage s02-enrich specifications. Inside this list, you can specify Parser Whitelists.
+
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#s01-parse> for details.
+                  '';
+                  example = [
+                    {
+                      name = "myips/whitelist";
+                      description = "Whitelist parse events from my IPs";
+                      whitelist = {
+                        reason = "My IP ranges";
+                        ip = [
+                          "1.2.3.4"
+                        ];
+                        cidr = [
+                          "1.2.3.0/24"
+                        ];
+                      };
+                    }
+                  ];
+                };
+              };
+            };
+            description = ''
+              The set of parser specifications.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/> for details.
+            '';
+            default = { };
+          };
+
+          postOverflows = lib.mkOption {
+            type = lib.types.submodule {
+              options = {
+                s01Whitelist = lib.mkOption {
+                  type = lib.types.listOf yaml.type;
+                  default = [ ];
+                  description = ''
+                    A list of stage s01-whitelist specifications. Inside this list, you can specify Postoverflows Whitelists.
+
+                    See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro/#postoverflows> for details.
+                  '';
+                  example = [
+                    {
+                      name = "postoverflows/whitelist_my_dns_domain";
+                      description = "Whitelist my reverse DNS";
+                      whitelist = {
+                        reason = "Don't ban me";
+                        expression = [
+                          "evt.Enriched.reverse_dns endsWith '.local.'"
+                        ];
+                      };
+                    }
+                  ];
+                };
+              };
+            };
+            description = ''
+              The set of Postoverflows specifications.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro#postoverflows> for details.
+            '';
+            default = { };
+          };
+
+          contexts = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            description = ''
+              A list of additional contexts to specify.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/alert_context/intro> for details.
+            '';
+            example = [
+              {
+                context = {
+                  target_uri = [ "evt.Meta.http_path" ];
+                  user_agent = [ "evt.Meta.http_user_agent" ];
+                  method = [ "evt.Meta.http_verb" ];
+                  status = [ "evt.Meta.http_status" ];
+                };
+              }
+            ];
+            default = [ ];
+          };
+
+          notifications = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            description = ''
+              A list of notifications to enable and use in your profiles. Note that for now, only the plugins shipped by default with CrowdSec are supported.
+
+              See <https://docs.crowdsec.net/docs/next/local_api/notification_plugins/intro> for details.
+            '';
+            example = [
+              {
+                type = "http";
+                name = "default_http_notification";
+                log_level = "info";
+                yaml = ''
+                  {{.|toJson}}
+                '';
+                url = "https://example.com/hook";
+                method = "POST";
+              }
+            ];
+            default = [ ];
+          };
+
+          profiles = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            description = ''
+              A list of profiles to enable.
+
+              See <https://docs.crowdsec.net/u/getting_started/post_installation/profiles> for more details.
+            '';
+            default = [
+              {
+                name = "default_ip_remediation";
+                filters = [
+                  "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
+                ];
+                decisions = [
+                  {
+                    type = "ban";
+                    duration = "4h";
+                  }
+                ];
+                on_success = "break";
+              }
+              {
+                name = "default_range_remediation";
+                filters = [
+                  "Alert.Remediation == true && Alert.GetScope() == 'Range'"
+                ];
+                decisions = [
+                  {
+                    type = "ban";
+                    duration = "4h";
+                  }
+                ];
+                on_success = "break";
+              }
+            ];
+          };
+
+          patterns = lib.mkOption {
+            type = lib.types.listOf lib.types.package;
+            description = ''
+              A list of files containing custom grok patterns.
+
+              See <https://docs.crowdsec.net/docs/next/log_processor/parsers/yaml/#patterns-documentation> for more details.
+            '';
+            default = [ ];
+            example = lib.literalExpression ''
+              [ (pkgs.writeTextDir "custom_service_logs" (builtins.readFile ./custom_service_logs)) ]
+            '';
+          };
+
           console = lib.mkOption {
             type = lib.types.submodule {
               options = {
-                tokenFile = lib.mkOption {
+                enrollKeyFile = lib.mkOption {
                   type = lib.types.nullOr lib.types.path;
                   example = "/run/crowdsec/console_token.yaml";
                   description = ''
                     The Console Token file to use.
+
+                    Normally you would do `cscli enroll <token>`, but you can put the token in a file instead and pass the path of that  file to this option.
+
+                    The token is available by clicking the "Enroll command" button at <https://app.crowdsec.net/security-engines?distribution=linux>
                   '';
                   default = null;
                 };
+
                 configuration = lib.mkOption {
-                  type = format.type;
+                  type = yaml.type;
+                  description = ''
+                    Attributes inside the console.yaml file.
+                  '';
                   default = {
                     share_manual_decisions = false;
                     share_custom = false;
                     share_tainted = false;
                     share_context = false;
                   };
-                  description = ''
-                    Attributes inside the console.yaml file.
-                  '';
                 };
               };
             };
@@ -492,13 +481,13 @@ in
   config =
     let
       cfg = config.services.crowdsec;
-      configFile = format.generate "crowdsec.yaml" cfg.settings.general;
-      simulationFile = format.generate "simulation.yaml" cfg.settings.simulation;
-      consoleFile = format.generate "console.yaml" cfg.settings.console.configuration;
+      configFile = yaml.generate "crowdsec.yaml" cfg.settings.general;
+      simulationFile = yaml.generate "simulation.yaml" cfg.settings.simulation;
+      consoleFile = yaml.generate "console.yaml" cfg.settings.console.configuration;
       patternsDir = pkgs.buildPackages.symlinkJoin {
         name = "crowdsec-patterns";
         paths = [
-          cfg.localConfig.patterns
+          cfg.settings.patterns
           "${lib.attrsets.getOutput "out" cfg.package}/share/crowdsec/config/patterns/"
         ];
       };
@@ -519,29 +508,27 @@ in
         $sudo ${lib.getExe' cfg.package "cscli"} -c=${configFile} "$@"
       '';
 
-      localScenariosMap = (map (format.generate "scenario.yaml") cfg.localConfig.scenarios);
-      localParsersS00RawMap = (
-        map (format.generate "parsers-s00-raw.yaml") cfg.localConfig.parsers.s00Raw
-      );
+      localScenariosMap = (map (yaml.generate "scenario.yaml") cfg.settings.scenarios);
+      localParsersS00RawMap = (map (yaml.generate "parsers-s00-raw.yaml") cfg.settings.parsers.s00Raw);
       localParsersS01ParseMap = (
-        map (format.generate "parsers-s01-parse.yaml") cfg.localConfig.parsers.s01Parse
+        map (yaml.generate "parsers-s01-parse.yaml") cfg.settings.parsers.s01Parse
       );
       localParsersS02EnrichMap = (
-        map (format.generate "parsers-s02-enrich.yaml") cfg.localConfig.parsers.s02Enrich
+        map (yaml.generate "parsers-s02-enrich.yaml") cfg.settings.parsers.s02Enrich
       );
       localPostOverflowsS01WhitelistMap = (
-        map (format.generate "postoverflows-s01-whitelist.yaml") cfg.localConfig.postOverflows.s01Whitelist
+        map (yaml.generate "postoverflows-s01-whitelist.yaml") cfg.settings.postOverflows.s01Whitelist
       );
-      localContextsMap = (map (format.generate "context.yaml") cfg.localConfig.contexts);
-      localNotificationsMap = (map (format.generate "notification.yaml") cfg.localConfig.notifications);
+      localContextsMap = (map (yaml.generate "context.yaml") cfg.settings.contexts);
+      localNotificationsMap = (map (yaml.generate "notification.yaml") cfg.settings.notifications);
       localProfilesFile = pkgs.writeText "local_profiles.yaml" ''
         ---
-        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.profiles}
+        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.settings.profiles}
         ---
       '';
       localAcquisisionFile = pkgs.writeText "local_acquisisions.yaml" ''
         ---
-        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.localConfig.acquisitions}
+        ${lib.strings.concatMapStringsSep "\n---\n" builtins.toJSON cfg.settings.acquisitions}
         ---
       '';
 
@@ -594,7 +581,7 @@ in
           fi
         ''
       ]
-      ++ lib.optionals (cfg.settings.console.tokenFile != null) [
+      ++ lib.optionals (cfg.settings.console.enrollKeyFile != null) [
         ''
           if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
             ${lib.getExe cscli} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
@@ -611,11 +598,11 @@ in
 
       warnings =
         [ ]
-        ++ lib.optionals (cfg.localConfig.profiles == [ ]) [
-          "By not specifying profiles in services.crowdsec.localConfig.profiles, CrowdSec will not react to any alert by default."
+        ++ lib.optionals (cfg.settings.profiles == [ ]) [
+          "By not specifying profiles in services.crowdsec.settings.profiles, CrowdSec will not react to any alert by default."
         ]
-        ++ lib.optionals (cfg.localConfig.acquisitions == [ ]) [
-          "By not specifying acquisitions in services.crowdsec.localConfig.acquisitions, CrowdSec will not look for any data source."
+        ++ lib.optionals (cfg.settings.acquisitions == [ ]) [
+          "By not specifying acquisitions in services.crowdsec.settings.acquisitions, CrowdSec will not look for any data source."
         ];
 
       services.crowdsec.settings.general = {
@@ -669,7 +656,7 @@ in
           listen_port = lib.mkDefault 6060;
         };
         cscli = {
-          hub_branch = cfg.hub.branch;
+          # hub_branch = cfg.hub.branch;
         };
       };
 
