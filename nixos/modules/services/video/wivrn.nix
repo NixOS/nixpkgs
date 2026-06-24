@@ -24,6 +24,7 @@ let
     getExe
     types
     maintainers
+    makeBinPath
     ;
   cfg = config.services.wivrn;
   configFormat = pkgs.formats.json { };
@@ -63,13 +64,24 @@ let
   enabledConfig = optionalString cfg.config.enable "-f ${configFile}";
 
   # Manage server executables and flags
-  serverExec = concatStringsSep " " (
+  serverCmdline = concatStringsSep " " (
     [
       serverPackageExe
       enabledConfig
     ]
     ++ cfg.extraServerFlags
   );
+  serverExec =
+    if cfg.steam.enable then
+      lib.getExe (
+        pkgs.writeShellScriptBin "start-wivrn-server" ''
+          # The server needs Steam in PATH to open Steam games from the application launcher
+          export PATH="${makeBinPath [ cfg.steam.package ]}:$PATH"
+          exec -a wivrn-server ${serverCmdline}
+        ''
+      )
+    else
+      serverCmdline;
 in
 {
   imports = [
@@ -184,6 +196,11 @@ in
             IPC_EXIT_ON_DISCONNECT = "off";
             PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = mkIf cfg.steam.importOXRRuntimes "1";
           } cfg.monadoEnvironment;
+          # WiVRn scans for .desktop files in $XDG_DATA_DIRS for the application launcher,
+          # which will execute the command in Exec when selected in the headset. If the
+          # Exec path isn't absolute, it will be resolved relative to $PATH, so we must
+          # not override the value of $PATH.
+          enableDefaultPath = false;
           serviceConfig = (
             if cfg.highPriority then
               {
@@ -211,8 +228,6 @@ in
                 RestrictSUIDSGID = true;
               }
           );
-          # Needs Steam in the PATH to allow launching games from the headset
-          path = mkIf cfg.steam.enable [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package
