@@ -1735,6 +1735,24 @@
   "sec-meta-license": [
     "index.html#sec-meta-license"
   ],
+  "sec-meta-license-multiple": [
+    "index.html#sec-meta-license-multiple"
+  ],
+  "lib.licenses.OR": [
+    "index.html#lib.licenses.OR"
+  ],
+  "lib.licenses.AND": [
+    "index.html#lib.licenses.AND"
+  ],
+  "lib.licenses.WITH": [
+    "index.html#lib.licenses.WITH"
+  ],
+  "lib.licenses.PLUS": [
+    "index.html#lib.licenses.PLUS"
+  ],
+  "sec-meta-license-generic": [
+    "index.html#sec-meta-license-generic"
+  ],
   "lib.licenses.free-free": [
     "index.html#lib.licenses.free-free"
   ],
