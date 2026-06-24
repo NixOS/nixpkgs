@@ -115,7 +115,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   env.FIDUS_OUT_DIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
-  env.PYTHONPATH = "${finalAttrs.passthru.pythonPath}";
+  env.PYTHONPATH = "${finalAttrs.passthru.pythonPath}:${finalAttrs.env.FIDUS_OUT_DIR}";
 
   makeWrapperArgs = [
     "--chdir"
@@ -128,7 +128,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "${finalAttrs.passthru.pythonPath}:${finalAttrs.env.FIDUS_OUT_DIR}"
+    "${finalAttrs.env.PYTHONPATH}"
   ];
 
   postFixup = ''
