@@ -4203,6 +4203,13 @@
     githubId = 18356186;
     name = "Gabriela Moreira";
   };
+  buggymcbugfix = {
+    email = "nix@vilem.net";
+    github = "buggymcbugfix";
+    matrix = "@buggymcbugfix:matrix.org";
+    githubId = 17603372;
+    name = "Vilem Liepelt";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
