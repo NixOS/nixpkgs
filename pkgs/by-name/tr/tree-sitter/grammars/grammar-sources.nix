@@ -513,10 +513,10 @@
   };
 
   dtd = {
-    version = "0-unstable-2023-04-07";
-    url = "github:KMikeeU/tree-sitter-dtd";
-    rev = "6116becb02a6b8e9588ef73d300a9ba4622e156f";
-    hash = "sha256-mq617pfH/Na9JB8SDEudxbKJfaoezgjC3xVOIOZ8Qb8=";
+    version = "0-unstable-2026-01-21";
+    url = "github:tree-sitter-grammars/tree-sitter-xml";
+    rev = "5000ae8f22d11fbe93939b05c1e37cf21117162d";
+    hash = "sha256-QN+jQx1CrTbYpmM9mLUfjWcymGsa0Th7LVgk4thnQXU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
