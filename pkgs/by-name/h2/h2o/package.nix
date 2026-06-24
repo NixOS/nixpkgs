@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2026-06-23";
+  version = "2.3.0-rolling-2026-06-24";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "21708fe347076047add1225349bbcc445c447002";
-    hash = "sha256-3wvKqlyHU6igfzA5xmxngpNJbxWIJkVwXQB1arycS3c=";
+    rev = "66fcbfed806d7645577e4e78e4d536d38379764d";
+    hash = "sha256-RzQHDHihcD+ife1CBCGliytrkt8eYVdL8AHdaYp3CFQ=";
   };
 
   outputs = [
