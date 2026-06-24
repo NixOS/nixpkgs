@@ -7,15 +7,15 @@ let
   originalDrv = fetchFromGitHub {
     owner = "Aylur";
     repo = "astal";
-    rev = "7d1fac8a4b2a14954843a978d2ddde86168c75ef";
-    hash = "sha256-Jh4VtPcK2Ov+RTcV9FtyQRsxiJmXFQGfqX6jjM7/mgc=";
+    rev = "11842ae3045c1367fb3a62a2302dba0d9ccb4a33";
+    hash = "sha256-FGZHls4eQJ8y3pvf5h3b83PfXlve3vD/Gj3g1qoAK6o=";
   };
 in
 originalDrv.overrideAttrs (
   final: prev: {
     name = "${final.pname}-${final.version}"; # fetchFromGitHub already defines name
     pname = "astal-source";
-    version = "0-unstable-2025-11-26";
+    version = "0-unstable-2026-06-21";
 
     meta = prev.meta // {
       description = "Building blocks for creating custom desktop shells (source)";
