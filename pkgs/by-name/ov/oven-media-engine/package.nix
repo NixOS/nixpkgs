@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
   srt,
   bc,
   pkg-config,
   perl,
   openssl,
   zlib,
-  ffmpeg_6,
   libvpx,
   libopus,
   libuuid,
@@ -20,6 +20,9 @@
   whisper-cpp,
 }:
 
+let
+  ffmpeg-ome = callPackage ./ffmpeg-minimal.nix { };
+in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
   version = "0.20.5";
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
     openssl
     srt
     zlib
-    ffmpeg_6
+    ffmpeg-ome
     libvpx
     libopus
     srtp
