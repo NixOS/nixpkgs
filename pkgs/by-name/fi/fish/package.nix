@@ -150,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-u0mBdWkxP4zI6NUhJ0LJrEDrbAAfTDi8IapsWWC9yWc=";
+    hash = "sha256-ttjLM1uBY8sL+jVcxdHUnHYlRFe5jGjnkgBLy17qGso=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-d4YA9fnDQyfyK675nP+tiTqJ1o2jqjwPHU1trXd8MCA=";
+    hash = "sha256-w8MuabpZ5ronQL3iaXbLErxPlTe1Mg8OsRb5foR59II=";
   };
 
   patches = [
