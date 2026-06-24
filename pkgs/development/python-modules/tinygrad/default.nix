@@ -195,6 +195,8 @@ buildPythonPackage (finalAttrs: {
     # Flaky:
     #   AssertionError: 2.1376906810000946 not less than 2.0
     "test_recursive_pad"
+    # AssertionError: 23476983700 not greater than 60457564575 (performance test)
+    "test_flops"
 
     # Require internet access
     "testCopySHMtoDefault"
