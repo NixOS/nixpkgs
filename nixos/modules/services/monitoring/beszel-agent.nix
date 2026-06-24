@@ -146,7 +146,7 @@ in
           ${cfg.package}/bin/beszel-agent
         '';
 
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
         # adds ability to monitor docker/podman containers
         SupplementaryGroups =
