@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
+  outputs = [
+    "out"
+    "denort"
+  ];
+
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
@@ -227,7 +232,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    moveToOutput "bin/denort" "$denort"
+
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
 
     # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
