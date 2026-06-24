@@ -23,7 +23,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";
-  version = "1.1.4-unstable-2026-04-16";
+  version = "1.1.4";
   src = fetchFromGitHub {
     owner = "OpenSiFli";
     repo = "sftool-gui";
