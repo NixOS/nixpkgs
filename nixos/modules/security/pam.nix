@@ -1221,7 +1221,7 @@ let
                       settings = {
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
-                        likeauth = true;
+                        likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                       };
                     }
                     {
@@ -1319,7 +1319,7 @@ let
                   settings = {
                     nullok = cfg.allowNullPassword;
                     inherit (cfg) nodelay;
-                    likeauth = true;
+                    likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                     try_first_pass = true;
                   };
                 }
@@ -1407,7 +1407,7 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = true;
+                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1909,6 +1909,19 @@ in
         e.g. {command}`login` or {command}`passwd`.
         Each attribute of this set defines a PAM service, with the attribute name
         defining the name of the service.
+      '';
+    };
+
+    security.pam.enableLegacySettings = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = ''
+        Alternative implementations of pam_unix may not support all legacy arguments.
+        This option will disable all known legacy settings.
+        ::: {.note}
+        Setting this option to false will omit arguments, such as `yescrypt`.
+        Doing so is only safe if the defaults used by pam_unix are sensible.
+        :::
       '';
     };
 
