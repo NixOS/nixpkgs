@@ -1539,10 +1539,10 @@
   };
 
   lua = {
-    version = "0.0.19-unstable-2025-05-16";
-    url = "github:MunifTanjim/tree-sitter-lua";
-    rev = "4fbec840c34149b7d5fe10097c93a320ee4af053";
-    hash = "sha256-fO8XqlauYiPR0KaFzlAzvkrYXgEsiSzlB3xYzUpcbrs=";
+    version = "0.0.19-unstable-2026-02-26";
+    url = "github:tree-sitter-grammars/tree-sitter-lua";
+    rev = "10fe0054734eec83049514ea2e718b2a56acd0c9";
+    hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
     meta = {
       license = lib.licenses.mit;
     };
