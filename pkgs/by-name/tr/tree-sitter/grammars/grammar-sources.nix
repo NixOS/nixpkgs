@@ -847,10 +847,10 @@
   };
 
   gitattributes = {
-    version = "0-unstable-2022-05-06";
-    url = "github:mtoohey31/tree-sitter-gitattributes";
-    rev = "deb04fdbff485310ee5bac74ddc6ab624a602b7b";
-    hash = "sha256-4auPT/qeURtVMs+mi/zS4B08v0cMVkHOjSidV5FELO0=";
+    version = "0-unstable-2025-08-17";
+    url = "github:tree-sitter-grammars/tree-sitter-gitattributes";
+    rev = "1b7af09d45b579f9f288453b95ad555f1f431645";
+    hash = "sha256-eHDcJgHpWemOYtKACVhl5Muri1W1Igrjm/p0rAbvrNY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
