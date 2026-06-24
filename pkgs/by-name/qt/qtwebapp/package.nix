@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  sourceRoot = "source/QtWebApp";
+  sourceRoot = "${finalAttrs.src.name}/QtWebApp";
 
   postPatch = ''
     cat >>QtWebApp.pro <<EOF
