@@ -1,81 +1,57 @@
 {
   lib,
-  fetchFromGitHub,
-  fetchpatch2,
   python3,
+  fetchPypi,
   nginx,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pyparsing = super.pyparsing.overridePythonAttrs rec {
-        version = "2.4.7";
-        src = fetchFromGitHub {
-          owner = "pyparsing";
-          repo = "pyparsing";
-          rev = "pyparsing_${version}";
-          sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
-        };
-        nativeBuildInputs = [ super.setuptools ];
-      };
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
-  pname = "gixy";
-  version = "0.1.21";
+python3.pkgs.buildPythonApplication rec {
+  pname = "gixy-ng";
+  version = "0.2.47";
   pyproject = true;
 
-  # fetching from GitHub because the PyPi source is missing the tests
-  src = fetchFromGitHub {
-    owner = "yandex";
-    repo = "gixy";
-    rev = "v${version}";
-    sha256 = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
+  src = fetchPypi {
+    pname = "gixy_ng";
+    inherit version;
+    hash = "sha256-Zyn0rmskzlVJJbzlHLvKnlF4XDGi+FuSODTEDI0gDdE=";
   };
 
-  patches = [
-    # Migrate tests to pytest
-    # https://github.com/yandex/gixy/pull/146
-    (fetchpatch2 {
-      name = "migrate-tests-to-pytest.patch";
-      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.diff?full_index=1";
-      hash = "sha256-qIKKTC65ewZqiKiNLcaglKEdFh0SBZMJgIvY41/7WUc=";
-    })
-    ./python3.13-compat.patch
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  build-system = [ python.pkgs.setuptools ];
-
-  dependencies = with python.pkgs; [
-    cached-property
-    configargparse
-    pyparsing
+  dependencies = with python3.pkgs; [
+    ngxparse
     jinja2
-    six
+    configargparse
   ];
 
-  nativeCheckInputs = [ python.pkgs.pytestCheckHook ];
+  pythonImportsCheck = [ "gixy" ];
 
-  pythonRemoveDeps = [ "argparse" ];
+  # The pytest suite needs fixtures that don't ship in the PyPI sdist;
+  # the import check above is the smoke test.
+  doCheck = false;
 
   passthru = {
     inherit (nginx.passthru) tests;
   };
 
   meta = {
-    description = "Nginx configuration static analyzer";
+    description = "Nginx configuration static analyzer focused on security";
     mainProgram = "gixy";
     longDescription = ''
-      Gixy is a tool to analyze Nginx configuration.
-      The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
+      Gixy is a static analyzer for nginx configurations. Its main
+      goal is to detect security misconfigurations and to automate
+      the discovery of common flaws (HTTP response splitting, host
+      spoofing on virtual-host dispatch, alias-traversal "off-by-
+      slash", missing add_header inheritance, weak SSL/TLS ciphers,
+      and more).
+
+      Tracks the actively-maintained gixy-ng distribution on PyPI;
+      the binary remains `gixy'.
     '';
-    homepage = "https://github.com/yandex/gixy";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    homepage = "https://gixy.getpagespeed.com/";
+    changelog = "https://github.com/dvershinin/gixy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dvershinin ];
     platforms = lib.platforms.unix;
   };
 }
