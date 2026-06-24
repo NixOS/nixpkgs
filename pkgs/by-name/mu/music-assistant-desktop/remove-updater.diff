@@ -1,0 +1,32 @@
+diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
+index 03cac7d..fc69f93 100644
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -623,7 +623,6 @@ pub fn run() {
+             MacosLauncher::AppleScript,
+             None,))
+         .plugin(tauri_plugin_clipboard_manager::init())
+-        .plugin(tauri_plugin_updater::Builder::new().build())
+         .invoke_handler(tauri::generate_handler![
+             is_companion_app,
+             is_desktop_app,
+@@ -733,11 +732,6 @@ pub fn run() {
+             let separator3 = PredefinedMenuItem::separator(app)?;
+             let settings =
+                 MenuItemBuilder::with_id("settings", i18n::tr("desktop.tray.settings")).build(app)?;
+-            let update = MenuItemBuilder::with_id(
+-                "update",
+-                i18n::tr("desktop.tray.check_for_updates"),
+-            )
+-            .build(app)?;
+             let relaunch =
+                 MenuItemBuilder::with_id("relaunch", i18n::tr("desktop.tray.relaunch")).build(app)?;
+             let open_log = MenuItemBuilder::with_id(
+@@ -777,7 +771,6 @@ pub fn run() {
+                     &discord_rpc_item,
+                     &separator3,
+                     &settings,
+-                    &update,
+                     &relaunch,
+                     &open_log,
+                     &separator4,
