@@ -28,6 +28,7 @@ rec {
     optionalAttrs
     pipe
     isString
+    isList
     filterAttrs
     mapAttrs
     partition
@@ -132,6 +133,14 @@ rec {
         else
           attrs: attrs ? meta.broken && attrs.meta.broken;
       value.message = "This package is broken.";
+    }
+    {
+      kindName = "stringy-license";
+      condition =
+        config: attrs:
+        (attrs ? meta.license)
+        && (isString attrs.meta.license || (isList attrs.meta.license && any isString attrs.meta.license));
+      value.message = "This package has a stringy license.";
     }
   ];
 
