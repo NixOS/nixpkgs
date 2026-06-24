@@ -54,6 +54,16 @@ in
       default = "crowdsec";
     };
 
+    extraGroups = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = ''
+        List of additional groups that are assigned to the crowdsec user.
+
+        The main usecase for this is to allow reading group readable log files.
+      '';
+      defaultText = lib.literalExpression ''[ "systemd-journal" ]'';
+    };
+
     name = lib.mkOption {
       type = lib.types.str;
       description = ''
@@ -957,15 +967,17 @@ in
           );
       };
 
-      users.users.${cfg.user} = {
-        name = cfg.user;
-        description = lib.mkDefault "CrowdSec service user";
-        isSystemUser = true;
-        group = cfg.group;
-        extraGroups = [ "systemd-journal" ];
-      };
+      users = {
+        users.${cfg.user} = {
+          name = cfg.user;
+          group = cfg.group;
+          description = lib.mkDefault "CrowdSec service user";
+          isSystemUser = true;
+          extraGroups = [ "systemd-journal" ] ++ cfg.extraGroups;
+        };
 
-      users.groups.${cfg.group} = lib.mapAttrs (name: lib.mkDefault) { };
+        groups.${cfg.group} = {};
+      };
 
       networking.firewall.allowedTCPPorts =
         let
