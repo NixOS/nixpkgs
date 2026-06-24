@@ -1,15 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
   docutils,
-  rich,
+  fetchFromGitHub,
   pytestCheckHook,
+  rich,
+  setuptools-scm,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-rst";
   version = "2.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = "rich-rst";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7nniBu9UnXA0pogv0TDkANTeOcsVYbyDxEr6/r7MxcY=";
   };
 
@@ -38,7 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Beautiful reStructuredText renderer for rich";
     homepage = "https://github.com/wasi-master/rich-rst";
+    changelog = "https://github.com/wasi-master/rich-rst/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
