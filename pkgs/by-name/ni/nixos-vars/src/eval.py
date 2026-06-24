@@ -10,7 +10,7 @@ jsonify = Path(__file__).parent / "nix" / "jsonify.nix"
 
 
 def evaluate_config(args: VarsArgs) -> VarsConfig:
-	return VarsConfig.fromJSON(evaluate_config_raw(args))
+	return VarsConfig.from_jsom(evaluate_config_raw(args))
 
 
 def evaluate_config_raw(args: VarsArgs) -> Any:
