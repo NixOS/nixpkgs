@@ -200,7 +200,22 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    warnings = lib.optional config.services.pulseaudio.enable "Support for Pulseaudio + gdm will be removed in NixOS 26.11";
+    warnings =
+      lib.optional config.services.pulseaudio.enable "Support for Pulseaudio + gdm will be removed in NixOS 26.11"
+      ++
+        lib.optional
+          (
+            defaultSessionName == null
+            && !(lib.elem "gnome" config.services.displayManager.sessionData.sessionNames)
+          )
+          ''
+            GDM is enabled but `services.displayManager.defaultSession` is not set, and no GNOME
+            session is installed. GDM falls back to launching gnome-session, which will fail with
+            "Session never registered, failing" and return you to the login screen.
+
+            Set services.displayManager.defaultSession to one of:
+                ${lib.concatStringsSep ", " config.services.displayManager.sessionData.sessionNames}
+          '';
 
     services.xserver.displayManager.lightdm.enable = false;
 
