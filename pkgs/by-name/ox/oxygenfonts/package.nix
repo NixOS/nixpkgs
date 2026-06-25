@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,14 +16,14 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-0LKq8nChkDAb6U1sOUyga/DvzpDmIjoRn+2PB9rok4w=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp OxygenSans-version-0.4/*/Oxygen-Sans*.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
-
-    runHook postInstall
+  # Remove stuff that we don't need or would cause conflicts
+  buildPhase = ''
+    rm -r Oxygen-GoogleWebFont
+    rm -r OxygenSans-version-0.2
+    find -type d -name src -delete
   '';
+
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Desktop/gui font for integrated use with the KDE desktop";
