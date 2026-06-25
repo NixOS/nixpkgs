@@ -1910,6 +1910,6 @@ in
 
   };
 
-  meta.doc = ./gitlab.md;
+  meta.doc = ./default.md;
   meta.teams = [ teams.gitlab ];
 }
