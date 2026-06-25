@@ -1,27 +1,18 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchzip,
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "oxygenfonts";
-  version = "20160824";
+  version = "5.4.3";
 
-  src = fetchFromGitHub {
-    owner = "vernnobile";
-    repo = "oxygenFont";
-    rev = "62db0ebe3488c936406685485071a54e3d18473b";
-    hash = "sha256-0LKq8nChkDAb6U1sOUyga/DvzpDmIjoRn+2PB9rok4w=";
+  src = fetchzip {
+    url = "https://invent.kde.org/unmaintained/oxygen-fonts/-/archive/v${finalAttrs.version}/oxygen-fonts-v${finalAttrs.version}.zip";
+    hash = "sha256-N8fU5/iqgtFqaqdGuqbEVDsFCmVcHXLodo/T5NZMu8U=";
   };
-
-  # Remove stuff that we don't need or would cause conflicts
-  buildPhase = ''
-    rm -r Oxygen-GoogleWebFont
-    rm -r OxygenSans-version-0.2
-    find -type d -name src -delete
-  '';
 
   nativeBuildInputs = [ installFonts ];
 
@@ -56,4 +47,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ VarNepvius ];
     platforms = lib.platforms.all;
   };
-}
+})
