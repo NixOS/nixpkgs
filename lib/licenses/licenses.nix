@@ -310,6 +310,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bugroff = {
+      fullName = "Bugroff License";
+      url = "https://tunes.org/legalese/bugroff.html";
+    };
+
     bzip2 = {
       spdxId = "bzip2-1.0.6";
       fullName = "bzip2 and libbzip2 License v1.0.6";
@@ -1002,9 +1007,9 @@ lib.mapAttrs mkLicense (
       fullName = "Licence Libre du Québec – Permissive version 1.1";
     };
 
-    llgpl21 = {
-      fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-      url = "https://opensource.franz.com/preamble.html";
+    llgplPreamble = {
+      spdxId = "LLGPL";
+      fullName = "LLGPL Preamble";
     };
 
     llvm-exception = {
