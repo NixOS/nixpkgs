@@ -8,16 +8,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nnd";
-  version = "0.77";
+  version = "0.78";
 
   src = fetchFromGitHub {
     owner = "al13n321";
     repo = "nnd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OUXI7MErvkGYmz3H14SOJNuqhdkC1Vk9kUZQ/mpdUPk=";
+    hash = "sha256-Jv69wEkqURmpnuc4ih6h9DgJMZN0c+AeTp5uyP5w8n0=";
   };
 
-  cargoHash = "sha256-P3r1C+8iWGXp821xALhaJj0OHeG/lvDxxDwgs574c6Y=";
+  cargoHash = "sha256-6uR07V1qEbI+AWvBcOgRgSwjT50CRPEdGM2Gl/94rr0=";
 
   meta = {
     description = "Debugger for Linux";
