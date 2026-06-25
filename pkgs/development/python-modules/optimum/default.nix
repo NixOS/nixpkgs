@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-nA73afFr9wqJWmobBw5hOIjRvQ6I8QvVZoRJnYnXzUc=";
+    hash = "sha256-lUTnO1MVcYd6TnHVqs6RGV7By6U44pdoqd67c/YKfk8=";
   };
 
   build-system = [ setuptools ];
