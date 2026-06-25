@@ -10129,6 +10129,8 @@ with pkgs;
 
   minecraftServers = callPackage ../by-name/mi/minecraft-server/versions.nix { };
 
+  fabricServers = import ../games/fabric-servers { inherit callPackage lib; };
+
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
