@@ -226,19 +226,20 @@ in
       machine.wait_for_unit("${serviceName}")
 
       with subtest("Generation of manifest files"):
-        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/manifest-absent.${manifestFormat}")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/foo-namespace.${manifestFormat}")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/manifest-hello.${manifestFormat}")
+        machine.succeed("test -L /var/lib/rancher/${rancherDistro}/server/manifests/nixos")
+        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/manifest-absent.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/foo-namespace.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/manifest-hello.${manifestFormat}")
 
       with subtest("Generation of chart manifest files"):
-        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/chart-disabled.${manifestFormat}")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/chart-hello.${manifestFormat}")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/chart-values-file.${manifestFormat}")
-        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/chart-advanced.${manifestFormat}")
+        machine.succeed("test ! -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/chart-disabled.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/chart-hello.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/chart-values-file.${manifestFormat}")
+        machine.succeed("test -e /var/lib/rancher/${rancherDistro}/server/manifests/nixos/chart-advanced.${manifestFormat}")
 
       with subtest("Timeout of advanced chart"):
         # select only the first item in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/${rancherDistro}/server/manifests/chart-advanced.${manifestFormat}"))
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/${rancherDistro}/server/manifests/nixos/chart-advanced.${manifestFormat}"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
 
       with subtest("Container image import"):

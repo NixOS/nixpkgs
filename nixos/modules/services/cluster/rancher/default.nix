@@ -29,6 +29,9 @@ let
       containerdConfigTemplateFile = "/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl";
       staticContentChartDir = "/var/lib/rancher/${name}/server/static/charts";
 
+      # Merge manifest with manifests generated from auto deploying charts, keep only enabled manifests
+      enabledManifests = lib.filterAttrs (_: v: v.enable) (cfg.autoDeployCharts // cfg.manifests);
+
       manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml { };
       # Manifests need a valid suffix to be respected
       mkManifestTarget =
@@ -837,49 +840,57 @@ let
 
         environment.systemPackages = [ config.services.${name}.package ];
 
-        # Use systemd-tmpfiles to activate content
+        # Static symlink from k3s/rke2 manifest dir to a linkFarm in the store.
+        # k3s/rke2 scan subdirectories recursively (filepath.Walk),
+        # so files under nixos/ are picked up. When manifests are removed
+        # from config, the linkFarm derivation changes, the activation
+        # script updates the symlink, and the stale files disappear.
+        system.activationScripts.rancher-manifest-symlink = ''
+          mkdir -p "${manifestDir}"
+          ln -sfn "${
+            pkgs.linkFarm "${name}-manifests" (
+              lib.mapAttrsToList (_: v: {
+                name = v.target;
+                path = v.source;
+              }) enabledManifests
+            )
+          }" "${manifestDir}/nixos"
+        '';
+
         systemd.tmpfiles.settings."10-${name}" =
+          # Make a systemd-tmpfiles rule for a container image
           let
-            # Merge manifest with manifests generated from auto deploying charts, keep only enabled manifests
-            enabledManifests = lib.filterAttrs (_: v: v.enable) (cfg.autoDeployCharts // cfg.manifests);
-            # Make a systemd-tmpfiles rule for a manifest
-            mkManifestRule = manifest: {
-              name = "${manifestDir}/${manifest.target}";
-              value = {
-                "L+".argument = "${manifest.source}";
-              };
-            };
-            # Make a systemd-tmpfiles rule for a container image
             mkImageRule = image: {
               name = "${imageDir}/${image.name}";
               value = {
                 "L+".argument = "${image}";
               };
             };
-            # Merge charts with charts contained in enabled auto deploying charts
-            helmCharts =
-              (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
-                lib.filterAttrs (_: v: v.enable) cfg.autoDeployCharts
-              ))
-              // cfg.charts;
-            # Ensure that all chart targets have a .tgz suffix
-            mkChartTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
-            # Make a systemd-tmpfiles rule for a chart
-            mkChartRule = target: source: {
-              name = "${staticContentChartDir}/${mkChartTarget target}";
-              value = {
-                "L+".argument = "${source}";
-              };
-            };
           in
-          (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
-          // (builtins.listToAttrs (map mkImageRule cfg.images))
+          builtins.listToAttrs (map mkImageRule cfg.images)
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";
             };
           })
-          // (lib.mapAttrs' mkChartRule helmCharts);
+          # Merge charts with charts contained in enabled auto deploying charts
+          // (
+            let
+              helmCharts =
+                (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
+                  lib.filterAttrs (_: v: v.enable) cfg.autoDeployCharts
+                ))
+                // cfg.charts;
+              mkChartTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
+              mkChartRule = target: source: {
+                name = "${staticContentChartDir}/${mkChartTarget target}";
+                value = {
+                  "L+".argument = "${source}";
+                };
+              };
+            in
+            lib.mapAttrs' mkChartRule helmCharts
+          );
 
         systemd.services.${serviceName} =
           let

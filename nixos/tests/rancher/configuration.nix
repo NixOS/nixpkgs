@@ -18,11 +18,19 @@ let
   podsPerCore = 3;
   memoryThrottlingFactor = 0.69;
   containerLogMaxSize = "5Mi";
+  manifestFormat =
+    {
+      k3s = "yaml";
+      rke2 = "json";
+    }
+    .${rancherDistro};
+  manifestsRoot = "/var/lib/rancher/${rancherDistro}/server/manifests";
+  nixosDir = "${manifestsRoot}/nixos";
 in
 {
   name = "${rancherPackage.name}-configuration";
   nodes.machine =
-    { ... }:
+    { lib, ... }:
     {
       environment.systemPackages = with pkgs; [
         kubectl
@@ -51,6 +59,28 @@ in
         extraKubeletConfig = {
           inherit podsPerCore memoryThrottlingFactor containerLogMaxSize;
         };
+        manifests = {
+          foo-namespace = {
+            target = "foo-namespace.${manifestFormat}";
+            content = {
+              apiVersion = "v1";
+              kind = "Namespace";
+              metadata.name = "foo";
+            };
+          };
+          bar-namespace = {
+            target = "bar-namespace.${manifestFormat}";
+            content = {
+              apiVersion = "v1";
+              kind = "Namespace";
+              metadata.name = "bar";
+            };
+          };
+        };
+      };
+
+      specialisation.removed-manifests.configuration = {
+        services.${rancherDistro}.manifests = lib.mkForce { };
       };
     };
 
@@ -83,6 +113,19 @@ in
         t.assertEqual(kubelet_config["podsPerCore"], ${toString podsPerCore})
         t.assertEqual(kubelet_config["memoryThrottlingFactor"], ${toString memoryThrottlingFactor})
         t.assertEqual(kubelet_config["containerLogMaxSize"],"${containerLogMaxSize}")
+
+      with subtest("Manifests are deployed via linkFarm"):
+        machine.succeed("test -L ${nixosDir}")
+        machine.succeed("readlink -f ${nixosDir} | grep -q /nix/store")
+        machine.succeed("test -f ${nixosDir}/foo-namespace.${manifestFormat}")
+        machine.succeed("test -f ${nixosDir}/bar-namespace.${manifestFormat}")
+
+      with subtest("After removing manifests from config, old files are cleaned up"):
+        machine.succeed("/run/current-system/specialisation/removed-manifests/bin/switch-to-configuration test >&2")
+        machine.succeed("test -L ${nixosDir}")
+        machine.succeed("readlink -f ${nixosDir} | grep -q /nix/store")
+        machine.succeed("test ! -e ${nixosDir}/foo-namespace.${manifestFormat}")
+        machine.succeed("test ! -e ${nixosDir}/bar-namespace.${manifestFormat}")
     '';
 
   meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
