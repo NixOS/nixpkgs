@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   buildPythonPackage,
   callPackage,
   setuptools,
@@ -56,6 +57,12 @@ buildPythonPackage rec {
       excludes = [ ".github/actions/**" ];
       hash = "sha256-9WFoA+H/OMLLkSfJvhBf9cgSYrhuVokYKLr6WeNJAgI=";
     })
+    # Add test marks where malloc failure is expected on systems with overcommit enabled
+    (fetchpatch {
+      name = "malloc-overcommit-mark.patch";
+      url = "https://github.com/pyca/cryptography/commit/2efeba9cc67809b67e659bea8eaea680df2135e8.patch";
+      hash = "sha256-06Z+sk2JTJ50CCnPf2vXyPL5BZeI98oc43LpccenzNg=";
+    })
   ];
 
   postPatch = ''
@@ -92,12 +99,6 @@ buildPythonPackage rec {
   ++ optional-dependencies.ssh;
 
   pytestFlags = [ "--disable-pytest-warnings" ];
-
-  disabledTests = [
-    # Tries to allocate 1 TiB with vm.overcommit_memory=1
-    # https://github.com/pyca/cryptography/pull/14782
-    "test_argon2_malloc_failure"
-  ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks
