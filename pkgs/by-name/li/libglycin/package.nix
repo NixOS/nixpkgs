@@ -15,6 +15,7 @@
   glib,
   gobject-introspection,
   glycin-loaders,
+  glycin-thumbnailer,
   libglycin-gtk4,
   fontconfig,
   libseccomp,
@@ -153,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit
         glycin-loaders
+        glycin-thumbnailer
         libglycin-gtk4
         ;
     };
@@ -162,10 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sandboxed and extendable image loading library";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
     changelog = "https://gitlab.gnome.org/GNOME/glycin/-/tags/${finalAttrs.version}";
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     maintainers = [ ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
