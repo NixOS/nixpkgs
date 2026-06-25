@@ -3840,6 +3840,8 @@ self: super: with self; {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deeptutor = callPackage ../development/python-modules/deeptutor { };
+
   deepwave = callPackage ../development/python-modules/deepwave { };
 
   deezer-py = callPackage ../development/python-modules/deezer-py { };
