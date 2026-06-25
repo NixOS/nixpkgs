@@ -1,7 +1,7 @@
 {
   lib,
   ocaml,
-  version ? if lib.versionAtLeast ocaml.version "5.1" then "2.7.0" else "0.9",
+  version ? if lib.versionAtLeast ocaml.version "5.1" then "2.14.0" else "0.9",
   buildDunePackage,
   cstruct,
   dune-configurator,
@@ -18,20 +18,20 @@ let
         minimalOCamlVersion = "4.12";
         hash = "sha256-eXWIxfL9UsKKf4sanBjKfr6Od4fPDctVnkU+wjIXW0M=";
       };
-      "2.7.0" = {
+      "2.14.0" = {
         minimalOCamlVersion = "5.1.0";
-        hash = "sha256-mePi6/TXtxgtLYLyHRAdnRcgeldCVgUaPY+MZXSzC6U=";
+        hash = "sha256-U6B3/ExryC7WLYj1iIUHoXZQluFE56Rf3dwOpux/qIE=";
       };
     }
     .${version};
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "uring";
   inherit version;
   inherit (param) minimalOCamlVersion;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/ocaml-uring/releases/download/v${finalAttrs.version}/uring-${version}.tbz";
     inherit (param) hash;
   };
 
@@ -60,8 +60,8 @@ buildDunePackage rec {
   dontStrip = true;
 
   meta = {
-    homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
-    changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
+    homepage = "https://github.com/ocaml-multicore/ocaml-uring";
+    changelog = "https://raw.githubusercontent.com/ocaml-multicore/ocaml-uring/v${finalAttrs.version}/CHANGES.md";
     description = "Bindings to io_uring for OCaml";
     license = with lib.licenses; [
       isc
@@ -70,4 +70,4 @@ buildDunePackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})
