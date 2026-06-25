@@ -223,6 +223,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
+
   env = {
     # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
     BUILDCC = lib.getExe pkgsBuildBuild.stdenv.cc;
