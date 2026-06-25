@@ -627,11 +627,12 @@ buildStdenv.mkDerivation {
 
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true;
   env = {
     # if not explicitly set, wrong cc from buildStdenv would be used
     HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
     HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+    CARGO_BUILD_JOBS = "1";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
