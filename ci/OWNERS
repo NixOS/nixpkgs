@@ -127,10 +127,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /doc/redirects.json                @GetPsyched
 /nixos/doc/manual/redirects.json   @GetPsyched
 
-# NixOS integration test driver
-/nixos/lib/test-driver  @tfc
-/nixos/lib/testing      @tfc
-
 # NixOS QEMU virtualisation
 /nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
 /nixos/modules/services/backup/libvirtd-autosnapshot.nix  @6543
@@ -531,3 +527,9 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 
 # Zellij plugins
 /pkgs/by-name/ze/zellij/plugins/   @PerchunPak
+
+# Test-driver
+/nixos/lib/test-driver                                      @NixOS/test-driver
+/nixos/lib/testing                                          @NixOS/test-driver
+/nixos/tests/nixos-test-driver                              @NixOS/test-driver
+/nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver

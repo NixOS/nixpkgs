@@ -748,10 +748,8 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  tests = {
-    members = [ tfc ];
-    scope = "Maintain the NixOS VM test runner.";
-    shortName = "NixOS tests";
+  test-driver = {
+    github = "test-driver";
     enableFeatureFreezePing = true;
   };
 
