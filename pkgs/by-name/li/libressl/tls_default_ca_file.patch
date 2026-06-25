@@ -1,0 +1,13 @@
+diff --git a/tls/CMakeLists.txt.bak b/tls/CMakeLists.txt
+index a1b244a..8c28465 100644
+--- a/tls/CMakeLists.txt.bak
++++ b/tls/CMakeLists.txt
+@@ -41,8 +41,6 @@ if(WIN32)
+        set(TLS_COMPAT_SRC ${TLS_COMPAT_SRC} compat/pwrite.c)
+ endif()
+ 
+-add_definitions(-DTLS_DEFAULT_CA_FILE=\"${OPENSSLDIR}/cert.pem\")
+-
+ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tls.sym DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR})
+ 
