@@ -38,6 +38,10 @@
   webkitgtk_4_1,
   ripgrep,
   which,
+  libxtst,
+  libjpeg8,
+  pipewire,
+  libei,
 
   # needed to fix "Save as Root"
   asar,
@@ -257,6 +261,10 @@ stdenv.mkDerivation (
       systemdLibs
       webkitgtk_4_1
       libxkbfile
+      libxtst
+      libjpeg8.out
+      pipewire
+      libei
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [

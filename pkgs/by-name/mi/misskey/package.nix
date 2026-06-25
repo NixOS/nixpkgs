@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2026.5.4";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-ENq5V1lIFGKIr1xZccy1LFRYVqZVEhDzBhAbDNcG5sM=";
+    hash = "sha256-jq1HtLabix9qxaAjaCgUN3nsY438ruHgHgC3MuGeR2E=";
     fetchSubmodules = true;
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-wEbYkfp+zfytOPBjEcyTHCaoohGRNRjG5oTUefI5BVw=";
+    hash = "sha256-GCkSASkgwUvlAlm8hiy4Yk/QMVerVGacxOh1AYouH0g=";
   };
 
   buildPhase = ''

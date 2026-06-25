@@ -5662,6 +5662,8 @@ self: super: with self; {
 
   firedrake-fiat = callPackage ../development/python-modules/firedrake-fiat { };
 
+  firedrake-ufl = callPackage ../development/python-modules/firedrake-ufl { };
+
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
   firetv = callPackage ../development/python-modules/firetv { };
@@ -18922,6 +18924,8 @@ self: super: with self; {
   sqlmodel = callPackage ../development/python-modules/sqlmodel { };
 
   sqlobject = callPackage ../development/python-modules/sqlobject { };
+
+  sqlparams = callPackage ../development/python-modules/sqlparams { };
 
   sqlparse = callPackage ../development/python-modules/sqlparse { };
 

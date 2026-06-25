@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
   fetchurl,
   jetbrains,
@@ -8,6 +9,7 @@
   wayland-scanner,
   wayland-protocols,
   libxkbcommon,
+  speechd-minimal,
 }:
 
 let
@@ -26,8 +28,8 @@ let
   # cd jetbrainsruntime
   # git tag --points-at [revision]
   # Look for the line that starts with jbr-
-  javaVersion = "25.0.2";
-  build = "432.48";
+  javaVersion = "25.0.3";
+  build = "508.4";
 in
 callPackage ./common.nix
   {
@@ -36,12 +38,21 @@ callPackage ./common.nix
   {
     inherit javaVersion build;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    sourceDateEpoch = 1777242155;
-    srcHash = "sha256-BKyvBUKtg+JbZNuH/RZY87eJng6Eyd6L3cOwcOgOx/Y=";
+    sourceDateEpoch = 1780959777;
+    srcHash = "sha256-N+7D++Cxu0RGWChEWW8gtNz7E2I8qM2AFbXv4luAXto=";
     homePath = "${jetbrains.jdk}/lib/openjdk";
     jcefPackage = jetbrains.jcef;
     extraBuildPhase = ''
       cp -r ${gtk-protocols.out} gtk-shell.xml
+
+      # JBR hardcodes the speech-dispatcher header location to
+      # /usr/include/speech-dispatcher in its mkimages scripts.
+      substituteInPlace \
+        jb/project/tools/linux/scripts/mkimages_x64.sh \
+        jb/project/tools/linux/scripts/mkimages_aarch64.sh \
+        --replace-fail \
+          "--with-speechd-include=/usr/include/speech-dispatcher" \
+          "--with-speechd-include=${lib.getDev speechd-minimal}/include/speech-dispatcher"
     '';
     vendorVersionString = "nix/JBR-${javaVersion}-b${build}${if withJcef then "-jcef" else ""}";
     extraConfigureFlags = [
