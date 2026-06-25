@@ -40,6 +40,8 @@ buildPythonPackage (finalAttrs: {
     platformdirs
   ];
 
+  pythonImportsCheck = [ "midealocal" ];
+
   meta = {
     description = "Control your Midea M-Smart appliances via local area network";
     homepage = "https://github.com/midea-lan/midea-local";
