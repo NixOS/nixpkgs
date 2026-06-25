@@ -6,6 +6,7 @@
   nodes =
     let
       hub-addr = "127.0.0.1:49200";
+      branch = "nixos-test";
     in
     {
       crowdsec =
@@ -18,7 +19,7 @@
               # serve local hub
               virtualHosts = {
                 "http://${hub-addr}".extraConfig = ''
-                  handle_path /master/* {
+                  handle_path /${branch}/* {
                     root ${./data/hub}
                     file_server
                   }
@@ -29,7 +30,7 @@
             crowdsec = {
               enable = true;
               settings.config.cscli = {
-                hub_branch = "master";
+                hub_branch = branch;
                 __hub_url_template__ = "http://${hub-addr}/%s/%s";
               };
             };

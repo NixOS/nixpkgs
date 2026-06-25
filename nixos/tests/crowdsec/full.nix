@@ -6,6 +6,7 @@
   nodes =
     let
       hub-addr = "127.0.0.1";
+      branch = "nixos-test";
     in
     {
       attacker = { ... }: { };
@@ -16,22 +17,10 @@
           # crowdsec needs the files from caddy
           systemd.services.crowdsec.after = [ "caddy.service" ];
 
-          # for interactive with non-root users
-          security.sudo-rs.enable = true;
-
           # to test auto completion for different shells
           programs = {
             fish.enable = true;
             zsh.enable = true;
-          };
-
-          users.users.nixos = {
-            useDefaultShell = true;
-            isNormalUser = true;
-            password = "nixos";
-            extraGroups = [
-              "wheel"
-            ];
           };
 
           services = {
@@ -43,7 +32,7 @@
               # serve local hub
               virtualHosts = {
                 "http://${hub-addr}".extraConfig = ''
-                  handle_path /master/* {
+                  handle_path /${branch}/* {
                     root ${./data/hub}
                     file_server
                   }
@@ -108,7 +97,7 @@
                   };
 
                   cscli = {
-                    hub_branch = "master";
+                    hub_branch = branch;
                     __hub_url_template__ = "http://${hub-addr}/%s/%s";
                   };
                 };
