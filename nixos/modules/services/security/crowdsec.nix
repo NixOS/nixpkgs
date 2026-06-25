@@ -64,15 +64,6 @@ in
 
     autoUpdateService = lib.mkEnableOption "if `true` `cscli hub update` will be executed daily. See `https://docs.crowdsec.net/docs/cscli/cscli_hub_update/` for more information";
 
-    openFirewall = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = ''
-        Whether to automatically open firewall ports for `crowdsec`.
-      '';
-    };
-
     user = lib.mkOption {
       type = lib.types.str;
       description = "The user to run crowdsec as";
@@ -1054,19 +1045,6 @@ in
 
         groups.${cfg.group} = { };
       };
-
-      networking.firewall.allowedTCPPorts =
-        let
-          parsePortFromURLOption =
-            url: option:
-            builtins.addErrorContext "extracting a port from URL: `${option}` requires a port to be specified, but we failed to parse a port from '${url}'" (
-              lib.strings.toInt (lib.last (lib.strings.splitString ":" url))
-            );
-        in
-        lib.mkIf cfg.openFirewall [
-          cfg.settings.general.prometheus.listen_port
-          (parsePortFromURLOption cfg.settings.general.api.server.listen_uri "config.services.crowdsec.settings.general.api.server.listen_uri")
-        ];
     };
 
   meta = {
