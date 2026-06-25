@@ -696,6 +696,8 @@ self: super: with self; {
     callPackage ../development/python-modules/alibabacloud-endpoint-util
       { };
 
+  alibabacloud-gateway-oss = callPackage ../development/python-modules/alibabacloud-gateway-oss { };
+
   alibabacloud-gateway-oss-util =
     callPackage ../development/python-modules/alibabacloud-gateway-oss-util
       { };
