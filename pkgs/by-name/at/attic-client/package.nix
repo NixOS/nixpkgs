@@ -16,7 +16,7 @@ let
   # Only the attic-client crate builds against the Nix C++ libs
   # This derivation is also used to build the server
   needNixInclude = lib.elem "attic-client" crates;
-  nix = nixVersions.nix_2_28;
+  nix = nixVersions.nix_2_34;
 in
 
 rustPlatform.buildRustPackage {

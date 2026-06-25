@@ -18693,6 +18693,12 @@
     githubId = 2072185;
     name = "Marc Scholten";
   };
+  Mr-Stoneman = {
+    email = "mrstoneman@sten.rocks";
+    github = "Mr-Stoneman";
+    githubId = 72991726;
+    name = "Mr-Stoneman";
+  };
   mrbenjadmin = {
     email = "mrbenjadmin@gmail.com";
     github = "mrbenjadmin";
@@ -28301,6 +28307,12 @@
     github = "toonn";
     githubId = 1486805;
     name = "Toon Nolten";
+  };
+  tophcodes = {
+    email = "toki@toph.so";
+    github = "tophcodes";
+    githubId = 3678770;
+    name = "Christopher Mühl";
   };
   tornax = {
     email = "tornax@pm.me";
