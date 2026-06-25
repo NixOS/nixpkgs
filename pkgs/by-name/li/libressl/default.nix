@@ -64,7 +64,7 @@ let
         export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
         export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
       ''
-      + lib.optionalString stdenv.hostPlatform.isElf ''
+      + lib.optionalString (stdenv.hostPlatform.isElf && buildShared) ''
         # Bail if any shared object has executable stack enabled. This can
         # happen when an object produced from an assmbly file in libcrypto is
         # missing a .note.GNU-stack section. An executable stack is dangerous
