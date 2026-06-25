@@ -706,6 +706,8 @@ self: super: with self; {
 
   alibabacloud-tea-util = callPackage ../development/python-modules/alibabacloud-tea-util { };
 
+  alibabacloud-tea-xml = callPackage ../development/python-modules/alibabacloud-tea-xml { };
+
   alibabacloud-vpc20160428 = callPackage ../development/python-modules/alibabacloud-vpc20160428 { };
 
   aligator = callPackage ../development/python-modules/aligator { inherit (pkgs) aligator; };
