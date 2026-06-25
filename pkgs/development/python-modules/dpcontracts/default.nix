@@ -9,6 +9,8 @@ buildPythonPackage {
   version = "unstable-2018-11-20";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "deadpixi";
     repo = "contracts";
