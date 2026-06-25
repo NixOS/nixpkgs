@@ -1123,11 +1123,7 @@ let
 
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
-        linol = callPackage ../development/ocaml-modules/linol {
-          ppx_yojson_conv_lib = ppx_yojson_conv_lib.override {
-            yojson = yojson_2;
-          };
-        };
+        linol = callPackage ../development/ocaml-modules/linol { };
 
         linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
