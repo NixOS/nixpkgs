@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quick-sasl";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-sasl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kMKZRromm/hb9PZwvWAzmJorSqTB8xMIbWASfSjajiQ=";
+    hash = "sha256-ykznug09ujES8wdHaCT/hRM4irOQFoaJcq/M24EBgKg=";
   };
 
   strictDeps = true;
