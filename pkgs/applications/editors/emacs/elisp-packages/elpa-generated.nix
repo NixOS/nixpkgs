@@ -7159,10 +7159,10 @@
     elpaBuild {
       pname = "php-fill";
       ename = "php-fill";
-      version = "1.1.1";
+      version = "1.1.2";
       src = fetchurl {
-        url = "https://elpa.gnu.org/packages/php-fill-1.1.1.tar";
-        sha256 = "130q6nyx5837wvhvis0nlzsqky7hic00z1jakik66asqpyrl7ncj";
+        url = "https://elpa.gnu.org/packages/php-fill-1.1.2.tar";
+        sha256 = "0r1zmin3wv8sqzgw6zbvbb7wix7d6h6s798f9r05w6g9m1vf0r5r";
       };
       packageRequires = [ ];
       meta = {
