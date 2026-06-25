@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,14 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-0LKq8nChkDAb6U1sOUyga/DvzpDmIjoRn+2PB9rok4w=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp */Oxygen-Sans.ttf */Oxygen-Sans-Bold.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Desktop/gui font for integrated use with the KDE desktop";
