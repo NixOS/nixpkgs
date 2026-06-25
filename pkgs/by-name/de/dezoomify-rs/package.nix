@@ -6,17 +6,20 @@
   nix-update-script,
   pkg-config,
   openssl,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dezoomify-rs";
-  version = "2.15.0";
+  version = "2.16.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gx/h9i+VPU0AtpQEkN/zCLmeyaW5wSUCfdY52hPwm3Q=";
+    hash = "sha256-45Vlgle605s3uvPh+Lr+KAk72AzIoolnSuhFzRCORC4=";
   };
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -27,9 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
+  nativeCheckInputs = [
+    cacert
+  ];
+
   passthru.updateScript = nix-update-script { };
 
-  cargoHash = "sha256-Jh1a5DW25a4wzuZbOAoTn/crp/ioLsmq3jDiqIctCCM=";
+  cargoHash = "sha256-tfeknHPrY11rSmHyEAUvJgCLDwmIpo9jk8BLgzgQCrc=";
 
   # hyper uses SystemConfiguration.framework to read system proxy settings.
   # Allow access to the Mach service to prevent the tests from failing.
@@ -39,9 +46,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Zoomable image downloader for Google Arts & Culture, Zoomify, IIIF, and others";
+    changelog = "https://github.com/lovasoa/dezoomify-rs/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/lovasoa/dezoomify-rs/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fsagbuya ];
+    maintainers = with lib.maintainers; [
+      fsagbuya
+      kybe236
+    ];
     mainProgram = "dezoomify-rs";
   };
 })
