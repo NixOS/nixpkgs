@@ -219,7 +219,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   )
   ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
