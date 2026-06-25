@@ -17772,6 +17772,8 @@ self: super: with self; {
 
   scales = callPackage ../development/python-modules/scales { };
 
+  scaleway = callPackage ../development/python-modules/scaleway { };
+
   scaleway-core = callPackage ../development/python-modules/scaleway-core { };
 
   scalib = callPackage ../development/python-modules/scalib { };
