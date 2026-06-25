@@ -1648,8 +1648,6 @@ with pkgs;
 
   kaggle = with python3Packages; toPythonApplication kaggle;
 
-  materialx = with python3Packages; toPythonApplication materialx;
-
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
   # example of an error which this fixes
