@@ -95,6 +95,20 @@ in
       defaultText = lib.literalExpression "config.networking.hostName";
     };
 
+    readOnlyPaths = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = ''
+        Additional read-only paths from the host which the crowdsec service can access.
+
+        The main usecase for this is to allow crowdsec to read additional log files.
+      '';
+      default = [ ];
+      example = [
+        "/var/log/vaultwarden"
+        "/var/log/nginx"
+      ];
+    };
+
     hub = lib.mkOption {
       description = ''
         Hub collections, parsers, AppSec rules, etc.
@@ -641,8 +655,6 @@ in
   };
   config =
     let
-      configFile = "${config_paths.config_dir}/config.yaml.local";
-
       dirs = [
         config_paths.config_dir
         config_paths.data_dir
@@ -653,83 +665,58 @@ in
         "${config_paths.config_dir}/console"
       ];
 
-      cscli = pkgs.writeShellScriptBin "cscli" ''
-        set -euo pipefail
-        # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
-        export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
-                sudo=exec
-        if [ "$USER" != "${cfg.user}" ]; then
-          ${
-            if config.security.sudo.enable then
-              "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user}'"
-            else
-              ">&2 echo 'Aborting, cscli must be run as user `${cfg.user}`!'; exit 2"
-          }
-        fi
-        $sudo ${lib.getExe' cfg.package "cscli"} -c=${configFile} "$@"
-      '';
+      setupScript = pkgs.writeShellApplication {
+        name = "crowdsec-setup";
+        runtimeInputs = [
+          cfg.package
+          pkgs.coreutils
+        ];
+        text =
+          let
+            argString = arg: lib.concatMapStringsSep " " lib.escapeShellArg arg;
+            maybeInstall =
+              x:
+              lib.optionalString (
+                builtins.isList cfg.hub.${x} && cfg.hub.${x} != [ ]
+              ) "cscli ${lib.toLower x} install ${argString cfg.hub.${x}}";
+          in
+          ''
+            echo "Updating hub..."
 
-      scriptArray = [
-        "set -euo pipefail"
-        "${lib.getExe' pkgs.coreutils "mkdir"} -p '${config_paths.hub_dir}'"
-        "${lib.getExe cscli} hub update"
-      ]
-      ++ lib.optionals (cfg.hub.collections != [ ]) [
-        "${lib.getExe cscli} collections install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-        "${lib.getExe cscli} scenarios install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.parsers != [ ]) [
-        "${lib.getExe cscli} parsers install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.postoverflows != [ ]) [
-        "${lib.getExe cscli} postoverflows install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postoverflows
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appsec-configs != [ ]) [
-        "${lib.getExe cscli} appsec-configs install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appsec-configs
-        }"
-      ]
-      ++ lib.optionals (cfg.hub.appsec-rules != [ ]) [
-        "${lib.getExe cscli} appsec-rules install ${
-          lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appsec-rules
-        }"
-      ]
-      ++ lib.optionals (cfg.settings.config.api.server.enable) [
-        ''
-          if [ ! -s "${cfg.settings.config.api.client.credentials_path}" ]; then
-            ${lib.getExe cscli} machine add "${cfg.name}" --auto
-          fi
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.config.api.server.online_client.credentials_path != null) [
-        ''
-          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.config.api.server.online_client.credentials_path}" ]; then
-            ${lib.getExe cscli} capi register
-          fi
-        ''
-      ]
-      ++ lib.optionals (cfg.settings.console.enrollKeyFile != null) [
-        ''
-          if [ ! -e "${cfg.settings.console.enrollKeyFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
-          fi
-        ''
-      ];
+            cscli hub update
 
-      setupScript = pkgs.writeShellScriptBin "crowdsec-setup" (
-        lib.strings.concatStringsSep "\n" scriptArray
-      );
+            echo "Installing resources..."
 
+            ${maybeInstall "collections"}
+            ${maybeInstall "scenarios"}
+            ${maybeInstall "parsers"}
+            ${maybeInstall "postoverflows"}
+            ${maybeInstall "appsec-configs"}
+            ${maybeInstall "appsec-rules"}
+
+            ${lib.optionalString (cfg.settings.config.api.server.online_client.credentials_path != null) ''
+              if [ ! -s "${cfg.settings.config.api.server.online_client.credentials_path}" ]; then
+                echo "No local online API credentials created. Registering..."
+                cscli capi register
+              fi
+            ''}
+
+            ${lib.optionalString cfg.settings.config.api.server.enable ''
+              if [ ! -s ${cfg.settings.config.api.client.credentials_path} ]; then
+                echo "No local API credentials currently created. Generating local API credentials..."
+                cscli machines add "${cfg.name}" --auto --file ${cfg.settings.config.api.client.credentials_path}
+              fi
+            ''}
+
+            ${lib.optionalString (cfg.settings.console.enrollKeyFile != null) ''
+              if [ -e "$CREDENTIALS_DIRECTORY/enrollKeyFile" ]; then
+                echo "Enrolling to the online console..."
+                cscli console enroll "$(<"$CREDENTIALS_DIRECTORY/enrollKeyFile")" --name ${cfg.name}
+              fi
+            ''}
+            echo "Completed crowdsec setup"
+          '';
+      };
     in
     lib.mkIf (cfg.enable) {
 
@@ -742,266 +729,231 @@ in
           "By not specifying acquisitions in services.crowdsec.settings.acquisitions, CrowdSec will not look for any data source."
         ];
 
-      environment = {
-        systemPackages = [ cscli ];
-      };
+      environment.systemPackages = [ cfg.package ];
 
-      systemd.packages = [ cfg.package ];
-
-      systemd.timers.crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
-        description = "Update the crowdsec hub index";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "daily";
-          RandomizedDelaySec = 300;
-          Persistent = "yes";
-          Unit = "crowdsec-update-hub.service";
-        };
-      };
-      systemd.services = {
-        crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
+      systemd = {
+        timers.crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
           description = "Update the crowdsec hub index";
-          serviceConfig = {
-            Type = "oneshot";
-            User = cfg.user;
-            Group = cfg.group;
-            LimitNOFILE = 65536;
-            NoNewPrivileges = true;
-            LockPersonality = true;
-            RemoveIPC = true;
-            ProtectSystem = "strict";
-            PrivateUsers = true;
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            ProtectHostname = true;
-            UMask = "0077";
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            SystemCallFilter = [
-              " " # This is needed to clear the SystemCallFilter existing definitions
-              "~@reboot"
-              "~@swap"
-              "~@obsolete"
-              "~@mount"
-              "~@module"
-              "~@debug"
-              "~@cpu-emulation"
-              "~@clock"
-              "~@raw-io"
-              "~@privileged"
-              "~@resources"
-            ];
-            CapabilityBoundingSet = [
-              " " # Reset all capabilities to an empty set
-            ];
-            RestrictAddressFamilies = [
-              " " # This is needed to clear the RestrictAddressFamilies existing definitions
-              "none" # Remove all addresses families
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            DevicePolicy = "closed";
-            ProtectKernelLogs = true;
-            SystemCallArchitectures = "native";
-            ReadWritePaths = dirs;
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
-            ExecStart = "${lib.getExe cscli} --error hub update";
-            ExecStartPost = "systemctl reload crowdsec.service";
-            DynamicUser = true;
+          wantedBy = [ "timers.target" ];
+          timerConfig = {
+            OnCalendar = "daily";
+            RandomizedDelaySec = 300;
+            Persistent = "yes";
+            Unit = "crowdsec-update-hub.service";
           };
         };
 
-        crowdsec = {
-          description = "CrowdSec agent";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network-online.target" ];
-          wants = [ "network-online.target" ];
-          path = lib.mkForce [ ];
-          environment = {
-            LC_ALL = "C";
-            LANG = "C";
-          };
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            Type = "notify";
-            RestartSec = 60;
-            LimitNOFILE = 65536;
-            NoNewPrivileges = true;
-            LockPersonality = true;
-            RemoveIPC = true;
-            ProtectSystem = "strict";
-            PrivateUsers = true;
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            ProtectHostname = true;
-            ProtectClock = true;
-            UMask = "0077";
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            SystemCallFilter = [
-              " " # This is needed to clear the SystemCallFilter existing definitions
-              "~@reboot"
-              "~@swap"
-              "~@obsolete"
-              "~@mount"
-              "~@module"
-              "~@debug"
-              "~@cpu-emulation"
-              "~@clock"
-              "~@raw-io"
-              "~@privileged"
-              "~@resources"
-            ];
-            ReadWritePaths = dirs;
-            CapabilityBoundingSet = [
-              " " # Reset all capabilities to an empty set
-              "CAP_SYSLOG" # Add capability to read syslog
-            ];
-            RestrictAddressFamilies = [
-              " " # This is needed to clear the RestrictAddressFamilies existing definitions
-              "none" # Remove all addresses families
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            DevicePolicy = "closed";
-            ProtectKernelLogs = true;
-            SystemCallArchitectures = "native";
-            DynamicUser = true;
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
-            ExecReload = [
-              " " # This is needed to clear the ExecReload definitions from upstream
-            ];
-            ExecStart = [
-              " " # This is needed to clear the ExecStart definitions from upstream
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -info"
-            ];
-            ExecStartPre = [
-              " " # This is needed to clear the ExecStartPre definitions from upstream
-              "${lib.getExe setupScript}"
-              "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
-            ];
-          };
-        };
-      };
+        services =
+          let
+            createServiceConfig =
+              attrs:
+              lib.recursiveUpdate {
+                User = cfg.user;
+                Group = cfg.group;
+                UMask = "0077";
+                DynamicUser = true;
+                ReadWritePaths = dirs;
+                PrivateDevices = true;
+                LockPersonality = true;
 
-      systemd.tmpfiles.settings."10-crowdsec" =
-        let
-          toYaml = lib.generators.toYAML { };
+                ProtectHome = true;
+                ProtectHostname = "true:${cfg.name}";
+                ProtectClock = true;
+                ProtectKernelTunables = true;
+                ProtectKernelModules = true;
+                ProtectKernelLogs = true;
+                ProtectControlGroups = "strict";
+                ProtectProc = "invisible";
 
-          createDirectory = dirPath: {
-            name = dirPath;
-            value.D = {
-              user = cfg.user;
-              group = cfg.group;
+                RestrictRealtime = true;
+                RestrictNamespaces = true;
+                RestrictAddressFamilies = [
+                  "AF_UNIX"
+                  "AF_INET"
+                  "AF_INET6"
+                ];
+
+                LoadCredential = lib.optional (
+                  cfg.settings.console.enrollKeyFile != null
+                ) "enrollKeyFile:${cfg.settings.console.enrollKeyFile}";
+
+                SystemCallFilter = [ "@system-service" ];
+                SystemCallErrorNumber = "EPERM";
+                SystemCallArchitectures = "native";
+              } attrs;
+          in
+          {
+            crowdsec-update-hub = lib.mkIf (cfg.autoUpdateService) {
+              description = "Update the crowdsec hub index";
+              # for dns resolving
+              wants = [ "network-online.target" ];
+              after = [ "network-online.target" ];
+
+              serviceConfig = createServiceConfig {
+                Type = "oneshot";
+                ExecStart = [
+                  "${lib.getExe' cfg.package "cscli"} --warning hub update"
+                  "${lib.getExe' cfg.package "cscli"} --warning hub upgrade"
+                ];
+                ExecStartPost = "+systemctl reload crowdsec.service";
+              };
+            };
+
+            crowdsec-setup = {
+              description = "CrowdSec setup service";
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
+              before = [ "crowdsec.service" ];
+              # for dns resolving
+              after = [ "network-online.target" ];
+              serviceConfig = createServiceConfig {
+                Type = "oneshot";
+                ExecStart = lib.getExe setupScript;
+              };
+            };
+
+            crowdsec = {
+              description = "CrowdSec Security Engine";
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network-online.target" ];
+              after = [
+                "network-online.target"
+                "crowdsec-setup.service"
+              ];
+
+              serviceConfig =
+                let
+                  crowdsec = "${lib.getExe' cfg.package "crowdsec"}";
+                in
+                createServiceConfig {
+                  Type = "notify";
+                  RestartSec = 60;
+
+                  ProtectKernelLogs = false;
+
+                  ReadOnlyPaths = cfg.readOnlyPaths;
+                  SupplementaryGroups = cfg.extraGroups;
+
+                  ExecStartPre = "${crowdsec} -t -error";
+                  ExecStart = "${crowdsec} -info";
+                  ExecReload = [
+                    "${crowdsec} -t -error"
+                    "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID"
+                  ];
+
+                  ExecPaths = [ cfg.settings.config.config_paths.plugin_dir ];
+
+                  Restart = "always";
+                };
             };
           };
 
-          createFile = dstPath: content: {
-            name = dstPath;
-            value.f = {
-              user = cfg.user;
-              group = cfg.group;
-              argument = content;
+        tmpfiles.settings."10-crowdsec" =
+          let
+            toYaml = lib.generators.toYAML { };
+
+            createDirectory = dirPath: {
+              name = dirPath;
+              value.D = {
+                user = cfg.user;
+                group = cfg.group;
+              };
             };
-          };
 
-          createSymlink = src: dst: {
-            name = dst;
-            value."L+".argument = src;
-          };
+            createFile = dstPath: content: {
+              name = dstPath;
+              value.f = {
+                user = cfg.user;
+                group = cfg.group;
+                argument = content;
+              };
+            };
 
-          createEnumeratedFiles =
-            targetDir: attrList:
-            let
-              converter =
-                idx: attrList:
-                if attrList == [ ] then
-                  [ ]
-                else
-                  let
-                    dst_path = "${targetDir}/${toString idx}-nixos-generated.yaml";
+            createSymlink = src: dst: {
+              name = dst;
+              value."L+".argument = src;
+            };
 
-                    next_attr = builtins.head attrList;
-                    rest = builtins.tail attrList;
+            createEnumeratedFiles =
+              targetDir: attrList:
+              let
+                converter =
+                  idx: attrList:
+                  if attrList == [ ] then
+                    [ ]
+                  else
+                    let
+                      dst_path = "${targetDir}/${toString idx}-nixos-generated.yaml";
 
-                    entry = {
-                      name = dst_path;
-                      value.f = {
-                        user = cfg.user;
-                        group = cfg.group;
-                        argument = toYaml next_attr;
+                      next_attr = builtins.head attrList;
+                      rest = builtins.tail attrList;
+
+                      entry = {
+                        name = dst_path;
+                        value.f = {
+                          user = cfg.user;
+                          group = cfg.group;
+                          argument = toYaml next_attr;
+                        };
                       };
-                    };
-                  in
-                  [ entry ] ++ (converter (idx + 1) rest);
+                    in
+                    [ entry ] ++ (converter (idx + 1) rest);
 
-            in
-            converter 0 attrList;
+              in
+              converter 0 attrList;
 
-          linkNotificationPlugin = name: {
-            name = "${config_paths.plugin_dir}/notification-${name}";
-            value."L+".argument = "${cfg.package}/bin/notification-${name}";
-          };
+            linkNotificationPlugin = name: {
+              name = "${config_paths.plugin_dir}/notification-${name}";
+              value."L+".argument = "${cfg.package}/bin/notification-${name}";
+            };
 
-          directories = map createDirectory dirs;
+            directories = map createDirectory dirs;
 
-          files = [
-            (createFile cfg.settings.config.api.server.console_path (toYaml cfg.settings.console.configuration))
-            (createFile cfg.settings.config.api.server.profiles_path (
-              lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.profiles
-            ))
-            (createFile "${config_paths.config_dir}/config.yaml.local" (toYaml cfg.settings.config))
-            (createFile config_paths.simulation_path (toYaml cfg.settings.simulation))
-            (createFile "${cfg.settings.config.crowdsec_service.acquisition_dir}/0-nixos-generated.yaml" (
-              lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
-            ))
-            (createFile "${cfg.settings.config.api.server.console_path}" (
-              toYaml cfg.settings.console.configuration
-            ))
-          ];
+            files = [
+              (createFile cfg.settings.config.api.server.console_path (toYaml cfg.settings.console.configuration))
+              (createFile cfg.settings.config.api.server.profiles_path (
+                lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.profiles
+              ))
+              (createFile "${config_paths.config_dir}/config.yaml.local" (toYaml cfg.settings.config))
+              (createFile config_paths.simulation_path (toYaml cfg.settings.simulation))
+              (createFile "${cfg.settings.config.crowdsec_service.acquisition_dir}/0-nixos-generated.yaml" (
+                lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
+              ))
+              (createFile "${cfg.settings.config.api.server.console_path}" (
+                toYaml cfg.settings.console.configuration
+              ))
+            ];
 
-          notificationFiles = map linkNotificationPlugin [
-            "dummy"
-            "email"
-            "file"
-            "http"
-            "sentinel"
-            "slack"
-            "splunk"
-          ];
+            notificationFiles = map linkNotificationPlugin [
+              "dummy"
+              "email"
+              "file"
+              "http"
+              "sentinel"
+              "slack"
+              "splunk"
+            ];
 
-          enumeratedFiles = lib.lists.flatten [
-            (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
-            (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
-            (createEnumeratedFiles "${config_paths.config_dir}/parsers/s00-raw" cfg.settings.parsers.s00Raw)
-            (createEnumeratedFiles "${config_paths.config_dir}/parsers/s01-parse" cfg.settings.parsers.s01Parse)
-            (createEnumeratedFiles "${config_paths.config_dir}/parsers/s02-enrich" cfg.settings.parsers.s02Enrich)
-            (createEnumeratedFiles "${config_paths.config_dir}/postoverflows/s01-whitelist" cfg.settings.postOverflows.s01Whitelist)
-            (createEnumeratedFiles "${config_paths.config_dir}/contexts" cfg.settings.contexts)
-            (createEnumeratedFiles config_paths.notification_dir cfg.settings.notifications)
-          ];
+            enumeratedFiles = lib.lists.flatten [
+              (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
+              (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
+              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s00-raw" cfg.settings.parsers.s00Raw)
+              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s01-parse" cfg.settings.parsers.s01Parse)
+              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s02-enrich" cfg.settings.parsers.s02Enrich)
+              (createEnumeratedFiles "${config_paths.config_dir}/postoverflows/s01-whitelist" cfg.settings.postOverflows.s01Whitelist)
+              (createEnumeratedFiles "${config_paths.config_dir}/contexts" cfg.settings.contexts)
+              (createEnumeratedFiles config_paths.notification_dir cfg.settings.notifications)
+            ];
 
-          symlinks = [
-            (createSymlink "${cfg.package}/share/crowdsec/config/detect.yaml" "${config_paths.data_dir}/detect.yaml")
-            (createSymlink "${cfg.package}/share/crowdsec/config/config.yaml" "${config_paths.config_dir}/config.yaml")
-          ];
+            symlinks = [
+              (createSymlink "${cfg.package}/share/crowdsec/config/detect.yaml" "${config_paths.data_dir}/detect.yaml")
+              (createSymlink "${cfg.package}/share/crowdsec/config/config.yaml" "${config_paths.config_dir}/config.yaml")
+            ];
 
-          entries = directories ++ files ++ symlinks ++ enumeratedFiles ++ notificationFiles;
-        in
-        builtins.listToAttrs entries;
+            entries = directories ++ files ++ symlinks ++ enumeratedFiles ++ notificationFiles;
+          in
+          builtins.listToAttrs entries;
+      };
 
       users = {
         users.${cfg.user} = {
