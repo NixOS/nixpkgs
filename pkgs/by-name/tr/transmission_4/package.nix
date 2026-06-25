@@ -29,10 +29,8 @@
   libpthread-stubs,
   libayatana-appindicator,
   wrapGAppsHook4,
-  enableQt5 ? false,
-  enableQt6 ? false,
+  enableQt ? false,
   enableMac ? false,
-  qt5,
   qt6Packages,
   nixosTests,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -100,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_DAEMON" enableDaemon)
     (cmakeBool "ENABLE_GTK" enableGTK4)
     (cmakeBool "ENABLE_MAC" enableMac)
-    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "INSTALL_LIB" installLib)
     (cmakeBool "RUN_CLANG_TIDY" false)
   ]
@@ -132,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
   ''
-  + optionalString (stdenv.hostPlatform.isDarwin && (enableQt5 || enableQt6)) ''
+  + optionalString (stdenv.hostPlatform.isDarwin && enableQt) ''
     substituteInPlace qt/CMakeLists.txt \
       --replace-fail \
         'transmission::qt_impl)' \
@@ -145,8 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ optionals enableGTK4 [ wrapGAppsHook4 ]
-  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
+  ++ optionals enableQt [ qt6Packages.wrapQtAppsHook ]
   ++ optionals enableMac [
     ibtool
     actool
@@ -171,14 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     utf8cpp
     zlib
   ]
-  ++ optionals enableQt5 (
-    with qt5;
-    [
-      qttools
-      qtbase
-    ]
-  )
-  ++ optionals enableQt6 (
+  ++ optionals enableQt (
     with qt6Packages;
     [
       qttools
@@ -230,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, easy and free BitTorrent client";
     mainProgram =
-      if (enableQt5 || enableQt6) then
+      if enableQt then
         "transmission-qt"
       else if enableGTK4 then
         "transmission-gtk"
