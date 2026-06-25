@@ -41,7 +41,6 @@ in
       ]
       (config: config.services.crowdsec.settings.capi.credentialsFile)
     )
-
     (lib.mkChangedOptionModule
       [ "services" "crowdsec" "settings" "lapi" "credentialsFile" ]
       [
@@ -663,6 +662,7 @@ in
         config_paths.plugin_dir
         cfg.settings.config.crowdsec_service.acquisition_dir
         "${config_paths.config_dir}/console"
+        "${config_paths.config_dir}/scenarios"
       ];
 
       setupScript = pkgs.writeShellApplication {
@@ -681,6 +681,7 @@ in
               ) "cscli ${lib.toLower x} install ${argString cfg.hub.${x}}";
           in
           ''
+
             echo "Updating hub..."
 
             cscli hub update
@@ -808,6 +809,9 @@ in
               after = [ "network-online.target" ];
               serviceConfig = createServiceConfig {
                 Type = "oneshot";
+                # the notification plugins are owned by root after copying them with tmpfiles.
+                # It's not possible to copy files and change the mode of the files at the same time
+                ExecStartPre = "+${lib.getExe' pkgs.coreutils "chown"} -R ${cfg.user}:${cfg.group} ${config_paths.plugin_dir}";
                 ExecStart = lib.getExe setupScript;
               };
             };
@@ -874,7 +878,7 @@ in
               value."L+".argument = src;
             };
 
-            createEnumeratedFiles =
+            createEnumeratedSymlinks =
               targetDir: attrList:
               let
                 converter =
@@ -890,11 +894,7 @@ in
 
                       entry = {
                         name = dst_path;
-                        value.f = {
-                          user = cfg.user;
-                          group = cfg.group;
-                          argument = toYaml next_attr;
-                        };
+                        value."L+".argument = toString (yaml.generate "${toString idx}-nixos-generated.yaml" next_attr);
                       };
                     in
                     [ entry ] ++ (converter (idx + 1) rest);
@@ -904,8 +904,10 @@ in
 
             linkNotificationPlugin = name: {
               name = "${config_paths.plugin_dir}/notification-${name}";
-              value."L+".argument = "${cfg.package}/bin/notification-${name}";
-            };
+              value."C+".argument = "${cfg.package}/bin/notification-${name}";
+            }
+
+            ;
 
             directories = map createDirectory dirs;
 
@@ -914,7 +916,6 @@ in
               (createFile cfg.settings.config.api.server.profiles_path (
                 lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.profiles
               ))
-              (createFile "${config_paths.config_dir}/config.yaml.local" (toYaml cfg.settings.config))
               (createFile config_paths.simulation_path (toYaml cfg.settings.simulation))
               (createFile "${cfg.settings.config.crowdsec_service.acquisition_dir}/0-nixos-generated.yaml" (
                 lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
@@ -935,19 +936,20 @@ in
             ];
 
             enumeratedFiles = lib.lists.flatten [
-              (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
-              (createEnumeratedFiles "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
-              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s00-raw" cfg.settings.parsers.s00Raw)
-              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s01-parse" cfg.settings.parsers.s01Parse)
-              (createEnumeratedFiles "${config_paths.config_dir}/parsers/s02-enrich" cfg.settings.parsers.s02Enrich)
-              (createEnumeratedFiles "${config_paths.config_dir}/postoverflows/s01-whitelist" cfg.settings.postOverflows.s01Whitelist)
-              (createEnumeratedFiles "${config_paths.config_dir}/contexts" cfg.settings.contexts)
-              (createEnumeratedFiles config_paths.notification_dir cfg.settings.notifications)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/parsers/s00-raw" cfg.settings.parsers.s00Raw)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/parsers/s01-parse" cfg.settings.parsers.s01Parse)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/parsers/s02-enrich" cfg.settings.parsers.s02Enrich)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/postoverflows/s01-whitelist" cfg.settings.postOverflows.s01Whitelist)
+              (createEnumeratedSymlinks "${config_paths.config_dir}/contexts" cfg.settings.contexts)
+              (createEnumeratedSymlinks config_paths.notification_dir cfg.settings.notifications)
             ];
 
             symlinks = [
               (createSymlink "${cfg.package}/share/crowdsec/config/detect.yaml" "${config_paths.data_dir}/detect.yaml")
               (createSymlink "${cfg.package}/share/crowdsec/config/config.yaml" "${config_paths.config_dir}/config.yaml")
+
+              (createSymlink (toString (yaml.generate "config.yaml" cfg.settings.config)) "${config_paths.config_dir}/config.yaml.local")
             ];
 
             entries = directories ++ files ++ symlinks ++ enumeratedFiles ++ notificationFiles;
