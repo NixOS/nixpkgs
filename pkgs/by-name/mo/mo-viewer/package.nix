@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mo-viewer";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "mo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/PiMYllj0l3XwIkqT/sc7U/vGXdNmTD8RowZWe9ZDR8=";
+    hash = "sha256-/dUAz55hsDYV+1rgNN52rdO798SCRyIyHXrL/ZGTwmY=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalFrontendAttrs: {
