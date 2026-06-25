@@ -90,7 +90,6 @@ let
       (
         [
           "nrfutil"
-          "nrfutil-completion"
         ]
         ++ extensions
       );
