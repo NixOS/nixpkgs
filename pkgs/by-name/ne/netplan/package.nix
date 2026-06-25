@@ -9,67 +9,93 @@
   python3,
   libuuid,
   bash-completion,
+  meson,
+  ninja,
+  cmake,
+  iproute2,
+  makeWrapper,
   lib,
+  nixosTests,
 }:
 
+let
+  pythonenv = python3.withPackages (
+    p: with p; [
+      pyyaml
+      netifaces
+      dbus-python
+      rich
+      cffi
+      setuptools
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netplan";
-  version = "0.106.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = finalAttrs.version;
-    hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
+    hash = "sha256-JbwBnv+vaSyeFd8FKAgLeYNBELAsloUIPwd1ed2ogaI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
+    pythonenv
     pkg-config
-    glib
     pandoc
+    meson
+    ninja
+    cmake
+    makeWrapper
   ];
 
   buildInputs = [
+    pythonenv
     systemd
     glib
     libyaml
-    (python3.withPackages (
-      p: with p; [
-        pyyaml
-        netifaces
-        dbus-python
-        rich
-      ]
-    ))
     libuuid
     bash-completion
+    iproute2
   ];
 
+  env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMGENERATORDIR = "${placeholder "out"}/lib/systemd/system-generators";
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+
   postPatch = ''
-    substituteInPlace netplan/libnetplan.py \
-      --replace "/lib/netplan/generate" "$out/lib/netplan/generate" \
-      --replace "ctypes.util.find_library('netplan')" "\"$out/lib/libnetplan.so\""
+    for mesonBooleanOption in "testing" "unit_testing"; do
+      substituteInPlace meson_options.txt --replace-fail \
+        "option('$mesonBooleanOption', type: 'boolean', value: true)" \
+        "option('$mesonBooleanOption', type: 'boolean', value: false)"
+    done
+    substituteInPlace netplan-configure.service \
+      --replace-fail "/usr/libexec/netplan/" "${placeholder "out"}/libexec/netplan/"
+    substituteInPlace netplan_cli/cli/utils.py \
+      --replace-fail "/usr/libexec/netplan/" "${placeholder "out"}/libexec/netplan/"
+  '';
 
-    substituteInPlace Makefile \
-      --replace 'SYSTEMD_GENERATOR_DIR=' 'SYSTEMD_GENERATOR_DIR ?= ' \
-      --replace 'SYSTEMD_UNIT_DIR=' 'SYSTEMD_UNIT_DIR ?= ' \
-      --replace 'BASH_COMPLETIONS_DIR=' 'BASH_COMPLETIONS_DIR ?= ' \
-      --replace 'pkg-config' '$(PKG_CONFIG)'
-
-    # from upstream https://github.com/canonical/netplan/blob/ee0d5df7b1dfbc3197865f02c724204b955e0e58/rpm/netplan.spec#L81
-    sed -e "s/-Werror//g" -i Makefile
-
-    substituteInPlace netplan/cli/utils.py \
-      --replace-fail "/usr/libexec/netplan/generate" "${placeholder "out"}/lib/netplan/generate"
+  # Wrap the systemd generator to force its argv0 value, ensuring it detects itself being invoked as such
+  # As netplan installs a systemd generator to function, it requires `systemd.packages = [ pkgs.netplan ];` to make systemd use it
+  postFixup = ''
+    wrapProgram $out/bin/netplan \
+      --prefix PYTHONPATH : "$out/${pythonenv.sitePackages}:${pythonenv}/${pythonenv.sitePackages}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib" \
+      --inherit-argv0
+    wrapProgram $out/lib/systemd/system-generators/netplan \
+      --argv0 /etc/systemd/system-generators/netplan
   '';
 
   makeFlags = [
-    "PREFIX="
     "DESTDIR=$(out)"
-    "SYSTEMD_GENERATOR_DIR=lib/systemd/system-generators/"
-    "SYSTEMD_UNIT_DIR=lib/systemd/units/"
-    "BASH_COMPLETIONS_DIR=share/bash-completion/completions"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) netplan;
+  };
 
   meta = {
     description = "Backend-agnostic network configuration in YAML";
