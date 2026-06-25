@@ -732,6 +732,8 @@ self: super: with self; {
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
 
+  aliyun-log-fastpb = callPackage ../development/python-modules/aliyun-log-fastpb { };
+
   aliyun-python-sdk-alimt = callPackage ../development/python-modules/aliyun-python-sdk-alimt { };
 
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
