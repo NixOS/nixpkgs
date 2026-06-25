@@ -3650,6 +3650,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cole-nvim = buildVimPlugin {
+    pname = "cole.nvim";
+    version = "0-unstable-2026-05-29";
+    src = fetchFromGitHub {
+      owner = "thekylehuang";
+      repo = "cole.nvim";
+      rev = "1920cfa31c717e1f73a5a6e5a2c02a44b5faeb5c";
+      hash = "sha256-k153XzTkkBm1qF6iKK8fzmAHIPnoIbXEAxAOQIoAPo0=";
+    };
+    meta.homepage = "https://github.com/thekylehuang/cole.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   colibri-vim = buildVimPlugin {
     pname = "colibri.vim";
     version = "0-unstable-2019-06-15";
