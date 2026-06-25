@@ -710,16 +710,6 @@ self: super: with self; {
 
   alibabacloud-ram20150501 = callPackage ../development/python-modules/alibabacloud-ram20150501 { };
 
-  alibabacloud-rds20140815 = callPackage ../development/python-modules/alibabacloud-rds20140815 { };
-
-  alibabacloud-rds20140815 = callPackage ../development/python-modules/alibabacloud-rds20140815 { };
-
-  alibabacloud-gateway-sls = callPackage ../development/python-modules/alibabacloud-gateway-sls { };
-
-  alibabacloud-gateway-sls-util =
-    callPackage ../development/python-modules/alibabacloud-gateway-sls-util
-      { };
-
   alibabacloud-sas20181203 = callPackage ../development/python-modules/alibabacloud-sas20181203 { };
 
   alibabacloud-sts20150401 = callPackage ../development/python-modules/alibabacloud-sts20150401 { };
