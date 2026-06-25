@@ -3990,6 +3990,8 @@ self: super: with self; {
 
   dinghy = callPackage ../development/python-modules/dinghy { };
 
+  dingtalk-stream = callPackage ../development/python-modules/dingtalk-stream { };
+
   dingz = callPackage ../development/python-modules/dingz { };
 
   dio-chacon-wifi-api = callPackage ../development/python-modules/dio-chacon-wifi-api { };
