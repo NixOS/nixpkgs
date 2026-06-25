@@ -82,6 +82,13 @@ let
           "internal/pkg/util/env/clean.go" = [
             "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ];
+          # Since 4.5.0, SingularityCE locates helper binaries (mksquashfs,
+          # unsquashfs, ...) via the "root search path" / "user search path"
+          # directives instead of $PATH, so the wrapped PATH is ignored.
+          # Inject the Nixpkgs binary paths into their defaults.
+          "pkg/util/singularityconf/config.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
         };
       };
 
