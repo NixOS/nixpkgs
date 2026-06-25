@@ -225,13 +225,6 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       preCheck = ''
-        # Replace hard-coded dependencies on /bin
-        sed -i 's|/bin/date|${lib.getExe' coreutils "date"}|' testsuite/date/date-works-1
-
-        # wget tests rely on network access, use simple-http-server instead
-        simple-http-server --index &
-        sed -i 's|http://www.google.com|http://127.0.0.1:8000|' testsuite/wget/*
-
         skip-files() {
           for file in "$@"; do
             echo "echo SKIPPED $file; exit 0" > $file
@@ -251,6 +244,13 @@ stdenv.mkDerivation (finalAttrs: {
         # Fix/skip tests
 
         pushd testsuite
+
+        # Replace hard-coded dependencies on /bin
+        sed -i 's|/bin/date|${lib.getExe' coreutils "date"}|' date/date-works-1
+
+        # wget tests rely on network access, use simple-http-server instead
+        simple-http-server --index &
+        sed -i 's|http://www.google.com|http://127.0.0.1:8000|' wget/*
 
         # /usr/bin doesn't exist in the sandbox, so use /nix/store instead
         sed -i "s|/usr/bin|/nix/store|" cpio.tests
