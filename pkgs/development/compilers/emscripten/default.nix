@@ -209,7 +209,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       qknight
-      raitobezarius
       willcohen
     ];
     license = lib.licenses.ncsa;
