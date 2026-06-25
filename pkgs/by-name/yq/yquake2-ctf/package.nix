@@ -15,7 +15,7 @@ let
     title = "ctf";
     version = "1.07";
     description = "'Capture The Flag' for Yamagi Quake II";
-    sha256 = "0i9bwhjvq6yhalrsbzjambh27fdzrzgswqz3jgfn9qw6k1kjvlin";
+    hash = "sha256-NtItZ5iG42Tdk+Njrt/Pv7kj4KpK/qUzVdAbvCXkK0U=";
   };
 
   gameDrv = stdenv.mkDerivation rec {
@@ -28,10 +28,10 @@ let
     pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
-      inherit (game) sha256;
+      inherit (game) hash;
       owner = "yquake2";
       repo = id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      tag = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     };
 
     env =

@@ -15,7 +15,7 @@ let
     title = "the-reckoning";
     version = "2.08";
     description = "'The Reckoning' for Yamagi Quake II";
-    sha256 = "1wp9fg1q8nly2r9hh4394r1h4dxyni3lvdy7g419cz5s8hhn5msr";
+    hash = "sha256-WddiIUS6fJYCece3TUe0vjcCQyZpEAhTFp5ahMNz6fI=";
   };
 
   gameDrv = stdenv.mkDerivation rec {
@@ -28,10 +28,10 @@ let
     pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
-      inherit (game) sha256;
+      inherit (game) hash;
       owner = "yquake2";
       repo = id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      tag = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     };
 
     env =

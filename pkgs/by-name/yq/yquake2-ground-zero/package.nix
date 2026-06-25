@@ -15,7 +15,7 @@ let
     title = "ground-zero";
     version = "2.07";
     description = "'Ground Zero' for Yamagi Quake II";
-    sha256 = "1m2r4vgfdxpsi0lkf32liwf1433mdhhmjxiicjwzqjlkncjyfcb1";
+    hash = "sha256-YTHnJbOTSvy5ZDF2WSFsdQwSHI9UDDcpiPr25t4mWdQ=";
   };
 
   gameDrv = stdenv.mkDerivation rec {
@@ -28,10 +28,10 @@ let
     pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
-      inherit (game) sha256;
+      inherit (game) hash;
       owner = "yquake2";
       repo = id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      tag = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     };
 
     env =

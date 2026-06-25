@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "yquake2";
     repo = "yquake2";
-    rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    tag = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-XD0Fnx3TZwZUvjLOpzM5oWoIQFykDuBOddQXudkiyB0=";
   };
 

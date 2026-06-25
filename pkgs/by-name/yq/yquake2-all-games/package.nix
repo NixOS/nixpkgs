@@ -16,21 +16,21 @@ let
       title = "ctf";
       version = "1.07";
       description = "'Capture The Flag' for Yamagi Quake II";
-      sha256 = "0i9bwhjvq6yhalrsbzjambh27fdzrzgswqz3jgfn9qw6k1kjvlin";
+      hash = "sha256-NtItZ5iG42Tdk+Njrt/Pv7kj4KpK/qUzVdAbvCXkK0U=";
     }
     {
       id = "rogue";
       title = "ground-zero";
       version = "2.07";
       description = "'Ground Zero' for Yamagi Quake II";
-      sha256 = "1m2r4vgfdxpsi0lkf32liwf1433mdhhmjxiicjwzqjlkncjyfcb1";
+      hash = "sha256-YTHnJbOTSvy5ZDF2WSFsdQwSHI9UDDcpiPr25t4mWdQ=";
     }
     {
       id = "xatrix";
       title = "the-reckoning";
       version = "2.08";
       description = "'The Reckoning' for Yamagi Quake II";
-      sha256 = "1wp9fg1q8nly2r9hh4394r1h4dxyni3lvdy7g419cz5s8hhn5msr";
+      hash = "sha256-WddiIUS6fJYCece3TUe0vjcCQyZpEAhTFp5ahMNz6fI=";
     }
   ];
 
@@ -42,15 +42,15 @@ let
         version
         description
         title
-        sha256
+        hash
         ;
       pname = "yquake2-${title}";
 
       src = fetchFromGitHub {
-        inherit sha256;
+        inherit hash;
         owner = "yquake2";
         repo = id;
-        rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+        tag = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
       };
 
       env =
