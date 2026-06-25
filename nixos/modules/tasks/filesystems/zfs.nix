@@ -18,6 +18,7 @@ let
   cfgScrub = config.services.zfs.autoScrub;
   cfgTrim = config.services.zfs.trim;
   cfgZED = config.services.zfs.zed;
+  cfgSBA = config.services.zfs.snapshotBeforeActivation;
 
   selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
   clevisDatasets = lib.attrNames (
@@ -262,6 +263,20 @@ let
           lib.err "this value is" (toString v);
     } "=";
   } cfgZED.settings;
+
+  datasetsSBA =
+    if cfgSBA.datasets != null then
+      cfgSBA.datasets
+    else
+      (lib.listToAttrs (
+        map (
+          n:
+          lib.nameValuePair n {
+            name = n;
+            recursive = null;
+          }
+        ) allPools
+      ));
 in
 
 {
@@ -657,6 +672,94 @@ in
           {manpage}`zed(8)`
           for details on ZED and the scripts in /etc/zfs/zed.d to find the possible variables
         '';
+      };
+    };
+
+    services.zfs.snapshotBeforeActivation = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Take a snapshot of all datasets before activation.
+
+          If taking a snapshot failed, the activation will be aborted.
+        '';
+        default = false;
+      };
+
+      template = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          Bash command to generate the snapshot name. $1 is the path to the new generation.
+
+          The default will produce a snapshot name like so:
+
+          ```text
+          pre-260625T071305-96vzsj6qmcpk4jhaqp24d60kvif92bai-nixos-system-hostname-26.11pre
+          ```
+        '';
+        default = ''pre-$(date --utc '+%y%m%dT%H%M%S')-$(basename "$1")'';
+      };
+
+      datasets = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.attrsOf (
+            lib.types.submodule (
+              { name, ... }:
+              {
+                options = {
+                  name = lib.mkOption {
+                    type = lib.types.str;
+                    description = ''
+                      Dataset name.
+
+                      By default, the attr name.
+                    '';
+                    example = "root/home";
+                    default = name;
+                  };
+
+                  recursive = lib.mkOption {
+                    type = lib.types.nullOr lib.types.bool;
+                    description = ''
+                      Sets whether or not to take a recursive snapshot of this dataset.
+
+                      If set to null, the default, then takes the value from the global
+                      `services.zfs.snapshotBeforeActivation.recursive` option.
+                    '';
+                    default = null;
+                  };
+                };
+              }
+            )
+          )
+        );
+        default = null;
+        example = {
+          "root/home" = { };
+          "root/var" = {
+            recursive = true;
+          };
+        };
+        description = ''
+          Defines all datasets to take a snapshot of.
+
+          If set to `null`, the default, uses all identified pools.
+
+          The snapshots are not recursive unless specificed in the `services.zfs.snapshotBeforeActivation.recursive` option,
+          which can also be overriden per dataset.
+        '';
+      };
+
+      recursive = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Sets whether or not to take a recursive snapshot of the datasets.
+
+          This sets the default and each dataset can override this value with the
+          `services.zfs.snapshotBeforeActivation.datasets.<name>.recursive` option.
+        '';
+        default = false;
+        example = true;
       };
     };
   };
@@ -1107,6 +1210,26 @@ in
         Persistent = lib.mkDefault "yes";
         RandomizedDelaySec = cfgTrim.randomizedDelaySec;
       };
+    })
+
+    (lib.mkIf (cfgZfs.enabled && cfgSBA.enable) {
+      system.preSwitchChecks."shb-zfs-snapshot" = (
+        ''
+          snapshot="${cfgSBA.template}"
+        ''
+        + (lib.concatMapStringsSep "\n" (
+          ds:
+          let
+            recursiveFlag = lib.optionalString (
+              if ds.recursive != null then ds.recursive else cfgSBA.recursive
+            ) "-r";
+          in
+          ''
+            echo "Taking ZFS snapshot {ds}@$snapshot"
+            zfs snapshot ${recursiveFlag} ${ds.name}@"$snapshot"
+          ''
+        ) (lib.attrValues datasetsSBA))
+      );
     })
   ];
 }
