@@ -328,6 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       balsoft
+      kilyanni
     ];
     platforms = [ "x86_64-linux" ];
   };
