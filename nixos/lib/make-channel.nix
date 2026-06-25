@@ -18,7 +18,10 @@ pkgs.releaseTools.makeSourceTarball {
   officialRelease = false; # FIXME: fix this in makeSourceTarball
   inherit version versionSuffix;
 
-  buildInputs = [ pkgs.nix ];
+  buildInputs = with pkgs; [
+    nix
+    zstd
+  ];
 
   distPhase = ''
     rm -rf .git
@@ -33,5 +36,10 @@ pkgs.releaseTools.makeSourceTarball {
     cd ..
     chmod -R u+w $releaseName
     tar cfJ $out/tarballs/$releaseName.tar.xz $releaseName
+    tar \
+      --create \
+      --file="$out/tarballs/$releaseName.tar.zst" \
+      --use-compress-program="zstd -19 -T$NIX_BUILD_CORES" \
+      $releaseName
   '';
 }
