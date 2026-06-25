@@ -3,19 +3,22 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "calmjs-types";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "calmjs.types";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EGWYv9mx3RPqs9dnB5t3Bu3hiujL2y/XxyMP7JkjjAQ=";
     extension = "zip";
   };
+
+  build-system = [ setuptools ];
 
   checkInputs = [ pytestCheckHook ];
 
@@ -27,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})
