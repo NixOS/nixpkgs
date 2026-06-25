@@ -846,6 +846,16 @@ with haskellLib;
   xmlgen = dontCheck super.xmlgen;
   wai-cors = dontCheck super.wai-cors;
 
+  # Apply patch from 3.2.1 (which we can't use yet due to mighttpd2)
+  # for compat with http-types >= 0.12.5
+  wai-app-file-cgi = appendPatches [
+    (pkgs.fetchpatch {
+      name = "wai-app-file-cgi-http-types-0.12.5.patch";
+      url = "https://github.com/kazu-yamamoto/wai-app-file-cgi/commit/45d749338c4125335ad8a605d6fa81553e81aad8.patch";
+      hash = "sha256-gchBTsGohgfJ+gJxE1VwgEQfsSLMuSUXJw1xAyNRqjc=";
+    })
+  ] super.wai-app-file-cgi;
+
   # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = appendPatch (pkgs.fetchpatch {
