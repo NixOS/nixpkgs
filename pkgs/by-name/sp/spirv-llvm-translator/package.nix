@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  srcOnly,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -84,7 +85,7 @@ stdenv.mkDerivation {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${srcOnly spirv-headers}"
   ]
   ++ lib.optional (
     lib.toInt llvmMajor >= 19
