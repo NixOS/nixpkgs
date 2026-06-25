@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yCY9ltm21cD3NnC2hDZ3O+2UZYgop4TLHC0djPF3Lo0=";
+    hash = "sha256-90e+f95RIv2FZUFrfr6e7MhsQ8Xnve+Ie+uPyc87FRE=";
   };
 
   postPatch = ''
