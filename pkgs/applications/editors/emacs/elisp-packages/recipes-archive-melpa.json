@@ -19702,8 +19702,8 @@
   "repo": "armindarvish/consult-gh",
   "unstable": {
    "version": [
-    20260623,
-    1820
+    20260625,
+    257
    ],
    "deps": [
     "consult",
@@ -19711,8 +19711,8 @@
     "ox-gfm",
     "yaml"
    ],
-   "commit": "7b0fba0dc81a446c95cd39fa2a6adcd39501df9d",
-   "sha256": "18bmk52z2fx23mnbg8c8cv78fp68l958j2zkhk7wxcip7zzjnr7q"
+   "commit": "7042619362cd47314d3d0f706fa9cac5bf07950c",
+   "sha256": "0xa7z2zhz44i2fhgiag3a96jkhz71z294qfnphqjxw96cqcq3mb7"
   },
   "stable": {
    "version": [
