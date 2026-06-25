@@ -8897,13 +8897,10 @@ with pkgs;
 
   hachoir = with python3Packages; toPythonApplication hachoir;
 
-  hydrogen-web-unwrapped =
-    callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix
-      { };
-
-  hydrogen-web = callPackage ../applications/networking/instant-messengers/hydrogen-web/wrapper.nix {
-    conf = config.hydrogen-web.conf or { };
-  };
+  inherit (callPackage ../applications/networking/instant-messengers/hydrogen-web { })
+    hydrogen-web
+    hydrogen-web-unwrapped
+    ;
 
   hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
   hledger-iadd = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-iadd;
