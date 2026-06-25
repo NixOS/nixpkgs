@@ -18298,6 +18298,8 @@ self: super: with self; {
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
+  slackify-markdown = callPackage ../development/python-modules/slackify-markdown { };
+
   slapd = callPackage ../development/python-modules/slapd { };
 
   sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
