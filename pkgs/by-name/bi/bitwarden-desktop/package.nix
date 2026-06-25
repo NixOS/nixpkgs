@@ -21,19 +21,18 @@
 }:
 
 let
-  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_39;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.5.0";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "desktop-v${version}";
-    hash = "sha256-R00wt5W4kKmFIODEaGoUqDwfGyHH/2PpiRaC8Gq3d88=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-JIIis3wW0cU33ovRQfJi3HlB2YdLZ5IPvueq1dGFbas=";
   };
 
   patches = [
@@ -49,10 +48,6 @@ buildNpmPackage rec {
   ];
 
   postPatch = ''
-    # https://github.com/bitwarden/clients/pull/20480
-    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
-      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
-
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -78,18 +73,18 @@ buildNpmPackage rec {
   ];
 
   npmWorkspace = "apps/desktop";
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-xmb3zwE8/nWpRlUOgTz2UhNRaUA8KW9sHQHA97pjjfg=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-mvFLZwWwIv4PbUwfTWvwZ9JyRoHJSwAA0cT4RXD0/YU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       patches
       ;
-    hash = "sha256-phvk4t1JKfSYGzm/vm1rT8A0fACHJF/C0WiZ2Lk3cV0=";
+    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -169,7 +164,7 @@ buildNpmPackage rec {
   ];
 
   preCheck = ''
-    pushd ${cargoRoot}
+    pushd ${finalAttrs.cargoRoot}
     cargoCheckType=release
     HOME=$(mktemp -d)
   '';
@@ -223,7 +218,7 @@ buildNpmPackage rec {
       name = "bitwarden";
       exec = "bitwarden %U";
       inherit icon;
-      comment = description;
+      comment = finalAttrs.meta.description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/bitwarden" ];
@@ -240,11 +235,14 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    inherit description;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      tree-sapii
+      amarshall
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -253,4 +251,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "bitwarden";
   };
-}
+})
