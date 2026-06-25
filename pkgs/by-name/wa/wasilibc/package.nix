@@ -1,6 +1,6 @@
 {
   stdenvNoLibc,
-  fetchFromGitHub,
+  buildPackages,
   lib,
   firefox-unwrapped,
   firefox-esr-unwrapped,
@@ -11,7 +11,10 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
   version = "27";
 
-  src = fetchFromGitHub {
+  # following evaluation leads to an infinte recursion, if fetchFromGutHub
+  # is used instead of buildPackages.fetchFromGitHub:
+  # nix eval --impure --expr '(import ./. { overlays = [ (_: prev: { fetchgit = prev.fetchgit.override { cacert = prev.hello; }; }) ]; }).pkgs.firefox'
+  src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
     tag = "wasi-sdk-${finalAttrs.version}";
