@@ -104,6 +104,15 @@
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
   ],
+  "module-services-pterodactyl": [
+    "index.html#module-services-pterodactyl"
+  ],
+  "module-services-pterodactyl-basic-usage": [
+    "index.html#module-services-pterodactyl-basic-usage"
+  ],
+  "module-services-pterodactyl-cli": [
+    "index.html#module-services-pterodactyl-cli"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
