@@ -58,6 +58,7 @@ buildPythonPackage (finalAttrs: {
     "test_pull_subscribe_limits"
     "test_stream_management"
     "test_subscribe_no_echo"
+    "test_rtt"
     # Tests fail on hydra, often Time-out
     "test_subscribe_iterate_next_msg"
     "test_ordered_consumer_larger_streams"
