@@ -672,7 +672,7 @@ with haskellLib;
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-PoO1vAUVZsHHFAusoxBJeSW4y9tn3/kKXFDGzr8hZh4=";
+        sha256 = "sha256-VB0IC2cT2FFwZcE5P/epIHMCpYeZrG8TjdC+o2zl5vc=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
@@ -687,6 +687,8 @@ with haskellLib;
         # TODO(@sternenseemann): submit upstreamable patch resolving this
         # (this should be possible by also taking PREFIX into account).
         ./patches/git-annex-no-usr-prefix.patch
+        # Fix build with http-types >= 0.12.5, will be part of next release
+        ./patches/git-annex-http-types-0.12.5.patch
       ];
 
       postPatch = ''
