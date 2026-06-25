@@ -31257,6 +31257,12 @@
     github = "zuzuleinen";
     githubId = 944919;
   };
+  zwartemees = {
+    email = "zwartemees@gmail.com";
+    name = "Mees";
+    github = "zwartemees";
+    githubId = 60814194;
+  };
   zx2c4 = {
     email = "Jason@zx2c4.com";
     github = "zx2c4";
