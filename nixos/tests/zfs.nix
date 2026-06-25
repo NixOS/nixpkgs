@@ -314,4 +314,157 @@ in
           exit(1)
       '';
   };
+
+  snapshot-before-activation = runTest {
+    name = "snapshot-before-activation";
+    nodes = {
+      machine =
+        { pkgs, lib, ... }:
+        {
+          networking.hostId = "deadbeef";
+          boot.supportedFilesystems = [ "zfs" ];
+
+          virtualisation = {
+            emptyDiskImages = [
+              512
+              512
+            ];
+          };
+
+          boot.zfs.forceImportRoot = lib.mkDefault false;
+
+          systemd.services."zfs-zpool-create" = {
+            unitConfig.DefaultDependencies = false;
+            after = [ "systemd-modules-load.service" ];
+            requiredBy = [
+              "zfs-import-root.service"
+              "zfs-import-data.service"
+              "zfs-mount.service"
+            ];
+            before = [
+              "zfs-import-root.service"
+              "zfs-import-data.service"
+              "zfs-mount.service"
+            ];
+            script = ''
+              if [ ! -f /var/done ]; then
+                ${pkgs.zfs}/bin/zpool create -m none -O acltype=posixacl root /dev/vdb
+                ${pkgs.zfs}/bin/zpool create -m none -O acltype=posixacl data /dev/vdc
+                ${pkgs.zfs}/bin/zfs create root/one
+                ${pkgs.zfs}/bin/zfs create root/two
+                ${pkgs.zfs}/bin/zfs create data/one
+                ${pkgs.zfs}/bin/zfs create data/two
+                sync
+              fi
+              touch /var/done
+            '';
+          };
+
+          boot.zfs.extraPools = [
+            "root"
+            "data"
+          ];
+
+          services.zfs.snapshotBeforeActivation = {
+            enable = true;
+            recursive = true;
+          };
+
+          specialisation = {
+            all.configuration = { };
+            rootOnly.configuration = {
+              services.zfs.snapshotBeforeActivation = {
+                enable = true;
+                datasets = {
+                  "root" = { };
+                };
+                recursive = true;
+              };
+            };
+            dataNotRecursive.configuration = {
+              services.zfs.snapshotBeforeActivation = {
+                enable = true;
+                datasets = {
+                  "root" = { };
+                  "data" = {
+                    recursive = false;
+                  };
+                };
+                recursive = true;
+              };
+            };
+            fail.configuration = {
+              # A plus sign is not allowed as the snapshot name so it will make it fail.
+              services.zfs.snapshotBeforeActivation.template = "+";
+            };
+          };
+        };
+    };
+
+    testScript =
+      { nodes, ... }:
+      let
+        specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
+        switch = name: "${specialisations}/${name}/bin/switch-to-configuration test";
+      in
+      ''
+        def assert_count_snapshots(name, count):
+            out = machine.succeed(f"zfs list -Ht snapshot {name}")
+            print(out)
+            got = len(out.splitlines())
+            if count != got:
+                raise Exception(f"Expected {count} dataset, got {got}")
+
+        start_all()
+        machine.wait_for_unit("default.target")
+
+        with subtest("no snapshot yet"):
+            print(machine.succeed("zpool list"))
+            print(machine.succeed("zfs list"))
+            assert_count_snapshots("root", 0)
+            assert_count_snapshots("root/one", 0)
+            assert_count_snapshots("root/two", 0)
+            assert_count_snapshots("data", 0)
+            assert_count_snapshots("data/one", 0)
+            assert_count_snapshots("data/two", 0)
+
+        machine.succeed("${switch "all"}")
+
+        with subtest("snapshot created for all"):
+            print(machine.succeed("zpool list"))
+            print(machine.succeed("zfs list"))
+            assert_count_snapshots("root", 1)
+            assert_count_snapshots("root/one", 1)
+            assert_count_snapshots("root/two", 1)
+            assert_count_snapshots("data", 1)
+            assert_count_snapshots("data/one", 1)
+            assert_count_snapshots("data/two", 1)
+
+        machine.succeed("${switch "rootOnly"}")
+
+        with subtest("snapshot created for root only"):
+            print(machine.succeed("zpool list"))
+            print(machine.succeed("zfs list"))
+            assert_count_snapshots("root", 2)
+            assert_count_snapshots("root/one", 2)
+            assert_count_snapshots("root/two", 2)
+            assert_count_snapshots("data", 1)
+            assert_count_snapshots("data/one", 1)
+            assert_count_snapshots("data/two", 1)
+
+        machine.succeed("${switch "dataNotRecursive"}")
+
+        with subtest("snapshot created for data not recursive"):
+            print(machine.succeed("zpool list"))
+            print(machine.succeed("zfs list"))
+            assert_count_snapshots("root", 3)
+            assert_count_snapshots("root/one", 3)
+            assert_count_snapshots("root/two", 3)
+            assert_count_snapshots("data", 2)
+            assert_count_snapshots("data/one", 1)
+            assert_count_snapshots("data/two", 1)
+
+        machine.fail("${switch "fail"}")
+      '';
+  };
 }
