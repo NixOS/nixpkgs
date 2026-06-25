@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
   version = "7.10.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
@@ -70,9 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gfortran
+    mpi
     pkg-config
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
     blas
