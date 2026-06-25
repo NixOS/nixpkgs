@@ -1781,6 +1781,7 @@
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/pihole-web.nix
   ./services/web-apps/pixelfed.nix
+  ./services/web-apps/plane.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/porn-vault/default.nix
