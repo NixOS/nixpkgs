@@ -16,6 +16,11 @@ let
   llvmMajor = lib.versions.major llvm.version;
 
   versions = {
+    "22" = rec {
+      version = "22.1.3";
+      rev = "v${version}";
+      hash = "sha256-u/OytBH9LgAyGF9PX+5lmAbGPQ7iVv52w8mwQ+6fi/s=";
+    };
     "21" = rec {
       version = "21.1.0";
       rev = "v${version}";
