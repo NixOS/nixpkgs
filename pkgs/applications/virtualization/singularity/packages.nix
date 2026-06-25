@@ -43,7 +43,7 @@ let
       };
 
   singularity =
-    callPackage
+    (callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
         version = "4.4.2";
@@ -82,8 +82,28 @@ let
           "internal/pkg/util/env/clean.go" = [
             "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           ];
+          # Since 4.4.2, SingularityCE locates helper binaries (mount,
+          # mksquashfs, fusermount, ...) only via the "root search path" and
+          # "user search path" directives, no longer via env.DefaultPath.
+          # root search path (user search path is handled in postPatch below)
+          "pkg/util/singularityconf/config.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
         };
-      };
+      }
+    ).overrideAttrs
+      (prevAttrs: {
+        postPatch =
+          prevAttrs.postPatch or ""
+          # Inject the Nixpkgs binary paths into the default user search path,
+          # after "$PATH" to keep the pre-4.4.2 lookup order.
+          + ''
+            substituteInPlace pkg/util/singularityconf/config.go \
+              --replace-fail \
+                '"$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"' \
+                "\"\$PATH:$systemDefaultPath''${systemDefaultPath:+:}/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin''${inputsDefaultPath:+:}$inputsDefaultPath\""
+          '';
+      });
 
   genOverridenNixos =
     package: packageName:
