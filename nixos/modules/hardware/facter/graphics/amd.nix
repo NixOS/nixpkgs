@@ -12,7 +12,11 @@ in
       defaultText = "hardware dependent";
     };
   };
-  config = lib.mkIf (config.hardware.facter.enable && cfg.enable) {
-    services.xserver.videoDrivers = [ "modesetting" ];
-  };
+  config = lib.mkIf (config.hardware.facter.enable && cfg.enable) (
+    facterLib.mkFacterAssignment {
+      moduleName = "graphics-amd";
+      path = "services.xserver.videoDrivers";
+      value = [ "modesetting" ];
+    }
+  );
 }

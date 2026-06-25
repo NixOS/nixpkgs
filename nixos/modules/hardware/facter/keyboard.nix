@@ -15,7 +15,11 @@ in
     '';
   };
 
-  config = lib.mkIf config.hardware.facter.enable {
-    boot.initrd.availableKernelModules = config.hardware.facter.detected.boot.keyboard.kernelModules;
-  };
+  config = lib.mkIf config.hardware.facter.enable (
+    facterLib.mkFacterAssignment {
+      moduleName = "keyboard";
+      path = "boot.initrd.availableKernelModules";
+      value = config.hardware.facter.detected.boot.keyboard.kernelModules;
+    }
+  );
 }
