@@ -14,8 +14,8 @@
         enable = true;
         settings = {
           defaultQuotingType = "ecdsa_256";
+          qplLogLevel = "info";
           proxyType = "direct";
-          whitelistUrl = "http://nixos.org";
         };
       };
 
@@ -75,16 +75,16 @@
           machine.fail(f"sudo -u nosgxtest test {op} {socket_path}")
 
       with subtest("Copies white_list_cert_to_be_verify.bin"):
-        whitelist_path = "/var/opt/aesmd/data/white_list_cert_to_be_verify.bin"
-        whitelist_perms = machine.succeed(
-          f"nsenter -m -t {main_pid} ${pkgs.coreutils}/bin/stat -c '%a' {whitelist_path}"
+        data_dir = "/var/opt/aesmd/data"
+        data_dir_perms = machine.succeed(
+          f"nsenter -m -t {main_pid} ${pkgs.coreutils}/bin/stat -c '%a' {data_dir}"
         ).strip()
-        assert "644" == whitelist_perms, f"white_list_cert_to_be_verify.bin has permissions {whitelist_perms}"
+        assert data_dir_perms == "755", f"{data_dir} has permissions {data_dir_perms}"
 
       with subtest("Writes and binds aesm.conf in service namespace"):
         aesmd_config = machine.succeed(f"nsenter -m -t {main_pid} ${pkgs.coreutils}/bin/cat /etc/aesmd.conf")
-
-        assert aesmd_config == "whitelist url = http://nixos.org\nproxy type = direct\ndefault quoting type = ecdsa_256\n", "aesmd.conf differs"
+        expected = "default quoting type = ecdsa_256\nqpl log level = info\nproxy type = direct\n"
+        assert aesmd_config == expected, f"aesmd.conf\n\nactual:\n{aesmd_config}\n---\n\nexpected:\n{expected}"
 
       with subtest("aesmd.service without quote provider library has correct LD_LIBRARY_PATH"):
         status, environment = machine.systemctl("show --property Environment --value aesmd.service")

@@ -17,18 +17,20 @@
   which,
   debug ? false,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgx-psw";
   # Version as given in se_version.h
-  version = "2.27.100.1";
+  version = "2.28.100.1";
   # Version as used in the Git tag
-  versionTag = "2.27";
+  versionTag = "2.28";
+  # The Intel Data Center Attestation Primitives (DCAP) version.
+  versionDcap = "1.25";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "linux-sgx";
-    rev = "sgx_${versionTag}";
-    hash = "sha256-hNmh4IgNJDNqt2xF8zBnD/x+saMyMk5hZLA3aOqzqEA=";
+    repo = "confidential-computing.sgx";
+    rev = "sgx_${finalAttrs.versionTag}";
+    hash = "sha256-dRLTyIMNHnPmHb+ro2O7UtzR5EkhMXvxR5BKa6kfNhs=";
     fetchSubmodules = true;
   };
 
@@ -39,31 +41,30 @@ stdenv.mkDerivation rec {
       # run user application enclaves, verify launch policies, produce remote
       # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
+        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/prebuilt_ae_${finalAttrs.versionTag}.tar.gz";
         hash = "sha256-Hlh96rYOyml2y50d8ASKz6U97Fl0hbGYECeZiG9nMSQ=";
       };
 
       # Pre-built ipp-crypto with mitigations.
       optlib.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/optimized_libs_${versionTag}.tar.gz";
+        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/optimized_libs_${finalAttrs.versionTag}.tar.gz";
         hash = "sha256-7mDTaLtpOQLHQ6Fv+FWJ2k/veJZPXIcuj7kOdRtRqhg=";
       };
 
       # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
       # and pre-built sgxssl.
       dcap = rec {
-        version = "1.24";
-        filename = "prebuilt_dcap_${version}.tar.gz";
+        filename = "prebuilt_dcap_${finalAttrs.versionDcap}.tar.gz";
         prebuilt = fetchurl {
-          url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-sc/eYIPdhwAyDk2Zh1HU6yuFlobqVy/4++m5OnQE3Bc=";
+          url = "https://download.01.org/intel-sgx/sgx-dcap/${finalAttrs.versionDcap}/linux/${filename}";
+          hash = "sha256-TXQ8xh0q9RKPyKqjMvxoQtIH2lxbhCiwpV+HvQxACaw=";
         };
       };
     in
     ''
       # Make sure this is the right version of linux-sgx
-      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+      grep -q '"${finalAttrs.version}"' "$src/common/inc/internal/se_version.h" \
+        || (echo "Could not find expected version ${finalAttrs.version} in linux-sgx source" >&2 && exit 1)
 
       tar -xzvf ${ae.prebuilt}     -C $sourceRoot/
       tar -xzvf ${optlib.prebuilt} -C $sourceRoot/
@@ -273,10 +274,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/linux-sgx";
     maintainers = with lib.maintainers; [
       phlip9
-      veehaitch
-      citadelcore
     ];
     platforms = [ "x86_64-linux" ];
     license = [ lib.licenses.bsd3 ];
   };
-}
+})
