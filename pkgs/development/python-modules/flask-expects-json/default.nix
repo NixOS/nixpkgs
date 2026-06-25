@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   flask,
   jsonschema,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "flask-expects-json";
   version = "1.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -21,7 +22,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-CUxuwqjjAb9Fy6xWtX1WtSANYaYr5//vY8k89KghYoQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     jsonschema
   ]
