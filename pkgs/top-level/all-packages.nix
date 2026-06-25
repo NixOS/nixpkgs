@@ -8897,11 +8897,6 @@ with pkgs;
 
   hachoir = with python3Packages; toPythonApplication hachoir;
 
-  inherit (callPackage ../applications/networking/instant-messengers/hydrogen-web { })
-    hydrogen-web
-    hydrogen-web-unwrapped
-    ;
-
   hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
   hledger-iadd = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-interest;
