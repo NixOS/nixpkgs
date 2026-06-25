@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.7.0";
 
   src =
-    with stdenv;
+    with stdenv.hostPlatform;
     fetchurl (
       if isx86_64 && isLinux then
         {

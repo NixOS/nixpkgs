@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r install-cli.nix cli.nix default.nix disk-deactivate lib $out/share/disko
 
     scripts=(disko)
-    ${lib.optionalString (!stdenvNoCC.isDarwin) ''
+    ${lib.optionalString (!stdenvNoCC.hostPlatform.isDarwin) ''
       scripts+=(disko-install)
     ''}
 
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               coreutils
               xcp
             ]
-            ++ lib.optional (!stdenvNoCC.isDarwin) nixos-install
+            ++ lib.optional (!stdenvNoCC.hostPlatform.isDarwin) nixos-install
           )
         }
     done
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/disko --help
-    ${lib.optionalString (!stdenvNoCC.isDarwin) ''
+    ${lib.optionalString (!stdenvNoCC.hostPlatform.isDarwin) ''
       $out/bin/disko-install --help
     ''}
     runHook postInstallCheck

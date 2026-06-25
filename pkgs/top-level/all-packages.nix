@@ -3334,7 +3334,7 @@ with pkgs;
       ccWrapper.override (prev: {
         cc = prev.cc.override {
           reproducibleBuild = false;
-          profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
+          profiledCompiler = with stdenv.hostPlatform; (!isDarwin && isx86);
         };
       })
     else

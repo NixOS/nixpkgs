@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PCB2GCODE_COMPILE_WARNING_AS_ERROR" false)
   ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CXXFLAGS="$CXXFLAGS -fpermissive -Wno-error=c++20-extensions -Wno-error=invalid-constexpr"
   '';
 
