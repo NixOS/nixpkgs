@@ -4,6 +4,7 @@
   pname,
   version,
   meta,
+  undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -12,43 +13,34 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     version
     meta
     ;
-  srcs =
-
+  src =
     let
-      plugin = fetchurl {
-        url =
-          let
-            arch = if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then "x86_64" else "arm64";
-          in
-          "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-${arch}.dylib";
-        hash =
-          {
-            x86_64-darwin = "sha256-c0enRIXFN+dMDdxTQ3hFv0almTF0dfrSHILNigJp2Js=";
-            aarch64-darwin = "sha256-jmuob0qslYhxiE2ShfTwY4RJAKBLJSUb+VBEM0sQPbo=";
-          }
-          .${stdenvNoCC.hostPlatform.system};
-      };
+      arch = if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then "x86_64" else "arm64";
     in
-    [
-      plugin
-      (fetchurl {
-        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python64.py";
-        hash = "sha256-GDlvfARg1g5oTH2itEug6Auxr9iFlPDdGueInGmHqSI=";
-      })
-      (fetchurl {
-        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python32.py";
-        hash = "sha256-np2r568csSdIS7VZHDASroZlXhpfxXwNn0gROTinWU4=";
-      })
-    ];
+    fetchurl {
+      urls = [
+        "https://www.sws-extension.org/download/featured/sws-${finalAttrs.version}-Darwin-${arch}.dmg"
+        "https://www.sws-extension.org/download/old/sws-${finalAttrs.version}-Darwin-${arch}.dmg"
+      ];
+      hash =
+        {
+          x86_64 = "sha256-7wSgiaOcCHpUXBtOBdTTi385M94i8FnWCAp4cN0Rycs=";
+          arm64 = "sha256-AzOLBgh3WECqbFHMTZ4EBGNLpAleXFJT2USzh7pDkQA=";
+        }
+        .${arch};
+    };
 
-  unpackCmd = ''
-    cp $curSrc $(stripHash $curSrc)
-  '';
+  nativeBuildInputs = [ undmg ];
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
-    install -D -t $out/Scripts *.py
-    install -D -t $out/UserPlugins *.dylib
+
+    mkdir -p $out/Data
+    cp -r Grooves $out/Data
+    install -D *.py -t $out/Scripts
+    install -D *.dylib -t $out/UserPlugins
+
     runHook postInstall
   '';
 })
