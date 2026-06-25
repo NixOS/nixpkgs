@@ -15154,6 +15154,12 @@
     githubId = 27364685;
     name = "Lorenzo Pasqui";
   };
+  l1a = {
+    email = "kentobias@gmail.com";
+    github = "l1a";
+    githubId = 634380;
+    name = "Ken Tobias";
+  };
   l1n = {
     github = "l1n";
     githubId = 1367322;
