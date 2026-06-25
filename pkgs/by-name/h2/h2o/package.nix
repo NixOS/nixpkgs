@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  makeWrapper,
+  makeBinaryWrapper,
   ninja,
   perl,
   perlPackages,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
+    makeBinaryWrapper
     ninja
     perlPackages.JSON
   ]
