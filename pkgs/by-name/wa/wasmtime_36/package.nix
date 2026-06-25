@@ -4,7 +4,7 @@
 }:
 
 # NOTE: LTS Version EOL August 20 2027
-(wasmtime.override { majorVersion = "36"; }).overrideAttrs (old: {
+(wasmtime.override { variant = "lts-36"; }).overrideAttrs (old: {
   __structuredAttrs = true;
 
   passthru = old.passthru // {

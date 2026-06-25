@@ -10,22 +10,22 @@
   nix-update-script,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  majorVersion ? "46",
+  variant ? "main",
 }:
 let
   sources = {
-    "36" = {
+    lts-36 = {
       version = "36.0.11";
       hash = "sha256-rrSI2dSOA8/1CL7JhW0eQ7LaeS5EqTVnyn2HTI+/x20=";
       cargoHash = "sha256-S67/fv7179uDy4PpwycyXSWAknIC/7ZzvzWPOd6MD+8=";
     };
-    "46" = {
+    main = {
       version = "46.0.1";
       hash = "sha256-rPIO+wQSu5KWT/v3Wbjs29p5Aoqpnpb+TwSTT5CRb6U=";
       cargoHash = "sha256-cJD5iq342giBP+YdTem0/nOsMhI7DKRL4iiai5xayv8=";
     };
   };
-  source = sources.${majorVersion};
+  source = sources.${variant};
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
