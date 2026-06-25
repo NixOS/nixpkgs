@@ -1,21 +1,21 @@
 {
-  buildNpmPackage,
   fetchFromGitHub,
+  buildNpmPackage,
   jq,
 }:
 
 buildNpmPackage rec {
   pname = "appium-uiautomator2-driver";
   packageName = pname;
-  version = "6.3.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DqnqMEnmWjWlDXa8oUp/k1XrVP6ZP/GOQ7mI4ab2iFo=";
+    hash = "sha256-GB6qlDgKN2axoaaBLLhKZkItQHuJknktN7gjTuYj59U=";
   };
-  npmDepsHash = "sha256-wqMZVGeSoqCoe+ju+Zz1P/Tz+jqkyuVT8/pc33JBoVM=";
+  npmDepsHash = "sha256-FQEdYwczBSeUpnsAsam9kwAHUHrE6UBBs+Hl8xQSDck=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json

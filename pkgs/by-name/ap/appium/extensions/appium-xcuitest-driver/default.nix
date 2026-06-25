@@ -1,21 +1,21 @@
 {
-  buildNpmPackage,
   fetchFromGitHub,
+  buildNpmPackage,
   jq,
 }:
 
 buildNpmPackage rec {
   pname = "appium-xcuitest-driver";
   packageName = pname;
-  version = "10.8.3";
+  version = "11.14.1";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fclwYba68frnVP3J2VdbjREsZDZKSnmWMI/CT640VsQ=";
+    hash = "sha256-LAV44ZxtB8t2Nbzh+ks70t4gP6joudY/Tso6mdlAl5U=";
   };
-  npmDepsHash = "sha256-6iGgvjj9Z0sD2Da60buvuhQJE5fRHi+KRV9sgaiewSk=";
+  npmDepsHash = "sha256-5Q+VR7CnUOC1MOUQgACWw/ooen9oYIOyDrRX1pUxNAQ=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
