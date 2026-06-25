@@ -53,6 +53,7 @@ let
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
+      mediascanner2 = callPackage ./services/mediascanner2 { };
     }
     // lib.optionalAttrs useQt6 {
       #### Core Apps
@@ -98,7 +99,6 @@ let
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
-      mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in
 lib.makeScope qtPackages.newScope packages
