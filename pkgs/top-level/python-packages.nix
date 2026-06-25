@@ -676,6 +676,8 @@ self: super: with self; {
 
   alibabacloud-openapi-util = callPackage ../development/python-modules/alibabacloud-openapi-util { };
 
+  alibabacloud-sas20181203 = callPackage ../development/python-modules/alibabacloud-sas20181203 { };
+
   alibabacloud-sts20150401 = callPackage ../development/python-modules/alibabacloud-sts20150401 { };
 
   alibabacloud-tea = callPackage ../development/python-modules/alibabacloud-tea { };
