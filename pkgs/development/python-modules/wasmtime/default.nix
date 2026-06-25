@@ -85,6 +85,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/bytecodealliance/wasmtime-py";
     changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = [ lib.maintainers.fab ] ++ pkgs.wasmtime.meta.maintainers;
   };
 })
