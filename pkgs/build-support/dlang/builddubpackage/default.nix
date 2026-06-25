@@ -58,10 +58,12 @@ lib.extendMkDerivation {
       preFixup = ''
         ${args.preFixup or ""}
 
-        find "$out" -type f -exec remove-references-to -t ${compiler} '{}' +
+        find "$out" -type f -exec remove-references-to ${
+          lib.concatMapStringsSep " " (output: "-t ${output}") compiler.all
+        } '{}' +
       '';
 
-      disallowedReferences = args.disallowedReferences or [ compiler ];
+      disallowedReferences = args.disallowedReferences or compiler.all;
 
       meta = {
         platforms = dub.meta.platforms;
