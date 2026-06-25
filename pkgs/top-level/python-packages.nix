@@ -666,6 +666,10 @@ self: super: with self; {
 
   alibabacloud-cs20151215 = callPackage ../development/python-modules/alibabacloud-cs20151215 { };
 
+  alibabacloud-darabonba-time =
+    callPackage ../development/python-modules/alibabacloud-darabonba-time
+      { };
+
   alibabacloud-ecs20140526 = callPackage ../development/python-modules/alibabacloud-ecs20140526 { };
 
   alibabacloud-endpoint-util =
