@@ -12,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "4.7.0";
+  version = "4.8.0";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ek+h/MWxvUZKfUKSYL501+qqwFKHifopj2PicvnEr0Y=";
+    hash = "sha256-eU/OtURj/IriICi4qB5uUmyMzbsoZyEK18Kz40qKO08=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-n+fLtinvMchjsztH5GmPIjG+2spUu0Ayw9yqHTJRxAQ=";
+  cargoHash = "sha256-umJBYmX3lSaH6OjsxFMRT8+Ymq8OZNxG0qPtZs+Dhh0=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [
