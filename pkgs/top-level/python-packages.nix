@@ -9782,6 +9782,8 @@ self: super: with self; {
 
   mathutils = callPackage ../development/python-modules/mathutils { };
 
+  matplot2tikz = callPackage ../development/python-modules/matplot2tikz { };
+
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
   };
