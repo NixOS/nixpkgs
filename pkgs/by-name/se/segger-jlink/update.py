@@ -31,7 +31,7 @@ def find_latest_jlink_version() -> str:
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    jlink_download_tile = soup.find(lambda tag: tag.name == 'tbody' and "J-Link Software and Documentation pack" in tag.text)
+    jlink_download_tile = soup.find(lambda tag: tag.name == 'tbody' and "J-Link Software and Documentation Pack" in tag.text)
     version_select = jlink_download_tile.find('select')
     version = next(o.text for o in version_select.find_all('option'))
 
