@@ -225,7 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
-    BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
+    BUILDCC = lib.getExe pkgsBuildBuild.stdenv.cc;
     LIVE555_PREFIX = live555;
   }
   // lib.optionalAttrs stdenv.cc.isGNU {
