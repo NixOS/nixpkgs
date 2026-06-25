@@ -8,12 +8,13 @@
   ninja,
   perl,
   perlPackages,
-  brotli,
   openssl,
   libcap,
   libuv,
   wslay,
   zlib,
+  withBrotli ? true,
+  brotli,
   withMruby ? true,
   bison,
   ruby,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perlPackages.JSON
   ]
+  ++ lib.optional withBrotli brotli
   ++ lib.optionals withMruby [
     bison
     ruby
@@ -61,9 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     zlib
     wslay
-  ];
+  ]
+  ++ lib.optional withBrotli brotli;
 
   cmakeFlags = [
+    "-DWITH_BROTLI=${if withBrotli then "ON" else "OFF"}"
     "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
   ];
 
