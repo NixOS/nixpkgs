@@ -63,7 +63,7 @@ in
   config = lib.mkIf (imcfg.enable && imcfg.type == "kime") {
     i18n.inputMethod.package = pkgs.kime;
 
-    environment.variables = {
+    environment.sessionVariables = {
       GTK_IM_MODULE = "kime";
       QT_IM_MODULE = "kime";
       XMODIFIERS = "@im=kime";

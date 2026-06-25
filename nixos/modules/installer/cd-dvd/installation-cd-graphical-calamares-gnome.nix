@@ -31,7 +31,7 @@
   };
 
   # Fix scaling for calamares on wayland
-  environment.variables = {
+  environment.sessionVariables = {
     QT_QPA_PLATFORM = "$([[ $XDG_SESSION_TYPE = \"wayland\" ]] && echo \"wayland\")";
   };
 

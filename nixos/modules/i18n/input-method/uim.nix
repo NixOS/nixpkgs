@@ -33,7 +33,7 @@ in
   config = lib.mkIf (imcfg.enable && imcfg.type == "uim") {
     i18n.inputMethod.package = pkgs.uim;
 
-    environment.variables = {
+    environment.sessionVariables = {
       GTK_IM_MODULE = "uim";
       QT_IM_MODULE = "uim";
       XMODIFIERS = "@im=uim";
