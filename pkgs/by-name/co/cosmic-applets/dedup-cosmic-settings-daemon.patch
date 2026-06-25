@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index bdd37740..c1adcfad 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1514,7 +1514,7 @@ dependencies = [
+ [[package]]
+ name = "cosmic-settings-config"
+ version = "0.1.0"
+-source = "git+https://github.com/pop-os/cosmic-settings-daemon#fa82bdf9fe7b5f5bd6008f32f393efd5e7a71c47"
++source = "git+https://github.com/pop-os/cosmic-settings-daemon#e7936f0d4f01c8c5a436908c7ee9f6ad43e6a7d8"
+ dependencies = [
+  "cosmic-config",
+  "ron 0.11.0",
