@@ -22106,6 +22106,12 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.02.tar.gz";
       hash = "sha256-nhFzm5zQi6LXWllzfx+yl/RYA/KJBjxcdZv8eP1Rbns=";
     };
+
+    # Fails with 'symlinks not listed in MANIFEST is not ignored for a non-local distribution'
+    postPatch = ''
+      rm -f t/analyse/manifest.t
+    '';
+
     propagatedBuildInputs = [
       ArchiveAnyLite
       ArrayDiff
