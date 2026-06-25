@@ -11,23 +11,23 @@
   copyDesktopItems,
   pnpm_10,
   nodejs,
-  electron_38,
+  electron_42,
   zip,
 }:
 let
-  electron = electron_38;
+  electron = electron_42;
   stdenv = stdenvNoCC;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vMXnBniA0wyoK7Pe13h/yHtf8ky59ts4VQb9k7KuUCE=";
+    hash = "sha256-l4kxlPwohaxserVyNAb3Dp4f5XhnPUKeuRJwrOl9EWc=";
   };
 
   postPatch = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-m0EuM8qTCFLxxO0RNze5WgMkuHZXeIi+U/Jiuv91eCg=";
+    hash = "sha256-bIDwEmt/8URBMx7XIQ1EP4SucwMuyGZE1hlQM0rxDnw=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
