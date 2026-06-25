@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "icoextract";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlu5";
     repo = "icoextract";
     rev = finalAttrs.version;
-    hash = "sha256-GJCe7oFUidJt21F4NmOXspxZGRQXIjQvFjFhMYsHLjk=";
+    hash = "sha256-uesnYwv1ig7cnakWpH7MKeN6cfjasxVYLHs1JYG0Tss=";
   };
 
   build-system = with python3Packages; [ setuptools ];
