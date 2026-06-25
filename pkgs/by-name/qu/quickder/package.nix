@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "quickder";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
     rev = "v${version}";
-    hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
+    hash = "sha256-IxoE9h+ISExNys2egvjSEb3phkrf4ices7k5oYgOL4A=";
   };
 
   nativeBuildInputs = [
@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/arpa2/quick-der/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+    teams = with lib.teams; [ ngi ];
   };
 }
