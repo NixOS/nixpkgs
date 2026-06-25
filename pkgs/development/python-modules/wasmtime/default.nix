@@ -84,10 +84,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python WebAssembly runtime powered by Wasmtime";
     homepage = "https://github.com/bytecodealliance/wasmtime-py";
     changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/${finalAttrs.src.tag}";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
     maintainers = with lib.maintainers; [ fab ];
   };
 })
