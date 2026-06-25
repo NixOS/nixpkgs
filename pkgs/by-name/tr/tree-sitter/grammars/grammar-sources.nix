@@ -723,11 +723,14 @@
   };
 
   fortran = {
-    version = "0.5.1";
+    version = "0.6.0";
     url = "github:stadelmanma/tree-sitter-fortran";
-    hash = "sha256-6l+cfLVbs8geKIYhnfuZDac8uzmNHOZf2rFANdl4tDs=";
+    hash = "sha256-je9RlV/KozBGcCrOeFLC0f3LZ0avxZIn3nAiHzrWIoI=";
     meta = {
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        norbertwnuk
+      ];
     };
   };
 
@@ -1409,12 +1412,15 @@
     };
   };
 
-  kotlin = rec {
-    version = "0.3.8";
-    url = "github:fwcd/tree-sitter-kotlin?ref=${version}";
-    hash = "sha256-kze1kF8naH2qQou58MKMhzmMXk0ouzcP6i3F61kOYi8=";
+  kotlin = {
+    version = "1.1.0";
+    url = "github:tree-sitter-grammars/tree-sitter-kotlin";
+    hash = "sha256-6jjK5rA/lEdsYDboU7wGfzEiRdZo44SrLlcgWci0xa4=";
     meta = {
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        norbertwnuk
+      ];
     };
   };
 
@@ -1540,12 +1546,14 @@
   };
 
   lua = {
-    version = "0.0.19-unstable-2025-05-16";
-    url = "github:MunifTanjim/tree-sitter-lua";
-    rev = "4fbec840c34149b7d5fe10097c93a320ee4af053";
-    hash = "sha256-fO8XqlauYiPR0KaFzlAzvkrYXgEsiSzlB3xYzUpcbrs=";
+    version = "0.5.0";
+    url = "github:tree-sitter-grammars/tree-sitter-lua";
+    hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
     meta = {
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        norbertwnuk
+      ];
     };
   };
 
