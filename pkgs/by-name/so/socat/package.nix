@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socat";
-  version = "1.8.1.1";
+  version = "1.8.1.2";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/socat-${version}.tar.bz2";
-    hash = "sha256-Xrxja39CcFP5iAZpZSFlOmFMfgZGSRA1PL9U4jJ63Bs=";
+    hash = "sha256-Dht+rAxuPW+k1Vtjx/zd8D9KLqpZ+pOx8w3Cxz1Cqg0=";
   };
 
   postPatch = ''
