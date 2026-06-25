@@ -3674,6 +3674,12 @@
     githubId = 5700358;
     name = "Thomas Blank";
   };
+  blaobla = {
+    email = "trilobitahalo@gmail.com";
+    github = "blaobla";
+    githubId = 35721724;
+    name = "Yang Kong";
+  };
   bleetube = {
     email = "git@blee.tube";
     matrix = "@blee:satstack.cloud";
