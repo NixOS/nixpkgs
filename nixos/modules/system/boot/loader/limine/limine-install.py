@@ -36,6 +36,7 @@ class BootSpec:
     label: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
+    extraInitrdPaths: list[str]
     xen: XenBootSpec | None
     initrd: str | None = None
     initrdSecrets: str | None = None
@@ -173,10 +174,15 @@ def bootjson_to_bootspec(bootjson: dict) -> BootSpec:
     xen = None
     if "org.xenproject.bootspec.v2" in bootjson:
         xen = bootjson["org.xenproject.bootspec.v2"]
+
+    extraInitrdExtension = bootjson.get("org.nixos.extra-initrd.v1", {})
+    extraInitrdPaths = extraInitrdExtension.get("paths", [])
+
     return BootSpec(
         **bootjson["org.nixos.bootspec.v1"],
         specialisations=specialisations,
         xen=xen,
+        extraInitrdPaths=extraInitrdPaths,
     )
 
 
@@ -299,6 +305,10 @@ def xen_config_entry(
         if bootspec.initrd:
             # the final module is the initrd
             entry += "module_path: " + get_kernel_uri(bootspec.initrd) + "\n"
+
+        for p in bootspec.extraInitrdPaths:
+            entry += f"module_path: boot():/{p}\n"
+
     return entry
 
 
@@ -320,6 +330,9 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
 
     if bootspec.initrd:
         entry += f"module_path: " + get_kernel_uri(bootspec.initrd) + "\n"
+
+    for p in bootspec.extraInitrdPaths:
+        entry += f"module_path: boot():/{p}\n"
 
     if bootspec.initrdSecrets:
         base_path = str(limine_install_dir) + "/kernels/"
