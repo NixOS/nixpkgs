@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cryptsetup";
     maintainers = with lib.maintainers; [
       numinit
-      raitobezarius
     ];
     platforms = with lib.platforms; linux;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "cryptsetup_project" finalAttrs.version;

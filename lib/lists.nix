@@ -6,12 +6,12 @@ let
   inherit (lib.strings) toInt;
   inherit (lib.trivial)
     compare
-    min
     id
+    min
+    seq
     warn
     ;
   inherit (lib.attrsets) mapAttrs attrNames attrValues;
-  inherit (lib) max;
 in
 rec {
 
@@ -276,11 +276,14 @@ rec {
     :::
   */
   foldl' =
+    let
+      inherit (builtins) foldl';
+    in
     op: acc:
     # The builtin `foldl'` is a bit lazier than one might expect.
     # See https://github.com/NixOS/nix/pull/7158.
     # In particular, the initial accumulator value is not forced before the first iteration starts.
-    builtins.seq acc (builtins.foldl' op acc);
+    seq acc (foldl' op acc);
 
   /**
     Map with index starting from 0
@@ -442,7 +445,7 @@ rec {
 
     :::
   */
-  flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
+  flatten = x: if isList x then concatMap flatten x else [ x ];
 
   /**
     Remove elements equal to `e` from a list.  Useful for `buildInputs`.
@@ -1122,9 +1125,10 @@ rec {
   reverseList =
     xs:
     let
-      l = length xs;
+      # subtract one to save an __sub call on every element
+      lastIndex = length xs - 1;
     in
-    genList (n: elemAt xs (l - n - 1)) l;
+    genList (n: elemAt xs (lastIndex - n)) (lastIndex + 1);
 
   /**
     Depth-First Search (DFS) for lists `list != []`.
@@ -1181,13 +1185,13 @@ rec {
           c = filter (x: before x us) visited;
           b = partition (x: before x us) rest;
         in
-        if stopOnCycles && (length c > 0) then
+        if stopOnCycles && c != [ ] then
           {
             cycle = us;
             loops = c;
             inherit visited rest;
           }
-        else if length b.right == 0 then
+        else if b.right == [ ] then
           # nothing is before us
           {
             minimal = us;
@@ -1244,27 +1248,33 @@ rec {
     :::
   */
   toposort =
-    before: list:
+    before:
     let
-      dfsthis = listDfs true before list;
-      toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
+      dfs = listDfs true before;
+      recurse =
+        list:
+        let
+          dfsthis = dfs list;
+          toporest = recurse (dfsthis.visited ++ dfsthis.rest);
+        in
+        if length list < 2 then
+          # finish
+          { result = list; }
+        else if dfsthis ? cycle then
+          # there's a cycle, starting from the current vertex, return it
+          {
+            cycle = reverseList dfsthis.visited ++ [ dfsthis.cycle ];
+            inherit (dfsthis) loops;
+          }
+        else if toporest ? cycle then
+          # there's a cycle somewhere else in the graph, return it
+          toporest
+        # Slow, but short. Can be made a bit faster with an explicit stack.
+        else
+          # there are no cycles
+          { result = [ dfsthis.minimal ] ++ toporest.result; };
     in
-    if length list < 2 then
-      # finish
-      { result = list; }
-    else if dfsthis ? cycle then
-      # there's a cycle, starting from the current vertex, return it
-      {
-        cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
-        inherit (dfsthis) loops;
-      }
-    else if toporest ? cycle then
-      # there's a cycle somewhere else in the graph, return it
-      toporest
-    # Slow, but short. Can be made a bit faster with an explicit stack.
-    else
-      # there are no cycles
-      { result = [ dfsthis.minimal ] ++ toporest.result; };
+    recurse;
 
   /**
     Sort a list based on a comparator function which compares two
@@ -1504,7 +1514,12 @@ rec {
 
     :::
   */
-  take = count: sublist 0 count;
+  take =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (if count > len then len else count);
 
   /**
     Returns the last (at most) N elements of a list.
@@ -1538,7 +1553,13 @@ rec {
 
     :::
   */
-  takeEnd = n: xs: drop (max 0 (length xs - n)) xs;
+  takeEnd =
+    count: list:
+    let
+      len = length list;
+      start = if count > len then 0 else len - count;
+    in
+    genList (i: elemAt list (start + i)) (if start > len then 0 else len - start);
 
   /**
     Remove the first (at most) N elements of a list.
@@ -1572,7 +1593,12 @@ rec {
 
     :::
   */
-  drop = count: list: sublist count (length list) list;
+  drop =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (n: elemAt list (n + count)) (if count > len then 0 else len - count);
 
   /**
     Remove the last (at most) N elements of a list.
@@ -1606,7 +1632,19 @@ rec {
     ```
     :::
   */
-  dropEnd = n: xs: take (max 0 (length xs - n)) xs;
+  dropEnd =
+    n: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (
+      if n > len then
+        0
+      else if n < 0 then
+        len
+      else
+        len - n
+    );
 
   /**
     Whether the first list is a prefix of the second list.
@@ -1844,7 +1882,7 @@ rec {
   init =
     list:
     assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
-    take (length list - 1) list;
+    genList (elemAt list) (length list - 1);
 
   /**
     Returns the image of the cross product of some lists by a function.
