@@ -18,8 +18,12 @@
   icoutils,
   bintools,
   fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
+  darwin,
 }:
+
+let
+  inherit (darwin) autoSignDarwinBinariesHook;
+in
 
 buildDotnetModule rec {
   pname = "avalonia-ilspy";
