@@ -5190,6 +5190,8 @@ self: super: with self; {
 
   esper = callPackage ../development/python-modules/esper { };
 
+  esphome = callPackage ../development/python-modules/esphome { };
+
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
   esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
