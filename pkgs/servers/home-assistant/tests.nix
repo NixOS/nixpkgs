@@ -134,6 +134,10 @@ let
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
     ];
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
+    ];
     homeassistant_connect_zbt2 = [
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"

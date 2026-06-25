@@ -316,6 +316,9 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about not running in a docker or a venv
     ./patches/pythonpath-is-a-venv.patch
 
+    # No scaring our users about our install method
+    ./patches/nixos-was-never-supported.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -333,6 +336,9 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
       hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
+
+    # https://github.com/home-assistant/core/pull/172893
+    ./patches/pyjwt-2.13-compat.patch
   ];
 
   postPatch = ''
