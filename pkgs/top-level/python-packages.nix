@@ -9332,6 +9332,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-readers-weather
       { };
 
+  llama-index-retrievers-bm25 =
+    callPackage ../development/python-modules/llama-index-retrievers-bm25
+      { };
+
   llama-index-vector-stores-chroma =
     callPackage ../development/python-modules/llama-index-vector-stores-chroma
       { };
