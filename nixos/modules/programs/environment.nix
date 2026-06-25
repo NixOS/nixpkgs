@@ -19,7 +19,6 @@ in
       # note: many programs exec() this directly, so default options for less must not
       # be specified here; do so in the default value of programs.less.envVariables instead
       PAGER = lib.mkDefault "less";
-      EDITOR = lib.mkDefault "nano";
     };
 
     # since we set PAGER to this above, make sure it's installed
