@@ -666,6 +666,10 @@ self: super: with self; {
 
   alibabacloud-cs20151215 = callPackage ../development/python-modules/alibabacloud-cs20151215 { };
 
+  alibabacloud-darabonba-signature-util =
+    callPackage ../development/python-modules/alibabacloud-darabonba-signature-util
+      { };
+
   alibabacloud-darabonba-string =
     callPackage ../development/python-modules/alibabacloud-darabonba-string
       { };
