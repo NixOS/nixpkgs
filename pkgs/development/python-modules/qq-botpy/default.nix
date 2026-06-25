@@ -8,7 +8,6 @@
   # Dependencies
   aiohttp,
   apscheduler,
-  pre-commit,
   pyyaml,
   # Tests
   pytestCheckHook,
@@ -34,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     apscheduler
-    pre-commit
     pyyaml
   ];
 
