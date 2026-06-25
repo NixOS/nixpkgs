@@ -35,6 +35,7 @@ lib.extendMkDerivation {
       };
 
       strictDeps = args.strictDeps or true;
+      __structuredAttrs = args.__structuredAttrs or true;
 
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
         dubSetupHook
