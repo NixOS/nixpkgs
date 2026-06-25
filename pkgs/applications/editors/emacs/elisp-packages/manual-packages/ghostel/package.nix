@@ -6,6 +6,7 @@
   stdenv,
   zig_0_15,
   emacs,
+  xcbuild,
 }:
 
 let
@@ -31,7 +32,7 @@ let
       hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
     };
 
-    nativeBuildInputs = [ zig ];
+    nativeBuildInputs = [ zig ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]);
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
