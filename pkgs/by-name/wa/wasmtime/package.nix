@@ -10,7 +10,7 @@
   nix-update-script,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  majorVersion ? "45",
+  majorVersion ? "46",
 }:
 let
   sources = {
@@ -19,11 +19,10 @@ let
       hash = "sha256-rrSI2dSOA8/1CL7JhW0eQ7LaeS5EqTVnyn2HTI+/x20=";
       cargoHash = "sha256-S67/fv7179uDy4PpwycyXSWAknIC/7ZzvzWPOd6MD+8=";
     };
-    "45" = {
-
-      version = "45.0.2";
-      hash = "sha256-LEQitwz+UDSX4mrjEecmoO/ZPgRnYTZ3DsD1pu8Jybs=";
-      cargoHash = "sha256-uTgEW2w0RSMetd2W1ucGiVMEEvz2A7CQ79SEsE8/+BM=";
+    "46" = {
+      version = "46.0.1";
+      hash = "sha256-rPIO+wQSu5KWT/v3Wbjs29p5Aoqpnpb+TwSTT5CRb6U=";
+      cargoHash = "sha256-cJD5iq342giBP+YdTem0/nOsMhI7DKRL4iiai5xayv8=";
     };
   };
   source = sources.${majorVersion};
