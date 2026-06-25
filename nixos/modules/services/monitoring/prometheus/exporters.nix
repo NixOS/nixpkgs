@@ -578,6 +578,18 @@ in
       })
     ]
     ++ [
+      (mkIf config.services.prometheus.exporters.node.enable {
+        # tcpstat depends on tcp_diag kernel module.
+        # If security.lockKernelModules is enabled, this module can't be loaded at runtime despite being required.
+        # Fix: load the kernel module if tcpstat is enabled.
+        boot.kernelModules =
+          lib.optionals (lib.elem "tcpstat" config.services.prometheus.exporters.node.enabledCollectors)
+            [
+              "tcp_diag"
+            ];
+      })
+    ]
+    ++ [
       (mkIf config.services.postfix.enable {
         services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
       })
