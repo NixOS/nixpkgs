@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "dacite";
-  version = "1.9.2";
+  version = "1.9.2-fix";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "konradhalas";
     repo = "dacite";
     tag = "v${version}";
-    hash = "sha256-mAPqWvBpkTbtzHpwtCSDXMNkoc8/hbRH3OIEeK2yStU=";
+    hash = "sha256-n5fD0s3Zp77U8fYW5p6tmB9VS65eimnG9gMM/71LU3c=";
   };
 
   postPatch = ''
