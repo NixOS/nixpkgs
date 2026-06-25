@@ -1,0 +1,38 @@
+From ff06851e13461c0b9e2f258caf6a2ead16bad700 Mon Sep 17 00:00:00 2001
+From: Seth Flynn <getchoo@tuta.io>
+Date: Wed, 5 Mar 2025 16:43:57 -0500
+Subject: [PATCH 3/5] build: allow linking against system libffi
+
+Adapted from https://cgit.freebsd.org/ports/commit/?id=680dc7bb031d0f708c2dd38f055ec8d63ee68b8a
+---
+ config/linux/build.xml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 11e4743ab..4500d23c0 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -194,16 +194,18 @@
+                     <include name="${module.lwjgl}/jawt/src/generated/c/*.c" if:true="${binding.jawt}"/>
+                 </fileset>
+             </source>
+-            <beforeLink>
++            <beforeLink unless:true="${use.libffi.so}">
+                 <parallel threadsPerProcessor="2" failonany="true" unless:set="lib-dependencies-uptodate">
+                     <update-dependency module="core" artifact="core/libffi.a"/>
+                 </parallel>
+             </beforeLink>
+             <link>
+-                <fileset dir="${lib.native}/org/lwjgl">
++                <fileset dir="${lib.native}/org/lwjgl" unless:true="${use.libffi.so}">
+                     <include name="libffi.a"/>
+                 </fileset>
+                 <arg value="-ldl"/>
++                <arg value="-lffi" if:true="${use.libffi.so}"/>
++                <arg value="-L${libffi.path}" if:set="libffi.path"/>
+             </link>
+         </build>
+ 
+-- 
+2.48.1
+
