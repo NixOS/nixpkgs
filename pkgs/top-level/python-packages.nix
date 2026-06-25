@@ -16820,6 +16820,8 @@ self: super: with self; {
 
   qpsolvers = callPackage ../development/python-modules/qpsolvers { };
 
+  qq-botpy = callPackage ../development/python-modules/qq-botpy { };
+
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
