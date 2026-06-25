@@ -8,6 +8,7 @@
   ninja,
   clang,
   python3,
+  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # to build bundled libdispatch
