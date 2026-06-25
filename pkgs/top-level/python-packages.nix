@@ -702,6 +702,10 @@ self: super: with self; {
     callPackage ../development/python-modules/alibabacloud-gateway-oss-util
       { };
 
+  alibabacloud-gateway-sls-util =
+    callPackage ../development/python-modules/alibabacloud-gateway-sls-util
+      { };
+
   alibabacloud-gateway-spi = callPackage ../development/python-modules/alibabacloud-gateway-spi { };
 
   alibabacloud-openapi-util = callPackage ../development/python-modules/alibabacloud-openapi-util { };
