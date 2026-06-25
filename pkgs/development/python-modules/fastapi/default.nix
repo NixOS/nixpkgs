@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.135.3";
+  version = "0.136.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-sE5d+MgmP9L+MUosRBsR+KSJkcC9i2EOOtKHq0sXjRM=";
+    hash = "sha256-lfmk8ZveKPukEEfwWq2mKtWmOHAtVzGuE5BsOskDzh0=";
   };
 
   build-system = [ pdm-backend ];
