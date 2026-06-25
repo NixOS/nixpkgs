@@ -185,8 +185,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   versionYear = "2026";
   versionMajor = "0";
-  versionMinor = "0";
-  versionRel = "198";
+  versionMinor = "1";
+  versionRel = "27";
 
   version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
 
@@ -194,8 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/71180075-e4e3-4c6f-bbbb-19017ed0cf7d/intel-oneapi-toolkit-2026.0.0.198_offline.sh";
-    hash = "sha256-FVpSiWvSQjndxzP0h+zLKvXK2ZV+7R4r/mDOFFNpTls=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c9c3d3e3-ddb4-490e-bb41-6e9041ba32a7/intel-oneapi-toolkit-2026.0.1.27_offline.sh";
+    hash = "sha256-MCMdAN4BCIkuptUOeFCRtAy4eQuwBryl5PXmRzWjPPo=";
   };
 
   nativeBuildInputs = [
