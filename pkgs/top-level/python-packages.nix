@@ -3583,6 +3583,8 @@ self: super: with self; {
 
   daqp = callPackage ../development/python-modules/daqp { };
 
+  darabonba-core = callPackage ../development/python-modules/darabonba-core { };
+
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
   dartsim = toPythonModule (
