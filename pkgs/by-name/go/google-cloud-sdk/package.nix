@@ -69,6 +69,9 @@ stdenv.mkDerivation rec {
     ./gcloud-path.patch
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Cloud SDK vendors protobuf under the cloudsdk.google.protobuf namespace.
+    # Keep that vendored runtime from loading external google._upb modules.
+    ./cloudsdk-vendored-protobuf-upb.patch
   ];
 
   installPhase = ''
@@ -176,6 +179,12 @@ stdenv.mkDerivation rec {
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+    $out/bin/gcloud storage ls --help > /dev/null
+    # Exercises generated clients that use Cloud SDK's vendored protobuf. This
+    # catches regressions where external protobuf/upb is selected instead of the
+    # vendored pure-Python protobuf implementation.
+    $out/bin/gcloud kms asymmetric-sign --help > /dev/null
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=upb $out/bin/gcloud kms asymmetric-sign --help > /dev/null
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
