@@ -7,6 +7,7 @@ let
   inherit (lib) assertMsg;
 
   # Query if a facter report contains a CPU with the given vendor name
+  # Asserts if hardware/cpu data is missing (use only when data is guaranteed)
   hasCpu =
     name:
     {
@@ -25,6 +26,26 @@ let
       }:
       assert assertMsg (vendor_name != null) "detail.vendor_name not found in cpu entry";
       vendor_name == name
+    ) cpus;
+
+  # Query if a facter report contains an Intel CPU with model >= threshold
+  # Returns false if no CPU info available (graceful degradation)
+  hasIntelCpuModelAtLeast =
+    minModel:
+    {
+      hardware ? { },
+      ...
+    }:
+    let
+      cpus = hardware.cpu or [ ];
+    in
+    builtins.any (
+      {
+        vendor_name ? null,
+        model ? 0,
+        ...
+      }:
+      vendor_name == "GenuineIntel" && model >= minModel
     ) cpus;
 
   # Extract all driver_modules from a list of hardware entries
@@ -49,6 +70,7 @@ in
 {
   inherit
     hasCpu
+    hasIntelCpuModelAtLeast
     collectDrivers
     toZeroPaddedHex
     ;
