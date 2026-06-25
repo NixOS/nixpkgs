@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicr";
   version = "0.18.0";
 
+__structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "agavra";
     repo = "tuicr";
@@ -22,9 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   strictDeps = true;
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   checkFlags = [
     # expects to be run inside the upstream git repository
