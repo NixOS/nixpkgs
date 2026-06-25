@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytestCheckHook,
   setuptools,
   levenshtein,
   pycodestyle,
-  hypothesis,
-  pytest,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -27,9 +26,12 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ levenshtein ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     pycodestyle
-    hypothesis
-    pytest
+  ];
+
+  pythonImportsCheck = [
+    "fuzzywuzzy"
   ];
 
   meta = {
