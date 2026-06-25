@@ -6825,6 +6825,14 @@
     githubId = 1427254;
     name = "Jack O'Sullivan";
   };
+  devurandom = {
+    name = "Dennis Schridde";
+    email = "heri@mailbox.org";
+    matrix = "@devurandom:matrix.org";
+    github = "devurandom";
+    githubId = 63082;
+    keys = [ { fingerprint = "F857 7089 4E67 B9FF 705A  91A5 4DC8 A2F1 0752 C237"; } ];
+  };
   devusb = {
     email = "mhelton@devusb.us";
     github = "devusb";
