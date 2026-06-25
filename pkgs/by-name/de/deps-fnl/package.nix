@@ -17,18 +17,21 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/libexec
+    cp deps $out/libexec/deps
+
     # deps requires argv0 to be fennel as an executable lua script
     # skipping the luarocks wrapper is fine here
-    fennelLua=$(echo ${luaPackages.fennel}/fennel*/fennel/*/bin/fennel)
-    substitute deps $out/bin/deps \
-      --replace-fail '#!/usr/bin/env fennel' "#!$fennelLua"
-    chmod +x $out/bin/deps
+    fennelCli=$(find "${luaPackages.fennel}" -type f -path "*/bin/fennel" | head -n 1)
+    cat << EOF > $out/bin/deps
+      #!/bin/sh
+      exec "${luaPackages.lua}/bin/lua" "$fennelCli" "$out/libexec/deps" "\$@"
+    EOF
 
+    chmod +x $out/bin/deps
     runHook postInstall
   '';
 
