@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.13.13";
+  version = "1.14.0-alpha.34";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RsiBxPQOE4rE3cFRjl81x1uIG2A4/smSBUg+G0vm7uQ=";
+    hash = "sha256-QwG46iZtc5jqWar/28/K9STZHWnLUwofHBlR2mE5lYs=";
   };
 
-  vendorHash = "sha256-FUzGQx0TIJdWWYtF6781BSXLViFrXbPEdLKjuvtuleM=";
+  vendorHash = "sha256-c99as3LIzPR/IZel76rEOJ/kHmxE0fwJV84eSPG98Ls=";
 
   tags = [
     "with_gvisor"
@@ -32,6 +32,7 @@ buildGoModule (finalAttrs: {
     "with_tailscale"
     "with_ccm"
     "with_ocm"
+    "with_cloudflared"
     "badlinkname"
     "tfogo_checklinkname0"
   ];
@@ -63,7 +64,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
     tests = { inherit (nixosTests) sing-box; };
   };
 
