@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,9 +35,16 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   pythonImportsCheck = [
     "motioneye"
   ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/meyectl";
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Web frontend for the motion daemon";
