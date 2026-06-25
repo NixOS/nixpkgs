@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicr";
   version = "0.18.0";
 
-__structuredAttrs = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agavra";
