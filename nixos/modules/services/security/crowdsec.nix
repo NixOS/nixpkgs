@@ -260,17 +260,6 @@ in
                       See <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#hub_branch> for more information.
                     '';
                   };
-                  prometheus_uri = lib.mkOption {
-                    type = lib.types.str;
-                    default = "http://${cfg.settings.config.prometheus.listen_addr}:${toString cfg.settings.config.prometheus.listen_port}";
-                    defaultText = "The prometheus address and port set in `services.crowdsec.settings.config.prometheus`.";
-                    example = "http://127.0.0.1:6060";
-                    description = ''
-                      (>1.0.7) An uri (without the trailing /metrics) that will be used by cscli metrics command, ie. http://127.0.0.1:6060/
-
-                      See <https://docs.crowdsec.net/docs/configuration/crowdsec_configuration/#prometheus_uri> for more information.
-                    '';
-                  };
                 };
 
                 plugin_config = {
@@ -351,26 +340,6 @@ in
                         The file will be automatically created, unless it already exists.
                       '';
                     };
-                  };
-                };
-
-                prometheus = {
-                  enabled = lib.mkOption {
-                    type = lib.types.bool;
-                    default = true;
-                    description = "Whether to enable the CrowdSec prometheus exporter.";
-                  };
-
-                  listen_addr = lib.mkOption {
-                    type = lib.types.str;
-                    default = "127.0.0.1";
-                    description = "Prometheus exporter listen address.";
-                  };
-
-                  listen_port = lib.mkOption {
-                    type = lib.types.port;
-                    default = 6060;
-                    description = "Prometheus exporter listen port.";
                   };
                 };
               };
@@ -672,8 +641,7 @@ in
   };
   config =
     let
-      # configFile = yaml.generate "crowdsec.yaml" cfg.settings.general;
-      configFile = "${config_paths.config_dir}/config.yaml";
+      configFile = "${config_paths.config_dir}/config.yaml.local";
 
       dirs = [
         config_paths.config_dir
@@ -995,7 +963,7 @@ in
             (createFile cfg.settings.config.api.server.profiles_path (
               lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.profiles
             ))
-            (createFile "${config_paths.config_dir}/config.yaml" (toYaml cfg.settings.config))
+            (createFile "${config_paths.config_dir}/config.yaml.local" (toYaml cfg.settings.config))
             (createFile config_paths.simulation_path (toYaml cfg.settings.simulation))
             (createFile "${cfg.settings.config.crowdsec_service.acquisition_dir}/0-nixos-generated.yaml" (
               lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
@@ -1028,6 +996,7 @@ in
 
           symlinks = [
             (createSymlink "${cfg.package}/share/crowdsec/config/detect.yaml" "${config_paths.data_dir}/detect.yaml")
+            (createSymlink "${cfg.package}/share/crowdsec/config/config.yaml" "${config_paths.config_dir}/config.yaml")
           ];
 
           entries = directories ++ files ++ symlinks ++ enumeratedFiles ++ notificationFiles;
