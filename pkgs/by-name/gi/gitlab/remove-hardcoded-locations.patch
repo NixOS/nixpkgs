@@ -12,7 +12,7 @@ index e1a7db8d860..5823f170410 100644
 -  # # }
 +  config.action_mailer.sendmail_settings = {
 +    location: '/run/wrappers/bin/sendmail',
-+    arguments: '-i -t'
++    arguments: ['-i', '-t']
 +  }
    config.action_mailer.perform_deliveries = true
    config.action_mailer.raise_delivery_errors = true
