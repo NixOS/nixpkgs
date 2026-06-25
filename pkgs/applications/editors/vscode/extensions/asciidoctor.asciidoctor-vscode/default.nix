@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "asciidoctor-vscode";
     publisher = "asciidoctor";
-    version = "3.4.2";
-    hash = "sha256-HG3y7999xeE1erQZCnBgUPj/aC0Kwyn20PEZR9gKrxY=";
+    version = "3.4.5";
+    hash = "sha256-X7njFSqfb45l6ZTr7GDS3At6DMHyvBT41JoghOeVjwI=";
   };
 
   patches = [
