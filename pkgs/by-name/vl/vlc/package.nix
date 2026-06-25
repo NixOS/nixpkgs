@@ -227,9 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
     BUILDCC = lib.getExe pkgsBuildBuild.stdenv.cc;
     LIVE555_PREFIX = live555;
-  }
-  // lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   patches = [
