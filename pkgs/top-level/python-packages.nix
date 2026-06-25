@@ -9274,6 +9274,8 @@ self: super: with self; {
 
   linode-api = callPackage ../development/python-modules/linode-api { };
 
+  linode-api4 = callPackage ../development/python-modules/linode-api4 { };
+
   linode-metadata = callPackage ../development/python-modules/linode-metadata { };
 
   linuxdoc = callPackage ../development/python-modules/linuxdoc { };
