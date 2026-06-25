@@ -1,17 +1,21 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   aiofiles,
   aiohttp,
+  buildPythonPackage,
   colorlog,
   commonregex,
   defusedxml,
   deprecated,
+  fetchFromGitHub,
   ifaddr,
-  pycryptodome,
   platformdirs,
+  pycryptodome,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,6 +42,13 @@ buildPythonPackage (finalAttrs: {
     ifaddr
     pycryptodome
     platformdirs
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "midealocal" ];
