@@ -23,6 +23,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.setuptools
   ];
 
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+  ];
+
   makeWrapperArgs = [
     "--prefix"
     "PATH"
