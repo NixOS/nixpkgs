@@ -200,7 +200,7 @@ in
 
                   simulation_path = lib.mkOption {
                     type = lib.types.path;
-                    default = "${config_paths.config_dir}/simulation.yaml";
+                    default = lib.literalExpression "\${config_paths.config_dir}/simulation.yaml";
                     description = ''
                       This file is generated from `config.services.crowdsec.settings.simulation`.
                     '';
@@ -333,6 +333,7 @@ in
                     profiles_path = lib.mkOption {
                       type = lib.types.path;
                       default = "${config_paths.config_dir}/profiles.yaml";
+                      defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.config_dir}/profiles.yaml";
                       description = "Path to the profiles file.";
                     };
 
