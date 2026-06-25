@@ -18,25 +18,25 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wtforms";
-  version = "3.2.1";
+  version = "3.3.0b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wtforms";
     repo = "wtforms";
-    tag = version;
-    hash = "sha256-jwjP/wkk8MdNJbPE8MlkrH4DyR304Ju41nN4lMo3jFs=";
+    tag = finalAttrs.version;
+    hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     babel
     hatchling
     setuptools
   ];
 
-  propagatedBuildInputs = [ markupsafe ];
+  dependencies = [ markupsafe ];
 
   optional-dependencies = {
     email = [ email-validator ];
@@ -45,14 +45,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "wtforms" ];
 
   meta = {
     description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
-    changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/wtforms/wtforms/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
-}
+})
