@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   preferLocalBuild = true;
@@ -44,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) freescout;
+  };
 
   # Because freescout is searching for some folders only relative to it's own source location, we need to have the symlinks to the actual locations in here
   dontCheckForBrokenSymlinks = true;
