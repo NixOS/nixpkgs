@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
-  version = "0.0.42";
+  version = "0.0.44-hip-radeon";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # ggml-python expects an older version of ggml than pkgs.ggml's
     fetchSubmodules = true;
-    hash = "sha256-dbYxAropTT8h1BnMg4Ua1hY/IUYWHaZcS0ckj38UoO4=";
+    hash = "sha256-Pjc91nKBAdmEg8TmirWdD1AcKlY+BCDAoHzL6mTE2SM=";
   };
 
   build-system = [
