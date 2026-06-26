@@ -152,8 +152,9 @@ let
     include ${cfg.defaultMimeTypes};
     types_hash_max_size ${toString cfg.typesHashMaxSize};
 
-    include ${cfg.package}/conf/fastcgi.conf;
-    include ${cfg.package}/conf/uwsgi_params;
+    ${concatMapStringsSep "\n" (i: ''
+      include ${i};
+    '') cfg.commonHttpIncludes}
 
     default_type application/octet-stream;
   '';
@@ -163,9 +164,9 @@ let
       ''
         ${cfg.prependConfig}
 
-        pid /run/nginx/nginx.pid;
+        pid ${cfg.pidFile};
         error_log ${cfg.logError};
-        daemon off;
+        daemon ${if cfg.daemon then "on" else "off"};
 
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
@@ -319,7 +320,7 @@ let
         ${cfg.appendConfig}
       '';
 
-  configPath = if cfg.enableReload then "/etc/nginx/nginx.conf" else configFile;
+  configPath = if cfg.enableReload then "/etc/nginx/nginx.conf" else cfg.configFile;
 
   execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
@@ -764,6 +765,19 @@ in
         '';
       };
 
+      commonHttpIncludes = mkOption {
+        type = types.listOf types.path;
+        default = [
+          "${cfg.package}/conf/fastcgi.conf"
+          "${cfg.package}/conf/uwsgi_params"
+        ];
+        defaultText = literalExpression ''[ "''${cfg.package}/conf/fastcgi.conf" "''${cfg.package}/conf/uwsgi_params" ]'';
+        example = literalExpression "[ ]";
+        description = ''
+          List of configuration files to include in the http block.
+        '';
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
         defaultText = literalExpression "pkgs.nginxStable";
@@ -791,6 +805,12 @@ in
         '';
       };
 
+      pidFile = mkOption {
+        type = types.str;
+        default = "/run/nginx/nginx.pid";
+        description = "Location of Nginx pid file";
+      };
+
       logError = mkOption {
         default = "stderr";
         type = types.str;
@@ -805,6 +825,15 @@ in
           increasing severity. Setting a certain log level will cause all
           messages of the specified and more severe log levels to be logged.
           If this parameter is omitted then error is used.
+        '';
+      };
+
+      daemon = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether NGINX runs in the background (daemon mode) or in the foreground (default).
+          Note that running nginx in daemon mode requires manual adjustments to the systemd service.
         '';
       };
 
@@ -825,10 +854,20 @@ in
           {file}`nginx.conf` except for
           - [](#opt-services.nginx.appendConfig)
           - [](#opt-services.nginx.httpConfig)
+          - [](#opt-services.nginx.pidFile)
           - [](#opt-services.nginx.logError)
+          - [](#opt-services.nginx.daemon)
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
+        '';
+      };
+
+      configFile = mkOption {
+        type = types.path;
+        readOnly = true;
+        description = ''
+          Path to the nginx configuration file.
         '';
       };
 
@@ -1448,6 +1487,8 @@ in
         }
       ) vhostCertNames;
 
+    services.nginx.configFile = configFile;
+
     services.nginx.additionalModules =
       optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd;
@@ -1593,7 +1634,7 @@ in
           wantedBy = [ "multi-user.target" ] ++ optionals cfg.enableReload sslServices;
           after = optionals cfg.enableReload sslServices;
           before = optionals cfg.enableReload sslOrderRenewServices;
-          restartTriggers = optionals cfg.enableReload [ configFile ];
+          restartTriggers = optionals cfg.enableReload [ cfg.configFile ];
           # Block reloading if not all certs exist yet.
           # Happens when config changes add new vhosts/certs.
           unitConfig = {
@@ -1634,7 +1675,7 @@ in
     );
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = configFile;
+      source = cfg.configFile;
     };
 
     security.acme.certs =
@@ -1696,7 +1737,7 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
-      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+      postrotate = "[ ! -f ${cfg.pidFile} ] || kill -USR1 `cat ${cfg.pidFile}`";
     };
   };
 }
