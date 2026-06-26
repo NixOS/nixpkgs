@@ -76,6 +76,24 @@ in
         '';
       };
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Include getty in the system.
+
+          getty is quiescent until called into action and does not have
+          runtime costs if it is not used. The benefit of disabling it is
+          in reducing closure size.
+
+          Disabling getty means that console login may not be possible,
+          `machinectl shell` and `login` may not work, and other ills.
+          It is only recommended for lights-out, headless containers,
+          appliances, and similar configurations not meant for any human
+          interaction ever.
+        '';
+      };
+
       loginProgram = mkOption {
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
@@ -133,7 +151,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
