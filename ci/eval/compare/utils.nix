@@ -49,8 +49,6 @@ rec {
         "hello.aarch64-linux"
         "hello.x86_64-linux"
         "hello.aarch64-darwin"
-        "hello.x86_64-darwin"
-        "bye.x86_64-darwin"
         "bye.aarch64-darwin"
         "release-checks"  <- Will be dropped
       ]
@@ -59,9 +57,7 @@ rec {
         { name = "hello"; platform = "aarch64-linux"; packagePath = [ "hello" ]; }
         { name = "hello"; platform = "x86_64-linux"; packagePath = [ "hello" ]; }
         { name = "hello"; platform = "aarch64-darwin"; packagePath = [ "hello" ]; }
-        { name = "hello"; platform = "x86_64-darwin"; packagePath = [ "hello" ]; }
         { name = "bye"; platform = "aarch64-darwin"; packagePath = [ "hello" ]; }
-        { name = "bye"; platform = "x86_64-darwin"; packagePath = [ "hello" ]; }
       ]
   */
   convertToPackagePlatformAttrs =
@@ -76,8 +72,6 @@ rec {
         "hello.aarch64-linux"
         "hello.x86_64-linux"
         "hello.aarch64-darwin"
-        "hello.x86_64-darwin"
-        "bye.x86_64-darwin"
         "bye.aarch64-darwin"
       ]
     into
@@ -101,16 +95,13 @@ rec {
         { name = "hello"; platform = "aarch64-linux"; ... }
         { name = "hello"; platform = "x86_64-linux"; ... }
         { name = "hello"; platform = "aarch64-darwin"; ... }
-        { name = "hello"; platform = "x86_64-darwin"; ... }
         { name = "bye"; platform = "aarch64-darwin"; ... }
-        { name = "bye"; platform = "x86_64-darwin"; ... }
       ]
     into
       {
         aarch64-linux = [ "hello" ];
         x86_64-linux = [ "hello" ];
         aarch64-darwin = [ "hello" "bye" ];
-        x86_64-darwin = [ "hello" "bye" ];
       }
   */
   groupByPlatform =
@@ -126,9 +117,7 @@ rec {
   #   { name = "hello"; platform = "aarch64-linux"; ... }
   #   { name = "hello"; platform = "x86_64-linux"; ... }
   #   { name = "hello"; platform = "aarch64-darwin"; ... }
-  #   { name = "hello"; platform = "x86_64-darwin"; ... }
   #   { name = "bye"; platform = "aarch64-darwin"; ... }
-  #   { name = "bye"; platform = "x86_64-darwin"; ... }
   # ]
   #
   # into
